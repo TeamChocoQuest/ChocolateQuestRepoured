@@ -1,38 +1,90 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toClient;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.lang3.SerializationUtils;
+import com.teamcqr.chocolatequestrepoured.customtextures.TextureSet;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class CustomTexturesPacket implements IMessage {
 
-	private HashMap<String, String> entries = new HashMap<>();
+	private Map<String, String> entries = new HashMap<>();
+	private Map<String, Map<ResourceLocation, Set<ResourceLocation>>> textureSets = new HashMap<>();
 
 	public CustomTexturesPacket() {
-
+		
 	}
 
 	public void addPair(String file, String path) {
 		this.entries.put(file, path);
 	}
+	
+	public void addTextureSet(TextureSet ts) {
+		this.textureSets.put(ts.getName(), ts.getMappings());
+	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		// this.entries = SerializationUtils.deserialize(buf.read)
-		int byteCount = buf.readInt();
-		byte[] bytes = new byte[byteCount];
-		buf.readBytes(bytes);
-		this.entries = SerializationUtils.deserialize(bytes);
+		int keys = buf.readInt();
+		int tscount = buf.readInt();
+		while(keys > 0) {
+			String k = ByteBufUtils.readUTF8String(buf);
+			String v = ByteBufUtils.readUTF8String(buf);
+			entries.put(k, v);
+			keys--;
+		}
+		
+		while(tscount > 0) {
+			String tsname = ByteBufUtils.readUTF8String(buf);
+			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = textureSets.getOrDefault(tsname, new HashMap<>());
+			int tskeys = buf.readInt();
+			while(tskeys > 0) {
+				String key = ByteBufUtils.readUTF8String(buf);
+				Set<ResourceLocation> values = new HashSet<>();
+				int vals = buf.readInt();
+				while(vals > 0) {
+					String val = ByteBufUtils.readUTF8String(buf);
+					values.add(new ResourceLocation(val));
+					vals--;
+				}
+				entityTextureMap.put(new ResourceLocation(key), values);
+				tskeys--;
+			}
+			textureSets.put(tsname, entityTextureMap);
+			tscount--;
+		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		byte[] bytes = SerializationUtils.serialize(this.entries);
-		buf.writeInt(bytes.length);
-		buf.writeBytes(bytes);
+		buf.writeInt(entries.keySet().size());
+		buf.writeInt(textureSets.keySet().size());
+		//Textures
+		for(Map.Entry<String, String> entry : entries.entrySet()) {
+			ByteBufUtils.writeUTF8String(buf, entry.getKey());
+			ByteBufUtils.writeUTF8String(buf, entry.getValue());
+		}
+		//Texture sets
+		for(Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : this.textureSets.entrySet()) {
+			ByteBufUtils.writeUTF8String(buf, entry.getKey());
+			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = entry.getValue();
+			buf.writeInt(entityTextureMap.keySet().size());
+			
+			for(ResourceLocation key : entityTextureMap.keySet()) {
+				ByteBufUtils.writeUTF8String(buf, key.toString());
+				buf.writeInt(entityTextureMap.get(key).size());
+				for(ResourceLocation val : entityTextureMap.get(key)) {
+					ByteBufUtils.writeUTF8String(buf, val.toString());
+				}
+			}
+		}
+		
 	}
 
 }
