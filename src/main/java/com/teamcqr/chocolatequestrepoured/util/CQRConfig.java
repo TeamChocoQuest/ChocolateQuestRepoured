@@ -80,6 +80,7 @@ public class CQRConfig {
 		public double flyingCowardPenaltyDamage = 10.0;
 
 		public boolean punishHackedItemUsers = false;
+		public boolean mobsCanStealExploitWeapons = true;
 		public boolean enableMaxDamageCaps = true;
 	}
 

@@ -26,6 +26,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -214,16 +215,22 @@ public class EventsHandler {
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
 		if (CQRConfig.advanced.punishHackedItemUsers && event.getEntityPlayer() != null && event.getEntity() != null && event.getEntity() instanceof AbstractEntityCQR) {
 			EntityPlayer attacker = event.getEntityPlayer();
-			for (ItemStack item : attacker.getEquipmentAndArmor()) {
+			for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+				ItemStack item = attacker.getItemStackFromSlot(slot);
 				if (ItemUtil.isCheaterItem(item)) {
 					// Punishment
 					if (attacker instanceof EntityPlayerMP) {
 						float damage = EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED);
-						if (item.isItemStackDamageable()) {
-							item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
-						} /*else {
-							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * 0.5F);
-						}*/
+						if(CQRConfig.advanced.mobsCanStealExploitWeapons) {
+							event.getEntityLiving().setItemStackToSlot(slot, item);
+							attacker.setItemStackToSlot(slot, ItemStack.EMPTY);
+						} else {
+							if (item.isItemStackDamageable()) {
+								item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
+							} /*else {
+								attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * 0.5F);
+							}*/
+						}
 					}
 
 				}
