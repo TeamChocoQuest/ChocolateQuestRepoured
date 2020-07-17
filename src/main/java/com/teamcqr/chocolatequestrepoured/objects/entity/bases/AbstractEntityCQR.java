@@ -256,15 +256,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	protected boolean damageCapEnabled() {
-		return false;
+		return CQRConfig.mobs.enableDamageCapForNonBossMobs;
 	}
 	
 	protected float maxDamageInPercentOfMaxHP() {
-		return 0.5F;
+		return CQRConfig.mobs.maxUncappedDamageInMaxHPPercent;
 	}
 	
 	protected float maxUncappedDamage() {
-		return 10F;
+		return CQRConfig.mobs.maxUncappedDamageForNonBossMobs;
 	}
 	
 	private float handleDamageCap(float originalAmount) {

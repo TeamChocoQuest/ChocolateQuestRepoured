@@ -173,12 +173,17 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	//Damage cap stuff
 	@Override
 	protected boolean damageCapEnabled() {
-		return true;
+		return CQRConfig.bossDamageCaps.enableDamageCapForBosses;
 	}
 	
 	@Override
 	protected float maxDamageInPercentOfMaxHP() {
-		return 0.5F;
+		return CQRConfig.bossDamageCaps.maxDamageInPercentOfMaxHP;
+	}
+	
+	@Override
+	protected float maxUncappedDamage() {
+		return CQRConfig.bossDamageCaps.maxUncappedDamage;
 	}
 
 }
