@@ -53,7 +53,6 @@ public class TextureSetManager {
 	
 	@SideOnly(Side.SERVER)
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
-		// First things first: we gotta send over all loaded textures
 		CustomTexturesPacket packet = new CustomTexturesPacket();
 		for (File texture : TextureSet.getLoadedTextures()) {
 			String base64 = CompressionUtil.encodeFileToBase64(texture);
@@ -65,10 +64,6 @@ public class TextureSetManager {
 			packet.addTextureSet(ts);
 		}
 		CQRMain.NETWORK.sendTo(packet, joiningPlayer);
-		
-		//now we send the texture sets themselves...
-		// -> NO, we wait for the request from client
-		
 	}
 
 	private void registerTextureSetImpl(TextureSet set) {
