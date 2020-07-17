@@ -15,6 +15,7 @@ public class CQRConfig {
 
 	public static Advanced advanced = new Advanced();
 	public static Bosses bosses = new Bosses();
+	public static BossDamageCaps bossDamageCaps = new BossDamageCaps();
 	public static DungeonProtection dungeonProtection = new DungeonProtection();
 	public static General general = new General();
 	public static Mobs mobs = new Mobs();
@@ -79,19 +80,17 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
 
-		public boolean punishHackedItemUsers = false;
-		public boolean mobsCanStealExploitWeapons = true;
 		public boolean enableMaxDamageCaps = true;
 	}
 
 	public static class Bosses {
 		public boolean antiCowardMode = true;
 		public int antiCowardRadius = 16;
-
+		
 		public boolean hotFireballsDestroyTerrain = true;
 
-		public boolean harderWalkerKing = true;
-		public boolean armorForTheWalkerKing = false;
+		public boolean harderWalkerKing = false;
+		public boolean armorForTheWalkerKing = true;
 
 		public boolean netherDragonDestroysBlocks = true;
 		public int netherDragonStageTwoFireballInterval = 40;
@@ -121,6 +120,12 @@ public class CQRConfig {
 
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
+	}
+	
+	public static class BossDamageCaps {
+		public boolean enableDamageCapForBosses = true;
+		public float maxUncappedDamage = 30F;
+		public float maxDamageInPercentOfMaxHP = 0.1F;
 	}
 
 	public static class DungeonProtection {
@@ -212,6 +217,9 @@ public class CQRConfig {
 		public boolean offhandPotionsAreSingleUse = true;
 		public boolean potionsInBagAreSingleUse = true;
 
+		public boolean enableDamageCapForNonBossMobs = false;
+		public float maxUncappedDamageForNonBossMobs = 50F;
+		public float maxUncappedDamageInMaxHPPercent = 1F;
 	}
 
 	public static class Wall {
