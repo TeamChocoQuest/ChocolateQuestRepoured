@@ -18,28 +18,9 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingEmpty;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossStairEmpty;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossStairMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBridgeTop;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomHallway;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomJailCell;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomLandingDirected;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomLandingDirectedBoss;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomLandingSpiral;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomReplacedRoof;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomRoofBossEmpty;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomRoofBossMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomStaircaseDirected;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomStaircaseSpiral;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomTowerSquare;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoof;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoofTower;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.RoomFactoryCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoofBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleRoofFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.*;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -103,7 +84,7 @@ public class CastleRoomSelector {
 	private Random random;
 	private RoomGrid grid;
 	private List<SupportArea> supportAreas;
-	private List<CastleAddonRoof> castleRoofs;
+	private List<CastleAddonRoofBase> castleRoofs;
 
 	public CastleRoomSelector(DungeonCastle dungeon) {
 		this.dungeon = dungeon;
@@ -223,7 +204,7 @@ public class CastleRoomSelector {
 	}
 
 	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		for (CastleAddonRoof roof : this.castleRoofs) {
+		for (CastleAddonRoofBase roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
 		}
 
@@ -1097,7 +1078,7 @@ public class CastleRoomSelector {
 		final int sizeX = (roofArea.sizeX * (this.roomSize + 1)) + 1;
 		final int sizeZ = (roofArea.sizeZ * (this.roomSize + 1)) + 1;
 
-		this.castleRoofs.add(new CastleAddonRoof(roofStart, sizeX, sizeZ));
+		this.castleRoofs.add(CastleRoofFactory.createRoof(dungeon.getRandomRoofType(), roofStart, sizeX, sizeZ));
 	}
 
 	private int getBossFloor() {
