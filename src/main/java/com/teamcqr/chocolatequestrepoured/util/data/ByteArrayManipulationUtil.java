@@ -3,12 +3,9 @@ package com.teamcqr.chocolatequestrepoured.util.data;
 import java.util.ArrayList;
 
 /**
- * A set of static utility methods to facilitate the manipulation
- * of byte arrays and the conversion between object format and
- * primitive format
+ * A set of static utility methods to facilitate the manipulation of byte arrays and the conversion between object format and primitive format
  *
- * @author jdawg3636
- *         GitHub: https://github.com/jdawg3636
+ * @author jdawg3636 GitHub: https://github.com/jdawg3636
  *
  * @version 25.07.19
  */

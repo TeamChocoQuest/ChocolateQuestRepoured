@@ -192,7 +192,7 @@ public class ContainerCQREntity extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		/*return playerIn.isCreative();*/
+		/* return playerIn.isCreative(); */
 		return true;
 	}
 

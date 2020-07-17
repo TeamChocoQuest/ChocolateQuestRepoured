@@ -10,18 +10,18 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 public class CustomTexturesPacket implements IMessage {
 
 	private HashMap<String, String> entries = new HashMap<>();
-	
+
 	public CustomTexturesPacket() {
-		
+
 	}
-	
+
 	public void addPair(String file, String path) {
-		this.entries.put(file,path);
+		this.entries.put(file, path);
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		//this.entries = SerializationUtils.deserialize(buf.read)
+		// this.entries = SerializationUtils.deserialize(buf.read)
 		int byteCount = buf.readInt();
 		byte[] bytes = new byte[byteCount];
 		buf.readBytes(bytes);

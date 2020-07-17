@@ -63,25 +63,23 @@ public class ClientProxy implements IProxy {
 			return context.getServerHandler().player.world;
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void colorItemArmors(ColorHandlerEvent.Item event) {
 		List<Item> dyables = new ArrayList<>();
-		for(Item item : ModItems.ItemRegistrationHandler.ITEMS) {
-			if(item instanceof ItemArmorDyable) {
+		for (Item item : ModItems.ItemRegistrationHandler.ITEMS) {
+			if (item instanceof ItemArmorDyable) {
 				dyables.add(item);
 			}
 		}
-		
+
 		event.getItemColors().registerItemColorHandler(new IItemColor() {
-			
+
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
-				return tintIndex > 0 ? -1 : ((ItemArmorDyable)stack.getItem()).getColor(stack);
+				return tintIndex > 0 ? -1 : ((ItemArmorDyable) stack.getItem()).getColor(stack);
 			}
 		}, dyables.toArray(new Item[dyables.size()]));
 	}
-	
-	
 
 }

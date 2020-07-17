@@ -20,9 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 20.04.2020
- * Developed by KalgogSmash
- * GitHub: https://github.com/KalgogSmash
+ * Copyright (c) 20.04.2020 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class DungeonCastle extends DungeonBase {
 

@@ -11,8 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 /**
- * ModelCrown - DerToaster
- * Created using Tabula 7.0.1
+ * ModelCrown - DerToaster Created using Tabula 7.0.1
  */
 public class ModelCrown extends ModelCustomArmorBase {
 

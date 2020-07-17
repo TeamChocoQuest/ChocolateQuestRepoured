@@ -70,34 +70,35 @@ public class StrongholdBuilder {
 		BlockPos pos = this.startPos;// .add(expansionV);
 
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-		
+
 		for (int i = 0; i < (this.blocksRemainingToWall / 4) + 2; i++) {
 			this.buildSegment(pos.subtract(this.startPos), blockInfoList);
 			pos = pos.add(expansionVector);
 		}
 		this.strongholdParts.add(new DungeonPartBlock(world, dungeonGenerator, this.startPos, blockInfoList, new PlacementSettings(), mobType));
-		buildStronghold(pos.add(0,-1,0), world, cX, cZ, mobType);
+		buildStronghold(pos.add(0, -1, 0), world, cX, cZ, mobType);
 	}
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, String mobType) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() / 16, pos.getZ()
+				/ 16)));
 		stronghold.calculateFloors(pos);
-		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ, mobType);
+		stronghold.buildFloors(pos.add(0, -1, 0), world, cX, cZ, mobType);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 
 	private void buildSegment(BlockPos startPosCentered, List<AbstractBlockInfo> blockInfoList) {
-		//COrner 2 is always the reference location for the part (!)
+		// COrner 2 is always the reference location for the part (!)
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2, air1, air2;
 		corner1 = null;
 		corner2 = null;
-		//Pillars are in the middle of the part (on the expansion axis)
+		// Pillars are in the middle of the part (on the expansion axis)
 		pillar1 = null;
 		pillar2 = null;
-		//marks the positions of the torches
+		// marks the positions of the torches
 		torch1 = null;
 		torch2 = null;
-		//these mark the corners of the complete part
+		// these mark the corners of the complete part
 		air1 = null;
 		air2 = null;
 		switch (this.direction) {

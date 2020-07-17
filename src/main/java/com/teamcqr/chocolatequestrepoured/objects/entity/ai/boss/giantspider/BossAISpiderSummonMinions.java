@@ -12,12 +12,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 
 public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGiantSpider> {
-	
+
 	protected ISummoner summoner = null;
 	protected int MAX_MINIONS = 6;
 	protected int MAX_MINIONS_AT_A_TIME = 3;
 	protected ResourceLocation minionOverride = new ResourceLocation("minecraft", "cave_spider");
-	
+
 	private int cooldown = 0;
 	private static final int MAX_COOLDOWN = 200;
 	private static final int MIN_COOLDOWN = 100;
@@ -32,20 +32,20 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		if (this.summoner == null || this.entity == null) {
 			return false;
 		}
-		if(cooldown > 0) {
+		if (cooldown > 0) {
 			cooldown--;
 		}
-		if(!entity.hasAttackTarget()) {
+		if (!entity.hasAttackTarget()) {
 			return false;
 		}
-		if(getAliveMinionCount() < MAX_MINIONS) {
-			if(entity.getHealth() / entity.getMaxHealth() <= 0.75) {
+		if (getAliveMinionCount() < MAX_MINIONS) {
+			if (entity.getHealth() / entity.getMaxHealth() <= 0.75) {
 				return cooldown <= 0;
 			}
 		}
 		return false;
 	}
-	
+
 	protected int getAliveMinionCount() {
 		int aliveMinions = 0;
 		for (Entity minio : this.summoner.getSummonedEntities()) {
@@ -55,7 +55,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		}
 		return aliveMinions;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		if (this.summoner == null || this.entity == null) {
@@ -63,11 +63,11 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		}
 		int minionCount = Math.min(MAX_MINIONS_AT_A_TIME, MAX_MINIONS - getAliveMinionCount());
 		double angle = 360 / minionCount;
-		Vec3d v = new Vec3d(1,0,0);
-		for(int i = 0; i < minionCount; i++) {
+		Vec3d v = new Vec3d(1, 0, 0);
+		for (int i = 0; i < minionCount; i++) {
 			Vec3d pos = entity.getPositionVector().add(v);
 			v = VectorUtil.rotateVectorAroundY(v, angle);
-				
+
 			Entity minion = EntityList.createEntityByIDFromName(minionOverride, entity.world);
 			minion.setPosition(pos.x, pos.y, pos.z);
 			entity.world.spawnEntity(minion);
@@ -78,7 +78,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		}
 		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return false;

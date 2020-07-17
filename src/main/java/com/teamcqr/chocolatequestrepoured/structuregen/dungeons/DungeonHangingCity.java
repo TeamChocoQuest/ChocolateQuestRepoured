@@ -14,9 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class DungeonHangingCity extends DungeonBase {
 
@@ -77,42 +75,20 @@ public class DungeonHangingCity extends DungeonBase {
 	/*
 	 * private int radius;
 	 * 
-	 * @SuppressWarnings("unused")
-	 * private int platformThickness;
+	 * @SuppressWarnings("unused") private int platformThickness;
 	 * 
-	 * public WorldGenEndIsland(int r, int pt) {
-	 * this.radius = r;
-	 * this.platformThickness = pt;
-	 * }
+	 * public WorldGenEndIsland(int r, int pt) { this.radius = r; this.platformThickness = pt; }
 	 * 
-	 * @Override
-	 * public boolean generate(World world, Random random, BlockPosition startPos) {
-	 * float rdmFloat = (float) (random.nextInt(3) + 4);
+	 * @Override public boolean generate(World world, Random random, BlockPosition startPos) { float rdmFloat = (float) (random.nextInt(3) + 4);
 	 * 
-	 * for (int y = 0; rdmFloat > 0.5F; --y) {
-	 * for (int x = MathHelper.d(-rdmFloat); x <= MathHelper.f(rdmFloat); ++x) {
-	 * for (int z = MathHelper.d(-rdmFloat); z <= MathHelper.f(rdmFloat); ++z) {
-	 * if ((float) (x * x + z * z) <= (rdmFloat + 1.0F) * (rdmFloat + 1.0F)) {
-	 * if(isAllowed(x) && isAllowed(z)) {
-	 * this.a(world, startPos.a(x, y, z), Blocks.END_STONE.getBlockData());
-	 * }
-	 * }
-	 * }
-	 * }
+	 * for (int y = 0; rdmFloat > 0.5F; --y) { for (int x = MathHelper.d(-rdmFloat); x <= MathHelper.f(rdmFloat); ++x) { for (int z = MathHelper.d(-rdmFloat); z <= MathHelper.f(rdmFloat); ++z) { if ((float) (x * x + z * z) <= (rdmFloat + 1.0F) *
+	 * (rdmFloat + 1.0F)) { if(isAllowed(x) && isAllowed(z)) { this.a(world, startPos.a(x, y, z), Blocks.END_STONE.getBlockData()); } } } }
 	 * 
-	 * rdmFloat = (float) ((double) rdmFloat - ((double) random.nextInt(2) + 0.5D));
-	 * }
+	 * rdmFloat = (float) ((double) rdmFloat - ((double) random.nextInt(2) + 0.5D)); }
 	 * 
-	 * return true;
-	 * }
+	 * return true; }
 	 * 
-	 * private boolean isAllowed(int distanceToCenter) {
-	 * double divisionResult = ((double)distanceToCenter) / ((double)this.radius);
-	 * if(divisionResult < 1.0D) {
-	 * return true;
-	 * }
-	 * return false;
-	 * }
+	 * private boolean isAllowed(int distanceToCenter) { double divisionResult = ((double)distanceToCenter) / ((double)this.radius); if(divisionResult < 1.0D) { return true; } return false; }
 	 */
 
 	public File pickStructure() {
@@ -134,12 +110,7 @@ public class DungeonHangingCity extends DungeonBase {
 	}
 
 	/*
-	 * public boolean doBuildBridges() {
-	 * return this.buildBridges;
-	 * }
-	 * public int getBridgeChance() {
-	 * return this.bridgeChance;
-	 * }
+	 * public boolean doBuildBridges() { return this.buildBridges; } public int getBridgeChance() { return this.bridgeChance; }
 	 */
 
 	public int getMinBuildings() {
@@ -159,9 +130,7 @@ public class DungeonHangingCity extends DungeonBase {
 	}
 
 	/*
-	 * public Block getBridgeBlock() {
-	 * return this.bridgeBlock;
-	 * }
+	 * public Block getBridgeBlock() { return this.bridgeBlock; }
 	 */
 
 	public int getPosY() {

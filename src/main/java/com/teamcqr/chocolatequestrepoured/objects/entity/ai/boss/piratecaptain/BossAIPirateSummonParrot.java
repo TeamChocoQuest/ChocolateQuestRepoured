@@ -16,18 +16,18 @@ public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPir
 		super(entity, cooldown, chargingTicks, castingTicks);
 		this.setup(true, true, true, false);
 	}
-	
+
 	@Override
 	public boolean shouldExecute() {
 		return !entity.hasSpawnedParrot() && super.shouldExecute();
 	}
-	
+
 	@Override
 	public void startCastingSpell() {
 		Vec3d v = this.entity.getLookVec().normalize().scale(3);
 		v = VectorUtil.rotateVectorAroundY(v, 90);
-		if(entity.world.getBlockState(new BlockPos(entity.getPositionVector().add(v).add(0,1,0))).getBlock() != Blocks.AIR) {
-			v = new Vec3d(0,1,0);
+		if (entity.world.getBlockState(new BlockPos(entity.getPositionVector().add(v).add(0, 1, 0))).getBlock() != Blocks.AIR) {
+			v = new Vec3d(0, 1, 0);
 		}
 		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(world);
 		parrot.setOwnerId(entity.getUniqueID());

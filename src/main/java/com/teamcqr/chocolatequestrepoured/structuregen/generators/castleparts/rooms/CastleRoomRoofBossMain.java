@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
@@ -72,8 +72,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-	{
+	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
 		// Have to add torches last because they won't place unless the wall next to them is already built
 		this.placeTorches(this.getBossRoomBuildStartPosition(), genArray);
 
@@ -82,9 +81,9 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 
 	@Override
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
-		BlockPos pos =  this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
-		if(bossResourceLocation == null) {
-			
+		BlockPos pos = this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
+		if (bossResourceLocation == null) {
+
 			EntityArmorStand indicator = new EntityArmorStand(world);
 			indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
 			indicator.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
@@ -93,20 +92,20 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			indicator.setAlwaysRenderNameTag(true);
 			indicator.setSilent(true);
 			indicator.setNoGravity(true);
-			
+
 			genArray.addEntity(BlockPos.ORIGIN, indicator);
-			
+
 			return;
 		}
-		
+
 		Entity mobEntity = EntityList.createEntityByIDFromName(bossResourceLocation, world);
 
-		//SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
+		// SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
 
 		if (mobEntity != null) {
 			Block spawnerBlock = ModBlocks.SPAWNER;
 			IBlockState state = spawnerBlock.getDefaultState();
-			TileEntitySpawner spawner = (TileEntitySpawner)spawnerBlock.createTileEntity(world, state);
+			TileEntitySpawner spawner = (TileEntitySpawner) spawnerBlock.createTileEntity(world, state);
 			if (spawner != null) {
 				spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
 				NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
@@ -151,15 +150,10 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			if (treasureChestsPlaced < numTreasureChests) {
 				lootTable = ModLoottables.CHESTS_TREASURE;
 				++treasureChestsPlaced;
-			}
-			else
-			{
-				if (DungeonGenUtils.PercentageRandom(50, random))
-				{
+			} else {
+				if (DungeonGenUtils.PercentageRandom(50, random)) {
 					lootTable = ModLoottables.CHESTS_MATERIAL;
-				}
-				else
-				{
+				} else {
 					lootTable = ModLoottables.CHESTS_EQUIPMENT;
 				}
 			}

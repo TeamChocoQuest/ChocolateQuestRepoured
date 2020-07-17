@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPhylactery extends Block {
-	
+
 	protected final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
 
 	public BlockPhylactery(Material materialIn) {
@@ -63,7 +63,7 @@ public class BlockPhylactery extends Block {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Items.AIR;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;
@@ -79,18 +79,18 @@ public class BlockPhylactery extends Block {
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-	
+
 	@Override
 	public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.randomTick(worldIn, pos, state, rand);
-		AxisAlignedBB aabb = new AxisAlignedBB(pos.add(3,2,3), pos.add(-3,-2,-3));
+		AxisAlignedBB aabb = new AxisAlignedBB(pos.add(3, 2, 3), pos.add(-3, -2, -3));
 		List<EntityCQRLich> lichesInRange = worldIn.getEntitiesWithinAABB(EntityCQRLich.class, aabb);
-		if(!lichesInRange.isEmpty()) {
+		if (!lichesInRange.isEmpty()) {
 			int i = 0;
-			while(i < lichesInRange.size()) {
+			while (i < lichesInRange.size()) {
 				EntityCQRLich lich = lichesInRange.get(i);
-				if(lich != null && !lich.isDead) {
-					if(!lich.hasPhylactery()) {
+				if (lich != null && !lich.isDead) {
+					if (!lich.hasPhylactery()) {
 						lich.setCurrentPhylacteryBlock(pos);
 						i = lichesInRange.size();
 					} else {

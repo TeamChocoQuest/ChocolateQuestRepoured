@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -16,8 +17,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	private Vec3i pillarOffset;
 	private EnumFacing firstStairSide;
 
-	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide,
-								 int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
+	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
 		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;

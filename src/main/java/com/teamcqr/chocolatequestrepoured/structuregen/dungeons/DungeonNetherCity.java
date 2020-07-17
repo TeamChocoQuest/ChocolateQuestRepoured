@@ -14,9 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class DungeonNetherCity extends DungeonBase {
 
@@ -96,9 +94,7 @@ public class DungeonNetherCity extends DungeonBase {
 	}
 
 	/*
-	 * public boolean useSingleAirPocketsForHouses() {
-	 * return this.singleAirPocketsForHouses;
-	 * }
+	 * public boolean useSingleAirPocketsForHouses() { return this.singleAirPocketsForHouses; }
 	 */
 
 	public boolean centralBuildingIsSpecial() {

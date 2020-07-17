@@ -18,9 +18,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemShieldDummy extends Item {
 
 	public ItemShieldDummy() {
-		//TODO: ToolTip
+		// TODO: ToolTip
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

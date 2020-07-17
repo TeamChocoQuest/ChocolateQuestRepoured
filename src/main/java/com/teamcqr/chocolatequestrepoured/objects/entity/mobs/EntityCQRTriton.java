@@ -43,7 +43,7 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	public boolean canMountEntity() {
 		return false;
 	}
-	
+
 	@Override
 	protected float getWaterSlowDown() {
 		return 0.0F;

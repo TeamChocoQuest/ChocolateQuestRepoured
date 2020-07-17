@@ -11,17 +11,17 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRWasp extends RenderLiving<EntityCQRWasp> {
-	
+
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/entity_wasp.png");
 
 	public RenderCQRWasp(RenderManager renderManager) {
 		this(renderManager, new ModelCQRWasp(0F), 0F);
 	}
-	
+
 	public RenderCQRWasp(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
 		super(rendermanagerIn, modelbaseIn, shadowsizeIn);
 	}
-	
+
 	@Override
 	protected void renderModel(EntityCQRWasp entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		GlStateManager.pushMatrix();

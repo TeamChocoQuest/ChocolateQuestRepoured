@@ -8,9 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Copyright (c) 11.05.2019
- * Developed by MrMarnic
- * GitHub: https://github.com/MrMarnic
+ * Copyright (c) 11.05.2019 Developed by MrMarnic GitHub: https://github.com/MrMarnic
  */
 public class CQProtectedRegionEnterEvent extends Event {
 	private ProtectedRegion region;

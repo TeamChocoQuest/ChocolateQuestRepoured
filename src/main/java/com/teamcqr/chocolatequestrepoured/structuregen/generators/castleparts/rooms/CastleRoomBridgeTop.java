@@ -1,20 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.function.Predicate;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-
-import java.util.function.Predicate;
 
 public class CastleRoomBridgeTop extends CastleRoomBase {
 	protected Alignment alignment;
 
 	public enum Alignment {
-		VERTICAL,
-		HORIZONTAL;
+		VERTICAL, HORIZONTAL;
 
 		static Alignment fromFacing(EnumFacing facing) {
 			return facing.getAxis() == EnumFacing.Axis.X ? HORIZONTAL : VERTICAL;
@@ -34,7 +34,7 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		final int startX = 1;
 		final int startZ = 1;
 
-		//Don't use decoration length since we don't care if there are walls
+		// Don't use decoration length since we don't care if there are walls
 		final int endX = getRoomLengthX() - 3;
 		final int endZ = getRoomLengthZ() - 3;
 
@@ -42,13 +42,10 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		Predicate<Vec3i> edges;
 
 		GenerationTemplate bridgeTopTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
-		if (alignment == Alignment.HORIZONTAL)
-		{
+		if (alignment == Alignment.HORIZONTAL) {
 			bottom = (v -> (v.getY() == 0) && (v.getZ() >= startZ) && (v.getZ() <= endZ));
 			edges = (v -> v.getY() == 1 && ((v.getZ() == startZ) || (v.getZ() == endZ)));
-		}
-		else
-		{
+		} else {
 			bottom = (v -> (v.getY() == 0) && (v.getX() >= startX) && (v.getX() <= endX));
 			edges = (v -> v.getY() == 1 && ((v.getX() == startZ) || (v.getX() == endX)));
 		}

@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorPillar;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.block.BlockGlazedTerracotta;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -45,8 +45,8 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 				IBlockState tcBlock = Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
 				EnumFacing tcFacing;
 
-				//Terracotta patterns are formed in a 2x2 square from the pattern (going clockwise) N E S W
-				//So create that pattern here given some starting facing
+				// Terracotta patterns are formed in a 2x2 square from the pattern (going clockwise) N E S W
+				// So create that pattern here given some starting facing
 				if (pos.getZ() % 2 == 0) {
 					if (pos.getX() % 2 == 0) {
 						tcFacing = patternStartFacing;
@@ -72,7 +72,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		int halfX = this.getDecorationLengthX() / 2;
 		int halfZ = this.getDecorationLengthZ() / 2;
 
-		//Offset by 1 since the pillar is 3x3
+		// Offset by 1 since the pillar is 3x3
 		--halfX;
 		--halfZ;
 

@@ -11,7 +11,7 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 	protected EntityCQRGiantTortoise turtle;
 	protected Animation animationIn;
 	protected Animation animationOut;
-	
+
 	public BossAITortoiseSwitchStates(EntityCQRGiantTortoise entity, Animation animIn, Animation animOut) {
 		super(entity);
 		setMutexBits(8);
@@ -22,7 +22,7 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 
 	@Override
 	public Animation getAnimation() {
-		if(turtle.getTargetedState() != 0) {
+		if (turtle.getTargetedState() != 0) {
 			return turtle.getTargetedState() < 0 ? animationIn : animationOut;
 		}
 		return null;
@@ -30,17 +30,17 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 
 	@Override
 	public boolean shouldExecute() {
-		if(turtle.wantsToChangeState() && !turtle.isStunned() && !turtle.isSpinning()) {
+		if (turtle.wantsToChangeState() && !turtle.isStunned() && !turtle.isSpinning()) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
@@ -48,24 +48,24 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 		turtle.setReadyToSpin(false);
 		turtle.setAnimationTick(0);
 		turtle.setInShell(true);
-		if(turtle.getTargetedState() < 0) {
+		if (turtle.getTargetedState() < 0) {
 			turtle.setAnimation(animationIn);
 		} else {
 			turtle.setAnimation(animationOut);
 		}
 		turtle.setBypassInShell(true);
 	}
-	
+
 	@Override
 	public boolean isAutomatic() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isInterruptible() {
 		return false;
 	}
-	
+
 	@Override
 	public void resetTask() {
 		super.resetTask();
@@ -77,6 +77,5 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 		turtle.targetNewState(0);
 		turtle.setBypassInShell(false);
 	}
-	
-}
 
+}

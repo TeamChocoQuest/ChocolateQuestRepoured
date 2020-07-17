@@ -35,7 +35,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
 			BlockPos centeredPos = this.entity.getAttackTarget().getPosition();
 			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
-			v = v.normalize().scale(Math.abs((ballCount / 3) -2));
+			v = v.normalize().scale(Math.abs((ballCount / 3) - 2));
 			centeredPos = centeredPos.add(v.x, v.y, v.z);
 			for (int i = 0; i < ballCount; i++) {
 				spawnPositions[i] = centeredPos.add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));

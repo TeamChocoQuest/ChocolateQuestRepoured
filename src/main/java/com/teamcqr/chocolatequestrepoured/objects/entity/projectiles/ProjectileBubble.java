@@ -15,7 +15,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectileBubble extends ProjectileBase {
-	
+
 	private Entity shooter;
 	protected float damage;
 
@@ -33,7 +33,7 @@ public class ProjectileBubble extends ProjectileBase {
 		this.damage = 1F;
 		this.isImmuneToFire = true;
 	}
-	
+
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
 			applyEntityCollision(result.entityHit);
@@ -41,38 +41,38 @@ public class ProjectileBubble extends ProjectileBase {
 
 		super.onImpact(result);
 	}
-	
+
 	@Override
 	public void applyEntityCollision(Entity entityHit) {
 		if (entityHit == this.shooter) {
 			return;
 		}
-		
-		if(entityHit instanceof EntityBubble || entityHit instanceof ProjectileBubble) {
+
+		if (entityHit instanceof EntityBubble || entityHit instanceof ProjectileBubble) {
 			return;
 		}
-		
-		if(entityHit.isRiding() && entityHit.getRidingEntity() instanceof EntityBubble) {
+
+		if (entityHit.isRiding() && entityHit.getRidingEntity() instanceof EntityBubble) {
 			return;
 		}
-		
-		if(entityHit instanceof EntityLiving && ((EntityLiving)entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
+
+		if (entityHit instanceof EntityLiving && ((EntityLiving) entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
 			return;
 		}
 
 		entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shooter, this), this.damage);
 		float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
 		this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_SWIM, SoundCategory.PLAYERS, 4, pitch, true);
-		
+
 		EntityBubble bubbles = new EntityBubble(world);
-		bubbles.moveToBlockPosAndAngles(entityHit.getPosition().add(0,0.25,0), entityHit.rotationYaw, entityHit.rotationPitch);
+		bubbles.moveToBlockPosAndAngles(entityHit.getPosition().add(0, 0.25, 0), entityHit.rotationYaw, entityHit.rotationPitch);
 		world.spawnEntity(bubbles);
-		
+
 		entityHit.startRiding(bubbles, true);
-		
+
 		this.setDead();
 	}
-	
+
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();

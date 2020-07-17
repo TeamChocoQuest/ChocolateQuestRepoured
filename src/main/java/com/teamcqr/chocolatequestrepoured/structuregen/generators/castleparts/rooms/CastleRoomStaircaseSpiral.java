@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -93,7 +94,6 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	public int getStairCenterOffsetZ() {
 		return this.pillarOffset.getZ();
 	}
-
 
 	private void recalcPillarOffset() {
 		int centerX = (this.roomLengthX - 1) / 2;

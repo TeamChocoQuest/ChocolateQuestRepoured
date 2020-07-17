@@ -38,71 +38,66 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	public EntityCQRPirateParrot(World worldIn) {
 		super(worldIn);
 	}
-	
-	protected void initEntityAI()
-    {
-        this.aiSit = new EntityAISit(this);
-        //this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new BossAIPirateParrotThrowPotions(this));
-        //this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(2, new EntityAIFollowOwnerFlying(this, 1.0D, 5.0F, 1.0F));
-        this.tasks.addTask(4, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
-        this.tasks.addTask(5, new BossAIPirateParrotLandOnCaptainsShoulder(this));
-        this.tasks.addTask(3, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
-        
-        this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<EntityLiving>(this, EntityLiving.class, 100, true, false));
-    }
-	
+
+	protected void initEntityAI() {
+		this.aiSit = new EntityAISit(this);
+		// this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new BossAIPirateParrotThrowPotions(this));
+		// this.tasks.addTask(2, this.aiSit);
+		this.tasks.addTask(2, new EntityAIFollowOwnerFlying(this, 1.0D, 5.0F, 1.0F));
+		this.tasks.addTask(4, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
+		this.tasks.addTask(5, new BossAIPirateParrotLandOnCaptainsShoulder(this));
+		this.tasks.addTask(3, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
+
+		this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<EntityLiving>(this, EntityLiving.class, 100, true, false));
+	}
+
 	@Override
 	public void addPotionEffect(PotionEffect effect) {
-		if(effect.getPotion().isBadEffect()) {
+		if (effect.getPotion().isBadEffect()) {
 			return;
 		}
 		super.addPotionEffect(effect);
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			world.createExplosion(this, posX, posY, posZ, 2, true);
 		}
 	}
-	
+
 	@Override
 	public void setSitting(boolean sitting) {
 	}
-	
+
 	@Override
 	public boolean isSitting() {
 		return false;
 	}
-	
+
 	@Nullable
 	@Override
-    public EntityLivingBase getOwner()
-    {
-        try
-        {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : getOwnerInRange(uuid);
-        }
-        catch (IllegalArgumentException var2)
-        {
-            return null;
-        }
-    }	
-	
+	public EntityLivingBase getOwner() {
+		try {
+			UUID uuid = this.getOwnerId();
+			return uuid == null ? null : getOwnerInRange(uuid);
+		} catch (IllegalArgumentException var2) {
+			return null;
+		}
+	}
+
 	private EntityLivingBase getOwnerInRange(UUID uuid) {
-		List<Entity> ents = world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(posX -20, posY -20, posZ -20, posX +20, posY +20, posZ +20), new Predicate<Entity>() {
+		List<Entity> ents = world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(posX - 20, posY - 20, posZ - 20, posX + 20, posY + 20, posZ + 20), new Predicate<Entity>() {
 
 			@Override
 			public boolean apply(Entity input) {
 				return input instanceof EntityLivingBase && input.getPersistentID().equals(uuid);
 			}
 		});
-		return ents.isEmpty() ? null : (EntityLivingBase)ents.get(0); 
+		return ents.isEmpty() ? null : (EntityLivingBase) ents.get(0);
 	}
 
 	@Override
@@ -110,45 +105,39 @@ public class EntityCQRPirateParrot extends EntityParrot {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40);
 	}
-	
-	public boolean setCQREntityOnShoulder(AbstractEntityCQR p_191994_1_)
-    {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        nbttagcompound.setString("id", this.getEntityString());
-        this.writeToNBT(nbttagcompound);
 
-        if (p_191994_1_.addShoulderEntity(nbttagcompound))
-        {
-            this.world.removeEntity(this);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-	
+	public boolean setCQREntityOnShoulder(AbstractEntityCQR p_191994_1_) {
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		nbttagcompound.setString("id", this.getEntityString());
+		this.writeToNBT(nbttagcompound);
+
+		if (p_191994_1_.addShoulderEntity(nbttagcompound)) {
+			this.world.removeEntity(this);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.FIRE_CHARGE, 1));
 	}
-	
+
 	@Override
 	public boolean canSitOnShoulder() {
 		return true;
 	}
-	
-	
-	
+
 	@Override
 	public boolean setEntityOnShoulder(EntityPlayer p_191994_1_) {
 		return super.setEntityOnShoulder(p_191994_1_);
 	}
-	
+
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if(isTamed() && player != getOwner()) {
+		if (isTamed() && player != getOwner()) {
 			return true;
 		}
 		return super.processInteract(player, hand);

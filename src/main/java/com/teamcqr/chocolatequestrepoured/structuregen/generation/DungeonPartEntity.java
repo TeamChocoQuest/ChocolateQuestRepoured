@@ -42,8 +42,8 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		this.dungeonMobType = dungeonMobType;
 		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, partPos.getX(), partPos.getZ());
-			//this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
-			if(inha != null) {
+			// this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+			if (inha != null) {
 				this.dungeonMobType = inha.getName();
 			}
 			CQRMain.logger.warn("Created dungeon part entity with mob type default at {}", partPos);
@@ -56,7 +56,7 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 
 		compound.setInteger("mirror", this.settings.getMirror().ordinal());
 		compound.setInteger("rotation", this.settings.getRotation().ordinal());
-		//compound.setInteger("mob", this.dungeonMobType.ordinal());
+		// compound.setInteger("mob", this.dungeonMobType.ordinal());
 		compound.setString("mob", this.dungeonMobType);
 
 		// Save entities
@@ -76,7 +76,7 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		this.settings = new PlacementSettings();
 		this.settings.setMirror(Mirror.values()[compound.getInteger("mirror")]);
 		this.settings.setRotation(Rotation.values()[compound.getInteger("rotation")]);
-		//this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
+		// this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
 		this.dungeonMobType = compound.getString("mob");
 
 		// Load entities

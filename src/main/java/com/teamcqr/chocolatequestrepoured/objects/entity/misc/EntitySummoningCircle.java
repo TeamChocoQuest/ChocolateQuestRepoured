@@ -105,21 +105,21 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 				for (int i = 0; i < 4; i++) {
 					this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble());
 				}
-				
-				if(!this.world.isRemote) {
-					CQRFaction faction = this.summoner != null ?  this.summoner.getSummonerFaction() : null;
-					for(Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(this.width / 2, 0, this.width / 2), getPosition().add(-this.width / 2, 3, -this.width / 2)), 
-							faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
-								if(ent != null && ent.isEntityAlive() && ent instanceof EntityLivingBase) {
-									((EntityLivingBase)ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 80, 0));
-								}
-							}
+
+				if (!this.world.isRemote) {
+					CQRFaction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
+					for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(this.width / 2, 0, this.width / 2), getPosition().add(-this.width / 2, 3, -this.width / 2)), faction != null ? TargetUtil
+							.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
+						if (ent != null && ent.isEntityAlive() && ent instanceof EntityLivingBase) {
+							((EntityLivingBase) ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 80, 0));
+						}
+					}
 				}
-				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 1.0F, 0.0F, 0.0F, 20);
-				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 0.5F, 0.0F, 0.5F, 1);
-				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 0.5F, 0.0F, -0.5F, 1);
-				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, -0.5F, 0.0F, 0.5F, 1);
-				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, -0.5F, 0.0F, -0.5F, 1);
+				// this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 1.0F, 0.0F, 0.0F, 20);
+				// this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 0.5F, 0.0F, 0.5F, 1);
+				// this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 0.5F, 0.0F, -0.5F, 1);
+				// this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, -0.5F, 0.0F, 0.5F, 1);
+				// this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, -0.5F, 0.0F, -0.5F, 1);
 			}
 		}
 	}

@@ -26,7 +26,7 @@ public class ModMaterials {
 		public static final ArmorMaterial ARMOR_BACKPACK = createArmorMaterial("backpack", 67, new int[] { 1, 3, 3, 1 }, 9, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA, 0.0F);
 		public static final ArmorMaterial DIAMOND_DYABLE = createArmorMaterial("diamond_dyable", 30, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0F);
 		public static final ArmorMaterial IRON_DYABLE = createArmorMaterial("iron_dyable", 12, new int[] { 2, 5, 6, 2 }, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
-		public static final ArmorMaterial ARMOR_CROWN = createArmorMaterial("king_crown", 10, new int[] { 4,7,9,4}, 20, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5F);
+		public static final ArmorMaterial ARMOR_CROWN = createArmorMaterial("king_crown", 10, new int[] { 4, 7, 9, 4 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0.5F);
 
 		private static ArmorMaterial createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {
 			return EnumHelper.addArmorMaterial(name, Reference.MODID + ":" + name, durability, reductionAmounts, enchantability, soundOnEquip, toughness);

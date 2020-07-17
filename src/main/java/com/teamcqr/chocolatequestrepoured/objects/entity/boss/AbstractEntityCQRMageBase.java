@@ -71,10 +71,10 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 			this.revealIdentity();
 		}
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
-		if(isIdentityHidden()) {
+		if (isIdentityHidden()) {
 			return new TextComponentString("???");
 		}
 		return super.getDisplayName();

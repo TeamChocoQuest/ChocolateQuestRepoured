@@ -18,8 +18,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
- * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub:
- * https://github.com/DerToaster98
+ * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class WallPartRailingTower implements IWallPart {
 

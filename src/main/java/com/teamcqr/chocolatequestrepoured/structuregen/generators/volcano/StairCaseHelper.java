@@ -9,28 +9,12 @@ public class StairCaseHelper {
 
 	public enum EStairSection {
 		/**
-		 * North: -z
-		 * East: +x
-		 * South: +z
-		 * West: -x
+		 * North: -z East: +x South: +z West: -x
 		 * 
-		 * NE: z- x+
-		 * SE: z+ x+
-		 * SW: z+ x-
-		 * NW: z- x-
+		 * NE: z- x+ SE: z+ x+ SW: z+ x- NW: z- x-
 		 */
 
-		NORTH("NORTH_EAST"),
-		NORTH_EAST("EAST_SEC"),
-		EAST_SEC("EAST"),
-		EAST("SOUTH_EAST"),
-		SOUTH_EAST("SOUTH_SEC"),
-		SOUTH_SEC("SOUTH"),
-		SOUTH("SOUTH_WEST"),
-		SOUTH_WEST("WEST_SEC"),
-		WEST_SEC("WEST"),
-		WEST("NORTH_WEST"),
-		NORTH_WEST("NORTH_SEC"),
+		NORTH("NORTH_EAST"), NORTH_EAST("EAST_SEC"), EAST_SEC("EAST"), EAST("SOUTH_EAST"), SOUTH_EAST("SOUTH_SEC"), SOUTH_SEC("SOUTH"), SOUTH("SOUTH_WEST"), SOUTH_WEST("WEST_SEC"), WEST_SEC("WEST"), WEST("NORTH_WEST"), NORTH_WEST("NORTH_SEC"),
 		NORTH_SEC("NORTH");
 
 		private String successorName;
@@ -70,8 +54,7 @@ public class StairCaseHelper {
 		case 1:
 			return EStairSection.SOUTH_EAST;
 		/*
-		 * case 2:
-		 * return EStairSection.SOUTH_WEST;
+		 * case 2: return EStairSection.SOUTH_WEST;
 		 */
 		case 2:
 			return EStairSection.NORTH_WEST;

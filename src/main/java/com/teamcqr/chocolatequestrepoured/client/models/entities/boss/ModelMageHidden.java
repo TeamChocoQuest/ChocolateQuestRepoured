@@ -5,8 +5,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import net.minecraft.client.model.ModelRenderer;
 
 /**
- * Necromancer - Arlo The Epic
- * Created using Tabula 7.0.1
+ * Necromancer - Arlo The Epic Created using Tabula 7.0.1
  */
 public class ModelMageHidden extends ModelCQRBiped {
 

@@ -8,7 +8,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectileWeb extends ProjectileBase {
-	
+
 	private EntityLivingBase shooter;
 
 	public ProjectileWeb(World worldIn) {
@@ -24,7 +24,7 @@ public class ProjectileWeb extends ProjectileBase {
 		this.shooter = shooter;
 		this.isImmuneToFire = false;
 	}
-	
+
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
@@ -45,7 +45,7 @@ public class ProjectileWeb extends ProjectileBase {
 			super.onImpact(result);
 		}
 	}
-	
+
 	@Override
 	public boolean hasNoGravity() {
 		return false;

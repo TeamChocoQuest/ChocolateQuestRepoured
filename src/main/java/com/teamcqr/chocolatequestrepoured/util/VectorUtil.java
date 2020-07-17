@@ -5,9 +5,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class VectorUtil {
 
@@ -54,15 +52,14 @@ public class VectorUtil {
 
 	public static NBTTagCompound createVectorNBTTag(Vec3d vector) {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-        nbttagcompound.setDouble("X", vector.x);
-        nbttagcompound.setDouble("Y", vector.y);
-        nbttagcompound.setDouble("Z", vector.z);
-        return nbttagcompound;
+		nbttagcompound.setDouble("X", vector.x);
+		nbttagcompound.setDouble("Y", vector.y);
+		nbttagcompound.setDouble("Z", vector.z);
+		return nbttagcompound;
 	}
-	
-	public static Vec3d getVectorFromTag(NBTTagCompound tag)
-    {
-        return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
-    }
+
+	public static Vec3d getVectorFromTag(NBTTagCompound tag) {
+		return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
+	}
 
 }

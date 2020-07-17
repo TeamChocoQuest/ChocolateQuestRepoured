@@ -137,8 +137,8 @@ public class LootTableLoader {
 						entries[i] = items.get(i).getAsLootEntry(i);
 					}
 
-					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest),
-							Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getPath() + "_pool"));
+					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(
+							CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getPath() + "_pool"));
 				} else {
 					for (int i = 0; i < items.size(); i++) {
 						lootTable.addPool(items.get(i).getAsSingleLootPool(i));

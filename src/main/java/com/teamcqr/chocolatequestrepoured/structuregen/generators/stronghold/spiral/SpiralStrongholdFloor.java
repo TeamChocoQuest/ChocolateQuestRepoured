@@ -32,7 +32,7 @@ public class SpiralStrongholdFloor {
 	private int roomCount;
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
-	
+
 	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
@@ -44,23 +44,23 @@ public class SpiralStrongholdFloor {
 		this.roomGrid = new EStrongholdRoomType[sideLength][sideLength];
 		this.coordinateGrid = new BlockPos[sideLength][sideLength];
 	}
-	
+
 	public void calculateRoomGrid(EStrongholdRoomType entranceRoomType, boolean rev) {
 		int x = entranceIndex.getFirst();
 		int z = entranceIndex.getSecond();
-		while(roomCount > 0) {
+		while (roomCount > 0) {
 			roomCount--;
-			if(roomCount == 0) {
-				exitIndex = new Tuple<>(x,z);
-				if(isLastFloor) {
+			if (roomCount == 0) {
+				exitIndex = new Tuple<>(x, z);
+				if (isLastFloor) {
 					roomGrid[x][z] = EStrongholdRoomType.BOSS;
 				} else {
 					roomGrid[x][z] = getExitRoomType(x, z, rev);
 				}
 				break;
 			}
-			if(x == 0 && z == 0) {
-				if(rev) {
+			if (x == 0 && z == 0) {
+				if (rev) {
 					roomGrid[x][z] = EStrongholdRoomType.CURVE_SE;
 					x += 1;
 				} else {
@@ -69,8 +69,8 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(x == (sideLength -1) && z == (sideLength -1)) {
-				if(rev) {
+			if (x == (sideLength - 1) && z == (sideLength - 1)) {
+				if (rev) {
 					roomGrid[x][z] = EStrongholdRoomType.CURVE_NW;
 					x -= 1;
 				} else {
@@ -79,8 +79,8 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(x == 0 && z == (sideLength -1)) {
-				if(rev) {
+			if (x == 0 && z == (sideLength - 1)) {
+				if (rev) {
 					roomGrid[x][z] = EStrongholdRoomType.CURVE_EN;
 					z -= 1;
 				} else {
@@ -89,8 +89,8 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(x == (sideLength -1) && z == 0) {
-				if(rev) {
+			if (x == (sideLength - 1) && z == 0) {
+				if (rev) {
 					roomGrid[x][z] = EStrongholdRoomType.CURVE_WS;
 					z += 1;
 				} else {
@@ -99,9 +99,9 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(x == 0) {
-				//Left side
-				if(!rev) {
+			if (x == 0) {
+				// Left side
+				if (!rev) {
 					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
 					z += 1;
 				} else {
@@ -110,9 +110,9 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(x == (sideLength -1)) {
-				//Right side
-				if(rev) {
+			if (x == (sideLength - 1)) {
+				// Right side
+				if (rev) {
 					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
 					z += 1;
 				} else {
@@ -121,9 +121,9 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(z == 0) {
-				//Bottom side
-				if(rev) {
+			if (z == 0) {
+				// Bottom side
+				if (rev) {
 					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_WE;
 					x += 1;
 				} else {
@@ -132,9 +132,9 @@ public class SpiralStrongholdFloor {
 				}
 				continue;
 			}
-			if(z == (sideLength -1)) {
-				//Top side
-				if(!rev) {
+			if (z == (sideLength - 1)) {
+				// Top side
+				if (!rev) {
 					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_WE;
 					x += 1;
 				} else {
@@ -145,79 +145,81 @@ public class SpiralStrongholdFloor {
 			}
 		}
 		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entranceRoomType;
-		//System.out.println("Done");
+		// System.out.println("Done");
 	}
-	
+
 	private EStrongholdRoomType getExitRoomType(int iX, int iZ, boolean rev) {
-		if(iX == 0 && iZ == 0) {
+		if (iX == 0 && iZ == 0) {
 			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_EE;
 		}
-		if(iX == 0 && iZ == (sideLength -1)) {
+		if (iX == 0 && iZ == (sideLength - 1)) {
 			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_NN;
 		}
-		if(iX == (sideLength -1) && iZ == 0) {
+		if (iX == (sideLength - 1) && iZ == 0) {
 			return rev ? EStrongholdRoomType.STAIR_WW : EStrongholdRoomType.STAIR_SS;
 		}
-		if(iX == (sideLength -1) && iZ == (sideLength -1)) {
+		if (iX == (sideLength - 1) && iZ == (sideLength - 1)) {
 			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_WW;
 		}
-		
-		//Stairs not in corners
-		if(iZ == 0) {
+
+		// Stairs not in corners
+		if (iZ == 0) {
 			return rev ? EStrongholdRoomType.STAIR_WW : EStrongholdRoomType.STAIR_EE;
 		}
-		if(iZ == (sideLength -1)) {
+		if (iZ == (sideLength - 1)) {
 			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_WW;
 		}
-		if(iX == 0) {
+		if (iX == 0) {
 			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_NN;
 		}
-		if(iX == (sideLength -1)) {
+		if (iX == (sideLength - 1)) {
 			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_SS;
 		}
 		return EStrongholdRoomType.NONE;
 	}
-	
+
 	public void calculateCoordinates(int y, int roomSizeX, int roomSizeZ) {
 		BlockPos entrancePos = new BlockPos(entranceCoordinates.getFirst(), y, entranceCoordinates.getSecond());
 		coordinateGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entrancePos;
-		for(int iX = 0; iX < sideLength; iX++) {
-			for(int iZ = 0; iZ < sideLength; iZ++) {
-				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
+		for (int iX = 0; iX < sideLength; iX++) {
+			for (int iZ = 0; iZ < sideLength; iZ++) {
+				if ((iX == 0 || iX == (sideLength - 1)) || (iZ == 0 || iZ == (sideLength - 1))) {
 					EStrongholdRoomType room = roomGrid[iX][iZ];
-					if(room != null && !room.equals(EStrongholdRoomType.NONE)) {
+					if (room != null && !room.equals(EStrongholdRoomType.NONE)) {
 						int x = (iX - entranceIndex.getFirst()) * roomSizeX;
 						x += entrancePos.getX();
 						int z = (iZ - entranceIndex.getSecond()) * roomSizeZ;
 						z += entrancePos.getZ();
-						coordinateGrid[iX][iZ] = new BlockPos(x,y,z);
+						coordinateGrid[iX][iZ] = new BlockPos(x, y, z);
 					}
 				}
 			}
 		}
 		coordinateGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entrancePos;
-		if(!this.isLastFloor) {
+		if (!this.isLastFloor) {
 			int x = (exitIndex.getFirst() - entranceIndex.getFirst()) * roomSizeX;
 			x += entrancePos.getX();
 			int z = (exitIndex.getSecond() - entranceIndex.getSecond()) * roomSizeZ;
 			z += entrancePos.getZ();
-			coordinateGrid[exitIndex.getFirst()][exitIndex.getSecond()] = new BlockPos(x,y,z);
+			coordinateGrid[exitIndex.getFirst()][exitIndex.getSecond()] = new BlockPos(x, y, z);
 			exitCoordinates = new Tuple<>(x, z);
 		}
 	}
-	
+
 	public Tuple<Integer, Integer> getExitCoordinates() {
 		return exitCoordinates;
 	}
+
 	public Tuple<Integer, Integer> getExitIndex() {
 		return exitIndex;
 	}
-	
+
 	public void overrideFirstRoomType(EStrongholdRoomType type) {
 		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = type;
 	}
+
 	public void overrideLastRoomType(EStrongholdRoomType type) {
-		if(!isLastFloor) {
+		if (!isLastFloor) {
 			roomGrid[exitIndex.getFirst()][exitIndex.getSecond()] = type;
 		}
 	}
@@ -225,18 +227,18 @@ public class SpiralStrongholdFloor {
 	public EStrongholdRoomType[][] getRoomGrid() {
 		return roomGrid;
 	}
-	
+
 	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, String mobType) {
 		List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
-		for(int iX = 0; iX < sideLength; iX++) {
-			for(int iZ = 0; iZ < sideLength; iZ++) {
-				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
+		for (int iX = 0; iX < sideLength; iX++) {
+			for (int iZ = 0; iZ < sideLength; iZ++) {
+				if ((iX == 0 || iX == (sideLength - 1)) || (iZ == 0 || iZ == (sideLength - 1))) {
 					EStrongholdRoomType type = roomGrid[iX][iZ];
-					if(type != null && !type.equals(EStrongholdRoomType.NONE)) {
-						if(dungeon != null && world != null) {
+					if (type != null && !type.equals(EStrongholdRoomType.NONE)) {
+						if (dungeon != null && world != null) {
 							File file = dungeon.getRoomNBTFileForType(type);
-							if(file != null) {
+							if (file != null) {
 								CQStructure room = this.generator.loadStructureFromFile(file);
 								BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(coordinateGrid[iX][iZ], room, settings);
 								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getBlockInfoList(), settings, mobType));
@@ -250,6 +252,7 @@ public class SpiralStrongholdFloor {
 		}
 		return strongholdParts;
 	}
+
 	public EStrongholdRoomType getExitRoomType() {
 		return roomGrid[exitIndex.getFirst()][exitIndex.getSecond()];
 	}

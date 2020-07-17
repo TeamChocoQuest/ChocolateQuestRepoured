@@ -10,25 +10,24 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderIceSpike extends Render<EntityIceSpike> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(
-			"textures/blocks/ice_packed.png");
-	
+	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/blocks/ice_packed.png");
+
 	private final ModelIceSpike model = new ModelIceSpike();
-	
+
 	public RenderIceSpike(RenderManager p_i46179_1_) {
 		super(p_i46179_1_);
 	}
-	
+
 	@Override
 	public void doRender(EntityIceSpike entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.rotate(180, 0, 0, 1);
 		this.bindTexture(this.getEntityTexture(entity));
-		this.model.render(entity, 2*entity.getAnimationProgress(partialTicks *2), 0.0F, 0F, 0.0F, 0.0F, 0.05F);
+		this.model.render(entity, 2 * entity.getAnimationProgress(partialTicks * 2), 0.0F, 0F, 0.0F, 0.0F, 0.05F);
 		GlStateManager.popMatrix();
 	}
-	
+
 	protected ResourceLocation getEntityTexture(EntityIceSpike p_110775_1_) {
 		return TEXTURE;
 	}

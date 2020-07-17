@@ -34,10 +34,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		}
 
 		/*
-		 * if(entity.deathTicks > 0 ) {
-		 * GlStateManager.pushMatrix();
-		 * GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
-		 * }
+		 * if(entity.deathTicks > 0 ) { GlStateManager.pushMatrix(); GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F); }
 		 */
 		if (entity.deathTicks > 0 && entity.deathTicks % 5 == 0) {
 			float f = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
@@ -47,9 +44,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		}
 		super.doRender(entity, x, y, z, entity.rotationYawHead, partialTicks);
 		/*
-		 * if(entity.deathTicks > 0 ) {
-		 * GlStateManager.popMatrix();
-		 * }
+		 * if(entity.deathTicks > 0 ) { GlStateManager.popMatrix(); }
 		 */
 	}
 

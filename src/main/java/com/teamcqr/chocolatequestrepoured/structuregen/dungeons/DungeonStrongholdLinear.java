@@ -17,9 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class DungeonStrongholdLinear extends DungeonBase {
 
@@ -52,11 +50,11 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	private int minFloorSize = 3;
 	private int maxFloorSize = 5;
-	
+
 	private int roomSizeX = 15;
 	private int roomSizeY = 10;
 	private int roomSizeZ = 15;
-	
+
 	private boolean useStairSegments = true;
 
 	// Generator for the old strongholds which were basic linear dungeons
@@ -66,7 +64,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	public DungeonStrongholdLinear(String name, Properties prop) {
 		super(name, prop);
-		
+
 		this.rotateDungeon = false;
 
 		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
@@ -78,9 +76,9 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		this.entranceStairSegmentFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairSegmentFolder", "stronghold/linear/entranceStairSegments");
 		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
-		
+
 		this.useStairSegments = PropertyFileHelper.getBooleanProperty(prop, "useStairSegments", true);
-		
+
 		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "stronghold/rooms/curves/EN");
 		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "stronghold/rooms/curves/ES");
 		this.curveNEFolder = PropertyFileHelper.getFileProperty(prop, "curveNEFolder", "stronghold/rooms/curves/NE");
@@ -131,7 +129,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	public File getEntranceBuilding() {
 		return this.getStructureFileFromDirectory(this.entranceBuildingFolder);
 	}
-	
+
 	public File getEntranceStairRoom() {
 		return this.getStructureFileFromDirectory(this.entranceStairFolder);
 	}
@@ -139,25 +137,25 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	public File getEntranceStairSegment() {
 		return this.getStructureFileFromDirectory(this.entranceStairSegmentFolder);
 	}
-	
+
 	public File getBossRoom() {
 		return this.getStructureFileFromDirectory(this.bossRoomFolder);
 	}
-	
+
 	public boolean useStairSegments() {
 		return this.useStairSegments;
 	}
-	
+
 	@Nullable
 	public File getStairRoom(ESkyDirection direction) {
 		return getRoom(direction, direction);
 	}
-	
+
 	@Nullable
 	public File getRoom(ESkyDirection entranceD, ESkyDirection exitD) {
 		File folder = null;
-		if(entranceD == exitD) {
-			switch(entranceD) {
+		if (entranceD == exitD) {
+			switch (entranceD) {
 			case EAST:
 				folder = stairEFolder;
 				break;
@@ -172,9 +170,9 @@ public class DungeonStrongholdLinear extends DungeonBase {
 				break;
 			}
 		} else {
-			switch(entranceD) {
+			switch (entranceD) {
 			case EAST:
-				switch(exitD) {
+				switch (exitD) {
 				case NORTH:
 					folder = curveENFolder;
 					break;
@@ -184,11 +182,12 @@ public class DungeonStrongholdLinear extends DungeonBase {
 				case WEST:
 					folder = hallEWFolder;
 					break;
-				default: break;
+				default:
+					break;
 				}
 				break;
 			case NORTH:
-				switch(exitD) {
+				switch (exitD) {
 				case EAST:
 					folder = curveNEFolder;
 					break;
@@ -198,11 +197,12 @@ public class DungeonStrongholdLinear extends DungeonBase {
 				case WEST:
 					folder = curveNWFolder;
 					break;
-				default: break;
+				default:
+					break;
 				}
 				break;
 			case SOUTH:
-				switch(exitD) {
+				switch (exitD) {
 				case EAST:
 					folder = curveSEFolder;
 					break;
@@ -212,11 +212,12 @@ public class DungeonStrongholdLinear extends DungeonBase {
 				case WEST:
 					folder = curveSWFolder;
 					break;
-				default: break;
+				default:
+					break;
 				}
 				break;
 			case WEST:
-				switch(exitD) {
+				switch (exitD) {
 				case EAST:
 					folder = hallWEFolder;
 					break;
@@ -226,34 +227,35 @@ public class DungeonStrongholdLinear extends DungeonBase {
 				case SOUTH:
 					folder = curveWSFolder;
 					break;
-				default: break;
+				default:
+					break;
 				}
 				break;
 			default:
 				break;
 			}
 		}
-		
-		if(folder != null) {
+
+		if (folder != null) {
 			return this.getStructureFileFromDirectory(folder);
 		}
 		return null;
 	}
-	
+
 	public int getFloorSize(Random random) {
 		int size = DungeonGenUtils.getIntBetweenBorders(minFloorSize, maxFloorSize);
 		if (size < 3) {
 			size = 3;
 		}
-		if( size % 2 == 0) {
+		if (size % 2 == 0) {
 			size += 1;
 		}
 		return size;
 	}
-	
+
 	public File getRoom(EStrongholdRoomType type) {
 		File folder = null;
-		switch(type) {
+		switch (type) {
 		case BOSS:
 			folder = bossRoomFolder;
 			break;
@@ -308,7 +310,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		default:
 			return null;
 		}
-		if(folder != null) {
+		if (folder != null) {
 			return this.getStructureFileFromDirectory(folder);
 		}
 		return null;

@@ -1,17 +1,23 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomReplacedRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class RoomGrid {
 	public static class Area2D {
@@ -295,18 +301,15 @@ public class RoomGrid {
 		initializeWalls(roomWidth, floorHeight);
 	}
 
-	private void initializeCellLinks()
-	{
+	private void initializeCellLinks() {
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {
 				for (int z = 0; z < roomsZ; z++) {
 					RoomGridCell cell = getCellAt(floor, x, z);
 
-					for (EnumFacing direction : EnumFacing.VALUES)
-					{
+					for (EnumFacing direction : EnumFacing.VALUES) {
 						RoomGridCell adjacent = getAdjacentCell(cell, direction);
-						if (adjacent != null)
-						{
+						if (adjacent != null) {
 							cell.registerAdjacentCell(adjacent, direction);
 							adjacent.registerAdjacentCell(cell, direction.getOpposite());
 						}
@@ -316,11 +319,10 @@ public class RoomGrid {
 		}
 	}
 
-	private void initializeWalls(int roomWidth, int floorHeight)
-	{
-		final int wallWidth = roomWidth + 2; //extends 1 block past each edge of the room
+	private void initializeWalls(int roomWidth, int floorHeight) {
+		final int wallWidth = roomWidth + 2; // extends 1 block past each edge of the room
 
-		//vertical walls
+		// vertical walls
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX + 1; x++) {
 				for (int z = 0; z < roomsZ; z++) {
@@ -332,15 +334,13 @@ public class RoomGrid {
 					wallList.add(wall);
 
 					RoomGridCell westCell = getCellAt(floor, x - 1, z);
-					if (westCell != null)
-					{
+					if (westCell != null) {
 						wall.registerAdjacentCell(westCell, EnumFacing.WEST);
 						westCell.registerAdjacentWall(wall, EnumFacing.EAST);
 					}
 
 					RoomGridCell eastCell = getCellAt(floor, x, z);
-					if (eastCell != null)
-					{
+					if (eastCell != null) {
 						wall.registerAdjacentCell(eastCell, EnumFacing.EAST);
 						eastCell.registerAdjacentWall(wall, EnumFacing.WEST);
 					}
@@ -348,7 +348,7 @@ public class RoomGrid {
 			}
 		}
 
-		//horizontal walls
+		// horizontal walls
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {
 				for (int z = 0; z < roomsZ + 1; z++) {
@@ -360,15 +360,13 @@ public class RoomGrid {
 					wallList.add(wall);
 
 					RoomGridCell northCell = getCellAt(floor, x, z - 1);
-					if (northCell != null)
-					{
+					if (northCell != null) {
 						wall.registerAdjacentCell(northCell, EnumFacing.NORTH);
 						northCell.registerAdjacentWall(wall, EnumFacing.SOUTH);
 					}
 
 					RoomGridCell southCell = getCellAt(floor, x, z);
-					if (southCell != null)
-					{
+					if (southCell != null) {
 						wall.registerAdjacentCell(southCell, EnumFacing.SOUTH);
 						southCell.registerAdjacentWall(wall, EnumFacing.NORTH);
 					}
@@ -422,11 +420,9 @@ public class RoomGrid {
 	}
 
 	/*
-	 * Returns a list (from largest area to smallest area) of contiguous 2d grid areas
-	 * that are on a given floor and satisfy a given condition.
+	 * Returns a list (from largest area to smallest area) of contiguous 2d grid areas that are on a given floor and satisfy a given condition.
 	 *
-	 * Note: Areas 2x2 or larger will always evaluate as larger than anything 1xN or Nx1.
-	 * This is done on purpose because 2x2+ areas are more useful for building.
+	 * Note: Areas 2x2 or larger will always evaluate as larger than anything 1xN or Nx1. This is done on purpose because 2x2+ areas are more useful for building.
 	 */
 	public ArrayList<Area2D> getAllGridAreasWhere(int floor, Predicate<RoomGridCell> condition, int minDimension1, int minDimension2) {
 		ArrayList<RoomGridPosition> floorPositions = new ArrayList<>();
@@ -645,11 +641,11 @@ public class RoomGrid {
 	}
 
 	private void setPathingForCellSet(HashSet<RoomGridCell> cellsInArea) {
-	    HashSet<RoomGridCell> masterPathList = new HashSet<>();
+		HashSet<RoomGridCell> masterPathList = new HashSet<>();
 
 		// For each cell in this area
 		for (RoomGridCell cell : cellsInArea) {
-            masterPathList.add(cell); //make sure to include this cell in pathing
+			masterPathList.add(cell); // make sure to include this cell in pathing
 
 			// Check each horizontal (EnumFacing order is S W N E)
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
@@ -660,17 +656,17 @@ public class RoomGrid {
 						adjacent.isSelectedForBuilding() && // adjacent cell is selected
 						!cell.getPathableCellsCopy().contains(adjacent)) // I haven't already been pathed to it
 				{
-                    //maintain a "superset" of all pathable sets of cells we see around us
-				    masterPathList.addAll(adjacent.getPathableCellsCopy());
+					// maintain a "superset" of all pathable sets of cells we see around us
+					masterPathList.addAll(adjacent.getPathableCellsCopy());
 				}
 			}
 		}
 
-        //Reflexively copy out the new master list so all connected sections path to each other
-        // This MUST be done last, since we don't know who is around the new cell area until we check all of them
-        for (RoomGridCell cell : masterPathList) {
-            cell.addPathableCells(masterPathList);
-        }
+		// Reflexively copy out the new master list so all connected sections path to each other
+		// This MUST be done last, since we don't know who is around the new cell area until we check all of them
+		for (RoomGridCell cell : masterPathList) {
+			cell.addPathableCells(masterPathList);
+		}
 	}
 
 	public boolean adjacentCellIsPopulated(RoomGridCell startCell, EnumFacing direction) {
@@ -696,10 +692,7 @@ public class RoomGrid {
 	public boolean cellIsValidForRoof(RoomGridCell cell) {
 		RoomGridCell below = this.getAdjacentCell(cell, EnumFacing.DOWN);
 
-		return (below != null &&
-				!cell.isSelectedForBuilding() &&
-				below.isPopulated() &&
-				!(below.getFloor() == bossArea.start.getFloor())); //Don't want to build roofs over the boss floor rooms
+		return (below != null && !cell.isSelectedForBuilding() && below.isPopulated() && !(below.getFloor() == bossArea.start.getFloor())); // Don't want to build roofs over the boss floor rooms
 	}
 
 	public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction) {
@@ -726,18 +719,16 @@ public class RoomGrid {
 		}
 
 		if (!next.isPresent()) {
-			//If we hit a null cell that means we hit the edge of the castle grid
-			result.clear(); //Clear the bridge cell array - can't build a bridge here
+			// If we hit a null cell that means we hit the edge of the castle grid
+			result.clear(); // Clear the bridge cell array - can't build a bridge here
 		} else if (!next.get().isPopulated()) {
-			//Have to end on a populated room, otherwise it's a bridge to nowhere
+			// Have to end on a populated room, otherwise it's a bridge to nowhere
 			result.clear();
-		}
-		else if (next.get().isPopulated() && !next.get().reachableFromSide(direction.getOpposite())) {
-			//If we hit another room, make sure that room can exit to the bridge
+		} else if (next.get().isPopulated() && !next.get().reachableFromSide(direction.getOpposite())) {
+			// If we hit another room, make sure that room can exit to the bridge
 			result.clear();
-		}
-		else if (next.get().isPopulated() && next.get().getRoom() instanceof CastleRoomReplacedRoof) {
-			//Don't want to path to replaced roofs either
+		} else if (next.get().isPopulated() && next.get().getRoom() instanceof CastleRoomReplacedRoof) {
+			// Don't want to path to replaced roofs either
 			result.clear();
 		}
 
@@ -784,9 +775,7 @@ public class RoomGrid {
 	public boolean canAttachTower(RoomGridCell cell, EnumFacing side) {
 		RoomGridCell adjacent = this.getAdjacentCell(cell, side);
 
-		return (!cell.getRoom().isTower() &&
-				adjacent != null && !(adjacent.isPopulated() &&
-				!cell.getRoom().isStairsOrLanding()));
+		return (!cell.getRoom().isTower() && adjacent != null && !(adjacent.isPopulated() && !cell.getRoom().isStairsOrLanding()));
 	}
 
 	public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2) {

@@ -128,9 +128,9 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote) {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				this.setDead();
-				
+
 				onFinalDeath();
-				
+
 				if (this.doesExplodeOnDeath()) {
 					this.world.createExplosion(this, this.posX, this.posY, this.posZ, 8.0F, true);
 				}
@@ -139,11 +139,11 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			super.onDeathUpdate();
 		}
 	}
-	
+
 	protected void onFinalDeath() {
-		
+
 	}
-	
+
 	protected SoundEvent getFinalDeathSound() {
 		return this.getDeathSound();
 	}
@@ -168,6 +168,17 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	public boolean canMountEntity() {
 		return false;
+	}
+	
+	//Damage cap stuff
+	@Override
+	protected boolean damageCapEnabled() {
+		return true;
+	}
+	
+	@Override
+	protected float maxDamageInPercentOfMaxHP() {
+		return 0.5F;
 	}
 
 }

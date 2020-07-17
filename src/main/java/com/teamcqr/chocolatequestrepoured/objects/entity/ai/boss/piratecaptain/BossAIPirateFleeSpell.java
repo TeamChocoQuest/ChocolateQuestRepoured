@@ -27,7 +27,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		}
 		return BossAIPirateFleeSpell.this.isSuitableAlly(input);
 	};
-	
+
 	public BossAIPirateFleeSpell(EntityCQRPirateCaptain entity, int cooldown, int chargingTicks, int castingTicks) {
 		super(entity, cooldown, chargingTicks, castingTicks);
 		this.setup(true, true, true, false);
@@ -40,24 +40,24 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return super.shouldContinueExecuting() && hasNearbyAllies();
 	}
-	
+
 	private boolean hasNearbyAllies() {
 		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
 		Vec3d v1 = entity.getPositionVector().add(vec);
 		Vec3d v2 = entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
-		
+
 		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
 		return !allies.isEmpty();
 	}
-	
+
 	private int getNearbyAllies(EntityLiving o1) {
-		Vec3d vec = new Vec3d(4,2,4);
+		Vec3d vec = new Vec3d(4, 2, 4);
 		Vec3d v1 = o1.getPositionVector().add(vec);
 		Vec3d v2 = o1.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
@@ -67,12 +67,12 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	@Override
 	public void castSpell() {
 		super.castSpell();
-		
+
 		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
 		Vec3d v1 = entity.getPositionVector().add(vec);
 		Vec3d v2 = entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
-		
+
 		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
 		allies.sort(new Comparator<EntityLiving>() {
 
@@ -87,8 +87,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		Vec3d p = allies.get(0).getPositionVector();
 		entity.attemptTeleport(p.x, p.y, p.z);
 	}
-	
-	
+
 	@Override
 	public int getWeight() {
 		return 2;
@@ -113,7 +112,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	public float getBlue() {
 		return 0;
 	}
-	
+
 	protected boolean isSuitableAlly(EntityLiving possibleAlly) {
 		if (possibleAlly == this.entity) {
 			return false;

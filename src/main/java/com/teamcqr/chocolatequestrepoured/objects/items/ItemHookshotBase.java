@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
-public abstract class ItemHookshotBase extends Item /*implements IRangedWeapon*/ {
+public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon */ {
 
 	private enum BlockGroup {
 		BASE_SOLID("BASE_SOLID"), BASE_WOOD("BASE_WOOD"), BASE_STONE("BASE_STONE"), BASE_DIRT("BASE_DIRT");
@@ -207,7 +207,7 @@ public abstract class ItemHookshotBase extends Item /*implements IRangedWeapon*/
 			 */
 			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
-			hookEntity.shoot(v.x, v.y, v.z, (float)hookEntity.getTravelSpeed(), 0);
+			hookEntity.shoot(v.x, v.y, v.z, (float) hookEntity.getTravelSpeed(), 0);
 			worldIn.spawnEntity(hookEntity);
 			return hookEntity;
 		}

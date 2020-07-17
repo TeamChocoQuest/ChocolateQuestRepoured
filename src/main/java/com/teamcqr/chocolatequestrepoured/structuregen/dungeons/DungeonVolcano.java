@@ -21,9 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class DungeonVolcano extends DungeonBase {
 
@@ -95,25 +93,14 @@ public class DungeonVolcano extends DungeonBase {
 		this.ores = PropertyFileHelper.getBooleanProperty(prop, "ores", true);
 		this.oreConcentration = Math.min(Math.max(1, Math.abs(PropertyFileHelper.getIntProperty(prop, "orechance", 5))), 100);
 		this.rampMobName = prop.getProperty("rampMob", "minecraft:zombie");
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
-				LootTableList.CHESTS_ABANDONED_MINESHAFT,
-				LootTableList.CHESTS_NETHER_BRIDGE,
-				ModLoottables.CHESTS_FOOD
-		});
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
 		this.stoneBlock = PropertyFileHelper.getBlockProperty(prop, "topBlock", Blocks.STONE);
 		this.lowerStoneBlock = PropertyFileHelper.getBlockProperty(prop, "lowerBlock", Blocks.COBBLESTONE);
 		this.lavaBlock = PropertyFileHelper.getBlockProperty(prop, "lavaBlock", Blocks.LAVA);
 		this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 		this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
 		this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
-		this.oreBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "oreBlocks", new Block[] {
-				Blocks.COAL_ORE,
-				Blocks.IRON_ORE,
-				Blocks.GOLD_BLOCK,
-				Blocks.EMERALD_ORE,
-				Blocks.REDSTONE_ORE,
-				Blocks.DIAMOND_ORE
-		});
+		this.oreBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "oreBlocks", new Block[] { Blocks.COAL_ORE, Blocks.IRON_ORE, Blocks.GOLD_BLOCK, Blocks.EMERALD_ORE, Blocks.REDSTONE_ORE, Blocks.DIAMOND_ORE });
 
 		// Stronghold
 		this.minStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "minStrongholdFloors", 3);

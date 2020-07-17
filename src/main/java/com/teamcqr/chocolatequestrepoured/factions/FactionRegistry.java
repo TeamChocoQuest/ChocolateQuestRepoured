@@ -220,8 +220,8 @@ public class FactionRegistry {
 		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		}
-		
-		if(entity instanceof IEntityOwnable && ((IEntityOwnable)entity).getOwner() != null) {
+
+		if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() != null) {
 			return this.getFactionOf(((IEntityOwnable) entity).getOwner());
 		}
 

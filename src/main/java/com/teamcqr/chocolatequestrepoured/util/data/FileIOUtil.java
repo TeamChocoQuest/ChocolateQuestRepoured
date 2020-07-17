@@ -20,8 +20,7 @@ import net.minecraftforge.common.util.Constants;
 /**
  * Simple static util class for saving/reading files to/from disk
  *
- * @author jdawg3636
- *         GitHub: https://github.com/jdawg3636
+ * @author jdawg3636 GitHub: https://github.com/jdawg3636
  *
  * @version 05.09.19
  */
@@ -168,5 +167,5 @@ public class FileIOUtil {
 
 		return nbtFileFilter;
 	}
-	
+
 }

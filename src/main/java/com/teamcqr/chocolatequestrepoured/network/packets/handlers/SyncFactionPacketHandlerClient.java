@@ -13,8 +13,8 @@ public class SyncFactionPacketHandlerClient implements IMessageHandler<SyncFacti
 
 	@Override
 	public IMessage onMessage(SyncFactionDataReply message, MessageContext ctx) {
-		if(ctx.side.isClient()) {
-			//Fill in faction data in GUI
+		if (ctx.side.isClient()) {
+			// Fill in faction data in GUI
 		}
 		return null;
 	}

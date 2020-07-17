@@ -1,19 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import java.io.File;
+import java.util.Properties;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.io.File;
-import java.util.Properties;
-
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class PropertyFileHelper {
 
@@ -130,10 +129,10 @@ public class PropertyFileHelper {
 
 		return retBlock;
 	}
-	
+
 	public static Block[] getBlockArrayProperty(Properties prop, String key, Block[] defVal) {
 		String s = prop.getProperty(key);
-		if(s == null || s.isEmpty()) {
+		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
 		String[] splitSTr = s.split(",");
@@ -144,7 +143,7 @@ public class PropertyFileHelper {
 			if (tmp.isEmpty()) {
 				retVal = ArrayUtils.remove(retVal, i - removed);
 				removed++;
-			} else if(Block.getBlockFromName(tmp) != null){
+			} else if (Block.getBlockFromName(tmp) != null) {
 				retVal[i - removed] = Block.getBlockFromName(tmp);
 			}
 		}
@@ -160,7 +159,7 @@ public class PropertyFileHelper {
 
 		Block retBlock = Block.getBlockFromName(s);
 		if (retBlock == null) {
-			//Try one last thing - to see if the block exists only as a block variant in forge 1.12
+			// Try one last thing - to see if the block exists only as a block variant in forge 1.12
 			IBlockState variantState = EnumForgeBlockVariant.getVariantStateFromName(s);
 			if (variantState == null) {
 				return defVal;

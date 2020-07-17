@@ -7,14 +7,13 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class SyncFactionDataRequest implements IMessage {
-	
-	
-	private UUID requestingPlayer; 
-	
+
+	private UUID requestingPlayer;
+
 	public SyncFactionDataRequest() {
-		
+
 	}
-	
+
 	public SyncFactionDataRequest(UUID requestingPlayer) {
 		this.requestingPlayer = requestingPlayer;
 	}

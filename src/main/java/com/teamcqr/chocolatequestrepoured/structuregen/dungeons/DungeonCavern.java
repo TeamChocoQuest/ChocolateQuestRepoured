@@ -36,9 +36,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.storage.loot.LootTableList;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class DungeonCavern extends DungeonBase {
 
@@ -133,7 +131,8 @@ public class DungeonCavern extends DungeonBase {
 
 			GeneratorCavern cave = new GeneratorCavern(world, centerLoc.add(distance.getX(), 0, distance.getZ()), this, dungeonGenerator);
 			// Let the cave calculate its air blocks...
-			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, this.random));
+			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(
+					this.minHeight, this.maxHeight, this.random));
 			cave.preProcess();
 
 			int vLength = DungeonGenUtils.getIntBetweenBorders(this.minRoomDistance, this.maxRoomDistance, this.random);

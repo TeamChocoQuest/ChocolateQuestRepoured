@@ -6,8 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
 /**
- * SummoningCircle - DerToaster
- * Created using Tabula 7.0.1
+ * SummoningCircle - DerToaster Created using Tabula 7.0.1
  */
 public class ModelSummoningCircle extends ModelBase {
 	public ModelRenderer circle;

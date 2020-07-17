@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -43,7 +44,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
 		this.defaultCeiling = true;
 
-		this.endX = ROOMS_LONG * sideLength; //1 wall space in between them
+		this.endX = ROOMS_LONG * sideLength; // 1 wall space in between them
 		this.lenX = this.endX + 1;
 		this.endZ = ROOMS_SHORT * sideLength - 1;
 		this.lenZ = this.endZ + 1;

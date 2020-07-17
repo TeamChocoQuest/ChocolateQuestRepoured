@@ -24,71 +24,71 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 public class DungeonDataManager {
-	
+
 	private static final Map<World, DungeonDataManager> INSTANCES = new HashMap<>();
-	
+
 	private boolean modifiedSinceLastSave = false;
 	private Map<String, Set<BlockPos>> dungeonData = new HashMap<>();
 	protected final String DATA_FILE_NAME = "structures.nbt";
 	private File file;
 
 	public static void handleWorldLoad(World world) {
-		if(isWorldValid(world) && !INSTANCES.containsKey(world)) {
+		if (isWorldValid(world) && !INSTANCES.containsKey(world)) {
 			createInstance(world);
 			getInstance(world).readData();
 		}
 	}
-	
+
 	public static void handleWorldUnload(World world) {
-		if(isWorldValid(world)) {
+		if (isWorldValid(world)) {
 			deleteInstance(world);
 		}
 	}
-	
+
 	public static void handleWorldSave(World world) {
-		if(isWorldValid(world)) {
+		if (isWorldValid(world)) {
 			getInstance(world).saveData();
 		}
 	}
-	
+
 	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position) {
-		if(isWorldValid(world)) {
+		if (isWorldValid(world)) {
 			getInstance(world).insertDungeonEntry(dungeon.getDungeonName(), position);
 		}
 	}
-	
+
 	@Nullable
 	public static DungeonDataManager getInstance(World world) {
-		if(isWorldValid(world)) {
+		if (isWorldValid(world)) {
 			return INSTANCES.get(world);
 		}
 		return null;
 	}
-	
+
 	private static boolean isWorldValid(World world) {
 		return world != null && !world.isRemote;
 	}
-	
+
 	private static void createInstance(World world) {
-		if(isWorldValid(world) && !INSTANCES.containsKey(world)) {
+		if (isWorldValid(world) && !INSTANCES.containsKey(world)) {
 			INSTANCES.put(world, new DungeonDataManager(world));
 		}
 	}
-	
+
 	private static void deleteInstance(World world) {
-		if(isWorldValid(world) && INSTANCES.containsKey(world)) {
+		if (isWorldValid(world) && INSTANCES.containsKey(world)) {
 			INSTANCES.remove(world);
 		}
 	}
-	
+
 	public static Set<String> getSpawnedDungeonNames(World world) {
 		return getInstance(world).getSpawnedDungeonNames();
 	}
-	
+
 	private Set<String> getSpawnedDungeonNames() {
 		return dungeonData.keySet();
 	}
-	
+
 	public static Set<BlockPos> getLocationsOfDungeon(World world, String dungeon) {
 		return getInstance(world).getLocationsOfDungeon(dungeon);
 	}
@@ -107,22 +107,22 @@ public class DungeonDataManager {
 		}
 		this.file = FileIOUtil.getOrCreateFile(path, DATA_FILE_NAME);
 	}
-	
+
 	public void insertDungeonEntry(String dungeon, BlockPos location) {
 		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon, new HashSet<>());
-		if(spawnedLocs.add(location)) {
+		if (spawnedLocs.add(location)) {
 			dungeonData.put(dungeon, spawnedLocs);
-			if(!modifiedSinceLastSave) {
+			if (!modifiedSinceLastSave) {
 				modifiedSinceLastSave = true;
 			}
 		}
 	}
-	
+
 	public void saveData() {
-		if(modifiedSinceLastSave) {
+		if (modifiedSinceLastSave) {
 			this.file.delete();
 			try {
-				if(!this.file.createNewFile()) {
+				if (!this.file.createNewFile()) {
 					CQRMain.logger.warn("Unable to create file: " + this.file.getAbsolutePath() + "! Information about dungeons may be lost!");
 					return;
 				}
@@ -131,10 +131,10 @@ public class DungeonDataManager {
 			}
 			NBTTagCompound root = new NBTTagCompound();
 			NBTTagList dungeonNames = FileIOUtil.getOrCreateTagList(root, "dungeons", Constants.NBT.TAG_STRING);
-			for(Map.Entry<String, Set<BlockPos>> data : this.dungeonData.entrySet()) {
-				if(!data.getValue().isEmpty()) {
+			for (Map.Entry<String, Set<BlockPos>> data : this.dungeonData.entrySet()) {
+				if (!data.getValue().isEmpty()) {
 					NBTTagList locs = FileIOUtil.getOrCreateTagList(root, "dun-" + data.getKey(), Constants.NBT.TAG_COMPOUND);
-					for(BlockPos loc : data.getValue()) {
+					for (BlockPos loc : data.getValue()) {
 						locs.appendTag(NBTUtil.createPosTag(loc));
 					}
 					dungeonNames.appendTag(new NBTTagString(data.getKey()));
@@ -144,7 +144,7 @@ public class DungeonDataManager {
 			modifiedSinceLastSave = false;
 		}
 	}
-	
+
 	public void readData() {
 		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(file);
 		NBTTagList dungeons = FileIOUtil.getOrCreateTagList(root, "dungeons", Constants.NBT.TAG_STRING);
@@ -152,14 +152,14 @@ public class DungeonDataManager {
 
 			@Override
 			public void accept(NBTBase t) {
-				if(t instanceof NBTTagString) {
+				if (t instanceof NBTTagString) {
 					NBTTagString tag = (NBTTagString) t;
 					String s = tag.getString();
 					Set<BlockPos> poss = dungeonData.getOrDefault(s, new HashSet<>());
 					NBTTagList data = FileIOUtil.getOrCreateTagList(root, "dun-" + s, Constants.NBT.TAG_COMPOUND);
 					data.forEach(new Consumer<NBTBase>() {
 						public void accept(NBTBase t1) {
-							if(t1 instanceof NBTTagCompound) {
+							if (t1 instanceof NBTTagCompound) {
 								NBTTagCompound tag1 = (NBTTagCompound) t1;
 								poss.add(NBTUtil.getPosFromTag(tag1));
 							}
@@ -175,15 +175,14 @@ public class DungeonDataManager {
 		if (dungeon.getSpawnLimit() < 0) {
 			return false;
 		}
-		if(dungeonData.isEmpty()) {
+		if (dungeonData.isEmpty()) {
 			return false;
 		}
 		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon.getDungeonName(), new HashSet<>());
-		if(spawnedLocs.isEmpty()) {
+		if (spawnedLocs.isEmpty()) {
 			return false;
 		}
 		return spawnedLocs.size() >= dungeon.getSpawnLimit();
 	}
-
 
 }

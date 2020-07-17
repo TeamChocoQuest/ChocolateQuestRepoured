@@ -53,25 +53,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
-	
+
 	private int lightningTick = 0;
 	private int borderLightning = 20;
 	private boolean active = false;
 	private int activationCooldown = 80;
 	private int dragonAttackCooldown = 0;
 	private int lavaCounterAttackCooldown = 0;
-	
+
 	public EntityCQRWalkerKing(World worldIn) {
 		super(worldIn);
-		
+
 		this.bossInfoServer.setColor(Color.PURPLE);
 		this.bossInfoServer.setCreateFog(true);
 		this.bossInfoServer.setDarkenSky(true);
 		this.bossInfoServer.setPlayEndBossMusic(true);
-		
+
 		this.experienceValue = 200;
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
@@ -81,53 +81,53 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.tasks.addTask(16, new BossAIWalkerLightningCircles(this));
 		this.tasks.addTask(17, new BossAIWalkerLightningSpiral(this));
 	}
-	
+
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
-		if(dragonAttackCooldown > 0) {
+		if (dragonAttackCooldown > 0) {
 			dragonAttackCooldown--;
 		}
-		if(fallDistance > 12) {
+		if (fallDistance > 12) {
 			BlockPos teleportPos = null;
 			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
-			if(getAttackTarget() != null && !world.isRemote) {
+			if (getAttackTarget() != null && !world.isRemote) {
 				Vec3d v = getAttackTarget().getLookVec();
 				v = v.normalize();
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
 				teleportPos = new BlockPos(getAttackTarget().getPositionVector().subtract(v));
-				if(world.isBlockFullCube(teleportPos) || world.isBlockFullCube(teleportPos.offset(EnumFacing.UP)) || world.isAirBlock(teleportPos.offset(EnumFacing.DOWN))) {
+				if (world.isBlockFullCube(teleportPos) || world.isBlockFullCube(teleportPos.offset(EnumFacing.UP)) || world.isAirBlock(teleportPos.offset(EnumFacing.DOWN))) {
 					teleportPos = getAttackTarget().getPosition();
 				}
-			} else if(getHomePositionCQR() != null && !world.isRemote) {
+			} else if (getHomePositionCQR() != null && !world.isRemote) {
 				teleportPos = getHomePositionCQR();
 			}
-			if(teleport) {
-				//spawn cloud
-				for(int ix = -1; ix <= 1; ix++) {
-					for(int iz = -1; iz <= 1; iz++) {
-						((WorldServer)world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + ix, posY +2, posZ +iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
+			if (teleport) {
+				// spawn cloud
+				for (int ix = -1; ix <= 1; ix++) {
+					for (int iz = -1; iz <= 1; iz++) {
+						((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + ix, posY + 2, posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 					}
 				}
 				world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
 				attemptTeleport(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
 			}
 		}
-		if(active && !world.isRemote) {
-			if(getAttackTarget() == null && !world.isRemote) {
+		if (active && !world.isRemote) {
+			if (getAttackTarget() == null && !world.isRemote) {
 				activationCooldown--;
-				if(activationCooldown < 0) {
+				if (activationCooldown < 0) {
 					active = false;
 					world.getWorldInfo().setThundering(false);
 					activationCooldown = 80;
 				}
-			} else if(!world.isRemote) {
+			} else if (!world.isRemote) {
 				world.getWorldInfo().setCleanWeatherTime(0);
 				world.getWorldInfo().setRainTime(400);
 				world.getWorldInfo().setThunderTime(200);
@@ -135,33 +135,33 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				world.getWorldInfo().setThundering(true);
 			}
 			lightningTick++;
-			if(lightningTick > borderLightning) {
+			if (lightningTick > borderLightning) {
 				// strike lightning
 				lightningTick = 0;
 				borderLightning = 50;
 				int x = -20 + getRNG().nextInt(41);
 				int z = -15 + getRNG().nextInt(41);
 				int y = -10 + getRNG().nextInt(21);
-				
-				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(world, posX +x, posY +y, posZ +z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+
+				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(world, posX + x, posY + y, posZ + z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 				world.spawnEntity(entitybolt);
 			}
-			
-			if(this.isInLava() && hasAttackTarget() && lavaCounterAttackCooldown <= 0) {
+
+			if (this.isInLava() && hasAttackTarget() && lavaCounterAttackCooldown <= 0) {
 				teleportBehindEntity(getAttackTarget());
 				attackEntityAsMob(getAttackTarget());
 				lavaCounterAttackCooldown = 20;
 			}
-			if(lavaCounterAttackCooldown > 0) {
+			if (lavaCounterAttackCooldown > 0) {
 				lavaCounterAttackCooldown--;
 			}
-			
-		} else if(world.isRemote) {
+
+		} else if (world.isRemote) {
 			active = false;
 		}
 		super.onLivingUpdate();
 	}
-	
+
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		this.heal(1F);
@@ -171,21 +171,21 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		return super.attackEntityFrom(source, amount);
 	}
-	
+
 	private void backStabAttacker(DamageSource source) {
-		if(source.getTrueSource() != null) {
-			if(teleportBehindEntity(source.getTrueSource())) {
+		if (source.getTrueSource() != null) {
+			if (teleportBehindEntity(source.getTrueSource())) {
 				attackEntityAsMob(source.getTrueSource());
 			}
 		}
 	}
-	
+
 	private boolean teleportBehindEntity(Entity entity) {
 		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
-		if(getNavigator().canEntityStandOnPos(new BlockPos(p.x,p.y,p.z))) {
-			for(int ix = -1; ix <= 1; ix++) {
-				for(int iz = -1; iz <= 1; iz++) {
-					((WorldServer)world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + ix, posY +2, posZ +iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
+		if (getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
+			for (int ix = -1; ix <= 1; ix++) {
+				for (int iz = -1; iz <= 1; iz++) {
+					((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + ix, posY + 2, posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 				}
 			}
 			world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
@@ -195,32 +195,26 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	private void handleAttackedByDragon(Entity dragon) {
-		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null /*&& (getRNG().nextInt(100) +1) > 95*/) {
-			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
+		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null /* && (getRNG().nextInt(100) +1) > 95 */) {
+			if (dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
 				dragon.getControllingPassenger().dismountRidingEntity();
-				//((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
-				/*if(dragon instanceof EntityTameable) {
-					try {
-						((EntityTameable)dragon).setOwnerId(null);
-					} catch(NullPointerException ex) {
-						
-					}
-					try {
-						((EntityTameable)dragon).setTamedBy(null);
-					} catch(NullPointerException ex) {
-						
-					}
-					((EntityTameable)dragon).setTamed(false);
-				}*/
+				// ((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
+				/*
+				 * if(dragon instanceof EntityTameable) { try { ((EntityTameable)dragon).setOwnerId(null); } catch(NullPointerException ex) {
+				 * 
+				 * } try { ((EntityTameable)dragon).setTamedBy(null); } catch(NullPointerException ex) {
+				 * 
+				 * } ((EntityTameable)dragon).setTamed(false); }
+				 */
 			}
 		}
-		
-		//KILL IT!!!
+
+		// KILL IT!!!
 		int lightningCount = 6 + getRNG().nextInt(3);
 		double angle = 360 / lightningCount;
 		double dragonSize = dragon.width > dragon.height ? dragon.width : dragon.height;
-		Vec3d v = new Vec3d(3 + (3 * dragonSize),0,0);
-		for(int i = 0; i < lightningCount; i++) {
+		Vec3d v = new Vec3d(3 + (3 * dragonSize), 0, 0);
+		for (int i = 0; i < lightningCount; i++) {
 			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
 			int dY = -3 + getRNG().nextInt(7);
 			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, false, false, 1F, 0.00F, 0.0F, 0.4F);
@@ -230,7 +224,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	private void handleActivation() {
-		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
+		if (!world.isRemote && !world.getWorldInfo().isThundering()) {
 			active = true;
 			activationCooldown = 80;
 			world.getWorldInfo().setCleanWeatherTime(0);
@@ -240,80 +234,80 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			world.getWorldInfo().setThundering(true);
 		}
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if(source == DamageSource.WITHER) {
-			this.heal(amount /2);
+		if (source == DamageSource.WITHER) {
+			this.heal(amount / 2);
 			return true;
 		}
-		if(source == DamageSource.FALL) {
+		if (source == DamageSource.FALL) {
 			return true;
 		}
-		
-		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
+
+		if (!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
 			amount *= 0.5F;
 		}
-		
-		if(source.getImmediateSource() != null ) {
-			if(source.getImmediateSource() instanceof EntitySpectralArrow) {
+
+		if (source.getImmediateSource() != null) {
+			if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 				amount *= 2;
 				super.attackEntityFrom(source, amount, sentFromPart);
 				return true;
 			}
-			if(source.getImmediateSource() instanceof EntityThrowable && !world.isRemote) {
-				//STAB HIM IN THE BACK!!
+			if (source.getImmediateSource() instanceof EntityThrowable && !world.isRemote) {
+				// STAB HIM IN THE BACK!!
 				backStabAttacker(source);
 				return false;
 			}
 		}
-		
+
 		handleActivation();
 
-		if(source.getTrueSource() != null && !world.isRemote) {
+		if (source.getTrueSource() != null && !world.isRemote) {
 			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
-			if(resLoc != null) {
+			if (resLoc != null) {
 				// Start IceAndFire compatibility
 				boolean flag = resLoc.getNamespace().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
 				if (flag) {
 					amount /= 2;
 				}
 				// End IceAndFire compatibility
-				
+
 				CQRFaction fac = FactionRegistry.instance().getFactionOf(source.getTrueSource());
 				boolean dragonFactionFlag = fac != null && (fac.getName().equalsIgnoreCase("DRAGON") || fac.getName().equalsIgnoreCase("DRAGONS"));
-				
-				//If we are attacked by a dragon: KILL IT
-				if(dragonAttackCooldown <= 0 && (dragonFactionFlag || resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {
+
+				// If we are attacked by a dragon: KILL IT
+				if (dragonAttackCooldown <= 0 && (dragonFactionFlag || resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {
 					dragonAttackCooldown = 80;
 					handleAttackedByDragon(source.getTrueSource());
 				}
 			}
 		}
-		
-		if(CQRConfig.bosses.harderWalkerKing && !world.isRemote) {
-			if(getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
-				//Revenge Attack
-				if(getRNG().nextDouble() < 0.7) {
+
+		if (CQRConfig.bosses.harderWalkerKing && !world.isRemote) {
+			if (getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
+				// Revenge Attack
+				if (getRNG().nextDouble() < 0.7) {
 					attackEntityAsMob(source.getTrueSource());
 					teleportBehindEntity(source.getTrueSource());
-				} 
+				}
 			}
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
-	
+
 	@Override
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
-		if(!CQRConfig.bosses.harderWalkerKing) {
+		if (!CQRConfig.bosses.harderWalkerKing) {
 			return super.canBlockDamageSource(damageSourceIn);
 		}
 		if (super.canBlockDamageSource(damageSourceIn)) {
-			if(getRNG().nextDouble() < 0.3) {
+			if (getRNG().nextDouble() < 0.3) {
 				return true;
 			}
-			if(getRNG().nextDouble() < 0.1) {
-				//Attack back
+			if (getRNG().nextDouble() < 0.1) {
+				// Attack back
 				counterAttack();
 			}
 		}
@@ -323,7 +317,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	private void counterAttack() {
 		counterAttack(this.getAttackTarget());
 	}
-	
+
 	private void counterAttack(Entity entitylivingbase) {
 		double d0 = Math.min(entitylivingbase.posY, this.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.posY) + 1.0D;
@@ -337,13 +331,13 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			float f2 = f + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
 			this.spawnFangs(this.posX + (double) MathHelper.cos(f2) * 2.5D, this.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 		}
-		
+
 		for (int k = 0; k < 11; ++k) {
 			float f2 = f + (float) k * (float) Math.PI * 2.0F / 11.0F + ((float) Math.PI * 2F / 5F);
 			this.spawnFangs(this.posX + (double) MathHelper.cos(f2) * 3.5D, this.posZ + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, 6);
 		}
 	}
-	
+
 	private void spawnFangs(double x, double z, double minY, double maxY, float rotationYawRadians, int warmupDelayTicks) {
 		BlockPos blockpos = new BlockPos(x, maxY, z);
 		boolean flag = false;
@@ -372,16 +366,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		if (flag) {
-			EntityIceSpike entityevokerfangs = new EntityIceSpike(this.world, x, (double) blockpos.getY() + d0 -0.5, z, rotationYawRadians, warmupDelayTicks, this);
+			EntityIceSpike entityevokerfangs = new EntityIceSpike(this.world, x, (double) blockpos.getY() + d0 - 0.5, z, rotationYawRadians, warmupDelayTicks, this);
 			this.world.spawnEntity(entityevokerfangs);
 		}
 	}
-	
+
 	@Override
 	public boolean hasCape() {
 		return this.deathTicks <= 0;
 	}
-	
+
 	@Override
 	public ResourceLocation getResourceLocationOfCape() {
 		return Capes.CAPE_WALKER;
@@ -401,21 +395,21 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.WALKERS;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_WITHER_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_WITHER_HURT;
 	}
-	
+
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_WITHER_DEATH;
 	};
-	
+
 	@Override
 	protected SoundEvent getFinalDeathSound() {
 		return SoundEvents.ENTITY_ENDERMEN_DEATH;
@@ -424,15 +418,15 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		
+
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
-		
+
 		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.KING_CROWN, 1));
-		
-		//Give him some armor...
-		if(CQRConfig.bosses.armorForTheWalkerKing) {
+
+		// Give him some armor...
+		if (CQRConfig.bosses.armorForTheWalkerKing) {
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
 
@@ -444,58 +438,54 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			ItemStack chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) ModItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 9437439);
 			setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
-			
+
 			ItemStack legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) ModItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 9437439);
 			setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
-			
+
 			ItemStack boobs = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) ModItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 9437439);
 			setItemStackToSlot(EntityEquipmentSlot.FEET, boobs);
 		}
 	}
-	
-	
+
 	private ItemStack getSword() {
 		ItemStack sword = new ItemStack(ModItems.SWORD_WALKER, 1);
-		
-		/*for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) {
-			sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true);
-		}*/
+
+		/*
+		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true); }
+		 */
 		sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 30, true);
-		if(!EnchantmentHelper.hasVanishingCurse(sword)) {
+		if (!EnchantmentHelper.hasVanishingCurse(sword)) {
 			sword.addEnchantment(Enchantments.VANISHING_CURSE, 1);
 		}
-		
+
 		return sword;
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
 		world.getWorldInfo().setThundering(false);
 		super.onDeath(cause);
 	}
-	
+
 	@Override
 	protected void onDeathUpdate() {
 		super.onDeathUpdate();
-		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
-        {
-            if (this.deathTicks > 150 && this.deathTicks % 5 == 0)
-            {
-                this.dropExperience(MathHelper.floor((float)50F));
-            }
-        }
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
+			if (this.deathTicks > 150 && this.deathTicks % 5 == 0) {
+				this.dropExperience(MathHelper.floor((float) 50F));
+			}
+		}
 	}
-	
+
 	@Override
 	protected void onFinalDeath() {
-		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
-        {
-            this.dropExperience(MathHelper.floor((float)1200));
-        }
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
+			this.dropExperience(MathHelper.floor((float) 1200));
+		}
 	}
-	
+
 	@Override
 	protected boolean usesEnderDragonDeath() {
 		return true;
@@ -505,25 +495,23 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	protected boolean doesExplodeOnDeath() {
 		return false;
 	}
-	
+
 	@Override
 	protected EnumParticleTypes getDeathAnimParticles() {
 		return EnumParticleTypes.EXPLOSION_HUGE;
 	}
-	
+
 	@Override
 	protected int getExperiencePoints(EntityPlayer player) {
 		return super.getExperiencePoints(player);
 	}
-	
-	private void dropExperience(int p_184668_1_)
-    {
-        while (p_184668_1_ > 0)
-        {
-            int i = EntityXPOrb.getXPSplit(p_184668_1_);
-            p_184668_1_ -= i;
-            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
-        }
-    }
-	
+
+	private void dropExperience(int p_184668_1_) {
+		while (p_184668_1_ > 0) {
+			int i = EntityXPOrb.getXPSplit(p_184668_1_);
+			p_184668_1_ -= i;
+			this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
+		}
+	}
+
 }

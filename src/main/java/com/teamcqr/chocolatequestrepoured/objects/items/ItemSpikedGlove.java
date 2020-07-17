@@ -21,31 +21,31 @@ public class ItemSpikedGlove extends Item {
 	public ItemSpikedGlove() {
 		super();
 		setMaxStackSize(1);
-		//With this durability you should be able to climb 1200m in total
+		// With this durability you should be able to climb 1200m in total
 		setMaxDamage(6000);
 	}
-	
+
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		if(entityIn instanceof EntityLivingBase) {
-			EntityLivingBase entity = (EntityLivingBase)entityIn;
-			if(entity.getHeldItemMainhand().getItem() instanceof ItemSpikedGlove && entity.getHeldItemOffhand().getItem() instanceof ItemSpikedGlove) {
-				//We actually have two bear hands
-				if(entity instanceof EntityPlayer && ((EntityPlayer)entity).isSpectator()) {
+		if (entityIn instanceof EntityLivingBase) {
+			EntityLivingBase entity = (EntityLivingBase) entityIn;
+			if (entity.getHeldItemMainhand().getItem() instanceof ItemSpikedGlove && entity.getHeldItemOffhand().getItem() instanceof ItemSpikedGlove) {
+				// We actually have two bear hands
+				if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator()) {
 					return;
 				}
 				if (entity.collidedHorizontally) {
 					if (worldIn.isRemote) {
 						if (entity.moveForward > 0) {
 							double vY = 0.2D;
-							
+
 							int effLvlMain = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getHeldItemMainhand());
 							int effLvlOff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getHeldItemOffhand());
-							if(effLvlMain > 0 && effLvlOff > 0) {
-								vY += 0.1D* (((0.5D * (double)effLvlMain) + (0.5D * (double)effLvlOff)) / (double)2);
+							if (effLvlMain > 0 && effLvlOff > 0) {
+								vY += 0.1D * (((0.5D * (double) effLvlMain) + (0.5D * (double) effLvlOff)) / (double) 2);
 							}
-							
+
 							entity.motionY = vY;
 							entity.getHeldItemMainhand().damageItem(1, entity);
 							entity.getHeldItemOffhand().damageItem(1, entity);
@@ -63,12 +63,12 @@ public class ItemSpikedGlove extends Item {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
 		return (enchantment == Enchantments.EFFICIENCY || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING);
 	}
-	
+
 	private void createClimbingParticles(EntityLivingBase player, World world) {
 		int i = (int) player.posX;
 		int j = MathHelper.floor(player.getPosition().getY());
@@ -91,8 +91,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D,
-							(player.posZ + 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
@@ -116,8 +116,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D,
-							player.posZ + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
@@ -141,8 +141,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D,
-							(player.posZ - 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
@@ -162,11 +162,11 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D,
-							player.posZ + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
 	}
-	
+
 }

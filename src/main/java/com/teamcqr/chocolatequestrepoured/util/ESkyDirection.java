@@ -3,9 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 import net.minecraft.util.EnumFacing;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public enum ESkyDirection {
 
@@ -27,7 +25,7 @@ public enum ESkyDirection {
 	}
 
 	public static ESkyDirection fromFacing(EnumFacing direction) {
-		switch(direction) {
+		switch (direction) {
 		case EAST:
 			return EAST;
 		case NORTH:

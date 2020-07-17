@@ -5,21 +5,19 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.MathHelper;
 
-public class BossAISpiderLeapAttack extends EntityAIBase
-{
-    /** The entity that is leaping. */
-    EntityLiving leaper;
-    /** The entity that the leaper is leaping towards. */
-    EntityLivingBase leapTarget;
-    /** The entity's motionY after leaping. */
-    float leapMotionY;
+public class BossAISpiderLeapAttack extends EntityAIBase {
+	/** The entity that is leaping. */
+	EntityLiving leaper;
+	/** The entity that the leaper is leaping towards. */
+	EntityLivingBase leapTarget;
+	/** The entity's motionY after leaping. */
+	float leapMotionY;
 
-	public BossAISpiderLeapAttack(EntityLiving leapingEntity, float leapMotionYIn)
-    {
-        this.leaper = leapingEntity;
-        this.leapMotionY = leapMotionYIn;
-        this.setMutexBits(5);
-    }
+	public BossAISpiderLeapAttack(EntityLiving leapingEntity, float leapMotionYIn) {
+		this.leaper = leapingEntity;
+		this.leapMotionY = leapMotionYIn;
+		this.setMutexBits(5);
+	}
 
 	/**
 	 * Returns whether the EntityAIBase should begin execution.

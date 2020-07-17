@@ -24,11 +24,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Copyright (c) 25.05.2019 Developed by MrMarnic GitHub:
- * https://github.com/MrMarnic
+ * Copyright (c) 25.05.2019 Developed by MrMarnic GitHub: https://github.com/MrMarnic
  */
 public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
-	
+
 	protected final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1.75, 1);
 
 	public BlockForceFieldNexus(Material materialIn) {
@@ -48,7 +47,7 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 		TileEntityForceFieldNexus tile = new TileEntityForceFieldNexus();
 		return tile;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;
@@ -57,16 +56,10 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 	/*
 	 * TODO implement nexus and determine if this is necessary
 	 * 
-	 * @Override
-	 * public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-	 * super.onBlockHarvested(worldIn, pos, state, player);
-	 * TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus) worldIn.getTileEntity(pos);
-	 * if (nexus.hasData()) {
-	 * nexus.getRegion().setEnabled(false);
-	 * }
-	 * }
+	 * @Override public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) { super.onBlockHarvested(worldIn, pos, state, player); TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus)
+	 * worldIn.getTileEntity(pos); if (nexus.hasData()) { nexus.getRegion().setEnabled(false); } }
 	 */
-	
+
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;

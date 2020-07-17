@@ -49,10 +49,10 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ModLoottables.ENTITIES_WALKER;
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
+		if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
 		}
 		return super.attackEntityFrom(source, amount);
@@ -68,5 +68,5 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		this.heal(new Float(this.getMaxHealth() * 0.025));
 	}
-	
+
 }

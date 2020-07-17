@@ -19,26 +19,23 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 	}
 
 	@Override
-	public PathPoint getPathPointToCoords(double x, double y, double z)
-    {
-        return super.openPoint(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
-    }
+	public PathPoint getPathPointToCoords(double x, double y, double z) {
+		return super.openPoint(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+	}
 
 	@Override
 	public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
 		int i = 0;
 
-        for (EnumFacing enumfacing : EnumFacing.values())
-        {
-            PathPoint pathpoint = this.openPoint(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(), currentPoint.z + enumfacing.getZOffset());
+		for (EnumFacing enumfacing : EnumFacing.values()) {
+			PathPoint pathpoint = this.openPoint(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(), currentPoint.z + enumfacing.getZOffset());
 
-            if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance)
-            {
-                pathOptions[i++] = pathpoint;
-            }
-        }
+			if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
+				pathOptions[i++] = pathpoint;
+			}
+		}
 
-        return i;
+		return i;
 	}
 
 	@Override

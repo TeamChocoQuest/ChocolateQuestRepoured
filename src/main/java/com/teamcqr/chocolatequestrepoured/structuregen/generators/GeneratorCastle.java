@@ -16,9 +16,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
- * Copyright (c) 25.05.2019
- * Developed by KalgogSmash
- * GitHub: https://github.com/KalgogSmash
+ * Copyright (c) 25.05.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 

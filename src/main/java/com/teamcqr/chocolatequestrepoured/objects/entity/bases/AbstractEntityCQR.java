@@ -186,7 +186,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected boolean canDespawn() {
 		return !CQRConfig.general.mobsFromCQSpawnerDontDespawn;
 	}
-	
+
 	protected int getTextureVariant() {
 		return this.getRNG().nextInt(this.getTextureCount());
 	}
@@ -242,6 +242,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
 		}
 
+		amount = handleDamageCap(amount);
+
 		if (super.attackEntityFrom(source, amount)) {
 			if (CQRConfig.mobs.armorShattersOnMobs) {
 				this.handleArmorBreaking();
@@ -251,6 +253,25 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		return false;
+	}
+	
+	protected boolean damageCapEnabled() {
+		return false;
+	}
+	
+	protected float maxDamageInPercentOfMaxHP() {
+		return 0.5F;
+	}
+	
+	protected float maxUncappedDamage() {
+		return 10F;
+	}
+	
+	private float handleDamageCap(float originalAmount) {
+		if(CQRConfig.advanced.enableMaxDamageCaps && damageCapEnabled()) {
+			return new Float(Math.min(Math.max(maxUncappedDamage(), getMaxHealth() * maxDamageInPercentOfMaxHP()), originalAmount));
+		}
+		return originalAmount;
 	}
 
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
@@ -305,7 +326,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(13, new EntityAIHooker(this)); /* AI for secondary Item */
 		this.tasks.addTask(14, new EntityAIBackstab(this));
 		this.tasks.addTask(15, new EntityAIAttack(this));
-		
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
 		this.tasks.addTask(21, new EntityAIFireFighter(this));
@@ -347,19 +367,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			boolean flag = d0 > 1.0D;
 
 			boolean backpackflag = false;
-			if(itemstack.getItem() instanceof ItemBackpack) {
+			if (itemstack.getItem() instanceof ItemBackpack) {
 				IItemHandler inv = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				if(inv != null) {
-					for(int i = 0; i < inv.getSlots(); i++) {
-						if(!inv.getStackInSlot(i).isEmpty()) {
+				if (inv != null) {
+					for (int i = 0; i < inv.getSlots(); i++) {
+						if (!inv.getStackInSlot(i).isEmpty()) {
 							backpackflag = true;
 							break;
 						}
 					}
 				}
 			}
-			
-			if ( backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && (double) (this.rand.nextFloat() - (float) lootingModifier * 0.01F) < d0)) {
+
+			if (backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && (double) (this.rand.nextFloat() - (float) lootingModifier * 0.01F) < d0)) {
 				if (!flag && itemstack.isItemStackDamageable() && !backpackflag) {
 					double durability = modalValue + MathHelper.clamp(this.rand.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
 					itemstack.setItemDamage((int) ((double) itemstack.getMaxDamage() * (1.0D - durability)));
@@ -755,21 +775,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leader = null;
 				this.leaderUUID = null;
 			} else {
-				if(this.world instanceof WorldServer) {
-					Entity leader = ((WorldServer)this.world).getEntityFromUuid(leaderUUID);
-					if(leader instanceof EntityLivingBase) {
+				if (this.world instanceof WorldServer) {
+					Entity leader = ((WorldServer) this.world).getEntityFromUuid(leaderUUID);
+					if (leader instanceof EntityLivingBase) {
 						this.leader = (EntityLivingBase) leader;
 						return (EntityLivingBase) leader;
 					}
 					return null;
 				}
-				
-				/*for (Entity entity : this.world.loadedEntityList) {
-					if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
-						this.leader = (EntityLivingBase) entity;
-						return (EntityLivingBase) entity;
-					}
-				}*/
+
+				/*
+				 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) { this.leader = (EntityLivingBase) entity; return
+				 * (EntityLivingBase) entity; } }
+				 */
 			}
 		} else {
 			this.leader = null;
@@ -1264,7 +1282,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.lastTimeHitByAxeWhileBlocking;
 	}
 
-	//@SideOnly(Side.CLIENT)
+	// @SideOnly(Side.CLIENT)
 	public boolean hasAttackTarget() {
 		if (world.isRemote) {
 			return this.dataManager.get(HAS_TARGET);
@@ -1328,19 +1346,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void setLeftShoulderEntity(NBTTagCompound tag) {
 		this.dataManager.set(SHOULDER_ENTITY, tag);
 	}
-	
+
 	public void onPutInSpawner() {
-		if(hasHomePositionCQR() && getHomePositionCQR() != null) {
-			//Recalculate the path positions to my new home
+		if (hasHomePositionCQR() && getHomePositionCQR() != null) {
+			// Recalculate the path positions to my new home
 			BlockPos homeNew = this.getPosition();
 			BlockPos v = homeNew.subtract(getHomePositionCQR());
-			for(int i = 0; i < this.pathPoints.length; i++) {
+			for (int i = 0; i < this.pathPoints.length; i++) {
 				pathPoints[i] = pathPoints[i].subtract(v);
 			}
 			setHomePositionCQR(homeNew);
 		}
 	}
-	
+
 	public boolean canUseSpinToWinAttack() {
 		return true;
 	}
@@ -1348,7 +1366,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public boolean isSpinToWinActive() {
 		return canUseSpinToWinAttack() && dataManager.get(SPIN_TO_WIN);
 	}
-	
+
 	@SideOnly(Side.SERVER)
 	public void setSpinToWin(boolean value) {
 		this.dataManager.set(SPIN_TO_WIN, value);

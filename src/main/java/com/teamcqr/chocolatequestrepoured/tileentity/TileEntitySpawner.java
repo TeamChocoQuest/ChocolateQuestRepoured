@@ -103,7 +103,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.turnBackIntoEntity();
 		}
 	}
-	
+
 	public void forceTurnBackIntoEntity() {
 		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 			this.turnBackIntoEntity();
@@ -157,9 +157,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				DungeonInhabitant mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 				nbt.setString("id", mobType.getEntityID().toString());
 			} else {
-				//nbt.setString("id", this.mobOverride.getEntityResourceLocation().toString());
+				// nbt.setString("id", this.mobOverride.getEntityResourceLocation().toString());
 				DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(this.mobOverride);
-				if(inha != null) {
+				if (inha != null) {
 					nbt.setString("id", inha.getEntityID().toString());
 				}
 			}

@@ -26,9 +26,9 @@ public class Perlin3D {
 		int xmax = xmin + 1;
 		int zmin = (int) Math.floor((double) z / (double) this.frequency);
 		int zmax = zmin + 1;
-		return (double) this.cosineInterpolate(this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmin), (float) this.getRandomAtPosition(xmax, y, zmin), (float) (x - xmin * this.frequency) / (float) this.frequency),
-				this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmax), (float) this.getRandomAtPosition(xmax, y, zmax), (float) (x - xmin * this.frequency) / (float) this.frequency),
-				((float) z - (float) zmin * (float) this.frequency) / (float) this.frequency);
+		return (double) this.cosineInterpolate(this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmin), (float) this.getRandomAtPosition(xmax, y, zmin), (float) (x - xmin * this.frequency) / (float) this.frequency), this
+				.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmax), (float) this.getRandomAtPosition(xmax, y, zmax), (float) (x - xmin * this.frequency) / (float) this.frequency), ((float) z - (float) zmin * (float) this.frequency)
+						/ (float) this.frequency);
 	}
 
 	private float cosineInterpolate(float a, float b, float x) {

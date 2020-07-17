@@ -41,18 +41,18 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.isExplosion()) {
+		if (source.isExplosion()) {
 			return false;
 		}
-		if(source.getTrueSource() != null && EntityUtil.isEntityFlying(source.getTrueSource())) {
+		if (source.getTrueSource() != null && EntityUtil.isEntityFlying(source.getTrueSource())) {
 			return false;
 		}
 		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
-			//this.explode(10F);
-			//this.setDead();
+			// this.explode(10F);
+			// this.setDead();
 			return true;
 		}
 		if (this.getRNG().nextInt(10) == 9) {
@@ -90,7 +90,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			}
 			Vec3d v = this.direction;
 			v = v.normalize();
-			//this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
+			// this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
 			this.motionX = v.x * 0.4D;
 			this.motionY = v.y * 0.25D;
 			this.motionZ = v.z * 0.4D;
@@ -111,7 +111,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 				Vec3d velo = targetPos.subtract(this.getPositionVector());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
-				//this.setVelocity(velo.x, velo.y * 1.5, velo.z);
+				// this.setVelocity(velo.x, velo.y * 1.5, velo.z);
 				this.motionX = velo.x;
 				this.motionY = velo.y * 2.5D;
 				this.motionZ = velo.z;
@@ -124,12 +124,12 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	protected void collideWithEntity(Entity entityIn) {
 		if (entityIn != this.summoner) {
 			super.collideWithEntity(entityIn);
-			
-			if(EntityUtil.isEntityFlying(entityIn)) {
-				if(this.summoner instanceof EntityLivingBase && entityIn instanceof EntityLivingBase) {
-					((EntityLivingBase)summoner).heal(((EntityLivingBase)entityIn).getHealth() / 2);
-					((EntityLivingBase)entityIn).motionY *= -2;
-					((EntityLivingBase)entityIn).velocityChanged = true;
+
+			if (EntityUtil.isEntityFlying(entityIn)) {
+				if (this.summoner instanceof EntityLivingBase && entityIn instanceof EntityLivingBase) {
+					((EntityLivingBase) summoner).heal(((EntityLivingBase) entityIn).getHealth() / 2);
+					((EntityLivingBase) entityIn).motionY *= -2;
+					((EntityLivingBase) entityIn).velocityChanged = true;
 				}
 			}
 			this.explode(0.75F);
@@ -181,7 +181,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(this.target.getPersistentID()));
 		}
 	}
-	
+
 	public boolean isAttacking() {
 		return this.attacking;
 	}

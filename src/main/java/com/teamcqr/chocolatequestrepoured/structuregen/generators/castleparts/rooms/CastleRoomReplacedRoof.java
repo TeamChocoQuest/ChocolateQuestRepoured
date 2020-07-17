@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomReplacedRoof extends CastleRoomBase {
@@ -16,10 +17,8 @@ public class CastleRoomReplacedRoof extends CastleRoomBase {
 		;
 	}
 
-
 	@Override
-	protected boolean hasFloor()
-	{
+	protected boolean hasFloor() {
 		return false;
 	}
 }

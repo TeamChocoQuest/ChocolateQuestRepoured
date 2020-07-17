@@ -40,92 +40,93 @@ public class ItemSummoningBone extends Item {
 		setMaxStackSize(1);
 		setNoRepair();
 	}
-	
+
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 40;
 	}
-	
+
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if(!worldIn.isRemote && spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
+		if (!worldIn.isRemote && spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
 			stack.damageItem(1, entityLiving);
 		}
-		if(entityLiving instanceof EntityPlayerMP) {
+		if (entityLiving instanceof EntityPlayerMP) {
 			((EntityPlayerMP) entityLiving).getCooldownTracker().setCooldown(this, 20);
 		}
-		if(stack.getItemDamage() >= stack.getMaxDamage()) {
+		if (stack.getItemDamage() >= stack.getMaxDamage()) {
 			return ItemStack.EMPTY;
 		}
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
-	
+
 	public boolean spawnEntity(EntityPlayer player, World worldIn, ItemStack item) {
 		Vec3d start = player.getPositionEyes(1.0F);
 		Vec3d end = start.add(player.getLookVec().scale(5.0D));
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null) {
-			if(worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(new BlockPos(result.hitVec).offset(EnumFacing.UP, 2))) {
-				//DONE: Spawn circle
+			if (worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(new BlockPos(result.hitVec).offset(EnumFacing.UP, 2))) {
+				// DONE: Spawn circle
 				ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
-				//Get entity id
-				if(item.hasTagCompound() && item.getTagCompound().hasKey("entity_to_summon")) {
+				// Get entity id
+				if (item.hasTagCompound() && item.getTagCompound().hasKey("entity_to_summon")) {
 					try {
-						NBTTagCompound tag = item.getTagCompound();//.getCompoundTag("tag");
+						NBTTagCompound tag = item.getTagCompound();// .getCompoundTag("tag");
 						resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
-						if(!EntityList.isRegistered(resLoc)) {
+						if (!EntityList.isRegistered(resLoc)) {
 							resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 						}
-					} catch(Exception ex) {
+					} catch (Exception ex) {
 						resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 					}
 				}
 				EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, null, player);
 				circle.setSummon(resLoc);
 				circle.setNoGravity(false);
-				circle.setPosition(result.hitVec.x, result.hitVec.y +1, result.hitVec.z);
+				circle.setPosition(result.hitVec.x, result.hitVec.y + 1, result.hitVec.z);
 				worldIn.spawnEntity(circle);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-	
+
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BOW;
 	}
-	
+
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
-		if(entityLiving instanceof EntityPlayer) {
+		if (entityLiving instanceof EntityPlayer) {
 			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, 20);
 		}
-		//stack.damageItem(1, entityLiving);
+		// stack.damageItem(1, entityLiving);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon")) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon")) {
 			try {
-				NBTTagCompound tag = stack.getTagCompound();//.getCompoundTag("tag");
+				NBTTagCompound tag = stack.getTagCompound();// .getCompoundTag("tag");
 				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
-			} catch(Exception ex) {
+			} catch (Exception ex) {
 				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + "missingNo");
 			}
 			return;
 		}
 		tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(Reference.MODID + ":skeleton"));
 	}
+
 	private String getEntityName(String registryName) {
 		EntityEntry entityEntry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName));
 		if (entityEntry != null) {
@@ -133,5 +134,5 @@ public class ItemSummoningBone extends Item {
 		}
 		return "missingNO";
 	}
-	
+
 }

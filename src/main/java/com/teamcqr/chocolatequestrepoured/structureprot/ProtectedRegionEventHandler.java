@@ -31,8 +31,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class ProtectedRegionEventHandler {
 
 	/*
-	 * Possible other events to use (do not delete): PlayerInteractEvent.LeftClickBlock PlayerInteractEvent.RightClickBlock
-	 * PlayerEvent.BreakSpeed
+	 * Possible other events to use (do not delete): PlayerInteractEvent.LeftClickBlock PlayerInteractEvent.RightClickBlock PlayerEvent.BreakSpeed
 	 */
 
 	private ProtectedRegionEventHandler() {

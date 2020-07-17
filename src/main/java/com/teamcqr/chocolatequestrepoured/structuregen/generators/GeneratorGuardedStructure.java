@@ -30,9 +30,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonGuardedCastle> {
 
@@ -157,15 +155,13 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 						this.structurePosList.set(i, pos);
 					}
 
-					this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+					this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(),
+							this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 					// Build the structure...
 					/*
-					 * int Y = pos.getY() - this.dungeon.getUnderGroundOffset();
-					 * int X = pos.getX() - (dungeonToSpawn.getSizeX() /2);
-					 * int Z = pos.getZ() - (dungeonToSpawn.getSizeZ() /2);
-					 * //pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0, - dungeonToSpawn.getSizeZ() /2);
-					 * pos = new BlockPos(X, Y, Z);
+					 * int Y = pos.getY() - this.dungeon.getUnderGroundOffset(); int X = pos.getX() - (dungeonToSpawn.getSizeX() /2); int Z = pos.getZ() - (dungeonToSpawn.getSizeZ() /2); //pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0, -
+					 * dungeonToSpawn.getSizeZ() /2); pos = new BlockPos(X, Y, Z);
 					 */
 
 					this.toGenerate.put(structure, pos);
@@ -203,7 +199,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			int index = 1;
 			BlockPos posLower = this.pos;
 			BlockPos posUpper = this.pos;
-			//List<String> bosses = new ArrayList<>();
+			// List<String> bosses = new ArrayList<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				// CQRMain.logger.info("Building house {}...", index);
 				BlockPos pos = this.toGenerate.get(structure);
@@ -275,10 +271,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			currChunk = this.world.getChunk(new BlockPos(currX, y, z));
 		} while (currX != end.getX());
 		/*
-		 * if(start.getZ() != end.getZ()) {
-		 * start = new BlockPos(end.getX(), start.getY(), start.getZ());
-		 * buildPathZ(start, end);
-		 * }
+		 * if(start.getZ() != end.getZ()) { start = new BlockPos(end.getX(), start.getY(), start.getZ()); buildPathZ(start, end); }
 		 */
 	}
 
@@ -298,10 +291,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			currChunk = this.world.getChunk(new BlockPos(x, y, currZ));
 		} while (currZ != end.getZ());
 		/*
-		 * if(start.getX() != end.getX()) {
-		 * start = new BlockPos(start.getX(), start.getY(), end.getZ());
-		 * buildPathZ(start, end);
-		 * }
+		 * if(start.getX() != end.getX()) { start = new BlockPos(start.getX(), start.getY(), end.getZ()); buildPathZ(start, end); }
 		 */
 	}
 
