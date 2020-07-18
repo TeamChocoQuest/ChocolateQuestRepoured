@@ -119,7 +119,7 @@ public class BlockFireCQR extends BlockFire {
 	}
 
 	private void tryCatchFire(World worldIn, BlockPos pos, int chance, Random random, int age, EnumFacing face) {
-		if (!ProtectedRegionHelper.isFireSpreadingPrevented(worldIn, pos, null, false)) {
+		if (ProtectedRegionHelper.isFireSpreadingPrevented(worldIn, pos, null, false)) {
 			return;
 		}
 		int i = worldIn.getBlockState(pos).getBlock().getFlammability(worldIn, pos, face);
