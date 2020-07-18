@@ -12,37 +12,31 @@ public class ModelPigMage extends ModelCQRBiped {
 	public ModelRenderer Leg_Cape;
 	public ModelRenderer Hood_Rear;
 	public ModelRenderer Buckle;
-	public ModelRenderer Eyes;
 	public ModelRenderer Hood_Top;
 	public ModelRenderer Hood_Left;
 	public ModelRenderer Hood_Right;
 	public ModelRenderer Hood_Front;
-	public ModelRenderer Arm_Left_Bone;
-	public ModelRenderer Arm_Right_Bone;
 
 	public ModelPigMage() {
 		super(128, 64, false);
 
-		this.bipedRightArm = new ModelRenderer(this, 32, 34);
+		this.bipedRightArm = new ModelRenderer(this, 80, 34);
 		this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
-		this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
+		this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
 
-		this.Arm_Right_Bone = new ModelRenderer(this, 51, 2);
-		this.Arm_Right_Bone.setRotationPoint(-2.0F, 6.0F, 0.0F);
-		this.Arm_Right_Bone.addBox(0.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
-
-		this.bipedLeftArm = new ModelRenderer(this, 32, 34);
+		this.bipedLeftArm = new ModelRenderer(this, 80, 34);
 		this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
-		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
-
-		this.Arm_Left_Bone = new ModelRenderer(this, 51, 2);
-		this.Arm_Left_Bone.setRotationPoint(0.0F, 6.0F, 0.0F);
-		this.Arm_Left_Bone.addBox(0.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
+		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
 
 		this.bipedHead = new ModelRenderer(this, 83, 0);
 		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
 		this.setRotateAngle(this.bipedHead, 0.0F, 0.017453292519943295F, 0.0F);
+
+		this.bipedHeadwear = new ModelRenderer(this, 96, 48);
+		this.bipedHeadwear.setRotationPoint(0, 0, 0);
+		this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.25F);
+		
 		this.Hood_Left = new ModelRenderer(this, 24, 14);
 		this.Hood_Left.setRotationPoint(4.5F, 0.0F, 0.0F);
 		this.Hood_Left.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
@@ -65,9 +59,6 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.Hood_Right = new ModelRenderer(this, 24, 14);
 		this.Hood_Right.setRotationPoint(-4.5F, 0.0F, 0.0F);
 		this.Hood_Right.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
-		this.Eyes = new ModelRenderer(this, 54, 18);
-		this.Eyes.setRotationPoint(0.0F, -4.0F, -4.1F);
-		this.Eyes.addBox(-3.0F, 0.0F, 0.0F, 6, 1, 0, 0.0F);
 		this.bipedRightLeg = new ModelRenderer(this, 0, 34);
 		this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
 		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
@@ -79,18 +70,15 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
 
 		this.bipedBody.addChild(this.Buckle);
-		this.bipedLeftArm.addChild(this.Arm_Left_Bone);
 		this.Hood_Top.addChild(this.Hood_Left);
-		this.bipedRightArm.addChild(this.Arm_Right_Bone);
 		this.bipedBody.addChild(this.Leg_Cape);
 		this.bipedHead.addChild(this.Hood_Rear);
 		this.Hood_Top.addChild(this.Hood_Front);
 		this.Hood_Rear.addChild(this.Hood_Top);
 		this.Hood_Top.addChild(this.Hood_Right);
-		this.bipedHead.addChild(this.Eyes);
 
-		this.bipedHeadwear.isHidden = true;
-		this.bipedHeadwear.showModel = false;
+		//this.bipedHeadwear.isHidden = true;
+		//this.bipedHeadwear.showModel = false;
 	}
 
 }
