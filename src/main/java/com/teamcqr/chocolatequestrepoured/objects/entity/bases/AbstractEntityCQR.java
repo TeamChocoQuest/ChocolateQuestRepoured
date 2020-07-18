@@ -242,7 +242,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
 		}
 
-		amount = handleDamageCap(amount);
+		amount = handleDamageCap(source, amount);
 
 		if (super.attackEntityFrom(source, amount)) {
 			if (CQRConfig.mobs.armorShattersOnMobs) {
@@ -267,7 +267,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return CQRConfig.mobs.maxUncappedDamageForNonBossMobs;
 	}
 	
-	private float handleDamageCap(float originalAmount) {
+	private float handleDamageCap(DamageSource source, float originalAmount) {
+		if(source.isCreativePlayer()) {
+			return originalAmount;
+		}
 		if(CQRConfig.advanced.enableMaxDamageCaps && damageCapEnabled()) {
 			return new Float(Math.min(Math.max(maxUncappedDamage(), getMaxHealth() * maxDamageInPercentOfMaxHP()), originalAmount));
 		}
