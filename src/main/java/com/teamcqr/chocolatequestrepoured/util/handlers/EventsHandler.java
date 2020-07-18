@@ -192,7 +192,7 @@ public class EventsHandler {
 
 		if (event.player.world.isRemote) {
 			TextureSetManager.unloadTextures();
-		} else if(event.player instanceof EntityPlayerMP) {
+		} else if (event.player instanceof EntityPlayerMP) {
 			// Send packets with ct's to player
 			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 		}
@@ -226,8 +226,8 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
 		if (CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
-			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2,
-					CQRConfig.bosses.antiCowardRadius), event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius))).isEmpty());
+			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
+					event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius))).isEmpty());
 		}
 	}
 

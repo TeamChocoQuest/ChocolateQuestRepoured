@@ -63,8 +63,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 
 		Chunk spawnChunk = world.getChunk(world.getSpawnPoint());
-		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ) && DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX,
-				chunkZ, dungeonSeparation)) {
+		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ) && DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
 			// Check if there is a village structure nearby
 			int checkDist = 20;
 			if (world.getVillageCollection().getNearestVillage(new BlockPos(chunkX << 4, world.getActualHeight() >> 1, chunkZ << 4), checkDist) != null) {

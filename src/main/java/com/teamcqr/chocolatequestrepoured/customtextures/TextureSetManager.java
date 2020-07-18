@@ -50,7 +50,7 @@ public class TextureSetManager {
 			// Ignore
 		}
 	}
-	
+
 	@SideOnly(Side.SERVER)
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
 		CustomTexturesPacket packet = new CustomTexturesPacket();
@@ -60,7 +60,7 @@ public class TextureSetManager {
 
 			packet.addPair(base64, path);
 		}
-		for(TextureSet ts : this.textureSets.values()) {
+		for (TextureSet ts : this.textureSets.values()) {
 			packet.addTextureSet(ts);
 		}
 		CQRMain.NETWORK.sendTo(packet, joiningPlayer);

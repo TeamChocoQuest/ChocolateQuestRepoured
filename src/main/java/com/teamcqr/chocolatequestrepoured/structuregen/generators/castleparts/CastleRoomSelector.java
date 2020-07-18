@@ -824,8 +824,8 @@ public class CastleRoomSelector {
 		if (aboveCell != null && !aboveCell.isPopulated()) {
 			for (EnumFacing side : EnumFacing.HORIZONTALS) {
 				RoomGridCell adjacent = this.grid.getAdjacentCell(cell, side);
-				if (adjacent != null && adjacent.needsRoomType() && !this.grid.cellBordersRoomType(cell, EnumRoomType.LANDING_DIRECTED) && !this.grid.cellBordersRoomType(adjacent, EnumRoomType.LANDING_DIRECTED) && this.grid.adjacentCellIsSelected(
-						aboveCell, side) && !this.grid.adjacentCellIsPopulated(aboveCell, side)) {
+				if (adjacent != null && adjacent.needsRoomType() && !this.grid.cellBordersRoomType(cell, EnumRoomType.LANDING_DIRECTED) && !this.grid.cellBordersRoomType(adjacent, EnumRoomType.LANDING_DIRECTED) && this.grid.adjacentCellIsSelected(aboveCell, side)
+						&& !this.grid.adjacentCellIsPopulated(aboveCell, side)) {
 					return side;
 				}
 			}
@@ -1017,7 +1017,8 @@ public class CastleRoomSelector {
 
 	private void determineWalls() {
 		/*
-		 * ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.isBossArea()); for (RoomGridCell cell : cells) { if (cell.getRoom() instanceof CastleRoomWalkableRoof) { this.determineWalkableRoofWalls(cell); } else {
+		 * ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.isBossArea()); for (RoomGridCell cell : cells) { if (cell.getRoom()
+		 * instanceof CastleRoomWalkableRoof) { this.determineWalkableRoofWalls(cell); } else {
 		 * this.determineNormalRoomWalls(cell); } }
 		 */
 		for (CastleMainStructWall wall : this.grid.getWallListCopy()) {

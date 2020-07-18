@@ -254,24 +254,24 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		return false;
 	}
-	
+
 	protected boolean damageCapEnabled() {
 		return CQRConfig.mobs.enableDamageCapForNonBossMobs;
 	}
-	
+
 	protected float maxDamageInPercentOfMaxHP() {
 		return CQRConfig.mobs.maxUncappedDamageInMaxHPPercent;
 	}
-	
+
 	protected float maxUncappedDamage() {
 		return CQRConfig.mobs.maxUncappedDamageForNonBossMobs;
 	}
-	
+
 	private float handleDamageCap(DamageSource source, float originalAmount) {
-		if(source.isCreativePlayer() || source.canHarmInCreative()) {
+		if (source.isCreativePlayer() || source.canHarmInCreative()) {
 			return originalAmount;
 		}
-		if(CQRConfig.advanced.enableMaxDamageCaps && damageCapEnabled()) {
+		if (CQRConfig.advanced.enableMaxDamageCaps && damageCapEnabled()) {
 			return new Float(Math.min(Math.max(maxUncappedDamage(), getMaxHealth() * maxDamageInPercentOfMaxHP()), originalAmount));
 		}
 		return originalAmount;
@@ -788,7 +788,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				}
 
 				/*
-				 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) { this.leader = (EntityLivingBase) entity; return
+				 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) &&
+				 * entity.isEntityAlive()) { this.leader = (EntityLivingBase) entity; return
 				 * (EntityLivingBase) entity; } }
 				 */
 			}

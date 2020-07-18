@@ -564,7 +564,8 @@ public class CastleMainStructWall {
 	}
 
 	/*
-	 * Whether to build a door or window is usually determined by how far along the wall we are. This function gets the relevant length along the wall based on if we are a horizontal wall or a vertical wall.
+	 * Whether to build a door or window is usually determined by how far along the wall we are. This function gets the relevant length along the wall based on if
+	 * we are a horizontal wall or a vertical wall.
 	 */
 	protected int getLengthPoint(BlockPos pos) {
 		if (this.orientation == WallOrientation.VERTICAL) {

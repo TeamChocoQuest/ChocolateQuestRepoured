@@ -67,8 +67,10 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 					}
 				} else if (inha.getEntityID() != null) {
 					/*
-					 * EntityArmorStand indicator = new EntityArmorStand(world); indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!"); indicator.setPosition(transformedPos.getX() + 0.5D,
-					 * transformedPos.getY(), transformedPos.getZ() + 0.5D); indicator.setEntityInvulnerable(true); indicator.setInvisible(true); indicator.setAlwaysRenderNameTag(true); indicator.setSilent(true); indicator.setNoGravity(true);
+					 * EntityArmorStand indicator = new EntityArmorStand(world);
+					 * indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!"); indicator.setPosition(transformedPos.getX() + 0.5D,
+					 * transformedPos.getY(), transformedPos.getZ() + 0.5D); indicator.setEntityInvulnerable(true); indicator.setInvisible(true);
+					 * indicator.setAlwaysRenderNameTag(true); indicator.setSilent(true); indicator.setNoGravity(true);
 					 */
 					Entity entity = EntityList.createEntityByIDFromName(inha.getEntityID(), world);
 

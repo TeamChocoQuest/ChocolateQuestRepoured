@@ -58,7 +58,8 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate
-		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
+		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the
+		// remaining component and wander to the destination
 		int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 		for (int i = 0; i < this.chosenStructures.size(); i++) {
 			if (!this.dungeon.placeInCircle() && i > 0) {
@@ -155,12 +156,13 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 						this.structurePosList.set(i, pos);
 					}
 
-					this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(),
-							this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+					this.dungeonGenerator
+							.add(new DungeonPartPlateau(world, dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 					// Build the structure...
 					/*
-					 * int Y = pos.getY() - this.dungeon.getUnderGroundOffset(); int X = pos.getX() - (dungeonToSpawn.getSizeX() /2); int Z = pos.getZ() - (dungeonToSpawn.getSizeZ() /2); //pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0, -
+					 * int Y = pos.getY() - this.dungeon.getUnderGroundOffset(); int X = pos.getX() - (dungeonToSpawn.getSizeX() /2); int Z = pos.getZ() -
+					 * (dungeonToSpawn.getSizeZ() /2); //pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0, -
 					 * dungeonToSpawn.getSizeZ() /2); pos = new BlockPos(X, Y, Z);
 					 */
 

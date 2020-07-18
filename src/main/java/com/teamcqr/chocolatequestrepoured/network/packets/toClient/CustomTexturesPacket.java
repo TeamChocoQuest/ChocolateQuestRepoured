@@ -18,13 +18,13 @@ public class CustomTexturesPacket implements IMessage {
 	private Map<String, Map<ResourceLocation, Set<ResourceLocation>>> textureSets = new HashMap<>();
 
 	public CustomTexturesPacket() {
-		
+
 	}
 
 	public void addPair(String file, String path) {
 		this.entries.put(file, path);
 	}
-	
+
 	public void addTextureSet(TextureSet ts) {
 		this.textureSets.put(ts.getName(), ts.getMappings());
 	}
@@ -33,22 +33,22 @@ public class CustomTexturesPacket implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		int keys = buf.readInt();
 		int tscount = buf.readInt();
-		while(keys > 0) {
+		while (keys > 0) {
 			String k = ByteBufUtils.readUTF8String(buf);
 			String v = ByteBufUtils.readUTF8String(buf);
 			entries.put(k, v);
 			keys--;
 		}
-		
-		while(tscount > 0) {
+
+		while (tscount > 0) {
 			String tsname = ByteBufUtils.readUTF8String(buf);
 			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = textureSets.getOrDefault(tsname, new HashMap<>());
 			int tskeys = buf.readInt();
-			while(tskeys > 0) {
+			while (tskeys > 0) {
 				String key = ByteBufUtils.readUTF8String(buf);
 				Set<ResourceLocation> values = new HashSet<>();
 				int vals = buf.readInt();
-				while(vals > 0) {
+				while (vals > 0) {
 					String val = ByteBufUtils.readUTF8String(buf);
 					values.add(new ResourceLocation(val));
 					vals--;
@@ -65,26 +65,26 @@ public class CustomTexturesPacket implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(entries.keySet().size());
 		buf.writeInt(textureSets.keySet().size());
-		//Textures
-		for(Map.Entry<String, String> entry : entries.entrySet()) {
+		// Textures
+		for (Map.Entry<String, String> entry : entries.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, entry.getKey());
 			ByteBufUtils.writeUTF8String(buf, entry.getValue());
 		}
-		//Texture sets
-		for(Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : this.textureSets.entrySet()) {
+		// Texture sets
+		for (Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : this.textureSets.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, entry.getKey());
 			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = entry.getValue();
 			buf.writeInt(entityTextureMap.keySet().size());
-			
-			for(ResourceLocation key : entityTextureMap.keySet()) {
+
+			for (ResourceLocation key : entityTextureMap.keySet()) {
 				ByteBufUtils.writeUTF8String(buf, key.toString());
 				buf.writeInt(entityTextureMap.get(key).size());
-				for(ResourceLocation val : entityTextureMap.get(key)) {
+				for (ResourceLocation val : entityTextureMap.get(key)) {
 					ByteBufUtils.writeUTF8String(buf, val.toString());
 				}
 			}
 		}
-		
+
 	}
 
 }

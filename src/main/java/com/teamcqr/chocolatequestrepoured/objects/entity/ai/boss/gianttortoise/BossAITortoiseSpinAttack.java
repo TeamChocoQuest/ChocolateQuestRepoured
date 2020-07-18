@@ -75,8 +75,8 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return getBoss() != null && getBoss().getAnimation() == this.getAnimation() && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss()
-				.getAttackTarget() != null && !getBoss().getAttackTarget().isDead && !getBoss().isHealing();
+		return getBoss() != null && getBoss().getAnimation() == this.getAnimation() && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead
+				&& !getBoss().isHealing();
 	}
 
 	private void calculateVelocity() {
@@ -118,20 +118,20 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 			this.getBoss().setSpinning(false);
 			this.getBoss().setStunned(true);
 		} else if (getBoss().getAnimationTick() > BUBBLE_SHOOT_DURATION && getAnimation().getDuration() - getBoss().getAnimationTick() > AFTER_IDLE_TIME) {
-			if(explosionCooldown > 0) {
+			if (explosionCooldown > 0) {
 				explosionCooldown--;
 			}
 			if (getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= MAX_DISTANCE_TO_TARGET || previousBlocks != getBoss().getSpinsBlocked()) {
-				if(getBoss().collidedHorizontally && !getBoss().getWorld().isRemote && explosionCooldown <= 0) {
+				if (getBoss().collidedHorizontally && !getBoss().getWorld().isRemote && explosionCooldown <= 0) {
 					explosionCooldown = MAX_EXPLOSION_COOLDOWN;
 					getBoss().getWorld().newExplosion(getBoss(), entity.getPositionVector().x, entity.getPositionVector().y, entity.getPositionVector().z, 2, false, false);
 				}
-				
-				if(hitHardBlock(this.movementVector)) {
+
+				if (hitHardBlock(this.movementVector)) {
 					this.getBoss().setSpinning(false);
 					this.getBoss().setStunned(true);
 				}
-				
+
 				calculateVelocity();
 				float damage = 1F;
 				if (previousBlocks != getBoss().getSpinsBlocked()) {
@@ -140,9 +140,10 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 					damage /= Math.max(1, getBoss().getWorld().getDifficulty().getId());
 					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
 				}
-				
+
 				/*
-				 * damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId()); if(getBoss().collidedHorizontally) { getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true); }
+				 * damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId()); if(getBoss().collidedHorizontally) {
+				 * getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true); }
 				 */
 			}
 			this.getBoss().setSpinning(true);
@@ -184,21 +185,21 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		int x2 = MathHelper.floor(aabb.maxX);
 		int y2 = MathHelper.floor(aabb.maxY);
 		int z2 = MathHelper.floor(aabb.maxZ);
-		
+
 		for (int k1 = x1; k1 <= x2; ++k1) {
 			for (int l1 = y1; l1 <= y2; ++l1) {
 				for (int i2 = z1; i2 <= z2; ++i2) {
 					BlockPos blockpos = new BlockPos(k1, l1, i2);
 					IBlockState iblockstate = world.getBlockState(blockpos);
 					Block block = iblockstate.getBlock();
-					
-					if(EntityCQRGiantTortoise.isHardBlock(block.getRegistryName())) {
+
+					if (EntityCQRGiantTortoise.isHardBlock(block.getRegistryName())) {
 						return true;
 					}
 				}
 			}
 		}
-		
+
 		return false;
 	}
 

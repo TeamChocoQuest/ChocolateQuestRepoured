@@ -469,8 +469,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 						vE = vE.down();
 						vS = vS.down();
 						vW = vW.down();
-						if (this.blocks.getOrDefault(vN, airState).getBlock() != this.dungeon.getAirBlock() || this.blocks.getOrDefault(vE, airState).getBlock() != this.dungeon.getAirBlock() || this.blocks.getOrDefault(vS, airState)
-								.getBlock() != this.dungeon.getAirBlock() || this.blocks.getOrDefault(vW, airState).getBlock() != this.dungeon.getAirBlock()) {
+						if (this.blocks.getOrDefault(vN, airState).getBlock() != this.dungeon.getAirBlock() || this.blocks.getOrDefault(vE, airState).getBlock() != this.dungeon.getAirBlock() || this.blocks.getOrDefault(vS, airState).getBlock() != this.dungeon.getAirBlock()
+								|| this.blocks.getOrDefault(vW, airState).getBlock() != this.dungeon.getAirBlock()) {
 							break;
 						}
 					} else {

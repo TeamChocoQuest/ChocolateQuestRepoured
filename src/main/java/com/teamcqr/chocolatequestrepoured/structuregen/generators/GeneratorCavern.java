@@ -154,7 +154,8 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 			this.generateTunnel(true, start, target, world, stateMap);
 		}
 		/*
-		 * else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) { generateTunnel(!xFirst, start, target, world); }
+		 * else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) { generateTunnel(!xFirst,
+		 * start, target, world); }
 		 */
 		else {
 			int v = 0;

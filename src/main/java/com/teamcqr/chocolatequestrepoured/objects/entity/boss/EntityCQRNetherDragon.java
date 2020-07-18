@@ -66,8 +66,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks
 	 * 
-	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up Then begin spiraling up to your "strafing y", there you fly 0.5 - 3 rounds on your circle and attack again While you are circling, you may
-	 * change to a higher, thinner circler, about 10 blocks above the normal. You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs
+	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up Then begin spiraling up to your "strafing y", there you
+	 * fly 0.5 - 3 rounds on your circle and attack again While you are circling, you may
+	 * change to a higher, thinner circler, about 10 blocks above the normal. You fly up to it by spiraling up or down, whilst charging at the player you may spit
+	 * fire or shoot fireballs
 	 */
 
 	public final int INITIAL_SEGMENT_COUNT = 18;
@@ -99,9 +101,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private static ArrayList<ResourceLocation> breakableBlocks = new ArrayList<>();
 
 	/*
-	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
+	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts
+	 * from Twilight Forests Naga
 	 * 
-	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them on fire It will also break obsidian blocks, but not command blocks or structure blocks
+	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them
+	 * on fire It will also break obsidian blocks, but not command blocks or structure blocks
 	 * or bedrock
 	 */
 
@@ -525,7 +529,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 				// DEBUG TO SEE THE "ZONE"
 				/*
-				 * for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX, (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY, (int)aabb.maxZ)){ world.setBlockState(p, Blocks.GLASS.getDefaultState()); }
+				 * for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX, (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY, (int)aabb.maxZ)){
+				 * world.setBlockState(p, Blocks.GLASS.getDefaultState()); }
 				 */
 
 				currentLength += lengthIncr;
@@ -563,9 +568,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK
-									&& block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != ModBlocks.PHYLACTERY
-									&& block != ModBlocks.FORCE_FIELD_NEXUS && block != ModBlocks.EXPORTER) {
+							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
+									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != ModBlocks.PHYLACTERY && block != ModBlocks.FORCE_FIELD_NEXUS && block != ModBlocks.EXPORTER) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
 								cancelled = true;

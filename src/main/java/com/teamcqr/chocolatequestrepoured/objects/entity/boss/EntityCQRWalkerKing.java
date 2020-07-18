@@ -453,7 +453,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		ItemStack sword = new ItemStack(ModItems.SWORD_WALKER, 1);
 
 		/*
-		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true); }
+		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20
+		 * + getRNG().nextInt(41), true); }
 		 */
 		sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 30, true);
 		if (!EnchantmentHelper.hasVanishingCurse(sword)) {

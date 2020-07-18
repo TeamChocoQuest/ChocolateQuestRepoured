@@ -73,8 +73,7 @@ public class StrongholdFloor {
 				}
 				break;
 			}
-			if (slCounter <= 0 || (!reversed && slCounter > 1 && isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) || (reversed && slCounter > 1 && slCounter < ((sideLengthTemp * 4) - 4 - 2) && isCurveRoom(roomCoord.getFirst(), roomCoord
-					.getSecond()))) {
+			if (slCounter <= 0 || (!reversed && slCounter > 1 && isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) || (reversed && slCounter > 1 && slCounter < ((sideLengthTemp * 4) - 4 - 2) && isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))) {
 				if (slCounter <= 0) {
 					sideLengthTemp += reversed ? -2 : 2;
 					slCounter = (sideLengthTemp * 4) - 4;

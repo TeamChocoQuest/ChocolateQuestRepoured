@@ -36,7 +36,7 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.bipedHeadwear = new ModelRenderer(this, 96, 48);
 		this.bipedHeadwear.setRotationPoint(0, 0, 0);
 		this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.25F);
-		
+
 		this.Hood_Left = new ModelRenderer(this, 24, 14);
 		this.Hood_Left.setRotationPoint(4.5F, 0.0F, 0.0F);
 		this.Hood_Left.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
@@ -77,8 +77,8 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.Hood_Rear.addChild(this.Hood_Top);
 		this.Hood_Top.addChild(this.Hood_Right);
 
-		//this.bipedHeadwear.isHidden = true;
-		//this.bipedHeadwear.showModel = false;
+		// this.bipedHeadwear.isHidden = true;
+		// this.bipedHeadwear.showModel = false;
 	}
 
 }

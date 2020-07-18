@@ -70,7 +70,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int spinsBlocked = 0;
 	private int timesHealed = 1;
 	private boolean isHealing = false;
-	
+
 	private Vec3d lastTickPos = null;
 	private int stuckTicks = 0;
 	private static final int MAX_STUCK_TICKS = 60;
@@ -99,11 +99,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			hardBlocks.add(rs);
 		}
 	}
-	
+
 	public static boolean isHardBlock(ResourceLocation rl) {
 		return !EntityCQRGiantTortoise.hardBlocks.isEmpty() && EntityCQRGiantTortoise.hardBlocks.contains(rl);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		// this.tasks.addTask(0, new EntityAISwimming(this));
@@ -144,7 +144,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super(worldIn);
 
 		this.bossInfoServer.setColor(Color.GREEN);
-		
+
 		this.stepHeight = 2.1F;
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
@@ -192,10 +192,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
-		/*if (source.isExplosion() && isInShell() && canBeStunned && !stunned) {
-			stunned = true;
-			canBeStunned = false;
-		}*/
+		/*
+		 * if (source.isExplosion() && isInShell() && canBeStunned && !stunned) {
+		 * stunned = true;
+		 * canBeStunned = false;
+		 * }
+		 */
 		partSoundFlag = sentFromPart;
 
 		if (source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
@@ -490,22 +492,22 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
-		if(hasAttackTarget()) {
-			if(this.lastTickPos == null) {
+
+		if (hasAttackTarget()) {
+			if (this.lastTickPos == null) {
 				this.lastTickPos = this.getPositionVector();
 			}
-			if(this.getHomePositionCQR() == null) {
+			if (this.getHomePositionCQR() == null) {
 				this.setHomePositionCQR(getPosition());
 			}
 			Vec3d curPos = getPositionVector();
-			if(this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
-				if(curPos.distanceTo(lastTickPos) <= 0.05) {
+			if (this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
+				if (curPos.distanceTo(lastTickPos) <= 0.05) {
 					this.stuckTicks++;
 				} else {
 					this.lastTickPos = curPos;
 				}
-				if(this.stuckTicks >= MAX_STUCK_TICKS) {
+				if (this.stuckTicks >= MAX_STUCK_TICKS) {
 					this.setAttackTarget(null);
 					this.stuckTicks = 0;
 				}
@@ -513,7 +515,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		} else {
 			this.stuckTicks = 0;
 		}
-		
 
 		if (getAnimation() != NO_ANIMATION) {
 			animationTick++;

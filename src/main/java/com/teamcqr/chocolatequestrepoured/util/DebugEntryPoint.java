@@ -13,9 +13,12 @@ public class DebugEntryPoint {
 		// Example use case for debugging ArchiveManipulationUtil's unzip method
 
 		/*
-		 * HashMap<String, byte[]> unzipped = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\Forge Mapping Files for CQR.zip"));
+		 * HashMap<String, byte[]> unzipped = ArchiveManipulationUtil.unzip(FileIOUtil.
+		 * loadFromFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\Forge Mapping Files for CQR.zip"));
 		 * 
-		 * for(String fileName : unzipped.keySet()) { FileIOUtil.saveToFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\mappings\\" + fileName, unzipped.get(fileName)); }
+		 * for(String fileName : unzipped.keySet()) {
+		 * FileIOUtil.saveToFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\mappings\\" + fileName,
+		 * unzipped.get(fileName)); }
 		 */
 
 	}

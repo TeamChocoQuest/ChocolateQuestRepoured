@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {
 
 	private static final DataParameter<Boolean> BONE_SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRNecromancer.class, DataSerializers.BOOLEAN);
-	
+
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		});
 		// this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 30, 10));
 	}
-	
+
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(BONE_SHIELD_ACTIVE, false);
@@ -80,10 +80,10 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 				this.summonedSkulls.get(1).setSide(true);
 			}
 		}
-		
-		if(!this.world.isRemote && this.getHealth() <= getMaxHealth() / 2) {
+
+		if (!this.world.isRemote && this.getHealth() <= getMaxHealth() / 2) {
 			this.dataManager.set(BONE_SHIELD_ACTIVE, true);
-		} else if(!this.world.isRemote) {
+		} else if (!this.world.isRemote) {
 			this.dataManager.set(BONE_SHIELD_ACTIVE, false);
 		}
 
@@ -102,11 +102,11 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(!this.world.isRemote && this.getHealth() <= getMaxHealth() / 2) {
-			if(source.isProjectile() || source.getImmediateSource() instanceof EntityArrow || source.getImmediateSource() instanceof IProjectile) {
+		if (!this.world.isRemote && this.getHealth() <= getMaxHealth() / 2) {
+			if (source.isProjectile() || source.getImmediateSource() instanceof EntityArrow || source.getImmediateSource() instanceof IProjectile) {
 				amount = 0;
 				return false;
 			}
@@ -198,7 +198,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;
 	}
-	
+
 	public boolean isBoneShieldActive() {
 		return dataManager.get(BONE_SHIELD_ACTIVE);
 	}

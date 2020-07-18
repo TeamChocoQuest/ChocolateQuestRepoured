@@ -24,30 +24,10 @@ public class CQRConfig {
 
 	public static class Advanced {
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
-		public String[] specialBlocks = {
-				"minecraft:bed",
-				"minecraft:wooden_door",
-				"minecraft:spruce_door",
-				"minecraft:birch_door",
-				"minecraft:jungle_door",
-				"minecraft:acacia_door",
-				"minecraft:dark_oak_door",
-				"minecraft:iron_door",
-				"minecraft:piston",
-				"minecraft:sticky_piston",
-				"minecraft:piston_head" };
+		public String[] specialBlocks = { "minecraft:bed", "minecraft:wooden_door", "minecraft:spruce_door", "minecraft:birch_door", "minecraft:jungle_door", "minecraft:acacia_door", "minecraft:dark_oak_door", "minecraft:iron_door", "minecraft:piston", "minecraft:sticky_piston", "minecraft:piston_head" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
-		public String[] specialEntities = {
-				"minecraft:painting",
-				"minecraft:item_frame",
-				"minecraft:armor_stand",
-				"minecraft:minecart",
-				"minecraft:chest_minecart",
-				"minecraft:furnace_minecart",
-				"minecraft:tnt_minecart",
-				"minecraft:hopper_minecart",
-				"minecraft:boat" };
+		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand", "minecraft:minecart", "minecraft:chest_minecart", "minecraft:furnace_minecart", "minecraft:tnt_minecart", "minecraft:hopper_minecart", "minecraft:boat" };
 
 		public boolean enableSpecialFeatures = true;
 
@@ -87,7 +67,7 @@ public class CQRConfig {
 	public static class Bosses {
 		public boolean antiCowardMode = true;
 		public int antiCowardRadius = 16;
-		
+
 		public boolean hotFireballsDestroyTerrain = true;
 
 		public boolean harderWalkerKing = false;
@@ -121,14 +101,10 @@ public class CQRConfig {
 
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
-		
-		public String[] giantTortoiseHardBlocks = {
-				"minecraft:obsidian",
-				"minecraft:iron_block",
-				"minecraft:bedrock"
-		};
+
+		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
 	}
-	
+
 	public static class BossDamageCaps {
 		public boolean enableDamageCapForBosses = true;
 		public float maxUncappedDamage = 30F;

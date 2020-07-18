@@ -18,19 +18,7 @@ package com.teamcqr.chocolatequestrepoured.util;
  */
 
 public class SimplexNoise { // Simplex noise in 2D, 3D and 4D
-	private static Grad grad3[] = {
-			new Grad(1, 1, 0),
-			new Grad(-1, 1, 0),
-			new Grad(1, -1, 0),
-			new Grad(-1, -1, 0),
-			new Grad(1, 0, 1),
-			new Grad(-1, 0, 1),
-			new Grad(1, 0, -1),
-			new Grad(-1, 0, -1),
-			new Grad(0, 1, 1),
-			new Grad(0, -1, 1),
-			new Grad(0, 1, -1),
-			new Grad(0, -1, -1) };
+	private static Grad grad3[] = { new Grad(1, 1, 0), new Grad(-1, 1, 0), new Grad(1, -1, 0), new Grad(-1, -1, 0), new Grad(1, 0, 1), new Grad(-1, 0, 1), new Grad(1, 0, -1), new Grad(-1, 0, -1), new Grad(0, 1, 1), new Grad(0, -1, 1), new Grad(0, 1, -1), new Grad(0, -1, -1) };
 
 	private static Grad grad4[] = {
 			new Grad(0, 1, 1, 1),
@@ -382,9 +370,9 @@ public class SimplexNoise { // Simplex noise in 2D, 3D and 4D
 			i1 = 0;
 			j1 = 1;
 		} // upper triangle, YX order: (0,0)->(0,1)->(1,1)
-		// A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
-		// a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
-		// c = (3-sqrt(3))/6
+			// A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+			// a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
+			// c = (3-sqrt(3))/6
 		double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
 		double y1 = y0 - j1 + G2;
 		double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords

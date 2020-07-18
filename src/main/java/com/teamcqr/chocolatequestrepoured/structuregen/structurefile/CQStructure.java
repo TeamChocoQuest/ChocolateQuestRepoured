@@ -98,7 +98,8 @@ public class CQStructure {
 	private BlockPos size = BlockPos.ORIGIN;
 	private String author = "";
 
-	// Overall: Move stuff in different sub methods AND add comments throughout the method explaining why you do something or place a longer comment directly at the beginning of the function that summarizes the functionality and how it works
+	// Overall: Move stuff in different sub methods AND add comments throughout the method explaining why you do something or place a longer comment directly at the
+	// beginning of the function that summarizes the functionality and how it works
 	private CQStructure() {
 
 	}
