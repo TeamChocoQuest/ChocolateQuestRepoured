@@ -127,6 +127,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super(worldIn);
 
 		this.bossInfoServer.setColor(Color.GREEN);
+		
+		this.stepHeight = 2.1F;
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
 			this.parts[i] = new EntityCQRGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
