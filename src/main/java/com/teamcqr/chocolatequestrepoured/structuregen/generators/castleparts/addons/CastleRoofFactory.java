@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
+
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoofFactory {
