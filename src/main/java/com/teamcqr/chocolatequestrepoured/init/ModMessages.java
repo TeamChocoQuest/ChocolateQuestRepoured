@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.init;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.ArmorCooldownSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerSyncTextureSets;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.DungeonSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.ExporterUpdatePacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.ExtendedReachAttackPacketHandler;
@@ -12,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.network.packets.handlers.SaveStructure
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.StructureSelectorPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.SyncEntityPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ArmorCooldownSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSyncPacket;
@@ -36,6 +38,7 @@ public class ModMessages {
 		CQRMain.NETWORK.registerMessage(ItemStackSyncPacketHandler.class, ItemStackSyncPacket.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(HookShotPlayerStopPacketHandler.class, HookShotPlayerStopPacket.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncProtectedRegions.class, SPacketSyncProtectedRegions.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTextureSets.class, CustomTexturesPacket.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, SaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class, messageID++, Side.SERVER);
