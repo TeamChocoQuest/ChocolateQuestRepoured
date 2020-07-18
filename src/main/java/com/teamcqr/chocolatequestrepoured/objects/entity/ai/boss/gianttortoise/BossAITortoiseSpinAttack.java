@@ -127,7 +127,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 					getBoss().getWorld().newExplosion(getBoss(), entity.getPositionVector().x, entity.getPositionVector().y, entity.getPositionVector().z, 2, false, false);
 				}
 				
-				if(hitHardBlock()) {
+				if(hitHardBlock(this.movementVector)) {
 					this.getBoss().setSpinning(false);
 					this.getBoss().setStunned(true);
 				}
@@ -174,8 +174,8 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		}
 	}
 
-	private boolean hitHardBlock() {
-		AxisAlignedBB aabb = getBoss().getCollisionBoundingBox().grow(0.5).offset(getBoss().getPositionVector().normalize().scale(getBoss().width / 2));
+	private boolean hitHardBlock(Vec3d velocity) {
+		AxisAlignedBB aabb = getBoss().getCollisionBoundingBox().grow(0.5).offset(velocity.normalize().scale(getBoss().width / 2));
 		World world = getBoss().getWorld();
 
 		int x1 = MathHelper.floor(aabb.minX);
