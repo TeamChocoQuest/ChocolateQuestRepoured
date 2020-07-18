@@ -420,7 +420,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
-		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(1.25).offset(new Vec3d(motionX, motionY, motionZ).scale(1.5)));
+		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(0.5).offset(new Vec3d(motionX, motionY, motionZ).scale(1.5)));
 		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 			if (segment != null) {
 				destroyBlocksInAABB(segment.getEntityBoundingBox());
