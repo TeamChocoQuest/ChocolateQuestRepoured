@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import java.util.ArrayList;
+
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
@@ -15,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -77,6 +80,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationTick;
 	public AnimationAI<EntityCQRGiantTortoise> currentAnim;
 
+	private static ArrayList<ResourceLocation> hardBlocks = new ArrayList<>();
+
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
 	public static final Animation ANIMATION_SPIN = Animation.create(250).setLooping(false);
@@ -87,6 +92,18 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private static final Animation[] ANIMATIONS = { ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT, ANIMATION_SPIN, ANIMATION_IDLE, ANIMATION_STUNNED, ANIMATION_DEATH, };
 	// End of Animations
 
+	public static void realoadHardBlocks() {
+		hardBlocks.clear();
+		for (String s : CQRConfig.bosses.giantTortoiseHardBlocks) {
+			ResourceLocation rs = new ResourceLocation(s);
+			hardBlocks.add(rs);
+		}
+	}
+	
+	public static boolean isHardBlock(ResourceLocation rl) {
+		return !EntityCQRGiantTortoise.hardBlocks.isEmpty() && EntityCQRGiantTortoise.hardBlocks.contains(rl);
+	}
+	
 	@Override
 	protected void initEntityAI() {
 		// this.tasks.addTask(0, new EntityAISwimming(this));

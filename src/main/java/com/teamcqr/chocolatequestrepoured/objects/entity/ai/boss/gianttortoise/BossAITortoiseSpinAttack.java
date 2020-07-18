@@ -6,8 +6,14 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileB
 
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise> {
 
@@ -120,6 +126,12 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 					explosionCooldown = MAX_EXPLOSION_COOLDOWN;
 					getBoss().getWorld().newExplosion(getBoss(), entity.getPositionVector().x, entity.getPositionVector().y, entity.getPositionVector().z, 2, false, false);
 				}
+				
+				if(hitHardBlock()) {
+					this.getBoss().setSpinning(false);
+					this.getBoss().setStunned(true);
+				}
+				
 				calculateVelocity();
 				float damage = 1F;
 				if (previousBlocks != getBoss().getSpinsBlocked()) {
@@ -160,6 +172,34 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 			this.getBoss().setSpinning(false);
 			getBoss().resetSpinsBlocked();
 		}
+	}
+
+	private boolean hitHardBlock() {
+		AxisAlignedBB aabb = getBoss().getCollisionBoundingBox().grow(0.5).offset(getBoss().getPositionVector().normalize().scale(getBoss().width / 2));
+		World world = getBoss().getWorld();
+
+		int x1 = MathHelper.floor(aabb.minX);
+		int y1 = MathHelper.floor(aabb.minY);
+		int z1 = MathHelper.floor(aabb.minZ);
+		int x2 = MathHelper.floor(aabb.maxX);
+		int y2 = MathHelper.floor(aabb.maxY);
+		int z2 = MathHelper.floor(aabb.maxZ);
+		
+		for (int k1 = x1; k1 <= x2; ++k1) {
+			for (int l1 = y1; l1 <= y2; ++l1) {
+				for (int i2 = z1; i2 <= z2; ++i2) {
+					BlockPos blockpos = new BlockPos(k1, l1, i2);
+					IBlockState iblockstate = world.getBlockState(blockpos);
+					Block block = iblockstate.getBlock();
+					
+					if(EntityCQRGiantTortoise.isHardBlock(block.getRegistryName())) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	@Override

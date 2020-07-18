@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
@@ -120,6 +121,12 @@ public class CQRConfig {
 
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
+		
+		public String[] giantTortoiseHardBlocks = {
+				"minecraft:obsidian",
+				"minecraft:iron_block",
+				"minecraft:bedrock"
+		};
 	}
 	
 	public static class BossDamageCaps {
@@ -246,6 +253,7 @@ public class CQRConfig {
 				ProtectedRegionHelper.updateBreakableBlockWhitelist();
 				ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 				EntityCQRNetherDragon.reloadBreakableBlocks();
+				EntityCQRGiantTortoise.realoadHardBlocks();
 			}
 		}
 
