@@ -43,12 +43,12 @@ public class Trade {
 	}
 
 	public boolean isUnlockedFor(EntityPlayerMP player) {
-		if (!hasToBeUnlocked) {
+		if (!this.hasToBeUnlocked) {
 			return true;
 		}
 
-		if (requireReputation) {
-			return FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), holder.getTraderFaction()) >= minReputation;
+		if (this.requireReputation) {
+			return FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) >= this.minReputation;
 		}
 
 		// TODO: Why does this not work?
@@ -71,41 +71,43 @@ public class Trade {
 		NBTTagList inItems = nbt.getTagList("inputItems", Constants.NBT.TAG_COMPOUND);
 		NBTTagList outItems = nbt.getTagList("inputItems", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < inItems.tagCount(); i++) {
-			inputItems[i] = new ItemStack(inItems.getCompoundTagAt(i));
+			this.inputItems[i] = new ItemStack(inItems.getCompoundTagAt(i));
 		}
 		for (int i = 0; i < outItems.tagCount(); i++) {
-			outputItems[i] = new ItemStack(outItems.getCompoundTagAt(i));
+			this.outputItems[i] = new ItemStack(outItems.getCompoundTagAt(i));
 		}
 
 		NBTTagCompound unlockConditions = nbt.getCompoundTag("unlockConditions");
 		this.manuallyUnlocked = unlockConditions.getBoolean("manuallyUnlocked");
 		this.requireReputation = unlockConditions.getBoolean("requireReputation");
 		this.requireAdvancement = unlockConditions.getBoolean("requireAdvancement");
-		if (requireReputation)
+		if (this.requireReputation) {
 			this.minReputation = unlockConditions.getInteger("requiredReputation");
-		if (requireAdvancement)
+		}
+		if (this.requireAdvancement) {
 			this.advancementIdent = new ResourceLocation(unlockConditions.getString("requiredAdvancement"));
+		}
 	}
 
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 
-		nbt.setTag("uuid", NBTUtil.createUUIDTag(recipeID));
-		nbt.setString("name", getRecipeName());
-		nbt.setBoolean("ignoreDurability", ignoreDurability);
-		nbt.setInteger("stock", inStock);
-		nbt.setInteger("maxStock", maxStock);
-		nbt.setBoolean("requiresUnlocking", hasToBeUnlocked);
-		nbt.setFloat("expCount", expCount);
+		nbt.setTag("uuid", NBTUtil.createUUIDTag(this.recipeID));
+		nbt.setString("name", this.getRecipeName());
+		nbt.setBoolean("ignoreDurability", this.ignoreDurability);
+		nbt.setInteger("stock", this.inStock);
+		nbt.setInteger("maxStock", this.maxStock);
+		nbt.setBoolean("requiresUnlocking", this.hasToBeUnlocked);
+		nbt.setFloat("expCount", this.expCount);
 
 		// In and out items
 		NBTTagList inItems = new NBTTagList();
-		for (int i = 0; i < inputItems.length; i++) {
-			inItems.appendTag(inputItems[i].writeToNBT(new NBTTagCompound()));
+		for (int i = 0; i < this.inputItems.length; i++) {
+			inItems.appendTag(this.inputItems[i].writeToNBT(new NBTTagCompound()));
 		}
 		NBTTagList outItems = new NBTTagList();
-		for (int i = 0; i < outputItems.length; i++) {
-			outItems.appendTag(outputItems[i].writeToNBT(new NBTTagCompound()));
+		for (int i = 0; i < this.outputItems.length; i++) {
+			outItems.appendTag(this.outputItems[i].writeToNBT(new NBTTagCompound()));
 		}
 		nbt.setTag("inputItems", inItems);
 		nbt.setTag("outputItems", outItems);
@@ -113,13 +115,15 @@ public class Trade {
 		// Unlock conditions
 		NBTTagCompound unlockConditions = new NBTTagCompound();
 
-		unlockConditions.setBoolean("manuallyUnlocked", manuallyUnlocked);
-		unlockConditions.setBoolean("requireReputation", requireReputation);
-		unlockConditions.setBoolean("requireAdvancement", requireAdvancement);
-		if (requireReputation)
-			unlockConditions.setInteger("requiredReputation", minReputation);
-		if (requireAdvancement)
-			unlockConditions.setString("requiredAdvancement", advancementIdent.toString());
+		unlockConditions.setBoolean("manuallyUnlocked", this.manuallyUnlocked);
+		unlockConditions.setBoolean("requireReputation", this.requireReputation);
+		unlockConditions.setBoolean("requireAdvancement", this.requireAdvancement);
+		if (this.requireReputation) {
+			unlockConditions.setInteger("requiredReputation", this.minReputation);
+		}
+		if (this.requireAdvancement) {
+			unlockConditions.setString("requiredAdvancement", this.advancementIdent.toString());
+		}
 
 		nbt.setTag("unlockConditions", unlockConditions);
 
@@ -127,29 +131,29 @@ public class Trade {
 	}
 
 	public boolean incStock() {
-		if (inStock < maxStock) {
-			inStock++;
+		if (this.inStock < this.maxStock) {
+			this.inStock++;
 			return true;
 		}
 		return false;
 	}
 
 	public void decStock() {
-		inStock--;
+		this.inStock--;
 	}
 
 	public boolean isInStock() {
-		return inStock > 0;
+		return this.inStock > 0;
 	}
 
 	public boolean doItemsMatch(ItemStack[] input) {
-		for (int i = 0; i < inputItems.length; i++) {
-			if (ignoreDurability) {
-				if (!inputItems[i].isItemEqualIgnoreDurability(input[i])) {
+		for (int i = 0; i < this.inputItems.length; i++) {
+			if (this.ignoreDurability) {
+				if (!this.inputItems[i].isItemEqualIgnoreDurability(input[i])) {
 					return false;
 				}
 			} else {
-				if (!inputItems[i].isItemEqual(input[i])) {
+				if (!this.inputItems[i].isItemEqual(input[i])) {
 					return false;
 				}
 			}
@@ -158,11 +162,11 @@ public class Trade {
 	}
 
 	public ItemStack[] getOutputItems() {
-		return outputItems;
+		return this.outputItems;
 	}
 
 	public ItemStack[] getInputItems() {
-		return inputItems;
+		return this.inputItems;
 	}
 
 	public String getRecipeName() {
@@ -170,7 +174,7 @@ public class Trade {
 	}
 
 	public float getExpCount() {
-		return expCount;
+		return this.expCount;
 	}
 
 }

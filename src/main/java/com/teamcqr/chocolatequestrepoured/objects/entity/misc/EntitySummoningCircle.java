@@ -108,7 +108,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 
 				if (!this.world.isRemote) {
 					CQRFaction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
-					for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(this.width / 2, 0, this.width / 2), getPosition().add(-this.width / 2, 3, -this.width / 2)), faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
+					for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(this.width / 2, 0, this.width / 2), this.getPosition().add(-this.width / 2, 3, -this.width / 2)), faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
 						if (ent != null && ent.isEntityAlive() && ent instanceof EntityLivingBase) {
 							((EntityLivingBase) ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 80, 0));
 						}

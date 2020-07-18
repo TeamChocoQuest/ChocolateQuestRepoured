@@ -31,11 +31,11 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 		if (this.entity == null || this.entity.isDead) {
 			return false;
 		}
-		if (cooldown > 0) {
-			cooldown--;
+		if (this.cooldown > 0) {
+			this.cooldown--;
 			return false;
 		}
-		return entity.hasAttackTarget() && entity.getDistanceSq(entity.getAttackTarget()) < MAX_DISTANCE_TO_TARGET;
+		return this.entity.hasAttackTarget() && this.entity.getDistanceSq(this.entity.getAttackTarget()) < MAX_DISTANCE_TO_TARGET;
 	}
 
 	@Override
@@ -43,14 +43,14 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 		if (this.entity == null) {
 			return;
 		}
-		int projCount = DungeonGenUtils.getIntBetweenBorders(MIN_WEBS, MAX_WEBS, entity.getRNG());
+		int projCount = DungeonGenUtils.getIntBetweenBorders(MIN_WEBS, MAX_WEBS, this.entity.getRNG());
 		double angle = 180 / projCount;
-		Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector()).normalize();
+		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector()).normalize();
 		for (int i = -(projCount / 2); i <= (projCount / 2); i++) {
 			Vec3d velo = VectorUtil.rotateVectorAroundY(v, i * angle);
 			velo = velo.add(0, 0.1, 0);
 
-			ProjectileBase web = entity.getRNG().nextDouble() > 0.8 ? new ProjectilePoisonSpell(entity.world, entity) : new ProjectileWeb(entity.world, entity);
+			ProjectileBase web = this.entity.getRNG().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.world, this.entity) : new ProjectileWeb(this.entity.world, this.entity);
 			web.motionX = velo.x * SPEED_MULTIPLIER;
 			web.motionY = velo.y * SPEED_MULTIPLIER;
 			web.motionZ = velo.z * SPEED_MULTIPLIER;
@@ -58,7 +58,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 			this.entity.world.spawnEntity(web);
 
 		}
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}
 
 	@Override

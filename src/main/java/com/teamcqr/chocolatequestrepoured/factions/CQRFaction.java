@@ -76,11 +76,11 @@ public class CQRFaction {
 	}
 
 	public List<CQRFaction> getEnemies() {
-		return enemies;
+		return this.enemies;
 	}
 
 	public List<CQRFaction> getAllies() {
-		return allies;
+		return this.allies;
 	}
 
 	public void addAlly(CQRFaction ally) {
@@ -225,16 +225,18 @@ public class CQRFaction {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (o == null || this.getClass() != o.getClass()) {
 			return false;
+		}
 		CQRFaction that = (CQRFaction) o;
-		return name.equals(that.name);
+		return this.name.equals(that.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(this.name);
 	}
 }

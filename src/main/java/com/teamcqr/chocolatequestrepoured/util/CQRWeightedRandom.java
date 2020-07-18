@@ -55,7 +55,7 @@ public class CQRWeightedRandom<T> {
 
 				return null;
 			} else {
-				return (T) items.get(0);
+				return (T) this.items.get(0);
 			}
 		} else {
 			return null;

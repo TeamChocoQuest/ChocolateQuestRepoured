@@ -86,7 +86,7 @@ public class DungeonDataManager {
 	}
 
 	private Set<String> getSpawnedDungeonNames() {
-		return dungeonData.keySet();
+		return this.dungeonData.keySet();
 	}
 
 	public static Set<BlockPos> getLocationsOfDungeon(World world, String dungeon) {
@@ -94,7 +94,7 @@ public class DungeonDataManager {
 	}
 
 	private Set<BlockPos> getLocationsOfDungeon(String dungeon) {
-		return dungeonData.getOrDefault(dungeon, new HashSet<>());
+		return this.dungeonData.getOrDefault(dungeon, new HashSet<>());
 	}
 
 	public DungeonDataManager(World world) {
@@ -105,21 +105,21 @@ public class DungeonDataManager {
 		} else {
 			path += "/DIM" + dim + "/data/CQR/";
 		}
-		this.file = FileIOUtil.getOrCreateFile(path, DATA_FILE_NAME);
+		this.file = FileIOUtil.getOrCreateFile(path, this.DATA_FILE_NAME);
 	}
 
 	public void insertDungeonEntry(String dungeon, BlockPos location) {
-		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon, new HashSet<>());
+		Set<BlockPos> spawnedLocs = this.dungeonData.getOrDefault(dungeon, new HashSet<>());
 		if (spawnedLocs.add(location)) {
-			dungeonData.put(dungeon, spawnedLocs);
-			if (!modifiedSinceLastSave) {
-				modifiedSinceLastSave = true;
+			this.dungeonData.put(dungeon, spawnedLocs);
+			if (!this.modifiedSinceLastSave) {
+				this.modifiedSinceLastSave = true;
 			}
 		}
 	}
 
 	public void saveData() {
-		if (modifiedSinceLastSave) {
+		if (this.modifiedSinceLastSave) {
 			this.file.delete();
 			try {
 				if (!this.file.createNewFile()) {
@@ -140,13 +140,13 @@ public class DungeonDataManager {
 					dungeonNames.appendTag(new NBTTagString(data.getKey()));
 				}
 			}
-			FileIOUtil.saveNBTCompoundToFile(root, file);
-			modifiedSinceLastSave = false;
+			FileIOUtil.saveNBTCompoundToFile(root, this.file);
+			this.modifiedSinceLastSave = false;
 		}
 	}
 
 	public void readData() {
-		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(file);
+		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(this.file);
 		NBTTagList dungeons = FileIOUtil.getOrCreateTagList(root, "dungeons", Constants.NBT.TAG_STRING);
 		dungeons.forEach(new Consumer<NBTBase>() {
 
@@ -155,9 +155,10 @@ public class DungeonDataManager {
 				if (t instanceof NBTTagString) {
 					NBTTagString tag = (NBTTagString) t;
 					String s = tag.getString();
-					Set<BlockPos> poss = dungeonData.getOrDefault(s, new HashSet<>());
+					Set<BlockPos> poss = DungeonDataManager.this.dungeonData.getOrDefault(s, new HashSet<>());
 					NBTTagList data = FileIOUtil.getOrCreateTagList(root, "dun-" + s, Constants.NBT.TAG_COMPOUND);
 					data.forEach(new Consumer<NBTBase>() {
+						@Override
 						public void accept(NBTBase t1) {
 							if (t1 instanceof NBTTagCompound) {
 								NBTTagCompound tag1 = (NBTTagCompound) t1;
@@ -165,7 +166,7 @@ public class DungeonDataManager {
 							}
 						}
 					});
-					dungeonData.put(s, poss);
+					DungeonDataManager.this.dungeonData.put(s, poss);
 				}
 			}
 		});
@@ -175,10 +176,10 @@ public class DungeonDataManager {
 		if (dungeon.getSpawnLimit() < 0) {
 			return false;
 		}
-		if (dungeonData.isEmpty()) {
+		if (this.dungeonData.isEmpty()) {
 			return false;
 		}
-		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon.getDungeonName(), new HashSet<>());
+		Set<BlockPos> spawnedLocs = this.dungeonData.getOrDefault(dungeon.getDungeonName(), new HashSet<>());
 		if (spawnedLocs.isEmpty()) {
 			return false;
 		}

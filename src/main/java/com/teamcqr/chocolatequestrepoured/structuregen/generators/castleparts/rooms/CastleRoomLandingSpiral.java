@@ -28,8 +28,8 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
 
-		for (int x = 0; x < getDecorationLengthX(); x++) {
-			for (int z = 0; z < getDecorationLengthZ(); z++) {
+		for (int x = 0; x < this.getDecorationLengthX(); x++) {
+			for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 				for (int y = 0; y < this.getDecorationLengthY(); y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					pos = this.getInteriorBuildStart().add(x, y, z);

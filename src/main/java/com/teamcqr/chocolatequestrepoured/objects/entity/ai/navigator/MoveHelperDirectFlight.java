@@ -11,6 +11,7 @@ public class MoveHelperDirectFlight extends EntityMoveHelper {
 		super(entitylivingIn);
 	}
 
+	@Override
 	public void onUpdateMoveHelper() {
 		if (this.action == EntityMoveHelper.Action.MOVE_TO) {
 			this.action = EntityMoveHelper.Action.WAIT;

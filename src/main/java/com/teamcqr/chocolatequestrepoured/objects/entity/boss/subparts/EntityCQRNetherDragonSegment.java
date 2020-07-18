@@ -85,7 +85,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		++this.ticksExisted;
 
 		if (this.dataManager.get(IS_REMOVED)) {
-			world.removeEntityDangerously(this);
+			this.world.removeEntityDangerously(this);
 		}
 
 	}
@@ -119,34 +119,34 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	}
 
 	public void explode() {
-		if (!world.isRemote) {
-			this.world.createExplosion(this, posX, posY, posZ, 1, false);
+		if (!this.world.isRemote) {
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 1, false);
 		}
 	}
 
 	public void switchToSkeletalState() {
-		setIsSkeletal(true);
-		if (!world.isRemote) {
-			this.world.createExplosion(this, posX, posY, posZ, 0, false);
+		this.setIsSkeletal(true);
+		if (!this.world.isRemote) {
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 0, false);
 		}
 	}
 
 	public void die() {
-		explode();
+		this.explode();
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("skeletal", this.isSkeletal());
-		compound.setInteger("realID", realID);
+		compound.setInteger("realID", this.realID);
 		compound.setInteger("partIndex", this.partIndex);
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		setIsSkeletal(compound.getBoolean("skeletal"));
+		this.setIsSkeletal(compound.getBoolean("skeletal"));
 		this.realID = compound.getInteger("realID");
 		this.partIndex = compound.getInteger("partIndex");
 	}

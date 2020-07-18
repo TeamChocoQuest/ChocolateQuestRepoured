@@ -20,9 +20,9 @@ public class ItemSpikedGlove extends Item {
 
 	public ItemSpikedGlove() {
 		super();
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 		// With this durability you should be able to climb 1200m in total
-		setMaxDamage(6000);
+		this.setMaxDamage(6000);
 	}
 
 	@Override

@@ -297,18 +297,18 @@ public class RoomGrid {
 			}
 		}
 
-		initializeCellLinks();
-		initializeWalls(roomWidth, floorHeight);
+		this.initializeCellLinks();
+		this.initializeWalls(roomWidth, floorHeight);
 	}
 
 	private void initializeCellLinks() {
-		for (int floor = 0; floor < floors; floor++) {
-			for (int x = 0; x < roomsX; x++) {
-				for (int z = 0; z < roomsZ; z++) {
-					RoomGridCell cell = getCellAt(floor, x, z);
+		for (int floor = 0; floor < this.floors; floor++) {
+			for (int x = 0; x < this.roomsX; x++) {
+				for (int z = 0; z < this.roomsZ; z++) {
+					RoomGridCell cell = this.getCellAt(floor, x, z);
 
 					for (EnumFacing direction : EnumFacing.VALUES) {
-						RoomGridCell adjacent = getAdjacentCell(cell, direction);
+						RoomGridCell adjacent = this.getAdjacentCell(cell, direction);
 						if (adjacent != null) {
 							cell.registerAdjacentCell(adjacent, direction);
 							adjacent.registerAdjacentCell(cell, direction.getOpposite());
@@ -323,23 +323,23 @@ public class RoomGrid {
 		final int wallWidth = roomWidth + 2; // extends 1 block past each edge of the room
 
 		// vertical walls
-		for (int floor = 0; floor < floors; floor++) {
-			for (int x = 0; x < roomsX + 1; x++) {
-				for (int z = 0; z < roomsZ; z++) {
+		for (int floor = 0; floor < this.floors; floor++) {
+			for (int x = 0; x < this.roomsX + 1; x++) {
+				for (int z = 0; z < this.roomsZ; z++) {
 					int xOffset = x * (roomWidth + 1);
 					int yOffset = floor * floorHeight;
 					int zOffset = z * (roomWidth + 1);
 					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
 					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.VERTICAL, wallWidth, floorHeight);
-					wallList.add(wall);
+					this.wallList.add(wall);
 
-					RoomGridCell westCell = getCellAt(floor, x - 1, z);
+					RoomGridCell westCell = this.getCellAt(floor, x - 1, z);
 					if (westCell != null) {
 						wall.registerAdjacentCell(westCell, EnumFacing.WEST);
 						westCell.registerAdjacentWall(wall, EnumFacing.EAST);
 					}
 
-					RoomGridCell eastCell = getCellAt(floor, x, z);
+					RoomGridCell eastCell = this.getCellAt(floor, x, z);
 					if (eastCell != null) {
 						wall.registerAdjacentCell(eastCell, EnumFacing.EAST);
 						eastCell.registerAdjacentWall(wall, EnumFacing.WEST);
@@ -349,23 +349,23 @@ public class RoomGrid {
 		}
 
 		// horizontal walls
-		for (int floor = 0; floor < floors; floor++) {
-			for (int x = 0; x < roomsX; x++) {
-				for (int z = 0; z < roomsZ + 1; z++) {
+		for (int floor = 0; floor < this.floors; floor++) {
+			for (int x = 0; x < this.roomsX; x++) {
+				for (int z = 0; z < this.roomsZ + 1; z++) {
 					int xOffset = x * (roomWidth + 1);
 					int yOffset = floor * floorHeight;
 					int zOffset = z * (roomWidth + 1);
 					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
 					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.HORIZONTAL, wallWidth, floorHeight);
-					wallList.add(wall);
+					this.wallList.add(wall);
 
-					RoomGridCell northCell = getCellAt(floor, x, z - 1);
+					RoomGridCell northCell = this.getCellAt(floor, x, z - 1);
 					if (northCell != null) {
 						wall.registerAdjacentCell(northCell, EnumFacing.NORTH);
 						northCell.registerAdjacentWall(wall, EnumFacing.SOUTH);
 					}
 
-					RoomGridCell southCell = getCellAt(floor, x, z);
+					RoomGridCell southCell = this.getCellAt(floor, x, z);
 					if (southCell != null) {
 						wall.registerAdjacentCell(southCell, EnumFacing.SOUTH);
 						southCell.registerAdjacentWall(wall, EnumFacing.NORTH);
@@ -456,7 +456,7 @@ public class RoomGrid {
 			}
 			for (int i = 0; i < z; i++) {
 				RoomGridPosition checkPos = rootPosition.move(EnumFacing.EAST, (x - 1)).move(EnumFacing.SOUTH, i);
-				if ((getCellAt(checkPos) == null) || (!getCellAt(checkPos).needsRoomType())) {
+				if ((this.getCellAt(checkPos) == null) || (!this.getCellAt(checkPos).needsRoomType())) {
 					incX = false;
 					--x;
 					break;
@@ -468,7 +468,7 @@ public class RoomGrid {
 			}
 			for (int i = 0; i < x; i++) {
 				RoomGridPosition checkPos = rootPosition.move(EnumFacing.EAST, i).move(EnumFacing.SOUTH, (z - 1));
-				if ((getCellAt(checkPos) == null) || (!getCellAt(checkPos).needsRoomType())) {
+				if ((this.getCellAt(checkPos) == null) || (!this.getCellAt(checkPos).needsRoomType())) {
 					incZ = false;
 					--z;
 					break;
@@ -692,7 +692,7 @@ public class RoomGrid {
 	public boolean cellIsValidForRoof(RoomGridCell cell) {
 		RoomGridCell below = this.getAdjacentCell(cell, EnumFacing.DOWN);
 
-		return (below != null && !cell.isSelectedForBuilding() && below.isPopulated() && !(below.getFloor() == bossArea.start.getFloor())); // Don't want to build roofs over the boss floor rooms
+		return (below != null && !cell.isSelectedForBuilding() && below.isPopulated() && !(below.getFloor() == this.bossArea.start.getFloor())); // Don't want to build roofs over the boss floor rooms
 	}
 
 	public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction) {
@@ -811,7 +811,7 @@ public class RoomGrid {
 	}
 
 	public List<CastleMainStructWall> getWallListCopy() {
-		return new ArrayList<>(wallList);
+		return new ArrayList<>(this.wallList);
 	}
 
 	@Nullable

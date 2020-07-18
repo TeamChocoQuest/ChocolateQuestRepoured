@@ -24,7 +24,7 @@ public class ModelBoneShield extends ModelBase {
 		this.bone = new ModelRenderer(this, 0, 0);
 		this.bone.setRotationPoint(0.0F, 8F, 0.0F);
 		this.bone.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
-		this.setRotateAngle(bone, 0, 0, 0);
+		this.setRotateAngle(this.bone, 0, 0, 0);
 		this.shape6 = new ModelRenderer(this, 0, 0);
 		this.shape6.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.shape6.addBox(16.0F, -8.0F, -8.0F, 0, 16, 16, 0.0F);
@@ -34,11 +34,11 @@ public class ModelBoneShield extends ModelBase {
 		this.shape7 = new ModelRenderer(this, 0, 0);
 		this.shape7.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.shape7.addBox(-16.0F, -8.0F, -8.0F, 0, 16, 16, 0.0F);
-		this.setRotateAngle(shape7, 0.0F, 0.7853981633974483F, 0.0F);
+		this.setRotateAngle(this.shape7, 0.0F, 0.7853981633974483F, 0.0F);
 		this.shape8 = new ModelRenderer(this, 0, 0);
 		this.shape8.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.shape8.addBox(16.0F, -8.0F, -8.0F, 0, 16, 16, 0.0F);
-		this.setRotateAngle(shape8, 0.0F, 0.7853981633974483F, 0.0F);
+		this.setRotateAngle(this.shape8, 0.0F, 0.7853981633974483F, 0.0F);
 		this.shape1 = new ModelRenderer(this, 0, 0);
 		this.shape1.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.shape1.addBox(-8.0F, -8.0F, -16.0F, 16, 16, 0, 0.0F);
@@ -48,11 +48,11 @@ public class ModelBoneShield extends ModelBase {
 		this.shape4 = new ModelRenderer(this, 0, 0);
 		this.shape4.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.shape4.addBox(-8.0F, -8.0F, 16.0F, 16, 16, 0, 0.0F);
-		this.setRotateAngle(shape4, 0.0F, 0.7853981633974483F, 0.0F);
+		this.setRotateAngle(this.shape4, 0.0F, 0.7853981633974483F, 0.0F);
 		this.shape3 = new ModelRenderer(this, 0, 0);
 		this.shape3.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.shape3.addBox(-8.0F, -8.0F, -16.0F, 16, 16, 0, 0.0F);
-		this.setRotateAngle(shape3, 0.0F, 0.7853981633974483F, 0.0F);
+		this.setRotateAngle(this.shape3, 0.0F, 0.7853981633974483F, 0.0F);
 
 		this.bone.addChild(this.shape6);
 		this.bone.addChild(this.shape2);

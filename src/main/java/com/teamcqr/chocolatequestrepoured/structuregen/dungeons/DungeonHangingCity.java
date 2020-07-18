@@ -116,11 +116,11 @@ public class DungeonHangingCity extends DungeonBase {
 	 */
 
 	public int getMinBuildings() {
-		return minBuildings;
+		return this.minBuildings;
 	}
 
 	public int getMaxBuildings() {
-		return maxBuildings;
+		return this.maxBuildings;
 	}
 
 	public Block getChainBlock() {

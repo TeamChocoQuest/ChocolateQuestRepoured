@@ -31,7 +31,7 @@ public enum EStrongholdRoomType {
 	private String reversed;
 
 	public EStrongholdRoomType getReversed() {
-		return valueOf(reversed);
+		return valueOf(this.reversed);
 	}
 
 }

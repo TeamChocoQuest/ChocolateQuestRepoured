@@ -95,8 +95,8 @@ public class FactionRegistry {
 					ResourceLocation resLoc = new ResourceLocation(rlkey);
 					// if(EntityList.isRegistered(resLoc)) {
 					String faction = prop.getProperty(key, null);
-					if (faction != null && factions.containsKey(faction)) {
-						entityFactionMap.put(resLoc, factions.get(faction));
+					if (faction != null && this.factions.containsKey(faction)) {
+						this.entityFactionMap.put(resLoc, this.factions.get(faction));
 					}
 					// }
 				}
@@ -231,8 +231,8 @@ public class FactionRegistry {
 
 		// Faction overriding
 		ResourceLocation registryName = EntityList.getKey(entity);
-		if (registryName != null && entityFactionMap.containsKey(registryName)) {
-			return entityFactionMap.get(registryName);
+		if (registryName != null && this.entityFactionMap.containsKey(registryName)) {
+			return this.entityFactionMap.get(registryName);
 		}
 		// Overriding end
 
@@ -282,7 +282,7 @@ public class FactionRegistry {
 	}
 
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
-		return EReputationStateRough.getByRepuScore(getExactReputationOf(playerID, faction));
+		return EReputationStateRough.getByRepuScore(this.getExactReputationOf(playerID, faction));
 	}
 
 	public int getExactReputationOf(UUID playerID, CQRFaction faction) {
@@ -452,7 +452,7 @@ public class FactionRegistry {
 	}
 
 	public List<CQRFaction> getLoadedFactions() {
-		return new ArrayList<CQRFaction>(factions.values());
+		return new ArrayList<CQRFaction>(this.factions.values());
 	}
 
 }

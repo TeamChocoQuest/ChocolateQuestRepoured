@@ -50,7 +50,7 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return BOUNDING_BOX;
+		return this.BOUNDING_BOX;
 	}
 
 	/*

@@ -26,26 +26,26 @@ public class CastleRoomPool extends CastleRoomDecoratedBase {
 
 	@Override
 	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		int endX = getDecorationLengthX() - 1;
-		int endZ = getDecorationLengthZ() - 1;
+		int endX = this.getDecorationLengthX() - 1;
+		int endZ = this.getDecorationLengthZ() - 1;
 		Predicate<Vec3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
 		Predicate<Vec3i> southRow = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
 		Predicate<Vec3i> westRow = (v -> ((v.getY() == 0) && (v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
 		Predicate<Vec3i> eastRow = (v -> ((v.getY() == 0) && (v.getX() == endZ - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
 		Predicate<Vec3i> water = (v -> ((v.getY() == 0) && (v.getX() > 1) && (v.getX() < endX - 1) && (v.getZ() > 1) && (v.getZ() < endZ - 1)));
 
-		GenerationTemplate poolRoomTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
+		GenerationTemplate poolRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		poolRoomTemplate.addRule(northRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
 		poolRoomTemplate.addRule(southRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
 		poolRoomTemplate.addRule(westRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
 		poolRoomTemplate.addRule(eastRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
 		poolRoomTemplate.addRule(water, Blocks.WATER.getDefaultState());
 
-		HashMap<BlockPos, IBlockState> genMap = poolRoomTemplate.GetGenerationMap(getDecorationStartPos(), true);
+		HashMap<BlockPos, IBlockState> genMap = poolRoomTemplate.GetGenerationMap(this.getDecorationStartPos(), true);
 		genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 		for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
 			if (entry.getValue().getBlock() != Blocks.AIR) {
-				usedDecoPositions.add(entry.getKey());
+				this.usedDecoPositions.add(entry.getKey());
 			}
 		}
 

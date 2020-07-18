@@ -65,7 +65,7 @@ public class EntityWalkerTornado extends Entity {
 
 		if (this.getOwnerID() != null && this.owner == null && this.ticksExisted % 10 == 0) {
 			if (this.world instanceof WorldServer) {
-				Entity ent = ((WorldServer) this.world).getEntityFromUuid(getOwnerID());
+				Entity ent = ((WorldServer) this.world).getEntityFromUuid(this.getOwnerID());
 				if (ent.isEntityAlive()) {
 					this.owner = ent;
 				}

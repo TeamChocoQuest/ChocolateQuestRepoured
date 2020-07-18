@@ -22,31 +22,31 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 
 	@Override
 	public boolean shouldExecute() {
-		aiCooldown--;
-		return super.shouldExecute() && entity.getAttackTarget() != null && !entity.getAttackTarget().isDead && aiCooldown <= 0 && !this.entity.isFlyingUp();
+		this.aiCooldown--;
+		return super.shouldExecute() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead && this.aiCooldown <= 0 && !this.entity.isFlyingUp();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && entity.getAttackTarget() != null && !entity.getAttackTarget().isDead;
+		return super.shouldContinueExecuting() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead;
 	}
 
 	@Override
 	public void updateTask() {
-		if (entity.getPositionVector().distanceTo(getTargetLocation()) <= 4) {
-			entity.attackEntityAsMob(entity.getAttackTarget());
-			resetTask();
+		if (this.entity.getPositionVector().distanceTo(this.getTargetLocation()) <= 4) {
+			this.entity.attackEntityAsMob(this.entity.getAttackTarget());
+			this.resetTask();
 		}
 		super.updateTask();
-		if (!breathFire) {
-			attackCooldown--;
-			if (attackCooldown <= 0) {
-				attackCooldown = 20 + entity.getRNG().nextInt(41);
-				entity.attackEntityWithRangedAttack(entity.getAttackTarget(), entity.getDistance(entity.getAttackTarget()));
+		if (!this.breathFire) {
+			this.attackCooldown--;
+			if (this.attackCooldown <= 0) {
+				this.attackCooldown = 20 + this.entity.getRNG().nextInt(41);
+				this.entity.attackEntityWithRangedAttack(this.entity.getAttackTarget(), this.entity.getDistance(this.entity.getAttackTarget()));
 			}
 		} else {
-			((EntityCQRNetherDragon) entity).breatheFire();
-			((EntityCQRNetherDragon) entity).setBreathingFireFlag(true);
+			((EntityCQRNetherDragon) this.entity).breatheFire();
+			((EntityCQRNetherDragon) this.entity).setBreathingFireFlag(true);
 		}
 	}
 
@@ -54,23 +54,23 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	public void startExecuting() {
 		super.startExecuting();
 
-		this.breathFire = entity.getRNG().nextDouble() >= 0.75;
+		this.breathFire = this.entity.getRNG().nextDouble() >= 0.75;
 	}
 
 	@Override
 	public void resetTask() {
 		super.resetTask();
 		this.aiCooldown = 40;
-		if (breathFire) {
-			((EntityCQRNetherDragon) entity).setBreathingFireFlag(false);
+		if (this.breathFire) {
+			((EntityCQRNetherDragon) this.entity).setBreathingFireFlag(false);
 		}
 		this.breathFire = false;
-		this.entity.setTargetLocation(new Vec3d(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ()));
+		this.entity.setTargetLocation(new Vec3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
 	}
 
 	@Override
 	protected Vec3d getTargetLocation() {
-		return (entity.getAttackTarget() != null && !entity.getAttackTarget().isDead) ? entity.getAttackTarget().getPositionVector() : null;
+		return (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) ? this.entity.getAttackTarget().getPositionVector() : null;
 	}
 
 }

@@ -203,7 +203,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		for (Map.Entry<BlockPos, Block> entry : this.blockMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue().getDefaultState(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
 
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
 			PlacementSettings settings = new PlacementSettings();

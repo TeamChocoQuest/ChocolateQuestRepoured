@@ -45,24 +45,24 @@ public class TextureSet {
 						textures.add(tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + name, texture);
 						// if(TextureSetManager.loadTexture(tf, rs)) {
-						entityTextureMap.getOrDefault(resLoc, new HashSet<ResourceLocation>()).add(rs);
+						this.entityTextureMap.getOrDefault(resLoc, new HashSet<ResourceLocation>()).add(rs);
 						// }
 					}
 				}
 			}
-			if (!entityTextureMap.isEmpty()) {
+			if (!this.entityTextureMap.isEmpty()) {
 				TextureSetManager.registerTextureSet(this);
 			}
 		} catch (Exception ex) {
-			entityTextureMap.clear();
+			this.entityTextureMap.clear();
 		}
 	}
 
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity ent) {
 		ResourceLocation ers = EntityList.getKey(ent);
-		if (entityTextureMap.containsKey(ers)) {
-			Object[] textures = entityTextureMap.get(ers).toArray();
+		if (this.entityTextureMap.containsKey(ers)) {
+			Object[] textures = this.entityTextureMap.get(ers).toArray();
 			int indx = random.nextInt(textures.length);
 			return (ResourceLocation) textures[indx];
 		}
@@ -70,7 +70,7 @@ public class TextureSet {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public Set<ResourceLocation> getTextures() {

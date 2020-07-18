@@ -27,9 +27,9 @@ public class CastleAddonRoofTwoSided extends CastleAddonRoofBase {
 		IBlockState blockState = dungeon.getRoofBlockState();
 		boolean xIsLongSide;
 
-		if (sizeX > sizeZ) {
+		if (this.sizeX > this.sizeZ) {
 			xIsLongSide = true;
-		} else if (sizeX < sizeZ) {
+		} else if (this.sizeX < this.sizeZ) {
 			xIsLongSide = false;
 		} else {
 			xIsLongSide = dungeon.getRandom().nextBoolean();
@@ -52,7 +52,7 @@ public class CastleAddonRoofTwoSided extends CastleAddonRoofBase {
 			if (xIsLongSide) {
 				roofX = x - 1;
 				roofZ = z - 1;
-				roofLenX = sizeX + 2;
+				roofLenX = this.sizeX + 2;
 				roofLenZ = underLenZ + 2;
 
 				for (int i = 0; i < roofLenX; i++) {
@@ -69,7 +69,7 @@ public class CastleAddonRoofTwoSided extends CastleAddonRoofBase {
 				roofX = x - 1;
 				roofZ = z - 1;
 				roofLenX = underLenX + 2;
-				roofLenZ = sizeZ + 2;
+				roofLenZ = this.sizeZ + 2;
 
 				for (int i = 0; i < roofLenZ; i++) {
 					blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST);

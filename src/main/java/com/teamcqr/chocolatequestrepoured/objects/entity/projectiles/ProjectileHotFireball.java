@@ -14,18 +14,18 @@ public class ProjectileHotFireball extends EntityThrowable {
 
 	public ProjectileHotFireball(World worldIn) {
 		super(worldIn);
-		setSize(0.5F, 0.5F);
+		this.setSize(0.5F, 0.5F);
 	}
 
 	public ProjectileHotFireball(World worldIn, EntityLivingBase shooter, double x, double y, double z) {
 		super(worldIn, x, y, z);
 		this.thrower = shooter;
-		setSize(0.5F, 0.5F);
+		this.setSize(0.5F, 0.5F);
 	}
 
 	public ProjectileHotFireball(World worldIn, EntityLivingBase shooter) {
 		super(worldIn, shooter);
-		setSize(0.5F, 0.5F);
+		this.setSize(0.5F, 0.5F);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 	@Override
 	public void onUpdate() {
 		if (this.ticksExisted > 400) {
-			this.world.createExplosion(this.thrower, posX, posY, posZ, 1.5F, true);
+			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, true);
 			this.setDead();
 		}
 
@@ -45,7 +45,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if (world.isRemote) {
+		if (this.world.isRemote) {
 			return;
 		}
 		if (result.typeOfHit == Type.ENTITY) {
@@ -67,8 +67,8 @@ public class ProjectileHotFireball extends EntityThrowable {
 				}
 			}
 		}
-		this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, CQRConfig.bosses.hotFireballsDestroyTerrain);
-		setDead();
+		this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 3.0F, CQRConfig.bosses.hotFireballsDestroyTerrain);
+		this.setDead();
 	}
 
 }

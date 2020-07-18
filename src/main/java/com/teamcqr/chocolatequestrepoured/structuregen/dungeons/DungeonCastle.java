@@ -131,15 +131,15 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public IBlockState getFancyBlockState() {
-		return fancyBlock;
+		return this.fancyBlock;
 	}
 
 	public IBlockState getSlabBlockState() {
-		return slabBlock;
+		return this.slabBlock;
 	}
 
 	public IBlockState getStairBlockState() {
-		return stairBlock;
+		return this.stairBlock;
 	}
 
 	public IBlockState getFloorBlockState() {
@@ -151,7 +151,7 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public IBlockState getFenceBlockState() {
-		return fenceBlock;
+		return this.fenceBlock;
 	}
 
 	public IBlockState getWoodStairBlockState() {
@@ -159,15 +159,15 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public IBlockState getWoodSlabBlockState() {
-		return woodSlabBlock;
+		return this.woodSlabBlock;
 	}
 
 	public IBlockState getPlankBlockState() {
-		return plankBlock;
+		return this.plankBlock;
 	}
 
 	public IBlockState getDoorBlockState() {
-		return doorBlock;
+		return this.doorBlock;
 	}
 
 	public int getMaxSize() {
@@ -199,19 +199,19 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public int getMinBridgeLength() {
-		return minBridgeLength;
+		return this.minBridgeLength;
 	}
 
 	public int getMaxBridgeLength() {
-		return maxBridgeLength;
+		return this.maxBridgeLength;
 	}
 
 	public int getBridgeChance() {
-		return bridgeChance;
+		return this.bridgeChance;
 	}
 
 	public int getPaintingChance() {
-		return paintingChance;
+		return this.paintingChance;
 	}
 
 	public int randomizeRoomSpawnerCount() {

@@ -75,19 +75,19 @@ public class DungeonGuardedCastle extends DungeonBase {
 	}
 
 	public int getMinBuildings() {
-		return minBuildings;
+		return this.minBuildings;
 	}
 
 	public int getMaxBuilding() {
-		return maxBuilding;
+		return this.maxBuilding;
 	}
 
 	public File getStructureFolder() {
-		return structureFolder;
+		return this.structureFolder;
 	}
 
 	public File getCenterStructureFolder() {
-		return centerStructureFolder;
+		return this.centerStructureFolder;
 	}
 
 }

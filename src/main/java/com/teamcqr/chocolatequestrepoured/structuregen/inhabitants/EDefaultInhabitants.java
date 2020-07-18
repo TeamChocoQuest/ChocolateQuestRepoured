@@ -58,11 +58,11 @@ enum EDefaultInhabitants {
 	}
 
 	public ResourceLocation[] getEntityIDs() {
-		return resLoc;
+		return this.resLoc;
 	}
 
 	public ResourceLocation[] getBossIDs() {
-		return bossResLoc;
+		return this.bossResLoc;
 	}
 
 }

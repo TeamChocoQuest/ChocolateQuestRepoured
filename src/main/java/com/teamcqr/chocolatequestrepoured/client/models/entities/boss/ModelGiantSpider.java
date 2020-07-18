@@ -189,6 +189,7 @@ public class ModelGiantSpider extends ModelBase {
 	 * that arms and legs swing back and forth) and par2 represents how "far" arms and legs
 	 * can swing at most.
 	 */
+	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 		this.head.rotateAngleX = headPitch * 0.017453292F;

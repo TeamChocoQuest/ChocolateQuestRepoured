@@ -15,33 +15,33 @@ public class SyncFactionDataReply implements IMessage {
 	private int[] reputations = new int[FactionRegistry.instance().getLoadedFactions().size()];
 
 	public SyncFactionDataReply(UUID playerID) {
-		for (int i = 0; i < factions.length; i++) {
+		for (int i = 0; i < this.factions.length; i++) {
 			CQRFaction fac = FactionRegistry.instance().getLoadedFactions().get(i);
-			factions[i] = fac.getName();
+			this.factions[i] = fac.getName();
 			int score = FactionRegistry.instance().getExactReputationOf(playerID, fac);
-			reputations[i] = score;
+			this.reputations[i] = score;
 		}
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		int count = buf.readInt();
-		factions = new String[count];
-		reputations = new int[count];
+		this.factions = new String[count];
+		this.reputations = new int[count];
 		int counter = 0;
 		while (count > 0) {
-			factions[counter] = ByteBufUtils.readUTF8String(buf);
-			reputations[counter] = buf.readInt();
+			this.factions[counter] = ByteBufUtils.readUTF8String(buf);
+			this.reputations[counter] = buf.readInt();
 			counter++;
 		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(factions.length);
-		for (int i = 0; i < factions.length; i++) {
-			ByteBufUtils.writeUTF8String(buf, factions[i]);
-			buf.writeInt(reputations[i]);
+		buf.writeInt(this.factions.length);
+		for (int i = 0; i < this.factions.length; i++) {
+			ByteBufUtils.writeUTF8String(buf, this.factions[i]);
+			buf.writeInt(this.reputations[i]);
 		}
 	}
 

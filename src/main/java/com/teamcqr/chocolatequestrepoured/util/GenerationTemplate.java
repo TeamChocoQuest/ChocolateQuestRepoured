@@ -26,11 +26,11 @@ public class GenerationTemplate {
 		}
 
 		public Predicate<Vec3i> getCondition() {
-			return condition;
+			return this.condition;
 		}
 
 		public IBlockState getBlock() {
-			return block;
+			return this.block;
 		}
 	}
 
@@ -60,15 +60,15 @@ public class GenerationTemplate {
 	}
 
 	public void addRule(Predicate<Vec3i> condition, IBlockState blockToBuild) {
-		generationRules.add(new GenerationRule(condition, blockToBuild));
+		this.generationRules.add(new GenerationRule(condition, blockToBuild));
 	}
 
 	public void AddToGenArray(BlockPos origin, BlockStateGenArray genArray, BlockStateGenArray.GenerationPhase phase) {
-		AddToGenArray(origin, genArray, phase, null);
+		this.AddToGenArray(origin, genArray, phase, null);
 	}
 
 	public void AddToGenArray(BlockPos origin, BlockStateGenArray genArray, BlockStateGenArray.GenerationPhase phase, @Nullable HashSet<BlockPos> positionsFilled) {
-		HashMap<BlockPos, IBlockState> genMap = this.GetGenerationMap(origin, fillUnusedBlockWithAir);
+		HashMap<BlockPos, IBlockState> genMap = this.GetGenerationMap(origin, this.fillUnusedBlockWithAir);
 		genArray.addBlockStateMap(genMap, phase, BlockStateGenArray.EnumPriority.MEDIUM);
 		if (positionsFilled != null) {
 			for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
@@ -82,13 +82,13 @@ public class GenerationTemplate {
 	public HashMap<BlockPos, IBlockState> GetGenerationMap(BlockPos origin, boolean fillUnusedWithAir) {
 		HashMap<BlockPos, IBlockState> result = new HashMap<>();
 
-		for (int x = 0; x < lengthX; x++) {
-			for (int z = 0; z < lengthZ; z++) {
-				for (int y = 0; y < lengthY; y++) {
+		for (int x = 0; x < this.lengthX; x++) {
+			for (int z = 0; z < this.lengthZ; z++) {
+				for (int y = 0; y < this.lengthY; y++) {
 					boolean foundRule = false;
 
 					Vec3i offset = new Vec3i(x, y, z);
-					for (GenerationRule rule : generationRules) {
+					for (GenerationRule rule : this.generationRules) {
 						if (rule.getCondition().test(offset)) {
 							result.put(origin.add(offset), rule.getBlock());
 							foundRule = true;
@@ -107,6 +107,6 @@ public class GenerationTemplate {
 	}
 
 	public ArrayList<Map.Entry<BlockPos, IBlockState>> GetGenerationList(BlockPos origin, boolean fillUnusedWithAir) {
-		return new ArrayList<>(GetGenerationMap(origin, fillUnusedWithAir).entrySet());
+		return new ArrayList<>(this.GetGenerationMap(origin, fillUnusedWithAir).entrySet());
 	}
 }

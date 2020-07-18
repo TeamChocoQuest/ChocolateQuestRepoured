@@ -48,7 +48,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 			return false;
 		}
 		if (this.entity.ticksExisted % 4 == 0) {
-			if (!hasBackpack(this.entity)) {
+			if (!this.hasBackpack(this.entity)) {
 				return false;
 			}
 			if (!this.hasBackpackSpace()) {
@@ -75,7 +75,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	private boolean hasBackpackSpace() {
-		ItemStack backpack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+		ItemStack backpack = this.entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		IItemHandler inventory = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		if (inventory != null) {
 			for (int i = 0; i < inventory.getSlots(); i++) {
@@ -90,32 +90,32 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		currentLootingTime = LOOTING_DURATION;
-		this.entity.getNavigator().tryMoveToXYZ(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), 1.125D);
+		this.currentLootingTime = this.LOOTING_DURATION;
+		this.entity.getNavigator().tryMoveToXYZ(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && isChestStillThere() && hasBackpack(entity) && hasBackpackSpace();
+		return super.shouldContinueExecuting() && this.isChestStillThere() && this.hasBackpack(this.entity) && this.hasBackpackSpace();
 	}
 
 	@Override
 	public void updateTask() {
 		super.updateTask();
 
-		if (entity.getNavigator().getPathToPos(currentTarget) == null) {
-			this.visitedChests.add(currentTarget);
-			currentTarget = null;
+		if (this.entity.getNavigator().getPathToPos(this.currentTarget) == null) {
+			this.visitedChests.add(this.currentTarget);
+			this.currentTarget = null;
 			return;
 		}
 
-		if (isInLootingRange()) {
-			entity.getNavigator().clearPath();
-			TileEntityChest tile = (TileEntityChest) world.getTileEntity(currentTarget);
+		if (this.isInLootingRange()) {
+			this.entity.getNavigator().clearPath();
+			TileEntityChest tile = (TileEntityChest) this.world.getTileEntity(this.currentTarget);
 			// TODO: let it stay open
-			if (currentLootingTime >= 0) {
-				currentLootingTime--;
-				if (currentLootingTime % (LOOTING_DURATION / CQRConfig.mobs.looterAIStealableItems) == 0) {
+			if (this.currentLootingTime >= 0) {
+				this.currentLootingTime--;
+				if (this.currentLootingTime % (this.LOOTING_DURATION / CQRConfig.mobs.looterAIStealableItems) == 0) {
 					ItemStack stolenItem = null;
 					for (int i = 0; i < tile.getSizeInventory(); i++) {
 						if (!tile.getStackInSlot(i).isEmpty()) {
@@ -126,9 +126,9 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					}
 					if (stolenItem != null) {
 						tile.markDirty();
-						entity.swingArm(EnumHand.MAIN_HAND);
-						entity.swingArm(EnumHand.OFF_HAND);
-						ItemStack backpack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+						this.entity.swingArm(EnumHand.MAIN_HAND);
+						this.entity.swingArm(EnumHand.OFF_HAND);
+						ItemStack backpack = this.entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 						IItemHandler inventory = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 						if (inventory != null) {
 							for (int i = 0; i < inventory.getSlots(); i++) {
@@ -141,18 +141,18 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					}
 				}
 			} else {
-				this.visitedChests.add(currentTarget);
+				this.visitedChests.add(this.currentTarget);
 			}
 		} else {
-			entity.getLookHelper().setLookPosition(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), 30, 30);
+			this.entity.getLookHelper().setLookPosition(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 30, 30);
 			if (!this.entity.hasPath()) {
-				this.entity.getNavigator().tryMoveToXYZ(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), 1.125D);
+				this.entity.getNavigator().tryMoveToXYZ(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
 			}
 		}
 	}
 
 	private boolean isInLootingRange() {
-		return entity.getDistanceSq(currentTarget) <= REQUIRED_DISTANCE_TO_LOOT;
+		return this.entity.getDistanceSq(this.currentTarget) <= this.REQUIRED_DISTANCE_TO_LOOT;
 	}
 
 	protected boolean hasBackpack(EntityLiving living) {
@@ -161,13 +161,13 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	protected boolean isChestStillThere() {
-		if (currentTarget == null) {
+		if (this.currentTarget == null) {
 			return false;
 		}
-		if (visitedChests.contains(currentTarget)) {
+		if (this.visitedChests.contains(this.currentTarget)) {
 			return false;
 		}
-		TileEntity tile = world.getTileEntity(currentTarget);
+		TileEntity tile = this.world.getTileEntity(this.currentTarget);
 		return tile != null && tile instanceof TileEntityChest && !((TileEntityChest) tile).isEmpty();
 	}
 

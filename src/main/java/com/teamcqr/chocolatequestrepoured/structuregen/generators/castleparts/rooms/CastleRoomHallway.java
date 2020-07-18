@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
-import net.minecraft.block.BlockGlazedTerracotta;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -34,7 +34,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		this.alignment = alignment;
 		this.defaultFloor = true;
 		this.defaultCeiling = true;
-		this.patternStartFacing = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
+		this.patternStartFacing = EnumFacing.HORIZONTALS[this.random.nextInt(EnumFacing.HORIZONTALS.length)];
 	}
 
 	@Override
@@ -49,18 +49,18 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 				// So create that pattern here given some starting facing
 				if (pos.getZ() % 2 == 0) {
 					if (pos.getX() % 2 == 0) {
-						tcFacing = patternStartFacing;
+						tcFacing = this.patternStartFacing;
 					} else {
-						tcFacing = patternStartFacing.rotateY();
+						tcFacing = this.patternStartFacing.rotateY();
 					}
 				} else {
 					if (pos.getX() % 2 == 0) {
-						tcFacing = patternStartFacing.rotateYCCW();
+						tcFacing = this.patternStartFacing.rotateYCCW();
 					} else {
-						tcFacing = patternStartFacing.rotateY().rotateY();
+						tcFacing = this.patternStartFacing.rotateY().rotateY();
 					}
 				}
-				tcBlock = tcBlock.withProperty(BlockGlazedTerracotta.FACING, tcFacing);
+				tcBlock = tcBlock.withProperty(BlockHorizontal.FACING, tcFacing);
 				genArray.addBlockState(pos, tcBlock, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}

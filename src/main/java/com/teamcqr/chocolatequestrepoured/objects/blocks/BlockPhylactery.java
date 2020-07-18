@@ -66,7 +66,7 @@ public class BlockPhylactery extends Block {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return BOUNDING_BOX;
+		return this.BOUNDING_BOX;
 	}
 
 	@Override

@@ -13,17 +13,17 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 
 	public BossAIFlyToLocation(EntityCQRNetherDragon entity) {
 		super(entity);
-		setMutexBits(1 | 2 | 4);
+		this.setMutexBits(1 | 2 | 4);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		return getTargetLocation() != null && !this.entity.isFlyingUp();
+		return this.getTargetLocation() != null && !this.entity.isFlyingUp();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && entity.getPositionVector().distanceTo(getTargetLocation()) > MIN_DISTANCE_TO_REACH;
+		return super.shouldContinueExecuting() && this.entity.getPositionVector().distanceTo(this.getTargetLocation()) > MIN_DISTANCE_TO_REACH;
 	}
 
 	protected Vec3d getTargetLocation() {
@@ -33,11 +33,11 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if (cooldown <= 0) {
-			cooldown = 10;
-			this.entity.getNavigator().tryMoveToXYZ(getTargetLocation().x, getTargetLocation().y, getTargetLocation().z, getMovementSpeed());
+		if (this.cooldown <= 0) {
+			this.cooldown = 10;
+			this.entity.getNavigator().tryMoveToXYZ(this.getTargetLocation().x, this.getTargetLocation().y, this.getTargetLocation().z, this.getMovementSpeed());
 		}
-		cooldown--;
+		this.cooldown--;
 	}
 
 	protected double getMovementSpeed() {

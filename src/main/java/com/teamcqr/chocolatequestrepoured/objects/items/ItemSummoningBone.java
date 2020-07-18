@@ -36,9 +36,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemSummoningBone extends Item {
 
 	public ItemSummoningBone() {
-		setMaxDamage(3);
-		setMaxStackSize(1);
-		setNoRepair();
+		this.setMaxDamage(3);
+		this.setMaxStackSize(1);
+		this.setNoRepair();
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class ItemSummoningBone extends Item {
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if (!worldIn.isRemote && spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
+		if (!worldIn.isRemote && this.spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
 			stack.damageItem(1, entityLiving);
 		}
 		if (entityLiving instanceof EntityPlayerMP) {

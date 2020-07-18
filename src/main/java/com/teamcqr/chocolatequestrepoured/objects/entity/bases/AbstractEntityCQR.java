@@ -173,7 +173,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(HAS_TARGET, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
-		this.dataManager.register(TEXTURE_INDEX, getTextureVariant());
+		this.dataManager.register(TEXTURE_INDEX, this.getTextureVariant());
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
 		this.dataManager.register(SPIN_TO_WIN, false);
@@ -224,7 +224,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// End IceAndFire compatibility
 
 		// Shoulder entity stuff
-		spawnShoulderEntities();
+		this.spawnShoulderEntities();
 
 		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
 			amount *= 0.7F;
@@ -242,7 +242,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
 		}
 
-		amount = handleDamageCap(source, amount);
+		amount = this.handleDamageCap(source, amount);
 
 		if (super.attackEntityFrom(source, amount)) {
 			if (CQRConfig.mobs.armorShattersOnMobs) {
@@ -271,8 +271,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (source.isCreativePlayer() || source.canHarmInCreative()) {
 			return originalAmount;
 		}
-		if (CQRConfig.advanced.enableMaxDamageCaps && damageCapEnabled()) {
-			return new Float(Math.min(Math.max(maxUncappedDamage(), getMaxHealth() * maxDamageInPercentOfMaxHP()), originalAmount));
+		if (CQRConfig.advanced.enableMaxDamageCaps && this.damageCapEnabled()) {
+			return new Float(Math.min(Math.max(this.maxUncappedDamage(), this.getMaxHealth() * this.maxDamageInPercentOfMaxHP()), originalAmount));
 		}
 		return originalAmount;
 	}
@@ -672,7 +672,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
 		// Shoulder entity stuff
-		spawnShoulderEntities();
+		this.spawnShoulderEntities();
 
 		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof EntityLivingBase) {
@@ -779,7 +779,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leaderUUID = null;
 			} else {
 				if (this.world instanceof WorldServer) {
-					Entity leader = ((WorldServer) this.world).getEntityFromUuid(leaderUUID);
+					Entity leader = ((WorldServer) this.world).getEntityFromUuid(this.leaderUUID);
 					if (leader instanceof EntityLivingBase) {
 						this.leader = (EntityLivingBase) leader;
 						return (EntityLivingBase) leader;
@@ -1009,7 +1009,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.setItemStackToSlot(slot, new ItemStack(mobType.getShieldReplacement(), 1));
 			}
 			if (mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
-				setFaction(mobType.getFactionOverride());
+				this.setFaction(mobType.getFactionOverride());
 			}
 		}
 	}
@@ -1288,7 +1288,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// @SideOnly(Side.CLIENT)
 	public boolean hasAttackTarget() {
-		if (world.isRemote) {
+		if (this.world.isRemote) {
 			return this.dataManager.get(HAS_TARGET);
 		} else {
 			return this.getAttackTarget() != null && !this.getAttackTarget().isDead;
@@ -1352,14 +1352,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void onPutInSpawner() {
-		if (hasHomePositionCQR() && getHomePositionCQR() != null) {
+		if (this.hasHomePositionCQR() && this.getHomePositionCQR() != null) {
 			// Recalculate the path positions to my new home
 			BlockPos homeNew = this.getPosition();
-			BlockPos v = homeNew.subtract(getHomePositionCQR());
+			BlockPos v = homeNew.subtract(this.getHomePositionCQR());
 			for (int i = 0; i < this.pathPoints.length; i++) {
-				pathPoints[i] = pathPoints[i].subtract(v);
+				this.pathPoints[i] = this.pathPoints[i].subtract(v);
 			}
-			setHomePositionCQR(homeNew);
+			this.setHomePositionCQR(homeNew);
 		}
 	}
 
@@ -1368,7 +1368,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean isSpinToWinActive() {
-		return canUseSpinToWinAttack() && dataManager.get(SPIN_TO_WIN);
+		return this.canUseSpinToWinAttack() && this.dataManager.get(SPIN_TO_WIN);
 	}
 
 	@SideOnly(Side.SERVER)

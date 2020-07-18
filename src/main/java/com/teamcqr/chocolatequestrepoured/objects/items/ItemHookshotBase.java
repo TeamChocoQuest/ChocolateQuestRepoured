@@ -131,7 +131,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 					// Try the vanilla blocks first
 					blockMatch = Block.getBlockFromName(blockType);
 					if (blockMatch != null) {
-						validLatchBlocks.add(blockMatch);
+						this.validLatchBlocks.add(blockMatch);
 						continue;
 					}
 
@@ -156,19 +156,20 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 				return true;
 			}
 		}
-		return validLatchBlocks.contains(block);
+		return this.validLatchBlocks.contains(block);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format(getTranslationKey()));
+			tooltip.add(TextFormatting.BLUE + I18n.format(this.getTranslationKey()));
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 
+	@Override
 	public abstract String getTranslationKey();
 
 	public abstract double getHookRange();
@@ -190,7 +191,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, this, stack);
 			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, (float) hookEntity.getTravelSpeed(), 0F);
-			player.getCooldownTracker().setCooldown(stack.getItem(), getCooldown());
+			player.getCooldownTracker().setCooldown(stack.getItem(), this.getCooldown());
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
 		}

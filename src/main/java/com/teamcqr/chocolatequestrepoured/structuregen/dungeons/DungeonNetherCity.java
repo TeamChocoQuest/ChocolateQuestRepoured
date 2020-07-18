@@ -122,7 +122,7 @@ public class DungeonNetherCity extends DungeonBase {
 	}
 
 	public double getBridgeSizeMultiplier() {
-		return bridgeSizeMultiplier;
+		return this.bridgeSizeMultiplier;
 	}
 
 }

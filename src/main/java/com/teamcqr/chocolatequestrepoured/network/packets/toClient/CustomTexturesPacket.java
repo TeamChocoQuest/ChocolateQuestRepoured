@@ -36,13 +36,13 @@ public class CustomTexturesPacket implements IMessage {
 		while (keys > 0) {
 			String k = ByteBufUtils.readUTF8String(buf);
 			String v = ByteBufUtils.readUTF8String(buf);
-			entries.put(k, v);
+			this.entries.put(k, v);
 			keys--;
 		}
 
 		while (tscount > 0) {
 			String tsname = ByteBufUtils.readUTF8String(buf);
-			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = textureSets.getOrDefault(tsname, new HashMap<>());
+			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = this.textureSets.getOrDefault(tsname, new HashMap<>());
 			int tskeys = buf.readInt();
 			while (tskeys > 0) {
 				String key = ByteBufUtils.readUTF8String(buf);
@@ -56,17 +56,17 @@ public class CustomTexturesPacket implements IMessage {
 				entityTextureMap.put(new ResourceLocation(key), values);
 				tskeys--;
 			}
-			textureSets.put(tsname, entityTextureMap);
+			this.textureSets.put(tsname, entityTextureMap);
 			tscount--;
 		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(entries.keySet().size());
-		buf.writeInt(textureSets.keySet().size());
+		buf.writeInt(this.entries.keySet().size());
+		buf.writeInt(this.textureSets.keySet().size());
 		// Textures
-		for (Map.Entry<String, String> entry : entries.entrySet()) {
+		for (Map.Entry<String, String> entry : this.entries.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, entry.getKey());
 			ByteBufUtils.writeUTF8String(buf, entry.getValue());
 		}

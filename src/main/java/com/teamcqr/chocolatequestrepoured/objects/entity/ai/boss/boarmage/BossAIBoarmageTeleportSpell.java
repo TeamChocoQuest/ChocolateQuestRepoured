@@ -31,37 +31,37 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 
 	@Override
 	public boolean shouldExecute() {
-		if (ticksAtTeleport != 0) {
+		if (this.ticksAtTeleport != 0) {
 			return false;
 		}
-		if (cooldown > 0) {
-			cooldown--;
+		if (this.cooldown > 0) {
+			this.cooldown--;
 			return false;
 		}
-		return entity.hasAttackTarget() && (entity.getDistance(entity.getAttackTarget()) <= MIN_DISTANCE || entity.getDistance(entity.getAttackTarget()) >= MAX_DISTANCE);
+		return this.entity.hasAttackTarget() && (this.entity.getDistance(this.entity.getAttackTarget()) <= MIN_DISTANCE || this.entity.getDistance(this.entity.getAttackTarget()) >= MAX_DISTANCE);
 	}
 
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		this.wallsMax = DungeonGenUtils.getIntBetweenBorders(MIN_WALLS, MAX_WALLS, entity.getRNG());
+		this.wallsMax = DungeonGenUtils.getIntBetweenBorders(MIN_WALLS, MAX_WALLS, this.entity.getRNG());
 		this.wallCounter = 0;
-		world.newExplosion(entity, entity.posX, entity.posY, entity.posZ, 2, true, false);
-		Vec3d v = entity.getPositionVector().subtract(entity.getAttackTarget().getPositionVector());
+		this.world.newExplosion(this.entity, this.entity.posX, this.entity.posY, this.entity.posZ, 2, true, false);
+		Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector());
 		v = v.normalize().scale(5);
-		Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v);
-		if (entity.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
-			if (entity.attemptTeleport(p.x, p.y, p.z)) {
-				ticksAtTeleport = new Long(entity.ticksExisted);
+		Vec3d p = this.entity.getAttackTarget().getPositionVector().subtract(v);
+		if (this.entity.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
+			if (this.entity.attemptTeleport(p.x, p.y, p.z)) {
+				this.ticksAtTeleport = new Long(this.entity.ticksExisted);
 				return;
 			}
 		}
-		resetTask();
+		this.resetTask();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return ticksAtTeleport != 0 && wallCounter <= wallsMax && entity.hasAttackTarget();
+		return this.ticksAtTeleport != 0 && this.wallCounter <= this.wallsMax && this.entity.hasAttackTarget();
 	}
 
 	@Override
@@ -72,10 +72,10 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if (Math.abs(entity.ticksExisted - ticksAtTeleport) > PREPARE_TIME) {
-			ticksAtTeleport = entity.ticksExisted;
+		if (Math.abs(this.entity.ticksExisted - this.ticksAtTeleport) > PREPARE_TIME) {
+			this.ticksAtTeleport = this.entity.ticksExisted;
 			// Summon fire wall here
-			int wallLength = MIN_WALL_LENGTH + wallCounter * ((MAX_WALL_LENGTH - MIN_WALL_LENGTH) / (wallsMax));
+			int wallLength = MIN_WALL_LENGTH + this.wallCounter * ((MAX_WALL_LENGTH - MIN_WALL_LENGTH) / (this.wallsMax));
 
 			// WALL CODE
 			Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
@@ -94,7 +94,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 				positions[arrayIndex] = startPos.add(new Vec3d(i * vL.x, 0, i * vL.z));
 				arrayIndex++;
 			}
-			entity.swingArm(EnumHand.MAIN_HAND);
+			this.entity.swingArm(EnumHand.MAIN_HAND);
 
 			for (Vec3d p : positions) {
 				if (p != null) {
@@ -110,15 +110,15 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 			}
 			// END OF WALL CODE
 
-			wallCounter++;
+			this.wallCounter++;
 		}
 	}
 
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		cooldown = 60;
-		ticksAtTeleport = 0;
+		this.cooldown = 60;
+		this.ticksAtTeleport = 0;
 	}
 
 }

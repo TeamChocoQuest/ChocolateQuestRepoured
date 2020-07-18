@@ -27,7 +27,7 @@ public class DecoBlockRotating extends DecoBlockBase {
 
 	@Override
 	protected IBlockState getState(EnumFacing side) {
-		int rotations = DungeonGenUtils.getCWRotationsBetween(DEFAULT_SIDE, side);
-		return blockState.withProperty(directionProperty, DungeonGenUtils.rotateFacingNTimesAboutY(initialFacing, rotations));
+		int rotations = DungeonGenUtils.getCWRotationsBetween(this.DEFAULT_SIDE, side);
+		return this.blockState.withProperty(this.directionProperty, DungeonGenUtils.rotateFacingNTimesAboutY(this.initialFacing, rotations));
 	}
 }

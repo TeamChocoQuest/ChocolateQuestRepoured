@@ -77,7 +77,7 @@ public class TextureSetManager {
 
 	@SideOnly(Side.CLIENT)
 	private void unloadTexturesImpl() {
-		for (TextureSet set : textureSets.values()) {
+		for (TextureSet set : this.textureSets.values()) {
 			for (ResourceLocation rs : set.getTextures()) {
 				try {
 					TextureUtil.unloadTexture(rs);

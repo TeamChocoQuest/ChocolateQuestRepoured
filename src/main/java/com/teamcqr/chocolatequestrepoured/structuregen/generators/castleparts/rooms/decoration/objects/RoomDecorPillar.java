@@ -22,13 +22,13 @@ public class RoomDecorPillar extends RoomDecorBlocksBase {
 
 	@Override
 	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap, CastleRoomBase room) {
-		this.schematic = getSizedSchematic(room);
+		this.schematic = this.getSizedSchematic(room);
 		return super.wouldFit(start, side, decoArea, decoMap, room);
 	}
 
 	@Override
 	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonCastle dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
-		this.schematic = getSizedSchematic(room);
+		this.schematic = this.getSizedSchematic(room);
 		super.build(world, genArray, room, dungeon, start, side, decoMap);
 	}
 

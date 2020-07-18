@@ -34,7 +34,7 @@ public class ItemTeleportStone extends Item {
 	public ItemTeleportStone() {
 		this.setMaxDamage(100);
 
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class ItemTeleportStone extends Item {
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
-		return getPoint(stack) != null;
+		return this.getPoint(stack) != null;
 	}
 
 	@Nullable

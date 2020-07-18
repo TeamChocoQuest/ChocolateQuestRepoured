@@ -19,21 +19,21 @@ public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPir
 
 	@Override
 	public boolean shouldExecute() {
-		return !entity.hasSpawnedParrot() && super.shouldExecute();
+		return !this.entity.hasSpawnedParrot() && super.shouldExecute();
 	}
 
 	@Override
 	public void startCastingSpell() {
 		Vec3d v = this.entity.getLookVec().normalize().scale(3);
 		v = VectorUtil.rotateVectorAroundY(v, 90);
-		if (entity.world.getBlockState(new BlockPos(entity.getPositionVector().add(v).add(0, 1, 0))).getBlock() != Blocks.AIR) {
+		if (this.entity.world.getBlockState(new BlockPos(this.entity.getPositionVector().add(v).add(0, 1, 0))).getBlock() != Blocks.AIR) {
 			v = new Vec3d(0, 1, 0);
 		}
-		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(world);
-		parrot.setOwnerId(entity.getUniqueID());
+		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(this.world);
+		parrot.setOwnerId(this.entity.getUniqueID());
 		parrot.setTamed(true);
-		parrot.setOwnerId(entity.getUniqueID());
-		Vec3d pos = entity.getPositionVector().add(v);
+		parrot.setOwnerId(this.entity.getUniqueID());
+		Vec3d pos = this.entity.getPositionVector().add(v);
 		parrot.setPosition(pos.x, pos.y, pos.z);
 		this.entity.world.spawnEntity(parrot);
 		this.entity.setSpawnedParrot(true);

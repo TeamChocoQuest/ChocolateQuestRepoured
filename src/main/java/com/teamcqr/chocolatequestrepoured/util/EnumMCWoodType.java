@@ -29,23 +29,23 @@ public enum EnumMCWoodType {
 	}
 
 	public IBlockState getSlabBlockState() {
-		return Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, plankVariant);
+		return Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, this.plankVariant);
 	}
 
 	public IBlockState getPlankBlockState() {
-		return Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, plankVariant);
+		return Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, this.plankVariant);
 	}
 
 	public IBlockState getStairBlockState() {
-		return stairBlock.getDefaultState();
+		return this.stairBlock.getDefaultState();
 	}
 
 	public IBlockState getFenceBlockState() {
-		return fenceBlock.getDefaultState();
+		return this.fenceBlock.getDefaultState();
 	}
 
 	public IBlockState getDoorBlockState() {
-		return doorBlock.getDefaultState();
+		return this.doorBlock.getDefaultState();
 	}
 
 	@Nullable

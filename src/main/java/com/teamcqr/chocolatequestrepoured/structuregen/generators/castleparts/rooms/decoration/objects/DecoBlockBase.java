@@ -24,10 +24,10 @@ public class DecoBlockBase {
 	}
 
 	protected IBlockState getState(EnumFacing side) {
-		return blockState;
+		return this.blockState;
 	}
 
 	public BlockStateGenArray.GenerationPhase getGenPhase() {
-		return genPhase;
+		return this.genPhase;
 	}
 }

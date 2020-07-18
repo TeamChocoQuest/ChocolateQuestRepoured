@@ -86,7 +86,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 				newPos = this.pos.add(v);
 			}
-			int yNew = DungeonGenUtils.getHighestYAt(world.getChunk(newPos), newPos.getX(), newPos.getZ(), true);
+			int yNew = DungeonGenUtils.getHighestYAt(this.world.getChunk(newPos), newPos.getX(), newPos.getZ(), true);
 
 			BlockPos calculatedPos = new BlockPos(newPos.getX(), yNew, newPos.getZ());
 			if (!this.structurePosList.contains(calculatedPos)) {
@@ -112,7 +112,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		CQStructure centerDun = this.loadStructureFromFile(this.centerStructure);
 
-		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		this.toGenerate.put(centerDun, this.pos);
 
 		// First, build all the support platforms
@@ -157,7 +157,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 					}
 
 					this.dungeonGenerator
-							.add(new DungeonPartPlateau(world, dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+							.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 					// Build the structure...
 					/*
@@ -235,9 +235,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 				plcmnt.setRotation(this.rotList.get(index - 1));
 
-				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, posLower, structure.getBlockInfoList(), plcmnt, mobType));
-				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, posLower, structure.getSpecialBlockInfoList(), plcmnt, mobType));
-				this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, posLower, structure.getEntityInfoList(), plcmnt, mobType));
+				this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, posLower, structure.getBlockInfoList(), plcmnt, mobType));
+				this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, posLower, structure.getSpecialBlockInfoList(), plcmnt, mobType));
+				this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, posLower, structure.getEntityInfoList(), plcmnt, mobType));
 
 				index++;
 			}
@@ -354,7 +354,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 				int endX = this.toGenerate.get(structure).getX() + structure.getSize().getX() + structure.getSize().getX() / 3 + CQRConfig.general.supportHillWallSize / 2;
 				int endZ = this.toGenerate.get(structure).getZ() + structure.getSize().getZ() + structure.getSize().getZ() / 3 + CQRConfig.general.supportHillWallSize / 2;
 
-				this.dungeonGenerator.add(new DungeonPartCover(world, dungeonGenerator, startX, startZ, endX, endZ, this.dungeon.getCoverBlock()));
+				this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, startX, startZ, endX, endZ, this.dungeon.getCoverBlock()));
 			}
 		}
 	}

@@ -28,8 +28,9 @@ public class BlockFireCQR extends BlockFire {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (worldIn.getGameRules().getBoolean("doFireTick")) {
-			if (!worldIn.isAreaLoaded(pos, 2))
+			if (!worldIn.isAreaLoaded(pos, 2)) {
 				return; // Forge: prevent loading unloaded chunks when spreading fire
+			}
 			if (!this.canPlaceBlockAt(worldIn, pos)) {
 				worldIn.setBlockToAir(pos);
 			}

@@ -29,7 +29,7 @@ public class TraderOffer {
 			public void accept(NBTBase tradeNBT) {
 				Trade trade = new Trade(TraderOffer.this);
 				trade.readFromNBT((NBTTagCompound) tradeNBT);
-				trades.add(trade);
+				TraderOffer.this.trades.add(trade);
 			}
 
 		});
@@ -44,7 +44,7 @@ public class TraderOffer {
 	}
 
 	public CQRFaction getTraderFaction() {
-		return trader.getFaction();
+		return this.trader.getFaction();
 	}
 
 }

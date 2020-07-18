@@ -40,6 +40,7 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute() {
 		CQRFaction faction = FactionRegistry.instance().getFactionOf(this.taskOwner);
 		if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
@@ -82,6 +83,7 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting() {
 		this.taskOwner.setAttackTarget(this.targetEntity);
 		super.startExecuting();
@@ -94,6 +96,7 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 			this.entity = entityIn;
 		}
 
+		@Override
 		public int compare(Entity p_compare_1_, Entity p_compare_2_) {
 			double d0 = this.entity.getDistanceSq(p_compare_1_);
 			double d1 = this.entity.getDistanceSq(p_compare_2_);

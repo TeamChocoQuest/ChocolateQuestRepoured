@@ -64,6 +64,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		// this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 30, 10));
 	}
 
+	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(BONE_SHIELD_ACTIVE, false);
@@ -74,14 +75,14 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		super.onLivingUpdate();
 		this.filterSummonLists();
 
-		if (this.summonedSkulls.size() >= 1 && !hasAttackTarget()) {
+		if (this.summonedSkulls.size() >= 1 && !this.hasAttackTarget()) {
 			this.summonedSkulls.get(0).setSide(false);
 			if (this.summonedSkulls.size() >= 2) {
 				this.summonedSkulls.get(1).setSide(true);
 			}
 		}
 
-		if (!this.world.isRemote && this.getHealth() <= getMaxHealth() / 2) {
+		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
 			this.dataManager.set(BONE_SHIELD_ACTIVE, true);
 		} else if (!this.world.isRemote) {
 			this.dataManager.set(BONE_SHIELD_ACTIVE, false);
@@ -105,7 +106,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (!this.world.isRemote && this.getHealth() <= getMaxHealth() / 2) {
+		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
 			if (source.isProjectile() || source.getImmediateSource() instanceof EntityArrow || source.getImmediateSource() instanceof IProjectile) {
 				amount = 0;
 				return false;
@@ -200,7 +201,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	public boolean isBoneShieldActive() {
-		return dataManager.get(BONE_SHIELD_ACTIVE);
+		return this.dataManager.get(BONE_SHIELD_ACTIVE);
 	}
 
 }

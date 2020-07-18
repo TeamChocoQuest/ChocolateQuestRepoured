@@ -32,15 +32,15 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		if (this.summoner == null || this.entity == null) {
 			return false;
 		}
-		if (cooldown > 0) {
-			cooldown--;
+		if (this.cooldown > 0) {
+			this.cooldown--;
 		}
-		if (!entity.hasAttackTarget()) {
+		if (!this.entity.hasAttackTarget()) {
 			return false;
 		}
-		if (getAliveMinionCount() < MAX_MINIONS) {
-			if (entity.getHealth() / entity.getMaxHealth() <= 0.75) {
-				return cooldown <= 0;
+		if (this.getAliveMinionCount() < this.MAX_MINIONS) {
+			if (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.75) {
+				return this.cooldown <= 0;
 			}
 		}
 		return false;
@@ -61,22 +61,22 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		if (this.summoner == null || this.entity == null) {
 			return;
 		}
-		int minionCount = Math.min(MAX_MINIONS_AT_A_TIME, MAX_MINIONS - getAliveMinionCount());
+		int minionCount = Math.min(this.MAX_MINIONS_AT_A_TIME, this.MAX_MINIONS - this.getAliveMinionCount());
 		double angle = 360 / minionCount;
 		Vec3d v = new Vec3d(1, 0, 0);
 		for (int i = 0; i < minionCount; i++) {
-			Vec3d pos = entity.getPositionVector().add(v);
+			Vec3d pos = this.entity.getPositionVector().add(v);
 			v = VectorUtil.rotateVectorAroundY(v, angle);
 
-			Entity minion = EntityList.createEntityByIDFromName(minionOverride, entity.world);
+			Entity minion = EntityList.createEntityByIDFromName(this.minionOverride, this.entity.world);
 			minion.setPosition(pos.x, pos.y, pos.z);
-			entity.world.spawnEntity(minion);
+			this.entity.world.spawnEntity(minion);
 			if (this.summoner != null && !this.summoner.getSummoner().isDead) {
 				this.summoner.setSummonedEntityFaction(minion);
 				this.summoner.addSummonedEntityToList(minion);
 			}
 		}
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}
 
 	@Override

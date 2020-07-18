@@ -34,9 +34,10 @@ public class ProjectileBubble extends ProjectileBase {
 		this.isImmuneToFire = true;
 	}
 
+	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
-			applyEntityCollision(result.entityHit);
+			this.applyEntityCollision(result.entityHit);
 		}
 
 		super.onImpact(result);
@@ -60,13 +61,13 @@ public class ProjectileBubble extends ProjectileBase {
 			return;
 		}
 
-		entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shooter, this), this.damage);
-		float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
+		entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this.shooter, this), this.damage);
+		float pitch = (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F;
 		this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_SWIM, SoundCategory.PLAYERS, 4, pitch, true);
 
-		EntityBubble bubbles = new EntityBubble(world);
+		EntityBubble bubbles = new EntityBubble(this.world);
 		bubbles.moveToBlockPosAndAngles(entityHit.getPosition().add(0, 0.25, 0), entityHit.rotationYaw, entityHit.rotationPitch);
-		world.spawnEntity(bubbles);
+		this.world.spawnEntity(bubbles);
 
 		entityHit.startRiding(bubbles, true);
 

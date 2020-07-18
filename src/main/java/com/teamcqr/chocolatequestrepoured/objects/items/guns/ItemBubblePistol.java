@@ -26,8 +26,8 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 
 	public ItemBubblePistol() {
 		super();
-		setMaxDamage(getMaxUses());
-		setMaxStackSize(1);
+		this.setMaxDamage(this.getMaxUses());
+		this.setMaxStackSize(1);
 	}
 
 	public int getMaxUses() {
@@ -46,7 +46,7 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if (entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, getCooldown());
+			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
 		}
 		stack.damageItem(1, entityLiving);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
@@ -57,14 +57,14 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
 		stack.damageItem(1, entityLiving);
 		if (entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, getCooldown());
+			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
 		}
 	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isHandActive() && ((EntityLivingBase) entityIn).getActiveItemStack() == stack) {
-			shootBubbles((EntityLivingBase) entityIn);
+			this.shootBubbles((EntityLivingBase) entityIn);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 		double x = -Math.sin(Math.toRadians(entity.rotationYaw));
 		double z = Math.cos(Math.toRadians(entity.rotationYaw));
 		double y = -Math.sin(Math.toRadians(entity.rotationPitch));
-		shootBubbles(new Vec3d(x, y, z), entity);
+		this.shootBubbles(new Vec3d(x, y, z), entity);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 	}
 
 	private void shootBubbles(Vec3d velocity, EntityLivingBase shooter) {
-		Vec3d v = new Vec3d(-getInaccurary() + velocity.x + (2 * getInaccurary() * rng.nextDouble()), -getInaccurary() + velocity.y + (2 * getInaccurary() * rng.nextDouble()), -getInaccurary() + velocity.z + (2 * getInaccurary() * rng.nextDouble()));
+		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 
@@ -103,7 +103,7 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 
 	@Override
 	public void shoot(World world, EntityLivingBase shooter, Entity target, EnumHand hand) {
-		shootBubbles(shooter);
+		this.shootBubbles(shooter);
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class StrongholdFloorOpen {
 	}
 
 	public Tuple<Integer, Integer> getExitStairIndexes() {
-		return exitStairIndex;
+		return this.exitStairIndex;
 	}
 
 	public void setEntranceStairPosition(@Nonnull File entranceStair, int x, int y, int z) {

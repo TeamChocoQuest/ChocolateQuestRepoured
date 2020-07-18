@@ -44,12 +44,12 @@ public class CastleMainStructWall {
 	}
 
 	public void registerAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {
-		adjacentCells.put(directionOfCell, cell);
+		this.adjacentCells.put(directionOfCell, cell);
 	}
 
 	public Optional<RoomGridCell> getAdjacentCell(EnumFacing direction) {
-		if (adjacentCells.containsKey(direction)) {
-			return Optional.of(adjacentCells.get(direction));
+		if (this.adjacentCells.containsKey(direction)) {
+			return Optional.of(this.adjacentCells.get(direction));
 		} else {
 			return Optional.empty();
 		}
@@ -88,7 +88,7 @@ public class CastleMainStructWall {
 	}
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public boolean isVertical() {
@@ -127,8 +127,8 @@ public class CastleMainStructWall {
 			checkSide2 = EnumFacing.EAST;
 		}
 
-		Optional<RoomGridCell> neighbor1 = getAdjacentCell(checkSide1);
-		Optional<RoomGridCell> neighbor2 = getAdjacentCell(checkSide2);
+		Optional<RoomGridCell> neighbor1 = this.getAdjacentCell(checkSide1);
+		Optional<RoomGridCell> neighbor2 = this.getAdjacentCell(checkSide2);
 
 		boolean neighbor1Populated = false;
 		boolean neighbor1IsWalkableRoof = false;
@@ -254,7 +254,7 @@ public class CastleMainStructWall {
 		BlockPos wallPosition = this.origin.add(xDist, heightOnWall, zDist);
 
 		// Consider this a door/window block if it is anything other then a regular castle block
-		return (getBlockToBuild(wallPosition, dungeon)) != dungeon.getMainBlockState();
+		return (this.getBlockToBuild(wallPosition, dungeon)) != dungeon.getMainBlockState();
 	}
 
 	private IBlockState getRoofEdgeBlock(BlockPos pos, DungeonCastle dungeon) {
@@ -290,7 +290,7 @@ public class CastleMainStructWall {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
 
-		if (dist < (length - 3)) {
+		if (dist < (this.length - 3)) {
 			if (y == 0) {
 				blockToBuild = dungeon.getMainBlockState();
 			} else if (y < this.height - 1) {
@@ -421,12 +421,12 @@ public class CastleMainStructWall {
 					BlockDoor.EnumDoorHalf half = (y == 1) ? BlockDoor.EnumDoorHalf.LOWER : BlockDoor.EnumDoorHalf.UPPER;
 
 					BlockDoor.EnumHingePosition hinge;
-					if (orientation == WallOrientation.HORIZONTAL) {
+					if (this.orientation == WallOrientation.HORIZONTAL) {
 						hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT;
 					} else {
 						hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.LEFT : BlockDoor.EnumHingePosition.RIGHT;
 					}
-					EnumFacing facing = (orientation == WallOrientation.HORIZONTAL) ? EnumFacing.NORTH : EnumFacing.WEST;
+					EnumFacing facing = (this.orientation == WallOrientation.HORIZONTAL) ? EnumFacing.NORTH : EnumFacing.WEST;
 
 					blockToBuild = dungeon.getDoorBlockState().withProperty(BlockDoor.HALF, half).withProperty(BlockDoor.FACING, facing).withProperty(BlockDoor.HINGE, hinge);
 				} else if (y == 3) {
@@ -489,14 +489,14 @@ public class CastleMainStructWall {
 	protected IBlockState getWindowBlock(BlockPos pos, DungeonCastle dungeon) {
 		switch (this.windowType) {
 		case BASIC_GLASS:
-			return getBlockWindowBasicGlass(pos, dungeon);
+			return this.getBlockWindowBasicGlass(pos, dungeon);
 		case CROSS_GLASS:
-			return getBlockWindowCrossGlass(pos, dungeon);
+			return this.getBlockWindowCrossGlass(pos, dungeon);
 		case SQUARE_BARS:
-			return getBlockWindowSquareBars(pos, dungeon);
+			return this.getBlockWindowSquareBars(pos, dungeon);
 		case OPEN_SLIT:
 		default:
-			return getBlockWindowOpenSlit(pos, dungeon);
+			return this.getBlockWindowOpenSlit(pos, dungeon);
 		}
 	}
 
@@ -526,7 +526,7 @@ public class CastleMainStructWall {
 	private IBlockState getBlockWindowSquareBars(BlockPos pos, DungeonCastle dungeon) {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
-		int halfDist = length / 2;
+		int halfDist = this.length / 2;
 
 		if (((y == 2) || (y == 3)) && ((dist == halfDist) || (dist == halfDist + 1))) {
 			return Blocks.IRON_BARS.getDefaultState();
@@ -538,7 +538,7 @@ public class CastleMainStructWall {
 	private IBlockState getBlockWindowOpenSlit(BlockPos pos, DungeonCastle dungeon) {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
-		int halfDist = length / 2;
+		int halfDist = this.length / 2;
 
 		if ((y == 2) && (dist >= halfDist - 1) && (dist <= halfDist + 1)) {
 			return Blocks.AIR.getDefaultState();
@@ -552,7 +552,7 @@ public class CastleMainStructWall {
 			type = EnumCastleDoorType.getRandomRegularType(random);
 		}
 		this.doorType = type;
-		this.doorStartOffset = (length - type.getWidth()) / 2;
+		this.doorStartOffset = (this.length - type.getWidth()) / 2;
 	}
 
 	public void addDoorRandomOffset(EnumCastleDoorType type, Random random) {
@@ -560,7 +560,7 @@ public class CastleMainStructWall {
 			type = EnumCastleDoorType.getRandomRegularType(random);
 		}
 		this.doorType = type;
-		this.doorStartOffset = 1 + random.nextInt(length - type.getWidth() - 1);
+		this.doorStartOffset = 1 + random.nextInt(this.length - type.getWidth() - 1);
 	}
 
 	/*

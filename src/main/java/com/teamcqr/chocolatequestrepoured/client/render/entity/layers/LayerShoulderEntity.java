@@ -33,6 +33,7 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
 		super(livingEntityRendererIn);
 	}
 
+	@Override
 	public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entitylivingbaseIn.getLeftShoulderEntity() != null) {
 			GlStateManager.enableRescaleNormal();

@@ -48,8 +48,8 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 	@Override
 	public void preProcess() {
 		// DONE: calculate air blocks
-		Perlin3D perlin1 = new Perlin3D(world.getSeed(), 4, new Random());
-		Perlin3D perlin2 = new Perlin3D(world.getSeed(), 32, new Random());
+		Perlin3D perlin1 = new Perlin3D(this.world.getSeed(), 4, new Random());
+		Perlin3D perlin2 = new Perlin3D(this.world.getSeed(), 32, new Random());
 
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 
@@ -86,9 +86,9 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 
 					if (noise < 0.75D) {
 						BlockPos block = this.pos.add(iX, iY, iZ);
-						stateMap.put(block, dungeon.getAirBlock().getDefaultState());
+						stateMap.put(block, this.dungeon.getAirBlock().getDefaultState());
 						if (iY == 0) {
-							stateMap.put(block, dungeon.getFloorBlock().getDefaultState());
+							stateMap.put(block, this.dungeon.getFloorBlock().getDefaultState());
 						}
 					}
 				}
@@ -98,7 +98,7 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
-		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
+		this.customGenerator.add(new DungeonPartBlock(this.world, this.customGenerator, this.pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
 	}
 
 	@Override
@@ -115,17 +115,17 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 		BlockPos start = this.pos;
 		IBlockState state = Blocks.CHEST.getDefaultState();
 		List<AbstractBlockInfo> list = new ArrayList<>();
-		TileEntityChest chest = (TileEntityChest) Blocks.CHEST.createTileEntity(world, state);
+		TileEntityChest chest = (TileEntityChest) Blocks.CHEST.createTileEntity(this.world, state);
 		ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		if (chest != null) {
 			ResourceLocation resLoc = chestIDs[new Random().nextInt(chestIDs.length)];
 			if (resLoc != null) {
-				long seed = WorldDungeonGenerator.getSeed(world, this.pos.getX(), this.pos.getZ());
+				long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX(), this.pos.getZ());
 				chest.setLootTable(resLoc, seed);
 			}
 			list.add(new BlockInfo(BlockPos.ORIGIN, state, chest.writeToNBT(new NBTTagCompound())));
 		}
-		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, start, list, new PlacementSettings(), "ZOMBIE"));
+		this.customGenerator.add(new DungeonPartBlock(this.world, this.customGenerator, start, list, new PlacementSettings(), "ZOMBIE"));
 	}
 
 	public void placeSpawners() {
@@ -133,12 +133,12 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 		List<AbstractBlockInfo> list = new ArrayList<>();
 
 		IBlockState state = Blocks.MOB_SPAWNER.getDefaultState();
-		TileEntityMobSpawner spawner = (TileEntityMobSpawner) Blocks.MOB_SPAWNER.createTileEntity(world, state);
-		spawner.getSpawnerBaseLogic().setEntityId(dungeon.getMob());
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner) Blocks.MOB_SPAWNER.createTileEntity(this.world, state);
+		spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
 		spawner.updateContainingBlockInfo();
 		list.add(new BlockInfo(BlockPos.ORIGIN, state, spawner.writeToNBT(new NBTTagCompound())));
 
-		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, spawnerPos, list, new PlacementSettings(), "ZOMBIE"));
+		this.customGenerator.add(new DungeonPartBlock(this.world, this.customGenerator, spawnerPos, list, new PlacementSettings(), "ZOMBIE"));
 	}
 
 	public void generateTunnel(BlockPos start, BlockPos end, World world, Map<BlockPos, IBlockState> stateMap) {

@@ -6,12 +6,12 @@ public class EntityAIExplodeAreaStartSpell extends AbstractEntityAISpell<EntityC
 
 	public EntityAIExplodeAreaStartSpell(EntityCQRBoarmage entity, int cooldown, int chargingTicks, int castingTicks) {
 		super(entity, cooldown, chargingTicks, castingTicks);
-		setup(true, false, true, false);
+		this.setup(true, false, true, false);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && !entity.isExecutingExplodeAreaAttack();
+		return super.shouldExecute() && !this.entity.isExecutingExplodeAreaAttack();
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class EntityAIExplodeAreaStartSpell extends AbstractEntityAISpell<EntityC
 	@Override
 	public void startCastingSpell() {
 		super.startCastingSpell();
-		entity.startExplodeAreaAttack();
+		this.entity.startExplodeAreaAttack();
 	}
 
 	@Override
