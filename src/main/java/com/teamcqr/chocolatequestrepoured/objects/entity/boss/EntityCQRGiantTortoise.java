@@ -67,6 +67,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int spinsBlocked = 0;
 	private int timesHealed = 1;
 	private boolean isHealing = false;
+	
+	private Vec3d lastTickPos = null;
+	private int stuckTicks = 0;
+	private static final int MAX_STUCK_TICKS = 40;
 
 	// Animations
 	private Animation animation = NO_ANIMATION;
@@ -467,6 +471,27 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		
+		if(hasAttackTarget()) {
+			if(this.lastTickPos == null) {
+				this.lastTickPos = this.getPositionVector();
+			}
+			Vec3d curPos = getPositionVector();
+			if(this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
+				if(curPos.distanceTo(lastTickPos) <= 0.05) {
+					this.stuckTicks++;
+				} else {
+					this.lastTickPos = curPos;
+				}
+				if(this.stuckTicks >= MAX_STUCK_TICKS) {
+					this.setAttackTarget(null);
+					this.stuckTicks = 0;
+				}
+			}
+		} else {
+			this.stuckTicks = 0;
+		}
+		
 
 		if (getAnimation() != NO_ANIMATION) {
 			animationTick++;
