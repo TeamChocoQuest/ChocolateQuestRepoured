@@ -24,6 +24,9 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 	static final int MAX_DISTANCE_TO_BEGIN_SPIN = 16;
 	static final int MAX_DISTANCE_TO_TARGET = 20;
 
+	private int explosionCooldown = 0;
+	private static final int MAX_EXPLOSION_COOLDOWN = 20;
+
 	public BossAITortoiseSpinAttack(EntityCQRGiantTortoise entity) {
 		super(entity);
 		// setMutexBits(8);
@@ -109,8 +112,12 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 			this.getBoss().setSpinning(false);
 			this.getBoss().setStunned(true);
 		} else if (getBoss().getAnimationTick() > BUBBLE_SHOOT_DURATION && getAnimation().getDuration() - getBoss().getAnimationTick() > AFTER_IDLE_TIME) {
+			if(explosionCooldown > 0) {
+				explosionCooldown--;
+			}
 			if (getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= MAX_DISTANCE_TO_TARGET || previousBlocks != getBoss().getSpinsBlocked()) {
-				if(getBoss().collidedHorizontally && !getBoss().getWorld().isRemote) {
+				if(getBoss().collidedHorizontally && !getBoss().getWorld().isRemote && explosionCooldown <= 0) {
+					explosionCooldown = MAX_EXPLOSION_COOLDOWN;
 					getBoss().getWorld().newExplosion(getBoss(), entity.getPositionVector().x, entity.getPositionVector().y, entity.getPositionVector().z, 2, false, false);
 				}
 				calculateVelocity();
