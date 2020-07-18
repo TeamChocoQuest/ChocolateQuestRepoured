@@ -607,7 +607,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void setAttackTarget(EntityLivingBase target) {
 		super.setAttackTarget(target);
 		if(target != null) {
-			if(getNavigator().getPathToEntityLiving(target) == null || (target.getPosition().getY() - getPosition().getY()) > 2) {
+			if(getNavigator().getPathToEntityLiving(target) == null/* || (target.getPosition().getY() - getPosition().getY()) > 2*/) {
 				super.setAttackTarget(null);
 			}
 		}
