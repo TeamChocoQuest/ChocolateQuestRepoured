@@ -476,6 +476,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if(this.lastTickPos == null) {
 				this.lastTickPos = this.getPositionVector();
 			}
+			if(this.getHomePositionCQR() != null) {
+				this.setHomePositionCQR(getPosition());
+			}
 			Vec3d curPos = getPositionVector();
 			if(this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
 				if(curPos.distanceTo(lastTickPos) <= 0.05) {
