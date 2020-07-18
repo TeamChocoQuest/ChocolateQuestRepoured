@@ -27,10 +27,6 @@ public class TextureSetManager {
 		return INSTANCE;
 	}
 
-	public static boolean loadTextureSet(String name) {
-		return getInstance().loadTextureSetImpl(name);
-	}
-
 	public static void registerTextureSet(TextureSet set) {
 		getInstance().registerTextureSetImpl(set);
 	}
@@ -68,11 +64,6 @@ public class TextureSetManager {
 
 	private void registerTextureSetImpl(TextureSet set) {
 		this.textureSets.put(set.getName(), set);
-	}
-
-	private boolean loadTextureSetImpl(String name) {
-
-		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
