@@ -6,6 +6,7 @@
 <setting id="cleanup.always_use_this_for_non_static_method_access" value="true"/>
 <setting id="cleanup.organize_imports" value="true"/>
 <setting id="cleanup.remove_trailing_whitespaces_ignore_empty" value="false"/>
+<setting id="cleanup.lazy_logical_operator" value="false"/>
 <setting id="cleanup.use_directly_map_method" value="false"/>
 <setting id="cleanup.format_source_code_changes_only" value="false"/>
 <setting id="cleanup.qualify_static_field_accesses_with_declaring_class" value="false"/>
@@ -30,6 +31,7 @@
 <setting id="cleanup.remove_private_constructors" value="true"/>
 <setting id="cleanup.always_use_parentheses_in_expressions" value="false"/>
 <setting id="cleanup.remove_unused_local_variables" value="false"/>
+<setting id="cleanup.merge_conditional_blocks" value="false"/>
 <setting id="cleanup.convert_to_enhanced_for_loop" value="false"/>
 <setting id="cleanup.remove_unused_private_fields" value="true"/>
 <setting id="cleanup.remove_redundant_modifiers" value="false"/>
@@ -64,7 +66,9 @@
 <setting id="cleanup.add_missing_override_annotations" value="true"/>
 <setting id="cleanup.use_blocks" value="true"/>
 <setting id="cleanup.make_variable_declarations_final" value="false"/>
+<setting id="cleanup.convert_to_enhanced_for_loop_if_loop_var_used" value="false"/>
 <setting id="cleanup.correct_indentation" value="false"/>
+<setting id="cleanup.use_var" value="false"/>
 <setting id="cleanup.remove_unused_private_types" value="true"/>
 </profile>
 </profiles>
