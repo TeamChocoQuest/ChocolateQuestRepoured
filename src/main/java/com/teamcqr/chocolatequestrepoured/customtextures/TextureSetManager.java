@@ -1,8 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.customtextures;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
@@ -36,6 +44,31 @@ public class TextureSetManager {
 			getInstance().unloadTexturesImpl();
 		} catch (NoSuchMethodError ex) {
 			// Ignore
+		}
+	}
+	
+	public static void loadTextureSetsFromFolder(File folder) {
+		if(folder.isDirectory()) {
+			List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "cfg", "prop", "properties" }, true));
+			for(File f : files) {
+				boolean flag = true;
+				Properties prop = new Properties();
+				try (InputStream inputStream = new FileInputStream(f)) {
+					prop.load(inputStream);
+					flag = true;
+				} catch (IOException e) {
+					CQRMain.logger.error("Failed to load file" + f.getName(), e);
+					flag = false;
+					continue;
+				}
+				if (flag) {
+					try {
+						new TextureSet(prop, f.getName().substring(0, f.getName().lastIndexOf('.')));					
+					} catch(Exception e) {
+						//TODO: WARNN
+					}
+				}
+			}
 		}
 	}
 
