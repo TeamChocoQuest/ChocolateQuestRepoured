@@ -70,7 +70,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	private Vec3d lastTickPos = null;
 	private int stuckTicks = 0;
-	private static final int MAX_STUCK_TICKS = 40;
+	private static final int MAX_STUCK_TICKS = 60;
 
 	// Animations
 	private Animation animation = NO_ANIMATION;
@@ -173,10 +173,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
-		if (source.isExplosion() && isInShell() && canBeStunned && !stunned) {
+		/*if (source.isExplosion() && isInShell() && canBeStunned && !stunned) {
 			stunned = true;
 			canBeStunned = false;
-		}
+		}*/
 		partSoundFlag = sentFromPart;
 
 		if (source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
@@ -601,16 +601,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public boolean canIgniteTorch() {
 		return false;
-	}
-	
-	@Override
-	public void setAttackTarget(EntityLivingBase target) {
-		super.setAttackTarget(target);
-		if(target != null) {
-			if(getNavigator().getPathToEntityLiving(target) == null/* || (target.getPosition().getY() - getPosition().getY()) > 2*/) {
-				super.setAttackTarget(null);
-			}
-		}
 	}
 
 }
