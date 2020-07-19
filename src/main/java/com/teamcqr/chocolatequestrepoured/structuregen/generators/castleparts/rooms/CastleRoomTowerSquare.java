@@ -40,7 +40,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos stairCenter = roomOrigin.add(this.pillarOffset);
-		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
+		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 
 		BlockPos pos;
 		IBlockState blockToBuild;
