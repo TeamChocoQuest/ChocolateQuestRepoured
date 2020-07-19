@@ -35,9 +35,12 @@ public class LayerCQRNecromancerBoneShield extends AbstractLayerCQR {
 			GlStateManager.pushMatrix();
 			GlStateManager.scale(0.8, 0.8, 0.8);
 			this.ring1.render(entity, 45, 0, 0, netHeadYaw, headPitch, scale);
-			this.ring2.render(entity, 45, 180, 0, netHeadYaw, headPitch, scale);
 			GlStateManager.popMatrix();
-
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(0.7, 0.7, 0.7);
+			this.ring2.render(entity, -45, 180, 0, netHeadYaw, headPitch, scale);
+			GlStateManager.popMatrix();
 		}
 	}
 
