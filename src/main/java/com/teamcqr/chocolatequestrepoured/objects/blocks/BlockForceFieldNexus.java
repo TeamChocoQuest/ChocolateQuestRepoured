@@ -50,13 +50,14 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return BOUNDING_BOX;
+		return this.BOUNDING_BOX;
 	}
 
 	/*
 	 * TODO implement nexus and determine if this is necessary
 	 * 
-	 * @Override public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) { super.onBlockHarvested(worldIn, pos, state, player); TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus)
+	 * @Override public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) { super.onBlockHarvested(worldIn, pos, state,
+	 * player); TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus)
 	 * worldIn.getTileEntity(pos); if (nexus.hasData()) { nexus.getRegion().setEnabled(false); } }
 	 */
 

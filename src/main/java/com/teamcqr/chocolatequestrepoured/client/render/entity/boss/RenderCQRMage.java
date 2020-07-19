@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
+public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQREntity<T> {
 
 	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation(Reference.MODID, "textures/entity/boss/mage_hidden.png");
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(Reference.MODID, "textures/entity/magic_armor/mages.png");
@@ -36,7 +36,7 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 	}
 
 	@Override
-	public void doRender(AbstractEntityCQRMageBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		if (entity.isIdentityHidden()) {
 			this.mainModel = this.modelHidden;
 		} else {
@@ -46,7 +46,7 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(AbstractEntityCQRMageBase entity) {
+	protected ResourceLocation getEntityTexture(T entity) {
 		return entity.isIdentityHidden() ? TEXTURES_HIDDEN : this.texture;
 	}
 

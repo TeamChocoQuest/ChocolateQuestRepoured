@@ -18,22 +18,22 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 
 	@Override
 	public boolean shouldExecute() {
-		if (entity != null && entity.getHealth() / entity.getMaxHealth() <= 0.5 && entity.getAttackTarget() != null && !entity.isDead) {
-			cooldown--;
-			return cooldown <= 0;
+		if (this.entity != null && this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5 && this.entity.getAttackTarget() != null && !this.entity.isDead) {
+			this.cooldown--;
+			return this.cooldown <= 0;
 		}
 		return false;
 	}
 
 	@Override
 	public void startExecuting() {
-		invisibleTime = 200;
-		entity.setInvisibleTicks(1);
+		this.invisibleTime = 200;
+		this.entity.setInvisibleTicks(1);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return invisibleTime > 0;
+		return this.invisibleTime > 0;
 	}
 
 	@Override
@@ -41,28 +41,28 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 		boolean disInt = false;
 		boolean reInt = false;
 		boolean invi = true;
-		if (invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+		if (this.invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			reInt = true;
 			invi = false;
-			entity.setInvisibleTicks(entity.getInvisibleTicks() - 1);
-			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
-		} else if (invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+			this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
+			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
+		} else if (this.invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			disInt = true;
 			invi = false;
-			entity.setInvisibleTicks(entity.getInvisibleTicks() + 1);
-			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
+			this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
+			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
 		}
 
-		invisibleTime--;
-		if (invisibleTime == 0) {
+		this.invisibleTime--;
+		if (this.invisibleTime == 0) {
 			disInt = false;
 			reInt = false;
 			invi = false;
 			this.cooldown = 100;
 		}
-		entity.setInvisible(invi);
-		entity.setIsReintegrating(reInt);
-		entity.setIsDisintegrating(disInt);
+		this.entity.setInvisible(invi);
+		this.entity.setIsReintegrating(reInt);
+		this.entity.setIsDisintegrating(disInt);
 	}
 
 }

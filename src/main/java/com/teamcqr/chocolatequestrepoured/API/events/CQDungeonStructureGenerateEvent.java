@@ -32,11 +32,11 @@ public class CQDungeonStructureGenerateEvent extends Event {
 		this.dunSize = size;
 		this.world = world;
 		this.uuid = uuid;
-		bossUUIDs.addAll(uuids);
+		this.bossUUIDs.addAll(uuids);
 	}
 
 	public ArrayList<String> getBossIDs() {
-		return bossUUIDs;
+		return this.bossUUIDs;
 	}
 
 	public DungeonBase getDungeon() {

@@ -28,7 +28,7 @@ public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> 
 		this.input.add(new OreIngredient("dyeRed"));
 		this.input.add(new OreIngredient("dyeGreen"));
 		this.input.add(new OreIngredient("dyeBlue"));
-		for (Ingredient i : input) {
+		for (Ingredient i : this.input) {
 			this.isSimple &= i.isSimple();
 		}
 	}

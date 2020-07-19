@@ -23,38 +23,38 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 
 	@Override
 	public boolean shouldExecute() {
-		cooldown--;
-		return cooldown <= 0 && entity.getAttackTarget() != null && entity.getDistance(entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE && !(entity.isInvisible() || entity.isReintegrating() || entity.isDisintegrating());
+		this.cooldown--;
+		return this.cooldown <= 0 && this.entity.getAttackTarget() != null && this.entity.getDistance(this.entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE && !(this.entity.isInvisible() || this.entity.isReintegrating() || this.entity.isDisintegrating());
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return timer < 120 && entity.getAttackTarget() != null;
+		return this.timer < 120 && this.entity.getAttackTarget() != null;
 	}
 
 	@Override
 	public void updateTask() {
-		timer++;
+		this.timer++;
 		super.updateTask();
-		if (timer == 10) {
-			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
+		if (this.timer == 10) {
+			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
 		}
 
-		if (timer == 100) {
-			Vec3d v = entity.getAttackTarget().getLookVec().normalize().scale(2);
-			Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
-			entity.attemptTeleport(p.x, p.y, p.z);
-			entity.getLookHelper().setLookPositionWithEntity(entity.getAttackTarget(), 30, 30);
-			entity.attackEntityAsMob(entity.getAttackTarget());
+		if (this.timer == 100) {
+			Vec3d v = this.entity.getAttackTarget().getLookVec().normalize().scale(2);
+			Vec3d p = this.entity.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
+			this.entity.attemptTeleport(p.x, p.y, p.z);
+			this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
+			this.entity.attackEntityAsMob(this.entity.getAttackTarget());
 
-			cooldown = MAX_COOLDOWN;
+			this.cooldown = MAX_COOLDOWN;
 		}
 	}
 
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		timer = 0;
+		this.timer = 0;
 		this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
 	}
 

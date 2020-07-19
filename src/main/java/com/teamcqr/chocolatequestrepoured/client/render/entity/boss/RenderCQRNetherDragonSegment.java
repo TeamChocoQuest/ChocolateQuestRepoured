@@ -75,7 +75,8 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		this.bindTexture(this.getEntityTexture(entity));
 
 		/*
-		 * if(entity.getParent() != null) { if(entity.getParent().deathTicks > 600) { GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F); } }
+		 * if(entity.getParent() != null) { if(entity.getParent().deathTicks > 600) { GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted)
+		 * + 0.5)),0,0, 1F); } }
 		 */
 		/*
 		 * if(entity.isSkeletal() && entity.getHealthPercentage() > 0) { GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F); }

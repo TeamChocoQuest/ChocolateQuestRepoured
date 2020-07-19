@@ -25,17 +25,17 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIHooker(AbstractEntityCQR entity) {
 		super(entity);
-		setMutexBits(3);
+		this.setMutexBits(3);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if (hasHookShoot(entity)) {
-			if (cooldown > 0) {
-				cooldown--;
+		if (this.hasHookShoot(this.entity)) {
+			if (this.cooldown > 0) {
+				this.cooldown--;
 				return false;
 			}
-			return entity.hasAttackTarget() && entity.getEntitySenses().canSee(entity.getAttackTarget());
+			return this.entity.hasAttackTarget() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		return false;
@@ -47,16 +47,16 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 		this.state = STATE.PREPARING;
 		if (this.entity.hasPath()) {
 			this.entity.getNavigator().clearPath();
-			double dist = this.entity.getDistanceSq(entity.getAttackTarget());
+			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
 			if (dist > REQUIRED_RANGE) {
-				this.entity.getNavigator().tryMoveToEntityLiving(entity.getAttackTarget(), 1.1);
+				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
 			} else if (dist >= 64) {
 				this.entity.getNavigator().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vec3d v = entity.getPositionVector().subtract(entity.getAttackTarget().getPositionVector()).normalize().scale(6);
-				v = v.add(entity.getPositionVector());
+				Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector()).normalize().scale(6);
+				v = v.add(this.entity.getPositionVector());
 				this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.3);
 			}
 		}
@@ -66,10 +66,10 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void updateTask() {
 		super.updateTask();
 
-		if (hook != null && !this.hook.isDead) {
-			entity.getLookHelper().setLookPositionWithEntity(hook, 30, 30);
-		} else if (entity.hasAttackTarget()) {
-			entity.getLookHelper().setLookPositionWithEntity(entity.getAttackTarget(), 30, 30);
+		if (this.hook != null && !this.hook.isDead) {
+			this.entity.getLookHelper().setLookPositionWithEntity(this.hook, 30, 30);
+		} else if (this.entity.hasAttackTarget()) {
+			this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
 		}
 
 		switch (this.state) {
@@ -83,16 +83,16 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			break;
 		case PREPARING:
-			double dist = this.entity.getDistanceSq(entity.getAttackTarget());
+			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
 			if (dist > REQUIRED_RANGE) {
-				this.entity.getNavigator().tryMoveToEntityLiving(entity.getAttackTarget(), 1.1);
+				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
 			} else if (dist >= 64) {
 				this.entity.getNavigator().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vec3d v = entity.getPositionVector().subtract(entity.getAttackTarget().getPositionVector()).normalize().scale(6);
-				v = v.add(entity.getPositionVector());
+				Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector()).normalize().scale(6);
+				v = v.add(this.entity.getPositionVector());
 				this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.3);
 			}
 			break;
@@ -100,9 +100,9 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 			if (this.entity.hasPath()) {
 				this.entity.getNavigator().clearPath();
 			}
-			ItemStack hookItem = entity.getHeldItemOffhand();
+			ItemStack hookItem = this.entity.getHeldItemOffhand();
 			if (hookItem.getItem() instanceof ItemHookshotBase) {
-				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(world, entity, entity.getAttackTarget(), EnumHand.OFF_HAND);
+				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getAttackTarget(), EnumHand.OFF_HAND);
 				this.state = STATE.HOOK_FLYING;
 			}
 
@@ -114,7 +114,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && entity.hasAttackTarget() && entity.getEntitySenses().canSee(entity.getAttackTarget()) && hasHookShoot(entity) && cooldown <= 0;
+		return super.shouldContinueExecuting() && this.entity.hasAttackTarget() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
 	}
 
 	@Override

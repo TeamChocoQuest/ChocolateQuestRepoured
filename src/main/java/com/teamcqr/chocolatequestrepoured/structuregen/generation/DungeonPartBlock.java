@@ -46,7 +46,8 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
 		/*
-		 * if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) { this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+		 * if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) { this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(),
+		 * partPos.getZ());
 		 * CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos); }
 		 */
 		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {

@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 
 import com.teamcqr.chocolatequestrepoured.command.CommandExport;
+import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
@@ -133,6 +134,9 @@ public class CQRMain {
 
 		// Faction system
 		FactionRegistry.instance().loadFactions();
+		
+		// Custom Textures System
+		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
 		// Enables Dungeon generation in worlds, do not change the number (!) and do NOT
 		// remove this line, moving it somewhere else is fine, but it must be called in

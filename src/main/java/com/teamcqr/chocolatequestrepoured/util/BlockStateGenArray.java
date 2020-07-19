@@ -36,7 +36,7 @@ public class BlockStateGenArray {
 		}
 
 		public int getValue() {
-			return value;
+			return this.value;
 		}
 	}
 
@@ -50,11 +50,11 @@ public class BlockStateGenArray {
 		}
 
 		public AbstractBlockInfo getBlockInfo() {
-			return blockInfo;
+			return this.blockInfo;
 		}
 
 		public EnumPriority getPriority() {
-			return priority;
+			return this.priority;
 		}
 	}
 
@@ -67,18 +67,18 @@ public class BlockStateGenArray {
 
 	public Map<BlockPos, AbstractBlockInfo> getMainMap() {
 		Map<BlockPos, AbstractBlockInfo> result = new HashMap<>();
-		mainMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
+		this.mainMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
 		return result;
 	}
 
 	public Map<BlockPos, AbstractBlockInfo> getPostMap() {
 		Map<BlockPos, AbstractBlockInfo> result = new HashMap<>();
-		postMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
+		this.postMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
 		return result;
 	}
 
 	public Map<BlockPos, EntityInfo> getEntityMap() {
-		return entityMap;
+		return this.entityMap;
 	}
 
 	public boolean addChestWithLootTable(World world, BlockPos pos, EnumFacing facing, ResourceLocation lootTable, GenerationPhase phase) {
@@ -109,29 +109,29 @@ public class BlockStateGenArray {
 
 	public void addBlockStateMap(Map<BlockPos, IBlockState> map, GenerationPhase phase, EnumPriority priority) {
 		for (BlockPos pos : map.keySet()) {
-			addBlockState(pos, map.get(pos), phase, priority);
+			this.addBlockState(pos, map.get(pos), phase, priority);
 		}
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase, EnumPriority priority) {
-		return addInternal(phase, new BlockInfo(pos, blockState, null), priority);
+		return this.addInternal(phase, new BlockInfo(pos, blockState, null), priority);
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return addInternal(phase, new BlockInfo(pos, blockState, nbt), priority);
+		return this.addInternal(phase, new BlockInfo(pos, blockState, nbt), priority);
 	}
 
 	public boolean addSpawner(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return addInternal(phase, new BlockInfo(pos, blockState, nbt), priority);
+		return this.addInternal(phase, new BlockInfo(pos, blockState, nbt), priority);
 	}
 
 	public boolean addEntity(BlockPos structurePos, Entity entity) {
-		return addInternal(new EntityInfo(structurePos, entity));
+		return this.addInternal(new EntityInfo(structurePos, entity));
 	}
 
 	private boolean addInternal(GenerationPhase phase, AbstractBlockInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
-		Map<BlockPos, PriorityBlockInfo> mapToAdd = getMapFromPhase(phase);
+		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
 
 		if ((!mapToAdd.containsKey(blockInfo.getPos())) || (priority.getValue() > mapToAdd.get(blockInfo.getPos()).getPriority().getValue())) {
 			mapToAdd.put(blockInfo.getPos(), new PriorityBlockInfo(blockInfo, priority));
@@ -142,17 +142,17 @@ public class BlockStateGenArray {
 	}
 
 	private boolean addInternal(EntityInfo entityInfo) {
-		entityMap.put(entityInfo.getPos(), entityInfo);
+		this.entityMap.put(entityInfo.getPos(), entityInfo);
 		return true;
 	}
 
 	private Map<BlockPos, PriorityBlockInfo> getMapFromPhase(GenerationPhase phase) {
 		switch (phase) {
 		case POST:
-			return postMap;
+			return this.postMap;
 		case MAIN:
 		default:
-			return mainMap;
+			return this.mainMap;
 
 		}
 	}

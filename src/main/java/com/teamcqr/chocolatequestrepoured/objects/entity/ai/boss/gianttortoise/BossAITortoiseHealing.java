@@ -11,12 +11,12 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	private boolean healingActive = false;
 
 	private final int healingDuration = 160;
-	private final int MIN_HEALING_AMOUNT = 50;
+	private final int MIN_HEALING_AMOUNT = 80;
 	private int currHealTicks = 0;
 
 	public BossAITortoiseHealing(EntityCQRGiantTortoise entity) {
 		super(entity);
-		setMutexBits(8);
+		this.setMutexBits(8);
 	}
 
 	private EntityCQRGiantTortoise getBoss() {
@@ -26,7 +26,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	@Override
 	public boolean shouldExecute() {
 		this.healingActive = false;
-		if (!getBoss().isSpinning() && !getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= MIN_HEALING_AMOUNT) {
+		if (!this.getBoss().isSpinning() && !this.getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
 			((EntityCQRGiantTortoise) this.entity).setHealing(true);
 			if (((EntityCQRGiantTortoise) this.entity).isInShell()) {
 				this.healingActive = true;
@@ -50,7 +50,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 		this.getBoss().setCanBeStunned(false);
 		this.getBoss().setStunned(false);
 		this.currHealTicks = 0;
-		updateTask();
+		this.updateTask();
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 				((EntityCQRGiantTortoise) this.entity).setTimesHealed(((EntityCQRGiantTortoise) this.entity).getTimesHealed() + 1);
 				this.getBoss().setCanBeStunned(true);
 			} else {
-				((WorldServer) entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY, entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
+				((WorldServer) this.entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, this.entity.posX, this.entity.posY, this.entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
 				this.getBoss().heal(1F);
 				this.getBoss().setCanBeStunned(false);
 				this.getBoss().setStunned(false);

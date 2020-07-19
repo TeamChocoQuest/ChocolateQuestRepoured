@@ -50,7 +50,7 @@ public class RenderBubble extends Render<EntityBubble> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityBubble entity) {
-		return TEXTURE;
+		return this.TEXTURE;
 	}
 
 }

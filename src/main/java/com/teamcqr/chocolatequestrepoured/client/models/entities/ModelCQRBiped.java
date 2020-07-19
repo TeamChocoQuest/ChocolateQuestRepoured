@@ -80,7 +80,8 @@ public class ModelCQRBiped extends ModelBiped {
 	}
 
 	/**
-	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how "far" arms and legs
+	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and legs, where par1 represents the time(so
+	 * that arms and legs swing back and forth) and par2 represents how "far" arms and legs
 	 * can swing at most.
 	 */
 	@Override
@@ -97,8 +98,7 @@ public class ModelCQRBiped extends ModelBiped {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
-				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemMainhand()
-						.getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {

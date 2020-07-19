@@ -234,14 +234,14 @@ public abstract class CastleRoomBase {
 		// First get all blocks that are not occupied by walls
 		ArrayList<BlockPos> result = this.getDecorationLayer(0);
 
-		removeAllButEdge(result, side);
+		this.removeAllButEdge(result, side);
 		result.removeIf(p -> this.usedDecoPositions.contains(p)); // Remove block if it is occupied already
 
 		return result;
 	}
 
 	protected ArrayList<BlockPos> getDecorationMiddle() {
-		ArrayList<BlockPos> result = getDecorationLayer(0);
+		ArrayList<BlockPos> result = this.getDecorationLayer(0);
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			result.removeAll(this.getDecorationEdge(side));
 		}
@@ -256,7 +256,7 @@ public abstract class CastleRoomBase {
 		// First get all blocks that are not occupied by walls
 		ArrayList<BlockPos> result = this.getDecorationLayer(2);
 
-		removeAllButEdge(result, side);
+		this.removeAllButEdge(result, side);
 		result.removeIf(p -> this.usedDecoPositions.contains(p)); // Remove block if it is occupied already
 
 		return result;
@@ -285,7 +285,8 @@ public abstract class CastleRoomBase {
 	}
 
 	/*
-	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In other words, the layer just above the floor that is not already occupied by walls.
+	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In other words, the layer just above the
+	 * floor that is not already occupied by walls.
 	 */
 	protected ArrayList<BlockPos> getDecorationLayer(int layer) {
 		ArrayList<BlockPos> result = this.getDecorationArea();
@@ -331,9 +332,9 @@ public abstract class CastleRoomBase {
 	}
 
 	protected int getDecorationLengthX() {
-		int length = roomLengthX;
-		if (walls.containsKey(EnumFacing.EAST)) {
-			if (!walls.get(EnumFacing.EAST).isEnabled()) {
+		int length = this.roomLengthX;
+		if (this.walls.containsKey(EnumFacing.EAST)) {
+			if (!this.walls.get(EnumFacing.EAST).isEnabled()) {
 				++length; // No wall there so this room should extend into that block
 			}
 		}
@@ -341,9 +342,9 @@ public abstract class CastleRoomBase {
 	}
 
 	protected int getDecorationLengthZ() {
-		int length = roomLengthZ;
-		if (walls.containsKey(EnumFacing.SOUTH)) {
-			if (!walls.get(EnumFacing.SOUTH).isEnabled()) {
+		int length = this.roomLengthZ;
+		if (this.walls.containsKey(EnumFacing.SOUTH)) {
+			if (!this.walls.get(EnumFacing.SOUTH).isEnabled()) {
 				++length; // No wall there so this room should extend into that block
 			}
 		}
@@ -397,7 +398,7 @@ public abstract class CastleRoomBase {
 
 	public void setRoomsInBlock(ArrayList<CastleRoomBase> rooms) {
 		this.roomsInBlock = rooms;
-		makeRoomBlockAdjustments();
+		this.makeRoomBlockAdjustments();
 	}
 
 	protected void makeRoomBlockAdjustments() {

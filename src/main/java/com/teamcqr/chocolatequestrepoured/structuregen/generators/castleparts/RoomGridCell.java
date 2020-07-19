@@ -34,7 +34,7 @@ public class RoomGridCell {
 
 		@Override
 		public String toString() {
-			return text;
+			return this.text;
 		}
 
 		private boolean isAtLeast(CellState state) {
@@ -61,49 +61,49 @@ public class RoomGridCell {
 
 	public RoomGridCell(int floor, int x, int z, int roomWidth, int floorHeight) {
 		this.gridPosition = new RoomGridPosition(floor, x, z);
-		this.originOffset = calculateOriginOffset(roomWidth, floorHeight);
+		this.originOffset = this.calculateOriginOffset(roomWidth, floorHeight);
 		this.connectedCells = new HashSet<>();
 		this.pathableCells = new HashSet<>();
 	}
 
 	private BlockPos calculateOriginOffset(int roomWidth, int floorHeight) {
-		int xOffset = 1 + (gridPosition.getX() * (roomWidth + 1));
-		int zOffset = 1 + (gridPosition.getZ() * (roomWidth + 1));
-		int yOffset = gridPosition.getFloor() * floorHeight;
+		int xOffset = 1 + (this.gridPosition.getX() * (roomWidth + 1));
+		int zOffset = 1 + (this.gridPosition.getZ() * (roomWidth + 1));
+		int yOffset = this.gridPosition.getFloor() * floorHeight;
 		return new BlockPos(xOffset, yOffset, zOffset);
 	}
 
 	public BlockPos getOriginOffset() {
-		return originOffset;
+		return this.originOffset;
 	}
 
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		if (this.isPopulated() && this.room != null) {
-			room.setRoomOrigin(getOriginOffset());
-			room.registerWalls(this.walls);
-			room.generate(castleOrigin, genArray, dungeon);
+			this.room.setRoomOrigin(this.getOriginOffset());
+			this.room.registerWalls(this.walls);
+			this.room.generate(castleOrigin, genArray, dungeon);
 		}
 	}
 
 	public void registerAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {
-		adjacentCells.put(directionOfCell, cell);
+		this.adjacentCells.put(directionOfCell, cell);
 	}
 
 	public Optional<RoomGridCell> getAdjacentCell(EnumFacing direction) {
-		if (adjacentCells.containsKey(direction)) {
-			return Optional.of(adjacentCells.get(direction));
+		if (this.adjacentCells.containsKey(direction)) {
+			return Optional.of(this.adjacentCells.get(direction));
 		} else {
 			return Optional.empty();
 		}
 	}
 
 	public void registerAdjacentWall(CastleMainStructWall wall, EnumFacing directionOfWall) {
-		walls.put(directionOfWall, wall);
+		this.walls.put(directionOfWall, wall);
 	}
 
 	public Optional<CastleMainStructWall> getAdjacentWall(EnumFacing direction) {
-		if (walls.containsKey(direction)) {
-			return Optional.of(walls.get(direction));
+		if (this.walls.containsKey(direction)) {
+			return Optional.of(this.walls.get(direction));
 		} else {
 			return Optional.empty();
 		}
@@ -270,48 +270,48 @@ public class RoomGridCell {
 	}
 
 	public void addDoorOnSideCentered(EnumFacing side, EnumCastleDoorType type, Random random) {
-		if (walls.containsKey(side)) {
-			walls.get(side).addDoorCentered(type, random);
+		if (this.walls.containsKey(side)) {
+			this.walls.get(side).addDoorCentered(type, random);
 		}
 	}
 
 	public void addDoorOnSideRandomOffset(EnumFacing side, EnumCastleDoorType type, Random random) {
-		if (walls.containsKey(side)) {
-			walls.get(side).addDoorRandomOffset(type, random);
+		if (this.walls.containsKey(side)) {
+			this.walls.get(side).addDoorRandomOffset(type, random);
 		}
 	}
 
 	public void addOuterWall(EnumFacing side) {
-		if (walls.containsKey(side)) {
-			walls.get(side).enable();
-			walls.get(side).setAsOuterWall();
+		if (this.walls.containsKey(side)) {
+			this.walls.get(side).enable();
+			this.walls.get(side).setAsOuterWall();
 		}
 	}
 
 	public void addRoofEdgeWall(EnumFacing side) {
-		if (walls.containsKey(side)) {
-			walls.get(side).enable();
-			walls.get(side).setAsOuterWall();
-			walls.get(side).setAsRoofEdge();
+		if (this.walls.containsKey(side)) {
+			this.walls.get(side).enable();
+			this.walls.get(side).setAsOuterWall();
+			this.walls.get(side).setAsRoofEdge();
 		}
 	}
 
 	public void addInnerWall(EnumFacing side) {
-		if (walls.containsKey(side)) {
-			walls.get(side).enable();
-			walls.get(side).setAsInnerWall();
+		if (this.walls.containsKey(side)) {
+			this.walls.get(side).enable();
+			this.walls.get(side).setAsInnerWall();
 		}
 	}
 
 	public void removeWall(EnumFacing side) {
-		if (walls.containsKey(side)) {
-			walls.get(side).disable(); // don't actually delete the wall just don't build it
+		if (this.walls.containsKey(side)) {
+			this.walls.get(side).disable(); // don't actually delete the wall just don't build it
 		}
 	}
 
 	public void copyRoomPropertiesToConnectedCells() {
 		ArrayList<CastleRoomBase> connectedRooms = new ArrayList<>();
-		connectedCells.stream().filter(RoomGridCell::isPopulated).forEach(c -> connectedRooms.add(c.getRoom()));
+		this.connectedCells.stream().filter(RoomGridCell::isPopulated).forEach(c -> connectedRooms.add(c.getRoom()));
 		for (CastleRoomBase connectedRoom : connectedRooms) {
 			connectedRoom.copyPropertiesOf(this.room);
 		}
@@ -320,9 +320,9 @@ public class RoomGridCell {
 	public ArrayList<EnumFacing> getPotentialBridgeDirections() {
 		ArrayList<EnumFacing> result = new ArrayList<>();
 
-		if (isPopulated()) {
+		if (this.isPopulated()) {
 			for (EnumFacing side : EnumFacing.HORIZONTALS) {
-				Optional<RoomGridCell> adjacent = getAdjacentCell(side);
+				Optional<RoomGridCell> adjacent = this.getAdjacentCell(side);
 				if (adjacent.isPresent() && adjacent.get().isValidForBridge()) {
 					result.add(side);
 				}
@@ -333,8 +333,8 @@ public class RoomGridCell {
 	}
 
 	public boolean isValidForBridge() {
-		if (isNotSelected()) {
-			Optional<RoomGridCell> below = getAdjacentCell(EnumFacing.DOWN);
+		if (this.isNotSelected()) {
+			Optional<RoomGridCell> below = this.getAdjacentCell(EnumFacing.DOWN);
 			// Cell below it has to satisfy the same
 			return (below.isPresent() && below.get().isNotSelected());
 		}

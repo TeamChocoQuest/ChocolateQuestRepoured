@@ -85,11 +85,13 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
+	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
 	}
 
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
@@ -115,6 +117,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	/**
 	 * Returns new PathNavigateGround instance
 	 */
+	@Override
 	protected PathNavigate createNavigator(World worldIn) {
 		return new PathNavigateClimber(this, worldIn);
 	}
@@ -153,7 +156,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		boolean result = super.attackEntityAsMob(entityIn);
 		if (result) {
 			int effectlvl = 1;
-			if (getRNG().nextDouble() > 0.7) {
+			if (this.getRNG().nextDouble() > 0.7) {
 				effectlvl = 2;
 			}
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
@@ -181,25 +184,31 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		return EnumCreatureAttribute.ARTHROPOD;
 	}
 
+	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_SPIDER_AMBIENT;
 	}
 
+	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_SPIDER_HURT;
 	}
 
+	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_SPIDER_DEATH;
 	}
 
+	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
 		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
+	@Override
 	public void setInWeb() {
 	}
 
+	@Override
 	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
 		if (potioneffectIn.getPotion() == MobEffects.POISON) {
 			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);

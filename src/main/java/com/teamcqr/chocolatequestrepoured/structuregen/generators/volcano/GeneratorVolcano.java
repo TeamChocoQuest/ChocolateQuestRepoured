@@ -39,9 +39,12 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	// GENERATION TIME TOTAL: ~15-30 seconds
 	/**
-	 * Generate: Given height, given base radius, given top inner radius steepness: In % level begins at 0!! DONE: Outer Radius -> make new function, current function dows not really work out Outer Radius --> y=(level * steepness) * level^2 --> y =
-	 * steepness *level^3 --> RADIUS = baseRAD - (level/steepness)^1/3 Inner Radius --> given, OR if (OuterRadius - (maxHeight - currHeight)) > given && (OuterRadius - (maxHeight - currHeight)) < maxInnerRad then use (OuterRadius - (maxHeight -
-	 * currHeight)) Block placing: generate circles. Per outer layer, the probability to place a block is reduced, same for height. A block can only be placed if it has a support block probability for blocks: max rad +1: 0% minRad -1: 100% --> P(x) =
+	 * Generate: Given height, given base radius, given top inner radius steepness: In % level begins at 0!! DONE: Outer Radius -> make new function, current
+	 * function dows not really work out Outer Radius --> y=(level * steepness) * level^2 --> y =
+	 * steepness *level^3 --> RADIUS = baseRAD - (level/steepness)^1/3 Inner Radius --> given, OR if (OuterRadius - (maxHeight - currHeight)) > given &&
+	 * (OuterRadius - (maxHeight - currHeight)) < maxInnerRad then use (OuterRadius - (maxHeight -
+	 * currHeight)) Block placing: generate circles. Per outer layer, the probability to place a block is reduced, same for height. A block can only be placed if it
+	 * has a support block probability for blocks: max rad +1: 0% minRad -1: 100% --> P(x) =
 	 * 1- [ (x-MIN)/(MAX-MIN) -steepNess * level] x = radius of block -> distance to center - innerRadius
 	 * 
 	 * 
@@ -131,9 +134,9 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// int lowYMax = y + (new Double(0.1 * this.maxHeight).intValue());
 		this.minY = this.pos.getY();// this.getMinY(this.centerLoc, this.baseRadius, world) /*- (new Double(0.1 * maxHeight).intValue())*/;
 		int lowYMax = this.minY + (new Double(0.1 * this.maxHeight).intValue());
-		int rMax = (int) (baseRadius * 4 + dungeon.getMaxHoleSize());
+		int rMax = (int) (this.baseRadius * 4 + this.dungeon.getMaxHoleSize());
 		final int r = rMax / 2;
-		BlockPos referenceLoc = centerLoc.subtract(new Vec3i(r, centerLoc.getY(), r));
+		BlockPos referenceLoc = this.centerLoc.subtract(new Vec3i(r, this.centerLoc.getY(), r));
 		Block[][][] blocks = new Block[rMax][256][rMax];
 		// DONE: indexes CAN be negative -> recalculate coordinates
 		// DONE: Rewrite ore gen code
@@ -143,8 +146,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// int yMax = ((y + this.maxHeight) < 256 ? this.maxHeight : (255 - y));
 		int yMax = ((this.minY + this.maxHeight) < 256 ? this.maxHeight : (255 - this.minY));
 
-		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.minY + 1, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(),
-				8));
+		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.minY + 1, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 		// Upper volcano part
 		for (int iY = 0; iY < yMax; iY++) {
@@ -162,10 +164,10 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 							// SO now we decide what the wall is gonna be...
 							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), this.random.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
 								// It is lava :D
-								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getLavaBlock();
+								blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getLavaBlock();
 							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), this.random.nextLong())) {
 								// It is magma
-								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getMagmaBlock();
+								blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getMagmaBlock();
 							} else {
 								// It is stone or ore
 								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
@@ -206,7 +208,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, (radius - 1), this.centerLoc)) {
 							if (iY < 2) {
 								// We're low enough, place lava
-								blocks[iX + r][iY + 6][iZ + r] = dungeon.getLavaBlock();
+								blocks[iX + r][iY + 6][iZ + r] = this.dungeon.getLavaBlock();
 							} else {
 								// We're over the lava -> air
 								blocks[iX + r][iY + 6][iZ + r] = Blocks.AIR;
@@ -246,7 +248,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				if (this.dungeon.doBuildDungeon() && i == 0) {
 					this.entranceDistToWall = (radiusArr[i] / 3);
 					int vecI = radiusArr[i] - this.entranceDistToWall;
-					calculateNextStairDirection(yStairCase, vecI);
+					this.calculateNextStairDirection(yStairCase, vecI);
 				}
 
 				for (int iX = -stairRadius; iX <= stairRadius; iX++) {
@@ -260,7 +262,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 							// Check that it is outside of the middle circle
 							if (this.dungeon.doBuildStairs() && StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
 								BlockPos pos = new BlockPos(iX + this.pos.getX(), yStairCase, iZ + this.pos.getZ());
-								blocks[iX + r][yStairCase][iZ + r] = dungeon.getRampBlock();
+								blocks[iX + r][yStairCase][iZ + r] = this.dungeon.getRampBlock();
 								// Spawners and chets, spawn only in a certain radius and only with 1% chance
 								if (DungeonGenUtils.isInsideCircle(iX, iZ, (stairRadius / 2) + (stairRadius / 4) + (stairRadius / 6), this.centerLoc)) {
 									if (new Random().nextInt(this.dungeon.getChestChance() + 1) >= (this.dungeon.getChestChance() - 1)) {
@@ -277,7 +279,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 
 		if (this.dungeon.isVolcanoDamaged()) {
-			generateHoles(blockList, blocks, r);
+			this.generateHoles(blockList, blocks, r);
 		}
 
 		if (this.dungeon.generateOres()) {
@@ -286,13 +288,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		if (this.dungeon.doBuildDungeon()) {
 			for (BlockPos center : pillarCenters) {
-				this.generatePillars(center, 2, lowYMax + 10, blocks, dungeon.getPillarBlock());
+				this.generatePillars(center, 2, lowYMax + 10, blocks, this.dungeon.getPillarBlock());
 			}
 		}
 
-		String mobType = dungeon.getDungeonMob();
+		String mobType = this.dungeon.getDungeonMob();
 		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 
 		// Generate parts for generation
@@ -307,7 +309,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				}
 			}
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, referenceLoc, list, new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, list, new PlacementSettings(), mobType));
 
 		// BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		// BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
@@ -320,7 +322,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// All: About 20 seconds
 
 		if (this.dungeon.doBuildDungeon()) {
-			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonGenerator, this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
+			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonGenerator, this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), this.world);
 			entranceBuilder.generate(this.pos.getX(), this.pos.getZ(), mobType);
 			this.dungeonGenerator.addAll(entranceBuilder.getStrongholdParts());
 		}
@@ -345,25 +347,25 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				lootChests.add(new BlockInfoLootChest(pos.subtract(this.pos), chestIDs[this.random.nextInt(chestIDs.length)], EnumFacing.NORTH));
 			}
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, lootChests, new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, lootChests, new PlacementSettings(), mobType));
 
 		List<AbstractBlockInfo> mobSpawners = new ArrayList<>();
 		int floor = this.spawnersNChestsOnPath.size();
-		GearedMobFactory mobFactory = new GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), this.random);
+		GearedMobFactory mobFactory = new GearedMobFactory(this.spawnersNChestsOnPath.size(), this.dungeon.getRampMob(), this.random);
 		for (BlockPos pos : this.spawnersNChestsOnPath) {
 			Block block = ModBlocks.SPAWNER;
 			IBlockState state = block.getDefaultState();
-			TileEntitySpawner spawner = (TileEntitySpawner) block.createTileEntity(world, state);
+			TileEntitySpawner spawner = (TileEntitySpawner) block.createTileEntity(this.world, state);
 			int ec = 2 + this.random.nextInt(3);
 			for (int i = 0; i < ec; i++) {
-				Entity ent = mobFactory.getGearedEntityByFloor(floor, world);
+				Entity ent = mobFactory.getGearedEntityByFloor(floor, this.world);
 				spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent));
 			}
 			NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound());
 			mobSpawners.add(new BlockInfo(pos.subtract(this.pos).add(0, 1, 0), state, data));
 			floor--;
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, mobSpawners, new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, mobSpawners, new PlacementSettings(), mobType));
 	}
 
 	@Override
@@ -372,36 +374,52 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	}
 
 	/*
-	 * public void fillChests() { final ResourceLocation[] chestIDs = this.dungeon.getChestIDs(); Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); Random rdm = new Random(); for(BlockPos pos :
-	 * this.spawnersNChestsOnPath) { if(rdm.nextBoolean()) { Block block = Blocks.CHEST; IBlockState state = block.getDefaultState(); TileEntityChest chest = (TileEntityChest)block.createTileEntity(world, state);
+	 * public void fillChests() { final ResourceLocation[] chestIDs = this.dungeon.getChestIDs(); Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap
+	 * = new HashMap<>(); Random rdm = new Random(); for(BlockPos pos :
+	 * this.spawnersNChestsOnPath) { if(rdm.nextBoolean()) { Block block = Blocks.CHEST; IBlockState state = block.getDefaultState(); TileEntityChest chest =
+	 * (TileEntityChest)block.createTileEntity(world, state);
 	 * 
-	 * if (chest != null) { ResourceLocation resLoc = chestIDs[rdm.nextInt(chestIDs.length)]; if (resLoc != null) { long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY()); chest.setLootTable(resLoc,
+	 * if (chest != null) { ResourceLocation resLoc = chestIDs[rdm.nextInt(chestIDs.length)]; if (resLoc != null) { long seed = WorldDungeonGenerator.getSeed(world,
+	 * x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY()); chest.setLootTable(resLoc,
 	 * seed); } }
 	 * 
-	 * NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound()); stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt)); } } lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); }
+	 * NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound()); stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt)); } }
+	 * lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); }
 	 * 
-	 * public void placeSpawners() { Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); Random rng = new Random(); int floor = this.spawnersNChestsOnPath.size(); GearedMobFactory mobFactory = new
-	 * GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), rng); for(BlockPos pos : this.spawnersNChestsOnPath) { Block block = ModBlocks.SPAWNER;//Blocks.MOB_SPAWNER; IBlockState state = block.getDefaultState();
-	 * //TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state); TileEntitySpawner spawner = (TileEntitySpawner)block.createTileEntity(world, state);
+	 * public void placeSpawners() { Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); Random rng = new Random(); int floor =
+	 * this.spawnersNChestsOnPath.size(); GearedMobFactory mobFactory = new
+	 * GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), rng); for(BlockPos pos : this.spawnersNChestsOnPath) { Block block =
+	 * ModBlocks.SPAWNER;//Blocks.MOB_SPAWNER; IBlockState state = block.getDefaultState();
+	 * //TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state); TileEntitySpawner spawner =
+	 * (TileEntitySpawner)block.createTileEntity(world, state);
 	 * /*spawner.getSpawnerBaseLogic().setEntityId(dungeon.getRampMob());
 	 * 
-	 * //Spawner settings NBTTagCompound settingsCompound = spawner.writeToNBT(new NBTTagCompound()); settingsCompound.setShort("MaxNearbyEntities", (short) 3); //Activation distance settingsCompound.setShort("RequiredPlayerRange", (short) 20);
+	 * //Spawner settings NBTTagCompound settingsCompound = spawner.writeToNBT(new NBTTagCompound()); settingsCompound.setShort("MaxNearbyEntities", (short) 3);
+	 * //Activation distance settingsCompound.setShort("RequiredPlayerRange", (short) 20);
 	 * settingsCompound.setShort("SpawnRange", (short) 12); settingsCompound.setShort("SpawnCount", (short) 3);
 	 * 
 	 * 
-	 * NBTTagList spawnPotentials = new NBTTagList(); Entity entity = mobFactory.getGearedEntityByFloor(floor, world); NBTTagCompound ent = SpawnerFactory.createSpawnerNBTFromEntity(entity); ent.removeTag("UUIDLeast"); ent.removeTag("UUIDMost");
-	 * ent.removeTag("Pos"); NBTTagList passengers = ent.getTagList("Passengers", 10); for (NBTBase passenger : passengers) { ((NBTTagCompound) passenger).removeTag("UUIDLeast"); ((NBTTagCompound) passenger).removeTag("UUIDMost"); ((NBTTagCompound)
-	 * passenger).removeTag("Pos"); } NBTTagCompound spawnPotential = new NBTTagCompound(); spawnPotential.setInteger("Weight", 1); spawnPotential.setTag("Entity", ent); spawnPotentials.appendTag(spawnPotential);
+	 * NBTTagList spawnPotentials = new NBTTagList(); Entity entity = mobFactory.getGearedEntityByFloor(floor, world); NBTTagCompound ent =
+	 * SpawnerFactory.createSpawnerNBTFromEntity(entity); ent.removeTag("UUIDLeast"); ent.removeTag("UUIDMost");
+	 * ent.removeTag("Pos"); NBTTagList passengers = ent.getTagList("Passengers", 10); for (NBTBase passenger : passengers) { ((NBTTagCompound)
+	 * passenger).removeTag("UUIDLeast"); ((NBTTagCompound) passenger).removeTag("UUIDMost"); ((NBTTagCompound)
+	 * passenger).removeTag("Pos"); } NBTTagCompound spawnPotential = new NBTTagCompound(); spawnPotential.setInteger("Weight", 1); spawnPotential.setTag("Entity",
+	 * ent); spawnPotentials.appendTag(spawnPotential);
 	 * settingsCompound.setTag("SpawnPotentials", spawnPotentials);; settingsCompound.removeTag("SpawnData");
 	 *//*
-		 * //End of spawner settings int ec = 2 + rng.nextInt(3); for(int i = 0; i < ec; i++) { Entity ent = mobFactory.getGearedEntityByFloor(floor, world); //NBTTagCompound entity = SpawnerFactory.createSpawnerNBTFromEntity(ent);
-		 * spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent)); } NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound()); stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state,
+		 * //End of spawner settings int ec = 2 + rng.nextInt(3); for(int i = 0; i < ec; i++) { Entity ent = mobFactory.getGearedEntityByFloor(floor, world);
+		 * //NBTTagCompound entity = SpawnerFactory.createSpawnerNBTFromEntity(ent);
+		 * spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent)); } NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound());
+		 * stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state,
 		 * data)); floor--; } lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); }
 		 * 
-		 * public void placeCoverBlocks() { // DONE: Adjust to the new system Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); if (this.dungeon.isCoverBlockEnabled()) {
+		 * public void placeCoverBlocks() { // DONE: Adjust to the new system Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); if
+		 * (this.dungeon.isCoverBlockEnabled()) {
 		 * 
-		 * for (int iX = new Double(x - (this.baseRadius * 1.25)).intValue(); iX <= new Double(x + (this.baseRadius * 1.25)).intValue(); iX++) { for (int iZ = new Double(z - (this.baseRadius * 1.25)).intValue(); iZ <= new Double(z + (this.baseRadius
-		 * * 1.25)).intValue(); iZ++) { stateMap.put(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)), new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null)); } }
+		 * for (int iX = new Double(x - (this.baseRadius * 1.25)).intValue(); iX <= new Double(x + (this.baseRadius * 1.25)).intValue(); iX++) { for (int iZ = new
+		 * Double(z - (this.baseRadius * 1.25)).intValue(); iZ <= new Double(z + (this.baseRadius
+		 * * 1.25)).intValue(); iZ++) { stateMap.put(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)), new
+		 * ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null)); } }
 		 * lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); } // DONE Pass the list to a simplethread to place the blocks }
 		 */
 
@@ -431,7 +449,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				blockIndex = rdm.nextInt(blocks.size());
 			}
 			BlockPos p = blocks.get(blockIndex);
-			BlockPos v = p.subtract(centerLoc);
+			BlockPos v = p.subtract(this.centerLoc);
 
 			if (blockArray[v.getX() + r][p.getY()][v.getZ() + r] == Blocks.AIR || blockArray[v.getX() + r][p.getY()][v.getZ() + r] == null) {
 				continue;
@@ -453,7 +471,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			int radius = DungeonGenUtils.getIntBetweenBorders(2, this.dungeon.getMaxHoleSize());
 
 			for (BlockPos p : this.getSphereBlocks(center, radius)) {
-				BlockPos v = p.subtract(centerLoc);
+				BlockPos v = p.subtract(this.centerLoc);
 				try {
 					blockArray[v.getX() + r][p.getY()][v.getZ() + r] = Blocks.AIR;
 				} catch (ArrayIndexOutOfBoundsException ex) {

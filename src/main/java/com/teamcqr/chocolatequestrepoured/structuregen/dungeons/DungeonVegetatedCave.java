@@ -83,35 +83,35 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	public File getRandomCentralBuilding() {
-		return getStructureFileFromDirectory(buildingFolder);
+		return this.getStructureFileFromDirectory(this.buildingFolder);
 	}
 
 	public Block getVineBlock() {
-		return vineBlock;
+		return this.vineBlock;
 	}
 
 	public Block getFlowerBlock(Random rdm) {
-		return flowerBlocks[rdm.nextInt(flowerBlocks.length)];
+		return this.flowerBlocks[rdm.nextInt(this.flowerBlocks.length)];
 	}
 
 	public Block getMushroomBlock(Random rdm) {
-		return mushrooms[rdm.nextInt(mushrooms.length)];
+		return this.mushrooms[rdm.nextInt(this.mushrooms.length)];
 	}
 
 	public Block getFloorBlock(Random rdm) {
-		return floorBlocks[rdm.nextInt(floorBlocks.length)];
+		return this.floorBlocks[rdm.nextInt(this.floorBlocks.length)];
 	}
 
 	public Block getGrassBlock(Random rdm) {
-		return grassBlocks[rdm.nextInt(grassBlocks.length)];
+		return this.grassBlocks[rdm.nextInt(this.grassBlocks.length)];
 	}
 
 	public boolean placeVegetation() {
-		return placeVegetation;
+		return this.placeVegetation;
 	}
 
 	public boolean placeBuilding() {
-		return placeBuilding;
+		return this.placeBuilding;
 	}
 
 	public boolean isVineShapeCross() {
@@ -119,7 +119,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	public boolean placeVines() {
-		return placeVines;
+		return this.placeVines;
 	}
 
 	public boolean skipCeilingFiltering() {
@@ -127,15 +127,15 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	public Block getAirBlock() {
-		return airBlock;
+		return this.airBlock;
 	}
 
 	public Block getPumpkinBlock() {
-		return pumpkinBlock;
+		return this.pumpkinBlock;
 	}
 
 	public Block getVineLatchBlock() {
-		return vineLatchBlock;
+		return this.vineLatchBlock;
 	}
 
 	public int getCentralCaveSize() {
@@ -143,7 +143,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	public int getTunnelCount(Random random) {
-		return DungeonGenUtils.getIntBetweenBorders(tunnelCountMin, tunnelCountMax, random);
+		return DungeonGenUtils.getIntBetweenBorders(this.tunnelCountMin, this.tunnelCountMax, random);
 	}
 
 	public int getCaveSegmentCount() {

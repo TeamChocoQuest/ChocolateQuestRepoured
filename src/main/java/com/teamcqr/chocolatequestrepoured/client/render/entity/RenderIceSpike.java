@@ -28,6 +28,7 @@ public class RenderIceSpike extends Render<EntityIceSpike> {
 		GlStateManager.popMatrix();
 	}
 
+	@Override
 	protected ResourceLocation getEntityTexture(EntityIceSpike p_110775_1_) {
 		return TEXTURE;
 	}

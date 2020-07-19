@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
@@ -15,6 +16,7 @@ public class CQRConfig {
 
 	public static Advanced advanced = new Advanced();
 	public static Bosses bosses = new Bosses();
+	public static BossDamageCaps bossDamageCaps = new BossDamageCaps();
 	public static DungeonProtection dungeonProtection = new DungeonProtection();
 	public static General general = new General();
 	public static Mobs mobs = new Mobs();
@@ -22,30 +24,10 @@ public class CQRConfig {
 
 	public static class Advanced {
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
-		public String[] specialBlocks = {
-				"minecraft:bed",
-				"minecraft:wooden_door",
-				"minecraft:spruce_door",
-				"minecraft:birch_door",
-				"minecraft:jungle_door",
-				"minecraft:acacia_door",
-				"minecraft:dark_oak_door",
-				"minecraft:iron_door",
-				"minecraft:piston",
-				"minecraft:sticky_piston",
-				"minecraft:piston_head" };
+		public String[] specialBlocks = { "minecraft:bed", "minecraft:wooden_door", "minecraft:spruce_door", "minecraft:birch_door", "minecraft:jungle_door", "minecraft:acacia_door", "minecraft:dark_oak_door", "minecraft:iron_door", "minecraft:piston", "minecraft:sticky_piston", "minecraft:piston_head" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
-		public String[] specialEntities = {
-				"minecraft:painting",
-				"minecraft:item_frame",
-				"minecraft:armor_stand",
-				"minecraft:minecart",
-				"minecraft:chest_minecart",
-				"minecraft:furnace_minecart",
-				"minecraft:tnt_minecart",
-				"minecraft:hopper_minecart",
-				"minecraft:boat" };
+		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand", "minecraft:minecart", "minecraft:chest_minecart", "minecraft:furnace_minecart", "minecraft:tnt_minecart", "minecraft:hopper_minecart", "minecraft:boat" };
 
 		public boolean enableSpecialFeatures = true;
 
@@ -79,7 +61,6 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
 
-		public boolean punishHackedItemUsers = false;
 		public boolean enableMaxDamageCaps = true;
 	}
 
@@ -89,8 +70,8 @@ public class CQRConfig {
 
 		public boolean hotFireballsDestroyTerrain = true;
 
-		public boolean harderWalkerKing = true;
-		public boolean armorForTheWalkerKing = false;
+		public boolean harderWalkerKing = false;
+		public boolean armorForTheWalkerKing = true;
 
 		public boolean netherDragonDestroysBlocks = true;
 		public int netherDragonStageTwoFireballInterval = 40;
@@ -120,6 +101,14 @@ public class CQRConfig {
 
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
+
+		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
+	}
+
+	public static class BossDamageCaps {
+		public boolean enableDamageCapForBosses = true;
+		public float maxUncappedDamage = 30F;
+		public float maxDamageInPercentOfMaxHP = 0.1F;
 	}
 
 	public static class DungeonProtection {
@@ -211,6 +200,9 @@ public class CQRConfig {
 		public boolean offhandPotionsAreSingleUse = true;
 		public boolean potionsInBagAreSingleUse = true;
 
+		public boolean enableDamageCapForNonBossMobs = false;
+		public float maxUncappedDamageForNonBossMobs = 50F;
+		public float maxUncappedDamageInMaxHPPercent = 1F;
 	}
 
 	public static class Wall {
@@ -237,6 +229,7 @@ public class CQRConfig {
 				ProtectedRegionHelper.updateBreakableBlockWhitelist();
 				ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 				EntityCQRNetherDragon.reloadBreakableBlocks();
+				EntityCQRGiantTortoise.realoadHardBlocks();
 			}
 		}
 

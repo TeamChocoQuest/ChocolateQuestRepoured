@@ -37,7 +37,7 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 		this.roomType = EnumRoomType.JAIL;
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
-		this.doorSide = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
+		this.doorSide = EnumFacing.HORIZONTALS[this.random.nextInt(EnumFacing.HORIZONTALS.length)];
 	}
 
 	@Override
@@ -67,20 +67,20 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 
 	@Override
 	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		int endX = getDecorationLengthX() - 1;
-		int endZ = getDecorationLengthZ() - 1;
+		int endX = this.getDecorationLengthX() - 1;
+		int endZ = this.getDecorationLengthZ() - 1;
 
 		Predicate<Vec3i> northRow = (v -> ((v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
 		Predicate<Vec3i> southRow = (v -> ((v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
 		Predicate<Vec3i> westRow = (v -> ((v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
 		Predicate<Vec3i> eastRow = (v -> ((v.getX() == endX - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
 
-		GenerationTemplate template = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
+		GenerationTemplate template = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		// here we take advantage of the fact that rules added to the template earlier will take priority
 		// so we add in the order of door -> frame -> cell
 
-		if (doorSide == EnumFacing.NORTH) {
-			int half = getDecorationLengthX() / 2;
+		if (this.doorSide == EnumFacing.NORTH) {
+			int half = this.getDecorationLengthX() / 2;
 			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
 			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == 1) && (v.getX() == half)));
 			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == 1) && (v.getX() == half + 1)));
@@ -94,8 +94,8 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.NORTH));
-		} else if (doorSide == EnumFacing.SOUTH) {
-			int half = getDecorationLengthX() / 2;
+		} else if (this.doorSide == EnumFacing.SOUTH) {
+			int half = this.getDecorationLengthX() / 2;
 			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == endZ - 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
 			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half)));
 			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
@@ -109,8 +109,8 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.SOUTH));
-		} else if (doorSide == EnumFacing.WEST) {
-			int half = getDecorationLengthZ() / 2;
+		} else if (this.doorSide == EnumFacing.WEST) {
+			int half = this.getDecorationLengthZ() / 2;
 			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
 			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == 1) && (v.getZ() == half)));
 			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == 1) && (v.getZ() == half + 1)));
@@ -124,8 +124,8 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.WEST));
-		} else if (doorSide == EnumFacing.EAST) {
-			int half = getDecorationLengthZ() / 2;
+		} else if (this.doorSide == EnumFacing.EAST) {
+			int half = this.getDecorationLengthZ() / 2;
 			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == endX - 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
 			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half)));
 			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
@@ -146,29 +146,29 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 		template.addRule(westRow, Blocks.IRON_BARS.getDefaultState());
 		template.addRule(eastRow, Blocks.IRON_BARS.getDefaultState());
 
-		HashMap<BlockPos, IBlockState> genMap = template.GetGenerationMap(getDecorationStartPos(), true);
+		HashMap<BlockPos, IBlockState> genMap = template.GetGenerationMap(this.getDecorationStartPos(), true);
 		genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 		for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
 			if (entry.getValue().getBlock() != Blocks.AIR) {
-				usedDecoPositions.add(entry.getKey());
+				this.usedDecoPositions.add(entry.getKey());
 			}
 		}
 
 		// Add all spaces inside the cell to the list os possible prisoner spawn locations
-		for (int x = 2; x < getDecorationLengthX() - 2; x++) {
-			for (int z = 2; z < getDecorationLengthZ() - 2; z++) {
-				prisonerSpawnerPositions.add(this.roomOrigin.add(x, 1, z));
+		for (int x = 2; x < this.getDecorationLengthX() - 2; x++) {
+			for (int z = 2; z < this.getDecorationLengthZ() - 2; z++) {
+				this.prisonerSpawnerPositions.add(this.roomOrigin.add(x, 1, z));
 			}
 		}
 	}
 
 	public void addPrisonerSpawners(DungeonInhabitant jailInhabitant, BlockStateGenArray genArray, World world) {
-		Collections.shuffle(this.prisonerSpawnerPositions, random);
+		Collections.shuffle(this.prisonerSpawnerPositions, this.random);
 
-		int spawnerCount = DungeonGenUtils.randomBetween(random, 2, 5);
+		int spawnerCount = DungeonGenUtils.randomBetween(this.random, 2, 5);
 
-		for (int i = 0; (i < spawnerCount && !prisonerSpawnerPositions.isEmpty()); i++) {
-			BlockPos pos = prisonerSpawnerPositions.get(i);
+		for (int i = 0; (i < spawnerCount && !this.prisonerSpawnerPositions.isEmpty()); i++) {
+			BlockPos pos = this.prisonerSpawnerPositions.get(i);
 
 			Entity mobEntity = EntityList.createEntityByIDFromName(jailInhabitant.getEntityID(), world);
 

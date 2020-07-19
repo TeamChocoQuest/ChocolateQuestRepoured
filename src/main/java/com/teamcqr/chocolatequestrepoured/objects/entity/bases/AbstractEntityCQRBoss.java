@@ -129,7 +129,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				this.setDead();
 
-				onFinalDeath();
+				this.onFinalDeath();
 
 				if (this.doesExplodeOnDeath()) {
 					this.world.createExplosion(this, this.posX, this.posY, this.posZ, 8.0F, true);
@@ -169,16 +169,21 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public boolean canMountEntity() {
 		return false;
 	}
-	
-	//Damage cap stuff
+
+	// Damage cap stuff
 	@Override
 	protected boolean damageCapEnabled() {
-		return true;
+		return CQRConfig.bossDamageCaps.enableDamageCapForBosses;
 	}
-	
+
 	@Override
 	protected float maxDamageInPercentOfMaxHP() {
-		return 0.5F;
+		return CQRConfig.bossDamageCaps.maxDamageInPercentOfMaxHP;
+	}
+
+	@Override
+	protected float maxUncappedDamage() {
+		return CQRConfig.bossDamageCaps.maxUncappedDamage;
 	}
 
 }

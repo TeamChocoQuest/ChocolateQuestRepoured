@@ -58,7 +58,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 
-		renderChain(entity);
+		this.renderChain(entity);
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}

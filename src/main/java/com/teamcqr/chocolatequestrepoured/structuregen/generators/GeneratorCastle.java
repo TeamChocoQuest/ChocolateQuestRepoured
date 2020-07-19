@@ -36,7 +36,7 @@ public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 				CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.pos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
-				this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+				this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 			}
 		}
 	}
@@ -45,15 +45,15 @@ public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 	public void buildStructure() {
 		BlockStateGenArray genArray = new BlockStateGenArray();
 		ArrayList<String> bossUuids = new ArrayList<>();
-		String mobType = dungeon.getDungeonMob();
+		String mobType = this.dungeon.getDungeonMob();
 		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
 
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, genArray.getMainMap().values(), new PlacementSettings(), mobType));
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, genArray.getPostMap().values(), new PlacementSettings(), mobType));
-		this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, pos, genArray.getEntityMap().values(), new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, genArray.getMainMap().values(), new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, genArray.getPostMap().values(), new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.pos, genArray.getEntityMap().values(), new PlacementSettings(), mobType));
 	}
 
 	@Override

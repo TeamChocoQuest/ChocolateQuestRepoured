@@ -71,7 +71,7 @@ public class WeightedItemStack {
 			}
 		}
 		if (this.damage != 0 && this.damage > 0) {
-			functions.add(new SetMetadata(null, new RandomValueRange(damage)));
+			functions.add(new SetMetadata(null, new RandomValueRange(this.damage)));
 		}
 
 		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionC, "entry_" + indx + this.itemName);
@@ -101,7 +101,7 @@ public class WeightedItemStack {
 			}
 		}
 		if (this.damage != 0 && this.damage > 0) {
-			functions.add(new SetMetadata(null, new RandomValueRange(damage)));
+			functions.add(new SetMetadata(null, new RandomValueRange(this.damage)));
 		}
 
 		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + this.itemName);

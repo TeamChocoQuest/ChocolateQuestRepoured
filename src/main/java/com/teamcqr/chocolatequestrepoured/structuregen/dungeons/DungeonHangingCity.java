@@ -81,14 +81,16 @@ public class DungeonHangingCity extends DungeonBase {
 	 * 
 	 * @Override public boolean generate(World world, Random random, BlockPosition startPos) { float rdmFloat = (float) (random.nextInt(3) + 4);
 	 * 
-	 * for (int y = 0; rdmFloat > 0.5F; --y) { for (int x = MathHelper.d(-rdmFloat); x <= MathHelper.f(rdmFloat); ++x) { for (int z = MathHelper.d(-rdmFloat); z <= MathHelper.f(rdmFloat); ++z) { if ((float) (x * x + z * z) <= (rdmFloat + 1.0F) *
+	 * for (int y = 0; rdmFloat > 0.5F; --y) { for (int x = MathHelper.d(-rdmFloat); x <= MathHelper.f(rdmFloat); ++x) { for (int z = MathHelper.d(-rdmFloat); z <=
+	 * MathHelper.f(rdmFloat); ++z) { if ((float) (x * x + z * z) <= (rdmFloat + 1.0F) *
 	 * (rdmFloat + 1.0F)) { if(isAllowed(x) && isAllowed(z)) { this.a(world, startPos.a(x, y, z), Blocks.END_STONE.getBlockData()); } } } }
 	 * 
 	 * rdmFloat = (float) ((double) rdmFloat - ((double) random.nextInt(2) + 0.5D)); }
 	 * 
 	 * return true; }
 	 * 
-	 * private boolean isAllowed(int distanceToCenter) { double divisionResult = ((double)distanceToCenter) / ((double)this.radius); if(divisionResult < 1.0D) { return true; } return false; }
+	 * private boolean isAllowed(int distanceToCenter) { double divisionResult = ((double)distanceToCenter) / ((double)this.radius); if(divisionResult < 1.0D) {
+	 * return true; } return false; }
 	 */
 
 	public File pickStructure() {
@@ -114,11 +116,11 @@ public class DungeonHangingCity extends DungeonBase {
 	 */
 
 	public int getMinBuildings() {
-		return minBuildings;
+		return this.minBuildings;
 	}
 
 	public int getMaxBuildings() {
-		return maxBuildings;
+		return this.maxBuildings;
 	}
 
 	public Block getChainBlock() {

@@ -16,12 +16,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -195,7 +192,7 @@ public class EventsHandler {
 
 		if (event.player.world.isRemote) {
 			TextureSetManager.unloadTextures();
-		} else if(event.player instanceof EntityPlayerMP) {
+		} else if (event.player instanceof EntityPlayerMP) {
 			// Send packets with ct's to player
 			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 		}
@@ -212,24 +209,6 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
-		if (CQRConfig.advanced.punishHackedItemUsers && event.getEntityPlayer() != null && event.getEntity() != null && event.getEntity() instanceof AbstractEntityCQR) {
-			EntityPlayer attacker = event.getEntityPlayer();
-			for (ItemStack item : attacker.getEquipmentAndArmor()) {
-				if (ItemUtil.isCheaterItem(item)) {
-					// Punishment
-					if (attacker instanceof EntityPlayerMP) {
-						float damage = EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED);
-						if (item.isItemStackDamageable()) {
-							item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
-						} /*else {
-							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * 0.5F);
-						}*/
-					}
-
-				}
-			}
-		}
-
 		if (CQRConfig.mobs.blockCancelledByAxe) {
 			EntityPlayer player = event.getEntityPlayer();
 			World world = player.world;
@@ -247,8 +226,8 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
 		if (CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
-			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2,
-					CQRConfig.bosses.antiCowardRadius), event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius))).isEmpty());
+			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
+					event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius))).isEmpty());
 		}
 	}
 

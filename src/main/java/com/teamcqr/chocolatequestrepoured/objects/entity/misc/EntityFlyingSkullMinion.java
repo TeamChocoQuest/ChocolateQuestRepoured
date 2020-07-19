@@ -127,7 +127,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 
 			if (EntityUtil.isEntityFlying(entityIn)) {
 				if (this.summoner instanceof EntityLivingBase && entityIn instanceof EntityLivingBase) {
-					((EntityLivingBase) summoner).heal(((EntityLivingBase) entityIn).getHealth() / 2);
+					((EntityLivingBase) this.summoner).heal(((EntityLivingBase) entityIn).getHealth() / 2);
 					((EntityLivingBase) entityIn).motionY *= -2;
 					((EntityLivingBase) entityIn).velocityChanged = true;
 				}

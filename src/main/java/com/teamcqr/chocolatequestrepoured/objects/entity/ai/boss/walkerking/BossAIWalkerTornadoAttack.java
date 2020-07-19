@@ -23,23 +23,23 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 
 	@Override
 	public boolean shouldExecute() {
-		if (entity != null && entity.getAttackTarget() != null && !entity.getAttackTarget().isDead) {
-			cooldown--;
-			return cooldown <= 0;
+		if (this.entity != null && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
+			this.cooldown--;
+			return this.cooldown <= 0;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && shouldExecute();
+		return super.shouldContinueExecuting() && this.shouldExecute();
 	}
 
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		spawnTornadoes(DungeonGenUtils.getIntBetweenBorders(MIN_TORNADOES, MAX_TORNADOES + 1, entity.getRNG()));
-		cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.spawnTornadoes(DungeonGenUtils.getIntBetweenBorders(MIN_TORNADOES, MAX_TORNADOES + 1, this.entity.getRNG()));
+		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}
 
 	private void spawnTornadoes(int count) {
@@ -49,14 +49,14 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 		velocity = VectorUtil.rotateVectorAroundY(velocity, -45);
 		for (int i = 0; i < count; i++) {
 			Vec3d v = VectorUtil.rotateVectorAroundY(velocity, angle * i);
-			Vec3d p = entity.getPositionVector().add(v.normalize().scale(0.5));
+			Vec3d p = this.entity.getPositionVector().add(v.normalize().scale(0.5));
 			v = v.normalize().scale(0.25);
 			// System.out.println("V=" + v.toString());
-			EntityWalkerTornado tornado = new EntityWalkerTornado(entity.world);
-			tornado.setOwner(entity.getPersistentID());
+			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.world);
+			tornado.setOwner(this.entity.getPersistentID());
 			tornado.setPosition(p.x, p.y, p.z);
 			tornado.setVelocity(v);
-			entity.world.spawnEntity(tornado);
+			this.entity.world.spawnEntity(tornado);
 		}
 	}
 

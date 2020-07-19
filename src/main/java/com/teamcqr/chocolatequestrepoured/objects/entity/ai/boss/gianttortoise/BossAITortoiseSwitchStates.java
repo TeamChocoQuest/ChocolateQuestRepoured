@@ -14,7 +14,7 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 
 	public BossAITortoiseSwitchStates(EntityCQRGiantTortoise entity, Animation animIn, Animation animOut) {
 		super(entity);
-		setMutexBits(8);
+		this.setMutexBits(8);
 		this.turtle = entity;
 		this.animationIn = animIn;
 		this.animationOut = animOut;
@@ -22,15 +22,15 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 
 	@Override
 	public Animation getAnimation() {
-		if (turtle.getTargetedState() != 0) {
-			return turtle.getTargetedState() < 0 ? animationIn : animationOut;
+		if (this.turtle.getTargetedState() != 0) {
+			return this.turtle.getTargetedState() < 0 ? this.animationIn : this.animationOut;
 		}
 		return null;
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if (turtle.wantsToChangeState() && !turtle.isStunned() && !turtle.isSpinning()) {
+		if (this.turtle.wantsToChangeState() && !this.turtle.isStunned() && !this.turtle.isSpinning()) {
 			return true;
 		}
 		return false;
@@ -44,16 +44,16 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		turtle.currentAnim = this;
-		turtle.setReadyToSpin(false);
-		turtle.setAnimationTick(0);
-		turtle.setInShell(true);
-		if (turtle.getTargetedState() < 0) {
-			turtle.setAnimation(animationIn);
+		this.turtle.currentAnim = this;
+		this.turtle.setReadyToSpin(false);
+		this.turtle.setAnimationTick(0);
+		this.turtle.setInShell(true);
+		if (this.turtle.getTargetedState() < 0) {
+			this.turtle.setAnimation(this.animationIn);
 		} else {
-			turtle.setAnimation(animationOut);
+			this.turtle.setAnimation(this.animationOut);
 		}
-		turtle.setBypassInShell(true);
+		this.turtle.setBypassInShell(true);
 	}
 
 	@Override
@@ -69,13 +69,13 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		turtle.setAnimationTick(0);
-		turtle.currentAnim = null;
-		turtle.setAnimation(IAnimatedEntity.NO_ANIMATION);
-		turtle.setInShell(turtle.getTargetedState() < 0);
-		turtle.changedState();
-		turtle.targetNewState(0);
-		turtle.setBypassInShell(false);
+		this.turtle.setAnimationTick(0);
+		this.turtle.currentAnim = null;
+		this.turtle.setAnimation(IAnimatedEntity.NO_ANIMATION);
+		this.turtle.setInShell(this.turtle.getTargetedState() < 0);
+		this.turtle.changedState();
+		this.turtle.targetNewState(0);
+		this.turtle.setBypassInShell(false);
 	}
 
 }

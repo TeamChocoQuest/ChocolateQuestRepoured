@@ -25,7 +25,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		CQRWeightedRandom<ShelfPattern> randomPattern = new CQRWeightedRandom<>(random);
+		CQRWeightedRandom<ShelfPattern> randomPattern = new CQRWeightedRandom<>(this.random);
 		randomPattern.add(ShelfPattern.LONG_VERTICAL, 1);
 		randomPattern.add(ShelfPattern.LONG_HORIZONTAL, 1);
 
@@ -35,17 +35,17 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 	@Override
 	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		// allow 1 space from the wall to start
-		shelfStart = this.getDecorationStartPos().south().east();
-		shelfXLen = this.getDecorationLengthX() - 2;
-		shelfZLen = this.getDecorationLengthZ() - 2;
-		shelfHeight = this.getDecorationLengthY() - 2; // leave some room to the ceiling
+		this.shelfStart = this.getDecorationStartPos().south().east();
+		this.shelfXLen = this.getDecorationLengthX() - 2;
+		this.shelfZLen = this.getDecorationLengthZ() - 2;
+		this.shelfHeight = this.getDecorationLengthY() - 2; // leave some room to the ceiling
 
-		switch (pattern) {
+		switch (this.pattern) {
 		case LONG_VERTICAL:
-			generateVertical(genArray);
+			this.generateVertical(genArray);
 			break;
 		case LONG_HORIZONTAL:
-			generateHorizontal(genArray);
+			this.generateHorizontal(genArray);
 			break;
 		default:
 			break;
@@ -78,11 +78,11 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 	}
 
 	private void generateVertical(BlockStateGenArray genArray) {
-		for (int x = 0; x < shelfXLen; x++) {
-			for (int y = 0; y < shelfHeight; y++) {
-				for (int z = 0; z < shelfZLen; z++) {
-					if ((x % 2 == 0) && (z != (shelfZLen / 2))) {
-						BlockPos pos = shelfStart.add(x, y, z);
+		for (int x = 0; x < this.shelfXLen; x++) {
+			for (int y = 0; y < this.shelfHeight; y++) {
+				for (int z = 0; z < this.shelfZLen; z++) {
+					if ((x % 2 == 0) && (z != (this.shelfZLen / 2))) {
+						BlockPos pos = this.shelfStart.add(x, y, z);
 						genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 						this.usedDecoPositions.add(pos);
 					}
@@ -92,11 +92,11 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 	}
 
 	private void generateHorizontal(BlockStateGenArray genArray) {
-		for (int x = 0; x < shelfXLen; x++) {
-			for (int y = 0; y < shelfHeight; y++) {
-				for (int z = 0; z < shelfZLen; z++) {
-					if ((z % 2 == 0) && (x != (shelfXLen / 2))) {
-						BlockPos pos = shelfStart.add(x, y, z);
+		for (int x = 0; x < this.shelfXLen; x++) {
+			for (int y = 0; y < this.shelfHeight; y++) {
+				for (int z = 0; z < this.shelfZLen; z++) {
+					if ((z % 2 == 0) && (x != (this.shelfXLen / 2))) {
+						BlockPos pos = this.shelfStart.add(x, y, z);
 						genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 						this.usedDecoPositions.add(pos);
 					}

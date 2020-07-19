@@ -19,15 +19,15 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldExecute() {
-		if (cooldown > 0) {
-			cooldown--;
+		if (this.cooldown > 0) {
+			this.cooldown--;
 			return false;
 		}
-		return entity != null && !entity.isDead && entity.hasAttackTarget() && cooldown <= 0 && hasFireball();
+		return this.entity != null && !this.entity.isDead && this.entity.hasAttackTarget() && this.cooldown <= 0 && this.hasFireball();
 	}
 
 	private boolean hasFireball() {
-		ItemStack item = entity.getHeldItemOffhand();
+		ItemStack item = this.entity.getHeldItemOffhand();
 		if (item.isEmpty() || item.getItem() != Items.FIRE_CHARGE) {
 			return false;
 		}
@@ -37,11 +37,11 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		cooldown = 140;
-		entity.getHeldItemOffhand().shrink(1);
-		Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector());
-		EntityFireball fireball = entity.getRNG().nextDouble() > 0.7 ? new EntityLargeFireball(entity.world, entity, v.x, v.y, v.z) : new EntitySmallFireball(entity.world, entity, v.x, v.y, v.z);
-		entity.world.spawnEntity(fireball);
+		this.cooldown = 140;
+		this.entity.getHeldItemOffhand().shrink(1);
+		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+		EntityFireball fireball = this.entity.getRNG().nextDouble() > 0.7 ? new EntityLargeFireball(this.entity.world, this.entity, v.x, v.y, v.z) : new EntitySmallFireball(this.entity.world, this.entity, v.x, v.y, v.z);
+		this.entity.world.spawnEntity(fireball);
 	}
 
 }

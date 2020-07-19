@@ -33,28 +33,28 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 
 	@Override
 	public boolean shouldExecute() {
-		if (cooldown > 0) {
-			cooldown--;
+		if (this.cooldown > 0) {
+			this.cooldown--;
 			return false;
 		}
-		return entity != null && entity.isEntityAlive() && entity.isExecutingExplodeAreaAttack();
+		return this.entity != null && this.entity.isEntityAlive() && this.entity.isExecutingExplodeAreaAttack();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return entity != null && entity.isEntityAlive() && entity.isExecutingExplodeAreaAttack();
+		return this.entity != null && this.entity.isEntityAlive() && this.entity.isExecutingExplodeAreaAttack();
 	}
 
 	@Override
 	public void startExecuting() {
-		this.explosionCount = DungeonGenUtils.getIntBetweenBorders(MIN_EXPLOSIONS, MAX_EXPLOSIONS, entity.getRNG());
-		this.lastExplodeTechTick = entity.ticksExisted;
-		addExplosionLoc();
+		this.explosionCount = DungeonGenUtils.getIntBetweenBorders(MIN_EXPLOSIONS, MAX_EXPLOSIONS, this.entity.getRNG());
+		this.lastExplodeTechTick = this.entity.ticksExisted;
+		this.addExplosionLoc();
 	}
 
 	private void addExplosionLoc() {
-		if (entity.getAttackTarget() != null) {
-			this.explosions.add(entity.getAttackTarget().getPosition());
+		if (this.entity.getAttackTarget() != null) {
+			this.explosions.add(this.entity.getAttackTarget().getPosition());
 		}
 	}
 
@@ -62,27 +62,27 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 	public void updateTask() {
 		super.updateTask();
 		// Particles on positions
-		if (entity.ticksExisted % 5 == 0) {
-			for (BlockPos p : explosions) {
-				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, -0.125, 1);
-				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, 0.125, 1);
-				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, -0.125, 1);
-				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, 0.125, 1);
+		if (this.entity.ticksExisted % 5 == 0) {
+			for (BlockPos p : this.explosions) {
+				this.world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, -0.125, 1);
+				this.world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, 0.125, 1);
+				this.world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, -0.125, 1);
+				this.world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, 0.125, 1);
 			}
 		}
 
-		if (explosions.size() >= explosionCount) {
+		if (this.explosions.size() >= this.explosionCount) {
 			// EXPLOSION!!!!
 
-			for (BlockPos p : explosions) {
-				world.newExplosion(entity, p.getX(), p.getY(), p.getZ(), 3, entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionAreaDestroysTerrain);
+			for (BlockPos p : this.explosions) {
+				this.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 3, this.entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionAreaDestroysTerrain);
 			}
 
-			resetTask();
-		} else if (Math.abs(entity.ticksExisted - lastExplodeTechTick) > TIMEDIV) {
-			entity.swingArm(EnumHand.OFF_HAND);
-			this.lastExplodeTechTick = entity.ticksExisted;
-			addExplosionLoc();
+			this.resetTask();
+		} else if (Math.abs(this.entity.ticksExisted - this.lastExplodeTechTick) > TIMEDIV) {
+			this.entity.swingArm(EnumHand.OFF_HAND);
+			this.lastExplodeTechTick = this.entity.ticksExisted;
+			this.addExplosionLoc();
 		}
 	}
 
@@ -91,7 +91,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 		super.resetTask();
 		this.explosionCount = 0;
 		this.explosions.clear();
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		this.entity.stopExplodeAreaAttack();
 	}
 

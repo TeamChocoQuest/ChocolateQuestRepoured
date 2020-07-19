@@ -31,8 +31,8 @@ public class DungeonInhabitant {
 
 	public DungeonInhabitant(Properties prop) {
 		this.name = prop.getProperty(ConfigKeys.KEY_NAME, "missingNo");
-		this.entityIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_ENTITY_ID_LIST, entityIDs);
-		this.bossIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_BOSS_ID_LIST, bossIDs);
+		this.entityIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_ENTITY_ID_LIST, this.entityIDs);
+		this.bossIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_BOSS_ID_LIST, this.bossIDs);
 		String tmp = prop.getProperty(ConfigKeys.KEY_BANNER, "UNUSED");
 		if (!tmp.equalsIgnoreCase("UNUSED")) {
 			this.assignedBanner = EBanners.valueOf(tmp);
@@ -61,11 +61,11 @@ public class DungeonInhabitant {
 	}
 
 	public ResourceLocation getEntityID() {
-		return (entityIDs == null || entityIDs.length <= 0) ? EMPTY_RES_LOC : entityIDs[random.nextInt(entityIDs.length)];
+		return (this.entityIDs == null || this.entityIDs.length <= 0) ? EMPTY_RES_LOC : this.entityIDs[random.nextInt(this.entityIDs.length)];
 	}
 
 	public ResourceLocation getBossID() {
-		return bossIDs.length <= 0 ? null : bossIDs[random.nextInt(bossIDs.length)];
+		return this.bossIDs.length <= 0 ? null : this.bossIDs[random.nextInt(this.bossIDs.length)];
 	}
 
 	@Nullable

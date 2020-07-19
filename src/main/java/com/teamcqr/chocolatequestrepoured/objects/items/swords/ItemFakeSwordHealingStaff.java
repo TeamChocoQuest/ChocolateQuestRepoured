@@ -12,6 +12,7 @@ public class ItemFakeSwordHealingStaff extends ItemSword implements IFakeWeapon<
 		super(material);
 	}
 
+	@Override
 	public ItemStaffHealing getOriginalItem() {
 		return ModItems.STAFF_HEALING;
 	}

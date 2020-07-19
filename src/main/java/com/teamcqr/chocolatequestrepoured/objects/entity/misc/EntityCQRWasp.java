@@ -27,7 +27,7 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 
 	public EntityCQRWasp(World worldIn) {
 		super(worldIn);
-		setSize(0.75F, 0.75F);
+		this.setSize(0.75F, 0.75F);
 		this.moveHelper = new EntityFlyHelper(this);
 	}
 
@@ -46,9 +46,11 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 		}));
 	}
 
+	@Override
 	public void fall(float distance, float damageMultiplier) {
 	}
 
+	@Override
 	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
 	}
 
@@ -68,6 +70,7 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 		return false;
 	}
 
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
@@ -79,6 +82,7 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 	/**
 	 * Returns new PathNavigateGround instance
 	 */
+	@Override
 	protected PathNavigate createNavigator(World worldIn) {
 		PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
 		pathnavigateflying.setCanOpenDoors(false);
@@ -90,6 +94,7 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 	/**
 	 * Checks if the entity's current position is a valid location to spawn this entity.
 	 */
+	@Override
 	public boolean getCanSpawnHere() {
 		int i = MathHelper.floor(this.posX);
 		int j = MathHelper.floor(this.getEntityBoundingBox().minY);

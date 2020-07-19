@@ -43,7 +43,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 		this.ttl = ttl;
 		this.parentUUID = parent.getPersistentID();
 
-		cloneParentEquipment(parent);
+		this.cloneParentEquipment(parent);
 	}
 
 	private void cloneParentEquipment(AbstractEntityCQR parent) {
@@ -77,87 +77,87 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		if (parent != null) {
-			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(parent.getMaxHealth());
-			this.setHealth(parent.getHealth());
+		if (this.parent != null) {
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.parent.getMaxHealth());
+			this.setHealth(this.parent.getHealth());
 		}
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		return attackEntityFrom(source, amount, false);
+		return this.attackEntityFrom(source, amount, false);
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		// return super.attackEntityFrom(source, amount, sentFromPart);
-		if (!world.isRemote && damageCounter >= 2 * (world.getDifficulty().ordinal() <= 0 ? 1 : world.getDifficulty().ordinal())) {
-			setDead();
+		if (!this.world.isRemote && this.damageCounter >= 2 * (this.world.getDifficulty().ordinal() <= 0 ? 1 : this.world.getDifficulty().ordinal())) {
+			this.setDead();
 		}
-		damageCounter++;
+		this.damageCounter++;
 		return true;
 	}
 
 	@Override
 	public void setDead() {
-		if (world.isRemote) {
-			playDeathEffect();
+		if (this.world.isRemote) {
+			this.playDeathEffect();
 		}
 		super.setDead();
 	}
 
 	private void playDeathEffect() {
-		if (world.isRemote) {
+		if (this.world.isRemote) {
 			for (int i = 0; i < 15; i++) {
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.025, 0.0);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, 0.025);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, -0.025);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, 0.025);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, -0.025);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.0, 0.025, 0.0);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.025, 0.01, 0.025);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.025, 0.01, -0.025);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, -0.025, 0.01, 0.025);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, -0.025, 0.01, -0.025);
 			}
-			world.playSound(posX, posY, posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
 		}
 	}
 
 	@Override
 	public void onEntityUpdate() {
-		if (!world.isRemote) {
-			if (ttl < 0) {
-				setDead();
+		if (!this.world.isRemote) {
+			if (this.ttl < 0) {
+				this.setDead();
 				return;
 			}
 			// Search parent
-			if (parent == null && parentUUID != null) {
-				if (searchTicksForParent > 0) {
-					if (!world.isRemote) {
-						world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(-10, -10, -10), getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
+			if (this.parent == null && this.parentUUID != null) {
+				if (this.searchTicksForParent > 0) {
+					if (!this.world.isRemote) {
+						this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(-10, -10, -10), this.getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
 
 							@Override
 							public void accept(Entity t) {
-								if (t.getPersistentID().equals(parentUUID)) {
-									parent = (EntityCQRWalkerKing) t;
+								if (t.getPersistentID().equals(EntityWalkerKingIllusion.this.parentUUID)) {
+									EntityWalkerKingIllusion.this.parent = (EntityCQRWalkerKing) t;
 								}
 							}
 						});
 						;
-						searchTicksForParent--;
+						this.searchTicksForParent--;
 					}
 				} else {
-					setDead();
+					this.setDead();
 					return;
 				}
 			}
-			if (parent == null || parent.isDead) {
-				setDead();
+			if (this.parent == null || this.parent.isDead) {
+				this.setDead();
 				return;
 			}
 			super.onEntityUpdate();
-			this.setHealth(parent.getHealth());
+			this.setHealth(this.parent.getHealth());
 
-			if (parent.getAttackTarget() != null || getAttackTarget() != null) {
-				ttl--;
+			if (this.parent.getAttackTarget() != null || this.getAttackTarget() != null) {
+				this.ttl--;
 			} else {
-				ttl -= 10;
+				this.ttl -= 10;
 			}
 		} else {
 			super.onEntityUpdate();
@@ -177,15 +177,15 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setInteger("ttl", ttl);
-		compound.setTag("illusionParent", NBTUtil.createUUIDTag(parentUUID));
+		compound.setInteger("ttl", this.ttl);
+		compound.setTag("illusionParent", NBTUtil.createUUIDTag(this.parentUUID));
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		ttl = compound.getInteger("ttl");
-		parentUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("illusionParent"));
+		this.ttl = compound.getInteger("ttl");
+		this.parentUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("illusionParent"));
 	}
 
 }

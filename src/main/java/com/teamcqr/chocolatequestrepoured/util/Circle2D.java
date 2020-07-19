@@ -7,7 +7,8 @@ import java.util.Objects;
 /**
  * Copyright (c) 30.06.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  *
- * Description: Definition for a circle in a 2d pixel grid, constructed using the Midpoint algorithm described here: https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+ * Description: Definition for a circle in a 2d pixel grid, constructed using the Midpoint algorithm described here:
+ * https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
  */
 
 public class Circle2D {

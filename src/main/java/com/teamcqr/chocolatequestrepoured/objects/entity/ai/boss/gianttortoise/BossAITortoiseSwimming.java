@@ -11,13 +11,13 @@ public class BossAITortoiseSwimming extends EntityAISwimming {
 	public BossAITortoiseSwimming(EntityCQRGiantTortoise entityIn) {
 		super(entityIn);
 		this.boss = entityIn;
-		setMutexBits(0);
+		this.setMutexBits(0);
 	}
 
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute()) {
-			return boss.getAttackTarget() != null;
+			return this.boss.getAttackTarget() != null;
 		}
 		return false;
 	}
@@ -25,7 +25,7 @@ public class BossAITortoiseSwimming extends EntityAISwimming {
 	@Override
 	public boolean shouldContinueExecuting() {
 		if (super.shouldContinueExecuting()) {
-			return boss.getAttackTarget() != null;
+			return this.boss.getAttackTarget() != null;
 		}
 		return false;
 	}
@@ -33,8 +33,8 @@ public class BossAITortoiseSwimming extends EntityAISwimming {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if (boss.getAttackTarget() != null) {
-			boss.getNavigator().tryMoveToEntityLiving(boss.getAttackTarget(), 3);
+		if (this.boss.getAttackTarget() != null) {
+			this.boss.getNavigator().tryMoveToEntityLiving(this.boss.getAttackTarget(), 3);
 		}
 	}
 

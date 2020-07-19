@@ -141,15 +141,15 @@ public class ItemStructureSelector extends Item {
 	}
 
 	public boolean hasFirstPos(ItemStack stack) {
-		return getFirstPos(stack) != null;
+		return this.getFirstPos(stack) != null;
 	}
 
 	public boolean hasSecondPos(ItemStack stack) {
-		return getSecondPos(stack) != null;
+		return this.getSecondPos(stack) != null;
 	}
 
 	public boolean hasFirstAndSecondPos(ItemStack stack) {
-		return hasFirstPos(stack) && hasSecondPos(stack);
+		return this.hasFirstPos(stack) && this.hasSecondPos(stack);
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID)

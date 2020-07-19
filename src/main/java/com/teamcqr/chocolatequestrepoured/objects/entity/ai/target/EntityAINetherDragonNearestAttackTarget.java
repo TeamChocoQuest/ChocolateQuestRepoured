@@ -72,7 +72,7 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 			 * if (!this.entity.isInSightRange(possibleTarget)) { return false; }
 			 */
 			// return this.entity.getEntitySenses().canSee(possibleTarget);
-			return isInHomeZone(possibleTarget);
+			return this.isInHomeZone(possibleTarget);
 		}
 		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
@@ -111,7 +111,7 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 			 * if (!this.entity.isInSightRange(possibleTarget)) { return false; }
 			 */
 			// return this.entity.getEntitySenses().canSee(possibleTarget);
-			return isInHomeZone(possibleTarget);
+			return this.isInHomeZone(possibleTarget);
 		}
 		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
@@ -119,12 +119,12 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 		/*
 		 * if (!this.entity.isInSightRange(possibleTarget)) { return false; } return this.entity.getEntitySenses().canSee(possibleTarget);
 		 */
-		return isInHomeZone(possibleTarget);
+		return this.isInHomeZone(possibleTarget);
 	}
 
 	private boolean isInHomeZone(EntityLivingBase possibleTarget) {
-		double distance = possibleTarget.getPosition().getDistance(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ());
-		return distance <= 24 + 8 * (world.getDifficulty().ordinal());
+		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		return distance <= 24 + 8 * (this.world.getDifficulty().ordinal());
 	}
 
 }

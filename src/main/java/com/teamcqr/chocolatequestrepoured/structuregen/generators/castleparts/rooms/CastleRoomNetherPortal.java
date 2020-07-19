@@ -28,13 +28,13 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 		this.maxSlotsUsed = 1;
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
-		this.portalAlignment = random.nextBoolean() ? Alignment.HORIZONTAL : Alignment.VERTICAL;
+		this.portalAlignment = this.random.nextBoolean() ? Alignment.HORIZONTAL : Alignment.VERTICAL;
 	}
 
 	@Override
 	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		int endX = getDecorationLengthX() - 1;
-		int endZ = getDecorationLengthZ() - 1;
+		int endX = this.getDecorationLengthX() - 1;
+		int endZ = this.getDecorationLengthZ() - 1;
 		int halfX = endX / 2;
 		int halfZ = endZ / 2;
 
@@ -55,7 +55,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 		Predicate<Vec3i> portal = portalBot.or(portalTop).or(portalSides);
 		Predicate<Vec3i> platform = portal.negate().and(firstLayer.and(v -> (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1) && (v.getZ() >= zStart + 1) && (v.getZ() <= zEnd - 1)));
 
-		GenerationTemplate portalRoomTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
+		GenerationTemplate portalRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		portalRoomTemplate.addRule(northEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
 		portalRoomTemplate.addRule(southEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
 		portalRoomTemplate.addRule(westEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
@@ -64,11 +64,11 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 		portalRoomTemplate.addRule(portal, Blocks.OBSIDIAN.getDefaultState());
 		portalRoomTemplate.addRule(portalMid, Blocks.PORTAL.getDefaultState());
 
-		HashMap<BlockPos, IBlockState> genMap = portalRoomTemplate.GetGenerationMap(getDecorationStartPos(), true);
+		HashMap<BlockPos, IBlockState> genMap = portalRoomTemplate.GetGenerationMap(this.getDecorationStartPos(), true);
 		genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 		for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
 			if (entry.getValue().getBlock() != Blocks.AIR) {
-				usedDecoPositions.add(entry.getKey());
+				this.usedDecoPositions.add(entry.getKey());
 			}
 		}
 

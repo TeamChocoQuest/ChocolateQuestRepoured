@@ -1,12 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.customtextures;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.TextureSetPacket;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -28,10 +35,6 @@ public class TextureSetManager {
 		return INSTANCE;
 	}
 
-	public static boolean loadTextureSet(String name) {
-		return getInstance().loadTextureSetImpl(name);
-	}
-
 	public static void registerTextureSet(TextureSet set) {
 		getInstance().registerTextureSetImpl(set);
 	}
@@ -43,6 +46,31 @@ public class TextureSetManager {
 			// Ignore
 		}
 	}
+	
+	public static void loadTextureSetsFromFolder(File folder) {
+		if(folder.isDirectory()) {
+			List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "cfg", "prop", "properties" }, true));
+			for(File f : files) {
+				boolean flag = true;
+				Properties prop = new Properties();
+				try (InputStream inputStream = new FileInputStream(f)) {
+					prop.load(inputStream);
+					flag = true;
+				} catch (IOException e) {
+					CQRMain.logger.error("Failed to load file" + f.getName(), e);
+					flag = false;
+					continue;
+				}
+				if (flag) {
+					try {
+						new TextureSet(prop, f.getName().substring(0, f.getName().lastIndexOf('.')));					
+					} catch(Exception e) {
+						//TODO: WARNN
+					}
+				}
+			}
+		}
+	}
 
 	public static void sendTexturesToClient(EntityPlayerMP joiningPlayer) {
 		try {
@@ -51,18 +79,9 @@ public class TextureSetManager {
 			// Ignore
 		}
 	}
-	
-	public static void sendTextureSetsToClient(EntityPlayerMP player) {
-		try {
-			getInstance().sendTextureSetsToClientImpl(player);
-		} catch (NoSuchMethodError ex) {
-			// Ignore
-		}
-	}
 
 	@SideOnly(Side.SERVER)
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
-		// First things first: we gotta send over all loaded textures
 		CustomTexturesPacket packet = new CustomTexturesPacket();
 		for (File texture : TextureSet.getLoadedTextures()) {
 			String base64 = CompressionUtil.encodeFileToBase64(texture);
@@ -70,33 +89,19 @@ public class TextureSetManager {
 
 			packet.addPair(base64, path);
 		}
-		CQRMain.NETWORK.sendTo(packet, joiningPlayer);
-		
-		//now we send the texture sets themselves...
-		// -> NO, we wait for the request from client
-		
-	}
-	
-	@SideOnly(Side.SERVER)
-	private void sendTextureSetsToClientImpl(EntityPlayerMP client) {
-		for(TextureSet ts : this.textureSets.values()) {
-			TextureSetPacket packet = new TextureSetPacket(ts.getName(), ts.getMappings());
-			CQRMain.NETWORK.sendTo(packet, client);
+		for (TextureSet ts : this.textureSets.values()) {
+			packet.addTextureSet(ts);
 		}
+		CQRMain.NETWORK.sendTo(packet, joiningPlayer);
 	}
 
 	private void registerTextureSetImpl(TextureSet set) {
 		this.textureSets.put(set.getName(), set);
 	}
 
-	private boolean loadTextureSetImpl(String name) {
-
-		return false;
-	}
-
 	@SideOnly(Side.CLIENT)
 	private void unloadTexturesImpl() {
-		for (TextureSet set : textureSets.values()) {
+		for (TextureSet set : this.textureSets.values()) {
 			for (ResourceLocation rs : set.getTextures()) {
 				try {
 					TextureUtil.unloadTexture(rs);

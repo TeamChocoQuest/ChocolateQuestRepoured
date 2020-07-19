@@ -24,9 +24,9 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 
 	@Override
 	public boolean shouldExecute() {
-		if (!entity.world.isRemote && entity != null && !entity.isDead && entity.getAttackTarget() != null) {
-			cooldown--;
-			return cooldown <= 0;
+		if (!this.entity.world.isRemote && this.entity != null && !this.entity.isDead && this.entity.getAttackTarget() != null) {
+			this.cooldown--;
+			return this.cooldown <= 0;
 		}
 		return false;
 	}
@@ -34,42 +34,42 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		cooldown_circle = 1;
-		circleRad = 4;
+		this.cooldown_circle = 1;
+		this.circleRad = 4;
 	}
 
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		cooldown_circle--;
-		if (cooldown_circle <= 0) {
-			spawnLightnings();
-			circleRad *= 1.75;
-			cooldown_circle = 10;
+		this.cooldown_circle--;
+		if (this.cooldown_circle <= 0) {
+			this.spawnLightnings();
+			this.circleRad *= 1.75;
+			this.cooldown_circle = 10;
 		}
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return shouldExecute() && circleRad < MAX_CIRCLE_RADIUS;
+		return this.shouldExecute() && this.circleRad < MAX_CIRCLE_RADIUS;
 	}
 
 	private void spawnLightnings() {
-		int count = 2 * circleRad;
+		int count = 2 * this.circleRad;
 		int angle = 360 / count;
-		Vec3d v = new Vec3d(circleRad, 0, 0);
+		Vec3d v = new Vec3d(this.circleRad, 0, 0);
 		for (int i = 0; i < count; i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle);
-			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
-			lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
-			entity.world.spawnEntity(lightning);
+			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.world, this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+			lightning.setPosition(this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z);
+			this.entity.world.spawnEntity(lightning);
 		}
 	}
 
 	@Override
 	public void resetTask() {
 		this.circleRad = 4;
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		super.resetTask();
 	}
 

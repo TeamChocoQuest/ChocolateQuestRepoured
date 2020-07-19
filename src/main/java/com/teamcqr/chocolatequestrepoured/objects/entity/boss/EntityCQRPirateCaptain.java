@@ -63,7 +63,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		spawnShoulderEntities();
+		this.spawnShoulderEntities();
 		return super.attackEntityAsMob(entityIn);
 	}
 
@@ -104,32 +104,32 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
 
-		setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(ModItems.BULLET_FIRE, 64));
-		setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 2));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(ModItems.BULLET_FIRE, 64));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 2));
 	}
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		setEquipmentBasedOnDifficulty(difficulty);
+		this.setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setBoolean("spawnedParrot", spawnedParrot);
+		compound.setBoolean("spawnedParrot", this.spawnedParrot);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		spawnedParrot = compound.getBoolean("spawnedParrot");
+		this.spawnedParrot = compound.getBoolean("spawnedParrot");
 	}
 
 	public boolean hasSpawnedParrot() {
-		return spawnedParrot;
+		return this.spawnedParrot;
 	}
 
 	public void setSpawnedParrot(boolean b) {

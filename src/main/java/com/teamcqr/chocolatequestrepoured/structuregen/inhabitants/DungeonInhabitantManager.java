@@ -38,9 +38,9 @@ public class DungeonInhabitantManager {
 	public static final String DEFAULT_INHABITANT_IDENT = "DEFAULT";
 
 	private DungeonInhabitantManager() {
-		loadDefaultInhabitants();
-		loadInhabitantConfigs();
-		loadDistantMapping();
+		this.loadDefaultInhabitants();
+		this.loadInhabitantConfigs();
+		this.loadDistantMapping();
 	}
 
 	private void loadDefaultInhabitants() {
@@ -96,12 +96,12 @@ public class DungeonInhabitantManager {
 					System.out.println(tmpList.toString());
 					for (String s : entries) {
 						s = s.trim();
-						if (inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
+						if (this.inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
 							tmpList.add(s);
 						}
 					}
 					if (!tmpList.isEmpty()) {
-						distantMapping.add(tmpList);
+						this.distantMapping.add(tmpList);
 					}
 				}
 				reader.close();
@@ -130,7 +130,7 @@ public class DungeonInhabitantManager {
 	}
 
 	private boolean isValid(String name) {
-		return name.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT) || inhabitantMapping.containsKey(name);
+		return name.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT) || this.inhabitantMapping.containsKey(name);
 	}
 
 	public static DungeonInhabitant getInhabitantByName(String name) {
@@ -149,7 +149,7 @@ public class DungeonInhabitantManager {
 
 	private DungeonInhabitant getInhabitantByDistance(World world, int blockX, int blockZ) {
 		if (this.distantMapping.isEmpty()) {
-			return (DungeonInhabitant) this.inhabitantMapping.values().toArray()[random.nextInt(inhabitantMapping.values().size())];
+			return (DungeonInhabitant) this.inhabitantMapping.values().toArray()[this.random.nextInt(this.inhabitantMapping.values().size())];
 		}
 		BlockPos spawnPoint = world.getSpawnPoint();
 		int x1 = blockX - spawnPoint.getX();
@@ -157,20 +157,20 @@ public class DungeonInhabitantManager {
 		int distToSpawn = (int) Math.sqrt((double) (x1 * x1 + z1 * z1));
 		int index = distToSpawn / CQRConfig.mobs.mobTypeChangeDistance;
 
-		if (index >= distantMapping.size()) {
-			index = random.nextInt(distantMapping.size());
+		if (index >= this.distantMapping.size()) {
+			index = this.random.nextInt(this.distantMapping.size());
 		}
-		List<String> tmpList = distantMapping.get(index);
-		return getInhabitant(tmpList.get(random.nextInt(tmpList.size())));
+		List<String> tmpList = this.distantMapping.get(index);
+		return this.getInhabitant(tmpList.get(this.random.nextInt(tmpList.size())));
 
 	}
 
 	public DungeonInhabitant getInhabitant(String name) {
-		if (name.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT) || !inhabitantMapping.containsKey(name)) {
-			List<String> tmpList = distantMapping.get(random.nextInt(distantMapping.size()));
-			return getInhabitant(tmpList.get(random.nextInt(tmpList.size())));
+		if (name.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT) || !this.inhabitantMapping.containsKey(name)) {
+			List<String> tmpList = this.distantMapping.get(this.random.nextInt(this.distantMapping.size()));
+			return this.getInhabitant(tmpList.get(this.random.nextInt(tmpList.size())));
 		}
-		return inhabitantMapping.getOrDefault(name, inhabitantMapping.get("ILLAGER"));
+		return this.inhabitantMapping.getOrDefault(name, this.inhabitantMapping.get("ILLAGER"));
 	}
 
 	public static List<DungeonInhabitant> getAllInhabitantsFromFaction(CQRFaction faction, World world) {

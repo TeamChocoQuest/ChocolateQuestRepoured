@@ -148,7 +148,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	@Nullable
 	public File getStairRoom(ESkyDirection direction) {
-		return getRoom(direction, direction);
+		return this.getRoom(direction, direction);
 	}
 
 	@Nullable
@@ -157,16 +157,16 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		if (entranceD == exitD) {
 			switch (entranceD) {
 			case EAST:
-				folder = stairEFolder;
+				folder = this.stairEFolder;
 				break;
 			case NORTH:
-				folder = stairNFolder;
+				folder = this.stairNFolder;
 				break;
 			case SOUTH:
-				folder = stairSFolder;
+				folder = this.stairSFolder;
 				break;
 			case WEST:
-				folder = stairWFolder;
+				folder = this.stairWFolder;
 				break;
 			}
 		} else {
@@ -174,13 +174,13 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			case EAST:
 				switch (exitD) {
 				case NORTH:
-					folder = curveENFolder;
+					folder = this.curveENFolder;
 					break;
 				case SOUTH:
-					folder = curveESFolder;
+					folder = this.curveESFolder;
 					break;
 				case WEST:
-					folder = hallEWFolder;
+					folder = this.hallEWFolder;
 					break;
 				default:
 					break;
@@ -189,13 +189,13 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			case NORTH:
 				switch (exitD) {
 				case EAST:
-					folder = curveNEFolder;
+					folder = this.curveNEFolder;
 					break;
 				case SOUTH:
-					folder = hallNSFolder;
+					folder = this.hallNSFolder;
 					break;
 				case WEST:
-					folder = curveNWFolder;
+					folder = this.curveNWFolder;
 					break;
 				default:
 					break;
@@ -204,13 +204,13 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			case SOUTH:
 				switch (exitD) {
 				case EAST:
-					folder = curveSEFolder;
+					folder = this.curveSEFolder;
 					break;
 				case NORTH:
-					folder = hallSNFolder;
+					folder = this.hallSNFolder;
 					break;
 				case WEST:
-					folder = curveSWFolder;
+					folder = this.curveSWFolder;
 					break;
 				default:
 					break;
@@ -219,13 +219,13 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			case WEST:
 				switch (exitD) {
 				case EAST:
-					folder = hallWEFolder;
+					folder = this.hallWEFolder;
 					break;
 				case NORTH:
-					folder = curveWNFolder;
+					folder = this.curveWNFolder;
 					break;
 				case SOUTH:
-					folder = curveWSFolder;
+					folder = this.curveWSFolder;
 					break;
 				default:
 					break;
@@ -243,7 +243,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	public int getFloorSize(Random random) {
-		int size = DungeonGenUtils.getIntBetweenBorders(minFloorSize, maxFloorSize);
+		int size = DungeonGenUtils.getIntBetweenBorders(this.minFloorSize, this.maxFloorSize);
 		if (size < 3) {
 			size = 3;
 		}
@@ -257,55 +257,55 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		File folder = null;
 		switch (type) {
 		case BOSS:
-			folder = bossRoomFolder;
+			folder = this.bossRoomFolder;
 			break;
 		case CURVE_EN:
-			folder = curveENFolder;
+			folder = this.curveENFolder;
 			break;
 		case CURVE_ES:
-			folder = curveESFolder;
+			folder = this.curveESFolder;
 			break;
 		case CURVE_NE:
-			folder = curveNEFolder;
+			folder = this.curveNEFolder;
 			break;
 		case CURVE_NW:
-			folder = curveNWFolder;
+			folder = this.curveNWFolder;
 			break;
 		case CURVE_SE:
-			folder = curveSEFolder;
+			folder = this.curveSEFolder;
 			break;
 		case CURVE_SW:
-			folder = curveSWFolder;
+			folder = this.curveSWFolder;
 			break;
 		case CURVE_WN:
-			folder = curveWNFolder;
+			folder = this.curveWNFolder;
 			break;
 		case CURVE_WS:
-			folder = curveWSFolder;
+			folder = this.curveWSFolder;
 			break;
 		case HALLWAY_EW:
-			folder = hallEWFolder;
+			folder = this.hallEWFolder;
 			break;
 		case HALLWAY_NS:
-			folder = hallNSFolder;
+			folder = this.hallNSFolder;
 			break;
 		case HALLWAY_SN:
-			folder = hallSNFolder;
+			folder = this.hallSNFolder;
 			break;
 		case HALLWAY_WE:
-			folder = hallWEFolder;
+			folder = this.hallWEFolder;
 			break;
 		case STAIR_EE:
-			folder = stairEFolder;
+			folder = this.stairEFolder;
 			break;
 		case STAIR_NN:
-			folder = stairNFolder;
+			folder = this.stairNFolder;
 			break;
 		case STAIR_SS:
-			folder = stairSFolder;
+			folder = this.stairSFolder;
 			break;
 		case STAIR_WW:
-			folder = stairWFolder;
+			folder = this.stairWFolder;
 			break;
 		default:
 			return null;

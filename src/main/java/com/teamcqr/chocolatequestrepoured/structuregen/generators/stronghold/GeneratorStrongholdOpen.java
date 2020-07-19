@@ -90,7 +90,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getYOffset(),0));
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
 
-		int rgd = getDungeon().getRandomRoomCountForFloor();
+		int rgd = this.getDungeon().getRandomRoomCountForFloor();
 		if (rgd < 2) {
 			rgd = 2;
 		}
@@ -155,9 +155,9 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	@Override
 	public void buildStructure() {
 		File building = this.dungeon.getEntranceBuilding();
-		String mobType = dungeon.getDungeonMob();
+		String mobType = this.dungeon.getDungeonMob();
 		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
@@ -165,18 +165,19 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		}
 		CQStructure structure = this.loadStructureFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2,
-					this.pos.getY(), this.pos.getZ() - 4 - structure.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
+					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
-		entranceSizeX = structure.getSize().getX();
-		entranceSizeZ = structure.getSize().getX();
+		this.entranceSizeX = structure.getSize().getX();
+		this.entranceSizeZ = structure.getSize().getX();
 
 		BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.pos, structure, this.settings);
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getBlockInfoList(), this.settings, mobType));
 		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, structure.getEntityInfoList(), this.settings, mobType));
 		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p, structure.getSpecialBlockInfoList(), this.settings, mobType));
 		/*
-		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications()); BlockPos pastePosForStair = new BlockPos(x, y - stairs.getSizeY(), z); stairs.placeBlocksInWorld(world,
+		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications()); BlockPos pastePosForStair =
+		 * new BlockPos(x, y - stairs.getSizeY(), z); stairs.placeBlocksInWorld(world,
 		 * pastePosForStair, settings, EPosType.CENTER_XZ_LAYER);
 		 */
 		// Will generate the structure
@@ -190,7 +191,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 
 		// Structure gen information: stored in map with location and structure file
 		for (StrongholdFloorOpen floor : this.floors) {
-			floor.generateRooms(world, this.dungeonGenerator, mobType);
+			floor.generateRooms(this.world, this.dungeonGenerator, mobType);
 		}
 	}
 
@@ -202,7 +203,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
 				try {
-					floor.buildWalls(world, this.dungeonGenerator);
+					floor.buildWalls(this.world, this.dungeonGenerator);
 				} catch (NullPointerException ex) {
 					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(), this.pos.getZ());
 				}
@@ -212,16 +213,16 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		if (this.dungeon.isCoverBlockEnabled()) {
 			Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 
-			int startX = this.pos.getX() - entranceSizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
-			int startZ = this.pos.getZ() - entranceSizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
+			int startX = this.pos.getX() - this.entranceSizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
+			int startZ = this.pos.getZ() - this.entranceSizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
 
-			int endX = this.pos.getX() + entranceSizeX + entranceSizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
-			int endZ = this.pos.getZ() + entranceSizeZ + entranceSizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
+			int endX = this.pos.getX() + this.entranceSizeX + this.entranceSizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
+			int endZ = this.pos.getZ() + this.entranceSizeZ + this.entranceSizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
 
 			for (int iX = startX; iX <= endX; iX++) {
 				for (int iZ = startZ; iZ <= endZ; iZ++) {
-					BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
-					if (!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
+					BlockPos pos = new BlockPos(iX, this.world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
+					if (!Block.isEqualTo(this.world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
 						stateMap.put(pos, this.dungeon.getCoverBlock().getDefaultState());
 					}
 				}
@@ -230,7 +231,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 				blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 			}
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
 		}
 	}
 

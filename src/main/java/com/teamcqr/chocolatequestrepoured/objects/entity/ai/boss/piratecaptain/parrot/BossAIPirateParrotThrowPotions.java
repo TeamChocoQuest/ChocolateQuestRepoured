@@ -33,8 +33,8 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		cd--;
-		return this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && cd <= 0;
+		this.cd--;
+		return this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && this.cd <= 0;
 	}
 
 	@Override
@@ -42,12 +42,12 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		super.startExecuting();
 
 		// Equip potion
-		equipPotion(entity);
+		this.equipPotion(this.entity);
 	}
 
 	private void equipPotion(EntityCQRPirateParrot entity2) {
 		PotionType type = null;
-		switch (entity.getRNG().nextInt((3))) {
+		switch (this.entity.getRNG().nextInt((3))) {
 		case 0:
 			type = PotionTypes.HARMING;
 			break;
@@ -58,7 +58,7 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 			type = PotionTypes.STRONG_POISON;
 			break;
 		}
-		if (entity.getAttackTarget().getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
+		if (this.entity.getAttackTarget().getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
 			if (type == PotionTypes.STRONG_HARMING) {
 				type = PotionTypes.STRONG_HEALING;
 			}
@@ -77,9 +77,9 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
 		if (this.entity.getDistanceSq(this.entity.getAttackTarget()) <= MIN_DISTANCE_SQ) {
 			// Throw stuff
-			throwPotion(entity, entity.getAttackTarget());
+			this.throwPotion(this.entity, this.entity.getAttackTarget());
 
-			cd = COOLDOWN;
+			this.cd = COOLDOWN;
 		} else {
 			this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), SPEED);
 		}
@@ -98,12 +98,12 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		thrower.world.playSound((EntityPlayer) null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundCategory(), 1.0F, 0.8F + thrower.getRNG().nextFloat() * 0.4F);
 		thrower.world.spawnEntity(potion);
 
-		entity.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+		this.entity.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && shouldExecute();
+		return super.shouldContinueExecuting() && this.shouldExecute();
 	}
 
 }

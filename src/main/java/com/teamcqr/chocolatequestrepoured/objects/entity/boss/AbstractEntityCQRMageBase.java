@@ -36,7 +36,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	public void revealIdentity() {
 		this.dataManager.set(IDENTITY_HIDDEN, false);
-		this.bossInfoServer.setName(getDisplayName());
+		this.bossInfoServer.setName(this.getDisplayName());
 	}
 
 	public boolean isIdentityHidden() {
@@ -47,7 +47,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	protected void damageEntity(DamageSource damageSrc, float damageAmount) {
 		super.damageEntity(damageSrc, damageAmount);
 
-		if ((this.getHealth() / this.getMaxHealth()) < 0.83F) {
+		if (!world.isRemote && (this.getHealth() / this.getMaxHealth()) < 0.83F) {
 			this.revealIdentity();
 		}
 	}
@@ -74,7 +74,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	@Override
 	public ITextComponent getDisplayName() {
-		if (isIdentityHidden()) {
+		if (this.isIdentityHidden()) {
 			return new TextComponentString("???");
 		}
 		return super.getDisplayName();

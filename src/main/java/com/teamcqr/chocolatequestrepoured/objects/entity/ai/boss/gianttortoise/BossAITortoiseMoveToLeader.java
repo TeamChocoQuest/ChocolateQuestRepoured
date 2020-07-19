@@ -16,15 +16,15 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute()) {
-			return checkTurtleSpecific();
+			return this.checkTurtleSpecific();
 		}
 		return false;
 	}
 
 	private boolean checkTurtleSpecific() {
-		if (!getBoss().hasAttackTarget() && !(getBoss().isStunned() || getBoss().isSpinning() || getBoss().isHealing())) {
-			if (getBoss().isInShell()) {
-				getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
+		if (!this.getBoss().hasAttackTarget() && !(this.getBoss().isStunned() || this.getBoss().isSpinning() || this.getBoss().isHealing())) {
+			if (this.getBoss().isInShell()) {
+				this.getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
 			}
 			return true;
 		}
@@ -34,14 +34,14 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	@Override
 	public boolean shouldContinueExecuting() {
 		if (super.shouldContinueExecuting()) {
-			return checkTurtleSpecific();
+			return this.checkTurtleSpecific();
 		}
 		return false;
 	}
 
 	@Override
 	public void updateTask() {
-		if (!getBoss().isInShell()) {
+		if (!this.getBoss().isInShell()) {
 			super.updateTask();
 		}
 	}

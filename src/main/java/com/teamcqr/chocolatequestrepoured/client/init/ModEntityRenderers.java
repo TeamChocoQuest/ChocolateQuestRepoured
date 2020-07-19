@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGia
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRMage;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNecromancer;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
@@ -208,13 +209,13 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, RenderCQRGiantTortoisePart::new);
 
 		// Lich
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage(renderManager, new ModelLich(), "boss/lich"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage<EntityCQRLich>(renderManager, new ModelLich(), "boss/lich"));
 
 		// Boar Mage
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage(renderManager, new ModelPigMage(), "boss/pig_mage"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage<EntityCQRBoarmage>(renderManager, new ModelPigMage(), "boss/pig_mage"));
 
 		// Necromancer
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRMage(renderManager, new ModelNecromancer(), "boss/necromancer"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRNecromancer(renderManager, new ModelNecromancer(), "boss/necromancer"));
 
 		// Walker King
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, RenderCQRWalkerKing::new);

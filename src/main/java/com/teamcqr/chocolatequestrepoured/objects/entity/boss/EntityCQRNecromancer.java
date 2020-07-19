@@ -18,12 +18,19 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {
+
+	private static final DataParameter<Boolean> BONE_SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRNecromancer.class, DataSerializers.BOOLEAN);
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
@@ -58,15 +65,27 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(BONE_SHIELD_ACTIVE, false);
+	}
+
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		this.filterSummonLists();
 
-		if (this.summonedSkulls.size() >= 1 && !hasAttackTarget()) {
+		if (this.summonedSkulls.size() >= 1 && !this.hasAttackTarget()) {
 			this.summonedSkulls.get(0).setSide(false);
 			if (this.summonedSkulls.size() >= 2) {
 				this.summonedSkulls.get(1).setSide(true);
 			}
+		}
+
+		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
+			this.dataManager.set(BONE_SHIELD_ACTIVE, true);
+		} else if (!this.world.isRemote) {
+			this.dataManager.set(BONE_SHIELD_ACTIVE, false);
 		}
 
 		if (this.getAttackTarget() != null && !this.getAttackTarget().isDead && this.summonedSkulls.size() >= 1) {
@@ -83,6 +102,17 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
+			if (source.isProjectile() || source.getImmediateSource() instanceof EntityArrow || source.getImmediateSource() instanceof IProjectile) {
+				amount = 0;
+				return false;
+			}
+		}
+		return super.attackEntityFrom(source, amount);
 	}
 
 	private void filterSummonLists() {
@@ -168,6 +198,10 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;
+	}
+
+	public boolean isBoneShieldActive() {
+		return this.dataManager.get(BONE_SHIELD_ACTIVE);
 	}
 
 }

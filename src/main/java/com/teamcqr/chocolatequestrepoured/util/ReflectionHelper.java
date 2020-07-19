@@ -58,10 +58,13 @@ public class ReflectionHelper {
 	 */
 
 	/**
-	 * Returns requested Field with accessibility set to true Accepts multiple potential names to handle variations between dev and release environments (MCP vs Searge naming)
+	 * Returns requested Field with accessibility set to true Accepts multiple potential names to handle variations between dev and release environments (MCP vs
+	 * Searge naming)
 	 *
-	 * NOTE: This method intentionally uses the reflectGetAllFields utility method from this class, causing a minor performance loss when compared directly to the getField method of a class object. This is done to avoid recreating the recursive
-	 * structure necessary to get all fields from superclasses using getDeclaredField(s) (the getField(s) methods don't return private fields, which defeats the entire purpose of this util). If being used in a situation where the performance penalty
+	 * NOTE: This method intentionally uses the reflectGetAllFields utility method from this class, causing a minor performance loss when compared directly to the
+	 * getField method of a class object. This is done to avoid recreating the recursive
+	 * structure necessary to get all fields from superclasses using getDeclaredField(s) (the getField(s) methods don't return private fields, which defeats the
+	 * entire purpose of this util). If being used in a situation where the performance penalty
 	 * from this actually matters, this util should probably not be being used anyway.
 	 *
 	 * @return requested Field or null
@@ -140,7 +143,8 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns all fields of a provided Class object or instance thereof and sets their accessibility status to true USES RECURSION TO RETRIEVE SUPERCLASS FIELDS - USE SPARINGLY
+	 * Returns all fields of a provided Class object or instance thereof and sets their accessibility status to true USES RECURSION TO RETRIEVE SUPERCLASS FIELDS -
+	 * USE SPARINGLY
 	 * 
 	 * @return Field[]
 	 */
@@ -285,7 +289,8 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns Reflect API Method objects to represent each method present in the instance/class provided. Accepts both normal instances and Class object representations
+	 * Returns Reflect API Method objects to represent each method present in the instance/class provided. Accepts both normal instances and Class object
+	 * representations
 	 * 
 	 * @return Method[]
 	 */

@@ -59,7 +59,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 				int radius = structure != null ? 2 * Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
 				BlockPos startPos = nextIslandPos.add(-radius, -this.dungeon.getYFactorHeight(), -radius);
 				BlockPos endPos = nextIslandPos.add(radius, this.dungeon.getYFactorHeight(), radius);
-				this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4), world, dungeonGenerator));
+				this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(this.world, this.pos.getX() >> 4, this.pos.getZ() >> 4), this.world, this.dungeonGenerator));
 			}
 		}
 
@@ -69,7 +69,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			int radius = structure != null ? 2 * Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
 			BlockPos startPos = this.pos.add(-radius, -this.dungeon.getYFactorHeight(), -radius);
 			BlockPos endPos = this.pos.add(radius, this.dungeon.getYFactorHeight(), radius);
-			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4), world, dungeonGenerator));
+			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(this.world, this.pos.getX() >> 4, this.pos.getZ() >> 4), this.world, this.dungeonGenerator));
 		}
 	}
 
@@ -125,9 +125,9 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		if (structure != null) {
 			PlacementSettings settings = new PlacementSettings();
 			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(centeredPos.up(), structure, settings);
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, p, structure.getEntityInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getBlockInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, structure.getEntityInfoList(), settings, mobType));
 		}
 	}
 
@@ -141,7 +141,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			for (int iX = -rad; iX <= rad; iX++) {
 				for (int iZ = -rad; iZ <= rad; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad, center)) {
-						stateMap.put((center.add(iX, -decrementor, iZ)), dungeon.getIslandBlock().getDefaultState());
+						stateMap.put((center.add(iX, -decrementor, iZ)), this.dungeon.getIslandBlock().getDefaultState());
 					}
 				}
 			}
@@ -160,7 +160,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(center), entry.getValue(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, center, blockInfoList, new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, center, blockInfoList, new PlacementSettings(), mobType));
 	}
 
 	private void buildChain(BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
@@ -169,7 +169,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		 */
 		int deltaYPerChainSegment = 5;
 
-		int maxY = DungeonGenUtils.getHighestYAt(world.getChunk(pos), pos.getX(), pos.getZ(), true);
+		int maxY = DungeonGenUtils.getHighestYAt(this.world.getChunk(pos), pos.getX(), pos.getZ(), true);
 		maxY = maxY >= 255 ? 255 : maxY;
 		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
 		for (int i = 0; i < chainCount; i++) {

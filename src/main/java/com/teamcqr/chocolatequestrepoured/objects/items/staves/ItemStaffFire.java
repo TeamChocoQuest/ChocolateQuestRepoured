@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.block.BlockTorch;
@@ -76,7 +75,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
 			if (blockStateLookingAt.getBlock() == ModBlocks.UNLIT_TORCH) {
-				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, blockStateLookingAt.getValue(BlockUnlitTorch.FACING)));
+				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, blockStateLookingAt.getValue(BlockTorch.FACING)));
 			}
 		}
 	}
@@ -94,8 +93,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 			for (int i = 0; i < 50; i++) {
 				double flameRandomMotion = itemRand.nextDouble() + 0.2D;
 				float height = shooter.height;
-				world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ, (x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (z
-						+ (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
+				world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ, (x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
 			}
 		}
 

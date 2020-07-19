@@ -25,11 +25,11 @@ public class SyncFactionDataRequest implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeUTF8String(buf, requestingPlayer.toString());
+		ByteBufUtils.writeUTF8String(buf, this.requestingPlayer.toString());
 	}
 
 	public UUID getPlayerUUID() {
-		return requestingPlayer;
+		return this.requestingPlayer;
 	}
 
 }

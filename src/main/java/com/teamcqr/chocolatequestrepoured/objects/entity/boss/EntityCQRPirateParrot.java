@@ -39,6 +39,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 		super(worldIn);
 	}
 
+	@Override
 	protected void initEntityAI() {
 		this.aiSit = new EntityAISit(this);
 		// this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
@@ -64,8 +65,8 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		if (!world.isRemote) {
-			world.createExplosion(this, posX, posY, posZ, 2, true);
+		if (!this.world.isRemote) {
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2, true);
 		}
 	}
 
@@ -83,14 +84,14 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	public EntityLivingBase getOwner() {
 		try {
 			UUID uuid = this.getOwnerId();
-			return uuid == null ? null : getOwnerInRange(uuid);
+			return uuid == null ? null : this.getOwnerInRange(uuid);
 		} catch (IllegalArgumentException var2) {
 			return null;
 		}
 	}
 
 	private EntityLivingBase getOwnerInRange(UUID uuid) {
-		List<Entity> ents = world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(posX - 20, posY - 20, posZ - 20, posX + 20, posY + 20, posZ + 20), new Predicate<Entity>() {
+		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20), new Predicate<Entity>() {
 
 			@Override
 			public boolean apply(Entity input) {
@@ -137,7 +138,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (isTamed() && player != getOwner()) {
+		if (this.isTamed() && player != this.getOwner()) {
 			return true;
 		}
 		return super.processInteract(player, hand);

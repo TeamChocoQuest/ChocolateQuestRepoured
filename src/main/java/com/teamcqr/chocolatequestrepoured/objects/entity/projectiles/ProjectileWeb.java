@@ -38,7 +38,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
 					entity.setInWeb();
-					world.setBlockState(entity.getPosition(), Blocks.WEB.getDefaultState());
+					this.world.setBlockState(entity.getPosition(), Blocks.WEB.getDefaultState());
 					this.setDead();
 				}
 			}
