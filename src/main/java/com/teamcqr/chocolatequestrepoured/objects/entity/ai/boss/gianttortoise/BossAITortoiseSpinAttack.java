@@ -176,7 +176,11 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 	}
 
 	private boolean hitHardBlock(Vec3d velocity) {
-		AxisAlignedBB aabb = this.getBoss().getCollisionBoundingBox().grow(0.5).offset(velocity.normalize().scale(this.getBoss().width / 2));
+		AxisAlignedBB aabb = this.getBoss().getCollisionBoundingBox();
+		if(aabb == null) {
+			return false;
+		}
+		aabb = aabb.grow(0.5).offset(velocity.normalize().scale(this.getBoss().width / 2));
 		World world = this.getBoss().getWorld();
 
 		int x1 = MathHelper.floor(aabb.minX);
