@@ -31,7 +31,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase {
 		Predicate<Vec3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
 		Predicate<Vec3i> southRow = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
 		Predicate<Vec3i> westRow = (v -> ((v.getY() == 0) && (v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
-		Predicate<Vec3i> eastRow = (v -> ((v.getY() == 0) && (v.getX() == endZ - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+		Predicate<Vec3i> eastRow = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
 		Predicate<Vec3i> water = (v -> ((v.getY() == 0) && (v.getX() > 1) && (v.getX() < endX - 1) && (v.getZ() > 1) && (v.getZ() < endZ - 1)));
 
 		GenerationTemplate poolRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
