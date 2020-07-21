@@ -27,8 +27,10 @@ public class CQRWeightedRandom<T> {
 	}
 
 	public void add(T item, int weight) {
-		this.totalWeight += weight;
-		this.items.add(new WeightedObject(item, weight));
+		if (weight > 0) {
+			this.totalWeight += weight;
+			this.items.add(new WeightedObject(item, weight));
+		}
 	}
 
 	public int numItems() {
