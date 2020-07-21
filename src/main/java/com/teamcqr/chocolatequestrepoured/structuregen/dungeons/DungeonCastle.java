@@ -40,6 +40,7 @@ public class DungeonCastle extends DungeonBase {
 	private IBlockState doorBlock;
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
+	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> towerRoofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
 	private CQRWeightedRandom<EnumRoomType> roomRandomizer;
 
@@ -99,6 +100,17 @@ public class DungeonCastle extends DungeonBase {
 		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
 		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightSpire", 0);
+		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
+
+		this.towerRoofTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightTwoSided", 1);
+		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightFourSided", 1);
+		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightSpire", 5);
+		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
+
 
 		this.windowTypeRandomizer = new CQRWeightedRandom<>(this.random);
 		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);
@@ -192,6 +204,10 @@ public class DungeonCastle extends DungeonBase {
 
 	public RandomCastleConfigOptions.RoofType getRandomRoofType() {
 		return this.roofTypeRandomizer.next();
+	}
+
+	public RandomCastleConfigOptions.RoofType getRandomTowerRoofType() {
+		return this.towerRoofTypeRandomizer.next();
 	}
 
 	public RandomCastleConfigOptions.WindowType getRandomWindowType() {

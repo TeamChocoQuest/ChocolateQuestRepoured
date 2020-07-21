@@ -405,7 +405,12 @@ public class CastleRoomSelector {
 		// Build a walkable roof on top of the tower
 		if (tower != null && this.grid.withinGridBounds(startFloor + height, x, z)) {
 			cell = this.grid.getCellAt(startFloor + height, x, z);
-			cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
+			if (DungeonGenUtils.PercentageRandom(50, random)) {
+				cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
+			} else {
+				BlockPos startPos = cell.getOriginOffset().north().west();
+				castleRoofs.add(CastleRoofFactory.createRoof(dungeon.getRandomTowerRoofType(), startPos, tower.getRoomLengthX() + 1, tower.getRoomLengthZ() + 1));
+			}
 		}
 	}
 
