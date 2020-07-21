@@ -108,7 +108,7 @@ public class DungeonCastle extends DungeonBase {
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightFourSided", 1);
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
-		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightSpire", 5);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightSpire", 2);
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
 
 
