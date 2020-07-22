@@ -39,6 +39,8 @@ public class LootTableLoader {
 	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class, Boolean.TYPE);
 	private static final ReflectionField<LootTableManager, Gson> GSON_INSTANCE = new ReflectionField<>(LootTableManager.class, "field_186526_b", "GSON_INSTANCE");
 
+	private static LootTable loadingLootTable;
+
 	private static List<WeightedItemStack> getItemList(Properties propFile) {
 		List<WeightedItemStack> items = new ArrayList<WeightedItemStack>();
 		Enumeration<Object> fileEntries = propFile.elements();
@@ -118,7 +120,7 @@ public class LootTableLoader {
 				que.pop();
 
 				if (lootTable != null) {
-					lootTable.freeze();
+					loadingLootTable = lootTable;
 				}
 			} catch (IOException | JsonSyntaxException e) {
 				CQRMain.logger.error("Failed to read json loot table " + jsonFile.getName(), e);
@@ -150,7 +152,13 @@ public class LootTableLoader {
 		}
 
 		return lootTable;
+	}
 
+	public static void freezeLootTable() {
+		if (loadingLootTable != null) {
+			loadingLootTable.freeze();
+			loadingLootTable = null;
+		}
 	}
 
 }

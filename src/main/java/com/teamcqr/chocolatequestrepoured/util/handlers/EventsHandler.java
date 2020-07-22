@@ -45,6 +45,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -52,8 +53,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 @EventBusSubscriber
 public class EventsHandler {
 
-	@SubscribeEvent
-	public static void onLootTableLoad(LootTableLoadEvent event) {
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onLootTableLoadPre(LootTableLoadEvent event) {
 		if (event.getName().getNamespace().equals(Reference.MODID)) {
 			try {
 				event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
@@ -61,6 +62,11 @@ public class EventsHandler {
 				CQRMain.logger.error("Unable to fill loot table {}", event.getName());
 			}
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onLootTableLoadPost(LootTableLoadEvent event) {
+		LootTableLoader.freezeLootTable();
 	}
 
 	@SubscribeEvent
