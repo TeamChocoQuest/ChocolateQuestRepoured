@@ -26,7 +26,7 @@ public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 
 	@Override
 	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
-		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
+		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 
 		if (protectedRegion != null) {
 			if (BlockPlacingHelper.setBlockState(world, transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates)) {

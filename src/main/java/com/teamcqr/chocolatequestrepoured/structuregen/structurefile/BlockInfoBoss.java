@@ -35,7 +35,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 	@Override
 	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
-		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
+		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 
 		if (!world.isOutsideBuildHeight(transformedPos)) {
 			BlockPlacingHelper.setBlockState(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates);
