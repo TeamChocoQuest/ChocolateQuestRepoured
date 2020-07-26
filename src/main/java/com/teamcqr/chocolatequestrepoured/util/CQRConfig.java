@@ -62,12 +62,12 @@ public class CQRConfig {
 
 		@Config.Comment("Enable/Disable loading and caching of structure files during startup.")
 		public boolean cacheStructureFiles = true;
-		@Config.Comment("The maximum amount of megabytes which will be cached.")
-		@Config.RangeInt(min = 1, max = 2048)
-		public int cachedStructureFilesMaxSize = 128;
+		@Config.Comment("The maximum amount of kilobytes which will be cached. Ram usage will be approximately x * 200 kilobytes. This was the result when caching multiple, differently sized structure files and thus might not be representative for your setup.")
+		@Config.RangeInt(min = 1, max = 16384)
+		public int cachedStructureFilesMaxSize = 256;
 		@Config.Comment("The maximum amount of files which will be cached.")
-		@Config.RangeInt(min = 1, max = 1024)
-		public int cachedStructureFilesMaxAmount = 64;
+		@Config.RangeInt(min = 1, max = 16384)
+		public int cachedStructureFilesMaxAmount = 256;
 
 		@Config.RangeInt(min = 1, max = 100)
 		public int generationSpeed = 20;
