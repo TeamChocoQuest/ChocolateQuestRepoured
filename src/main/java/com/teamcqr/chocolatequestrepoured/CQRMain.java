@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -134,7 +132,7 @@ public class CQRMain {
 
 		// Faction system
 		FactionRegistry.instance().loadFactions();
-		
+
 		// Custom Textures System
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
@@ -159,43 +157,24 @@ public class CQRMain {
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		CQ_CONFIG_FOLDER = new File(event.getModConfigurationDirectory(), "CQR");
-		CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons");
-		CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs");
-		CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures");
-		CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output");
-		CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions");
-		CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants");
-		CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items");
-		CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures");
-		CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets");
-		CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures");
+		File[] subfolders = new File[] {
+				CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons"),
+				CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs"),
+				CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures"),
+				CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output"),
+				CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions"),
+				CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants"),
+				CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items"),
+				CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures"),
+				CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"),
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures") };
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
-			try {
-				CopyHelper.copyFromJar("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER.toPath());
-			} catch (URISyntaxException | IOException e) {
-				logger.error("Failed to copy config files", e);
-			}
+			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
 		} else {
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeons", CQ_DUNGEON_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/lootconfigs", CQ_CHEST_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/structures", CQ_STRUCTURE_FILES_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/factions", CQ_FACTION_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeon_inhabitants", CQ_INHABITANT_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/items", CQ_ITEM_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/textures", CQ_CUSTOM_TEXTURES_FOLDER_ROOT);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/textures/texture_sets", CQ_CUSTOM_TEXTURES_FOLDER_SETS);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/textures/textures", CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES);
-		}
-		CQ_EXPORT_FILES_FOLDER.mkdir();
-	}
-
-	private void checkAndCopyConfig(String source, File target) {
-		if (!target.exists()) {
-			try {
-				CopyHelper.copyFromJar(source, target.toPath());
-			} catch (URISyntaxException | IOException e) {
-				logger.error("Failed to copy config files", e);
+			int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
+			for (File folder : subfolders) {
+				CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs/" + folder.getAbsolutePath().substring(i), folder, false);
 			}
 		}
 	}
