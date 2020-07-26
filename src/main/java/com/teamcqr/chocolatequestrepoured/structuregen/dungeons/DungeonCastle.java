@@ -20,9 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 20.04.2020
- * Developed by KalgogSmash
- * GitHub: https://github.com/KalgogSmash
+ * Copyright (c) 20.04.2020 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class DungeonCastle extends DungeonBase {
 
@@ -42,12 +40,17 @@ public class DungeonCastle extends DungeonBase {
 	private IBlockState doorBlock;
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
+	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> towerRoofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
 	private CQRWeightedRandom<EnumRoomType> roomRandomizer;
 
 	private int minSpawnerRolls;
 	private int maxSpawnerRolls;
 	private int spawnerRollChance;
+
+	private int minBridgeLength;
+	private int maxBridgeLength;
+	private int bridgeChance;
 
 	private int paintingChance;
 
@@ -89,12 +92,25 @@ public class DungeonCastle extends DungeonBase {
 		this.roomRandomizer.add(EnumRoomType.POOL, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightPortal", 1);
 		this.roomRandomizer.add(EnumRoomType.PORTAL, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightJailCell", 1);
+		this.roomRandomizer.add(EnumRoomType.JAIL, weight);
 
 		this.roofTypeRandomizer = new CQRWeightedRandom<>(this.random);
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
 		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
 		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightSpire", 0);
+		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
+
+		this.towerRoofTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightTwoSided", 1);
+		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightFourSided", 1);
+		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightSpire", 2);
+		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
+
 
 		this.windowTypeRandomizer = new CQRWeightedRandom<>(this.random);
 		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);
@@ -110,6 +126,10 @@ public class DungeonCastle extends DungeonBase {
 		this.maxSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "maxSpawnerRolls", 3);
 		this.spawnerRollChance = PropertyFileHelper.getIntProperty(prop, "spawnerRollChance", 100);
 
+		this.minBridgeLength = PropertyFileHelper.getIntProperty(prop, "minBridgeLength", 2);
+		this.maxBridgeLength = PropertyFileHelper.getIntProperty(prop, "maxBridgeLength", 4);
+		this.bridgeChance = PropertyFileHelper.getIntProperty(prop, "bridgeChance", 25);
+
 		this.paintingChance = PropertyFileHelper.getIntProperty(prop, "paintingChance", 0);
 	}
 
@@ -123,15 +143,15 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public IBlockState getFancyBlockState() {
-		return fancyBlock;
+		return this.fancyBlock;
 	}
 
 	public IBlockState getSlabBlockState() {
-		return slabBlock;
+		return this.slabBlock;
 	}
 
 	public IBlockState getStairBlockState() {
-		return stairBlock;
+		return this.stairBlock;
 	}
 
 	public IBlockState getFloorBlockState() {
@@ -143,7 +163,7 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public IBlockState getFenceBlockState() {
-		return fenceBlock;
+		return this.fenceBlock;
 	}
 
 	public IBlockState getWoodStairBlockState() {
@@ -151,15 +171,15 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	public IBlockState getWoodSlabBlockState() {
-		return woodSlabBlock;
+		return this.woodSlabBlock;
 	}
 
 	public IBlockState getPlankBlockState() {
-		return plankBlock;
+		return this.plankBlock;
 	}
 
 	public IBlockState getDoorBlockState() {
-		return doorBlock;
+		return this.doorBlock;
 	}
 
 	public int getMaxSize() {
@@ -186,12 +206,28 @@ public class DungeonCastle extends DungeonBase {
 		return this.roofTypeRandomizer.next();
 	}
 
+	public RandomCastleConfigOptions.RoofType getRandomTowerRoofType() {
+		return this.towerRoofTypeRandomizer.next();
+	}
+
 	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
 		return this.windowTypeRandomizer.next();
 	}
 
+	public int getMinBridgeLength() {
+		return this.minBridgeLength;
+	}
+
+	public int getMaxBridgeLength() {
+		return this.maxBridgeLength;
+	}
+
+	public int getBridgeChance() {
+		return this.bridgeChance;
+	}
+
 	public int getPaintingChance() {
-		return paintingChance;
+		return this.paintingChance;
 	}
 
 	public int randomizeRoomSpawnerCount() {

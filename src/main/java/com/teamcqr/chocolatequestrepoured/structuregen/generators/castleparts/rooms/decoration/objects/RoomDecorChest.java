@@ -31,7 +31,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 
 	@Override
 	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonCastle dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
-		//super.build(world, genArray, room, dungeon, start, side, decoMap);
+		// super.build(world, genArray, room, dungeon, start, side, decoMap);
 
 		ResourceLocation[] chestIDs = room.getChestIDs();
 		if (chestIDs != null && chestIDs.length > 0) {
@@ -45,7 +45,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 					chest.setLootTable(resLoc, seed);
 				}
 				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
-				genArray.forceAddBlockState(start, state, nbt, BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(start, state, nbt, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.HIGH);
 				decoMap.add(start);
 			}
 		} else {

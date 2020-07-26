@@ -5,14 +5,20 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 import net.minecraft.util.math.BlockPos;
 
-public class CastleRoomRoofBossEmpty extends CastleRoomBase {
-	public CastleRoomRoofBossEmpty(int sideLength, int height, int floor) {
+public class CastleRoomReplacedRoof extends CastleRoomBase {
+	public CastleRoomReplacedRoof(int sideLength, int height, int floor) {
 		super(sideLength, height, floor);
-		this.roomType = EnumRoomType.ROOF_BOSS_EMPTY;
+		this.roomType = EnumRoomType.REPLACED_ROOF;
 		this.pathable = false;
 	}
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		;
+	}
+
+	@Override
+	protected boolean hasFloor() {
+		return false;
 	}
 }

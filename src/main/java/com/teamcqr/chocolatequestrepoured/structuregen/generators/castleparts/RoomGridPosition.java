@@ -1,8 +1,8 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
-
-import net.minecraft.util.EnumFacing;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
 import java.util.Objects;
+
+import net.minecraft.util.EnumFacing;
 
 public class RoomGridPosition {
 	private int floor;

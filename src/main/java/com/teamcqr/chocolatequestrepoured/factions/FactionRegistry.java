@@ -22,12 +22,12 @@ import org.apache.commons.io.FileUtils;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -95,8 +95,8 @@ public class FactionRegistry {
 					ResourceLocation resLoc = new ResourceLocation(rlkey);
 					// if(EntityList.isRegistered(resLoc)) {
 					String faction = prop.getProperty(key, null);
-					if (faction != null && factions.containsKey(faction)) {
-						entityFactionMap.put(resLoc, factions.get(faction));
+					if (faction != null && this.factions.containsKey(faction)) {
+						this.entityFactionMap.put(resLoc, this.factions.get(faction));
 					}
 					// }
 				}
@@ -221,14 +221,18 @@ public class FactionRegistry {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		}
 
+		if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() != null) {
+			return this.getFactionOf(((IEntityOwnable) entity).getOwner());
+		}
+
 		if (entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
 
 		// Faction overriding
 		ResourceLocation registryName = EntityList.getKey(entity);
-		if (registryName != null && entityFactionMap.containsKey(registryName)) {
-			return entityFactionMap.get(registryName);
+		if (registryName != null && this.entityFactionMap.containsKey(registryName)) {
+			return this.entityFactionMap.get(registryName);
 		}
 		// Overriding end
 
@@ -278,7 +282,7 @@ public class FactionRegistry {
 	}
 
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
-		return EReputationStateRough.getByRepuScore(getExactReputationOf(playerID, faction));
+		return EReputationStateRough.getByRepuScore(this.getExactReputationOf(playerID, faction));
 	}
 
 	public int getExactReputationOf(UUID playerID, CQRFaction faction) {
@@ -448,7 +452,7 @@ public class FactionRegistry {
 	}
 
 	public List<CQRFaction> getLoadedFactions() {
-		return new ArrayList<CQRFaction>(factions.values());
+		return new ArrayList<CQRFaction>(this.factions.values());
 	}
 
 }

@@ -1,18 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
@@ -45,7 +46,7 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
-			genArray.addBlockState(pos, placement.getState(side), placement.getGenPhase());
+			genArray.addBlockState(pos, placement.getState(side), placement.getGenPhase(), BlockStateGenArray.EnumPriority.MEDIUM);
 
 			if (placement.getState(side).getBlock() != Blocks.AIR) {
 				decoMap.add(pos);

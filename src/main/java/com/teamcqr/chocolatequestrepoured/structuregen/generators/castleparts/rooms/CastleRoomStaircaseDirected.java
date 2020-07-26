@@ -1,16 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Random;
 
 public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	private static final int PLATFORM_LENGTH = 2;
@@ -21,8 +19,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	private int centerStairWidth;
 	private int centerStairLength;
 
-	public CastleRoomStaircaseDirected(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomStaircaseDirected(int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.doorSide);
@@ -43,11 +41,11 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		//If stairs are facing to the east or west, need to flip the build lengths since we are essentially
-		//generating a room facing south and then rotating it
-		int lenX = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthX : this.buildLengthZ;
-		int lenZ = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthZ : this.buildLengthX;
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		// If stairs are facing to the east or west, need to flip the build lengths since we are essentially
+		// generating a room facing south and then rotating it
+		int lenX = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.roomLengthX : this.roomLengthZ;
+		int lenZ = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.roomLengthZ : this.roomLengthX;
 
 		for (int x = 0; x < lenX - 1; x++) {
 			for (int z = 0; z < lenZ - 1; z++) {
@@ -86,7 +84,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 
 	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getFloorBlockState();
-		genArray.addBlockState(this.origin.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(this.roomOrigin.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 	}
 
 	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
@@ -101,7 +99,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 		}
 	}
 
@@ -117,7 +115,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 		}
 	}
 
@@ -131,7 +129,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 		}
 	}
 
@@ -143,11 +141,5 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	@Override
 	public boolean reachableFromSide(EnumFacing side) {
 		return (side == this.doorSide);
-	}
-
-	//Only centered doors look good, as the stairs are centered in the room
-	@Override
-	public DoorPlacement addDoorOnSideRandom(Random random, EnumFacing side) {
-		return super.addDoorOnSideCentered(side);
 	}
 }

@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,15 +14,42 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoofBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleRoofFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingEmpty;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossStairEmpty;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossStairMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBridgeTop;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomHallway;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomJailCell;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomLandingDirected;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomLandingDirectedBoss;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomLandingSpiral;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomReplacedRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomRoofBossEmpty;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomRoofBossMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomStaircaseDirected;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomStaircaseSpiral;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomTowerSquare;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoofTower;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.RoomFactoryCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -30,9 +57,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 20.12.2019
- * Developed by KalgogSmash
- * GitHub: https://github.com/KalgogSmash
+ * Copyright (c) 20.12.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class CastleRoomSelector {
 	public class SupportArea {
@@ -69,7 +94,6 @@ public class CastleRoomSelector {
 
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
-	private BlockPos buildPosition;
 	private DungeonCastle dungeon;
 	private int floorHeight;
 	private int roomSize;
@@ -80,16 +104,15 @@ public class CastleRoomSelector {
 	private Random random;
 	private RoomGrid grid;
 	private List<SupportArea> supportAreas;
-	private List<CastleAddonRoof> castleRoofs;
+	private List<CastleAddonRoofBase> castleRoofs;
 
-	public CastleRoomSelector(BlockPos buildPosition, DungeonCastle dungeon) {
-		this.buildPosition = buildPosition;
+	public CastleRoomSelector(DungeonCastle dungeon) {
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
 		this.roomSize = dungeon.getRoomSize();
 		this.floorsPerLayer = FLOORS_PER_LAYER;
-		this.maxFloors = floorsPerLayer * MAX_LAYERS;
-		this.minRoomsForBoss = (int) (Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
+		this.maxFloors = this.floorsPerLayer * MAX_LAYERS;
+		this.minRoomsForBoss = (int) (Math.ceil((double) MIN_BOSS_ROOM_SIZE / (this.roomSize - 1)));
 		this.random = dungeon.getRandom();
 		this.castleRoofs = new ArrayList<>();
 		this.supportAreas = new ArrayList<>();
@@ -98,7 +121,7 @@ public class CastleRoomSelector {
 		int gridSizeZ = dungeon.getMaxSize() / this.roomSize;
 
 		// Add padding floors so that we can build walkable roofs on top of the highest rooms
-		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, gridSizeX, gridSizeZ, random);
+		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, gridSizeX, gridSizeZ, this.roomSize, this.floorHeight, this.random);
 	}
 
 	public void randomizeCastle() {
@@ -112,54 +135,101 @@ public class CastleRoomSelector {
 		this.linkCells();
 
 		this.determineRoofs();
-		this.determineWalls();
-
-		this.placeOuterDoors();
 		this.placeTowers();
-		//this.placeBridges();
+
+		this.determineWalls();
+		this.placeBridges();
+		this.placeOuterDoors();
 
 		this.pathBetweenRooms();
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobType) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobName) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
-		DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobType);
+		this.generateWalls(genArray, dungeon);
+
+		DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobName);
+
 		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, inha);
 
-		this.generateRoofs(genArray, dungeon);
+		this.generateRoofs(startPos, genArray, dungeon);
 	}
 
 	private void generateRooms(BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
 		// because they have the lowest block priority (all other parts should overwrite)
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
-			cell.getRoom().generate(genArray, dungeon);
+			cell.generateRoom(startPos, genArray, dungeon);
 		}
-
 	}
 
-	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, DungeonInhabitant mobType)
-	{
+	private void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
+		List<CastleMainStructWall> genList = this.grid.getWallListCopy();
+		genList.sort(Comparator.comparingInt(CastleMainStructWall::getGenerationPriority));
+		for (CastleMainStructWall wall : genList) {
+			if (wall.isEnabled()) {
+				wall.generate(genArray, dungeon);
+			}
+		}
+	}
+
+	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, DungeonInhabitant mobType) {
 		ResourceLocation mobResLoc = mobType.getEntityID();
 		ResourceLocation bossResLoc = mobType.getBossID();
-		GearedMobFactory mobFactory = new GearedMobFactory(getBossFloor(), mobResLoc, random);
+		GearedMobFactory mobFactory = new GearedMobFactory(this.getBossFloor(), mobResLoc, this.random);
 
 		// The rooms MUST be generated before they are decorated
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
 			cell.getRoom().decorate(world, genArray, dungeon, mobFactory);
 			cell.getRoom().placeBoss(world, genArray, dungeon, bossResLoc, bossUuids);
+
+			if (cell.getRoom() instanceof CastleRoomJailCell) {
+				DungeonInhabitant jailInhabitant = this.selectJailInhabitant(world, mobType);
+				if (jailInhabitant != null) {
+					((CastleRoomJailCell) cell.getRoom()).addPrisonerSpawners(jailInhabitant, genArray, world);
+				}
+			}
 		}
 	}
 
-	private void generateRoofs(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		for (CastleAddonRoof roof : this.castleRoofs) {
+	private DungeonInhabitant selectJailInhabitant(World world, DungeonInhabitant mainInhabitant) {
+		CQRFaction inhaFaction;
+		DungeonInhabitant jailed = null;
+
+		String factionOverride = mainInhabitant.getFactionOverride();
+		if (factionOverride != null) {
+			inhaFaction = FactionRegistry.instance().getFactionInstance(factionOverride);
+		} else {
+			Entity entity = EntityList.createEntityByIDFromName(mainInhabitant.getEntityID(), world);
+
+			// It is possible for entity to be null here but getFactionOf handles that case with a default value
+			inhaFaction = FactionRegistry.instance().getFactionOf(entity);
+
+		}
+		List<CQRFaction> enemies = inhaFaction.getEnemies();
+		Collections.shuffle(enemies, this.random);
+
+		// Keep trying until we find a faction with potential enemies
+		for (CQRFaction enemyFaction : enemies) {
+			List<DungeonInhabitant> possibleJailed = DungeonInhabitantManager.getAllInhabitantsFromFaction(enemyFaction, world);
+			if (!possibleJailed.isEmpty()) {
+				jailed = possibleJailed.get(this.random.nextInt(possibleJailed.size()));
+				break;
+			}
+		}
+
+		return jailed;
+	}
+
+	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		for (CastleAddonRoofBase roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
 		}
 
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && (c.getRoom() instanceof CastleRoomWalkableRoof))) {
-			cell.getRoom().generate(genArray, dungeon);
+			cell.generateRoom(startPos, genArray, dungeon);
 		}
 	}
 
@@ -193,7 +263,7 @@ public class CastleRoomSelector {
 								if (layer >= 3) {
 									RoomGrid.Area2D bossArea = buildArea.getExactSubArea(this.random, this.minRoomsForBoss, this.minRoomsForBoss + 1);
 									// grid.selectBlockOfCellsForBuilding(bossArea, floorsPerLayer);
-									CQRMain.logger.info("At high enough layer so setting boss area to: {}" + bossArea);
+									CQRMain.logger.info("At high enough layer so setting boss area to: {}", bossArea);
 									this.grid.setBossArea(bossArea);
 									lastFloor = true;
 
@@ -263,7 +333,7 @@ public class CastleRoomSelector {
 	private void addSupportIfFirstLayer(int layer, int gridIndexX, int gridIndexZ, int roomsX, int roomsZ) {
 		if (layer == 0) {
 			// get NW corner of the area and move it NW 1 square because of the extra N and W walls on the sides
-			BlockPos startCorner = this.getRoomStart(0, gridIndexX, gridIndexZ);
+			BlockPos startCorner = this.grid.getCellAt(0, gridIndexX, gridIndexZ).getOriginOffset();
 
 			this.supportAreas.add(new SupportArea(startCorner, roomsX, roomsZ));
 		}
@@ -317,10 +387,7 @@ public class CastleRoomSelector {
 		int z = position.getZ();
 		int startFloor = position.getFloor();
 
-		// Randomize the size somewhere between the min tower size and the room size
-		int towerSize = MIN_TOWER_SIZE + this.random.nextInt(this.roomSize - Math.min(MIN_TOWER_SIZE, this.roomSize));
-
-		CQRMain.logger.info("Placing tower at {},{} on floor {} facing {}, size = {}", x, z, startFloor, alignment, towerSize);
+		CQRMain.logger.info("Placing tower at {},{} on floor {} facing {}, size = {}", x, z, startFloor, alignment, this.roomSize);
 
 		CastleRoomTowerSquare tower = null;
 		RoomGridCell cell = null;
@@ -328,66 +395,67 @@ public class CastleRoomSelector {
 		for (int floor = startFloor; floor < startFloor + height; floor++) {
 			cell = this.grid.getCellAt(floor, x, z);
 			if (cell == null) {
-				CQRMain.logger.info("Tried to place a tower @ null");
+				CQRMain.logger.info("Tried to place a tower @ null cell");
 			} else {
-				tower = new CastleRoomTowerSquare(this.getRoomStart(cell), this.roomSize, this.floorHeight, alignment, towerSize, tower, cell.getFloor());
+				tower = new CastleRoomTowerSquare(this.roomSize, this.floorHeight, alignment, this.roomSize, tower, cell.getFloor());
 				cell.setRoom(tower);
-				// cell.setAllLinkedReachable();
-
-				RoomGridCell adjacent = this.grid.getAdjacentCell(cell, alignment);
-				if (adjacent.isPopulated() && !adjacent.getRoom().getRoomType().isBossRoom()) {
-					adjacent.getRoom().addDoorOnSideCentered(alignment.getOpposite());
-
-					if (adjacent.getRoom() instanceof CastleRoomWalkableRoof) {
-						cell.getRoom().addDoorOnSideCentered(alignment);
-					} else {
-						cell.getRoom().removeWall(alignment);
-					}
-				}
 			}
 		}
 
 		// Build a walkable roof on top of the tower
 		if (tower != null && this.grid.withinGridBounds(startFloor + height, x, z)) {
 			cell = this.grid.getCellAt(startFloor + height, x, z);
-			cell.setRoom(new CastleRoomWalkableRoofTower(this.getRoomStart(cell), this.roomSize, this.floorHeight, tower, cell.getFloor()));
+			if (DungeonGenUtils.PercentageRandom(50, random)) {
+				cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
+			} else {
+				BlockPos startPos = cell.getOriginOffset().north().west();
+				castleRoofs.add(CastleRoofFactory.createRoof(dungeon.getRandomTowerRoofType(), startPos, tower.getRoomLengthX() + 1, tower.getRoomLengthZ() + 1));
+			}
 		}
 	}
 
 	private void placeBridges() {
-		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0);
+		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0 && !(c.getRoom() instanceof CastleRoomReplacedRoof));
 		for (RoomGridCell cell : populated) {
-			ArrayList<EnumFacing> bridgeDirections = grid.getPotentialBridgeDirections(cell);
-			if (!bridgeDirections.isEmpty())
-			{
-				EnumFacing bestDirection = null;
-				int longestBridge = MIN_BRIDGE_LENGTH - 1; //subtract one since we are checking for greater than this
 
-				for (EnumFacing direction : bridgeDirections) {
-					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, direction);
-					if (bridgeCells.size() > longestBridge) {
-						longestBridge = bridgeCells.size();
-						bestDirection = direction;
+			// Get all directions from the room that could potentially be the start of a bridge
+			ArrayList<EnumFacing> possibleDirections = cell.getPotentialBridgeDirections();
+			if (!possibleDirections.isEmpty()) {
+
+				// Filter the directions from this cell that meet min and max length requirements
+				ArrayList<EnumFacing> validDirections = new ArrayList<>();
+
+				for (EnumFacing direction : possibleDirections) {
+					ArrayList<RoomGridCell> bridgeCells = this.grid.getBridgeCells(cell, direction);
+					if (bridgeCells.size() >= this.dungeon.getMinBridgeLength() && bridgeCells.size() <= this.dungeon.getMaxBridgeLength()) {
+						validDirections.add(direction);
 					}
 				}
 
-				if (bestDirection != null) {
-					cell.getRoom().addDoorOnSideCentered(bestDirection);
+				if (!validDirections.isEmpty() && DungeonGenUtils.PercentageRandom(this.dungeon.getBridgeChance(), this.random)) {
+					Collections.shuffle(validDirections, this.random);
+					final EnumFacing selectedDirection = validDirections.get(0);
 
-					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, bestDirection);
+					cell.addDoorOnSideCentered(selectedDirection, EnumCastleDoorType.RANDOM, this.random);
+					if (cell.getRoom() instanceof CastleRoomWalkableRoof) {
+						cell.removeWall(selectedDirection);
+					}
 
-					for (RoomGridCell bridgeCell : bridgeCells)
-					{
-						if (!bridgeCell.isPopulated())
-						{
-							CastleRoomBridgeTop bridgeRoom = new CastleRoomBridgeTop(getRoomStart(bridgeCell), this.roomSize, this.floorHeight, bestDirection, bridgeCell.getFloor());
+					ArrayList<RoomGridCell> bridgeCells = this.grid.getBridgeCells(cell, selectedDirection);
+
+					for (RoomGridCell bridgeCell : bridgeCells) {
+						if (!bridgeCell.isPopulated()) {
+							CastleRoomBridgeTop bridgeRoom = new CastleRoomBridgeTop(this.roomSize, this.floorHeight, selectedDirection, bridgeCell.getFloor());
 							bridgeCell.setRoom(bridgeRoom);
 						}
 					}
 
-					RoomGridCell endCell = grid.getAdjacentCell(bridgeCells.get(bridgeCells.size() - 1), bestDirection);
+					RoomGridCell endCell = this.grid.getAdjacentCell(bridgeCells.get(bridgeCells.size() - 1), selectedDirection);
 					if (endCell != null && endCell.isPopulated()) {
-						endCell.getRoom().addDoorOnSideCentered(bestDirection.getOpposite());
+						endCell.addDoorOnSideCentered(selectedDirection.getOpposite(), EnumCastleDoorType.RANDOM, this.random);
+						if (endCell.getRoom() instanceof CastleRoomWalkableRoof) {
+							endCell.removeWall(selectedDirection.getOpposite());
+						}
 					}
 				}
 			}
@@ -399,7 +467,7 @@ public class CastleRoomSelector {
 
 		while (!unTyped.isEmpty()) {
 			RoomGridCell rootCell = unTyped.get(this.random.nextInt(unTyped.size()));
-			RoomGrid.Area2D availableCells = grid.getPotentialRoomBuildArea(rootCell.getGridPosition());
+			RoomGrid.Area2D availableCells = this.grid.getPotentialRoomBuildArea(rootCell.getGridPosition());
 			int availableX = availableCells.sizeX;
 			int availableZ = availableCells.sizeZ;
 
@@ -414,7 +482,7 @@ public class CastleRoomSelector {
 			for (int x = 0; x < sizeX; x++) {
 				for (int z = 0; z < sizeZ; z++) {
 					RoomGridCell buildCell = this.grid.getCellAt(rootCell.getFloor(), rootCell.getGridX() + x, rootCell.getGridZ() + z);
-					CastleRoomBase roomToBuild = RoomFactoryCastle.CreateGenericRoom(type, this.getRoomStart(buildCell), this.roomSize, this.floorHeight, buildCell.getFloor());
+					CastleRoomBase roomToBuild = RoomFactoryCastle.CreateGenericRoom(type, this.roomSize, this.floorHeight, buildCell.getFloor());
 					buildCell.setRoom(roomToBuild);
 					blockRooms.add(roomToBuild);
 
@@ -438,16 +506,16 @@ public class CastleRoomSelector {
 		RoomGrid.Area2D bossArea = this.grid.getBossArea();
 
 		if (bossArea != null && bossArea.dimensionsAreAtLeast(this.minRoomsForBoss, this.minRoomsForBoss + 1)) {
-			boolean horizontal = bossArea.sizeX > bossArea.sizeZ; //classify as horizontal/vertical based on long side
+			boolean horizontal = bossArea.sizeX > bossArea.sizeZ; // classify as horizontal/vertical based on long side
 			int longSideLen = horizontal ? bossArea.sizeX : bossArea.sizeZ;
 			int shortSideLen = horizontal ? bossArea.sizeZ : bossArea.sizeX;
 
-			//If the boss room is an even number of rooms wide on the stair side, we need to use the double boss stairs
+			// If the boss room is an even number of rooms wide on the stair side, we need to use the double boss stairs
 			boolean dualStairs = (shortSideLen % 2 == 0);
 
 			HashMap<RoomGridPosition, EnumFacing> possibleStairs = new HashMap<>();
 
-			//Define which direction is along the long side/short side for help with alignment
+			// Define which direction is along the long side/short side for help with alignment
 			EnumFacing alongLongSide = horizontal ? EnumFacing.EAST : EnumFacing.SOUTH;
 			EnumFacing alongShortSide = horizontal ? EnumFacing.SOUTH : EnumFacing.EAST;
 
@@ -471,40 +539,48 @@ public class CastleRoomSelector {
 				EnumFacing stairDoorSide = possibleStairs.get(topOfBossStairs);
 
 				if (dualStairs) {
-					CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(this.getRoomStart(bottomOfBossStairs), this.roomSize, this.floorHeight, stairDoorSide, bottomOfBossStairs.getFloor());
-					this.grid.getCellAt(bottomOfBossStairs).setRoom(stairMain);
+					RoomGridCell cell = this.grid.getCellAt(bottomOfBossStairs);
+					CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(this.roomSize, this.floorHeight, stairDoorSide, bottomOfBossStairs.getFloor());
+					cell.setRoom(stairMain);
 
-					CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(this.getRoomStart(bottomOfBossStairs.move(alongShortSide)), this.roomSize, this.floorHeight, stairDoorSide, bottomOfBossStairs.getFloor());
-					this.grid.getCellAt(bottomOfBossStairs.move(alongShortSide)).setRoom(stairEmpty);
+					cell = this.grid.getCellAt(bottomOfBossStairs.move(alongShortSide));
+					CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(this.roomSize, this.floorHeight, stairDoorSide, bottomOfBossStairs.getFloor());
+					cell.setRoom(stairEmpty);
 
-					CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(this.getRoomStart(topOfBossStairs), this.roomSize, this.floorHeight, stairDoorSide, topOfBossStairs.getFloor());
-					this.grid.getCellAt(topOfBossStairs).setRoom(landingMain);
+					cell = this.grid.getCellAt(topOfBossStairs);
+					CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(this.roomSize, this.floorHeight, stairDoorSide, topOfBossStairs.getFloor());
+					cell.setRoom(landingMain);
 
-					CastleRoomBossLandingEmpty landingEmpty = new CastleRoomBossLandingEmpty(this.getRoomStart(topOfBossStairs.move(alongShortSide)), this.roomSize, this.floorHeight, stairDoorSide, topOfBossStairs.getFloor());
-					this.grid.getCellAt(topOfBossStairs.move(alongShortSide)).setRoom(landingEmpty);
+					cell = this.grid.getCellAt(topOfBossStairs.move(alongShortSide));
+					CastleRoomBossLandingEmpty landingEmpty = new CastleRoomBossLandingEmpty(this.roomSize, this.floorHeight, stairDoorSide, topOfBossStairs.getFloor());
+					cell.setRoom(landingEmpty);
 				} else {
-					CastleRoomStaircaseDirected stair = new CastleRoomStaircaseDirected(this.getRoomStart(bottomOfBossStairs), this.roomSize, this.floorHeight, stairDoorSide, bottomOfBossStairs.getFloor());
-					this.grid.getCellAt(bottomOfBossStairs).setRoom(stair);
+					RoomGridCell cell = this.grid.getCellAt(bottomOfBossStairs);
+					CastleRoomStaircaseDirected stair = new CastleRoomStaircaseDirected(this.roomSize, this.floorHeight, stairDoorSide, bottomOfBossStairs.getFloor());
+					cell.setRoom(stair);
 
-					CastleRoomLandingDirectedBoss landing = new CastleRoomLandingDirectedBoss(this.getRoomStart(topOfBossStairs), this.roomSize, this.floorHeight, stair, topOfBossStairs.getFloor());
-					this.grid.getCellAt(topOfBossStairs).setRoom(landing);
+					cell = this.grid.getCellAt(topOfBossStairs);
+					CastleRoomLandingDirectedBoss landing = new CastleRoomLandingDirectedBoss(this.roomSize, this.floorHeight, stair, topOfBossStairs.getFloor());
+					cell.setRoom(landing);
 				}
 
-				//calculate the position of the "root" (northwest) boss room relative to the boss area
+				// calculate the position of the "root" (northwest) boss room relative to the boss area
 				rootPos = bossArea.start;
 
-				if (stairDoorSide == EnumFacing.SOUTH) { //Bump it south if the north edge contains the stairs
+				if (stairDoorSide == EnumFacing.SOUTH) { // Bump it south if the north edge contains the stairs
 					rootPos = rootPos.move(EnumFacing.SOUTH);
-				} else if (stairDoorSide == EnumFacing.EAST) { //Bump it east if the west edge contains the stairs
+				} else if (stairDoorSide == EnumFacing.EAST) { // Bump it east if the west edge contains the stairs
 					rootPos = rootPos.move(EnumFacing.EAST);
 				}
 
-				//Constuct the root (NW) boss room and add it to the grid
-				//Only the "root" room contains any build logic, the rest are blank rooms just to mark off a position in the grid
-				rootRoom = new CastleRoomRoofBossMain(this.getRoomStart(rootPos), this.roomSize, this.floorHeight, rootPos.getFloor());
-				this.grid.getCellAt(rootPos).setRoom(rootRoom);
+				// Constuct the root (NW) boss room and add it to the grid
+				// Only the "root" room contains any build logic, the rest are blank rooms just to mark off a position in the grid
+				RoomGridCell bossCell = this.grid.getCellAt(rootPos);
+				rootRoom = new CastleRoomRoofBossMain(this.roomSize, this.floorHeight, rootPos.getFloor());
+				bossCell.setRoom(rootRoom);
+				bossCell.setBossRoomCell();
 
-				//Add the empty rooms
+				// Add the empty rooms
 				for (int x = 0; x < this.minRoomsForBoss; x++) {
 					for (int z = 0; z < this.minRoomsForBoss; z++) {
 						if (x == 0 && z == 0) {
@@ -512,31 +588,34 @@ public class CastleRoomSelector {
 						}
 
 						RoomGridPosition emptyRoomPos = rootPos.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z);
-						CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(this.getRoomStart(emptyRoomPos), this.roomSize, this.floorHeight, emptyRoomPos.getFloor());
-						this.grid.getCellAt(emptyRoomPos).setRoom(emptyRoom);
+
+						RoomGridCell roofCell = this.grid.getCellAt(emptyRoomPos);
+						CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(this.roomSize, this.floorHeight, emptyRoomPos.getFloor());
+						roofCell.setRoom(emptyRoom);
+						roofCell.setBossRoomCell();
 					}
 				}
 
-				//It is likely the boss room does not take up every square of the grid cells it occupies
-				//so move the boss room area a few squares to align it with the stairs
-				EnumFacing snapToSide = stairDoorSide.getOpposite(); //Direction we are moving the room
+				// It is likely the boss room does not take up every square of the grid cells it occupies
+				// so move the boss room area a few squares to align it with the stairs
+				EnumFacing snapToSide = stairDoorSide.getOpposite(); // Direction we are moving the room
 				if (snapToSide == EnumFacing.NORTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
-					int x = distFromEdge / 2;
+					int x = (distFromEdge / 2) + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, 0));
 				} else if (snapToSide == EnumFacing.WEST) {
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
-					int z = distFromEdge / 2;
+					int z = (distFromEdge / 2) + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(0, 0, z));
 				} else if (snapToSide == EnumFacing.SOUTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
-					int x = distFromEdge / 2;
-					int z = distFromEdge;
+					int x = (distFromEdge / 2) + 1;
+					int z = distFromEdge + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
-				} else { //east
+				} else { // east
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
-					int z = distFromEdge / 2;
-					int x = distFromEdge;
+					int z = (distFromEdge / 2) + 1;
+					int x = distFromEdge + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
 				}
 			}
@@ -590,24 +669,23 @@ public class CastleRoomSelector {
 	}
 
 	private void linkCellToAdjacentCells(RoomGridCell cell) {
-		cell.connectToCell(cell); //connect the cell to itself first
+		cell.connectToCell(cell); // connect the cell to itself first
 
 		for (EnumFacing direction : EnumFacing.HORIZONTALS) {
 			RoomGridCell adjacent = this.grid.getAdjacentCell(cell, direction);
 			if (adjacent != null && adjacent.isPopulated() && cell.getRoom().getRoomType() == adjacent.getRoom().getRoomType()) {
-				//if we are already on the adjacent cell's list then it likely means
-				//that cell was connected to us already and nothing else needs to be done
+				// if we are already on the adjacent cell's list then it likely means
+				// that cell was connected to us already and nothing else needs to be done
 				if (!adjacent.isConnectedToCell(cell)) {
-					//add all connected cells from the adjacent cell to this cell
+					// add all connected cells from the adjacent cell to this cell
 					cell.connectToCell(adjacent);
 					cell.connectToCells(adjacent.getConnectedCellsCopy());
 				}
 			}
 		}
 
-		//now this cell's connected list is the "true" one, so copy it out
-		for (RoomGridCell connectedCell : cell.getConnectedCellsCopy())
-		{
+		// now this cell's connected list is the "true" one, so copy it out
+		for (RoomGridCell connectedCell : cell.getConnectedCellsCopy()) {
 			connectedCell.connectToCells(cell.getConnectedCellsCopy());
 		}
 
@@ -615,12 +693,14 @@ public class CastleRoomSelector {
 	}
 
 	private void placeOuterDoors() {
+		ArrayList<RoomGridCell> mainEntranceCells = new ArrayList<>();
+
 		// Start at first floor since ground floor gets the grand entrance
-		for (int floor = 1; floor < this.usedFloors; floor += this.floorsPerLayer) {
+		for (int floor = 0; floor < this.usedFloors; floor += this.floorsPerLayer) {
 			HashSet<EnumFacing> doorDirections = new HashSet<>(); // Sides of this floor that already have exits
 
 			final int f = floor;
-			ArrayList<RoomGridCell> floorRooms = this.grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated() && !(r.getRoom() instanceof CastleRoomWalkableRoof) && !r.getRoom().isTower());
+			ArrayList<RoomGridCell> floorRooms = this.grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated() && !r.getRoom().isTower() && !r.getRoom().isWalkableRoof());
 			Collections.shuffle(floorRooms);
 
 			for (RoomGridCell cell : floorRooms) {
@@ -636,13 +716,25 @@ public class CastleRoomSelector {
 
 						if (buildExit) {
 							doorDirections.add(side);
-							this.addDoorToRoomCentered(cell, side);
+							if (floor == 0) {
+								cell.addDoorOnSideCentered(side, EnumCastleDoorType.GRAND_ENTRY, this.random);
+								mainEntranceCells.add(cell);
+							} else {
+								cell.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, this.random);
+							}
 							break;
 						}
 					}
 				}
 			}
 		}
+
+		// Set the first reachable cell on the ground floor to kick off the pathing
+		if (!mainEntranceCells.isEmpty()) {
+			Collections.shuffle(mainEntranceCells, this.random);
+			mainEntranceCells.get(0).setReachable();
+		}
+
 	}
 
 	private void addHallways() {
@@ -659,20 +751,9 @@ public class CastleRoomSelector {
 					ArrayList<RoomGridCell> hallwayCells = this.grid.getAdjacentSelectedCellsInRow(hallStartGridPos);
 
 					for (RoomGridCell hallwayCell : hallwayCells) {
-						hallwayCell.setRoom(new CastleRoomHallway(this.getRoomStart(hallwayCell.getGridPosition()), this.roomSize, this.floorHeight, CastleRoomHallway.Alignment.HORIZONTAL, hallwayCell.getFloor()));
+						hallwayCell.setRoom(new CastleRoomHallway(this.roomSize, this.floorHeight, CastleRoomHallway.Alignment.HORIZONTAL, hallwayCell.getFloor()));
 					}
 
-					if (floor == 0) {
-						if (this.random.nextBoolean()) {
-							hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.WEST);
-							hallwayCells.get(0).getRoom().addGrandEntrance(EnumFacing.WEST);
-							hallwayCells.get(0).setReachable();
-						} else {
-							hallwayCells.get(hallwayCells.size() - 1).getRoom().addOuterWall(EnumFacing.EAST);
-							hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.EAST);
-							hallwayCells.get(hallwayCells.size() - 1).setReachable();
-						}
-					}
 				} else {
 					int xIndex = DungeonGenUtils.randomBetweenGaussian(this.random, hallwayArea.getStartX(), hallwayArea.getEndX());
 
@@ -680,17 +761,17 @@ public class CastleRoomSelector {
 					ArrayList<RoomGridCell> hallwayCells = this.grid.getAdjacentSelectedCellsInColumn(hallStartGridPos);
 
 					for (RoomGridCell hallwayCell : hallwayCells) {
-						hallwayCell.setRoom(new CastleRoomHallway(this.getRoomStart(hallwayCell.getGridPosition()), this.roomSize, this.floorHeight, CastleRoomHallway.Alignment.VERTICAL, hallwayCell.getFloor()));
+						hallwayCell.setRoom(new CastleRoomHallway(this.roomSize, this.floorHeight, CastleRoomHallway.Alignment.VERTICAL, hallwayCell.getFloor()));
 					}
 
 					if (floor == 0) {
 						if (this.random.nextBoolean()) {
-							hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.NORTH);
-							hallwayCells.get(0).getRoom().addGrandEntrance(EnumFacing.NORTH);
+							hallwayCells.get(0).addOuterWall(EnumFacing.NORTH);
+							hallwayCells.get(0).addDoorOnSideCentered(EnumFacing.NORTH, EnumCastleDoorType.GRAND_ENTRY, this.random);
 							hallwayCells.get(0).setReachable();
 						} else {
-							hallwayCells.get(hallwayCells.size() - 1).getRoom().addOuterWall(EnumFacing.SOUTH);
-							hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.SOUTH);
+							hallwayCells.get(hallwayCells.size() - 1).addOuterWall(EnumFacing.SOUTH);
+							hallwayCells.get(hallwayCells.size() - 1).addDoorOnSideCentered(EnumFacing.SOUTH, EnumCastleDoorType.GRAND_ENTRY, this.random);
 							hallwayCells.get(hallwayCells.size() - 1).setReachable();
 						}
 					}
@@ -711,10 +792,10 @@ public class CastleRoomSelector {
 			for (RoomGridCell cell : candidateCells) {
 				RoomGridCell aboveCell = this.grid.getAdjacentCell(cell, EnumFacing.UP);
 				if (aboveCell != null && aboveCell.needsRoomType() && !aboveCell.isOnFloorWithLanding()) {
-					CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(this.getRoomStart(cell), this.roomSize, this.floorHeight, cell.getFloor());
+					CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(this.roomSize, this.floorHeight, cell.getFloor());
 					cell.setRoom(stairs);
 
-					CastleRoomLandingSpiral landing = new CastleRoomLandingSpiral(this.getRoomStart(aboveCell), this.roomSize, this.floorHeight, stairs, aboveCell.getFloor());
+					CastleRoomLandingSpiral landing = new CastleRoomLandingSpiral(this.roomSize, this.floorHeight, stairs, aboveCell.getFloor());
 					aboveCell.setRoom(landing);
 					aboveCell.setReachable();
 					aboveCell.setLandingForAllPathableCells();
@@ -729,11 +810,11 @@ public class CastleRoomSelector {
 		if (side != EnumFacing.DOWN) {
 			RoomGridCell aboveCell = this.grid.getAdjacentCell(cell, EnumFacing.UP);
 
-			CastleRoomStaircaseDirected stairs = new CastleRoomStaircaseDirected(this.getRoomStart(cell), this.roomSize, this.floorHeight, side, cell.getFloor());
+			CastleRoomStaircaseDirected stairs = new CastleRoomStaircaseDirected(this.roomSize, this.floorHeight, side, cell.getFloor());
 			cell.setRoom(stairs);
-			this.addDoorToRoomCentered(cell, side);
+			cell.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, this.random);
 
-			aboveCell.setRoom(new CastleRoomLandingDirected(this.getRoomStart(aboveCell), this.roomSize, this.floorHeight, stairs, aboveCell.getFloor()));
+			aboveCell.setRoom(new CastleRoomLandingDirected(this.roomSize, this.floorHeight, stairs, aboveCell.getFloor()));
 			aboveCell.setReachable();
 
 			return true;
@@ -748,8 +829,8 @@ public class CastleRoomSelector {
 		if (aboveCell != null && !aboveCell.isPopulated()) {
 			for (EnumFacing side : EnumFacing.HORIZONTALS) {
 				RoomGridCell adjacent = this.grid.getAdjacentCell(cell, side);
-				if (adjacent != null && adjacent.needsRoomType() && !this.grid.cellBordersRoomType(cell, EnumRoomType.LANDING_DIRECTED) && !this.grid.cellBordersRoomType(adjacent, EnumRoomType.LANDING_DIRECTED)
-						&& this.grid.adjacentCellIsSelected(aboveCell, side) && !this.grid.adjacentCellIsPopulated(aboveCell, side)) {
+				if (adjacent != null && adjacent.needsRoomType() && !this.grid.cellBordersRoomType(cell, EnumRoomType.LANDING_DIRECTED) && !this.grid.cellBordersRoomType(adjacent, EnumRoomType.LANDING_DIRECTED) && this.grid.adjacentCellIsSelected(aboveCell, side)
+						&& !this.grid.adjacentCellIsPopulated(aboveCell, side)) {
 					return side;
 				}
 			}
@@ -828,27 +909,25 @@ public class CastleRoomSelector {
 							RoomGridCell cell = this.grid.getCellAt(node.getCell().getGridPosition());
 							if (cell != null) {
 								if (node.getParent() != null) {
-									this.addDoorToRoomRandom(cell, node.getParentDirection());
+									cell.addDoorOnSideRandomOffset(node.getParentDirection(), EnumCastleDoorType.RANDOM, this.random);
 								}
 								cell.setAllLinkedReachable(unreachable, reachable);
 							}
 						}
 					} else {
-						CQRMain.logger.info("Failed to find path from {} to {}" , srcRoom.getGridPosition(), destRoom.getGridPosition());
+						CQRMain.logger.info("Failed to find path from {} to {}", srcRoom.getGridPosition(), destRoom.getGridPosition());
 					}
 				} else {
 					CQRMain.logger.info("{} had no pathable rooms!", srcRoom);
 
-					//Add doors where we can to make sure the player can get to the room in some way
-					for (EnumFacing side : EnumFacing.HORIZONTALS)
-					{
-						if (srcRoom.getRoom().canBuildDoorOnSide(side))
-						{
-							srcRoom.getRoom().addDoorOnSideCentered(side);
+					// Add doors where we can to make sure the player can get to the room in some way
+					for (EnumFacing side : EnumFacing.HORIZONTALS) {
+						if (srcRoom.getRoom().canBuildDoorOnSide(side)) {
+							srcRoom.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, this.random);
 						}
 					}
 
-					//Move it to the reachable list (but don't mark it as reachable so other cells don't path here)
+					// Move it to the reachable list (but don't mark it as reachable so other cells don't path here)
 					unreachable.remove(srcRoom);
 					reachable.add(srcRoom);
 				}
@@ -883,7 +962,7 @@ public class CastleRoomSelector {
 			double neighborG = currentNode.getG() + 1;
 			// add each neighbor node to closed list if it connectable and not closed already
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
-				//Make sure this cell/room can actually go this direction first
+				// Make sure this cell/room can actually go this direction first
 				if (currentNode.getCell().reachableFromSide(direction)) {
 					RoomGridCell neighborCell = this.grid.getAdjacentCell(currentNode.getCell(), direction);
 					if (neighborCell != null && neighborCell.isPopulated() && neighborCell.reachableFromSide(direction.getOpposite()) && !invalidCells.contains(neighborCell)) {
@@ -942,63 +1021,53 @@ public class CastleRoomSelector {
 	}
 
 	private void determineWalls() {
-		ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.getRoom().isTower());
-		for (RoomGridCell cell : cells) {
-			if (cell.getRoom() instanceof CastleRoomWalkableRoof) {
-				this.determineWalkableRoofWalls(cell);
-			} else {
-				this.determineNormalRoomWalls(cell);
-			}
+		/*
+		 * ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.isBossArea()); for (RoomGridCell cell : cells) { if (cell.getRoom()
+		 * instanceof CastleRoomWalkableRoof) { this.determineWalkableRoofWalls(cell); } else {
+		 * this.determineNormalRoomWalls(cell); } }
+		 */
+		for (CastleMainStructWall wall : this.grid.getWallListCopy()) {
+			wall.determineIfEnabled();
 		}
 	}
 
 	private void determineWalkableRoofWalls(RoomGridCell cell) {
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			if (!this.grid.adjacentCellIsPopulated(cell, side)) {
-				cell.getRoom().addOuterWall(side);
+				cell.addRoofEdgeWall(side);
 			}
 		}
 	}
 
 	private void determineNormalRoomWalls(RoomGridCell cell) {
-		//If we are at the edge cells, we force adding the walls. Otherwise we don't force
-		//it so rooms like hallways don't add them by mistake.
+		// If we are at the edge cells, we force adding the walls. Otherwise we don't force
+		// it so rooms like hallways don't add them by mistake.
 		boolean outerSouth = !this.grid.adjacentCellIsFullRoom(cell, EnumFacing.SOUTH);
 
 		if (outerSouth) {
-			cell.getRoom().addOuterWall(EnumFacing.SOUTH);
+			cell.addOuterWall(EnumFacing.SOUTH);
 		} else {
 			if (!cell.isConnectedToCell(this.grid.getAdjacentCell(cell, EnumFacing.SOUTH))) {
-				cell.getRoom().addInnerWall(EnumFacing.SOUTH);
-
-				RoomGridCell adjacentCell = this.grid.getAdjacentCell(cell, EnumFacing.SOUTH);
-				if (adjacentCell != null && adjacentCell.isPopulated()) {
-					adjacentCell.getRoom().registerAdjacentRoomWall(EnumFacing.NORTH);
-				}
+				cell.addInnerWall(EnumFacing.SOUTH);
 			}
 		}
 
 		boolean outerEast = !this.grid.adjacentCellIsFullRoom(cell, EnumFacing.EAST);
 
 		if (outerEast) {
-			cell.getRoom().addOuterWall(EnumFacing.EAST);
+			cell.addOuterWall(EnumFacing.EAST);
 		} else {
 			if (!cell.isConnectedToCell(this.grid.getAdjacentCell(cell, EnumFacing.EAST))) {
-				cell.getRoom().addInnerWall(EnumFacing.EAST);
-
-				RoomGridCell adjacentCell = this.grid.getAdjacentCell(cell, EnumFacing.EAST);
-				if (adjacentCell != null && adjacentCell.isPopulated()) {
-					adjacentCell.getRoom().registerAdjacentRoomWall(EnumFacing.WEST);
-				}
+				cell.addInnerWall(EnumFacing.EAST);
 			}
 		}
 
 		if (!this.grid.adjacentCellIsFullRoom(cell, EnumFacing.NORTH)) {
-			cell.getRoom().addOuterWall(EnumFacing.NORTH);
+			cell.addOuterWall(EnumFacing.NORTH);
 		}
 
 		if (!this.grid.adjacentCellIsFullRoom(cell, EnumFacing.WEST)) {
-			cell.getRoom().addOuterWall(EnumFacing.WEST);
+			cell.addOuterWall(EnumFacing.WEST);
 		}
 	}
 
@@ -1016,72 +1085,34 @@ public class CastleRoomSelector {
 				this.addRoofFromRoofArea(roofArea);
 				for (RoomGridPosition areaPos : roofArea.getPositionList()) {
 					roofCells.remove(this.grid.getCellAt(areaPos));
+					this.grid.getCellAt(areaPos).setRoom(new CastleRoomReplacedRoof(this.roomSize, this.floorHeight, areaPos.getFloor()));
 				}
 			}
 		}
 
 		for (RoomGridCell cell : roofCells) {
-			cell.setRoom(new CastleRoomWalkableRoof(this.getRoomStart(cell), this.roomSize, this.floorHeight, cell.getFloor()));
+			cell.setRoom(new CastleRoomWalkableRoof(this.roomSize, this.floorHeight, cell.getFloor()));
 		}
 	}
 
 	private void addRoofFromRoofArea(RoomGrid.Area2D roofArea) {
-		BlockPos roofStart = this.getRoomStart(roofArea.start.getFloor(), roofArea.start.getX(), roofArea.start.getZ());
+		RoomGridCell roofStartCell = this.grid.getCellAt(roofArea.start);
+		BlockPos roofStart = roofStartCell.getOriginOffset();
 
-		// Account for extra wall on N and W sides
+		// Corner should be over the wall so move northwest
 		roofStart = roofStart.north().west();
-		final int sizeX = (roofArea.sizeX * this.roomSize) + 1;
-		final int sizeZ = (roofArea.sizeZ * this.roomSize) + 1;
+		final int sizeX = (roofArea.sizeX * (this.roomSize + 1)) + 1;
+		final int sizeZ = (roofArea.sizeZ * (this.roomSize + 1)) + 1;
 
-		this.castleRoofs.add(new CastleAddonRoof(roofStart, sizeX, sizeZ));
-	}
-
-	private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side) {
-		if (cell.getRoom().hasWallOnSide(side)) {
-			DoorPlacement placement = cell.getRoom().addDoorOnSideCentered(side);
-			if (this.grid.adjacentCellIsPopulated(cell, side)) {
-				this.grid.getAdjacentCell(cell, side).getRoom().registerAdjacentRoomDoor(side.getOpposite(), placement);
-			}
-		} else {
-			if (this.grid.adjacentCellIsPopulated(cell, side)) {
-				DoorPlacement placement = this.grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideCentered(side.getOpposite());
-				cell.getRoom().registerAdjacentRoomDoor(side, placement);
-			}
-		}
-	}
-
-	private void addDoorToRoomRandom(RoomGridCell cell, EnumFacing side) {
-		if (cell.getRoom().hasWallOnSide(side)) {
-			DoorPlacement placement = cell.getRoom().addDoorOnSideRandom(this.random, side);
-			if (this.grid.adjacentCellIsPopulated(cell, side)) {
-				this.grid.getAdjacentCell(cell, side).getRoom().registerAdjacentRoomDoor(side.getOpposite(), placement);
-			}
-		} else {
-			if (this.grid.adjacentCellIsPopulated(cell, side)) {
-				DoorPlacement placement = this.grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideRandom(this.random, side.getOpposite());
-				cell.getRoom().registerAdjacentRoomDoor(side, placement);
-			}
-		}
-	}
-
-	private BlockPos getRoomStart(int floor, int x, int z) {
-		return new BlockPos(x * this.roomSize, floor * this.floorHeight, z * this.roomSize);
-	}
-
-	private BlockPos getRoomStart(RoomGridCell selection) {
-		return getRoomStart(selection.getFloor(), selection.getGridX(), selection.getGridZ());
-	}
-
-	private BlockPos getRoomStart(RoomGridPosition position) {
-		return getRoomStart(position.getFloor(), position.getX(), position.getZ());
+		this.castleRoofs.add(CastleRoofFactory.createRoof(this.dungeon.getRandomRoofType(), roofStart, sizeX, sizeZ));
 	}
 
 	private int getBossFloor() {
-        if (this.grid.getBossArea() != null) {
-            return this.grid.getBossArea().start.getFloor();
-        } else {
-            return 0;
-        }
-    }
+		if (this.grid.getBossArea() != null) {
+			return this.grid.getBossArea().start.getFloor();
+		} else {
+			return 0;
+		}
+	}
 
 }

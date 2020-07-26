@@ -3,42 +3,28 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 public class CastleRoomTowerSquare extends CastleRoomBase {
 	private static final int MIN_SIZE = 5;
 	private EnumFacing connectedSide;
 	private int stairYOffset;
-	private BlockPos pillarStart;
+	private Vec3i pillarOffset;
 	private EnumFacing firstStairSide;
 
-	public CastleRoomTowerSquare(BlockPos startOffset, int sideLength, int height, EnumFacing connectedSide,
-								 int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;
-		this.buildLengthX = towerSize;
-		this.buildLengthZ = towerSize;
 		this.defaultFloor = false;
 		this.defaultCeiling = false;
 		this.pathable = false;
 		this.isTower = true;
-
-		if (connectedSide == EnumFacing.NORTH || connectedSide == EnumFacing.SOUTH) {
-			this.offsetX += (sideLength - this.buildLengthX) / 2;
-			if (connectedSide == EnumFacing.SOUTH) {
-				this.offsetZ += sideLength - this.buildLengthZ;
-			}
-		}
-		if (connectedSide == EnumFacing.WEST || connectedSide == EnumFacing.EAST) {
-			this.offsetZ += (sideLength - this.buildLengthZ) / 2;
-			if (connectedSide == EnumFacing.EAST) {
-				this.offsetX += sideLength - this.buildLengthX;
-			}
-		}
 
 		if (towerBelow != null) {
 			this.firstStairSide = towerBelow.getLastStairSide().rotateY();
@@ -48,23 +34,19 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 			this.stairYOffset = 1; // account for 1 layer of floor
 		}
 
-		for (EnumFacing side : EnumFacing.HORIZONTALS) {
-			this.walls.addOuter(side);
-		}
-
-		this.pillarStart = this.getNonWallStartPos().add((this.buildLengthX / 2), this.stairYOffset, (this.buildLengthZ / 2));
+		this.pillarOffset = new Vec3i((this.roomLengthX / 2), this.stairYOffset, (this.roomLengthZ / 2));
 	}
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		BlockPos stairCenter = roomOrigin.add(this.pillarOffset);
+		BlockPos stairCenter = this.roomOrigin.add(this.pillarOffset);
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 
 		BlockPos pos;
 		IBlockState blockToBuild;
 
-		for (int x = 0; x < this.buildLengthX - 1; x++) {
-			for (int z = 0; z < this.buildLengthX - 1; z++) {
+		for (int x = 0; x < this.getDecorationLengthX(); x++) {
+			for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 				for (int y = 0; y < this.height; y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					pos = this.getNonWallStartPos().add(x, y, z);
@@ -81,7 +63,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 						this.usedDecoPositions.add(pos);
 					}
 
-					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 			}
 		}
@@ -93,16 +75,6 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 			result = result.rotateY();
 		}
 		return result;
-	}
-
-	@Override
-	public boolean reachableFromSide(EnumFacing side) {
-		return side == this.connectedSide;
-	}
-
-	@Override
-	public boolean canBuildDoorOnSide(EnumFacing side) {
-		return side == this.connectedSide;
 	}
 
 	@Override

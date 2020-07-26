@@ -1,16 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.paintings;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import net.minecraft.entity.EntityList;
+
 import net.minecraft.entity.item.EntityPainting;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import java.util.*;
 
 public class RoomDecorPainting {
 	private EnumMap<EntityPainting.EnumArt, ArrayList<Vec3i>> artFootprints = new EnumMap<>(EntityPainting.EnumArt.class);
@@ -19,16 +22,16 @@ public class RoomDecorPainting {
 		super();
 
 		for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values()) {
-			artFootprints.put(art, getFootPrintFromArtType(art));
+			this.artFootprints.put(art, this.getFootPrintFromArtType(art));
 		}
 	}
 
 	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
-		return !getArtThatWouldFit(start, side, decoArea, decoMap).isEmpty();
+		return !this.getArtThatWouldFit(start, side, decoArea, decoMap).isEmpty();
 	}
 
 	public void buildRandom(World world, BlockPos start, BlockStateGenArray genArray, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
-		ArrayList<EntityPainting.EnumArt> artList = getArtThatWouldFit(start, side, decoArea, decoMap);
+		ArrayList<EntityPainting.EnumArt> artList = this.getArtThatWouldFit(start, side, decoArea, decoMap);
 		if (!artList.isEmpty()) {
 			Collections.shuffle(artList);
 			this.build(artList.get(0), world, start, genArray, side, decoMap);
@@ -61,7 +64,7 @@ public class RoomDecorPainting {
 
 		for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values()) {
 			boolean fits = true;
-			ArrayList<Vec3i> rotated = alignFootprint(artFootprints.get(art), side);
+			ArrayList<Vec3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
 
 			for (Vec3i placement : rotated) {
 				BlockPos pos = start.add(placement);
