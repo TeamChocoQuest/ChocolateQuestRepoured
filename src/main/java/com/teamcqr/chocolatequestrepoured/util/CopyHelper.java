@@ -18,22 +18,41 @@ import java.nio.file.attribute.BasicFileAttributes;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
 public class CopyHelper {
-	/*
+
+	/**
 	 * Small utility by meldexun to extract a folder from a jar
 	 */
-	public static void copyFromJar(String source, Path target) throws URISyntaxException, IOException {
-		Path path;
+	public static void copyFromJarOrWorkspace(String source, File target, boolean overrideExisitingFiles) {
+		boolean flag = target.exists();
 
-		URL url = CQRMain.class.getResource("");
-		if (url.getProtocol().equals("jar")) {
-			JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-			try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get(jarURLConnection.getJarFileURL().toURI()), CQRMain.class.getClassLoader())) {
-				path = fileSystem.getPath(source);
-				copyFiles(path, target);
+		if (!overrideExisitingFiles && flag) {
+			return;
+		}
+
+		if (!flag) {
+			target.mkdirs();
+		}
+
+		try {
+			Path sourcePath;
+			Path targetPath = target.toPath();
+
+			URL url = CQRMain.class.getResource("");
+			if (url.getProtocol().equals("jar")) {
+				JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
+				try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get(jarURLConnection.getJarFileURL().toURI()), CQRMain.class.getClassLoader())) {
+					sourcePath = fileSystem.getPath(source);
+					copyFiles(sourcePath, targetPath);
+				}
+			} else {
+				URL resource = CQRMain.class.getResource(source);
+				if (resource != null) {
+					sourcePath = new File(resource.toURI()).toPath();
+					copyFiles(sourcePath, targetPath);
+				}
 			}
-		} else {
-			path = new File(CQRMain.class.getResource(source).toURI()).toPath();
-			copyFiles(path, target);
+		} catch (IOException | URISyntaxException e) {
+			CQRMain.logger.error("Failed to copy file(s) from {} to {}", source, target.getName());
 		}
 	}
 
