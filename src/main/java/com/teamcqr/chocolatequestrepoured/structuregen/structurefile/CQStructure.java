@@ -64,7 +64,7 @@ public class CQStructure {
 			boolean hasTileEntity2 = ((BlockInfo) blockInfo2).tileentityData != null;
 			boolean hasSpecialShape1 = !((BlockInfo) blockInfo1).blockstate.isFullBlock() && !((BlockInfo) blockInfo1).blockstate.isFullCube();
 			boolean hasSpecialShape2 = !((BlockInfo) blockInfo2).blockstate.isFullBlock() && !((BlockInfo) blockInfo2).blockstate.isFullCube();
-			if (!hasTileEntity1 && !hasSpecialShape1 && !hasTileEntity2 && !hasSpecialShape2) {
+			if (hasTileEntity1 == hasTileEntity2 && hasSpecialShape1 == hasSpecialShape2) {
 				return 0;
 			}
 			if (!hasTileEntity1 && !hasSpecialShape1 && (hasTileEntity2 || hasSpecialShape2)) {
@@ -73,17 +73,21 @@ public class CQStructure {
 			if ((hasTileEntity1 || hasSpecialShape1) && !hasTileEntity2 && !hasSpecialShape2) {
 				return 1;
 			}
-			if (hasTileEntity1 && !hasTileEntity2) {
+			if (!hasTileEntity1 && hasTileEntity2) {
 				return -1;
 			}
-			if (!hasTileEntity1 && hasTileEntity2) {
+			if (hasTileEntity1 && !hasTileEntity2) {
 				return 1;
 			}
-		}
-		if (isNormalBlock1 && !isNormalBlock2) {
+			if (!hasSpecialShape1 && hasSpecialShape2) {
+				return -1;
+			}
+			if (hasSpecialShape1 && !hasSpecialShape2) {
+				return 1;
+			}
+		} else if (isNormalBlock1 && !isNormalBlock2) {
 			return -1;
-		}
-		if (!isNormalBlock1 && isNormalBlock2) {
+		} else if (!isNormalBlock1 && isNormalBlock2) {
 			return 1;
 		}
 		return 0;
