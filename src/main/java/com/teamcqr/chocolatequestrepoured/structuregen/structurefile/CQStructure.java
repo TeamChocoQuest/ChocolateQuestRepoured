@@ -125,10 +125,10 @@ public class CQStructure {
 		long fileSizeSum = 0;
 		for (int i = 0; i < fileList.size() && i < CQRConfig.advanced.cachedStructureFilesMaxAmount; i++) {
 			File file = fileList.get(i);
-			fileSizeSum += file.length();
-			CACHED_STRUCTURES.put(file, createFromFile(file));
-			if (fileSizeSum >= CQRConfig.advanced.cachedStructureFilesMaxSize << 20) {
-				break;
+			long fileSize = file.length();
+			if (fileSizeSum + fileSize < CQRConfig.advanced.cachedStructureFilesMaxSize * 1000) {
+				CACHED_STRUCTURES.put(file, createFromFile(file));
+				fileSizeSum += fileSize;
 			}
 		}
 	}
