@@ -31,7 +31,7 @@ public class BlockInfoBanner extends BlockInfo {
 	@Override
 	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
 		super.generate(world, dungeonPos, dungeonPartPos, settings, dungeonMob, protectedRegion);
-		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
+		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 		TileEntity tileEntity = world.getTileEntity(transformedPos);
 
 		if (tileEntity instanceof TileEntityBanner) {
