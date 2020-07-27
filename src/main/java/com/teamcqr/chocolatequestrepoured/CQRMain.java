@@ -158,7 +158,7 @@ public class CQRMain {
 				CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output"),
 				CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions"),
 				CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants"),
-				CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items") };r
+				CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items") };
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
