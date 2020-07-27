@@ -5,12 +5,16 @@ import com.teamcqr.chocolatequestrepoured.client.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBadge;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiMerchant;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiMerchantEditTrade;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiReputation;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiSpawner;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBackpack;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBadge;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerCQREntity;
+import com.teamcqr.chocolatequestrepoured.inventory.ContainerMerchant;
+import com.teamcqr.chocolatequestrepoured.inventory.ContainerMerchantEditTrade;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
@@ -50,6 +54,14 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerCQREntity(player.inventory, (AbstractEntityCQR) world.getEntityByID(x));
 		}
 
+		if (ID == Reference.MERCHANT_GUI_ID) {
+			return new ContainerMerchant((AbstractEntityCQR) world.getEntityByID(x), player);
+		}
+
+		if (ID == Reference.MERCHANT_EDIT_TRADE_GUI_ID) {
+			return new ContainerMerchantEditTrade((AbstractEntityCQR) world.getEntityByID(x), player, y);
+		}
+
 		return null;
 	}
 
@@ -74,6 +86,14 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == Reference.CQR_ENTITY_GUI_ID) {
 			return new GuiCQREntity(this.getServerGuiElement(ID, player, world, x, y, z), (AbstractEntityCQR) world.getEntityByID(x));
+		}
+
+		if (ID == Reference.MERCHANT_GUI_ID) {
+			return new GuiMerchant(this.getServerGuiElement(ID, player, world, x, y, z), (AbstractEntityCQR) world.getEntityByID(x));
+		}
+
+		if (ID == Reference.MERCHANT_EDIT_TRADE_GUI_ID) {
+			return new GuiMerchantEditTrade(this.getServerGuiElement(ID, player, world, x, y, z), (AbstractEntityCQR) world.getEntityByID(x), y);
 		}
 
 		if (ID == Reference.EXPORTER_GUI_ID) {

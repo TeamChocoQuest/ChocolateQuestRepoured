@@ -2,20 +2,29 @@ package com.teamcqr.chocolatequestrepoured.proxy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.client.gui.IUpdatableGui;
 import com.teamcqr.chocolatequestrepoured.client.init.ModEntityRenderers;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -30,6 +39,8 @@ public class ClientProxy implements IProxy {
 	static final String KEY_CATEGORY_MAIN = "Chocolate Quest Repoured";
 
 	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
+
+	private static final ReflectionField<ClientAdvancementManager, Map<Advancement, AdvancementProgress>> m = new ReflectionField<>(ClientAdvancementManager.class, "advancementToProgress", "advancementToProgress");
 
 	@Override
 	public void preInit() {
@@ -80,6 +91,26 @@ public class ClientProxy implements IProxy {
 				return tintIndex > 0 ? -1 : ((ItemArmorDyable) stack.getItem()).getColor(stack);
 			}
 		}, dyables.toArray(new Item[dyables.size()]));
+	}
+
+	@Override
+	public boolean hasAdvancement(EntityPlayer player, ResourceLocation id) {
+		if (player instanceof EntityPlayerSP) {
+			ClientAdvancementManager manager = ((EntityPlayerSP) player).connection.getAdvancementManager();
+			Advancement advancement = manager.getAdvancementList().getAdvancement(id);
+			if (advancement != null) {
+				return m.get(manager).get(advancement).isDone();
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void updateGui() {
+		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+		if (gui instanceof IUpdatableGui) {
+			((IUpdatableGui) gui).update();
+		}
 	}
 
 }

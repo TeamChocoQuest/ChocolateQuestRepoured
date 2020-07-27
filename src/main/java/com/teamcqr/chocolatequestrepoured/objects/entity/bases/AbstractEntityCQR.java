@@ -49,6 +49,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.spears.ItemSpearBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.objects.npc.trading.TraderOffer;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
@@ -71,11 +72,8 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -139,6 +137,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected BlockPos[] pathPoints = new BlockPos[] {};
 	protected boolean pathIsLoop = false;
 	protected int currentTargetPoint = 0;
+
+	private TraderOffer trades = new TraderOffer(this);
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -431,6 +431,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			compound.setTag("ShoulderEntityLeft", this.getLeftShoulderEntity());
 		}
 
+		compound.setTag("trades", this.trades.writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
@@ -475,49 +476,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.setLeftShoulderEntity(compound.getCompoundTag("ShoulderEntityLeft"));
 		}
 
+		this.trades.readFromNBT(compound.getCompoundTag("trades"));
 	}
 
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (player.isCreative() && !player.isSneaking()) {
-			if (!this.world.isRemote) {
-				ItemStack stack = player.getHeldItem(hand);
-
-				if (stack.getItem() instanceof ItemArmor) {
-					EntityEquipmentSlot slot = getSlotForItemStack(stack);
-
-					player.setHeldItem(hand, this.getItemStackFromSlot(slot));
-					this.setItemStackToSlot(slot, stack);
-					return true;
+		if (!player.isSneaking()) {
+			if (player.isCreative() || this.getLeader() == player) {
+				if (!this.world.isRemote) {
+					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
-
-				if (stack.getItem() instanceof ItemSword) {
-					player.setHeldItem(hand, this.getHeldItemMainhand());
-					this.setHeldItem(EnumHand.MAIN_HAND, stack);
-					return true;
-				}
-
-				if (stack.getItem() instanceof ItemShield) {
-					player.setHeldItem(hand, this.getHeldItemOffhand());
-					this.setHeldItem(EnumHand.OFF_HAND, stack);
-					return true;
-				}
-
-				if (!this.getLookHelper().getIsLooking() && !this.hasPath()) {
-					double x1 = player.posX - this.posX;
-					double z1 = player.posZ - this.posZ;
-					float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
-					this.rotationYaw = yaw;
-					this.rotationYawHead = yaw;
-					this.renderYawOffset = yaw;
-				}
-				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				return true;
 			}
-			return true;
-		}
-		if (this.hasLeader() && this.getLeader() == player && !player.isSneaking()) {
+		} else {
 			if (!this.world.isRemote) {
-				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 			}
 			return true;
 		}
@@ -753,6 +726,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.MAINHAND));
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.OFFHAND));
 		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
+		ByteBufUtils.writeTag(buffer, this.trades.writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
@@ -766,6 +740,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setDropChance(EntityEquipmentSlot.MAINHAND, additionalData.readFloat());
 		this.setDropChance(EntityEquipmentSlot.OFFHAND, additionalData.readFloat());
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ByteBufUtils.readItemStack(additionalData));
+		this.trades.readFromNBT(ByteBufUtils.readTag(additionalData));
 	}
 
 	// Chocolate Quest Repoured
@@ -1374,6 +1349,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@SideOnly(Side.SERVER)
 	public void setSpinToWin(boolean value) {
 		this.dataManager.set(SPIN_TO_WIN, value);
+	}
+
+	public TraderOffer getTrades() {
+		return this.trades;
 	}
 
 }
