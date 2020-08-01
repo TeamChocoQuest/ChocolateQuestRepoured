@@ -487,14 +487,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
 				return true;
-			} else if(getFaction().isAlly(player)) {
+			} else if(!getFaction().isEnemy(player) && this.getTrades() != null && !this.getTrades().isEmpty()) {
+				//Player is NOT CREATIVE
 				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				return true;
 			}
 		} else {
 			if (!this.world.isRemote) {
-				if(player.isCreative() || getFaction().isAlly(player)) {
-					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				if(player.isCreative() || !getFaction().isEnemy(player)) {
+					if(player.isCreative()) {
+						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+					} else if(this.getTrades() != null && !this.getTrades().isEmpty()) {
+						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+					}
 				}
 			}
 			return true;
