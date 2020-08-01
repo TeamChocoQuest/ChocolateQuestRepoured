@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiExporter extends GuiScreen {
 
-	private String authorName;
 	private boolean saveStructOnExit = false;
 	private TileEntityExporter exporter;
 
@@ -30,7 +29,6 @@ public class GuiExporter extends GuiScreen {
 
 	public GuiExporter(TileEntityExporter exporter) {
 		this.mc = Minecraft.getMinecraft();
-		this.authorName = this.mc.player.getName();
 		this.exporter = exporter;
 		if (this.exporter != null) {
 			this.exporter.setUser(this.mc.player);
