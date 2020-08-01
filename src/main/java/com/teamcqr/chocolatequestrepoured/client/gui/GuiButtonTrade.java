@@ -49,6 +49,8 @@ public class GuiButtonTrade extends GuiButton {
 				itemRender.renderItemAndEffectIntoGUI(mc.player, this.input.get(i).getStack(), x + i * 18, y);
 				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, this.input.get(i).getStack(), x + i * 18, y, null);
 			}
+			//TODO: Render a barrier icon between in and output when the trade is out of stock
+			//TODO: Render a lock between in and output when the trade is not unlocked for the player
 			itemRender.renderItemAndEffectIntoGUI(mc.player, this.output, x + 92, y);
 			itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, this.output, x + 92, y, null);
 			itemRender.zLevel = 0.0F;
