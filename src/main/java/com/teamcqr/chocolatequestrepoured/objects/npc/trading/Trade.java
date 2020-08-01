@@ -165,7 +165,7 @@ public class Trade {
 			}
 		}
 	}
-
+	
 	private void checkIfSimple() {
 		Set<Item> items = new HashSet<>();
 		for (TradeInput input : this.inputs) {
@@ -299,6 +299,10 @@ public class Trade {
 	}
 
 	public boolean doTransaction(ItemStack[] input) {
+		if(!this.isInStock()) {
+			return false;
+		}
+		this.decStock();
 		if (this.isSimple) {
 			if (!this.doItemsMatch(input)) {
 				return false;
@@ -400,6 +404,22 @@ public class Trade {
 
 	public float getExpCount() {
 		return this.expCount;
+	}
+
+	public Integer getStockCount() {
+		return this.inStock;
+	}
+
+	public Integer getMaxStockCount() {
+		return this.maxStock;
+	}
+	
+	public void setStockCount(int stockCount) {
+		this.inStock = stockCount;
+	}
+	
+	public void setMaxStockCount(int maxStockCount) {
+		this.maxStock = maxStockCount;
 	}
 
 }
