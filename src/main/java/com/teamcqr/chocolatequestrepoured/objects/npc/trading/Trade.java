@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.npc.trading;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,6 +48,8 @@ public class Trade {
 
 	private boolean manuallyUnlocked = false;
 
+	protected static final Random rdm = new Random();
+	
 	public Trade(TraderOffer holder, ItemStack output, TradeInput... inputs) {
 		this.holder = holder;
 		this.output = output.copy();
@@ -258,6 +261,7 @@ public class Trade {
 
 	public void decStock() {
 		this.inStock--;
+		this.holder.get(rdm.nextInt(this.holder.getTrades().size())).incStock();
 	}
 
 	public boolean isInStock() {
