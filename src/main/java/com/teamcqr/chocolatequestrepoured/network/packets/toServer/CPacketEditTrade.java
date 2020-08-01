@@ -7,6 +7,8 @@ public class CPacketEditTrade implements IMessage {
 
 	private int entityId;
 	private int tradeIndex;
+	private int stockCount;
+	private int maxStockCount;
 	private boolean[] ignoreMeta;
 	private boolean[] ignoreNBT;
 
@@ -14,11 +16,13 @@ public class CPacketEditTrade implements IMessage {
 
 	}
 
-	public CPacketEditTrade(int entityId, int tradeIndex, boolean[] ignoreMeta, boolean[] ignoreNBT) {
+	public CPacketEditTrade(int entityId, int tradeIndex, boolean[] ignoreMeta, boolean[] ignoreNBT, int inStock, int maxStock) {
 		this.entityId = entityId;
 		this.tradeIndex = tradeIndex;
 		this.ignoreMeta = ignoreMeta;
 		this.ignoreNBT = ignoreNBT;
+		this.stockCount = inStock;
+		this.maxStockCount = maxStock;
 	}
 
 	@Override
@@ -33,6 +37,8 @@ public class CPacketEditTrade implements IMessage {
 		for (int i = 0; i < this.ignoreNBT.length; i++) {
 			this.ignoreNBT[i] = buf.readBoolean();
 		}
+		this.stockCount = buf.readInt();
+		this.maxStockCount = buf.readInt();
 	}
 
 	@Override
@@ -47,6 +53,8 @@ public class CPacketEditTrade implements IMessage {
 		for (int i = 0; i < this.ignoreNBT.length; i++) {
 			buf.writeBoolean(this.ignoreNBT[i]);
 		}
+		buf.writeInt(stockCount);
+		buf.writeInt(maxStockCount);
 	}
 
 	public int getEntityId() {
@@ -55,6 +63,14 @@ public class CPacketEditTrade implements IMessage {
 
 	public int getTradeIndex() {
 		return this.tradeIndex;
+	}
+	
+	public int getStockCount() {
+		return this.stockCount;
+	}
+	
+	public int getMaxStockCount() {
+		return this.maxStockCount;
 	}
 
 	public boolean[] getIgnoreMeta() {

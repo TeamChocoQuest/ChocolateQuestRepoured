@@ -33,6 +33,8 @@ public class SPacketHandlerEditTrade implements IMessageHandler<CPacketEditTrade
 					ItemStack output = ((ContainerMerchantEditTrade) player.openContainer).getOutput();
 					TradeInput[] input = this.getTradeInput(((ContainerMerchantEditTrade) player.openContainer).getInput(), message.getIgnoreMeta(), message.getIgnoreNBT());
 					Trade trade = new Trade(trades, output, input);
+					trade.setStockCount(message.getStockCount());
+					trade.setMaxStockCount(message.getMaxStockCount());
 
 					if (trades.editTrade(message.getTradeIndex(), trade)) {
 						CQRMain.NETWORK.sendToAllTracking(new SPacketEditTrade(entity.getEntityId(), message.getTradeIndex(), trade.writeToNBT()), entity);
