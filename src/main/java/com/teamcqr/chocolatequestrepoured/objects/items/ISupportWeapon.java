@@ -4,6 +4,6 @@ import net.minecraft.item.Item;
 
 public interface ISupportWeapon<T extends Item & IFakeWeapon<?>> {
 
-	T getFakeSword();
+	T getFakeWeapon();
 
 }

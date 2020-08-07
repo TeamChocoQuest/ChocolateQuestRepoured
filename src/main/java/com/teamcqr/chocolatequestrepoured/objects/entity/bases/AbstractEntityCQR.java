@@ -43,6 +43,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtB
 import com.teamcqr.chocolatequestrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.IFakeWeapon;
+import com.teamcqr.chocolatequestrepoured.objects.items.ISupportWeapon;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
@@ -1288,10 +1289,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.dataManager.set(HAS_TARGET, false);
 			this.lastTimeSeenAttackTarget = Integer.MIN_VALUE;
 			this.lastPosAttackTarget = this.getPositionVector();
+
+			Item item = this.getHeldItemMainhand().getItem();
+			if (item instanceof IFakeWeapon<?>) {
+				this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+			}
 		} else {
 			this.dataManager.set(HAS_TARGET, true);
 			this.lastTimeSeenAttackTarget = this.ticksExisted;
 			this.lastPosAttackTarget = attackTarget.getPositionVector();
+
+			CQRFaction faction = this.getFaction();
+			if (faction != null) {
+				Item item = this.getHeldItemMainhand().getItem();
+				if (faction.isAlly(attackTarget)) {
+					if (item instanceof IFakeWeapon<?>) {
+						this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+					}
+				} else if (item instanceof ISupportWeapon<?>) {
+					this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeWeapon()));
+				}
+			}
 		}
 	}
 

@@ -1,14 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.items.IFakeWeapon;
-import com.teamcqr.chocolatequestrepoured.objects.items.ISupportWeapon;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
@@ -38,19 +33,6 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		this.updatePath(attackTarget);
 		this.checkAndPerformBlock();
-		CQRFaction faction = this.entity.getFaction();
-		if (faction != null) {
-			Item item = this.entity.getHeldItemMainhand().getItem();
-			if (faction.isEnemy(attackTarget)) {
-				if (item instanceof ISupportWeapon) {
-					this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeSword()));
-				}
-			} else if (faction.isAlly(attackTarget)) {
-				if (item instanceof IFakeWeapon<?>) {
-					this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
-				}
-			}
-		}
 	}
 
 	@Override

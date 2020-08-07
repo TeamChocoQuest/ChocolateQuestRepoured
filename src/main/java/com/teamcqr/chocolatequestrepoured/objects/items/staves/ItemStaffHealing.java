@@ -74,7 +74,7 @@ public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwo
 	}
 
 	@Override
-	public ItemFakeSwordHealingStaff getFakeSword() {
+	public ItemFakeSwordHealingStaff getFakeWeapon() {
 		return ModItems.DIAMOND_SWORD_FAKE_HEALING_STAFF;
 	}
 
