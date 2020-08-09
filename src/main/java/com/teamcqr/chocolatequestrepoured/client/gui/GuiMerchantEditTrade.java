@@ -35,8 +35,11 @@ public class GuiMerchantEditTrade extends GuiContainer {
 	private final Trade trade;
 	private final GuiCheckBox[] ignoreMetaCheckboxes = new GuiCheckBox[4];
 	private final GuiCheckBox[] ignoreNBTCheckboxes = new GuiCheckBox[4];
+	
+	//Stock stuff
 	private GuiTextField stockEdit;
 	private GuiTextField maxStockEdit;
+	private GuiCheckBox canRestock;
 
 	public GuiMerchantEditTrade(Container container, AbstractEntityCQR entity, int tradeIndex) {
 		super(container);
@@ -54,12 +57,16 @@ public class GuiMerchantEditTrade extends GuiContainer {
 
 		this.addButton(new GuiButton(0, this.guiLeft + 122, this.guiTop + 137, 111, 20, "Cancel"));
 		this.addButton(new GuiButton(1, this.guiLeft + 7, this.guiTop + 137, 111, 20, "Apply"));
-		this.stockEdit = new GuiTextField(10, this.fontRenderer, this.guiLeft + 76, this.guiTop + 70, 20, 12);
-		this.stockEdit.setEnableBackgroundDrawing(false);
-		this.stockEdit.setText(trade.getStockCount().toString());
-		this.maxStockEdit = new GuiTextField(10, this.fontRenderer, this.guiLeft + 76, this.guiTop + 100, 20, 12);
-		this.maxStockEdit.setEnableBackgroundDrawing(false);
-		this.maxStockEdit.setText(trade.getMaxStockCount().toString());
+		//this.drawString(this.fontRenderer, "In Stock", this.guiLeft + 7, this.guiTop +60, 0xFFFFFF);
+		//this.drawString(this.fontRenderer, "Max Stock", this.guiLeft + 7, this.guiTop +90, 0xFFFFFF);
+		this.stockEdit = new GuiTextField(10, this.fontRenderer, this.guiLeft + 7, this.guiTop + 60 + 10, 40, 12);
+		this.stockEdit.setEnableBackgroundDrawing(true);
+		this.stockEdit.setText("10");
+		this.maxStockEdit = new GuiTextField(11, this.fontRenderer, this.guiLeft + 7, this.guiTop + 90 + 10, 40, 12);
+		this.maxStockEdit.setEnableBackgroundDrawing(true);
+		this.maxStockEdit.setText("20");
+		this.canRestock = this.addButton(new GuiCheckBox(12, this.guiLeft + 7, this.guiTop + 90 + 10 + 12 + 5, "Restock", false));
+		this.canRestock.setIsChecked(trade.isAbleToRestock());
 
 		this.ignoreMetaCheckboxes[0] = this.addButton(new GuiCheckBox(2, this.guiLeft + 76, this.guiTop + 30, "", false));
 		this.ignoreNBTCheckboxes[0] = this.addButton(new GuiCheckBox(3, this.guiLeft + 76, this.guiTop + 42, "", false));
@@ -82,15 +89,16 @@ public class GuiMerchantEditTrade extends GuiContainer {
 					this.ignoreNBTCheckboxes[i].setIsChecked(tradeInput.ignoreNBT());
 				}
 			}
+			this.stockEdit.setText(trade.getStockCount().toString());
+			this.maxStockEdit.setText(trade.getMaxStockCount().toString());
 		}
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.stockEdit.drawTextBox();
 		this.maxStockEdit.drawTextBox();
-		
-		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
@@ -137,7 +145,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 				for (int i = 0; i < ignoreMeta.length; i++) {
 					ignoreNBT[i] = this.ignoreNBTCheckboxes[i].isChecked();
 				}
-				CQRMain.NETWORK.sendToServer(new CPacketEditTrade(this.entity.getEntityId(), this.tradeIndex, ignoreMeta, ignoreNBT, Integer.valueOf(this.stockEdit.getText()), Integer.valueOf(this.maxStockEdit.getText())));
+				CQRMain.NETWORK.sendToServer(new CPacketEditTrade(this.entity.getEntityId(), this.tradeIndex, ignoreMeta, ignoreNBT, Integer.valueOf(this.stockEdit.getText()), Integer.valueOf(this.maxStockEdit.getText()), this.canRestock.isChecked()));
 			}
 			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getEntityId()));
 		}
@@ -148,7 +156,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 		if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
 			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getEntityId()));
 		} else {
-			if(Character.isDigit(typedChar)) {
+			if(Character.isDigit(typedChar) || keyCode == 14 || keyCode == 211 || keyCode == 207 || keyCode == 199) {
 				this.stockEdit.textboxKeyTyped(typedChar, keyCode);
 				this.maxStockEdit.textboxKeyTyped(typedChar, keyCode);
 			}

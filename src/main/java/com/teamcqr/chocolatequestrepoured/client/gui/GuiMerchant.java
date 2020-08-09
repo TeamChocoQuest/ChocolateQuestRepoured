@@ -174,6 +174,7 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 			if (flag) {
 				this.tradeButtons[i].setIndex(this.buttonStartIndex + i);
 				this.tradeButtons[i].setInputAndOutput(trade.getInputItems(), trade.getOutput());
+				this.tradeButtons[i].setOutOfStock(!trade.isInStock());
 			}
 			this.tradeButtons[i].visible = flag;
 

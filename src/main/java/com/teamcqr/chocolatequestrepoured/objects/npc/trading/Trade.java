@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.npc.trading;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -28,7 +30,7 @@ public class Trade {
 	protected UUID recipeID = MathHelper.getRandomUUID();
 	protected String recipeName = "";
 	protected int inStock = 10;
-	protected int maxStock = 10;
+	protected int maxStock = 20;
 	protected float expCount = 0;
 
 	private NonNullList<TradeInput> inputs = NonNullList.create();
@@ -47,6 +49,7 @@ public class Trade {
 	private ResourceLocation advancementIdent = null;
 
 	private boolean manuallyUnlocked = false;
+	private boolean shouldRestock = true;
 
 	protected static final Random rdm = new Random();
 	
@@ -80,6 +83,7 @@ public class Trade {
 		this.recipeName = nbt.getString("name");
 		this.inStock = nbt.getInteger("stock");
 		this.maxStock = nbt.getInteger("maxStock");
+		this.shouldRestock = nbt.getBoolean("shouldRestock");
 		this.hasToBeUnlocked = nbt.getBoolean("requiresUnlocking");
 		this.expCount = nbt.getFloat("expCount");
 
@@ -110,6 +114,7 @@ public class Trade {
 		nbt.setString("name", this.recipeName);
 		nbt.setInteger("stock", this.inStock);
 		nbt.setInteger("maxStock", this.maxStock);
+		nbt.setBoolean("shouldRestock", this.shouldRestock);
 		nbt.setBoolean("requiresUnlocking", this.hasToBeUnlocked);
 		nbt.setFloat("expCount", this.expCount);
 
@@ -252,7 +257,7 @@ public class Trade {
 	}
 
 	public boolean incStock() {
-		if (this.inStock < this.maxStock) {
+		if (this.inStock < this.maxStock && this.shouldRestock) {
 			this.inStock++;
 			return true;
 		}
@@ -262,6 +267,11 @@ public class Trade {
 	public void decStock() {
 		this.inStock--;
 		this.holder.get(rdm.nextInt(this.holder.getTrades().size())).incStock();
+		List<Trade> restockableTrades = new ArrayList<>(this.holder.getTrades());
+		restockableTrades.removeIf( t -> (!t.isAbleToRestock() || t.getStockCount() >= t.getMaxStockCount() || (t == Trade.this && restockableTrades.size() > 1)));
+		if(!restockableTrades.isEmpty()) {
+			restockableTrades.get((rdm.nextInt(restockableTrades.size()))).incStock();
+		}
 	}
 
 	public boolean isInStock() {
@@ -424,6 +434,10 @@ public class Trade {
 	
 	public void setMaxStockCount(int maxStockCount) {
 		this.maxStock = maxStockCount;
+	}
+
+	public boolean isAbleToRestock() {
+		return this.shouldRestock;
 	}
 
 }
