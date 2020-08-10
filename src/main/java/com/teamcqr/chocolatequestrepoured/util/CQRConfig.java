@@ -62,6 +62,11 @@ public class CQRConfig {
 		public double flyingCowardPenaltyDamage = 10.0;
 
 		public boolean enableMaxDamageCaps = true;
+
+		public boolean generationRespectOtherStructures = true;
+		public double generationMinDistanceToOtherStructure = 64;
+		@Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures")
+		public boolean generationRespectUnexploredStructures = true;
 	}
 
 	public static class Bosses {
