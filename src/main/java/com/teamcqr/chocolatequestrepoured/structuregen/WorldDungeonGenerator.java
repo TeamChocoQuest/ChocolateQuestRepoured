@@ -10,9 +10,11 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
@@ -22,6 +24,8 @@ import net.minecraftforge.fml.common.IWorldGenerator;
  * GitHub: https://github.com/DerToaster98
  */
 public class WorldDungeonGenerator implements IWorldGenerator {
+	
+	static final String[] STRUCTURE_NAMES_INTERNAL = {"Stronghold", "Mansion", "Monument", "Village", "Mineshaft", "Temple", "EndCity", "Fortress"};
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -66,10 +70,21 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)
 				&& DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
 			// Check if there is a village structure nearby
-			int checkDist = 20;
-			if (world.getVillageCollection().getNearestVillage(new BlockPos(chunkX << 4, world.getActualHeight() >> 1, chunkZ << 4), checkDist) != null) {
+			BlockPos pos = new BlockPos(chunkX << 4, world.getHeight(chunkX << 4, chunkZ << 4), chunkZ << 4);
+			/*if (world.getVillageCollection().getNearestVillage(pos, checkDist) != null) {
 				CQRMain.logger.warn("Tried to spawn a dungeon in a chunk that was too near at a village, to disable this, lower the check distance in the config");
 				return;
+			}*/
+			
+			if(world instanceof WorldServer && CQRConfig.advanced.generationRespectOtherStructures) {
+				ChunkProviderServer cps = ((WorldServer)world).getChunkProvider();
+				for(String sn : STRUCTURE_NAMES_INTERNAL) {
+					BlockPos ps = cps.getNearestStructurePos(world, sn, pos, CQRConfig.advanced.generationRespectUnexploredStructures);
+					if(ps != null && ps.getDistance(pos.getX(), ps.getY(), pos.getZ()) <= CQRConfig.advanced.generationMinDistanceToOtherStructure) {
+						CQRMain.logger.warn("Tried to spawn a dungeon too near a structure(Internal name: " + sn + "), aborting generation!");
+						return;
+					}
+				}
 			}
 
 			Random rand = new Random(getSeed(world, chunkX, chunkZ));
