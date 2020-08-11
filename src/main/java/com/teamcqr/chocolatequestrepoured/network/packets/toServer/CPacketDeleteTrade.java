@@ -20,13 +20,13 @@ public class CPacketDeleteTrade implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		this.tradeIndex = buf.readByte() + 128;
+		this.tradeIndex = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		buf.writeByte(this.tradeIndex - 128);
+		buf.writeInt(this.tradeIndex);
 	}
 
 	public int getEntityId() {

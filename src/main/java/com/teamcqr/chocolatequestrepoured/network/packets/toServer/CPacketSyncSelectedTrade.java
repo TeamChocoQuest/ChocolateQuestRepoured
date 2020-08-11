@@ -17,12 +17,12 @@ public class CPacketSyncSelectedTrade implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.selectedTradeIndex = buf.readByte() + 128;
+		this.selectedTradeIndex = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeByte(this.selectedTradeIndex - 128);
+		buf.writeInt(this.selectedTradeIndex);
 	}
 
 	public int getSelectedTradeIndex() {

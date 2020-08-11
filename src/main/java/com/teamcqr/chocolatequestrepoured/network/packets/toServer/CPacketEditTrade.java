@@ -1,64 +1,77 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toServer;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class CPacketEditTrade implements IMessage {
 
 	private int entityId;
 	private int tradeIndex;
-	private int stockCount;
-	private int maxStockCount;
 	private boolean[] ignoreMeta;
 	private boolean[] ignoreNBT;
-	private boolean canRestock;
+	private String reputation;
+	private String advancement;
+	private boolean stock;
+	private int restock;
+	private int inStock;
+	private int maxStock;
 
 	public CPacketEditTrade() {
 
 	}
 
-	public CPacketEditTrade(int entityId, int tradeIndex, boolean[] ignoreMeta, boolean[] ignoreNBT, int inStock, int maxStock, boolean canRestock) {
+	public CPacketEditTrade(int entityId, int tradeIndex, boolean[] ignoreMeta, boolean[] ignoreNBT, String reputation, String advancement, boolean stock, int restock, int inStock, int maxStock) {
 		this.entityId = entityId;
 		this.tradeIndex = tradeIndex;
 		this.ignoreMeta = ignoreMeta;
 		this.ignoreNBT = ignoreNBT;
-		this.stockCount = inStock;
-		this.maxStockCount = maxStock;
-		this.canRestock = canRestock;
+		this.reputation = reputation;
+		this.advancement = advancement;
+		this.stock = stock;
+		this.restock = restock;
+		this.inStock = inStock;
+		this.maxStock = maxStock;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		this.tradeIndex = buf.readByte() + 128;
-		this.ignoreMeta = new boolean[buf.readByte()];
+		this.tradeIndex = buf.readInt();
+		this.ignoreMeta = new boolean[buf.readInt()];
 		for (int i = 0; i < this.ignoreMeta.length; i++) {
 			this.ignoreMeta[i] = buf.readBoolean();
 		}
-		this.ignoreNBT = new boolean[buf.readByte()];
+		this.ignoreNBT = new boolean[buf.readInt()];
 		for (int i = 0; i < this.ignoreNBT.length; i++) {
 			this.ignoreNBT[i] = buf.readBoolean();
 		}
-		this.stockCount = buf.readInt();
-		this.maxStockCount = buf.readInt();
-		this.canRestock = buf.readBoolean();
+		this.reputation = ByteBufUtils.readUTF8String(buf);
+		this.advancement = ByteBufUtils.readUTF8String(buf);
+		this.stock = buf.readBoolean();
+		this.restock = buf.readInt();
+		this.inStock = buf.readInt();
+		this.maxStock = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		buf.writeByte(this.tradeIndex - 128);
-		buf.writeByte(this.ignoreMeta.length);
+		buf.writeInt(this.tradeIndex);
+		buf.writeInt(this.ignoreMeta.length);
 		for (int i = 0; i < this.ignoreMeta.length; i++) {
 			buf.writeBoolean(this.ignoreMeta[i]);
 		}
-		buf.writeByte(this.ignoreNBT.length);
+		buf.writeInt(this.ignoreNBT.length);
 		for (int i = 0; i < this.ignoreNBT.length; i++) {
 			buf.writeBoolean(this.ignoreNBT[i]);
 		}
-		buf.writeInt(stockCount);
-		buf.writeInt(maxStockCount);
-		buf.writeBoolean(canRestock);
+		ByteBufUtils.writeUTF8String(buf, this.reputation);
+		ByteBufUtils.writeUTF8String(buf, this.advancement);
+		buf.writeBoolean(this.stock);
+		buf.writeInt(this.restock);
+		buf.writeInt(inStock);
+		buf.writeInt(maxStock);
 	}
 
 	public int getEntityId() {
@@ -68,14 +81,6 @@ public class CPacketEditTrade implements IMessage {
 	public int getTradeIndex() {
 		return this.tradeIndex;
 	}
-	
-	public int getStockCount() {
-		return this.stockCount;
-	}
-	
-	public int getMaxStockCount() {
-		return this.maxStockCount;
-	}
 
 	public boolean[] getIgnoreMeta() {
 		return this.ignoreMeta;
@@ -84,9 +89,29 @@ public class CPacketEditTrade implements IMessage {
 	public boolean[] getIgnoreNBT() {
 		return this.ignoreNBT;
 	}
-	
-	public boolean isAbleToRestock() {
-		return this.canRestock;
+
+	public String getReputation() {
+		return reputation;
+	}
+
+	public String getAdvancement() {
+		return advancement;
+	}
+
+	public boolean isStock() {
+		return stock;
+	}
+
+	public int getRestock() {
+		return restock;
+	}
+
+	public int getInStock() {
+		return this.inStock;
+	}
+
+	public int getMaxStock() {
+		return this.maxStock;
 	}
 
 }

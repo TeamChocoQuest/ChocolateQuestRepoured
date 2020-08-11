@@ -24,15 +24,15 @@ public class ContainerMerchantEditTrade extends Container {
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 72 + j * 18, 58 + i * 18));
+				this.addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 72 + j * 18, 60 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlotToContainer(new Slot(player.inventory, k, 72 + k * 18, 116));
+			this.addSlotToContainer(new Slot(player.inventory, k, 72 + k * 18, 118));
 		}
 
-		this.tradeInventory = new InventoryBasic(null, false, 5);
+		this.tradeInventory = new InventoryBasic("", false, 5);
 		this.addSlotToContainer(new Slot(this.tradeInventory, 0, 74, 12));
 		this.addSlotToContainer(new Slot(this.tradeInventory, 1, 100, 12));
 		this.addSlotToContainer(new Slot(this.tradeInventory, 2, 126, 12));

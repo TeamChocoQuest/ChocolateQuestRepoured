@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -29,14 +30,18 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant.png");
 	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant_creative.png");
 
-	private static final int GUI_WIDTH = 304;
+	private static final int GUI_WIDTH = 307;
 	private static final int GUI_HEIGHT = 166;
 	private final AbstractEntityCQR entity;
 	private final TraderOffer trades;
 	private final GuiButtonTrade[] tradeButtons = new GuiButtonTrade[7];
+	private final GuiButton[] pushUpButtons = new GuiButton[this.tradeButtons.length - 1];
+	private final GuiButton[] pushDownButtons = new GuiButton[this.tradeButtons.length - 1];
+	private final GuiButton[] deleteButtons = new GuiButton[this.tradeButtons.length - 1];
+	private final GuiButton[] editButtons = new GuiButton[this.tradeButtons.length - 1];
+	private GuiButton addNewTradeButton;
 	private int buttonStartIndex = 0;
 	private boolean scrollBarClicked;
-	private final GuiButton[] creativeButtons = new GuiButton[this.tradeButtons.length * 4];
 
 	public GuiMerchant(Container container, AbstractEntityCQR entity) {
 		super(container);
@@ -52,25 +57,26 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		this.guiTop = (this.height - GUI_HEIGHT) / 2;
 
 		for (int i = 0; i < this.tradeButtons.length; i++) {
-			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(i, this.guiLeft + 5, this.guiTop + 18 + i * 20, 116, 20, i));
-			int j = this.creativeButtons.length / this.tradeButtons.length;
-			int k = Math.max(this.tradeButtons.length, j);
-			this.creativeButtons[i * j] = this.addButton(new GuiButtonTextured((i + 1) * k, this.guiLeft - 15, this.guiTop + 18 + i * 20, 10, 10, "container/gui_button_10px", "container/icon_up"));
-			this.creativeButtons[i * j + 1] = this.addButton(new GuiButtonTextured((i + 1) * k + 1, this.guiLeft - 15, this.guiTop + 28 + i * 20, 10, 10, "container/gui_button_10px", "container/icon_down"));
-			this.creativeButtons[i * j + 2] = this.addButton(new GuiButtonTextured((i + 1) * k + 2, this.guiLeft - 5, this.guiTop + 18 + i * 20, 10, 10, "container/gui_button_10px", "container/icon_delete"));
-			this.creativeButtons[i * j + 3] = this.addButton(new GuiButtonTextured((i + 1) * k + 3, this.guiLeft - 5, this.guiTop + 28 + i * 20, 10, 10, "container/gui_button_10px", "container/icon_edit"));
+			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(10 + i, this.guiLeft + 8, this.guiTop + 18 + i * 20, i));
+			if (i < this.tradeButtons.length - 1) {
+				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.guiLeft - 12, this.guiTop + 18 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_up"));
+				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.guiLeft - 12, this.guiTop + 28 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_down"));
+				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.guiLeft - 2, this.guiTop + 18 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_delete"));
+				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.guiLeft - 2, this.guiTop + 28 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_edit"));
+			}
 		}
-		this.updateButtons();
+		this.addNewTradeButton = this.addButton(new GuiButton(0, this.guiLeft - 12, this.guiTop + 138, 136, 20, "- Create Trade -"));
+
+		this.update();
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		boolean flag = this.mc.player.isCreative();
-		for (GuiButton button : this.creativeButtons) {
-			button.visible = flag;
-		}
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+		for (GuiButtonTrade tradeButton : this.tradeButtons) {
+			tradeButton.renderHoveredToolTip(this, mouseX, mouseY);
+		}
 	}
 
 	@Override
@@ -85,11 +91,17 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 			GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH / 512.0D, GUI_HEIGHT / 256.0D);
 		}
 
-		if (this.trades.size() > this.tradeButtons.length) {
-			int scrollOffsetY = (int) ((double) this.buttonStartIndex / (double) (this.trades.size() - this.tradeButtons.length) * 113.0D);
-			GuiHelper.drawTexture(this.guiLeft + 122.0D, this.guiTop + 18.0D + scrollOffsetY, 0.0D, 199.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
+		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
+			int scrollOffsetY = (int) ((double) this.buttonStartIndex / (double) (this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0))) * 113.0D);
+			GuiHelper.drawTexture(this.guiLeft + 125.0D, this.guiTop + 18.0D + scrollOffsetY, 0.0D, 166.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
 		} else {
-			GuiHelper.drawTexture(this.guiLeft + 122.0D, this.guiTop + 18.0D, 6.0D / 512.0D, 199.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
+			GuiHelper.drawTexture(this.guiLeft + 125.0D, this.guiTop + 18.0D, 6.0D / 512.0D, 166.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
+		}
+
+		if (this.mc.player.isCreative()) {
+			this.fontRenderer.drawString(this.entity.getDisplayName().getFormattedText(), this.guiLeft - 13, this.guiTop + 7, 0x404040);
+		} else {
+			this.fontRenderer.drawString(this.entity.getDisplayName().getFormattedText(), this.guiLeft + 7, this.guiTop + 7, 0x404040);
 		}
 	}
 
@@ -104,19 +116,16 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 			((ContainerMerchant) this.inventorySlots).setCurrentTradeIndex(((GuiButtonTrade) button).getIndex());
 			((ContainerMerchant) this.inventorySlots).updateInputsForTrade(((GuiButtonTrade) button).getIndex());
 			CQRMain.NETWORK.sendToServer(new CPacketSyncSelectedTrade(((GuiButtonTrade) button).getIndex()));
-		} else {
-			int i = Math.max(this.tradeButtons.length, this.creativeButtons.length / this.tradeButtons.length);
-			int j = button.id % i;
-			int k = button.id / i - 1;
-			if (j == 0) {
-				CQRMain.NETWORK.sendToServer(new CPacketUpdateTradeIndex(this.entity.getEntityId(), k, k - 1));
-			} else if (j == 1) {
-				CQRMain.NETWORK.sendToServer(new CPacketUpdateTradeIndex(this.entity.getEntityId(), k, k + 1));
-			} else if (j == 2) {
-				CQRMain.NETWORK.sendToServer(new CPacketDeleteTrade(this.entity.getEntityId(), k));
-			} else if (j == 3) {
-				CQRMain.NETWORK.sendToServer(new CPacketOpenEditTradeGui(this.entity.getEntityId(), k));
-			}
+		} else if (button == this.addNewTradeButton) {
+			CQRMain.NETWORK.sendToServer(new CPacketOpenEditTradeGui(this.entity.getEntityId(), this.trades.size()));
+		} else if (button.id >= 20 && button.id < 30) {
+			CQRMain.NETWORK.sendToServer(new CPacketUpdateTradeIndex(this.entity.getEntityId(), this.buttonStartIndex + button.id - 20, this.buttonStartIndex + button.id - 20 - 1));
+		} else if (button.id >= 30 && button.id < 40) {
+			CQRMain.NETWORK.sendToServer(new CPacketUpdateTradeIndex(this.entity.getEntityId(), this.buttonStartIndex + button.id - 30, this.buttonStartIndex + button.id - 30 + 1));
+		} else if (button.id >= 40 && button.id < 50) {
+			CQRMain.NETWORK.sendToServer(new CPacketDeleteTrade(this.entity.getEntityId(), this.buttonStartIndex + button.id - 40));
+		} else if (button.id >= 50 && button.id < 60) {
+			CQRMain.NETWORK.sendToServer(new CPacketOpenEditTradeGui(this.entity.getEntityId(), this.buttonStartIndex + button.id - 50));
 		}
 	}
 
@@ -125,7 +134,11 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		super.handleMouseInput();
 		double dWheel = Mouse.getEventDWheel();
 		if (dWheel != 0.0D) {
-			this.scroll((int) (dWheel / 60.0D));
+			int scrollAmount = (int) (dWheel / 60.0D);
+			if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
+				this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex - scrollAmount, 0, this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)));
+				this.update();
+			}
 		}
 	}
 
@@ -134,11 +147,11 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		if (this.scrollBarClicked) {
 			int y1 = this.guiTop + 18;
 			int y2 = y1 + 139;
-			int scrollLength = this.trades.size() - this.tradeButtons.length;
+			int scrollLength = this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0));
 			float f = ((float) mouseY - (float) y1 - 13.5F) / ((float) (y2 - y1) - 27.0F);
 			f = f * (float) scrollLength + 0.5F;
 			this.buttonStartIndex = MathHelper.clamp((int) f, 0, scrollLength);
-			this.updateButtons();
+			this.update();
 		} else {
 			super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
 		}
@@ -149,8 +162,8 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		this.scrollBarClicked = false;
-		if (this.tradeButtons.length < this.trades.size() && mouseButton == 0) {
-			int x1 = this.guiLeft + 122;
+		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0) && mouseButton == 0) {
+			int x1 = this.guiLeft + 125;
 			int y1 = this.guiTop + 18;
 			int x2 = x1 + 5;
 			int y2 = y1 + 139;
@@ -160,34 +173,44 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		}
 	}
 
-	private void scroll(int amount) {
-		if (this.trades.size() > this.tradeButtons.length) {
-			this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex - amount, 0, this.trades.size() - this.tradeButtons.length);
-			this.updateButtons();
-		}
-	}
-
-	public void updateButtons() {
-		for (int i = 0; i < this.tradeButtons.length; i++) {
-			Trade trade = this.trades.get(this.buttonStartIndex + i);
-			boolean flag = trade != null;
-			if (flag) {
-				this.tradeButtons[i].setIndex(this.buttonStartIndex + i);
-				this.tradeButtons[i].setInputAndOutput(trade.getInputItems(), trade.getOutput());
-				this.tradeButtons[i].setOutOfStock(!trade.isInStock());
-			}
-			this.tradeButtons[i].visible = flag;
-
-			int j = this.creativeButtons.length / this.tradeButtons.length;
-			for (int k = 0; k < j; k++) {
-				this.creativeButtons[i * j + k].visible = this.mc.player.isCreative() && flag;
-			}
-		}
-	}
-
 	@Override
 	public void update() {
-		this.updateButtons();
+		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
+			this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex, 0, this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)));
+		} else {
+			this.buttonStartIndex = 0;
+		}
+
+		for (int i = 0; i < this.tradeButtons.length; i++) {
+			Trade trade = this.trades.get(this.buttonStartIndex + i);
+
+			this.tradeButtons[i].visible = trade != null;
+			if (trade != null) {
+				this.tradeButtons[i].setIndex(this.buttonStartIndex + i);
+				this.tradeButtons[i].setInput(trade.getInputItems());
+				this.tradeButtons[i].setOutput(trade.getOutput());
+				this.tradeButtons[i].setOutOfStock(!trade.isInStock());
+				this.tradeButtons[i].setLockedForPlayer(!trade.isUnlockedFor(this.mc.player));
+			}
+
+			if (i < this.tradeButtons.length - 1) {
+				this.pushUpButtons[i].visible = trade != null && this.mc.player.isCreative();
+				this.pushDownButtons[i].visible = trade != null && this.mc.player.isCreative();
+				this.deleteButtons[i].visible = trade != null && this.mc.player.isCreative();
+				this.editButtons[i].visible = trade != null && this.mc.player.isCreative();
+			}
+		}
+		this.tradeButtons[this.tradeButtons.length - 1].visible = !this.mc.player.isCreative();
+
+		this.addNewTradeButton.visible = this.mc.player.isCreative();
+		this.addNewTradeButton.x = this.guiLeft - 12;
+		this.addNewTradeButton.y = this.guiTop + (this.trades.size() < this.tradeButtons.length - 1 ? 18 + this.trades.size() * 20 : 138);
+	}
+
+	// Overriding to set access modifier to public
+	@Override
+	public void renderToolTip(ItemStack stack, int x, int y) {
+		super.renderToolTip(stack, x, y);
 	}
 
 }

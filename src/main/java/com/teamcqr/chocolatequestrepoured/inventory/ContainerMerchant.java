@@ -25,20 +25,20 @@ public class ContainerMerchant extends Container {
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 136 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 139 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlotToContainer(new Slot(player.inventory, k, 136 + k * 18, 142));
+			this.addSlotToContainer(new Slot(player.inventory, k, 139 + k * 18, 142));
 		}
 
 		this.merchantInventory = new InventoryMerchant(entity, player);
-		this.addSlotToContainer(new Slot(this.merchantInventory, 0, 138, 37));
-		this.addSlotToContainer(new Slot(this.merchantInventory, 1, 164, 37));
-		this.addSlotToContainer(new Slot(this.merchantInventory, 2, 190, 37));
-		this.addSlotToContainer(new Slot(this.merchantInventory, 3, 216, 37));
-		this.addSlotToContainer(new SlotMerchantOutput(player, this.merchantInventory, 4, 274, 37));
+		this.addSlotToContainer(new Slot(this.merchantInventory, 0, 141, 37));
+		this.addSlotToContainer(new Slot(this.merchantInventory, 1, 167, 37));
+		this.addSlotToContainer(new Slot(this.merchantInventory, 2, 193, 37));
+		this.addSlotToContainer(new Slot(this.merchantInventory, 3, 219, 37));
+		this.addSlotToContainer(new SlotMerchantOutput(player, this.merchantInventory, 4, 277, 37));
 	}
 
 	@Override

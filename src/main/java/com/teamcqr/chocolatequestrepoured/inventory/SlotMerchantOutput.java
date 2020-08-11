@@ -51,7 +51,7 @@ public class SlotMerchantOutput extends Slot {
 
 		if (trade != null) {
 			ItemStack[] input = new ItemStack[] { this.merchantInventory.getStackInSlot(0), this.merchantInventory.getStackInSlot(1), this.merchantInventory.getStackInSlot(2), this.merchantInventory.getStackInSlot(3) };
-			if (trade.doTransaction(input)) {
+			if (trade.doTransaction(thePlayer, input)) {
 				this.merchantInventory.setInventorySlotContents(0, input[0]);
 				this.merchantInventory.setInventorySlotContents(1, input[1]);
 				this.merchantInventory.setInventorySlotContents(2, input[2]);

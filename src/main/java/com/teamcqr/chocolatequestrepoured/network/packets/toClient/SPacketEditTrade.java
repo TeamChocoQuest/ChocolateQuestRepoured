@@ -24,14 +24,14 @@ public class SPacketEditTrade implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		this.tradeIndex = buf.readByte() + 128;
+		this.tradeIndex = buf.readInt();
 		this.tradeTag = ByteBufUtils.readTag(buf);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		buf.writeByte(this.tradeIndex - 128);
+		buf.writeInt(this.tradeIndex);
 		ByteBufUtils.writeTag(buf, this.tradeTag);
 	}
 

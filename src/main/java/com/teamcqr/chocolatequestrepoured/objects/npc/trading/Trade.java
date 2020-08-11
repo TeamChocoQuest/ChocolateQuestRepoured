@@ -1,14 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.objects.npc.trading;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.factions.EReputationState;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.util.CraftingHelper;
 
@@ -18,20 +16,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
 public class Trade {
 
-	protected TraderOffer holder;
-	protected UUID recipeID = MathHelper.getRandomUUID();
-	protected String recipeName = "";
-	protected int inStock = 10;
-	protected int maxStock = 20;
-	protected float expCount = 0;
+	private static final Random rdm = new Random();
+
+	private final TraderOffer holder;
 
 	private NonNullList<TradeInput> inputs = NonNullList.create();
 	private NonNullList<TradeInput> inputsCompressed = NonNullList.create();
@@ -40,21 +33,25 @@ public class Trade {
 	private ItemStack output;
 	private boolean isSimple = true;
 
-	// Unlock conditions
-	private boolean hasToBeUnlocked = true;
-	private boolean requireReputation = true;
-	private int minReputation = EReputationState.NEUTRAL.getValue();
+	private int requiredReputation = Integer.MIN_VALUE;
+	private ResourceLocation requiredAdvancement = null;
 
-	private boolean requireAdvancement = false;
-	private ResourceLocation advancementIdent = null;
+	private boolean hasLimitedStock = false;
+	private int restockRate = 5;
+	private int inStock = 10;
+	private int maxStock = 20;
 
-	private boolean manuallyUnlocked = false;
-	private boolean shouldRestock = true;
-
-	protected static final Random rdm = new Random();
-	
-	public Trade(TraderOffer holder, ItemStack output, TradeInput... inputs) {
+	public Trade(TraderOffer holder, int requiredMinReputation, @Nullable ResourceLocation requiredAdvancement, boolean hasLimitedStock, int restockRate, int inStock, int maxStock, ItemStack output, TradeInput... inputs) {
 		this.holder = holder;
+
+		this.requiredReputation = requiredMinReputation;
+		this.requiredAdvancement = requiredAdvancement;
+
+		this.hasLimitedStock = hasLimitedStock;
+		this.restockRate = restockRate;
+		this.inStock = inStock;
+		this.maxStock = maxStock;
+
 		this.output = output.copy();
 
 		for (TradeInput input : inputs) {
@@ -79,14 +76,6 @@ public class Trade {
 	}
 
 	private void readFromNBT(NBTTagCompound nbt) {
-		this.recipeID = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("uuid"));
-		this.recipeName = nbt.getString("name");
-		this.inStock = nbt.getInteger("stock");
-		this.maxStock = nbt.getInteger("maxStock");
-		this.shouldRestock = nbt.getBoolean("shouldRestock");
-		this.hasToBeUnlocked = nbt.getBoolean("requiresUnlocking");
-		this.expCount = nbt.getFloat("expCount");
-
 		this.inputs.clear();
 		NBTTagList inItems = nbt.getTagList("inputs", Constants.NBT.TAG_COMPOUND);
 		for (NBTBase tag : inItems) {
@@ -95,30 +84,18 @@ public class Trade {
 		this.output = new ItemStack(nbt.getCompoundTag("output"));
 		this.isSimple = nbt.getBoolean("isSimple");
 
-		NBTTagCompound unlockConditions = nbt.getCompoundTag("unlockConditions");
-		this.manuallyUnlocked = unlockConditions.getBoolean("manuallyUnlocked");
-		this.requireReputation = unlockConditions.getBoolean("requireReputation");
-		this.requireAdvancement = unlockConditions.getBoolean("requireAdvancement");
-		if (this.requireReputation) {
-			this.minReputation = unlockConditions.getInteger("requiredReputation");
-		}
-		if (this.requireAdvancement) {
-			this.advancementIdent = new ResourceLocation(unlockConditions.getString("requiredAdvancement"));
-		}
+		this.requiredReputation = nbt.getInteger("requiredReputation");
+		this.requiredAdvancement = nbt.hasKey("requiredAdvancement", Constants.NBT.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement")) : null;
+
+		this.hasLimitedStock = nbt.getBoolean("hasLimitedStock");
+		this.restockRate = nbt.getInteger("restockRate");
+		this.inStock = nbt.getInteger("inStock");
+		this.maxStock = nbt.getInteger("maxStock");
 	}
 
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 
-		nbt.setTag("uuid", NBTUtil.createUUIDTag(this.recipeID));
-		nbt.setString("name", this.recipeName);
-		nbt.setInteger("stock", this.inStock);
-		nbt.setInteger("maxStock", this.maxStock);
-		nbt.setBoolean("shouldRestock", this.shouldRestock);
-		nbt.setBoolean("requiresUnlocking", this.hasToBeUnlocked);
-		nbt.setFloat("expCount", this.expCount);
-
-		// In and out items
 		NBTTagList inItems = new NBTTagList();
 		for (TradeInput input : this.inputs) {
 			inItems.appendTag(input.writeToNBT());
@@ -127,20 +104,15 @@ public class Trade {
 		nbt.setTag("output", this.output.writeToNBT(new NBTTagCompound()));
 		nbt.setBoolean("isSimple", this.isSimple);
 
-		// Unlock conditions
-		NBTTagCompound unlockConditions = new NBTTagCompound();
+		nbt.setBoolean("hasLimitedStock", this.hasLimitedStock);
+		nbt.setInteger("restockRate", this.restockRate);
+		nbt.setInteger("inStock", this.inStock);
+		nbt.setInteger("maxStock", this.maxStock);
 
-		unlockConditions.setBoolean("manuallyUnlocked", this.manuallyUnlocked);
-		unlockConditions.setBoolean("requireReputation", this.requireReputation);
-		unlockConditions.setBoolean("requireAdvancement", this.requireAdvancement);
-		if (this.requireReputation) {
-			unlockConditions.setInteger("requiredReputation", this.minReputation);
+		nbt.setInteger("requiredReputation", this.requiredReputation);
+		if (this.requiredAdvancement != null) {
+			nbt.setString("requiredAdvancement", this.requiredAdvancement.toString());
 		}
-		if (this.requireAdvancement) {
-			unlockConditions.setString("requiredAdvancement", this.advancementIdent.toString());
-		}
-
-		nbt.setTag("unlockConditions", unlockConditions);
 
 		return nbt;
 	}
@@ -173,7 +145,7 @@ public class Trade {
 			}
 		}
 	}
-	
+
 	private void checkIfSimple() {
 		Set<Item> items = new HashSet<>();
 		for (TradeInput input : this.inputs) {
@@ -244,40 +216,6 @@ public class Trade {
 		this.inputsCompressedNBTSorted.sort(TradeInput.SORT_NBT);
 	}
 
-	public boolean isUnlockedFor(EntityPlayer player) {
-		if (!this.hasToBeUnlocked) {
-			return true;
-		}
-
-		if (this.requireReputation) {
-			return FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) >= this.minReputation;
-		}
-
-		return !this.requireAdvancement || CQRMain.proxy.hasAdvancement(player, this.advancementIdent);
-	}
-
-	public boolean incStock() {
-		if (this.inStock < this.maxStock && this.shouldRestock) {
-			this.inStock++;
-			return true;
-		}
-		return false;
-	}
-
-	public void decStock() {
-		this.inStock--;
-		this.holder.get(rdm.nextInt(this.holder.getTrades().size())).incStock();
-		List<Trade> restockableTrades = new ArrayList<>(this.holder.getTrades());
-		restockableTrades.removeIf( t -> (!t.isAbleToRestock() || t.getStockCount() >= t.getMaxStockCount() || (t == Trade.this && restockableTrades.size() > 1)));
-		if(!restockableTrades.isEmpty()) {
-			restockableTrades.get((rdm.nextInt(restockableTrades.size()))).incStock();
-		}
-	}
-
-	public boolean isInStock() {
-		return this.inStock > 0;
-	}
-
 	public boolean doItemsMatch(ItemStack[] input) {
 		if (this.isSimple) {
 			NonNullList<TradeInput> tradeInputs = this.getInputItemsCompressed();
@@ -312,11 +250,13 @@ public class Trade {
 		}
 	}
 
-	public boolean doTransaction(ItemStack[] input) {
-		if(!this.isInStock()) {
+	public boolean doTransaction(@Nullable EntityPlayer player, ItemStack[] input) {
+		if (!this.isInStock()) {
 			return false;
 		}
-		this.decStock();
+		if (player != null && !this.isUnlockedFor(player)) {
+			return false;
+		}
 		if (this.isSimple) {
 			if (!this.doItemsMatch(input)) {
 				return false;
@@ -328,6 +268,8 @@ public class Trade {
 					return false;
 				}
 			}
+
+			this.decStock();
 			return true;
 		} else {
 			NonNullList<TradeInput> tradeInputsMetaSorted = this.getInputItemsCompressedMetaSorted();
@@ -344,6 +286,7 @@ public class Trade {
 				for (TradeInput tradeInput : tradeInputsMetaSorted) {
 					CraftingHelper.remove(input, tradeInput.getStack(), false, tradeInput.ignoreMeta(), tradeInput.ignoreNBT());
 				}
+				this.decStock();
 				return true;
 			} else {
 				flag = true;
@@ -360,6 +303,7 @@ public class Trade {
 					for (TradeInput tradeInput : tradeInputsNBTSorted) {
 						CraftingHelper.remove(input, tradeInput.getStack(), false, tradeInput.ignoreMeta(), tradeInput.ignoreNBT());
 					}
+					this.decStock();
 					return true;
 				} else {
 					return false;
@@ -412,32 +356,57 @@ public class Trade {
 		return list;
 	}
 
-	public String getRecipeName() {
-		return this.recipeName;
+	public boolean isUnlockedFor(EntityPlayer player) {
+		if (FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
+			return false;
+		}
+
+		if (this.requiredAdvancement == null) {
+			return true;
+		}
+
+		return CQRMain.proxy.hasAdvancement(player, this.requiredAdvancement);
 	}
 
-	public float getExpCount() {
-		return this.expCount;
+	public void incStock() {
+		if (this.inStock < this.maxStock) {
+			this.inStock++;
+		}
 	}
 
-	public Integer getStockCount() {
-		return this.inStock;
+	public void decStock() {
+		if (this.inStock > 0) {
+			this.inStock--;
+			this.holder.get(rdm.nextInt(this.holder.getTrades().size())).incStock();
+		}
 	}
 
-	public Integer getMaxStockCount() {
-		return this.maxStock;
-	}
-	
-	public void setStockCount(int stockCount) {
-		this.inStock = stockCount;
-	}
-	
-	public void setMaxStockCount(int maxStockCount) {
-		this.maxStock = maxStockCount;
+	public boolean isInStock() {
+		return !this.hasLimitedStock || this.inStock > 0;
 	}
 
-	public boolean isAbleToRestock() {
-		return this.shouldRestock;
+	public int getRequiredReputation() {
+		return requiredReputation;
+	}
+
+	public ResourceLocation getRequiredAdvancement() {
+		return requiredAdvancement;
+	}
+
+	public boolean hasLimitedStock() {
+		return hasLimitedStock;
+	}
+
+	public int getRestockRate() {
+		return restockRate;
+	}
+
+	public int getInStock() {
+		return inStock;
+	}
+
+	public int getMaxStock() {
+		return maxStock;
 	}
 
 }
