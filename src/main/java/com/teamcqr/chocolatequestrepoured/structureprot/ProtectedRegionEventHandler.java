@@ -75,7 +75,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
-		CQRMain.logger.info("break");
+		//CQRMain.logger.info("break");
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
 		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
@@ -97,7 +97,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
-		CQRMain.logger.info("place");
+		//CQRMain.logger.info("place");
 		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntity(), event.getPlacedBlock().getBlock())) {
 			event.setCanceled(true);
 		}
@@ -115,12 +115,12 @@ public class ProtectedRegionEventHandler {
 			return;
 		}
 		if (item == Items.BUCKET) {
-			CQRMain.logger.info("bucket break");
+			//CQRMain.logger.info("bucket break");
 			if (ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer())) {
 				event.setCanceled(true);
 			}
 		} else {
-			CQRMain.logger.info("bucket place");
+			//CQRMain.logger.info("bucket place");
 			if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), stack)) {
 				event.setCanceled(true);
 			}
