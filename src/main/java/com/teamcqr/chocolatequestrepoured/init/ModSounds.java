@@ -19,12 +19,23 @@ public class ModSounds {
 	public static final SoundEvent GUN_SHOOT = Null();
 	@ObjectHolder("item.magic")
 	public static final SoundEvent MAGIC = Null();
+	
 	@ObjectHolder("entity.player.classic_hurt")
 	public static final SoundEvent CLASSIC_HURT = Null();
+	
 	@ObjectHolder("entity.nether_dragon.hurt")
 	public static final SoundEvent NETHER_DRAGON_HURT = Null();
 	@ObjectHolder("entity.nether_dragon.death")
 	public static final SoundEvent NETHER_DRAGON_DEATH = Null();
+	
+	//Source for goblin sounds: https://opengameart.org/content/goblins-sound-pack
+	@ObjectHolder("entity.goblin.ambient")
+	public static final SoundEvent GOBLIN_AMBIENT = Null();
+	@ObjectHolder("entity.goblin.hurt")
+	public static final SoundEvent GOBLIN_HURT = Null();
+	@ObjectHolder("entity.goblin.death")
+	public static final SoundEvent GOBLIN_DEATH = Null();
+	
 	@ObjectHolder("entity.bubble.bubble")
 	public static final SoundEvent BUBBLE_BUBBLE = Null();
 
@@ -33,7 +44,17 @@ public class ModSounds {
 
 		@SubscribeEvent
 		public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-			final SoundEvent[] sounds = { createSoundEvent("item.gun.shoot"), createSoundEvent("item.magic"), createSoundEvent("entity.player.classic_hurt"), createSoundEvent("entity.nether_dragon.hurt"), createSoundEvent("entity.nether_dragon.death"), createSoundEvent("entity.bubble.bubble") };
+			final SoundEvent[] sounds = { 
+					createSoundEvent("item.gun.shoot"), 
+					createSoundEvent("item.magic"), 
+					createSoundEvent("entity.player.classic_hurt"), 
+					createSoundEvent("entity.goblin.ambient"),
+					createSoundEvent("entity.goblin.hurt"),
+					createSoundEvent("entity.goblin.death"),
+					createSoundEvent("entity.nether_dragon.hurt"), 
+					createSoundEvent("entity.nether_dragon.death"), 
+					createSoundEvent("entity.bubble.bubble") 
+				};
 
 			IForgeRegistry<SoundEvent> registry = event.getRegistry();
 

@@ -16,6 +16,39 @@
 		"category": "neutral",
 		"sounds": [{"name": "cqrepoured:entity/player/classic_hurt"}]
 	},
+	
+	"entity.goblin.ambient":
+	{
+		"category": "neutral",
+		"sounds": 
+		[
+			{"name": "cqrepoured:entity/goblin/ambient_1"},
+			{"name": "cqrepoured:entity/goblin/ambient_2"},
+			{"name": "cqrepoured:entity/goblin/ambient_3"},
+			{"name": "cqrepoured:entity/goblin/ambient_4"},
+			{"name": "cqrepoured:entity/goblin/ambient_5"}
+		]
+	},
+	"entity.goblin.hurt":
+	{
+		"category": "neutral",
+		"sounds": 
+		[
+			{"name": "cqrepoured:entity/goblin/hurt_1"},
+			{"name": "cqrepoured:entity/goblin/hurt_2"},
+			{"name": "cqrepoured:entity/goblin/hurt_3"},
+			{"name": "cqrepoured:entity/goblin/hurt_4"}
+		]
+	},
+	"entity.goblin.death":
+	{
+		"category": "neutral",
+		"sounds": 
+		[
+			{"name": "cqrepoured:entity/goblin/death"}
+		]
+	},
+	
 	"entity.nether_dragon.hurt":
 	{
 		"category": "neutral",

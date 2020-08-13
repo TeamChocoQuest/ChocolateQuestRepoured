@@ -15,6 +15,7 @@ public class ModLoottables {
 	public static final ResourceLocation ENTITIES_BOARMAN = createEntityLootTable("boarman");
 	public static final ResourceLocation ENTITIES_DWARF = createEntityLootTable("dwarf");
 	public static final ResourceLocation ENTITIES_ENDERMAN = createEntityLootTable("enderman");
+	public static final ResourceLocation ENTITIES_GOBLIN = createEntityLootTable("goblin");
 	public static final ResourceLocation ENTITIES_GOLEM = createEntityLootTable("golem");
 	public static final ResourceLocation ENTITIES_GREMLIN = createEntityLootTable("gremlin");
 	public static final ResourceLocation ENTITIES_ILLAGER = createEntityLootTable("illager");

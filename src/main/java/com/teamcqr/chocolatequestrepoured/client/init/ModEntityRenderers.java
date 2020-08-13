@@ -25,6 +25,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRBoa
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRDummy;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQREnderman;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGoblin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGolem;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRIllager;
@@ -83,6 +84,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
@@ -190,6 +192,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRTriton.class, RenderCQRTriton::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, RenderCQRWalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);
 
 		// Mounts
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
