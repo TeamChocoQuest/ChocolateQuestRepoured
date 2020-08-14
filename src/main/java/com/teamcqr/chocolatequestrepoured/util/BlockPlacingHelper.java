@@ -1,12 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
+import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionMethod;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -22,60 +19,9 @@ import net.minecraftforge.common.util.BlockSnapshot;
 
 public class BlockPlacingHelper {
 
-	private static Field precipitationHeightMapField = null;
-
-	private static int[] getPrecipitationHeightMap(Chunk chunk) {
-		try {
-			if (precipitationHeightMapField == null) {
-				try {
-					precipitationHeightMapField = Chunk.class.getDeclaredField("field_76638_b");
-				} catch (NoSuchFieldException e) {
-					precipitationHeightMapField = Chunk.class.getDeclaredField("precipitationHeightMap");
-				}
-				precipitationHeightMapField.setAccessible(true);
-			}
-			return (int[]) precipitationHeightMapField.get(chunk);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error("Failed to get value of Chunk.precipitationHeightMap field", e);
-		}
-		return new int[256];
-	}
-
-	private static Method relightBlockMethod = null;
-
-	private static void relightBlock(Chunk chunk, int x, int y, int z) {
-		try {
-			if (relightBlockMethod == null) {
-				try {
-					relightBlockMethod = Chunk.class.getDeclaredMethod("func_76615_h", int.class, int.class, int.class);
-				} catch (NoSuchMethodException e) {
-					relightBlockMethod = Chunk.class.getDeclaredMethod("relightBlock", int.class, int.class, int.class);
-				}
-				relightBlockMethod.setAccessible(true);
-			}
-			relightBlockMethod.invoke(chunk, x, y, z);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Failed to invoke Chunk.relightBlock method", e);
-		}
-	}
-
-	private static Method propagateSkylightOcclusionMethod = null;
-
-	private static void propagateSkylightOcclusion(Chunk chunk, int x, int z) {
-		try {
-			if (propagateSkylightOcclusionMethod == null) {
-				try {
-					propagateSkylightOcclusionMethod = Chunk.class.getDeclaredMethod("func_76595_e", int.class, int.class);
-				} catch (NoSuchMethodException e) {
-					propagateSkylightOcclusionMethod = Chunk.class.getDeclaredMethod("propagateSkylightOcclusion", int.class, int.class);
-				}
-				propagateSkylightOcclusionMethod.setAccessible(true);
-			}
-			propagateSkylightOcclusionMethod.invoke(chunk, x, z);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Failed to invoke Chunk.propagateSkylightOcclusion method", e);
-		}
-	}
+	private static ReflectionField<Chunk, int[]> precipitationHeightMapField = new ReflectionField<>(Chunk.class, "field_76638_b", "precipitationHeightMap");
+	private static ReflectionMethod<Chunk, Object> relightBlockMethod = new ReflectionMethod<>(Chunk.class, "func_76615_h", "relightBlock", int.class, int.class, int.class);
+	private static ReflectionMethod<Chunk, Object> propagateSkylightOcclusionMethod = new ReflectionMethod<>(Chunk.class, "func_76595_e", "propagateSkylightOcclusion", int.class, int.class);
 
 	public static boolean setBlockState(World world, BlockPos pos, IBlockState newState, int flags, boolean updateLight) {
 		if (world.isOutsideBuildHeight(pos)) {
@@ -119,7 +65,7 @@ public class BlockPlacingHelper {
 		int k = pos.getZ() & 15;
 		int l = k << 4 | i;
 
-		int[] precipitationHeightMap = getPrecipitationHeightMap(chunk);
+		int[] precipitationHeightMap = precipitationHeightMapField.get(chunk);
 		if (j >= precipitationHeightMap[l] - 1) {
 			precipitationHeightMap[l] = -999;
 		}
@@ -174,14 +120,14 @@ public class BlockPlacingHelper {
 
 						if (j1 > 0) {
 							if (j >= i1) {
-								relightBlock(chunk, i, j + 1, k);
+								relightBlockMethod.invoke(chunk, i, j + 1, k);
 							}
 						} else if (j == i1 - 1) {
-							relightBlock(chunk, i, j, k);
+							relightBlockMethod.invoke(chunk, i, j, k);
 						}
 
 						if (j1 != k1 && (j1 < k1 || chunk.getLightFor(EnumSkyBlock.SKY, pos) > 0 || chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
-							propagateSkylightOcclusion(chunk, i, k);
+							propagateSkylightOcclusionMethod.invoke(chunk, i, k);
 						}
 					}
 				}
