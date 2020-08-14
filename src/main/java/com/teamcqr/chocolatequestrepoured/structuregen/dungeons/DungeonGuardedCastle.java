@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuard
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,7 +29,7 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 	private boolean buildPaths = true;
 	private boolean placeInCircle = false;
-	private Block pathBlock = Blocks.GRASS_PATH;
+	private IBlockState pathBlock = Blocks.GRASS_PATH.getDefaultState();
 
 	public DungeonGuardedCastle(String name, Properties prop) {
 		super(name, prop);
@@ -46,7 +47,7 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 		this.buildPaths = PropertyFileHelper.getBooleanProperty(prop, "buildroads", true);
 
-		this.pathBlock = PropertyFileHelper.getBlockProperty(prop, "pathblock", Blocks.GRASS_PATH);
+		this.pathBlock = PropertyFileHelper.getBlockStateProperty(prop, "pathblock", Blocks.GRASS_PATH.getDefaultState());
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class DungeonGuardedCastle extends DungeonBase {
 		return this.placeInCircle;
 	}
 
-	public Block getPathMaterial() {
+	public IBlockState getPathMaterial() {
 		return this.pathBlock;
 	}
 

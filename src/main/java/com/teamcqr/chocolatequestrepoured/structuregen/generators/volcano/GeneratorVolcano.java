@@ -137,7 +137,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		int rMax = (int) (this.baseRadius * 4 + this.dungeon.getMaxHoleSize());
 		final int r = rMax / 2;
 		BlockPos referenceLoc = this.centerLoc.subtract(new Vec3i(r, this.centerLoc.getY(), r));
-		Block[][][] blocks = new Block[rMax][256][rMax];
+		IBlockState[][][] blocks = new IBlockState[rMax][256][rMax];
 		// DONE: indexes CAN be negative -> recalculate coordinates
 		// DONE: Rewrite ore gen code
 		// DONE: Rewrite hole gen code
@@ -188,7 +188,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 								}
 							}
 						} else {
-							blocks[iX + r][iY + this.minY][iZ + r] = Blocks.AIR;
+							blocks[iX + r][iY + this.minY][iZ + r] = Blocks.AIR.getDefaultState();
 						}
 					}
 				}
@@ -211,7 +211,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 								blocks[iX + r][iY + 6][iZ + r] = this.dungeon.getLavaBlock();
 							} else {
 								// We're over the lava -> air
-								blocks[iX + r][iY + 6][iZ + r] = Blocks.AIR;
+								blocks[iX + r][iY + 6][iZ + r] = Blocks.AIR.getDefaultState();
 							}
 						} else {
 							// We are in the outer wall -> random spheres to make it more cave
@@ -219,7 +219,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 								for (BlockPos bp : this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + 6, iZ + this.pos.getZ()), this.random.nextInt(3) + 2)) {
 									BlockPos v = bp.subtract(referenceLoc);
 									int chanceForSecondary = new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue();
-									Block block = DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 - chanceForSecondary) ? this.dungeon.getMagmaBlock() : this.dungeon.getLowerMainBlock();
+									IBlockState block = DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 - chanceForSecondary) ? this.dungeon.getMagmaBlock() : this.dungeon.getLowerMainBlock();
 									if (bp.getY() < 256) {
 										try {
 											blocks[v.getX()][bp.getY()][v.getZ()] = block;
@@ -304,7 +304,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int j = 0; j < blocks[i].length; j++) {
 				for (int k = 0; k < blocks[i][j].length; k++) {
 					if (blocks[i][j][k] != null) {
-						list.add(new BlockInfo(new BlockPos(i, j, k), blocks[i][j][k].getDefaultState(), null));
+						list.add(new BlockInfo(new BlockPos(i, j, k), blocks[i][j][k], null));
 					}
 				}
 			}
@@ -438,7 +438,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		return posList;
 	}
 
-	private void generateOres(List<BlockPos> blocks, Block[][][] blockArray, int r) {
+	private void generateOres(List<BlockPos> blocks, IBlockState[][][] blockArray, int r) {
 		Random rdm = new Random();
 
 		List<Integer> usedIndexes = new ArrayList<>();
@@ -454,7 +454,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			if (blockArray[v.getX() + r][p.getY()][v.getZ() + r] == Blocks.AIR || blockArray[v.getX() + r][p.getY()][v.getZ() + r] == null) {
 				continue;
 			}
-			Block ore;
+			IBlockState ore;
 			int indx = this.dungeon.getOres().length;
 			indx = rdm.nextInt(indx);
 			ore = this.dungeon.getOres()[indx];
@@ -462,7 +462,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generateHoles(List<BlockPos> blocks, Block[][][] blockArray, int r) {
+	private void generateHoles(List<BlockPos> blocks, IBlockState[][][] blockArray, int r) {
 		Random rdm = new Random();
 		// Makes random holes
 		for (int holeCount = 0; holeCount < this.maxHeight * 1.5; holeCount++) {
@@ -473,7 +473,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (BlockPos p : this.getSphereBlocks(center, radius)) {
 				BlockPos v = p.subtract(this.centerLoc);
 				try {
-					blockArray[v.getX() + r][p.getY()][v.getZ() + r] = Blocks.AIR;
+					blockArray[v.getX() + r][p.getY()][v.getZ() + r] = Blocks.AIR.getDefaultState();
 				} catch (ArrayIndexOutOfBoundsException ex) {
 					// Ignore
 				}
@@ -482,7 +482,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generatePillars(BlockPos centerAsIndexes, int radius, int height, Block[][][] blocks, Block pillarBlock) {
+	private void generatePillars(BlockPos centerAsIndexes, int radius, int height, IBlockState[][][] blocks, IBlockState pillarBlock) {
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = -radius; iX <= radius; iX++) {
 				for (int iZ = -radius; iZ <= radius; iZ++) {

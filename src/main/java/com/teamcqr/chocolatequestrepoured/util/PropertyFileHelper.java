@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -10,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -116,59 +118,52 @@ public class PropertyFileHelper {
 		return s.trim().equalsIgnoreCase("true");
 	}
 
-	public static Block getBlockProperty(Properties prop, String key, Block defVal) {
+	public static IBlockState getBlockStateProperty(Properties prop, String key, IBlockState defVal) {
 		String s = prop.getProperty(key);
 		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
 
-		Block retBlock = Block.getBlockFromName(s);
-		if (retBlock == null) {
-			retBlock = defVal;
-		}
-
-		return retBlock;
+		return getBlockStateFromString(s, defVal);
 	}
 
-	public static Block[] getBlockArrayProperty(Properties prop, String key, Block[] defVal) {
+	public static IBlockState[] getBlockStateArrayProperty(Properties prop, String key, IBlockState[] defVal) {
 		String s = prop.getProperty(key);
 		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
-		String[] splitSTr = s.split(",");
-		Block[] retVal = new Block[splitSTr.length];
-		int removed = 0;
-		for (int i = 0; i < splitSTr.length; i++) {
-			String tmp = splitSTr[i].trim();
-			if (tmp.isEmpty()) {
-				retVal = ArrayUtils.remove(retVal, i - removed);
-				removed++;
-			} else if (Block.getBlockFromName(tmp) != null) {
-				retVal[i - removed] = Block.getBlockFromName(tmp);
+
+		String[] strings = s.split(",");
+		ArrayList<IBlockState> blockStates = new ArrayList<>(strings.length);
+		for (String string : strings) {
+			IBlockState state = getBlockStateFromString(string, null);
+			if (state != null) {
+				blockStates.add(state);
 			}
 		}
 
-		return retVal;
+		return !blockStates.isEmpty() ? blockStates.toArray(new IBlockState[blockStates.size()]) : defVal;
 	}
 
-	public static IBlockState getDefaultStateBlockProperty(Properties prop, String key, IBlockState defVal) {
-		String s = prop.getProperty(key);
-		if (s == null || s.isEmpty()) {
-			return defVal;
-		}
-
-		Block retBlock = Block.getBlockFromName(s);
-		if (retBlock == null) {
-			// Try one last thing - to see if the block exists only as a block variant in forge 1.12
-			IBlockState variantState = EnumForgeBlockVariant.getVariantStateFromName(s);
-			if (variantState == null) {
-				return defVal;
-			} else {
-				return variantState;
+	@SuppressWarnings("deprecation")
+	private static IBlockState getBlockStateFromString(String s, IBlockState defVal) {
+		String[] strings = s.split(":");
+		Block block = null;
+		int meta = 0;
+		if (strings.length >= 2) {
+			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0], strings[1]));
+			if (strings.length >= 3) {
+				try {
+					meta = Integer.parseInt(strings[2]);
+				} catch (NumberFormatException e) {
+					// ignore
+				}
 			}
 		} else {
-			return retBlock.getDefaultState();
+			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0]));
 		}
+
+		return block != null ? block.getStateFromMeta(meta) : defVal;
 	}
 
 	public static File getFileProperty(Properties prop, String key, String defVal) {

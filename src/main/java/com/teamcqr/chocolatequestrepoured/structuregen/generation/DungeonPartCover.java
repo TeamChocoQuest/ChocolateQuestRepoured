@@ -11,15 +11,15 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DungeonPartCover extends AbstractDungeonPart {
 
-	private Block coverBlock;
+	private IBlockState coverBlock;
 	private int x1;
 	private int z1;
 
 	public DungeonPartCover(World world, DungeonGenerator dungeonGenerator) {
-		this(world, dungeonGenerator, 0, 0, 0, 0, Blocks.AIR);
+		this(world, dungeonGenerator, 0, 0, 0, 0, Blocks.AIR.getDefaultState());
 	}
 
-	public DungeonPartCover(World world, DungeonGenerator dungeonGenerator, int startX, int startZ, int endX, int endZ, Block coverBlock) {
+	public DungeonPartCover(World world, DungeonGenerator dungeonGenerator, int startX, int startZ, int endX, int endZ, IBlockState coverBlock) {
 		super(world, dungeonGenerator, new BlockPos(Math.min(startX, endX), dungeonGenerator.getPos().getY(), Math.min(startZ, endZ)));
 		this.maxPos = new BlockPos(Math.max(startX, endX), dungeonGenerator.getPos().getY(), Math.max(startZ, endZ));
 		this.x1 = this.minPos.getX();
@@ -30,7 +30,8 @@ public class DungeonPartCover extends AbstractDungeonPart {
 	@Override
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = super.writeToNBT();
-		compound.setString("coverBlock", this.coverBlock.getRegistryName().toString());
+		compound.setString("coverBlock", this.coverBlock.getBlock().getRegistryName().toString());
+		compound.setInteger("coverBlockMeta", this.coverBlock.getBlock().getMetaFromState(this.coverBlock));
 		compound.setInteger("x1", this.x1);
 		compound.setInteger("z1", this.z1);
 		return compound;
@@ -39,9 +40,11 @@ public class DungeonPartCover extends AbstractDungeonPart {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.coverBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("coverBlock")));
-		if (this.coverBlock == null) {
-			this.coverBlock = Blocks.AIR;
+		Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("coverBlock")));
+		if (b != null) {
+			this.coverBlock = b.getStateFromMeta(compound.getInteger("coverBlockMeta"));
+		} else {
+			this.coverBlock = Blocks.AIR.getDefaultState();
 		}
 		this.x1 = compound.getInteger("x1");
 		this.z1 = compound.getInteger("z1");
@@ -68,7 +71,7 @@ public class DungeonPartCover extends AbstractDungeonPart {
 					} else {
 						if (state.getBlock() != this.coverBlock) {
 							mutablePos.setY(mutablePos.getY() + 1);
-							this.world.setBlockState(mutablePos, this.coverBlock.getDefaultState(), 18);
+							this.world.setBlockState(mutablePos, this.coverBlock, 18);
 						}
 						break;
 					}

@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -20,14 +21,14 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 public class DungeonVegetatedCave extends DungeonBase {
 
-	private Block vineBlock;
-	private Block vineLatchBlock;
-	private Block airBlock;
-	private Block pumpkinBlock;
-	private Block[] flowerBlocks;
-	private Block[] mushrooms;
-	private Block[] grassBlocks;
-	private Block[] floorBlocks;
+	private IBlockState vineBlock;
+	private IBlockState vineLatchBlock;
+	private IBlockState airBlock;
+	private IBlockState pumpkinBlock;
+	private IBlockState[] flowerBlocks;
+	private IBlockState[] mushrooms;
+	private IBlockState[] grassBlocks;
+	private IBlockState[] floorBlocks;
 	private int centralCaveSize = 20;
 	private int tunnelCountMin = 3;
 	private int tunnelCountMax = 5;
@@ -46,15 +47,15 @@ public class DungeonVegetatedCave extends DungeonBase {
 
 	public DungeonVegetatedCave(String name, Properties prop) {
 		super(name, prop);
-		this.vineBlock = PropertyFileHelper.getBlockProperty(prop, "vineBlock", Blocks.VINE);
+		this.vineBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineBlock", Blocks.VINE.getDefaultState());
 		// DONE: Add a non-cross-shape vine thing
 		this.crossVine = (this.vineBlock instanceof BlockVine);
-		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airBlock", Blocks.AIR);
-		this.pumpkinBlock = PropertyFileHelper.getBlockProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN);
-		this.flowerBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "flowerBlocks", new Block[] { Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER });
-		this.mushrooms = PropertyFileHelper.getBlockArrayProperty(prop, "mushroomBlocks", new Block[] { Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM });
-		this.floorBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "floorBlocks", new Block[] { Blocks.GRASS, });
-		this.grassBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "grassBlocks", new Block[] { Blocks.AIR, });
+		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airBlock", Blocks.AIR.getDefaultState());
+		this.pumpkinBlock = PropertyFileHelper.getBlockStateProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN.getDefaultState());
+		this.flowerBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "flowerBlocks", new IBlockState[] { Blocks.RED_FLOWER.getDefaultState(), Blocks.YELLOW_FLOWER.getDefaultState() });
+		this.mushrooms = PropertyFileHelper.getBlockStateArrayProperty(prop, "mushroomBlocks", new IBlockState[] { Blocks.BROWN_MUSHROOM.getDefaultState(), Blocks.RED_MUSHROOM.getDefaultState() });
+		this.floorBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "floorBlocks", new IBlockState[] { Blocks.GRASS.getDefaultState() });
+		this.grassBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "grassBlocks", new IBlockState[] { Blocks.AIR.getDefaultState() });
 		this.vineLengthModifier = Math.max(1, PropertyFileHelper.getDoubleProperty(prop, "vineLengthModifier", 2));
 		this.vineChance = PropertyFileHelper.getIntProperty(prop, "vineChance", 20);
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
@@ -66,7 +67,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.tunnelCountMin = PropertyFileHelper.getIntProperty(prop, "tunnelCountMin", 3);
 		this.tunnelCountMax = PropertyFileHelper.getIntProperty(prop, "tunnelCountMax", 5);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
-		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
+		this.vineLatchBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE.getDefaultState());
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
@@ -86,23 +87,23 @@ public class DungeonVegetatedCave extends DungeonBase {
 		return this.getStructureFileFromDirectory(this.buildingFolder);
 	}
 
-	public Block getVineBlock() {
+	public IBlockState getVineBlock() {
 		return this.vineBlock;
 	}
 
-	public Block getFlowerBlock(Random rdm) {
+	public IBlockState getFlowerBlock(Random rdm) {
 		return this.flowerBlocks[rdm.nextInt(this.flowerBlocks.length)];
 	}
 
-	public Block getMushroomBlock(Random rdm) {
+	public IBlockState getMushroomBlock(Random rdm) {
 		return this.mushrooms[rdm.nextInt(this.mushrooms.length)];
 	}
 
-	public Block getFloorBlock(Random rdm) {
+	public IBlockState getFloorBlock(Random rdm) {
 		return this.floorBlocks[rdm.nextInt(this.floorBlocks.length)];
 	}
 
-	public Block getGrassBlock(Random rdm) {
+	public IBlockState getGrassBlock(Random rdm) {
 		return this.grassBlocks[rdm.nextInt(this.grassBlocks.length)];
 	}
 
@@ -126,15 +127,15 @@ public class DungeonVegetatedCave extends DungeonBase {
 		return this.skipCeilingFiltering;
 	}
 
-	public Block getAirBlock() {
+	public IBlockState getAirBlock() {
 		return this.airBlock;
 	}
 
-	public Block getPumpkinBlock() {
+	public IBlockState getPumpkinBlock() {
 		return this.pumpkinBlock;
 	}
 
-	public Block getVineLatchBlock() {
+	public IBlockState getVineLatchBlock() {
 		return this.vineLatchBlock;
 	}
 

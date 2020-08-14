@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,7 +34,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	private int roomSizeY = 10;
 	private int roomSizeZ = 17;
 
-	private Block wallBlock = Blocks.STONEBRICK;
+	private IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
 
 	// Important: All rooms must have the same dimensions!!!
 
@@ -57,7 +58,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
 		this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 17);
 
-		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
+		this.wallBlock = PropertyFileHelper.getBlockStateProperty(prop, "wallBlock", Blocks.STONEBRICK.getDefaultState());
 	}
 
 	@Override
@@ -145,7 +146,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 		return this.roomSizeZ;
 	}
 
-	public Block getWallBlock() {
+	public IBlockState getWallBlock() {
 		return this.wallBlock;
 	}
 }

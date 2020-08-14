@@ -141,7 +141,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			for (int iX = -rad; iX <= rad; iX++) {
 				for (int iZ = -rad; iZ <= rad; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad, center)) {
-						stateMap.put((center.add(iX, -decrementor, iZ)), this.dungeon.getIslandBlock().getDefaultState());
+						stateMap.put((center.add(iX, -decrementor, iZ)), this.dungeon.getIslandBlock());
 					}
 				}
 			}
@@ -185,18 +185,18 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	}
 
 	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, IBlockState> stateMap) {
-		stateMap.put(lowerCenter, this.dungeon.getChainBlock().getDefaultState());
-		stateMap.put(lowerCenter.add(0, 6, 0), this.dungeon.getChainBlock().getDefaultState());
+		stateMap.put(lowerCenter, this.dungeon.getChainBlock());
+		stateMap.put(lowerCenter.add(0, 6, 0), this.dungeon.getChainBlock());
 
-		stateMap.put(lowerLeft, this.dungeon.getChainBlock().getDefaultState());
-		stateMap.put(lowerLeft.add(0, 6, 0), this.dungeon.getChainBlock().getDefaultState());
+		stateMap.put(lowerLeft, this.dungeon.getChainBlock());
+		stateMap.put(lowerLeft.add(0, 6, 0), this.dungeon.getChainBlock());
 
-		stateMap.put(lowerRight, this.dungeon.getChainBlock().getDefaultState());
-		stateMap.put(lowerRight.add(0, 6, 0), this.dungeon.getChainBlock().getDefaultState());
+		stateMap.put(lowerRight, this.dungeon.getChainBlock());
+		stateMap.put(lowerRight.add(0, 6, 0), this.dungeon.getChainBlock());
 
 		for (int i = 0; i < 5; i++) {
-			stateMap.put(lowerBoundL.add(0, i, 0), this.dungeon.getChainBlock().getDefaultState());
-			stateMap.put(lowerBoundR.add(0, i, 0), this.dungeon.getChainBlock().getDefaultState());
+			stateMap.put(lowerBoundL.add(0, i, 0), this.dungeon.getChainBlock());
+			stateMap.put(lowerBoundR.add(0, i, 0), this.dungeon.getChainBlock());
 		}
 	}
 

@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -52,11 +53,11 @@ public abstract class DungeonBase {
 	protected BlockPos lockedPos;
 
 	protected boolean buildSupportPlatform;
-	protected Block supportBlock;
-	protected Block supportTopBlock;
+	protected IBlockState supportBlock;
+	protected IBlockState supportTopBlock;
 
 	protected boolean useCoverBlock;
-	protected Block coverBlock;
+	protected IBlockState coverBlock;
 
 	// Protection system stuff
 	protected boolean enableProtectionSystem = false;
@@ -94,11 +95,11 @@ public abstract class DungeonBase {
 		}
 
 		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
-		this.supportBlock = PropertyFileHelper.getBlockProperty(prop, "supportblock", Blocks.STONE);
-		this.supportTopBlock = PropertyFileHelper.getBlockProperty(prop, "supportblocktop", Blocks.GRASS);
+		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", Blocks.STONE.getDefaultState());
+		this.supportTopBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblocktop", Blocks.GRASS.getDefaultState());
 
 		this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
-		this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
+		this.coverBlock = PropertyFileHelper.getBlockStateProperty(prop, "coverblock", Blocks.AIR.getDefaultState());
 
 		// protection system
 		this.enableProtectionSystem = PropertyFileHelper.getBooleanProperty(prop, "enableProtectionSystem", false);
@@ -201,11 +202,11 @@ public abstract class DungeonBase {
 		return this.spawnLimit;
 	}
 
-	public Block getSupportTopBlock() {
+	public IBlockState getSupportTopBlock() {
 		return this.supportTopBlock;
 	}
 
-	public Block getSupportBlock() {
+	public IBlockState getSupportBlock() {
 		return this.supportBlock;
 	}
 
@@ -234,7 +235,7 @@ public abstract class DungeonBase {
 		return this.buildSupportPlatform;
 	}
 
-	public Block getCoverBlock() {
+	public IBlockState getCoverBlock() {
 		return this.coverBlock;
 	}
 

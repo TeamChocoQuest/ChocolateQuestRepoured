@@ -86,9 +86,9 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 
 					if (noise < 0.75D) {
 						BlockPos block = this.pos.add(iX, iY, iZ);
-						stateMap.put(block, this.dungeon.getAirBlock().getDefaultState());
+						stateMap.put(block, this.dungeon.getAirBlock());
 						if (iY == 0) {
-							stateMap.put(block, this.dungeon.getFloorBlock().getDefaultState());
+							stateMap.put(block, this.dungeon.getFloorBlock());
 						}
 					}
 				}
@@ -178,53 +178,53 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 	}
 
 	private void buildTunnelSegment(BlockPos pos, Map<BlockPos, IBlockState> stateMap) {
-		Block airBlock = this.dungeon.getAirBlock();
-		Block floorMaterial = this.dungeon.getFloorBlock();
+		IBlockState airBlock = this.dungeon.getAirBlock();
+		IBlockState floorMaterial = this.dungeon.getFloorBlock();
 
-		stateMap.put(pos, airBlock.getDefaultState());
-		stateMap.put(pos.down(), airBlock.getDefaultState());
-		stateMap.put(pos.down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.up(), airBlock.getDefaultState());
+		stateMap.put(pos, airBlock);
+		stateMap.put(pos.down(), airBlock);
+		stateMap.put(pos.down().down(), floorMaterial);
+		stateMap.put(pos.up(), airBlock);
 
-		stateMap.put(pos.north(), airBlock.getDefaultState());
-		stateMap.put(pos.north().down(), airBlock.getDefaultState());
-		stateMap.put(pos.north().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.north().up(), airBlock.getDefaultState());
+		stateMap.put(pos.north(), airBlock);
+		stateMap.put(pos.north().down(), airBlock);
+		stateMap.put(pos.north().down().down(), floorMaterial);
+		stateMap.put(pos.north().up(), airBlock);
 
-		stateMap.put(pos.north().east(), airBlock.getDefaultState());
-		stateMap.put(pos.north().east().down(), airBlock.getDefaultState());
-		stateMap.put(pos.north().east().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.north().east().up(), airBlock.getDefaultState());
+		stateMap.put(pos.north().east(), airBlock);
+		stateMap.put(pos.north().east().down(), airBlock);
+		stateMap.put(pos.north().east().down().down(), floorMaterial);
+		stateMap.put(pos.north().east().up(), airBlock);
 
-		stateMap.put(pos.north().west(), airBlock.getDefaultState());
-		stateMap.put(pos.north().west().down(), airBlock.getDefaultState());
-		stateMap.put(pos.north().west().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.north().west().up(), airBlock.getDefaultState());
+		stateMap.put(pos.north().west(), airBlock);
+		stateMap.put(pos.north().west().down(), airBlock);
+		stateMap.put(pos.north().west().down().down(), floorMaterial);
+		stateMap.put(pos.north().west().up(), airBlock);
 
-		stateMap.put(pos.east(), airBlock.getDefaultState());
-		stateMap.put(pos.east().down(), airBlock.getDefaultState());
-		stateMap.put(pos.east().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.east().up(), airBlock.getDefaultState());
+		stateMap.put(pos.east(), airBlock);
+		stateMap.put(pos.east().down(), airBlock);
+		stateMap.put(pos.east().down().down(), floorMaterial);
+		stateMap.put(pos.east().up(), airBlock);
 
-		stateMap.put(pos.south(), airBlock.getDefaultState());
-		stateMap.put(pos.south().down(), airBlock.getDefaultState());
-		stateMap.put(pos.south().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.south().up(), airBlock.getDefaultState());
+		stateMap.put(pos.south(), airBlock);
+		stateMap.put(pos.south().down(), airBlock);
+		stateMap.put(pos.south().down().down(), floorMaterial);
+		stateMap.put(pos.south().up(), airBlock);
 
-		stateMap.put(pos.south().east(), airBlock.getDefaultState());
-		stateMap.put(pos.south().east().down(), airBlock.getDefaultState());
-		stateMap.put(pos.south().east().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.south().east().up(), airBlock.getDefaultState());
+		stateMap.put(pos.south().east(), airBlock);
+		stateMap.put(pos.south().east().down(), airBlock);
+		stateMap.put(pos.south().east().down().down(), floorMaterial);
+		stateMap.put(pos.south().east().up(), airBlock);
 
-		stateMap.put(pos.south().west(), airBlock.getDefaultState());
-		stateMap.put(pos.south().west().down(), airBlock.getDefaultState());
-		stateMap.put(pos.south().west().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.south().west().up(), airBlock.getDefaultState());
+		stateMap.put(pos.south().west(), airBlock);
+		stateMap.put(pos.south().west().down(), airBlock);
+		stateMap.put(pos.south().west().down().down(), floorMaterial);
+		stateMap.put(pos.south().west().up(), airBlock);
 
-		stateMap.put(pos.west(), airBlock.getDefaultState());
-		stateMap.put(pos.west().down(), airBlock.getDefaultState());
-		stateMap.put(pos.west().down().down(), floorMaterial.getDefaultState());
-		stateMap.put(pos.west().up(), airBlock.getDefaultState());
+		stateMap.put(pos.west(), airBlock);
+		stateMap.put(pos.west().down(), airBlock);
+		stateMap.put(pos.west().down().down(), floorMaterial);
+		stateMap.put(pos.west().up(), airBlock);
 	}
 
 	public void setSizeAndHeight(int sX, int sZ, int h) {
