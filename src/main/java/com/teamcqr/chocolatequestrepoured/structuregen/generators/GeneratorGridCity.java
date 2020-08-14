@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -39,7 +40,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 	private Set<BlockPos> bridgeBlocks = new HashSet<>();
 	private Set<BlockPos> lavaBlocks = new HashSet<>();
 
-	private Map<BlockPos, Block> blockMap = new HashMap<>();
+	private Map<BlockPos, IBlockState> blockMap = new HashMap<>();
 
 	private int minX;
 	private int maxX;
@@ -214,8 +215,8 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		}
 
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>(this.blockMap.size());
-		for (Map.Entry<BlockPos, Block> entry : this.blockMap.entrySet()) {
-			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue().getDefaultState(), null));
+		for (Map.Entry<BlockPos, IBlockState> entry : this.blockMap.entrySet()) {
+			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
 		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
 

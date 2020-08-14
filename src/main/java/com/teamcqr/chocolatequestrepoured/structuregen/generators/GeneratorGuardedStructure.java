@@ -306,9 +306,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	}
 
 	private void buildPathSegmentX(BlockPos pos) {
-		this.world.setBlockState(pos, this.dungeon.getPathMaterial().getDefaultState());
-		this.world.setBlockState(pos.north(), this.dungeon.getPathMaterial().getDefaultState());
-		this.world.setBlockState(pos.south(), this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos, this.dungeon.getPathMaterial());
+		this.world.setBlockState(pos.north(), this.dungeon.getPathMaterial());
+		this.world.setBlockState(pos.south(), this.dungeon.getPathMaterial());
 
 		this.supportBlock(pos);
 		this.supportBlock(pos.north());
@@ -316,9 +316,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	}
 
 	private void buildPathSegmentZ(BlockPos pos) {
-		this.world.setBlockState(pos, this.dungeon.getPathMaterial().getDefaultState());
-		this.world.setBlockState(pos.west(), this.dungeon.getPathMaterial().getDefaultState());
-		this.world.setBlockState(pos.east(), this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos, this.dungeon.getPathMaterial());
+		this.world.setBlockState(pos.west(), this.dungeon.getPathMaterial());
+		this.world.setBlockState(pos.east(), this.dungeon.getPathMaterial());
 
 		this.supportBlock(pos);
 		this.supportBlock(pos.west());
@@ -334,7 +334,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		tmpPos = pos.down();
 		while (Block.isEqualTo(this.world.getBlockState(tmpPos).getBlock(), Blocks.AIR)) {
-			this.world.setBlockState(tmpPos, this.dungeon.getPathMaterial().getDefaultState());
+			this.world.setBlockState(tmpPos, this.dungeon.getPathMaterial());
 			tmpPos = tmpPos.down();
 		}
 	}

@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -43,13 +44,13 @@ public class DungeonVolcano extends DungeonBase {
 	private double lavaChance = 0.005D;
 	private double magmaChance = 0.1;
 	private String rampMobName = "minecraft:zombie";
-	private Block stoneBlock = Blocks.STONE;
-	private Block lavaBlock = Blocks.LAVA;
-	private Block magmaBlock = Blocks.MAGMA;
-	private Block rampBlock = Blocks.NETHERRACK;
-	private Block lowerStoneBlock = Blocks.COBBLESTONE;
-	private Block pillarBlock = ModBlocks.GRANITE_LARGE;
-	private Block[] oreBlocks = {};
+	private IBlockState stoneBlock = Blocks.STONE.getDefaultState();
+	private IBlockState lavaBlock = Blocks.LAVA.getDefaultState();
+	private IBlockState magmaBlock = Blocks.MAGMA.getDefaultState();
+	private IBlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
+	private IBlockState lowerStoneBlock = Blocks.COBBLESTONE.getDefaultState();
+	private IBlockState pillarBlock = ModBlocks.GRANITE_LARGE.getDefaultState();
+	private IBlockState[] oreBlocks = {};
 
 	// Stronghold
 	private int minStrongholdFloors = 3;
@@ -95,25 +96,15 @@ public class DungeonVolcano extends DungeonBase {
 		this.ores = PropertyFileHelper.getBooleanProperty(prop, "ores", true);
 		this.oreConcentration = Math.min(Math.max(1, Math.abs(PropertyFileHelper.getIntProperty(prop, "orechance", 5))), 100);
 		this.rampMobName = prop.getProperty("rampMob", "minecraft:zombie");
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
-				LootTableList.CHESTS_ABANDONED_MINESHAFT,
-				LootTableList.CHESTS_NETHER_BRIDGE,
-				ModLoottables.CHESTS_FOOD
-		});
-		this.stoneBlock = PropertyFileHelper.getBlockProperty(prop, "topBlock", Blocks.STONE);
-		this.lowerStoneBlock = PropertyFileHelper.getBlockProperty(prop, "lowerBlock", Blocks.COBBLESTONE);
-		this.lavaBlock = PropertyFileHelper.getBlockProperty(prop, "lavaBlock", Blocks.LAVA);
-		this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
-		this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
-		this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
-		this.oreBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "oreBlocks", new Block[] {
-				Blocks.COAL_ORE,
-				Blocks.IRON_ORE,
-				Blocks.GOLD_BLOCK,
-				Blocks.EMERALD_ORE,
-				Blocks.REDSTONE_ORE,
-				Blocks.DIAMOND_ORE
-		});
+
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
+		this.stoneBlock = PropertyFileHelper.getBlockStateProperty(prop, "topBlock", Blocks.STONE.getDefaultState());
+		this.lowerStoneBlock = PropertyFileHelper.getBlockStateProperty(prop, "lowerBlock", Blocks.COBBLESTONE.getDefaultState());
+		this.lavaBlock = PropertyFileHelper.getBlockStateProperty(prop, "lavaBlock", Blocks.LAVA.getDefaultState());
+		this.magmaBlock = PropertyFileHelper.getBlockStateProperty(prop, "magmaBlock", Blocks.MAGMA.getDefaultState());
+		this.rampBlock = PropertyFileHelper.getBlockStateProperty(prop, "rampBlock", Blocks.NETHERRACK.getDefaultState());
+		this.pillarBlock = PropertyFileHelper.getBlockStateProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE.getDefaultState());
+		this.oreBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "oreBlocks", new IBlockState[] { Blocks.COAL_ORE.getDefaultState(), Blocks.IRON_ORE.getDefaultState(), Blocks.GOLD_BLOCK.getDefaultState(), Blocks.EMERALD_ORE.getDefaultState(), Blocks.REDSTONE_ORE.getDefaultState(), Blocks.DIAMOND_ORE.getDefaultState() });
 
 		// Stronghold
 		this.minStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "minStrongholdFloors", 3);
@@ -293,31 +284,31 @@ public class DungeonVolcano extends DungeonBase {
 		return this.chestIDs;
 	}
 
-	public Block getUpperMainBlock() {
+	public IBlockState getUpperMainBlock() {
 		return this.stoneBlock;
 	}
 
-	public Block getLowerMainBlock() {
+	public IBlockState getLowerMainBlock() {
 		return this.lowerStoneBlock;
 	}
 
-	public Block getLavaBlock() {
+	public IBlockState getLavaBlock() {
 		return this.lavaBlock;
 	}
 
-	public Block getMagmaBlock() {
+	public IBlockState getMagmaBlock() {
 		return this.magmaBlock;
 	}
 
-	public Block getRampBlock() {
+	public IBlockState getRampBlock() {
 		return this.rampBlock;
 	}
 
-	public Block[] getOres() {
+	public IBlockState[] getOres() {
 		return this.oreBlocks;
 	}
 
-	public Block getPillarBlock() {
+	public IBlockState getPillarBlock() {
 		return this.pillarBlock;
 	}
 

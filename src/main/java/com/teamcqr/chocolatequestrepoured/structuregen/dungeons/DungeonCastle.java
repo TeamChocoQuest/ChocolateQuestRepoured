@@ -62,17 +62,17 @@ public class DungeonCastle extends DungeonBase {
 		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
 		EnumMCWoodType woodType = PropertyFileHelper.getWoodTypeProperty(prop, "woodType", EnumMCWoodType.OAK);
-		this.mainBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "mainBlock", Blocks.STONEBRICK.getDefaultState());
-		this.stairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		this.slabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", Blocks.STONE_SLAB.getDefaultState());
-		this.fancyBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fancyBlock", Blocks.STONEBRICK.getDefaultState());
-		this.floorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "floorBlock", woodType.getPlankBlockState());
-		this.roofBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "roofBlock", woodType.getStairBlockState());
-		this.fenceBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState());
-		this.woodStairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "woodStairBlock", woodType.getStairBlockState());
-		this.woodSlabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "woodSlabBlock", woodType.getSlabBlockState());
-		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "plankBlock", woodType.getPlankBlockState());
-		this.doorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "doorBlock", woodType.getDoorBlockState());
+		this.mainBlock = PropertyFileHelper.getBlockStateProperty(prop, "mainBlock", Blocks.STONEBRICK.getDefaultState());
+		this.stairBlock = PropertyFileHelper.getBlockStateProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		this.slabBlock = PropertyFileHelper.getBlockStateProperty(prop, "slabBlock", Blocks.STONE_SLAB.getDefaultState());
+		this.fancyBlock = PropertyFileHelper.getBlockStateProperty(prop, "fancyBlock", Blocks.STONEBRICK.getDefaultState());
+		this.floorBlock = PropertyFileHelper.getBlockStateProperty(prop, "floorBlock", woodType.getPlankBlockState());
+		this.roofBlock = PropertyFileHelper.getBlockStateProperty(prop, "roofBlock", woodType.getStairBlockState());
+		this.fenceBlock = PropertyFileHelper.getBlockStateProperty(prop, "fenceBlock", woodType.getFenceBlockState());
+		this.woodStairBlock = PropertyFileHelper.getBlockStateProperty(prop, "woodStairBlock", woodType.getStairBlockState());
+		this.woodSlabBlock = PropertyFileHelper.getBlockStateProperty(prop, "woodSlabBlock", woodType.getSlabBlockState());
+		this.plankBlock = PropertyFileHelper.getBlockStateProperty(prop, "plankBlock", woodType.getPlankBlockState());
+		this.doorBlock = PropertyFileHelper.getBlockStateProperty(prop, "doorBlock", woodType.getDoorBlockState());
 		Collection<IProperty<?>> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);

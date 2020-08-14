@@ -164,7 +164,7 @@ public class StrongholdFloorOpen {
 		BlockPos p3 = this.roomGrid[0][this.sideLength - 1].add(-1, 0, 1).add(-dimX, -1, dimZ);
 		BlockPos p4 = this.roomGrid[0][0].add(-1, 0, -1).add(-dimX, -1, -dimZ);
 
-		IBlockState state = this.generator.getDungeon().getWallBlock().getDefaultState();
+		IBlockState state = this.generator.getDungeon().getWallBlock();
 		int addY = 2 + this.generator.getDungeon().getRoomSizeY();
 
 		// 1-2

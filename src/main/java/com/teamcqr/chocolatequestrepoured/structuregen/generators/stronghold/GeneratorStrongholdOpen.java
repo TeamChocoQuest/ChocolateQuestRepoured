@@ -212,6 +212,8 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		}
 
 		if (this.dungeon.isCoverBlockEnabled()) {
+			// needs update
+			/*
 			Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 			
 			int startX = this.pos.getX() - entranceSizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
@@ -232,7 +234,8 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 				blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 			}
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
+			*/
 		}
 	}
 

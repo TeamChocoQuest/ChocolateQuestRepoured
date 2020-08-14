@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,8 +28,8 @@ public class DungeonHangingCity extends DungeonBase {
 	private int yFactorHeight = 20;
 	private int heightVariation = 10;
 	private boolean digAirCave = true;
-	private Block islandMaterial = Blocks.NETHERRACK;
-	private Block chainBlock = Blocks.OBSIDIAN;
+	private IBlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
+	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
 	// private int bridgeChance = 20;
 	private int posY = 50; // lava level is 32 in the nether
@@ -54,8 +55,8 @@ public class DungeonHangingCity extends DungeonBase {
 		this.structureFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "floatingCity/islands");
 		this.centralStructureFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "floatingCity/centers");
 
-		this.islandMaterial = PropertyFileHelper.getBlockProperty(prop, "islandBlock", Blocks.NETHERRACK);
-		this.chainBlock = PropertyFileHelper.getBlockProperty(prop, "chainBlock", Blocks.OBSIDIAN);
+		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.getDefaultState());
+		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.getDefaultState());
 	}
 
 	@Override
@@ -150,11 +151,11 @@ public class DungeonHangingCity extends DungeonBase {
 		return maxBuildings;
 	}
 
-	public Block getChainBlock() {
+	public IBlockState getChainBlock() {
 		return this.chainBlock;
 	}
 
-	public Block getIslandBlock() {
+	public IBlockState getIslandBlock() {
 		return this.islandMaterial;
 	}
 

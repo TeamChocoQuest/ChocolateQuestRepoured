@@ -8,7 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGridC
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,9 +30,9 @@ public class DungeonNetherCity extends DungeonBase {
 	// private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
 	private boolean makeSpaceForBuildings = true;
-	private Block bridgeBlock = Blocks.NETHER_BRICK;
-	private Block floorBlock = Blocks.LAVA;
-	private Block airBlockForPocket = Blocks.AIR;
+	private IBlockState bridgeBlock = Blocks.NETHER_BRICK.getDefaultState();
+	private IBlockState floorBlock = Blocks.LAVA.getDefaultState();
+	private IBlockState airBlockForPocket = Blocks.AIR.getDefaultState();
 
 	protected File buildingFolder;
 	protected File centralBuildingsFolder;
@@ -53,9 +53,9 @@ public class DungeonNetherCity extends DungeonBase {
 
 		this.bridgeSizeMultiplier = PropertyFileHelper.getDoubleProperty(prop, "bridgelengthmultiplier", 1.2D);
 
-		this.bridgeBlock = PropertyFileHelper.getBlockProperty(prop, "streetblock", Blocks.NETHER_BRICK);
-		this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.LAVA);
-		this.airBlockForPocket = PropertyFileHelper.getBlockProperty(prop, "airPocketBlock", Blocks.AIR);
+		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "streetblock", Blocks.NETHER_BRICK.getDefaultState());
+		this.floorBlock = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.LAVA.getDefaultState());
+		this.airBlockForPocket = PropertyFileHelper.getBlockStateProperty(prop, "airPocketBlock", Blocks.AIR.getDefaultState());
 
 		this.buildingFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "nether_city_buildings");
 		this.centralBuildingsFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "nether_city_buildings");
@@ -75,15 +75,15 @@ public class DungeonNetherCity extends DungeonBase {
 		return this.heightY;
 	}
 
-	public Block getBridgeBlock() {
+	public IBlockState getBridgeBlock() {
 		return this.bridgeBlock;
 	}
 
-	public Block getFloorBlock() {
+	public IBlockState getFloorBlock() {
 		return this.floorBlock;
 	}
 
-	public Block getAirPocketBlock() {
+	public IBlockState getAirPocketBlock() {
 		return this.airBlockForPocket;
 	}
 

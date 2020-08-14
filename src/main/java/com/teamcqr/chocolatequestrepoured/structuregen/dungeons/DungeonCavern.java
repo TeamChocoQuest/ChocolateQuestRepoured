@@ -59,8 +59,8 @@ public class DungeonCavern extends DungeonBase {
 	private boolean lootChests = true;
 	private String mobName = "minecraft:zombie";
 	private String bossMobName = "minecraft:wither";
-	private Block floorMaterial = Blocks.STONE;
-	private Block airBlock = Blocks.AIR;
+	private IBlockState floorMaterial = Blocks.STONE.getDefaultState();
+	private IBlockState airBlock = Blocks.AIR.getDefaultState();
 	private ResourceLocation[] chestIDs;
 
 	public DungeonCavern(String name, Properties prop) {
@@ -94,9 +94,9 @@ public class DungeonCavern extends DungeonBase {
 
 		this.underGroundOffset = 0;
 
-		this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
+		this.floorMaterial = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.STONE.getDefaultState());
 
-		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airblock", Blocks.AIR);
+		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airblock", Blocks.AIR.getDefaultState());
 		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
 	}
 
@@ -216,11 +216,11 @@ public class DungeonCavern extends DungeonBase {
 		return this.maxCaveSize;
 	}
 
-	public Block getAirBlock() {
+	public IBlockState getAirBlock() {
 		return this.airBlock;
 	}
 
-	public Block getFloorBlock() {
+	public IBlockState getFloorBlock() {
 		return this.floorMaterial;
 	}
 
