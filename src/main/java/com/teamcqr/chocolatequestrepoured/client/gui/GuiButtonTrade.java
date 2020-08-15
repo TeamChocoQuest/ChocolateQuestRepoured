@@ -55,7 +55,7 @@ public class GuiButtonTrade extends GuiButton {
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-		if (this.visible) {
+		if (this.visible && (this.input != null && this.output != null)) {
 			mc.getTextureManager().bindTexture(TEXTURE);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
@@ -98,7 +98,7 @@ public class GuiButtonTrade extends GuiButton {
 	}
 
 	public void renderHoveredToolTip(GuiMerchant parent, int mouseX, int mouseY) {
-		if (!this.visible) {
+		if (!this.visible || this.input == null || this.output == null) {
 			return;
 		}
 		for (int i = 0; i < 4 && i < this.input.size(); i++) {
