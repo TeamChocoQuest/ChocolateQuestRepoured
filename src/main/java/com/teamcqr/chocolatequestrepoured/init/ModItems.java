@@ -302,8 +302,8 @@ public class ModItems {
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.4F), "great_sword_bull"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.4F), "great_sword_monking"),
 
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 2.0D, -0.35D), "spear_diamond"),
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 2.0D, -0.35D), "spear_iron"),
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 1.0D, -0.35D), "spear_diamond"),
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 1.0D, -0.35D), "spear_iron"),
 
 					setItemName(new ItemStaff(), "staff"),
 					setItemName(new ItemStaffFire(), "staff_fire"),
