@@ -16,16 +16,22 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 	public static final int SPAWNER_INFO_ID = 5;
 
 	// protected BlockPos pos;
-	private int pos;
+	private short x;
+	private short y;
+	private short z;
 
 	public AbstractBlockInfo(BlockPos pos) {
 		// this.pos = pos;
-		this.pos = (pos.getX() << 20) | ((pos.getY() & 0xFF) << 12) | (pos.getZ() & 0xFFF);
+		this.x = (short) pos.getX();
+		this.y = (short) pos.getY();
+		this.z = (short) pos.getZ();
 	}
 
 	public AbstractBlockInfo(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		// this.pos = pos;
-		this.pos = (pos.getX() << 20) | ((pos.getY() & 0xFF) << 12) | (pos.getZ() & 0xFFF);
+		this.x = (short) pos.getX();
+		this.y = (short) pos.getY();
+		this.z = (short) pos.getZ();
 		this.readFromNBT(nbtTagIntArray, blockStatePalette, compoundTagList);
 	}
 
@@ -64,7 +70,7 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 
 	public BlockPos getPos() {
 		// return this.pos;
-		return new BlockPos((this.pos >> 20), ((this.pos >> 12) & 0xFF), (this.pos & 0xFFF));
+		return new BlockPos(this.x, this.y, this.z);
 	}
 
 }
