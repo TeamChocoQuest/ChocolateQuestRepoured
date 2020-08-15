@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
@@ -381,7 +382,14 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	@Override
 	public void postProcess() {
-		// Not needed here
+		if(this.dungeon.isCoverBlockEnabled()) {
+			int rMax = (int) (this.baseRadius * 4 + this.dungeon.getMaxHoleSize());
+			BlockPos startPos = this.pos;
+			BlockPos endPos = startPos.add(rMax,0,rMax);
+			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
+			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
+			this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
+		}
 	}
 
 	private List<BlockPos> getSphereBlocks(BlockPos center, int radius) {
