@@ -1025,7 +1025,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		double reach = this.width + target.width + 0.25D;
 		ItemStack stack = this.getHeldItemMainhand();
 		if (stack.getItem() instanceof ItemSpearBase) {
-			reach += ((ItemSpearBase) stack.getItem()).getReach() * 0.75D;
+			reach += ((ItemSpearBase) stack.getItem()).getReach();
 		}
 		return reach;
 	}
