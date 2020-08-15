@@ -14,7 +14,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,8 +47,8 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 	@Override
 	public void preProcess() {
 		// DONE: calculate air blocks
-		Perlin3D perlin1 = new Perlin3D(this.world.getSeed(), 4, new Random());
-		Perlin3D perlin2 = new Perlin3D(this.world.getSeed(), 32, new Random());
+		Perlin3D perlin1 = new Perlin3D(this.world.getSeed(), 4);
+		Perlin3D perlin2 = new Perlin3D(this.world.getSeed(), 32);
 
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 

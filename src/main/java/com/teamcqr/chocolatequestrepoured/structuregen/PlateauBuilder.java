@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
@@ -21,8 +20,8 @@ public class PlateauBuilder {
 	// TODO Create custom DungeonPart class because Perlin3D is to slow to calculate immediately
 	public static DungeonPartBlock makeRandomBlob(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world, DungeonGenerator dungeonGenerator) {
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-		Perlin3D perlinNoise1 = new Perlin3D(seed, 8, new Random());
-		Perlin3D perlinNoise2 = new Perlin3D(seed, 32, new Random());
+		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
+		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 
 		int sizeX = endPos.getX() - startPos.getX();
 		int sizeZ = endPos.getZ() - startPos.getZ();
