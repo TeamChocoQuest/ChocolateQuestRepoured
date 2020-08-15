@@ -2,38 +2,51 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import java.util.Random;
 
-public class Perlin3D {
-	// DIRECTLY COPIED OUT OF OLD MOD, IS LEGAL BECAUSE THIS IS AN OPEN SOURCE
-	// PUBLIC LIBRARY YOU CAN DOWNLOAD
-	private long seed;
-	private Random rand;
-	private int frequency;
+import net.minecraft.util.math.MathHelper;
 
-	public Perlin3D(long seed, int octave, Random random) {
+public class Perlin3D {
+
+	// DIRECTLY COPIED OUT OF OLD MOD, IS LEGAL BECAUSE THIS IS AN OPEN SOURCE PUBLIC LIBRARY YOU CAN DOWNLOAD
+
+	private final Random rand = new Random();
+	private final long seed;
+	private final float tanSeed;
+	private final float frequency;
+
+	public Perlin3D(long seed, int octave) {
 		this.seed = seed;
 		this.frequency = octave;
-		this.rand = random;// new Random();
+		this.tanSeed = (float) Math.tan(this.seed);
 	}
 
-	public double getNoiseAt(int x, int y, int z) {
-		int ymin = (int) Math.floor((double) y / (double) this.frequency);
-		int ymax = ymin + 1;
-		return (double) this.cosineInterpolate((float) this.getNoiseLevelAtPosition(x, ymin, z), (float) this.getNoiseLevelAtPosition(x, ymax, z), ((float) y - (float) ymin * (float) this.frequency) / (float) this.frequency);
+	public float getNoiseAt(float x, float y, float z) {
+		float f1 = y / this.frequency;
+		float ymin = MathHelper.floor(f1);
+		float ymax = ymin + 1.0F;
+		float f2 = f1 - ymin;
+
+		return this.cosineInterpolate(this.getNoiseLevelAtPosition(x, ymin, z), this.getNoiseLevelAtPosition(x, ymax, z), f2);
 	}
 
-	private double getNoiseLevelAtPosition(int x, int y, int z) {
-		int xmin = (int) Math.floor((double) x / (double) this.frequency);
-		int xmax = xmin + 1;
-		int zmin = (int) Math.floor((double) z / (double) this.frequency);
-		int zmax = zmin + 1;
-		return (double) this.cosineInterpolate(this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmin), (float) this.getRandomAtPosition(xmax, y, zmin), (float) (x - xmin * this.frequency) / (float) this.frequency),
-				this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmax), (float) this.getRandomAtPosition(xmax, y, zmax), (float) (x - xmin * this.frequency) / (float) this.frequency),
-				((float) z - (float) zmin * (float) this.frequency) / (float) this.frequency);
+	private float getNoiseLevelAtPosition(float x, float y, float z) {
+		float f1 = x / this.frequency;
+		float xmin = MathHelper.floor(f1);
+		float xmax = xmin + 1.0F;
+		float f2 = f1 - xmin;
+
+		float f3 = z / this.frequency;
+		float zmin = MathHelper.floor(f3);
+		float zmax = zmin + 1.0F;
+		float f4 = f3 - zmin;
+
+		float f5 = this.cosineInterpolate(this.getRandomAtPosition(xmin, y, zmin), this.getRandomAtPosition(xmax, y, zmin), f2);
+		float f6 = this.cosineInterpolate(this.getRandomAtPosition(xmin, y, zmax), this.getRandomAtPosition(xmax, y, zmax), f2);
+		return this.cosineInterpolate(f5, f6, f4);
 	}
 
 	private float cosineInterpolate(float a, float b, float x) {
-		float f = (float) ((1.0D - Math.cos((double) x * Math.PI)) * 0.5D);
-		return a * (1.0F - f) + b * f;
+		float d = (1.0F - MathHelper.cos(x * (float) Math.PI)) * 0.5F;
+		return a * (1.0F - d) + b * d;
 	}
 
 	@SuppressWarnings("unused")
@@ -41,14 +54,10 @@ public class Perlin3D {
 		return a * (1.0F - x) + b * x;
 	}
 
-	private double getRandomAtPosition(int x, int y, int z) {
-		Double seedD = new Double((10000.0D * (Math.sin(x) + Math.cos(z) + Math.cos(y) + Math.tan((double) this.seed))));
-		// System.out.println("Double value: " + seedD);
-		// System.out.println("double value: " + seedD.doubleValue());
-		this.rand.setSeed(seedD.longValue());
-		// System.out.println("long value: " + seedD.longValue());
-		// System.out.println("long value with cast: " + ((long) seedD.doubleValue()));
-		return this.rand.nextDouble();
+	private float getRandomAtPosition(float x, float y, float z) {
+		long newSeed = (long) ((MathHelper.sin(x) + MathHelper.cos(z) + MathHelper.cos(y) + this.tanSeed) * 10000.0F);
+		this.rand.setSeed(newSeed);
+		return this.rand.nextFloat();
 	}
 
 }

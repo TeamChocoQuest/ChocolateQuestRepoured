@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
-import java.util.Random;
-
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
@@ -35,9 +33,8 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 		this.wallSize = wallSize;
 		this.x1 = this.minPos.getX();
 		this.z1 = this.minPos.getZ();
-		Random rand = new Random();
-		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize, rand);
-		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4, rand);
+		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize);
+		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4);
 	}
 
 	@Override
@@ -71,9 +68,8 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 		this.wallSize = compound.getInteger("wallSize");
 		this.x1 = compound.getInteger("x1");
 		this.z1 = compound.getInteger("z1");
-		Random rand = new Random();
-		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize, rand);
-		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4, rand);
+		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize);
+		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4);
 	}
 
 	@Override
