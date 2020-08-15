@@ -384,8 +384,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	public void postProcess() {
 		if(this.dungeon.isCoverBlockEnabled()) {
 			int rMax = (int) (this.baseRadius * 4 + this.dungeon.getMaxHoleSize());
-			BlockPos startPos = this.pos;
-			BlockPos endPos = startPos.add(rMax,0,rMax);
+			BlockPos startPos = this.pos.add((rMax / 2) + 8, 0, (rMax /2) + 8);
+			BlockPos endPos = this.pos.add(-(rMax / 2) - 8, 0, -(rMax /2) - 8);
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
