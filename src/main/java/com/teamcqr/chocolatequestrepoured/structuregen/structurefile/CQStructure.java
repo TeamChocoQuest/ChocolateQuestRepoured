@@ -154,7 +154,6 @@ public class CQStructure {
 	}
 
 	public void writeToFile(File file) {
-		long t = System.currentTimeMillis();
 		NBTTagCompound compound = this.writeToNBT();
 		try {
 			if (!file.exists() && !file.createNewFile()) {
@@ -169,7 +168,6 @@ public class CQStructure {
 	}
 
 	private void readFromFile(File file) {
-		long t = System.currentTimeMillis();
 		NBTTagCompound compound = null;
 		try {
 			if (!file.exists()) {
@@ -279,7 +277,6 @@ public class CQStructure {
 				z++;
 			}
 		}
-		long t = System.currentTimeMillis();
 		this.blockInfoList.sort(BLOCK_INFO_COMPARATOR);
 
 		// Load special blocks
