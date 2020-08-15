@@ -195,7 +195,9 @@ public class CQRConfig {
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
+		public boolean enableHealthChangeOnDistance = true;
 		@Config.RangeInt(min = 1, max = 100000)
+		@Config.Comment("Every X blocks the mobs HP goes up by 10% of it's base health")
 		public int distanceDivisor = 1000;
 		@Config.RangeInt(min = 1, max = 100000)
 		public int mobTypeChangeDistance = 1500;
