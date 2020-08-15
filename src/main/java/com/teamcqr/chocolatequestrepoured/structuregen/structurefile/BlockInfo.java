@@ -32,8 +32,24 @@ public class BlockInfo extends AbstractBlockInfo {
 		}
 	}
 
+	public BlockInfo(int x, int y, int z, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
+		super(x, y, z);
+		this.blockstate = blockstate;
+		this.tileentityData = tileentityData;
+		if (this.tileentityData != null) {
+			this.tileentityData.removeTag("x");
+			this.tileentityData.removeTag("y");
+			this.tileentityData.removeTag("z");
+		}
+	}
+
 	public BlockInfo(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		super(pos);
+		this.readFromNBT(nbtTagIntArray, blockStatePalette, compoundTagList);
+	}
+
+	public BlockInfo(int x, int y, int z, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+		super(x, y, z);
 		this.readFromNBT(nbtTagIntArray, blockStatePalette, compoundTagList);
 	}
 

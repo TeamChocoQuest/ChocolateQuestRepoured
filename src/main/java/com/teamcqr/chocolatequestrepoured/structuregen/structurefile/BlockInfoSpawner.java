@@ -22,8 +22,16 @@ public class BlockInfoSpawner extends BlockInfo {
 		super(pos, blockstate, tileentityData);
 	}
 
+	public BlockInfoSpawner(int x, int y, int z, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
+		super(x, y, z, blockstate, tileentityData);
+	}
+
 	public BlockInfoSpawner(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		super(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+	}
+
+	public BlockInfoSpawner(int x, int y, int z, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+		super(x, y, z, nbtTagIntArray, blockStatePalette, compoundTagList);
 	}
 
 	@Override

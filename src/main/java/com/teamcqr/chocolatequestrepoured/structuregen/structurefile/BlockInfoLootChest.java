@@ -37,14 +37,33 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 		}
 	}
 
+	public BlockInfoLootChest(int x, int y, int z, IBlockState state) {
+		super(x, y, z);
+		if (state.getBlock() instanceof BlockExporterChest) {
+			this.lootTable = ((BlockExporterChest) state.getBlock()).lootTable;
+			this.facing = state.getValue(BlockChest.FACING);
+		}
+	}
+
 	public BlockInfoLootChest(BlockPos pos, ResourceLocation lootTable, EnumFacing facing) {
 		super(pos);
 		this.lootTable = lootTable;
 		this.facing = facing;
 	}
 
+	public BlockInfoLootChest(int x, int y, int z, ResourceLocation lootTable, EnumFacing facing) {
+		super(x, y, z);
+		this.lootTable = lootTable;
+		this.facing = facing;
+	}
+
 	public BlockInfoLootChest(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
 		super(pos);
+		this.readFromNBT(nbtTagIntArray, null, null);
+	}
+
+	public BlockInfoLootChest(int x, int y, int z, NBTTagIntArray nbtTagIntArray) {
+		super(x, y, z);
 		this.readFromNBT(nbtTagIntArray, null, null);
 	}
 
