@@ -69,14 +69,10 @@ public class StairCaseHelper {
 			return EStairSection.NORTH_EAST;
 		case 1:
 			return EStairSection.SOUTH_EAST;
-		/*
-		 * case 2:
-		 * return EStairSection.SOUTH_WEST;
-		 */
 		case 2:
 			return EStairSection.NORTH_WEST;
 		}
-		return EStairSection.NORTH_EAST;
+		return EStairSection.SOUTH_WEST;
 	}
 
 	public static boolean isPillarCenterLocation(int x, int z, int radiusOfCircle) {
