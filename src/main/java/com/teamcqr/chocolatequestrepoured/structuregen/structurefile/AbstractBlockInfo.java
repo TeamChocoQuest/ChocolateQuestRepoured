@@ -22,8 +22,8 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 
 	public AbstractBlockInfo(int x, int y, int z) {
 		this.x = (short) x;
-		this.x = (short) y;
-		this.x = (short) z;
+		this.y = (short) y;
+		this.z = (short) z;
 	}
 
 	public AbstractBlockInfo(BlockPos pos) {
