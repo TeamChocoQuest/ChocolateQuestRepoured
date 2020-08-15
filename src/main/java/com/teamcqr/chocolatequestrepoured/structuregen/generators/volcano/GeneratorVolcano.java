@@ -451,7 +451,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			BlockPos p = blocks.get(blockIndex);
 			BlockPos v = p.subtract(this.centerLoc);
 
-			if (blockArray[v.getX() + r][p.getY()][v.getZ() + r].getBlock() == Blocks.AIR || blockArray[v.getX() + r][p.getY()][v.getZ() + r] == null) {
+			if (blockArray[v.getX() + r][p.getY()][v.getZ() + r] == null || blockArray[v.getX() + r][p.getY()][v.getZ() + r].getBlock() == Blocks.AIR) {
 				continue;
 			}
 			IBlockState ore;
