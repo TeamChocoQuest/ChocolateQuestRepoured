@@ -200,7 +200,9 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 				this.editButtons[i].visible = trade != null && this.mc.player.isCreative();
 			}
 		}
-		this.tradeButtons[this.tradeButtons.length - 1].visible = !this.mc.player.isCreative();
+		if (!this.mc.player.isCreative()) {
+			this.tradeButtons[this.tradeButtons.length - 1].visible = false;
+		}
 
 		this.addNewTradeButton.visible = this.mc.player.isCreative();
 		this.addNewTradeButton.x = this.guiLeft - 12;
