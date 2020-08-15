@@ -64,13 +64,15 @@ public class StairCaseHelper {
 	}
 
 	public static EStairSection getRandomStartSection() {
-		switch (new Random().nextInt(3)) {
+		switch (new Random().nextInt(4)) {
 		case 0:
 			return EStairSection.NORTH_EAST;
 		case 1:
 			return EStairSection.SOUTH_EAST;
 		case 2:
 			return EStairSection.NORTH_WEST;
+		case 3:
+			return EStairSection.SOUTH_WEST;
 		}
 		return EStairSection.SOUTH_WEST;
 	}
