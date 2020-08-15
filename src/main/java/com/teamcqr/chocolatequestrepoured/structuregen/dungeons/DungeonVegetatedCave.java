@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVeget
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
