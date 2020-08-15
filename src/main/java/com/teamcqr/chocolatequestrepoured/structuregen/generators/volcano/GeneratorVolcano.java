@@ -373,56 +373,6 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// Not needed here
 	}
 
-	/*
-	 * public void fillChests() { final ResourceLocation[] chestIDs = this.dungeon.getChestIDs(); Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap
-	 * = new HashMap<>(); Random rdm = new Random(); for(BlockPos pos :
-	 * this.spawnersNChestsOnPath) { if(rdm.nextBoolean()) { Block block = Blocks.CHEST; IBlockState state = block.getDefaultState(); TileEntityChest chest =
-	 * (TileEntityChest)block.createTileEntity(world, state);
-	 * 
-	 * if (chest != null) { ResourceLocation resLoc = chestIDs[rdm.nextInt(chestIDs.length)]; if (resLoc != null) { long seed = WorldDungeonGenerator.getSeed(world,
-	 * x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY()); chest.setLootTable(resLoc,
-	 * seed); } }
-	 * 
-	 * NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound()); stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt)); } }
-	 * lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); }
-	 * 
-	 * public void placeSpawners() { Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); Random rng = new Random(); int floor =
-	 * this.spawnersNChestsOnPath.size(); GearedMobFactory mobFactory = new
-	 * GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), rng); for(BlockPos pos : this.spawnersNChestsOnPath) { Block block =
-	 * ModBlocks.SPAWNER;//Blocks.MOB_SPAWNER; IBlockState state = block.getDefaultState();
-	 * //TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state); TileEntitySpawner spawner =
-	 * (TileEntitySpawner)block.createTileEntity(world, state);
-	 * /*spawner.getSpawnerBaseLogic().setEntityId(dungeon.getRampMob());
-	 * 
-	 * //Spawner settings NBTTagCompound settingsCompound = spawner.writeToNBT(new NBTTagCompound()); settingsCompound.setShort("MaxNearbyEntities", (short) 3);
-	 * //Activation distance settingsCompound.setShort("RequiredPlayerRange", (short) 20);
-	 * settingsCompound.setShort("SpawnRange", (short) 12); settingsCompound.setShort("SpawnCount", (short) 3);
-	 * 
-	 * 
-	 * NBTTagList spawnPotentials = new NBTTagList(); Entity entity = mobFactory.getGearedEntityByFloor(floor, world); NBTTagCompound ent =
-	 * SpawnerFactory.createSpawnerNBTFromEntity(entity); ent.removeTag("UUIDLeast"); ent.removeTag("UUIDMost");
-	 * ent.removeTag("Pos"); NBTTagList passengers = ent.getTagList("Passengers", 10); for (NBTBase passenger : passengers) { ((NBTTagCompound)
-	 * passenger).removeTag("UUIDLeast"); ((NBTTagCompound) passenger).removeTag("UUIDMost"); ((NBTTagCompound)
-	 * passenger).removeTag("Pos"); } NBTTagCompound spawnPotential = new NBTTagCompound(); spawnPotential.setInteger("Weight", 1); spawnPotential.setTag("Entity",
-	 * ent); spawnPotentials.appendTag(spawnPotential);
-	 * settingsCompound.setTag("SpawnPotentials", spawnPotentials);; settingsCompound.removeTag("SpawnData");
-	 *//*
-		 * //End of spawner settings int ec = 2 + rng.nextInt(3); for(int i = 0; i < ec; i++) { Entity ent = mobFactory.getGearedEntityByFloor(floor, world);
-		 * //NBTTagCompound entity = SpawnerFactory.createSpawnerNBTFromEntity(ent);
-		 * spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent)); } NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound());
-		 * stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state,
-		 * data)); floor--; } lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); }
-		 * 
-		 * public void placeCoverBlocks() { // DONE: Adjust to the new system Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>(); if
-		 * (this.dungeon.isCoverBlockEnabled()) {
-		 * 
-		 * for (int iX = new Double(x - (this.baseRadius * 1.25)).intValue(); iX <= new Double(x + (this.baseRadius * 1.25)).intValue(); iX++) { for (int iZ = new
-		 * Double(z - (this.baseRadius * 1.25)).intValue(); iZ <= new Double(z + (this.baseRadius
-		 * * 1.25)).intValue(); iZ++) { stateMap.put(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)), new
-		 * ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null)); } }
-		 * lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap)); } // DONE Pass the list to a simplethread to place the blocks }
-		 */
-
 	private List<BlockPos> getSphereBlocks(BlockPos center, int radius) {
 		List<BlockPos> posList = new ArrayList<>();
 		for (int x = -radius; x <= radius; x++) {
