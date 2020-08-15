@@ -28,8 +28,17 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 		super(pos);
 	}
 
+	public BlockInfoBoss(int x, int y, int z) {
+		super(x, y, z);
+	}
+
 	public BlockInfoBoss(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
 		super(pos);
+		this.readFromNBT(nbtTagIntArray, null, null);
+	}
+
+	public BlockInfoBoss(int x, int y, int z, NBTTagIntArray nbtTagIntArray) {
+		super(x, y, z);
 		this.readFromNBT(nbtTagIntArray, null, null);
 	}
 

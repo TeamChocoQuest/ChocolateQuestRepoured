@@ -263,7 +263,7 @@ public class CQStructure {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			AbstractBlockInfo blockInfo = AbstractBlockInfo.create(new BlockPos(x, y, z), (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
+			AbstractBlockInfo blockInfo = AbstractBlockInfo.create(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
 			if (blockInfo != null) {
 				this.blockInfoList.add(blockInfo);
 			}
