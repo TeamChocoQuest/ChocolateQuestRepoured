@@ -813,15 +813,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public abstract float getBaseHealth();
 
 	public float calculateBaseHealth(double x, double z, float health) {
-		BlockPos spawn = this.world.getSpawnPoint();
-		x -= (double) spawn.getX();
-		z -= (double) spawn.getZ();
-		float distance = (float) Math.sqrt(x * x + z * z);
+		if(CQRConfig.mobs.enableHealthChangeOnDistance) {
+			BlockPos spawn = this.world.getSpawnPoint();
+			x -= (double) spawn.getX();
+			z -= (double) spawn.getZ();
+			float distance = (float) Math.sqrt(x * x + z * z);
 
-		health *= 1.0F + 0.1F * (int) (distance / CQRConfig.mobs.distanceDivisor);
-		health *= this.healthScale;
+			health *= 1.0F + 0.1F * (int) (distance / CQRConfig.mobs.distanceDivisor);
+			health *= this.healthScale;
 
-		return (float) (int) health;
+			return (float) (int) health;
+		}
+		return health;
 	}
 
 	public void setBaseHealth(BlockPos pos, float health) {
