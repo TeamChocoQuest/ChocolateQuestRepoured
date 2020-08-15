@@ -442,7 +442,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		Random rdm = new Random();
 
 		List<Integer> usedIndexes = new ArrayList<>();
-		Double divisor = new Double((double) this.dungeon.getOreChance() / 100.0);
+		Double divisor = new Double((double) this.dungeon.getOreChance() / 100.0D);
 		for (int i = 0; i < (new Double(divisor * blocks.size()).intValue()); i++) {
 			int blockIndex = rdm.nextInt(blocks.size());
 			while (usedIndexes.contains(blockIndex)) {
@@ -451,7 +451,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			BlockPos p = blocks.get(blockIndex);
 			BlockPos v = p.subtract(this.centerLoc);
 
-			if (blockArray[v.getX() + r][p.getY()][v.getZ() + r] == Blocks.AIR || blockArray[v.getX() + r][p.getY()][v.getZ() + r] == null) {
+			if (blockArray[v.getX() + r][p.getY()][v.getZ() + r].getBlock() == Blocks.AIR || blockArray[v.getX() + r][p.getY()][v.getZ() + r] == null) {
 				continue;
 			}
 			IBlockState ore;
