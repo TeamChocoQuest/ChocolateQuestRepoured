@@ -53,7 +53,7 @@ public class TextureSet {
 				texturesString.replaceAll(" ", "");
 				// This strings represent the FILE PATHS, not the actual resource locations
 				for (String texture : texturesString.split(",")) {
-					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath() + texture + ".png");
+					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES,texture + ".png");
 					if (tf != null && tf.exists()) {
 						textures.add(tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
