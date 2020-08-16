@@ -24,8 +24,16 @@ public class BlockInfoBanner extends BlockInfo {
 		super(pos, blockstate, tileentityData);
 	}
 
+	public BlockInfoBanner(int x, int y, int z, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
+		super(x, y, z, blockstate, tileentityData);
+	}
+
 	public BlockInfoBanner(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		super(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+	}
+
+	public BlockInfoBanner(int x, int y, int z, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+		super(x, y, z, nbtTagIntArray, blockStatePalette, compoundTagList);
 	}
 
 	@Override

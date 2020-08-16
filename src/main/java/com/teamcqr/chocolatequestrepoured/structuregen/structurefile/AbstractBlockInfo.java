@@ -20,11 +20,25 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 	private short y;
 	private short z;
 
+	public AbstractBlockInfo(int x, int y, int z) {
+		this.x = (short) x;
+		this.y = (short) y;
+		this.z = (short) z;
+	}
+
 	public AbstractBlockInfo(BlockPos pos) {
 		// this.pos = pos;
 		this.x = (short) pos.getX();
 		this.y = (short) pos.getY();
 		this.z = (short) pos.getZ();
+	}
+
+	public AbstractBlockInfo(int x, int y, int z, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+		// this.pos = pos;
+		this.x = (short) x;
+		this.y = (short) y;
+		this.z = (short) z;
+		this.readFromNBT(nbtTagIntArray, blockStatePalette, compoundTagList);
 	}
 
 	public AbstractBlockInfo(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
@@ -47,22 +61,27 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 
 	@Nullable
 	public static AbstractBlockInfo create(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+		return create(pos.getX(), pos.getY(), pos.getZ(), nbtTagIntArray, blockStatePalette, compoundTagList);
+	}
+
+	@Nullable
+	public static AbstractBlockInfo create(int x, int y, int z, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		if (nbtTagIntArray.getIntArray().length == 0) {
 			return null;
 		}
 		switch (nbtTagIntArray.getIntArray()[0]) {
 		case BLOCK_INFO_ID:
-			return new BlockInfo(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+			return new BlockInfo(x, y, z, nbtTagIntArray, blockStatePalette, compoundTagList);
 		case BANNER_INFO_ID:
-			return new BlockInfoBanner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+			return new BlockInfoBanner(x, y, z, nbtTagIntArray, blockStatePalette, compoundTagList);
 		case BOSS_INFO_ID:
-			return new BlockInfoBoss(pos, nbtTagIntArray);
+			return new BlockInfoBoss(x, y, z, nbtTagIntArray);
 		case NEXUS_INFO_ID:
-			return new BlockInfoForceFieldNexus(pos, nbtTagIntArray);
+			return new BlockInfoForceFieldNexus(x, y, z, nbtTagIntArray);
 		case CHEST_INFO_ID:
-			return new BlockInfoLootChest(pos, nbtTagIntArray);
+			return new BlockInfoLootChest(x, y, z, nbtTagIntArray);
 		case SPAWNER_INFO_ID:
-			return new BlockInfoSpawner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+			return new BlockInfoSpawner(x, y, z, nbtTagIntArray, blockStatePalette, compoundTagList);
 		default:
 			return null;
 		}
