@@ -89,7 +89,7 @@ public class TextureSetManager {
 		CustomTexturesPacket packet = new CustomTexturesPacket();
 		for (File texture : TextureSet.getLoadedTextures()) {
 			String base64 = CompressionUtil.encodeFileToBase64(texture);
-			String path = texture.getAbsolutePath().replaceFirst(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath(), "");
+			String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
 
 			packet.addPair(base64, path);
 		}

@@ -29,7 +29,8 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomText
 			for(Map.Entry<String,String> textureEntry : message.getTextureMap().entrySet()) {
 				String path = textureEntry.getKey();
 				
-				File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath() + path + ".png");
+				//!!Path already contains the .png extension
+				File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, path);
 				if (tf != null) {
 					if(tf.exists()) {
 						tf.delete();

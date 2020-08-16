@@ -22,7 +22,7 @@ public class CustomTexturesPacket implements IMessage {
 	}
 
 	public void addPair(String file, String path) {
-		this.entries.put(file, path);
+		this.entries.put(path, file);
 	}
 
 	public void addTextureSet(TextureSet ts) {
