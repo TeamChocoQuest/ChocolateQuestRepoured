@@ -127,7 +127,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private String factionName;
 	private CQRFaction defaultFactionInstance;
 
-	protected boolean wasRecentlyHitByAxe = false;
 	protected int lastTickShieldDisabled = Integer.MIN_VALUE;
 	protected float damageBlockedWithShield = 0.0F;
 	protected boolean armorActive = false;
@@ -250,6 +249,28 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		return flag;
+	}
+
+	protected boolean damageCapEnabled() {
+		return CQRConfig.mobs.enableDamageCapForNonBossMobs;
+	}
+
+	protected float maxDamageInPercentOfMaxHP() {
+		return CQRConfig.mobs.maxUncappedDamageInMaxHPPercent;
+	}
+
+	protected float maxUncappedDamage() {
+		return CQRConfig.mobs.maxUncappedDamageForNonBossMobs;
+	}
+
+	private float handleDamageCap(DamageSource source, float originalAmount) {
+		if (source.isCreativePlayer() || source.canHarmInCreative()) {
+			return originalAmount;
+		}
+		if (CQRConfig.advanced.enableMaxDamageCaps && this.damageCapEnabled()) {
+			return Math.min(Math.max(this.maxUncappedDamage(), this.getMaxHealth() * this.maxDamageInPercentOfMaxHP()), originalAmount);
+		}
+		return originalAmount;
 	}
 
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
@@ -447,33 +468,24 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					return true;
 				}
 
-				if (stack.getItem() instanceof ItemSword) {
-					player.setHeldItem(hand, this.getHeldItemMainhand());
-					this.setHeldItem(EnumHand.MAIN_HAND, stack);
-					return true;
-				}
+				return true;
+			} else if (!getFaction().isEnemy(player) && this.getTrades() != null && !this.getTrades().isEmpty()) {
+				// Player is NOT CREATIVE
+				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				return true;
 
-				if (stack.getItem() instanceof ItemShield) {
-					player.setHeldItem(hand, this.getHeldItemOffhand());
-					this.setHeldItem(EnumHand.OFF_HAND, stack);
-					return true;
-				}
-
-				if (!this.getLookHelper().getIsLooking() && !this.hasPath()) {
-					double x1 = player.posX - this.posX;
-					double z1 = player.posZ - this.posZ;
-					float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
-					this.rotationYaw = yaw;
-					this.rotationYawHead = yaw;
-					this.renderYawOffset = yaw;
-				}
-				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 			}
 			return true;
 		}
 		if (this.hasLeader() && this.getLeader() == player && !player.isSneaking()) {
 			if (!this.world.isRemote) {
-				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				if (player.isCreative() || !getFaction().isEnemy(player)) {
+					if (player.isCreative()) {
+						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+					} else if (this.getTrades() != null && !this.getTrades().isEmpty()) {
+						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+					}
+				}
 			}
 			return true;
 		}
@@ -780,7 +792,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public abstract float getBaseHealth();
 
 	public float calculateBaseHealth(double x, double z, float health) {
-		if(CQRConfig.mobs.enableHealthChangeOnDistance) {
+		if (CQRConfig.mobs.enableHealthChangeOnDistance) {
 			BlockPos spawn = this.world.getSpawnPoint();
 			x -= (double) spawn.getX();
 			z -= (double) spawn.getZ();
