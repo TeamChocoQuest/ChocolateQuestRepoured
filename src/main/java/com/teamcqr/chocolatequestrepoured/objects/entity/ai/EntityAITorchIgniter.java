@@ -23,6 +23,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 	private static final int SEARCH_RADIUS_VERTICAL = 2;
 	private static final double REACH_DISTANCE_SQ = 3.0D * 3.0D;
 	private BlockPos nearestTorch = null;
+	private int lastTickStarted = Integer.MIN_VALUE;
 
 	public EntityAITorchIgniter(AbstractEntityCQR entity) {
 		super(entity);
@@ -35,7 +36,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 			return false;
 		}
 
-		if (this.entity.ticksExisted % 4 == 0) {
+		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
 			this.nearestTorch = this.getNearestUnlitTorch(this.entity.world, pos.getX(), pos.getY() + ((int) this.entity.height >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL);
 		}

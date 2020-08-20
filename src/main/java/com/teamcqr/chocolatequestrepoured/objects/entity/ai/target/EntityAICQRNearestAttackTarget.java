@@ -28,7 +28,10 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			return false;
 		}
 		this.entity.setAttackTarget(null);
-		return true;
+		if (!this.entity.hasFaction()) {
+			return false;
+		}
+		return this.random.nextInt(3) == 0;
 	}
 
 	@Override
