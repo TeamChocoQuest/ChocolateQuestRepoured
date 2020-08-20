@@ -208,7 +208,7 @@ public class EventsHandler {
 			if (!world.isRemote && event.getTarget() instanceof AbstractEntityCQR) {
 				AbstractEntityCQR targetCQR = (AbstractEntityCQR) event.getTarget();
 
-				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) == 1.0F) {
+				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) >= 0.9F) {
 					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
 				}
 			}
