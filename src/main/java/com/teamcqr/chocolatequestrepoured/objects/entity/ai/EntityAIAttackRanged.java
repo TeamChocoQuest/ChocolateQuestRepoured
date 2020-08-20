@@ -141,7 +141,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 					} else if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
 						inaccuracy = 2.0F;
 					}
-					arrow.shoot(x, y + distance * 0.06D, z, 3.0F, inaccuracy);
+					arrow.shoot(x, y + distance * distance * 0.0045D, z, 2.4F, inaccuracy);
 					arrow.motionX += this.entity.motionX;
 					arrow.motionZ += this.entity.motionZ;
 					if (!this.entity.onGround) {
