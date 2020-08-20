@@ -130,7 +130,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private String factionName;
 	private CQRFaction defaultFactionInstance;
 
-	protected boolean wasRecentlyHitByAxe = false;
 	protected int lastTickShieldDisabled = Integer.MIN_VALUE;
 	protected float damageBlockedWithShield = 0.0F;
 	protected boolean armorActive = false;
@@ -280,7 +279,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			return originalAmount;
 		}
 		if (CQRConfig.advanced.enableMaxDamageCaps && this.damageCapEnabled()) {
-			return new Float(Math.min(Math.max(this.maxUncappedDamage(), this.getMaxHealth() * this.maxDamageInPercentOfMaxHP()), originalAmount));
+			return Math.min(Math.max(this.maxUncappedDamage(), this.getMaxHealth() * this.maxDamageInPercentOfMaxHP()), originalAmount);
 		}
 		return originalAmount;
 	}
@@ -495,17 +494,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
 				return true;
-			} else if(!getFaction().isEnemy(player) && this.getTrades() != null && !this.getTrades().isEmpty()) {
-				//Player is NOT CREATIVE
+			} else if (!getFaction().isEnemy(player) && this.getTrades() != null && !this.getTrades().isEmpty()) {
+				// Player is NOT CREATIVE
 				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				return true;
 			}
 		} else {
 			if (!this.world.isRemote) {
-				if(player.isCreative() || !getFaction().isEnemy(player)) {
-					if(player.isCreative()) {
+				if (player.isCreative() || !getFaction().isEnemy(player)) {
+					if (player.isCreative()) {
 						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
-					} else if(this.getTrades() != null && !this.getTrades().isEmpty()) {
+					} else if (this.getTrades() != null && !this.getTrades().isEmpty()) {
 						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 					}
 				}
@@ -825,7 +824,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public abstract float getBaseHealth();
 
 	public float calculateBaseHealth(double x, double z, float health) {
-		if(CQRConfig.mobs.enableHealthChangeOnDistance) {
+		if (CQRConfig.mobs.enableHealthChangeOnDistance) {
 			BlockPos spawn = this.world.getSpawnPoint();
 			x -= (double) spawn.getX();
 			z -= (double) spawn.getZ();
