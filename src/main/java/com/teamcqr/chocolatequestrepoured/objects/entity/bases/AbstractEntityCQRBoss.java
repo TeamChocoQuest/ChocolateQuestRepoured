@@ -72,6 +72,9 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if (this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
+			this.heal(this.getMaxHealth() * 0.005F);
+		}
 
 		this.bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 	}
