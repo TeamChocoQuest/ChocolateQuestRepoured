@@ -19,6 +19,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 	private static final int SEARCH_RADIUS_VERTICAL = 2;
 	private static final double REACH_DISTANCE_SQ = 3.0D * 3.0D;
 	private BlockPos nearestFire = null;
+	private int lastTickStarted = Integer.MIN_VALUE;
 
 	public EntityAIFireFighter(AbstractEntityCQR entity) {
 		super(entity);
@@ -31,7 +32,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 			return false;
 		}
 
-		if (this.entity.ticksExisted % 4 == 0) {
+		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
 			Vec3d vec = this.entity.getPositionEyes(1.0F);
 			this.nearestFire = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, Blocks.FIRE, (mutablePos, state) -> {
@@ -63,6 +64,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.entity.getDistanceSqToCenter(this.nearestFire) > REACH_DISTANCE_SQ) {
 			this.entity.getNavigator().tryMoveToXYZ(this.nearestFire.getX(), this.nearestFire.getY(), this.nearestFire.getZ(), 1.0D);
 		}
+		this.lastTickStarted = this.entity.ticksExisted;
 	}
 
 	@Override

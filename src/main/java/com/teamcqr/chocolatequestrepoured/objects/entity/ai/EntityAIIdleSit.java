@@ -65,31 +65,21 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public void updateTask() {
-		if (this.cooldown < COOLDOWN_BORDER) {
-			this.cooldown++;
-		}
-
-		if (this.cooldown >= COOLDOWN_BORDER) {
-			if (this.cooldwonForPartnerCycle < COOLDOWN_FOR_PARTNER_CYCLE_BORDER) {
-				this.cooldwonForPartnerCycle++;
-			}
-
+		if (++this.cooldown > COOLDOWN_BORDER) {
 			// Make entity sit
 			if (!this.entity.isSitting()) {
 				this.entity.setSitting(true);
 			}
 
 			// search for new talking partner
-			if (this.talkingPartner == null || this.cooldwonForPartnerCycle >= COOLDOWN_FOR_PARTNER_CYCLE_BORDER) {
-				if (this.entity.ticksExisted % 4 == 0) {
-					Vec3d vec1 = this.entity.getPositionVector().subtract(6.0D, 3.0D, 6.0D);
-					Vec3d vec2 = this.entity.getPositionVector().add(6.0D, 3.0D, 6.0D);
-					AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-					List<AbstractEntityCQR> friends = this.entity.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, this.predicate);
-					if (!friends.isEmpty()) {
-						this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
-						this.cooldwonForPartnerCycle = 0;
-					}
+			if (++this.cooldwonForPartnerCycle > COOLDOWN_FOR_PARTNER_CYCLE_BORDER) {
+				this.cooldwonForPartnerCycle = 0;
+				Vec3d vec1 = this.entity.getPositionVector().subtract(6.0D, 3.0D, 6.0D);
+				Vec3d vec2 = this.entity.getPositionVector().add(6.0D, 3.0D, 6.0D);
+				AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
+				List<AbstractEntityCQR> friends = this.entity.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, this.predicate);
+				if (!friends.isEmpty()) {
+					this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
 				}
 			}
 

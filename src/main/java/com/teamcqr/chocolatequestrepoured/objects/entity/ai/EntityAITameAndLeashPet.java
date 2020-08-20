@@ -33,7 +33,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityC
 		if (!(this.entity.getHeldItemMainhand().getItem() instanceof ItemLead || this.entity.getHeldItemOffhand().getItem() instanceof ItemLead)) {
 			return false;
 		}
-		if (this.entity.ticksExisted % 4 == 0) {
+		if (this.random.nextInt(10) == 0) {
 			Vec3d vec1 = this.entity.getPositionVector().add(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
