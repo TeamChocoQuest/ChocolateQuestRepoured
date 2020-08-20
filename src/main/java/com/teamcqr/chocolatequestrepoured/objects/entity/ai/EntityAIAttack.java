@@ -93,4 +93,14 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 		}
 	}
 
+	public float getAttackCooldownPeriod() {
+		float f = (float) (1.0D / this.entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * 20.0D);
+		ItemStack stack = this.entity.getHeldItemOffhand();
+		return stack.getItem().isShield(stack, this.entity) ? f + 20.0F : f;
+	}
+
+	public int getBlockCooldownPeriod() {
+		return 30;
+	}
+
 }
