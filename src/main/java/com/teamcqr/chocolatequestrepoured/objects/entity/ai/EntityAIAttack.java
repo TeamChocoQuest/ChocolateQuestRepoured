@@ -10,7 +10,7 @@ import net.minecraft.util.EnumHand;
 public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected int attackTick;
-	protected int shieldTick;
+	private float attackCooldownOverhead;
 
 	public EntityAIAttack(AbstractEntityCQR entity) {
 		super(entity);
@@ -79,8 +79,8 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
-		if (this.attackTick <= 0 && this.entity.isInAttackReach(attackTarget)) {
-			int cooldown = (int) this.getCooldownPeriod();
+		if (this.attackTick + (int) this.getAttackCooldownPeriod() <= this.entity.ticksExisted && this.entity.isInAttackReach(attackTarget)) {
+
 			if (this.entity.isActiveItemStackBlocking()) {
 				this.entity.resetActiveHand();
 				this.attackTick = cooldown + 20;
@@ -88,15 +88,19 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 			} else {
 				this.attackTick = cooldown;
 			}
+			if (this.attackTick + this.getAttackCooldownPeriod() > this.entity.ticksExisted) {
+				this.attackCooldownOverhead = this.getAttackCooldownPeriod() % 1.0F;
+			} else {
+				this.attackCooldownOverhead = 0.0F;
+			}
+			this.attackTick = this.entity.ticksExisted;
 			this.entity.swingArm(EnumHand.MAIN_HAND);
 			this.entity.attackEntityAsMob(attackTarget);
 		}
 	}
 
 	public float getAttackCooldownPeriod() {
-		float f = (float) (1.0D / this.entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * 20.0D);
-		ItemStack stack = this.entity.getHeldItemOffhand();
-		return stack.getItem().isShield(stack, this.entity) ? f + 20.0F : f;
+		return (float) (1.0D / this.entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * 20.0D) + this.attackCooldownOverhead;
 	}
 
 	public int getBlockCooldownPeriod() {
