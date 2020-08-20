@@ -88,7 +88,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	public int getBlockCooldownPeriod() {
-		return 20;
+		return 30;
 	}
 
 }
