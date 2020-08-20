@@ -62,7 +62,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	protected void checkAndPerformBlock() {
-		if (this.entity.getLastTimeHitByAxeWhileBlocking() + 60 > this.entity.ticksExisted) {
+		if (this.entity.getLastTimeHitByAxeWhileBlocking() + 80 > this.entity.ticksExisted) {
 			if (this.entity.isActiveItemStackBlocking()) {
 				this.entity.resetActiveHand();
 			}
