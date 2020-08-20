@@ -121,6 +121,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private boolean prevSneaking;
 	private boolean prevSitting;
 	protected float sizeScaling = 1.0F;
+	protected int lastTickWithAttackTarget = Integer.MIN_VALUE;
 	protected int lastTimeSeenAttackTarget = Integer.MIN_VALUE;
 	protected Vec3d lastPosAttackTarget = Vec3d.ZERO;
 	protected EntityAISpellHandler spellHandler;
@@ -129,8 +130,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private String factionName;
 	private CQRFaction defaultFactionInstance;
 
-	protected int lastTimeHitByAxeWhileBlocking = 0;
 	protected boolean wasRecentlyHitByAxe = false;
+	protected int lastTickShieldDisabled = Integer.MIN_VALUE;
+	protected float damageBlockedWithShield = 0.0F;
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
 
@@ -238,22 +240,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
-		if (CQRConfig.mobs.blockCancelledByAxe && !this.world.isRemote && amount > 0.0F && this.canBlockDamageSource(source) && source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer)
-				&& ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
-			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
-		}
-
 		amount = this.handleDamageCap(source, amount);
 
-		if (super.attackEntityFrom(source, amount)) {
-			if (CQRConfig.mobs.armorShattersOnMobs) {
-				this.handleArmorBreaking();
+		if (!this.world.isRemote && amount > 0.0F && this.canBlockDamageSource(source)) {
+			if (source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer) && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+				this.lastTickShieldDisabled = this.ticksExisted;
+			} else {
+				this.damageBlockedWithShield = this.damageBlockedWithShield + amount * 0.0625F;
+				if (this.damageBlockedWithShield >= 1.0F) {
+					this.damageBlockedWithShield = 0.0F;
+					this.lastTickShieldDisabled = this.ticksExisted;
+				}
 			}
-
-			return true;
 		}
 
-		return false;
+		boolean flag = super.attackEntityFrom(source, amount);
+
+		if (flag && CQRConfig.mobs.armorShattersOnMobs) {
+			this.handleArmorBreaking();
+		}
+
+		return flag;
 	}
 
 	protected boolean damageCapEnabled() {
@@ -540,12 +547,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onUpdate() {
 		EntityLivingBase attackTarget = this.getAttackTarget();
 		if (attackTarget != null) {
+			this.lastTickWithAttackTarget = this.ticksExisted;
 			if (this.isInSightRange(attackTarget) && this.getEntitySenses().canSee(attackTarget)) {
 				this.lastTimeSeenAttackTarget = this.ticksExisted;
 			}
 			if (this.lastTimeSeenAttackTarget + 100 >= this.ticksExisted) {
 				this.lastPosAttackTarget = attackTarget.getPositionVector();
 			}
+		}
+
+		if (this.lastTickWithAttackTarget + 60 < this.ticksExisted && this.damageBlockedWithShield > 0.0F) {
+			this.damageBlockedWithShield = Math.max(this.damageBlockedWithShield - 0.02F, 0.0F);
 		}
 
 		super.onUpdate();
@@ -1243,6 +1255,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
+	public int getLastTickWithAttackTarget() {
+		return lastTickWithAttackTarget;
+	}
+
 	public int getLastTimeSeenAttackTarget() {
 		return this.lastTimeSeenAttackTarget;
 	}
@@ -1268,11 +1284,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setLastTimeHitByAxeWhileBlocking(int tick) {
-		this.lastTimeHitByAxeWhileBlocking = tick;
+		this.lastTickShieldDisabled = tick;
 	}
 
 	public int getLastTimeHitByAxeWhileBlocking() {
-		return this.lastTimeHitByAxeWhileBlocking;
+		return this.lastTickShieldDisabled;
 	}
 
 	// @SideOnly(Side.CLIENT)
