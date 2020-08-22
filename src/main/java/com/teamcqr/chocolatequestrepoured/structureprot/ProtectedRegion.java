@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class ProtectedRegion {
 
+	private static final String PROTECTED_REGION_VERSION = "1.0.0";
 	private final World world;
 	private UUID uuid = MathHelper.getRandomUUID();
 	private BlockPos startPos;
@@ -77,6 +78,7 @@ public class ProtectedRegion {
 
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
+		compound.setString("version", PROTECTED_REGION_VERSION);
 		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
 		compound.setTag("startPos", NBTUtil.createPosTag(this.startPos));
 		compound.setTag("endPos", NBTUtil.createPosTag(this.endPos));
@@ -102,6 +104,11 @@ public class ProtectedRegion {
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
+		String version = compound.getString("version");
+		if (!version.equals(PROTECTED_REGION_VERSION)) {
+			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
+		}
+
 		this.uuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("uuid"));
 		this.startPos = NBTUtil.getPosFromTag(compound.getCompoundTag("startPos"));
 		this.endPos = NBTUtil.getPosFromTag(compound.getCompoundTag("endPos"));
@@ -122,6 +129,11 @@ public class ProtectedRegion {
 		NBTTagList nbtTagList2 = compound.getTagList("blockDependencies", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
 			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
+		}
+
+		// TODO Fix for protected regions not deleting themselves. Should be removed in the future.
+		if (!version.equals(PROTECTED_REGION_VERSION)) {
+			this.isGenerating = false;
 		}
 	}
 

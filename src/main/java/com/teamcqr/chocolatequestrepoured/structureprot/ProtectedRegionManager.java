@@ -153,6 +153,13 @@ public class ProtectedRegionManager {
 			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
 				this.createProtectedRegionFromFile(file);
 			}
+			List<UUID> keys = new ArrayList<>(this.protectedRegions.keySet());
+			for (UUID key : keys) {
+				ProtectedRegion protectedRegion = this.protectedRegions.get(key);
+				if (protectedRegion == null || !protectedRegion.isValid()) {
+					this.protectedRegions.remove(key);
+				}
+			}
 		}
 	}
 
