@@ -118,7 +118,13 @@ public class DungeonGenerator {
 				} else {
 					this.state = EnumDungeonGeneratorState.POST_GENERATION;
 					if (this.protectedRegion != null) {
-						this.protectedRegion.setGenerating(true);
+						this.protectedRegion.setGenerating(false);
+						if (!this.protectedRegion.isValid()) {
+							ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
+							if (manager != null) {
+								manager.removeProtectedRegion(this.protectedRegion);
+							}
+						}
 					}
 				}
 
