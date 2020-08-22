@@ -109,7 +109,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, IMayHaveTextureOverride {
 
 	protected BlockPos homePosition = null;
 	protected UUID leaderUUID;
@@ -154,6 +154,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	// Shoulder entity stuff
 	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 
+	//Texture syncing
+	protected static final DataParameter<String> TEXTURE_OVERRIDE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
+	protected ResourceLocation textureOverride = null; 
+	
 	// Client only
 	@SideOnly(Side.CLIENT)
 	protected int currentSpeechBubbleID;
@@ -1400,5 +1404,25 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public TraderOffer getTrades() {
 		return this.trades;
 	}
-
+	
+	//Custom textures
+	@Override
+	public boolean hasTextureOverride() {
+		return this.dataManager.get(TEXTURE_OVERRIDE) != null && !this.dataManager.get(TEXTURE_OVERRIDE).isEmpty(); 
+	}
+	
+	@Override
+	public ResourceLocation getTextureOverride() {
+		if(this.textureOverride == null) {
+			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
+		}
+		return this.textureOverride;
+	}
+	
+	@Override
+	public Entity getEntity() {
+		return this;
+	}
+	
+	
 }

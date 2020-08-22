@@ -130,11 +130,11 @@ public class CQRMain {
 
 		proxy.preInit();
 
-		// Faction system
-		FactionRegistry.instance().loadFactions();
-
 		// Custom Textures System
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
+		
+		// Faction system
+		FactionRegistry.instance().loadFactions();
 
 		// Enables Dungeon generation in worlds, do not change the number (!) and do NOT
 		// remove this line, moving it somewhere else is fine, but it must be called in
