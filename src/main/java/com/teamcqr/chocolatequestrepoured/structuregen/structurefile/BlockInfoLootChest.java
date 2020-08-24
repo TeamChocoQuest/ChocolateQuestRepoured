@@ -147,7 +147,6 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			} catch (Exception e) {
 				CQRMain.logger.warn("Failed to read custom loottable for loottable {}!", lootTable);
 				return 0;
-				CQRMain.logger.warn("Failed to read custom loottable for loottable {}!", lootTable);
 			}
 		}
 	}
