@@ -24,10 +24,14 @@ public class RecipeArmorDyableBreathing extends IForgeRegistryEntry.Impl<IRecipe
 		for (int i = 0; i < inv.getSizeInventory(); ++i) {
 			ItemStack itemstack1 = inv.getStackInSlot(i);
 
-			if (itemstack1.getItem() instanceof ItemArmorDyable) {
-				itemstack = itemstack1;
-			} else if (itemstack1.getItem() == Items.GLOWSTONE_DUST) {
-				glowStoneDustCount++;
+			if (!itemstack1.isEmpty()) {
+				if (itemstack == ItemStack.EMPTY && itemstack1.getItem() instanceof ItemArmorDyable) {
+					itemstack = itemstack1;
+				} else if (itemstack1.getItem() == Items.GLOWSTONE_DUST) {
+					glowStoneDustCount++;
+				} else {
+					return false;
+				}
 			}
 		}
 
@@ -42,10 +46,14 @@ public class RecipeArmorDyableBreathing extends IForgeRegistryEntry.Impl<IRecipe
 		for (int i = 0; i < inv.getSizeInventory(); ++i) {
 			ItemStack itemstack1 = inv.getStackInSlot(i);
 
-			if (itemstack1.getItem() instanceof ItemArmorDyable) {
-				itemstack = itemstack1;
-			} else if (itemstack1.getItem() == Items.GLOWSTONE_DUST) {
-				glowStoneDustCount++;
+			if (!itemstack1.isEmpty()) {
+				if (itemstack == ItemStack.EMPTY && itemstack1.getItem() instanceof ItemArmorDyable) {
+					itemstack = itemstack1;
+				} else if (itemstack1.getItem() == Items.GLOWSTONE_DUST) {
+					glowStoneDustCount++;
+				} else {
+					return ItemStack.EMPTY;
+				}
 			}
 		}
 

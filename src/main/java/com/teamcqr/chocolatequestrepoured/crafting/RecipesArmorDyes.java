@@ -9,15 +9,12 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.IForgeRegistryEntry.Impl;
+import net.minecraftforge.oredict.DyeUtils;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
+public class RecipesArmorDyes extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
-	/**
-	 * Used to check if a recipe matches current crafting inventory
-	 */
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -27,14 +24,12 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 			ItemStack itemstack1 = inv.getStackInSlot(i);
 
 			if (!itemstack1.isEmpty()) {
-				if (itemstack1.getItem() instanceof ItemArmorDyable) {
+				if (itemstack == ItemStack.EMPTY && itemstack1.getItem() instanceof ItemArmorDyable) {
 					itemstack = itemstack1;
-				} else {
-					if (!net.minecraftforge.oredict.DyeUtils.isDye(itemstack1)) {
-						return false;
-					}
-
+				} else if (DyeUtils.isDye(itemstack1)) {
 					list.add(itemstack1);
+				} else {
+					return false;
 				}
 			}
 		}
@@ -42,9 +37,6 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 		return !itemstack.isEmpty() && !list.isEmpty();
 	}
 
-	/**
-	 * Returns an Item that is the result of this recipe
-	 */
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -57,7 +49,7 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 			ItemStack itemstack1 = inv.getStackInSlot(k);
 
 			if (!itemstack1.isEmpty()) {
-				if (itemstack1.getItem() instanceof ItemArmorDyable) {
+				if (itemstack == ItemStack.EMPTY && itemstack1.getItem() instanceof ItemArmorDyable) {
 					itemarmor = (ItemArmor) itemstack1.getItem();
 
 					itemstack = itemstack1.copy();
@@ -74,12 +66,8 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 						aint[2] = (int) ((float) aint[2] + f2 * 255.0F);
 						++j;
 					}
-				} else {
-					if (!net.minecraftforge.oredict.DyeUtils.isDye(itemstack1)) {
-						return ItemStack.EMPTY;
-					}
-
-					float[] afloat = net.minecraftforge.oredict.DyeUtils.colorFromStack(itemstack1).get().getColorComponentValues();
+				} else if (DyeUtils.isDye(itemstack1)) {
+					float[] afloat = DyeUtils.colorFromStack(itemstack1).get().getColorComponentValues();
 					int l1 = (int) (afloat[0] * 255.0F);
 					int i2 = (int) (afloat[1] * 255.0F);
 					int j2 = (int) (afloat[2] * 255.0F);
@@ -88,6 +76,8 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 					aint[1] += i2;
 					aint[2] += j2;
 					++j;
+				} else {
+					return ItemStack.EMPTY;
 				}
 			}
 		}
@@ -115,26 +105,6 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 		return ItemStack.EMPTY;
 	}
 
-	@Override
-	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-
-		for (int i = 0; i < nonnulllist.size(); ++i) {
-			ItemStack itemstack = inv.getStackInSlot(i);
-			nonnulllist.set(i, net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack));
-		}
-
-		return nonnulllist;
-	}
-
-	@Override
-	public boolean isDynamic() {
-		return true;
-	}
-
-	/**
-	 * Used to determine if this recipe can fit in a grid of the given width/height
-	 */
 	@Override
 	public boolean canFit(int width, int height) {
 		return width * height >= 2;
