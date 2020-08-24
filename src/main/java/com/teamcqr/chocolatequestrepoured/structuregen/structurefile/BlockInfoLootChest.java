@@ -145,8 +145,8 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			try {
 				return 17 + MathHelper.clamp(Integer.parseInt(lootTable.toString().substring(25)), 1, 14);
 			} catch (Exception e) {
-				return 0;
 				CQRMain.logger.warn("Failed to read custom loottable for loottable {}!", lootTable);
+				return 0;
 			}
 		}
 	}
