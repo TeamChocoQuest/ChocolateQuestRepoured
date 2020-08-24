@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
@@ -138,11 +139,14 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			return 15;
 		} else if (lootTable.equals(LootTableList.CHESTS_WOODLAND_MANSION)) {
 			return 16;
+		} else if (lootTable.equals(LootTableList.CHESTS_SIMPLE_DUNGEON)) {
+			return 17;
 		} else {
 			try {
-				return Integer.parseInt(lootTable.toString().substring(18, lootTable.toString().length()));
+				return 17 + MathHelper.clamp(Integer.parseInt(lootTable.toString().substring(25)), 1, 14);
 			} catch (Exception e) {
 				return 0;
+				CQRMain.logger.warn("Failed to read custom loottable for loottable {}!", lootTable);
 			}
 		}
 	}
@@ -183,12 +187,15 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			return LootTableList.CHESTS_VILLAGE_BLACKSMITH;
 		case 16:
 			return LootTableList.CHESTS_WOODLAND_MANSION;
+		case 17:
+			return LootTableList.CHESTS_SIMPLE_DUNGEON;
 		default:
 			break;
 		}
-		if (id >= 17 && id <= 30) {
-			return new ResourceLocation(Reference.MODID, "custom_" + (id - 16));
+		if (id >= 18 && id <= 31) {
+			return new ResourceLocation(Reference.MODID, "custom_" + (id - 17));
 		}
+		CQRMain.logger.warn("Failed to read loottable for id {}!", id);
 		return ModLoottables.CHESTS_FOOD;
 	}
 
