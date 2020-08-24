@@ -146,6 +146,7 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 				return 17 + MathHelper.clamp(Integer.parseInt(lootTable.toString().substring(25)), 1, 14);
 			} catch (Exception e) {
 				return 0;
+				CQRMain.logger.warn("Failed to read custom loottable for loottable {}!", lootTable);
 			}
 		}
 	}
@@ -194,6 +195,7 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 		if (id >= 18 && id <= 31) {
 			return new ResourceLocation(Reference.MODID, "custom_" + (id - 17));
 		}
+		CQRMain.logger.warn("Failed to read loottable for id {}!", id);
 		return ModLoottables.CHESTS_FOOD;
 	}
 
