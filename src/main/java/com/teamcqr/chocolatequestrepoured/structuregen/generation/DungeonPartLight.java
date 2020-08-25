@@ -1,14 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import java.util.EnumSet;
+
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldType;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.ForgeEventFactory;
 
 public class DungeonPartLight extends AbstractDungeonPart {
 
@@ -36,7 +42,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 			this.chunkZ = Integer.MAX_VALUE;
 			this.mutablePos1 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 			this.mutablePos2 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
-			this.mutablePos3 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+			this.mutablePos3 = new BlockPos.MutableBlockPos(this.minPos);
 		}
 	}
 
@@ -97,8 +103,9 @@ public class DungeonPartLight extends AbstractDungeonPart {
 				this.mutablePos2.setPos(this.mutablePos2.getX() + 1, this.minPos.getY(), this.minPos.getZ());
 			}
 		} else if (this.mutablePos3.getX() <= this.maxPos.getX()) {
-			IBlockState state = this.world.getBlockState(this.mutablePos3);
-			this.world.notifyNeighborsRespectDebug(this.mutablePos3, state.getBlock(), false);
+			//IBlockState state = this.world.getBlockState(this.mutablePos3);
+			//this.world.notifyNeighborsRespectDebug(this.mutablePos3, state.getBlock(), false);
+			notifyNeighborsRespectDebug(world, mutablePos3);
 
 			if (this.mutablePos3.getZ() < this.maxPos.getZ()) {
 				this.mutablePos3.setPos(this.mutablePos3.getX(), this.mutablePos3.getY(), this.mutablePos3.getZ() + 1);
@@ -113,6 +120,27 @@ public class DungeonPartLight extends AbstractDungeonPart {
 	@Override
 	public boolean isGenerated() {
 		return this.mutablePos3.getX() > this.maxPos.getX();
+	}
+
+	private void notifyNeighborsRespectDebug(World world, BlockPos pos) {
+		if (world.getWorldInfo().getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+			return;
+		}
+		
+		IBlockState state = world.getBlockState(pos);
+
+		if (ForgeEventFactory.onNeighborNotify(world, pos, state, EnumSet.allOf(EnumFacing.class), false).isCanceled()) {
+			return;
+		}
+
+		Block block = state.getBlock();
+		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+		world.neighborChanged(p.setPos(pos.getX() + 1, pos.getY(), pos.getZ()), block, pos);
+		world.neighborChanged(p.setPos(pos.getX() - 1, pos.getY(), pos.getZ()), block, pos);
+		world.neighborChanged(p.setPos(pos.getX(), pos.getY() + 1, pos.getZ()), block, pos);
+		world.neighborChanged(p.setPos(pos.getX(), pos.getY() - 1, pos.getZ()), block, pos);
+		world.neighborChanged(p.setPos(pos.getX(), pos.getY(), pos.getZ() + 1), block, pos);
+		world.neighborChanged(p.setPos(pos.getX(), pos.getY(), pos.getZ() - 1), block, pos);
 	}
 
 }
