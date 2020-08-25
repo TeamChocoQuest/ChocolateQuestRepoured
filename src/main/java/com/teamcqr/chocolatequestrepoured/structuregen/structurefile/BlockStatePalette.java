@@ -44,4 +44,8 @@ public class BlockStatePalette implements Iterable<IBlockState> {
 		this.ids.put(state, id);
 	}
 
+	public int size() {
+		return this.ids.size();
+	}
+
 }

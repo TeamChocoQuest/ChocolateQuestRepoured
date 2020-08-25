@@ -24,6 +24,10 @@ public class BlockPlacingHelper {
 	private static ReflectionMethod<Chunk, Object> propagateSkylightOcclusionMethod = new ReflectionMethod<>(Chunk.class, "func_76595_e", "propagateSkylightOcclusion", int.class, int.class);
 
 	public static boolean setBlockState(World world, BlockPos pos, IBlockState newState, int flags, boolean updateLight) {
+		if (updateLight) {
+			return world.setBlockState(pos, newState, flags);
+		}
+
 		if (world.isOutsideBuildHeight(pos)) {
 			return false;
 		}

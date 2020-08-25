@@ -138,22 +138,22 @@ public class ProtectedRegion {
 	}
 
 	public boolean isInsideProtectedRegion(BlockPos pos) {
-		if (pos.getX() <= this.startPos.getX()) {
+		if (pos.getX() < this.startPos.getX()) {
 			return false;
 		}
-		if (pos.getY() <= this.startPos.getY()) {
+		if (pos.getY() < this.startPos.getY()) {
 			return false;
 		}
-		if (pos.getZ() <= this.startPos.getZ()) {
+		if (pos.getZ() < this.startPos.getZ()) {
 			return false;
 		}
-		if (pos.getX() >= this.endPos.getX()) {
+		if (pos.getX() > this.endPos.getX()) {
 			return false;
 		}
-		if (pos.getY() >= this.endPos.getY()) {
+		if (pos.getY() > this.endPos.getY()) {
 			return false;
 		}
-		if (pos.getZ() >= this.endPos.getZ()) {
+		if (pos.getZ() > this.endPos.getZ()) {
 			return false;
 		}
 		return true;

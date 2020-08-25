@@ -53,7 +53,7 @@ public class CQRConfig {
 
 		@Config.RangeInt(min = 1, max = 100)
 		public int generationSpeed = 20;
-		@Config.RangeInt(min = 100, max = 100000)
+		@Config.RangeInt(min = 1, max = 1000000000)
 		public int generationLimit = 20000;
 		public boolean instantLightUpdates = false;
 
