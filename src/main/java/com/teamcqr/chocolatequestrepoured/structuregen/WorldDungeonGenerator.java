@@ -79,10 +79,14 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			if(world instanceof WorldServer && CQRConfig.advanced.generationRespectOtherStructures) {
 				ChunkProviderServer cps = ((WorldServer)world).getChunkProvider();
 				for(String sn : STRUCTURE_NAMES_INTERNAL) {
-					BlockPos ps = cps.getNearestStructurePos(world, sn, pos, CQRConfig.advanced.generationRespectUnexploredStructures);
-					if(ps != null && ps.getDistance(pos.getX(), ps.getY(), pos.getZ()) <= CQRConfig.advanced.generationMinDistanceToOtherStructure) {
-						CQRMain.logger.warn("Tried to spawn a dungeon too near a structure(Internal name: " + sn + "), aborting generation!");
-						return;
+					try {
+						BlockPos ps = cps.getNearestStructurePos(world, sn, pos, CQRConfig.advanced.generationRespectUnexploredStructures);
+						if(ps != null && ps.getDistance(pos.getX(), ps.getY(), pos.getZ()) <= CQRConfig.advanced.generationMinDistanceToOtherStructure) {
+							CQRMain.logger.warn("Tried to spawn a dungeon too near a structure(Internal name: " + sn + "), aborting generation!");
+							return;
+						}
+					} catch(NullPointerException npe) {
+						CQRMain.logger.error("NPE occured whilst trying to look for nearby structures! Exception: {}", npe);
 					}
 				}
 			}
