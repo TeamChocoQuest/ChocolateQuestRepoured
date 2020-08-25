@@ -72,13 +72,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	private EStairSection entranceDirection = null;
 
 	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon) {
-		super(world, pos, dungeon);
+		super(world, pos.down(20), dungeon);
 
-		this.maxHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight());
+		this.maxHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight()) + 20;
 		this.minRadius = dungeon.getInnerRadius();
 		this.steepness = dungeon.getSteepness();
 
-		this.baseRadius = new Double(this.minRadius + Math.pow(((this.maxHeight + 1) / this.steepness), 1 / 3)).intValue();
+		this.baseRadius = this.minRadius * 2 + (int) Math.cbrt(((double) this.maxHeight + 60.0D) / this.steepness);
 	}
 
 	// DONE: Lower ore gen
@@ -89,9 +89,6 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// X Y Z mark the C E N T E R / Middle of the crater!!!!
 
 		this.centerLoc = this.pos;
-
-		this.maxHeight += new Double(this.maxHeight * 0.1).intValue();
-		this.baseRadius = new Double(this.minRadius + Math.cbrt(this.maxHeight / this.steepness)).intValue();
 	}
 
 	private void calculateNextStairDirection(int yStairCase, int wideness) {
@@ -153,13 +150,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// Upper volcano part
 		for (int iY = 0; iY < yMax; iY++) {
 			// RADIUS = baseRAD - (level/steepness)^1/3
-			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY / this.steepness)).intValue();
+			int radiusOuter = this.baseRadius - (int) Math.cbrt(((double) iY + 60.0D) / this.steepness);
 			int innerRadius = this.minRadius; // DONE calculate minRadius
 
-			for (int iX = -radiusOuter * 2; iX <= radiusOuter * 2; iX++) {
-				for (int iZ = -radiusOuter * 2; iZ <= radiusOuter * 2; iZ++) {
+			for (int iX = -radiusOuter; iX <= radiusOuter; iX++) {
+				for (int iZ = -radiusOuter; iZ <= radiusOuter; iZ++) {
 					// First check if it is within the base radius...
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter * 2)) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter)) {
 						// If it is at the bottom and also inside the inner radius -> lava
 						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
 							// Else it is a wall block
