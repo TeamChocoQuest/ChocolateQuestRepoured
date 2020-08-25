@@ -14,7 +14,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagInt;
@@ -25,10 +24,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
@@ -39,58 +38,68 @@ import net.minecraft.world.gen.structure.template.Template;
  */
 public class DungeonGenUtils {
 
-	public static boolean isInsideCircle(int ix, int iz, int radius, BlockPos center) {
-		BlockPos newPos = new BlockPos(center.getX() + ix, center.getY(), center.getZ() + iz);
+	private static final Random RAND = new Random();
 
-		return isInsideSphere(newPos, center, radius);
+	public static boolean isInsideCircle(int x, int z, int radius) {
+		return x * x + z * z < radius * radius;
 	}
 
 	public static boolean isInsideSphere(BlockPos pos, BlockPos center, int radius) {
-		if (Math.abs(center.getDistance(pos.getX(), pos.getY(), pos.getZ())) < radius) {
+		return center.distanceSq(pos) < radius * radius;
+	}
+
+	public static boolean percentageRandom(int chance) {
+		return percentageRandom(chance, RAND);
+	}
+
+	public static boolean percentageRandom(int chance, Random rand) {
+		if (chance <= 0) {
+			return false;
+		}
+		if (chance >= 100) {
 			return true;
 		}
-		return false;
+		return rand.nextInt(100) < chance;
 	}
 
-	public static int getHighestYAt(Chunk chunk, int x, int z, boolean countWaterAsAir) {
-		int y = 255;
-		Block block = chunk.getBlockState(x, y, z).getBlock();
-		while (Block.isEqualTo(block, Blocks.AIR) || (countWaterAsAir && (Block.isEqualTo(block, Blocks.WATER) || Block.isEqualTo(block, Blocks.FLOWING_WATER)))) {
-			y--;
-			block = chunk.getBlockState(x, y, z).getBlock();
+	public static boolean percentageRandom(double chance) {
+		return percentageRandom(chance, RAND);
+	}
+
+	public static boolean percentageRandom(double chance, Random rand) {
+		if (chance <= 0.0D) {
+			return false;
 		}
-
-		return y;
-	}
-
-	public static boolean PercentageRandom(int number, Random rdm) {
-		if (number >= 100) {
+		if (chance >= 1.0D) {
 			return true;
 		}
-		return rdm.nextInt(100) < number;
+		return rand.nextDouble() < chance;
 	}
 
-	public static boolean PercentageRandom(double number, long seed) {
-		return PercentageRandom((int) (number * 100), new Random(seed));
+	public static int randomBetween(int min, int max) {
+		return randomBetween(min, max, RAND);
 	}
 
-	public static int getIntBetweenBorders(int min, int max, Random rdm) {
-		if (min != max && rdm != null) {
-			max += 1;
-			int ret = min + rdm.nextInt(max - min);
-			return ret;
-		}
-		return min;
-	}
-
-	public static int getIntBetweenBorders(int min, int max) {
-		Random rdm = new Random();
-		max += 1;
-		try {
-			return min + rdm.nextInt(max - min);
-		} catch (IllegalArgumentException ex) {
+	public static int randomBetween(int min, int max, Random rand) {
+		if (min >= max) {
 			return min;
 		}
+		return min + rand.nextInt(max - min + 1);
+	}
+
+	public static int randomBetweenGaussian(int min, int max) {
+		return randomBetweenGaussian(min, max, RAND);
+	}
+
+	public static int randomBetweenGaussian(int min, int max, Random rand) {
+		if (min >= max) {
+			return min;
+		}
+		double avg = min + ((max - min) / 2.0D);
+		double stdDev = (max - avg) / 3.0D; // guarantees that MOST (99.7%) results will be between low & high
+		double gaussian = rand.nextGaussian();
+		int result = (int) (avg + (gaussian * stdDev) + 0.5D); // 0.5 is added for rounding to nearest whole number
+		return MathHelper.clamp(result, min, max);
 	}
 
 	public static boolean isLootChest(Block b) {
@@ -114,25 +123,27 @@ public class DungeonGenUtils {
 		if (chunkZ < -CQRConfig.wall.distance - 12) {
 			return false;
 		}
-		if (chunkZ > -CQRConfig.wall.distance + 12) {
-			return false;
-		}
-
-		return true;
+		return chunkZ >= -CQRConfig.wall.distance + 12;
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
-		Chunk spawnChunk = world.getChunk(world.getSpawnPoint());
-		int x = chunkX - spawnChunk.x;
-		int z = chunkZ - spawnChunk.z;
-		return Math.sqrt(x * x + z * z) >= CQRConfig.general.dungeonSpawnDistance;
+		BlockPos spawnPoint = world.getSpawnPoint();
+		int x = chunkX - spawnPoint.getX() >> 4;
+		int z = chunkZ - spawnPoint.getZ() >> 4;
+		return x * x + z * z >= CQRConfig.general.dungeonSpawnDistance * CQRConfig.general.dungeonSpawnDistance;
 	}
 
-	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int dungeonSeparation) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ) {
+		int dim = world.provider.getDimension();
+
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
-			int x = chunkX - dungeon.getLockedPos().getX() * 16;
-			int z = chunkZ - dungeon.getLockedPos().getZ() * 16;
-			if (Math.sqrt(x * x + z * z) < dungeonSeparation) {
+			if (!dungeon.isDimensionAllowed(dim)) {
+				continue;
+			}
+			BlockPos pos = dungeon.getLockedPos();
+			int x = chunkX - pos.getX() >> 4;
+			int z = chunkZ - pos.getZ() >> 4;
+			if (x * x + z * z < CQRConfig.general.dungeonSeparation * CQRConfig.general.dungeonSeparation) {
 				return false;
 			}
 		}
@@ -141,17 +152,21 @@ public class DungeonGenUtils {
 	}
 
 	public static Set<DungeonBase> getLocSpecDungeonsForChunk(World world, int chunkX, int chunkZ) {
-		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
+		Set<DungeonBase> dungeons = new HashSet<>();
+		int dim = world.provider.getDimension();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
-			Chunk chunk = world.getChunk(dungeon.getLockedPos());
-			if (chunk.x == chunkX && chunk.z == chunkZ && dungeon.isDimensionAllowed(world.provider.getDimension())) {
+			if (!dungeon.isDimensionAllowed(dim)) {
+				continue;
+			}
+			BlockPos pos = dungeon.getLockedPos();
+			if (pos.getX() >> 4 == chunkX && pos.getZ() >> 4 == chunkZ) {
 				dungeons.add(dungeon);
 			}
 		}
 
 		if (dungeons.size() > 1) {
-			CQRMain.logger.warn("Found " + dungeons.size() + " coordinate specific dungeons for chunkX=" + chunkX + ", chunkZ=" + chunkZ + "!");
+			CQRMain.logger.warn("Found {} coordinate specific dungeons for chunkX={}, chunkZ={}!", dungeons.size(), chunkX, chunkZ);
 		}
 
 		return dungeons;
@@ -170,32 +185,6 @@ public class DungeonGenUtils {
 		} else {
 			// North side, or some other invalid side
 			return vec;
-		}
-	}
-
-	public static int randomBetween(Random random, int low, int high) {
-		if (high <= low) {
-			return low;
-		} else {
-			return low + random.nextInt(high - low + 1);
-		}
-	}
-
-	public static int randomBetweenGaussian(Random random, int low, int high) {
-		if (high <= low) {
-			return low;
-		} else {
-			double avg = low + ((high - low) / 2d);
-			double stdDev = (high - avg) / 3d; // guarantees that MOST (99.7%) results will be between low & high
-			double gaussian = random.nextGaussian();
-			int result = (int) (avg + (gaussian * stdDev) + 0.5); // 0.5 is added for rounding to nearest whole number
-			if (result < low) {
-				return low;
-			} else if (result > high) {
-				return high;
-			} else {
-				return result;
-			}
 		}
 	}
 
@@ -269,12 +258,13 @@ public class DungeonGenUtils {
 	}
 
 	public static int getYForPos(World world, int x, int z, boolean ignoreWater) {
-		int y = 255;
-		Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
-		while (y > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
-			material = world.getBlockState(new BlockPos(x, --y, z)).getMaterial();
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, 255, z);
+		Material material = world.getBlockState(mutablePos).getMaterial();
+		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
+			mutablePos.setY(mutablePos.getY() - 1);
+			material = world.getBlockState(mutablePos).getMaterial();
 		}
-		return y;
+		return mutablePos.getY();
 	}
 
 	public static Vec3d transformedVec3d(Vec3d vec, PlacementSettings settings) {

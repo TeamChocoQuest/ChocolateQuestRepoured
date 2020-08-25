@@ -129,8 +129,8 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	private void placeChests(World world, BlockPos nwCorner, BlockStateGenArray genArray) {
-		int numChestsTotal = DungeonGenUtils.randomBetweenGaussian(this.random, 4, 8);
-		int numTreasureChests = DungeonGenUtils.randomBetween(this.random, 2, 4);
+		int numChestsTotal = DungeonGenUtils.randomBetweenGaussian(4, 8, this.random);
+		int numTreasureChests = DungeonGenUtils.randomBetween(2, 4, this.random);
 		int treasureChestsPlaced = 0;
 		HashMap<BlockPos, EnumFacing> possibleChestLocs = new HashMap<>();
 		possibleChestLocs.put(nwCorner.add(1, 5, 7), EnumFacing.WEST);
@@ -151,7 +151,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				lootTable = ModLoottables.CHESTS_TREASURE;
 				++treasureChestsPlaced;
 			} else {
-				if (DungeonGenUtils.PercentageRandom(50, this.random)) {
+				if (DungeonGenUtils.percentageRandom(50, this.random)) {
 					lootTable = ModLoottables.CHESTS_MATERIAL;
 				} else {
 					lootTable = ModLoottables.CHESTS_EQUIPMENT;

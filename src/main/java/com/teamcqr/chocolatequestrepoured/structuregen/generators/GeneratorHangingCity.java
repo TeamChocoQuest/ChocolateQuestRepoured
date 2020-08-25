@@ -41,8 +41,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	@Override
 	public void preProcess() {
-		this.islandCount = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuildings(), this.random);
-		this.islandDistance = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinIslandDistance(), this.dungeon.getMaxIslandDistance(), this.random);
+		this.islandCount = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuildings(), this.random);
+		this.islandDistance = DungeonGenUtils.randomBetween(this.dungeon.getMinIslandDistance(), this.dungeon.getMaxIslandDistance(), this.random);
 
 		// Calculates the positions and creates the island objects
 		// positions are the !!CENTERS!! of the platforms, the structures positions are calculated by the platforms themselves
@@ -140,7 +140,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 			for (int iX = -rad; iX <= rad; iX++) {
 				for (int iZ = -rad; iZ <= rad; iZ++) {
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad, center)) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad)) {
 						stateMap.put((center.add(iX, -decrementor, iZ)), this.dungeon.getIslandBlock());
 					}
 				}
@@ -169,7 +169,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		 */
 		int deltaYPerChainSegment = 5;
 
-		int maxY = DungeonGenUtils.getHighestYAt(this.world.getChunk(pos), pos.getX(), pos.getZ(), true);
+		int maxY = DungeonGenUtils.getYForPos(this.world, pos.getX(), pos.getZ(), true);
 		maxY = maxY >= 255 ? 255 : maxY;
 		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
 		for (int i = 0; i < chainCount; i++) {

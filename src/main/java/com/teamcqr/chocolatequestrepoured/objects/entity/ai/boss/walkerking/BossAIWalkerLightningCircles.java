@@ -69,7 +69,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 	@Override
 	public void resetTask() {
 		this.circleRad = 4;
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		super.resetTask();
 	}
 

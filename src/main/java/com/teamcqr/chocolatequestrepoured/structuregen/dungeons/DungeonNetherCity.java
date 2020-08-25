@@ -86,11 +86,11 @@ public class DungeonNetherCity extends DungeonBase {
 	}
 
 	public int getXRows() {
-		return DungeonGenUtils.getIntBetweenBorders(this.minRowsX, this.maxRowsX);
+		return DungeonGenUtils.randomBetween(this.minRowsX, this.maxRowsX);
 	}
 
 	public int getZRows() {
-		return DungeonGenUtils.getIntBetweenBorders(this.minRowsZ, this.maxRowsZ);
+		return DungeonGenUtils.randomBetween(this.minRowsZ, this.maxRowsZ);
 	}
 
 	/*

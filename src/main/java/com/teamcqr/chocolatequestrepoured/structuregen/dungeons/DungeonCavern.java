@@ -104,7 +104,7 @@ public class DungeonCavern extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int z) {
-		this.generate(world, x, DungeonGenUtils.getIntBetweenBorders(this.minY, this.maxY, this.random), z);
+		this.generate(world, x, DungeonGenUtils.randomBetween(this.minY, this.maxY, this.random), z);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class DungeonCavern extends DungeonBase {
 		Map<GeneratorCavern, Integer> xMap = new HashMap<>();
 		Map<GeneratorCavern, Integer> zMap = new HashMap<>();
 
-		int rooms = DungeonGenUtils.getIntBetweenBorders(this.minRooms, this.maxRooms, this.random);
+		int rooms = DungeonGenUtils.randomBetween(this.minRooms, this.maxRooms, this.random);
 		int roomIndex = 1;
 
 		BlockPos centerLoc = new BlockPos(x, y, z);
@@ -130,10 +130,10 @@ public class DungeonCavern extends DungeonBase {
 
 			GeneratorCavern cave = new GeneratorCavern(world, centerLoc.add(distance.getX(), 0, distance.getZ()), this, dungeonGenerator);
 			// Let the cave calculate its air blocks...
-			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, this.random));
+			cave.setSizeAndHeight(DungeonGenUtils.randomBetween(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.randomBetween(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.randomBetween(this.minHeight, this.maxHeight, this.random));
 			cave.preProcess();
 
-			int vLength = DungeonGenUtils.getIntBetweenBorders(this.minRoomDistance, this.maxRoomDistance, this.random);
+			int vLength = DungeonGenUtils.randomBetween(this.minRoomDistance, this.maxRoomDistance, this.random);
 			distance = new Vec3i(vLength, 0, 0);
 			double angle = ((Integer) new Random().nextInt(360)).doubleValue();
 			distance = VectorUtil.rotateVectorAroundY(distance, angle);
@@ -164,7 +164,7 @@ public class DungeonCavern extends DungeonBase {
 			GeneratorCavern cave = caves.get(i);
 
 			// Place a loot chest....
-			if (this.lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
+			if (this.lootChests && DungeonGenUtils.percentageRandom(this.chestChancePerRoom)) {
 				cave.fillChests();
 			}
 

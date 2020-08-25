@@ -225,7 +225,7 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	public int getFloorCount(Random rdm) {
-		return DungeonGenUtils.getIntBetweenBorders(this.minStrongholdFloors, this.maxStrongholdFloors, rdm);
+		return DungeonGenUtils.randomBetween(this.minStrongholdFloors, this.maxStrongholdFloors, rdm);
 	}
 
 	public int getFloorSideLength() {
@@ -233,7 +233,7 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	public int getStrongholdRoomCount(Random rdm) {
-		return DungeonGenUtils.getIntBetweenBorders(this.minStrongholdRooms, this.maxStrongholdRooms, rdm);
+		return DungeonGenUtils.randomBetween(this.minStrongholdRooms, this.maxStrongholdRooms, rdm);
 	}
 
 	public int getRoomSizeX() {

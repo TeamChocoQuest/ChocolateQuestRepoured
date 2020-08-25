@@ -44,7 +44,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		this.wallsMax = DungeonGenUtils.getIntBetweenBorders(MIN_WALLS, MAX_WALLS, this.entity.getRNG());
+		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRNG());
 		this.wallCounter = 0;
 		this.world.newExplosion(this.entity, this.entity.posX, this.entity.posY, this.entity.posZ, 2, true, false);
 		Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector());

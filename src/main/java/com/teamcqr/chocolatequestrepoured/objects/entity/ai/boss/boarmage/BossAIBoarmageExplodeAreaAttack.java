@@ -47,7 +47,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 
 	@Override
 	public void startExecuting() {
-		this.explosionCount = DungeonGenUtils.getIntBetweenBorders(MIN_EXPLOSIONS, MAX_EXPLOSIONS, this.entity.getRNG());
+		this.explosionCount = DungeonGenUtils.randomBetween(MIN_EXPLOSIONS, MAX_EXPLOSIONS, this.entity.getRNG());
 		this.lastExplodeTechTick = this.entity.ticksExisted;
 		this.addExplosionLoc();
 	}
@@ -91,7 +91,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 		super.resetTask();
 		this.explosionCount = 0;
 		this.explosions.clear();
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		this.entity.stopExplodeAreaAttack();
 	}
 

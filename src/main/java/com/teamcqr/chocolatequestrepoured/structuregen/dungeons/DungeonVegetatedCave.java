@@ -143,7 +143,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	public int getTunnelCount(Random random) {
-		return DungeonGenUtils.getIntBetweenBorders(this.tunnelCountMin, this.tunnelCountMax, random);
+		return DungeonGenUtils.randomBetween(this.tunnelCountMin, this.tunnelCountMax, random);
 	}
 
 	public int getCaveSegmentCount() {

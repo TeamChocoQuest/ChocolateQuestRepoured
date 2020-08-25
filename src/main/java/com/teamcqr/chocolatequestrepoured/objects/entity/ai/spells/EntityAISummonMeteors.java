@@ -27,7 +27,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 
-		int ballCount = DungeonGenUtils.getIntBetweenBorders(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRNG());
+		int ballCount = DungeonGenUtils.randomBetween(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRNG());
 
 		if (ballCount > 0) {
 			double angle = 360D / (double) ballCount;

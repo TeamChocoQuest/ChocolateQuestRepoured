@@ -165,7 +165,7 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 	public void addPrisonerSpawners(DungeonInhabitant jailInhabitant, BlockStateGenArray genArray, World world) {
 		Collections.shuffle(this.prisonerSpawnerPositions, this.random);
 
-		int spawnerCount = DungeonGenUtils.randomBetween(this.random, 2, 5);
+		int spawnerCount = DungeonGenUtils.randomBetween(2, 5, this.random);
 
 		for (int i = 0; (i < spawnerCount && !this.prisonerSpawnerPositions.isEmpty()); i++) {
 			BlockPos pos = this.prisonerSpawnerPositions.get(i);

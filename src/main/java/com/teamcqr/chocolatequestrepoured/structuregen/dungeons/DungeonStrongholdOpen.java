@@ -106,11 +106,11 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	}
 
 	public int getRandomFloorCount() {
-		return DungeonGenUtils.getIntBetweenBorders(this.minFloors, this.maxFloors);
+		return DungeonGenUtils.randomBetween(this.minFloors, this.maxFloors);
 	}
 
 	public int getRandomRoomCountForFloor() {
-		return DungeonGenUtils.getIntBetweenBorders(this.minRoomsPerFloor, this.maxRoomsPerFloor);
+		return DungeonGenUtils.randomBetween(this.minRoomsPerFloor, this.maxRoomsPerFloor);
 	}
 
 	public File getBossRoom() {

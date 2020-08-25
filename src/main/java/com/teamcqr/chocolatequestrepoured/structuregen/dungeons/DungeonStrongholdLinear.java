@@ -243,7 +243,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	public int getFloorSize(Random random) {
-		int size = DungeonGenUtils.getIntBetweenBorders(this.minFloorSize, this.maxFloorSize);
+		int size = DungeonGenUtils.randomBetween(this.minFloorSize, this.maxFloorSize);
 		if (size < 3) {
 			size = 3;
 		}

@@ -175,11 +175,11 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 						// This position is already decorated, so keep going
 						continue;
 					}
-					if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.PercentageRandom(torchPercent, this.random))) {
+					if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(torchPercent, this.random))) {
 						RoomDecorTypes.TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
-					} else if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.PercentageRandom(5, this.random))) {
+					} else if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(5, this.random))) {
 						RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
-					} else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) && (DungeonGenUtils.PercentageRandom(dungeon.getPaintingChance(), this.random))) {
+					} else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) && (DungeonGenUtils.percentageRandom(dungeon.getPaintingChance(), this.random))) {
 						RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
 					}
 				}
@@ -189,7 +189,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
 	protected void addChests(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		if (this.getChestIDs() != null && !this.possibleChestLocs.isEmpty()) {
-			if (DungeonGenUtils.PercentageRandom(50, this.random)) {
+			if (DungeonGenUtils.percentageRandom(50, this.random)) {
 				IRoomDecor chest = new RoomDecorChest();
 				BlockPos pos = (BlockPos) this.possibleChestLocs.keySet().toArray()[this.random.nextInt(this.possibleChestLocs.size())];
 				chest.build(world, genArray, this, dungeon, pos, this.possibleChestLocs.get(pos), this.usedDecoPositions);

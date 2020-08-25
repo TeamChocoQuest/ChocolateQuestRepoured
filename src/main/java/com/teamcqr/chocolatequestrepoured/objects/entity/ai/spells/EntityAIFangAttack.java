@@ -53,7 +53,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		} else {
 			Vec3d v = new Vec3d((double) MathHelper.cos(entityAngle), 0, (double) MathHelper.sin(entityAngle));
 			v = v.normalize().scale(1.25D);
-			int rows = DungeonGenUtils.getIntBetweenBorders(this.minRows, this.maxRows, this.entity.getRNG());
+			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRNG());
 			double angle = rows > 0 ? 120 / rows : 0;
 			if (angle != 0) {
 				v = VectorUtil.rotateVectorAroundY(v, -60);
