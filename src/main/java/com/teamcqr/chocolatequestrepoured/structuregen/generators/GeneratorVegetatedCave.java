@@ -338,8 +338,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 						int r1Y = radiusY / 2;
 						int r2 = (int) (radius * 0.75);
 						int r2Y = (int) (radiusY * 0.75);
-						int rSub = DungeonGenUtils.getIntBetweenBorders(r1, r2, random);
-						int rSubY = DungeonGenUtils.getIntBetweenBorders(r1Y, r2Y, random);
+						int rSub = DungeonGenUtils.randomBetween(r1, r2, random);
+						int rSubY = DungeonGenUtils.randomBetween(r1Y, r2Y, random);
 						for (int jX = iX - rSub; jX <= iX + rSub; jX++) {
 							for (int jY = iY - rSubY; jY <= iY + rSubY; jY++) {
 								for (int jZ = iZ - rSub; jZ <= iZ + rSub; jZ++) {

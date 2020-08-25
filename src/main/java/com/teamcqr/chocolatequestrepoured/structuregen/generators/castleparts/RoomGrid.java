@@ -118,20 +118,20 @@ public class RoomGrid {
 				// If either dimension could be the long side, then pick at random
 				if (fitsX && fitsZ) {
 					if (random.nextBoolean()) {
-						resultX = DungeonGenUtils.randomBetweenGaussian(random, larger, this.sizeX - shrink);
-						resultZ = DungeonGenUtils.randomBetweenGaussian(random, smaller, this.sizeZ - shrink);
+						resultX = DungeonGenUtils.randomBetweenGaussian(larger, this.sizeX - shrink, random);
+						resultZ = DungeonGenUtils.randomBetweenGaussian(smaller, this.sizeZ - shrink, random);
 					} else {
-						resultZ = DungeonGenUtils.randomBetweenGaussian(random, larger, this.sizeZ - shrink);
-						resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, this.sizeX - shrink);
+						resultZ = DungeonGenUtils.randomBetweenGaussian(larger, this.sizeZ - shrink, random);
+						resultX = DungeonGenUtils.randomBetweenGaussian(smaller, this.sizeX - shrink, random);
 					}
 				}
 				// Otherwise use the side with more room as the long side
 				else if (fitsX) {
-					resultX = DungeonGenUtils.randomBetweenGaussian(random, larger, this.sizeX - shrink);
-					resultZ = DungeonGenUtils.randomBetweenGaussian(random, smaller, this.sizeZ - shrink);
+					resultX = DungeonGenUtils.randomBetweenGaussian(larger, this.sizeX - shrink, random);
+					resultZ = DungeonGenUtils.randomBetweenGaussian(smaller, this.sizeZ - shrink, random);
 				} else {
-					resultZ = DungeonGenUtils.randomBetweenGaussian(random, larger, this.sizeZ - shrink);
-					resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, this.sizeX - shrink);
+					resultZ = DungeonGenUtils.randomBetweenGaussian(larger, this.sizeZ - shrink, random);
+					resultX = DungeonGenUtils.randomBetweenGaussian(smaller, this.sizeX - shrink, random);
 				}
 
 				return this.randomlyPositionSubArea(random, resultX, resultZ);
@@ -233,7 +233,7 @@ public class RoomGrid {
 
 				minSlide = Math.max((targetArea.getStartX() - (this.sizeX - 1)), boundary.start.getX());
 				maxSlide = Math.min((targetArea.getEndX()), boundary.getEndX() - (this.sizeX - 1));
-				slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+				slideDest = DungeonGenUtils.randomBetweenGaussian(minSlide, maxSlide, random);
 
 				this.start.setX(slideDest);
 			} else if (side == EnumFacing.SOUTH) {
@@ -241,7 +241,7 @@ public class RoomGrid {
 
 				minSlide = Math.max((targetArea.getStartX() - (this.sizeX - 1)), boundary.start.getX());
 				maxSlide = Math.min((targetArea.getEndX()), boundary.getEndX() - (this.sizeX - 1));
-				slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+				slideDest = DungeonGenUtils.randomBetweenGaussian(minSlide, maxSlide, random);
 
 				this.start.setX(slideDest);
 			} else if (side == EnumFacing.WEST) {
@@ -249,7 +249,7 @@ public class RoomGrid {
 
 				minSlide = Math.max((targetArea.getStartZ() - (this.sizeZ - 1)), boundary.start.getZ());
 				maxSlide = Math.min((targetArea.getEndZ()), boundary.getEndZ() - (this.sizeZ - 1));
-				slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+				slideDest = DungeonGenUtils.randomBetweenGaussian(minSlide, maxSlide, random);
 
 				this.start.setZ(slideDest);
 			} else // East
@@ -258,7 +258,7 @@ public class RoomGrid {
 
 				minSlide = Math.max((targetArea.getStartZ() - (this.sizeZ - 1)), boundary.start.getZ());
 				maxSlide = Math.min((targetArea.getEndZ()), boundary.getEndZ() - (this.sizeZ - 1));
-				slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+				slideDest = DungeonGenUtils.randomBetweenGaussian(minSlide, maxSlide, random);
 
 				this.start.setZ(slideDest);
 			}

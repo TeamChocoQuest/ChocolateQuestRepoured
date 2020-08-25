@@ -236,14 +236,12 @@ public class DungeonCastle extends DungeonBase {
 		if (this.minSpawnerRolls >= this.maxSpawnerRolls) {
 			numRolls = this.minSpawnerRolls;
 		} else {
-			numRolls = DungeonGenUtils.getIntBetweenBorders(this.minSpawnerRolls, this.maxSpawnerRolls, this.random);
+			numRolls = DungeonGenUtils.randomBetween(this.minSpawnerRolls, this.maxSpawnerRolls, this.random);
 		}
 
 		for (int i = 0; i < numRolls; i++) {
-			if (this.spawnerRollChance > 0) {
-				if (DungeonGenUtils.PercentageRandom(this.spawnerRollChance, this.random)) {
-					result++;
-				}
+			if (DungeonGenUtils.percentageRandom(this.spawnerRollChance, this.random)) {
+				result++;
 			}
 		}
 

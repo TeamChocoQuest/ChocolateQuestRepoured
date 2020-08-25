@@ -188,7 +188,7 @@ public class DungeonHangingCity extends DungeonBase {
 	public int getRandomHeightVariation() {
 		if (this.heightVariation != 0) {
 			int var = Math.abs(this.heightVariation);
-			int rvar = DungeonGenUtils.getIntBetweenBorders(0, var);
+			int rvar = DungeonGenUtils.randomBetween(0, var);
 			return var / 2 - rvar;
 		}
 		return 0;

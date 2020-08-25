@@ -39,10 +39,24 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f2) * 2.5D, this.entity.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {
-			for (int l = 0; l < 16; ++l) {
-				double d2 = 1.25D * (double) (l + 1);
-				int j = 1 * l;
-				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f) * d2, this.entity.posZ + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
+			Vec3d v = new Vec3d((double) MathHelper.cos(entityAngle), 0, (double) MathHelper.sin(entityAngle));
+			v = v.normalize().scale(1.25D);
+			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRNG());
+			double angle = rows > 0 ? 120 / rows : 0;
+			if (angle != 0) {
+				v = VectorUtil.rotateVectorAroundY(v, -60);
+			}
+			for (int rowCount = 0; rowCount < rows; rowCount++) {
+				for (int fangcount = 0; fangcount < 24; ++fangcount) {
+					double d2 = 1.25D * (double) (fangcount + 1);
+					v = v.normalize();
+					v = v.scale(d2);
+					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, entityAngle, fangcount);
+				}
+				if (angle != 0) {
+					v = v.normalize();
+					v = VectorUtil.rotateVectorAroundY(v, angle);
+				}
 			}
 		}
 	}

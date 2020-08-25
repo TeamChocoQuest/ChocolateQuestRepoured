@@ -44,7 +44,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		long seed = WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4);
 		this.rdm = new Random();
 		this.rdm.setSeed(seed);
-		int count = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinFloors(), this.dungeon.getMaxFloors(), this.rdm);
+		int count = DungeonGenUtils.randomBetween(this.dungeon.getMinFloors(), this.dungeon.getMaxFloors(), this.rdm);
 		int floorSize = this.dungeon.getFloorSize(this.rdm);
 		this.floors = new StrongholdFloor[count];
 		this.dunX = this.pos.getX();

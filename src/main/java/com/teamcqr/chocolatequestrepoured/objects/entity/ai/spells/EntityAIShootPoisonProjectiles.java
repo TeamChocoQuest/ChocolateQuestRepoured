@@ -22,7 +22,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 
 	@Override
 	public void startCastingSpell() {
-		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
+		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
 		vector = vector.add(vector).add(vector).add(vector);

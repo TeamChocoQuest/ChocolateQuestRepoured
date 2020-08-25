@@ -67,8 +67,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 
 		Chunk spawnChunk = world.getChunk(world.getSpawnPoint());
-		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)
-				&& DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
+		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ) && DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ)) {
 			// Check if there is a village structure nearby
 			BlockPos pos = new BlockPos(chunkX << 4, world.getHeight(chunkX << 4, chunkZ << 4), chunkZ << 4);
 			/*if (world.getVillageCollection().getNearestVillage(pos, checkDist) != null) {
@@ -94,7 +93,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			Random rand = new Random(getSeed(world, chunkX, chunkZ));
 
 			// Overall dungeon spawn chance
-			if (DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
+			if (DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
 				Set<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForChunk(world, chunkX, chunkZ, behindWall);
 
 				if (!possibleDungeons.isEmpty()) {
@@ -106,7 +105,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 					for (DungeonBase dungeon : possibleDungeons) {
 						d -= dungeon.getWeight();
 						if (d <= 0) {
-							if (DungeonGenUtils.PercentageRandom(dungeon.getChance(), rand)) {
+							if (DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
 								dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8);
 							}
 							return;

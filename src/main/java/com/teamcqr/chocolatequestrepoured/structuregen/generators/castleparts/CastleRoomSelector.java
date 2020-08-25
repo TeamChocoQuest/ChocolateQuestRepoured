@@ -303,7 +303,7 @@ public class CastleRoomSelector {
 			RoomGrid.Area2D sideSelectedArea;
 
 			// While there is still room to build in this direction, 75% chance to keep going
-			while (sideAllowedArea != null && DungeonGenUtils.PercentageRandom(75, this.random)) {
+			while (sideAllowedArea != null && DungeonGenUtils.percentageRandom(75, this.random)) {
 				sideSelectedArea = sideAllowedArea.getRandomSubArea(this.random, 1, 1, false);
 				sideSelectedArea.alignToSide(this.random, lastBuiltArea, side, buildArea);
 
@@ -405,7 +405,7 @@ public class CastleRoomSelector {
 		// Build a walkable roof on top of the tower
 		if (tower != null && this.grid.withinGridBounds(startFloor + height, x, z)) {
 			cell = this.grid.getCellAt(startFloor + height, x, z);
-			if (DungeonGenUtils.PercentageRandom(50, random)) {
+			if (DungeonGenUtils.percentageRandom(50, random)) {
 				cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
 			} else {
 				BlockPos startPos = cell.getOriginOffset().north().west();
@@ -432,7 +432,7 @@ public class CastleRoomSelector {
 					}
 				}
 
-				if (!validDirections.isEmpty() && DungeonGenUtils.PercentageRandom(this.dungeon.getBridgeChance(), this.random)) {
+				if (!validDirections.isEmpty() && DungeonGenUtils.percentageRandom(this.dungeon.getBridgeChance(), this.random)) {
 					Collections.shuffle(validDirections, this.random);
 					final EnumFacing selectedDirection = validDirections.get(0);
 
@@ -745,7 +745,7 @@ public class CastleRoomSelector {
 				boolean horizontal = hallwayArea.sizeX == hallwayArea.sizeZ ? this.random.nextBoolean() : hallwayArea.sizeX > hallwayArea.sizeZ;
 
 				if (horizontal) {
-					int zIndex = DungeonGenUtils.randomBetweenGaussian(this.random, hallwayArea.getStartZ(), hallwayArea.getEndZ());
+					int zIndex = DungeonGenUtils.randomBetweenGaussian(hallwayArea.getStartZ(), hallwayArea.getEndZ(), this.random);
 
 					RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, hallwayArea.getStartX(), zIndex);
 					ArrayList<RoomGridCell> hallwayCells = this.grid.getAdjacentSelectedCellsInRow(hallStartGridPos);
@@ -755,7 +755,7 @@ public class CastleRoomSelector {
 					}
 
 				} else {
-					int xIndex = DungeonGenUtils.randomBetweenGaussian(this.random, hallwayArea.getStartX(), hallwayArea.getEndX());
+					int xIndex = DungeonGenUtils.randomBetweenGaussian(hallwayArea.getStartX(), hallwayArea.getEndX(), this.random);
 
 					RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, xIndex, hallwayArea.getStartZ());
 					ArrayList<RoomGridCell> hallwayCells = this.grid.getAdjacentSelectedCellsInColumn(hallStartGridPos);

@@ -75,9 +75,9 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	@Override
 	public void resetTask() {
 		this.r = 2;
-		lightningCount = 0;
-		angle = 0;
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.lightningCount = 0;
+		this.angle = 0;
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		super.resetTask();
 	}
 	

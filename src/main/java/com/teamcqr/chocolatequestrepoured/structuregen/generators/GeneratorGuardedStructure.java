@@ -53,18 +53,19 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 	@Override
 	public void preProcess() {
-		int buildings = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
+		int buildings = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
 		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder());
 		for (int i = 0; i < buildings; i++) {
 			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder())));
 		}
 
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate
-		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
-		int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the
+		// remaining component and wander to the destination
+		int vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 		for (int i = 0; i < this.chosenStructures.size(); i++) {
 			if (!this.dungeon.placeInCircle() && i > 0) {
-				vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+				vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 			}
 			Vec3i v = new Vec3i(vX, 0, 0);
 			Double degrees = ((Integer) new Random().nextInt(360)).doubleValue();
@@ -87,7 +88,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 				newPos = this.pos.add(v);
 			}
-			int yNew = DungeonGenUtils.getHighestYAt(world.getChunk(newPos), newPos.getX(), newPos.getZ(), true);
+			int yNew = DungeonGenUtils.getYForPos(this.world, newPos.getX(), newPos.getZ(), true);
 
 			BlockPos calculatedPos = new BlockPos(newPos.getX(), yNew, newPos.getZ());
 			if (!this.structurePosList.contains(calculatedPos)) {
@@ -260,7 +261,6 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	}
 
 	private void buildPathX(BlockPos start, BlockPos end) {
-		Chunk currChunk = this.world.getChunk(start);
 		int vX = end.getX() < start.getX() ? -1 : 1;
 		if (end.getX() == start.getX()) {
 			vX = 0;
@@ -269,10 +269,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int z = start.getZ();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getHighestYAt(currChunk, currX, z, true);
+			y = DungeonGenUtils.getYForPos(world, currX, z, true);
 			this.buildPathSegmentX(new BlockPos(currX, y, z));
 			currX += vX;
-			currChunk = this.world.getChunk(new BlockPos(currX, y, z));
 		} while (currX != end.getX());
 		/*
 		 * if(start.getZ() != end.getZ()) {
@@ -283,7 +282,6 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	}
 
 	private void buildPathZ(BlockPos start, BlockPos end) {
-		Chunk currChunk = this.world.getChunk(start);
 		int vZ = end.getZ() < start.getZ() ? -1 : 1;
 		if (end.getZ() == start.getZ()) {
 			vZ = 0;
@@ -292,10 +290,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int x = start.getX();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getHighestYAt(currChunk, x, currZ, true);
+			y = DungeonGenUtils.getYForPos(world, x, currZ, true);
 			this.buildPathSegmentZ(new BlockPos(x, y, currZ));
 			currZ += vZ;
-			currChunk = this.world.getChunk(new BlockPos(x, y, currZ));
 		} while (currZ != end.getZ());
 		/*
 		 * if(start.getX() != end.getX()) {

@@ -44,7 +44,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 		if (this.entity == null) {
 			return;
 		}
-		int projCount = DungeonGenUtils.getIntBetweenBorders(MIN_WEBS, MAX_WEBS, entity.getRNG());
+		int projCount = DungeonGenUtils.randomBetween(MIN_WEBS, MAX_WEBS, this.entity.getRNG());
 		double angle = 180 / projCount;
 		Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector()).normalize().scale(3);
 		for(int i = - (projCount /2); i <= (projCount /2); i++) {
@@ -59,7 +59,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 			this.entity.world.spawnEntity(web);
 			
 		}
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}
 	
 	@Override

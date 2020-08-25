@@ -85,7 +85,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon) {
 		super(world, pos, dungeon);
 
-		this.maxHeight = DungeonGenUtils.getIntBetweenBorders(dungeon.getMinHeight(), dungeon.getMaxHeight());
+		this.maxHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight());
 		this.minRadius = dungeon.getInnerRadius();
 		this.steepness = dungeon.getSteepness();
 
@@ -171,9 +171,9 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int iX = -radiusOuter * 2; iX <= radiusOuter * 2; iX++) {
 				for (int iZ = -radiusOuter * 2; iZ <= radiusOuter * 2; iZ++) {
 					// First check if it is within the base radius...
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter * 2, this.centerLoc)) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter * 2)) {
 						// If it is at the bottom and also inside the inner radius -> lava
-						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, this.centerLoc)) {
+						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
 							// Else it is a wall block
 							// SO now we decide what the wall is gonna be...
 							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), this.random.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
@@ -439,7 +439,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		for (int holeCount = 0; holeCount < this.maxHeight * 1.5; holeCount++) {
 			BlockPos center = blocks.get(rdm.nextInt(blocks.size()));
 
-			int radius = DungeonGenUtils.getIntBetweenBorders(2, this.dungeon.getMaxHoleSize());
+			int radius = DungeonGenUtils.randomBetween(2, this.dungeon.getMaxHoleSize());
 
 			for (BlockPos p : this.getSphereBlocks(center, radius)) {
 				BlockPos v = p.subtract(centerLoc);

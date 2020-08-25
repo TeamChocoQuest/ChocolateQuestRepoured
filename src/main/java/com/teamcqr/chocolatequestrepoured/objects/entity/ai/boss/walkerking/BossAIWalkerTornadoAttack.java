@@ -38,8 +38,8 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		spawnTornadoes(DungeonGenUtils.getIntBetweenBorders(MIN_TORNADOES, MAX_TORNADOES +1, entity.getRNG()));
-		cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.spawnTornadoes(DungeonGenUtils.randomBetween(MIN_TORNADOES, MAX_TORNADOES + 1, this.entity.getRNG()));
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}
 	
 	private void spawnTornadoes(int count) {

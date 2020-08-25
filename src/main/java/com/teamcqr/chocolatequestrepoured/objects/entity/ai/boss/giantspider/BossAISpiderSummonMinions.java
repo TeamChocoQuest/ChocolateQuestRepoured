@@ -76,7 +76,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 				this.summoner.addSummonedEntityToList(minion);
 			}
 		}
-		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}
 	
 	@Override
