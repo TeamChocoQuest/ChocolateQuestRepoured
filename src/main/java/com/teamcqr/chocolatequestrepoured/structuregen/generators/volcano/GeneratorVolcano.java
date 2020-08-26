@@ -161,15 +161,15 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
 							// Else it is a wall block
 							// SO now we decide what the wall is gonna be...
-							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), this.random.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
+							if (DungeonGenUtils.percentageRandom(this.dungeon.getLavaChance()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
 								// It is lava :D
 								blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getLavaBlock();
-							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), this.random.nextLong())) {
+							} else if (DungeonGenUtils.percentageRandom(this.dungeon.getMagmaChance())) {
 								// It is magma
 								blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getMagmaBlock();
 							} else {
 								// It is stone or ore
-								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
+								if (DungeonGenUtils.randomBetween(0, 101) > 95) {
 									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + this.minY, iZ + this.pos.getZ()), this.random.nextInt(3) + 1));
 									for (BlockPos bp : this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + this.minY, iZ + this.pos.getZ()), this.random.nextInt(3) + 1)) {
 										BlockPos v = bp.subtract(referenceLoc);
@@ -203,8 +203,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			}
 			for (int iX = -radius - 2; iX <= radius + 2; iX++) {
 				for (int iZ = -radius - 2; iZ <= radius + 2; iZ++) {
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, radius, this.centerLoc)) {
-						if (DungeonGenUtils.isInsideCircle(iX, iZ, (radius - 1), this.centerLoc)) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, radius)) {
+						if (DungeonGenUtils.isInsideCircle(iX, iZ, (radius - 1))) {
 							if (iY < 2) {
 								// We're low enough, place lava
 								blocks[iX + r][iY + 6][iZ + r] = this.dungeon.getLavaBlock();
@@ -214,11 +214,11 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 							}
 						} else {
 							// We are in the outer wall -> random spheres to make it more cave
-							if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
+							if (DungeonGenUtils.randomBetween(0, 101) > 95) {
 								for (BlockPos bp : this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + 6, iZ + this.pos.getZ()), this.random.nextInt(3) + 2)) {
 									BlockPos v = bp.subtract(referenceLoc);
 									int chanceForSecondary = new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue();
-									IBlockState block = DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 - chanceForSecondary) ? this.dungeon.getMagmaBlock() : this.dungeon.getLowerMainBlock();
+									IBlockState block = DungeonGenUtils.randomBetween(0, 101) >= (100 - chanceForSecondary) ? this.dungeon.getMagmaBlock() : this.dungeon.getLowerMainBlock();
 									if (bp.getY() < 256) {
 										try {
 											blocks[v.getX()][bp.getY()][v.getZ()] = block;
@@ -257,13 +257,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 							pillarCenters.add(new BlockPos(iX + r, yStairCase - 3, iZ + r));
 						}
 						// Stairwell -> check if it is in the volcano
-						if (DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius + 1, this.centerLoc) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius / 2, this.centerLoc)) {
+						if (DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius + 1) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius / 2)) {
 							// Check that it is outside of the middle circle
 							if (this.dungeon.doBuildStairs() && StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
 								BlockPos pos = new BlockPos(iX + this.pos.getX(), yStairCase, iZ + this.pos.getZ());
 								blocks[iX + r][yStairCase][iZ + r] = this.dungeon.getRampBlock();
 								// Spawners and chets, spawn only in a certain radius and only with 1% chance
-								if (DungeonGenUtils.isInsideCircle(iX, iZ, (stairRadius / 2) + (stairRadius / 4) + (stairRadius / 6), this.centerLoc)) {
+								if (DungeonGenUtils.isInsideCircle(iX, iZ, (stairRadius / 2) + (stairRadius / 4) + (stairRadius / 6))) {
 									if (new Random().nextInt(this.dungeon.getChestChance() + 1) >= (this.dungeon.getChestChance() - 1)) {
 										this.spawnersNChestsOnPath.add(pos.add(0, 1, 0));
 									}
