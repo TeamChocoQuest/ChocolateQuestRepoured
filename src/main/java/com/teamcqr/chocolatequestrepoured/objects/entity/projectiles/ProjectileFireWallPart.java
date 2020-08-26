@@ -43,7 +43,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (this.world.getBlockState(this.getPosition().offset(EnumFacing.DOWN)).isFullBlock() && this.rdm.nextInt(10) == 8) {
+		if (!this.world.isRemote && this.world.getBlockState(this.getPosition().offset(EnumFacing.DOWN)).isFullBlock() && this.rdm.nextInt(10) == 8) {
 			this.world.setBlockState(this.getPosition(), Blocks.FIRE.getDefaultState());
 		}
 	}
@@ -54,7 +54,9 @@ public class ProjectileFireWallPart extends ProjectileBase {
 			IBlockState state = this.world.getBlockState(result.getBlockPos());
 
 			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
-				this.world.newExplosion(this.thrower, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, false);
+				if(this.world.isRemote) {
+					this.world.newExplosion(this.thrower, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, false);
+				}
 				this.setDead();
 			}
 		}
