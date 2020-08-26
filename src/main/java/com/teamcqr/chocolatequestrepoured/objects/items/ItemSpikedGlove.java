@@ -42,7 +42,7 @@ public class ItemSpikedGlove extends Item {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.spiked_glove.name"));
 		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.spiked_glove.name"));
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 
