@@ -469,11 +469,37 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
-		if(getAnimation() != NO_ANIMATION) {
-			animationTick++;
-			if(world.isRemote && animationTick >= animation.getDuration()) {
-				setAnimation(NO_ANIMATION);
+
+		if (this.hasAttackTarget()) {
+			if (this.lastTickPos == null) {
+				this.lastTickPos = this.getPositionVector();
+			}
+			if (this.getHomePositionCQR() == null) {
+				this.setHomePositionCQR(this.getPosition());
+			}
+			Vec3d curPos = this.getPositionVector();
+			if (this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
+				if (curPos.distanceTo(this.lastTickPos) <= 0.05) {
+					this.stuckTicks++;
+				} else {
+					this.lastTickPos = curPos;
+				}
+				if (this.stuckTicks >= MAX_STUCK_TICKS) {
+					this.setAttackTarget(null);
+					this.stuckTicks = 0;
+				}
+			}
+		} else {
+			this.stuckTicks = 0;
+		}
+
+		if (this.getAnimation() != NO_ANIMATION) {
+			this.animationTick++;
+			if (this.world.isRemote && this.animationTick >= this.animation.getDuration()) {
+				if(this.getAnimation() == ANIMATION_MOVE_LEGS_IN) {
+					this.setInShell(true);
+				}
+				this.setAnimation(NO_ANIMATION);
 				AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
 			}
 		}
