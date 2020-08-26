@@ -519,6 +519,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if (this.getAnimation() != NO_ANIMATION) {
 			this.animationTick++;
 			if (this.world.isRemote && this.animationTick >= this.animation.getDuration()) {
+				if(this.getAnimation() == ANIMATION_MOVE_LEGS_IN) {
+					this.setInShell(true);
+				}
 				this.setAnimation(NO_ANIMATION);
 				AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
 			}

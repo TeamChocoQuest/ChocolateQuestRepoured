@@ -47,7 +47,7 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 		this.turtle.currentAnim = this;
 		this.turtle.setReadyToSpin(false);
 		this.turtle.setAnimationTick(0);
-		this.turtle.setInShell(true);
+		this.turtle.setInShell(false);
 		if (this.turtle.getTargetedState() < 0) {
 			this.turtle.setAnimation(this.animationIn);
 		} else {

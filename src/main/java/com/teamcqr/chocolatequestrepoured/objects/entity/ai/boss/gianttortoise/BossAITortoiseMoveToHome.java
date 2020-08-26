@@ -22,6 +22,9 @@ public class BossAITortoiseMoveToHome extends EntityAIMoveToHome {
 	}
 
 	private boolean checkTurtleSpecific() {
+		if (!(this.getBoss().hasHomePositionCQR() || this.getBoss().hasHome())) {
+			return false;
+		}
 		if (!this.getBoss().hasAttackTarget() && !(this.getBoss().isStunned() || this.getBoss().isSpinning() || this.getBoss().isHealing())) {
 			if (this.getBoss().isInShell()) {
 				this.getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
