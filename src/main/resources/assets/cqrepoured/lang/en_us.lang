@@ -550,6 +550,7 @@ description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet
 description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
+description.spiked_glove.name=Missing #TODO
 description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
 description.cursed_bone.name=Mob to be summoned:
 description.dummy_shield.name=A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.
