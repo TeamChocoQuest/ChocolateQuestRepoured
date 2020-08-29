@@ -2,10 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.sp
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
@@ -81,8 +79,8 @@ public class StrongholdBuilder {
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, String mobType) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon);
-		stronghold.calculateFloors(pos);
-		stronghold.buildFloors(pos.add(0, -1, 0), this.world, cX, cZ, mobType);
+		stronghold.calculateFloors(pos, world2, mobType);
+		stronghold.buildFloors(pos.add(0, -1, 0), this.world,mobType);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 
