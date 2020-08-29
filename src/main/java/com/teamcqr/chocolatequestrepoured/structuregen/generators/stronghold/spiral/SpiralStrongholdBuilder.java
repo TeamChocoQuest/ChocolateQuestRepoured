@@ -26,6 +26,7 @@ public class SpiralStrongholdBuilder {
 	private int roomCount = 0;
 	private int floorSideLength = 0;
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
+	private boolean buildDownwards = true;
 
 	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, ESkyDirection expansionDirection, DungeonVolcano dungeon) {
 		this.generator = generator;
@@ -75,6 +76,7 @@ public class SpiralStrongholdBuilder {
 		
 		}
 		int y = strongholdEntrancePos.getY();
+		EStrongholdRoomType firstRoomOverride = entranceType;
 		for (int i = 0; i < this.floors.length; i++) {
 			if (posTuple == null || roomCounter <= 0) {
 				this.floorCount--;
@@ -93,8 +95,13 @@ public class SpiralStrongholdBuilder {
 			floor.calculateRoomGrid(entranceType, (i + 1) % 2 == 0);
 			floor.calculateCoordinates(y, this.dungeon.getRoomSizeX(), this.dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();
-			if(i != 0) {
-				floor.overrideFirstRoomType(EStrongholdRoomType.NONE);
+
+			if (i != 0) {
+				if(buildDownwards) {
+					floor.overrideFirstRoomType(firstRoomOverride);
+				} else {
+					floor.overrideFirstRoomType(EStrongholdRoomType.NONE);
+				}
 			}
 			entranceX = floor.getExitIndex().getFirst();
 			entranceZ = floor.getExitIndex().getSecond();
@@ -102,9 +109,17 @@ public class SpiralStrongholdBuilder {
 				floor.overrideLastRoomType(EStrongholdRoomType.BOSS);
 			} else {
 				entranceType = floor.getExitRoomType();
+				firstRoomOverride = entranceType;
+				if(buildDownwards) {
+					floor.overrideLastRoomType(EStrongholdRoomType.NONE);
+				}
 			}
-			y += dungeon.getRoomSizeY();
-			floors[i] = floor;
+			if(buildDownwards) {
+				y -= this.dungeon.getRoomSizeY();
+			} else {
+				y += this.dungeon.getRoomSizeY();
+			}
+			this.floors[i] = floor;
 		}
 	}
 	
