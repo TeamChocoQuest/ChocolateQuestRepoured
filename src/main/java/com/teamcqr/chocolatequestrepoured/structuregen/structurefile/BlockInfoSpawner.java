@@ -1,12 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
@@ -24,6 +28,22 @@ public class BlockInfoSpawner extends BlockInfo {
 
 	public BlockInfoSpawner(int x, int y, int z, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
 		super(x, y, z, blockstate, tileentityData);
+	}
+
+	public BlockInfoSpawner(BlockPos pos, IBlockState blockstate, Entity... entities) {
+		super(pos, blockstate, getNBTTagCompoundFromEntityList(entities));
+	}
+
+	public BlockInfoSpawner(int x, int y, int z, IBlockState blockstate, Entity... entities) {
+		super(x, y, z, blockstate, getNBTTagCompoundFromEntityList(entities));
+	}
+
+	public BlockInfoSpawner(BlockPos pos, IBlockState blockstate, List<Entity> entityList) {
+		super(pos, blockstate, getNBTTagCompoundFromEntityList(entityList.toArray(new Entity[entityList.size()])));
+	}
+
+	public BlockInfoSpawner(int x, int y, int z, IBlockState blockstate, List<Entity> entityList) {
+		super(x, y, z, blockstate, getNBTTagCompoundFromEntityList(entityList.toArray(new Entity[entityList.size()])));
 	}
 
 	public BlockInfoSpawner(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
@@ -50,6 +70,16 @@ public class BlockInfoSpawner extends BlockInfo {
 	@Override
 	public int getId() {
 		return SPAWNER_INFO_ID;
+	}
+
+	private static NBTTagCompound getNBTTagCompoundFromEntityList(Entity... entities) {
+		TileEntitySpawner tileEntitySpawner = new TileEntitySpawner();
+		for (int i = 0; i < entities.length && i < tileEntitySpawner.inventory.getSlots(); i++) {
+			if (entities[i] != null) {
+				tileEntitySpawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(entities[i]));
+			}
+		}
+		return tileEntitySpawner.writeToNBT(new NBTTagCompound());
 	}
 
 }

@@ -2,13 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.sp
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.util.Tuple;
@@ -23,38 +23,40 @@ public class SpiralStrongholdBuilder {
 	private DungeonVolcano dungeon;
 	private SpiralStrongholdFloor[] floors;
 	private int floorCount = 0;
+	private int roomCount = 0;
+	private int floorSideLength = 0;
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
-	private Random rdm;
 
-	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rdm) {
+	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, ESkyDirection expansionDirection, DungeonVolcano dungeon) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
-		this.rdm = rdm;
 		this.allowedDirection = expansionDirection;
 		this.dungeon = dungeon;
 
-		this.floorCount = dungeon.getFloorCount(this.rdm);
+		this.floorCount = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdFloors(), dungeon.getMaxStrongholdFloors());
+		this.roomCount = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdRooms(), dungeon.getMaxStrongholdRooms());
+		this.floorSideLength = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdRadius(), dungeon.getMaxStrongholdRadius()) * 2 + 1;
 		this.floors = new SpiralStrongholdFloor[this.floorCount];
 	}
 
 	public void calculateFloors(BlockPos strongholdEntrancePos) {
 		Tuple<Integer, Integer> posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());
-		int middle = (int) Math.floor(this.dungeon.getFloorSideLength() / 2);
+		int middle = this.floorSideLength / 2;
 		int entranceX = 0;
 		int entranceZ = 0;
-		int roomCount = this.dungeon.getStrongholdRoomCount(this.rdm);
-		final int maxRoomsPerFloor = this.dungeon.getFloorSideLength() * 4 - 4;
+		int roomCounter = this.roomCount;
+		final int maxRoomsPerFloor = this.floorSideLength * 4 - 4;
 		EStrongholdRoomType entranceType = EStrongholdRoomType.NONE;
 		switch (this.allowedDirection) {
 		case WEST:
 			entranceType = EStrongholdRoomType.CURVE_EN;
-			entranceX = this.dungeon.getFloorSideLength() - 1;
+			entranceX = this.floorSideLength - 1;
 			entranceZ = middle;
 			break;
 		case NORTH:
 			entranceType = EStrongholdRoomType.CURVE_SE;
 			entranceX = middle;
-			entranceZ = this.dungeon.getFloorSideLength() - 1;
+			entranceZ = this.floorSideLength - 1;
 			break;
 		case SOUTH:
 			entranceType = EStrongholdRoomType.CURVE_NW;
@@ -72,20 +74,20 @@ public class SpiralStrongholdBuilder {
 		}
 		int y = strongholdEntrancePos.getY();
 		for (int i = 0; i < this.floors.length; i++) {
-			if (posTuple == null || roomCount <= 0) {
+			if (posTuple == null || roomCounter <= 0) {
 				this.floorCount--;
 				continue;
 			}
 			int floorRoomCount = maxRoomsPerFloor;
-			if (roomCount >= maxRoomsPerFloor) {
-				roomCount -= maxRoomsPerFloor;
+			if (roomCounter >= maxRoomsPerFloor) {
+				roomCounter -= maxRoomsPerFloor;
 				/* We add one cause the room above the stair does not count as room */
-				roomCount++;
+				roomCounter++;
 			} else {
-				floorRoomCount = roomCount;
-				roomCount = 0;
+				floorRoomCount = roomCounter;
+				roomCounter = 0;
 			}
-			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonGenerator, posTuple, entranceX, entranceZ, roomCount <= 0 || i == (this.floors.length - 1), this.dungeon.getFloorSideLength(), floorRoomCount);
+			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonGenerator, posTuple, entranceX, entranceZ, roomCounter <= 0 || i == (this.floors.length - 1), this.floorSideLength, floorRoomCount);
 			floor.calculateRoomGrid(entranceType, (i + 1) % 2 == 0);
 			floor.calculateCoordinates(y, this.dungeon.getRoomSizeX(), this.dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();

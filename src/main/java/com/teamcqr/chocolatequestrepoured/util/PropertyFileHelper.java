@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -96,6 +97,11 @@ public class PropertyFileHelper {
 		return retVal;
 	}
 
+	public static ResourceLocation getResourceLocationProperty(Properties prop, String key, ResourceLocation defVal) {
+		String s = prop.getProperty(key);
+		return s != null ? new ResourceLocation(s) : defVal;
+	}
+
 	public static ResourceLocation[] getResourceLocationArrayProperty(Properties prop, String key, ResourceLocation[] defVal) {
 		if (!prop.containsKey(key)) {
 			return defVal;
@@ -145,13 +151,40 @@ public class PropertyFileHelper {
 		return !blockStates.isEmpty() ? blockStates.toArray(new IBlockState[blockStates.size()]) : defVal;
 	}
 
+	public static List<WeightedItem<IBlockState>> getWeightedBlockStateList(Properties prop, String key, List<WeightedItem<IBlockState>> defVal) {
+		String s = prop.getProperty(key);
+		if (s == null || s.isEmpty()) {
+			return defVal;
+		}
+
+		String[] stringArray1 = s.split(";");
+		List<WeightedItem<IBlockState>> list = new ArrayList<>(stringArray1.length);
+		for (String string : stringArray1) {
+			String[] stringArray2 = string.split(",");
+			if (stringArray2.length >= 2) {
+				IBlockState state = getBlockStateFromString(stringArray2[0], null);
+				int weight = 0;
+				try {
+					weight = Integer.parseInt(stringArray2[1].trim());
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				if (state != null && weight > 0) {
+					list.add(new WeightedItem<>(state, weight));
+				}
+			}
+		}
+
+		return list;
+	}
+
 	@SuppressWarnings("deprecation")
 	private static IBlockState getBlockStateFromString(String s, IBlockState defVal) {
 		String[] strings = s.split(":");
 		Block block = null;
 		int meta = 0;
 		if (strings.length >= 2) {
-			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0], strings[1]));
+			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0].trim(), strings[1].trim()));
 			if (strings.length >= 3) {
 				try {
 					meta = Integer.parseInt(strings[2]);
@@ -160,7 +193,7 @@ public class PropertyFileHelper {
 				}
 			}
 		} else {
-			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0]));
+			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0].trim()));
 		}
 
 		return block != null ? block.getStateFromMeta(meta) : defVal;
