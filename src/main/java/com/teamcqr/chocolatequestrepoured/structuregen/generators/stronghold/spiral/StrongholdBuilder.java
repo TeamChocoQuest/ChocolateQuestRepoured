@@ -78,8 +78,8 @@ public class StrongholdBuilder {
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, String mobType) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon);
-		stronghold.calculateFloors(pos);
-		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ, mobType);
+		stronghold.calculateFloors(pos, world2, mobType);
+		stronghold.buildFloors(pos.add(0, -1, 0), this.world,mobType);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 

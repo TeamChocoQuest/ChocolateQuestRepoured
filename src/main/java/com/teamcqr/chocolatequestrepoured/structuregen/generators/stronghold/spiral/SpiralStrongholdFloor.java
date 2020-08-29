@@ -225,8 +225,8 @@ public class SpiralStrongholdFloor {
 	public EStrongholdRoomType[][] getRoomGrid() {
 		return roomGrid;
 	}
-	
-	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, String mobType) {
+
+	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, World world, String mobType) {
 		List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
 		for(int iX = 0; iX < sideLength; iX++) {
