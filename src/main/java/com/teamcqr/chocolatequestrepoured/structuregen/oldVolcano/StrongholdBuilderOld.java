@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral;
+package com.teamcqr.chocolatequestrepoured.structuregen.oldVolcano;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +26,18 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
-public class StrongholdBuilder {
+public class StrongholdBuilderOld {
 
-	private AbstractDungeonGenerator<DungeonVolcano> generator;
+	private AbstractDungeonGenerator<DungeonVolcanoOld> generator;
 	private DungeonGenerator dungeonGenerator;
 	private BlockPos startPos;
-	private DungeonVolcano dungeon;
+	private DungeonVolcanoOld dungeon;
 	private int blocksRemainingToWall;
 	private EnumFacing direction;
 	private World world;
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 
-	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
+	public StrongholdBuilderOld(AbstractDungeonGenerator<DungeonVolcanoOld> generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcanoOld dungeon, EnumFacing expansionDirection, World world) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.startPos = start;
@@ -80,7 +80,7 @@ public class StrongholdBuilder {
 	}
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, String mobType) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon);
+		SpiralStrongholdBuilderOld stronghold = new SpiralStrongholdBuilderOld(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
 		stronghold.calculateFloors(pos);
 		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ, mobType);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
@@ -150,10 +150,10 @@ public class StrongholdBuilder {
 			}
 			this.buildFloorAndCeiling(corner1, corner2, 5, blockInfoList);
 
-			// Left torch -> Facing side: rotate right (90.0Â°)
+			// Left torch -> Facing side: rotate right (90.0°)
 			this.buildPillar(pillar1, blockInfoList);
 			blockInfoList.add(new BlockInfo(torch1, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.COUNTERCLOCKWISE_90)), null));
-			// Right torch -> Facing side: rotate left (-90.0Â°)
+			// Right torch -> Facing side: rotate left (-90.0°)
 			this.buildPillar(pillar2, blockInfoList);
 			blockInfoList.add(new BlockInfo(torch2, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.CLOCKWISE_90)), null));
 		}

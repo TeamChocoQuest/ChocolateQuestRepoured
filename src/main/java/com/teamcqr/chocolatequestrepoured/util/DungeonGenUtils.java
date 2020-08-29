@@ -48,6 +48,10 @@ public class DungeonGenUtils {
 		return center.distanceSq(pos) < radius * radius;
 	}
 
+	public static boolean isInsideSphere(int x, int y, int z, int radius) {
+		return x * x + y * y + z * z < radius * radius;
+	}
+
 	public static boolean percentageRandom(int chance) {
 		return percentageRandom(chance, RAND);
 	}
