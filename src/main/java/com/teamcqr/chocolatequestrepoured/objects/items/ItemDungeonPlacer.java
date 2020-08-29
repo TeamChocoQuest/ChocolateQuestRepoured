@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDungeonPlacer extends Item {
 
-	public static Set<FakeDungeon> fakeDungeonSet = new HashSet<FakeDungeon>();
+	public static Set<FakeDungeon> fakeDungeonSet = new HashSet<>();
 
 	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
@@ -121,7 +121,7 @@ public class ItemDungeonPlacer extends Item {
 					RayTraceResult result = worldIn.rayTraceBlocks(vec, vec.add(look.scale(256.0D)));
 
 					if (result != null) {
-						BlockPos pos = result.getBlockPos();
+						BlockPos pos = result.getBlockPos().offset(result.sideHit);
 						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
@@ -132,7 +132,7 @@ public class ItemDungeonPlacer extends Item {
 				}
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	public static class FakeDungeon {
