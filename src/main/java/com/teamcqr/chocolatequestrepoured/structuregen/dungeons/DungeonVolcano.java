@@ -1,16 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.structuregen.oldVolcano.GeneratorVolcanoOld;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.WeightedItem;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +20,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -26,35 +27,33 @@ import net.minecraft.world.storage.loot.LootTableList;
 public class DungeonVolcano extends DungeonBase {
 
 	// For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
-	private boolean buildStairwell = true;
-	private boolean buildDungeon = false;
+	private ResourceLocation rampMob = new ResourceLocation("minecraft", "zombie");
+
+	private int minHeight = 80;
+	private int maxHeight = 100;
+	private int innerRadius = 10;
+	private double steepness = 0.0000125D;
 	private boolean damagedVolcano = true;
-	private boolean ores = true;
-	private int oreConcentration = 5;
-	private int maxHoleSize = 9;
-	private int minHeight = 100;
-	private int maxHeight = 130;
-	private int innerRadius = 6;
-	private int chestChance = 600;
-	private ResourceLocation[] chestIDs;
-	private double steepness = 0.075D;
-	private double lavaChance = 0.005D;
-	private double magmaChance = 0.1;
-	private String rampMobName = "minecraft:zombie";
-	private IBlockState stoneBlock = Blocks.STONE.getDefaultState();
+	private int maxHoleSize = 8;
+
+	private List<WeightedItem<IBlockState>> volcanoBlocks = Arrays.asList(new WeightedItem<>(Blocks.STONE.getDefaultState(), 1000));
 	private IBlockState lavaBlock = Blocks.LAVA.getDefaultState();
-	private IBlockState magmaBlock = Blocks.MAGMA.getDefaultState();
+	private int lavaWeight = 10;
 	private IBlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
-	private IBlockState lowerStoneBlock = Blocks.COBBLESTONE.getDefaultState();
 	private IBlockState pillarBlock = ModBlocks.GRANITE_LARGE.getDefaultState();
-	private IBlockState[] oreBlocks = {};
+
+	private boolean buildStairwell = true;
+	private double chestChance = 0.002D;
+	private ResourceLocation[] chestIDs = { ModLoottables.CHESTS_FOOD, ModLoottables.CHESTS_MATERIAL, ModLoottables.CHESTS_EQUIPMENT };
 
 	// Stronghold
-	private int minStrongholdFloors = 3;
-	private int maxStrongholdFloors = 5;
-	private int strongholdSideLength = 3;
-	private int minStrongholdRooms = 26;
-	private int maxStrongholdRooms = 32;
+	private boolean buildStronghold = true;
+	private int minStrongholdFloors = 2;
+	private int maxStrongholdFloors = 3;
+	private int minStrongholdRadius = 1;
+	private int maxStrongholdRadius = 2;
+	private int minStrongholdRooms = 15;
+	private int maxStrongholdRooms = 46;
 	private int roomSizeX = 15;
 	private int roomSizeY = 10;
 	private int roomSizeZ = 15;
@@ -79,40 +78,36 @@ public class DungeonVolcano extends DungeonBase {
 	public DungeonVolcano(String name, Properties prop) {
 		super(name, prop);
 
-		this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);
-		this.buildDungeon = PropertyFileHelper.getBooleanProperty(prop, "buildDungeon", true);
-		this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", 100);
-		this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxHeight", 130);
-		this.innerRadius = PropertyFileHelper.getIntProperty(prop, "innerRadius", 5);
-		this.lavaChance = Math.abs(Double.valueOf(prop.getProperty("lavaChance", "0.005")));
-		this.magmaChance = Math.abs(Double.valueOf(prop.getProperty("magmaChance", "0.1")));
-		this.steepness = Math.abs(Double.valueOf(prop.getProperty("steepness", "0.075")));
-		this.damagedVolcano = PropertyFileHelper.getBooleanProperty(prop, "damagedVolcano", true);
-		this.chestChance = PropertyFileHelper.getIntProperty(prop, "chestChance", 600);
-		this.maxHoleSize = Math.max(Math.abs(PropertyFileHelper.getIntProperty(prop, "maxHoleSize", 9)), 2);
-		this.ores = PropertyFileHelper.getBooleanProperty(prop, "ores", true);
-		this.oreConcentration = Math.min(Math.max(1, Math.abs(PropertyFileHelper.getIntProperty(prop, "orechance", 5))), 100);
-		this.rampMobName = prop.getProperty("rampMob", "minecraft:zombie");
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
-		this.stoneBlock = PropertyFileHelper.getBlockStateProperty(prop, "topBlock", Blocks.STONE.getDefaultState());
-		this.lowerStoneBlock = PropertyFileHelper.getBlockStateProperty(prop, "lowerBlock", Blocks.COBBLESTONE.getDefaultState());
-		this.lavaBlock = PropertyFileHelper.getBlockStateProperty(prop, "lavaBlock", Blocks.LAVA.getDefaultState());
-		this.magmaBlock = PropertyFileHelper.getBlockStateProperty(prop, "magmaBlock", Blocks.MAGMA.getDefaultState());
-		this.rampBlock = PropertyFileHelper.getBlockStateProperty(prop, "rampBlock", Blocks.NETHERRACK.getDefaultState());
-		this.pillarBlock = PropertyFileHelper.getBlockStateProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE.getDefaultState());
-		this.oreBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "oreBlocks", new IBlockState[] { Blocks.COAL_ORE.getDefaultState(), Blocks.IRON_ORE.getDefaultState(), Blocks.GOLD_BLOCK.getDefaultState(), Blocks.EMERALD_ORE.getDefaultState(), Blocks.REDSTONE_ORE.getDefaultState(), Blocks.DIAMOND_ORE.getDefaultState() });
+		this.rampMob = PropertyFileHelper.getResourceLocationProperty(prop, "rampMob", this.rampMob);
+
+		this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", this.minHeight);
+		this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxHeight", this.maxHeight);
+		this.innerRadius = PropertyFileHelper.getIntProperty(prop, "innerRadius", this.innerRadius);
+		this.steepness = PropertyFileHelper.getDoubleProperty(prop, "steepness", this.steepness);
+		this.damagedVolcano = PropertyFileHelper.getBooleanProperty(prop, "damagedVolcano", this.damagedVolcano);
+		this.maxHoleSize = Math.max(PropertyFileHelper.getIntProperty(prop, "maxHoleSize", this.maxHoleSize), 2);
+
+		this.volcanoBlocks = PropertyFileHelper.getWeightedBlockStateList(prop, "volcanoBlocks", this.volcanoBlocks);
+		this.lavaBlock = PropertyFileHelper.getBlockStateProperty(prop, "lavaBlock", this.lavaBlock);
+		this.lavaWeight = PropertyFileHelper.getIntProperty(prop, "lavaWeight", this.lavaWeight);
+		this.rampBlock = PropertyFileHelper.getBlockStateProperty(prop, "rampBlock", this.rampBlock);
+		this.pillarBlock = PropertyFileHelper.getBlockStateProperty(prop, "pillarBlock", this.pillarBlock);
+
+		this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildStairwell", this.buildStairwell);
+		this.chestChance = PropertyFileHelper.getDoubleProperty(prop, "chestChance", this.chestChance);
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", this.chestIDs);
 
 		// Stronghold
-		this.minStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "minStrongholdFloors", 3);
-		this.maxStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "maxStrongholdFloors", 5);
-		this.strongholdSideLength = PropertyFileHelper.getIntProperty(prop, "strongholdSideLength", 3);
-		this.strongholdSideLength = this.strongholdSideLength < 3 ? 3 : this.strongholdSideLength;
-		this.strongholdSideLength += this.strongholdSideLength % 2 == 0 ? 1 : 0;
-		this.minStrongholdRooms = PropertyFileHelper.getIntProperty(prop, "minStrongholdRooms", 24);
-		this.maxStrongholdRooms = PropertyFileHelper.getIntProperty(prop, "maxStrongholdRooms", 80);
-		this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
-		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
-		this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
+		this.buildStronghold = PropertyFileHelper.getBooleanProperty(prop, "buildStronghold", this.buildStronghold);
+		this.minStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "minStrongholdFloors", this.minStrongholdFloors);
+		this.maxStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "maxStrongholdFloors", this.maxStrongholdFloors);
+		this.minStrongholdRadius = PropertyFileHelper.getIntProperty(prop, "minStrongholdRadius", this.minStrongholdRadius);
+		this.maxStrongholdRadius = PropertyFileHelper.getIntProperty(prop, "maxStrongholdRadius", this.maxStrongholdRadius);
+		this.minStrongholdRooms = PropertyFileHelper.getIntProperty(prop, "minStrongholdRooms", this.minStrongholdRooms);
+		this.maxStrongholdRooms = PropertyFileHelper.getIntProperty(prop, "maxStrongholdRooms", this.maxStrongholdRooms);
+		this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", this.roomSizeX);
+		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", this.roomSizeY);
+		this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", this.roomSizeZ);
 		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "volcano/rooms/curves/EN");
 		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "volcano/rooms/curves/ES");
 		this.curveNEFolder = PropertyFileHelper.getFileProperty(prop, "curveNEFolder", "volcano/rooms/curves/NE");
@@ -133,32 +128,8 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonVolcano> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorVolcano(world, new BlockPos(x, y, z), this);
-	}
-
-	public int getMinHeight() {
-		return this.minHeight;
-	}
-
-	public int getMaxHeight() {
-		return this.maxHeight;
-	}
-
-	public double getSteepness() {
-		return this.steepness;
-	}
-
-	public double getLavaChance() {
-		return this.lavaChance;
-	}
-
-	public double getMagmaChance() {
-		return this.magmaChance;
-	}
-
-	public int getInnerRadius() {
-		return this.innerRadius;
+	public AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z) {
+		return true ? new GeneratorVolcano(world, new BlockPos(x, y, z), this) : new GeneratorVolcanoOld(world, new BlockPos(x, y, z));
 	}
 
 	public File getRoomNBTFileForType(EStrongholdRoomType type) {
@@ -224,94 +195,104 @@ public class DungeonVolcano extends DungeonBase {
 		return null;
 	}
 
-	public int getFloorCount(Random rdm) {
-		return DungeonGenUtils.randomBetween(this.minStrongholdFloors, this.maxStrongholdFloors, rdm);
+	public ResourceLocation getRampMob() {
+		return rampMob;
 	}
 
-	public int getFloorSideLength() {
-		return this.strongholdSideLength;
+	public int getMinHeight() {
+		return minHeight;
 	}
 
-	public int getStrongholdRoomCount(Random rdm) {
-		return DungeonGenUtils.randomBetween(this.minStrongholdRooms, this.maxStrongholdRooms, rdm);
+	public int getMaxHeight() {
+		return maxHeight;
 	}
 
-	public int getRoomSizeX() {
-		return this.roomSizeX;
+	public int getInnerRadius() {
+		return innerRadius;
 	}
 
-	public int getRoomSizeY() {
-		return this.roomSizeY;
-	}
-
-	public int getRoomSizeZ() {
-		return this.roomSizeZ;
-	}
-
-	public boolean doBuildStairs() {
-		return this.buildStairwell;
-	}
-
-	public boolean doBuildDungeon() {
-		return this.buildDungeon;
+	public double getSteepness() {
+		return steepness;
 	}
 
 	public boolean isVolcanoDamaged() {
-		return this.damagedVolcano;
+		return damagedVolcano;
 	}
 
 	public int getMaxHoleSize() {
-		return this.maxHoleSize;
+		return maxHoleSize;
 	}
 
-	public int getOreChance() {
-		return this.oreConcentration;
-	}
-
-	public boolean generateOres() {
-		return this.ores;
-	}
-
-	public int getChestChance() {
-		return this.chestChance;
-	}
-
-	public ResourceLocation[] getChestIDs() {
-		return this.chestIDs;
-	}
-
-	public IBlockState getUpperMainBlock() {
-		return this.stoneBlock;
-	}
-
-	public IBlockState getLowerMainBlock() {
-		return this.lowerStoneBlock;
+	public List<WeightedItem<IBlockState>> getVolcanoBlocks() {
+		return volcanoBlocks;
 	}
 
 	public IBlockState getLavaBlock() {
-		return this.lavaBlock;
+		return lavaBlock;
 	}
 
-	public IBlockState getMagmaBlock() {
-		return this.magmaBlock;
+	public int getLavaWeight() {
+		return lavaWeight;
 	}
 
 	public IBlockState getRampBlock() {
-		return this.rampBlock;
-	}
-
-	public IBlockState[] getOres() {
-		return this.oreBlocks;
+		return rampBlock;
 	}
 
 	public IBlockState getPillarBlock() {
-		return this.pillarBlock;
+		return pillarBlock;
 	}
 
-	public ResourceLocation getRampMob() {
-		String[] bossString = this.rampMobName.split(":");
+	public boolean doBuildStairs() {
+		return buildStairwell;
+	}
 
-		return new ResourceLocation(bossString[0], bossString[1]);
+	public double getChestChance() {
+		return chestChance;
+	}
+
+	public ResourceLocation[] getChestIDs() {
+		return chestIDs;
+	}
+
+	public boolean doBuildStronghold() {
+		return buildStronghold;
+	}
+
+	public int getMinStrongholdFloors() {
+		return minStrongholdFloors;
+	}
+
+	public int getMaxStrongholdFloors() {
+		return maxStrongholdFloors;
+	}
+
+	public int getMinStrongholdRadius() {
+		return minStrongholdRadius;
+	}
+
+	public int getMaxStrongholdRadius() {
+		return maxStrongholdRadius;
+	}
+
+	public int getMinStrongholdRooms() {
+		return minStrongholdRooms;
+	}
+
+	public int getMaxStrongholdRooms() {
+		return maxStrongholdRooms;
+	}
+
+	public int getRoomSizeX() {
+		return roomSizeX;
+	}
+
+	public int getRoomSizeY() {
+		return roomSizeY;
+	}
+
+	public int getRoomSizeZ() {
+		return roomSizeZ;
 	}
 
 }
