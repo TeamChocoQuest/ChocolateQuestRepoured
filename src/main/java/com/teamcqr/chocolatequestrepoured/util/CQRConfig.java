@@ -91,7 +91,8 @@ public class CQRConfig {
 	public static class Bosses {
 		public boolean antiCowardMode = true;
 		public int antiCowardRadius = 16;
-		
+		public boolean enableHealthRegen = true;
+
 		public boolean hotFireballsDestroyTerrain = true;
 		
 		public boolean harderWalkerKing = true;
