@@ -61,6 +61,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 					this.motionX = -this.motionX;
 					this.motionY = -this.motionY;
 					this.motionZ = -this.motionZ;
+					this.velocityChanged = true;
 					this.thrower = (EntityLivingBase) result.entityHit;
 					return;
 				}
