@@ -32,7 +32,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
 		super.applyEntityCollision(entityIn);
-		entityIn.setFire(8);
+		entityIn.setFire(4);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (!this.world.isRemote && this.world.getBlockState(this.getPosition().offset(EnumFacing.DOWN)).isFullBlock() && this.rdm.nextInt(10) == 8) {
+		if (!this.world.isRemote && this.world.getBlockState(this.getPosition().offset(EnumFacing.DOWN)).isFullBlock() && this.rdm.nextInt(15) == 8) {
 			this.world.setBlockState(this.getPosition(), Blocks.FIRE.getDefaultState());
 		}
 	}
