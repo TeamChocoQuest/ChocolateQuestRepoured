@@ -1,11 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModEnchantments;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.SoundEvents;
@@ -54,6 +57,12 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
+		}
+		if(source.getTrueSource() instanceof EntityLivingBase) {
+			if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase)source.getTrueSource()).getHeldItemMainhand()) > 0 ||
+					EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase)source.getTrueSource()).getHeldItemOffhand()) > 0) {
+				amount *= 2;
+			}
 		}
 		return super.attackEntityFrom(source, amount);
 	}

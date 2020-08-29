@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
 import com.teamcqr.chocolatequestrepoured.objects.enchantments.EnchantmentLightningProtection;
+import com.teamcqr.chocolatequestrepoured.objects.enchantments.EnchantmentSpectral;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.enchantment.Enchantment;
@@ -14,6 +15,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModEnchantments {
 
 	public static final Enchantment LIGHTNING_PROTECTION = new EnchantmentLightningProtection();
+	public static final Enchantment SPECTRAL = new EnchantmentSpectral();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class RegistrationHandler {
@@ -23,6 +25,7 @@ public class ModEnchantments {
 			final IForgeRegistry<Enchantment> registry = event.getRegistry();
 
 			registry.register(LIGHTNING_PROTECTION);
+			registry.register(SPECTRAL);
 		}
 	}
 

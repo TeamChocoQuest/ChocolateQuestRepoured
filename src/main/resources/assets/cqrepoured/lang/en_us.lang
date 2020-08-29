@@ -557,6 +557,7 @@ description.dummy_shield.name=A rough approximation of what a shield is supposed
 
 #Enchantments
 enchantment.lightning_protection=Lightning Protection
+enchantment.spectral=Spectral Balsam
 
 #Mobs
 entity.cqr_boarman.name=Boarman

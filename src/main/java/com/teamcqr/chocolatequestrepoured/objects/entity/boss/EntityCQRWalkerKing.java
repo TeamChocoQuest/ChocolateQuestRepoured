@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
+import com.teamcqr.chocolatequestrepoured.init.ModEnchantments;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
@@ -245,7 +246,15 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			return true;
 		}
 
-		if (!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
+		boolean spectralFlag = false;
+		if(source.getTrueSource() instanceof EntityLivingBase) {
+			if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase)source.getTrueSource()).getHeldItemMainhand()) > 0 ||
+					EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase)source.getTrueSource()).getHeldItemOffhand()) > 0) {
+				amount *= 2;
+				spectralFlag = true;
+			}
+		}
+		if (!spectralFlag && !(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
 			amount *= 0.5F;
 		}
 
