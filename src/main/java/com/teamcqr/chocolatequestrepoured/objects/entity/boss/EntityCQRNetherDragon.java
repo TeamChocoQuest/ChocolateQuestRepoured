@@ -32,6 +32,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
@@ -76,7 +77,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public final int SEGMENT_COUNT_ON_DEATH = 4;
 	public int segmentCount = this.INITIAL_SEGMENT_COUNT;
 	/*
-	 * 0: Normal mode 1: Transition to phase 2 2: skeletal phase
+	 * 0: Normal mode 
+	 * 1: Transition to phase 2 
+	 * 2: skeletal phase
 	 */
 	private int phase = 0;
 	private int phaseChangeTimer = 0;
@@ -929,6 +932,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	public void setTargetLocation(Vec3d newTarget) {
 		this.targetLocation = newTarget;
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return this.phase > 0 ? EnumCreatureAttribute.UNDEAD : EnumCreatureAttribute.UNDEFINED;
 	}
 
 }
