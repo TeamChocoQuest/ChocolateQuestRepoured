@@ -65,7 +65,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		}
 
 		if ((this.isInLava() || this.isBurning()) && this.ticksExisted % 5 == 0) {
-			this.heal(2);
+			this.heal(1);
 		}
 	}
 
