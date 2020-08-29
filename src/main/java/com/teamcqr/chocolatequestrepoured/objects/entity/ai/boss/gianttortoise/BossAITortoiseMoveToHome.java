@@ -43,6 +43,12 @@ public class BossAITortoiseMoveToHome extends EntityAIMoveToHome {
 	}
 	
 	@Override
+	public void startExecuting() {
+		getBoss().setInShell(false);
+		super.startExecuting();
+	}
+
+	@Override
 	public void updateTask() {
 		if(!getBoss().isInShell()) {
 			super.updateTask();
