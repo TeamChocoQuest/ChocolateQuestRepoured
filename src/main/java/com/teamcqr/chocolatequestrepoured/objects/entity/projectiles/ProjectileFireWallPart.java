@@ -32,7 +32,9 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
 		super.applyEntityCollision(entityIn);
-		entityIn.setFire(4);
+		if(!(entityIn instanceof EntityLivingBase && ((EntityLivingBase)entityIn).isActiveItemStackBlocking())) {
+			entityIn.setFire(4);
+		}
 	}
 
 	@Override
