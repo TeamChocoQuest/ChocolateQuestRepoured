@@ -102,18 +102,14 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
 				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						if (DungeonGenUtils.percentageRandom(0.15D)) {
+						if (DungeonGenUtils.percentageRandom(0.05D)) {
 							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
-								try {
-									if (blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {
-										if (!DungeonGenUtils.isInsideCircle(p.getX(), p.getZ(), innerRadius + 2)) {
-											blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlockWithLava();
-										} else {
-											blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
-										}
+								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {
+									if (!DungeonGenUtils.isInsideCircle(p.getX(), p.getZ(), innerRadius + 2)) {
+										blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlockWithLava();
+									} else {
+										blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
 									}
-								} catch (ArrayIndexOutOfBoundsException e) {
-									// ignore
 								}
 							});
 						} else if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
@@ -142,14 +138,10 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 							blocks[iX + r][iY][iZ + r] = Blocks.AIR.getDefaultState();
 						}
 
-						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius - 1) && DungeonGenUtils.percentageRandom(5)) {
+						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius - 1) && DungeonGenUtils.percentageRandom(0.05D)) {
 							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
-								try {
-									if (blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {
-										blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
-									}
-								} catch (ArrayIndexOutOfBoundsException e) {
-									// ignore
+								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && (blocks[p.getX() + r][p.getY()][p.getZ() + r] == null || blocks[p.getX() + r][p.getY()][p.getZ() + r] == Blocks.AIR.getDefaultState())) {
+									blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
 								}
 							});
 						}
@@ -223,17 +215,17 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	}
 
-	private void generateHoles(IBlockState[][][] blockArray) {
+	private void generateHoles(IBlockState[][][] blocks) {
 		if (this.dungeon.isVolcanoDamaged()) {
 			List<BlockPos> list = new ArrayList<>((int) (this.volcanoHeight * 1.6D));
 
 			for (int i = 0; i < this.volcanoHeight * 1.6D; i++) {
 				for (int j = 0; j < 100; j++) {
-					int x = this.random.nextInt(blockArray.length);
-					int y = this.random.nextInt(blockArray[x].length);
-					int z = this.random.nextInt(blockArray[x][y].length);
+					int x = this.random.nextInt(blocks.length);
+					int y = this.random.nextInt(blocks[x].length);
+					int z = this.random.nextInt(blocks[x][y].length);
 
-					if (blockArray[x][y][z] != null && blockArray[x][y][z] != Blocks.AIR.getDefaultState()) {
+					if (blocks[x][y][z] != null && blocks[x][y][z] != Blocks.AIR.getDefaultState()) {
 						list.add(new BlockPos(x, y, z));
 						break;
 					}
@@ -242,12 +234,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			for (BlockPos pos : list) {
 				this.forEachSpherePosition(pos, DungeonGenUtils.randomBetween(2, this.dungeon.getMaxHoleSize()), p -> {
-					try {
-						if (blockArray[p.getX()][p.getY()][p.getZ()] != null && blockArray[p.getX()][p.getY()][p.getZ()] != Blocks.AIR.getDefaultState()) {
-							blockArray[p.getX()][p.getY()][p.getZ()] = Blocks.AIR.getDefaultState();
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-						// ignore
+					if (this.isIndexValid(p.getX(), p.getY(), p.getZ(), blocks) && (blocks[p.getX()][p.getY()][p.getZ()] != null && blocks[p.getX()][p.getY()][p.getZ()] != Blocks.AIR.getDefaultState())) {
+						blocks[p.getX()][p.getY()][p.getZ()] = Blocks.AIR.getDefaultState();
 					}
 				});
 			}
@@ -327,10 +315,14 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	private void forEachSpherePosition(BlockPos center, int radius, Consumer<BlockPos.MutableBlockPos> action) {
 		for (BlockPos.MutableBlockPos p : BlockPos.getAllInBoxMutable(center.getX() - radius, center.getY() - radius, center.getZ() - radius, center.getX() + radius, center.getY() + radius, center.getZ() + radius)) {
-			if (DungeonGenUtils.isInsideSphere(p.getX(), p.getY(), p.getZ(), radius)) {
+			if (DungeonGenUtils.isInsideSphere(p.getX() - center.getX(), p.getY() - center.getY(), p.getZ() - center.getZ(), radius)) {
 				action.accept(p);
 			}
 		}
+	}
+
+	private boolean isIndexValid(int x, int y, int z, Object[][][] array) {
+		return x >= 0 && x < array.length && y >= 0 && y < array[x].length && z >= 0 && z < array[x][y].length;
 	}
 
 	private IBlockState getRandomVolcanoBlock() {
