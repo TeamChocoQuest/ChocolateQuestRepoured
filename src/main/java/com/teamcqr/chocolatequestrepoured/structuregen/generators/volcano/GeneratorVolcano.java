@@ -101,21 +101,41 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
 				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						if (DungeonGenUtils.percentageRandom(0.05D)) {
-							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
-								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {
-									if (!DungeonGenUtils.isInsideCircle(p.getX(), p.getZ(), innerRadius + 2)) {
-										blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlockWithLava();
-									} else {
-										blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
-									}
-								}
-							});
-						} else if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
+						blocks[iX + r][iY][iZ + r] = Blocks.AIR.getDefaultState();
+					} else if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius)) {
+						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
 							blocks[iX + r][iY][iZ + r] = this.getRandomVolcanoBlockWithLava();
 						} else {
 							blocks[iX + r][iY][iZ + r] = this.getRandomVolcanoBlock();
+						}
+					}
+				}
+			}
+		}
+
+		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
+			int outerRadius = outerRadiusArray[iY];
+			int innerRadius = innerRadiusArray[iY];
+
+			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
+				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
+						if (DungeonGenUtils.percentageRandom(0.05D)) {
+							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
+								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == Blocks.AIR.getDefaultState()) {
+									blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
+								}
+							});
+						}
+					}
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && (!DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius - 2) || (iY == this.volcanoHeight + this.caveDepth - 1 && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)))) {
+						if (DungeonGenUtils.percentageRandom(0.05D)) {
+							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
+								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {
+									blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlockWithLava();
+								}
+							});
 						}
 					}
 				}
@@ -126,17 +146,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		this.generateHoles(blocks);
 
 		// Cave part
-		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
+		for (int iY = 0; iY < 2; iY++) {
 			int innerRadius = innerRadiusArray[iY];
 
 			for (int iX = -innerRadius; iX <= innerRadius; iX++) {
 				for (int iZ = -innerRadius; iZ <= innerRadius; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						if (iY < 2) {
-							blocks[iX + r][iY][iZ + r] = this.dungeon.getLavaBlock();
-						} else {
-							blocks[iX + r][iY][iZ + r] = Blocks.AIR.getDefaultState();
-						}
+						blocks[iX + r][iY][iZ + r] = this.dungeon.getLavaBlock();
 
 						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius - 1) && DungeonGenUtils.percentageRandom(0.05D)) {
 							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
