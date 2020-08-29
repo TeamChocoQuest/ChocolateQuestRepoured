@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
@@ -38,19 +37,10 @@ public class BlockPlacingHelper {
 
 		Chunk chunk = world.getChunk(pos);
 		IBlockState oldState = chunk.getBlockState(pos);
-		int oldLight = oldState.getLightValue(world, pos);
-		int oldOpacity = oldState.getLightOpacity(world, pos);
-
-		IBlockState iblockstate = setBlockState(world, chunk, pos, newState, updateLight);
+		IBlockState iblockstate = setBlockState(world, chunk, pos, newState);
 
 		if (iblockstate == null) {
 			return false;
-		}
-
-		if (updateLight && (newState.getLightOpacity(world, pos) != oldOpacity || newState.getLightValue(world, pos) != oldLight)) {
-			world.profiler.startSection("checkLight");
-			world.checkLight(pos);
-			world.profiler.endSection();
 		}
 
 		if (!world.isRemote && world.captureBlockSnapshots) {
@@ -63,7 +53,7 @@ public class BlockPlacingHelper {
 	}
 
 	@Nullable
-	public static IBlockState setBlockState(World world, Chunk chunk, BlockPos pos, IBlockState state, boolean updateLight) {
+	private static IBlockState setBlockState(World world, Chunk chunk, BlockPos pos, IBlockState state) {
 		int i = pos.getX() & 15;
 		int j = pos.getY();
 		int k = pos.getZ() & 15;
@@ -74,7 +64,6 @@ public class BlockPlacingHelper {
 			precipitationHeightMap[l] = -999;
 		}
 
-		int i1 = chunk.getHeightMap()[l];
 		IBlockState iblockstate = chunk.getBlockState(pos);
 
 		if (iblockstate == state) {
@@ -82,9 +71,7 @@ public class BlockPlacingHelper {
 		} else {
 			Block block = state.getBlock();
 			Block block1 = iblockstate.getBlock();
-			int k1 = iblockstate.getLightOpacity(world, pos);
 			ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[j >> 4];
-			boolean flag = false;
 
 			if (extendedblockstorage == Chunk.NULL_BLOCK_STORAGE) {
 				if (block == Blocks.AIR) {
@@ -93,7 +80,6 @@ public class BlockPlacingHelper {
 
 				extendedblockstorage = new ExtendedBlockStorage(j >> 4 << 4, world.provider.hasSkyLight());
 				chunk.getBlockStorageArray()[j >> 4] = extendedblockstorage;
-				flag = j >= i1;
 			}
 
 			extendedblockstorage.set(i, j & 15, k, state);
@@ -116,26 +102,6 @@ public class BlockPlacingHelper {
 			if (extendedblockstorage.get(i, j & 15, k).getBlock() != block) {
 				return null;
 			} else {
-				if (updateLight) {
-					if (flag) {
-						chunk.generateSkylightMap();
-					} else {
-						int j1 = state.getLightOpacity(world, pos);
-
-						if (j1 > 0) {
-							if (j >= i1) {
-								relightBlockMethod.invoke(chunk, i, j + 1, k);
-							}
-						} else if (j == i1 - 1) {
-							relightBlockMethod.invoke(chunk, i, j, k);
-						}
-
-						if (j1 != k1 && (j1 < k1 || chunk.getLightFor(EnumSkyBlock.SKY, pos) > 0 || chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
-							propagateSkylightOcclusionMethod.invoke(chunk, i, k);
-						}
-					}
-				}
-
 				if (!world.isRemote && block1 != block && (!world.captureBlockSnapshots || block.hasTileEntity(state))) {
 					block.onBlockAdded(world, pos, state);
 				}

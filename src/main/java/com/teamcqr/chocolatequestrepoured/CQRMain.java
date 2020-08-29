@@ -39,6 +39,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -75,6 +76,8 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_SETS = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_ROOT = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
+
+	public static boolean isPhosphorInstalled;
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
@@ -192,6 +195,8 @@ public class CQRMain {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+
+		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
 
 		DungeonRegistry.getInstance().loadDungeons();
 		CQStructure.cacheFiles();

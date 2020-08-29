@@ -38,7 +38,7 @@ public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 
 		if (protectedRegion != null) {
-			if (BlockPlacingHelper.setBlockState(world, transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates)) {
+			if (BlockPlacingHelper.setBlockState(world, transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 18, CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates)) {
 				protectedRegion.addBlockDependency(transformedPos);
 			} else {
 				CQRMain.logger.warn("Failed to place force field nexus at {}", transformedPos);
