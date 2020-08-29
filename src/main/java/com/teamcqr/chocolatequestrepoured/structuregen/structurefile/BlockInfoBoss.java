@@ -47,7 +47,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 
 		if (!world.isOutsideBuildHeight(transformedPos)) {
-			BlockPlacingHelper.setBlockState(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates);
+			BlockPlacingHelper.setBlockState(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates);
 
 			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(dungeonMob);
 

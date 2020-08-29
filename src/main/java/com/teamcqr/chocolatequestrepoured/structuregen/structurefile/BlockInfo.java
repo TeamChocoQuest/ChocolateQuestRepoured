@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -58,7 +59,7 @@ public class BlockInfo extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 		IBlockState iblockstate = this.blockstate.withMirror(settings.getMirror()).withRotation(settings.getRotation());
 
-		if (BlockPlacingHelper.setBlockState(world, transformedPos, iblockstate, 18, CQRConfig.advanced.instantLightUpdates) && this.tileentityData != null) {
+		if (BlockPlacingHelper.setBlockState(world, transformedPos, iblockstate, 18, CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates) && this.tileentityData != null) {
 			TileEntity tileentity = world.getTileEntity(transformedPos);
 
 			if (tileentity != null) {
