@@ -144,6 +144,7 @@ public abstract class DungeonBase {
 			}
 		}
 		y >>= 8;
+		y++;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
 		this.generate(world, x, y, z);
