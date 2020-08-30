@@ -127,7 +127,7 @@ public class DungeonGenUtils {
 		if (chunkZ < -CQRConfig.wall.distance - 12) {
 			return false;
 		}
-		return chunkZ >= -CQRConfig.wall.distance + 12;
+		return chunkZ <= -CQRConfig.wall.distance + 12;
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
