@@ -82,6 +82,21 @@ public class EntityInfo implements IGeneratable {
 		return new BlockPos(nbtTagList.getDoubleAt(0), nbtTagList.getDoubleAt(1), nbtTagList.getDoubleAt(2));
 	}
 
+	public double getX() {
+		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+		return nbtTagList.getDoubleAt(0);
+	}
+
+	public double getY() {
+		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+		return nbtTagList.getDoubleAt(1);
+	}
+
+	public double getZ() {
+		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+		return nbtTagList.getDoubleAt(2);
+	}
+
 	private float getTransformedYaw(float rotationYaw, Mirror mirror, Rotation rotation) {
 		float f = MathHelper.wrapDegrees(rotationYaw);
 		switch (mirror) {

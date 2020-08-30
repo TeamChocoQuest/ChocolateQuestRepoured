@@ -22,7 +22,6 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartBlock extends AbstractDungeonPart {
@@ -39,20 +38,32 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		super(world, dungeonGenerator, partPos);
 		for (AbstractBlockInfo blockInfo : blocks) {
 			if (blockInfo != null) {
-				this.updateMinAndMaxPos(partPos.add(Template.transformedBlockPos(settings, blockInfo.getPos())));
 				this.blockInfoList.add(blockInfo);
 			}
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-		/*
-		 * if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) { this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(),
-		 * partPos.getZ());
-		 * CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos); }
-		 */
+
+		if (!this.blockInfoList.isEmpty()) {
+			AbstractBlockInfo firstBlockInfo = this.blockInfoList.getFirst();
+			this.minPos = firstBlockInfo.getPos();
+			this.maxPos = this.minPos;
+
+			BlockPos.MutableBlockPos p1 = new BlockPos.MutableBlockPos(this.minPos);
+			BlockPos.MutableBlockPos p2 = new BlockPos.MutableBlockPos(this.minPos);
+			BlockPos.MutableBlockPos p3 = new BlockPos.MutableBlockPos(this.minPos);
+			for (AbstractBlockInfo blockInfo : this.blockInfoList) {
+				this.transformedXYZasMutablePos(partPos, blockInfo.getX(), blockInfo.getY(), blockInfo.getZ(), settings.getMirror(), settings.getRotation(), p1);
+				p2.setPos(Math.min(p2.getX(), p1.getX()), Math.min(p2.getY(), p1.getY()), Math.min(p2.getZ(), p1.getZ()));
+				p3.setPos(Math.max(p3.getX(), p1.getX()), Math.max(p3.getY(), p1.getY()), Math.max(p3.getZ(), p1.getZ()));
+			}
+			this.updateMinAndMaxPos(p2);
+			this.updateMinAndMaxPos(p3);
+		}
+
 		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			this.dungeonMobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, partPos.getX(), partPos.getZ()).getName();
-			CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos);
+			CQRMain.logger.warn("Created dungeon block part with mob type default at {}", partPos);
 		}
 	}
 

@@ -92,4 +92,16 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 		return new BlockPos(this.x, this.y, this.z);
 	}
 
+	public int getX() {
+		return this.x;
+	}
+
+	public int getY() {
+		return this.y;
+	}
+
+	public int getZ() {
+		return this.z;
+	}
+
 }

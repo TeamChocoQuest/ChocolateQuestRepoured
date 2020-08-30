@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EntityInfo;
 
@@ -40,13 +39,27 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, partPos.getX(), partPos.getZ());
-			// this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
-			if (inha != null) {
-				this.dungeonMobType = inha.getName();
+
+		if (!this.entityInfoList.isEmpty()) {
+			EntityInfo firstEntityInfo = this.entityInfoList.getFirst();
+			this.minPos = firstEntityInfo.getPos();
+			this.maxPos = this.minPos;
+
+			BlockPos.MutableBlockPos p1 = new BlockPos.MutableBlockPos(this.minPos);
+			BlockPos.MutableBlockPos p2 = new BlockPos.MutableBlockPos(this.minPos);
+			BlockPos.MutableBlockPos p3 = new BlockPos.MutableBlockPos(this.minPos);
+			for (EntityInfo entityInfo : this.entityInfoList) {
+				this.transformedXYZasMutablePos(partPos, entityInfo.getX(), entityInfo.getY(), entityInfo.getZ(), settings.getMirror(), settings.getRotation(), p1);
+				p2.setPos(Math.min(p2.getX(), p1.getX()), Math.min(p2.getY(), p1.getY()), Math.min(p2.getZ(), p1.getZ()));
+				p3.setPos(Math.max(p3.getX(), p1.getX()), Math.max(p3.getY(), p1.getY()), Math.max(p3.getZ(), p1.getZ()));
 			}
-			CQRMain.logger.warn("Created dungeon part entity with mob type default at {}", partPos);
+			this.updateMinAndMaxPos(p2);
+			this.updateMinAndMaxPos(p3);
+		}
+
+		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
+			this.dungeonMobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, partPos.getX(), partPos.getZ()).getName();
+			CQRMain.logger.warn("Created dungeon entity part with mob type default at {}", partPos);
 		}
 	}
 

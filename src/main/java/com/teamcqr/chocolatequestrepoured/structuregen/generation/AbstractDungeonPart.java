@@ -5,6 +5,8 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -112,6 +114,52 @@ public abstract class AbstractDungeonPart {
 	protected void updateMinAndMaxPos(BlockPos pos) {
 		this.minPos = DungeonGenUtils.getValidMinPos(pos, this.minPos);
 		this.maxPos = DungeonGenUtils.getValidMaxPos(pos, this.maxPos);
+	}
+
+	protected BlockPos.MutableBlockPos transformedXYZasMutablePos(BlockPos pos, int x, int y, int z, Mirror mirror, Rotation rotation, BlockPos.MutableBlockPos mutablePos) {
+		switch (mirror) {
+		case LEFT_RIGHT:
+			z = -z;
+			break;
+		case FRONT_BACK:
+			x = -x;
+			break;
+		default:
+		}
+
+		switch (rotation) {
+		case COUNTERCLOCKWISE_90:
+			return mutablePos.setPos(pos.getX() + z, pos.getY() + y, pos.getZ() - x);
+		case CLOCKWISE_90:
+			return mutablePos.setPos(pos.getX() - z, pos.getY() + y, pos.getZ() + x);
+		case CLOCKWISE_180:
+			return mutablePos.setPos(pos.getX() - x, pos.getY() + y, pos.getZ() - z);
+		default:
+			return mutablePos.setPos(pos);
+		}
+	}
+
+	protected BlockPos.MutableBlockPos transformedXYZasMutablePos(BlockPos pos, double x, double y, double z, Mirror mirror, Rotation rotation, BlockPos.MutableBlockPos mutablePos) {
+		switch (mirror) {
+		case LEFT_RIGHT:
+			z = -z;
+			break;
+		case FRONT_BACK:
+			x = -x;
+			break;
+		default:
+		}
+
+		switch (rotation) {
+		case COUNTERCLOCKWISE_90:
+			return mutablePos.setPos(pos.getX() + z, pos.getY() + y, pos.getZ() - x);
+		case CLOCKWISE_90:
+			return mutablePos.setPos(pos.getX() - z, pos.getY() + y, pos.getZ() + x);
+		case CLOCKWISE_180:
+			return mutablePos.setPos(pos.getX() - x, pos.getY() + y, pos.getZ() - z);
+		default:
+			return mutablePos.setPos(pos);
+		}
 	}
 
 }
