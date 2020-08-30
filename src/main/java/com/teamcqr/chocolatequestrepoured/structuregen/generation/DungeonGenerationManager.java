@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 
@@ -27,9 +29,9 @@ import net.minecraft.world.World;
 
 public class DungeonGenerationManager {
 
-	private static final Map<World, DungeonGenerationManager> INSTANCES = new HashMap<>();
+	private static final Map<World, DungeonGenerationManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
-	private final List<DungeonGenerator> dungeonGeneratorList = new ArrayList<>();
+	private final List<DungeonGenerator> dungeonGeneratorList = Collections.synchronizedList(new ArrayList<>());
 	private final World world;
 	private final File folder;
 
@@ -67,6 +69,10 @@ public class DungeonGenerationManager {
 
 	public static void handleWorldUnload(World world) {
 		if (!world.isRemote && INSTANCES.containsKey(world)) {
+			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
+				// wait
+			}
+			INSTANCES.get(world).saveData();
 			CQRMain.logger.info("Saved {} parts to generate", INSTANCES.get(world).dungeonGeneratorList.size());
 			INSTANCES.remove(world);
 		}
