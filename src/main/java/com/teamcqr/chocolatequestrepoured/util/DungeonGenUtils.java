@@ -28,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
@@ -262,13 +263,14 @@ public class DungeonGenUtils {
 	}
 
 	public static int getYForPos(World world, int x, int z, boolean ignoreWater) {
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, 255, z);
-		Material material = world.getBlockState(mutablePos).getMaterial();
+		Chunk chunk = world.getChunk(x >> 4, z >> 4);
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, chunk.getTopFilledSegment() + 15, z);
+		Material material = chunk.getBlockState(mutablePos).getMaterial();
 		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
 			mutablePos.setY(mutablePos.getY() - 1);
-			material = world.getBlockState(mutablePos).getMaterial();
+			material = chunk.getBlockState(mutablePos).getMaterial();
 		}
-		return mutablePos.getY();
+		return mutablePos.getY() + 1;
 	}
 
 	public static Vec3d transformedVec3d(Vec3d vec, PlacementSettings settings) {
