@@ -9,6 +9,7 @@ import java.util.Random;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -150,7 +151,8 @@ public abstract class DungeonBase {
 	}
 
 	public void generate(World world, int x, int y, int z) {
-		this.createDungeonGenerator(world, x, y, z).generate();
+		new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z)).start();
+		//this.createDungeonGenerator(world, x, y, z).generate();
 	}
 
 	public void generateWithOffsets(World world, int x, int y, int z) {
