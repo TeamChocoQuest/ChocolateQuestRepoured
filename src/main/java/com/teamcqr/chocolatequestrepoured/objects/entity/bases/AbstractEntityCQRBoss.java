@@ -83,10 +83,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
 	@Override
 	public void addTrackingPlayer(EntityPlayerMP player) {
-		if (CQRConfig.bosses.enableBossBars) {
-			super.addTrackingPlayer(player);
-			this.bossInfoServer.addPlayer(player);
-		}
+		super.addTrackingPlayer(player);
+		this.bossInfoServer.addPlayer(player);
 	}
 
 	@Override
