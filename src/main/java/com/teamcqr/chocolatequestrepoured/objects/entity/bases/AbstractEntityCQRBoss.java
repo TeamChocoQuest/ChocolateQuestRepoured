@@ -26,6 +26,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public AbstractEntityCQRBoss(World worldIn) {
 		super(worldIn);
 		this.experienceValue = 50;
+		this.bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
 	}
 
 	@Override
@@ -82,8 +83,10 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
 	@Override
 	public void addTrackingPlayer(EntityPlayerMP player) {
-		super.addTrackingPlayer(player);
-		this.bossInfoServer.addPlayer(player);
+		if (CQRConfig.bosses.enableBossBars) {
+			super.addTrackingPlayer(player);
+			this.bossInfoServer.addPlayer(player);
+		}
 	}
 
 	@Override
