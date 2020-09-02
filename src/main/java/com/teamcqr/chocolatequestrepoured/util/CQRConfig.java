@@ -73,6 +73,8 @@ public class CQRConfig {
 		public boolean antiCowardMode = true;
 		public int antiCowardRadius = 16;
 		public boolean enableHealthRegen = true;
+		@Config.Comment("WARNING: This WILL affect every player on the server or your lan world! Changing this as a player on a server does not have any effect")
+		public boolean enableBossBars = true;
 
 		public boolean hotFireballsDestroyTerrain = true;
 
