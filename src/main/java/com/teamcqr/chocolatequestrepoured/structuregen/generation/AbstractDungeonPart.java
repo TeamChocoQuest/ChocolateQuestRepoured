@@ -135,7 +135,7 @@ public abstract class AbstractDungeonPart {
 		case CLOCKWISE_180:
 			return mutablePos.setPos(pos.getX() - x, pos.getY() + y, pos.getZ() - z);
 		default:
-			return mutablePos.setPos(pos);
+			return mutablePos.setPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
 		}
 	}
 
