@@ -15,7 +15,7 @@ assignees: ''
    - [ ] Multiplayer
  - [ ] I have searched for this or a similar issue before reporting and it was either (1) not previously reported, or (2) previously fixed  and I'm having the same problem.
  - [ ] I am using the latest version of the mod (all versions can be found on github under releases)
- - [ ] I read through the FAQ and i could not find something helpful (FAQ: [go](https://wiki.cq-repoured.net/index.php?title=FAQ){:target="_blank" rel="FAQ"}
+ - [ ] I read through the FAQ and i could not find something helpful ([FAQ](https://wiki.cq-repoured.net/index.php?title=FAQ))
  - [ ] I reproduced the bug without any other mod's except forge, cqr and it's dependencies
  - [ ] The game crashes because of this bug
  
