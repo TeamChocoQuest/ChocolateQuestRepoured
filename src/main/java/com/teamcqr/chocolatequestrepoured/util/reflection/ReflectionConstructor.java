@@ -20,6 +20,7 @@ public class ReflectionConstructor<C> {
 		this.constructor = c;
 	}
 
+	@SuppressWarnings("unchecked")
 	public ReflectionConstructor(String className, Class<?>... parameterTypes) {
 		Constructor<C> c = null;
 		try {

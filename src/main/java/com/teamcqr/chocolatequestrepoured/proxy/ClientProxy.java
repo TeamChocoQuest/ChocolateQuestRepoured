@@ -31,6 +31,8 @@ public class ClientProxy implements IProxy {
 
 	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
 
+	private static final ReflectionField<Map<Advancement, AdvancementProgress>> m = new ReflectionField<>(ClientAdvancementManager.class, "field_192803_d", "advancementToProgress");
+
 	@Override
 	public void preInit() {
 		ModEntityRenderers.registerRenderers();
