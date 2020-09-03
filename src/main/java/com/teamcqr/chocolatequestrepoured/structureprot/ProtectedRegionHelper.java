@@ -27,8 +27,8 @@ public class ProtectedRegionHelper {
 
 	private static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
 	private static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
-	private static final ReflectionField<ItemBucket, Block> CONTAINED_BLOCK_FIELD = new ReflectionField<>(ItemBucket.class, "field_77876_a", "containedBlock");
-	private static final ReflectionField<Explosion, Entity> EXPLODER_FIELD = new ReflectionField<>(Explosion.class, "field_77283_e", "exploder");
+	private static final ReflectionField<Block> CONTAINED_BLOCK_FIELD = new ReflectionField<>(ItemBucket.class, "field_77876_a", "containedBlock");
+	private static final ReflectionField<Entity> EXPLODER_FIELD = new ReflectionField<>(Explosion.class, "field_77283_e", "exploder");
 
 	private ProtectedRegionHelper() {
 

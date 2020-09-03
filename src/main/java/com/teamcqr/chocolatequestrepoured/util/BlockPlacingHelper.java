@@ -18,9 +18,9 @@ import net.minecraftforge.common.util.BlockSnapshot;
 
 public class BlockPlacingHelper {
 
-	private static ReflectionField<Chunk, int[]> precipitationHeightMapField = new ReflectionField<>(Chunk.class, "field_76638_b", "precipitationHeightMap");
-	private static ReflectionMethod<Chunk, Object> relightBlockMethod = new ReflectionMethod<>(Chunk.class, "func_76615_h", "relightBlock", int.class, int.class, int.class);
-	private static ReflectionMethod<Chunk, Object> propagateSkylightOcclusionMethod = new ReflectionMethod<>(Chunk.class, "func_76595_e", "propagateSkylightOcclusion", int.class, int.class);
+	private static ReflectionField<int[]> precipitationHeightMapField = new ReflectionField<>(Chunk.class, "field_76638_b", "precipitationHeightMap");
+	private static ReflectionMethod<Object> relightBlockMethod = new ReflectionMethod<>(Chunk.class, "func_76615_h", "relightBlock", int.class, int.class, int.class);
+	private static ReflectionMethod<Object> propagateSkylightOcclusionMethod = new ReflectionMethod<>(Chunk.class, "func_76595_e", "propagateSkylightOcclusion", int.class, int.class);
 
 	public static boolean setBlockState(World world, BlockPos pos, IBlockState newState, int flags, boolean updateLight) {
 		if (updateLight) {

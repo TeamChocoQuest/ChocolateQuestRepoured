@@ -6,8 +6,8 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class DungeonGenerationEventHandler {
@@ -33,7 +33,7 @@ public class DungeonGenerationEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onWorldTickEvent(WorldTickEvent event) {
+	public static void onWorldTickEvent(TickEvent.WorldTickEvent event) {
 		if (event.phase == Phase.START) {
 			DungeonGenerationManager.handleWorldTick(event.world);
 		}
