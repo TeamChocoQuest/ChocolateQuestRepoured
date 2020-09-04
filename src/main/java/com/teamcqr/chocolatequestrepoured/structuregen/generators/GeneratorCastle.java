@@ -33,7 +33,7 @@ public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 
 		if (this.dungeon.doBuildSupportPlatform()) {
 			for (CastleRoomSelector.SupportArea area : this.roomHelper.getSupportAreas()) {
-				CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
+				//CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.pos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
 				this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
