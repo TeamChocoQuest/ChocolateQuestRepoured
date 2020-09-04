@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -151,8 +152,11 @@ public abstract class DungeonBase {
 	}
 
 	public void generate(World world, int x, int y, int z) {
-		new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z)).start();
-		//this.createDungeonGenerator(world, x, y, z).generate();
+		if (CQRConfig.advanced.multithreadedDungeonPreparation) {
+			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z)).start();
+		} else {
+			this.createDungeonGenerator(world, x, y, z).generate();
+		}
 	}
 
 	public void generateWithOffsets(World world, int x, int y, int z) {
