@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,15 +12,25 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * This code is adapted minecraft vanilla code, so it is made by Mojang
  */
 public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
+	private int minRows = 1;
+	private int maxRows = 1;
+
 	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 1);
 		this.setup(true, true, true, false);
+	}
+
+	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargingTicks, int minRows, int maxRows) {
+		this(entity, cooldown, chargingTicks);
+		this.minRows = minRows;
+		this.maxRows = maxRows;
 	}
 
 	@Override
@@ -26,16 +38,16 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
-		float f = (float) MathHelper.atan2(entitylivingbase.posZ - this.entity.posZ, entitylivingbase.posX - this.entity.posX);
+		float entityAngle = (float) MathHelper.atan2(entitylivingbase.posZ - this.entity.posZ, entitylivingbase.posX - this.entity.posX);
 
 		if (this.entity.getDistanceSq(entitylivingbase) < 9.0D) {
 			for (int i = 0; i < 5; ++i) {
-				float f1 = f + (float) i * (float) Math.PI * 0.4F;
+				float f1 = entityAngle + (float) i * (float) Math.PI * 0.4F;
 				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f1) * 1.5D, this.entity.posZ + (double) MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
 			}
 
 			for (int k = 0; k < 8; ++k) {
-				float f2 = f + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
+				float f2 = entityAngle + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
 				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f2) * 2.5D, this.entity.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {

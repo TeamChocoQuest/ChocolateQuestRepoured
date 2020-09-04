@@ -28,7 +28,7 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 		if (!this.getBoss().hasAttackTarget() && !(this.getBoss().isStunned() || this.getBoss().isSpinning() || this.getBoss().isHealing())) {
 			if (this.getBoss().isInShell()) {
 				this.getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
->			}
+			}
 			return true;
 		}
 		return false;

@@ -37,12 +37,12 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 			this.cooldown--;
 			return false;
 		}
-		return this.entity != null && this.entity.isEntityAlive() && this.entity.isExecutingExplodeAreaAttack();
+		return this.entity != null && this.entity.isEntityAlive() /*&& this.entity.isExecutingExplodeAreaAttack()*/;
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.entity != null && this.entity.isEntityAlive() && this.entity.isExecutingExplodeAreaAttack();
+		return this.entity != null && this.entity.isEntityAlive() /*&& this.entity.isExecutingExplodeAreaAttack()*/;
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 		this.explosionCount = 0;
 		this.explosions.clear();
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
-		this.entity.stopExplodeAreaAttack();
+		//this.entity.stopExplodeAreaAttack();
 	}
 
 }

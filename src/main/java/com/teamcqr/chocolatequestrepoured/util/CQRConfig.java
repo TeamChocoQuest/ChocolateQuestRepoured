@@ -129,6 +129,8 @@ public class CQRConfig {
 		
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
+		
+		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
 	}
 
 	public static class DungeonProtection {
