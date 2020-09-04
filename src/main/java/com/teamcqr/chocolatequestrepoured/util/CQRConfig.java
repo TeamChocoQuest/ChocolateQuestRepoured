@@ -67,6 +67,9 @@ public class CQRConfig {
 		public double generationMinDistanceToOtherStructure = 64;
 		@Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures")
 		public boolean generationRespectUnexploredStructures = true;
+
+		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
+		public boolean multithreadedDungeonPreparation = true;
 	}
 
 	public static class Bosses {
