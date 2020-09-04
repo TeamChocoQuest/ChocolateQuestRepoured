@@ -74,4 +74,9 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 		this.cachedStructures.put(file, structure);
 		return structure;
 	}
+
+	public World getWorld() {
+		return this.world;
+	}
+
 }

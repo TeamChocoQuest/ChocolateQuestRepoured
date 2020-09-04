@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,10 +26,10 @@ import net.minecraftforge.common.util.Constants;
 
 public class DungeonDataManager {
 
-	private static final Map<World, DungeonDataManager> INSTANCES = new HashMap<>();
+	private static final Map<World, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
 	private boolean modifiedSinceLastSave = false;
-	private Map<String, Set<BlockPos>> dungeonData = new HashMap<>();
+	private final Map<String, Set<BlockPos>> dungeonData = Collections.synchronizedMap(new HashMap<>());
 	protected final String DATA_FILE_NAME = "structures.nbt";
 	private File file;
 
@@ -41,6 +42,10 @@ public class DungeonDataManager {
 
 	public static void handleWorldUnload(World world) {
 		if (isWorldValid(world)) {
+			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
+				// wait
+			}
+			getInstance(world).saveData();
 			deleteInstance(world);
 		}
 	}

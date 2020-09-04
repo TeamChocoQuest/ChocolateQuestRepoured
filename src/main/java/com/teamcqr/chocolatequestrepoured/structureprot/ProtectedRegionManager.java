@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,8 +29,8 @@ import net.minecraft.world.World;
 public class ProtectedRegionManager {
 
 	private static final ProtectedRegionManager CLIENT_INSTANCE = new ProtectedRegionManager(null);
-	private static final Map<World, ProtectedRegionManager> INSTANCES = new HashMap<>();
-	private final Map<UUID, ProtectedRegion> protectedRegions = new HashMap<>();
+	private static final Map<World, ProtectedRegionManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
+	private final Map<UUID, ProtectedRegion> protectedRegions = Collections.synchronizedMap(new HashMap<>());
 	private final World world;
 	private final File folder;
 
@@ -69,6 +71,10 @@ public class ProtectedRegionManager {
 
 	public static void handleWorldUnload(World world) {
 		if (!world.isRemote && INSTANCES.containsKey(world)) {
+			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
+				// wait
+			}
+			INSTANCES.get(world).saveData();
 			INSTANCES.remove(world);
 		}
 	}
