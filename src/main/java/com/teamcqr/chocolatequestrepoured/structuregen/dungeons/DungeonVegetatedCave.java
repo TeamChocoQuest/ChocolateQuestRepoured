@@ -48,7 +48,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		super(name, prop);
 		this.vineBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineBlock", Blocks.VINE.getDefaultState());
 		// DONE: Add a non-cross-shape vine thing
-		this.crossVine = (this.vineBlock instanceof BlockVine);
+		this.crossVine = (this.vineBlock.getBlock() instanceof BlockVine);
 		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airBlock", Blocks.AIR.getDefaultState());
 		this.pumpkinBlock = PropertyFileHelper.getBlockStateProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN.getDefaultState());
 		this.flowerBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "flowerBlocks", new IBlockState[] { Blocks.RED_FLOWER.getDefaultState(), Blocks.YELLOW_FLOWER.getDefaultState() });
