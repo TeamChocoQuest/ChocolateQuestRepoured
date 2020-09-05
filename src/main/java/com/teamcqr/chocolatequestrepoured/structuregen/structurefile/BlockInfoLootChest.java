@@ -193,7 +193,7 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			break;
 		}
 		if (id >= 18 && id <= 31) {
-			return new ResourceLocation(Reference.MODID, "custom_" + (id - 17));
+			return new ResourceLocation(Reference.MODID, "chests/custom_" + (id - 17));
 		}
 		CQRMain.logger.warn("Failed to read loottable for id {}!", id);
 		return ModLoottables.CHESTS_FOOD;
