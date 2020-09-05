@@ -479,10 +479,10 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 						}
 					} else {
 						this.blocks.put(vineStart, this.dungeon.getVineBlock());
+						vineStart = vineStart.down();
 						if (this.blocks.getOrDefault(vineStart, airState).getBlock() != this.dungeon.getAirBlock()) {
 							break;
 						}
-						vineStart = vineStart.down();
 					}
 					vineLength--;
 				}
