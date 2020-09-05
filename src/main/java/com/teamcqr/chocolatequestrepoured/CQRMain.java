@@ -174,11 +174,11 @@ public class CQRMain {
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
-		} else {
-			int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
-			for (File folder : subfolders) {
-				CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs/" + folder.getAbsolutePath().substring(i), folder, false);
-			}
+		}
+
+		int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
+		for (File folder : subfolders) {
+			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs/" + folder.getAbsolutePath().substring(i), folder, false);
 		}
 	}
 
