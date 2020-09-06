@@ -310,7 +310,7 @@ public class DungeonRegistry {
 	}
 
 	public boolean canDungeonSpawnAgain(World world, DungeonBase dungeon) {
-		return (dungeon.getSpawnLimit() < 0) || !DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(dungeon);
+		return (dungeon.getSpawnLimit() < 0) || dungeon.isPosLocked() || !DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(dungeon);
 	}
 
 }
