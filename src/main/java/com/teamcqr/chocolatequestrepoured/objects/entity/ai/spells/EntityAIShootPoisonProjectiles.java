@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileP
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -35,6 +36,11 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 		for (Vec3d v : velocities) {
 			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity.world, this.entity);
 			// proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
+			
+			if(this.entity.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD) {
+				proj.enableAuraPlacement();
+			}
+			
 			proj.motionX = v.x * SPEED_MULTIPLIER;
 			proj.motionY = v.y * SPEED_MULTIPLIER;
 			proj.motionZ = v.z * SPEED_MULTIPLIER;

@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderLeapAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderSummonMinions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderWebshot;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -80,6 +81,18 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(31, new EntityAIFollowPath(this));
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
+		
+		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 120, 20) {
+			@Override
+			protected SoundEvent getStartChargingSound() {
+				return SoundEvents.ENTITY_SPIDER_HURT;
+			}
+
+			@Override
+			protected SoundEvent getStartCastingSound() {
+				return SoundEvents.ENTITY_SPIDER_AMBIENT;
+			}
+		}); 
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -113,7 +126,15 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.summonedMinions.remove(e);
 		}
 	}
-
+	
+	@Override
+	public void addPotionEffect(PotionEffect potioneffectIn) {
+		if(potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
+			return;
+		}
+		super.addPotionEffect(potioneffectIn);
+	}
+	
 	/**
 	 * Returns new PathNavigateGround instance
 	 */
