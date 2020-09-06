@@ -23,6 +23,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 
 	public BlockTemporaryWeb() {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
+		this.setTickRandomly(true);
 	}
 	
 	@Override
@@ -36,8 +37,13 @@ public class BlockTemporaryWeb extends BlockWeb {
 	}
 
 	@Override
+	public boolean requiresUpdates() {
+		return true;
+	}
+	
+	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState blockstate, Random random) {
-		if ((random.nextInt(2) == 1 || this.countNeighbors(world, pos) < 4)) {
+		if ((random.nextInt(3) == 0 || this.countNeighbors(world, pos) < 4)) {
 			this.slightlyDecay(world, pos, blockstate, random, true);
 		} else {
 			world.scheduleUpdate(pos, this, MathHelper.getInt(random, 20, 40));
