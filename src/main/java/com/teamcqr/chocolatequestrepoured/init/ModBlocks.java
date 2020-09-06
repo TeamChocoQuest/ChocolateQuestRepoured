@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPhylactery;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTemporaryWeb;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChest;
@@ -169,6 +170,7 @@ public class ModBlocks {
 
 	// Technical
 	public static final BlockPhylactery PHYLACTERY = Null();
+	public static final BlockTemporaryWeb TEMPORARY_WEB = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class BlockRegistrationHandler {
@@ -286,7 +288,9 @@ public class ModBlocks {
 
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
-					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery") };
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"), 
+					setBlockName(new BlockTemporaryWeb(), "temporary_web"),
+			};
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 
