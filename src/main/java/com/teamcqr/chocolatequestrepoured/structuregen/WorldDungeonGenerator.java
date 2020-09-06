@@ -27,6 +27,11 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		// Check if structures are enabled for this world
+		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
+			return;
+		}
+		
 		// Check for flat world type and if dungeons may spawn there
 		if (world.getWorldType() == WorldType.FLAT && !CQRConfig.general.dungeonsInFlat) {
 			return;
