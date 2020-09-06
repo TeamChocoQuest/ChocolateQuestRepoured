@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toClient;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer.FakeDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
@@ -12,21 +12,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class DungeonSyncPacket implements IMessage {
 
-	private Set<DungeonBase> dungeonSet = new HashSet<DungeonBase>();
-	private Set<FakeDungeon> fakeDungeonSet = new HashSet<FakeDungeon>();
+	private List<DungeonBase> dungeons;
+	private List<FakeDungeon> fakeDungeonSet;
 
 	public DungeonSyncPacket() {
 
 	}
 
-	public DungeonSyncPacket(Set<DungeonBase> dungeons) {
-		this.dungeonSet = dungeons;
+	public DungeonSyncPacket(List<DungeonBase> dungeons) {
+		this.dungeons = dungeons;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		int dungeonCount = buf.readByte();
-		this.fakeDungeonSet = new HashSet<FakeDungeon>(dungeonCount);
+		this.fakeDungeonSet = new ArrayList<>(dungeonCount);
 		for (int i = 0; i < dungeonCount; i++) {
 			String name = ByteBufUtils.readUTF8String(buf);
 			int iconID = buf.readByte();
@@ -42,18 +42,18 @@ public class DungeonSyncPacket implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeByte(this.dungeonSet.size());
-		for (DungeonBase dungeon : this.dungeonSet) {
+		buf.writeByte(this.dungeons.size());
+		for (DungeonBase dungeon : this.dungeons) {
 			ByteBufUtils.writeUTF8String(buf, dungeon.getDungeonName());
 			buf.writeByte(dungeon.getIconID());
-			buf.writeByte(dungeon.getDependencies().length);
-			for (String dependency : dungeon.getDependencies()) {
+			buf.writeByte(dungeon.getModDependencies().length);
+			for (String dependency : dungeon.getModDependencies()) {
 				ByteBufUtils.writeUTF8String(buf, dependency);
 			}
 		}
 	}
 
-	public Set<FakeDungeon> getFakeDungeonList() {
+	public List<FakeDungeon> getFakeDungeonList() {
 		return this.fakeDungeonSet;
 	}
 

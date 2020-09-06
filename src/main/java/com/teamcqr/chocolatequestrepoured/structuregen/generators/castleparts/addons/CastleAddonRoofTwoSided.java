@@ -32,7 +32,7 @@ public class CastleAddonRoofTwoSided extends CastleAddonRoofBase {
 		} else if (this.sizeX < this.sizeZ) {
 			xIsLongSide = false;
 		} else {
-			xIsLongSide = dungeon.getRandom().nextBoolean();
+			xIsLongSide = genArray.getRandom().nextBoolean();
 		}
 
 		do {

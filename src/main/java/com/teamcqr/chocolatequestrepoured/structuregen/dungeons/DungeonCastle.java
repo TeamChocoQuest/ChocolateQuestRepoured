@@ -194,10 +194,6 @@ public class DungeonCastle extends DungeonBase {
 		return this.floorHeight;
 	}
 
-	public Random getRandom() {
-		return this.random;
-	}
-
 	public EnumRoomType getRandomRoom() {
 		return this.roomRandomizer.next();
 	}
@@ -236,11 +232,11 @@ public class DungeonCastle extends DungeonBase {
 		if (this.minSpawnerRolls >= this.maxSpawnerRolls) {
 			numRolls = this.minSpawnerRolls;
 		} else {
-			numRolls = DungeonGenUtils.randomBetween(this.minSpawnerRolls, this.maxSpawnerRolls, this.random);
+			numRolls = DungeonGenUtils.randomBetween(this.minSpawnerRolls, this.maxSpawnerRolls);
 		}
 
 		for (int i = 0; i < numRolls; i++) {
-			if (DungeonGenUtils.percentageRandom(this.spawnerRollChance, this.random)) {
+			if (DungeonGenUtils.percentageRandom(this.spawnerRollChance)) {
 				result++;
 			}
 		}

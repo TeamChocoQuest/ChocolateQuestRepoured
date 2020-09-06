@@ -1,11 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
@@ -132,49 +129,38 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
+		if (!world.provider.canRespawnHere()) {
+			return true;
+		}
 		BlockPos spawnPoint = world.getSpawnPoint();
 		int x = chunkX - spawnPoint.getX() >> 4;
 		int z = chunkZ - spawnPoint.getZ() >> 4;
 		return x * x + z * z >= CQRConfig.general.dungeonSpawnDistance * CQRConfig.general.dungeonSpawnDistance;
 	}
 
-	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int dungeonSeparation) {
 		int dim = world.provider.getDimension();
 
-		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
-			if (!dungeon.isDimensionAllowed(dim)) {
+		for (DungeonBase dungeon : DungeonRegistry.getInstance().getDungeons()) {
+			if (!dungeon.isEnabled()) {
 				continue;
 			}
-			BlockPos pos = dungeon.getLockedPos();
-			int x = chunkX - pos.getX() >> 4;
-			int z = chunkZ - pos.getZ() >> 4;
-			if (x * x + z * z < CQRConfig.general.dungeonSeparation * CQRConfig.general.dungeonSeparation) {
-				return false;
+			if (dungeon.isModDependencyMissing()) {
+				continue;
+			}
+			if (!dungeon.isValidDim(dim)) {
+				continue;
+			}
+			for (BlockPos pos : dungeon.getLockedPositions()) {
+				int x = chunkX - pos.getX() >> 4;
+				int z = chunkZ - pos.getZ() >> 4;
+				if (x * x + z * z < dungeonSeparation * dungeonSeparation) {
+					return false;
+				}
 			}
 		}
 
 		return true;
-	}
-
-	public static Set<DungeonBase> getLocSpecDungeonsForChunk(World world, int chunkX, int chunkZ) {
-		Set<DungeonBase> dungeons = new HashSet<>();
-		int dim = world.provider.getDimension();
-
-		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
-			if (!dungeon.isDimensionAllowed(dim)) {
-				continue;
-			}
-			BlockPos pos = dungeon.getLockedPos();
-			if (pos.getX() >> 4 == chunkX && pos.getZ() >> 4 == chunkZ) {
-				dungeons.add(dungeon);
-			}
-		}
-
-		if (dungeons.size() > 1) {
-			CQRMain.logger.warn("Found {} coordinate specific dungeons for chunkX={}, chunkZ={}!", dungeons.size(), chunkX, chunkZ);
-		}
-
-		return dungeons;
 	}
 
 	/*

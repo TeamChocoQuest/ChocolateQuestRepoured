@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
@@ -112,6 +113,7 @@ public class PropertyFileHelper {
 		for (int i = 0; i < stringArray.length; i++) {
 			resourceLocationArray[i] = new ResourceLocation(stringArray[i]);
 		}
+
 		return resourceLocationArray;
 	}
 
@@ -224,6 +226,31 @@ public class PropertyFileHelper {
 		}
 
 		return retType;
+	}
+
+	public static BlockPos[] getBlockPosArrayProperty(Properties prop, String key, BlockPos[] defVal) {
+		String s = prop.getProperty(key);
+		if (s == null || s.isEmpty()) {
+			return defVal;
+		}
+
+		String[] strings = s.split(";");
+		ArrayList<BlockPos> positions = new ArrayList<>(strings.length);
+		for (String string : strings) {
+			try {
+				String[] posString = string.split(",");
+				if (posString.length >= 3) {
+					int x = Integer.parseInt(posString[0]);
+					int y = Integer.parseInt(posString[1]);
+					int z = Integer.parseInt(posString[2]);
+					positions.add(new BlockPos(x, y, z));
+				}
+			} catch (NumberFormatException e) {
+				// ignore
+			}
+		}
+
+		return positions.toArray(new BlockPos[positions.size()]);
 	}
 
 }

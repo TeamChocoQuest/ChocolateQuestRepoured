@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -18,9 +19,13 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -28,30 +33,32 @@ import net.minecraft.world.chunk.Chunk;
 public abstract class DungeonBase {
 
 	// private CQFaction owningFaction
-
 	protected final Random random = new Random();
 
 	protected String name;
-	protected int iconID;
+	protected int iconID = 0;
+	protected boolean enabled = true;
 
-	protected int[] allowedDims;
-	protected int weight;
-	protected int chance;
-	protected int spawnLimit;
-	protected String[] biomes;
-	protected String[] blacklistedBiomes;
+	protected int weight = 0;
+	protected int chance = 0;
+	protected int spawnLimit = -1;
+	protected int[] allowedDims = new int[0];
+	protected boolean allowedInAllDims = false;
+	protected ResourceLocation[] allowedBiomes = new ResourceLocation[0];
+	protected String[] allowedBiomeTypes = new String[0];
+	protected boolean allowedInAllBiomes = false;
+	protected ResourceLocation[] disallowedBiomes = new ResourceLocation[0];
+	protected String[] disallowedBiomeTypes = new String[0];
+	protected BlockPos[] lockedPositions = new BlockPos[0];
+	protected boolean spawnOnlyBehindWall = false;
+	protected String[] modDependencies = new String[0];
+	protected String[] dungeonDependencies = new String[0];
+
 	protected boolean rotateDungeon;
-	protected boolean spawnBehindWall;
-	protected String[] modDependencies;
-	protected String[] dungeonDependencies;
-
 	protected String dungeonMob;
 	protected boolean replaceBanners;
 	protected int underGroundOffset;
 	protected int yOffset;
-
-	protected boolean isPosLocked;
-	protected BlockPos lockedPos;
 
 	protected boolean buildSupportPlatform;
 	protected IBlockState supportBlock;
@@ -72,28 +79,29 @@ public abstract class DungeonBase {
 
 	public DungeonBase(String name, Properties prop) {
 		this.name = name;
-		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
+		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID);
+		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
 
-		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[0]);
-		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", 0);
-		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
-		this.biomes = PropertyFileHelper.getStringArrayProperty(prop, "biomes", new String[0]);
-		this.blacklistedBiomes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomes", new String[0]);
-		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", -1);
-		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[0]);
-		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "requiredDungeonsForThisToSpawn", new String[0]);
-		this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
+		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight);
+		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance);
+		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", this.spawnLimit);
+		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", this.allowedDims);
+		this.allowedInAllDims = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllDims", this.allowedInAllDims);
+		this.allowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "allowedBiomes", this.allowedBiomes);
+		this.allowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "allowedBiomeTypes", this.allowedBiomeTypes);
+		this.allowedInAllBiomes = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllBiomes", this.allowedInAllBiomes);
+		this.disallowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "disallowedBiomes", this.disallowedBiomes);
+		this.disallowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomeTypes", this.disallowedBiomeTypes);
+		this.lockedPositions = PropertyFileHelper.getBlockPosArrayProperty(prop, "lockedPositions", this.lockedPositions);
+		this.spawnOnlyBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", this.spawnOnlyBehindWall);
+		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "modDependencies", this.modDependencies);
+		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dungeonDependencies", this.dungeonDependencies);
 
 		this.dungeonMob = prop.getProperty("dummyReplacement", DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 		this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", true);
-
-		this.isPosLocked = PropertyFileHelper.getBooleanProperty(prop, "spawnAtCertainPosition", false);
-		if (this.isPosLocked) {
-			this.isPosLocked = this.handleLockedPos(prop);
-		}
 
 		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", Blocks.STONE.getDefaultState());
@@ -116,20 +124,6 @@ public abstract class DungeonBase {
 	@Override
 	public String toString() {
 		return this.name;
-	}
-
-	private boolean handleLockedPos(Properties prop) {
-		String[] coordinates = prop.getProperty("spawnAt", "-;-;-").split(";");
-		try {
-			int x = Integer.parseInt(coordinates[0]);
-			int y = Integer.parseInt(coordinates[1]);
-			int z = Integer.parseInt(coordinates[2]);
-			this.lockedPos = new BlockPos(x, y, z);
-		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			CQRMain.logger.error("{}: Failed to read spawn position!", this.name);
-			return false;
-		}
-		return true;
 	}
 
 	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z);
@@ -170,147 +164,281 @@ public abstract class DungeonBase {
 		return null;
 	}
 
-	public String getDungeonName() {
-		return this.name;
+	public boolean canSpawnAtPos(World world, BlockPos pos, boolean behindWall) {
+		if (!this.enabled) {
+			return false;
+		}
+		if (this.weight <= 0) {
+			return false;
+		}
+		if (this.chance <= 0) {
+			return false;
+		}
+		if (this.isModDependencyMissing()) {
+			return false;
+		}
+		if (!this.isValidDim(world.provider.getDimension())) {
+			return false;
+		}
+		if (this.isDungeonDependencyMissing(world)) {
+			return false;
+		}
+		if (DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(this)) {
+			return false;
+		}
+		if (world.provider.getDimension() == 0 && this.spawnOnlyBehindWall && !behindWall) {
+			return false;
+		}
+		return this.isValidBiome(world.getBiome(pos));
 	}
 
-	public int getWeight() {
-		return this.weight;
+	public boolean canSpawnInChunkWithLockedPosition(World world, int chunkX, int chunkZ) {
+		if (!this.enabled) {
+			return false;
+		}
+		if (this.isModDependencyMissing()) {
+			return false;
+		}
+		if (!this.isValidDim(world.provider.getDimension())) {
+			return false;
+		}
+		return this.isLockedPositionInChunk(chunkX, chunkZ);
 	}
 
-	public int getChance() {
-		return this.chance;
-	}
-
-	public String[] getBiomes() {
-		return this.biomes;
-	}
-
-	public String[] getBlacklistedBiomes() {
-		return this.blacklistedBiomes;
-	}
-
-	public int[] getAllowedDimensions() {
-		return this.allowedDims;
-	}
-
-	public boolean isDimensionAllowed(int dimension) {
-		for (int dim : this.getAllowedDimensions()) {
-			if (dim == dimension) {
+	public boolean isModDependencyMissing() {
+		for (String s : this.modDependencies) {
+			if (!Loader.isModLoaded(s)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public int getSpawnLimit() {
-		return this.spawnLimit;
+	public boolean isValidDim(int dim) {
+		if (this.allowedInAllDims) {
+			return true;
+		}
+		for (int i : this.allowedDims) {
+			if (i == dim) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public IBlockState getSupportTopBlock() {
-		return this.supportTopBlock;
+	public boolean isDungeonDependencyMissing(World world) {
+		Set<String> spawnedDungeons = DungeonDataManager.getSpawnedDungeonNames(world);
+		for (String s : this.dungeonDependencies) {
+			if (!spawnedDungeons.contains(s)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public IBlockState getSupportBlock() {
-		return this.supportBlock;
+	public boolean isValidBiome(Biome biome) {
+		ResourceLocation biomeName = biome.getRegistryName();
+		Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
+		boolean flag = this.allowedInAllBiomes;
+
+		if (!flag) {
+			for (ResourceLocation rs : this.allowedBiomes) {
+				if (rs.equals(biomeName)) {
+					flag = true;
+					break;
+				}
+			}
+		}
+		if (!flag) {
+			for (BiomeDictionary.Type biomeType : biomeTypes) {
+				for (String s : this.allowedBiomeTypes) {
+					if (s.equals(biomeType.getName())) {
+						flag = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if (flag) {
+			for (ResourceLocation rs : this.disallowedBiomes) {
+				if (rs.equals(biomeName)) {
+					flag = false;
+					break;
+				}
+			}
+		}
+		if (flag) {
+			for (BiomeDictionary.Type biomeType : biomeTypes) {
+				for (String s : this.disallowedBiomeTypes) {
+					if (s.equals(biomeType.getName())) {
+						flag = false;
+						break;
+					}
+				}
+			}
+		}
+
+		return flag;
 	}
 
-	public int getUnderGroundOffset() {
-		return Math.abs(this.underGroundOffset);
+	public boolean isLockedPositionInChunk(int chunkX, int chunkZ) {
+		for (BlockPos p : this.lockedPositions) {
+			if (p.getX() >> 4 == chunkX && p.getZ() >> 4 == chunkZ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public BlockPos getLockedPos() {
-		return this.lockedPos;
+	public List<BlockPos> getLockedPositionsInChunk(int chunkX, int chunkZ) {
+		List<BlockPos> list = new ArrayList<>();
+		for (BlockPos p : this.lockedPositions) {
+			if (p.getX() >> 4 == chunkX && p.getZ() >> 4 == chunkZ) {
+				list.add(p);
+			}
+		}
+		return list;
 	}
 
-	public boolean isPosLocked() {
-		return this.isPosLocked;
+	public String getDungeonName() {
+		return name;
 	}
 
 	public int getIconID() {
-		return this.iconID;
+		return iconID;
 	}
 
-	public void setLockPos(BlockPos pos, boolean locked) {
-		this.lockedPos = pos;
-		this.isPosLocked = locked;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public boolean doBuildSupportPlatform() {
-		return this.buildSupportPlatform;
+	public int getWeight() {
+		return weight;
 	}
 
-	public IBlockState getCoverBlock() {
-		return this.coverBlock;
+	public int getChance() {
+		return chance;
 	}
 
-	public boolean isCoverBlockEnabled() {
-		return this.useCoverBlock;
+	public int getSpawnLimit() {
+		return spawnLimit;
+	}
+
+	public int[] getAllowedDims() {
+		return allowedDims;
+	}
+
+	public boolean isAllowedInAllDims() {
+		return allowedInAllDims;
+	}
+
+	public ResourceLocation[] getAllowedBiomes() {
+		return allowedBiomes;
+	}
+
+	public String[] getAllowedBiomeTypes() {
+		return allowedBiomeTypes;
+	}
+
+	public boolean isAllowedInAllBiomes() {
+		return allowedInAllBiomes;
+	}
+
+	public ResourceLocation[] getDisallowedBiomes() {
+		return disallowedBiomes;
+	}
+
+	public String[] getDisallowedBiomeTypes() {
+		return disallowedBiomeTypes;
+	}
+
+	public BlockPos[] getLockedPositions() {
+		return lockedPositions;
 	}
 
 	public boolean doesSpawnOnlyBehindWall() {
-		return this.spawnBehindWall;
+		return spawnOnlyBehindWall;
 	}
 
-	public boolean replaceBanners() {
-		return this.replaceBanners;
-	}
-
-	public boolean rotateDungeon() {
-		return this.rotateDungeon;
-	}
-
-	public String getDungeonMob() {
-		return this.dungeonMob;
-	}
-
-	public String[] getDependencies() {
-		return this.modDependencies;
-	}
-
-	public int getYOffset() {
-		return this.yOffset;
-	}
-
-	public boolean dependsOnOtherStructures() {
-		return this.dungeonDependencies.length > 0;
+	public String[] getModDependencies() {
+		return modDependencies;
 	}
 
 	public String[] getDungeonDependencies() {
-		return this.dungeonDependencies;
+		return dungeonDependencies;
 	}
 
-	// Protection system
+	public boolean rotateDungeon() {
+		return rotateDungeon;
+	}
+
+	public String getDungeonMob() {
+		return dungeonMob;
+	}
+
+	public boolean replaceBanners() {
+		return replaceBanners;
+	}
+
+	public int getUnderGroundOffset() {
+		return underGroundOffset;
+	}
+
+	public int getYOffset() {
+		return yOffset;
+	}
+
+	public boolean doBuildSupportPlatform() {
+		return buildSupportPlatform;
+	}
+
+	public IBlockState getSupportBlock() {
+		return supportBlock;
+	}
+
+	public IBlockState getSupportTopBlock() {
+		return supportTopBlock;
+	}
+
+	public boolean isCoverBlockEnabled() {
+		return useCoverBlock;
+	}
+
+	public IBlockState getCoverBlock() {
+		return coverBlock;
+	}
+
 	public boolean isProtectionSystemEnabled() {
-		return this.enableProtectionSystem;
+		return enableProtectionSystem;
 	}
 
 	public boolean preventBlockPlacing() {
-		return this.preventBlockPlacing;
+		return preventBlockPlacing;
 	}
 
 	public boolean preventBlockBreaking() {
-		return this.preventBlockBreaking;
-	}
-
-	public boolean preventFireSpreading() {
-		return this.preventFireSpreading;
-	}
-
-	public boolean preventEntitySpawning() {
-		return this.preventEntitySpawning;
+		return preventBlockBreaking;
 	}
 
 	public boolean preventExplosionsTNT() {
-		return this.preventExplosionsTNT;
+		return preventExplosionsTNT;
 	}
 
 	public boolean preventExplosionsOther() {
-		return this.preventExplosionsOther;
+		return preventExplosionsOther;
+	}
+
+	public boolean preventFireSpreading() {
+		return preventFireSpreading;
+	}
+
+	public boolean preventEntitySpawning() {
+		return preventEntitySpawning;
 	}
 
 	public boolean ignoreNoBossOrNexus() {
-		return this.ignoreNoBossOrNexus;
+		return ignoreNoBossOrNexus;
 	}
 
 }

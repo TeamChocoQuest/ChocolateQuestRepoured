@@ -17,9 +17,14 @@ public class CQRWeightedRandom<T> {
 		}
 	}
 
+	private static final Random RAND = new Random();
 	private Random random;
 	private List<WeightedObject> items;
 	private int totalWeight = 0;
+
+	public CQRWeightedRandom() {
+		this(RAND);
+	}
 
 	public CQRWeightedRandom(Random random) {
 		this.random = random;

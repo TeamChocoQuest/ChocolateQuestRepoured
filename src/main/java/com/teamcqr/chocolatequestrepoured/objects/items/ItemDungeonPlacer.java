@@ -1,8 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
@@ -40,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDungeonPlacer extends Item {
 
-	public static Set<FakeDungeon> fakeDungeonSet = new HashSet<>();
+	public static List<FakeDungeon> fakeDungeonSet = Collections.emptyList();
 
 	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
@@ -167,7 +166,7 @@ public class ItemDungeonPlacer extends Item {
 		@SubscribeEvent
 		public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.player.world.isRemote) {
-				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(DungeonRegistry.getInstance().getLoadedDungeons()), (EntityPlayerMP) event.player);
+				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(DungeonRegistry.getInstance().getDungeons()), (EntityPlayerMP) event.player);
 			}
 		}
 

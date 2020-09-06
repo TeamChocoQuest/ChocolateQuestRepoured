@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import java.util.HashSet;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -39,7 +40,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 			IBlockState state = this.schematic.get(0).getState(side);
 			TileEntityChest chest = (TileEntityChest) chestBlock.createTileEntity(world, state);
 			if (chest != null) {
-				ResourceLocation resLoc = chestIDs[dungeon.getRandom().nextInt(chestIDs.length)];
+				ResourceLocation resLoc = chestIDs[genArray.getRandom().nextInt(chestIDs.length)];
 				if (resLoc != null) {
 					long seed = WorldDungeonGenerator.getSeed(world, start.getX() + start.getY(), start.getZ() + start.getY());
 					chest.setLootTable(resLoc, seed);

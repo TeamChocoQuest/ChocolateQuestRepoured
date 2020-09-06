@@ -198,7 +198,7 @@ public class CQRMain {
 
 		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
 
-		DungeonRegistry.getInstance().loadDungeons();
+		DungeonRegistry.getInstance().loadDungeonFiles();
 		CQStructure.cacheFiles();
 		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();

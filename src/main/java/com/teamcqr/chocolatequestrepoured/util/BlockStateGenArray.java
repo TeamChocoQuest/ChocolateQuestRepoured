@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -58,11 +59,13 @@ public class BlockStateGenArray {
 		}
 	}
 
+	private Random random = new Random();
 	private Map<BlockPos, PriorityBlockInfo> mainMap = new HashMap<>();
 	private Map<BlockPos, PriorityBlockInfo> postMap = new HashMap<>();
 	private Map<BlockPos, EntityInfo> entityMap = new HashMap<>();
 
-	public BlockStateGenArray() {
+	public Random getRandom() {
+		return random;
 	}
 
 	public Map<BlockPos, AbstractBlockInfo> getMainMap() {

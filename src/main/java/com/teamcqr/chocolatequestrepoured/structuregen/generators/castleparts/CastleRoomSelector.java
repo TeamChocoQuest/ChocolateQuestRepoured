@@ -113,7 +113,7 @@ public class CastleRoomSelector {
 		this.floorsPerLayer = FLOORS_PER_LAYER;
 		this.maxFloors = this.floorsPerLayer * MAX_LAYERS;
 		this.minRoomsForBoss = (int) (Math.ceil((double) MIN_BOSS_ROOM_SIZE / (this.roomSize - 1)));
-		this.random = dungeon.getRandom();
+		this.random = new Random();
 		this.castleRoofs = new ArrayList<>();
 		this.supportAreas = new ArrayList<>();
 
