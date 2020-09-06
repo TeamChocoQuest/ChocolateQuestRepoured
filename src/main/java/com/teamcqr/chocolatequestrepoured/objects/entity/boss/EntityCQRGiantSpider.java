@@ -112,6 +112,11 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.setBesideClimbableBlock(this.collidedHorizontally);
 		}
 	}
+	
+	@Override
+	public void fall(float p_180430_1_, float p_180430_2_) {
+		//What do we say to fall damge? Not today!
+	}
 
 	@Override
 	public void onLivingUpdate() {
