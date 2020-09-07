@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
@@ -66,7 +66,7 @@ public abstract class CastleRoomBase {
 		this.roomOrigin = offset;
 	}
 
-	public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		this.generateRoom(castleOrigin, genArray, dungeon);
 		// this.generateWalls(genArray, dungeon);
 
@@ -78,17 +78,17 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	public void postProcess(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void postProcess(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		;
 	}
 
-	protected abstract void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon);
+	protected abstract void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon);
 
-	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, GearedMobFactory mobFactory) {
 		; // Default is no decoration
 	}
 
-	public void placeBoss(World world, BlockStateGenArray genArray, DungeonCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
+	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		; // Default is no boss
 	}
 
@@ -116,7 +116,7 @@ public abstract class CastleRoomBase {
 		return this.roomType.isPathable();
 	}
 
-	protected void generateDefaultCeiling(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void generateDefaultCeiling(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
 				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
@@ -124,7 +124,7 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	protected void generateDefaultFloor(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void generateDefaultFloor(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		BlockPos pos = this.getNonWallStartPos();
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
@@ -143,7 +143,7 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
+	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return dungeon.getFloorBlockState();
 	}
 
@@ -173,12 +173,12 @@ public abstract class CastleRoomBase {
 		return this.buildStartPos.add(this.offsetX, 0, this.offsetZ);
 	}
 
-	protected void setupDecoration(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void setupDecoration(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		this.possibleDecoPositions = new HashSet<>(this.getDecorationArea());
 		this.setDoorAndWindowAreasToAir(genArray, dungeon);
 	}
 
-	protected void setDoorAndWindowAreasToAir(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void setDoorAndWindowAreasToAir(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		BlockPos northStart = this.getDecorationStartPos();
 		BlockPos westStart = this.getDecorationStartPos();
 		BlockPos eastStart = this.getDecorationStartPos().add((this.getDecorationLengthX() - 1), 0, 0);

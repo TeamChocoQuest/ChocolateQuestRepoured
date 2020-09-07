@@ -36,8 +36,8 @@ public abstract class DungeonBase {
 	protected final Random random = new Random();
 
 	protected String name;
-	protected int iconID = 0;
 	protected boolean enabled = true;
+	protected int iconID = 0;
 
 	protected int weight = 0;
 	protected int chance = 0;
@@ -54,7 +54,6 @@ public abstract class DungeonBase {
 	protected String[] modDependencies = new String[0];
 	protected String[] dungeonDependencies = new String[0];
 
-	protected boolean rotateDungeon;
 	protected String dungeonMob;
 	protected boolean replaceBanners;
 	protected int underGroundOffset;
@@ -79,8 +78,8 @@ public abstract class DungeonBase {
 
 	public DungeonBase(String name, Properties prop) {
 		this.name = name;
-		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID);
 		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
+		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID);
 
 		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight);
 		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance);
@@ -101,7 +100,6 @@ public abstract class DungeonBase {
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
-		this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", true);
 
 		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", Blocks.STONE.getDefaultState());
@@ -367,10 +365,6 @@ public abstract class DungeonBase {
 
 	public String[] getDungeonDependencies() {
 		return dungeonDependencies;
-	}
-
-	public boolean rotateDungeon() {
-		return rotateDungeon;
 	}
 
 	public String getDungeonMob() {

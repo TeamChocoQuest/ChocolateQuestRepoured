@@ -3,15 +3,11 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGridCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonNetherCity;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonSurface;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonTemplateSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 
@@ -20,19 +16,19 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
  */
 public enum EDungeonGenerator {
 
-	CAVERNS(DungeonCavern::new),
+	TEMPLATE_SURFACE(DungeonTemplateSurface::new),
+	RANDOMIZED_CASTLE(DungeonRandomizedCastle::new),
+	VOLCANO(DungeonVolcano::new),
+	GRID_CITY(DungeonGridCity::new),
+	HANGING_CITY(DungeonHangingCity::new),
+	LINEAR_STRONGHOLD(DungeonStrongholdLinear::new),
+	VEGETATED_CAVE(DungeonVegetatedCave::new),
+	
+	CAVERNS((name, prop) -> null),
 	ABANDONED((name, prop) -> null),
 	RUIN((name, prop) -> null),
-	NETHER_CITY(DungeonNetherCity::new),
-	FLOATING_NETHER_CITY(DungeonHangingCity::new),
-	TEMPLATE_SURFACE(DungeonSurface::new),
-	TEMPLATE_OCEAN_FLOOR(DungeonOceanFloor::new),
-	STRONGHOLD(DungeonStrongholdOpen::new),
-	CLASSIC_STRONGHOLD(DungeonStrongholdLinear::new),
-	GREEN_CAVE(DungeonVegetatedCave::new),
-	GUARDED_CASTLE(DungeonGuardedCastle::new),
-	CASTLE(DungeonCastle::new),
-	VOLCANO(DungeonVolcano::new);
+	OPEN_STRONGHOLD((name, prop) -> null),
+	GUARDED_CASTLE((name, prop) -> null);
 
 	private IDungeonGenerator generator;
 
@@ -56,4 +52,5 @@ public enum EDungeonGenerator {
 	private static interface IDungeonGenerator {
 		public DungeonBase createDungeon(String name, Properties prop);
 	}
+
 }

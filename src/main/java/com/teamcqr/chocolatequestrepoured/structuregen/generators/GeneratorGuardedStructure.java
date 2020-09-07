@@ -130,11 +130,11 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 					int xT = pos.getX();
 					int zT = pos.getZ();
 
-					Rotation rot = this.dungeon.rotateDungeon() ? Rotation.values()[new Random().nextInt(4)] : Rotation.NONE;
+					Rotation rot = Rotation.NONE;
 					int sizeX = structure.getSize().getX();
 					int sizeZ = structure.getSize().getZ();
 					this.rotList.set(i, rot);
-					if (this.dungeon.rotateDungeon()) {
+					if (false) {
 						switch (rot) {
 						case CLOCKWISE_90:
 							xT -= sizeX;
@@ -193,7 +193,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			PlacementSettings plcmnt = new PlacementSettings();
 			plcmnt.setMirror(Mirror.NONE);
 			plcmnt.setRotation(Rotation.NONE);
-			if (this.dungeon.rotateDungeon()) {
+			if (false) {
 				plcmnt.setRotation(this.getRandomRotation());
 			}
 			plcmnt.setIntegrity(1.0f);

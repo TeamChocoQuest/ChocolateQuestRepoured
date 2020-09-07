@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -95,7 +95,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
@@ -114,7 +114,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 		}
 	}
 
-	private IBlockState getBlockToBuild(DungeonCastle dungeon, int x, int y, int z) {
+	private IBlockState getBlockToBuild(DungeonRandomizedCastle dungeon, int x, int y, int z) {
 		IBlockState blockToBuild = Blocks.AIR.getDefaultState();
 
 		if (y == 0) {

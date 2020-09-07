@@ -17,7 +17,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoofBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleRoofFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
@@ -94,7 +94,7 @@ public class CastleRoomSelector {
 
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
-	private DungeonCastle dungeon;
+	private DungeonRandomizedCastle dungeon;
 	private int floorHeight;
 	private int roomSize;
 	private int minRoomsForBoss;
@@ -106,7 +106,7 @@ public class CastleRoomSelector {
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoofBase> castleRoofs;
 
-	public CastleRoomSelector(DungeonCastle dungeon) {
+	public CastleRoomSelector(DungeonRandomizedCastle dungeon) {
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
 		this.roomSize = dungeon.getRoomSize();
@@ -145,7 +145,7 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobName) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobName) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
 		this.generateWalls(genArray, dungeon);
 
@@ -156,7 +156,7 @@ public class CastleRoomSelector {
 		this.generateRoofs(startPos, genArray, dungeon);
 	}
 
-	private void generateRooms(BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
+	private void generateRooms(BlockPos startPos, DungeonRandomizedCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
 		// because they have the lowest block priority (all other parts should overwrite)
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
@@ -164,7 +164,7 @@ public class CastleRoomSelector {
 		}
 	}
 
-	private void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	private void generateWalls(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		List<CastleMainStructWall> genList = this.grid.getWallListCopy();
 		genList.sort(Comparator.comparingInt(CastleMainStructWall::getGenerationPriority));
 		for (CastleMainStructWall wall : genList) {
@@ -174,7 +174,7 @@ public class CastleRoomSelector {
 		}
 	}
 
-	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, DungeonInhabitant mobType) {
+	private void addDecoration(World world, BlockPos startPos, DungeonRandomizedCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, DungeonInhabitant mobType) {
 		ResourceLocation mobResLoc = mobType.getEntityID();
 		ResourceLocation bossResLoc = mobType.getBossID();
 		GearedMobFactory mobFactory = new GearedMobFactory(this.getBossFloor(), mobResLoc, this.random);
@@ -223,7 +223,7 @@ public class CastleRoomSelector {
 		return jailed;
 	}
 
-	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		for (CastleAddonRoofBase roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
 		}

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
 
@@ -32,7 +32,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		int endX = this.getDecorationLengthX() - 1;
 		int endZ = this.getDecorationLengthZ() - 1;
 		int halfX = endX / 2;
@@ -75,7 +75,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
+	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return dungeon.getMainBlockState();
 	}
 

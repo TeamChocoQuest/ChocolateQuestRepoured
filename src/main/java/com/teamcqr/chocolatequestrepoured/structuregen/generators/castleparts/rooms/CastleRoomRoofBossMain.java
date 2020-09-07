@@ -10,7 +10,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -36,7 +36,7 @@ import net.minecraft.world.World;
 public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
-	private DungeonCastle dungeon;
+	private DungeonRandomizedCastle dungeon;
 
 	public CastleRoomRoofBossMain(int sideLength, int height, int floor) {
 		super(sideLength, height, floor);
@@ -53,7 +53,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		BlockPos nwCorner = this.getBossRoomBuildStartPosition();
 		BlockPos pos;
 		IBlockState blockToBuild;
@@ -72,7 +72,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, GearedMobFactory mobFactory) {
 		// Have to add torches last because they won't place unless the wall next to them is already built
 		this.placeTorches(this.getBossRoomBuildStartPosition(), genArray);
 
@@ -80,7 +80,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	public void placeBoss(World world, BlockStateGenArray genArray, DungeonCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
+	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		BlockPos pos = this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
 		if (bossResourceLocation == null) {
 

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.DecorationSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
@@ -38,7 +38,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, GearedMobFactory mobFactory) {
 		this.setupDecoration(genArray, dungeon);
 
 		if (this.shouldBuildEdgeDecoration()) {
@@ -70,7 +70,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
 	abstract boolean shouldAddChests();
 
-	protected void addEdgeDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void addEdgeDecoration(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		if (this.decoSelector.edgeDecorRegistered()) {
 			for (EnumFacing side : EnumFacing.HORIZONTALS) {
 				if (this.walls.containsKey(side) && this.walls.get(side).isEnabled()) {
@@ -108,7 +108,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 		}
 	}
 
-	protected void addMidDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void addMidDecoration(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		if (this.decoSelector.midDecorRegistered()) {
 			ArrayList<BlockPos> area = this.getDecorationMiddle();
 			for (BlockPos pos : area) {
@@ -137,7 +137,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 		}
 	}
 
-	protected void addSpawners(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
+	protected void addSpawners(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, GearedMobFactory mobFactory) {
 		ArrayList<BlockPos> spawnPositions = this.getDecorationLayer(0);
 		spawnPositions.removeAll(this.usedDecoPositions);
 
@@ -164,7 +164,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 		}
 	}
 
-	protected void addWallDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void addWallDecoration(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		int torchPercent = LIGHT_LEVEL * 3;
 
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
@@ -187,7 +187,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 		}
 	}
 
-	protected void addChests(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void addChests(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		if (this.getChestIDs() != null && !this.possibleChestLocs.isEmpty()) {
 			if (DungeonGenUtils.percentageRandom(50, this.random)) {
 				IRoomDecor chest = new RoomDecorChest();

@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
@@ -38,7 +38,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	}
 
 	@Override
-	protected void generateDefaultFloor(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void generateDefaultFloor(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
 				BlockPos pos = this.getNonWallStartPos().add(x, 0, z);
@@ -67,7 +67,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	}
 
 	@Override
-	protected void addMidDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	protected void addMidDecoration(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		IRoomDecor pillar = RoomDecorTypes.PILLAR;
 		int halfX = this.getDecorationLengthX() / 2;
 		int halfZ = this.getDecorationLengthZ() / 2;
@@ -81,7 +81,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
+	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
 	}
 

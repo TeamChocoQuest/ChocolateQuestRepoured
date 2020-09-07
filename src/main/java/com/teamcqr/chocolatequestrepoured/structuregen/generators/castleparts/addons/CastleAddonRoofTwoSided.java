@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 import net.minecraft.block.BlockStairs;
@@ -14,7 +14,7 @@ public class CastleAddonRoofTwoSided extends CastleAddonRoofBase {
 	}
 
 	@Override
-	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generate(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		int roofX;
 		int roofZ;
 		int roofLenX;

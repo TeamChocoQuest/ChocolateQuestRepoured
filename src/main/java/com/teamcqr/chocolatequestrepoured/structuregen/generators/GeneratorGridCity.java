@@ -10,7 +10,7 @@ import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGridCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -27,7 +27,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
-public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCity> {
+public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity> {
 
 	private int longestSide;
 	private int distanceBetweenBuildings;
@@ -51,7 +51,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 
 	private CQStructure[][] structures;
 
-	public GeneratorGridCity(World world, BlockPos pos, DungeonNetherCity dungeon) {
+	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon) {
 		super(world, pos, dungeon);
 	}
 

@@ -65,8 +65,6 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	public DungeonStrongholdLinear(String name, Properties prop) {
 		super(name, prop);
 
-		this.rotateDungeon = false;
-
 		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
 		this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 3);
 		this.minFloorSize = PropertyFileHelper.getIntProperty(prop, "minFloorSize", 3);

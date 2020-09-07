@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
@@ -77,7 +77,7 @@ public class RoomGridCell {
 		return this.originOffset;
 	}
 
-	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		if (this.isPopulated() && this.room != null) {
 			this.room.setRoomOrigin(this.getOriginOffset());
 			this.room.registerWalls(this.walls);

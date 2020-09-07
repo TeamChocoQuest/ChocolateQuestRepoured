@@ -10,7 +10,7 @@ import net.minecraft.world.chunk.Chunk;
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
-public class DungeonOceanFloor extends DungeonSurface {
+public class DungeonOceanFloor extends DungeonTemplateSurface {
 
 	public DungeonOceanFloor(String name, Properties prop) {
 		super(name, prop);

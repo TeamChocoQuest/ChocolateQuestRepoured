@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RoomGridCell;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
@@ -208,7 +208,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generate(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
@@ -235,7 +235,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	protected IBlockState getBlockToBuild(BlockPos pos, DungeonCastle dungeon) {
+	protected IBlockState getBlockToBuild(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		if (this.isRoofEdge) {
 			return this.getRoofEdgeBlock(pos, dungeon);
 		} else if (this.hasDoor()) {
@@ -247,7 +247,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	public boolean offsetIsDoorOrWindow(int distAlongWall, int heightOnWall, DungeonCastle dungeon) {
+	public boolean offsetIsDoorOrWindow(int distAlongWall, int heightOnWall, DungeonRandomizedCastle dungeon) {
 		// Determine the relative offset within the wall given the distance and height
 		int xDist = (this.orientation == WallOrientation.HORIZONTAL) ? distAlongWall : 0;
 		int zDist = (this.orientation == WallOrientation.VERTICAL) ? distAlongWall : 0;
@@ -257,7 +257,7 @@ public class CastleMainStructWall {
 		return (this.getBlockToBuild(wallPosition, dungeon)) != dungeon.getMainBlockState();
 	}
 
-	private IBlockState getRoofEdgeBlock(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getRoofEdgeBlock(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
@@ -269,7 +269,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	private IBlockState getBlockDoorBossHalf1(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockDoorBossHalf1(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
@@ -285,7 +285,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorBossHalf2(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockDoorBossHalf2(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
@@ -301,7 +301,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	protected IBlockState getDoorBlock(BlockPos pos, DungeonCastle dungeon) {
+	protected IBlockState getDoorBlock(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		switch (this.doorType) {
 		case AIR:
 			return this.getBlockDoorAir(pos, dungeon);
@@ -329,7 +329,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	private IBlockState getBlockDoorAir(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockDoorAir(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
@@ -345,7 +345,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorStairBorder(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockDoorStairBorder(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		final int y = pos.getY() - this.origin.getY();
 		final int dist = this.getLengthPoint(pos);
@@ -384,7 +384,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorFenceBorder(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockDoorFenceBorder(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		final int y = pos.getY() - this.origin.getY();
 		final int dist = this.getLengthPoint(pos);
@@ -407,7 +407,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorStandard(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockDoorStandard(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		final int y = pos.getY() - this.origin.getY();
 		final int dist = this.getLengthPoint(pos);
@@ -441,7 +441,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockGrandEntry(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockGrandEntry(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 
 		final int y = pos.getY() - this.origin.getY();
@@ -486,7 +486,7 @@ public class CastleMainStructWall {
 		return blockToBuild;
 	}
 
-	protected IBlockState getWindowBlock(BlockPos pos, DungeonCastle dungeon) {
+	protected IBlockState getWindowBlock(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		switch (this.windowType) {
 		case BASIC_GLASS:
 			return this.getBlockWindowBasicGlass(pos, dungeon);
@@ -500,7 +500,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	private IBlockState getBlockWindowBasicGlass(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockWindowBasicGlass(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
 
@@ -511,7 +511,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	private IBlockState getBlockWindowCrossGlass(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockWindowCrossGlass(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
 		int halfDist = this.length / 2;
@@ -523,7 +523,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	private IBlockState getBlockWindowSquareBars(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockWindowSquareBars(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
 		int halfDist = this.length / 2;
@@ -535,7 +535,7 @@ public class CastleMainStructWall {
 		}
 	}
 
-	private IBlockState getBlockWindowOpenSlit(BlockPos pos, DungeonCastle dungeon) {
+	private IBlockState getBlockWindowOpenSlit(BlockPos pos, DungeonRandomizedCastle dungeon) {
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
 		int halfDist = this.length / 2;
