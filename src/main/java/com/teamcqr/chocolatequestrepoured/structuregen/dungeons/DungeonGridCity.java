@@ -55,8 +55,8 @@ public class DungeonGridCity extends DungeonBase {
 		this.floorBlock = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.LAVA.getDefaultState());
 		this.airBlockForPocket = PropertyFileHelper.getBlockStateProperty(prop, "airPocketBlock", Blocks.AIR.getDefaultState());
 
-		this.buildingFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "nether_city_buildings");
-		this.centralBuildingsFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "nether_city_buildings");
+		this.buildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "nether_city_buildings");
+		this.centralBuildingsFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centralStructureFolder", "nether_city_buildings");
 	}
 
 	@Override

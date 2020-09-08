@@ -33,9 +33,9 @@ public class DungeonGuardedCastle extends DungeonBase {
 	public DungeonGuardedCastle(String name, Properties prop) {
 		super(name, prop);
 
-		this.structureFolder = PropertyFileHelper.getFileProperty(prop, "structurefolder", "village_buildings");
+		this.structureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structurefolder", "village_buildings");
 
-		this.centerStructureFolder = PropertyFileHelper.getFileProperty(prop, "centerstructurefolder", "village_centers");
+		this.centerStructureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centerstructurefolder", "village_centers");
 		this.minBuildings = PropertyFileHelper.getIntProperty(prop, "minbuildings", 6);
 		this.maxBuilding = PropertyFileHelper.getIntProperty(prop, "maxbuildings", 10);
 

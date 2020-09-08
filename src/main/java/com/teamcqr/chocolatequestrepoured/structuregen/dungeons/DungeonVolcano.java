@@ -95,7 +95,7 @@ public class DungeonVolcano extends DungeonBase {
 
 		this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildStairwell", this.buildStairwell);
 		this.chestChance = PropertyFileHelper.getDoubleProperty(prop, "chestChance", this.chestChance);
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", this.chestIDs);
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", this.chestIDs, false);
 
 		// Stronghold
 		this.buildStronghold = PropertyFileHelper.getBooleanProperty(prop, "buildStronghold", this.buildStronghold);
@@ -108,23 +108,23 @@ public class DungeonVolcano extends DungeonBase {
 		this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", this.roomSizeX);
 		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", this.roomSizeY);
 		this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", this.roomSizeZ);
-		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "volcano/rooms/curves/EN");
-		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "volcano/rooms/curves/ES");
-		this.curveNEFolder = PropertyFileHelper.getFileProperty(prop, "curveNEFolder", "volcano/rooms/curves/NE");
-		this.curveNWFolder = PropertyFileHelper.getFileProperty(prop, "curveNWFolder", "volcano/rooms/curves/NW");
-		this.curveSEFolder = PropertyFileHelper.getFileProperty(prop, "curveSEFolder", "volcano/rooms/curves/SE");
-		this.curveSWFolder = PropertyFileHelper.getFileProperty(prop, "curveSWFolder", "volcano/rooms/curves/SW");
-		this.curveWNFolder = PropertyFileHelper.getFileProperty(prop, "curveWNFolder", "volcano/rooms/curves/WN");
-		this.curveWSFolder = PropertyFileHelper.getFileProperty(prop, "curveWSFolder", "volcano/rooms/curves/WS");
-		this.hallEWFolder = PropertyFileHelper.getFileProperty(prop, "hallwayEWFolder", "volcano/rooms/hallway/EW");
-		this.hallNSFolder = PropertyFileHelper.getFileProperty(prop, "hallwayNSFolder", "volcano/rooms/hallway/NS");
-		this.hallSNFolder = PropertyFileHelper.getFileProperty(prop, "hallwaySNFolder", "volcano/rooms/hallway/SN");
-		this.hallWEFolder = PropertyFileHelper.getFileProperty(prop, "hallwayWEFolder", "volcano/rooms/hallway/WE");
-		this.stairEFolder = PropertyFileHelper.getFileProperty(prop, "stairEFolder", "volcano/stairs/E");
-		this.stairNFolder = PropertyFileHelper.getFileProperty(prop, "stairNFolder", "volcano/stairs/N");
-		this.stairSFolder = PropertyFileHelper.getFileProperty(prop, "stairSFolder", "volcano/stairs/S");
-		this.stairWFolder = PropertyFileHelper.getFileProperty(prop, "stairWFolder", "volcano/stairs/W");
-		this.bossFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "volcano/rooms/boss/");
+		this.curveENFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveENFolder", "volcano/rooms/curves/EN");
+		this.curveESFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveESFolder", "volcano/rooms/curves/ES");
+		this.curveNEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveNEFolder", "volcano/rooms/curves/NE");
+		this.curveNWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveNWFolder", "volcano/rooms/curves/NW");
+		this.curveSEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveSEFolder", "volcano/rooms/curves/SE");
+		this.curveSWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveSWFolder", "volcano/rooms/curves/SW");
+		this.curveWNFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveWNFolder", "volcano/rooms/curves/WN");
+		this.curveWSFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveWSFolder", "volcano/rooms/curves/WS");
+		this.hallEWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwayEWFolder", "volcano/rooms/hallway/EW");
+		this.hallNSFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwayNSFolder", "volcano/rooms/hallway/NS");
+		this.hallSNFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwaySNFolder", "volcano/rooms/hallway/SN");
+		this.hallWEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwayWEFolder", "volcano/rooms/hallway/WE");
+		this.stairEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairEFolder", "volcano/stairs/E");
+		this.stairNFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairNFolder", "volcano/stairs/N");
+		this.stairSFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairSFolder", "volcano/stairs/S");
+		this.stairWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairWFolder", "volcano/stairs/W");
+		this.bossFolder = PropertyFileHelper.getStructureFolderProperty(prop, "bossRoomFolder", "volcano/rooms/boss/");
 	}
 
 	@Override

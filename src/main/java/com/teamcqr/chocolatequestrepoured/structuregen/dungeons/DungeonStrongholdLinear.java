@@ -70,29 +70,29 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		this.minFloorSize = PropertyFileHelper.getIntProperty(prop, "minFloorSize", 3);
 		this.maxFloorSize = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
 
-		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
-		this.entranceStairSegmentFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairSegmentFolder", "stronghold/linear/entranceStairSegments");
-		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
-		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
+		this.entranceStairFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
+		this.entranceStairSegmentFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairSegmentFolder", "stronghold/linear/entranceStairSegments");
+		this.entranceBuildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
+		this.bossRoomFolder = PropertyFileHelper.getStructureFolderProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
 
 		this.useStairSegments = PropertyFileHelper.getBooleanProperty(prop, "useStairSegments", true);
 
-		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "stronghold/rooms/curves/EN");
-		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "stronghold/rooms/curves/ES");
-		this.curveNEFolder = PropertyFileHelper.getFileProperty(prop, "curveNEFolder", "stronghold/rooms/curves/NE");
-		this.curveNWFolder = PropertyFileHelper.getFileProperty(prop, "curveNWFolder", "stronghold/rooms/curves/NW");
-		this.curveSEFolder = PropertyFileHelper.getFileProperty(prop, "curveSEFolder", "stronghold/rooms/curves/SE");
-		this.curveSWFolder = PropertyFileHelper.getFileProperty(prop, "curveSWFolder", "stronghold/rooms/curves/SW");
-		this.curveWNFolder = PropertyFileHelper.getFileProperty(prop, "curveWNFolder", "stronghold/rooms/curves/WN");
-		this.curveWSFolder = PropertyFileHelper.getFileProperty(prop, "curveWSFolder", "stronghold/rooms/curves/WS");
-		this.hallEWFolder = PropertyFileHelper.getFileProperty(prop, "hallwayEWFolder", "stronghold/rooms/hallway/EW");
-		this.hallNSFolder = PropertyFileHelper.getFileProperty(prop, "hallwayNSFolder", "stronghold/rooms/hallway/NS");
-		this.hallSNFolder = PropertyFileHelper.getFileProperty(prop, "hallwaySNFolder", "stronghold/rooms/hallway/SN");
-		this.hallWEFolder = PropertyFileHelper.getFileProperty(prop, "hallwayWEFolder", "stronghold/rooms/hallway/WE");
-		this.stairEFolder = PropertyFileHelper.getFileProperty(prop, "stairEFolder", "stronghold/stairs/E");
-		this.stairNFolder = PropertyFileHelper.getFileProperty(prop, "stairNFolder", "stronghold/stairs/N");
-		this.stairSFolder = PropertyFileHelper.getFileProperty(prop, "stairSFolder", "stronghold/stairs/S");
-		this.stairWFolder = PropertyFileHelper.getFileProperty(prop, "stairWFolder", "stronghold/stairs/W");
+		this.curveENFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveENFolder", "stronghold/rooms/curves/EN");
+		this.curveESFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveESFolder", "stronghold/rooms/curves/ES");
+		this.curveNEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveNEFolder", "stronghold/rooms/curves/NE");
+		this.curveNWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveNWFolder", "stronghold/rooms/curves/NW");
+		this.curveSEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveSEFolder", "stronghold/rooms/curves/SE");
+		this.curveSWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveSWFolder", "stronghold/rooms/curves/SW");
+		this.curveWNFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveWNFolder", "stronghold/rooms/curves/WN");
+		this.curveWSFolder = PropertyFileHelper.getStructureFolderProperty(prop, "curveWSFolder", "stronghold/rooms/curves/WS");
+		this.hallEWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwayEWFolder", "stronghold/rooms/hallway/EW");
+		this.hallNSFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwayNSFolder", "stronghold/rooms/hallway/NS");
+		this.hallSNFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwaySNFolder", "stronghold/rooms/hallway/SN");
+		this.hallWEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "hallwayWEFolder", "stronghold/rooms/hallway/WE");
+		this.stairEFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairEFolder", "stronghold/stairs/E");
+		this.stairNFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairNFolder", "stronghold/stairs/N");
+		this.stairSFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairSFolder", "stronghold/stairs/S");
+		this.stairWFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairWFolder", "stronghold/stairs/W");
 
 		this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
 		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);

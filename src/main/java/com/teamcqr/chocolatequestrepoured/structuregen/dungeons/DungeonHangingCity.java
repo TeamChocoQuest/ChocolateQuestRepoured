@@ -49,8 +49,8 @@ public class DungeonHangingCity extends DungeonBase {
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 		this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
 
-		this.structureFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "floatingCity/islands");
-		this.centralStructureFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "floatingCity/centers");
+		this.structureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "floatingCity/islands");
+		this.centralStructureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centralStructureFolder", "floatingCity/centers");
 
 		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.getDefaultState());
 		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.getDefaultState());

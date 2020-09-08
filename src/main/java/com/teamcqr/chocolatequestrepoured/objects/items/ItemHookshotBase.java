@@ -119,7 +119,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 				stream = new FileInputStream(configFile.get());
 				hookshotConfig.load(stream);
 
-				String[] latchBlocks = PropertyFileHelper.getStringArrayProperty(hookshotConfig, "latchblocks", new String[] {});
+				String[] latchBlocks = PropertyFileHelper.getStringArrayProperty(hookshotConfig, "latchblocks", new String[0], true);
 				for (String blockType : latchBlocks) {
 					Optional<BlockGroup> groupMatch = BlockGroup.fromConfigString(blockType);
 					if (groupMatch.isPresent()) {

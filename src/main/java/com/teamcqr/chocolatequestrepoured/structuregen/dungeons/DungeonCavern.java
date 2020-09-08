@@ -94,7 +94,7 @@ public class DungeonCavern extends DungeonBase {
 		this.floorMaterial = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.STONE.getDefaultState());
 
 		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airblock", Blocks.AIR.getDefaultState());
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD }, false);
 	}
 
 	@Override

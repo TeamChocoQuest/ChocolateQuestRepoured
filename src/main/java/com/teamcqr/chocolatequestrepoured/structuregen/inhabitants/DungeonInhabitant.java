@@ -31,8 +31,8 @@ public class DungeonInhabitant {
 
 	public DungeonInhabitant(Properties prop) {
 		this.name = prop.getProperty(ConfigKeys.KEY_NAME, "missingNo");
-		this.entityIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_ENTITY_ID_LIST, this.entityIDs);
-		this.bossIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_BOSS_ID_LIST, this.bossIDs);
+		this.entityIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_ENTITY_ID_LIST, this.entityIDs, true);
+		this.bossIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_BOSS_ID_LIST, this.bossIDs, true);
 		String tmp = prop.getProperty(ConfigKeys.KEY_BANNER, "UNUSED");
 		if (!tmp.equalsIgnoreCase("UNUSED")) {
 			this.assignedBanner = EBanners.valueOf(tmp);

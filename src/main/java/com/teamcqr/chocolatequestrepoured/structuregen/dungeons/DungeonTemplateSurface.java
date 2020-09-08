@@ -22,7 +22,7 @@ public class DungeonTemplateSurface extends DungeonBase {
 	public DungeonTemplateSurface(String name, Properties prop) {
 		super(name, prop);
 
-		this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structureFolder", "test");
+		this.structureFolderPath = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "test");
 		this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", this.rotateDungeon);
 	}
 

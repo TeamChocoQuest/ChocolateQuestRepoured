@@ -42,11 +42,11 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	public DungeonStrongholdOpen(String name, Properties prop) {
 		super(name, prop);
 
-		this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "strongholds/open/stairs");
-		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "strongholds/open/entrance/stairs");
-		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceBuildingFolder", "strongholds/open/entrance/buildings");
-		this.roomFolder = PropertyFileHelper.getFileProperty(prop, "roomFolder", "strongholds/open/rooms");
-		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "strongholds/open/boss");
+		this.stairFolder = PropertyFileHelper.getStructureFolderProperty(prop, "stairFolder", "strongholds/open/stairs");
+		this.entranceStairFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairFolder", "strongholds/open/entrance/stairs");
+		this.entranceBuildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceBuildingFolder", "strongholds/open/entrance/buildings");
+		this.roomFolder = PropertyFileHelper.getStructureFolderProperty(prop, "roomFolder", "strongholds/open/rooms");
+		this.bossRoomFolder = PropertyFileHelper.getStructureFolderProperty(prop, "bossRoomFolder", "strongholds/open/boss");
 
 		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
 		this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 4);

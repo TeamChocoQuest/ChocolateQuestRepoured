@@ -54,10 +54,11 @@ public abstract class DungeonBase {
 	protected String[] modDependencies = new String[0];
 	protected String[] dungeonDependencies = new String[0];
 
-	protected String dungeonMob;
-	protected boolean replaceBanners;
-	protected int underGroundOffset;
-	protected int yOffset;
+	protected int underGroundOffset = 0;
+	protected int yOffset = 0;
+
+	protected String dungeonMob = DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT;
+	protected boolean replaceBanners = true;
 
 	protected boolean buildSupportPlatform;
 	protected IBlockState supportBlock;
@@ -79,27 +80,28 @@ public abstract class DungeonBase {
 	public DungeonBase(String name, Properties prop) {
 		this.name = name;
 		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
-		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID);
-
-		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight);
-		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance);
-		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", this.spawnLimit);
-		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", this.allowedDims);
 		this.allowedInAllDims = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllDims", this.allowedInAllDims);
-		this.allowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "allowedBiomes", this.allowedBiomes);
-		this.allowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "allowedBiomeTypes", this.allowedBiomeTypes);
-		this.allowedInAllBiomes = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllBiomes", this.allowedInAllBiomes);
-		this.disallowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "disallowedBiomes", this.disallowedBiomes);
-		this.disallowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomeTypes", this.disallowedBiomeTypes);
-		this.lockedPositions = PropertyFileHelper.getBlockPosArrayProperty(prop, "lockedPositions", this.lockedPositions);
-		this.spawnOnlyBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", this.spawnOnlyBehindWall);
-		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "modDependencies", this.modDependencies);
-		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dungeonDependencies", this.dungeonDependencies);
+		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID, 0, 19);
 
-		this.dungeonMob = prop.getProperty("dummyReplacement", DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
-		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
-		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
-		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
+		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight, 0, Integer.MAX_VALUE);
+		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance, 0, 100);
+		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", this.spawnLimit, -1, Integer.MAX_VALUE);
+		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", this.allowedDims, true);
+		this.allowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "allowedBiomes", this.allowedBiomes, true);
+		this.allowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "allowedBiomeTypes", this.allowedBiomeTypes, true);
+		this.allowedInAllBiomes = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllBiomes", this.allowedInAllBiomes);
+		this.disallowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "disallowedBiomes", this.disallowedBiomes, true);
+		this.disallowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomeTypes", this.disallowedBiomeTypes, true);
+		this.lockedPositions = PropertyFileHelper.getBlockPosArrayProperty(prop, "lockedPositions", this.lockedPositions, true);
+		this.spawnOnlyBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", this.spawnOnlyBehindWall);
+		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "modDependencies", this.modDependencies, true);
+		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dungeonDependencies", this.dungeonDependencies, true);
+
+		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", this.underGroundOffset, 0, Integer.MAX_VALUE);
+		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", this.yOffset);
+
+		this.dungeonMob = prop.getProperty("dummyReplacement", this.dungeonMob);
+		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", this.replaceBanners);
 
 		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", Blocks.STONE.getDefaultState());
