@@ -1,17 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 public class CQRWeightedRandom<T> {
-	private class WeightedObject {
-		Object object;
-		int weight;
 
-		private WeightedObject(Object object, int weight) {
+	public static class WeightedObject<T> {
+		private T object;
+		private int weight;
+
+		public WeightedObject(T object, int weight) {
 			this.object = object;
 			this.weight = weight;
 		}
@@ -19,7 +21,7 @@ public class CQRWeightedRandom<T> {
 
 	private static final Random RAND = new Random();
 	private Random random;
-	private List<WeightedObject> items;
+	private List<WeightedObject<T>> items;
 	private int totalWeight = 0;
 
 	public CQRWeightedRandom() {
@@ -31,10 +33,29 @@ public class CQRWeightedRandom<T> {
 		this.items = new ArrayList<>();
 	}
 
+	@SafeVarargs
+	public CQRWeightedRandom(WeightedObject<T>... weightedObjects) {
+		this(RAND);
+		for (WeightedObject<T> weightedObject : weightedObjects) {
+			this.add(weightedObject);
+		}
+	}
+
+	public CQRWeightedRandom(Collection<WeightedObject<T>> weightedObjects) {
+		this(RAND);
+		for (WeightedObject<T> weightedObject : weightedObjects) {
+			this.add(weightedObject);
+		}
+	}
+
 	public void add(T item, int weight) {
-		if (weight > 0) {
-			this.totalWeight += weight;
-			this.items.add(new WeightedObject(item, weight));
+		this.add(new WeightedObject<T>(item, weight));
+	}
+
+	public void add(WeightedObject<T> weightedObject) {
+		if (weightedObject.weight > 0) {
+			this.totalWeight += weightedObject.weight;
+			this.items.add(weightedObject);
 		}
 	}
 
@@ -53,19 +74,24 @@ public class CQRWeightedRandom<T> {
 			if (this.totalWeight > 0) {
 				int seed = this.random.nextInt(this.totalWeight);
 				int total = 0;
-				for (WeightedObject item : this.items) {
+				for (WeightedObject<T> item : this.items) {
 					total += item.weight;
 					if (total > seed) {
-						return (T) item.object;
+						return item.object;
 					}
 				}
 
 				return null;
 			} else {
-				return (T) this.items.get(0);
+				return this.items.get(0).object;
 			}
 		} else {
 			return null;
 		}
 	}
+
+	public CQRWeightedRandom<T> copy() {
+		return new CQRWeightedRandom<>(this.items);
+	}
+
 }

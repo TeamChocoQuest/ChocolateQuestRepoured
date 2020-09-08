@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -398,31 +396,40 @@ public class PropertyFileHelper {
 		return retArr;
 	}
 
-	public static List<WeightedItem<IBlockState>> getWeightedBlockStateList(Properties prop, String key, List<WeightedItem<IBlockState>> defVal) {
+	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal, boolean allowEmpty) {
 		String s = prop.getProperty(key);
-		if (s == null || s.isEmpty()) {
+		if (s == null) {
 			return defVal;
 		}
 
-		String[] stringArray1 = s.split(";");
-		List<WeightedItem<IBlockState>> list = new ArrayList<>(stringArray1.length);
-		for (String string : stringArray1) {
-			String[] stringArray2 = string.split(",");
-			if (stringArray2.length >= 2) {
-				IBlockState state = getBlockStateFromString(stringArray2[0], null);
+		s = s.trim();
+		if (!allowEmpty && s.isEmpty()) {
+			return defVal;
+		}
+
+		String[] splitStr1 = s.split(";");
+		CQRWeightedRandom<IBlockState> retList = new CQRWeightedRandom<>();
+		for (String string : splitStr1) {
+			String[] splitStr2 = string.split(",");
+			if (splitStr2.length >= 2) {
+				IBlockState state = getBlockStateFromString(splitStr2[0], null);
 				int weight = 0;
 				try {
-					weight = Integer.parseInt(stringArray2[1].trim());
+					weight = Integer.parseInt(splitStr2[1].trim());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 				if (state != null && weight > 0) {
-					list.add(new WeightedItem<>(state, weight));
+					retList.add(state, weight);
 				}
 			}
 		}
 
-		return list;
+		if (!allowEmpty && retList.numItems() == 0) {
+			return defVal;
+		}
+
+		return retList;
 	}
 
 	private static ResourceLocation getResourceLocationFromString(String s, ResourceLocation defVal) {

@@ -18,15 +18,14 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfoLootChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfoSpawner;
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.WeightedItem;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -42,10 +41,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	private final EStairSection startStairSection = StairCaseHelper.getRandomStartSection();
 
-	private final List<WeightedItem<IBlockState>> volcanoBlocks;
-	private final int volcanoBlocksTotalWeight;
-	private final List<WeightedItem<IBlockState>> volcanoBlocksWithLava;
-	private final int volcanoBlocksTotalWeightWithLava;
+	private final CQRWeightedRandom<IBlockState> volcanoBlocks;
+	private final CQRWeightedRandom<IBlockState> volcanoBlocksWithLava;
 
 	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon) {
 		super(world, pos, dungeon);
@@ -57,11 +54,9 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		this.caveHeight = (int) (this.volcanoHeight * 0.6D);
 		this.caveDepth = 30;
 
-		this.volcanoBlocks = new ArrayList<>(this.dungeon.getVolcanoBlocks());
-		this.volcanoBlocksTotalWeight = WeightedRandom.getTotalWeight(this.volcanoBlocks);
-		this.volcanoBlocksWithLava = new ArrayList<>(this.dungeon.getVolcanoBlocks());
-		this.volcanoBlocksWithLava.add(new WeightedItem<>(this.dungeon.getLavaBlock(), this.dungeon.getLavaWeight()));
-		this.volcanoBlocksTotalWeightWithLava = WeightedRandom.getTotalWeight(this.volcanoBlocksWithLava);
+		this.volcanoBlocks = this.dungeon.getVolcanoBlocks().copy();
+		this.volcanoBlocksWithLava = this.dungeon.getVolcanoBlocks().copy();
+		this.volcanoBlocksWithLava.add(new CQRWeightedRandom.WeightedObject<IBlockState>(this.dungeon.getLavaBlock(), this.dungeon.getLavaWeight()));
 	}
 
 	@Override
@@ -335,13 +330,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	}
 
 	private IBlockState getRandomVolcanoBlock() {
-		WeightedItem<IBlockState> weightedItem = WeightedRandom.getRandomItem(this.random, this.volcanoBlocks, this.volcanoBlocksTotalWeight);
-		return weightedItem != null ? weightedItem.item : Blocks.STONE.getDefaultState();
+		IBlockState state = this.volcanoBlocks.next();
+		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 
 	private IBlockState getRandomVolcanoBlockWithLava() {
-		WeightedItem<IBlockState> weightedItem = WeightedRandom.getRandomItem(this.random, this.volcanoBlocksWithLava, this.volcanoBlocksTotalWeightWithLava);
-		return weightedItem != null ? weightedItem.item : Blocks.STONE.getDefaultState();
+		IBlockState state = this.volcanoBlocksWithLava.next();
+		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 
 }

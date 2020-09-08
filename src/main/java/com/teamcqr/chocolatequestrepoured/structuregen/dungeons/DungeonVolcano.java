@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
@@ -10,9 +8,8 @@ import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
-import com.teamcqr.chocolatequestrepoured.structuregen.oldVolcano.GeneratorVolcanoOld;
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
-import com.teamcqr.chocolatequestrepoured.util.WeightedItem;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.state.IBlockState;
@@ -36,7 +33,7 @@ public class DungeonVolcano extends DungeonBase {
 	private boolean damagedVolcano = true;
 	private int maxHoleSize = 8;
 
-	private List<WeightedItem<IBlockState>> volcanoBlocks = Arrays.asList(new WeightedItem<>(Blocks.STONE.getDefaultState(), 1000));
+	private CQRWeightedRandom<IBlockState> volcanoBlocks = new CQRWeightedRandom<>(new CQRWeightedRandom.WeightedObject<>(Blocks.STONE.getDefaultState(), 1));
 	private IBlockState lavaBlock = Blocks.LAVA.getDefaultState();
 	private int lavaWeight = 10;
 	private IBlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
@@ -87,7 +84,7 @@ public class DungeonVolcano extends DungeonBase {
 		this.damagedVolcano = PropertyFileHelper.getBooleanProperty(prop, "damagedVolcano", this.damagedVolcano);
 		this.maxHoleSize = Math.max(PropertyFileHelper.getIntProperty(prop, "maxHoleSize", this.maxHoleSize), 2);
 
-		this.volcanoBlocks = PropertyFileHelper.getWeightedBlockStateList(prop, "volcanoBlocks", this.volcanoBlocks);
+		this.volcanoBlocks = PropertyFileHelper.getWeightedBlockStateList(prop, "volcanoBlocks", this.volcanoBlocks, false);
 		this.lavaBlock = PropertyFileHelper.getBlockStateProperty(prop, "lavaBlock", this.lavaBlock);
 		this.lavaWeight = PropertyFileHelper.getIntProperty(prop, "lavaWeight", this.lavaWeight);
 		this.rampBlock = PropertyFileHelper.getBlockStateProperty(prop, "rampBlock", this.rampBlock);
@@ -223,8 +220,8 @@ public class DungeonVolcano extends DungeonBase {
 		return maxHoleSize;
 	}
 
-	public List<WeightedItem<IBlockState>> getVolcanoBlocks() {
 		return volcanoBlocks;
+	public CQRWeightedRandom<IBlockState> getVolcanoBlocks() {
 	}
 
 	public IBlockState getLavaBlock() {
