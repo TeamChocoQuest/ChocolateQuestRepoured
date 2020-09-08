@@ -43,7 +43,7 @@ public abstract class DungeonBase {
 	protected int chance = 0;
 	protected int spawnLimit = -1;
 	protected int[] allowedDims = new int[0];
-	protected boolean allowedInAllDims = false;
+	protected boolean allowedDimsAsBlacklist = false;
 	protected ResourceLocation[] allowedBiomes = new ResourceLocation[0];
 	protected String[] allowedBiomeTypes = new String[0];
 	protected boolean allowedInAllBiomes = false;
@@ -54,6 +54,7 @@ public abstract class DungeonBase {
 	protected String[] modDependencies = new String[0];
 	protected String[] dungeonDependencies = new String[0];
 
+	protected boolean treatWaterAsAir = false;
 	protected int underGroundOffset = 0;
 	protected int yOffset = 0;
 
@@ -80,13 +81,13 @@ public abstract class DungeonBase {
 	public DungeonBase(String name, Properties prop) {
 		this.name = name;
 		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
-		this.allowedInAllDims = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllDims", this.allowedInAllDims);
 		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID, 0, 19);
 
 		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight, 0, Integer.MAX_VALUE);
 		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance, 0, 100);
 		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", this.spawnLimit, -1, Integer.MAX_VALUE);
 		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", this.allowedDims, true);
+		this.allowedDimsAsBlacklist = PropertyFileHelper.getBooleanProperty(prop, "allowedDimsAsBlacklist", this.allowedDimsAsBlacklist);
 		this.allowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "allowedBiomes", this.allowedBiomes, true);
 		this.allowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "allowedBiomeTypes", this.allowedBiomeTypes, true);
 		this.allowedInAllBiomes = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllBiomes", this.allowedInAllBiomes);
@@ -97,6 +98,7 @@ public abstract class DungeonBase {
 		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "modDependencies", this.modDependencies, true);
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dungeonDependencies", this.dungeonDependencies, true);
 
+		this.treatWaterAsAir = PropertyFileHelper.getBooleanProperty(prop, "treatWaterAsAir", this.treatWaterAsAir);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", this.underGroundOffset, 0, Integer.MAX_VALUE);
 		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", this.yOffset);
 
@@ -133,7 +135,7 @@ public abstract class DungeonBase {
 		int y = 0;
 		for (int ix = 0; ix < 16; ix++) {
 			for (int iz = 0; iz < 16; iz++) {
-				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
+				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, this.treatWaterAsAir);
 			}
 		}
 		y >>= 8;
@@ -215,15 +217,12 @@ public abstract class DungeonBase {
 	}
 
 	public boolean isValidDim(int dim) {
-		if (this.allowedInAllDims) {
-			return true;
-		}
 		for (int i : this.allowedDims) {
 			if (i == dim) {
-				return true;
+				return !this.allowedDimsAsBlacklist;
 			}
 		}
-		return false;
+		return this.allowedDimsAsBlacklist;
 	}
 
 	public boolean isDungeonDependencyMissing(World world) {
