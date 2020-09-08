@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
-import java.util.Collection;
 import java.util.Properties;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorRandomizedCastle;
@@ -13,7 +11,6 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.EnumMCWoodType;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -73,7 +70,6 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		this.woodSlabBlock = PropertyFileHelper.getBlockStateProperty(prop, "woodSlabBlock", woodType.getSlabBlockState());
 		this.plankBlock = PropertyFileHelper.getBlockStateProperty(prop, "plankBlock", woodType.getPlankBlockState());
 		this.doorBlock = PropertyFileHelper.getBlockStateProperty(prop, "doorBlock", woodType.getDoorBlockState());
-		Collection<IProperty<?>> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
@@ -110,7 +106,6 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightSpire", 2);
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
-
 
 		this.windowTypeRandomizer = new CQRWeightedRandom<>(this.random);
 		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);

@@ -301,139 +301,143 @@ public abstract class DungeonBase {
 	}
 
 	public String getDungeonName() {
-		return name;
+		return this.name;
 	}
 
 	public int getIconID() {
-		return iconID;
+		return this.iconID;
 	}
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public int getWeight() {
-		return weight;
+		return this.weight;
 	}
 
 	public int getChance() {
-		return chance;
+		return this.chance;
 	}
 
 	public int getSpawnLimit() {
-		return spawnLimit;
+		return this.spawnLimit;
 	}
 
 	public int[] getAllowedDims() {
-		return allowedDims;
+		return this.allowedDims;
 	}
 
-	public boolean isAllowedInAllDims() {
-		return allowedInAllDims;
+	public boolean isAllowedDimsAsBlacklist() {
+		return this.allowedDimsAsBlacklist;
 	}
 
 	public ResourceLocation[] getAllowedBiomes() {
-		return allowedBiomes;
+		return this.allowedBiomes;
 	}
 
 	public String[] getAllowedBiomeTypes() {
-		return allowedBiomeTypes;
+		return this.allowedBiomeTypes;
 	}
 
 	public boolean isAllowedInAllBiomes() {
-		return allowedInAllBiomes;
+		return this.allowedInAllBiomes;
 	}
 
 	public ResourceLocation[] getDisallowedBiomes() {
-		return disallowedBiomes;
+		return this.disallowedBiomes;
 	}
 
 	public String[] getDisallowedBiomeTypes() {
-		return disallowedBiomeTypes;
+		return this.disallowedBiomeTypes;
 	}
 
 	public BlockPos[] getLockedPositions() {
-		return lockedPositions;
+		return this.lockedPositions;
 	}
 
 	public boolean doesSpawnOnlyBehindWall() {
-		return spawnOnlyBehindWall;
+		return this.spawnOnlyBehindWall;
 	}
 
 	public String[] getModDependencies() {
-		return modDependencies;
+		return this.modDependencies;
 	}
 
 	public String[] getDungeonDependencies() {
-		return dungeonDependencies;
+		return this.dungeonDependencies;
 	}
 
-	public String getDungeonMob() {
-		return dungeonMob;
-	}
-
-	public boolean replaceBanners() {
-		return replaceBanners;
+	public boolean treatWaterAsAir() {
+		return this.treatWaterAsAir;
 	}
 
 	public int getUnderGroundOffset() {
-		return underGroundOffset;
+		return this.underGroundOffset;
 	}
 
 	public int getYOffset() {
-		return yOffset;
+		return this.yOffset;
+	}
+
+	public String getDungeonMob() {
+		return this.dungeonMob;
+	}
+
+	public boolean replaceBanners() {
+		return this.replaceBanners;
 	}
 
 	public boolean doBuildSupportPlatform() {
-		return buildSupportPlatform;
+		return this.buildSupportPlatform;
 	}
 
 	public IBlockState getSupportBlock() {
-		return supportBlock;
+		return this.supportBlock;
 	}
 
 	public IBlockState getSupportTopBlock() {
-		return supportTopBlock;
+		return this.supportTopBlock;
 	}
 
 	public boolean isCoverBlockEnabled() {
-		return useCoverBlock;
+		return this.useCoverBlock;
 	}
 
 	public IBlockState getCoverBlock() {
-		return coverBlock;
+		return this.coverBlock;
 	}
 
 	public boolean isProtectionSystemEnabled() {
-		return enableProtectionSystem;
+		return this.enableProtectionSystem;
 	}
 
 	public boolean preventBlockPlacing() {
-		return preventBlockPlacing;
+		return this.preventBlockPlacing;
 	}
 
 	public boolean preventBlockBreaking() {
-		return preventBlockBreaking;
+		return this.preventBlockBreaking;
 	}
 
 	public boolean preventExplosionsTNT() {
-		return preventExplosionsTNT;
+		return this.preventExplosionsTNT;
 	}
 
 	public boolean preventExplosionsOther() {
-		return preventExplosionsOther;
+		return this.preventExplosionsOther;
 	}
 
 	public boolean preventFireSpreading() {
-		return preventFireSpreading;
+		return this.preventFireSpreading;
 	}
 
 	public boolean preventEntitySpawning() {
-		return preventEntitySpawning;
+		return this.preventEntitySpawning;
 	}
 
 	public boolean ignoreNoBossOrNexus() {
-		return ignoreNoBossOrNexus;
+		return this.ignoreNoBossOrNexus;
 	}
 
 }

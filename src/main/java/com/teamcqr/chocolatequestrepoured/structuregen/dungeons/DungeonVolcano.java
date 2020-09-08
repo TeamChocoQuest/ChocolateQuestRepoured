@@ -126,7 +126,7 @@ public class DungeonVolcano extends DungeonBase {
 
 	@Override
 	public AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z) {
-		return true ? new GeneratorVolcano(world, new BlockPos(x, y, z), this) : new GeneratorVolcanoOld(world, new BlockPos(x, y, z));
+		return new GeneratorVolcano(world, new BlockPos(x, y, z), this);
 	}
 
 	public File getRoomNBTFileForType(EStrongholdRoomType type) {
@@ -193,103 +193,103 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	public ResourceLocation getRampMob() {
-		return rampMob;
+		return this.rampMob;
 	}
 
 	public int getMinHeight() {
-		return minHeight;
+		return this.minHeight;
 	}
 
 	public int getMaxHeight() {
-		return maxHeight;
+		return this.maxHeight;
 	}
 
 	public int getInnerRadius() {
-		return innerRadius;
+		return this.innerRadius;
 	}
 
 	public double getSteepness() {
-		return steepness;
+		return this.steepness;
 	}
 
 	public boolean isVolcanoDamaged() {
-		return damagedVolcano;
+		return this.damagedVolcano;
 	}
 
 	public int getMaxHoleSize() {
-		return maxHoleSize;
+		return this.maxHoleSize;
 	}
 
-		return volcanoBlocks;
 	public CQRWeightedRandom<IBlockState> getVolcanoBlocks() {
+		return this.volcanoBlocks;
 	}
 
 	public IBlockState getLavaBlock() {
-		return lavaBlock;
+		return this.lavaBlock;
 	}
 
 	public int getLavaWeight() {
-		return lavaWeight;
+		return this.lavaWeight;
 	}
 
 	public IBlockState getRampBlock() {
-		return rampBlock;
+		return this.rampBlock;
 	}
 
 	public IBlockState getPillarBlock() {
-		return pillarBlock;
+		return this.pillarBlock;
 	}
 
 	public boolean doBuildStairs() {
-		return buildStairwell;
+		return this.buildStairwell;
 	}
 
 	public double getChestChance() {
-		return chestChance;
+		return this.chestChance;
 	}
 
 	public ResourceLocation[] getChestIDs() {
-		return chestIDs;
+		return this.chestIDs;
 	}
 
 	public boolean doBuildStronghold() {
-		return buildStronghold;
+		return this.buildStronghold;
 	}
 
 	public int getMinStrongholdFloors() {
-		return minStrongholdFloors;
+		return this.minStrongholdFloors;
 	}
 
 	public int getMaxStrongholdFloors() {
-		return maxStrongholdFloors;
+		return this.maxStrongholdFloors;
 	}
 
 	public int getMinStrongholdRadius() {
-		return minStrongholdRadius;
+		return this.minStrongholdRadius;
 	}
 
 	public int getMaxStrongholdRadius() {
-		return maxStrongholdRadius;
+		return this.maxStrongholdRadius;
 	}
 
 	public int getMinStrongholdRooms() {
-		return minStrongholdRooms;
+		return this.minStrongholdRooms;
 	}
 
 	public int getMaxStrongholdRooms() {
-		return maxStrongholdRooms;
+		return this.maxStrongholdRooms;
 	}
 
 	public int getRoomSizeX() {
-		return roomSizeX;
+		return this.roomSizeX;
 	}
 
 	public int getRoomSizeY() {
-		return roomSizeY;
+		return this.roomSizeY;
 	}
 
 	public int getRoomSizeZ() {
-		return roomSizeZ;
+		return this.roomSizeZ;
 	}
 
 }
