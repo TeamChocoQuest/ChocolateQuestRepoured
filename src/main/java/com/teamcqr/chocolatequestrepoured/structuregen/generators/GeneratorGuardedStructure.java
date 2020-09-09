@@ -54,7 +54,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int buildings = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
 		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder());
 		for (int i = 0; i < buildings; i++) {
-			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder())));
+			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder()));
 		}
 
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate
@@ -112,7 +112,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		CQStructure centerDun = this.loadStructureFromFile(this.centerStructure);
 
-		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + centerDun.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + centerDun.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		this.toGenerate.put(centerDun, this.pos);
 
 		// First, build all the support platforms
@@ -133,7 +133,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 					Rotation rot = Rotation.NONE;
 					int sizeX = structure.getSize().getX();
 					int sizeZ = structure.getSize().getZ();
-					this.rotList.set(i, rot);
+					this.rotList.add(rot);
 					if (false) {
 						switch (rot) {
 						case CLOCKWISE_90:
