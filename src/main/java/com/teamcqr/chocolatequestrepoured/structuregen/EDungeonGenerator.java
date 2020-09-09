@@ -3,10 +3,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGridCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonTemplateSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
@@ -24,11 +27,12 @@ public enum EDungeonGenerator {
 	LINEAR_STRONGHOLD(DungeonStrongholdLinear::new),
 	VEGETATED_CAVE(DungeonVegetatedCave::new),
 	
-	CAVERNS((name, prop) -> null),
+	CAVERNS(DungeonCavern::new),
+	OPEN_STRONGHOLD(DungeonStrongholdOpen::new),
+	GUARDED_CASTLE(DungeonGuardedCastle::new),
+
 	ABANDONED((name, prop) -> null),
-	RUIN((name, prop) -> null),
-	OPEN_STRONGHOLD((name, prop) -> null),
-	GUARDED_CASTLE((name, prop) -> null);
+	RUIN((name, prop) -> null);
 
 	private IDungeonGenerator generator;
 
