@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGridCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
@@ -26,8 +25,7 @@ public enum EDungeonGenerator {
 	HANGING_CITY(DungeonHangingCity::new),
 	LINEAR_STRONGHOLD(DungeonStrongholdLinear::new),
 	VEGETATED_CAVE(DungeonVegetatedCave::new),
-	
-	CAVERNS(DungeonCavern::new),
+
 	OPEN_STRONGHOLD(DungeonStrongholdOpen::new),
 	GUARDED_CASTLE(DungeonGuardedCastle::new),
 
