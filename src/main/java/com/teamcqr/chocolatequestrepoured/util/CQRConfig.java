@@ -116,7 +116,7 @@ public class CQRConfig {
 		public int   diamondGreatSwordHarvestLevel = 0;
 		public int	 diamondGreatSwordDurability = 1560;
 		public float diamondGreatSwordEfficiency = 0F;
-		public float diamondGreatSwordDamage = 0F;
+		public float diamondGreatSwordDamage = 5F;
 		public int   diamondGreatSwordEnchantability = 10;
 		
 		public int   ironGreatSwordHarvestLevel = 0;
