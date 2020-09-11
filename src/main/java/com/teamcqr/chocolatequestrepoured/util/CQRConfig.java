@@ -21,7 +21,8 @@ public class CQRConfig {
 	public static General general = new General();
 	public static Mobs mobs = new Mobs();
 	public static Wall wall = new Wall();
-
+	public static Materials materials = new Materials();
+	
 	public static class Advanced {
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = { "minecraft:bed", "minecraft:wooden_door", "minecraft:spruce_door", "minecraft:birch_door", "minecraft:jungle_door", "minecraft:acacia_door", "minecraft:dark_oak_door", "minecraft:iron_door", "minecraft:piston", "minecraft:sticky_piston", "minecraft:piston_head" };
@@ -70,6 +71,150 @@ public class CQRConfig {
 
 		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
 		public boolean multithreadedDungeonPreparation = true;
+	}
+	
+	public static class Materials {
+		//Armor values
+		public int armorStatDragonBase = 9;
+		public int armorStatCloudBase = 9;
+		public int armorStatBullBase = 7;
+		public int armorStatSpiderBase = 7;
+		public int armorStatSlimeBase = 6;
+		public int armorStatTurtleBase = 8;
+		public int armorStatHeavyDiamondBase = 9;
+		public int armorStatHeavyIronBase = 8;
+		public int armorStatInquisitionBase = 8;
+		public int armorStatBackpackBase = 3;
+		public int armorStatKingCrownBase = 9;
+
+		//Armor toughness values
+		public float toughnessStatCloud = 1;
+		public float toughnessStatDragon = 1;
+		public float toughnessStatBull = 1;
+		public float toughnessStatSpider = 1;
+		public float toughnessStatSlime = 1;
+		public float toughnessStatTurtle = 1;
+		public float toughnessStatHeavyDiamond = 4;
+		public float toughnessStatHeavyIron = 2;
+		public float toughnessStatBackpack = 0;
+		public float toughnessStatInquisition = 1;
+		public float toughnessStatKingCrown = 0.5F;
+		
+		//Tool materials
+		public int   monkingGreatSwordHarvestLevel = 0;
+		public int	 monkingGreatSwordDurability = 1560;
+		public float monkingGreatSwordEfficiency = 0F;
+		public float monkingGreatSwordDamage = 5F;
+		public int   monkingGreatSwordEnchantability = 10;
+		
+		public int   bullGreatSwordHarvestLevel = 0;
+		public int	 bullGreatSwordDurability = 1560;
+		public float bullGreatSwordEfficiency = 0F;
+		public float bullGreatSwordDamage = 5F;
+		public int   bullGreatSwordEnchantability = 10;
+		
+		public int   diamondGreatSwordHarvestLevel = 0;
+		public int	 diamondGreatSwordDurability = 1560;
+		public float diamondGreatSwordEfficiency = 0F;
+		public float diamondGreatSwordDamage = 0F;
+		public int   diamondGreatSwordEnchantability = 10;
+		
+		public int   ironGreatSwordHarvestLevel = 0;
+		public int	 ironGreatSwordDurability = 250;
+		public float ironGreatSwordEfficiency = 0F;
+		public float ironGreatSwordDamage = 4F;
+		public int   ironGreatSwordEnchantability = 14;
+		
+		public int   ironSpearHarvestLevel = 0;
+		public int	 ironSpearDurability = 250;
+		public float ironSpearEfficiency = 0F;
+		public float ironSpearDamage = 2F;
+		public int   ironSpearEnchantability = 7;
+		
+		public int   diamondSpearHarvestLevel = 0;
+		public int	 diamondSpearDurability = 1560;
+		public float diamondSpearEfficiency = 0F;
+		public float diamondSpearDamage = 3F;
+		public int   diamondSpearEnchantability = 10;
+		
+		public int   ironDaggerHarvestLevel = 0;
+		public int	 ironDaggerDurability = 250;
+		public float ironDaggerEfficiency = 0F;
+		public float ironDaggerDamage = 0.5F;
+		public int   ironDaggerEnchantability = 14;
+		
+		public int   diamondDaggerHarvestLevel = 0;
+		public int	 diamondDaggerDurability = 1560;
+		public float diamondDaggerEfficiency = 0F;
+		public float diamondDaggerDamage = 1.5F;
+		public int   diamondDaggerEnchantability = 10;
+		
+		public int   monkingDaggerHarvestLevel = 0;
+		public int	 monkingDaggerDurability = 1560;
+		public float monkingDaggerEfficiency = 0F;
+		public float monkingDaggerDamage = 2.5F;
+		public int   monkingDaggerEnchantability = 10;
+		
+		public int   ninjaDaggerHarvestLevel = 0;
+		public int	 ninjaDaggerDurability = 2048;
+		public float ninjaDaggerEfficiency = 0F;
+		public float ninjaDaggerDamage = 2.5F;
+		public int   ninjaDaggerEnchantability = 10;
+		
+		public int   bullBattleAxeHarvestLevel = 0;
+		public int	 bullBattleAxeDurability = 1560;
+		public float bullBattleAxeEfficiency = 0F;
+		public float bullBattleAxeDamage = 5F;
+		public int   bullBattleAxeEnchantability = 10;
+		
+		public int   turtleSwordHarvestLevel = 0;
+		public int	 turtleSwordDurability = 2048;
+		public float turtleSwordEfficiency = 0F;
+		public float turtleSwordDamage = 3F;
+		public int   turtleSwordEnchantability = 10;
+		
+		public int   spiderSwordHarvestLevel = 0;
+		public int	 spiderSwordDurability = 2048;
+		public float spiderSwordEfficiency = 0F;
+		public float spiderSwordDamage = 3F;
+		public int   spiderSwordEnchantability = 10;
+		
+		public int   moonlightHarvestLevel = 0;
+		public int	 moonlightDurability = 2048;
+		public float moonlightEfficiency = 0F;
+		public float moonlightDamage = 3F;
+		public int   moonlightEnchantability = 10;
+		
+		public int   sunshineHarvestLevel = 0;
+		public int	 sunshineDurability = 2048;
+		public float sunshineEfficiency = 0F;
+		public float sunshineDamage = 3F;
+		public int   sunshineEnchantability = 10;
+		
+		public int   walkerSwordHarvestLevel = 0;
+		public int	 walkerSwordDurability = 2048;
+		public float walkerSwordEfficiency = 0F;
+		public float walkerSwordDamage = 3F;
+		public int   walkerSwordEnchantability = 10;
+		
+		public int   musketIronHarvestLevel = 0;
+		public int	 musketIronDurability = 300;
+		public float musketIronEfficiency = 0F;
+		public float musketIronDamage = 0F;
+		public int   musketIronEnchantability = 14;
+		
+		public int   musketDiamondHarvestLevel = 0;
+		public int	 musketDiamondDurability = 300;
+		public float musketDiamondEfficiency = 0F;
+		public float musketDiamondDamage = 1F;
+		public int   musketDiamondEnchantability = 10;
+		
+		public int   musketMonkingHarvestLevel = 0;
+		public int	 musketMonkingDurability = 300;
+		public float musketMonkingEfficiency = 0F;
+		public float musketMonkingDamage = 3F;
+		public int   musketMonkingEnchantability = 10;
+		
 	}
 
 	public static class Bosses {
