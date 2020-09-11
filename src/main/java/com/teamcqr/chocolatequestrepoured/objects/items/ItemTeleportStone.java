@@ -10,6 +10,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -57,12 +58,13 @@ public class ItemTeleportStone extends Item {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLiving;
+		if (entityLiving instanceof EntityPlayerMP) {
+			EntityPlayerMP player = (EntityPlayerMP) entityLiving;
 
 			if (stack.hasTagCompound() && !player.isSneaking()) {
 				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z) && this.getMaxItemUseDuration(stack) - timeLeft >= 30) {
-					player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z));
+					//player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z));
+					player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
 					for (int i = 0; i < 30; i++) {
 						worldIn.spawnParticle(EnumParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 					}
