@@ -125,6 +125,9 @@ public class CQRMain {
 		}
 	};
 
+	public static final WorldDungeonGenerator DUNGEON_GENERATOR = new WorldDungeonGenerator();
+	public static final WorldWallGenerator WALL_GENERATOR = new WorldWallGenerator();
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
@@ -142,8 +145,8 @@ public class CQRMain {
 		// Enables Dungeon generation in worlds, do not change the number (!) and do NOT
 		// remove this line, moving it somewhere else is fine, but it must be called in
 		// pre initialization (!)
-		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
+		GameRegistry.registerWorldGenerator(DUNGEON_GENERATOR, 100);
+		GameRegistry.registerWorldGenerator(WALL_GENERATOR, 101);
 
 		// Instantiating enums
 		EBannerPatternsCQ.values();
