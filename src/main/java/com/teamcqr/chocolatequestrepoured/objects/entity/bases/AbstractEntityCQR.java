@@ -492,30 +492,37 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+		boolean flag = false;
+
 		if (!player.isSneaking()) {
 			if (player.isCreative() || this.getLeader() == player) {
 				if (!this.world.isRemote) {
 					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
-				return true;
-			} else if (!getFaction().isEnemy(player) && this.getTrades() != null && !this.getTrades().isEmpty()) {
-				// Player is NOT CREATIVE
-				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
-				return true;
-			}
-		} else {
-			if (!this.world.isRemote) {
-				if (player.isCreative() || !getFaction().isEnemy(player)) {
-					if (player.isCreative()) {
-						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
-					} else if (this.getTrades() != null && !this.getTrades().isEmpty()) {
-						player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
-					}
+				flag = true;
+			} else if (!getFaction().isEnemy(player) && !this.trades.isEmpty()) {
+				if (!this.world.isRemote) {
+					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
+				flag = true;
 			}
-			return true;
+		} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && !this.trades.isEmpty())) {
+			if (!this.world.isRemote) {
+				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+			}
+			flag = true;
 		}
-		return false;
+
+		if (flag && !this.getLookHelper().getIsLooking() && !this.hasPath()) {
+			double x1 = player.posX - this.posX;
+			double z1 = player.posZ - this.posZ;
+			float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
+			this.rotationYaw = yaw;
+			this.rotationYawHead = yaw;
+			this.renderYawOffset = yaw;
+		}
+
+		return flag;
 	}
 
 	@Override
