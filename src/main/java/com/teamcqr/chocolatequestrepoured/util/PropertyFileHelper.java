@@ -555,7 +555,7 @@ public class PropertyFileHelper {
 				int z = Integer.parseInt(splitStr[1].trim());
 				boolean spawnPointRelative = false;
 				if (splitStr.length >= 3) {
-					spawnPointRelative = Boolean.getBoolean(splitStr[2].trim());
+					spawnPointRelative = Boolean.valueOf(splitStr[2].trim());
 				}
 				return new DungeonSpawnPos(x, z, spawnPointRelative);
 			} catch (NumberFormatException e) {
