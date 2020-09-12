@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -27,11 +28,16 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		if (Boolean.TRUE.equals(TestThread.FINDING_SPAWN_POINT.get(world))) {
+			TestThread.add((WorldServer) world, chunkX, chunkZ);
+			return;
+		}
+
 		// Check if structures are enabled for this world
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			return;
 		}
-		
+
 		// Check for flat world type and if dungeons may spawn there
 		if (world.getWorldType() == WorldType.FLAT && !CQRConfig.general.dungeonsInFlat) {
 			return;
@@ -44,8 +50,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				CQRMain.logger.warn("Found {} location specific dungeons for chunkX={}, chunkZ={}!", locationSpecificDungeons.size(), chunkX, chunkZ);
 			}
 			for (DungeonBase dungeon : locationSpecificDungeons) {
-				for (BlockPos pos : dungeon.getLockedPositionsInChunk(chunkX, chunkZ)) {
-					dungeon.generate(world, pos.getX(), pos.getY(), pos.getZ());
+				for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositionsInChunk(world, chunkX, chunkZ)) {
+					dungeon.generate(world, dungeonSpawnPos.getX(world), dungeonSpawnPos.getZ(world));
 				}
 			}
 			return;

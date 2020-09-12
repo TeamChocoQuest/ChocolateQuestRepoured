@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonSpawnPos;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -49,7 +50,7 @@ public abstract class DungeonBase {
 	protected boolean allowedInAllBiomes = false;
 	protected ResourceLocation[] disallowedBiomes = new ResourceLocation[0];
 	protected String[] disallowedBiomeTypes = new String[0];
-	protected BlockPos[] lockedPositions = new BlockPos[0];
+	protected DungeonSpawnPos[] lockedPositions = new DungeonSpawnPos[0];
 	protected boolean spawnOnlyBehindWall = false;
 	protected String[] modDependencies = new String[0];
 	protected String[] dungeonDependencies = new String[0];
@@ -93,7 +94,7 @@ public abstract class DungeonBase {
 		this.allowedInAllBiomes = PropertyFileHelper.getBooleanProperty(prop, "allowedInAllBiomes", this.allowedInAllBiomes);
 		this.disallowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "disallowedBiomes", this.disallowedBiomes, true);
 		this.disallowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomeTypes", this.disallowedBiomeTypes, true);
-		this.lockedPositions = PropertyFileHelper.getBlockPosArrayProperty(prop, "lockedPositions", this.lockedPositions, true);
+		this.lockedPositions = PropertyFileHelper.getDungeonSpawnPosArrayProperty(prop, "lockedPositions", this.lockedPositions, true);
 		this.spawnOnlyBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", this.spawnOnlyBehindWall);
 		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "modDependencies", this.modDependencies, true);
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dungeonDependencies", this.dungeonDependencies, true);
@@ -204,7 +205,7 @@ public abstract class DungeonBase {
 		if (!this.isValidDim(world.provider.getDimension())) {
 			return false;
 		}
-		return this.isLockedPositionInChunk(chunkX, chunkZ);
+		return this.isLockedPositionInChunk(world, chunkX, chunkZ);
 	}
 
 	public boolean isModDependencyMissing() {
@@ -281,20 +282,20 @@ public abstract class DungeonBase {
 		return flag;
 	}
 
-	public boolean isLockedPositionInChunk(int chunkX, int chunkZ) {
-		for (BlockPos p : this.lockedPositions) {
-			if (p.getX() >> 4 == chunkX && p.getZ() >> 4 == chunkZ) {
+	public boolean isLockedPositionInChunk(World world, int chunkX, int chunkZ) {
+		for (DungeonSpawnPos dungeonSpawnPos : this.lockedPositions) {
+			if (dungeonSpawnPos.isInChunk(world, chunkX, chunkZ)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public List<BlockPos> getLockedPositionsInChunk(int chunkX, int chunkZ) {
-		List<BlockPos> list = new ArrayList<>();
-		for (BlockPos p : this.lockedPositions) {
-			if (p.getX() >> 4 == chunkX && p.getZ() >> 4 == chunkZ) {
-				list.add(p);
+	public List<DungeonSpawnPos> getLockedPositionsInChunk(World world, int chunkX, int chunkZ) {
+		List<DungeonSpawnPos> list = new ArrayList<>();
+		for (DungeonSpawnPos dungeonSpawnPos : this.lockedPositions) {
+			if (dungeonSpawnPos.isInChunk(world, chunkX, chunkZ)) {
+				list.add(dungeonSpawnPos);
 			}
 		}
 		return list;
@@ -352,7 +353,7 @@ public abstract class DungeonBase {
 		return this.disallowedBiomeTypes;
 	}
 
-	public BlockPos[] getLockedPositions() {
+	public DungeonSpawnPos[] getLockedPositions() {
 		return this.lockedPositions;
 	}
 

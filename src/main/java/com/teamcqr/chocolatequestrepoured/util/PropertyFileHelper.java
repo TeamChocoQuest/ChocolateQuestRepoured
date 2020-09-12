@@ -6,6 +6,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonSpawnPos;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -137,6 +138,20 @@ public class PropertyFileHelper {
 		}
 
 		return getBlockPosFromString(s, defVal);
+	}
+
+	public static DungeonSpawnPos getDungeonSpawnPosProperty(Properties prop, String key, DungeonSpawnPos defVal) {
+		String s = prop.getProperty(key);
+		if (s == null) {
+			return defVal;
+		}
+
+		s = s.trim();
+		if (s.isEmpty()) {
+			return defVal;
+		}
+
+		return getDungeonSpawnPosFromString(s, defVal);
 	}
 
 	public static File getStructureFolderProperty(Properties prop, String key, String defVal) {
@@ -396,6 +411,37 @@ public class PropertyFileHelper {
 		return retArr;
 	}
 
+	public static DungeonSpawnPos[] getDungeonSpawnPosArrayProperty(Properties prop, String key, DungeonSpawnPos[] defVal, boolean allowEmpty) {
+		String s = prop.getProperty(key);
+		if (s == null) {
+			return defVal;
+		}
+
+		s = s.trim();
+		if (!allowEmpty && s.isEmpty()) {
+			return defVal;
+		}
+
+		String[] splitStr = s.split(";");
+		DungeonSpawnPos[] retArr = new DungeonSpawnPos[splitStr.length];
+		int removed = 0;
+		for (int i = 0; i < splitStr.length; i++) {
+			DungeonSpawnPos dungeonSpawnPos = getDungeonSpawnPosFromString(splitStr[i], null);
+			if (dungeonSpawnPos != null) {
+				retArr[i - removed] = dungeonSpawnPos;
+			} else {
+				retArr = ArrayUtils.remove(retArr, i - removed);
+				removed++;
+			}
+		}
+
+		if (!allowEmpty && retArr.length == 0) {
+			return defVal;
+		}
+
+		return retArr;
+	}
+
 	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal, boolean allowEmpty) {
 		String s = prop.getProperty(key);
 		if (s == null) {
@@ -492,6 +538,26 @@ public class PropertyFileHelper {
 				int y = Integer.parseInt(splitStr[1].trim());
 				int z = Integer.parseInt(splitStr[2].trim());
 				return new BlockPos(x, y, z);
+			} catch (NumberFormatException e) {
+				// ignore
+			}
+		}
+
+		return defVal;
+	}
+
+	public static DungeonSpawnPos getDungeonSpawnPosFromString(String s, DungeonSpawnPos defVal) {
+		String[] splitStr = s.split(",");
+
+		if (splitStr.length >= 2) {
+			try {
+				int x = Integer.parseInt(splitStr[0].trim());
+				int z = Integer.parseInt(splitStr[1].trim());
+				boolean spawnPointRelative = false;
+				if (splitStr.length >= 3) {
+					spawnPointRelative = Boolean.getBoolean(splitStr[2].trim());
+				}
+				return new DungeonSpawnPos(x, z, spawnPointRelative);
 			} catch (NumberFormatException e) {
 				// ignore
 			}

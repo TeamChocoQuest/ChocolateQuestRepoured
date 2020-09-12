@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonSpawnPos;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
@@ -151,9 +152,9 @@ public class DungeonGenUtils {
 			if (!dungeon.isValidDim(dim)) {
 				continue;
 			}
-			for (BlockPos pos : dungeon.getLockedPositions()) {
-				int x = chunkX - pos.getX() >> 4;
-				int z = chunkZ - pos.getZ() >> 4;
+			for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositions()) {
+				int x = chunkX - dungeonSpawnPos.getX(world) >> 4;
+				int z = chunkZ - dungeonSpawnPos.getZ(world) >> 4;
 				if (x * x + z * z < dungeonSeparation * dungeonSeparation) {
 					return false;
 				}
