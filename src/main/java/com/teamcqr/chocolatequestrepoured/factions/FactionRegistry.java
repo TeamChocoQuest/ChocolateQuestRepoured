@@ -377,7 +377,7 @@ public class FactionRegistry {
 						}
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
-							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
+							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.getOrDefault(event.player.getPersistentID(), new ConcurrentHashMap<>());
 							repuDataList.forEach(new Consumer<NBTBase>() {
 
 								@Override
