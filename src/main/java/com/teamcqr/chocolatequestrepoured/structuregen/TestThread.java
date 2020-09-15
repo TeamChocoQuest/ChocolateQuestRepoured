@@ -21,7 +21,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @EventBusSubscriber(modid = Reference.MODID)
 public class TestThread extends Thread {
 
-	public static final ReflectionField<Boolean> FINDING_SPAWN_POINT = new ReflectionField<>(World.class, "", "findingSpawnPoint");
+	//@Meldexun: Please stop checking in changes that contain reflection without the obfuscated name included!!
+	public static final ReflectionField<Boolean> FINDING_SPAWN_POINT = new ReflectionField<>(World.class, "field_72987_B", "findingSpawnPoint");
 	private static final Map<Integer, TestThread> INSTANCES = new ConcurrentHashMap<>();
 	private final WorldServer world;
 	private final Queue<ChunkPos> chunkList = new ConcurrentLinkedQueue<>();
