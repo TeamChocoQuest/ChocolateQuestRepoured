@@ -73,17 +73,17 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	@Override
-	public void generate(World world, int x, int z) {
-		this.generate(world, x, this.posY, z);
+	public void generate(World world, int x, int z, Random rand) {
+		this.generate(world, x, this.posY, z, rand);
 	}
 
-	public File getRandomCentralBuilding() {
-		return this.getStructureFileFromDirectory(this.buildingFolder);
+	public File getRandomCentralBuilding(Random rand) {
+		return this.getStructureFileFromDirectory(this.buildingFolder, rand);
 	}
 
 	public IBlockState getVineBlock() {

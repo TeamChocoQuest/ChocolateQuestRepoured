@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
@@ -22,13 +23,13 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 
 	private CastleRoomSelector roomHelper;
 
-	public GeneratorRandomizedCastle(World world, BlockPos pos, DungeonRandomizedCastle dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorRandomizedCastle(World world, BlockPos pos, DungeonRandomizedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
-		this.roomHelper = new CastleRoomSelector(this.dungeon);
+		this.roomHelper = new CastleRoomSelector(this.dungeon, this.random);
 		this.roomHelper.randomizeCastle();
 
 		if (this.dungeon.doBuildSupportPlatform()) {
@@ -43,7 +44,7 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 
 	@Override
 	public void buildStructure() {
-		BlockStateGenArray genArray = new BlockStateGenArray();
+		BlockStateGenArray genArray = new BlockStateGenArray(this.random);
 		ArrayList<String> bossUuids = new ArrayList<>();
 		String mobType = this.dungeon.getDungeonMob();
 		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {

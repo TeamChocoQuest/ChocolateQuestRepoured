@@ -2,9 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
@@ -15,15 +14,10 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPla
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -51,8 +45,8 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	private int entranceSizeX = 0;
 	private int entranceSizeZ = 0;
 
-	public GeneratorStrongholdOpen(World world, BlockPos pos, DungeonStrongholdOpen dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorStrongholdOpen(World world, BlockPos pos, DungeonStrongholdOpen dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 		this.structureBounds = new Tuple<>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 
 		this.settings.setMirror(Mirror.NONE);
@@ -60,7 +54,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		this.settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		this.settings.setIntegrity(1.0F);
 
-		this.floors = new StrongholdFloorOpen[dungeon.getRandomFloorCount()];
+		this.floors = new StrongholdFloorOpen[dungeon.getRandomFloorCount(this.random)];
 		this.searchStructureBounds();
 		this.computeNotFittingStructures();
 	}
@@ -90,7 +84,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getYOffset(),0));
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
 
-		int rgd = this.getDungeon().getRandomRoomCountForFloor();
+		int rgd = this.getDungeon().getRandomRoomCountForFloor(this.random);
 		if (rgd < 2) {
 			rgd = 2;
 		}
@@ -107,19 +101,19 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			boolean isFirst = i == 0;
 			StrongholdFloorOpen floor = null;
 			if (isFirst) {
-				floor = new StrongholdFloorOpen(this, rgd, ((Double) Math.floor(rgd / 2)).intValue(), ((Double) Math.floor(rgd / 2)).intValue());
+				floor = new StrongholdFloorOpen(this, rgd, ((Double) Math.floor(rgd / 2)).intValue(), ((Double) Math.floor(rgd / 2)).intValue(), this.random);
 			} else {
-				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getFirst(), prevFloor.getExitStairIndexes().getSecond());
+				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getFirst(), prevFloor.getExitStairIndexes().getSecond(), this.random);
 			}
 			File stair = null;
 			if (isFirst) {
-				stair = this.dungeon.getEntranceStair();
+				stair = this.dungeon.getEntranceStair(this.random);
 				if (stair == null) {
 					CQRMain.logger.error("No entrance stair rooms for Stronghold Open Dungeon: {}", this.getDungeon().getDungeonName());
 					return;
 				}
 			} else {
-				stair = this.dungeon.getStairRoom();
+				stair = this.dungeon.getStairRoom(this.random);
 				if (stair == null) {
 					CQRMain.logger.error("No stair rooms for Stronghold Open Dungeon: {}", this.getDungeon().getDungeonName());
 					return;
@@ -154,7 +148,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 
 	@Override
 	public void buildStructure() {
-		File building = this.dungeon.getEntranceBuilding();
+		File building = this.dungeon.getEntranceBuilding(this.random);
 		String mobType = this.dungeon.getDungeonMob();
 		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();

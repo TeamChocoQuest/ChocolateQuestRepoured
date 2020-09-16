@@ -33,9 +33,6 @@ import net.minecraftforge.fml.common.Loader;
  */
 public abstract class DungeonBase {
 
-	// private CQFaction owningFaction
-	protected final Random random = new Random();
-
 	protected String name;
 	protected boolean enabled = true;
 	protected int iconID = 0;
@@ -129,40 +126,37 @@ public abstract class DungeonBase {
 		return this.name;
 	}
 
-	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z);
+	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand);
 
-	public void generate(World world, int x, int z) {
-		Chunk chunk = world.getChunk(x >> 4, z >> 4);
+	public void generate(World world, int x, int z, Random rand) {
+		int chunkStartX = x >> 4 << 4;
+		int chunkStartZ = z >> 4 << 4;
 		int y = 0;
 		for (int ix = 0; ix < 16; ix++) {
 			for (int iz = 0; iz < 16; iz++) {
-				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, this.treatWaterAsAir);
+				y += DungeonGenUtils.getYForPos(world, chunkStartX + ix, chunkStartZ + iz, this.treatWaterAsAir);
 			}
 		}
 		y >>= 8;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
-		this.generate(world, x, y, z);
+		this.generate(world, x, y, z, rand);
 	}
 
-	public void generate(World world, int x, int y, int z) {
-		if (CQRConfig.advanced.multithreadedDungeonPreparation) {
-			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z)).start();
-		} else {
-			this.createDungeonGenerator(world, x, y, z).generate();
-		}
+	public void generate(World world, int x, int y, int z, Random rand) {
+		new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z, rand)).start();
 	}
 
-	public void generateWithOffsets(World world, int x, int y, int z) {
+	public void generateWithOffsets(World world, int x, int y, int z, Random rand) {
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
-		this.generate(world, x, y, z);
+		this.generate(world, x, y, z, rand);
 	}
 
-	public File getStructureFileFromDirectory(File parentDir) {
+	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
 		if (!files.isEmpty()) {
-			return files.get(this.random.nextInt(files.size()));
+			return files.get(rand.nextInt(files.size()));
 		}
 		return null;
 	}

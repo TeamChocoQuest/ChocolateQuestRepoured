@@ -45,25 +45,25 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 	private Map<CQStructure, BlockPos> toGenerate = new HashMap<>();
 
-	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
 		int buildings = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
-		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder());
+		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder(), this.random);
 		for (int i = 0; i < buildings; i++) {
-			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder()));
+			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder(), this.random));
 		}
 
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate
 		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the
 		// remaining component and wander to the destination
-		int vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+		int vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random);
 		for (int i = 0; i < this.chosenStructures.size(); i++) {
 			if (!this.dungeon.placeInCircle() && i > 0) {
-				vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+				vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random);
 			}
 			Vec3i v = new Vec3i(vX, 0, 0);
 			Double degrees = ((Integer) new Random().nextInt(360)).doubleValue();

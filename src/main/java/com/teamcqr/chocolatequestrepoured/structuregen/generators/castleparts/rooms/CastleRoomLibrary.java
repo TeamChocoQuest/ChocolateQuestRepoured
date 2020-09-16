@@ -25,11 +25,11 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		CQRWeightedRandom<ShelfPattern> randomPattern = new CQRWeightedRandom<>(this.random);
+		CQRWeightedRandom<ShelfPattern> randomPattern = new CQRWeightedRandom<>();
 		randomPattern.add(ShelfPattern.LONG_VERTICAL, 1);
 		randomPattern.add(ShelfPattern.LONG_HORIZONTAL, 1);
 
-		this.pattern = randomPattern.next();
+		this.pattern = randomPattern.next(this.random);
 	}
 
 	@Override

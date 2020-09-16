@@ -59,10 +59,14 @@ public class BlockStateGenArray {
 		}
 	}
 
-	private Random random = new Random();
+	private final Random random;
 	private Map<BlockPos, PriorityBlockInfo> mainMap = new HashMap<>();
 	private Map<BlockPos, PriorityBlockInfo> postMap = new HashMap<>();
 	private Map<BlockPos, EntityInfo> entityMap = new HashMap<>();
+
+	public BlockStateGenArray(Random rand) {
+		this.random = rand;
+	}
 
 	public Random getRandom() {
 		return random;

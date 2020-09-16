@@ -106,14 +106,14 @@ public class CastleRoomSelector {
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoofBase> castleRoofs;
 
-	public CastleRoomSelector(DungeonRandomizedCastle dungeon) {
+	public CastleRoomSelector(DungeonRandomizedCastle dungeon, Random rand) {
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
 		this.roomSize = dungeon.getRoomSize();
 		this.floorsPerLayer = FLOORS_PER_LAYER;
 		this.maxFloors = this.floorsPerLayer * MAX_LAYERS;
 		this.minRoomsForBoss = (int) (Math.ceil((double) MIN_BOSS_ROOM_SIZE / (this.roomSize - 1)));
-		this.random = new Random();
+		this.random = rand;
 		this.castleRoofs = new ArrayList<>();
 		this.supportAreas = new ArrayList<>();
 
@@ -409,7 +409,7 @@ public class CastleRoomSelector {
 				cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
 			} else {
 				BlockPos startPos = cell.getOriginOffset().north().west();
-				castleRoofs.add(CastleRoofFactory.createRoof(dungeon.getRandomTowerRoofType(), startPos, tower.getRoomLengthX() + 1, tower.getRoomLengthZ() + 1));
+				castleRoofs.add(CastleRoofFactory.createRoof(dungeon.getRandomTowerRoofType(this.random), startPos, tower.getRoomLengthX() + 1, tower.getRoomLengthZ() + 1));
 			}
 		}
 	}
@@ -471,7 +471,7 @@ public class CastleRoomSelector {
 			int availableX = availableCells.sizeX;
 			int availableZ = availableCells.sizeZ;
 
-			EnumRoomType type = this.dungeon.getRandomRoom();
+			EnumRoomType type = this.dungeon.getRandomRoom(this.random);
 			int maxX = Math.min(type.getMaxXCells(), availableX);
 			int maxZ = Math.min(type.getMaxZCells(), availableZ);
 
@@ -1104,7 +1104,7 @@ public class CastleRoomSelector {
 		final int sizeX = (roofArea.sizeX * (this.roomSize + 1)) + 1;
 		final int sizeZ = (roofArea.sizeZ * (this.roomSize + 1)) + 1;
 
-		this.castleRoofs.add(CastleRoofFactory.createRoof(this.dungeon.getRandomRoofType(), roofStart, sizeX, sizeZ));
+		this.castleRoofs.add(CastleRoofFactory.createRoof(this.dungeon.getRandomRoofType(this.random), roofStart, sizeX, sizeZ));
 	}
 
 	private int getBossFloor() {

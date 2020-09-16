@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 
-	protected final Random random = new Random();
+	protected final Random random;
 	protected final World world;
 	protected final BlockPos pos;
 	protected final T dungeon;
@@ -27,7 +27,8 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 
 	// Why remove all parameters from the functions?!?!? Those were supposed to be all the same! It is even needed like that for some generators
 
-	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon) {
+	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon, Random rand) {
+		this.random = rand;
 		this.world = world;
 		this.pos = pos;
 		this.dungeon = dungeon;

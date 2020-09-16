@@ -213,7 +213,7 @@ public class CastleMainStructWall {
 		IBlockState blockToBuild;
 
 		EnumFacing iterDirection;
-		this.windowType = dungeon.getRandomWindowType();
+		this.windowType = dungeon.getRandomWindowType(genArray.getRandom());
 
 		if (this.orientation == WallOrientation.VERTICAL) {
 			iterDirection = EnumFacing.SOUTH;

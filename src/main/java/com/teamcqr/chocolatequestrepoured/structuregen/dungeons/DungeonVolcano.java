@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
@@ -125,11 +126,11 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorVolcano(world, new BlockPos(x, y, z), this);
+	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand);
 	}
 
-	public File getRoomNBTFileForType(EStrongholdRoomType type) {
+	public File getRoomNBTFileForType(EStrongholdRoomType type, Random rand) {
 		File dir = null;
 		switch (type) {
 		case BOSS:
@@ -187,7 +188,7 @@ public class DungeonVolcano extends DungeonBase {
 			break;
 		}
 		if (dir != null && dir.isDirectory() && dir.list(FileIOUtil.getNBTFileFilter()).length > 0) {
-			return this.getStructureFileFromDirectory(dir);
+			return this.getStructureFileFromDirectory(dir, rand);
 		}
 		return null;
 	}

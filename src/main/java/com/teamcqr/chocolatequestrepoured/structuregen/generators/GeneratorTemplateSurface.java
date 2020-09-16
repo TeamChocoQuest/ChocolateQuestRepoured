@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.io.File;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonTemplateSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
@@ -26,13 +27,13 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 	private PlacementSettings settings;
 	private BlockPos structurePos;
 
-	public GeneratorTemplateSurface(World world, BlockPos pos, DungeonTemplateSurface dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorTemplateSurface(World world, BlockPos pos, DungeonTemplateSurface dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	protected void preProcess() {
-		File file = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolderPath());
+		File file = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolderPath(), this.random);
 		if (file == null) {
 			throw new NullPointerException("No structure file found in folder " + this.dungeon.getStructureFolderPath());
 		}

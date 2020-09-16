@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorRandomizedCastle;
@@ -71,7 +72,7 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		this.plankBlock = PropertyFileHelper.getBlockStateProperty(prop, "plankBlock", woodType.getPlankBlockState());
 		this.doorBlock = PropertyFileHelper.getBlockStateProperty(prop, "doorBlock", woodType.getDoorBlockState());
 
-		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
+		this.roomRandomizer = new CQRWeightedRandom<>();
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
 		this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightArmory", 1);
@@ -91,7 +92,7 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightJailCell", 1);
 		this.roomRandomizer.add(EnumRoomType.JAIL, weight);
 
-		this.roofTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		this.roofTypeRandomizer = new CQRWeightedRandom<>();
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
 		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
@@ -99,7 +100,7 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightSpire", 0);
 		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
 
-		this.towerRoofTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		this.towerRoofTypeRandomizer = new CQRWeightedRandom<>();
 		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightTwoSided", 1);
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightFourSided", 1);
@@ -107,7 +108,7 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		weight = PropertyFileHelper.getIntProperty(prop, "towerRoofWeightSpire", 2);
 		this.towerRoofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.SPIRE, weight);
 
-		this.windowTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		this.windowTypeRandomizer = new CQRWeightedRandom<>();
 		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);
 		this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.BASIC_GLASS, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightCrossGlass", 1);
@@ -129,8 +130,8 @@ public class DungeonRandomizedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public IBlockState getMainBlockState() {
@@ -189,20 +190,20 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		return this.floorHeight;
 	}
 
-	public EnumRoomType getRandomRoom() {
-		return this.roomRandomizer.next();
+	public EnumRoomType getRandomRoom(Random rand) {
+		return this.roomRandomizer.next(rand);
 	}
 
-	public RandomCastleConfigOptions.RoofType getRandomRoofType() {
-		return this.roofTypeRandomizer.next();
+	public RandomCastleConfigOptions.RoofType getRandomRoofType(Random rand) {
+		return this.roofTypeRandomizer.next(rand);
 	}
 
-	public RandomCastleConfigOptions.RoofType getRandomTowerRoofType() {
-		return this.towerRoofTypeRandomizer.next();
+	public RandomCastleConfigOptions.RoofType getRandomTowerRoofType(Random rand) {
+		return this.towerRoofTypeRandomizer.next(rand);
 	}
 
-	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
-		return this.windowTypeRandomizer.next();
+	public RandomCastleConfigOptions.WindowType getRandomWindowType(Random rand) {
+		return this.windowTypeRandomizer.next(rand);
 	}
 
 	public int getMinBridgeLength() {
@@ -221,17 +222,17 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		return this.paintingChance;
 	}
 
-	public int randomizeRoomSpawnerCount() {
+	public int randomizeRoomSpawnerCount(Random rand) {
 		int numRolls;
 		int result = 0;
 		if (this.minSpawnerRolls >= this.maxSpawnerRolls) {
 			numRolls = this.minSpawnerRolls;
 		} else {
-			numRolls = DungeonGenUtils.randomBetween(this.minSpawnerRolls, this.maxSpawnerRolls);
+			numRolls = DungeonGenUtils.randomBetween(this.minSpawnerRolls, this.maxSpawnerRolls, rand);
 		}
 
 		for (int i = 0; i < numRolls; i++) {
-			if (DungeonGenUtils.percentageRandom(this.spawnerRollChance)) {
+			if (DungeonGenUtils.percentageRandom(this.spawnerRollChance, rand)) {
 				result++;
 			}
 		}

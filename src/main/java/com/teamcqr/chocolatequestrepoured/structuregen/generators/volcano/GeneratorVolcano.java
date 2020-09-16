@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
@@ -44,10 +45,10 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	private final CQRWeightedRandom<IBlockState> volcanoBlocks;
 	private final CQRWeightedRandom<IBlockState> volcanoBlocksWithLava;
 
-	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 
-		this.volcanoHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight());
+		this.volcanoHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight(), this.random);
 		this.steepness = dungeon.getSteepness();
 		this.minRadius = dungeon.getInnerRadius();
 
@@ -56,7 +57,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		this.volcanoBlocks = this.dungeon.getVolcanoBlocks().copy();
 		this.volcanoBlocksWithLava = this.dungeon.getVolcanoBlocks().copy();
-		this.volcanoBlocksWithLava.add(new CQRWeightedRandom.WeightedObject<IBlockState>(this.dungeon.getLavaBlock(), this.dungeon.getLavaWeight()));
+		this.volcanoBlocksWithLava.add(new CQRWeightedRandom.WeightedObject<>(this.dungeon.getLavaBlock(), this.dungeon.getLavaWeight()));
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
 				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && (!DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius - 2) || (iY == this.volcanoHeight + this.caveDepth - 1 && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadiusArray[iY])))) {
-						if (DungeonGenUtils.percentageRandom(0.05D)) {
+						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
 							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
 								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {
 									blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlockWithLava();
@@ -142,7 +143,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 					}
 
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						if (DungeonGenUtils.percentageRandom(0.05D)) {
+						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
 							this.forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
 								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == Blocks.AIR.getDefaultState()) {
 									blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
@@ -168,7 +169,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius) && StairCaseHelper.isLocationFine(stairSection, iX, iZ, outerStairRadius)) {
 							blocks[iX + r][y][iZ + r] = this.dungeon.getRampBlock();
 
-							if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius - 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius + 2) && DungeonGenUtils.percentageRandom(this.dungeon.getChestChance())) {
+							if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius - 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius + 2) && DungeonGenUtils.percentageRandom(this.dungeon.getChestChance(), this.random)) {
 								spawnerAndChestList.add(new BlockPos(iX, y - this.caveDepth + 1, iZ));
 							}
 						}
@@ -237,7 +238,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			}
 
 			for (BlockPos pos : list) {
-				this.forEachSpherePosition(pos, DungeonGenUtils.randomBetween(2, this.dungeon.getMaxHoleSize()), p -> {
+				this.forEachSpherePosition(pos, DungeonGenUtils.randomBetween(2, this.dungeon.getMaxHoleSize(), this.random), p -> {
 					if (this.isIndexValid(p.getX(), p.getY(), p.getZ(), blocks) && (blocks[p.getX()][p.getY()][p.getZ()] != null && blocks[p.getX()][p.getY()][p.getZ()] != Blocks.AIR.getDefaultState())) {
 						blocks[p.getX()][p.getY()][p.getZ()] = Blocks.AIR.getDefaultState();
 					}
@@ -311,7 +312,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				break;
 			}
 
-			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonGenerator, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world);
+			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonGenerator, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world, this.random);
 			entranceBuilder.generate(this.pos.getX(), this.pos.getZ(), mobType);
 			this.dungeonGenerator.addAll(entranceBuilder.getStrongholdParts());
 		}
@@ -330,12 +331,12 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	}
 
 	private IBlockState getRandomVolcanoBlock() {
-		IBlockState state = this.volcanoBlocks.next();
+		IBlockState state = this.volcanoBlocks.next(this.random);
 		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 
 	private IBlockState getRandomVolcanoBlockWithLava() {
-		IBlockState state = this.volcanoBlocksWithLava.next();
+		IBlockState state = this.volcanoBlocksWithLava.next(this.random);
 		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 

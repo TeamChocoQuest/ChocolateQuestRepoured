@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 
@@ -52,10 +53,9 @@ public class DungeonRegistry {
 		return null;
 	}
 
-	public CQRWeightedRandom<DungeonBase> getDungeonsForChunk(World world, int chunkX, int chunkZ) {
+	public CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, BlockPos pos) {
 		CQRWeightedRandom<DungeonBase> dungeonsForChunk = new CQRWeightedRandom<>();
-		BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
-		boolean isChunkBehindWall = CQRConfig.wall.enabled && chunkZ < -CQRConfig.wall.distance;
+		boolean isChunkBehindWall = CQRConfig.wall.enabled && (pos.getZ() >> 4) < -CQRConfig.wall.distance;
 
 		for (DungeonBase dungeon : this.dungeons) {
 			if (dungeon.canSpawnAtPos(world, pos, isChunkBehindWall)) {

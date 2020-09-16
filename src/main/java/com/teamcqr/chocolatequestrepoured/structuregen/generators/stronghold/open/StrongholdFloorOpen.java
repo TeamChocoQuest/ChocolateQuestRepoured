@@ -28,6 +28,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdFloorOpen {
 
+	private final Random random;
 	private GeneratorStrongholdOpen generator;
 	private BlockPos[][] roomGrid;
 	private Tuple<Integer, Integer> entranceStairBlockPosition;
@@ -42,25 +43,26 @@ public class StrongholdFloorOpen {
 	private boolean exitStairIsBossRoom = false;
 	private boolean isFirstFloor = false;
 
-	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount) {
-		this(generator, roomCount, new Random().nextInt(roomCount), new Random().nextInt(roomCount));
+	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount, Random rand) {
+		this(generator, roomCount, rand.nextInt(roomCount), rand.nextInt(roomCount), rand);
 	}
 
-	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount, int entranceStairIndexX, int entranceStairIndexZ) {
+	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount, int entranceStairIndexX, int entranceStairIndexZ, Random rand) {
 		this.generator = generator;
 		this.sideLength = roomCount;
 		this.roomGrid = new BlockPos[roomCount][roomCount];
+		this.random = rand;
 
-		int iX2, iZ2;
+		int iX2;
+		int iZ2;
 		this.entranceStairIndex = new Tuple<>(entranceStairIndexX, entranceStairIndexZ);
-		Random rdm = new Random();
-		iX2 = rdm.nextInt(roomCount);
-		iZ2 = rdm.nextInt(roomCount);
+		iX2 = this.random.nextInt(roomCount);
+		iZ2 = this.random.nextInt(roomCount);
 		while (iX2 == entranceStairIndexX) {
-			iX2 = rdm.nextInt(roomCount);
+			iX2 = this.random.nextInt(roomCount);
 		}
 		while (iZ2 == entranceStairIndexZ) {
-			iZ2 = rdm.nextInt(roomCount);
+			iZ2 = this.random.nextInt(roomCount);
 		}
 		this.exitStairIndex = new Tuple<>(iX2, iZ2);
 	}
@@ -72,7 +74,7 @@ public class StrongholdFloorOpen {
 	public void setEntranceStairPosition(@Nonnull File entranceStair, int x, int y, int z) {
 		this.entranceStair = entranceStair;
 		this.yPos = y;
-		this.entranceStairBlockPosition = new Tuple<Integer, Integer>(x, z);
+		this.entranceStairBlockPosition = new Tuple<>(x, z);
 		this.roomGrid[this.entranceStairIndex.getFirst()][this.entranceStairIndex.getSecond()] = new BlockPos(x, y, z);
 	}
 
@@ -128,15 +130,15 @@ public class StrongholdFloorOpen {
 						if (this.entranceStair != null) {
 							file = this.entranceStair;
 						} else if (this.isFirstFloor) {
-							file = this.generator.getDungeon().getEntranceStair();
+							file = this.generator.getDungeon().getEntranceStair(this.random);
 						} else {
-							file = this.generator.getDungeon().getStairRoom();
+							file = this.generator.getDungeon().getStairRoom(this.random);
 						}
 					} else {
-						file = this.generator.getDungeon().getRoom();
+						file = this.generator.getDungeon().getRoom(this.random);
 					}
 				} else if (this.exitStairIsBossRoom) {
-					file = this.generator.getDungeon().getBossRoom();
+					file = this.generator.getDungeon().getBossRoom(this.random);
 					this.exitStairIsBossRoom = false;
 				}
 
@@ -168,28 +170,23 @@ public class StrongholdFloorOpen {
 
 		// 1-2
 		for (BlockPos p12 : BlockPos.getAllInBoxMutable(p1, p2.add(0, addY, 0))) {
-			// world.setBlockState(p12, block);
 			stateMap.put(p12, state);
 		}
 		// 1-3
 		for (BlockPos p13 : BlockPos.getAllInBoxMutable(p1, p3.add(0, addY, 0))) {
-			// world.setBlockState(p13, block);
 			stateMap.put(p13, state);
 		}
 		// 4-2
 		for (BlockPos p42 : BlockPos.getAllInBoxMutable(p4, p2.add(0, addY, 0))) {
-			// world.setBlockState(p42, block);
 			stateMap.put(p42, state);
 		}
 		// 4-3
 		for (BlockPos p43 : BlockPos.getAllInBoxMutable(p4, p3.add(0, addY, 0))) {
-			// world.setBlockState(p43, block);
 			stateMap.put(p43, state);
 		}
 		// Top
 		for (BlockPos pT : BlockPos.getAllInBoxMutable(p1.add(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.add(0, addY, 0))) {
 			if (!(pT.getX() >= this.entranceStairCorners.getFirst().getX() && pT.getX() <= this.entranceStairCorners.getSecond().getX() && pT.getZ() >= this.entranceStairCorners.getFirst().getZ() && pT.getZ() <= this.entranceStairCorners.getSecond().getZ())) {
-				// world.setBlockState(pT, block);
 				stateMap.put(pT, state);
 			}
 		}
@@ -197,7 +194,6 @@ public class StrongholdFloorOpen {
 		for (BlockPos pB : BlockPos.getAllInBoxMutable(p1, p4)) {
 			if (this.exitStairIsBossRoom
 					|| (pB != null && this.exitStairCorners != null && !(pB.getX() >= this.exitStairCorners.getFirst().getX() && pB.getX() <= this.exitStairCorners.getSecond().getX() && pB.getZ() >= this.exitStairCorners.getFirst().getZ() && pB.getZ() <= this.exitStairCorners.getSecond().getZ()))) {
-				// world.setBlockState(pB, block);
 				stateMap.put(pB, state);
 			}
 		}

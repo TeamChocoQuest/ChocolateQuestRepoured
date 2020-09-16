@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.linear;
 
 import java.io.File;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
@@ -19,6 +20,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdFloor {
 
+	private final Random random;
 	private GeneratorStronghold generator;
 	private int sideLength;
 	private EStrongholdRoomType[][] roomPattern;
@@ -27,11 +29,12 @@ public class StrongholdFloor {
 	private boolean lastFloor;
 	private int lastX, lastZ;
 
-	public StrongholdFloor(int size, GeneratorStronghold generator, boolean isLastFloor) {
+	public StrongholdFloor(int size, GeneratorStronghold generator, boolean isLastFloor, Random rand) {
 		this.generator = generator;
 		this.sideLength = size;
 		this.lastFloor = isLastFloor;
 		this.roomPattern = new EStrongholdRoomType[size][size];
+		this.random = rand;
 	}
 
 	public void generateRoomPattern(int gridPosX, int gridPosZ, ESkyDirection prevFloorExitDir) {
@@ -151,7 +154,7 @@ public class StrongholdFloor {
 						y1 -= this.generator.getDungeon().getRoomSizeY();
 					}
 					BlockPos pos = new BlockPos(x, y1, z);
-					File struct = this.generator.getDungeon().getRoom(room);
+					File struct = this.generator.getDungeon().getRoom(room, this.random);
 					if (struct != null) {
 						CQStructure structure = this.generator.loadStructureFromFile(struct);
 						BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(pos, structure, settings);

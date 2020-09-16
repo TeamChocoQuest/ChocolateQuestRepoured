@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
@@ -19,7 +20,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -51,15 +51,15 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 	private CQStructure[][] structures;
 
-	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
 		// Calculate the grid for the buildings
-		int rowsX = this.dungeon.getXRows() >> 1;
-		int rowsZ = this.dungeon.getZRows() >> 1;
+		int rowsX = this.dungeon.getXRows(this.random) >> 1;
+		int rowsZ = this.dungeon.getZRows(this.random) >> 1;
 
 		this.structures = new CQStructure[(rowsX << 1) + 1][(rowsZ << 1) + 1];
 		this.gridPositions = new BlockPos[(rowsX << 1) + 1][(rowsZ << 1) + 1];
@@ -67,9 +67,9 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 			for (int iZ = -rowsZ; iZ <= rowsZ; iZ++) {
 				File file;
 				if (this.dungeon.centralBuildingIsSpecial() && iX == 0 && iZ == 0) {
-					file = this.dungeon.getRandomCentralBuilding();
+					file = this.dungeon.getRandomCentralBuilding(this.random);
 				} else {
-					file = this.dungeon.getRandomBuilding();
+					file = this.dungeon.getRandomBuilding(this.random);
 				}
 				CQStructure structure = this.loadStructureFromFile(file);
 				this.structures[iX + rowsX][iZ + rowsZ] = structure;
