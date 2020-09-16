@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
@@ -37,8 +39,8 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private int stairOpeningZStartIdx;
 	private int stairOpeningZEndIdx;
 
-	public CastleRoomBossLandingMain(int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomBossLandingMain(int sideLength, int height, EnumFacing doorSide, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);

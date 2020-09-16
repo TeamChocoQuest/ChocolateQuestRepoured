@@ -1,13 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
-	public CastleRoomWalkableRoofTower(int sideLength, int height, CastleRoomTowerSquare tower, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomWalkableRoofTower(int sideLength, int height, CastleRoomTowerSquare tower, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.WALKABLE_TOWER_ROOF;
 		this.pathable = false;
 		this.offsetX = tower.getOffsetX();

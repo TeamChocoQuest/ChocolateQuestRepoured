@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
@@ -17,8 +19,8 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	private Vec3i pillarOffset;
 	private EnumFacing firstStairSide;
 
-	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;
 		this.defaultFloor = false;

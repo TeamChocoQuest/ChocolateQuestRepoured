@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
@@ -28,8 +30,8 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	private Alignment alignment;
 	EnumFacing patternStartFacing;
 
-	public CastleRoomHallway(int sideLength, int height, Alignment alignment, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomHallway(int sideLength, int height, Alignment alignment, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.HALLWAY;
 		this.alignment = alignment;
 		this.defaultFloor = true;

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
@@ -22,8 +23,8 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 
 	private Alignment portalAlignment;
 
-	public CastleRoomNetherPortal(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomNetherPortal(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.PORTAL;
 		this.maxSlotsUsed = 1;
 		this.defaultCeiling = true;

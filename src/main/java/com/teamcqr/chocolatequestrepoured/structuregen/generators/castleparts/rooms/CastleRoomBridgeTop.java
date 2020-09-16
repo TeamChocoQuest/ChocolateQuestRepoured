@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
 import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
@@ -21,8 +22,8 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		}
 	}
 
-	public CastleRoomBridgeTop(int sideLength, int height, EnumFacing direction, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomBridgeTop(int sideLength, int height, EnumFacing direction, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.BRIDGE_TOP;
 		this.defaultCeiling = false;
 		this.defaultFloor = false;

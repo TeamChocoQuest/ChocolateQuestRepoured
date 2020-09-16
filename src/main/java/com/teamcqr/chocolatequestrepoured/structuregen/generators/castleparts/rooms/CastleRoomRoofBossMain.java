@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
@@ -38,8 +39,8 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
 	private DungeonRandomizedCastle dungeon;
 
-	public CastleRoomRoofBossMain(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomRoofBossMain(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.ROOF_BOSS_MAIN;
 		this.pathable = false;
 	}

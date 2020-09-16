@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
@@ -31,8 +32,8 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 	protected DecorationSelector decoSelector;
 	protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
-	CastleRoomDecoratedBase(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	CastleRoomDecoratedBase(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.decoSelector = new DecorationSelector();
 		this.possibleChestLocs = new HashMap<>();
 	}

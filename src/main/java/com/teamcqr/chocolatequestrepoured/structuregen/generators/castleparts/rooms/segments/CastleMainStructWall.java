@@ -115,7 +115,7 @@ public class CastleMainStructWall {
 		return Int.MaxValue();
 	}
 
-	public void determineIfEnabled() {
+	public void determineIfEnabled(Random rand) {
 		EnumFacing checkSide1;
 		EnumFacing checkSide2;
 

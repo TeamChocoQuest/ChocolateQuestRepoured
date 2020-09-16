@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
@@ -7,8 +9,8 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomAlchemyLab extends CastleRoomGenericBase {
-	public CastleRoomAlchemyLab(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomAlchemyLab(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.ALCHEMY_LAB;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

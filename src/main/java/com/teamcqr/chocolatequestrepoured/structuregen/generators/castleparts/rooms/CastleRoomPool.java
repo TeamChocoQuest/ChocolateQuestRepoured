@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
@@ -16,8 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
 public class CastleRoomPool extends CastleRoomDecoratedBase {
-	public CastleRoomPool(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomPool(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.POOL;
 		this.maxSlotsUsed = 1;
 		this.defaultCeiling = true;
