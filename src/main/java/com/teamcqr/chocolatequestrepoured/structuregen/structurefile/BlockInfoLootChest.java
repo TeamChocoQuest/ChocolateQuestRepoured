@@ -113,6 +113,8 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			return 2;
 		} else if (lootTable.equals(ModLoottables.CHESTS_MATERIAL)) {
 			return 3;
+		} else if (lootTable.equals(ModLoottables.CHESTS_CLUTTER)) {
+			return 32;
 		} else if (lootTable.equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)) {
 			return 4;
 		} else if (lootTable.equals(LootTableList.CHESTS_DESERT_PYRAMID)) {
@@ -161,6 +163,8 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			return ModLoottables.CHESTS_TREASURE;
 		case 3:
 			return ModLoottables.CHESTS_MATERIAL;
+		case 32:
+			return ModLoottables.CHESTS_CLUTTER;
 		case 4:
 			return LootTableList.CHESTS_ABANDONED_MINESHAFT;
 		case 5:
