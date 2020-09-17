@@ -24,7 +24,6 @@ public class DungeonGridCity extends DungeonBase {
 	private int minRowsZ = 5;
 	private int maxRowsZ = 7;
 	private int heightY = 31;
-	private int posY = 31;
 	private double bridgeSizeMultiplier = 1.2D;
 	// private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
@@ -43,7 +42,6 @@ public class DungeonGridCity extends DungeonBase {
 		this.maxRowsX = PropertyFileHelper.getIntProperty(prop, "maxRowsX", 7);
 		this.minRowsX = PropertyFileHelper.getIntProperty(prop, "minRowsZ", 5);
 		this.maxRowsZ = PropertyFileHelper.getIntProperty(prop, "maxRowsZ", 7);
-		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 31);
 		this.heightY = PropertyFileHelper.getIntProperty(prop, "height", 40);
 
 		// singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
@@ -58,11 +56,6 @@ public class DungeonGridCity extends DungeonBase {
 
 		this.buildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "nether_city_buildings");
 		this.centralBuildingsFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centralStructureFolder", "nether_city_buildings");
-	}
-
-	@Override
-	public void generate(World world, int x, int z, Random rand, boolean generateImmediately) {
-		this.generate(world, x, this.posY, z, rand, generateImmediately);
 	}
 
 	@Override

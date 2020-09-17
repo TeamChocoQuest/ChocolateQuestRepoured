@@ -30,7 +30,6 @@ public class DungeonHangingCity extends DungeonBase {
 	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
 	// private int bridgeChance = 20;
-	private int posY = 50; // lava level is 32 in the nether
 	private boolean buildChains = true;
 	// private boolean buildBridges = false;
 	private File structureFolder;
@@ -45,7 +44,6 @@ public class DungeonHangingCity extends DungeonBase {
 		this.maxIslandDistance = PropertyFileHelper.getIntProperty(prop, "maxIslandDistance", 30);
 		this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
 		this.heightVariation = PropertyFileHelper.getIntProperty(prop, "islandHeightVariation", 10);
-		this.posY = PropertyFileHelper.getIntProperty(prop, "yPosition", 50);
 
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 		this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
@@ -55,11 +53,6 @@ public class DungeonHangingCity extends DungeonBase {
 
 		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.getDefaultState());
 		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.getDefaultState());
-	}
-
-	@Override
-	public void generate(World world, int x, int z, Random rand, boolean generateImmediately) {
-		this.generate(world, x, this.posY, z, rand, generateImmediately);
 	}
 
 	@Override
@@ -135,10 +128,6 @@ public class DungeonHangingCity extends DungeonBase {
 	/*
 	 * public Block getBridgeBlock() { return this.bridgeBlock; }
 	 */
-
-	public int getPosY() {
-		return this.posY;
-	}
 
 	public int getMinIslandDistance() {
 		return this.minIslandDistance;

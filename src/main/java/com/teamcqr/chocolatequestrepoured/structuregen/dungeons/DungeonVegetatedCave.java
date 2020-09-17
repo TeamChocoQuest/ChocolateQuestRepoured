@@ -33,7 +33,6 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int tunnelCountMax = 5;
 	private int tunnelStartSize = 8;
 	private int caveSegmentCount = 8;
-	private int posY = 30;
 	private int vineChance = 20;
 	private ResourceLocation[] chestIDs;
 	private double vineLengthModifier = 2;
@@ -62,7 +61,6 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.placeBuilding = PropertyFileHelper.getBooleanProperty(prop, "placeBuilding", true);
 		this.buildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "buildingFolder", "caves/swamp");
 		this.centralCaveSize = PropertyFileHelper.getIntProperty(prop, "centralCaveSize", 15);
-		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 30);
 		this.tunnelCountMin = PropertyFileHelper.getIntProperty(prop, "tunnelCountMin", 3);
 		this.tunnelCountMax = PropertyFileHelper.getIntProperty(prop, "tunnelCountMax", 5);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
@@ -75,11 +73,6 @@ public class DungeonVegetatedCave extends DungeonBase {
 	@Override
 	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
 		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this, rand);
-	}
-
-	@Override
-	public void generate(World world, int x, int z, Random rand, boolean generateImmediately) {
-		this.generate(world, x, this.posY, z, rand, generateImmediately);
 	}
 
 	public File getRandomCentralBuilding(Random rand) {
