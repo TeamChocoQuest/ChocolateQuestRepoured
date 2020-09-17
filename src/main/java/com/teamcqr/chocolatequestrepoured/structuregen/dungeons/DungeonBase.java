@@ -128,7 +128,7 @@ public abstract class DungeonBase {
 
 	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand);
 
-	public void generate(World world, int x, int z, Random rand) {
+	public void generate(World world, int x, int z, Random rand, boolean generateImmediately) {
 		int chunkStartX = x >> 4 << 4;
 		int chunkStartZ = z >> 4 << 4;
 		int y = 0;
@@ -140,17 +140,21 @@ public abstract class DungeonBase {
 		y >>= 8;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
-		this.generate(world, x, y, z, rand);
+		this.generate(world, x, y, z, rand, generateImmediately);
 	}
 
-	public void generate(World world, int x, int y, int z, Random rand) {
-		new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z, rand)).start();
+	public void generate(World world, int x, int y, int z, Random rand, boolean generateImmediately) {
+		if (!generateImmediately && CQRConfig.advanced.multithreadedDungeonPreparation) {
+			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z, rand)).start();
+		} else {
+			this.createDungeonGenerator(world, x, y, z, rand).generate(generateImmediately);
+		}
 	}
 
-	public void generateWithOffsets(World world, int x, int y, int z, Random rand) {
+	public void generateWithOffsets(World world, int x, int y, int z, Random rand, boolean generateImmediately) {
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
-		this.generate(world, x, y, z, rand);
+		this.generate(world, x, y, z, rand, generateImmediately);
 	}
 
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {

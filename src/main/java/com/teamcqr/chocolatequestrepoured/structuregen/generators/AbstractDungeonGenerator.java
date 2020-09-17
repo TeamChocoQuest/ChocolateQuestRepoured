@@ -35,7 +35,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 		this.dungeonGenerator = new DungeonGenerator(world, pos, dungeon.getDungeonName());
 	}
 
-	public void generate() {
+	public void generate(boolean generateImmediately) {
 		if (this.world.isRemote) {
 			return;
 		}
@@ -46,7 +46,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 			this.preProcess();
 			this.buildStructure();
 			this.postProcess();
-			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon);
+			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon, generateImmediately);
 		} catch (Exception e) {
 			CQRMain.logger.error("Failed to prepare dungeon " + this.dungeon + " for generation at " + this.pos, e);
 		}

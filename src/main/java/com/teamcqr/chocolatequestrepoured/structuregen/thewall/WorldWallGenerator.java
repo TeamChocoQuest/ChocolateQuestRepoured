@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.thewall;
 
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHelper;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.IWallPart;
@@ -31,6 +32,10 @@ public class WorldWallGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
+			return;
+		}
+
 		if (!CQRConfig.wall.enabled || world.isRemote || world.provider.getDimension() != 0) {
 			return;
 		}
@@ -64,7 +69,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 			wallPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonGenerator);
 			railingPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonGenerator);
 
-			DungeonGenerationManager.addStructure(world, dungeonGenerator, null);
+			DungeonGenerationManager.addStructure(world, dungeonGenerator, null, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 		}
 
 	}

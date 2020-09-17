@@ -58,8 +58,8 @@ public class DungeonHangingCity extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int z, Random rand) {
-		this.generate(world, x, this.posY, z, rand);
+	public void generate(World world, int x, int z, Random rand, boolean generateImmediately) {
+		this.generate(world, x, this.posY, z, rand, generateImmediately);
 	}
 
 	@Override
