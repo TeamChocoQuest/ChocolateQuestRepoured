@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
@@ -35,7 +36,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 		this.dungeonGenerator = new DungeonGenerator(world, pos, dungeon.getDungeonName());
 	}
 
-	public void generate(boolean generateImmediately) {
+	public void generate(DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		if (this.world.isRemote) {
 			return;
 		}
@@ -46,7 +47,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 			this.preProcess();
 			this.buildStructure();
 			this.postProcess();
-			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon, generateImmediately);
+			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon, spawnType, generateImmediately);
 		} catch (Exception e) {
 			CQRMain.logger.error("Failed to prepare dungeon " + this.dungeon + " for generation at " + this.pos, e);
 		}

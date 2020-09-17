@@ -84,7 +84,7 @@ public class DungeonGenerationManager {
 		}
 	}
 
-	public static void addStructure(World world, DungeonGenerator structure, @Nullable DungeonBase dungeon, boolean generateImmediately) {
+	public static void addStructure(World world, DungeonGenerator structure, @Nullable DungeonBase dungeon, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		if (world != null && !world.isRemote) {
 			if (dungeon != null) {
 				structure.setupProtectedRegion(dungeon);
@@ -92,7 +92,7 @@ public class DungeonGenerationManager {
 			structure.setupLight();
 			structure.startGeneration();
 			if (dungeon != null) {
-				DungeonDataManager.addDungeonEntry(world, dungeon, structure.getPos());
+				DungeonDataManager.addDungeonEntry(world, dungeon, structure.getPos(), spawnType);
 			}
 			ProtectedRegionManager.getInstance(world).addProtectedRegion(structure.getProtectedRegion());
 			if (generateImmediately) {

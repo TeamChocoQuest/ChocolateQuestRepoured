@@ -131,7 +131,7 @@ public abstract class DungeonBase {
 
 	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand);
 
-	public void generate(World world, int x, int z, Random rand, boolean generateImmediately) {
+	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		int y = 0;
 		if (!this.fixedY) {
 			int chunkStartX = x >> 4 << 4;
@@ -147,23 +147,23 @@ public abstract class DungeonBase {
 			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		}
 		y -= this.getUnderGroundOffset();
-		this.generate(world, x, y, z, rand, generateImmediately);
+		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
 	}
 
-	public void generate(World world, int x, int y, int z, Random rand, boolean generateImmediately) {
+	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		if (!generateImmediately && CQRConfig.advanced.multithreadedDungeonPreparation) {
 			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z, rand)).start();
 		} else {
-			this.createDungeonGenerator(world, x, y, z, rand).generate(generateImmediately);
+			this.createDungeonGenerator(world, x, y, z, rand).generate(spawnType, generateImmediately);
 		}
 	}
 
-	public void generateWithOffsets(World world, int x, int y, int z, Random rand, boolean generateImmediately) {
+	public void generateWithOffsets(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		if (!this.fixedY) {
 			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		}
 		y -= this.getUnderGroundOffset();
-		this.generate(world, x, y, z, rand, generateImmediately);
+		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
 	}
 
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {

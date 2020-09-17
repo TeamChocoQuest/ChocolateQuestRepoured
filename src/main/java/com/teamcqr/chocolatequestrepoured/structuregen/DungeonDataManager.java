@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -18,7 +17,6 @@ import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,12 +24,54 @@ import net.minecraftforge.common.util.Constants;
 
 public class DungeonDataManager {
 
+	public static class DungeonInfo {
+		private BlockPos pos;
+		private DungeonSpawnType spawnType;
+
+		public DungeonInfo(BlockPos pos, DungeonSpawnType spawnType) {
+			this.pos = pos.toImmutable();
+			this.spawnType = spawnType;
+		}
+
+		public DungeonInfo(NBTTagCompound compound) {
+			this.readFromNBT(compound);
+		}
+
+		public NBTTagCompound writeToNBT() {
+			NBTTagCompound compound = new NBTTagCompound();
+			compound.setTag("pos", NBTUtil.createPosTag(this.pos));
+			compound.setInteger("spawnType", this.spawnType.ordinal());
+			return compound;
+		}
+
+		public void readFromNBT(NBTTagCompound compound) {
+			if (compound.hasKey("pos", Constants.NBT.TAG_COMPOUND)) {
+				this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
+			} else {
+				this.pos = NBTUtil.getPosFromTag(compound);
+			}
+			this.spawnType = DungeonSpawnType.values()[compound.getInteger("spawnType")];
+		}
+	}
+
+	public enum DungeonSpawnType {
+		DUNGEON_GENERATION, LOCKED_COORDINATE, DUNGEON_PLACER_ITEM;
+	}
+
 	private static final Map<World, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
+	private final Map<String, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
+	private final File file;
 	private boolean modifiedSinceLastSave = false;
-	private final Map<String, Set<BlockPos>> dungeonData = Collections.synchronizedMap(new HashMap<>());
-	protected final String DATA_FILE_NAME = "structures.nbt";
-	private File file;
+
+	public DungeonDataManager(World world) {
+		int dim = world.provider.getDimension();
+		if (dim == 0) {
+			this.file = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/structures.nbt");
+		} else {
+			this.file = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/structures.nbt");
+		}
+	}
 
 	public static void handleWorldLoad(World world) {
 		if (isWorldValid(world) && !INSTANCES.containsKey(world)) {
@@ -60,10 +100,10 @@ public class DungeonDataManager {
 		}
 	}
 
-	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position) {
+	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
 		if (isWorldValid(world)) {
 			try {
-				getInstance(world).insertDungeonEntry(dungeon.getDungeonName(), position);
+				getInstance(world).insertDungeonEntry(dungeon.getDungeonName(), position, spawnType);
 			} catch (NullPointerException npe) {
 				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
 			}
@@ -107,7 +147,7 @@ public class DungeonDataManager {
 		return this.dungeonData.keySet();
 	}
 
-	public static Set<BlockPos> getLocationsOfDungeon(World world, String dungeon) {
+	public static Set<DungeonInfo> getLocationsOfDungeon(World world, String dungeon) {
 		try {
 			return getInstance(world).getLocationsOfDungeon(dungeon);
 		} catch (NullPointerException npe) {
@@ -116,28 +156,14 @@ public class DungeonDataManager {
 		}
 	}
 
-	private Set<BlockPos> getLocationsOfDungeon(String dungeon) {
+	private Set<DungeonInfo> getLocationsOfDungeon(String dungeon) {
 		return this.dungeonData.getOrDefault(dungeon, new HashSet<>());
 	}
 
-	public DungeonDataManager(World world) {
-		int dim = world.provider.getDimension();
-		String path = world.getSaveHandler().getWorldDirectory().getAbsolutePath();
-		if (dim == 0) {
-			path += "/data/CQR/";
-		} else {
-			path += "/DIM" + dim + "/data/CQR/";
-		}
-		this.file = FileIOUtil.getOrCreateFile(path, this.DATA_FILE_NAME);
-	}
-
-	public void insertDungeonEntry(String dungeon, BlockPos location) {
-		Set<BlockPos> spawnedLocs = this.dungeonData.getOrDefault(dungeon, new HashSet<>());
-		if (spawnedLocs.add(location)) {
-			this.dungeonData.put(dungeon, spawnedLocs);
-			if (!this.modifiedSinceLastSave) {
-				this.modifiedSinceLastSave = true;
-			}
+	public void insertDungeonEntry(String dungeon, BlockPos location, DungeonSpawnType spawnType) {
+		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon, key -> new HashSet<>());
+		if (spawnedLocs.add(new DungeonInfo(location, spawnType))) {
+			this.modifiedSinceLastSave = true;
 		}
 	}
 
@@ -152,47 +178,38 @@ public class DungeonDataManager {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
 			NBTTagCompound root = new NBTTagCompound();
-			NBTTagList dungeonNames = FileIOUtil.getOrCreateTagList(root, "dungeons", Constants.NBT.TAG_STRING);
-			for (Map.Entry<String, Set<BlockPos>> data : this.dungeonData.entrySet()) {
-				if (!data.getValue().isEmpty()) {
-					NBTTagList locs = FileIOUtil.getOrCreateTagList(root, "dun-" + data.getKey(), Constants.NBT.TAG_COMPOUND);
-					for (BlockPos loc : data.getValue()) {
-						locs.appendTag(NBTUtil.createPosTag(loc));
+			for (Map.Entry<String, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
+				Set<DungeonInfo> dungeonInfos = data.getValue();
+				if (!dungeonInfos.isEmpty()) {
+					NBTTagList nbtTagList = new NBTTagList();
+					for (DungeonInfo dungeonInfo : dungeonInfos) {
+						nbtTagList.appendTag(dungeonInfo.writeToNBT());
 					}
-					dungeonNames.appendTag(new NBTTagString(data.getKey()));
+					root.setTag(data.getKey(), nbtTagList);
 				}
 			}
 			FileIOUtil.saveNBTCompoundToFile(root, this.file);
+
 			this.modifiedSinceLastSave = false;
 		}
 	}
 
 	public void readData() {
-		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(this.file);
-		NBTTagList dungeons = FileIOUtil.getOrCreateTagList(root, "dungeons", Constants.NBT.TAG_STRING);
-		dungeons.forEach(new Consumer<NBTBase>() {
+		this.dungeonData.clear();
 
-			@Override
-			public void accept(NBTBase t) {
-				if (t instanceof NBTTagString) {
-					NBTTagString tag = (NBTTagString) t;
-					String s = tag.getString();
-					Set<BlockPos> poss = DungeonDataManager.this.dungeonData.getOrDefault(s, new HashSet<>());
-					NBTTagList data = FileIOUtil.getOrCreateTagList(root, "dun-" + s, Constants.NBT.TAG_COMPOUND);
-					data.forEach(new Consumer<NBTBase>() {
-						@Override
-						public void accept(NBTBase t1) {
-							if (t1 instanceof NBTTagCompound) {
-								NBTTagCompound tag1 = (NBTTagCompound) t1;
-								poss.add(NBTUtil.getPosFromTag(tag1));
-							}
-						}
-					});
-					DungeonDataManager.this.dungeonData.put(s, poss);
-				}
+		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(this.file);
+		for (String key : root.getKeySet()) {
+			Set<DungeonInfo> dungeonInfos = new HashSet<>();
+			for (NBTBase nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
+				dungeonInfos.add(new DungeonInfo((NBTTagCompound) nbt));
 			}
-		});
+			if (!dungeonInfos.isEmpty()) {
+				String dungeonName = key.substring(0, 4).equals("dun-") ? key.substring(4) : key;
+				this.dungeonData.put(dungeonName, dungeonInfos);
+			}
+		}
 	}
 
 	public boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
@@ -202,11 +219,11 @@ public class DungeonDataManager {
 		if (this.dungeonData.isEmpty()) {
 			return false;
 		}
-		Set<BlockPos> spawnedLocs = this.dungeonData.getOrDefault(dungeon.getDungeonName(), new HashSet<>());
-		if (spawnedLocs.isEmpty()) {
+		Set<DungeonInfo> spawnedLocs = this.dungeonData.get(dungeon.getDungeonName());
+		if (spawnedLocs == null) {
 			return false;
 		}
-		return spawnedLocs.size() >= dungeon.getSpawnLimit();
+		return spawnedLocs.stream().filter(dungeonInfo -> dungeonInfo.spawnType == DungeonSpawnType.DUNGEON_GENERATION).count() >= dungeon.getSpawnLimit();
 	}
 
 }

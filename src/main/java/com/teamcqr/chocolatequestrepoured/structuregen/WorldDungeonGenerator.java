@@ -52,7 +52,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositionsInChunk(world, chunkX, chunkZ)) {
 					int x = dungeonSpawnPos.getX(world);
 					int z = dungeonSpawnPos.getZ(world);
-					dungeon.generate(world, x, z, new Random(getSeed(world, x, z)), DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+					dungeon.generate(world, x, z, new Random(getSeed(world, x, z)), DungeonDataManager.DungeonSpawnType.LOCKED_COORDINATE,DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 				}
 			}
 			return;
@@ -107,7 +107,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForPos(world, new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8));
 		DungeonBase dungeon = possibleDungeons.next(rand);
 		if (dungeon != null && DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
-			dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8, rand, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+			dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8, rand, DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 		}
 	}
 
