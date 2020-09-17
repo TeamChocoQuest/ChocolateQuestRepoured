@@ -49,8 +49,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private IBlockState[][][] centralCaveBlocks;
 	private String mobtype;
 
-	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	public void generateCenterStructure() {
 		// Well we need to place the building now to avoid that it gets overrun by mushrooms
 		if (this.dungeon.placeBuilding()) {
-			File file = this.dungeon.getRandomCentralBuilding();
+			File file = this.dungeon.getRandomCentralBuilding(this.random);
 			if (file != null) {
 				CQStructure structure = this.loadStructureFromFile(file);
 				int pY = this.getLowestY(this.centralCaveBlocks, structure.getSize().getX() / 2, structure.getSize().getZ() / 2, this.pos.getY());
@@ -469,8 +469,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 						vE = vE.down();
 						vS = vS.down();
 						vW = vW.down();
-						if (this.blocks.getOrDefault(vN, airState) != airState || this.blocks.getOrDefault(vE, airState) != airState || this.blocks.getOrDefault(vS, airState) != airState
-								|| this.blocks.getOrDefault(vW, airState) != airState) {
+						if (this.blocks.getOrDefault(vN, airState) != airState || this.blocks.getOrDefault(vE, airState) != airState || this.blocks.getOrDefault(vS, airState) != airState || this.blocks.getOrDefault(vW, airState) != airState) {
 							break;
 						}
 					} else {

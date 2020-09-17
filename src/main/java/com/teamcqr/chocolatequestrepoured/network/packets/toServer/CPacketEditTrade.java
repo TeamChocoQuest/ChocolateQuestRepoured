@@ -70,8 +70,8 @@ public class CPacketEditTrade implements IMessage {
 		ByteBufUtils.writeUTF8String(buf, this.advancement);
 		buf.writeBoolean(this.stock);
 		buf.writeInt(this.restock);
-		buf.writeInt(inStock);
-		buf.writeInt(maxStock);
+		buf.writeInt(this.inStock);
+		buf.writeInt(this.maxStock);
 	}
 
 	public int getEntityId() {
@@ -91,19 +91,19 @@ public class CPacketEditTrade implements IMessage {
 	}
 
 	public String getReputation() {
-		return reputation;
+		return this.reputation;
 	}
 
 	public String getAdvancement() {
-		return advancement;
+		return this.advancement;
 	}
 
 	public boolean isStock() {
-		return stock;
+		return this.stock;
 	}
 
 	public int getRestock() {
-		return restock;
+		return this.restock;
 	}
 
 	public int getInStock() {

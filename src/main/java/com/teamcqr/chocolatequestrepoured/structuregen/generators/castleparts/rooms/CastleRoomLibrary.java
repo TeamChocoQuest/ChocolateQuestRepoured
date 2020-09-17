@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
@@ -18,18 +20,18 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 	private int shelfZLen = 0;
 	private int shelfHeight = 0;
 
-	public CastleRoomLibrary(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomLibrary(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.LIBRARY;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		CQRWeightedRandom<ShelfPattern> randomPattern = new CQRWeightedRandom<>(this.random);
+		CQRWeightedRandom<ShelfPattern> randomPattern = new CQRWeightedRandom<>();
 		randomPattern.add(ShelfPattern.LONG_VERTICAL, 1);
 		randomPattern.add(ShelfPattern.LONG_HORIZONTAL, 1);
 
-		this.pattern = randomPattern.next();
+		this.pattern = randomPattern.next(this.random);
 	}
 
 	@Override

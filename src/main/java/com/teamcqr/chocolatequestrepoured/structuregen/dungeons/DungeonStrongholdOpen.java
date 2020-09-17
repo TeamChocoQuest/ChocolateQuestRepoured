@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
@@ -61,8 +62,8 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public File getStairFolder() {
@@ -105,32 +106,32 @@ public class DungeonStrongholdOpen extends DungeonBase {
 		this.roomFolder = roomFolder;
 	}
 
-	public int getRandomFloorCount() {
-		return DungeonGenUtils.randomBetween(this.minFloors, this.maxFloors);
+	public int getRandomFloorCount(Random rand) {
+		return DungeonGenUtils.randomBetween(this.minFloors, this.maxFloors, rand);
 	}
 
-	public int getRandomRoomCountForFloor() {
-		return DungeonGenUtils.randomBetween(this.minRoomsPerFloor, this.maxRoomsPerFloor);
+	public int getRandomRoomCountForFloor(Random rand) {
+		return DungeonGenUtils.randomBetween(this.minRoomsPerFloor, this.maxRoomsPerFloor, rand);
 	}
 
-	public File getBossRoom() {
-		return this.getStructureFileFromDirectory(this.bossRoomFolder);
+	public File getBossRoom(Random rand) {
+		return this.getStructureFileFromDirectory(this.bossRoomFolder, rand);
 	}
 
-	public File getRoom() {
-		return this.getStructureFileFromDirectory(this.roomFolder);
+	public File getRoom(Random rand) {
+		return this.getStructureFileFromDirectory(this.roomFolder, rand);
 	}
 
-	public File getStairRoom() {
-		return this.getStructureFileFromDirectory(this.stairFolder);
+	public File getStairRoom(Random rand) {
+		return this.getStructureFileFromDirectory(this.stairFolder, rand);
 	}
 
-	public File getEntranceBuilding() {
-		return this.getStructureFileFromDirectory(this.entranceBuildingFolder);
+	public File getEntranceBuilding(Random rand) {
+		return this.getStructureFileFromDirectory(this.entranceBuildingFolder, rand);
 	}
 
-	public File getEntranceStair() {
-		return this.getStructureFileFromDirectory(this.entranceStairFolder);
+	public File getEntranceStair(Random rand) {
+		return this.getStructureFileFromDirectory(this.entranceStairFolder, rand);
 	}
 
 	public int getRoomSizeX() {

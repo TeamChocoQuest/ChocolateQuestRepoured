@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
@@ -27,8 +28,8 @@ public class DungeonTemplateSurface extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonTemplateSurface> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorTemplateSurface(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonTemplateSurface> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorTemplateSurface(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public File getStructureFolderPath() {

@@ -30,7 +30,7 @@ public class DungeonGeneratorThread extends Thread {
 
 	@Override
 	public void run() {
-		this.dungeonGenerator.generate();
+		this.dungeonGenerator.generate(DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, false);
 		if (DUNGEON_GENERATOR_THREADS.containsKey(this.dim)) {
 			DUNGEON_GENERATOR_THREADS.get(this.dim).remove(this);
 		}

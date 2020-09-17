@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
@@ -9,8 +11,8 @@ import net.minecraft.item.EnumDyeColor;
 public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
 
-	public CastleRoomBedroomBasic(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomBedroomBasic(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.BEDROOM_BASIC;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

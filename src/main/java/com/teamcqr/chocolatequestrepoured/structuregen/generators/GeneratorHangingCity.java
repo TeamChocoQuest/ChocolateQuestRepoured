@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -35,8 +36,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon) {
-		super(world, pos.up(8), dungeon);
+	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
@@ -51,7 +52,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		// DONE: Carve out cave -> Need to specify the height in the dungeon
 		for (int i = 0; i < this.islandCount; i++) {
 			BlockPos nextIslandPos = this.getNextIslandPos(this.pos, i);
-			File file = this.dungeon.pickStructure();
+			File file = this.dungeon.pickStructure(this.random);
 			CQStructure structure = this.loadStructureFromFile(file);
 
 			this.structureMap.put(nextIslandPos, structure);
@@ -63,7 +64,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			}
 		}
 
-		CQStructure structure = this.loadStructureFromFile(this.dungeon.pickCentralStructure());
+		CQStructure structure = this.loadStructureFromFile(this.dungeon.pickCentralStructure(this.random));
 		this.structureMap.put(this.pos, structure);
 		if (this.dungeon.digAirCave()) {
 			int radius = structure != null ? 2 * Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
@@ -108,7 +109,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		}
 		double angle = this.islandCount >= 10 ? 36D : 360D / this.islandCount;
 		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * angle));
-		retPos = retPos.add(0, this.dungeon.getRandomHeightVariation(), 0);
+		retPos = retPos.add(0, this.dungeon.getRandomHeightVariation(this.random), 0);
 		return retPos;
 	}
 

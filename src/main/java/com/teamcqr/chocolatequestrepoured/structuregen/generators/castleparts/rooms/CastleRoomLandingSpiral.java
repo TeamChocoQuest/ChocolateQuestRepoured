@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
@@ -12,8 +14,8 @@ import net.minecraft.util.math.BlockPos;
 public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
-	public CastleRoomLandingSpiral(int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomLandingSpiral(int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.LANDING_SPIRAL;
 		this.stairsBelow = stairsBelow;
 		this.defaultCeiling = true;

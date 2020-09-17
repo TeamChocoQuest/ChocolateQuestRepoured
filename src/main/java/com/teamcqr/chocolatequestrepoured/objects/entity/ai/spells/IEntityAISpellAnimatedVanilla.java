@@ -2,10 +2,10 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 public interface IEntityAISpellAnimatedVanilla {
 
-	public float getRed();
+	float getRed();
 
-	public float getGreen();
+	float getGreen();
 
-	public float getBlue();
+	float getBlue();
 
 }

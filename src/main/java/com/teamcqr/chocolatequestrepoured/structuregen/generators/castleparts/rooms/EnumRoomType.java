@@ -62,7 +62,7 @@ public enum EnumRoomType {
 
 	public boolean isBossRoom() {
 		return this.boss;
-	};
+	}
 
 	public Vec3i getMaxDimensions() {
 		return this.maxSize;

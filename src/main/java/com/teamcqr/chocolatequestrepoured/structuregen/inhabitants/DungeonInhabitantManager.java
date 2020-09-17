@@ -148,7 +148,7 @@ public class DungeonInhabitantManager {
 
 	private DungeonInhabitant getInhabitantByDistance(World world, int blockX, int blockZ) {
 		if (this.distantMapping.isEmpty()) {
-			return (DungeonInhabitant) this.inhabitantMapping.values().toArray()[this.random.nextInt(this.inhabitantMapping.values().size())];
+			return (DungeonInhabitant) this.inhabitantMapping.values().toArray()[this.random.nextInt(this.inhabitantMapping.size())];
 		}
 		BlockPos spawnPoint = world.getSpawnPoint();
 		int x1 = blockX - spawnPoint.getX();

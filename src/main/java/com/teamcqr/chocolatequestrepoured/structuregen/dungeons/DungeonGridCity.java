@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGridCity;
@@ -23,7 +24,6 @@ public class DungeonGridCity extends DungeonBase {
 	private int minRowsZ = 5;
 	private int maxRowsZ = 7;
 	private int heightY = 31;
-	private int posY = 31;
 	private double bridgeSizeMultiplier = 1.2D;
 	// private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
@@ -42,7 +42,6 @@ public class DungeonGridCity extends DungeonBase {
 		this.maxRowsX = PropertyFileHelper.getIntProperty(prop, "maxRowsX", 7);
 		this.minRowsX = PropertyFileHelper.getIntProperty(prop, "minRowsZ", 5);
 		this.maxRowsZ = PropertyFileHelper.getIntProperty(prop, "maxRowsZ", 7);
-		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 31);
 		this.heightY = PropertyFileHelper.getIntProperty(prop, "height", 40);
 
 		// singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
@@ -60,13 +59,8 @@ public class DungeonGridCity extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int z) {
-		this.generate(world, x, this.posY, z);
-	}
-
-	@Override
-	public AbstractDungeonGenerator<DungeonGridCity> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorGridCity(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonGridCity> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorGridCity(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public int getCaveHeight() {
@@ -85,12 +79,12 @@ public class DungeonGridCity extends DungeonBase {
 		return this.airBlockForPocket;
 	}
 
-	public int getXRows() {
-		return DungeonGenUtils.randomBetween(this.minRowsX, this.maxRowsX);
+	public int getXRows(Random rand) {
+		return DungeonGenUtils.randomBetween(this.minRowsX, this.maxRowsX, rand);
 	}
 
-	public int getZRows() {
-		return DungeonGenUtils.randomBetween(this.minRowsZ, this.maxRowsZ);
+	public int getZRows(Random rand) {
+		return DungeonGenUtils.randomBetween(this.minRowsZ, this.maxRowsZ, rand);
 	}
 
 	/*
@@ -109,16 +103,16 @@ public class DungeonGridCity extends DungeonBase {
 		return this.buildingFolder;
 	}
 
-	public File getRandomBuilding() {
-		return this.getStructureFileFromDirectory(this.getBuildingFolder());
+	public File getRandomBuilding(Random rand) {
+		return this.getStructureFileFromDirectory(this.getBuildingFolder(), rand);
 	}
 
 	public File getCentralBuildingFolder() {
 		return this.centralBuildingsFolder;
 	}
 
-	public File getRandomCentralBuilding() {
-		return this.getStructureFileFromDirectory(this.getCentralBuildingFolder());
+	public File getRandomCentralBuilding(Random rand) {
+		return this.getStructureFileFromDirectory(this.getCentralBuildingFolder(), rand);
 	}
 
 	public double getBridgeSizeMultiplier() {

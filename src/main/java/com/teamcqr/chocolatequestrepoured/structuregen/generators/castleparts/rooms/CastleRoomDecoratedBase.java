@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
@@ -31,9 +32,9 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 	protected DecorationSelector decoSelector;
 	protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
-	CastleRoomDecoratedBase(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
-		this.decoSelector = new DecorationSelector(this.random);
+	CastleRoomDecoratedBase(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
+		this.decoSelector = new DecorationSelector();
 		this.possibleChestLocs = new HashMap<>();
 	}
 
@@ -84,7 +85,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 						int attempts = 0;
 
 						while (attempts < MAX_DECO_ATTEMPTS) {
-							IRoomDecor decor = this.decoSelector.randomEdgeDecor();
+							IRoomDecor decor = this.decoSelector.randomEdgeDecor(genArray.getRandom());
 							if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) {
 								decor.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
 
@@ -120,7 +121,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 				int attempts = 0;
 
 				while (attempts < MAX_DECO_ATTEMPTS) {
-					IRoomDecor decor = this.decoSelector.randomMidDecor();
+					IRoomDecor decor = this.decoSelector.randomMidDecor(genArray.getRandom());
 					EnumFacing side = EnumFacing.NORTH; // EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
 					if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) {
 						decor.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
@@ -141,7 +142,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 		ArrayList<BlockPos> spawnPositions = this.getDecorationLayer(0);
 		spawnPositions.removeAll(this.usedDecoPositions);
 
-		int spawnerCount = dungeon.randomizeRoomSpawnerCount();
+		int spawnerCount = dungeon.randomizeRoomSpawnerCount(this.random);
 
 		for (int i = 0; (i < spawnerCount && !spawnPositions.isEmpty()); i++) {
 			BlockPos pos = spawnPositions.get(this.random.nextInt(spawnPositions.size()));

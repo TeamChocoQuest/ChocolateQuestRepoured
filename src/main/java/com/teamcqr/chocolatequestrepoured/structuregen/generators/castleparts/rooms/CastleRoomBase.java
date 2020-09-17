@@ -43,14 +43,14 @@ public abstract class CastleRoomBase {
 	protected EnumRoomType roomType = EnumRoomType.NONE;
 	protected boolean defaultCeiling = false;
 	protected boolean defaultFloor = false;
-	protected Random random = new Random();
+	protected Random random;
 
 	protected HashSet<BlockPos> possibleDecoPositions; // set of possible decoration positions
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
 	protected HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
 	// protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
-	public CastleRoomBase(int sideLength, int height, int floor) {
+	public CastleRoomBase(int sideLength, int height, int floor, Random rand) {
 		this.sideLength = sideLength;
 		this.offsetX = 0;
 		this.offsetZ = 0;
@@ -58,6 +58,7 @@ public abstract class CastleRoomBase {
 		this.roomLengthZ = this.sideLength;
 		this.height = height;
 		this.floor = floor;
+		this.random = rand;
 		this.usedDecoPositions = new HashSet<>();
 		this.possibleDecoPositions = new HashSet<>();
 	}
@@ -79,17 +80,17 @@ public abstract class CastleRoomBase {
 	}
 
 	public void postProcess(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
-		;
+
 	}
 
 	protected abstract void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon);
 
 	public void decorate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, GearedMobFactory mobFactory) {
-		; // Default is no decoration
+		// Default is no decoration
 	}
 
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
-		; // Default is no boss
+		// Default is no boss
 	}
 
 	public boolean canBuildDoorOnSide(EnumFacing side) {
@@ -402,7 +403,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected void makeRoomBlockAdjustments() {
-		;
+
 	}
 
 	public void setAsRootRoom() {
@@ -415,7 +416,7 @@ public abstract class CastleRoomBase {
 	}
 
 	public void copyPropertiesOf(CastleRoomBase room) {
-		;
+
 	}
 
 	public void registerWalls(HashMap<EnumFacing, CastleMainStructWall> walls) {

@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.util.ArrayList;
+import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
@@ -22,18 +22,18 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 
 	private CastleRoomSelector roomHelper;
 
-	public GeneratorRandomizedCastle(World world, BlockPos pos, DungeonRandomizedCastle dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorRandomizedCastle(World world, BlockPos pos, DungeonRandomizedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
-		this.roomHelper = new CastleRoomSelector(this.dungeon);
+		this.roomHelper = new CastleRoomSelector(this.dungeon, this.random);
 		this.roomHelper.randomizeCastle();
 
 		if (this.dungeon.doBuildSupportPlatform()) {
 			for (CastleRoomSelector.SupportArea area : this.roomHelper.getSupportAreas()) {
-				//CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
+				// CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.pos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
 				this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
@@ -43,7 +43,7 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 
 	@Override
 	public void buildStructure() {
-		BlockStateGenArray genArray = new BlockStateGenArray();
+		BlockStateGenArray genArray = new BlockStateGenArray(this.random);
 		ArrayList<String> bossUuids = new ArrayList<>();
 		String mobType = this.dungeon.getDungeonMob();
 		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {

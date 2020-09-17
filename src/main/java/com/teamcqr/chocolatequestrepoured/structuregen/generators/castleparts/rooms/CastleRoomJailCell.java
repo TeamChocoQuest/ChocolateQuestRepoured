@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
@@ -32,8 +33,8 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 	private EnumFacing doorSide;
 	private ArrayList<BlockPos> prisonerSpawnerPositions = new ArrayList<>();
 
-	public CastleRoomJailCell(int sideLength, int height, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomJailCell(int sideLength, int height, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.JAIL;
 		this.defaultCeiling = true;
 		this.defaultFloor = true;

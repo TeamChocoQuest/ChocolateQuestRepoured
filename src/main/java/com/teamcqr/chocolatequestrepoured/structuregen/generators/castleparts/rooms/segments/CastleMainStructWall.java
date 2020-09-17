@@ -115,7 +115,7 @@ public class CastleMainStructWall {
 		return Int.MaxValue();
 	}
 
-	public void determineIfEnabled() {
+	public void determineIfEnabled(Random rand) {
 		EnumFacing checkSide1;
 		EnumFacing checkSide2;
 
@@ -213,7 +213,7 @@ public class CastleMainStructWall {
 		IBlockState blockToBuild;
 
 		EnumFacing iterDirection;
-		this.windowType = dungeon.getRandomWindowType();
+		this.windowType = dungeon.getRandomWindowType(genArray.getRandom());
 
 		if (this.orientation == WallOrientation.VERTICAL) {
 			iterDirection = EnumFacing.SOUTH;

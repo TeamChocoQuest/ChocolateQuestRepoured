@@ -11,7 +11,7 @@ public class EnchantmentSpectral extends Enchantment {
 	public EnchantmentSpectral() {
 		this(Rarity.VERY_RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND });
 	}
-	
+
 	private EnchantmentSpectral(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
 		super(rarityIn, typeIn, slots);
 		this.setName("spectral");
@@ -22,10 +22,10 @@ public class EnchantmentSpectral extends Enchantment {
 	public int getMaxLevel() {
 		return 1;
 	}
-	
+
 	@Override
 	public boolean isTreasureEnchantment() {
 		return true;
 	}
-	
+
 }

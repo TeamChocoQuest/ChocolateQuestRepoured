@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -19,8 +21,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	private int centerStairWidth;
 	private int centerStairLength;
 
-	public CastleRoomStaircaseDirected(int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(sideLength, height, floor);
+	public CastleRoomStaircaseDirected(int sideLength, int height, EnumFacing doorSide, int floor, Random rand) {
+		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.doorSide);

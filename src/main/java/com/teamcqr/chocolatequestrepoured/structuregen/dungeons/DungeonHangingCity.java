@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorHangingCity;
@@ -29,7 +30,6 @@ public class DungeonHangingCity extends DungeonBase {
 	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
 	// private int bridgeChance = 20;
-	private int posY = 50; // lava level is 32 in the nether
 	private boolean buildChains = true;
 	// private boolean buildBridges = false;
 	private File structureFolder;
@@ -44,7 +44,6 @@ public class DungeonHangingCity extends DungeonBase {
 		this.maxIslandDistance = PropertyFileHelper.getIntProperty(prop, "maxIslandDistance", 30);
 		this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
 		this.heightVariation = PropertyFileHelper.getIntProperty(prop, "islandHeightVariation", 10);
-		this.posY = PropertyFileHelper.getIntProperty(prop, "yPosition", 50);
 
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 		this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
@@ -57,13 +56,8 @@ public class DungeonHangingCity extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int z) {
-		this.generate(world, x, this.posY, z);
-	}
-
-	@Override
-	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	// Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!
@@ -93,18 +87,18 @@ public class DungeonHangingCity extends DungeonBase {
 	 * return true; } return false; }
 	 */
 
-	public File pickStructure() {
+	public File pickStructure(Random rand) {
 		if (this.structureFolder == null) {
 			return null;
 		}
-		return this.getStructureFileFromDirectory(this.structureFolder);
+		return this.getStructureFileFromDirectory(this.structureFolder, rand);
 	}
 
-	public File pickCentralStructure() {
+	public File pickCentralStructure(Random rand) {
 		if (this.centralStructureFolder == null) {
 			return null;
 		}
-		return this.getStructureFileFromDirectory(this.centralStructureFolder);
+		return this.getStructureFileFromDirectory(this.centralStructureFolder, rand);
 	}
 
 	public boolean doBuildChains() {
@@ -135,10 +129,6 @@ public class DungeonHangingCity extends DungeonBase {
 	 * public Block getBridgeBlock() { return this.bridgeBlock; }
 	 */
 
-	public int getPosY() {
-		return this.posY;
-	}
-
 	public int getMinIslandDistance() {
 		return this.minIslandDistance;
 	}
@@ -155,10 +145,10 @@ public class DungeonHangingCity extends DungeonBase {
 		return this.digAirCave;
 	}
 
-	public int getRandomHeightVariation() {
+	public int getRandomHeightVariation(Random rand) {
 		if (this.heightVariation != 0) {
 			int var = Math.abs(this.heightVariation);
-			int rvar = DungeonGenUtils.randomBetween(0, var);
+			int rvar = DungeonGenUtils.randomBetween(0, var, rand);
 			return var / 2 - rvar;
 		}
 		return 0;

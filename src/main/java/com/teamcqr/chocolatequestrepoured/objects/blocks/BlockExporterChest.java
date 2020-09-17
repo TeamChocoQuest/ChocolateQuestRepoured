@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BlockExporterChest extends BlockHorizontal {
 
-	public static final Set<BlockExporterChest> EXPORTER_CHESTS = new HashSet<BlockExporterChest>();
+	public static final Set<BlockExporterChest> EXPORTER_CHESTS = new HashSet<>();
 
 	public final ResourceLocation lootTable;
 	public final ResourceLocation itemTexture;
@@ -136,7 +136,7 @@ public class BlockExporterChest extends BlockHorizontal {
 				}
 			}
 		}
-	};
+	}
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {

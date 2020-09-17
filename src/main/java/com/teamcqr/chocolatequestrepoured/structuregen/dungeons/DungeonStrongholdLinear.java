@@ -100,8 +100,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorStronghold(world, new BlockPos(x, y, z), this);
+	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
+		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public int getMinFloors() {
@@ -124,20 +124,20 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		return this.roomSizeY;
 	}
 
-	public File getEntranceBuilding() {
-		return this.getStructureFileFromDirectory(this.entranceBuildingFolder);
+	public File getEntranceBuilding(Random rand) {
+		return this.getStructureFileFromDirectory(this.entranceBuildingFolder, rand);
 	}
 
-	public File getEntranceStairRoom() {
-		return this.getStructureFileFromDirectory(this.entranceStairFolder);
+	public File getEntranceStairRoom(Random rand) {
+		return this.getStructureFileFromDirectory(this.entranceStairFolder, rand);
 	}
 
-	public File getEntranceStairSegment() {
-		return this.getStructureFileFromDirectory(this.entranceStairSegmentFolder);
+	public File getEntranceStairSegment(Random rand) {
+		return this.getStructureFileFromDirectory(this.entranceStairSegmentFolder, rand);
 	}
 
-	public File getBossRoom() {
-		return this.getStructureFileFromDirectory(this.bossRoomFolder);
+	public File getBossRoom(Random rand) {
+		return this.getStructureFileFromDirectory(this.bossRoomFolder, rand);
 	}
 
 	public boolean useStairSegments() {
@@ -145,12 +145,12 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Nullable
-	public File getStairRoom(ESkyDirection direction) {
-		return this.getRoom(direction, direction);
+	public File getStairRoom(ESkyDirection direction, Random rand) {
+		return this.getRoom(direction, direction, rand);
 	}
 
 	@Nullable
-	public File getRoom(ESkyDirection entranceD, ESkyDirection exitD) {
+	public File getRoom(ESkyDirection entranceD, ESkyDirection exitD, Random rand) {
 		File folder = null;
 		if (entranceD == exitD) {
 			switch (entranceD) {
@@ -235,13 +235,13 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		}
 
 		if (folder != null) {
-			return this.getStructureFileFromDirectory(folder);
+			return this.getStructureFileFromDirectory(folder, rand);
 		}
 		return null;
 	}
 
-	public int getFloorSize(Random random) {
-		int size = DungeonGenUtils.randomBetween(this.minFloorSize, this.maxFloorSize);
+	public int getFloorSize(Random rand) {
+		int size = DungeonGenUtils.randomBetween(this.minFloorSize, this.maxFloorSize, rand);
 		if (size < 3) {
 			size = 3;
 		}
@@ -251,7 +251,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		return size;
 	}
 
-	public File getRoom(EStrongholdRoomType type) {
+	public File getRoom(EStrongholdRoomType type, Random rand) {
 		File folder = null;
 		switch (type) {
 		case BOSS:
@@ -309,7 +309,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			return null;
 		}
 		if (folder != null) {
-			return this.getStructureFileFromDirectory(folder);
+			return this.getStructureFileFromDirectory(folder, rand);
 		}
 		return null;
 	}

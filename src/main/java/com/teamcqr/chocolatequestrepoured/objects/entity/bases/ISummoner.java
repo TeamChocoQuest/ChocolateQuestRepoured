@@ -10,11 +10,11 @@ import net.minecraft.entity.EntityLivingBase;
 
 public interface ISummoner {
 
-	public CQRFaction getSummonerFaction();
+	CQRFaction getSummonerFaction();
 
-	public List<Entity> getSummonedEntities();
+	List<Entity> getSummonedEntities();
 
-	public EntityLivingBase getSummoner();
+	EntityLivingBase getSummoner();
 
 	default void setSummonedEntityFaction(Entity summoned) {
 		if (summoned instanceof AbstractEntityCQR) {
@@ -26,6 +26,6 @@ public interface ISummoner {
 		}
 	}
 
-	public void addSummonedEntityToList(Entity summoned);
+	void addSummonedEntityToList(Entity summoned);
 
 }

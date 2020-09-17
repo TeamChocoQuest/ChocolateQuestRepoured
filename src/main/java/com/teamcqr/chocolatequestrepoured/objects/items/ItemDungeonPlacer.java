@@ -2,9 +2,11 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -121,7 +123,7 @@ public class ItemDungeonPlacer extends Item {
 
 					if (result != null) {
 						BlockPos pos = result.getBlockPos().offset(result.sideHit);
-						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ());
+						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ(), new Random(), DungeonDataManager.DungeonSpawnType.DUNGEON_PLACER_ITEM, false);
 
 						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 						if (!(playerIn.isCreative() || playerIn.isSpectator())) {

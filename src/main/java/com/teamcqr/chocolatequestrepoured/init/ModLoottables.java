@@ -67,6 +67,7 @@ public class ModLoottables {
 	public static final ResourceLocation CHESTS_EQUIPMENT = createChestLootTable("equipment");
 	public static final ResourceLocation CHESTS_FOOD = createChestLootTable("food");
 	public static final ResourceLocation CHESTS_MATERIAL = createChestLootTable("material");
+	public static final ResourceLocation CHESTS_CLUTTER = createChestLootTable("clutter");
 
 	public static final ResourceLocation CHESTS_CUSTOM_1 = createChestLootTable("custom_1");
 	public static final ResourceLocation CHESTS_CUSTOM_2 = createChestLootTable("custom_2");

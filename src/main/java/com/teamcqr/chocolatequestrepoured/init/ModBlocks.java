@@ -132,6 +132,7 @@ public class ModBlocks {
 	public static final BlockExporterChest EXPORTER_CHEST_FOOD = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_EQUIPMENT = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_UTILITY = Null();
+	public static final BlockExporterChest EXPORTER_CHEST_CLUTTER = Null();
 
 	// Vanilla
 	public static final BlockExporterChest EXPORTER_CHEST_VANILLA_BLACKSMITH = Null();
@@ -255,6 +256,7 @@ public class ModBlocks {
 					setBlockNameAndTab(new BlockExporterChest(ModLoottables.CHESTS_FOOD, "textures/items/porkchop_raw.png"), "exporter_chest_food", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChest(ModLoottables.CHESTS_EQUIPMENT, "textures/items/iron_pickaxe.png"), "exporter_chest_equipment", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChest(ModLoottables.CHESTS_MATERIAL, "textures/items/iron_ingot.png"), "exporter_chest_utility", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChest(ModLoottables.CHESTS_CLUTTER, "textures/items/gunpowder.png"), "exporter_chest_clutter", CQRMain.CQR_EXPORTER_CHEST_TAB),
 
 					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_VILLAGE_BLACKSMITH, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_blacksmith.png"), "exporter_chest_vanilla_blacksmith", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_SPAWN_BONUS_CHEST, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_bonus.png"), "exporter_chest_vanilla_bonus", CQRMain.CQR_EXPORTER_CHEST_TAB),
@@ -288,9 +290,8 @@ public class ModBlocks {
 
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
-					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"), 
-					setBlockName(new BlockTemporaryWeb(), "temporary_web"),
-			};
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
+					setBlockName(new BlockTemporaryWeb(), "temporary_web"), };
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 

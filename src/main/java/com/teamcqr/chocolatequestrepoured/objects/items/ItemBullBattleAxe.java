@@ -49,11 +49,11 @@ public class ItemBullBattleAxe extends ItemSword {
 				worldIn.spawnEntity(quake);
 
 				playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItem(handIn).getItem(), 20);
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+				return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 			}
 			playerIn.swingArm(handIn);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 	}
 
 	@Override

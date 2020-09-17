@@ -32,7 +32,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
 		super.applyEntityCollision(entityIn);
-		if(!(entityIn instanceof EntityLivingBase && ((EntityLivingBase)entityIn).isActiveItemStackBlocking())) {
+		if (!(entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isActiveItemStackBlocking())) {
 			entityIn.setFire(4);
 		}
 	}
@@ -56,7 +56,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 			IBlockState state = this.world.getBlockState(result.getBlockPos());
 
 			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
-				if(this.world.isRemote) {
+				if (this.world.isRemote) {
 					this.world.newExplosion(this.thrower, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, false);
 				}
 				this.setDead();

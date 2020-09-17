@@ -154,10 +154,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	// Shoulder entity stuff
 	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 
-	//Texture syncing
+	// Texture syncing
 	protected static final DataParameter<String> TEXTURE_OVERRIDE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
-	protected ResourceLocation textureOverride = null; 
-	
+	protected ResourceLocation textureOverride = null;
+
 	// Client only
 	@SideOnly(Side.CLIENT)
 	protected int currentSpeechBubbleID;
@@ -505,7 +505,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
 				flag = true;
-			} else if (!getFaction().isEnemy(player) && !this.trades.isEmpty()) {
+			} else if (!this.getFaction().isEnemy(player) && !this.trades.isEmpty()) {
 				if (!this.world.isRemote) {
 					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
@@ -1271,7 +1271,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public int getLastTickWithAttackTarget() {
-		return lastTickWithAttackTarget;
+		return this.lastTickWithAttackTarget;
 	}
 
 	public int getLastTimeSeenAttackTarget() {
@@ -1416,25 +1416,24 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public TraderOffer getTrades() {
 		return this.trades;
 	}
-	
-	//Custom textures
+
+	// Custom textures
 	@Override
 	public boolean hasTextureOverride() {
-		return this.dataManager.get(TEXTURE_OVERRIDE) != null && !this.dataManager.get(TEXTURE_OVERRIDE).isEmpty(); 
+		return this.dataManager.get(TEXTURE_OVERRIDE) != null && !this.dataManager.get(TEXTURE_OVERRIDE).isEmpty();
 	}
-	
+
 	@Override
 	public ResourceLocation getTextureOverride() {
-		if(this.textureOverride == null) {
+		if (this.textureOverride == null) {
 			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
 		}
 		return this.textureOverride;
 	}
-	
+
 	@Override
 	public Entity getEntity() {
 		return this;
 	}
-	
-	
+
 }

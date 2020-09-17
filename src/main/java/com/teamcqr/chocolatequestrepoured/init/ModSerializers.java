@@ -31,7 +31,7 @@ public class ModSerializers {
 
 		@Override
 		public DataParameter<Vec3d> createKey(int id) {
-			return new DataParameter<Vec3d>(id, this);
+			return new DataParameter<>(id, this);
 		}
 
 		@Override

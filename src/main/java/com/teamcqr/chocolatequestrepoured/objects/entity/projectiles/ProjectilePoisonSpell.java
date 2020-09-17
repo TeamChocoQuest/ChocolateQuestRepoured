@@ -64,7 +64,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 			cloud.setColor(35849);
 			cloud.setNoGravity(false);
 
-			world.spawnEntity(cloud);
+			this.world.spawnEntity(cloud);
 		}
 
 		super.onImpact(result);

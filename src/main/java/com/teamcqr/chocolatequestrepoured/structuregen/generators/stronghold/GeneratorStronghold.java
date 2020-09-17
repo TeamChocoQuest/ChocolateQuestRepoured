@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
 
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
@@ -27,33 +26,27 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 	private int dunX;
 	private int dunZ;
 
-	private Random rdm;
 	private StrongholdFloor[] floors;
 
-	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon) {
-		// Set floor count
-		// Set room per floor count
-		super(world, pos, dungeon);
+	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
 		// calculates the positions for rooms, stairs, bossroom, entrance, entrance stairs
-		long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX() >> 4, this.pos.getZ() >> 4);
-		this.rdm = new Random();
-		this.rdm.setSeed(seed);
-		int count = DungeonGenUtils.randomBetween(this.dungeon.getMinFloors(), this.dungeon.getMaxFloors(), this.rdm);
-		int floorSize = this.dungeon.getFloorSize(this.rdm);
+		int count = DungeonGenUtils.randomBetween(this.dungeon.getMinFloors(), this.dungeon.getMaxFloors(), this.random);
+		int floorSize = this.dungeon.getFloorSize(this.random);
 		this.floors = new StrongholdFloor[count];
 		this.dunX = this.pos.getX();
 		this.dunZ = this.pos.getZ();
 
 		int sX = 0;
 		int sZ = 0;
-		ESkyDirection exitDir = ESkyDirection.values()[this.rdm.nextInt(ESkyDirection.values().length)];
+		ESkyDirection exitDir = ESkyDirection.values()[this.random.nextInt(ESkyDirection.values().length)];
 		for (int i = 0; i < this.floors.length; i++) {
 			// System.out.println("Calculating floor" + (i+1));
-			StrongholdFloor floor = new StrongholdFloor(floorSize, this, i == (this.floors.length - 1));
+			StrongholdFloor floor = new StrongholdFloor(floorSize, this, i == (this.floors.length - 1), this.random);
 			floor.generateRoomPattern(sX, sZ, exitDir);
 			this.floors[i] = floor;
 			exitDir = floor.getExitDirection();
@@ -74,8 +67,8 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		PlacementSettings settings = new PlacementSettings();
-		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom());
-		CQStructure structureEntrance = this.loadStructureFromFile(this.dungeon.getEntranceBuilding());
+		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom(this.random));
+		CQStructure structureEntrance = this.loadStructureFromFile(this.dungeon.getEntranceBuilding(this.random));
 
 		int segCount = 0;
 		CQStructure stairSeg = null;
@@ -88,7 +81,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 
 			if (yTmp < ySurface) {
 				y = yTmp;
-				stairSeg = this.loadStructureFromFile(this.dungeon.getEntranceStairSegment());
+				stairSeg = this.loadStructureFromFile(this.dungeon.getEntranceStairSegment(this.random));
 				while (y < ySurface) {
 					segCount++;
 					y += stairSeg.getSize().getY();

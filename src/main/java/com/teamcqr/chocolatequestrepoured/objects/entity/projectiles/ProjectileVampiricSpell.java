@@ -29,7 +29,7 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit instanceof EntityLivingBase) {
 					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
-					if(entity.isActiveItemStackBlocking()) {
+					if (entity.isActiveItemStackBlocking()) {
 						this.setDead();
 						return;
 					}

@@ -24,19 +24,17 @@ public class TextureSet {
 	private Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
 	private static Set<File> textures = new HashSet<>();
 
-	
-	//FOR CLIENT
+	// FOR CLIENT
 	public TextureSet(String name) {
 		this.name = name;
 		this.entityTextureMap.clear();
 	}
-	
+
 	public void addTexture(ResourceLocation entity, ResourceLocation texture) {
 		this.entityTextureMap.getOrDefault(entity, new HashSet<ResourceLocation>()).add(texture);
 	}
-	
-	
-	//FOR SERVER
+
+	// FOR SERVER
 	public TextureSet(Properties config, String name) {
 		this.name = name;
 		try {
@@ -53,12 +51,12 @@ public class TextureSet {
 				texturesString.replaceAll(" ", "");
 				// This strings represent the FILE PATHS, not the actual resource locations
 				for (String texture : texturesString.split(",")) {
-					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES,texture + ".png");
+					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
 					if (tf != null && tf.exists()) {
 						textures.add(tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
 						// if(TextureSetManager.loadTexture(tf, rs)) {
-						addTexture(resLoc, rs);
+						this.addTexture(resLoc, rs);
 						// }
 					}
 				}
@@ -111,10 +109,10 @@ public class TextureSet {
 	}
 
 	public static Set<File> getLoadedTextures() {
-		return new HashSet<File>(TextureSet.textures);
+		return new HashSet<>(TextureSet.textures);
 	}
 
 	public Map<ResourceLocation, Set<ResourceLocation>> getMappings() {
-		return new HashMap<ResourceLocation, Set<ResourceLocation>>(this.entityTextureMap);
+		return new HashMap<>(this.entityTextureMap);
 	}
 }

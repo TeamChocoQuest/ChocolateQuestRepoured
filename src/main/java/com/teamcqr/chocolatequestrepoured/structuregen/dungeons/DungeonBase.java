@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
 
@@ -32,9 +31,6 @@ import net.minecraftforge.fml.common.Loader;
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public abstract class DungeonBase {
-
-	// private CQFaction owningFaction
-	protected final Random random = new Random();
 
 	protected String name;
 	protected boolean enabled = true;
@@ -57,7 +53,9 @@ public abstract class DungeonBase {
 
 	protected boolean treatWaterAsAir = false;
 	protected int underGroundOffset = 0;
-	protected int yOffset = 0;
+	protected boolean fixedY = false;
+	protected int yOffsetMin = 0;
+	protected int yOffsetMax = 0;
 
 	protected String dungeonMob = DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT;
 	protected boolean replaceBanners = true;
@@ -101,7 +99,9 @@ public abstract class DungeonBase {
 
 		this.treatWaterAsAir = PropertyFileHelper.getBooleanProperty(prop, "treatWaterAsAir", this.treatWaterAsAir);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", this.underGroundOffset, 0, Integer.MAX_VALUE);
-		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", this.yOffset);
+		this.fixedY = PropertyFileHelper.getBooleanProperty(prop, "fixedY", this.fixedY);
+		this.yOffsetMin = PropertyFileHelper.getIntProperty(prop, "yOffsetMin", this.yOffsetMin);
+		this.yOffsetMax = PropertyFileHelper.getIntProperty(prop, "yOffsetMax", this.yOffsetMax, this.yOffsetMin, Integer.MAX_VALUE);
 
 		this.dungeonMob = prop.getProperty("dummyReplacement", this.dungeonMob);
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", this.replaceBanners);
@@ -129,40 +129,47 @@ public abstract class DungeonBase {
 		return this.name;
 	}
 
-	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z);
+	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand);
 
-	public void generate(World world, int x, int z) {
-		Chunk chunk = world.getChunk(x >> 4, z >> 4);
+	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		int y = 0;
-		for (int ix = 0; ix < 16; ix++) {
-			for (int iz = 0; iz < 16; iz++) {
-				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, this.treatWaterAsAir);
+		if (!this.fixedY) {
+			int chunkStartX = x >> 4 << 4;
+			int chunkStartZ = z >> 4 << 4;
+			for (int ix = 0; ix < 16; ix++) {
+				for (int iz = 0; iz < 16; iz++) {
+					y += DungeonGenUtils.getYForPos(world, chunkStartX + ix, chunkStartZ + iz, this.treatWaterAsAir);
+				}
 			}
-		}
-		y >>= 8;
-		y -= this.getUnderGroundOffset();
-		y += this.getYOffset();
-		this.generate(world, x, y, z);
-	}
-
-	public void generate(World world, int x, int y, int z) {
-		if (CQRConfig.advanced.multithreadedDungeonPreparation) {
-			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z)).start();
+			y >>= 8;
+			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		} else {
-			this.createDungeonGenerator(world, x, y, z).generate();
+			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
+		}
+		y -= this.getUnderGroundOffset();
+		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
+	}
+
+	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+		if (!generateImmediately && CQRConfig.advanced.multithreadedDungeonPreparation) {
+			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z, rand)).start();
+		} else {
+			this.createDungeonGenerator(world, x, y, z, rand).generate(spawnType, generateImmediately);
 		}
 	}
 
-	public void generateWithOffsets(World world, int x, int y, int z) {
+	public void generateWithOffsets(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+		if (!this.fixedY) {
+			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
+		}
 		y -= this.getUnderGroundOffset();
-		y += this.getYOffset();
-		this.generate(world, x, y, z);
+		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
 	}
 
-	public File getStructureFileFromDirectory(File parentDir) {
+	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
 		if (!files.isEmpty()) {
-			return files.get(this.random.nextInt(files.size()));
+			return files.get(rand.nextInt(files.size()));
 		}
 		return null;
 	}
@@ -377,8 +384,12 @@ public abstract class DungeonBase {
 		return this.underGroundOffset;
 	}
 
-	public int getYOffset() {
-		return this.yOffset;
+	public int getYOffsetMin() {
+		return this.yOffsetMin;
+	}
+
+	public int getYOffsetMax() {
+		return this.yOffsetMax;
 	}
 
 	public String getDungeonMob() {

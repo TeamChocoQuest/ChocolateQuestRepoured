@@ -206,7 +206,7 @@ public abstract class SpawnerFactory {
 		if (tile != null && tile instanceof TileEntityMobSpawner) {
 			TileEntityMobSpawner spawnerMultiUseTile = (TileEntityMobSpawner) tile;
 
-			List<WeightedSpawnerEntity> spawnerEntries = new ArrayList<WeightedSpawnerEntity>();
+			List<WeightedSpawnerEntity> spawnerEntries = new ArrayList<>();
 			spawnerEntries = ObfuscationReflectionHelper.getPrivateValue(MobSpawnerBaseLogic.class, spawnerMultiUseTile.getSpawnerBaseLogic(), 1 /* It is an array index of getDeclaredFields() */);
 			if (spawnerEntries != null && !spawnerEntries.isEmpty()) {
 				Iterator<WeightedSpawnerEntity> iterator = spawnerEntries.iterator();

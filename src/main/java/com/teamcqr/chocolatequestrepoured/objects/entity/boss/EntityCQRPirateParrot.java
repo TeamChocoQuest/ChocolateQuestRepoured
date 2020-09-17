@@ -51,7 +51,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 		this.tasks.addTask(5, new BossAIPirateParrotLandOnCaptainsShoulder(this));
 		this.tasks.addTask(3, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
 
-		this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<EntityLiving>(this, EntityLiving.class, 100, true, false));
+		this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<>(this, EntityLiving.class, 100, true, false));
 	}
 
 	@Override

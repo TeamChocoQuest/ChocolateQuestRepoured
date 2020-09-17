@@ -81,7 +81,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(31, new EntityAIFollowPath(this));
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
-		
+
 		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 120, 20) {
 			@Override
 			protected SoundEvent getStartChargingSound() {
@@ -92,7 +92,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			protected SoundEvent getStartCastingSound() {
 				return SoundEvents.ENTITY_SPIDER_AMBIENT;
 			}
-		}); 
+		});
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -101,7 +101,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
+		this.dataManager.register(CLIMBING, (byte) 0);
 	}
 
 	@Override
@@ -112,10 +112,10 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.setBesideClimbableBlock(this.collidedHorizontally);
 		}
 	}
-	
+
 	@Override
 	public void fall(float p_180430_1_, float p_180430_2_) {
-		//What do we say to fall damge? Not today!
+		// What do we say to fall damge? Not today!
 	}
 
 	@Override
@@ -131,15 +131,15 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.summonedMinions.remove(e);
 		}
 	}
-	
+
 	@Override
 	public void addPotionEffect(PotionEffect potioneffectIn) {
-		if(potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
+		if (potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
 			return;
 		}
 		super.addPotionEffect(potioneffectIn);
 	}
-	
+
 	/**
 	 * Returns new PathNavigateGround instance
 	 */
@@ -159,7 +159,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	 * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is false.
 	 */
 	public void setBesideClimbableBlock(boolean climbing) {
-		byte b0 = ((Byte) this.dataManager.get(CLIMBING)).byteValue();
+		byte b0 = ((Byte) this.dataManager.get(CLIMBING));
 
 		if (climbing) {
 			b0 = (byte) (b0 | 1);
@@ -167,7 +167,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			b0 = (byte) (b0 & -2);
 		}
 
-		this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+		this.dataManager.set(CLIMBING, b0);
 	}
 
 	@Override

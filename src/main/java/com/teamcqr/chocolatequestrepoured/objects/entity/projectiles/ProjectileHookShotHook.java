@@ -255,7 +255,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.checkForEntityBlockedPath();
 
 		if (this.pulledEntity instanceof EntityPlayerMP) {
-			;
+
 		} else {
 			if (this.getPositionVector().distanceTo(this.startLocation) < STOP_PULL_DISTANCE) {
 				this.zeroizeHookVelocity();

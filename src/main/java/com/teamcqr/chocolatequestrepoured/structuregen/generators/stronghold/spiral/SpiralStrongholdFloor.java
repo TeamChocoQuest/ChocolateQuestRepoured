@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.sp
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
@@ -21,6 +22,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class SpiralStrongholdFloor {
 
+	private final Random random;
 	private AbstractDungeonGenerator<DungeonVolcano> generator;
 	private DungeonGenerator dungeonGenerator;
 	private Tuple<Integer, Integer> entranceCoordinates;
@@ -33,7 +35,7 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 
-	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
+	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.entranceCoordinates = entrancePos;
@@ -43,6 +45,7 @@ public class SpiralStrongholdFloor {
 		this.roomCount = roomCount;
 		this.roomGrid = new EStrongholdRoomType[sideLength][sideLength];
 		this.coordinateGrid = new BlockPos[sideLength][sideLength];
+		this.random = rand;
 	}
 
 	public void calculateRoomGrid(EStrongholdRoomType entranceRoomType, boolean rev) {
@@ -237,7 +240,7 @@ public class SpiralStrongholdFloor {
 					EStrongholdRoomType type = this.roomGrid[iX][iZ];
 					if (type != null && !type.equals(EStrongholdRoomType.NONE)) {
 						if (dungeon != null && world != null) {
-							File file = dungeon.getRoomNBTFileForType(type);
+							File file = dungeon.getRoomNBTFileForType(type, this.random);
 							if (file != null) {
 								CQStructure room = this.generator.loadStructureFromFile(file);
 								BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.coordinateGrid[iX][iZ], room, settings);

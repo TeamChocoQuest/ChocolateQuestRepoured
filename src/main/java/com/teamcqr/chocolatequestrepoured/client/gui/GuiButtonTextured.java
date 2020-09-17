@@ -51,8 +51,8 @@ public class GuiButtonTextured extends GuiButton {
 			this.mouseDragged(mc, mouseX, mouseY);
 			int j = 14737632;
 
-			if (packedFGColour != 0) {
-				j = packedFGColour;
+			if (this.packedFGColour != 0) {
+				j = this.packedFGColour;
 			} else if (!this.enabled) {
 				j = 10526880;
 			} else if (this.hovered) {

@@ -35,7 +35,7 @@ public class ItemSpikedGlove extends Item {
 		// With this durability you should be able to climb 1200m in total
 		this.setMaxDamage(6000);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

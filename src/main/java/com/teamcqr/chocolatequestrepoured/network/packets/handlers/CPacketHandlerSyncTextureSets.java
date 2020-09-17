@@ -24,43 +24,43 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomText
 
 	@Override
 	public IMessage onMessage(CustomTexturesPacket message, MessageContext ctx) {
-		if(ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
 			Map<String, File> fileMap = new HashMap<>();
-			for(Map.Entry<String,String> textureEntry : message.getTextureMap().entrySet()) {
+			for (Map.Entry<String, String> textureEntry : message.getTextureMap().entrySet()) {
 				String path = textureEntry.getKey();
-				
-				//!!Path already contains the .png extension
+
+				// !!Path already contains the .png extension
 				File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, path);
 				if (tf != null) {
-					if(tf.exists()) {
+					if (tf.exists()) {
 						tf.delete();
 					}
 					if (CompressionUtil.decodeBase64ToFile(tf, textureEntry.getValue())) {
 						fileMap.put(path, tf);
 					} else {
-						//TODO: Log warning!!
+						// TODO: Log warning!!
 					}
-					
+
 				}
 			}
-			//Now the texture sets themselves...
-			for(Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> tsEntry : message.getTextureSets().entrySet()) {
+			// Now the texture sets themselves...
+			for (Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> tsEntry : message.getTextureSets().entrySet()) {
 				TextureSet ts = new TextureSet(tsEntry.getKey());
 
-				for(Map.Entry<ResourceLocation, Set<ResourceLocation>> texEntry : tsEntry.getValue().entrySet()) {
-					for(ResourceLocation trs : texEntry.getValue()) {
+				for (Map.Entry<ResourceLocation, Set<ResourceLocation>> texEntry : tsEntry.getValue().entrySet()) {
+					for (ResourceLocation trs : texEntry.getValue()) {
 						File file = fileMap.getOrDefault(trs.getPath(), null);
-						if(file != null) {
+						if (file != null) {
 							TextureUtil.loadTextureInternal(file, trs);
 						}
 						ts.addTexture(texEntry.getKey(), trs);
 					}
 				}
-				
+
 				TextureSetManager.registerTextureSet(ts);
 			}
 		}
-		
+
 		return null;
 	}
 

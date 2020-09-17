@@ -276,8 +276,8 @@ public class ModItems {
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
 
-		public static final List<Item> ITEMS = new ArrayList<Item>();
-		public static final List<Item> SPAWN_EGGS = new ArrayList<Item>();
+		public static final List<Item> ITEMS = new ArrayList<>();
+		public static final List<Item> SPAWN_EGGS = new ArrayList<>();
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {

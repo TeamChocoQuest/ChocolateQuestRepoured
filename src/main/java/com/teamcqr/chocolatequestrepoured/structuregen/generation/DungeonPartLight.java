@@ -103,9 +103,9 @@ public class DungeonPartLight extends AbstractDungeonPart {
 				this.mutablePos2.setPos(this.mutablePos2.getX() + 1, this.minPos.getY(), this.minPos.getZ());
 			}
 		} else if (this.mutablePos3.getX() <= this.maxPos.getX()) {
-			//IBlockState state = this.world.getBlockState(this.mutablePos3);
-			//this.world.notifyNeighborsRespectDebug(this.mutablePos3, state.getBlock(), false);
-			notifyNeighborsRespectDebug(world, mutablePos3);
+			// IBlockState state = this.world.getBlockState(this.mutablePos3);
+			// this.world.notifyNeighborsRespectDebug(this.mutablePos3, state.getBlock(), false);
+			this.notifyNeighborsRespectDebug(this.world, this.mutablePos3);
 
 			if (this.mutablePos3.getZ() < this.maxPos.getZ()) {
 				this.mutablePos3.setPos(this.mutablePos3.getX(), this.mutablePos3.getY(), this.mutablePos3.getZ() + 1);
@@ -126,7 +126,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		if (world.getWorldInfo().getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
 			return;
 		}
-		
+
 		IBlockState state = world.getBlockState(pos);
 
 		if (ForgeEventFactory.onNeighborNotify(world, pos, state, EnumSet.allOf(EnumFacing.class), false).isCanceled()) {

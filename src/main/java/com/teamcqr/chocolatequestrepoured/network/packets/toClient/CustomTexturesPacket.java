@@ -63,8 +63,8 @@ public class CustomTexturesPacket implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entries.keySet().size());
-		buf.writeInt(this.textureSets.keySet().size());
+		buf.writeInt(this.entries.size());
+		buf.writeInt(this.textureSets.size());
 		// Textures
 		for (Map.Entry<String, String> entry : this.entries.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, entry.getKey());
@@ -74,7 +74,7 @@ public class CustomTexturesPacket implements IMessage {
 		for (Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : this.textureSets.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, entry.getKey());
 			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = entry.getValue();
-			buf.writeInt(entityTextureMap.keySet().size());
+			buf.writeInt(entityTextureMap.size());
 
 			for (ResourceLocation key : entityTextureMap.keySet()) {
 				ByteBufUtils.writeUTF8String(buf, key.toString());
@@ -86,11 +86,11 @@ public class CustomTexturesPacket implements IMessage {
 		}
 
 	}
-	
+
 	public Map<String, String> getTextureMap() {
 		return this.entries;
 	}
-	
+
 	public Map<String, Map<ResourceLocation, Set<ResourceLocation>>> getTextureSets() {
 		return this.textureSets;
 	}

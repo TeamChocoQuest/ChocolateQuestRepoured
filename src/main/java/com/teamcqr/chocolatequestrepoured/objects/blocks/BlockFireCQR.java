@@ -38,13 +38,13 @@ public class BlockFireCQR extends BlockFire {
 			Block block = worldIn.getBlockState(pos.down()).getBlock();
 			boolean flag = block.isFireSource(worldIn, pos.down(), EnumFacing.UP);
 
-			int i = ((Integer) state.getValue(AGE)).intValue();
+			int i = ((Integer) state.getValue(AGE));
 
 			if (!flag && worldIn.isRaining() && this.canDie(worldIn, pos) && rand.nextFloat() < 0.2F + (float) i * 0.03F) {
 				worldIn.setBlockToAir(pos);
 			} else {
 				if (i < 15) {
-					state = state.withProperty(AGE, Integer.valueOf(i + rand.nextInt(3) / 2));
+					state = state.withProperty(AGE, i + rand.nextInt(3) / 2);
 					worldIn.setBlockState(pos, state, 4);
 				}
 
@@ -108,7 +108,7 @@ public class BlockFireCQR extends BlockFire {
 											i2 = 15;
 										}
 
-										worldIn.setBlockState(blockpos, state.withProperty(AGE, Integer.valueOf(i2)), 3);
+										worldIn.setBlockState(blockpos, state.withProperty(AGE, i2), 3);
 									}
 								}
 							}
@@ -135,13 +135,13 @@ public class BlockFireCQR extends BlockFire {
 					j = 15;
 				}
 
-				worldIn.setBlockState(pos, this.getDefaultState().withProperty(AGE, Integer.valueOf(j)), 3);
+				worldIn.setBlockState(pos, this.getDefaultState().withProperty(AGE, j), 3);
 			} else {
 				worldIn.setBlockToAir(pos);
 			}
 
 			if (iblockstate.getBlock() == Blocks.TNT) {
-				Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
+				Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, true));
 			}
 		}
 	}

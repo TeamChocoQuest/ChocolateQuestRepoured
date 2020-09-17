@@ -31,22 +31,22 @@ public class EntityCQRGoblin extends AbstractEntityCQR {
 	protected EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.GOBLINS;
 	}
-	
+
 	@Override
 	public float getDefaultHeight() {
 		return super.getDefaultHeight() * 0.75F;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return ModSounds.GOBLIN_DEATH;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return ModSounds.GOBLIN_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return ModSounds.GOBLIN_HURT;

@@ -138,7 +138,7 @@ public class CQRMain {
 
 		// Custom Textures System
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
-		
+
 		// Faction system
 		FactionRegistry.instance().loadFactions();
 

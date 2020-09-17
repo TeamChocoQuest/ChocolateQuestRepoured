@@ -8,6 +8,6 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public interface IGeneratable {
 
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion);
+	void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion);
 
 }

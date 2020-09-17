@@ -29,7 +29,7 @@ public class GuiCQREntity extends GuiContainer {
 	private AbstractEntityCQR entity;
 
 	private GuiButtonExt openTradeGUIButton;
-	
+
 	private GuiSlider sliderHealthScaling;
 	private GuiSlider sliderDropChanceHelm;
 	private GuiSlider sliderDropChanceChest;
@@ -38,7 +38,7 @@ public class GuiCQREntity extends GuiContainer {
 	private GuiSlider sliderDropChanceMainhand;
 	private GuiSlider sliderDropChanceOffhand;
 	private GuiSlider sliderSizeScaling;
-	
+
 	public GuiCQREntity(Container inventorySlotsIn, AbstractEntityCQR entity) {
 		super(inventorySlotsIn);
 		this.entity = entity;
@@ -47,7 +47,7 @@ public class GuiCQREntity extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		//W := 107 -> steps are 10% steps
+		// W := 107 -> steps are 10% steps
 		this.sliderHealthScaling = new GuiSlider(0, 5, 5, 107, 16, "Health Scale ", " %", 10, 1000, this.entity.getHealthScale() * 100.0D, false, true);
 		this.sliderDropChanceHelm = new GuiSlider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.HEAD) * 100.0D, false, true);
 		this.sliderDropChanceChest = new GuiSlider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.CHEST) * 100.0D, false, true);
@@ -56,7 +56,7 @@ public class GuiCQREntity extends GuiContainer {
 		this.sliderDropChanceMainhand = new GuiSlider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.MAINHAND) * 100.0D, false, true);
 		this.sliderDropChanceOffhand = new GuiSlider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.OFFHAND) * 100.0D, false, true);
 		this.sliderSizeScaling = new GuiSlider(7, 5, 145, 107, 16, "Size Scale ", " %", 5, 500, this.entity.getSizeVariation() * 100.0D, false, true);
-		this.openTradeGUIButton = new GuiButtonExt(8, 5 + sliderHealthScaling.width + 40, 25, 54, 16, "Trades");
+		this.openTradeGUIButton = new GuiButtonExt(8, 5 + this.sliderHealthScaling.width + 40, 25, 54, 16, "Trades");
 		this.buttonList.add(this.sliderHealthScaling);
 		this.buttonList.add(this.sliderDropChanceHelm);
 		this.buttonList.add(this.sliderDropChanceChest);
@@ -140,13 +140,13 @@ public class GuiCQREntity extends GuiContainer {
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
-	
+
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		if(button == this.openTradeGUIButton && (player.isCreative() || (entity.getTrades() != null && !entity.getTrades().isEmpty() && !entity.getFaction().isEnemy(player)))) {
-			player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, entity.world, entity.getEntityId(), 0, 0);
+		if (button == this.openTradeGUIButton && (player.isCreative() || (this.entity.getTrades() != null && !this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
+			player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.entity.world, this.entity.getEntityId(), 0, 0);
 		}
 	}
 

@@ -26,7 +26,6 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
@@ -45,25 +44,25 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 	private Map<CQStructure, BlockPos> toGenerate = new HashMap<>();
 
-	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon) {
-		super(world, pos, dungeon);
+	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
 		int buildings = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
-		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder());
+		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder(), this.random);
 		for (int i = 0; i < buildings; i++) {
-			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder()));
+			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder(), this.random));
 		}
 
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate
 		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the
 		// remaining component and wander to the destination
-		int vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+		int vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random);
 		for (int i = 0; i < this.chosenStructures.size(); i++) {
 			if (!this.dungeon.placeInCircle() && i > 0) {
-				vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+				vX = DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random);
 			}
 			Vec3i v = new Vec3i(vX, 0, 0);
 			Double degrees = ((Integer) new Random().nextInt(360)).doubleValue();
@@ -112,7 +111,8 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		CQStructure centerDun = this.loadStructureFromFile(this.centerStructure);
 
-		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + centerDun.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + centerDun.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + centerDun.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + centerDun.getSize().getZ(), this.dungeon.getSupportBlock(),
+				this.dungeon.getSupportTopBlock(), 8));
 		this.toGenerate.put(centerDun, this.pos);
 
 		// First, build all the support platforms
@@ -266,7 +266,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int z = start.getZ();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getYForPos(world, currX, z, true);
+			y = DungeonGenUtils.getYForPos(this.world, currX, z, true);
 			this.buildPathSegmentX(new BlockPos(currX, y, z));
 			currX += vX;
 		} while (currX != end.getX());
@@ -284,7 +284,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int x = start.getX();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getYForPos(world, x, currZ, true);
+			y = DungeonGenUtils.getYForPos(this.world, x, currZ, true);
 			this.buildPathSegmentZ(new BlockPos(x, y, currZ));
 			currZ += vZ;
 		} while (currZ != end.getZ());

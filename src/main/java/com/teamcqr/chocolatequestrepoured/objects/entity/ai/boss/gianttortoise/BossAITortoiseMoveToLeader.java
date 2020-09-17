@@ -48,10 +48,10 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 			super.updateTask();
 		}
 	}
-	
+
 	@Override
 	public void startExecuting() {
-		getBoss().setInShell(false);
+		this.getBoss().setInShell(false);
 		super.startExecuting();
 	}
 

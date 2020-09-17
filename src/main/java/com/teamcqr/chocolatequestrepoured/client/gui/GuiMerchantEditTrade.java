@@ -73,7 +73,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 		}
 
 		this.reputationButton = this.addButton(new GuiButtonReputation(30, this.guiLeft + 7, this.guiTop + 72));
-		this.reputationButton.setReputationIndex(trade != null ? this.trade.getRequiredReputation() : Integer.MIN_VALUE);
+		this.reputationButton.setReputationIndex(this.trade != null ? this.trade.getRequiredReputation() : Integer.MIN_VALUE);
 		this.advancementTextField = new GuiTextField(40, this.fontRenderer, this.guiLeft + 8, this.guiTop + 103, 58, 10);
 		this.advancementTextField.setText(this.trade != null && this.trade.getRequiredAdvancement() != null ? this.trade.getRequiredAdvancement().toString() : "");
 

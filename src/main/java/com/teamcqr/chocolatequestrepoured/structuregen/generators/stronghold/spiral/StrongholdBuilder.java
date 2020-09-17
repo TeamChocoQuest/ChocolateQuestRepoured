@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.sp
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
@@ -26,6 +27,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdBuilder {
 
+	private final Random random;
 	private AbstractDungeonGenerator<DungeonVolcano> generator;
 	private DungeonGenerator dungeonGenerator;
 	private BlockPos startPos;
@@ -35,7 +37,7 @@ public class StrongholdBuilder {
 	private World world;
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 
-	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
+	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.startPos = start;
@@ -43,6 +45,7 @@ public class StrongholdBuilder {
 		this.blocksRemainingToWall = distanceToWall;
 		this.direction = expansionDirection;
 		this.world = world;
+		this.random = rand;
 	}
 
 	public void generate(int cX, int cZ, String mobType) {
@@ -78,9 +81,9 @@ public class StrongholdBuilder {
 	}
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, String mobType) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon);
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
 		stronghold.calculateFloors(pos, world2, mobType);
-		stronghold.buildFloors(pos.add(0, -1, 0), this.world,mobType);
+		stronghold.buildFloors(pos.add(0, -1, 0), this.world, mobType);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 

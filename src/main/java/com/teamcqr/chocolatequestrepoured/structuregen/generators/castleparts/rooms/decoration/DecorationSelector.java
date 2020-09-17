@@ -8,9 +8,9 @@ public class DecorationSelector {
 	private CQRWeightedRandom<IRoomDecor> edgeDecor;
 	private CQRWeightedRandom<IRoomDecor> midDecor;
 
-	public DecorationSelector(Random random) {
-		this.edgeDecor = new CQRWeightedRandom<>(random);
-		this.midDecor = new CQRWeightedRandom<>(random);
+	public DecorationSelector() {
+		this.edgeDecor = new CQRWeightedRandom<>();
+		this.midDecor = new CQRWeightedRandom<>();
 	}
 
 	public void registerEdgeDecor(IRoomDecor decor, int weight) {
@@ -29,11 +29,11 @@ public class DecorationSelector {
 		return this.midDecor.numItems() > 0;
 	}
 
-	public IRoomDecor randomEdgeDecor() {
-		return this.edgeDecor.next();
+	public IRoomDecor randomEdgeDecor(Random rand) {
+		return this.edgeDecor.next(rand);
 	}
 
-	public IRoomDecor randomMidDecor() {
-		return this.midDecor.next();
+	public IRoomDecor randomMidDecor(Random rand) {
+		return this.midDecor.next(rand);
 	}
 }

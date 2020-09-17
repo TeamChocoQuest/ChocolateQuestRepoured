@@ -102,7 +102,7 @@ public class EntityAIPotionThrower extends EntityAIAttack {
 				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 				int indx = this.entity.getRNG().nextInt(inventory.getSlots());
 				ItemStack st = inventory.getStackInSlot(indx);
-				Set<Integer> usedIDs = new HashSet<Integer>();
+				Set<Integer> usedIDs = new HashSet<>();
 				while ((st == null || st.isEmpty()) && !usedIDs.contains(indx)) {
 					indx = this.entity.getRNG().nextInt(inventory.getSlots());
 					usedIDs.add(indx);

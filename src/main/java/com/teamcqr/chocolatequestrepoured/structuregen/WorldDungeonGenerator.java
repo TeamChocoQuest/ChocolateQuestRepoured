@@ -11,7 +11,6 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -24,12 +23,12 @@ import net.minecraftforge.fml.common.IWorldGenerator;
  */
 public class WorldDungeonGenerator implements IWorldGenerator {
 
-	static final String[] STRUCTURE_NAMES_INTERNAL = { "Stronghold", "Mansion", "Monument", "Village", "Mineshaft", "Temple", "EndCity", "Fortress" };
+	private static final String[] STRUCTURE_NAMES_INTERNAL = { "Stronghold", "Mansion", "Monument", "Village", "Mineshaft", "Temple", "EndCity", "Fortress" };
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (Boolean.TRUE.equals(TestThread.FINDING_SPAWN_POINT.get(world))) {
-			TestThread.add((WorldServer) world, chunkX, chunkZ);
+		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
+			DungeonGenerationHelper.addDelayedChunk(world, chunkX, chunkZ);
 			return;
 		}
 
@@ -51,7 +50,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			}
 			for (DungeonBase dungeon : locationSpecificDungeons) {
 				for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositionsInChunk(world, chunkX, chunkZ)) {
-					dungeon.generate(world, dungeonSpawnPos.getX(world), dungeonSpawnPos.getZ(world));
+					int x = dungeonSpawnPos.getX(world);
+					int z = dungeonSpawnPos.getZ(world);
+					dungeon.generate(world, x, z, new Random(getSeed(world, x, z)), DungeonDataManager.DungeonSpawnType.LOCKED_COORDINATE,DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 				}
 			}
 			return;
@@ -98,15 +99,15 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			}
 		}
 
-		Random rand = new Random(getSeed(world, chunkX, chunkZ));
+		Random rand = new Random(getSeed(world, (chunkX << 4) + 8, (chunkZ << 4) + 8));
 		if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
 			return;
 		}
 
-		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForChunk(world, chunkX, chunkZ);
-		DungeonBase dungeon = possibleDungeons.next();
+		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForPos(world, new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8));
+		DungeonBase dungeon = possibleDungeons.next(rand);
 		if (dungeon != null && DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
-			dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8);
+			dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8, rand, DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 		}
 	}
 

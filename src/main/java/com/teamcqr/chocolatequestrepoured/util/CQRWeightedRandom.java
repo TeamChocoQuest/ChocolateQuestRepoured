@@ -20,36 +20,28 @@ public class CQRWeightedRandom<T> {
 	}
 
 	private static final Random RAND = new Random();
-	private Random random;
-	private List<WeightedObject<T>> items;
+	private List<WeightedObject<T>> items = new ArrayList<>();
 	private int totalWeight = 0;
 
 	public CQRWeightedRandom() {
-		this(RAND);
-	}
 
-	public CQRWeightedRandom(Random random) {
-		this.random = random;
-		this.items = new ArrayList<>();
 	}
 
 	@SafeVarargs
 	public CQRWeightedRandom(WeightedObject<T>... weightedObjects) {
-		this(RAND);
 		for (WeightedObject<T> weightedObject : weightedObjects) {
 			this.add(weightedObject);
 		}
 	}
 
 	public CQRWeightedRandom(Collection<WeightedObject<T>> weightedObjects) {
-		this(RAND);
 		for (WeightedObject<T> weightedObject : weightedObjects) {
 			this.add(weightedObject);
 		}
 	}
 
 	public void add(T item, int weight) {
-		this.add(new WeightedObject<T>(item, weight));
+		this.add(new WeightedObject<>(item, weight));
 	}
 
 	public void add(WeightedObject<T> weightedObject) {
@@ -70,9 +62,14 @@ public class CQRWeightedRandom<T> {
 
 	@Nullable
 	public T next() {
+		return this.next(RAND);
+	}
+
+	@Nullable
+	public T next(Random rand) {
 		if (this.numItems() > 0) {
 			if (this.totalWeight > 0) {
-				int seed = this.random.nextInt(this.totalWeight);
+				int seed = rand.nextInt(this.totalWeight);
 				int total = 0;
 				for (WeightedObject<T> item : this.items) {
 					total += item.weight;

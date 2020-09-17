@@ -212,10 +212,10 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, RenderCQRGiantTortoisePart::new);
 
 		// Lich
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage<EntityCQRLich>(renderManager, new ModelLich(), "boss/lich"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelLich(), "boss/lich"));
 
 		// Boar Mage
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage<EntityCQRBoarmage>(renderManager, new ModelPigMage(), "boss/pig_mage"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelPigMage(), "boss/pig_mage"));
 
 		// Necromancer
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRNecromancer(renderManager, new ModelNecromancer(), "boss/necromancer"));
