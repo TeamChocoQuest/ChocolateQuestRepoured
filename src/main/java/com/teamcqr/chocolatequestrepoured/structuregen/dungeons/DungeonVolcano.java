@@ -6,7 +6,6 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;

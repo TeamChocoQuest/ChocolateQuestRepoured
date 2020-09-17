@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
@@ -34,7 +33,7 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 
 		if (this.dungeon.doBuildSupportPlatform()) {
 			for (CastleRoomSelector.SupportArea area : this.roomHelper.getSupportAreas()) {
-				//CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
+				// CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.pos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
 				this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));

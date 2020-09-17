@@ -46,12 +46,12 @@ public class TextureSetManager {
 			// Ignore
 		}
 	}
-	
+
 	public static void loadTextureSetsFromFolder(File folder) {
-		if(folder.isDirectory()) {
+		if (folder.isDirectory()) {
 			List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "cfg", "prop", "properties" }, true));
 			int loadedSets = 0;
-			for(File f : files) {
+			for (File f : files) {
 				boolean flag = true;
 				Properties prop = new Properties();
 				try (InputStream inputStream = new FileInputStream(f)) {
@@ -67,8 +67,8 @@ public class TextureSetManager {
 						new TextureSet(prop, f.getName().substring(0, f.getName().lastIndexOf('.')));
 						CQRMain.logger.info("Successfully loaded texture set: " + f.getName().substring(0, f.getName().lastIndexOf('.')) + "!");
 						loadedSets++;
-					} catch(Exception e) {
-						//TODO: WARNN
+					} catch (Exception e) {
+						// TODO: WARNN
 					}
 				}
 			}

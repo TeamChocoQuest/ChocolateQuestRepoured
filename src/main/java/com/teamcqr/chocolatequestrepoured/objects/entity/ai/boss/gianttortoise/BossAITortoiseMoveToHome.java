@@ -41,10 +41,10 @@ public class BossAITortoiseMoveToHome extends EntityAIMoveToHome {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void startExecuting() {
-		getBoss().setInShell(false);
+		this.getBoss().setInShell(false);
 		super.startExecuting();
 	}
 

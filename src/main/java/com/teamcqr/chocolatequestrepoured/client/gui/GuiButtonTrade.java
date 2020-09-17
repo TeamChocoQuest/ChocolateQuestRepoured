@@ -79,7 +79,7 @@ public class GuiButtonTrade extends GuiButton {
 			RenderHelper.enableGUIStandardItemLighting();
 			GlStateManager.enableRescaleNormal();
 			GlStateManager.enableDepth();
-			
+
 			itemRender.zLevel = 100.0F;
 			int x = this.x + 4;
 			int y = this.y + 2;
@@ -90,7 +90,7 @@ public class GuiButtonTrade extends GuiButton {
 			itemRender.renderItemAndEffectIntoGUI(mc.player, this.output, x + 92, y);
 			itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, this.output, x + 92, y, null);
 			itemRender.zLevel = 0.0F;
-			
+
 			GlStateManager.disableDepth();
 			GlStateManager.disableRescaleNormal();
 			RenderHelper.disableStandardItemLighting();

@@ -47,7 +47,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	protected void damageEntity(DamageSource damageSrc, float damageAmount) {
 		super.damageEntity(damageSrc, damageAmount);
 
-		if (!world.isRemote && (this.getHealth() / this.getMaxHealth()) < 0.83F) {
+		if (!this.world.isRemote && (this.getHealth() / this.getMaxHealth()) < 0.83F) {
 			this.revealIdentity();
 		}
 	}

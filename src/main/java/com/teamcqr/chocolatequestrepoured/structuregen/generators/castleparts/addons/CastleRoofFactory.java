@@ -10,7 +10,7 @@ public class CastleRoofFactory {
 		case TWO_SIDED:
 			return new CastleAddonRoofTwoSided(startPos, sizeX, sizeZ);
 		case SPIRE:
-			return  new CastleAddonRoofSpire(startPos, sizeX, sizeZ);
+			return new CastleAddonRoofSpire(startPos, sizeX, sizeZ);
 		case FOUR_SIDED:
 		default:
 			return new CastleAddonRoofFourSided(startPos, sizeX, sizeZ);

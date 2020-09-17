@@ -18,14 +18,14 @@ import net.minecraft.world.World;
  * Copied from vanilla FrostedIce block
  */
 public class BlockTemporaryWeb extends BlockWeb {
-	
+
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
 
 	public BlockTemporaryWeb() {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
 		this.setTickRandomly(true);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState p_176201_1_) {
 		return (Integer) p_176201_1_.getValue(AGE);
@@ -40,7 +40,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 	public boolean requiresUpdates() {
 		return true;
 	}
-	
+
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState blockstate, Random random) {
 		if ((random.nextInt(3) == 0 || this.countNeighbors(world, pos) < 4)) {
@@ -52,8 +52,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState blockstate, World world, BlockPos pos, Block block,
-			BlockPos p_189540_5_) {
+	public void neighborChanged(IBlockState blockstate, World world, BlockPos pos, Block block, BlockPos p_189540_5_) {
 		if (block == this) {
 			int lvt_6_1_ = this.countNeighbors(world, pos);
 			if (lvt_6_1_ < 2) {
@@ -81,8 +80,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 		return lvt_3_1_;
 	}
 
-	protected void slightlyDecay(World world, BlockPos pos, IBlockState blockstate, Random random,
-			boolean updateNeighbors) {
+	protected void slightlyDecay(World world, BlockPos pos, IBlockState blockstate, Random random, boolean updateNeighbors) {
 		int age = (Integer) blockstate.getValue(AGE);
 		if (age < 3) {
 			world.setBlockState(pos, blockstate.withProperty(AGE, age + 1), 2);
@@ -108,7 +106,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{AGE});
+		return new BlockStateContainer(this, new IProperty[] { AGE });
 	}
 
 	@Override

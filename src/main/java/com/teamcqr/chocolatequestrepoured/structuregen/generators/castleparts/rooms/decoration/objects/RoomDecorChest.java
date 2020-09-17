@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import java.util.HashSet;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;

@@ -207,28 +207,28 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		if (this.dungeon.isCoverBlockEnabled()) {
 			// needs update
 			/*
-			Map<BlockPos, IBlockState> stateMap = new HashMap<>();
-
-			int startX = this.pos.getX() - this.entranceSizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
-			int startZ = this.pos.getZ() - this.entranceSizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
-
-			int endX = this.pos.getX() + this.entranceSizeX + this.entranceSizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
-			int endZ = this.pos.getZ() + this.entranceSizeZ + this.entranceSizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
-
-			for (int iX = startX; iX <= endX; iX++) {
-				for (int iZ = startZ; iZ <= endZ; iZ++) {
-					BlockPos pos = new BlockPos(iX, this.world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
-					if (!Block.isEqualTo(this.world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
-						stateMap.put(pos, this.dungeon.getCoverBlock().getDefaultState());
-					}
-				}
-			}
-			List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-			for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-				blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
-			}
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
-			*/
+			 * Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+			 * 
+			 * int startX = this.pos.getX() - this.entranceSizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
+			 * int startZ = this.pos.getZ() - this.entranceSizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
+			 * 
+			 * int endX = this.pos.getX() + this.entranceSizeX + this.entranceSizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
+			 * int endZ = this.pos.getZ() + this.entranceSizeZ + this.entranceSizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
+			 * 
+			 * for (int iX = startX; iX <= endX; iX++) {
+			 * for (int iZ = startZ; iZ <= endZ; iZ++) {
+			 * BlockPos pos = new BlockPos(iX, this.world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
+			 * if (!Block.isEqualTo(this.world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
+			 * stateMap.put(pos, this.dungeon.getCoverBlock().getDefaultState());
+			 * }
+			 * }
+			 * }
+			 * List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+			 * for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+			 * blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			 * }
+			 * this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
+			 */
 		}
 	}
 

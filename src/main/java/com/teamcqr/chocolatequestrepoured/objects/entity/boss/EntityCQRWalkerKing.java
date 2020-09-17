@@ -247,9 +247,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		boolean spectralFlag = false;
-		if(source.getTrueSource() instanceof EntityLivingBase) {
-			if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase)source.getTrueSource()).getHeldItemMainhand()) > 0 ||
-					EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase)source.getTrueSource()).getHeldItemOffhand()) > 0) {
+		if (source.getTrueSource() instanceof EntityLivingBase) {
+			if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
 				amount *= 2;
 				spectralFlag = true;
 			}

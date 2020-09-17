@@ -26,7 +26,6 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
@@ -112,7 +111,8 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		CQStructure centerDun = this.loadStructureFromFile(this.centerStructure);
 
-		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + centerDun.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + centerDun.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+		this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + centerDun.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + centerDun.getSize().getZ(), this.dungeon.getSupportBlock(),
+				this.dungeon.getSupportTopBlock(), 8));
 		this.toGenerate.put(centerDun, this.pos);
 
 		// First, build all the support platforms
@@ -266,7 +266,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int z = start.getZ();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getYForPos(world, currX, z, true);
+			y = DungeonGenUtils.getYForPos(this.world, currX, z, true);
 			this.buildPathSegmentX(new BlockPos(currX, y, z));
 			currX += vX;
 		} while (currX != end.getX());
@@ -284,7 +284,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		int x = start.getX();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getYForPos(world, x, currZ, true);
+			y = DungeonGenUtils.getYForPos(this.world, x, currZ, true);
 			this.buildPathSegmentZ(new BlockPos(x, y, currZ));
 			currZ += vZ;
 		} while (currZ != end.getZ());

@@ -86,11 +86,11 @@ public class CustomTexturesPacket implements IMessage {
 		}
 
 	}
-	
+
 	public Map<String, String> getTextureMap() {
 		return this.entries;
 	}
-	
+
 	public Map<String, Map<ResourceLocation, Set<ResourceLocation>>> getTextureSets() {
 		return this.textureSets;
 	}

@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
 
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;

@@ -27,7 +27,7 @@ public class SpiralStrongholdBuilder {
 	private final Random random;
 	private AbstractDungeonGenerator<DungeonVolcano> generator;
 	private DungeonGenerator dungeonGenerator;
-	//Direction the entryway is facing (beginning from the volcano center)
+	// Direction the entryway is facing (beginning from the volcano center)
 	private ESkyDirection allowedDirection;
 	private DungeonVolcano dungeon;
 	private SpiralStrongholdFloor[] floors;
@@ -59,47 +59,47 @@ public class SpiralStrongholdBuilder {
 		int roomCounter = this.roomCount;
 		final int maxRoomsPerFloor = this.floorSideLength * 4 - 4;
 		int y = strongholdEntrancePos.getY();
-		
-		//If we generate inwards our first step is to place a stairwell to invert the entrance direction
+
+		// If we generate inwards our first step is to place a stairwell to invert the entrance direction
 		EStrongholdRoomType stairwellType = EStrongholdRoomType.STAIR_NN;
 		Vec3i offsetVector = null;
-		if(buildInwards) {
-			switch(this.allowedDirection) {
+		if (this.buildInwards) {
+			switch (this.allowedDirection) {
 			case NORTH:
 				stairwellType = EStrongholdRoomType.STAIR_SS;
-				offsetVector = new Vec3i(0,0,dungeon.getRoomSizeZ());
+				offsetVector = new Vec3i(0, 0, this.dungeon.getRoomSizeZ());
 				break;
 			case EAST:
 				stairwellType = EStrongholdRoomType.STAIR_WW;
-				offsetVector = new Vec3i(-dungeon.getRoomSizeX(),0,0);
+				offsetVector = new Vec3i(-this.dungeon.getRoomSizeX(), 0, 0);
 				break;
 			case SOUTH:
 				stairwellType = EStrongholdRoomType.STAIR_NN;
-				offsetVector = new Vec3i(0,0,-dungeon.getRoomSizeZ());
+				offsetVector = new Vec3i(0, 0, -this.dungeon.getRoomSizeZ());
 				break;
 			case WEST:
 				stairwellType = EStrongholdRoomType.STAIR_EE;
-				offsetVector = new Vec3i(dungeon.getRoomSizeX(),0,0);
+				offsetVector = new Vec3i(this.dungeon.getRoomSizeX(), 0, 0);
 				break;
 			}
-			
+
 			y -= this.dungeon.getRoomSizeY();
-			
+
 			this.allowedDirection = this.allowedDirection.getOpposite();
-			File file = dungeon.getRoomNBTFileForType(stairwellType, this.random);
+			File file = this.dungeon.getRoomNBTFileForType(stairwellType, this.random);
 			if (file != null) {
 				CQStructure room = this.generator.loadStructureFromFile(file);
 				PlacementSettings settings = new PlacementSettings();
 				BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(strongholdEntrancePos, room, settings);
 				p = new BlockPos(p.getX(), y, p.getZ());
-				strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getBlockInfoList(), settings, mobType));
-				strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getSpecialBlockInfoList(), settings, mobType));
-				strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, p, room.getEntityInfoList(), settings, mobType));
+				this.strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getBlockInfoList(), settings, mobType));
+				this.strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getSpecialBlockInfoList(), settings, mobType));
+				this.strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, p, room.getEntityInfoList(), settings, mobType));
 			}
 			strongholdEntrancePos = strongholdEntrancePos.add(offsetVector);
 			posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());
 		}
-		
+
 		EStrongholdRoomType entranceType = EStrongholdRoomType.NONE;
 		switch (this.allowedDirection) {
 		case WEST:
@@ -125,7 +125,7 @@ public class SpiralStrongholdBuilder {
 		default:
 			break;
 		}
-		
+
 		EStrongholdRoomType firstRoomOverride = entranceType;
 		for (int i = 0; i < this.floors.length; i++) {
 			if (posTuple == null || roomCounter <= 0) {
@@ -146,7 +146,7 @@ public class SpiralStrongholdBuilder {
 			floor.calculateCoordinates(y, this.dungeon.getRoomSizeX(), this.dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();
 			if (i != 0) {
-				if(buildDownwards) {
+				if (this.buildDownwards) {
 					floor.overrideFirstRoomType(firstRoomOverride);
 				} else {
 					floor.overrideFirstRoomType(EStrongholdRoomType.NONE);
@@ -159,11 +159,11 @@ public class SpiralStrongholdBuilder {
 			} else {
 				entranceType = floor.getExitRoomType();
 				firstRoomOverride = entranceType;
-				if(buildDownwards) {
+				if (this.buildDownwards) {
 					floor.overrideLastRoomType(EStrongholdRoomType.NONE);
 				}
 			}
-			if(buildDownwards) {
+			if (this.buildDownwards) {
 				y -= this.dungeon.getRoomSizeY();
 			} else {
 				y += this.dungeon.getRoomSizeY();

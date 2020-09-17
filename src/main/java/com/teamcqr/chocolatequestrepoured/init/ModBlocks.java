@@ -290,9 +290,8 @@ public class ModBlocks {
 
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
-					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"), 
-					setBlockName(new BlockTemporaryWeb(), "temporary_web"),
-			};
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
+					setBlockName(new BlockTemporaryWeb(), "temporary_web"), };
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 

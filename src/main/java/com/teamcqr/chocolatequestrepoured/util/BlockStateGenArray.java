@@ -69,7 +69,7 @@ public class BlockStateGenArray {
 	}
 
 	public Random getRandom() {
-		return random;
+		return this.random;
 	}
 
 	public Map<BlockPos, AbstractBlockInfo> getMainMap() {

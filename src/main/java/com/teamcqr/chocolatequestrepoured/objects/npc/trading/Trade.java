@@ -386,27 +386,27 @@ public class Trade {
 	}
 
 	public int getRequiredReputation() {
-		return requiredReputation;
+		return this.requiredReputation;
 	}
 
 	public ResourceLocation getRequiredAdvancement() {
-		return requiredAdvancement;
+		return this.requiredAdvancement;
 	}
 
 	public boolean hasLimitedStock() {
-		return hasLimitedStock;
+		return this.hasLimitedStock;
 	}
 
 	public int getRestockRate() {
-		return restockRate;
+		return this.restockRate;
 	}
 
 	public int getInStock() {
-		return inStock;
+		return this.inStock;
 	}
 
 	public int getMaxStock() {
-		return maxStock;
+		return this.maxStock;
 	}
 
 }

@@ -54,7 +54,7 @@ public class DungeonDataManager {
 		if (isWorldValid(world)) {
 			try {
 				getInstance(world).saveData();
-			} catch(NullPointerException npe) {
+			} catch (NullPointerException npe) {
 				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
 			}
 		}
@@ -64,7 +64,7 @@ public class DungeonDataManager {
 		if (isWorldValid(world)) {
 			try {
 				getInstance(world).insertDungeonEntry(dungeon.getDungeonName(), position);
-			} catch(NullPointerException npe) {
+			} catch (NullPointerException npe) {
 				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
 			}
 		}
@@ -97,7 +97,7 @@ public class DungeonDataManager {
 	public static Set<String> getSpawnedDungeonNames(World world) {
 		try {
 			return getInstance(world).getSpawnedDungeonNames();
-		} catch(NullPointerException npe) {
+		} catch (NullPointerException npe) {
 			CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
 			return new HashSet<String>();
 		}
@@ -110,7 +110,7 @@ public class DungeonDataManager {
 	public static Set<BlockPos> getLocationsOfDungeon(World world, String dungeon) {
 		try {
 			return getInstance(world).getLocationsOfDungeon(dungeon);
-		} catch(NullPointerException npe) {
+		} catch (NullPointerException npe) {
 			CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
 			return new HashSet<BlockPos>();
 		}

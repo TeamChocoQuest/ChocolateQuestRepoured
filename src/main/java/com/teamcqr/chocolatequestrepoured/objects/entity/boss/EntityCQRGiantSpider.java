@@ -81,7 +81,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(31, new EntityAIFollowPath(this));
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
-		
+
 		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 120, 20) {
 			@Override
 			protected SoundEvent getStartChargingSound() {
@@ -92,7 +92,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			protected SoundEvent getStartCastingSound() {
 				return SoundEvents.ENTITY_SPIDER_AMBIENT;
 			}
-		}); 
+		});
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -112,10 +112,10 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.setBesideClimbableBlock(this.collidedHorizontally);
 		}
 	}
-	
+
 	@Override
 	public void fall(float p_180430_1_, float p_180430_2_) {
-		//What do we say to fall damge? Not today!
+		// What do we say to fall damge? Not today!
 	}
 
 	@Override
@@ -131,15 +131,15 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.summonedMinions.remove(e);
 		}
 	}
-	
+
 	@Override
 	public void addPotionEffect(PotionEffect potioneffectIn) {
-		if(potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
+		if (potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
 			return;
 		}
 		super.addPotionEffect(potioneffectIn);
 	}
-	
+
 	/**
 	 * Returns new PathNavigateGround instance
 	 */
