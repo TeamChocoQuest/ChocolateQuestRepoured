@@ -7,5 +7,5 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
  * Copyright (c) 01.07.2019 Developed by KalgogSmash: https://github.com/kalgogsmash
  */
 public interface ICastleAddon {
-	public void generate(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon);
+	void generate(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon);
 }

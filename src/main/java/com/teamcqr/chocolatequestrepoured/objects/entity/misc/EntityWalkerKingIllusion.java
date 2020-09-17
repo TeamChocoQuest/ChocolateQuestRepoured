@@ -139,7 +139,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 								}
 							}
 						});
-						;
+
 						this.searchTicksForParent--;
 					}
 				} else {

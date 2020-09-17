@@ -16,7 +16,7 @@ public class CastleRoomReplacedRoof extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
-		;
+
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			BlockPos blockpos;
 
 			for (blockpos = pos.down(); blockpos.getY() > 0 && this.world.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.down()) {
-				;
+
 			}
 
 			if (blockpos.getY() > 0) {
@@ -84,7 +84,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			BlockPos blockpos1;
 
 			for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
-				;
+
 			}
 
 			return this.getPathToPosCQR(blockpos1);

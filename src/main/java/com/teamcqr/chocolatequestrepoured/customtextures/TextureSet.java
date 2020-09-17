@@ -109,10 +109,10 @@ public class TextureSet {
 	}
 
 	public static Set<File> getLoadedTextures() {
-		return new HashSet<File>(TextureSet.textures);
+		return new HashSet<>(TextureSet.textures);
 	}
 
 	public Map<ResourceLocation, Set<ResourceLocation>> getMappings() {
-		return new HashMap<ResourceLocation, Set<ResourceLocation>>(this.entityTextureMap);
+		return new HashMap<>(this.entityTextureMap);
 	}
 }

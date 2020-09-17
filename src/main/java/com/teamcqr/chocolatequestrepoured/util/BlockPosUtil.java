@@ -17,11 +17,11 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class BlockPosUtil {
 
-	public static interface BlockInfoConsumer {
+	public interface BlockInfoConsumer {
 		void accept(BlockPos.MutableBlockPos mutablePos, IBlockState state);
 	}
 
-	public static interface BlockInfoPredicate {
+	public interface BlockInfoPredicate {
 		boolean test(BlockPos.MutableBlockPos mutablePos, IBlockState state);
 	}
 

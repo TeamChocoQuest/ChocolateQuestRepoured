@@ -46,10 +46,10 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 				stack.damageItem(1, playerIn);
 				playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+		return new ActionResult<>(EnumActionResult.FAIL, stack);
 	}
 
 	public void spawnLightningBolt(EntityPlayer player, World worldIn) {

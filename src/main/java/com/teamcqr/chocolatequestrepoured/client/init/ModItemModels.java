@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
 public class ModItemModels {
 
-	private static final List<Item> REGISTERED_ITEM_MODELS = new ArrayList<Item>();
+	private static final List<Item> REGISTERED_ITEM_MODELS = new ArrayList<>();
 
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {

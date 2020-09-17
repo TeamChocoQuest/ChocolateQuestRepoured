@@ -52,7 +52,7 @@ public enum EDungeonGenerator {
 
 	@FunctionalInterface
 	private static interface IDungeonGenerator {
-		public DungeonBase createDungeon(String name, Properties prop);
+		DungeonBase createDungeon(String name, Properties prop);
 	}
 
 }

@@ -7,11 +7,11 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IMayHaveTextureOverride {
 
-	public boolean hasTextureOverride();
+	boolean hasTextureOverride();
 
 	@Nullable
-	public ResourceLocation getTextureOverride();
+	ResourceLocation getTextureOverride();
 
-	public Entity getEntity();
+	Entity getEntity();
 
 }

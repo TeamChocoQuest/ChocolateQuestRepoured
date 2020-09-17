@@ -2,32 +2,32 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 public interface IEntityAISpell {
 
-	public boolean shouldExecute();
+	boolean shouldExecute();
 
-	public boolean shouldContinueExecuting();
+	boolean shouldContinueExecuting();
 
-	public boolean isInterruptible();
+	boolean isInterruptible();
 
-	public void startExecuting();
+	void startExecuting();
 
-	public void resetTask();
+	void resetTask();
 
-	public void updateTask();
+	void updateTask();
 
-	public void startChargingSpell();
+	void startChargingSpell();
 
-	public void chargeSpell();
+	void chargeSpell();
 
-	public void startCastingSpell();
+	void startCastingSpell();
 
-	public void castSpell();
+	void castSpell();
 
-	public boolean isCharging();
+	boolean isCharging();
 
-	public boolean isCasting();
+	boolean isCasting();
 
-	public int getWeight();
+	int getWeight();
 
-	public boolean ignoreWeight();
+	boolean ignoreWeight();
 
 }

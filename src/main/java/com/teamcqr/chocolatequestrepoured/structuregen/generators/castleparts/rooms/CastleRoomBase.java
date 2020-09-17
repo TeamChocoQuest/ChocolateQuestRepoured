@@ -80,17 +80,17 @@ public abstract class CastleRoomBase {
 	}
 
 	public void postProcess(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
-		;
+
 	}
 
 	protected abstract void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon);
 
 	public void decorate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, GearedMobFactory mobFactory) {
-		; // Default is no decoration
+		// Default is no decoration
 	}
 
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
-		; // Default is no boss
+		// Default is no boss
 	}
 
 	public boolean canBuildDoorOnSide(EnumFacing side) {
@@ -403,7 +403,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected void makeRoomBlockAdjustments() {
-		;
+
 	}
 
 	public void setAsRootRoom() {
@@ -416,7 +416,7 @@ public abstract class CastleRoomBase {
 	}
 
 	public void copyPropertiesOf(CastleRoomBase room) {
-		;
+
 	}
 
 	public void registerWalls(HashMap<EnumFacing, CastleMainStructWall> walls) {

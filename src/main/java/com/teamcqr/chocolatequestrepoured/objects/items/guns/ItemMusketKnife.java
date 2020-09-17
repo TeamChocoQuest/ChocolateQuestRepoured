@@ -93,7 +93,7 @@ public class ItemMusketKnife extends ItemSword {
 
 		else {
 			this.shoot(stack, worldIn, playerIn);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 	}
 

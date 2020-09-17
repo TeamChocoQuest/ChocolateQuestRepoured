@@ -101,7 +101,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
+		this.dataManager.register(CLIMBING, (byte) 0);
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	 * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is false.
 	 */
 	public void setBesideClimbableBlock(boolean climbing) {
-		byte b0 = ((Byte) this.dataManager.get(CLIMBING)).byteValue();
+		byte b0 = ((Byte) this.dataManager.get(CLIMBING));
 
 		if (climbing) {
 			b0 = (byte) (b0 | 1);
@@ -167,7 +167,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			b0 = (byte) (b0 & -2);
 		}
 
-		this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+		this.dataManager.set(CLIMBING, b0);
 	}
 
 	@Override

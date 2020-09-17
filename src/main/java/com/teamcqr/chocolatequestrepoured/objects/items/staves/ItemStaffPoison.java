@@ -39,7 +39,7 @@ public class ItemStaffPoison extends Item implements IRangedWeapon {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		this.shoot(stack, worldIn, playerIn, handIn);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player, EnumHand handIn) {

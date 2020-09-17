@@ -53,7 +53,7 @@ public class ItemTeleportStone extends Item {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override

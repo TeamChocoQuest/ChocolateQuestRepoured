@@ -99,7 +99,7 @@ public class DungeonDataManager {
 			return getInstance(world).getSpawnedDungeonNames();
 		} catch (NullPointerException npe) {
 			CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			return new HashSet<String>();
+			return new HashSet<>();
 		}
 	}
 
@@ -112,7 +112,7 @@ public class DungeonDataManager {
 			return getInstance(world).getLocationsOfDungeon(dungeon);
 		} catch (NullPointerException npe) {
 			CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			return new HashSet<BlockPos>();
+			return new HashSet<>();
 		}
 	}
 

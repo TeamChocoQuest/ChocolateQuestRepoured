@@ -14,7 +14,7 @@ public abstract class CastleRoomGenericBase extends CastleRoomDecoratedBase {
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
-		; // No special generation - decorations only
+		// No special generation - decorations only
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3i;
  */
 public class VectorUtil {
 
-	public static enum EAxis {
+	public enum EAxis {
 		AXIS_Y, AXIS_X, AXIS_Z;
 	}
 

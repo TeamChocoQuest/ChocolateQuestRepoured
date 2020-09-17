@@ -67,7 +67,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 
 		else {
 			this.shoot(stack, worldIn, playerIn);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 	}
 

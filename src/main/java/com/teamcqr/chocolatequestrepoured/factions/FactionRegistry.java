@@ -452,7 +452,7 @@ public class FactionRegistry {
 	}
 
 	public List<CQRFaction> getLoadedFactions() {
-		return new ArrayList<CQRFaction>(this.factions.values());
+		return new ArrayList<>(this.factions.values());
 	}
 
 }

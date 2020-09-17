@@ -55,7 +55,7 @@ public class ItemDaggerNinja extends ItemDagger {
 				playerIn.setPosition(playerIn.posX + x * dist, playerIn.posY + y * dist + 1, playerIn.posZ + z * dist);
 				playerIn.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 40, 5, false, false));
 			} else {
-				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+				return new ActionResult<>(EnumActionResult.FAIL, stack);
 			}
 
 			stack.damageItem(1, playerIn);
@@ -66,7 +66,7 @@ public class ItemDaggerNinja extends ItemDagger {
 		} else {
 			super.onItemRightClick(worldIn, playerIn, handIn);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override

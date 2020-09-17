@@ -417,7 +417,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_WITHER_DEATH;
-	};
+	}
 
 	@Override
 	protected SoundEvent getFinalDeathSound() {

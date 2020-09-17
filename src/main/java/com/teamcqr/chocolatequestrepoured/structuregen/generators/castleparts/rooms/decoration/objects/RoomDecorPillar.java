@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class RoomDecorPillar extends RoomDecorBlocksBase {
 	@Override
 	protected void makeSchematic() {
-		;
+
 	}
 
 	@Override

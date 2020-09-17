@@ -62,7 +62,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 		this.changeTorch(worldIn, playerIn);
 		stack.damageItem(1, playerIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	public void changeTorch(World worldIn, EntityPlayer player) {
