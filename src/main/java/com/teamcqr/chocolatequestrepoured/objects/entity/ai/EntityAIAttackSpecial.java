@@ -3,13 +3,20 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.entity.EntityLivingBase;
 
 public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR> {
 
-	private static final List<AbstractEntityAIAttackSpecial> SPECIAL_ATTACKS = new ArrayList<>();
+	public static final List<AbstractEntityAIAttackSpecial> SPECIAL_ATTACKS = new ArrayList<>();
+	static {
+		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialDagger());
+		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialGreatSword());
+		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialSpear());
+	}
 	private AbstractEntityAIAttackSpecial activeSpecialAttack;
 	private int specialAttackTick;
 	private int tick;
@@ -32,16 +39,23 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 			if (this.specialAttackTick + specialAttack.getCooldown(this.entity) >= this.entity.ticksExisted) {
 				continue;
 			}
-			if (specialAttack.shouldStartAttack(this.entity, attackTarget)) {
-				this.activeSpecialAttack = specialAttack;
-				return true;
+			if (!specialAttack.shouldStartAttack(this.entity, attackTarget)) {
+				continue;
 			}
+			if (!DungeonGenUtils.percentageRandom(specialAttack.getAttackChance(this.entity, attackTarget))) {
+				continue;
+			}
+			this.activeSpecialAttack = specialAttack;
+			return true;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if (this.tick >= this.activeSpecialAttack.getMaxUseTime()) {
+			return false;
+		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		if ((this.activeSpecialAttack.needsTargetToContinue || this.activeSpecialAttack.needsSightToContinue) && attackTarget == null) {
 			return false;
@@ -77,6 +91,10 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 	public void updateTask() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		this.activeSpecialAttack.continueAttack(this.entity, attackTarget, this.tick++);
+
+		if (this.tick == this.activeSpecialAttack.getMaxUseTime()) {
+			this.activeSpecialAttack.stopAttack(this.entity, attackTarget);
+		}
 	}
 
 }

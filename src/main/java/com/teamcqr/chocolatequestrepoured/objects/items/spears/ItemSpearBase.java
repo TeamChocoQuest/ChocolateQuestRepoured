@@ -281,8 +281,8 @@ public class ItemSpearBase extends ItemSword {
 				}
 
 				Vec3d vec3 = vec1.add(new Vec3d(0.0D, -0.5D, 0.0D).rotatePitch((float) Math.toRadians(-player.rotationPitch))).add(new Vec3d(-0.4D, 0.0D, 0.0D).rotateYaw((float) Math.toRadians(-player.rotationYaw)));
-				for (int i = (int) reachDistance; i > -1; i--) {
-					Vec3d vec4 = vec3.add(vec2.scale(i));
+				for (double d = reachDistance; d >= 0.0D; d--) {
+					Vec3d vec4 = vec3.add(vec2.scale(d));
 					((WorldServer) worldIn).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 				}
 
