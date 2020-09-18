@@ -1105,10 +1105,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean isInAttackReach(EntityLivingBase target) {
-		Vec3d vec1 = new Vec3d(this.posX, MathHelper.clamp(target.posY, this.posY, this.posY + this.height), this.posZ);
-		Vec3d vec2 = new Vec3d(target.posX, MathHelper.clamp(this.posY, target.posY, target.posY + target.height), target.posZ);
-		double d = this.getAttackReach(target);
-		return vec1.squareDistanceTo(vec2) <= d * d;
+		return this.isInReach(target, this.getAttackReach(target));
+	}
+
+	public boolean isInReach(EntityLivingBase target, double distance) {
+		double x = target.posX - this.posX;
+		double y = MathHelper.clamp(this.posY + this.getEyeHeight(), target.posY, target.posY + target.height) - (this.posY + this.getEyeHeight());
+		double z = target.posZ - this.posZ;
+		return x * x + y * y + z * z <= distance * distance;
 	}
 
 	public boolean canStrafe() {
