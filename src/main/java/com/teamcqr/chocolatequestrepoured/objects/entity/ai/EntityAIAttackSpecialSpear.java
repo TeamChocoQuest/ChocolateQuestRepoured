@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.spears.ItemSpearBase;
 import com.teamcqr.chocolatequestrepoured.util.math.BoundingBox;
-import com.teamcqr.chocolatequestrepoured.util.math.BoundingBoxHelper;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
@@ -63,7 +62,7 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 		double reachDistance = attacker.width + 0.85D + item.getReach() * 2.5D;
 		BoundingBox bb = new BoundingBox(new Vec3d(-0.25D, -0.25D, 0.0D), new Vec3d(0.25D, 0.25D, reachDistance), yaw, pitch, vec1);
 
-		for (EntityLivingBase entity : BoundingBoxHelper.getEntitiesInsideBB(attacker.world, attacker, EntityLivingBase.class, bb)) {
+		for (EntityLivingBase entity : BoundingBox.getEntitiesInsideBB(attacker.world, attacker, EntityLivingBase.class, bb)) {
 			if (!attacker.getFaction().isAlly(entity)) {
 				// TODO apply enchantments
 				entity.attackEntityFrom(DamageSource.causeMobDamage(attacker), 1.0F + item.getAttackDamage());
