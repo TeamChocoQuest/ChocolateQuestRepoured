@@ -20,7 +20,7 @@ enum EDefaultInhabitants {
 	ILLAGER(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "illager") }, null, EBanners.ILLAGER_BANNER),
 	WALKER(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "walker") }, new ResourceLocation[] { new ResourceLocation(Reference.MODID, "walker_king") }, EBanners.WALKER_ORDO, ModItems.SHIELD_WALKER),
 	SPECTER(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "spectre") }, null, null, ModItems.SHIELD_SPECTER),
-	ENDERMAN(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "enderman") }, null, EBanners.ENDERMEN_BANNER),
+	ENDERMAN(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "enderman") }, null, EBanners.ENDERMAN_BANNER),
 	BOARMAN(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "boarman") }, new ResourceLocation[] { new ResourceLocation(Reference.MODID, "boar_mage") }, EBanners.PIGMAN_BANNER, ModItems.SHIELD_FIRE),
 	MINOTAUR(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "minotaur") }, null, null, ModItems.SHIELD_PIGMAN),
 	ORC(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "orc") }, null, null, ModItems.SHIELD_WARPED),

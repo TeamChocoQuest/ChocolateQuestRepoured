@@ -4,12 +4,12 @@
 
 #CreativeTabs
 itemGroup.ChocolateQuestRepouredBlocksTab=CQR Blocks
-itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
+itemGroup.ChocolateQuestRepouredItemsTab=CQR Items
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Generators
 itemGroup.ChocolateQuestRepouredBannerTab=CQR Banners
 itemGroup.ChocolateQuestRepouredExporterChests=CQR Exporter Chests
 
-#Banners
+#Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-banner marker
 item.banner.cqrepoured_cq_blank.orange=CQR-banner marker
 item.banner.cqrepoured_cq_blank.magenta=CQR-banner marker
@@ -129,7 +129,6 @@ item.banner.cqrepoured_walker_black_bg.green=Green flag fabric
 item.banner.cqrepoured_walker_black_bg.red=Red flag fabric
 item.banner.cqrepoured_walker_black_bg.black=Black flag fabric
 
-
 item.banner.cqrepoured_walker_border.white=White border sticking
 item.banner.cqrepoured_walker_border.orange=Orange border sticking
 item.banner.cqrepoured_walker_border.magenta=Magenta border sticking
@@ -164,7 +163,6 @@ item.banner.cqrepoured_walker_inner_border.green=Green ragged fabric
 item.banner.cqrepoured_walker_inner_border.red=Red ragged fabric
 item.banner.cqrepoured_walker_inner_border.black=Black ragged fabric
 
-
 item.banner.cqrepoured_walker_skull.white=White walker face
 item.banner.cqrepoured_walker_skull.orange=Orange walker face
 item.banner.cqrepoured_walker_skull.magenta=Magenta walker face
@@ -182,6 +180,17 @@ item.banner.cqrepoured_walker_skull.green=Green walker face
 item.banner.cqrepoured_walker_skull.red=Red walker face
 item.banner.cqrepoured_walker_skull.black=Black walker face
 
+#Banners
+item.banner.pirate_banner.name=Pirate Banner
+item.banner.walker_banner.name=Walker Banner
+item.banner.pigman_banner.name=Pigman Banner
+item.banner.enderman_banner.name=Enderman Banner
+item.banner.enderman_banner2.name=Enderman Banner 2
+item.banner.npc_banner.name=NPC Banner
+item.banner.skeleton_banner.name=Skeleton Banner
+item.banner.illager_banner.name=Illager Banner
+item.banner.walker_ordo.name=Walker Banner 2
+item.banner.gremlin_banner.name=Gremlin Banner
 
 #Gui
 gui.repu.name=Reputation
