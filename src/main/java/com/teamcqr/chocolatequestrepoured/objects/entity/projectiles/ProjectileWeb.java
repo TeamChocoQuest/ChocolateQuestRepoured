@@ -1,9 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import java.util.function.Consumer;
+
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -38,9 +45,17 @@ public class ProjectileWeb extends ProjectileBase {
 
 					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
 					entity.setInWeb();
-					this.world.setBlockState(entity.getPosition(), Blocks.WEB.getDefaultState());
+					this.world.setBlockState(entity.getPosition(), ModBlocks.TEMPORARY_WEB.getDefaultState());
 					this.setDead();
 				}
+			}
+			else if(DungeonGenUtils.percentageRandom(0.25)) {
+				GeneratorVolcano.forEachSpherePosition(this.getPosition(), DungeonGenUtils.randomBetween(2, 4), new Consumer<BlockPos.MutableBlockPos>() {
+
+					@Override
+					public void accept(MutableBlockPos t) {
+						world.setBlockState(t, ModBlocks.TEMPORARY_WEB.getDefaultState());
+					}});
 			}
 			super.onImpact(result);
 		}

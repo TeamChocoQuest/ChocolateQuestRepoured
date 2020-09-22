@@ -46,7 +46,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 		if ((random.nextInt(3) == 0 || this.countNeighbors(world, pos) < 4)) {
 			this.slightlyDecay(world, pos, blockstate, random, true);
 		} else {
-			world.scheduleUpdate(pos, this, MathHelper.getInt(random, 20, 40));
+			world.scheduleUpdate(pos, this, MathHelper.getInt(random, 10, 30));
 		}
 
 	}
