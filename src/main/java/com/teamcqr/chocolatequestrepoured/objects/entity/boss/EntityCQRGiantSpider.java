@@ -175,6 +175,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		super.applyEntityAttributes();
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8);
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(4);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.5D * 0.30000001192092896D);
 	}
 
 	@Override
@@ -184,6 +185,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			int effectlvl = 1;
 			if (this.getRNG().nextDouble() > 0.7) {
 				effectlvl = 2;
+				this.heal(((EntityLivingBase) entityIn).getHealth() * 0.25F);
 			}
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
 		}
