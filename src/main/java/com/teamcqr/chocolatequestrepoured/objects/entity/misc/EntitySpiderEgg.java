@@ -21,12 +21,25 @@ public class EntitySpiderEgg extends Entity {
 
 	public EntitySpiderEgg(World worldIn) {
 		super(worldIn);
+		setSize(1F, 1F);
+		
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
+	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
 	}
 
 	@Override
 	protected void entityInit() {
 		this.dataManager.register(STAGE, 0);
 	}
+	
 	
 	@Override
 	public void onUpdate() {
