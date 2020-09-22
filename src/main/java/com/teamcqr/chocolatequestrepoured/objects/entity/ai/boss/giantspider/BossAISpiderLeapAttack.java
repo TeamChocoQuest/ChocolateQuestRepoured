@@ -43,7 +43,6 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 			double d0 = this.leaper.getDistanceSq(this.leapTarget);
 
 			double distVert = this.leapTarget.posY - this.leaper.posY;
-			distVert = distVert < this.leapMotionY ? this.leapMotionY : distVert;
 
 			if ((d0 >= MIN_DISTANCE_TO_LEAP || distVert >= MIN_VERTICAL_DISTANCE_TO_LEAP) && d0 <= MAX_LEAP_DISTANCE) {
 				if (!this.leaper.onGround) {
@@ -80,6 +79,8 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 		}
 
 		this.leaper.motionY = (this.leapTarget.posY - this.leaper.posY) * 0.5;
+		
+		this.leaper.motionY = this.leaper.motionY < this.leapMotionY ? this.leapMotionY : this.leaper.motionY;
 
 		this.leaper.velocityChanged = true;
 	}
