@@ -200,6 +200,9 @@ public class DungeonDataManager {
 		this.dungeonData.clear();
 
 		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(this.file);
+		if (root == null) {
+			return;
+		}
 		for (String key : root.getKeySet()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
 			for (NBTBase nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
