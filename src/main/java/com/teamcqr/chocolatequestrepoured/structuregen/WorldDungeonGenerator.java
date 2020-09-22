@@ -52,7 +52,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositionsInChunk(world, chunkX, chunkZ)) {
 					int x = dungeonSpawnPos.getX(world);
 					int z = dungeonSpawnPos.getZ(world);
-					dungeon.generate(world, x, z, new Random(getSeed(world, x, z)), DungeonDataManager.DungeonSpawnType.LOCKED_COORDINATE,DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+					dungeon.generate(world, x, z, new Random(getSeed(world, x, z)), DungeonDataManager.DungeonSpawnType.LOCKED_COORDINATE, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 				}
 			}
 			return;

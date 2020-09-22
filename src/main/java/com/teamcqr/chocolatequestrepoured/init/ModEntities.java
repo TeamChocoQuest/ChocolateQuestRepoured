@@ -203,9 +203,8 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(EntityColoredLightningBolt.class, "colored_lightning_bolt", 512, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerTornado.class, "walker_tornado", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCQRPirateParrot.class, "pirate_parrot", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityIceSpike.class, "ice_spike", 64, 1, true), 
-					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true),
-					};
+					createEntityEntryWithoutEgg(EntityIceSpike.class, "ice_spike", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true), };
 
 			event.getRegistry().registerAll(entityEntries);
 

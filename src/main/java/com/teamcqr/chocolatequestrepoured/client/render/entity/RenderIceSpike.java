@@ -24,7 +24,7 @@ public class RenderIceSpike extends Render<EntityIceSpike> {
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-		//GlStateManager.translate(0.0F, -1.501F, 0.0F);
+		// GlStateManager.translate(0.0F, -1.501F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
 		this.model.render(entity, 2 * entity.getAnimationProgress(partialTicks * 2), 0.0F, 0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();

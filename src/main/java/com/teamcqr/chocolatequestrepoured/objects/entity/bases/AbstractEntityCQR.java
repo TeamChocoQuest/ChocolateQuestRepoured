@@ -188,10 +188,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// Shoulder entity stuff
 		this.dataManager.register(SHOULDER_ENTITY, new NBTTagCompound());
 	}
-	
+
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		//Not wanted
+		// Not wanted
 	}
 
 	@Override

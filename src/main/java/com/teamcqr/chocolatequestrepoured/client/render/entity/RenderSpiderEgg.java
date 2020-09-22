@@ -18,8 +18,7 @@ public class RenderSpiderEgg extends Render<EntitySpiderEgg> {
 			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/1.png"),
 			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/2.png"),
 			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/3.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/4.png"),
-	};
+			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/4.png"), };
 
 	private final ModelBase model;
 

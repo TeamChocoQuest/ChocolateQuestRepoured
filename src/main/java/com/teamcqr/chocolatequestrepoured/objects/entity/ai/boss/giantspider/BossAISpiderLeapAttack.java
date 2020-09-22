@@ -12,9 +12,9 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 	EntityLivingBase leapTarget;
 	/** The entity's motionY after leaping. */
 	float leapMotionY;
-	
+
 	private int cooldown;
-	
+
 	private final double MIN_VERTICAL_DISTANCE_TO_LEAP = 2;
 	private final double MIN_DISTANCE_TO_LEAP = 9;
 	private final double MAX_LEAP_DISTANCE = 256;
@@ -31,7 +31,7 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 	 */
 	@Override
 	public boolean shouldExecute() {
-		if(cooldown > 0) {
+		if (cooldown > 0) {
 			cooldown--;
 			return false;
 		}
@@ -43,7 +43,7 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 			double d0 = this.leaper.getDistanceSq(this.leapTarget);
 
 			double distVert = this.leapTarget.posY - this.leaper.posY;
-			
+
 			if ((d0 >= MIN_DISTANCE_TO_LEAP || distVert >= MIN_VERTICAL_DISTANCE_TO_LEAP) && d0 <= MAX_LEAP_DISTANCE) {
 				if (!this.leaper.onGround) {
 					return false;
@@ -79,10 +79,10 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 		}
 
 		this.leaper.motionY = (this.leapTarget.posY - this.leaper.posY) * 0.5;
-		
+
 		this.leaper.velocityChanged = true;
 	}
-	
+
 	@Override
 	public void resetTask() {
 		this.cooldown = MAX_COOLDOWN;
