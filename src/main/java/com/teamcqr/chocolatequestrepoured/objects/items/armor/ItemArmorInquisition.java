@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.client.init.CQRArmorModels;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +22,7 @@ public class ItemArmorInquisition extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.inquisitionArmorLegs : ModArmorModels.inquisitionArmor;
+		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.inquisitionArmorLegs : CQRArmorModels.inquisitionArmor;
 	}
 
 }

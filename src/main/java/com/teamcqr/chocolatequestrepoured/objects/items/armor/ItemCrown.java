@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
-import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.client.init.CQRArmorModels;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
@@ -34,7 +34,7 @@ public class ItemCrown extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return ModArmorModels.crown;
+		return CQRArmorModels.crown;
 	}
 
 	@Override

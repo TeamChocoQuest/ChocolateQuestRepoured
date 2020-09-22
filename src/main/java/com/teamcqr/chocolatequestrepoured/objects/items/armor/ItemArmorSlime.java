@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandlerHelper;
-import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.client.init.CQRArmorModels;
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
@@ -70,7 +70,7 @@ public class ItemArmorSlime extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.slimeArmorLegs : ModArmorModels.slimeArmor;
+		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.slimeArmorLegs : CQRArmorModels.slimeArmor;
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID)

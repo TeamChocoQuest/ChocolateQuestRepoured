@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
-public class ModTextureAtlasSprites {
+public class CQRTextureAtlasSprites {
 
 	@SubscribeEvent
 	public static void registerTextureAtlasSprites(TextureStitchEvent.Pre event) {

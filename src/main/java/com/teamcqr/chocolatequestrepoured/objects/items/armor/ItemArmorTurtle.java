@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandlerHelper;
-import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.client.init.CQRArmorModels;
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -98,7 +98,7 @@ public class ItemArmorTurtle extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
+		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.turtleArmorLegs : CQRArmorModels.turtleArmor;
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID)

@@ -126,9 +126,9 @@ import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
-public class ModEntityRenderers {
+public class CQREntityRenderers {
 
-	private ModEntityRenderers() {
+	private CQREntityRenderers() {
 
 	}
 

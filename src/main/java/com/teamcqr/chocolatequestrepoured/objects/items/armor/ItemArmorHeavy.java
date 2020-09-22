@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.client.init.CQRArmorModels;
 import com.teamcqr.chocolatequestrepoured.init.CQRMaterials;
 
 import net.minecraft.client.model.ModelBiped;
@@ -55,9 +55,9 @@ public class ItemArmorHeavy extends ItemArmor {
 		ArmorMaterial armorMaterial = ((ItemArmor) itemStack.getItem()).getArmorMaterial();
 
 		if (armorMaterial == CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND) {
-			return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyDiamondArmorLegs : ModArmorModels.heavyDiamondArmor;
+			return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.heavyDiamondArmorLegs : CQRArmorModels.heavyDiamondArmor;
 		} else if (armorMaterial == CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON) {
-			return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
+			return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.heavyIronArmorLegs : CQRArmorModels.heavyIronArmor;
 		}
 
 		return null;

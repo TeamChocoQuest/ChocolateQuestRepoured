@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
-public class ModItemModels {
+public class CQRItemModels {
 
 	private static final List<Item> REGISTERED_ITEM_MODELS = new ArrayList<>();
 

@@ -9,7 +9,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTurtle;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelBackpack;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelCrown;
 
-public class ModArmorModels {
+public class CQRArmorModels {
 
 	public static ModelBackpack backpack = new ModelBackpack(0.0F);
 

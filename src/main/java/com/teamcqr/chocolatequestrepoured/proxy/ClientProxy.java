@@ -7,7 +7,7 @@ import java.util.Map;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.client.gui.IUpdatableGui;
-import com.teamcqr.chocolatequestrepoured.client.init.ModEntityRenderers;
+import com.teamcqr.chocolatequestrepoured.client.init.CQREntityRenderers;
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -44,7 +44,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void preInit() {
-		ModEntityRenderers.registerRenderers();
+		CQREntityRenderers.registerRenderers();
 	}
 
 	@Override

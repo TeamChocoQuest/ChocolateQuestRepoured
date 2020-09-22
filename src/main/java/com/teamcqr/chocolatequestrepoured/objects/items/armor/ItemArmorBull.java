@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.client.init.CQRArmorModels;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 
 import net.minecraft.client.model.ModelBiped;
@@ -72,7 +72,7 @@ public class ItemArmorBull extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.bullArmorLegs : ModArmorModels.bullArmor;
+		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.bullArmorLegs : CQRArmorModels.bullArmor;
 	}
 
 }
