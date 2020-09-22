@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderColoredLigh
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderIceSpike;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderPirateParrot;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSpiderEgg;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderWalkerTornado;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantSpider;
@@ -77,6 +78,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityIceSpike;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySpiderEgg;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerTornado;
@@ -167,6 +169,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerTornado.class, RenderWalkerTornado::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateParrot.class, RenderPirateParrot::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, RenderIceSpike::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpiderEgg.class, RenderSpiderEgg::new);
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}
