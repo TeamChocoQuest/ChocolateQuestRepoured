@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
