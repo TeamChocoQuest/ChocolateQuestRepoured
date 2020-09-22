@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.block.BlockAir;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -54,7 +55,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 					@Override
 					public void accept(MutableBlockPos t) {
-						world.setBlockState(t, ModBlocks.TEMPORARY_WEB.getDefaultState());
+						if(world.getBlockState(t).getBlock() instanceof BlockAir) world.setBlockState(t, ModBlocks.TEMPORARY_WEB.getDefaultState());
 					}});
 			}
 			super.onImpact(result);
