@@ -41,9 +41,11 @@ public class RenderSpiderEgg extends Render<EntitySpiderEgg> {
 	public void doRender(EntitySpiderEgg entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.rotate(180, 0, 0, 1);
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		GlStateManager.translate(0.0F, -1.501F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
-		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.75F);
+		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
 

@@ -24,7 +24,7 @@ public class ModelIceSpike extends ModelBase {
 		this.top.setRotationPoint(0.0F, -6.0F, 0.0F);
 		this.top.addBox(-1.0F, -6.0F, -1.0F, 2, 6, 2, 0.0F);
 		this.baseplate = new ModelRenderer(this, 0, 0);
-		this.baseplate.setRotationPoint(0.0F, -8.0F, 0.0F);
+		this.baseplate.setRotationPoint(0.0F, 2.0F, 0.0F);
 		this.baseplate.addBox(-6.0F, -4.0F, -6.0F, 12, 4, 12, 0.0F);
 		this.baseplate.addChild(this.base);
 		this.base.addChild(this.middle);

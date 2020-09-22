@@ -22,9 +22,11 @@ public class RenderIceSpike extends Render<EntityIceSpike> {
 	public void doRender(EntityIceSpike entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.rotate(180, 0, 0, 1);
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		//GlStateManager.translate(0.0F, -1.501F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
-		this.model.render(entity, 2 * entity.getAnimationProgress(partialTicks * 2), 0.0F, 0F, 0.0F, 0.0F, 0.05F);
+		this.model.render(entity, 2 * entity.getAnimationProgress(partialTicks * 2), 0.0F, 0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
 
