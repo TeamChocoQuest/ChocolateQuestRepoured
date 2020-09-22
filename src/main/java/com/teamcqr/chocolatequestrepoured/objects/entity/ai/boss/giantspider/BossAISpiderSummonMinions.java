@@ -20,8 +20,8 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 	protected ResourceLocation minionOverride = new ResourceLocation(Reference.MODID, "spider_egg");
 
 	private int cooldown = 0;
-	private static final int MAX_COOLDOWN = 200;
-	private static final int MIN_COOLDOWN = 100;
+	private static final int MAX_COOLDOWN = 150;
+	private static final int MIN_COOLDOWN = 50;
 
 	public BossAISpiderSummonMinions(EntityCQRGiantSpider spiderqueen) {
 		super(spiderqueen);

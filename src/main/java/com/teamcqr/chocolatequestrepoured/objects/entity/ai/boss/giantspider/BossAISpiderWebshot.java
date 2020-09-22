@@ -14,8 +14,8 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 
 	private static final int MIN_WEBS = 3;
 	private static final int MAX_WEBS = 7;
-	private static final int MIN_COOLDOWN = 160;
-	private static final int MAX_COOLDOWN = 260;
+	private static final int MIN_COOLDOWN = 80;
+	private static final int MAX_COOLDOWN = 160;
 
 	private static final int MAX_DISTANCE_TO_TARGET = 20 * 20;
 	protected static final double SPEED_MULTIPLIER = 1.3;

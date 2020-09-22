@@ -18,7 +18,7 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 	private final double MIN_VERTICAL_DISTANCE_TO_LEAP = 2;
 	private final double MIN_DISTANCE_TO_LEAP = 9;
 	private final double MAX_LEAP_DISTANCE = 256;
-	private final int MAX_COOLDOWN = 80;
+	private final int MAX_COOLDOWN = 40;
 
 	public BossAISpiderLeapAttack(EntityLiving leapingEntity, float leapMotionYIn) {
 		this.leaper = leapingEntity;
