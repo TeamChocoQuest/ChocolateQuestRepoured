@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.entity.Entity;
@@ -16,7 +17,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 	protected ISummoner summoner = null;
 	protected int MAX_MINIONS = 6;
 	protected int MAX_MINIONS_AT_A_TIME = 3;
-	protected ResourceLocation minionOverride = new ResourceLocation("minecraft", "cave_spider");
+	protected ResourceLocation minionOverride = new ResourceLocation(Reference.MODID, "spider_egg");
 
 	private int cooldown = 0;
 	private static final int MAX_COOLDOWN = 200;

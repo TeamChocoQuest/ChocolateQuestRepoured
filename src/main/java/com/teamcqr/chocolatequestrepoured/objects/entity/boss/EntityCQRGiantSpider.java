@@ -45,7 +45,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityCQRGiantSpider.class, DataSerializers.BYTE);
 
-	protected List<Entity> summonedMinions = new ArrayList<>();
+	protected List<Entity> activeEggs = new ArrayList<>();
 
 	public EntityCQRGiantSpider(World worldIn) {
 		super(worldIn);
@@ -122,13 +122,13 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
-		for (Entity ent : this.summonedMinions) {
+		for (Entity ent : this.activeEggs) {
 			if (ent == null || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
 		for (Entity e : tmp) {
-			this.summonedMinions.remove(e);
+			this.activeEggs.remove(e);
 		}
 	}
 
@@ -251,7 +251,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	@Override
 	public List<Entity> getSummonedEntities() {
-		return this.summonedMinions;
+		return this.activeEggs;
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
-		this.summonedMinions.add(summoned);
+		this.activeEggs.add(summoned);
 	}
 
 	@Override
