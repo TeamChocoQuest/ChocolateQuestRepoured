@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
-import com.teamcqr.chocolatequestrepoured.init.ModEnchantments;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQREnchantments;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -248,7 +248,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 		boolean spectralFlag = false;
 		if (source.getTrueSource() instanceof EntityLivingBase) {
-			if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
+			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
 				amount *= 2;
 				spectralFlag = true;
 			}
@@ -391,7 +391,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ModLoottables.ENTITIES_WALKER_KING;
+		return CQRLoottables.ENTITIES_WALKER_KING;
 	}
 
 	@Override
@@ -429,10 +429,10 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		super.setEquipmentBasedOnDifficulty(difficulty);
 
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, this.getSword());
-		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
+		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_WALKER_KING, 1));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 3));
 
-		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.KING_CROWN, 1));
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
 
 		// Give him some armor...
 		if (CQRConfig.bosses.armorForTheWalkerKing) {
@@ -444,22 +444,22 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 
 			nbttagcompound1.setInteger("color", 9437439);
-			ItemStack chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 9437439);
+			ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 9437439);
 			this.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
 
-			ItemStack legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 9437439);
+			ItemStack legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) CQRItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 9437439);
 			this.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
 
-			ItemStack boobs = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 9437439);
+			ItemStack boobs = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) CQRItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 9437439);
 			this.setItemStackToSlot(EntityEquipmentSlot.FEET, boobs);
 		}
 	}
 
 	private ItemStack getSword() {
-		ItemStack sword = new ItemStack(ModItems.SWORD_WALKER, 1);
+		ItemStack sword = new ItemStack(CQRItems.SWORD_WALKER, 1);
 
 		/*
 		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20

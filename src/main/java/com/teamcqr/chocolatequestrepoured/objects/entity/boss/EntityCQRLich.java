@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIArmorSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
@@ -50,7 +50,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		}
 		// Phylactery
 		if (this.currentPhylacteryPosition != null) {
-			if (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY) {
+			if (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY) {
 				this.setMagicArmorActive(true);
 			} else {
 				this.currentPhylacteryPosition = null;
@@ -113,7 +113,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ModLoottables.ENTITIES_LICH;
+		return CQRLoottables.ENTITIES_LICH;
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	public boolean hasPhylactery() {
-		return (this.currentPhylacteryPosition != null && (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY));
+		return (this.currentPhylacteryPosition != null && (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY));
 	}
 
 }

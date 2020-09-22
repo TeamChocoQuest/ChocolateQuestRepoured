@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -66,7 +66,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
 		this.vineLatchBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE.getDefaultState());
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD }, false);
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD }, false);
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 

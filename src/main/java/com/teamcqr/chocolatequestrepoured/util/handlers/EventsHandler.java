@@ -10,7 +10,7 @@ import com.teamcqr.chocolatequestrepoured.crafting.RecipeCrownDetach;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
@@ -80,7 +80,7 @@ public class EventsHandler {
 			float amount = event.getAmount();
 			World world = player.world;
 
-			if (player.getActiveItemStack().getItem() != ModItems.SHIELD_WALKER_KING || player.getHeldItemMainhand().getItem() != ModItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
+			if (player.getActiveItemStack().getItem() != CQRItems.SHIELD_WALKER_KING || player.getHeldItemMainhand().getItem() != CQRItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
 				return;
 			}
 

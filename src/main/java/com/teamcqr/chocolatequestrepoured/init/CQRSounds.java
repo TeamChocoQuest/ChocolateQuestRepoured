@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @ObjectHolder(Reference.MODID)
-public class ModSounds {
+public class CQRSounds {
 
 	@ObjectHolder("item.gun.shoot")
 	public static final SoundEvent GUN_SHOOT = Null();

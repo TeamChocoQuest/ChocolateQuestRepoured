@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.block.BlockTorch;
@@ -74,7 +74,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 			BlockPos pos = new BlockPos(result.hitVec);
 			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
-			if (blockStateLookingAt.getBlock() == ModBlocks.UNLIT_TORCH) {
+			if (blockStateLookingAt.getBlock() == CQRBlocks.UNLIT_TORCH) {
 				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, blockStateLookingAt.getValue(BlockTorch.FACING)));
 			}
 		}

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyToLocation;
@@ -572,7 +572,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
-									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != ModBlocks.PHYLACTERY && block != ModBlocks.FORCE_FIELD_NEXUS && block != ModBlocks.EXPORTER) {
+									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != CQRBlocks.PHYLACTERY && block != CQRBlocks.FORCE_FIELD_NEXUS && block != CQRBlocks.EXPORTER) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
 								cancelled = true;
@@ -704,12 +704,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return ModSounds.NETHER_DRAGON_HURT;
+		return CQRSounds.NETHER_DRAGON_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return ModSounds.NETHER_DRAGON_DEATH;
+		return CQRSounds.NETHER_DRAGON_DEATH;
 	}
 
 	@Override
@@ -783,7 +783,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ModLoottables.ENTITIES_DRAGON_NETHER;
+		return CQRLoottables.ENTITIES_DRAGON_NETHER;
 	}
 
 	@Override

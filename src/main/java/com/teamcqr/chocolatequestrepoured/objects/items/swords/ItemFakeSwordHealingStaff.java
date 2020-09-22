@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.swords;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.IFakeWeapon;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
@@ -14,7 +14,7 @@ public class ItemFakeSwordHealingStaff extends ItemSword implements IFakeWeapon<
 
 	@Override
 	public ItemStaffHealing getOriginalItem() {
-		return ModItems.STAFF_HEALING;
+		return CQRItems.STAFF_HEALING;
 	}
 
 }

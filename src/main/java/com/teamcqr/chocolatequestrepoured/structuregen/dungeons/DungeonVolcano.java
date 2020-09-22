@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
@@ -37,11 +37,11 @@ public class DungeonVolcano extends DungeonBase {
 	private IBlockState lavaBlock = Blocks.LAVA.getDefaultState();
 	private int lavaWeight = 10;
 	private IBlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
-	private IBlockState pillarBlock = ModBlocks.GRANITE_LARGE.getDefaultState();
+	private IBlockState pillarBlock = CQRBlocks.GRANITE_LARGE.getDefaultState();
 
 	private boolean buildStairwell = true;
 	private double chestChance = 0.002D;
-	private ResourceLocation[] chestIDs = { ModLoottables.CHESTS_FOOD, ModLoottables.CHESTS_MATERIAL, ModLoottables.CHESTS_EQUIPMENT };
+	private ResourceLocation[] chestIDs = { CQRLoottables.CHESTS_FOOD, CQRLoottables.CHESTS_MATERIAL, CQRLoottables.CHESTS_EQUIPMENT };
 
 	// Stronghold
 	private boolean buildStronghold = true;

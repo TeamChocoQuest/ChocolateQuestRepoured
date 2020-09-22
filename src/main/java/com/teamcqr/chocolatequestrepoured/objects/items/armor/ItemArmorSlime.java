@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -80,7 +80,7 @@ public class ItemArmorSlime extends ItemArmor {
 		public static void onLivingHurtEvent(LivingHurtEvent event) {
 			EntityLivingBase entity = event.getEntityLiving();
 
-			if (ItemUtil.hasFullSet(entity, ItemArmorSlime.class) && !CapabilityCooldownHandlerHelper.onCooldown(entity, ModItems.CHESTPLATE_SLIME)) {
+			if (ItemUtil.hasFullSet(entity, ItemArmorSlime.class) && !CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_SLIME)) {
 				if (!entity.world.isRemote) {
 					EntitySlimePart slime = new EntitySlimePart(entity.world, entity);
 					double x = entity.posX - 5.0D + 2.5D * slime.getRNG().nextDouble();
@@ -89,7 +89,7 @@ public class ItemArmorSlime extends ItemArmor {
 					slime.setPosition(x, y, z);
 					entity.world.spawnEntity(slime);
 				}
-				CapabilityCooldownHandlerHelper.setCooldown(entity, ModItems.CHESTPLATE_SLIME, 160);
+				CapabilityCooldownHandlerHelper.setCooldown(entity, CQRItems.CHESTPLATE_SLIME, 160);
 			}
 		}
 

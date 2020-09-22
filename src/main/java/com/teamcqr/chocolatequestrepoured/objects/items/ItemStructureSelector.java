@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -37,7 +37,7 @@ public class ItemStructureSelector extends Item {
 	@Override
 	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
 		Block block = world.getBlockState(pos).getBlock();
-		return block != ModBlocks.EXPORTER;
+		return block != CQRBlocks.EXPORTER;
 	}
 
 	@Override

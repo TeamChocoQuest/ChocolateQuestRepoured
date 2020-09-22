@@ -45,7 +45,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraftforge.fml.relauncher.Side;
 
-public class ModMessages {
+public class CQRMessages {
 
 	// Start the IDs at 1 so any unregistered messages (ID 0) throw a more obvious exception when received
 	private static int messageID = 1;

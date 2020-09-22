@@ -74,7 +74,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 @ObjectHolder(Reference.MODID)
-public class ModEntities {
+public class CQREntities {
 
 	private static int entityID = 0;
 

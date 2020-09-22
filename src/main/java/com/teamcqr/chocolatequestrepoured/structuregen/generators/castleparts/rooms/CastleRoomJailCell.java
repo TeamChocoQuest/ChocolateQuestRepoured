@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -173,7 +173,7 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 
 			Entity mobEntity = EntityList.createEntityByIDFromName(jailInhabitant.getEntityID(), world);
 
-			Block spawnerBlock = ModBlocks.SPAWNER;
+			Block spawnerBlock = CQRBlocks.SPAWNER;
 			IBlockState state = spawnerBlock.getDefaultState();
 			TileEntitySpawner spawner = (TileEntitySpawner) spawnerBlock.createTileEntity(world, state);
 

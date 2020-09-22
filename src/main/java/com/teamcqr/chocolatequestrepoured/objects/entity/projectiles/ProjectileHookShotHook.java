@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
+import com.teamcqr.chocolatequestrepoured.init.CQRSerializers;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -71,8 +71,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private ItemStack shooterItemStack = null;
 
 	// These positions are 3d locations instead of Rotations, but the structure stores 3 floats so it works nicely
-	protected static final DataParameter<Vec3d> DESTINATION_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
-	protected static final DataParameter<Vec3d> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
+	protected static final DataParameter<Vec3d> DESTINATION_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, CQRSerializers.VEC3D);
+	protected static final DataParameter<Vec3d> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, CQRSerializers.VEC3D);
 
 	protected static final DataParameter<Integer> PULL_STATUS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.VARINT);
 	protected static final DataParameter<Optional<UUID>> SHOOTER_UUID = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);

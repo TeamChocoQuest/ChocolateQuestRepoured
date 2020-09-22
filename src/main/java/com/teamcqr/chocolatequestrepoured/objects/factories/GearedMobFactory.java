@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -72,18 +72,18 @@ public class GearedMobFactory {
 			}
 			break;
 		case HEALING_STAFF:
-			mainHand = new ItemStack(ModItems.STAFF_HEALING);
+			mainHand = new ItemStack(CQRItems.STAFF_HEALING);
 			break;
 		case MAGIC_STAFF:
 			switch (this.random.nextInt(3)) {
 			case 0:
-				mainHand = new ItemStack(ModItems.STAFF_POISON);
+				mainHand = new ItemStack(CQRItems.STAFF_POISON);
 				break;
 			case 1:
-				mainHand = new ItemStack(ModItems.STAFF_FIRE);
+				mainHand = new ItemStack(CQRItems.STAFF_FIRE);
 				break;
 			case 2:
-				mainHand = new ItemStack(ModItems.STAFF_VAMPIRIC);
+				mainHand = new ItemStack(CQRItems.STAFF_VAMPIRIC);
 				break;
 			}
 			break;
@@ -104,13 +104,13 @@ public class GearedMobFactory {
 				} else {
 					switch (this.random.nextInt(3)) {
 					case 0:
-						mainHand = new ItemStack(ModItems.GREAT_SWORD_IRON);
+						mainHand = new ItemStack(CQRItems.GREAT_SWORD_IRON);
 						break;
 					case 1:
-						mainHand = new ItemStack(ModItems.SPEAR_IRON);
+						mainHand = new ItemStack(CQRItems.SPEAR_IRON);
 						break;
 					case 2:
-						mainHand = new ItemStack(ModItems.DAGGER_IRON);
+						mainHand = new ItemStack(CQRItems.DAGGER_IRON);
 						break;
 					}
 				}
@@ -121,13 +121,13 @@ public class GearedMobFactory {
 				} else {
 					switch (this.random.nextInt(3)) {
 					case 0:
-						mainHand = new ItemStack(ModItems.GREAT_SWORD_DIAMOND);
+						mainHand = new ItemStack(CQRItems.GREAT_SWORD_DIAMOND);
 						break;
 					case 1:
-						mainHand = new ItemStack(ModItems.SPEAR_DIAMOND);
+						mainHand = new ItemStack(CQRItems.SPEAR_DIAMOND);
 						break;
 					case 2:
-						mainHand = new ItemStack(ModItems.DAGGER_DIAMOND);
+						mainHand = new ItemStack(CQRItems.DAGGER_DIAMOND);
 						break;
 					}
 				}
@@ -160,10 +160,10 @@ public class GearedMobFactory {
 			break;
 		case IRON:
 			if (this.random.nextDouble() < 0.1D) {
-				head = new ItemStack(ModItems.HELMET_HEAVY_IRON);
-				chest = new ItemStack(ModItems.CHESTPLATE_HEAVY_IRON);
-				legs = new ItemStack(ModItems.LEGGINGS_HEAVY_IRON);
-				feet = new ItemStack(ModItems.BOOTS_HEAVY_IRON);
+				head = new ItemStack(CQRItems.HELMET_HEAVY_IRON);
+				chest = new ItemStack(CQRItems.CHESTPLATE_HEAVY_IRON);
+				legs = new ItemStack(CQRItems.LEGGINGS_HEAVY_IRON);
+				feet = new ItemStack(CQRItems.BOOTS_HEAVY_IRON);
 			} else {
 				head = new ItemStack(Items.IRON_HELMET);
 				chest = new ItemStack(Items.IRON_CHESTPLATE);
@@ -173,10 +173,10 @@ public class GearedMobFactory {
 			break;
 		case DIAMOND:
 			if (this.random.nextDouble() < 0.1D) {
-				head = new ItemStack(ModItems.HELMET_HEAVY_DIAMOND);
-				chest = new ItemStack(ModItems.CHESTPLATE_HEAVY_DIAMOND);
-				legs = new ItemStack(ModItems.LEGGINGS_HEAVY_DIAMOND);
-				feet = new ItemStack(ModItems.BOOTS_HEAVY_DIAMOND);
+				head = new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND);
+				chest = new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND);
+				legs = new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND);
+				feet = new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND);
 			} else {
 				head = new ItemStack(Items.DIAMOND_HELMET);
 				chest = new ItemStack(Items.DIAMOND_CHESTPLATE);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -53,9 +53,9 @@ public class SmeltingHandler {
 		GameRegistry.addSmelting(Items.GOLDEN_HELMET, new ItemStack(Items.GOLD_INGOT, 5), 1);
 
 		// HEAVY IRON ARMOR
-		GameRegistry.addSmelting(ModItems.BOOTS_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 4), 1);
-		GameRegistry.addSmelting(ModItems.LEGGINGS_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 7), 1);
-		GameRegistry.addSmelting(ModItems.CHESTPLATE_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 8), 1);
-		GameRegistry.addSmelting(ModItems.HELMET_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 5), 1);
+		GameRegistry.addSmelting(CQRItems.BOOTS_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 4), 1);
+		GameRegistry.addSmelting(CQRItems.LEGGINGS_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 7), 1);
+		GameRegistry.addSmelting(CQRItems.CHESTPLATE_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 8), 1);
+		GameRegistry.addSmelting(CQRItems.HELMET_HEAVY_IRON, new ItemStack(Items.IRON_INGOT, 5), 1);
 	}
 }

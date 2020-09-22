@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 
@@ -45,12 +45,12 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 			reInt = true;
 			invi = false;
 			this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
-			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
+			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 		} else if (this.invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			disInt = true;
 			invi = false;
 			this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
-			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
+			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
 
 		this.invisibleTime--;

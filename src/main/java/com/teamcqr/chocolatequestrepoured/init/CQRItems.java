@@ -101,7 +101,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @ObjectHolder(Reference.MODID)
-public class ModItems {
+public class CQRItems {
 
 	// Daggers
 	public static final Item DAGGER_IRON = Null();
@@ -282,28 +282,28 @@ public class ModItems {
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
 			final Item[] items = {
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25, 0.4F), "dagger_iron"),
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20, 0.4F), "dagger_diamond"),
-					setItemName(new ItemDaggerNinja(ModMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15, 0.4F), "dagger_ninja"),
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10, 0.4F), "dagger_monking"),
+					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25, 0.4F), "dagger_iron"),
+					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20, 0.4F), "dagger_diamond"),
+					setItemName(new ItemDaggerNinja(CQRMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15, 0.4F), "dagger_ninja"),
+					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10, 0.4F), "dagger_monking"),
 
-					setItemName(new ItemSwordTurtle(ModMaterials.ToolMaterials.TOOL_TURTLE_SWORD), "sword_turtle"),
-					setItemName(new ItemSwordSpider(ModMaterials.ToolMaterials.TOOL_SPIDER_SWORD), "sword_spider"),
-					setItemName(new ItemSwordMoonlight(ModMaterials.ToolMaterials.TOOL_MOONLIGHT_SWORD), "sword_moonlight"),
-					setItemName(new ItemSwordSunshine(ModMaterials.ToolMaterials.TOOL_SUNSHINE_SWORD), "sword_sunshine"),
+					setItemName(new ItemSwordTurtle(CQRMaterials.ToolMaterials.TOOL_TURTLE_SWORD), "sword_turtle"),
+					setItemName(new ItemSwordSpider(CQRMaterials.ToolMaterials.TOOL_SPIDER_SWORD), "sword_spider"),
+					setItemName(new ItemSwordMoonlight(CQRMaterials.ToolMaterials.TOOL_MOONLIGHT_SWORD), "sword_moonlight"),
+					setItemName(new ItemSwordSunshine(CQRMaterials.ToolMaterials.TOOL_SUNSHINE_SWORD), "sword_sunshine"),
 
-					setItemName(new ItemBullBattleAxe(ModMaterials.ToolMaterials.TOOL_BULL_BATTLE_AXE), "battle_axe_bull"),
+					setItemName(new ItemBullBattleAxe(CQRMaterials.ToolMaterials.TOOL_BULL_BATTLE_AXE), "battle_axe_bull"),
 
-					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
+					setItemName(new ItemSwordWalker(CQRMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
 					setItemName(new ItemShieldWalkerKing(), "shield_walker_king"),
 
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.4F), "great_sword_iron"),
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.4F), "great_sword_diamond"),
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.4F), "great_sword_bull"),
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.4F), "great_sword_monking"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.4F), "great_sword_iron"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.4F), "great_sword_diamond"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.4F), "great_sword_bull"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.4F), "great_sword_monking"),
 
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 1.0D, -0.35D), "spear_diamond"),
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 1.0D, -0.35D), "spear_iron"),
+					setItemName(new ItemSpearBase(CQRMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 1.0D, -0.35D), "spear_diamond"),
+					setItemName(new ItemSpearBase(CQRMaterials.ToolMaterials.TOOL_IRON_SPEAR, 1.0D, -0.35D), "spear_iron"),
 
 					setItemName(new ItemStaff(), "staff"),
 					setItemName(new ItemStaffFire(), "staff_fire"),
@@ -319,9 +319,9 @@ public class ModItems {
 					setItemName(new ItemRevolver(), "revolver"),
 					setItemName(new ItemRevolver(), "captain_revolver"),
 					setItemName(new ItemMusket(), "musket"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_dagger_iron"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_dagger_diamond"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_dagger_monking"),
+					setItemName(new ItemMusketKnife(CQRMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_dagger_iron"),
+					setItemName(new ItemMusketKnife(CQRMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_dagger_diamond"),
+					setItemName(new ItemMusketKnife(CQRMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_dagger_monking"),
 					setItemName(new ItemBullet(), "bullet_iron"),
 					setItemName(new ItemBullet(), "bullet_gold"),
 					setItemName(new ItemBullet(), "bullet_diamond"),
@@ -334,56 +334,56 @@ public class ModItems {
 					setItemName(new ItemHookshot(), "hookshot"),
 					setItemName(new ItemLongshot(), "longshot"),
 
-					setItemName(new ItemHelmetDragon(ModMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
-					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
-					setItemName(new ItemBackpack(ModMaterials.ArmorMaterials.ARMOR_BACKPACK, -1, EntityEquipmentSlot.CHEST), "backpack"),
+					setItemName(new ItemHelmetDragon(CQRMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
+					setItemName(new ItemBootsCloud(CQRMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
+					setItemName(new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, -1, EntityEquipmentSlot.CHEST), "backpack"),
 					setItemName(new ItemSpikedGlove(), "spiked_glove"),
-					setItemName(new ItemCrown(ModMaterials.ArmorMaterials.ARMOR_CROWN, -1), "king_crown"),
+					setItemName(new ItemCrown(CQRMaterials.ArmorMaterials.ARMOR_CROWN, -1), "king_crown"),
 
-					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.HEAD), "helmet_slime"),
-					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.CHEST), "chestplate_slime"),
-					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.LEGS), "leggings_slime"),
-					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.FEET), "boots_slime"),
+					setItemName(new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.HEAD), "helmet_slime"),
+					setItemName(new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.CHEST), "chestplate_slime"),
+					setItemName(new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.LEGS), "leggings_slime"),
+					setItemName(new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.FEET), "boots_slime"),
 
-					setItemName(new ItemArmorTurtle(ModMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.HEAD), "helmet_turtle"),
-					setItemName(new ItemArmorTurtle(ModMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.CHEST), "chestplate_turtle"),
-					setItemName(new ItemArmorTurtle(ModMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.LEGS), "leggings_turtle"),
-					setItemName(new ItemArmorTurtle(ModMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.FEET), "boots_turtle"),
+					setItemName(new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.HEAD), "helmet_turtle"),
+					setItemName(new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.CHEST), "chestplate_turtle"),
+					setItemName(new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.LEGS), "leggings_turtle"),
+					setItemName(new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, -1, EntityEquipmentSlot.FEET), "boots_turtle"),
 
-					setItemName(new ItemArmorBull(ModMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.HEAD), "helmet_bull"),
-					setItemName(new ItemArmorBull(ModMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.CHEST), "chestplate_bull"),
-					setItemName(new ItemArmorBull(ModMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.LEGS), "leggings_bull"),
-					setItemName(new ItemArmorBull(ModMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.FEET), "boots_bull"),
+					setItemName(new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.HEAD), "helmet_bull"),
+					setItemName(new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.CHEST), "chestplate_bull"),
+					setItemName(new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.LEGS), "leggings_bull"),
+					setItemName(new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, -1, EntityEquipmentSlot.FEET), "boots_bull"),
 
-					setItemName(new ItemArmorSpider(ModMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.HEAD), "helmet_spider"),
-					setItemName(new ItemArmorSpider(ModMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.CHEST), "chestplate_spider"),
-					setItemName(new ItemArmorSpider(ModMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.LEGS), "leggings_spider"),
-					setItemName(new ItemArmorSpider(ModMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.FEET), "boots_spider"),
+					setItemName(new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.HEAD), "helmet_spider"),
+					setItemName(new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.CHEST), "chestplate_spider"),
+					setItemName(new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.LEGS), "leggings_spider"),
+					setItemName(new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.FEET), "boots_spider"),
 
-					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.HEAD), "helmet_inquisition"),
-					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.CHEST), "chestplate_inquisition"),
-					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.LEGS), "leggings_inquisition"),
-					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.FEET), "boots_inquisition"),
+					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.HEAD), "helmet_inquisition"),
+					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.CHEST), "chestplate_inquisition"),
+					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.LEGS), "leggings_inquisition"),
+					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.FEET), "boots_inquisition"),
 
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.HEAD), "helmet_heavy_diamond"),
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_diamond"),
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.LEGS), "leggings_heavy_diamond"),
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.FEET), "boots_heavy_diamond"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.HEAD), "helmet_heavy_diamond"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_diamond"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.LEGS), "leggings_heavy_diamond"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.FEET), "boots_heavy_diamond"),
 
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.HEAD), "helmet_heavy_iron"),
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_iron"),
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.LEGS), "leggings_heavy_iron"),
-					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.FEET), "boots_heavy_iron"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.HEAD), "helmet_heavy_iron"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_iron"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.LEGS), "leggings_heavy_iron"),
+					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.FEET), "boots_heavy_iron"),
 
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_diamond_dyable"),
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_diamond_dyable"),
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_diamond_dyable"),
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_diamond_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_diamond_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_diamond_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_diamond_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_diamond_dyable"),
 
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_iron_dyable"),
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_iron_dyable"),
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_iron_dyable"),
-					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_iron_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_iron_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_iron_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_iron_dyable"),
+					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_iron_dyable"),
 
 					setItemName(new Item(), "scale_turtle"),
 					setItemName(new Item(), "leather_bull"),

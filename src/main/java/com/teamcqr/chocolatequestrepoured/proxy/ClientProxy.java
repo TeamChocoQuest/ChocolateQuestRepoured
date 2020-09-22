@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.client.gui.IUpdatableGui;
 import com.teamcqr.chocolatequestrepoured.client.init.ModEntityRenderers;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
@@ -78,7 +78,7 @@ public class ClientProxy implements IProxy {
 	@SubscribeEvent
 	public static void colorItemArmors(ColorHandlerEvent.Item event) {
 		List<Item> dyables = new ArrayList<>();
-		for (Item item : ModItems.ItemRegistrationHandler.ITEMS) {
+		for (Item item : CQRItems.ItemRegistrationHandler.ITEMS) {
 			if (item instanceof ItemArmorDyable) {
 				dyables.add(item);
 			}

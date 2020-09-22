@@ -4,7 +4,7 @@ import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHan
 import com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 
-public class ModCapabilities {
+public class CQRCapabilities {
 
 	public static void registerCapabilities() {
 		CapabilityCooldownHandlerProvider.register();

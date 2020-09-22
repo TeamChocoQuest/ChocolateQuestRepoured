@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.BlockPosUtil;
@@ -34,7 +34,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
 			Vec3d vec = this.entity.getPositionEyes(1.0F);
-			this.nearestTorch = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, ModBlocks.UNLIT_TORCH, (mutablePos, state) -> {
+			this.nearestTorch = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, CQRBlocks.UNLIT_TORCH, (mutablePos, state) -> {
 				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				return result == null || result.getBlockPos().equals(mutablePos);
 			});
@@ -48,7 +48,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (this.nearestTorch == null) {
 			return false;
 		}
-		if (this.entity.ticksExisted % 10 == 0 && this.entity.world.getBlockState(this.nearestTorch).getBlock() != ModBlocks.UNLIT_TORCH) {
+		if (this.entity.ticksExisted % 10 == 0 && this.entity.world.getBlockState(this.nearestTorch).getBlock() != CQRBlocks.UNLIT_TORCH) {
 			return false;
 		}
 		return this.entity.hasPath();
@@ -71,7 +71,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 	public void updateTask() {
 		if (this.entity.getDistanceSqToCenter(this.nearestTorch) <= REACH_DISTANCE_SQ) {
 			IBlockState state = this.entity.world.getBlockState(this.nearestTorch);
-			if (state.getBlock() == ModBlocks.UNLIT_TORCH) {
+			if (state.getBlock() == CQRBlocks.UNLIT_TORCH) {
 				BlockUnlitTorch.lightUp(this.entity.world, this.nearestTorch, state.getValue(BlockTorch.FACING));
 			}
 			this.nearestTorch = null;

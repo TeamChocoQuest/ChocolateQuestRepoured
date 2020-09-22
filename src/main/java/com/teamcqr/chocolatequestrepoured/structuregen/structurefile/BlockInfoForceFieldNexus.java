@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -38,7 +38,7 @@ public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 
 		if (protectedRegion != null) {
-			if (BlockPlacingHelper.setBlockState(world, transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 18, CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates)) {
+			if (BlockPlacingHelper.setBlockState(world, transformedPos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 18, CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates)) {
 				protectedRegion.addBlockDependency(transformedPos);
 			} else {
 				CQRMain.logger.warn("Failed to place force field nexus at {}", transformedPos);

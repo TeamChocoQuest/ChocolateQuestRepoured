@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
 
@@ -156,7 +156,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		} else if (this.getBoss().getAnimationTick() <= this.BUBBLE_SHOOT_DURATION) {
 			this.getBoss().setSpinning(false);
 			if (this.getBoss().getAnimationTick() % 5 == 0) {
-				this.getBoss().playSound(ModSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * this.getBoss().getRNG().nextFloat()));
+				this.getBoss().playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * this.getBoss().getRNG().nextFloat()));
 			}
 			Vec3d v = new Vec3d(this.entity.getRNG().nextDouble() - 0.5D, 0.125D * (this.entity.getRNG().nextDouble() - 0.5D), this.entity.getRNG().nextDouble() - 0.5D);
 			v = v.normalize();

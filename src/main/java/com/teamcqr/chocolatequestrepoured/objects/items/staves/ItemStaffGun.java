@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
@@ -43,7 +43,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 	}
 
 	public void shootStaff(World worldIn, EntityPlayer player, ItemStack stack, EnumHand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 
 		if (!worldIn.isRemote) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player);
@@ -82,7 +82,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		return ModSounds.GUN_SHOOT;
+		return CQRSounds.GUN_SHOOT;
 	}
 
 	@Override

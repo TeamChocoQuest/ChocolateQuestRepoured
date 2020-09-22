@@ -14,8 +14,8 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSp
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -368,7 +368,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		this.setHealingPotions(1);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(CQRItems.BADGE));
 		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			this.setDropChance(slot, 0.04F);
 		}
@@ -693,7 +693,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					((EntityLivingBase) entityIn).heal(ItemStaffHealing.HEAL_AMOUNT_ENTITIES);
 					entityIn.setFire(0);
 					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-					this.world.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
+					this.world.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
 				}
 				return true;
 			}
@@ -914,7 +914,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setHealingPotions(int amount) {
-		ItemStack stack = new ItemStack(ModItems.POTION_HEALING, amount);
+		ItemStack stack = new ItemStack(CQRItems.POTION_HEALING, amount);
 		if (this.holdingPotion) {
 			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 		} else {

@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
@@ -105,15 +105,15 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 	}
 
 	private int getIdFromLootTable(ResourceLocation lootTable) {
-		if (lootTable.equals(ModLoottables.CHESTS_FOOD)) {
+		if (lootTable.equals(CQRLoottables.CHESTS_FOOD)) {
 			return 0;
-		} else if (lootTable.equals(ModLoottables.CHESTS_EQUIPMENT)) {
+		} else if (lootTable.equals(CQRLoottables.CHESTS_EQUIPMENT)) {
 			return 1;
-		} else if (lootTable.equals(ModLoottables.CHESTS_TREASURE)) {
+		} else if (lootTable.equals(CQRLoottables.CHESTS_TREASURE)) {
 			return 2;
-		} else if (lootTable.equals(ModLoottables.CHESTS_MATERIAL)) {
+		} else if (lootTable.equals(CQRLoottables.CHESTS_MATERIAL)) {
 			return 3;
-		} else if (lootTable.equals(ModLoottables.CHESTS_CLUTTER)) {
+		} else if (lootTable.equals(CQRLoottables.CHESTS_CLUTTER)) {
 			return 32;
 		} else if (lootTable.equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)) {
 			return 4;
@@ -156,15 +156,15 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 	private ResourceLocation getLootTableFromId(int id) {
 		switch (id) {
 		case 0:
-			return ModLoottables.CHESTS_FOOD;
+			return CQRLoottables.CHESTS_FOOD;
 		case 1:
-			return ModLoottables.CHESTS_EQUIPMENT;
+			return CQRLoottables.CHESTS_EQUIPMENT;
 		case 2:
-			return ModLoottables.CHESTS_TREASURE;
+			return CQRLoottables.CHESTS_TREASURE;
 		case 3:
-			return ModLoottables.CHESTS_MATERIAL;
+			return CQRLoottables.CHESTS_MATERIAL;
 		case 32:
-			return ModLoottables.CHESTS_CLUTTER;
+			return CQRLoottables.CHESTS_CLUTTER;
 		case 4:
 			return LootTableList.CHESTS_ABANDONED_MINESHAFT;
 		case 5:
@@ -200,7 +200,7 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 			return new ResourceLocation(Reference.MODID, "chests/custom_" + (id - 17));
 		}
 		CQRMain.logger.warn("Failed to read loottable for id {}!", id);
-		return ModLoottables.CHESTS_FOOD;
+		return CQRLoottables.CHESTS_FOOD;
 	}
 
 	public ResourceLocation getLootTable() {

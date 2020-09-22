@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -315,11 +315,11 @@ public class CQStructure {
 			IBlockState state = world.getBlockState(mutablePos);
 			Block block = state.getBlock();
 
-			if (block == Blocks.BARRIER || block instanceof BlockCommandBlock || block == Blocks.STRUCTURE_BLOCK || block == ModBlocks.EXPORTER) {
+			if (block == Blocks.BARRIER || block instanceof BlockCommandBlock || block == Blocks.STRUCTURE_BLOCK || block == CQRBlocks.EXPORTER) {
 				CQRMain.logger.warn("Exporting unexpected block: {} from {}", block, mutablePos);
 			}
 
-			if (block != Blocks.STRUCTURE_VOID && block != ModBlocks.NULL_BLOCK) {
+			if (block != Blocks.STRUCTURE_VOID && block != CQRBlocks.NULL_BLOCK) {
 				BlockPos pos = mutablePos.subtract(pos1);
 				TileEntity tileEntity = world.getTileEntity(mutablePos);
 
@@ -330,13 +330,13 @@ public class CQStructure {
 					this.specialBlockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
 					this.blockInfoList.add(new BlockInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
-				} else if (block == ModBlocks.SPAWNER) {
+				} else if (block == CQRBlocks.SPAWNER) {
 					this.blockInfoList.add(new BlockInfoSpawner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block instanceof BlockExporterChest) {
 					this.blockInfoList.add(new BlockInfoLootChest(pos, ((BlockExporterChest) block).lootTable, state.getValue(BlockChest.FACING)));
-				} else if (block == ModBlocks.FORCE_FIELD_NEXUS) {
+				} else if (block == CQRBlocks.FORCE_FIELD_NEXUS) {
 					this.blockInfoList.add(new BlockInfoForceFieldNexus(pos));
-				} else if (block == ModBlocks.BOSS_BLOCK) {
+				} else if (block == CQRBlocks.BOSS_BLOCK) {
 					this.blockInfoList.add(new BlockInfoBoss(pos));
 				} else {
 					this.blockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
@@ -61,7 +61,7 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 			return false;
 		}
 		CQRFaction faction = this.entity.getFaction();
-		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
+		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
@@ -100,7 +100,7 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 			return false;
 		}
 		CQRFaction faction = this.entity.getFaction();
-		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
+		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}

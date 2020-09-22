@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -43,7 +43,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ModLoottables.ENTITIES_PIRATE_CAPTAIN;
+		return CQRLoottables.ENTITIES_PIRATE_CAPTAIN;
 	}
 
 	@Override
@@ -104,10 +104,10 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(ModItems.BULLET_FIRE, 64));
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 2));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(CQRItems.BULLET_FIRE, 64));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 2));
 	}
 
 	@Override

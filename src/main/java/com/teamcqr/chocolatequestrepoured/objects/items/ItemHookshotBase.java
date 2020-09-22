@@ -16,7 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import com.teamcqr.chocolatequestrepoured.util.CQRBlockUtil;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -195,7 +195,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
 		}
-		worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
 	}
 
 	public ProjectileHookShotHook entityAIshoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
@@ -217,7 +217,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 	}
 
 	public SoundEvent getShootSound() {
-		return ModSounds.GUN_SHOOT;
+		return CQRSounds.GUN_SHOOT;
 	}
 
 	public double getRange() {

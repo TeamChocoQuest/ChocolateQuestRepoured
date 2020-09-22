@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.items.ISupportWeapon;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemFakeSwordHealingStaff;
 
@@ -45,7 +45,7 @@ public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwo
 			((EntityLivingBase) entity).heal(HEAL_AMOUNT_ENTITIES);
 			entity.setFire(0);
 			((WorldServer) player.world).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + itemRand.nextFloat() * 0.2F);
+			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + itemRand.nextFloat() * 0.2F);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 		}
@@ -75,7 +75,7 @@ public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwo
 
 	@Override
 	public ItemFakeSwordHealingStaff getFakeWeapon() {
-		return ModItems.DIAMOND_SWORD_FAKE_HEALING_STAFF;
+		return CQRItems.DIAMOND_SWORD_FAKE_HEALING_STAFF;
 	}
 
 }

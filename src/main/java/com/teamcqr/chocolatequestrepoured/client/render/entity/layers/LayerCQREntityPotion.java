@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.layers;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,7 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 				ModelBox box = body.cubeList.get(0);
 
 				if (box != null) {
-					ItemStack stack = new ItemStack(ModItems.POTION_HEALING);
+					ItemStack stack = new ItemStack(CQRItems.POTION_HEALING);
 
 					GlStateManager.pushMatrix();
 					if (entity.isSneaking()) {

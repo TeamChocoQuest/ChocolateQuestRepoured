@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 
-public class ModDispenseBehaviors {
+public class CQRDispenseBehaviors {
 
 	private static final Random rng = new Random();
 	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_BUBBLE_GUN = new IBehaviorDispenseItem() {
@@ -67,7 +67,7 @@ public class ModDispenseBehaviors {
 			bubble.velocityChanged = true;
 			source.getWorld().spawnEntity(bubble);
 
-			source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), ModSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1, 0.75F + (0.5F * rng.nextFloat()), false);
+			source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), CQRSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1, 0.75F + (0.5F * rng.nextFloat()), false);
 
 			// DONE: FIgure out how to make the stack damaged
 			stack.attemptDamageItem(1, source.getWorld().rand, null);
@@ -80,11 +80,11 @@ public class ModDispenseBehaviors {
 
 	public static void registerDispenseBehaviors() {
 		// Bubble Gun
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BUBBLE_PISTOL, DISPENSE_BEHAVIOR_BUBBLE_GUN);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BUBBLE_RIFLE, DISPENSE_BEHAVIOR_BUBBLE_GUN);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.BUBBLE_PISTOL, DISPENSE_BEHAVIOR_BUBBLE_GUN);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.BUBBLE_RIFLE, DISPENSE_BEHAVIOR_BUBBLE_GUN);
 
 		// Soul bottle
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.SOUL_BOTTLE, DISPENSE_BEHAVIOR_SOUL_BOTTLE);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.SOUL_BOTTLE, DISPENSE_BEHAVIOR_SOUL_BOTTLE);
 	}
 
 	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_SOUL_BOTTLE = new IBehaviorDispenseItem() {

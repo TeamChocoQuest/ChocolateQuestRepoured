@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonRandomizedCastle;
@@ -104,7 +104,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		// SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
 
 		if (mobEntity != null) {
-			Block spawnerBlock = ModBlocks.SPAWNER;
+			Block spawnerBlock = CQRBlocks.SPAWNER;
 			IBlockState state = spawnerBlock.getDefaultState();
 			TileEntitySpawner spawner = (TileEntitySpawner) spawnerBlock.createTileEntity(world, state);
 			if (spawner != null) {
@@ -149,13 +149,13 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			ResourceLocation lootTable;
 
 			if (treasureChestsPlaced < numTreasureChests) {
-				lootTable = ModLoottables.CHESTS_TREASURE;
+				lootTable = CQRLoottables.CHESTS_TREASURE;
 				++treasureChestsPlaced;
 			} else {
 				if (DungeonGenUtils.percentageRandom(50, this.random)) {
-					lootTable = ModLoottables.CHESTS_MATERIAL;
+					lootTable = CQRLoottables.CHESTS_MATERIAL;
 				} else {
-					lootTable = ModLoottables.CHESTS_EQUIPMENT;
+					lootTable = CQRLoottables.CHESTS_EQUIPMENT;
 				}
 			}
 			genArray.addChestWithLootTable(world, locList.get(i).getKey(), locList.get(i).getValue().getOpposite(), lootTable, BlockStateGenArray.GenerationPhase.POST);

@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import java.util.function.Consumer;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -46,7 +46,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
 					entity.setInWeb();
-					this.world.setBlockState(entity.getPosition(), ModBlocks.TEMPORARY_WEB.getDefaultState());
+					this.world.setBlockState(entity.getPosition(), CQRBlocks.TEMPORARY_WEB.getDefaultState());
 					this.setDead();
 				}
 			}
@@ -55,7 +55,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 					@Override
 					public void accept(MutableBlockPos t) {
-						if(world.getBlockState(t).getBlock() instanceof BlockAir) world.setBlockState(t, ModBlocks.TEMPORARY_WEB.getDefaultState());
+						if(world.getBlockState(t).getBlock() instanceof BlockAir) world.setBlockState(t, CQRBlocks.TEMPORARY_WEB.getDefaultState());
 					}});
 			}
 			super.onImpact(result);

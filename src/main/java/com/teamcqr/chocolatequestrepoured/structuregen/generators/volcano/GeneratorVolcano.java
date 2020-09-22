@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
@@ -278,7 +278,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				for (int i = 0; i < entityCount; i++) {
 					entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
 				}
-				blockInfoList1.add(new BlockInfoSpawner(pos.getX(), pos.getY() + 1, pos.getZ(), ModBlocks.SPAWNER.getDefaultState(), entityList));
+				blockInfoList1.add(new BlockInfoSpawner(pos.getX(), pos.getY() + 1, pos.getZ(), CQRBlocks.SPAWNER.getDefaultState(), entityList));
 				floor--;
 			}
 			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList1, new PlacementSettings(), mobType));

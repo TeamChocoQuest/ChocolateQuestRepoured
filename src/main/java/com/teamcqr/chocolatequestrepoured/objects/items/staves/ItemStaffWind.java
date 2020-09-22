@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.staves;
 
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.Entity;
@@ -25,7 +25,7 @@ public class ItemStaffWind extends Item implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		return ModSounds.MAGIC;
+		return CQRSounds.MAGIC;
 	}
 
 	@Override

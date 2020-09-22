@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.enchantments;
 
-import com.teamcqr.chocolatequestrepoured.init.ModEnchantments;
+import com.teamcqr.chocolatequestrepoured.init.CQREnchantments;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.enchantment.Enchantment;
@@ -47,7 +47,7 @@ public class EnchantmentLightningProtection extends Enchantment {
 			EntityLivingBase living = (EntityLivingBase) event.getEntity();
 			ItemStack helmet = living.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 
-			int lvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LIGHTNING_PROTECTION, helmet);
+			int lvl = EnchantmentHelper.getEnchantmentLevel(CQREnchantments.LIGHTNING_PROTECTION, helmet);
 			if (lvl > 0 && lvl > living.getRNG().nextInt(10)) {
 				event.setCanceled(true);
 			}
