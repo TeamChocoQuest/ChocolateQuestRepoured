@@ -152,28 +152,30 @@ public class CQStructure {
 		return structure;
 	}
 
-	public void writeToFile(File file) {
-		long t = System.currentTimeMillis();
+	public boolean writeToFile(File file) {
 		NBTTagCompound compound = this.writeToNBT();
 		try {
-			if (!file.exists() && !file.createNewFile()) {
+			if (file.isDirectory()) {
 				throw new FileNotFoundException();
+			}
+			if (!file.exists()) {
+				file.getParentFile().mkdirs();
+				file.createNewFile();
 			}
 			try (OutputStream outputStream = new FileOutputStream(file)) {
 				CompressedStreamTools.writeCompressed(compound, outputStream);
 			}
+			return true;
 		} catch (IOException e) {
 			CQRMain.logger.error("Failed to write structure to file " + file.getName(), e);
 		}
+		return false;
 	}
 
-	private void readFromFile(File file) {
-		long t = System.currentTimeMillis();
+
+	private boolean readFromFile(File file) {
 		NBTTagCompound compound = null;
 		try {
-			if (!file.exists()) {
-				throw new FileNotFoundException();
-			}
 			try (InputStream inputStream = new FileInputStream(file)) {
 				compound = CompressedStreamTools.readCompressed(inputStream);
 			}
@@ -182,7 +184,9 @@ public class CQStructure {
 		}
 		if (compound != null) {
 			this.readFromNBT(compound);
+			return true;
 		}
+		return false;
 	}
 
 	private NBTTagCompound writeToNBT() {

@@ -30,7 +30,7 @@ public class TileEntityExporter extends TileEntity {
 	public int endY = 0;
 	public int endZ = 0;
 	public String structureName = "NoName";
-	public boolean relativeMode = false;
+	public boolean relativeMode = true;
 	public boolean ignoreEntities = true;
 
 	private BlockPos minPos = new BlockPos(0, 0, 0);
@@ -138,13 +138,19 @@ public class TileEntityExporter extends TileEntity {
 		}
 		if (!world.isRemote) {
 			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = CQStructure.createFromWorld(world, startPos, endPos, ignoreEntities, author.getName());
-			new Thread(() -> {
-				structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"));
-				author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName));
-			}).start();
+
+			CQStructure structure = CQStructure.createFromWorld(world, startPos, endPos, this.ignoreEntities, author.getName());
+			Thread exportThread = new Thread(() -> {
+				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"))) {
+					author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName));
+				} else {
+					author.sendMessage(new TextComponentString("Failed to export structure: " + this.structureName));
+				}
+			});
+			exportThread.setName("CQR Export Thread");
+			exportThread.start();
+
 		} else {
-			CQRMain.logger.info("Sending structure save request packet...");
 			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, this.ignoreEntities));
 		}
 	}

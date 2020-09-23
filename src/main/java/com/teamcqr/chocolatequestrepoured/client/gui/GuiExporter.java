@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.relauncher.Side;
@@ -69,9 +70,9 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartZ.setText(String.valueOf(this.exporter.startZ));
 
 		this.chbxRelativeMode = new GuiCheckBox(5, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.relativeMode);
-		this.chbxIgnoreEntities = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 60, "Ignore Entities", this.exporter.ignoreEntities);
+		this.chbxIgnoreEntities = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 40, "Ignore Entities", this.exporter.ignoreEntities);
 
-		this.btnExport = new GuiButtonExt(4, this.width / 2 - 70, this.height / 2 + 80, 140, 20, "Export");
+		this.btnExport = new GuiButtonExt(4, this.width / 2 - 70, this.height / 2 + 60, 140, 20, "Export");
 
 		this.buttonList.add(this.chbxRelativeMode);
 		this.buttonList.add(this.chbxIgnoreEntities);
@@ -87,24 +88,19 @@ public class GuiExporter extends GuiScreen {
 			int endX = Integer.parseInt(this.edtEndX.getText());
 			int endY = Integer.parseInt(this.edtEndY.getText());
 			int endZ = Integer.parseInt(this.edtEndZ.getText());
-
 			String structName = this.edtName.getText();
-			structName = structName.replaceAll(" ", "_");
-
-			if (structName.isEmpty() || structName.equalsIgnoreCase("")) {
-				structName = "dungeon_export";
+			if (structName.isEmpty()) {
+				throw new IllegalArgumentException();
 			}
 
 			this.exporter.setValues(startX, startY, startZ, endX, endY, endZ, structName, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked());
-
 			CQRMain.NETWORK.sendToServer(new ExporterUpdatePacket(this.exporter));
 
 			if (this.saveStructOnExit) {
-				CQRMain.logger.info("Saving structure...");
 				this.exporter.saveStructure(this.mc.world, new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ), this.mc.player);
 			}
-		} catch (NumberFormatException ex) {
-			CQRMain.logger.error(ex);
+		} catch (IllegalArgumentException e) {
+			Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Invalid exporter arguments"));
 		}
 
 		super.onGuiClosed();
