@@ -78,7 +78,7 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
 
 	public static boolean isPhosphorInstalled;
-
+	
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
 		public ItemStack createIcon() {
@@ -194,6 +194,7 @@ public class CQRMain {
 		CQRMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
 		BlockFire.init();
+		
 	}
 
 	@EventHandler
