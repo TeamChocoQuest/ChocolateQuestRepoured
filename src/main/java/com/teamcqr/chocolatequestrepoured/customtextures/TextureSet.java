@@ -54,7 +54,7 @@ public class TextureSet {
 					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
 					if (tf != null && tf.exists()) {
 						textures.put(texture + ".png", tf);
-						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
+						ResourceLocation rs = new ResourceLocation(Reference.MODID /*+ "_ctts_" + this.name*/, texture + ".png");
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
 						// }

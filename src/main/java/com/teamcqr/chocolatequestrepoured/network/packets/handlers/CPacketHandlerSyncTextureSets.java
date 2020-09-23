@@ -59,6 +59,7 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomText
 
 				TextureSetManager.registerTextureSet(ts);
 			}
+			
 		}
 
 		return null;
