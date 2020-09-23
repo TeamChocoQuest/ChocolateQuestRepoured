@@ -136,6 +136,7 @@ public class CQRMain {
 
 		proxy.preInit();
 
+		// !!Custom texture system has to load BEFORE the faction system!!
 		// Custom Textures System
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 

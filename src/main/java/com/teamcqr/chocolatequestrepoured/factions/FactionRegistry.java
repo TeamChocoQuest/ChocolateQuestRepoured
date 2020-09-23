@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.customtextures.TextureSet;
+import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -148,8 +150,13 @@ public class FactionRegistry {
 					Optional<Integer> optionMember = Optional.of(repuChangeMember);
 					Optional<Integer> optionAlly = Optional.of(repuChangeAlly);
 					Optional<Integer> optionEnemy = Optional.of(repuChangeEnemy);
+					
+					//Custom textures start
+					String textureSetName = prop.getProperty(ConfigKeys.TEXTURE_SET_KEY, "");
+					TextureSet ts = TextureSetManager.getInstance().getTextureSet(textureSetName);
+					//Custom textures end
 
-					CQRFaction f = new CQRFaction(fName, defRepu, !staticRepu, optionMember, optionAlly, optionEnemy);
+					CQRFaction f = new CQRFaction(fName, ts, defRepu, true, !staticRepu, optionMember, optionAlly, optionEnemy);
 					this.factions.put(fName, f);
 				}
 			}
@@ -183,7 +190,7 @@ public class FactionRegistry {
 			Optional<Integer> optionAlly = Optional.empty();
 			Optional<Integer> optionEnemy = Optional.empty();
 
-			CQRFaction fac = new CQRFaction(edf.name(), edf.getDefaultReputation(), false, edf.canRepuChange(), optionMember, optionAlly, optionEnemy);
+			CQRFaction fac = new CQRFaction(edf.name(), null, edf.getDefaultReputation(), false, edf.canRepuChange(), optionMember, optionAlly, optionEnemy);
 			this.factions.put(edf.name(), fac);
 		}
 

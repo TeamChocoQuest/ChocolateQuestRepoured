@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -116,6 +118,11 @@ public class TextureSetManager {
 			set.clearTextureCache();
 		}
 		this.textureSets.clear();
+	}
+	
+	@Nullable
+	public TextureSet getTextureSet(String name) {
+		return this.textureSets.getOrDefault(name, null);
 	}
 
 }

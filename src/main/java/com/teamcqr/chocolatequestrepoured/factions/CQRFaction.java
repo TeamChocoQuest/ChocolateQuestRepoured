@@ -14,14 +14,17 @@ import java.util.Optional;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.customtextures.TextureSet;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 
 public class CQRFaction {
@@ -32,18 +35,20 @@ public class CQRFaction {
 	private List<CQRFaction> allies = Collections.synchronizedList(new ArrayList<CQRFaction>());
 	private List<CQRFaction> enemies = Collections.synchronizedList(new ArrayList<CQRFaction>());
 	private EReputationState defaultRelation;
+	private TextureSet textureSet = null;
 
 	private int repuChangeOnMemberKill = 5;
 	private int repuChangeOnAllyKill = 2;
 	private int repuChangeOnEnemyKill = 1;
 
 	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
-		this(name, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
+		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
 
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+	public CQRFaction(@Nonnull String name, TextureSet ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this.savedGlobally = saveGlobally;
 		this.name = name;
+		this.textureSet = ctSet;
 		this.defaultRelation = defaultReputationState;
 		this.repuMayChange = canRepuChange;
 		this.repuChangeOnMemberKill = repuChangeOnMemberKill.isPresent() ? repuChangeOnMemberKill.get() : 5;
@@ -93,6 +98,16 @@ public class CQRFaction {
 		if (enemy != null) {
 			this.enemies.add(enemy);
 		}
+	}
+	
+	@Nullable
+	public ResourceLocation getRandomTextureFor(Entity entity) {
+		ResourceLocation result = null;
+		if(this.textureSet != null) {
+			result = this.textureSet.getRandomTextureFor(entity);
+		}
+		result = result != null ? result : new ResourceLocation("");
+		return result;
 	}
 
 	// DONE: Special case for player faction!!

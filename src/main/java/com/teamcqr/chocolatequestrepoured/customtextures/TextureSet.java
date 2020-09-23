@@ -31,7 +31,7 @@ public class TextureSet {
 	}
 
 	public void addTexture(ResourceLocation entity, ResourceLocation texture) {
-		this.entityTextureMap.getOrDefault(entity, new HashSet<ResourceLocation>()).add(texture);
+		this.entityTextureMap.computeIfAbsent(entity, key -> new HashSet<>()).add(texture);
 	}
 
 	// FOR SERVER
