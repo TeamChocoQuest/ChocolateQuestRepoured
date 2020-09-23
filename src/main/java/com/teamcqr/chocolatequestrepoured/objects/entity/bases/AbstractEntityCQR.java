@@ -452,7 +452,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		compound.setTag("trades", this.trades.writeToNBT(new NBTTagCompound()));
-		compound.setString("textureOverride", getTextureOverride().toString());
+		if (hasTextureOverride()) {
+			compound.setString("textureOverride", getTextureOverride().toString());
+		}
 	}
 
 	@Override
