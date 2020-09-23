@@ -51,7 +51,15 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragon entity) {
-		return entity.getSkeleProgress() < 0 ? TEXTURES_NORMAL : TEXTURES_SKELETAL;
+		if(entity.getSkeleProgress() < 0) {
+			//Custom texture start
+			if(entity.hasTextureOverride()) {
+				return entity.getTextureOverride();
+			}
+			//Custom texture end
+			return TEXTURES_NORMAL;
+		}
+		return TEXTURES_SKELETAL;
 	}
 
 }

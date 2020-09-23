@@ -18,6 +18,11 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRGiantTortoise entity) {
+		// Custom texture start
+		if (entity.hasTextureOverride()) {
+			return entity.getTextureOverride();
+		}
+		// Custom texture end
 		return TEXTURE;
 	}
 
