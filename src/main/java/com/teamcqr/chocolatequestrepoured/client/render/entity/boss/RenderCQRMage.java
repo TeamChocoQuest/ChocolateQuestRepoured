@@ -47,7 +47,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQ
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return entity.isIdentityHidden() ? TEXTURES_HIDDEN : this.texture;
+		return entity.isIdentityHidden() ? TEXTURES_HIDDEN : super.getEntityTexture(entity);
 	}
 
 }
