@@ -291,7 +291,7 @@ public class CQRBlocks {
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
 					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
-					setBlockName(new BlockTemporaryWeb(), "temporary_web"), };
+					setBlockNameAndTab(new BlockTemporaryWeb(), "temporary_web", null), };
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 
