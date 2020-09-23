@@ -184,7 +184,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
 		this.dataManager.register(SPIN_TO_WIN, false);
-		this.dataManager.register(TEXTURE_OVERRIDE, null);
+		this.dataManager.register(TEXTURE_OVERRIDE, "");
 
 		// Shoulder entity stuff
 		this.dataManager.register(SHOULDER_ENTITY, new NBTTagCompound());
