@@ -981,16 +981,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.factionInstance = null;
 		this.factionName = newFac;
 		
-		CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
-		if(faction != null) {
-			ResourceLocation rs = faction.getRandomTextureFor(this);
-			if(rs != null) {
-				
+		if(!world.isRemote) {
+			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
+			if(faction != null) {
+				ResourceLocation rs = faction.getRandomTextureFor(this);
+				if(rs != null) {
+					this.setCustomTexture(rs);
+				}
 			}
 		}
 	}
 	
-	@SideOnly(Side.SERVER)
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
 		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
 	}
@@ -1049,9 +1050,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			if (item instanceof ItemShieldDummy && mobType != null) {
 				this.setItemStackToSlot(slot, new ItemStack(mobType.getShieldReplacement(), 1));
 			}
-			if (mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
-				this.setFaction(mobType.getFactionOverride());
-			}
+		}
+		if (mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
+			this.setFaction(mobType.getFactionOverride());
 		}
 	}
 
@@ -1454,7 +1455,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public ResourceLocation getTextureOverride() {
-		if (this.textureOverride == null) {
+		if (this.textureOverride == null || this.textureOverride.toString() != this.dataManager.get(TEXTURE_OVERRIDE)) {
 			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
 		}
 		return this.textureOverride;
