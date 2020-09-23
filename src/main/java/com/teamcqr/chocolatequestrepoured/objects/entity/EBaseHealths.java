@@ -8,6 +8,7 @@ public enum EBaseHealths {
 	GOBLIN(20.0F),
 	GOLEM(40.0F),
 	GREMLIN(30.0F),
+	HUMAN(20.0F),
 	ILLAGER(25.0F),
 	MINOTAUR(30.0F),
 	MUMMY(20.0F),

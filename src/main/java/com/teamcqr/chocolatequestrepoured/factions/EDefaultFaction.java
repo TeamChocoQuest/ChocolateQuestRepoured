@@ -17,7 +17,7 @@ public enum EDefaultFaction {
 	ALL_ALLY(new String[] {}, new String[] { "UNDEAD", "PIRATE", "WALKERS", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "INQUISITION", "BEASTS", "VILLAGERS", "NEUTRAL", "TRITONS", "PLAYERS" }, EReputationState.NEUTRAL, false),
 	MOB_BATTLE_T1(new String[] { "MOB_BATTLE_T2" }, new String[] {}, EReputationState.ENEMY, false),
 	MOB_BATTLE_T2(new String[] { "MOB_BATTLE_T1" }, new String[] {}, EReputationState.ALLY, false),
-	PLAYERS(new String[] {}, new String[] { "VILLAGERS", "NPC" }, EReputationState.NEUTRAL, false),
+	PLAYERS(new String[] {}, new String[] { "VILLAGERS", "NPC" }, EReputationState.MEMBER, false),
 	ILLAGERS(new String[] { "TRITONS", "VILLAGERS", "DWARVES_AND_GOLEMS", "UNDEAD" }, new String[] { "GREMLINS, PIRATE, ENDERMEN" }, EReputationState.ENEMY, false),
 	GREMLINS(new String[] { "DWARVES_AND_GOLEMS", "GOBLINS", "UNDEAD", "WALKERS", "BEASTS", "ENDERMEN" }, new String[] { "ILLAGERS", "PIRATE" }, EReputationState.ENEMY, false),;
 

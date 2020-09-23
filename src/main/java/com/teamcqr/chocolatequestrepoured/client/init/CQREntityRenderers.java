@@ -29,6 +29,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQREnd
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGoblin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGolem;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGremlin;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRHuman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRIllager;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRMandril;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRMinotaur;
@@ -89,6 +90,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRHuman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMinotaur;
@@ -182,6 +184,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, RenderCQREnderman::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, RenderCQRGolem::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGremlin.class, RenderCQRGremlin::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRHuman.class, RenderCQRHuman::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRIllager.class, RenderCQRIllager::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMandril.class, RenderCQRMandril::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMinotaur.class, RenderCQRMinotaur::new);

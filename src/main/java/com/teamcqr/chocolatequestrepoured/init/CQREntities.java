@@ -30,6 +30,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRHuman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMinotaur;
@@ -96,6 +97,7 @@ public class CQREntities {
 	public static final EntityEntry GREMLIN = Null();
 	public static final EntityEntry GOBLIN = Null();
 	public static final EntityEntry GOLEM = Null();
+	public static final EntityEntry HUMAN = Null();
 	public static final EntityEntry ILLAGER = Null();
 	public static final EntityEntry NPC = Null();
 	public static final EntityEntry MINOTAUR = Null();
@@ -162,6 +164,7 @@ public class CQREntities {
 					createEntityEntry(EntityCQRGremlin.class, "gremlin", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRGoblin.class, "goblin", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRGolem.class, "golem", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRHuman.class, "human", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRIllager.class, "illager", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRNPC.class, "npc", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRMinotaur.class, "minotaur", 64, 1, true, 0x333333, 0xC3BDBD),

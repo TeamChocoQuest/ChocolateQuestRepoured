@@ -575,6 +575,7 @@ entity.cqr_dummy.name=Dummy
 entity.cqr_boarman.name=Boarman
 entity.cqr_enderman.name=Enderman
 entity.cqr_gremlin.name=Gremlin
+entity.cqr_human.name=Human
 entity.cqr_illager.name=Illager
 entity.cqr_mandril.name=Mandril
 entity.cqr_minotaur.name=Minotaur

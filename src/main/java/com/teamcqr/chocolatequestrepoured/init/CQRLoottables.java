@@ -18,6 +18,7 @@ public class CQRLoottables {
 	public static final ResourceLocation ENTITIES_GOBLIN = createEntityLootTable("goblin");
 	public static final ResourceLocation ENTITIES_GOLEM = createEntityLootTable("golem");
 	public static final ResourceLocation ENTITIES_GREMLIN = createEntityLootTable("gremlin");
+	public static final ResourceLocation ENTITIES_HUMAN = createEntityLootTable("human");
 	public static final ResourceLocation ENTITIES_ILLAGER = createEntityLootTable("illager");
 	public static final ResourceLocation ENTITIES_MANDRIL = createEntityLootTable("mandril");
 	public static final ResourceLocation ENTITIES_MINOTAUR = createEntityLootTable("minotaur");
