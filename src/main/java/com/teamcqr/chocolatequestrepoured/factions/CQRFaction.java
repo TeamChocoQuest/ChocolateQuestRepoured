@@ -102,12 +102,10 @@ public class CQRFaction {
 	
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity entity) {
-		ResourceLocation result = null;
 		if(this.textureSet != null) {
-			result = this.textureSet.getRandomTextureFor(entity);
+			return this.textureSet.getRandomTextureFor(entity);
 		}
-		result = result != null ? result : new ResourceLocation("");
-		return result;
+		return null;
 	}
 
 	// DONE: Special case for player faction!!

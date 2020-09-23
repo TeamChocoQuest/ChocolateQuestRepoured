@@ -10,6 +10,6 @@ public final class ConfigKeys {
 	static final String FACTION_REPU_DEFAULT = "defaultReputation";
 	static final String FACTION_ALLIES_KEY = "allies";
 	static final String FACTION_ENEMIES_KEY = "enemies";
-	static final String TEXTURE_SET_KEY = "texture_set";
+	static final String TEXTURE_SET_KEY = "textureSet";
 
 }

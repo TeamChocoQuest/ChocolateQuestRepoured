@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -451,6 +452,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		compound.setTag("trades", this.trades.writeToNBT(new NBTTagCompound()));
+		compound.setString("textureOverride", getTextureOverride().toString());
 	}
 
 	@Override
@@ -496,6 +498,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		this.trades.readFromNBT(compound.getCompoundTag("trades"));
+		
+		if(compound.hasKey("textrureOverride", Constants.NBT.TAG_STRING)) {
+			String ct = compound.getString("textureOverride");
+			if(!ct.isEmpty()) {
+				this.setCustomTexture(new ResourceLocation(ct));
+			}
+		}
 	}
 
 	@Override
@@ -971,6 +980,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setFaction(String newFac) {
 		this.factionInstance = null;
 		this.factionName = newFac;
+		
+		CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
+		if(faction != null) {
+			ResourceLocation rs = faction.getRandomTextureFor(this);
+			if(rs != null) {
+				
+			}
+		}
+	}
+	
+	@SideOnly(Side.SERVER)
+	public void setCustomTexture(@Nonnull ResourceLocation texture) {
+		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
 	}
 
 	public boolean hasFaction() {
