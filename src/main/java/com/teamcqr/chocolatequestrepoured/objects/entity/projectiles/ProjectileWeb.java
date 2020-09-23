@@ -50,7 +50,7 @@ public class ProjectileWeb extends ProjectileBase {
 					this.setDead();
 				}
 			}
-			else if(DungeonGenUtils.percentageRandom(0.3)) {
+			else if(DungeonGenUtils.percentageRandom(75)) {
 				GeneratorVolcano.forEachSpherePosition(this.getPosition(), DungeonGenUtils.randomBetween(1, 3), new Consumer<BlockPos.MutableBlockPos>() {
 
 					@Override
