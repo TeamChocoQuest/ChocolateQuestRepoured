@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.gui;
 import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
@@ -109,20 +110,30 @@ public class GuiExporter extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (keyCode == 1) {
+		if (this.edtName.isFocused() || this.edtStartX.isFocused() || this.edtStartY.isFocused() || this.edtStartZ.isFocused() || this.edtEndX.isFocused() || this.edtEndY.isFocused() || this.edtEndZ.isFocused()) {
+			if (keyCode == 1) {
+				this.edtName.setFocused(false);
+				this.edtStartX.setFocused(false);
+				this.edtStartY.setFocused(false);
+				this.edtStartZ.setFocused(false);
+				this.edtEndX.setFocused(false);
+				this.edtEndY.setFocused(false);
+				this.edtEndZ.setFocused(false);
+			} else {
+				this.edtName.textboxKeyTyped(typedChar, keyCode);
+				if (GuiHelper.isValidCharForNumberTextField(typedChar, keyCode, true, false)) {
+					this.edtStartX.textboxKeyTyped(typedChar, keyCode);
+					this.edtStartY.textboxKeyTyped(typedChar, keyCode);
+					this.edtStartZ.textboxKeyTyped(typedChar, keyCode);
+					this.edtEndX.textboxKeyTyped(typedChar, keyCode);
+					this.edtEndY.textboxKeyTyped(typedChar, keyCode);
+					this.edtEndZ.textboxKeyTyped(typedChar, keyCode);
+				}
+			}
+		} else if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
 			this.mc.player.closeScreen();
-		}
-
-		this.edtName.textboxKeyTyped(typedChar, keyCode);
-
-		if (!Character.isAlphabetic(typedChar)) {
-			this.edtEndX.textboxKeyTyped(typedChar, keyCode);
-			this.edtEndY.textboxKeyTyped(typedChar, keyCode);
-			this.edtEndZ.textboxKeyTyped(typedChar, keyCode);
-
-			this.edtStartX.textboxKeyTyped(typedChar, keyCode);
-			this.edtStartY.textboxKeyTyped(typedChar, keyCode);
-			this.edtStartZ.textboxKeyTyped(typedChar, keyCode);
+		} else {
+			super.keyTyped(typedChar, keyCode);
 		}
 	}
 
@@ -199,7 +210,7 @@ public class GuiExporter extends GuiScreen {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button == this.btnExport) {
 			this.saveStructOnExit = true;
-			this.mc.displayGuiScreen((GuiScreen) null);
+			this.mc.player.closeScreen();
 		}
 	}
 
