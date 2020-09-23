@@ -76,6 +76,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -513,6 +514,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		boolean flag = false;
 
+		if (player.getHeldItem(hand).getItem() instanceof ItemNameTag) {
+			return super.processInteract(player, hand);
+		}
+		
 		if (!player.isSneaking()) {
 			if (player.isCreative() || this.getLeader() == player) {
 				if (!this.world.isRemote) {
