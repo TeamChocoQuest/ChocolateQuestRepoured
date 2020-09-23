@@ -478,6 +478,7 @@ tile.exporter_chest_valuable.name=Exporter Chest Treasure
 tile.exporter_chest_food.name=Exporter Chest Food
 tile.exporter_chest_equipment.name=Exporter Chest Equipment
 tile.exporter_chest_utility.name=Exporter Chest Utility
+tile.exporter_chest_clutter.name=Exporter Chest Clutter
 tile.exporter_chest_vanilla_blacksmith.name=Exporter Chest - Village Blacksmith
 tile.exporter_chest_vanilla_bonus.name=Exporter Chest - Bonus Chest
 tile.exporter_chest_vanilla_dungeon.name=Exporter Chest - Dungeon
