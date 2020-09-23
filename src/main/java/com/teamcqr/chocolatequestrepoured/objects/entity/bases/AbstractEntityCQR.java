@@ -499,7 +499,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		this.trades.readFromNBT(compound.getCompoundTag("trades"));
 		
-		if(compound.hasKey("textrureOverride", Constants.NBT.TAG_STRING)) {
+		if(compound.hasKey("textureOverride", Constants.NBT.TAG_STRING)) {
 			String ct = compound.getString("textureOverride");
 			if(!ct.isEmpty()) {
 				this.setCustomTexture(new ResourceLocation(ct));
