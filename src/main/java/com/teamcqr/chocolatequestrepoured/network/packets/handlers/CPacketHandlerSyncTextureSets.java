@@ -6,25 +6,34 @@ import java.util.Map;
 import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.customtextures.CTResourcepack;
 import com.teamcqr.chocolatequestrepoured.customtextures.CompressionUtil;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSet;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureUtil;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
+import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomTexturesPacket, IMessage> {
+	
+	private static  final  ReflectionField<IReloadableResourceManager> RESOURCE_MANAGER = new ReflectionField<>(Minecraft.class, "field_110451_am", "resourceManager");
 
 	public CPacketHandlerSyncTextureSets() {
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IMessage onMessage(CustomTexturesPacket message, MessageContext ctx) {
 		if (ctx.side.isClient()) {
+			CTResourcepack.clear();
 			Map<String, File> fileMap = new HashMap<>();
 			for (Map.Entry<String, String> textureEntry : message.getTextureMap().entrySet()) {
 				String path = textureEntry.getKey();
@@ -58,6 +67,18 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomText
 				}
 
 				TextureSetManager.registerTextureSet(ts);
+			}
+			
+			// and finally we need to reload our resourcepack
+			/*List<IResourcePack> list = Lists.newArrayList(CTResourcepack.getInstance());
+			IReloadableResourceManager rm = RESOURCE_MANAGER.get(Minecraft.getMinecraft());
+			rm.reloadResources(list);*/
+			//Minecraft.getMinecraft().scheduleResourcesRefresh();
+			IReloadableResourceManager rm = RESOURCE_MANAGER.get(Minecraft.getMinecraft());
+			if(rm instanceof SimpleReloadableResourceManager) {
+				((SimpleReloadableResourceManager)rm).reloadResourcePack(CTResourcepack.getInstance());
+			} else {
+				Minecraft.getMinecraft().scheduleResourcesRefresh();
 			}
 			
 		}

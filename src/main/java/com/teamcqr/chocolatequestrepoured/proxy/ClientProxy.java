@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.client.gui.IUpdatableGui;
 import com.teamcqr.chocolatequestrepoured.client.init.CQREntityRenderers;
+import com.teamcqr.chocolatequestrepoured.customtextures.CTResourcepack;
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -20,6 +21,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -41,9 +43,12 @@ public class ClientProxy implements IProxy {
 	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
 
 	private static final ReflectionField<Map<Advancement, AdvancementProgress>> m = new ReflectionField<>(ClientAdvancementManager.class, "field_192803_d", "advancementToProgress");
-
+	public static final ReflectionField<List<IResourcePack>> DEFAULT_RESOURCE_PACKS = new ReflectionField<>(Minecraft.class, "field_110449_ao", "defaultResourcePacks");
+	
 	@Override
 	public void preInit() {
+		List<IResourcePack> defaultResourcePacks = DEFAULT_RESOURCE_PACKS.get(Minecraft.getMinecraft());
+		defaultResourcePacks.add(CTResourcepack.getInstance());
 		CQREntityRenderers.registerRenderers();
 	}
 
@@ -54,7 +59,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void postInit() {
-
+		
 	}
 
 	@Override
