@@ -21,7 +21,6 @@ public class EntityCQRHuman extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		// TODO Auto-generated method stub
 		return EBaseHealths.HUMAN.getValue();
 	}
 
