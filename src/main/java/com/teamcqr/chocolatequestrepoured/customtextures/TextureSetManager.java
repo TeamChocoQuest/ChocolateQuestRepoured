@@ -86,13 +86,18 @@ public class TextureSetManager {
 		}
 	}
 
-	@SideOnly(Side.SERVER)
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
 		CustomTexturesPacket packet = new CustomTexturesPacket();
-		for (File texture : TextureSet.getLoadedTextures()) {
+		/*for (File texture : TextureSet.getLoadedTextures()) {
 			String base64 = CompressionUtil.encodeFileToBase64(texture);
 			String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
 
+			packet.addPair(base64, path);
+		}*/
+		for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
+			String base64 = CompressionUtil.encodeFileToBase64(entry.getValue());
+			String path = entry.getKey();
+			
 			packet.addPair(base64, path);
 		}
 		for (TextureSet ts : this.textureSets.values()) {

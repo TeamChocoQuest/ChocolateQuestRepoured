@@ -22,7 +22,7 @@ public class TextureSet {
 	private static final Random random = new Random();
 	private String name;
 	private Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
-	private static Set<File> textures = new HashSet<>();
+	private static Map<String, File> textures = new HashMap<>();
 
 	// FOR CLIENT
 	public TextureSet(String name) {
@@ -53,7 +53,7 @@ public class TextureSet {
 				for (String texture : texturesString.split(",")) {
 					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
 					if (tf != null && tf.exists()) {
-						textures.add(tf);
+						textures.put(texture + ".png", tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
@@ -108,8 +108,8 @@ public class TextureSet {
 		TextureSet.textures.clear();
 	}
 
-	public static Set<File> getLoadedTextures() {
-		return new HashSet<>(TextureSet.textures);
+	public static Map<String, File> getLoadedTextures() {
+		return new HashMap<>(TextureSet.textures);
 	}
 
 	public Map<ResourceLocation, Set<ResourceLocation>> getMappings() {
