@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
+//TODO: Rendering the string
 public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
 	
 	public static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/blocks/web.png");
