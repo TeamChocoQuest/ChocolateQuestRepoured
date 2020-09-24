@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -55,7 +54,7 @@ public class BlockPosUtil {
 
 		for (int chunkX = chunkStartX; chunkX <= chunkEndX; chunkX++) {
 			for (int chunkZ = chunkStartZ; chunkZ <= chunkEndZ; chunkZ++) {
-				if (skipUnloadedChunks && !((WorldServer) world).getChunkProvider().chunkExists(chunkX, chunkZ)) {
+				if (skipUnloadedChunks && !world.isBlockLoaded(mutablePos.setPos(chunkX << 4, 0, chunkZ << 4))) {
 					continue;
 				}
 
