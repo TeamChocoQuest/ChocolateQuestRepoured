@@ -37,6 +37,9 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.scale(.5F, .5F, .5F);
 		//GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		if (entity.isReturning()) {
+			entityYaw -= 180F;
+		}
 		GlStateManager.rotate(entityYaw, 0, 1, 0);
 		GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
