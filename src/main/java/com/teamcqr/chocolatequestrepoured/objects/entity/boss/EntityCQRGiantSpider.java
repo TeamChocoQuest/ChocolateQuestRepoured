@@ -27,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.init.MobEffects;
@@ -117,6 +118,12 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		if (!this.world.isRemote) {
 			this.setBesideClimbableBlock(this.collidedHorizontally);
 		}
+	}
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		this.setEquipmentBasedOnDifficulty(difficulty);
+		return super.onInitialSpawn(difficulty, livingdata);
 	}
 	
 	@Override
