@@ -6,7 +6,6 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.boarmage.BossAIBoarmageExplodeAreaAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.boarmage.BossAIBoarmageTeleportSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplodeAreaStartSpell;
@@ -14,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplo
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -105,7 +105,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.BOAR_MAGE.getValue();
+		return CQRConfig.baseHealths.Boarmage;
 	}
 
 	@Override

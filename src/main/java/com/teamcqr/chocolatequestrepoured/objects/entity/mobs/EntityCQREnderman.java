@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,7 +65,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.ENDERMAN.getValue();
+		return CQRConfig.baseHealths.Enderman;
 	}
 
 	@Override

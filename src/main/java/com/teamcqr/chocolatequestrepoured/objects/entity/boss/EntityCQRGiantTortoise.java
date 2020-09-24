@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseMoveToHome;
@@ -264,7 +263,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.GIANT_TORTOISE.getValue();
+		return CQRConfig.baseHealths.GiantTortoise;
 	}
 
 	@Override

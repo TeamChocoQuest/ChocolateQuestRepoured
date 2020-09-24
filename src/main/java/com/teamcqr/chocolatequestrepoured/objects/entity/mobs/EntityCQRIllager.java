@@ -1,10 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -54,7 +54,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.ILLAGER.getValue();
+		return CQRConfig.baseHealths.Illager;
 	}
 
 	@Override

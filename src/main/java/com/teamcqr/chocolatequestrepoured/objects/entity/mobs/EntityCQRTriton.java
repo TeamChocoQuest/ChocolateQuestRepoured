@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -16,7 +16,7 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.TRITON.getValue();
+		return CQRConfig.baseHealths.Triton;
 	}
 
 	@Override

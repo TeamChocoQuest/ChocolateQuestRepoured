@@ -6,7 +6,6 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
@@ -20,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -199,7 +199,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.GIANT_SPIDER.getValue();
+		return CQRConfig.baseHealths.GiantSpider;
 	}
 
 	@Override

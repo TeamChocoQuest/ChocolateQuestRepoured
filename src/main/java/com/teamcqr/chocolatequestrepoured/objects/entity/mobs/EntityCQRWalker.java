@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.CQREnchantments;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
-import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,7 +25,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.WALKER.getValue();
+		return CQRConfig.baseHealths.AbyssWalker;
 	}
 
 	@Override
