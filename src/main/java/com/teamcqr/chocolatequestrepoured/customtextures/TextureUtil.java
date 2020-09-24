@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.customtextures;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,7 +13,7 @@ public class TextureUtil {
 		if (textureFile != null && textureFile.exists() && resLoc != null) {
 			// This code basically loads a new texture or reloads an existing one
 			try {
-				CTResourcepack.add(resLoc, new FileInputStream(textureFile));
+				CTResourcepack.add(resLoc, textureFile);
 				return true;
 			} catch (Exception ex) {
 				// Ignore

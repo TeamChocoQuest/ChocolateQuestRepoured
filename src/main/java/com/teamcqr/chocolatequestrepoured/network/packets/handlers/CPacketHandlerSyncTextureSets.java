@@ -80,6 +80,7 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomText
 			} else {
 				Minecraft.getMinecraft().scheduleResourcesRefresh();
 			}
+			CTResourcepack.loadAllTextures();
 			
 		}
 
