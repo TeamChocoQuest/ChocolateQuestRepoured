@@ -133,6 +133,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 				}
 			}
 			this.explode(0.75F);
+			this.setDead();
 		}
 	}
 
