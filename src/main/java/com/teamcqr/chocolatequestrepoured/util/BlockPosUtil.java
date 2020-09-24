@@ -40,6 +40,9 @@ public class BlockPosUtil {
 		x2 = Math.min(x2, 30000000);
 		y2 = Math.min(y2, 255);
 		z2 = Math.min(z2, 30000000);
+		if (x1 > x2 || y1 > y2 || z1 > z2) {
+			return;
+		}
 
 		int chunkStartX = x1 >> 4;
 		int chunkStartY = y1 >> 4;
