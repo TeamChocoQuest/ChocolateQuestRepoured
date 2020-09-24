@@ -373,7 +373,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		if (flag) {
-			EntityIceSpike entityevokerfangs = new EntityIceSpike(this.world, x, (double) blockpos.getY() + d0 - 0.5, z, rotationYawRadians, warmupDelayTicks, this);
+			EntityIceSpike entityevokerfangs = new EntityIceSpike(this.world, x, (double) blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this);
 			this.world.spawnEntity(entityevokerfangs);
 		}
 	}
