@@ -310,9 +310,6 @@ public class CQRConfig {
 	}
 
 	public static class General {
-		@Config.Comment("Unused currently.")
-		@Config.RangeInt(min = 16, max = 128)
-		public int despawnDistance = 48;
 		@Config.Comment("Distance in chunks between each dungeon. Recommend to not set this a value lower than 10.")
 		@Config.RangeInt(min = 1, max = 1000)
 		public int dungeonSeparation = 20;
