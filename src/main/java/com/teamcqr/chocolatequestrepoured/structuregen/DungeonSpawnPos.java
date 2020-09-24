@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.world.World;
 
 public class DungeonSpawnPos {
@@ -27,17 +29,17 @@ public class DungeonSpawnPos {
 	}
 
 	public boolean isInChunk(World world, int chunkX, int chunkZ) {
-		int i = this.spawnPointRelative ? (this.x + world.getWorldInfo().getSpawnX()) >> 4 : this.x >> 4;
-		int j = this.spawnPointRelative ? (this.z + world.getWorldInfo().getSpawnZ()) >> 4 : this.z >> 4;
+		int i = this.spawnPointRelative ? (this.x + DungeonGenUtils.getSpawnX(world)) >> 4 : this.x >> 4;
+		int j = this.spawnPointRelative ? (this.z + DungeonGenUtils.getSpawnZ(world)) >> 4 : this.z >> 4;
 		return i == chunkX && j == chunkZ;
 	}
 
 	public int getX(World world) {
-		return this.spawnPointRelative ? this.x + world.getWorldInfo().getSpawnX() : this.x;
+		return this.spawnPointRelative ? this.x + DungeonGenUtils.getSpawnX(world) : this.x;
 	}
 
 	public int getZ(World world) {
-		return this.spawnPointRelative ? this.z + world.getWorldInfo().getSpawnZ() : this.z;
+		return this.spawnPointRelative ? this.z + DungeonGenUtils.getSpawnZ(world) : this.z;
 	}
 
 }

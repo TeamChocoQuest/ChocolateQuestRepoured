@@ -26,6 +26,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
@@ -133,9 +134,8 @@ public class DungeonGenUtils {
 		if (!world.provider.canRespawnHere()) {
 			return true;
 		}
-		BlockPos spawnPoint = world.getSpawnPoint();
-		int x = chunkX - spawnPoint.getX() >> 4;
-		int z = chunkZ - spawnPoint.getZ() >> 4;
+		int x = chunkX - (getSpawnX(world) >> 4);
+		int z = chunkZ - (getSpawnZ(world) >> 4);
 		return x * x + z * z >= CQRConfig.general.dungeonSpawnDistance * CQRConfig.general.dungeonSpawnDistance;
 	}
 
@@ -153,8 +153,8 @@ public class DungeonGenUtils {
 				continue;
 			}
 			for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositions()) {
-				int x = chunkX - dungeonSpawnPos.getX(world) >> 4;
-				int z = chunkZ - dungeonSpawnPos.getZ(world) >> 4;
+				int x = chunkX - (dungeonSpawnPos.getX(world) >> 4);
+				int z = chunkZ - (dungeonSpawnPos.getZ(world) >> 4);
 				if (x * x + z * z < dungeonSeparation * dungeonSeparation) {
 					return false;
 				}
@@ -336,6 +336,20 @@ public class DungeonGenUtils {
 	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
 		BlockPos transformedSize = Template.transformedBlockPos(settings, structure.getSize());
 		return pos.add(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
+	}
+
+	public static int getSpawnX(World world) {
+		int x = world.getWorldInfo().getSpawnX();
+		return x >= world.getWorldBorder().minX() && x < world.getWorldBorder().maxX() ? x : MathHelper.floor(world.getWorldBorder().getCenterX());
+	}
+
+	public static int getSpawnY(World world) {
+		return world.getWorldInfo().getSpawnY();
+	}
+
+	public static int getSpawnZ(World world) {
+		int z = world.getWorldInfo().getSpawnZ();
+		return z >= world.getWorldBorder().minZ() && z < world.getWorldBorder().maxZ() ? z : MathHelper.floor(world.getWorldBorder().getCenterZ());
 	}
 
 }

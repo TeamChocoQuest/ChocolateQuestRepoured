@@ -71,8 +71,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 
 		// Check if the chunk is on the grid
-		BlockPos spawnPoint = world.getSpawnPoint();
-		if ((chunkX - (spawnPoint.getX() >> 4)) % dungeonSeparation != 0 || (chunkZ - (spawnPoint.getZ() >> 4)) % dungeonSeparation != 0) {
+		if ((chunkX - (DungeonGenUtils.getSpawnX(world) >> 4)) % dungeonSeparation != 0 || (chunkZ - (DungeonGenUtils.getSpawnZ(world) >> 4)) % dungeonSeparation != 0) {
 			return;
 		}
 
