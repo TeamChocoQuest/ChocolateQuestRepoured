@@ -188,9 +188,9 @@ public class CQRItems {
 	public static final Item BUBBLE_RIFLE = Null();
 	
 	//Hookers
-	public static final Item HOOKSHOT = Null();
-	public static final Item LONGSHOT = Null();
-	public static final Item SPIDERHOOK = Null();
+	public static final ItemHookshot HOOKSHOT = Null();
+	public static final ItemLongshot LONGSHOT = Null();
+	public static final ItemSpiderHook SPIDERHOOK = Null();
 
 	// Single Armor Items
 	public static final Item HELMET_DRAGON = Null(); // #TODO Make model centered on head // Abandon for now
