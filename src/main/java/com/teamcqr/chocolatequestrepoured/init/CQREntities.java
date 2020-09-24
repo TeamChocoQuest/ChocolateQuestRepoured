@@ -53,6 +53,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileH
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderHook;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileWeb;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
@@ -154,6 +155,7 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(ProjectileVampiricSpell.class, "projectile_vampiric_spell", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileFireWallPart.class, "projectile_firewall_part", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHookShotHook.class, "projectile_hookshot_hook", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileSpiderHook.class, "projectile_spider_hook", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileBubble.class, "projectile_bubble", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHotFireball.class, "projectile_hot_fireball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileWeb.class, "projectile_web", 64, 1, true),

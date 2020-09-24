@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileWeb;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderHook;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,15 +10,16 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderProjectileWeb extends Render<ProjectileWeb> {
+public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
+	
 	public static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/blocks/web.png");
 
-	public RenderProjectileWeb(RenderManager renderManager) {
+	public RenderProjectileSpiderHook(RenderManager renderManager) {
 		super(renderManager);
 	}
-
+	
 	@Override
-	public void doRender(ProjectileWeb entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(ProjectileSpiderHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		this.bindEntityTexture(entity);
 		GlStateManager.translate((float) x, (float) y, (float) z);
@@ -50,9 +51,10 @@ public class RenderProjectileWeb extends Render<ProjectileWeb> {
 		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileWeb entity) {
+	protected ResourceLocation getEntityTexture(ProjectileSpiderHook entity) {
 		return TEXTURE;
 	}
+
 }

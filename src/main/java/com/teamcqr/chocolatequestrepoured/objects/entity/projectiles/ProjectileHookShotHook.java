@@ -60,7 +60,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private static final double STOP_LATCH_DISTANCE = 3.0; // Stop pulling shooter at this distance
 	private static final double STOP_PULL_DISTANCE = 2.0; // Stop pulling hooked entity at this distance
 	private Vec3d startLocation = null;
-	private double hookRange = 20.0; // Max range of the hook before it stops extending
+	protected double hookRange = 20.0; // Max range of the hook before it stops extending
 	private EnumHookState travelState = EnumHookState.SHOOT; // Whether the hook is pulling something
 	private int ticksThisState = 0;
 	private Entity pulledEntity = null;
@@ -275,6 +275,10 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				this.pulledEntity.velocityChanged = true;
 			}
 		}
+	}
+	
+	public boolean isReturning() {
+		return (this.travelState == EnumHookState.RETRACT_NO_LATCH) || (this.travelState == EnumHookState.RETRACT_PULL_ENTITY);
 	}
 
 	private void preLatchState() {

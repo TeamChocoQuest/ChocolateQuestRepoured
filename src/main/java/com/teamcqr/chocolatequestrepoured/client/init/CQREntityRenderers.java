@@ -57,6 +57,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileHotFireball;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderHook;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileWeb;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
@@ -113,6 +114,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileH
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderHook;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileWeb;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
@@ -161,6 +163,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileBubble.class, RenderProjectileBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, RenderProjectileWeb::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderHook.class, RenderProjectileSpiderHook::new);
 
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);

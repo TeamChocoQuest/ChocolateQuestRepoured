@@ -42,6 +42,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpiderHook;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpikedGlove;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSummoningBone;
@@ -333,6 +334,7 @@ public class CQRItems {
 
 					setItemName(new ItemHookshot(), "hookshot"),
 					setItemName(new ItemLongshot(), "longshot"),
+					setItemName(new ItemSpiderHook(), "spiderhook"),
 
 					setItemName(new ItemHelmetDragon(CQRMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
 					setItemName(new ItemBootsCloud(CQRMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
