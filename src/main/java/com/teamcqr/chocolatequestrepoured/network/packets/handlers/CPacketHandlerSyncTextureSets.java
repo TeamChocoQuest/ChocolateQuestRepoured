@@ -70,10 +70,6 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<CustomText
 			}
 			
 			// and finally we need to reload our resourcepack
-			/*List<IResourcePack> list = Lists.newArrayList(CTResourcepack.getInstance());
-			IReloadableResourceManager rm = RESOURCE_MANAGER.get(Minecraft.getMinecraft());
-			rm.reloadResources(list);*/
-			//Minecraft.getMinecraft().scheduleResourcesRefresh();
 			IReloadableResourceManager rm = RESOURCE_MANAGER.get(Minecraft.getMinecraft());
 			if(rm instanceof SimpleReloadableResourceManager) {
 				((SimpleReloadableResourceManager)rm).reloadResourcePack(CTResourcepack.getInstance());
