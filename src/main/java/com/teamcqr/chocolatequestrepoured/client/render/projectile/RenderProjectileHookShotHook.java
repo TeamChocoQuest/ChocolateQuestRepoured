@@ -1,10 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
+import com.teamcqr.chocolatequestrepoured.client.models.ModelHook;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -17,7 +19,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
 public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook> {
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/cannon_ball.png");
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/hook.png");
+	
+	protected ModelBase model = new ModelHook();
 
 	public RenderProjectileHookShotHook(RenderManager renderManager) {
 		super(renderManager);
@@ -32,9 +36,8 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.scale(.5F, .5F, .5F);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		//GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(entityYaw, 0, 1, 0);
 		GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
 		if (this.renderOutlines) {
@@ -42,13 +45,20 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		// This seems to render the texture....
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-		bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		tessellator.draw();
+		if(this.model != null) {
+			this.bindTexture(TEXTURE);
+			model.render(entity, 0, 0, 0, 0, 0, /*0.0625F*/ 0.4F);
+		} else {
+			// This seems to render the texture....
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder bufferbuilder = tessellator.getBuffer();
+			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
+			bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+			bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+			bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+			bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+			tessellator.draw();
+		}
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
