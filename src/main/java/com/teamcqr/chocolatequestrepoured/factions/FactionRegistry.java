@@ -235,7 +235,7 @@ public class FactionRegistry {
 		if (entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
-
+		
 		// Faction overriding
 		ResourceLocation registryName = EntityList.getKey(entity);
 		if (registryName != null && this.entityFactionMap.containsKey(registryName)) {
