@@ -8,8 +8,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeo
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuardedStructure;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,10 +25,6 @@ public class DungeonGuardedCastle extends DungeonBase {
 	private int minDistance = 15;
 	private int maxDistance = 30;
 
-	private boolean buildPaths = true;
-	private boolean placeInCircle = false;
-	private IBlockState pathBlock = Blocks.GRASS_PATH.getDefaultState();
-
 	public DungeonGuardedCastle(String name, Properties prop) {
 		super(name, prop);
 
@@ -42,12 +36,6 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 		this.minDistance = PropertyFileHelper.getIntProperty(prop, "mindistance", 20);
 		this.maxDistance = PropertyFileHelper.getIntProperty(prop, "maxdistance", 40);
-
-		this.placeInCircle = PropertyFileHelper.getBooleanProperty(prop, "circle", false);
-
-		this.buildPaths = PropertyFileHelper.getBooleanProperty(prop, "buildroads", true);
-
-		this.pathBlock = PropertyFileHelper.getBlockStateProperty(prop, "pathblock", Blocks.GRASS_PATH.getDefaultState());
 	}
 
 	@Override
@@ -61,18 +49,6 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 	public int getMaxDistance() {
 		return this.maxDistance;
-	}
-
-	public boolean buildPaths() {
-		return this.buildPaths;
-	}
-
-	public boolean placeInCircle() {
-		return this.placeInCircle;
-	}
-
-	public IBlockState getPathMaterial() {
-		return this.pathBlock;
 	}
 
 	public int getMinBuildings() {
@@ -89,6 +65,11 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 	public File getCenterStructureFolder() {
 		return this.centerStructureFolder;
+	}
+
+	public boolean rotateDungeon() {
+		//TODO
+		return false;
 	}
 
 }

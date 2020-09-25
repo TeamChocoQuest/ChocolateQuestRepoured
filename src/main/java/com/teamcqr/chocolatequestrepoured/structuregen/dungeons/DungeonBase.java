@@ -132,6 +132,10 @@ public abstract class DungeonBase {
 	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand);
 
 	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+		this.generate(world, x, getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);
+	}
+	
+	public int getYForPos(World world, int x, int z, Random rand) {
 		int y = 0;
 		if (!this.fixedY) {
 			int chunkStartX = x >> 4 << 4;
@@ -147,7 +151,7 @@ public abstract class DungeonBase {
 			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		}
 		y -= this.getUnderGroundOffset();
-		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
+		return y;
 	}
 
 	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
