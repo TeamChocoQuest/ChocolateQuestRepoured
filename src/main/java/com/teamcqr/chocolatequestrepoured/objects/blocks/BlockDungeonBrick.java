@@ -10,8 +10,8 @@ public class BlockDungeonBrick extends Block {
 		super(Material.ROCK);
 
 		this.setSoundType(SoundType.STONE);
-		this.setBlockUnbreakable();
-		this.setResistance(Float.MAX_VALUE);
+		this.setHardness(1.5F);
+		this.setResistance(10.0F);
 	}
 
 }
