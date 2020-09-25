@@ -259,7 +259,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
     private void prePullEntityState() {
 		if (this.ticksThisState >= 1) {
 			this.reverseVelocity();
-			changeState(EnumHookState.RETRACT_PULL_ENTITY);
+			this.dataManager.set(DESTINATION_POS, this.startLocation);
+			this.changeState(EnumHookState.RETRACT_PULL_ENTITY);
 		}
 	}
 
