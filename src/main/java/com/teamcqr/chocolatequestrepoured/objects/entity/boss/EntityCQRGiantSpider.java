@@ -89,7 +89,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
 
 		this.tasks.addTask(11, this.spellHandler);
-		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 120, 20) {
+		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 80, 20) {
 			@Override
 			protected SoundEvent getStartChargingSound() {
 				return SoundEvents.ENTITY_SPIDER_HURT;

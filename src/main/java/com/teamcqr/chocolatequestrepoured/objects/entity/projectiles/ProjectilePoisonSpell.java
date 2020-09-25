@@ -51,7 +51,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 			return;
 		}
 
-		if (this.canPlaceAura && DungeonGenUtils.percentageRandom(0.2)) {
+		if (this.canPlaceAura && DungeonGenUtils.percentageRandom(0.6)) {
 			EntityAreaEffectCloud cloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 
 			cloud.setOwner(this.shooter);
