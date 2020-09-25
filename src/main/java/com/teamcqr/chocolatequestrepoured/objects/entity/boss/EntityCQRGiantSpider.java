@@ -10,9 +10,9 @@ import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHooker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderHook;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderLeapAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderSummonMinions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderWebshot;
@@ -78,8 +78,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
 		this.tasks.addTask(2, new BossAISpiderWebshot(this));
-		this.tasks.addTask(11, this.spellHandler);
-		this.tasks.addTask(12, new EntityAIHooker(this));
+		this.tasks.addTask(3, new BossAISpiderHook(this));
 		this.tasks.addTask(12, new BossAISpiderLeapAttack(this, 1.2F));
 		this.tasks.addTask(14, new EntityAIAttack(this));
 
@@ -89,6 +88,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(31, new EntityAIFollowPath(this));
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
 
+		this.tasks.addTask(11, this.spellHandler);
 		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 120, 20) {
 			@Override
 			protected SoundEvent getStartChargingSound() {

@@ -12,14 +12,15 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected int cooldown = 100;
-	protected static final int MAX_COOLDOWN = 60;
-	protected static final double REQUIRED_RANGE = 256; // = 16 * 16
+	protected int MAX_COOLDOWN = 60;
+	protected double MAX_RANGE = 256; // = 16 * 16
+	protected double MIN_RANGE = 64;
 
 	private ProjectileHookShotHook hook = null;
 
 	protected STATE state = STATE.PREPARING;
 
-	enum STATE {
+	public enum STATE {
 		PREPARING, PREPARING_LAUNCH, HOOK_FLYING, HOOK_RETURNED
 	}
 
@@ -48,9 +49,9 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (this.entity.hasPath()) {
 			this.entity.getNavigator().clearPath();
 			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
-			if (dist > REQUIRED_RANGE) {
+			if (dist > MAX_RANGE) {
 				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
-			} else if (dist >= 64) {
+			} else if (dist >= MIN_RANGE) {
 				this.entity.getNavigator().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
@@ -84,7 +85,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 			break;
 		case PREPARING:
 			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
-			if (dist > REQUIRED_RANGE) {
+			if (dist > MAX_RANGE) {
 				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
 			} else if (dist >= 64) {
 				this.entity.getNavigator().clearPath();
