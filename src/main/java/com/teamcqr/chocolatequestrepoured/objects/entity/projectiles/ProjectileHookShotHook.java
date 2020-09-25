@@ -239,7 +239,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void noLatchRetractState() {
-		if (this.getPositionVector().distanceTo(this.startLocation) < STOP_LATCH_DISTANCE) {
+		if (this.getPositionVector().distanceTo(getShooterPosition()) < STOP_LATCH_DISTANCE) {
 			this.stopPulling();
 		}
 	}
@@ -257,12 +257,12 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		if (this.pulledEntity instanceof EntityPlayerMP) {
 
 		} else {
-			if (this.getPositionVector().distanceTo(this.startLocation) < STOP_PULL_DISTANCE) {
+			if (this.getPositionVector().distanceTo(getShooterPosition()) < STOP_PULL_DISTANCE) {
 				this.zeroizeHookVelocity();
 				this.stopPulling();
 			}
 
-			if (this.pulledEntity.getPositionVector().distanceTo(this.startLocation) < STOP_PULL_DISTANCE) {
+			if (this.pulledEntity.getPositionVector().distanceTo(getShooterPosition()) < STOP_PULL_DISTANCE) {
 				this.stopPulling(); // will kill the hook next tick
 				this.pulledEntity.motionX = 0.0;
 				this.pulledEntity.motionY = 0.0;
