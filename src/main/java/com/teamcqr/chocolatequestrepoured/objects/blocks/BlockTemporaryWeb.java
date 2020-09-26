@@ -22,6 +22,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
 
 	public BlockTemporaryWeb() {
+		super();
 		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
 		this.setTickRandomly(true);
 	}
