@@ -75,6 +75,8 @@ public class CQRMain {
 
 	public static boolean isPhosphorInstalled;
 
+	public static boolean isEntityCullingInstalled;
+	
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
 		public ItemStack createIcon() {
@@ -188,6 +190,7 @@ public class CQRMain {
 		proxy.postInit();
 
 		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
+		isPhosphorInstalled = Loader.isModLoaded("entity_culling");
 
 		DungeonRegistry.getInstance().loadDungeons();
 		CQStructure.cacheFiles();
