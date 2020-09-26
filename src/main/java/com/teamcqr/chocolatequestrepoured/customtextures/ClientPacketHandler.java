@@ -34,7 +34,7 @@ public class ClientPacketHandler {
 				if (CompressionUtil.decodeBase64ToFile(tf, textureEntry.getValue())) {
 					fileMap.put(path, tf);
 				} else {
-					// TODO: Log warning!!
+					CQRMain.logger.warn("Unable to decode a file using base64! Entry: {}   File: {}", textureEntry.getValue(), tf);
 				}
 
 			}
