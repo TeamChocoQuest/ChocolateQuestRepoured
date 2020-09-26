@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
@@ -364,7 +364,7 @@ public class GeneratorVolcanoOld extends AbstractDungeonGenerator<DungeonVolcano
 		int floor = this.spawnersNChestsOnPath.size();
 		GearedMobFactory mobFactory = new GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), this.random);
 		for (BlockPos pos : this.spawnersNChestsOnPath) {
-			Block block = ModBlocks.SPAWNER;
+			Block block = CQRBlocks.SPAWNER;
 			IBlockState state = block.getDefaultState();
 			TileEntitySpawner spawner = (TileEntitySpawner) block.createTileEntity(world, state);
 			int ec = 2 + this.random.nextInt(3);

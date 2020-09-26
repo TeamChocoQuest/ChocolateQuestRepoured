@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -31,20 +31,20 @@ public class ModItemModels {
 		}
 
 		// register custom item models first
-		for (Item item : ModItems.ItemRegistrationHandler.SPAWN_EGGS) {
+		for (Item item : CQRItems.ItemRegistrationHandler.SPAWN_EGGS) {
 			String registryName = item.getRegistryName().toString();
 			registerCustomItemModel(item, 0, registryName.substring(0, registryName.length() - 2), "inventory");
 		}
 
 		// register all other item models
-		for (Item item : ModItems.ItemRegistrationHandler.ITEMS) {
+		for (Item item : CQRItems.ItemRegistrationHandler.ITEMS) {
 			if (!REGISTERED_ITEM_MODELS.contains(item)) {
 				registerItemModel(item);
 			}
 		}
 
 		// register all other item block models
-		for (ItemBlock itemBlock : ModBlocks.BlockRegistrationHandler.ITEM_BLOCKS) {
+		for (ItemBlock itemBlock : CQRBlocks.BlockRegistrationHandler.ITEM_BLOCKS) {
 			if (!REGISTERED_ITEM_MODELS.contains(itemBlock)) {
 				registerItemModel(itemBlock);
 			}

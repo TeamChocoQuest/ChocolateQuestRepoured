@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
@@ -18,7 +18,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -92,7 +91,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
+			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
 
 			if (!flag) {
@@ -128,41 +127,41 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	}
 
 	protected ItemStack getBulletStack(ItemStack stack, EntityPlayer player) {
-		if (stack.getItem() == ModItems.BULLET_IRON) {
-			return new ItemStack(ModItems.BULLET_IRON);
+		if (stack.getItem() == CQRItems.BULLET_IRON) {
+			return new ItemStack(CQRItems.BULLET_IRON);
 		}
 
-		if (stack.getItem() == ModItems.BULLET_GOLD) {
-			return new ItemStack(ModItems.BULLET_GOLD);
+		if (stack.getItem() == CQRItems.BULLET_GOLD) {
+			return new ItemStack(CQRItems.BULLET_GOLD);
 		}
 
-		if (stack.getItem() == ModItems.BULLET_DIAMOND) {
-			return new ItemStack(ModItems.BULLET_DIAMOND);
+		if (stack.getItem() == CQRItems.BULLET_DIAMOND) {
+			return new ItemStack(CQRItems.BULLET_DIAMOND);
 		}
 
-		if (stack.getItem() == ModItems.BULLET_FIRE) {
-			return new ItemStack(ModItems.BULLET_FIRE);
+		if (stack.getItem() == CQRItems.BULLET_FIRE) {
+			return new ItemStack(CQRItems.BULLET_FIRE);
 		} else {
 			// System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
 			// return ItemStack.EMPTY; // #SHOULD NEVER HAPPEN
-			return new ItemStack(ModItems.BULLET_IRON);
+			return new ItemStack(CQRItems.BULLET_IRON);
 		}
 	}
 
 	protected int getBulletType(ItemStack stack) {
-		if (stack.getItem() == ModItems.BULLET_IRON) {
+		if (stack.getItem() == CQRItems.BULLET_IRON) {
 			return 1;
 		}
 
-		if (stack.getItem() == ModItems.BULLET_GOLD) {
+		if (stack.getItem() == CQRItems.BULLET_GOLD) {
 			return 2;
 		}
 
-		if (stack.getItem() == ModItems.BULLET_DIAMOND) {
+		if (stack.getItem() == CQRItems.BULLET_DIAMOND) {
 			return 3;
 		}
 
-		if (stack.getItem() == ModItems.BULLET_FIRE) {
+		if (stack.getItem() == CQRItems.BULLET_FIRE) {
 			return 4;
 		}
 
@@ -176,7 +175,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		if (!worldIn.isRemote) {
-			ItemStack bulletStack = new ItemStack(ModItems.BULLET_IRON, 1);
+			ItemStack bulletStack = new ItemStack(CQRItems.BULLET_IRON, 1);
 			if (shooter instanceof AbstractEntityCQR) {
 				AbstractEntityCQR cqrEnt = (AbstractEntityCQR) shooter;
 				ItemStack bullet = cqrEnt.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
@@ -200,7 +199,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		return ModSounds.GUN_SHOOT;
+		return CQRSounds.GUN_SHOOT;
 	}
 
 	@Override

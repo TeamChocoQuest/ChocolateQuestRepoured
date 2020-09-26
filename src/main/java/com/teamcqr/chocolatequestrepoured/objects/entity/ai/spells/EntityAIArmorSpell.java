@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 
@@ -35,7 +35,7 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell<AbstractEntityCQR>
 		super.startCastingSpell();
 		if (this.entity instanceof EntityCQRLich) {
 			BlockPos pos = new BlockPos(this.entity);
-			this.entity.world.setBlockState(pos, ModBlocks.PHYLACTERY.getDefaultState());
+			this.entity.world.setBlockState(pos, CQRBlocks.PHYLACTERY.getDefaultState());
 			((EntityCQRLich) this.entity).setCurrentPhylacteryBlock(pos);
 		} else {
 			this.entity.setMagicArmorCooldown(300);

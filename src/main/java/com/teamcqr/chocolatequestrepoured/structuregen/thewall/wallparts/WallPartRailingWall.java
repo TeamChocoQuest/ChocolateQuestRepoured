@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
@@ -92,8 +92,8 @@ public class WallPartRailingWall implements IWallPart {
 				((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
 			}
 
-			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
-			TileEntitySpawner tileSpawner = (TileEntitySpawner) ModBlocks.SPAWNER.createTileEntity(world, state2);
+			IBlockState state2 = CQRBlocks.SPAWNER.getDefaultState();
+			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
 			blockInfoList.add(new BlockInfoSpawner(spawnerPos, state2, tileSpawner.writeToNBT(new NBTTagCompound())));
@@ -104,18 +104,18 @@ public class WallPartRailingWall implements IWallPart {
 		switch (entity.getRNG().nextInt(5)) {
 		case 0:
 			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 1:
 			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 2:
 			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
 			break;
 		case 3:
 			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 4:
 			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
@@ -125,31 +125,31 @@ public class WallPartRailingWall implements IWallPart {
 	}
 
 	private void equipArmorBasedOnDifficulty(EntityLivingBase entity, EnumDifficulty difficulty) {
-		ItemStack helm = new ItemStack(ModItems.HELMET_IRON_DYABLE);
-		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE);
-		ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE);
-		ItemStack feet = new ItemStack(ModItems.BOOTS_IRON_DYABLE);
+		ItemStack helm = new ItemStack(CQRItems.HELMET_IRON_DYABLE);
+		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_IRON_DYABLE);
+		ItemStack legs = new ItemStack(CQRItems.LEGGINGS_IRON_DYABLE);
+		ItemStack feet = new ItemStack(CQRItems.BOOTS_IRON_DYABLE);
 
 		if (difficulty == EnumDifficulty.HARD) {
 			if (entity.getRNG().nextDouble() < 0.35D) {
-				helm = new ItemStack(ModItems.HELMET_DIAMOND_DYABLE);
-				chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE);
-				legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE);
-				feet = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE);
+				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
+				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
+				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
+				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
 			}
 		} else if (difficulty == EnumDifficulty.NORMAL) {
 			if (entity.getRNG().nextDouble() < 0.25D) {
-				helm = new ItemStack(ModItems.HELMET_DIAMOND_DYABLE);
-				chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE);
-				legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE);
-				feet = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE);
+				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
+				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
+				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
+				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
 			}
 		} else {
 			if (entity.getRNG().nextDouble() < 0.2D) {
-				helm = new ItemStack(ModItems.HELMET_DIAMOND_DYABLE);
-				chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE);
-				legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE);
-				feet = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE);
+				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
+				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
+				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
+				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
 			}
 		}
 

@@ -8,7 +8,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
 
-public class ModLoottables {
+public class CQRLoottables {
 
 	private static final Set<ResourceLocation> LOOT_TABLES = new HashSet<>();
 

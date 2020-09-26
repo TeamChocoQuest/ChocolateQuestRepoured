@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -105,13 +105,13 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 						((EntityLiving) entity).setHealth(((EntityLiving) entity).getMaxHealth());
 
 						// Some gear
-						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND));
 						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(inha.getShieldReplacement()));
 
-						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.HELMET_HEAVY_DIAMOND));
-						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.CHESTPLATE_HEAVY_DIAMOND));
-						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.LEGGINGS_HEAVY_DIAMOND));
-						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.BOOTS_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND));
 					}
 
 					world.spawnEntity(entity);

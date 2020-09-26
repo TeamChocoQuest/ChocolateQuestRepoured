@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -62,7 +62,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (faction == null) {
 			return false;
 		}
-		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
+		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
 			if (!faction.isAlly(possibleTarget) && possibleTarget != this.entity.getLeader()) {
 				return false;
 			}
@@ -107,7 +107,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			return false;
 		}
 		CQRFaction faction = this.entity.getFaction();
-		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
+		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null) {
 				return false;
 			}

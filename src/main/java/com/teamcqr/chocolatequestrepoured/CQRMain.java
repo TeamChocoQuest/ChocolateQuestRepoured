@@ -7,14 +7,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.teamcqr.chocolatequestrepoured.command.CommandExport;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
-import com.teamcqr.chocolatequestrepoured.init.ModDispenseBehaviors;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
-import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
-import com.teamcqr.chocolatequestrepoured.init.ModMessages;
-import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRCapabilities;
+import com.teamcqr.chocolatequestrepoured.init.CQRDispenseBehaviors;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRMaterials;
+import com.teamcqr.chocolatequestrepoured.init.CQRMessages;
+import com.teamcqr.chocolatequestrepoured.init.CQRSerializers;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
@@ -78,13 +78,13 @@ public class CQRMain {
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ModItems.BOOTS_CLOUD);
+			return new ItemStack(CQRItems.BOOTS_CLOUD);
 		}
 	};
 	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs("ChocolateQuestRepouredBlocksTab") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ModBlocks.TABLE_OAK);
+			return new ItemStack(CQRBlocks.TABLE_OAK);
 		}
 	};
 	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
@@ -144,11 +144,11 @@ public class CQRMain {
 
 		// Register event handling for dungeon protection system
 		// MinecraftForge.EVENT_BUS.register(ProtectedRegionManager.getInstance());
-		MinecraftForge.EVENT_BUS.register(ModSerializers.class);
+		MinecraftForge.EVENT_BUS.register(CQRSerializers.class);
 
-		ModMessages.registerMessages();
-		ModCapabilities.registerCapabilities();
-		ModLoottables.registerLootTables();
+		CQRMessages.registerMessages();
+		CQRCapabilities.registerCapabilities();
+		CQRLoottables.registerLootTables();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
@@ -178,7 +178,7 @@ public class CQRMain {
 		proxy.init();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
-		ModMaterials.setRepairItemsForMaterials();
+		CQRMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
 		BlockFire.init();
 	}
@@ -195,7 +195,7 @@ public class CQRMain {
 		CQStructure.updateSpecialEntities();
 		ProtectedRegionHelper.updateBreakableBlockWhitelist();
 		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
-		ModDispenseBehaviors.registerDispenseBehaviors();
+		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
 		DungeonInhabitantManager.init();
 	}

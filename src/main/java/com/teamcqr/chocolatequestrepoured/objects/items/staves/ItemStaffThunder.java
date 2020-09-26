@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
@@ -98,7 +98,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		return ModSounds.MAGIC;
+		return CQRSounds.MAGIC;
 	}
 
 	@Override

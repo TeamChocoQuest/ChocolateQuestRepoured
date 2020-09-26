@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,7 +42,7 @@ public class ItemStaffHealing extends Item {
 			((EntityLivingBase) entity).heal(HEAL_AMOUNT_ENTITIES);
 			entity.setFire(0);
 			((WorldServer) player.world).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + itemRand.nextFloat() * 0.2F);
+			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + itemRand.nextFloat() * 0.2F);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 		}

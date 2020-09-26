@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -30,7 +30,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return ModSounds.CLASSIC_HURT;
+		return CQRSounds.CLASSIC_HURT;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ModLoottables.ENTITIES_DWARF;
+		return CQRLoottables.ENTITIES_DWARF;
 	}
 
 	@Override

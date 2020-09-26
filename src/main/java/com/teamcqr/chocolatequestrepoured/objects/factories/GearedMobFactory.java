@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.factories;
 
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -42,18 +42,18 @@ public class GearedMobFactory {
 			mainHand = new ItemStack(Items.BOW, 1);
 			break;
 		case HEALING_STAFF:
-			mainHand = new ItemStack(ModItems.STAFF_HEALING, 1);
+			mainHand = new ItemStack(CQRItems.STAFF_HEALING, 1);
 			break;
 		case STAFF:
 			switch(random.nextInt(3)) {
 			case 0:
-				mainHand = new ItemStack(ModItems.STAFF_POISON);
+				mainHand = new ItemStack(CQRItems.STAFF_POISON);
 				break;
 			case 1:
-				mainHand = new ItemStack(ModItems.STAFF_FIRE);
+				mainHand = new ItemStack(CQRItems.STAFF_FIRE);
 				break;
 			case 2:
-				mainHand = new ItemStack(ModItems.STAFF_VAMPIRIC);
+				mainHand = new ItemStack(CQRItems.STAFF_VAMPIRIC);
 				break;
 			}
 			break;

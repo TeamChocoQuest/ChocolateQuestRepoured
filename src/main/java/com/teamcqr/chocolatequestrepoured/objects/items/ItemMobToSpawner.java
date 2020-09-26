@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
@@ -48,7 +48,7 @@ public class ItemMobToSpawner extends Item {
 	
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-		if(state.getBlock() == ModBlocks.SPAWNER && !worldIn.isRemote) {
+		if(state.getBlock() == CQRBlocks.SPAWNER && !worldIn.isRemote) {
 			TileEntitySpawner spawner = (TileEntitySpawner) worldIn.getTileEntity(pos);
 			spawner.forceTurnBackIntoEntity();
 		}

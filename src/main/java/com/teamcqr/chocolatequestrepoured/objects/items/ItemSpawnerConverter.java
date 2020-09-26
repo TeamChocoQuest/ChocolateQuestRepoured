@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
 import net.minecraft.block.Block;
@@ -24,16 +24,16 @@ public class ItemSpawnerConverter extends Item {
 	@Override
 	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
 		Block block = world.getBlockState(pos).getBlock();
-		return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
+		return block != CQRBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
 	}
 
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		if (player.isCreative()) {
 			Block block = world.getBlockState(pos).getBlock();
-			if (block == ModBlocks.SPAWNER || block == Blocks.MOB_SPAWNER) {
+			if (block == CQRBlocks.SPAWNER || block == Blocks.MOB_SPAWNER) {
 				if (!world.isRemote) {
-					if (block == ModBlocks.SPAWNER) {
+					if (block == CQRBlocks.SPAWNER) {
 						CQRMain.logger.info("Converting: CQR -> Vanilla");
 						SpawnerFactory.convertCQSpawnerToVanillaSpawner(world, pos, null);
 					}

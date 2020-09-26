@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
@@ -22,7 +22,6 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
@@ -97,7 +96,7 @@ public class DungeonCavern extends DungeonBase {
 		this.floorMaterial = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.STONE.getDefaultState());
 
 		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airblock", Blocks.AIR.getDefaultState());
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD });
 	}
 
 	@Override
@@ -190,8 +189,8 @@ public class DungeonCavern extends DungeonBase {
 
 			// BOSS SPAWNER
 			// DONE: spawn the boss
-			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
-			TileEntitySpawner tileSpawner = (TileEntitySpawner) ModBlocks.SPAWNER.createTileEntity(world, state2);
+			IBlockState state2 = CQRBlocks.SPAWNER.getDefaultState();
+			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(EntityList.createEntityByIDFromName(this.getBossMob(), world)));
 			blockInfoList.add(new BlockInfo(BlockPos.ORIGIN, state, tileSpawner.writeToNBT(new NBTTagCompound())));
 

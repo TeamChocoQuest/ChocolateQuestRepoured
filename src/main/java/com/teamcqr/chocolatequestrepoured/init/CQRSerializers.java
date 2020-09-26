@@ -17,7 +17,7 @@ import net.minecraftforge.registries.DataSerializerEntry;
  * Developed by KalgogSmash
  * GitHub: https://github.com/KalgogSmash
  */
-public class ModSerializers {
+public class CQRSerializers {
 	public static final DataSerializer<Vec3d> VEC3D = new DataSerializer<Vec3d>()
 	{
 		public void write(PacketBuffer buf, Vec3d value)

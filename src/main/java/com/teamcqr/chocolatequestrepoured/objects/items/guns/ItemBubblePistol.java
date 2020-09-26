@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items.guns;
 
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
@@ -86,7 +86,7 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 		v = v.normalize();
 		v = v.scale(1.4);
 
-		shooter.playSound(ModSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * shooter.getRNG().nextFloat()));
+		shooter.playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * shooter.getRNG().nextFloat()));
 
 		ProjectileBubble bubble = new ProjectileBubble(shooter.world, shooter);
 		bubble.motionX = v.x;

@@ -8,15 +8,11 @@ import java.util.Properties;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.io.File;
-import java.util.Properties;
 
 /**
  * Copyright (c) 29.04.2019

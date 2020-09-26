@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -69,7 +69,7 @@ public class ItemArmorTurtle extends ItemArmor {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (player != null) {
-			int cooldown = CapabilityCooldownHandlerHelper.getCooldown(player, ModItems.CHESTPLATE_TURTLE);
+			int cooldown = CapabilityCooldownHandlerHelper.getCooldown(player, CQRItems.CHESTPLATE_TURTLE);
 			if (cooldown > 0) {
 				tooltip.add(TextFormatting.RED + I18n.format("description.turtle_armor_charging.name") + this.convertCooldown(cooldown));
 			}
@@ -117,7 +117,7 @@ public class ItemArmorTurtle extends ItemArmor {
 					((WorldServer) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
 				}
 
-				if (!CapabilityCooldownHandlerHelper.onCooldown(entity, ModItems.CHESTPLATE_TURTLE) && entity.getHealth() < Math.max(5.0F, entity.getMaxHealth() * 0.2F)) {
+				if (!CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_TURTLE) && entity.getHealth() < Math.max(5.0F, entity.getMaxHealth() * 0.2F)) {
 					if (!entity.world.isRemote) {
 						entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 2, false, true));
 						double x = entity.posX;
@@ -126,7 +126,7 @@ public class ItemArmorTurtle extends ItemArmor {
 						((WorldServer) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
 						entity.world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
 					}
-					CapabilityCooldownHandlerHelper.setCooldown(entity, ModItems.CHESTPLATE_TURTLE, 12000);
+					CapabilityCooldownHandlerHelper.setCooldown(entity, CQRItems.CHESTPLATE_TURTLE, 12000);
 				}
 			}
 		}
@@ -136,7 +136,7 @@ public class ItemArmorTurtle extends ItemArmor {
 			EntityLivingBase entity = event.getEntityLiving();
 			DamageSource source = event.getSource();
 
-			if (entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == ModItems.CHESTPLATE_TURTLE && source.getDamageLocation() != null) {
+			if (entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == CQRItems.CHESTPLATE_TURTLE && source.getDamageLocation() != null) {
 				Vec3d hitVec = source.getDamageLocation();
 				double x = entity.posX - hitVec.x;
 				double z = entity.posZ - hitVec.z;

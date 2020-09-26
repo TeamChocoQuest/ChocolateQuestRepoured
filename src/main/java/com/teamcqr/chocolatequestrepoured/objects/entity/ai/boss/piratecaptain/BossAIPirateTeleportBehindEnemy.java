@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 
@@ -39,7 +39,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 		timer++;
 		super.updateTask();
 		if(timer == 10) {
-			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
+			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
 		
 		if(timer == 100) {
@@ -57,7 +57,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	public void resetTask() {
 		super.resetTask();
 		timer = 0;
-		this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
+		this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 	}
 
 }

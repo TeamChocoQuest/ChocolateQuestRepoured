@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
@@ -150,21 +149,21 @@ public class StrongholdBuilderOld {
 			}
 			this.buildFloorAndCeiling(corner1, corner2, 5, blockInfoList);
 
-			// Left torch -> Facing side: rotate right (90.0°)
+			// Left torch -> Facing side: rotate right (90.0ï¿½)
 			this.buildPillar(pillar1, blockInfoList);
-			blockInfoList.add(new BlockInfo(torch1, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.COUNTERCLOCKWISE_90)), null));
-			// Right torch -> Facing side: rotate left (-90.0°)
+			blockInfoList.add(new BlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.COUNTERCLOCKWISE_90)), null));
+			// Right torch -> Facing side: rotate left (-90.0ï¿½)
 			this.buildPillar(pillar2, blockInfoList);
-			blockInfoList.add(new BlockInfo(torch2, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.CLOCKWISE_90)), null));
+			blockInfoList.add(new BlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.CLOCKWISE_90)), null));
 		}
 	}
 
 	private void buildPillar(BlockPos bottom, List<AbstractBlockInfo> blockInfoList) {
 		for (int iY = 1; iY <= 4; iY++) {
 			BlockPos pos = bottom.add(0, iY, 0);
-			blockInfoList.add(new BlockInfo(pos, ModBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
+			blockInfoList.add(new BlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
 		}
-		blockInfoList.add(new BlockInfo(bottom.add(0, 5, 0), ModBlocks.GRANITE_CARVED.getDefaultState(), null));
+		blockInfoList.add(new BlockInfo(bottom.add(0, 5, 0), CQRBlocks.GRANITE_CARVED.getDefaultState(), null));
 	}
 
 	private void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, List<AbstractBlockInfo> blockInfoList) {
@@ -172,12 +171,12 @@ public class StrongholdBuilderOld {
 
 		// Floor
 		for (BlockPos p : BlockPos.getAllInBox(start, endP)) {
-			blockInfoList.add(new BlockInfo(p, ModBlocks.GRANITE_SMALL.getDefaultState(), null));
+			blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SMALL.getDefaultState(), null));
 		}
 
 		// Ceiling
 		for (BlockPos p : BlockPos.getAllInBox(start.add(0, ceilingHeight + 1, 0), endP.add(0, ceilingHeight + 1, 0))) {
-			blockInfoList.add(new BlockInfo(p, ModBlocks.GRANITE_SQUARE.getDefaultState(), null));
+			blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SQUARE.getDefaultState(), null));
 		}
 	}
 

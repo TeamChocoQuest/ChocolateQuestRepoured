@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
@@ -63,7 +63,7 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon {
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
+			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
 
 			if (!flag) {

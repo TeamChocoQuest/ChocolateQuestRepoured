@@ -5,8 +5,8 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
@@ -31,7 +31,7 @@ public class DungeonVolcanoOld extends DungeonBase {
 	private int maxHeight = 130;
 	private int innerRadius = 11;
 	private int chestChance = 600;
-	private ResourceLocation[] chestIDs = { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD };
+	private ResourceLocation[] chestIDs = { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD };
 	private double steepness = 0.0025D;
 	private double lavaChance = 0.005D;
 	private double magmaChance = 0.075D;
@@ -41,7 +41,7 @@ public class DungeonVolcanoOld extends DungeonBase {
 	private IBlockState magmaBlock = Blocks.MAGMA.getDefaultState();
 	private IBlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
 	private IBlockState lowerStoneBlock = Blocks.COBBLESTONE.getDefaultState();
-	private IBlockState pillarBlock = ModBlocks.GRANITE_LARGE.getDefaultState();
+	private IBlockState pillarBlock = CQRBlocks.GRANITE_LARGE.getDefaultState();
 	private IBlockState[] oreBlocks = { Blocks.IRON_ORE.getDefaultState(), Blocks.GOLD_ORE.getDefaultState(), Blocks.REDSTONE_ORE.getDefaultState(), Blocks.EMERALD_ORE.getDefaultState() };
 
 	// Stronghold

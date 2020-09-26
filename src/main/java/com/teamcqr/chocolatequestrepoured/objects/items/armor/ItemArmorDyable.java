@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import java.awt.Color;
 
-import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
+import com.teamcqr.chocolatequestrepoured.init.CQRMaterials;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -28,7 +28,7 @@ public class ItemArmorDyable extends ItemArmor {
 	 */
 	@Override
 	public boolean hasColor(ItemStack stack) {
-		if (this.getArmorMaterial() == ModMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == ModMaterials.ArmorMaterials.IRON_DYABLE) {
+		if (this.getArmorMaterial() == CQRMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == CQRMaterials.ArmorMaterials.IRON_DYABLE) {
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			return nbttagcompound != null && nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND) ? nbttagcompound.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT) : false;
 		} else {
@@ -41,7 +41,7 @@ public class ItemArmorDyable extends ItemArmor {
 	 */
 	@Override
 	public int getColor(ItemStack stack) {
-		if (this.getArmorMaterial() == ModMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == ModMaterials.ArmorMaterials.IRON_DYABLE) {
+		if (this.getArmorMaterial() == CQRMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == CQRMaterials.ArmorMaterials.IRON_DYABLE) {
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 
 			if (nbttagcompound != null) {
@@ -68,7 +68,7 @@ public class ItemArmorDyable extends ItemArmor {
 				}
 			}
 
-			if (this.getArmorMaterial() == ModMaterials.ArmorMaterials.DIAMOND_DYABLE) {
+			if (this.getArmorMaterial() == CQRMaterials.ArmorMaterials.DIAMOND_DYABLE) {
 				return 65535;
 			} else {
 				return 13421772;
@@ -83,7 +83,7 @@ public class ItemArmorDyable extends ItemArmor {
 	 */
 	@Override
 	public void removeColor(ItemStack stack) {
-		if (this.getArmorMaterial() == ModMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == ModMaterials.ArmorMaterials.IRON_DYABLE) {
+		if (this.getArmorMaterial() == CQRMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == CQRMaterials.ArmorMaterials.IRON_DYABLE) {
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 
 			if (nbttagcompound != null) {
@@ -101,7 +101,7 @@ public class ItemArmorDyable extends ItemArmor {
 	 */
 	@Override
 	public void setColor(ItemStack stack, int color) {
-		if (this.getArmorMaterial() == ModMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == ModMaterials.ArmorMaterials.IRON_DYABLE) {
+		if (this.getArmorMaterial() == CQRMaterials.ArmorMaterials.DIAMOND_DYABLE || this.getArmorMaterial() == CQRMaterials.ArmorMaterials.IRON_DYABLE) {
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 
 			if (nbttagcompound == null) {

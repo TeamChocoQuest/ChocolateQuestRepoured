@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.mounts;
 
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRGiantSilverfishBase;
 
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +15,7 @@ public class EntityGiantSilverfishNormal extends EntityCQRGiantSilverfishBase {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ModLoottables.ENTITIES_GIANT_SILVERFISH;
+		return CQRLoottables.ENTITIES_GIANT_SILVERFISH;
 	}
 
 }

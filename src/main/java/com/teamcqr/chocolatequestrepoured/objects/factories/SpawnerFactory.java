@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
@@ -72,7 +72,7 @@ public abstract class SpawnerFactory {
 	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
-		world.setBlockState(pos, (multiUseSpawner == true /* && spawnerSettingsOverrides != null */) ? Blocks.MOB_SPAWNER.getDefaultState() : ModBlocks.SPAWNER.getDefaultState());
+		world.setBlockState(pos, (multiUseSpawner == true /* && spawnerSettingsOverrides != null */) ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (multiUseSpawner) {
@@ -284,7 +284,7 @@ public abstract class SpawnerFactory {
 	}
 
 	public static ItemStack getSoulBottleItemStackForEntity(NBTTagCompound entityTag) {
-		ItemStack bottle = new ItemStack(ModItems.SOUL_BOTTLE);
+		ItemStack bottle = new ItemStack(CQRItems.SOUL_BOTTLE);
 		bottle.setCount(1);
 		NBTTagCompound mobToSpawnerItem = new NBTTagCompound();
 

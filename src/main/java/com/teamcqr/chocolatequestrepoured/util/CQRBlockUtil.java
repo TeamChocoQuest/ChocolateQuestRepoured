@@ -1,17 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockWoodSlab;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import scala.actors.threadpool.Arrays;
-
-import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 public class CQRBlockUtil {
 

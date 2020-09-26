@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.crafting;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemCrown;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -26,7 +26,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.KING_CROWN) {
+				if (stack.getItem() == CQRItems.KING_CROWN) {
 					if (crown == ItemStack.EMPTY) {
 						crown = stack;
 					} else {
@@ -49,7 +49,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.KING_CROWN) {
+				if (stack.getItem() == CQRItems.KING_CROWN) {
 					if (crown == ItemStack.EMPTY) {
 						crown = stack;
 					} else {
