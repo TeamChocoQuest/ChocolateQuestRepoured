@@ -76,7 +76,11 @@ public class DungeonDataManager {
 	public static void handleWorldLoad(World world) {
 		if (isWorldValid(world) && !INSTANCES.containsKey(world)) {
 			createInstance(world);
-			getInstance(world).readData();
+			try {
+				getInstance(world).readData();
+			} catch(NullPointerException npe) {
+				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
+			}
 		}
 	}
 
@@ -85,7 +89,11 @@ public class DungeonDataManager {
 			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
 				// wait
 			}
-			getInstance(world).saveData();
+			try {
+				getInstance(world).saveData();
+			} catch(NullPointerException npe) {
+				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
+			}
 			deleteInstance(world);
 		}
 	}
