@@ -18,6 +18,7 @@ public class ClientPacketHandler {
 	
 	private static  final  ReflectionField<IReloadableResourceManager> RESOURCE_MANAGER = new ReflectionField<>(Minecraft.class, "field_110451_am", "resourceManager");
 	
+	@SuppressWarnings("deprecation")
 	public static void handleCTPacketClientside(CustomTexturesPacket message) {
 		CTResourcepack.clear();
 		Map<String, File> fileMap = new HashMap<>();
