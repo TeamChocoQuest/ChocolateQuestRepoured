@@ -19,7 +19,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 
@@ -69,9 +68,6 @@ public class DungeonGenerationManager {
 
 	public static void handleWorldUnload(World world) {
 		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
-				// wait
-			}
 			INSTANCES.get(world).saveData();
 			CQRMain.logger.info("Saved {} parts to generate", INSTANCES.get(world).dungeonGeneratorList.size());
 			INSTANCES.remove(world);

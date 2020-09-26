@@ -86,9 +86,6 @@ public class DungeonDataManager {
 
 	public static void handleWorldUnload(World world) {
 		if (isWorldValid(world)) {
-			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
-				// wait
-			}
 			try {
 				getInstance(world).saveData();
 			} catch(NullPointerException npe) {

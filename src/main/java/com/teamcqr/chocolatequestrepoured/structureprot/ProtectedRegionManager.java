@@ -20,7 +20,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGeneratorThread;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,9 +70,6 @@ public class ProtectedRegionManager {
 
 	public static void handleWorldUnload(World world) {
 		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			while (DungeonGeneratorThread.isDungeonGeneratorThreadRunning(world)) {
-				// wait
-			}
 			INSTANCES.get(world).saveData();
 			INSTANCES.remove(world);
 		}
