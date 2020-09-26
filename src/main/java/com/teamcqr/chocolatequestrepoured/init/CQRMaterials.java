@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
 
-public class ModMaterials {
+public class CQRMaterials {
 
 	public static class ArmorMaterials {
 		public static final ArmorMaterial ARMOR_CLOUD = createArmorMaterial("cloud", 20, new int[] 
@@ -102,10 +102,10 @@ public class ModMaterials {
 	}
 
 	public static void setRepairItemsForMaterials() {
-		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_BULL, ModItems.LEATHER_BULL);
-		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_SPIDER, ModItems.LEATHER_SPIDER);
-		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_SLIME, ModItems.BALL_SLIME);
-		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_TURTLE, ModItems.SCALE_TURTLE);
+		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_BULL, CQRItems.LEATHER_BULL);
+		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_SPIDER, CQRItems.LEATHER_SPIDER);
+		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_SLIME, CQRItems.BALL_SLIME);
+		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_TURTLE, CQRItems.SCALE_TURTLE);
 		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_HEAVY_DIAMOND, Items.DIAMOND);
 		setRepairItemForArmorlMaterial(ArmorMaterials.ARMOR_HEAVY_IRON, Items.IRON_INGOT);
 
