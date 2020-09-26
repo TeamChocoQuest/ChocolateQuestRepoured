@@ -7,22 +7,20 @@ import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
-import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.resource.VanillaResourceType;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ClientPacketHandler {
 
-	private static final ReflectionField<IReloadableResourceManager> RESOURCE_MANAGER = new ReflectionField<>(Minecraft.class, "field_110451_am", "resourceManager");
-
-	@SuppressWarnings("deprecation")
 	public static void handleCTPacketClientside(CustomTexturesPacket message) {
 		CTResourcepack.clear();
 		Map<String, File> fileMap = new HashMap<>();
-		for (Map.Entry<String, String> textureEntry : message.getTextureMap().entrySet()) {
+		for (Map.Entry<String, byte[]> textureEntry : message.getTextureMap().entrySet()) {
 			String path = textureEntry.getKey();
 
 			// !!Path already contains the .png extension
@@ -57,11 +55,11 @@ public class ClientPacketHandler {
 		}
 
 		// and finally we need to reload our resourcepack
-		IReloadableResourceManager rm = RESOURCE_MANAGER.get(Minecraft.getMinecraft());
+		IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
 		if (rm instanceof SimpleReloadableResourceManager) {
 			((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
 		} else {
-			Minecraft.getMinecraft().scheduleResourcesRefresh();
+			FMLClientHandler.instance().refreshResources(VanillaResourceType.TEXTURES);
 		}
 		CTResourcepack.loadAllTextures();
 	}

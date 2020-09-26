@@ -8,29 +8,26 @@ import java.util.Base64;
 
 public class CompressionUtil {
 
-	public static String encodeFileToBase64(File file) {
+	public static byte[] encodeFileToBase64(File file) {
 		try {
 			byte[] fileContent = Files.readAllBytes(file.toPath());
-			return Base64.getEncoder().encodeToString(fileContent);
+			return Base64.getEncoder().encode(fileContent);
 		} catch (IOException e) {
-			throw new IllegalStateException("could not read file " + file, e);
+			e.printStackTrace();
 		}
+		return new byte[0];
 	}
 
-	public static boolean decodeBase64ToFile(String filePathWithNameAndExtension, String base64) {
+	public static boolean decodeBase64ToFile(String filePathWithNameAndExtension, byte[] base64) {
 		return decodeBase64ToFile(new File(filePathWithNameAndExtension), base64);
 	}
 
-	public static boolean decodeBase64ToFile(File targetFile, String base64) {
-		byte dearr[] = Base64.getDecoder().decode(base64);
-		FileOutputStream fos;
-		try {
-			fos = new FileOutputStream(targetFile);
+	public static boolean decodeBase64ToFile(File targetFile, byte[] base64) {
+		byte[] dearr = Base64.getDecoder().decode(base64);
+		try (FileOutputStream fos = new FileOutputStream(targetFile)) {
 			fos.write(dearr);
-			fos.close();
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;

@@ -95,7 +95,7 @@ public class TextureSetManager {
 			packet.addPair(base64, path);
 		}*/
 		for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
-			String base64 = CompressionUtil.encodeFileToBase64(entry.getValue());
+			byte[] base64 = CompressionUtil.encodeFileToBase64(entry.getValue());
 			String path = entry.getKey();
 			
 			packet.addPair(base64, path);

@@ -14,14 +14,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class CustomTexturesPacket implements IMessage {
 
-	private Map<String, String> entries = new HashMap<>();
+	private Map<String, byte[]> entries = new HashMap<>();
 	private Map<String, Map<ResourceLocation, Set<ResourceLocation>>> textureSets = new HashMap<>();
 
 	public CustomTexturesPacket() {
 
 	}
 
-	public void addPair(String file, String path) {
+	public void addPair(byte[] file, String path) {
 		this.entries.put(path, file);
 	}
 
@@ -35,7 +35,7 @@ public class CustomTexturesPacket implements IMessage {
 		int tscount = buf.readInt();
 		while (keys > 0) {
 			String k = ByteBufUtils.readUTF8String(buf);
-			String v = ByteBufUtils.readUTF8String(buf);
+			byte[] v = buf.readBytes(buf.readInt()).array();
 			this.entries.put(k, v);
 			keys--;
 		}
@@ -66,9 +66,10 @@ public class CustomTexturesPacket implements IMessage {
 		buf.writeInt(this.entries.size());
 		buf.writeInt(this.textureSets.size());
 		// Textures
-		for (Map.Entry<String, String> entry : this.entries.entrySet()) {
+		for (Map.Entry<String, byte[]> entry : this.entries.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, entry.getKey());
-			ByteBufUtils.writeUTF8String(buf, entry.getValue());
+			buf.writeInt(entry.getValue().length);
+			buf.writeBytes(entry.getValue());
 		}
 		// Texture sets
 		for (Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : this.textureSets.entrySet()) {
@@ -87,7 +88,7 @@ public class CustomTexturesPacket implements IMessage {
 
 	}
 
-	public Map<String, String> getTextureMap() {
+	public Map<String, byte[]> getTextureMap() {
 		return this.entries;
 	}
 
