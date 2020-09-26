@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
@@ -25,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 public class CTResourcepack implements IResourcePack {
 
 	private Set<ResourceLocation> VALID_TEXTURES = new HashSet<>();
-	private HashMap<ResourceLocation, InputStream> INPUT_STREAMS = new HashMap<>();
 	private HashMap<ResourceLocation, File> FILES = new HashMap<>();
 	private Set<String> DOMAIN_SET = new HashSet<>();
 
@@ -43,12 +41,16 @@ public class CTResourcepack implements IResourcePack {
 
 	@Override
 	public InputStream getInputStream(ResourceLocation var1) throws IOException {
-		return INPUT_STREAMS.getOrDefault(var1, null);
+		File file = FILES.getOrDefault(var1, null);
+		if(file != null) {
+			return new FileInputStream(file);
+		}
+		return null;
 	}
 
 	@Override
 	public boolean resourceExists(ResourceLocation var1) {
-		return INPUT_STREAMS.containsKey(var1);
+		return FILES.containsKey(var1);
 	}
 
 	@Override
@@ -77,8 +79,6 @@ public class CTResourcepack implements IResourcePack {
 
 	private void addImpl(ResourceLocation resLoc, File file) {
 		try {
-			this.INPUT_STREAMS.put(resLoc, new FileInputStream(file));
-			
 			this.VALID_TEXTURES.add(resLoc);
 			this.DOMAIN_SET.add(resLoc.getNamespace());
 			this.FILES.put(resLoc, file);
@@ -93,7 +93,6 @@ public class CTResourcepack implements IResourcePack {
 	}
 
 	private void removeImpl(ResourceLocation texture) {
-		this.INPUT_STREAMS.remove(texture);
 		this.VALID_TEXTURES.remove(texture);
 		this.DOMAIN_SET.remove(texture.getNamespace());
 		this.FILES.remove(texture);
@@ -104,17 +103,6 @@ public class CTResourcepack implements IResourcePack {
 	}
 
 	private void clearImpl() {
-		this.INPUT_STREAMS.values().forEach(new Consumer<InputStream>() {
-
-			@Override
-			public void accept(InputStream t) {
-				try {
-					t.close();
-				} catch (IOException e) {
-				}
-			}
-		});
-		this.INPUT_STREAMS.clear();
 		this.VALID_TEXTURES.clear();
 		this.DOMAIN_SET.clear();
 		this.FILES.clear();
