@@ -15,9 +15,9 @@ import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 public class ClientPacketHandler {
-	
-	private static  final  ReflectionField<IReloadableResourceManager> RESOURCE_MANAGER = new ReflectionField<>(Minecraft.class, "field_110451_am", "resourceManager");
-	
+
+	private static final ReflectionField<IReloadableResourceManager> RESOURCE_MANAGER = new ReflectionField<>(Minecraft.class, "field_110451_am", "resourceManager");
+
 	@SuppressWarnings("deprecation")
 	public static void handleCTPacketClientside(CustomTexturesPacket message) {
 		CTResourcepack.clear();
@@ -55,15 +55,15 @@ public class ClientPacketHandler {
 
 			TextureSetManager.registerTextureSet(ts);
 		}
-		
+
 		// and finally we need to reload our resourcepack
 		IReloadableResourceManager rm = RESOURCE_MANAGER.get(Minecraft.getMinecraft());
-		if(rm instanceof SimpleReloadableResourceManager) {
-			((SimpleReloadableResourceManager)rm).reloadResourcePack(CTResourcepack.getInstance());
+		if (rm instanceof SimpleReloadableResourceManager) {
+			((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
 		} else {
 			Minecraft.getMinecraft().scheduleResourcesRefresh();
 		}
 		CTResourcepack.loadAllTextures();
 	}
-	
+
 }
