@@ -1,10 +1,12 @@
-package com.teamcqr.chocolatequestrepoured.client.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 
 import java.io.IOException;
 
 import org.lwjgl.input.Mouse;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiButtonTextured;
+import com.teamcqr.chocolatequestrepoured.client.gui.IUpdatableGui;
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerMerchant;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.CPacketDeleteTrade;

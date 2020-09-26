@@ -1,5 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.client.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiButtonTextured;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState;
 
 public class GuiButtonReputation extends GuiButtonTextured {

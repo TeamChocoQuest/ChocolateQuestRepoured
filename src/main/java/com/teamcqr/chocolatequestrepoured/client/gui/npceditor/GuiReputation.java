@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

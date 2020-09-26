@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 
 import java.io.IOException;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
 import com.teamcqr.chocolatequestrepoured.objects.npc.trading.TradeInput;
