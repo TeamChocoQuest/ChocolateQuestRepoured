@@ -44,7 +44,10 @@ public class GuiReputation extends GuiScreen {
 		super();
 		this.imgPlayerHead = player.getLocationSkin();
 
-		this.setGuiSize(this.width / 4, this.height / 3);
+		this.setGuiSize(Minecraft.getMinecraft().displayWidth / 4, Minecraft.getMinecraft().displayHeight / 4);
+
+		this.REPU_BAR_X = this.width / 2 + 70;
+		this.REPU_BAR_Y = this.height / 2 + 65;
 	}
 
 	@Override
@@ -65,27 +68,20 @@ public class GuiReputation extends GuiScreen {
 		this.drawHoveringText(I18n.format(this.lblReputationBarLangKey), this.width / 2 - 70, this.height / 2 + 5);
 		this.drawHoveringText(I18n.format(this.lblMembersKilledLangKey) + ": missingNo", this.width / 2 - 70, this.height / 2 + 25);
 		this.drawHoveringText(I18n.format(this.lblDungeonsConqueredLangKey) + ": missingNo", this.width / 2 - 70, this.height / 2 + 45);
-		this.REPU_BAR_X = this.width / 2 - 70;
-		this.REPU_BAR_Y = this.height / 2 + 65;
-	}
-
-	@Override
-	public void drawBackground(int tint) {
-		super.drawBackground(tint);
 
 		// Draw images
-		Minecraft.getMinecraft().renderEngine.bindTexture(TEXTURE_REPU_BAR);
+		//Minecraft.getMinecraft().renderEngine.bindTexture(TEXTURE_REPU_BAR);
 		// Reputation Bar
-		this.drawTexturedModalRect(this.REPU_BAR_X, this.REPU_BAR_Y, 0, 0, 128, 128);
+		//this.drawTexturedModalRect(this.REPU_BAR_X, this.REPU_BAR_Y, 0, 0, this.width, this.height);
 
 		// TODO: Calculate coordinates for head -> Recalculate X coordinate
 
 		// Draw player head
-		// Minecraft.getMinecraft().renderEngine.bindTexture(imgPlayerHead);
+		Minecraft.getMinecraft().renderEngine.bindTexture(imgPlayerHead);
 		// Face
-		// this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 8, 8, 8, 8);
+		this.drawTexturedModalRect(this.width / 2 - 70, this.height / 2 + 65, 8, 8, 8, 8);
 		// Headwear
-		// this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 72, 8, 8, 8);
+		this.drawTexturedModalRect(this.width / 2 - 70, this.height / 2 + 65, 72, 8, 8, 8);
 	}
 
 	protected void adjustComponentsToFaction(String newFaction) {
