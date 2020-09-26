@@ -73,103 +73,59 @@ public class DungeonDataManager {
 		}
 	}
 
-	public static void handleWorldLoad(World world) {
-		if (isWorldValid(world) && !INSTANCES.containsKey(world)) {
-			createInstance(world);
-			try {
-				getInstance(world).readData();
-			} catch(NullPointerException npe) {
-				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			}
-		}
-	}
-
-	public static void handleWorldUnload(World world) {
-		if (isWorldValid(world)) {
-			try {
-				getInstance(world).saveData();
-			} catch(NullPointerException npe) {
-				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			}
-			deleteInstance(world);
-		}
-	}
-
-	public static void handleWorldSave(World world) {
-		if (isWorldValid(world)) {
-			try {
-				getInstance(world).saveData();
-			} catch (NullPointerException npe) {
-				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			}
-		}
-	}
-
-	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
-		if (isWorldValid(world)) {
-			try {
-				getInstance(world).insertDungeonEntry(dungeon.getDungeonName(), position, spawnType);
-			} catch (NullPointerException npe) {
-				CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			}
-		}
-	}
-
 	@Nullable
 	public static DungeonDataManager getInstance(World world) {
-		if (isWorldValid(world)) {
+		if (!world.isRemote) {
 			return INSTANCES.get(world);
 		}
 		return null;
 	}
 
-	private static boolean isWorldValid(World world) {
-		return world != null && !world.isRemote;
-	}
-
-	private static void createInstance(World world) {
-		if (isWorldValid(world) && !INSTANCES.containsKey(world)) {
+	public static void handleWorldLoad(World world) {
+		if (!world.isRemote && !INSTANCES.containsKey(world)) {
 			INSTANCES.put(world, new DungeonDataManager(world));
+			INSTANCES.get(world).readData();
 		}
 	}
 
-	private static void deleteInstance(World world) {
-		if (isWorldValid(world) && INSTANCES.containsKey(world)) {
+	public static void handleWorldSave(World world) {
+		if (!world.isRemote && INSTANCES.containsKey(world)) {
+			INSTANCES.get(world).saveData();
+		}
+	}
+
+	public static void handleWorldUnload(World world) {
+		if (!world.isRemote && INSTANCES.containsKey(world)) {
+			INSTANCES.get(world).saveData();
 			INSTANCES.remove(world);
 		}
 	}
 
+	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
+		if (INSTANCES.containsKey(world)) {
+			INSTANCES.get(world).addDungeonEntry(dungeon, position, spawnType);
+		}
+	}
+
 	public static Set<String> getSpawnedDungeonNames(World world) {
-		try {
-			return getInstance(world).getSpawnedDungeonNames();
-		} catch (NullPointerException npe) {
-			CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			return new HashSet<>();
+		if (INSTANCES.containsKey(world)) {
+			return INSTANCES.get(world).getSpawnedDungeonNames();
 		}
+		return Collections.emptySet();
 	}
 
-	private Set<String> getSpawnedDungeonNames() {
-		return this.dungeonData.keySet();
-	}
-
-	public static Set<DungeonInfo> getLocationsOfDungeon(World world, String dungeon) {
-		try {
-			return getInstance(world).getLocationsOfDungeon(dungeon);
-		} catch (NullPointerException npe) {
-			CQRMain.logger.warn("Found no datamanager instance for world {}! Error: {}", world.getWorldInfo().getWorldName(), npe);
-			return new HashSet<>();
+	public static Set<DungeonInfo> getLocationsOfDungeon(World world, DungeonBase dungeon) {
+		if (INSTANCES.containsKey(world)) {
+			return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
 		}
+		return Collections.emptySet();
 	}
 
-	private Set<DungeonInfo> getLocationsOfDungeon(String dungeon) {
-		return this.dungeonData.getOrDefault(dungeon, new HashSet<>());
-	}
-
-	public void insertDungeonEntry(String dungeon, BlockPos location, DungeonSpawnType spawnType) {
-		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon, key -> new HashSet<>());
-		if (spawnedLocs.add(new DungeonInfo(location, spawnType))) {
-			this.modifiedSinceLastSave = true;
+	public static boolean isDungeonSpawnLimitMet(World world, DungeonBase dungeon) {
+		if (INSTANCES.containsKey(world)) {
+			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
 		}
+		return false;
 	}
 
 	public void saveData() {
@@ -220,7 +176,22 @@ public class DungeonDataManager {
 		}
 	}
 
-	public boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
+	private void addDungeonEntry(DungeonBase dungeon, BlockPos location, DungeonSpawnType spawnType) {
+		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon.getDungeonName(), key -> Collections.synchronizedSet(new HashSet<>()));
+		if (spawnedLocs.add(new DungeonInfo(location, spawnType))) {
+			this.modifiedSinceLastSave = true;
+		}
+	}
+
+	private Set<String> getSpawnedDungeonNames() {
+		return this.dungeonData.keySet();
+	}
+
+	private Set<DungeonInfo> getLocationsOfDungeon(DungeonBase dungeon) {
+		return this.dungeonData.getOrDefault(dungeon.getDungeonName(), Collections.emptySet());
+	}
+
+	private boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
 		if (dungeon.getSpawnLimit() < 0) {
 			return false;
 		}

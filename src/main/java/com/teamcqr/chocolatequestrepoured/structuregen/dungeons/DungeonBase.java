@@ -197,7 +197,7 @@ public abstract class DungeonBase {
 		if (this.isDungeonDependencyMissing(world)) {
 			return false;
 		}
-		if (DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(this)) {
+		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
 		if (world.provider.getDimension() == 0 && this.spawnOnlyBehindWall && !behindWall) {
