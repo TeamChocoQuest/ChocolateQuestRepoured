@@ -323,6 +323,7 @@ item.bubble_rifle.name=Bubble Launcher
 #Hookshots
 item.hookshot.name=Hookshot
 item.longshot.name=Longshot
+item.spiderhook.name=Spiderhookshot
 
 #Cloud Items
 item.boots_cloud.name=Cloud Boots
@@ -510,6 +511,7 @@ tile.exporter_chest_custom_14.name=Exporter Chest - Custom 14
 
 #technical
 tile.phylactery.name=Lich Phylactery
+tile.temporary_web.name=Temporary Web
 
 #Descriptions
 description.spider_armor.name=Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.
@@ -567,6 +569,18 @@ description.spear_diamond.name=A well-made weapon with longer reach than a sword
 description.cursed_bone.name=Mob to be summoned:
 description.dummy_shield.name=A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.
 
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name==When checked the input does not have to be similar in terms of meta data. For example you set a diamond sword as input, it will also accept damaged diamond swords for it.
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name==When checked the input does not have to be similar in terms of nbt data. For example you set a diamond sword as input, it will also accept enchanted diamond swords for it.
+description.gui_merchant_edit_trade.reputation_button.name==Reputation with the traders faction required to use this trade. Set it to "NONE" to not require any reputation.
+description.gui_merchant_edit_trade.advancement_text_field.name==Advancement required to use this trade. Specify an advancements resourcelocation (for example "minecraft:story/mine_stone) or leave it blank to not require any advancement.
+description.gui_merchant_edit_trade.stock_check_box.name==Check this to set that this trade has a stock count. This means that this trade has a limited use.
+description.gui_merchant_edit_trade.restock_text_field.name==Amount of uses it will increase when it gets restocked. Every time you buy something, it will restock a different trade that is not maxed out.
+description.gui_merchant_edit_trade.in_stock_text_field.name==Current amount of uses the trade has.
+description.gui_merchant_edit_trade.max_stock_text_field.name==Highest amount of uses the trade can have.
+description.gui_button_trade.locked.name=Trade is not unlocked yet!
+description.gui_button_trade.out_of_stock.name=Out of stock! If possible buy something else, then maybe the trade will be in stock again.
+
 #Enchantments
 enchantment.lightning_protection=Lightning Protection
 enchantment.spectral=Spectral Balsam
@@ -614,7 +628,8 @@ entity.cqr_giant_spider.name=Shelob
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
-entity.cqr_illusion_walker_king.name=Walker King
+#This name should be the same as the walker king name
+entity.cqr_illusion_walker_king.name=Abyss Walker King
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
 entity.cqr_pirate_parrot.name=Traitor Parrot
 entity.cqr_flying_skull.name=Flying Skull
