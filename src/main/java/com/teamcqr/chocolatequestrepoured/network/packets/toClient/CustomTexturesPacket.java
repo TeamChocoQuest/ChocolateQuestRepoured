@@ -35,7 +35,8 @@ public class CustomTexturesPacket implements IMessage {
 		int tscount = buf.readInt();
 		while (keys > 0) {
 			String k = ByteBufUtils.readUTF8String(buf);
-			byte[] v = buf.readBytes(buf.readInt()).array();
+			byte[] v = new byte[buf.readInt()];
+			buf.readBytes(v);
 			this.entries.put(k, v);
 			keys--;
 		}
