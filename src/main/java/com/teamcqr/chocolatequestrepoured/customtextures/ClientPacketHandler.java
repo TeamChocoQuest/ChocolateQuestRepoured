@@ -29,6 +29,9 @@ public class ClientPacketHandler {
 				if (tf.exists()) {
 					tf.delete();
 				}
+				if(tf.getParentFile() != null && !tf.getParentFile().equals(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC)) {
+					tf.getParentFile().mkdirs();
+				}
 				if (CompressionUtil.decodeBase64ToFile(tf, textureEntry.getValue())) {
 					fileMap.put(path, tf);
 				} else {
