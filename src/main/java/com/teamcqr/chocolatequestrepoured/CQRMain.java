@@ -76,6 +76,7 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_SETS = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_ROOT = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
+	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = null;
 
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
@@ -175,7 +176,9 @@ public class CQRMain {
 				CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items"),
 				CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures"),
 				CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"),
-				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures") };
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"),
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync")
+		};
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);

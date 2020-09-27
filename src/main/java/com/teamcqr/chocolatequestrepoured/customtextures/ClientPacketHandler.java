@@ -24,7 +24,7 @@ public class ClientPacketHandler {
 			String path = textureEntry.getKey();
 
 			// !!Path already contains the .png extension
-			File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, path);
+			File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC, path);
 			if (tf != null) {
 				if (tf.exists()) {
 					tf.delete();
