@@ -190,7 +190,7 @@ public class CQRMain {
 		proxy.postInit();
 
 		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
-		isPhosphorInstalled = Loader.isModLoaded("entity_culling");
+		isEntityCullingInstalled = Loader.isModLoaded("entity_culling");
 
 		DungeonRegistry.getInstance().loadDungeons();
 		CQStructure.cacheFiles();
