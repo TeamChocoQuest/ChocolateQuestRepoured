@@ -175,12 +175,28 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 						// This position is already decorated, so keep going
 						continue;
 					}
-					if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(torchPercent, this.random))) {
-						RoomDecorTypes.TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
-					} else if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(5, this.random))) {
-						RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
-					} else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) && (DungeonGenUtils.percentageRandom(dungeon.getPaintingChance(), this.random))) {
-						RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
+
+					switch (this.random.nextInt(2)) {
+					case 0:
+						if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(torchPercent, this.random))) {
+							RoomDecorTypes.TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
+						}
+						break;
+					case 1:
+						if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) && (DungeonGenUtils.percentageRandom(dungeon.getPaintingChance(), this.random))) {
+							RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
+						}
+						break;
+					/*
+					 * case 2:
+					 * if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(5,
+					 * this.random))) {
+					 * RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
+					 * }
+					 * break;
+					 */
+					default:
+						break;
 					}
 				}
 			}
