@@ -60,9 +60,9 @@ public abstract class DungeonBase {
 	protected String dungeonMob = DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT;
 	protected boolean replaceBanners = true;
 
-	protected boolean buildSupportPlatform;
-	protected IBlockState supportBlock;
-	protected IBlockState supportTopBlock;
+	protected boolean buildSupportPlatform = true;
+	protected IBlockState supportBlock = null;
+	protected IBlockState supportTopBlock = null;
 
 	protected boolean useCoverBlock;
 	protected IBlockState coverBlock;
@@ -106,9 +106,9 @@ public abstract class DungeonBase {
 		this.dungeonMob = prop.getProperty("dummyReplacement", this.dungeonMob);
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", this.replaceBanners);
 
-		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
-		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", Blocks.STONE.getDefaultState());
-		this.supportTopBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblocktop", Blocks.GRASS.getDefaultState());
+		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", this.buildSupportPlatform);
+		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", this.supportBlock);
+		this.supportTopBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblocktop", this.supportTopBlock);
 
 		this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
 		this.coverBlock = PropertyFileHelper.getBlockStateProperty(prop, "coverblock", Blocks.AIR.getDefaultState());

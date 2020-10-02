@@ -9,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DungeonPartPlateau extends AbstractDungeonPart {
@@ -22,7 +24,7 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 	private Perlin3D perlin2;
 
 	public DungeonPartPlateau(World world, DungeonGenerator dungeonGenerator) {
-		this(world, dungeonGenerator, 0, 0, 0, 0, 0, Blocks.STONE.getDefaultState(), Blocks.GRASS.getDefaultState(), 0);
+		this(world, dungeonGenerator, 0, 0, 0, 0, 0, null, null, 0);
 	}
 
 	public DungeonPartPlateau(World world, DungeonGenerator dungeonGenerator, int startX, int startZ, int endX, int endY, int endZ, IBlockState supportHillBlock, IBlockState supportHillTopBlock, int wallSize) {
@@ -40,30 +42,37 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 	@Override
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = super.writeToNBT();
-		compound.setString("supportHillBlock", this.supportHillBlock.getBlock().getRegistryName().toString());
-		compound.setInteger("supportHillBlockMeta", this.supportHillBlock.getBlock().getMetaFromState(this.supportHillBlock));
-		compound.setString("supportHillTopBlock", this.supportHillTopBlock.getBlock().getRegistryName().toString());
-		compound.setInteger("supportHillTopBlockMeta", this.supportHillTopBlock.getBlock().getMetaFromState(this.supportHillTopBlock));
+		if (this.supportHillBlock != null) {
+			compound.setString("supportHillBlock", this.supportHillBlock.getBlock().getRegistryName().toString());
+			compound.setInteger("supportHillBlockMeta", this.supportHillBlock.getBlock().getMetaFromState(this.supportHillBlock));
+		}
+		if (this.supportHillTopBlock != null) {
+			compound.setString("supportHillTopBlock", this.supportHillTopBlock.getBlock().getRegistryName().toString());
+			compound.setInteger("supportHillTopBlockMeta", this.supportHillTopBlock.getBlock().getMetaFromState(this.supportHillTopBlock));
+		}
 		compound.setInteger("wallSize", this.wallSize);
 		compound.setInteger("x1", this.x1);
 		compound.setInteger("z1", this.z1);
 		return compound;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		Block b1 = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("supportHillBlock")));
-		if (b1 != null) {
-			this.supportHillTopBlock = b1.getStateFromMeta(compound.getInteger("supportHillBlockMeta"));
-		} else {
-			this.supportHillTopBlock = Blocks.STONE.getDefaultState();
+		this.supportHillBlock = null;
+		if (compound.hasKey("supportHillBlock", Constants.NBT.TAG_STRING)) {
+			Block b1 = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("supportHillBlock")));
+			if (b1 != null) {
+				this.supportHillBlock = b1.getStateFromMeta(compound.getInteger("supportHillBlockMeta"));
+			}
 		}
-		Block b2 = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("supportHillBlockMeta")));
-		if (b2 != null) {
-			this.supportHillBlock = b2.getStateFromMeta(compound.getInteger("supportHillTopBlockMeta"));
-		} else {
-			this.supportHillBlock = Blocks.GRASS.getDefaultState();
+		this.supportHillTopBlock = null;
+		if (compound.hasKey("supportHillTopBlock", Constants.NBT.TAG_STRING)) {
+			Block b2 = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("supportHillTopBlock")));
+			if (b2 != null) {
+				this.supportHillTopBlock = b2.getStateFromMeta(compound.getInteger("supportHillTopBlockMeta"));
+			}
 		}
 		this.wallSize = compound.getInteger("wallSize");
 		this.x1 = compound.getInteger("x1");
@@ -80,13 +89,16 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 	@Override
 	public void generateNext() {
 		if (this.x1 <= this.maxPos.getX()) {
+			Biome biome = this.world.getBiome(new BlockPos(this.x1, 0, this.z1));
+			IBlockState state1 = this.supportHillBlock != null ? this.supportHillBlock : biome.fillerBlock;
+			IBlockState state2 = this.supportHillTopBlock != null ? this.supportHillTopBlock : biome.topBlock;
 			int posY = this.world.getTopSolidOrLiquidBlock(new BlockPos(this.x1, 0, this.z1)).getY();
 			int i = Math.max((this.maxPos.getY() - 1) - posY, 1);
 			int y1 = posY;
 
 			while (y1 < this.maxPos.getY()) {
 				if ((this.x1 >= this.minPos.getX() + this.wallSize) && (this.x1 <= this.maxPos.getX() - this.wallSize) && (this.z1 >= this.minPos.getZ() + this.wallSize) && (this.z1 <= this.maxPos.getZ() - this.wallSize)) {
-					this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), this.supportHillBlock, 18);
+					this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), state1, 18);
 				} else {
 					float noiseVar = (y1 - (this.maxPos.getY() - 1)) / (i * 1.5F);
 
@@ -103,7 +115,7 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 					double value = (this.perlin1.getNoiseAt(this.x1, y1, this.z1) + this.perlin2.getNoiseAt(this.x1, y1, this.z1) + noiseVar) / 3.0D + (y1 - posY) / i * 0.25D;
 
 					if (value < 0.5D) {
-						this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), this.supportHillBlock, 18);
+						this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), state1, 18);
 					} else {
 						break;
 					}
@@ -112,7 +124,7 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 			}
 
 			if (y1 <= this.maxPos.getY()) {
-				this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), this.supportHillTopBlock, 18);
+				this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), state2, 18);
 			}
 
 			this.z1++;
