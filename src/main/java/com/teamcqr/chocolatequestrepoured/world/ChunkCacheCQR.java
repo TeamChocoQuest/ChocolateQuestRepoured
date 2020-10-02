@@ -52,6 +52,8 @@ public class ChunkCacheCQR extends ChunkCache {
 		this.chunkZ = (Math.min(pos1.getZ(), pos2.getZ()) - blockRange) >> 4;
 		int chunkX2 = (Math.max(pos1.getX(), pos2.getX()) + blockRange) >> 4;
 		int chunkZ2 = (Math.max(pos1.getZ(), pos2.getZ()) + blockRange) >> 4;
+		int y1 = Math.min(pos1.getY(), pos2.getY());
+		int y2 = Math.max(pos1.getY(), pos2.getY());
 		this.chunkArray = new Chunk[chunkX2 - this.chunkX + 1][chunkZ2 - this.chunkZ + 1];
 
 		double lineStartX = pos1.getX() + 0.5D;
@@ -67,7 +69,7 @@ public class ChunkCacheCQR extends ChunkCache {
 				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkProvider().getLoadedChunk(x, z);
 				this.chunkArray[x - this.chunkX][z - this.chunkZ] = chunk;
 
-				if (this.empty && chunk != null && !chunk.isEmptyBetween(0, 0)) {
+				if (this.empty && chunk != null && !chunk.isEmptyBetween(y1, y2)) {
 					this.empty = false;
 				}
 			}
