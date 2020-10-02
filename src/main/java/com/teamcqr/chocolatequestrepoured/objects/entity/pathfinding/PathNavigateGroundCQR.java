@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.pathfinding;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.world.ChunkCacheCQR;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.Path;
@@ -9,6 +11,7 @@ import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
@@ -98,12 +101,15 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		} else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
 			return this.currentPath;
 		} else {
-			float f = this.getPathSearchRange();
+			float distance = MathHelper.sqrt(this.entity.getDistanceSqToCenter(pos));
+			if (distance > this.getPathSearchRange()) {
+				return null;
+			}
+
 			this.world.profiler.startSection("pathfind");
-			BlockPos blockpos = new BlockPos(this.entity);
-			int i = (int) (f + 8.0F);
-			ChunkCache chunkcache = new ChunkCache(this.world, blockpos.add(-i, -i, -i), blockpos.add(i, i, i), 0);
-			Path path = this.pathFinder.findPath(chunkcache, this.entity, pos, f);
+			BlockPos entityPos = new BlockPos(this.entity);
+			ChunkCache chunkcache = new ChunkCacheCQR(this.world, entityPos, pos, entityPos, 32, false);
+			Path path = this.pathFinder.findPath(chunkcache, this.entity, pos, MathHelper.ceil(distance + 32.0F));
 			this.world.profiler.endSection();
 			return path;
 		}
