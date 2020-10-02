@@ -1,18 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
@@ -22,17 +24,12 @@ import net.minecraftforge.fml.common.IWorldGenerator;
  * GitHub: https://github.com/DerToaster98
  */
 public class WorldDungeonGenerator implements IWorldGenerator {
-
-	private static final String[] STRUCTURE_NAMES_INTERNAL = { "Stronghold", "Mansion", "Monument", "Village", "Mineshaft", "Temple", "EndCity", "Fortress" };
+	
+	static final String[] STRUCTURE_NAMES_INTERNAL = {"Stronghold", "Mansion", "Monument", "Village", "Mineshaft", "Temple", "EndCity", "Fortress"};
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
-			DungeonGenerationHelper.addDelayedChunk(world, chunkX, chunkZ);
-			return;
-		}
-
-		// Check if structures are enabled for this world
+		// Check if structures can actually spawn in the world
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			return;
 		}
@@ -43,17 +40,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 
 		// Spawn all coordinate specific dungeons for this chunk
-		List<DungeonBase> locationSpecificDungeons = DungeonRegistry.getInstance().getLocationSpecificDungeonsForChunk(world, chunkX, chunkZ);
-		if (!locationSpecificDungeons.isEmpty()) {
-			if (locationSpecificDungeons.size() > 1) {
-				CQRMain.logger.warn("Found {} location specific dungeons for chunkX={}, chunkZ={}!", locationSpecificDungeons.size(), chunkX, chunkZ);
-			}
-			for (DungeonBase dungeon : locationSpecificDungeons) {
-				for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositionsInChunk(world, chunkX, chunkZ)) {
-					int x = dungeonSpawnPos.getX(world);
-					int z = dungeonSpawnPos.getZ(world);
-					dungeon.generate(world, x, z, new Random(getSeed(world, x, z)), DungeonDataManager.DungeonSpawnType.LOCKED_COORDINATE, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
-				}
+		Set<DungeonBase> coordinateSpecificDungeons = DungeonGenUtils.getLocSpecDungeonsForChunk(world, chunkX, chunkZ);
+		if (!coordinateSpecificDungeons.isEmpty()) {
+			for (DungeonBase dungeon : coordinateSpecificDungeons) {
+				CQRMain.logger.info("Generating dungeon {} at chunkX={}, chunkZ={}", dungeon.getDungeonName(), chunkX, chunkZ);
+				BlockPos pos = dungeon.getLockedPos();
+				dungeon.generate(world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return;
 		}
@@ -63,54 +55,68 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return;
 		}
 
+		boolean behindWall = false;
 		int dungeonSeparation = CQRConfig.general.dungeonSeparation;
 
 		// Check whether this chunk is farther north than the wall
-		if (CQRConfig.wall.enabled && chunkZ < -CQRConfig.wall.distance && CQRConfig.general.moreDungeonsBehindWall) {
-			dungeonSeparation /= CQRConfig.general.densityBehindWallFactor;
+		if (CQRConfig.wall.enabled && chunkZ < -CQRConfig.wall.distance) {
+			if (CQRConfig.general.moreDungeonsBehindWall) {
+				dungeonSeparation /= CQRConfig.general.densityBehindWallFactor;
+			}
+			behindWall = true;
 		}
 
-		// Check if the chunk is on the grid
-		if ((chunkX - (DungeonGenUtils.getSpawnX(world) >> 4)) % dungeonSeparation != 0 || (chunkZ - (DungeonGenUtils.getSpawnZ(world) >> 4)) % dungeonSeparation != 0) {
-			return;
-		}
-
-		if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
-			return;
-		}
-
-		if (!DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
-			return;
-		}
-
-		// Check if no vanilla structure is near
-		if (CQRConfig.advanced.generationRespectOtherStructures) {
-			BlockPos p = new BlockPos((chunkX << 4) + 8, world.getSeaLevel(), (chunkZ << 4) + 8);
-			for (String sn : STRUCTURE_NAMES_INTERNAL) {
-				try {
-					BlockPos vanillaStructurePos = world.findNearestStructure(sn, p, CQRConfig.advanced.generationRespectUnexploredStructures);
-					if (vanillaStructurePos != null && p.distanceSq(vanillaStructurePos) <= CQRConfig.advanced.generationMinDistanceToOtherStructure * CQRConfig.advanced.generationMinDistanceToOtherStructure) {
-						return;
+		Chunk spawnChunk = world.getChunk(world.getSpawnPoint());
+		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ) && DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ)) {
+			// Check if there is a village structure nearby
+			BlockPos pos = new BlockPos(chunkX << 4, world.getHeight(chunkX << 4, chunkZ << 4), chunkZ << 4);
+			/*if (world.getVillageCollection().getNearestVillage(pos, checkDist) != null) {
+				CQRMain.logger.warn("Tried to spawn a dungeon in a chunk that was too near at a village, to disable this, lower the check distance in the config");
+				return;
+			}*/
+			
+			if(world instanceof WorldServer && CQRConfig.advanced.generationRespectOtherStructures) {
+				ChunkProviderServer cps = ((WorldServer)world).getChunkProvider();
+				for(String sn : STRUCTURE_NAMES_INTERNAL) {
+					try {
+						BlockPos ps = cps.getNearestStructurePos(world, sn, pos, CQRConfig.advanced.generationRespectUnexploredStructures);
+						if(ps != null && ps.getDistance(pos.getX(), ps.getY(), pos.getZ()) <= CQRConfig.advanced.generationMinDistanceToOtherStructure) {
+							CQRMain.logger.warn("Tried to spawn a dungeon too near a vanilla structure (Internal name: {}), aborting generation!", sn);
+							return;
+						}
+					} catch(NullPointerException npe) {
+						// ignore
 					}
-				} catch (NullPointerException e) {
-					// ignore
+				}
+			}
+
+			Random rand = new Random(getSeed(world, chunkX, chunkZ));
+
+			// Overall dungeon spawn chance
+			if (DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
+				Set<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForChunk(world, chunkX, chunkZ, behindWall);
+
+				if (!possibleDungeons.isEmpty()) {
+					int maxWeight = 0;
+					for (DungeonBase t : possibleDungeons) {
+						maxWeight += t.getWeight();
+					}
+					double d = rand.nextDouble() * maxWeight;
+					for (DungeonBase dungeon : possibleDungeons) {
+						d -= dungeon.getWeight();
+						if (d <= 0) {
+							if (DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
+								dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8);
+							}
+							return;
+						}
+					}
 				}
 			}
 		}
-
-		Random rand = new Random(getSeed(world, (chunkX << 4) + 8, (chunkZ << 4) + 8));
-		if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
-			return;
-		}
-
-		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForPos(world, new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8));
-		DungeonBase dungeon = possibleDungeons.next(rand);
-		if (dungeon != null && DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
-			dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8, rand, DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
-		}
 	}
 
-	// This is needed to calculate the seed, cause we need a new seed for every generation OR we'll have the same dungeon generating every time
+	// This is needed to calculate the seed, cause we need a new seed for every generation OR we'll have the same dungeon generating everytime
 	public static long getSeed(World world, int chunkX, int chunkZ) {
 		long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1094792450L;
 		long result = xorShift64(mix);
