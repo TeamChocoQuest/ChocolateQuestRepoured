@@ -3,13 +3,13 @@ This translation was made possible by Atum262, Luker, Guilherme and sallomma
 
 
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocos
-itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Itens
+itemGroup.ChocolateQuestRepouredBlocksTab=CQR Blocos
+itemGroup.ChocolateQuestRepouredItemsTab=CQR Itens
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Geradores de Masmorra
-itemGroup.ChocolateQuestRepouredBannerTab=Estandartes
-itemGroup.ChocolateQuestRepouredExporterChests=Baús Exportadores
+itemGroup.ChocolateQuestRepouredBannerTab=CQR Estandartes
+itemGroup.ChocolateQuestRepouredExporterChests=CQR Baús Exportadores
 
-#Banners
+#Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-marcador de estandarte
 item.banner.cqrepoured_cq_blank.orange=CQR-marcador de estandarte
 item.banner.cqrepoured_cq_blank.magenta=CQR-marcador de estandarte
@@ -164,7 +164,6 @@ item.banner.cqrepoured_walker_inner_border.green=Tecido esfarrapado verde
 item.banner.cqrepoured_walker_inner_border.red=Tecido esfarrapado vermelho
 item.banner.cqrepoured_walker_inner_border.black=Tecido esfarrapado preto
 
-
 item.banner.cqrepoured_walker_skull.white=Face de andarilho branca
 item.banner.cqrepoured_walker_skull.orange=Face de andarilho laranja
 item.banner.cqrepoured_walker_skull.magenta=Face de andarilho magenta
@@ -182,6 +181,17 @@ item.banner.cqrepoured_walker_skull.green=Face de andarilho verde
 item.banner.cqrepoured_walker_skull.red=Face de andarilho vermelha
 item.banner.cqrepoured_walker_skull.black=Face de andarilho preta
 
+#Banners
+item.banner.pirate_banner.name=Estandarte dos Piratas
+item.banner.walker_banner.name=Estandarte dos Andarilhos
+item.banner.pigman_banner.name=Estandarte dos Homens-porco Zumbi
+item.banner.enderman_banner.name=Estandarte dos Endermans
+item.banner.enderman_banner2.name=Estandarte dos Endermans 2
+item.banner.npc_banner.name=Estandarte dos NPCs
+item.banner.skeleton_banner.name=Estandarte dos Esqueletos
+item.banner.illager_banner.name=Estandarte dos Illagers
+item.banner.walker_ordo.name=Estandarte dos Andarilhos 2
+item.banner.gremlin_banner.name=Estandarte dos Gremlins
 
 #Gui
 gui.repu.name=Reputação
@@ -213,6 +223,9 @@ item.path_tool.name=Ferramenta de Caminho
 item.cursed_bone.name=Osso Amaldiçoado
 item.dummy_shield.name=Escudo do Manequim
 
+#Axes
+item.battle_axe_bull.name=Machado de Batalha de Touro
+
 #Dragon Items
 item.helmet_dragon.name=Elmo de Dragão
 
@@ -225,20 +238,19 @@ item.dagger_ninja.name=Adaga Ninja
 #Swords
 item.sword_turtle.name=Espada de Tartaruga
 item.sword_spider.name=Espada de Aranha
-item.battle_axe_bull.name=Machado de Batalha de Touro
 item.sword_moonlight.name=Luar
 item.sword_sunshine.name=Solar
 
 #Shields
-item.cqr_shield_r01.name=Escudo do Homem-porco Zumbi
+item.cqr_shield_r01.name=Escudo dos Homens-porco Zumbi
 item.cqr_shield_r02.name=Escudo dos Piratas
-item.cqr_shield_r03.name=Escudo do Espectro
+item.cqr_shield_r03.name=Escudo dos Espectros
 item.cqr_shield_r04.name=Escudo dos Goblins
-item.cqr_shield_r05.name=Escudo da Múmia
+item.cqr_shield_r05.name=Escudo das Múmias
 item.cqr_shield_r06.name=Escudo Arco-Íris
 item.cqr_shield_r07.name=Escudo Enferrujado
 item.cqr_shield_r08.name=Escudo de Tartaruga
-item.cqr_shield_r09.name=Escudo do Tritão
+item.cqr_shield_r09.name=Escudo dos Tritões
 
 #Walker set
 item.sword_walker.name=Espada do Andarilho
@@ -253,23 +265,23 @@ item.shield_goblin.name=Escudo dos Goblins
 item.shield_monking.name=Escudo de MacacoRei
 item.shield_moon.name=Escudo Luar
 item.shield_mummy.name=Escudo Enfaixado
-item.shield_pigman.name=Escudo do Homem-porco Zumbi
+item.shield_pigman.name=Escudo dos Homens-porco Zumbi
 item.shield_pirate.name=Escudo dos Piratas
 item.shield_pirate2.name=Escudo dos Piratas
 item.shield_rainbow.name=Escudo Arco-Íris
 item.shield_reflective.name=Escudo Espelhado
 item.shield_rusted.name=Escudo Enferrujado
-item.shield_skeleton_friends.name=Escudo do Esqueleto
-item.shield_specter.name=Escudo do Espectro
+item.shield_skeleton_friends.name=Escudo dos Esqueletos
+item.shield_specter.name=Escudo dos Espectros
 item.shield_spider.name=Escudo de Aranha
 item.shield_sun.name=Escudo Solar
 item.shield_tomb.name=Escudo da Tumba
-item.shield_triton.name=Escudo do Tritão
+item.shield_triton.name=Escudo dos Tritões
 item.shield_turtle.name=Escudo de Infantaria de Tartaruga
 item.shield_warped.name=Escudo Deforme
-item.shield_walker.name=Escudo do Andarilho
-item.shield_walker_normal.name=Escudo do Andarilho
-item.shield_zombie.name=Escudo do Zumbi
+item.shield_walker.name=Escudo dos Andarilhos
+item.shield_walker_normal.name=Escudo dos Andarilhos
+item.shield_zombie.name=Escudo dos Zumbis
 
 #Great Swords
 item.great_sword_monking.name=Grande espada de MacacoRei
@@ -280,6 +292,7 @@ item.great_sword_iron.name=Grande espada de Ferro
 #Spears
 item.spear_diamond.name=Lança de Diamante
 item.spear_iron.name=Lança de Ferro
+attribute.name.generic.attackRange=Raio de Ataque
 
 #Staves
 item.staff.name=Cajado
@@ -306,11 +319,12 @@ item.bullet_fire.name=Balas Ardentes
 item.cannon_ball.name=Bala de Canhão
 item.flamethrower.name=Lança-chamas
 item.bubble_pistol.name=Arma de Bolhas
-item.bubble_rifle.name=Arma de Bolhas Avançada
+item.bubble_rifle.name=Lançador de Bolhas
 
 #Hookshots
 item.hookshot.name=Lança-gancho
 item.longshot.name=Longo-gancho
+item.spiderhook.name=Lança-teia
 
 #Cloud Items
 item.boots_cloud.name=Botas da Nuvem
@@ -394,7 +408,7 @@ tile.table_jungle.name=Mesa de Árvore da Selva
 tile.table_acacia.name=Mesa de Acácia
 tile.table_dark.name=Mesa de Carvalho Escuro
 tile.boss_block.name=Bloco do Chefão
-tile.force_field_nexus.name=Nexo do Campo de Força (Ainda Não Implementado)
+tile.force_field_nexus.name=Nexo do Campo de Força
 
 #Andesite blocks
 tile.andesite_carved.name=Andesito Esculpido
@@ -466,13 +480,14 @@ tile.exporter_chest_valuable.name=Baú Exportador Tesouro
 tile.exporter_chest_food.name=Baú Exportador Comida
 tile.exporter_chest_equipment.name=Baú Exportador Equipamento
 tile.exporter_chest_utility.name=Baú Exportador Utilitário
+tile.exporter_chest_clutter.name=Baú Exportador Itens Aleatórios
 tile.exporter_chest_vanilla_blacksmith.name=Baú Exportador - Ferreiro da Vila
 tile.exporter_chest_vanilla_bonus.name=Baú Exportador - Baú Bônus
 tile.exporter_chest_vanilla_dungeon.name=Baú Exportador - Masmorra
 tile.exporter_chest_vanilla_end_city.name=Baú Exportador - Cidade do Fim
 tile.exporter_chest_vanilla_igloo.name=Baú Exportador - Iglu
 tile.exporter_chest_vanilla_jungle.name=Baú Exportador - Baú da Selva
-tile.exporter_chest_vanilla_jungle_dispenser.name=Baú Exportador - Ejetor de Selva
+tile.exporter_chest_vanilla_jungle_dispenser.name=Baú Exportador - Ejetor do Templo da Selva
 tile.exporter_chest_vanilla_mansion.name=Baú Exportador - Mansão da Floresta
 tile.exporter_chest_vanilla_mineshaft.name=Baú Exportador - Mina Abandonada
 tile.exporter_chest_vanilla_nether.name=Baú Exportador - Fortaleza do Nether
@@ -497,21 +512,22 @@ tile.exporter_chest_custom_14.name=Baú Exportador - Personalizado 14
 
 #technical
 tile.phylactery.name=Talismã do Lich
+tile.temporary_web.name=Teia Temporária
 
 #Descriptions
 description.spider_armor.name=Vista a aranha para se tornar a aranha. A armadura completa permite subir paredes e pular muito mais alto.
-description.spider_sword.name=Fluindo das presas que fizeram desta simples espada a lâmina de um herói, o veneno de Shelob não pode ser retirado uma vez que seu inimgo for apunhalado com esta lâmina.
-description.bull_armor.name=Vista o touro para se tornar o touro. A armadura completa permite que você avance em alta velocidade, e destrua qualquer coisa em seu caminho.
+description.spider_sword.name=Fluindo das presas que fizeram desta simples espada uma lâmina tóxica, o veneno de Shelob não pode ser retirado uma vez que seu inimgo for apunhalado por esta lâmina.
+description.bull_armor.name=Vista o touro para se tornar o touro. A armadura completa permite que você avance em alta velocidade, destruindo tudo em seu caminho.
 description.great_sword.name=Segure o botão direito para dar dano em área.
 description.turtle_armor.name=O poder da tartaruga, se você vestir a armadura completa de seu casco, permitirá recuperar a vida muito mais rápido. O casco protege de danos traseiros também.
 description.slime_armor.name=Com a armadura completa de slime regenerador tocando sua pele, você pode sentir sua vida máxima transbordando, e quando sofrer dano, um pequeno slime pode aparecer o qual irá restaurar sua vida, se você alcançá-lo.
-description.cloud_boots.name=Aqueles que seguem a canção dos anjos os profetas dizem que não podem fazer nada de errado. Um simples salto se torna um voo, uma caminhada rápida quebra a velocidade do som, nenhuma queda pode parar os poucos escolhidos, e com essas botas, isso inclui você.
+description.cloud_boots.name=Aqueles que seguem a canção dos anjos os profetas dizem que não podem fazer nada de errado. Um simples salto se torna um voo, uma caminhada rápida quebra a velocidade do som, nenhuma queda pode parar os poucos escolhidos, e com essas botas, isso se extende a você!
 #description.dragon_helmet.name=Você pode sentir o poder do dragão correndo em suas veias. Ataques que antes eram uma ameaça para você parecem insignificantes agora, mas seus ataques são duas vezes mais fortes!
 description.dagger.name=Clique com o botão direito enquanto anda para saltar para frente
 description.ninja_dagger.name=Clique com o botão direito enquanto anda para saltar para frente. Dizem que o portador desta adaga pode, quando desejar, sumir sem deixar rastros. Você pode imitar este comportamento com um clique direito enquanto se agacha, mas quando você sumir de vista, não irá longe.
 description.bull_battle_axe.name=Grux clique direito no chão. Faz terremoto. Viaja para frente. Esmaga inimigos legal. Grux gosta.
-description.walker_set.name=Reza a lenda que aquele que atirar uma flecha no andarilho rei encontrará uma espada em suas costas e o rei atrás dele. Talvez coletando sua espada e seu escudo permitirá que você tenha a mesma habilidade?
-description.gun.name=Clique com o botão direito para atirar, requer balas.
+description.walker_set.name=Reza a lenda que aquele que atirar uma flecha no Andarilho Rei encontrará uma lâmina em suas costas e o Rei atrás dela. Talvez coletando sua espada e seu escudo permitirá que você utilize de uma habilidade semelhante?
+description.gun.name=Clique com o botão direito para atirar.
 description.bullet_damage.name=Dano da Bala
 description.bullet_fire.name=Incendeia ao atingir
 description.fire_rate.name=Cadência
@@ -525,13 +541,13 @@ description.teleport_stone.name=Um objeto místico criado por uma raça anciã. 
 description.teleport_stone_position.name=Posição Atual:
 description.staff_fire.name=As chamas consomem aqueles que cruzam seu caminho, um simples clique com o botão direito e eles sentirão sua ira. Também acende tochas.
 description.staff_spider.name=Clique com o botão direito para atirar sua gosma, meu chapa.
-description.staff_gun.name=É uma arma no bastão. Cara, esses anões são geniais.
-description.staff_healing.name=Um clique com o botão esquerdo restaura a saúde que você precisa, eu não me lembro realmente o que isso faz, mas tive que fazer descrições para tudo isso por ganância.
+description.staff_gun.name=É uma arma. Num bastão. Cara, esses anões são geniais.
+description.staff_healing.name=Um implemento mágico usado para aplicar efeitos de poção tocando sua ponta em um alvo. Embora historicamente geralmente seja usado para efeitos de cura, alguns generais fizeram grande uso de outras poções também. Como o efeito da poção do cajado é alterado é um segredo bem guardado.
 description.contains.name=Contém:
 description.empty.name=Vazio
-description.soul_bottle.name= Clique com o botão esquerdo em uma criatura para armazená-la, clique com o botão direito para invocar essa criatura. Pode ser transformado em um gerador para essa criatura também.
+description.soul_bottle.name= Clique com o botão esquerdo em uma criatura para armazená-la, clique com o botão direito para invocar essa criatura. Agache e clique com o botão direito para invocar a criatura e esvaziar a garrafa. Coloque um ovo invocador de criatura para definir a criatura que o gerador irá invocar.
 description.flamethrower.name=Protótipo Rústico Fyrebird mk7 22mm com unidade de explosão bocal. Pressionar o botão direito deverá expelir fogo diretamente para frente. Cartuchos Internos de Gel devem ser capaz de extrair slime de qualquer lugar do inventário. O modelo atual requer um recarregamento padrão, como nenhuma fonte regeneradora de slime foi descoberta.
-description.badge.name=Item somente criativo. Clique direito com ele para abrir o GUI(menu), itens colocados nesse menu podem ser acessados posteriormente clicando com o botão esquerdo em qualquer criatura com essa medalha novamente, e será dropada quando a criatura associada for morta.
+description.badge.name=Item somente criativo. Clique direito com ele para abrir a GUI(menu). Clique com o botão esquerdo em uma criatura para associar a ela. Os itens colocados dentro serão dropados quando a criatura associada morrer.
 description.backpack.name=Clique direito para abrir.
 description.alchemy_bag.name=Clique direito para abrir. Apenas armazena poções.
 #description.woodshot.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco de madeira, você será puxado para ele.
@@ -544,39 +560,56 @@ description.moonlight.name=A inscrição na lâmina diz "Meu poder só pode ser 
 description.sunshine.name=A inscrição na lâmina diz "Meu poder só pode ser despertado à luz do sol"
 description.attack_damage_at_night.name=Dano de Ataque durante a Noite
 description.attack_damage_at_day.name=Dano de Ataque durante o Dia
-description.staff_vampiric.name=Este bastão irradia energia negra, enquanto você o segura em sua mão. Se você o aproximar do ouvido, ouvirá sua demanda. Seu chamado é simples: "Clique com o botão direito comigo" e quando você o fizer você verá, o projétil que ele emite. Embora o dano seja leve, se você mirou direito, ele irá te curar quando acertar.
-description.staff_wind.name=O que quer que isto deva fazer, ainda não funciona. #TODO
-description.staff_poison.name=O que quer que isto deva fazer, ainda não funciona. #TODO
+description.staff_vampiric.name=Este bastão irradia energia negra enquanto você o segura em sua mão. Se você o aproximar do ouvido ouvirá sua demanda. Seu chamado é simples: "Clique com o botão direito comigo" e quando você o fizer você verá, o projétil que ele emite. Embora o dano seja leve, se você mirou direito, ele irá te curar quando acertar.
+description.staff_wind.name=Qualquer que seja o incrível poder mágico que isto uma vez teve, está por enquanto completamente adormecido. (O que quer que isto deva fazer, ainda não funciona. #TODO)
+description.staff_poison.name=O veneno borbulha em sua ponta, cuidado para não pingar, ele consome a pele, carne e osso, é melhor tomar cuidado não é seu. Atire por sua própria conta e risco, e cuidado pois nem todos chamariam de uma morte justa...
 description.staff.name=Faltando #TODO
-description.staff_thunder.name=Faltando #TODO
-description.spear_diamond.name=Uma arma bem feita com alcance maior que espadas. Clique com o botão direito para carregar um impulso estendido.
+description.staff_thunder.name=A joia no topo desse cajado estala e faisca com carga elétrica. Com um clique direito, para acertar sua marca, um pode simplesmente redirecionar seu circuito.
+description.spiked_glove.name=Com as garras de um urso, e a força de seus braços, essas luvas o levarão para longe do perigo. Enquanto empunha dois, aprecie a vista, pois paredes já não mais o impedem.
+description.spear_diamond.name=Uma arma bem feita com alcance maior que uma espada. Clique com o botão direito para carregar um impulso estendido.
 description.cursed_bone.name=Criatura a ser invocada:
 description.dummy_shield.name=Uma aproximação grosseira de como um escudo deve se parecer. Não irá te proteger de ataques. Um manequim exportado que estiver segurando isso estará na verdade segurando o escudo comum para seu tipo de criatura quando uma masmorra for gerada.
 
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=Quando marcado, a entrada não precisa ser semelhante em termos de metadados. Por exemplo, se você definir uma espada de diamante como entrada, também aceitará espadas de diamante danificadas.
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=Quando marcado, a entrada não precisa ser semelhante em termos de dados nbt. Por exemplo, se você definir uma espada de diamante como entrada, também aceitará espadas de diamante encantadas.
+description.gui_merchant_edit_trade.reputation_button.name=Reputação com a facção de comerciantes necessária para realizar esta compra. Defina como "NENHUM" para não exigir nenhuma reputação.
+description.gui_merchant_edit_trade.advancement_text_field.name=Progressos necessários para realizar esta compra. Especifique uma localização de recurso do progresso (por exemplo "minecraft:story/mine_stone") ou deixe em branco para não exigir nenhum progresso.
+description.gui_merchant_edit_trade.stock_check_box.name=Marque esta opção para definir se esta compra tem uma contagem de estoque. Isso significa que esta transação tem um uso limitado.
+description.gui_merchant_edit_trade.restock_text_field.name=Quantidade de usos, aumentará quando for reestocado. Toda vez que você compra algo, outro produto será reestocado.
+description.gui_merchant_edit_trade.in_stock_text_field.name=Quantidade atual de usos que a transação possui.
+description.gui_merchant_edit_trade.max_stock_text_field.name=Maior quantidade de usos que a transação pode ter.
+description.gui_button_trade.locked.name=Essa compra ainda não foi desbloqueada!
+description.gui_button_trade.out_of_stock.name=Fora de estoque! Se possível compre outra coisa, então talvez esse produto estará em estoque novamente.
+
 #Enchantments
 enchantment.lightning_protection=Proteção Contra Raios
+enchantment.spectral=Bálsamo Espectral
 
 #Mobs
-entity.cqr_boarman.name=Javalomem
 entity.cqr_dummy.name=Manequim
-entity.cqr_dwarf.name=Anão
+entity.cqr_boarman.name=Javalomem
 entity.cqr_enderman.name=Enderman
-entity.cqr_goblin.name=Goblin
-entity.cqr_golem.name=Golem
 entity.cqr_gremlin.name=Gremlin
+entity.cqr_human.name=Humano
 entity.cqr_illager.name=Illager
-entity.cqr_npc.name=NPC
 entity.cqr_mandril.name=Mandril
 entity.cqr_minotaur.name=Minotauro
 entity.cqr_mummy.name=Múmia
 entity.cqr_ogre.name=Ogro
-entity.cqr_orc.name=Orc
 entity.cqr_pirate.name=Pirata
 entity.cqr_skeleton.name=Esqueleto
 entity.cqr_spectre.name=Espectro
-entity.cqr_triton.name=Tritão
 entity.cqr_walker.name=Andarilho do Abismo
 entity.cqr_zombie.name=Zumbi
+
+#Friendly Races
+entity.cqr_npc.name=NPC
+entity.cqr_dwarf.name=Anão
+entity.cqr_golem.name=Golem
+entity.cqr_orc.name=Orc
+entity.cqr_goblin.name=Goblin
+entity.cqr_triton.name=Tritão
 
 #Mounts
 entity.cqr_giant_endermite.name=Endermite Gigante
@@ -590,21 +623,27 @@ entity.cqr_giant_tortoise.name=Tartaruga Gigante
 entity.cqr_lich.name=Lich
 entity.cqr_necromancer.name=Necromante
 entity.cqr_boar_mage.name=Javamago
-entity.cqr_walker_king.name=Andarilho Rei
+entity.cqr_walker_king.name=Andarilho do Abismo Rei
 entity.cqr_pirate_captain.name=Capitão Pirata
+entity.cqr_giant_spider.name=Shelob
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>invocando pentagrama
-entity.cqr_illusion_walker_king.name=Andarilho Rei
+#This name should be the same as the walker king name
+entity.cqr_illusion_walker_king.name=Andarilho do Abismo Rei
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Andarilho Tornado
 entity.cqr_pirate_parrot.name=Papagaio Traidor
+entity.cqr_flying_skull.name=Caveira Voadora
+entity.cqr_ice_spike.name=Espinho da Morte
+entity.cqr_wasp.name=Vespa (WIP)
+entity.cqr_pollo.name=Abominação (WIP)
 
 #Advancements
 advancements.cqrepoured.root.title=Chocolate Quest Repoured
 advancements.cqrepoured.root.description=Bem-vindo ao Chocolate Quest Repoured!
 advancements.cqrepoured.ha_got_you.title=Ha! Peguei Você!
 advancements.cqrepoured.ha_got_you.description=Foi morto por uma criatura do CQR
-advancements.cqrepoured.not_so_strong.title=Oponente Indigno
+advancements.cqrepoured.not_so_strong.title=Indigno
 advancements.cqrepoured.not_so_strong.description=Perdeu para um chefão do CQR
 advancements.cqrepoured.not_so_friendly.title=Não tão amigável...
 advancements.cqrepoured.not_so_friendly.description=Encontre os andarilhos
@@ -616,7 +655,7 @@ advancements.cqrepoured.wear_the_turtle.title=Vista a tartaruga!
 advancements.cqrepoured.wear_the_turtle.description=Agora eu sou um tanque! Obtenha um conjunto completo da armadura de tartaruga
 advancements.cqrepoured.kill_boar_mage.title=Esta garota está em chamas
 advancements.cqrepoured.kill_boar_mage.description=Derrote um javamago
-advancements.cqrepoured.kill_lich.title=Já chega dessa magia!
+advancements.cqrepoured.kill_lich.title=O que está morto pode morrer de novo!
 advancements.cqrepoured.kill_lich.description=Derrote um lich
 advancements.cqrepoured.kill_walker_king.title=Um oponente digno
 advancements.cqrepoured.kill_walker_king.description=Derrote um andarilho rei
@@ -624,9 +663,11 @@ advancements.cqrepoured.kill_necromancer.title=Ressuscite e morra
 advancements.cqrepoured.kill_necromancer.description=Derrote um necromante
 advancements.cqrepoured.kill_nether_dragon.title=Não era um godzilla
 advancements.cqrepoured.kill_nether_dragon.description=Derrote um dragão do nether
-advancements.cqrepoured.kill_giant_tortoise.title=Você me faz girar...
+advancements.cqrepoured.kill_giant_tortoise.title=Roda, roda e vira, solta a roda e vem...
 advancements.cqrepoured.kill_giant_tortoise.description=Derrote uma tartaruga gigante
-advancements.cqrepoured.kill_pirate_captain.title=Arrr!
-advancements.cqrepoured.kill_pirate_captain.description=Derrote o capitão pirata
-advancements.cqrepoured.new_captain.title=Quem é o capitão agora?
-advancements.cqrepoured.new_captain.description=Adquira as armas do capitão pirata
+advancements.cqrepoured.kill_pirate_captain.title=Eu sou o capitão agora
+advancements.cqrepoured.kill_pirate_captain.description=Derrote o Capitão Pirata
+advancements.cqrepoured.new_captain.title=Pirataria Reversa
+advancements.cqrepoured.new_captain.description=Adquira as armas do Capitão Pirata
+advancements.cqrepoured.kill_giant_spider.title=Aranha boa...
+advancements.cqrepoured.kill_giant_spider.description=...é aranha morta! Derrote uma aranha gigante

@@ -2,15 +2,14 @@ Ficheiro de linguagem português de Portugal para o mod Chocolate Quest Repoured
 Esta tradução foi criada por todos os desenvolvedores e foi polida por ArloTheEpic
 
 
-
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocks
-itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Placers
-itemGroup.ChocolateQuestRepouredBannerTab=Bandeiras
-itemGroup.ChocolateQuestRepouredExporterChests=Baús para Exportar
+itemGroup.ChocolateQuestRepouredBlocksTab=Blocos do CQR
+itemGroup.ChocolateQuestRepouredItemsTab=Items do CQR
+itemGroup.ChocolateQuestRepouredDungeonPlacers=Geradores de Dungeons do CQR
+itemGroup.ChocolateQuestRepouredBannerTab=Banners di CQR
+itemGroup.ChocolateQuestRepouredExporterChests=CQR Exporter Chests
 
-#Banners
+#Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-Marcador da bandeira
 item.banner.cqrepoured_cq_blank.orange=CQR-Marcador da bandeira
 item.banner.cqrepoured_cq_blank.magenta=CQR-Marcador da bandeira
@@ -45,6 +44,7 @@ item.banner.cqrepoured_cq_wither_eyes.green=Olhos verdes do esqueleto wither
 item.banner.cqrepoured_cq_wither_eyes.red=Olhos vermelhos do esqueleto wither
 item.banner.cqrepoured_cq_wither_eyes.black=Olhos pretos do esqueleto wither
 
+
 item.banner.cqrepoured_cq_wither_skull.white=Caveira do wither branca
 item.banner.cqrepoured_cq_wither_skull.orange=Caveira do wither cor-de-laranja
 item.banner.cqrepoured_cq_wither_skull.magenta=Caveira do wither magenta
@@ -61,6 +61,7 @@ item.banner.cqrepoured_cq_wither_skull.brown=Caveira do wither castanha
 item.banner.cqrepoured_cq_wither_skull.green=Caveira do wither verde
 item.banner.cqrepoured_cq_wither_skull.red=Caveira do wither vermelha
 item.banner.cqrepoured_cq_wither_skull.black=Caveira do wither preta
+
 
 item.banner.cqrepoured_cq_fire.white=Chamas brancas
 item.banner.cqrepoured_cq_fire.orange=Chamas cor-de-laranja
@@ -79,6 +80,7 @@ item.banner.cqrepoured_cq_fire.green=Chamas verdes
 item.banner.cqrepoured_cq_fire.red=Chamas vermelhas
 item.banner.cqrepoured_cq_fire.black=Chamas pretas
 
+
 item.banner.cqrepoured_cq_emerald.white=Esmeralda branca
 item.banner.cqrepoured_cq_emerald.orange=Esmeralda cor-de-laranja
 item.banner.cqrepoured_cq_emerald.magenta=Esmeralda magenta
@@ -96,6 +98,7 @@ item.banner.cqrepoured_cq_emerald.green=Esmeralda verde
 item.banner.cqrepoured_cq_emerald.red=Esmeralda vermelha
 item.banner.cqrepoured_cq_emerald.black=Esmeralda preta
 
+
 item.banner.cqrepoured_cq_bones.white=Ossos dos mortos brancos
 item.banner.cqrepoured_cq_bones.orange=Ossos dos mortos cor-de-laranja
 item.banner.cqrepoured_cq_bones.magenta=Ossos dos mortos magenta
@@ -112,7 +115,6 @@ item.banner.cqrepoured_cq_bones.brown=Ossos dos mortos castanhos
 item.banner.cqrepoured_cq_bones.green=Ossos dos mortos verdes
 item.banner.cqrepoured_cq_bones.red=Ossos dos mortos vermelhos
 item.banner.cqrepoured_cq_bones.black=Ossos dos mortos pretos
-
 
 item.banner.cqrepoured_walker_black_bg.white=Tecido de Bandeira Branco
 item.banner.cqrepoured_walker_black_bg.orange=Tecido de Bandeira cor-de-laranja
@@ -165,8 +167,6 @@ item.banner.cqrepoured_walker_inner_border.brown=Tecido áspero castanho
 item.banner.cqrepoured_walker_inner_border.green=Tecido áspero verde
 item.banner.cqrepoured_walker_inner_border.red=Tecido áspero vermelho
 item.banner.cqrepoured_walker_inner_border.black=Tecido áspero preto
-
-
 item.banner.cqrepoured_walker_skull.white=Cara do walker branca
 item.banner.cqrepoured_walker_skull.orange=Cara do walker cor-de-laranja
 item.banner.cqrepoured_walker_skull.magenta=Cara do walker magenta
@@ -184,7 +184,17 @@ item.banner.cqrepoured_walker_skull.green=Cara do walker verde
 item.banner.cqrepoured_walker_skull.red=Cara do walker vermelha
 item.banner.cqrepoured_walker_skull.black=Cara do walker preta
 
-
+#Banners
+item.banner.pirate_banner.name=Bandeira Pirata
+item.banner.walker_banner.name=Bandeira Walker
+item.banner.pigman_banner.name=Bandeira Pigman
+item.banner.enderman_banner.name=Bandeira Enderman
+item.banner.enderman_banner2.name=Bandeira Enderman 2
+item.banner.npc_banner.name=Bandeira NPC
+item.banner.skeleton_banner.name=Bandeira dos Esqueletos
+item.banner.illager_banner.name=Bandeira dos Illagers
+item.banner.walker_ordo.name=Bandeira Walker 2
+item.banner.gremlin_banner.name=Bandeira Gremlin
 
 #Gui
 gui.repu.name=Reputação
@@ -199,6 +209,8 @@ description.gui_exporter.name=Bloco exclusivo do modo creativo para exportação
 description.gui_exporter_part_mode.name=Divide a estrutura em cubos com 16x16x16 para exportação e geração mais rápida. 
 description.gui_exporter_relative_mode.name=Usa as coordenadas relativas ao bloco de exportação. 
 description.gui_exporter_ignore_entities.name=Ignora todas as entidades não listadas em cqrepoured.cfg -> advanced -> specialEntities. 
+Recomenda-se que se confirme de vez em quando.
+
 
 #Other
 item.super_tool.name=Super Ferramenta (apenas para o creativo)
@@ -215,6 +227,9 @@ item.path_tool.name=Path Tool
 item.cursed_bone.name=Osso Amaldiçoado
 item.dummy_shield.name=Escudo Manequim
 
+#Axes
+item.battle_axe_bull.name=Machado de Batalha do Touro
+
 #Dragon Items
 item.helmet_dragon.name=Cabeça de Dragão
 
@@ -227,9 +242,9 @@ item.dagger_ninja.name=Adaga do Ninja
 #Swords
 item.sword_turtle.name=Espada da Tartaruga
 item.sword_spider.name=Espada da Aranha
-item.battle_axe_bull.name=Machado de batalha do Touro
 item.sword_moonlight.name=Lâmina Luar
 item.sword_sunshine.name=Lâmina Solar
+
 
 #Shields
 item.cqr_shield_r01.name=Escudo do Pigman
@@ -283,38 +298,39 @@ item.great_sword_iron.name=Grande espada de ferro
 #Spears
 item.spear_diamond.name=Lança de Diamante
 item.spear_iron.name=Lança de Ferro
+attribute.name.generic.attackRange=Alcançe
 
 #Staves
-item.staff.name=Varinha
-item.staff_fire.name=Varinha de Fogo
-item.staff_vampiric.name=Varinha Vampírica
-item.staff_wind.name=Varinha do Vento
-item.staff_poison.name=Varinha Venenosa
-item.staff_spider.name=Varinha da Aranha
-item.staff_gun.name=Varinha-Arma
-item.staff_healing.name=Varinha da Cura
-item.staff_thunder.name=Varinha do Trovão
-
+item.staff.name=Staff
+item.staff_fire.name=Fire Staff
+item.staff_vampiric.name=Vampiric Staff
+item.staff_wind.name=Wind Staff
+item.staff_poison.name=Poison Staff
+item.staff_spider.name=Spider Staff
+item.staff_gun.name=Gun Staff
+item.staff_healing.name=Healing Staff
+item.staff_thunder.name=Thunder Staff
 
 #Guns
-item.revolver.name=Revolver
-item.captain_revolver.name=Captain Revolver
-item.musket.name=Musket
-item.musket_dagger_iron.name=Musket with Iron Dagger
-item.musket_dagger_diamond.name=Musket with Diamond Dagger
-item.musket_dagger_monking.name=Musket with Monking Dagger
-item.bullet_iron.name=Iron Bullets
-item.bullet_gold.name=Gold Bullets
-item.bullet_diamond.name=Diamond Bullets
-item.bullet_fire.name=Fiery Bullets
-item.cannon_ball.name=Cannon Ball
-item.flamethrower.name=Flamethrower
-item.bubble_pistol.name=Lança-bolhas
-item.bubble_rifle.name=Lança-bolhas Avançado
+item.revolver.name=Revólver
+item.captain_revolver.name=Revólver do Capitão
+item.musket.name=Mosquete
+item.musket_dagger_iron.name=Mosquete com Baioneta
+item.musket_dagger_diamond.name=Mosquete com Baioneta de Diamante
+item.musket_dagger_monking.name=Mosquete com Baioneta do Macaco
+item.bullet_iron.name=Balas de Ferro
+item.bullet_gold.name=Balas de Ouro
+item.bullet_diamond.name=Balas de Diamante
+item.bullet_fire.name=Balas Ardentes
+item.cannon_ball.name=Bala de Canhão
+item.flamethrower.name=Lança-Chamas
+item.bubble_pistol.name=Pistola de Bolhas
+item.bubble_rifle.name=Lança-Bolhas
 
 #Hookshots
 item.hookshot.name=Gancho
 item.longshot.name=Gancho Longo
+item.spiderhook.name=Ganho Aracnídeo
 
 #Cloud Items
 item.boots_cloud.name=Botas de Nuvem
@@ -364,7 +380,6 @@ item.boots_spider.name=Botas de Aranha
 item.leather_spider.name=Couro de Aranha
 item.giant_spider_poison.name=Veneno de Aranha Gigante
 
-
 #Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Capacete de Diamante Pesado
 item.chestplate_heavy_diamond.name=Peitoral de Diamante Pesado
@@ -384,9 +399,9 @@ item.leggings_iron_dyable.name=Calças de Ferro Coloríveis
 item.boots_iron_dyable.name=Botas de Ferro Coloríveis
 
 #Dyable Diamond Armor
-item.helmet_diamond_dyable.name==Capacete de Diamante Colorível
+item.helmet_diamond_dyable.name=Capacete de Diamante Colorível
 item.chestplate_diamond_dyable.name=Peitoral de Diamante Colorível
-item.leggings_diamond_dyable.name==Calças de Diamante Coloríveis
+item.leggings_diamond_dyable.name=Calças de Diamante Coloríveis
 item.boots_diamond_dyable.name=Botas de Diamante Coloríveis
 
 
@@ -402,7 +417,7 @@ tile.table_jungle.name=Mesa da Selva
 tile.table_acacia.name=Mesa de Acácia
 tile.table_dark.name=Mesa de Carvalho Negro
 tile.boss_block.name=Bloco do Chefe
-tile.force_field_nexus.name=Centro de Campo de Força (NYI)
+tile.force_field_nexus.name=Centro de Campo de Força
 
 //Andesite blocks
 tile.andesite_carved.name=Andesito Esculpido
@@ -505,92 +520,109 @@ tile.exporter_chest_custom_14.name=Exporter Chest - Custom 14
 
 #technical
 tile.phylactery.name=Filatelia da Bruxa
+tile.temporary_web.name=Rede Temporária
 
 #Descriptions
-description.spider_armor.name=Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.
-description.spider_sword.name=Flowing forth from the fangs that made this simple sword a hero's blade, Shelob's poison can't be stayed once your foe is stuck with this blade.
-description.bull_armor.name=Wear the bull to become the bull. A full set allows you to charge forward at great speed, and destroy anything in your path.
-description.great_sword.name=Hold right click to strike a large area.
-description.turtle_armor.name=The turtle's power, should you fashion a full set from its shell, will allow you to regain health much faster. The shell prevents most damage from the rear, as well.
-description.slime_armor.name=With a full set of the regenerating goo touching your skin, you can feel your maximum health overflowing, and whenever you are damaged, a small slime may appear which can restore your health, if you can reach it.
-description.cloud_boots.name=Those who tread to the angels song the prophets say can do no wrong. A single leap becomes a bound, a brisk walk breaks the speed of sound, no fall can stop the chosen few, and with these boots, that includes you. 
-#description.dragon_helmet.name=You can feel the power of the dragon coursing through your veins. Attacks that once were a threat to you seem meaningless now, yet your own strikes are twice as strong!
-description.dagger.name=Right click while moving to leap forward
-description.ninja_dagger.name=Right click while moving to leap forward. They say the wielder of this dagger could, at will, vanish without a trace. You can probably mimic this behavior with a sneaking right-click, but while you'll vanish from sight, you won't go far. 
-description.bull_battle_axe.name=Grux right-click ground. Make earthquake. Travel forward. Smash enemies real good. Grux like.
-description.walker_set.name=Legend has it that any who fired an arrow upon the walker king would find a sword in their back and the king behind them. Perhaps collecting both his sword and his shield would allow you the same ability?
-description.gun.name=Click right click to fire, requires bullets.
-description.bullet_damage.name=Bullet Damage
-description.bullet_fire.name=Ignite on hit
-description.fire_rate.name=Fire Rate
-description.accuracy.name=Accuracy
-description.click_shift.name=Hold shift to view description
-description.rear_damage.name=Rear Damage
-description.charging.name=Charging...
-description.turtle_armor_charging.name=Ability on cooldown, Remaining time: 
-description.healing_potion.name=Drink to restore 2 hearts.
-description.teleport_stone.name=A mystical object created by an ancient race. Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right-click to remove the saved location.
-description.teleport_stone_position.name=Current Position:
-description.staff_fire.name=The flames consume those who cross your path, a simple right-click and they'll feel your wrath. Also lights torches.
-description.staff_spider.name=Right-click to shoot your goo, my dude.
-description.staff_gun.name=It's a gun on a stick. Man, those dwarves are geniuses.
-description.staff_healing.name=A left-click restores the health that you need, I don't actually remember what this does, but I had to make descriptions for all of these out of greed.
-description.contains.name=Contains:
-description.empty.name=Empty
-description.soul_bottle.name=Left-click a mob to store it, right-click to summon that mob. Can be put in a single use spawner so that spawner spawns the stored mob.
-description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm nozzle flame expulsion unit. A right-mouse press should expel fire directly forwards. Internal Gel Cartridges should be able to extract slime from anywhere in the inventory. Current model requires regular reload, as no regenerating source of slime has been discovered. 
-description.badge.name=Creative only item. Right-click with it to open a GUI, items placed in this GUI can be accessed later by left-clicking any mob with this badge again, and will be dropped when the attached mob is killed.
-description.backpack.name=Right-click to open.
-description.alchemy_bag.name=Right-click to open. Only stores potions.
-#description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.
-description.hookshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
-description.longshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
-#description.manualhook.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
-#description.spidershot.name=Right-click to shoot web. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
-#description.hooksword.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
-description.moonlight.name=The inscription on the blade reads "My power can only be awakened in the light of the moon"
-description.sunshine.name=The inscription on the blade reads "My power can only be awakened in the light of the sun"
-description.attack_damage_at_night.name=Attack Damage during the Night
-description.attack_damage_at_day.name=Attack Damage during the Day
-description.staff_vampiric.name=This rod radiates dark energy, as you hold it in your hand. If you move it near your ear, you will hear its demand. Its call is simple: "Right-click with me" and when you do then you will see, a projectile it does emit. Though the damage is slight, if you land it just right, it will heal you when it does hit. 
+description.spider_armor.name=Veste a aranha para te transformares na aranha. O conjunto inteiro permite escalar paredes e saltar mais alto.
+description.spider_sword.name=Forjada com o veneno de Shelob, que não poderá ser removido pelo adversário.
+description.bull_armor.name=Veste o touro para te transformares no touro. O conjunto inteiro permite que faças uma placagem a grande velocidade, destruindo tudo no teu caminho.
+description.great_sword.name=Right-click para danificar uma grande área
+description.turtle_armor.name=O poder da tartaruga, apenas alcançável se vestires o conjunto inteiro vai regenerar-te a vida muito mais rápido, e a carapaça defende grande parte do dano infligido nas tuas costas.
+description.slime_armor.name=Com um conjunto inteiro de gosma regenerativa em cima de ti, ganhas mais vida máxima e quando sofres dano um pequeno slime pode aparecer, que vai regenerar-te vida, se o apanhares.
+description.cloud_boots.name=Um pequeno salto torna-se num voo, um simples passo quebra a velocidade do som, e nenhuma queda te pode magoar.
+#description.dragon_helmet.name=You can feel the dragon's power coursing through your veins. Attacks that once were a threat to you seem meaningless now, yet your own strikes are twice as strong!
+description.dagger.name=Right-click enquanto to moves para saltar para a frente
+description.ninja_dagger.name=Right-click enquanto to moves para saltar para a frente. Diz a lenda que o detentor desta adaga pode, à sua vontade, desaparecer sem rasto. Talvez consigas reviver a lenda ao fazer Shift+Right-Click, mas duvido que vás longe.
+description.bull_battle_axe.name=Right-click para fazer um terramoto. Esmaga os teus inimigos.
+description.walker_set.name=Diz a lenda que aquele que dispara uma flecha ao Rei dos Walkers deparar-se-ia com uma faca nas costas. Talvez se tiveres o escudo e a espada do Rei poderás fazer o mesmo?
+description.gun.name=Right-click para disparar
+description.bullet_damage.name=Dano de bala
+description.bullet_fire.name=Incendiar
+description.fire_rate.name=Rácio de munições
+description.accuracy.name=Precisão
+description.click_shift.name=Shift para ver a descrição
+description.rear_damage.name=Dano de trás
+description.charging.name=A carregar...
+description.turtle_armor_charging.name=Abilidade a recarregar: tempo restante: 
+description.healing_potion.name=Bebe para recuperar 2 corações-
+description.teleport_stone.name=Um objeto místico criado por uma civilização antiga. Pressiona Right-Click para marcar uma posição, depois faz o mesmo para voltar à localização gravada. Shift+Right-Click para remover a localização gravada. 
+description.teleport_stone_position.name=Posição Atual:
+description.staff_fire.name=As chamas consomem aqueles que se atrevem a cruzar o teu caminho, Right-Click e eles sentirão a tua raiva. Também acende tochas.
+description.staff_spider.name=Right-click para atirar as drenas, meu.
+description.staff_gun.name=É uma arma em cima de um pau. Literalmente é só isso.
+description.staff_healing.name=Mágicamente impingida com magias curativas.
+description.contains.name=Contém:
+description.empty.name=Vazio
+description.soul_bottle.name=Left-click num mob para armazená-lo, right-click para invocá-lo.  Shift+right-click para invocar o mob e esvaziar a garrafa.
+description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm nozzle flame , unidade de batalha. Right-click atira fogo. 
+description.badge.name=Apenas disponível no Creativo. Left-click num mob para abrir o inventário.
+description.backpack.name=Right-click para abrir
+description.alchemy_bag.name=Right-click para abrir. Apenas pode levar poções
+//description.woodshot.name=Right-click para atirar gancho. Se bater num bloco de madeira, vais ser puxado para ele
+//description.hookshot.name=Right-click para atirar gancho.Se bater num bloco, vais ser puxado para ele.
+//description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
+//description.manualhook.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+//description.spidershot.name=Right-click para atirar rede.Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+//description.hooksword.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+description.moonlight.name=A inscrição na lâmina diz :"O meu poder so pode ser acordado à luz da lua"
+description.sunshine.name=A inscrição na lâmina diz :"O meu poder so pode ser acordado à luz do Sol"
+description.attack_damage_at_night.name=Dano de ataque durante a noite
+description.attack_damage_at_day.name=Dano de ataque durante o dia
+description.staff_vampiric.name=Esta varinha emite magia negra.Right-click para enviar um projétil que rouba vida
 description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
-description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
-description.cursed_bone.name=Mob to be summoned:
+description.spear_diamond.name=Uma arma bem pensada para mais alcance do que as espadas. Botão direito para um ataque com mais alcance.
+description.cursed_bone.name=Mob a ser invocado.
 description.dummy_shield.name=Uma aproximação do que o escudo é suposto ser. Não protege de ataques. Um manequim exportado que segurar um destes escudos vai segurar o escudo normal do respetivo mob aquando da geração da sua dungeon. 
 
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=O item colocado não tem de ser uniforme em termos de meta dados. Por exemplo, se o item selecionado for uma espada de diamante, uma espada de diamante com pouca durabilidade também funciona. to be similar in terms of meta data. 
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=O item colocado não tem de ser uniforme em termos de dados nbt. Por exemplo, se o item selecionado for uma espada de diamante, uma espada de diamante encantada tambem funciona. 
+description.gui_merchant_edit_trade.reputation_button.name=Reputação com a facção dos traders necessária para fazer esta troca. Coloca "NONE" para não requerir reputação.
+description.gui_merchant_edit_trade.advancement_text_field.name=Conquista relacionada com esta troca. Especifica a resourcelocation (por exemplo,  "minecraft:story/mine_stone) ou deixa em branco para não requerir nenhuma conquista.
+description.gui_merchant_edit_trade.stock_check_box.name=Esta opção serve para decidir se a troca tem limite ou não. Isto significa que a troca é limitada.
+description.gui_merchant_edit_trade.restock_text_field.name=Quantidade de usos que vai aumentar quando a troca é restaurada. Sempre que compras algo, vai restaurar uma troca diferente que não esteja na capacidade máxima.
+description.gui_merchant_edit_trade.in_stock_text_field.name=Quantidade atual de usos que esta troca tem.
+description.gui_merchant_edit_trade.max_stock_text_field.name=Quantidade mais alta que esta troca pode ter.
+description.gui_button_trade.locked.name=Troca ainda não foi desbloqueada.
+description.gui_button_trade.out_of_stock.name=Já não há mais! Se possível compra outras coisas, talvez depois haja mais daquilo que queres.
+
 #Enchantments
-enchantment.lightning_protection=Proteção de Relâmpagos
+enchantment.lightning_protection=Proteção de Relâmpagos.
+enchantment.spectral=Bâlsamo dos espectros.
 
 #Mobs
-entity.boarman.name=Homem-Porco
-entity.dummy.name=Dummy
-entity.dwarf.name=Anão
-entity.enderman.name=Enderman
-entity.goblin.name=Goblin
-entity.golem.name=Golem
-entity.illager.name=Illager
-entity.npc.name=NPC
-entity.mandril.name=Macaco
-entity.minotaur.name=Minotauro
-entity.mummy.name=Múmia
-entity.ogre.name=Ogre
-entity.orc.name=Orc
-entity.pirate.name=Pirata
-entity.skeleton.name=Esqueleto
-entity.spectre.name=Espectro
-entity.triton.name=Tritão
-entity.walker.name=Walker do Abismo
-entity.zombie.name=Zombie
+entity.cqr_dummy.name=Manequim
+entity.cqr_boarman.name=Homem Porco
+entity.cqr_enderman.name=Enderman
+entity.cqr_gremlin.name=Gremlin
+entity.cqr_human.name=Humano
+entity.cqr_illager.name=Illager
+entity.cqr_mandril.name=Primata
+entity.cqr_minotaur.name=Minotauro
+entity.cqr_mummy.name=Múmia
+entity.cqr_ogre.name=Ogre
+entity.cqr_pirate.name=Pirata
+entity.cqr_skeleton.name=Esqueleto
+entity.cqr_spectre.name=Espectro
+entity.cqr_walker.name=Caminhante do Abismo
+entity.cqr_zombie.name=Zombie
+
+#Friendly Races
+entity.cqr_npc.name=NPC
+entity.cqr_dwarf.name=Anão
+entity.cqr_golem.name=Golem
+entity.cqr_orc.name=Orc
+entity.cqr_goblin.name=Goblin
+entity.cqr_triton.name=Tritão
 
 #Mounts
-entity.giant_endermite.name=Endermite Gigante
-entity.giant_silverfish.name=Silverfish Gigante
-entity.giant_silverfish1.name=Silverfish de Lava Gigante
-entity.giant_silverfish2.name=Silverfish do Pântano Gigante
-
+entity.cqr_giant_endermite.name=Giant Endermite
+entity.cqr_giant_silverfish.name=Giant Silverfish
+entity.cqr_giant_silverfish1.name=Giant Lava Silverfish
+entity.cqr_giant_silverfish2.name=Giant Swamp Silverfish
 
 #Bosses
 entity.nether_dragon.name=Dragão do Nether
@@ -600,12 +632,17 @@ entity.necromancer.name=Mago Negro
 entity.boarmage.name=Mago Javali
 entity.cqr_walker_king.name=Rei dos Walkers
 entity.cqr_pirate_captain.name=Capitão Pirata
+entity.cqr_giant_spider.name=Shelob
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
 entity.cqr_illusion_walker_king.name=Rei dos Walkers
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Tornado Walker
 entity.cqr_pirate_parrot.name=Papagaio Traidor
+entity.cqr_flying_skull.name=Caveira Voadora
+entity.cqr_ice_spike.name=Espinho de Gelo da Morte
+entity.cqr_wasp.name=Vespa (WIP)
+entity.cqr_pollo.name=Abominação (WIP)
 
 #Advancements
 advancements.cqrepoured.root.title=Chocolate Quest Repoured
@@ -638,3 +675,5 @@ advancements.cqrepoured.kill_pirate_captain.title=Arrr!
 advancements.cqrepoured.kill_pirate_captain.description=Derrotar o Capitão Pirata
 advancements.cqrepoured.new_captain.title=Quem é que é o capitão agora, hm?
 advancements.cqrepoured.new_captain.description=Obtém as armas do Capitão Pirata
+advancements.cqrepoured.kill_giant_spider.title= Aranha boa...
+advancements.cqrepoured.kill_giant_spider.description=...é aranha morta! Derrotar uma aranha gigante.
