@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.npc.trading.Trade;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -110,18 +111,24 @@ public class GuiButtonTrade extends GuiButton {
 			if (!isUnlocked) {
 				tooltip.add(I18n.format("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					tooltip.add("" + (CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED) + CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()).getDisplay().getTitle().getFormattedText());
+					TextFormatting formatting = CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
+					Advancement advancement = CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
+					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
+					tooltip.add(formatting + advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = FactionRegistry.instance().getExactReputationOf(parent.mc.player.getUniqueID(), this.trade.getHolder().getTraderFaction());
-					tooltip.add("" + (i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED) + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation());
+					TextFormatting formatting = i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED;
+					tooltip.add("" + formatting + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation());
 				}
 			} else if (!inStock) {
 				tooltip.add(I18n.format("description.gui_button_trade.out_of_stock.name"));
 			} else {
 				tooltip.add(I18n.format("description.gui_button_trade.unlocked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					tooltip.add("" + TextFormatting.GREEN + CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()).getDisplay().getTitle().getFormattedText());
+					Advancement advancement = CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
+					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
+					tooltip.add(TextFormatting.GREEN + advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = this.trade.getRequiredReputation();
