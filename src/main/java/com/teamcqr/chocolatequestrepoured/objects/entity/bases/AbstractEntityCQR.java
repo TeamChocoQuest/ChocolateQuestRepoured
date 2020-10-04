@@ -987,7 +987,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setFaction(String newFac) {
 		this.factionInstance = null;
 		this.factionName = newFac;
-		
+		//TODO: Update faction on client too!!
 		if(!world.isRemote) {
 			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
 			if(faction != null) {
