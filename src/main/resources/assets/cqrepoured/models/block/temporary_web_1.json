@@ -1,5 +1,5 @@
 {
-   "parent": "block/web",
+   "parent": "block/cross",
    "textures": {
        "all": "cqrepoured:blocks/temporary_web/web_poison_01"
    }
