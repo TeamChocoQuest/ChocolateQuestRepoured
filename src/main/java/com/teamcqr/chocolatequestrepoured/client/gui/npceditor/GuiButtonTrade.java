@@ -1,5 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
@@ -101,46 +104,31 @@ public class GuiButtonTrade extends GuiButton {
 		}
 		x = this.x + 78;
 		if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
+			List<String> tooltip = new ArrayList<>();
 			boolean isUnlocked = this.trade.isUnlockedFor(parent.mc.player);
 			boolean inStock = this.trade.isInStock();
 			if (!isUnlocked) {
-				StringBuilder sb = new StringBuilder(I18n.format("description.gui_button_trade.locked.name"));
+				tooltip.add(I18n.format("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					sb.append("\n");
-					sb.append(CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED);
-					sb.append(CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()).getDisplayText());
+					tooltip.add("" + (CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED) + CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()).getDisplay().getTitle().getFormattedText());
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = FactionRegistry.instance().getExactReputationOf(parent.mc.player.getUniqueID(), this.trade.getHolder().getTraderFaction());
-					sb.append("\n");
-					sb.append(i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED);
-					sb.append(this.trade.getHolder().getTraderFaction().getName());
-					sb.append(" ");
-					sb.append(i);
-					sb.append("/");
-					sb.append(this.trade.getRequiredReputation());
+					tooltip.add("" + (i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED) + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation());
 				}
-				parent.drawHoveringText(sb.toString(), mouseX, mouseY);
 			} else if (!inStock) {
-				parent.drawHoveringText(I18n.format("description.gui_button_trade.out_of_stock.name"), mouseX, mouseY);
+				tooltip.add(I18n.format("description.gui_button_trade.out_of_stock.name"));
 			} else {
-				StringBuilder sb = new StringBuilder(I18n.format("description.gui_button_trade.unlocked.name"));
+				tooltip.add(I18n.format("description.gui_button_trade.unlocked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					sb.append("\n");
-					sb.append(TextFormatting.GREEN);
-					sb.append(CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()).getDisplay().getTitle().getFormattedText());
+					tooltip.add("" + TextFormatting.GREEN + CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()).getDisplay().getTitle().getFormattedText());
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
-					sb.append("\n");
-					sb.append(TextFormatting.GREEN);
-					sb.append(this.trade.getHolder().getTraderFaction().getName());
-					sb.append(" ");
-					sb.append(this.trade.getRequiredReputation());
-					sb.append("/");
-					sb.append(this.trade.getRequiredReputation());
+					int i = this.trade.getRequiredReputation();
+					tooltip.add("" + TextFormatting.GREEN + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + i);
 				}
-				parent.drawHoveringText(sb.toString(), mouseX, mouseY);
 			}
+			parent.drawHoveringText(tooltip, mouseX, mouseY);
 		}
 	}
 
