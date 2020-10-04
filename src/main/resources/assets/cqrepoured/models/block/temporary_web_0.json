@@ -1,3 +1,6 @@
 {
-   "parent": "cqrepoured:blocks/temporary_web/web_poison_00"
+   "parent": "block/web",
+   "textures": {
+       "all": "cqrepoured:blocks/temporary_web/web_poison_00"
+   }
 }
