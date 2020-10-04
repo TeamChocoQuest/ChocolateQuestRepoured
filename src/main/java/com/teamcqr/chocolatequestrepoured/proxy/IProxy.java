@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -16,6 +17,11 @@ public interface IProxy {
 	EntityPlayer getPlayer(MessageContext ctx);
 
 	World getWorld(MessageContext ctx);
+
+	/**
+	 * Only works when called on server side or when the passed player is the user.
+	 */
+	Advancement getAdvancement(EntityPlayer player, ResourceLocation id);
 
 	/**
 	 * Only works when called on server side or when the passed player is the user.

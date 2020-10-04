@@ -19,6 +19,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Trade {
 
@@ -324,12 +326,22 @@ public class Trade {
 		return this.output.copy();
 	}
 
+	@SideOnly(Side.CLIENT)
+	public ItemStack getOutputClient() {
+		return this.output;
+	}
+
 	public NonNullList<TradeInput> getInputItems() {
 		NonNullList<TradeInput> list = NonNullList.create();
 		for (TradeInput input : this.inputs) {
 			list.add(input.copy());
 		}
 		return list;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public NonNullList<TradeInput> getInputItemsClient() {
+		return this.inputs;
 	}
 
 	private NonNullList<TradeInput> getInputItemsCompressed() {
@@ -357,15 +369,15 @@ public class Trade {
 	}
 
 	public boolean isUnlockedFor(EntityPlayer player) {
-		if (FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
+		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
 			return false;
 		}
 
-		if (this.requiredAdvancement == null) {
-			return true;
+		if (this.requiredAdvancement != null && !CQRMain.proxy.hasAdvancement(player, this.requiredAdvancement)) {
+			return false;
 		}
 
-		return CQRMain.proxy.hasAdvancement(player, this.requiredAdvancement);
+		return true;
 	}
 
 	public void incStock() {
@@ -383,6 +395,10 @@ public class Trade {
 
 	public boolean isInStock() {
 		return !this.hasLimitedStock || this.inStock > 0;
+	}
+
+	public TraderOffer getHolder() {
+		return this.holder;
 	}
 
 	public int getRequiredReputation() {

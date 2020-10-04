@@ -187,13 +187,10 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		for (int i = 0; i < this.tradeButtons.length; i++) {
 			Trade trade = this.trades.get(this.buttonStartIndex + i);
 
-			this.tradeButtons[i].visible = trade != null;
+			this.tradeButtons[i].visible = trade != null && (i < this.tradeButtons.length - 1 || !this.mc.player.isCreative());
 			if (trade != null) {
 				this.tradeButtons[i].setIndex(this.buttonStartIndex + i);
-				this.tradeButtons[i].setInput(trade.getInputItems());
-				this.tradeButtons[i].setOutput(trade.getOutput());
-				this.tradeButtons[i].setOutOfStock(!trade.isInStock());
-				this.tradeButtons[i].setLockedForPlayer(!trade.isUnlockedFor(this.mc.player));
+				this.tradeButtons[i].setTrade(trade);
 			}
 
 			if (i < this.tradeButtons.length - 1) {
@@ -202,9 +199,6 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 				this.deleteButtons[i].visible = trade != null && this.mc.player.isCreative();
 				this.editButtons[i].visible = trade != null && this.mc.player.isCreative();
 			}
-		}
-		if (!this.mc.player.isCreative()) {
-			this.tradeButtons[this.tradeButtons.length - 1].visible = false;
 		}
 
 		this.addNewTradeButton.visible = this.mc.player.isCreative();

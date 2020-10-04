@@ -35,9 +35,17 @@ public class ServerProxy implements IProxy {
 	}
 
 	@Override
+	public Advancement getAdvancement(EntityPlayer player, ResourceLocation id) {
+		if (player instanceof EntityPlayerMP) {
+			return ((EntityPlayerMP) player).getServerWorld().getAdvancementManager().getAdvancement(id);
+		}
+		return null;
+	}
+
+	@Override
 	public boolean hasAdvancement(EntityPlayer player, ResourceLocation id) {
 		if (player instanceof EntityPlayerMP) {
-			Advancement advancement = ((EntityPlayerMP) player).getServerWorld().getAdvancementManager().getAdvancement(id);
+			Advancement advancement = this.getAdvancement(player, id);
 			if (advancement != null) {
 				return ((EntityPlayerMP) player).getAdvancements().getProgress(advancement).isDone();
 			}

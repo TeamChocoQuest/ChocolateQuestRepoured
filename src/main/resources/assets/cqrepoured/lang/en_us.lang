@@ -578,6 +578,7 @@ description.gui_merchant_edit_trade.stock_check_box.name=Check this to set that 
 description.gui_merchant_edit_trade.restock_text_field.name=Amount of uses it will increase when it gets restocked. Every time you buy something, it will restock a different trade that is not maxed out.
 description.gui_merchant_edit_trade.in_stock_text_field.name=Current amount of uses the trade has.
 description.gui_merchant_edit_trade.max_stock_text_field.name=Highest amount of uses the trade can have.
+description.gui_button_trade.unlocked.name=Trade is unlocked.
 description.gui_button_trade.locked.name=Trade is not unlocked yet!
 description.gui_button_trade.out_of_stock.name=Out of stock! If possible buy something else, then maybe the trade will be in stock again.
 

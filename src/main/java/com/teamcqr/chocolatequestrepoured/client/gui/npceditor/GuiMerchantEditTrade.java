@@ -104,31 +104,31 @@ public class GuiMerchantEditTrade extends GuiContainer {
 
 		for (int i = 0; i < this.ignoreMetaCheckBoxes.length; i++) {
 			if (this.ignoreMetaCheckBoxes[i].isMouseOver()) {
-				this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.ignore_meta_check_box"), mouseX, mouseY);
+				this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.ignore_meta_check_box.name"), mouseX, mouseY);
 			}
 		}
 		for (int i = 0; i < this.ignoreNBTCheckBoxes.length; i++) {
 			if (this.ignoreNBTCheckBoxes[i].isMouseOver()) {
-				this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.ignore_nbt_check_box"), mouseX, mouseY);
+				this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.ignore_nbt_check_box.name"), mouseX, mouseY);
 			}
 		}
 		if (this.reputationButton.isMouseOver()) {
-			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.reputation_button"), mouseX, mouseY);
+			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.reputation_button.name"), mouseX, mouseY);
 		}
 		if (GuiHelper.isMouseOver(mouseX, mouseY, this.advancementTextField)) {
-			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.advancement_text_field"), mouseX, mouseY);
+			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.advancement_text_field.name"), mouseX, mouseY);
 		}
 		if (this.stockCheckBox.isMouseOver()) {
-			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.stock_check_box"), mouseX, mouseY);
+			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.stock_check_box.name"), mouseX, mouseY);
 		}
 		if (GuiHelper.isMouseOver(mouseX, mouseY, this.restockTextField)) {
-			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.restock_text_field"), mouseX, mouseY);
+			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.restock_text_field.name"), mouseX, mouseY);
 		}
 		if (GuiHelper.isMouseOver(mouseX, mouseY, this.inStockTextField)) {
-			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.in_stock_text_field"), mouseX, mouseY);
+			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.in_stock_text_field.name"), mouseX, mouseY);
 		}
 		if (GuiHelper.isMouseOver(mouseX, mouseY, this.maxStockTextField)) {
-			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.max_stock_text_field"), mouseX, mouseY);
+			this.drawHoveringText(I18n.format("description.gui_merchant_edit_trade.max_stock_text_field.name"), mouseX, mouseY);
 		}
 	}
 

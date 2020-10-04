@@ -99,6 +99,15 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
+	public Advancement getAdvancement(EntityPlayer player, ResourceLocation id) {
+		if (player instanceof EntityPlayerSP) {
+			ClientAdvancementManager manager = ((EntityPlayerSP) player).connection.getAdvancementManager();
+			return manager.getAdvancementList().getAdvancement(id);
+		}
+		return null;
+	}
+
+	@Override
 	public boolean hasAdvancement(EntityPlayer player, ResourceLocation id) {
 		if (player instanceof EntityPlayerSP) {
 			ClientAdvancementManager manager = ((EntityPlayerSP) player).connection.getAdvancementManager();
