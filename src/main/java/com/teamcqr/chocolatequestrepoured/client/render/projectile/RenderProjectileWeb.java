@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileWeb;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,7 +12,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileWeb extends Render<ProjectileWeb> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/blocks/web.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/blocks/temporary_web/web_poison_00.png");
 
 	public RenderProjectileWeb(RenderManager renderManager) {
 		super(renderManager);
