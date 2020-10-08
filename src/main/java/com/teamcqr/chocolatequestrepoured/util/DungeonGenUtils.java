@@ -133,8 +133,8 @@ public class DungeonGenUtils {
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
 		BlockPos spawnPoint = world.getSpawnPoint();
-		int x = chunkX - spawnPoint.getX() >> 4;
-		int z = chunkZ - spawnPoint.getZ() >> 4;
+		int x = chunkX - (spawnPoint.getX() >> 4);
+		int z = chunkZ - (spawnPoint.getZ() >> 4);
 		return x * x + z * z >= CQRConfig.general.dungeonSpawnDistance * CQRConfig.general.dungeonSpawnDistance;
 	}
 
