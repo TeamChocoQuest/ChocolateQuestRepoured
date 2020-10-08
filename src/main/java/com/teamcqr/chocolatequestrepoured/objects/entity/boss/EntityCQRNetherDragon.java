@@ -87,7 +87,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
 
-	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[0];
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[INITIAL_SEGMENT_COUNT];
 
 	// private boolean mouthOpen = false;
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
@@ -146,7 +146,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.segmentCount = this.INITIAL_SEGMENT_COUNT;
 		}
 
-		if (this.dragonBodyParts.length > 0) {
+		if (this.dragonBodyParts.length < 0) {
 			for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 				segment.onRemovedFromBody();
 			}
@@ -723,7 +723,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
 			if (dragonPart != null) {
-				this.world.removeEntityDangerously(dragonPart);
+				dragonPart.onRemovedFromBody();
 			}
 		}
 	}
