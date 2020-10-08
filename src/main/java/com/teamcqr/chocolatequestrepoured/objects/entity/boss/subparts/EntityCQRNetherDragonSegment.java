@@ -88,6 +88,9 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 			//this.world.removeEntityDangerously(this);
 			setDead();
 		}
+		if(world.isRemote && (this.dragon == null || this.dragon.isDead)) {
+			setDead();
+		}
 
 	}
 
