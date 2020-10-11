@@ -146,12 +146,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.segmentCount = this.INITIAL_SEGMENT_COUNT;
 		}
 
-		if (this.dragonBodyParts.length < 0) {
-			for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
-				segment.onRemovedFromBody();
-			}
-		}
-
 		this.dragonBodyParts = new EntityCQRNetherDragonSegment[this.segmentCount];
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1, false);
