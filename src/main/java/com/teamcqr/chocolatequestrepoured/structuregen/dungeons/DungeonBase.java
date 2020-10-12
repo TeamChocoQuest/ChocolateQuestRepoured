@@ -3,9 +3,11 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.io.FileUtils;
 
@@ -170,10 +172,20 @@ public abstract class DungeonBase {
 		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
 	}
 
+	private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
 		if (!files.isEmpty()) {
-			return files.get(rand.nextInt(files.size()));
+			File file = files.get(rand.nextInt(files.size()));
+			Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
+			if(lastUsedFileHash == 0) {
+				lastUsedFileHash = file.hashCode();
+			} else if(files.size() > 1 && file.hashCode() == lastUsedFileHash) {
+				while(file.hashCode() == lastUsedFileHash) {
+					file = files.get(rand.nextInt(files.size()));
+				}
+			}
+			return file;
 		}
 		return null;
 	}
