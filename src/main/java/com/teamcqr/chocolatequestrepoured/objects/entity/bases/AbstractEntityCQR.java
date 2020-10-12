@@ -130,8 +130,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected EntityAISpellHandler spellHandler;
 
 	private CQRFaction factionInstance;
-	private String factionName;
 	private CQRFaction defaultFactionInstance;
+	private String factionName;
 
 	protected int lastTickShieldDisabled = Integer.MIN_VALUE;
 	protected float damageBlockedWithShield = 0.0F;
@@ -154,6 +154,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> SPIN_TO_WIN = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<String> FACTION_OVERRIDE_SYNC = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	// Shoulder entity stuff
 	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 
@@ -187,6 +188,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(SPELL_INFORMATION, 0);
 		this.dataManager.register(SPIN_TO_WIN, false);
 		this.dataManager.register(TEXTURE_OVERRIDE, "");
+		this.dataManager.register(FACTION_OVERRIDE_SYNC, "");
 
 		// Shoulder entity stuff
 		this.dataManager.register(SHOULDER_ENTITY, new NBTTagCompound());
@@ -832,11 +834,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setLeader(EntityLivingBase leader) {
-		if (leader != null && leader.isEntityAlive()) {
+		if (leader != null && leader.isEntityAlive() && !world.isRemote) {
 			if (this.dimension == leader.dimension) {
 				this.leader = leader;
 			}
 			this.leaderUUID = leader.getPersistentID();
+			
+			CQRFaction leaderFaction = FactionRegistry.instance().getFactionOf(leader);
+			if(leaderFaction != null) {
+				this.setFaction(leaderFaction.getName());
+			}
 		}
 	}
 
@@ -972,29 +979,43 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Nullable
 	public CQRFaction getFaction() {
-		if (this.hasLeader()) {
-			return FactionRegistry.instance().getFactionOf(this.getLeader());
+		if(!world.isRemote) {
+			// Leader faction is set when assigning the leader
+			/*if (this.hasLeader()) {
+				return FactionRegistry.instance().getFactionOf(this.getLeader());
+			}*/
+			if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
+				this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
+			}
+			if (this.factionInstance != null) {
+				return this.factionInstance;
+			}
+			return this.getDefaultFactionInstance();
+		} else {
+			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
+			if(syncedFaction != null && !syncedFaction.isEmpty() && !(this.factionName.equals(syncedFaction))) {
+				this.factionName = syncedFaction;
+				this.factionInstance = FactionRegistry.instance().getFactionInstance(syncedFaction);
+			}
+			if (this.factionInstance != null) {
+				return this.factionInstance;
+			}
+			return this.getDefaultFactionInstance();
 		}
-		if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
-			this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
-		}
-		if (this.factionInstance != null) {
-			return this.factionInstance;
-		}
-		return this.getDefaultFactionInstance();
 	}
 
 	public void setFaction(String newFac) {
-		this.factionInstance = null;
-		this.factionName = newFac;
 		//TODO: Update faction on client too!!
 		if(!world.isRemote) {
 			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
 			if(faction != null) {
+				this.factionInstance = null;
+				this.factionName = newFac;
 				ResourceLocation rs = faction.getRandomTextureFor(this);
 				if(rs != null) {
 					this.setCustomTexture(rs);
 				}
+				this.dataManager.set(FACTION_OVERRIDE_SYNC, newFac);
 			}
 		}
 	}
