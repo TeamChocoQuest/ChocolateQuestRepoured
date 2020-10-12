@@ -842,7 +842,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			
 			CQRFaction leaderFaction = FactionRegistry.instance().getFactionOf(leader);
 			if(leaderFaction != null) {
-				this.setFaction(leaderFaction.getName());
+				this.setFaction(leaderFaction.getName(), true);
 			}
 		}
 	}
@@ -1003,17 +1003,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			return this.getDefaultFactionInstance();
 		}
 	}
-
+	
 	public void setFaction(String newFac) {
+		this.setFaction(newFac, false);
+	}
+
+	public void setFaction(String newFac, boolean ignoreCTS) {
 		//TODO: Update faction on client too!!
 		if(!world.isRemote) {
 			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
 			if(faction != null) {
 				this.factionInstance = null;
 				this.factionName = newFac;
-				ResourceLocation rs = faction.getRandomTextureFor(this);
-				if(rs != null) {
-					this.setCustomTexture(rs);
+				if(!ignoreCTS) {
+					ResourceLocation rs = faction.getRandomTextureFor(this);
+					if(rs != null) {
+						this.setCustomTexture(rs);
+					}
 				}
 				this.dataManager.set(FACTION_OVERRIDE_SYNC, newFac);
 			}
