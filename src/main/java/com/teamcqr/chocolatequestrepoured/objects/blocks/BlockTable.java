@@ -116,32 +116,38 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(playerIn.isSneaking() && !worldIn.isRemote) {
+		if (playerIn.isSneaking()) {
 			return false;
 		}
+
 		TileEntityTable tile = this.getTileEntity(worldIn, pos);
-		ItemStack helditem = playerIn.getHeldItem(EnumHand.MAIN_HAND);
+		ItemStack helditem = playerIn.getHeldItem(hand);
 		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
 		ItemStack table = itemHandler.getStackInSlot(0);
 
-		if (table.isEmpty() && !helditem.isEmpty() && !playerIn.isSneaking()) {
-			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+		if (table.isEmpty()) {
+			if (helditem.isEmpty()) {
+				return false;
+			}
+
 			if (!worldIn.isRemote) {
 				playerIn.setHeldItem(hand, itemHandler.insertItem(0, helditem, false));
 				tile.setRotation(playerIn);
+			} else {
+				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}
-		}
-
-		if (!table.isEmpty() && !playerIn.isSneaking()) {
-			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+		} else {
 			if (!worldIn.isRemote) {
 				ItemStack stack = itemHandler.extractItem(0, 64, false);
 				if (!playerIn.inventory.addItemStackToInventory(stack)) {
 					EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F, stack);
 					worldIn.spawnEntity(item);
 				}
+			} else {
+				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}
 		}
+
 		return true;
 	}
 
