@@ -293,12 +293,19 @@ public class FactionRegistry {
 
 		return null;
 	}
+	public FactionRegistry get() {
+		return this;
+	}
 
 	public static FactionRegistry instance() {
-		if (instance == null) {
+		FactionRegistry result;
+		try {
+			result = instance.get();
+		} catch(NullPointerException npe) {
 			instance = new FactionRegistry();
+			result = instance;
 		}
-		return instance;
+		return result;
 	}
 
 	public CQRFaction getFactionInstance(String factionName) {
