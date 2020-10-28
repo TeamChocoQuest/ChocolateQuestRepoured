@@ -23,6 +23,8 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSet;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketInitialFactionInformation;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketUpdatePlayerReputation;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
@@ -44,6 +46,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -52,12 +55,15 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FactionRegistry {
 
 	private static FactionRegistry instance;
 
-	private Map<String, CQRFaction> factions = new HashMap<>();
+	private volatile Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
 	private volatile List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
 	private Map<ResourceLocation, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
@@ -74,6 +80,20 @@ public class FactionRegistry {
 		this.loadDefaultFactions();
 
 		this.loadEntityFactionRelations();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public synchronized void addFaction(CQRFaction faction) {
+		this.factions.put(faction.getName(), faction);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public synchronized void setReputation(UUID player, Integer reputation, CQRFaction faction) {
+		if(!faction.isRepuStatic()) {
+			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player, new ConcurrentHashMap<>());
+			factionsOfPlayer.put(faction.getName(), reputation);
+			this.playerFactionRepuMap.put(player, factionsOfPlayer);
+		}
 	}
 
 	private void loadEntityFactionRelations() {
@@ -304,15 +324,15 @@ public class FactionRegistry {
 		return faction.getDefaultReputation().getValue();
 	}
 
-	public void incrementRepuOf(EntityPlayer player, String faction, int score) {
+	void incrementRepuOf(EntityPlayer player, String faction, int score) {
 		this.changeRepuOf(player, faction, Math.abs(score));
 	}
 
-	public void decrementRepuOf(EntityPlayer player, String faction, int score) {
+	void decrementRepuOf(EntityPlayer player, String faction, int score) {
 		this.changeRepuOf(player, faction, -Math.abs(score));
 	}
 
-	public void changeRepuOf(EntityPlayer player, String faction, int score) {
+	private void changeRepuOf(EntityPlayer player, String faction, int score) {
 		boolean flag = false;
 		if (this.canRepuChange(player)) {
 			if (score < 0) {
@@ -327,10 +347,19 @@ public class FactionRegistry {
 			factionsOfPlayer.put(faction, oldScore + score);
 			this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
 			CQRMain.logger.info("Repu changed!");
+			
+			//send packet to player
+			if(player instanceof EntityPlayerMP) {
+				EntityPlayerMP client = (EntityPlayerMP) player;
+				int currentRepu = oldScore + score;
+				
+				IMessage packet = new SPacketUpdatePlayerReputation(client, faction, currentRepu);
+				CQRMain.NETWORK.sendTo(packet, client);
+			}
 		}
 	}
 
-	public boolean canDecrementRepu(EntityPlayer player, String faction) {
+	private boolean canDecrementRepu(EntityPlayer player, String faction) {
 		if (this.canRepuChange(player)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
 			if (factionsOfPlayer != null) {
@@ -401,11 +430,18 @@ public class FactionRegistry {
 							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 						}
 					}
+					
+					//Send over factions and reputations
+					if(event.player instanceof EntityPlayerMP) {
+						IMessage packet = new SPacketInitialFactionInformation(uuid);
+						CQRMain.NETWORK.sendTo(packet, (EntityPlayerMP) event.player);
+					}
 				}
 			});
 			t.setDaemon(true);
 			t.start();
 		}
+		
 	}
 
 	public void handlePlayerLogout(PlayerLoggedOutEvent event) {
@@ -460,6 +496,12 @@ public class FactionRegistry {
 
 	public List<CQRFaction> getLoadedFactions() {
 		return new ArrayList<>(this.factions.values());
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void clearData() {
+		this.factions.clear();
+		this.playerFactionRepuMap.clear();
 	}
 
 }

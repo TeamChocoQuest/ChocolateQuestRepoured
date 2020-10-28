@@ -194,13 +194,15 @@ public class EventsHandler {
 		if (event.isCanceled()) {
 			return;
 		}
-		FactionRegistry.instance().handlePlayerLogin(event);
 
 		if (event.player.world.isRemote) {
 			TextureSetManager.unloadTextures();
-		} else if (event.player instanceof EntityPlayerMP) {
-			// Send packets with ct's to player
-			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
+		} else {
+			FactionRegistry.instance().handlePlayerLogin(event);
+			if (event.player instanceof EntityPlayerMP) {
+				// Send packets with ct's to player
+				TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
+			}
 		}
 
 	}

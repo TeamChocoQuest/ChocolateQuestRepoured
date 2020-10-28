@@ -993,7 +993,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			return this.getDefaultFactionInstance();
 		} else {
 			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
-			if(syncedFaction != null && !syncedFaction.isEmpty() && !(this.factionName.equals(syncedFaction))) {
+			if(syncedFaction != null && !syncedFaction.isEmpty() && !(factionName == null || this.factionName.equals(syncedFaction))) {
 				this.factionName = syncedFaction;
 				this.factionInstance = FactionRegistry.instance().getFactionInstance(syncedFaction);
 			}
@@ -1035,7 +1035,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void updateReputationOnDeath(DamageSource cause) {
-		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction()) {
+		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction() && !world.isRemote) {
 			EntityPlayer player = (EntityPlayer) cause.getTrueSource();
 			int range = CQRConfig.mobs.factionUpdateRadius;
 			double x1 = player.posX - range;

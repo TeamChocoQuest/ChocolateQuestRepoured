@@ -4,8 +4,10 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.ArmorCooldownSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerEditTrade;
+import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerInitialFactionInformation;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerSyncProtectedRegions;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerSyncTextureSets;
+import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerUpdateReputation;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.CPacketHandlerUpdateTradeIndex;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.DungeonSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.packets.handlers.ExporterUpdatePacketHandler;
@@ -28,7 +30,9 @@ import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlaye
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketEditTrade;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketInitialFactionInformation;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketUpdatePlayerReputation;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketUpdateTradeIndex;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SyncEntityPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.CPacketDeleteTrade;
@@ -60,6 +64,8 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerDeleteTrade.class, SPacketDeleteTrade.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerEditTrade.class, SPacketEditTrade.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateTradeIndex.class, SPacketUpdateTradeIndex.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerInitialFactionInformation.class, SPacketInitialFactionInformation.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateReputation.class, SPacketUpdatePlayerReputation.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, SaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class, messageID++, Side.SERVER);

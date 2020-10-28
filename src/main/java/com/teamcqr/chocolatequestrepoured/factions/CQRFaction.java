@@ -41,6 +41,10 @@ public class CQRFaction {
 	private int repuChangeOnAllyKill = 2;
 	private int repuChangeOnEnemyKill = 1;
 
+	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange) {
+		this(name, defaultReputationState, canRepuChange, Optional.empty(), Optional.empty(), Optional.empty());
+	}
+	
 	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
