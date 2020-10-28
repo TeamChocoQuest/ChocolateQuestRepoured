@@ -14,6 +14,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 public class CommandChangeReputation extends CommandBase {
 
@@ -38,6 +39,7 @@ public class CommandChangeReputation extends CommandBase {
 		int score = -1;
 		try {
 			score = Integer.parseInt(args[2]);
+			score = MathHelper.clamp(score, -1000, 1000);
 		} catch(NumberFormatException nfe) {
 			return;
 		}
