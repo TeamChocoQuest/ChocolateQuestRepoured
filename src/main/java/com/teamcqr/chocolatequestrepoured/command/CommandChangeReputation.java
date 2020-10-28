@@ -45,7 +45,7 @@ public class CommandChangeReputation extends CommandBase {
 		}
 		CQRFaction faction = FactionRegistry.instance().getFactionInstance(args[1]);
 		if(faction != null) {
-			FactionRegistry.instance().setReputation(sender.getCommandSenderEntity().getPersistentID(), score, faction);
+			FactionRegistry.instance().changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
 		}
 	}
 	

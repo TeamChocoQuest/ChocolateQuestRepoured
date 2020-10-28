@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
@@ -88,12 +89,21 @@ public class FactionRegistry {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public synchronized void setReputation(UUID player, Integer reputation, CQRFaction faction) {
+	public synchronized void setReputation(UUID player, int reputation, CQRFaction faction) {
 		if(!faction.isRepuStatic()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player, new ConcurrentHashMap<>());
 			factionsOfPlayer.put(faction.getName(), reputation);
 			this.playerFactionRepuMap.put(player, factionsOfPlayer);
 		}
+	}
+	
+	//Variant on the server, used by the command
+	public void changeReputationTo(@Nonnull EntityPlayerMP player, int reputation, @Nonnull CQRFaction faction) {
+		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
+		factionsOfPlayer.put(faction.getName(), reputation);
+		this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
+		
+		sendRepuUpdatePacket(player, reputation, faction.getName());
 	}
 
 	private void loadEntityFactionRelations() {
@@ -355,13 +365,14 @@ public class FactionRegistry {
 			
 			//send packet to player
 			if(player instanceof EntityPlayerMP) {
-				EntityPlayerMP client = (EntityPlayerMP) player;
-				int currentRepu = oldScore + score;
-				
-				IMessage packet = new SPacketUpdatePlayerReputation(client, faction, currentRepu);
-				CQRMain.NETWORK.sendTo(packet, client);
+				sendRepuUpdatePacket((EntityPlayerMP) player, score + oldScore, faction);
 			}
 		}
+	}
+	
+	private void sendRepuUpdatePacket(EntityPlayerMP player, int reputation, String faction) {
+			IMessage packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
+			CQRMain.NETWORK.sendTo(packet, player);
 	}
 
 	private boolean canDecrementRepu(EntityPlayer player, String faction) {
