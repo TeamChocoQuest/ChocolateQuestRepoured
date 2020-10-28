@@ -993,7 +993,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			return this.getDefaultFactionInstance();
 		} else {
 			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
-			if(syncedFaction != null && !syncedFaction.isEmpty() && !(factionName == null || this.factionName.equals(syncedFaction))) {
+			if(syncedFaction != null && !syncedFaction.isEmpty() && !(factionName != null && this.factionName.equals(syncedFaction))) {
 				this.factionName = syncedFaction;
 				this.factionInstance = FactionRegistry.instance().getFactionInstance(syncedFaction);
 			}
