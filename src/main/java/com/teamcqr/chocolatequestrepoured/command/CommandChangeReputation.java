@@ -32,16 +32,16 @@ public class CommandChangeReputation extends CommandBase {
 		if(sender.getCommandSenderEntity() == null || !(sender.getCommandSenderEntity() instanceof EntityPlayerMP)) {
 			return;
 		}
-		if(args.length < 2) {
+		if(args.length < 3) {
 			return;
 		}
 		int score = -1;
 		try {
-			score = Integer.parseInt(args[1]);
+			score = Integer.parseInt(args[2]);
 		} catch(NumberFormatException nfe) {
 			return;
 		}
-		CQRFaction faction = FactionRegistry.instance().getFactionInstance(args[0]);
+		CQRFaction faction = FactionRegistry.instance().getFactionInstance(args[1]);
 		if(faction != null) {
 			FactionRegistry.instance().setReputation(sender.getCommandSenderEntity().getPersistentID(), score, faction);
 		}
@@ -49,7 +49,7 @@ public class CommandChangeReputation extends CommandBase {
 	
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-		if(args.length == 0) {
+		if(args.length == 1) {
 			List<String> list = new ArrayList<>(FactionRegistry.instance().getLoadedFactions().size());
 			FactionRegistry.instance().getLoadedFactions().forEach(new Consumer<CQRFaction>() {
 
