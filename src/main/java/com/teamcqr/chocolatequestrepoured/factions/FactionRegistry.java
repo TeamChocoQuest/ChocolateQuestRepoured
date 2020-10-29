@@ -361,7 +361,7 @@ public class FactionRegistry {
 			int oldScore = factionsOfPlayer.getOrDefault(faction, this.factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
 			this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
-			CQRMain.logger.info("Repu changed!");
+			//CQRMain.logger.info("Repu changed!");
 			
 			//send packet to player
 			if(player instanceof EntityPlayerMP) {
