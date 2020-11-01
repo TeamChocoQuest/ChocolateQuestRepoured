@@ -54,7 +54,8 @@ public class RoomDecorPainting {
 		painting.facingDirection = side.getOpposite();
 		float rotation = side.getHorizontalAngle();
 		// Need to add 0.5 to each position amount so it spawns in the middle of the tile
-		painting.setPositionAndRotation((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5), rotation, 0f);
+		painting.setPosition((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5));
+		painting.rotationYaw = rotation;
 		genArray.addEntity(BlockPos.ORIGIN, painting);
 
 	}
