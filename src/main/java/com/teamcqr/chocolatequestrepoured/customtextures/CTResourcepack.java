@@ -13,7 +13,6 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourcePack;
@@ -115,7 +114,7 @@ public class CTResourcepack implements IResourcePack {
 	private void loadAllTexturesImpl() {
 		TextureManager tm = Minecraft.getMinecraft().getTextureManager();
 		for (Map.Entry<ResourceLocation, File> entry : this.FILES.entrySet()) {
-			ThreadDownloadImageData tex = new ThreadDownloadImageData(entry.getValue(), null, entry.getKey(), new ImageBufferDownload());
+			ThreadDownloadImageData tex = new ThreadDownloadImageData(entry.getValue(), null, entry.getKey(), new UniversalImageBuffer());
 			try {
 				tex.setBufferedImage(ImageIO.read(entry.getValue()));
 			} catch (IOException e) {
