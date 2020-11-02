@@ -44,20 +44,20 @@ public class SPacketInitialFactionInformation implements IMessage {
 	}
 	
 	public List<CQRFaction> getFactions() {
-		List<CQRFaction> result = new ArrayList<>(factions.length);
+		List<CQRFaction> result = new ArrayList<>();
 		
 		for(int i = 0; i < factions.length; i++) {
-			result.set(i, new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), lockedRepu[i]));
+			result.add(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), lockedRepu[i]));
 		}
 		
 		return result;
 	}
 	
 	public List<Tuple<CQRFaction, Integer>> getReputations() {
-		List<Tuple<CQRFaction, Integer>> data = new ArrayList<>(reputations.length);
+		List<Tuple<CQRFaction, Integer>> data = new ArrayList<>();
 		
 		for(int i = 0; i < reputations.length; i++) {
-			data.set(i, new Tuple<CQRFaction, Integer>(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), lockedRepu[i]), reputations[i]));
+			data.add(new Tuple<CQRFaction, Integer>(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), lockedRepu[i]), reputations[i]));
 		}
 		
 		return data;

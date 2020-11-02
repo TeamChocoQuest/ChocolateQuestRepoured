@@ -198,8 +198,9 @@ public class EventsHandler {
 		if (event.player.world.isRemote) {
 			TextureSetManager.unloadTextures();
 		} else {
-			FactionRegistry.instance().handlePlayerLogin(event);
 			if (event.player instanceof EntityPlayerMP) {
+				FactionRegistry.instance().handlePlayerLogin(event);
+				
 				// Send packets with ct's to player
 				TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 			}
@@ -209,7 +210,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
-		if (event.isCanceled()) {
+		if (event.isCanceled() || event.player.world.isRemote) {
 			return;
 		}
 		FactionRegistry.instance().handlePlayerLogout(event);
