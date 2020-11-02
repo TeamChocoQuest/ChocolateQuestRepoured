@@ -31,10 +31,16 @@ public class TextureSetManager {
 	}
 
 	public static TextureSetManager getInstance() {
-		if (INSTANCE == null) {
+		try {
+			return INSTANCE.get();
+		} catch(NullPointerException npe) {
 			INSTANCE = new TextureSetManager();
+			return INSTANCE;
 		}
-		return INSTANCE;
+	}
+	
+	TextureSetManager get() {
+		return this;
 	}
 
 	public static void registerTextureSet(TextureSet set) {
@@ -50,6 +56,7 @@ public class TextureSetManager {
 	}
 
 	public static void loadTextureSetsFromFolder(File folder) {
+		getInstance().clearData();
 		if (folder.isDirectory()) {
 			List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "cfg", "prop", "properties" }, true));
 			int loadedSets = 0;
@@ -75,6 +82,12 @@ public class TextureSetManager {
 				}
 			}
 			CQRMain.logger.info("Loaded " + loadedSets + " texture Sets!");
+		}
+	}
+
+	private void clearData() {
+		if(!textureSets.isEmpty()) {
+			textureSets.clear();
 		}
 	}
 
