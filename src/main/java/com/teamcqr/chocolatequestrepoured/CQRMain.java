@@ -140,8 +140,8 @@ public class CQRMain {
 		proxy.preInit();
 
 		// !!Custom texture system has to load BEFORE the faction system!!
-		// Custom Textures System
-		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
+		// Custom Textures System => Moved to server start
+		//TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
 		// Faction system => Moved to EventHandler (FMLServerStartingEvent)
 		// FactionRegistry.instance().loadFactions();
@@ -228,6 +228,9 @@ public class CQRMain {
 	
 	@EventHandler
 	public static void onVirtualServerStart(FMLServerStartingEvent event) {
+		//Since the CTS manager could also be corrupted, let's make him reload his data...
+		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
+		
 		FactionRegistry.instance().loadFactions();
 	}
 
