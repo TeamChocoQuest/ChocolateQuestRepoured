@@ -51,8 +51,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -88,17 +86,15 @@ public class FactionRegistry {
 	@SideOnly(Side.CLIENT)
 	public synchronized void setReputation(UUID player, int reputation, CQRFaction faction) {
 		if (!faction.isRepuStatic()) {
-			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player, new ConcurrentHashMap<>());
+			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new ConcurrentHashMap<>());
 			factionsOfPlayer.put(faction.getName(), reputation);
-			this.playerFactionRepuMap.put(player, factionsOfPlayer);
 		}
 	}
 
 	// Variant on the server, used by the command
 	public void changeReputationTo(@Nonnull EntityPlayerMP player, int reputation, @Nonnull CQRFaction faction) {
-		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
+		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
 		factionsOfPlayer.put(faction.getName(), reputation);
-		this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
 
 		sendRepuUpdatePacket(player, reputation, faction.getName());
 	}
@@ -355,10 +351,9 @@ public class FactionRegistry {
 			}
 		}
 		if (flag) {
-			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
+			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
 			int oldScore = factionsOfPlayer.getOrDefault(faction, this.factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
-			this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
 			// CQRMain.logger.info("Repu changed!");
 
 			// send packet to player
@@ -409,15 +404,15 @@ public class FactionRegistry {
 		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator() || this.uuidsBeingLoaded.contains(player.getPersistentID()));
 	}
 
-	public void handlePlayerLogin(PlayerLoggedInEvent event) {
+	public void handlePlayerLogin(EntityPlayerMP player) {
 		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-		File f = new File(path, event.player.getPersistentID() + ".nbt");
+		File f = new File(path, player.getPersistentID() + ".nbt");
 		CQRMain.logger.info("Loading player reputation...");
 		Thread t = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				final UUID uuid = event.player.getPersistentID();
+				final UUID uuid = player.getPersistentID();
 				if (f.exists()) {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
@@ -427,7 +422,7 @@ public class FactionRegistry {
 						}
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
-							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.computeIfAbsent(event.player.getPersistentID(), key -> new ConcurrentHashMap<>());
+							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
 							/*repuDataList.forEach(new Consumer<NBTBase>() {
 
 								@Override
@@ -441,9 +436,11 @@ public class FactionRegistry {
 								}
 							});*/
 							for(String key : root.getKeySet()) {
-								if(root.hasKey(key, Constants.NBT.TAG_INT) && FactionRegistry.this.factions.containsKey(key)) {
+								try {
 									int value = root.getInteger(key);
 									mapping.put(key, value);
+								} catch(Exception ex) {
+									//Ignore
 								}
 							}
 						} finally {
@@ -453,10 +450,8 @@ public class FactionRegistry {
 				}
 
 				// Send over factions and reputations
-				if (event.player instanceof EntityPlayerMP) {
-					IMessage packet = new SPacketInitialFactionInformation(uuid);
-					CQRMain.NETWORK.sendTo(packet, (EntityPlayerMP) event.player);
-				}
+				IMessage packet = new SPacketInitialFactionInformation(uuid);
+				CQRMain.NETWORK.sendTo(packet, player);
 			}
 		});
 		t.setDaemon(true);
@@ -464,16 +459,16 @@ public class FactionRegistry {
 
 	}
 
-	public void handlePlayerLogout(PlayerLoggedOutEvent event) {
-		if (this.playerFactionRepuMap.containsKey(event.player.getPersistentID())) {
+	public void handlePlayerLogout(EntityPlayerMP player) {
+		if (this.playerFactionRepuMap.containsKey(player.getPersistentID())) {
 			CQRMain.logger.info("Saving player reputation...");
 			Thread t = new Thread(new Runnable() {
 
 				@Override
 				public void run() {
-					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
+					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(player.getPersistentID());
 					//Map<String, Integer> entryMapping = new HashMap<>();
-					final UUID uuid = event.player.getPersistentID();
+					final UUID uuid = player.getPersistentID();
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
 					if (f != null) {
@@ -507,7 +502,7 @@ public class FactionRegistry {
 
 							FileIOUtil.saveNBTCompoundToFile(root, f);
 						} finally {
-							FactionRegistry.this.playerFactionRepuMap.remove(event.player.getPersistentID());
+							FactionRegistry.this.playerFactionRepuMap.remove(player.getPersistentID());
 							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 						}
 					}
