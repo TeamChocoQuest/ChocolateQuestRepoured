@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 
 public class CommandChangeReputation extends CommandBase {
 
@@ -41,17 +42,21 @@ public class CommandChangeReputation extends CommandBase {
 			score = Integer.parseInt(args[1]);
 			score = MathHelper.clamp(score, -1000, 1000);
 		} catch(NumberFormatException nfe) {
+			sender.sendMessage(new TextComponentString("The entered reputation (" + args[1] + ") is not a number!"));
 			return;
 		}
 		CQRFaction faction = FactionRegistry.instance().getFactionInstance(args[0]);
 		if(faction != null) {
 			FactionRegistry.instance().changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
+			sender.sendMessage(new TextComponentString("Changed " + sender.getDisplayName().getFormattedText() + "'s reputation towards faction " + faction.getName() + " to " + score));
+		} else {
+			sender.sendMessage(new TextComponentString(args[0] + " is not a valid faction! Try something else"));
 		}
 	}
 	
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-		if(args.length == 0) {
+		if(args.length <= 1) {
 			List<String> list = new ArrayList<>(FactionRegistry.instance().getLoadedFactions().size());
 			FactionRegistry.instance().getLoadedFactions().forEach(new Consumer<CQRFaction>() {
 
