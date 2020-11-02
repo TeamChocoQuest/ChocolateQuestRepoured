@@ -47,7 +47,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		List<CQRFaction> result = new ArrayList<>();
 		
 		for(int i = 0; i < factions.length; i++) {
-			result.add(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), lockedRepu[i]));
+			result.add(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), !lockedRepu[i]));
 		}
 		
 		return result;
