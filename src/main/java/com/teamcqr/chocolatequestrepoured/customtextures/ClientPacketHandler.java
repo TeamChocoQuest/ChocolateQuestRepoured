@@ -18,6 +18,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 public class ClientPacketHandler {
 
 	public static void handleCTPacketClientside(CustomTexturesPacket message) {
+		TextureSetManager.unloadTextures();
 		CTResourcepack.clear();
 		Map<String, File> fileMap = new HashMap<>();
 		for (Map.Entry<String, byte[]> textureEntry : message.getTextureMap().entrySet()) {
