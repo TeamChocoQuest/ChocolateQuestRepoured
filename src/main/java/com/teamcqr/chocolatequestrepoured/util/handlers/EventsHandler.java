@@ -45,6 +45,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -191,26 +192,23 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
-		if (event.isCanceled()) {
-			return;
+		if (event.player instanceof EntityPlayerMP) {
+			FactionRegistry.instance().handlePlayerLogin((EntityPlayerMP) event.player);
+
+			// Send packets with ct's to player
+			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 		}
 
-		if (event.player.world.isRemote) {
-			TextureSetManager.unloadTextures();
-		} else {
-			if (event.player instanceof EntityPlayerMP) {
-				FactionRegistry.instance().handlePlayerLogin((EntityPlayerMP) event.player);
-				
-				// Send packets with ct's to player
-				TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
-			}
-		}
-
+	}
+	
+	@SubscribeEvent
+	public static void onVirtualServerStart(FMLServerStartingEvent event) {
+		FactionRegistry.instance().loadFactions();
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
-		if (event.isCanceled() || event.player.world.isRemote || !(event.player instanceof EntityPlayerMP)) {
+		if (!(event.player instanceof EntityPlayerMP)) {
 			return;
 		}
 		FactionRegistry.instance().handlePlayerLogout((EntityPlayerMP) event.player);

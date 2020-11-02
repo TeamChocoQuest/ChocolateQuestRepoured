@@ -70,6 +70,16 @@ public class FactionRegistry {
 	}
 
 	public void loadFactions() {
+		if(!this.factions.isEmpty()) {
+			this.factions.clear();
+		}
+		if(!this.playerFactionRepuMap.isEmpty()) {
+			this.playerFactionRepuMap.clear();
+		}
+		if(!this.entityFactionMap.isEmpty()) {
+			this.entityFactionMap.clear();
+		}
+		
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
 
