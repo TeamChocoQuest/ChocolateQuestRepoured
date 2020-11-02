@@ -27,6 +27,8 @@ public interface IProxy {
 	 * Only works when called on server side or when the passed player is the user.
 	 */
 	boolean hasAdvancement(EntityPlayer player, ResourceLocation id);
+	
+	public boolean isOwnerOfIntegratedServer(EntityPlayer player);
 
 	void updateGui();
 

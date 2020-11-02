@@ -44,6 +44,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -192,7 +193,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
-		if (event.player instanceof EntityPlayerMP) {
+		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
 			FactionRegistry.instance().handlePlayerLogin((EntityPlayerMP) event.player);
 
 			// Send packets with ct's to player
@@ -200,7 +201,7 @@ public class EventsHandler {
 		}
 
 	}
-	
+
 	@SubscribeEvent
 	public static void onVirtualServerStart(FMLServerStartingEvent event) {
 		FactionRegistry.instance().loadFactions();

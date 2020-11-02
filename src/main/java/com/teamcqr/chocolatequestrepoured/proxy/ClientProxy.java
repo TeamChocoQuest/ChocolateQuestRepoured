@@ -126,5 +126,11 @@ public class ClientProxy implements IProxy {
 			((IUpdatableGui) gui).update();
 		}
 	}
+	
+	@Override
+    public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
+        Minecraft mc = Minecraft.getMinecraft();
+        return mc.player != null && mc.player.getPersistentID().equals(player.getPersistentID());
+    }
 
 }

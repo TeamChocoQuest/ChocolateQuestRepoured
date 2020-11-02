@@ -58,4 +58,9 @@ public class ServerProxy implements IProxy {
 
 	}
 
+	@Override
+	public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
+		return false;
+	}
+
 }

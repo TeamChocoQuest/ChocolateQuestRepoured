@@ -313,8 +313,9 @@ public class FactionRegistry {
 		try {
 			return instance.get();
 		} catch (NullPointerException npe) {
-			instance = new FactionRegistry();
-			return instance;
+			//Will also set the instance field
+			new FactionRegistry();
+			return instance.get();
 		}
 	}
 
