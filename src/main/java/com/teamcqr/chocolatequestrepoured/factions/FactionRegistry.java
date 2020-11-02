@@ -47,10 +47,8 @@ import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -415,8 +413,8 @@ public class FactionRegistry {
 				final UUID uuid = player.getPersistentID();
 				if (f.exists()) {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
-					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
-					if (!repuDataList.isEmpty()) {
+					//NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
+					if (!root.isEmpty()) {
 						while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
 							// Wait until the uuid isnt active
 						}
