@@ -46,7 +46,6 @@ import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -195,16 +194,10 @@ public class EventsHandler {
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
 			FactionRegistry.instance().handlePlayerLogin((EntityPlayerMP) event.player);
-
-			// Send packets with ct's to player
-			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 		}
-
-	}
-
-	@SubscribeEvent
-	public static void onVirtualServerStart(FMLServerStartingEvent event) {
-		FactionRegistry.instance().loadFactions();
+		
+		//Send packets with ct's to player
+		TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent
