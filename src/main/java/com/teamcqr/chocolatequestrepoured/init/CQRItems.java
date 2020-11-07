@@ -186,8 +186,8 @@ public class CQRItems {
 	public static final Item FLAMETHROWER = Null(); // #TODO TEXTURES
 	public static final Item BUBBLE_PISTOL = Null();
 	public static final Item BUBBLE_RIFLE = Null();
-	
-	//Hookers
+
+	// Hookers
 	public static final ItemHookshot HOOKSHOT = Null();
 	public static final ItemLongshot LONGSHOT = Null();
 	public static final ItemSpiderHook SPIDERHOOK = Null();
@@ -264,20 +264,20 @@ public class CQRItems {
 	public static final Item FEATHER_GOLDEN = Null();
 
 	// Other
-	public static final Item SUPER_TOOL = Null();
 	public static final Item POTION_HEALING = Null();
 	public static final Item TELEPORT_STONE = Null();
-	public static final Item SOUL_BOTTLE = Null();
-	public static final Item BADGE = Null();
-	public static final Item ALCHEMY_BAG = Null();
 	public static final Item CURSED_BONE = Null();
 
-	// Dungeon tools
+	// Creative
+	public static final Item SUPER_TOOL = Null();
+	public static final Item STRUCTURE_SELECTOR = Null();
+	public static final Item SOUL_BOTTLE = Null();
 	public static final Item MOB_TO_SPAWNER_TOOL = Null();
 	public static final Item SPAWNER_CONVERTER = Null();
-	public static final Item STRUCTURE_SELECTOR = Null();
+	public static final Item BADGE = Null();
 	public static final Item PATH_TOOL = Null();
 	public static final Item DUMMY_SHIELD = Null();
+	public static final Item ALCHEMY_BAG = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
@@ -401,19 +401,19 @@ public class CQRItems {
 					setItemName(new Item(), "giant_spider_poison"),
 					setItemName(new ItemGoldenFeather(), "feather_golden"),
 
-					setItemName(new ItemSuperTool(), "super_tool"),
 					setItemName(new ItemPotionHealing(), "potion_healing"),
 					setItemName(new ItemTeleportStone(), "teleport_stone"),
-					setItemName(new ItemSoulBottle(), "soul_bottle"),
-					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"),
-					setItemName(new ItemBadge(), "badge"),
-					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 					setItemName(new ItemSummoningBone(), "cursed_bone"),
 
-					setItemName(new ItemStructureSelector(), "structure_selector"),
-					setItemName(new ItemPathTool(), "path_tool"),
-					setItemName(new ItemShieldDummy(), "dummy_shield"),
-					setItemName(new ItemSpawnerConverter(), "spawner_converter") };
+					setItemNameAndTab(new ItemSuperTool(), "super_tool", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemStructureSelector(), "structure_selector", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemSoulBottle(), "soul_bottle", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemMobToSpawner(), "mob_to_spawner_tool", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemSpawnerConverter(), "spawner_converter", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemBadge(), "badge", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemPathTool(), "path_tool", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemShieldDummy(), "dummy_shield", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemAlchemyBag(), "alchemy_bag", CQRMain.CQR_CREATIVE_TOOL_TAB) };
 
 			IForgeRegistry<Item> registry = event.getRegistry();
 

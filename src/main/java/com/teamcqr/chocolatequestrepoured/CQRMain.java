@@ -35,10 +35,10 @@ import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 
 import net.minecraft.block.BlockFire;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -51,6 +51,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:llibrary@[1.7.19]; required:forge@[14.23.5.2817,)")
@@ -81,23 +82,29 @@ public class CQRMain {
 
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
-	
-	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
+
+	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(Reference.MODID + "_items") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRItems.BOOTS_CLOUD);
 		}
 	};
-	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs("ChocolateQuestRepouredBlocksTab") {
+	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs(Reference.MODID + "_blocks") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.TABLE_OAK);
 		}
 	};
-	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
+	public static final CreativeTabs CQR_CREATIVE_TOOL_TAB = new CreativeTabs(Reference.MODID + "_creative_tools") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(Items.BANNER);
+			return new ItemStack(CQRBlocks.EXPORTER);
+		}
+	};
+	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs(Reference.MODID + "_banners") {
+		@Override
+		public ItemStack createIcon() {
+			return EBanners.WALKER_ORDO.getBanner();
 		}
 
 		@Override
@@ -109,19 +116,19 @@ public class CQRMain {
 			}
 		}
 	};
-	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
+	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs(Reference.MODID + "_dungeon_placers") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(Blocks.STONEBRICK);
+			return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Reference.MODID, "dungeon_placer_d5")));
 		}
 	};
-	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
+	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs(Reference.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(Blocks.CHEST);
+			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
 		}
 	};
-	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs("CQR Spawn Eggs") {
+	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs(Reference.MODID + "_spawn_eggs") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(Items.SPAWN_EGG);

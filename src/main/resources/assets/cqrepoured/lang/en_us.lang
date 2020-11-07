@@ -3,11 +3,13 @@
 
 
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=CQR Blocks
-itemGroup.ChocolateQuestRepouredItemsTab=CQR Items
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Generators
-itemGroup.ChocolateQuestRepouredBannerTab=CQR Banners
-itemGroup.ChocolateQuestRepouredExporterChests=CQR Exporter Chests
+itemGroup.cqrepoured_blocks=CQR Blocks
+itemGroup.cqrepoured_items=CQR Items
+itemGroup.cqrepoured_banners=CQR Banners
+itemGroup.cqrepoured_creative_tools=CQR Creative Tools
+itemGroup.cqrepoured_dungeon_placers=CQR Dungeon Generators
+itemGroup.cqrepoured_exporter_chests=CQR Exporter Chests
+itemGroup.cqrepoured_spawn_eggs=CQR Spawn Eggs
 
 #Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-banner marker

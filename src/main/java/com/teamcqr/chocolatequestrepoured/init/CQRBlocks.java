@@ -118,13 +118,14 @@ public class CQRBlocks {
 	public static final BlockTable TABLE_JUNGLE = Null();
 	public static final BlockTable TABLE_ACACIA = Null();
 	public static final BlockTable TABLE_DARK = Null();
-
-	// Utility
-	public static final BlockExporter EXPORTER = Null();
 	public static final BlockUnlitTorch UNLIT_TORCH = Null();
+
+	// Creative
+	public static final BlockExporter EXPORTER = Null();
 	public static final BlockNull NULL_BLOCK = Null();
 	public static final BlockSpawner SPAWNER = Null();
 	public static final BlockBossBlock BOSS_BLOCK = Null();
+	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
 
 	// Loot Chests
 	// Standard
@@ -165,9 +166,6 @@ public class CQRBlocks {
 	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_12 = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_13 = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_14 = Null();
-
-	// Protected region
-	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
 
 	// Technical
 	public static final BlockPhylactery PHYLACTERY = Null();
@@ -246,11 +244,13 @@ public class CQRBlocks {
 					setBlockName(new BlockTable(), "table_acacia"),
 					setBlockName(new BlockTable(), "table_dark"),
 
-					setBlockName(new BlockExporter(), "exporter"),
 					setBlockName(new BlockUnlitTorch(), "unlit_torch"),
-					setBlockName(new BlockNull(true), "null_block"),
-					setBlockName(new BlockSpawner(), "spawner"),
-					setBlockName(new BlockBossBlock(), "boss_block"),
+
+					setBlockNameAndTab(new BlockExporter(), "exporter", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockNull(true), "null_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockSpawner(), "spawner", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockBossBlock(), "boss_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockForceFieldNexus(Material.IRON), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
 
 					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_TREASURE, "textures/items/diamond.png"), "exporter_chest_valuable", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_FOOD, "textures/items/porkchop_raw.png"), "exporter_chest_food", CQRMain.CQR_EXPORTER_CHEST_TAB),
@@ -287,8 +287,6 @@ public class CQRBlocks {
 					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_12, "textures/items/potato.png"), "exporter_chest_custom_12", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_13, Reference.MODID, "textures/items/potion_healing.png"), "exporter_chest_custom_13", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_14, "textures/items/record_strad.png"), "exporter_chest_custom_14", CQRMain.CQR_EXPORTER_CHEST_TAB),
-
-					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
 					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
 					setBlockNameAndTab(new BlockTemporaryWeb(), "temporary_web", null), };
