@@ -51,6 +51,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 		}
 
 		if (block instanceof BlockExporterChest) {
+			itemTexture = ((BlockExporterChest) block).itemTexture;
 		}
 
 		GlStateManager.pushMatrix();

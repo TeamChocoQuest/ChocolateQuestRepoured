@@ -217,7 +217,7 @@ public class CQRMain {
 		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
-		DungeonInhabitantManager.init();
+		DungeonInhabitantManager.instance().loadDungeonInhabitants();;
 	}
 
 	@EventHandler
