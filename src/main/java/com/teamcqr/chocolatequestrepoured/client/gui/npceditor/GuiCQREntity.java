@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SyncEntityPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.SyncEntityPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

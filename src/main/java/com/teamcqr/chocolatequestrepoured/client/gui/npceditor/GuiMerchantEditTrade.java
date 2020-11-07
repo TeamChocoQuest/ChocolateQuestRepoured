@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
-import com.teamcqr.chocolatequestrepoured.network.packets.toServer.CPacketEditTrade;
-import com.teamcqr.chocolatequestrepoured.network.packets.toServer.CPacketOpenMerchantGui;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketEditTrade;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketOpenMerchantGui;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.npc.trading.Trade;
 import com.teamcqr.chocolatequestrepoured.objects.npc.trading.TradeInput;

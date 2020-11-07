@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.capability.armor;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.SerializableCapabilityProvider;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ArmorCooldownSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.ArmorCooldownSyncPacket;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.EntityLivingBase;

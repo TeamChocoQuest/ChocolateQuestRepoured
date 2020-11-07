@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncProtectedRegions;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;

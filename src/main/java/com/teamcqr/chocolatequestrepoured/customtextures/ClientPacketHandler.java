@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.CustomTexturesPacket;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;

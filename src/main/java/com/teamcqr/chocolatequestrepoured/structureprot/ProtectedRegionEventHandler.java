@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;

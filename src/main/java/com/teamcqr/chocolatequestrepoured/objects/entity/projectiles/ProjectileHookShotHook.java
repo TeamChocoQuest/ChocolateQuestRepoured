@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.CQRSerializers;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.HookShotPlayerStopPacket;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 

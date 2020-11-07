@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import com.teamcqr.chocolatequestrepoured.util.ByteBufUtil;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 

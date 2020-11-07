@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
-import com.teamcqr.chocolatequestrepoured.network.packets.toServer.StructureSelectorPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;

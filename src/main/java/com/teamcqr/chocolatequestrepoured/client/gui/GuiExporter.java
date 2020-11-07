@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
-import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExporterUpdatePacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.Minecraft;
