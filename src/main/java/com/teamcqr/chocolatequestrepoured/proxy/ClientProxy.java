@@ -26,6 +26,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -44,7 +45,7 @@ public class ClientProxy implements IProxy {
 
 	private static final ReflectionField<Map<Advancement, AdvancementProgress>> m = new ReflectionField<>(ClientAdvancementManager.class, "field_192803_d", "advancementToProgress");
 	public static final ReflectionField<List<IResourcePack>> DEFAULT_RESOURCE_PACKS = new ReflectionField<>(Minecraft.class, "field_110449_ao", "defaultResourcePacks");
-	
+
 	@Override
 	public void preInit() {
 		List<IResourcePack> defaultResourcePacks = DEFAULT_RESOURCE_PACKS.get(Minecraft.getMinecraft());
@@ -59,7 +60,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void postInit() {
-		
+
 	}
 
 	@Override
@@ -126,11 +127,11 @@ public class ClientProxy implements IProxy {
 			((IUpdatableGui) gui).update();
 		}
 	}
-	
+
 	@Override
-    public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
-        Minecraft mc = Minecraft.getMinecraft();
-        return mc.player != null && mc.player.getPersistentID().equals(player.getPersistentID());
-    }
+	public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
+		IntegratedServer integratedServer = Minecraft.getMinecraft().getIntegratedServer();
+		return integratedServer != null && player.getName().equals(integratedServer.getServerOwner());
+	}
 
 }
