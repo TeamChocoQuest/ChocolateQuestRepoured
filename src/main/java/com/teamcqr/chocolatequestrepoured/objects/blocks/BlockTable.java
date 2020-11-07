@@ -96,30 +96,26 @@ public class BlockTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		boolean flag = (world.getBlockState(pos.west()).getBlock() == this && world.getBlockState(pos.east()).getBlock() == this) || (world.getBlockState(pos.north()).getBlock() == this && world.getBlockState(pos.south()).getBlock() == this);
+		return this.getDefaultState().withProperty(TOP, flag);
+	}
+
+	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		@SuppressWarnings("unused")
-		IBlockState blockstate = worldIn.getBlockState(pos);
-		state = this.getDefaultState();
-
-		if (worldIn.getBlockState(pos.west()).getBlock() == this && worldIn.getBlockState(pos.east()).getBlock() == this) {
-			worldIn.setBlockState(pos, state.withProperty(TOP, true));
-		}
-
-		else if (worldIn.getBlockState(pos.north()).getBlock() == this && worldIn.getBlockState(pos.south()).getBlock() == this) {
-			worldIn.setBlockState(pos, state.withProperty(TOP, true));
-		}
-
-		else {
-			worldIn.setBlockState(pos, state.withProperty(TOP, false));
+		if (Boolean.TRUE.equals(state.getValue(TOP))) {
+			if ((worldIn.getBlockState(pos.west()).getBlock() != this || worldIn.getBlockState(pos.east()).getBlock() != this) && (worldIn.getBlockState(pos.north()).getBlock() != this || worldIn.getBlockState(pos.south()).getBlock() != this)) {
+				worldIn.setBlockState(pos, this.getDefaultState().withProperty(TOP, false));
+			}
+		} else {
+			if ((worldIn.getBlockState(pos.west()).getBlock() == this && worldIn.getBlockState(pos.east()).getBlock() == this) || (worldIn.getBlockState(pos.north()).getBlock() == this && worldIn.getBlockState(pos.south()).getBlock() == this)) {
+				worldIn.setBlockState(pos, this.getDefaultState().withProperty(TOP, true));
+			}
 		}
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (playerIn.isSneaking()) {
-			return false;
-		}
-
 		TileEntityTable tile = this.getTileEntity(worldIn, pos);
 		ItemStack helditem = playerIn.getHeldItem(hand);
 		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
@@ -132,17 +128,23 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 			if (!worldIn.isRemote) {
 				playerIn.setHeldItem(hand, itemHandler.insertItem(0, helditem, false));
-				tile.setRotation(playerIn);
+				tile.setRotation(Math.round(playerIn.rotationYaw / 22.5F) % 16);
 			} else {
 				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}
-		} else {
+		} else if (!playerIn.isSneaking()) {
 			if (!worldIn.isRemote) {
 				ItemStack stack = itemHandler.extractItem(0, 64, false);
 				if (!playerIn.inventory.addItemStackToInventory(stack)) {
 					EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F, stack);
 					worldIn.spawnEntity(item);
 				}
+			} else {
+				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+			}
+		} else {
+			if (!worldIn.isRemote) {
+				tile.setRotation(tile.getRotation() + 1);
 			} else {
 				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}

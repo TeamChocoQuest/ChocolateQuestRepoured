@@ -1,14 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.network.server.handler;
 
-import java.io.File;
-
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSaveStructureRequest;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -21,12 +18,11 @@ public class SPacketHandlerSaveStructureRequest implements IMessageHandler<CPack
 		if (ctx.side.isServer()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
-				World world = CQRMain.proxy.getWorld(ctx);
-				CQStructure structure = CQStructure.createFromWorld(world, message.getStartPos(), message.getEndPos(), message.ignoreEntities(), player.getName());
-				new Thread(() -> {
-					structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, message.getName() + ".nbt"));
-					player.sendMessage(new TextComponentString("Successfully exported structure: " + message.getName()));
-				}).start();
+				TileEntity tileEntity = player.world.getTileEntity(message.getPos());
+
+				if (tileEntity instanceof TileEntityExporter) {
+					((TileEntityExporter) tileEntity).saveStructure(player);
+				}
 			});
 		}
 		return null;

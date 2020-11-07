@@ -18,8 +18,8 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
-		BlockPos pos1 = te.getRenderMinPos();
-		BlockPos pos2 = te.getRenderMaxPos();
+		BlockPos pos1 = te.getMinPosRelative();
+		BlockPos pos2 = te.getMaxPosRelative();
 
 		double x1 = x + pos1.getX() - 0.01D;
 		double y1 = y + pos1.getY() - 0.01D;

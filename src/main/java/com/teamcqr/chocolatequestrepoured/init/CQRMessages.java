@@ -15,7 +15,6 @@ import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerU
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerUpdateTradeIndex;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketEditTrade;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketExporterUpdate;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketExtendedReachAttack;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketOpenEditTradeGui;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketOpenMerchantGui;
@@ -27,7 +26,6 @@ import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSyncTileE
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketUpdateTradeIndex;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerEditTrade;
-import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerExporterUpdate;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerExtendedReachAttack;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerOpenEditTradeGui;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerOpenMerchantGui;
@@ -49,7 +47,6 @@ import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncProte
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncTileEntity;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketUpdateTradeIndex;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -72,8 +69,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateReputation.class, SPacketUpdatePlayerReputation.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTileEntity.class, SPacketSyncTileEntity.class, messageID++, Side.CLIENT);
 
-		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerExporterUpdate.class, CPacketExporterUpdate.class, messageID++, Side.SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerStructureSelector.class, CPacketStructureSelector.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncEntity.class, CPacketSyncEntity.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerExtendedReachAttack.class, CPacketExtendedReachAttack.class, messageID++, Side.SERVER);

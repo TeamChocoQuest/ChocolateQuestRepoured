@@ -18,8 +18,8 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 	@Override
 	public void render(TileEntityTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
-		ItemStack stack = te.inventory.getStackInSlot(0);
-		float rotation = te.getRotation();
+		ItemStack stack = te.getInventory().getStackInSlot(0);
+		float rotation = te.getRotationInDegree();
 
 		if (!stack.isEmpty()) {
 			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);

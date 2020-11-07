@@ -2,9 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.gui;
 
 import java.io.IOException;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketExporterUpdate;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.Minecraft;
@@ -32,44 +30,41 @@ public class GuiExporter extends GuiScreen {
 	public GuiExporter(TileEntityExporter exporter) {
 		this.mc = Minecraft.getMinecraft();
 		this.exporter = exporter;
-		if (this.exporter != null) {
-			this.exporter.setUser(this.mc.player);
-		}
 	}
 
 	public void sync() {
-		this.edtEndX.setText(String.valueOf(this.exporter.endX));
-		this.edtEndY.setText(String.valueOf(this.exporter.endY));
-		this.edtEndZ.setText(String.valueOf(this.exporter.endZ));
-		this.edtStartX.setText(String.valueOf(this.exporter.startX));
-		this.edtStartY.setText(String.valueOf(this.exporter.startY));
-		this.edtStartZ.setText(String.valueOf(this.exporter.startZ));
-		this.edtName.setText(this.exporter.structureName);
-		this.chbxRelativeMode.setIsChecked(this.exporter.relativeMode);
-		this.chbxIgnoreEntities.setIsChecked(this.exporter.ignoreEntities);
+		this.edtEndX.setText(String.valueOf(this.exporter.getEndX()));
+		this.edtEndY.setText(String.valueOf(this.exporter.getEndY()));
+		this.edtEndZ.setText(String.valueOf(this.exporter.getEndZ()));
+		this.edtStartX.setText(String.valueOf(this.exporter.getStartX()));
+		this.edtStartY.setText(String.valueOf(this.exporter.getStartY()));
+		this.edtStartZ.setText(String.valueOf(this.exporter.getStartZ()));
+		this.edtName.setText(this.exporter.getStructureName());
+		this.chbxRelativeMode.setIsChecked(this.exporter.isRelativeMode());
+		this.chbxIgnoreEntities.setIsChecked(this.exporter.isIgnoreEntities());
 	}
 
 	@Override
 	public void initGui() {
 		this.edtName = new GuiTextField(0, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
-		this.edtName.setText(this.exporter.structureName);
+		this.edtName.setText(this.exporter.getStructureName());
 
 		this.edtEndX = new GuiTextField(1, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 10, 40, 20);
-		this.edtEndX.setText(String.valueOf(this.exporter.endX));
+		this.edtEndX.setText(String.valueOf(this.exporter.getEndX()));
 		this.edtEndY = new GuiTextField(2, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 + 10, 40, 20);
-		this.edtEndY.setText(String.valueOf(this.exporter.endY));
+		this.edtEndY.setText(String.valueOf(this.exporter.getEndY()));
 		this.edtEndZ = new GuiTextField(3, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 + 10, 40, 20);
-		this.edtEndZ.setText(String.valueOf(this.exporter.endZ));
+		this.edtEndZ.setText(String.valueOf(this.exporter.getEndZ()));
 
 		this.edtStartX = new GuiTextField(1, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 30, 40, 20);
-		this.edtStartX.setText(String.valueOf(this.exporter.startX));
+		this.edtStartX.setText(String.valueOf(this.exporter.getStartX()));
 		this.edtStartY = new GuiTextField(2, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 - 30, 40, 20);
-		this.edtStartY.setText(String.valueOf(this.exporter.startY));
+		this.edtStartY.setText(String.valueOf(this.exporter.getStartY()));
 		this.edtStartZ = new GuiTextField(3, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20);
-		this.edtStartZ.setText(String.valueOf(this.exporter.startZ));
+		this.edtStartZ.setText(String.valueOf(this.exporter.getStartZ()));
 
-		this.chbxRelativeMode = new GuiCheckBox(5, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.relativeMode);
-		this.chbxIgnoreEntities = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 40, "Ignore Entities", this.exporter.ignoreEntities);
+		this.chbxRelativeMode = new GuiCheckBox(5, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.isRelativeMode());
+		this.chbxIgnoreEntities = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 40, "Ignore Entities", this.exporter.isIgnoreEntities());
 
 		this.btnExport = new GuiButtonExt(4, this.width / 2 - 70, this.height / 2 + 60, 140, 20, "Export");
 
@@ -92,11 +87,10 @@ public class GuiExporter extends GuiScreen {
 				throw new IllegalArgumentException();
 			}
 
-			this.exporter.setValues(startX, startY, startZ, endX, endY, endZ, structName, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked());
-			CQRMain.NETWORK.sendToServer(new CPacketExporterUpdate(this.exporter));
+			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked());
 
 			if (this.saveStructOnExit) {
-				this.exporter.saveStructure(this.mc.world, new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ), this.mc.player);
+				this.exporter.saveStructure(this.mc.player);
 			}
 		} catch (IllegalArgumentException e) {
 			Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Invalid exporter arguments"));
@@ -209,6 +203,42 @@ public class GuiExporter extends GuiScreen {
 		if (button == this.btnExport) {
 			this.saveStructOnExit = true;
 			this.mc.player.closeScreen();
+		} else {
+			super.actionPerformed(button);
+			if (button == this.chbxRelativeMode) {
+				boolean flag = this.chbxRelativeMode.isChecked();
+				BlockPos pos = this.exporter.getPos();
+				try {
+					this.edtStartX.setText(Integer.toString(Integer.parseInt(this.edtStartX.getText()) + (flag ? -pos.getX() : pos.getX())));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				try {
+					this.edtStartY.setText(Integer.toString(Integer.parseInt(this.edtStartY.getText()) + (flag ? -pos.getY() : pos.getY())));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				try {
+					this.edtStartZ.setText(Integer.toString(Integer.parseInt(this.edtStartZ.getText()) + (flag ? -pos.getZ() : pos.getZ())));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				try {
+					this.edtEndX.setText(Integer.toString(Integer.parseInt(this.edtEndX.getText()) + (flag ? -pos.getX() : pos.getX())));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				try {
+					this.edtEndY.setText(Integer.toString(Integer.parseInt(this.edtEndY.getText()) + (flag ? -pos.getY() : pos.getY())));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				try {
+					this.edtEndZ.setText(Integer.toString(Integer.parseInt(this.edtEndZ.getText()) + (flag ? -pos.getZ() : pos.getZ())));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+			}
 		}
 	}
 

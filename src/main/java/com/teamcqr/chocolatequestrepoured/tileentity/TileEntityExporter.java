@@ -2,15 +2,15 @@ package com.teamcqr.chocolatequestrepoured.tileentity;
 
 import java.io.File;
 
-import javax.annotation.Nullable;
-
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSaveStructureRequest;
+import com.teamcqr.chocolatequestrepoured.network.datasync.DataEntryBoolean;
+import com.teamcqr.chocolatequestrepoured.network.datasync.DataEntryInt;
+import com.teamcqr.chocolatequestrepoured.network.datasync.DataEntryString;
+import com.teamcqr.chocolatequestrepoured.network.datasync.TileEntityDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -19,160 +19,156 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
 
-public class TileEntityExporter extends TileEntity {
+public class TileEntityExporter extends TileEntity implements ITileEntitySyncable {
 
-	public int startX = 0;
-	public int startY = 0;
-	public int startZ = 0;
-	public int endX = 0;
-	public int endY = 0;
-	public int endZ = 0;
-	public String structureName = "NoName";
-	public boolean relativeMode = true;
-	public boolean ignoreEntities = true;
+	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
-	private BlockPos minPos = new BlockPos(0, 0, 0);
-	private BlockPos maxPos = new BlockPos(0, 0, 0);
+	private final DataEntryString structureName = new DataEntryString("StructureName", "NoName", true);
+	private final DataEntryInt startX = new DataEntryInt("StartX", 0, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryInt startY = new DataEntryInt("StartY", 0, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryInt startZ = new DataEntryInt("StartZ", 0, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryInt endX = new DataEntryInt("EndX", 0, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryInt endY = new DataEntryInt("EndY", 0, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryInt endZ = new DataEntryInt("EndZ", 0, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryBoolean relativeMode = new DataEntryBoolean("RelativeMode", true, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryBoolean ignoreEntities = new DataEntryBoolean("IgnoreEntities", true, true);
 
-	@SuppressWarnings("unused")
-	private EntityPlayer user = null;
+	private final BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos();
+	private final BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos();
+	private final BlockPos.MutableBlockPos minPosRelative = new BlockPos.MutableBlockPos();
+	private final BlockPos.MutableBlockPos maxPosRelative = new BlockPos.MutableBlockPos();
 
-	public NBTTagCompound getExporterData(NBTTagCompound compound) {
-		compound.setInteger("StartX", this.startX);
-		compound.setInteger("StartY", this.startY);
-		compound.setInteger("StartZ", this.startZ);
-		compound.setInteger("EndX", this.endX);
-		compound.setInteger("EndY", this.endY);
-		compound.setInteger("EndZ", this.endZ);
-		compound.setString("StructureName", this.structureName);
-		compound.setBoolean("RelativeMode", this.relativeMode);
-		compound.setBoolean("IgnoreEntities", this.ignoreEntities);
-		return compound;
+	public TileEntityExporter() {
+		this.dataManager.register(this.structureName);
+		this.dataManager.register(this.startX);
+		this.dataManager.register(this.startY);
+		this.dataManager.register(this.startZ);
+		this.dataManager.register(this.endX);
+		this.dataManager.register(this.endY);
+		this.dataManager.register(this.endZ);
+		this.dataManager.register(this.relativeMode);
+		this.dataManager.register(this.ignoreEntities);
 	}
 
-	public void setExporterData(NBTTagCompound compound) {
-		this.startX = compound.getInteger("StartX");
-		this.startY = compound.getInteger("StartY");
-		this.startZ = compound.getInteger("StartZ");
-		this.endX = compound.getInteger("EndX");
-		this.endY = compound.getInteger("EndY");
-		this.endZ = compound.getInteger("EndZ");
-		this.structureName = compound.getString("StructureName");
-		this.relativeMode = compound.getBoolean("RelativeMode");
-		this.ignoreEntities = compound.getBoolean("IgnoreEntities");
-
-		this.onPositionsChanged();
+	@Override
+	public TileEntityDataManager getDataManager() {
+		return this.dataManager;
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		this.getExporterData(compound);
+		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.setExporterData(compound);
-	}
-
-	public void setValues(BlockPos startPos, BlockPos endPos, String structName, boolean useRelativeMode, boolean useSmartMode) {
-		this.setValues(startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), structName, useRelativeMode, useSmartMode);
-	}
-
-	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean useRelativeMode, boolean useSmartMode) {
-		this.startX = sX;
-		this.startY = sY;
-		this.startZ = sZ;
-		this.endX = eX;
-		this.endY = eY;
-		this.endZ = eZ;
-		this.structureName = structName;
-		this.relativeMode = useRelativeMode;
-		this.ignoreEntities = useSmartMode;
-
+		this.dataManager.read(compound);
 		this.onPositionsChanged();
-
-		this.markDirty();
 	}
 
-	@Nullable
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 1, this.getExporterData(new NBTTagCompound()));
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		this.setExporterData(pkt.getNbtCompound());
-
-		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
-		if (screen instanceof GuiExporter) {
-			((GuiExporter) screen).sync();
-		}
+		return new SPacketUpdateTileEntity(this.pos, 0, this.dataManager.write(new NBTTagCompound()));
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound data = super.getUpdateTag();
-		data.setTag("data", this.getExporterData(new NBTTagCompound()));
-		return data;
+		return this.writeToNBT(new NBTTagCompound());
 	}
 
 	@Override
-	public void handleUpdateTag(NBTTagCompound tag) {
-		super.handleUpdateTag(tag);
-		this.setExporterData(tag.getCompoundTag("data"));
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		this.dataManager.read(pkt.getNbtCompound());
+		this.onPositionsChanged();
 	}
 
-	public void setUser(EntityPlayer player) {
-		this.user = player;
-	}
+	@Override
+	public void setPos(BlockPos posIn) {
+		boolean flag = !this.pos.equals(posIn);
 
-	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, EntityPlayer author) {
-		if (this.relativeMode) {
-			startPos = this.pos.add(startPos);
-			endPos = this.pos.add(endPos);
+		super.setPos(posIn);
+
+		if (flag) {
+			this.onPositionsChanged();
 		}
-		if (!world.isRemote) {
-			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = CQStructure.createFromWorld(world, startPos, endPos, this.ignoreEntities, author.getName());
-			Thread exportThread = new Thread(() -> {
-				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"))) {
-					author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName));
-				} else {
-					author.sendMessage(new TextComponentString("Failed to export structure: " + this.structureName));
-				}
-			});
-			exportThread.setName("CQR Export Thread");
-			exportThread.start();
+	}
+
+	private void onPositionsChanged() {
+		int x1 = Math.min(this.startX.getInt(), this.endX.getInt());
+		int y1 = Math.min(this.startY.getInt(), this.endY.getInt());
+		int z1 = Math.min(this.startZ.getInt(), this.endZ.getInt());
+		int x2 = Math.max(this.startX.getInt(), this.endX.getInt());
+		int y2 = Math.max(this.startY.getInt(), this.endY.getInt());
+		int z2 = Math.max(this.startZ.getInt(), this.endZ.getInt());
+		if (this.relativeMode.getBoolean()) {
+			this.minPosRelative.setPos(x1, y1, z1);
+			this.maxPosRelative.setPos(x2, y2, z2);
+			x1 += this.pos.getX();
+			y1 += this.pos.getY();
+			z1 += this.pos.getZ();
+			x2 += this.pos.getX();
+			y2 += this.pos.getY();
+			z2 += this.pos.getZ();
+			this.minPos.setPos(x1, y1, z1);
+			this.maxPos.setPos(x2, y2, z2);
 		} else {
-			CQRMain.NETWORK.sendToServer(new CPacketSaveStructureRequest(startPos, endPos, author.getName(), this.structureName, this.ignoreEntities));
+			this.minPos.setPos(x1, y1, z1);
+			this.maxPos.setPos(x2, y2, z2);
+			x1 -= this.pos.getX();
+			y1 -= this.pos.getY();
+			z1 -= this.pos.getZ();
+			x2 -= this.pos.getX();
+			y2 -= this.pos.getY();
+			z2 -= this.pos.getZ();
+			this.minPosRelative.setPos(x1, y1, z1);
+			this.maxPosRelative.setPos(x2, y2, z2);
 		}
-	}
-
-	public void onPositionsChanged() {
-		this.minPos = new BlockPos(Math.min(this.startX, this.endX), Math.min(this.startY, this.endY), Math.min(this.startZ, this.endZ));
-		this.maxPos = new BlockPos(Math.max(this.startX, this.endX), Math.max(this.startY, this.endY), Math.max(this.startZ, this.endZ));
-	}
-
-	public BlockPos getMinPos() {
-		return this.minPos;
-	}
-
-	public BlockPos getMaxPos() {
-		return this.maxPos;
-	}
-
-	public BlockPos getRenderMinPos() {
-		return this.relativeMode ? this.minPos : this.minPos.subtract(this.pos);
-	}
-
-	public BlockPos getRenderMaxPos() {
-		return this.relativeMode ? this.maxPos : this.maxPos.subtract(this.pos);
 	}
 
 	@Override
@@ -182,8 +178,96 @@ public class TileEntityExporter extends TileEntity {
 
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		double d = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
+		double d = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16.0D;
 		return d * d;
+	}
+
+	public void saveStructure(EntityPlayer author) {
+		if (this.world == null) {
+			return;
+		}
+		if (!this.world.isRemote) {
+			CQRMain.logger.info("Server is saving structure...");
+			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), author.getName());
+			new Thread(() -> {
+				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
+					author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName.get()));
+				} else {
+					author.sendMessage(new TextComponentString("Failed to export structure: " + this.structureName.get()));
+				}
+			}, "CQR Export Thread").start();
+		} else {
+			this.dataManager.checkIfDirtyAndSync();
+			CQRMain.NETWORK.sendToServer(new CPacketSaveStructureRequest(this.pos));
+		}
+	}
+
+	public void setValues(String structName, BlockPos startPos, BlockPos endPos, boolean useRelativeMode, boolean ignoreEntities) {
+		this.setValues(structName, startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), useRelativeMode, ignoreEntities);
+	}
+
+	public void setValues(String structName, int sX, int sY, int sZ, int eX, int eY, int eZ, boolean useRelativeMode, boolean ignoreEntities) {
+		this.structureName.set(structName);
+		this.startX.set(sX);
+		this.startY.set(sY);
+		this.startZ.set(sZ);
+		this.endX.set(eX);
+		this.endY.set(eY);
+		this.endZ.set(eZ);
+		this.relativeMode.set(useRelativeMode);
+		this.ignoreEntities.set(ignoreEntities);
+	}
+
+	public String getStructureName() {
+		return this.structureName.get();
+	}
+
+	public int getStartX() {
+		return this.startX.getInt();
+	}
+
+	public int getStartY() {
+		return this.startY.getInt();
+	}
+
+	public int getStartZ() {
+		return this.startZ.getInt();
+	}
+
+	public int getEndX() {
+		return this.endX.getInt();
+	}
+
+	public int getEndY() {
+		return this.endY.getInt();
+	}
+
+	public int getEndZ() {
+		return this.endZ.getInt();
+	}
+
+	public boolean isIgnoreEntities() {
+		return this.ignoreEntities.getBoolean();
+	}
+
+	public boolean isRelativeMode() {
+		return this.relativeMode.getBoolean();
+	}
+
+	public BlockPos.MutableBlockPos getMinPos() {
+		return this.minPos;
+	}
+
+	public BlockPos.MutableBlockPos getMaxPos() {
+		return this.maxPos;
+	}
+
+	public BlockPos getMinPosRelative() {
+		return this.minPosRelative;
+	}
+
+	public BlockPos getMaxPosRelative() {
+		return this.maxPosRelative;
 	}
 
 }

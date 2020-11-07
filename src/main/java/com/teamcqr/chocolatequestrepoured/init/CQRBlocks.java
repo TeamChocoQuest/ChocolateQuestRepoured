@@ -309,6 +309,7 @@ public class CQRBlocks {
 			GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(Reference.MODID, "TileEntitySpawner"));
 			GameRegistry.registerTileEntity(TileEntityForceFieldNexus.class, new ResourceLocation(Reference.MODID, "TileEntityForceFieldNexus"));
 			GameRegistry.registerTileEntity(TileEntityExporterChest.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChest"));
+			GameRegistry.registerTileEntity(TileEntityBoss.class, new ResourceLocation(Reference.MODID, "TileEntityBoss"));
 		}
 
 		private static Block setBlockName(Block block, String name) {

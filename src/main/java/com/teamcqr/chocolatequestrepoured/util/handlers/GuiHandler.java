@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBadge;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiBossBlock;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiSpawner;
 import com.teamcqr.chocolatequestrepoured.client.gui.npceditor.GuiCQREntity;
@@ -12,11 +13,13 @@ import com.teamcqr.chocolatequestrepoured.client.gui.npceditor.GuiReputation;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBackpack;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBadge;
+import com.teamcqr.chocolatequestrepoured.inventory.ContainerBossBlock;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerCQREntity;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerMerchant;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerMerchantEditTrade;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityBoss;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -62,6 +65,10 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerMerchantEditTrade((AbstractEntityCQR) world.getEntityByID(x), player, y);
 		}
 
+		if (ID == Reference.BOSS_BLOCK_GUI_ID) {
+			return new ContainerBossBlock(player.inventory, (TileEntityBoss) world.getTileEntity(new BlockPos(x, y, z)));
+		}
+
 		return null;
 	}
 
@@ -102,6 +109,10 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == Reference.REPUTATION_GUI_ID) {
 			return new GuiReputation((EntityPlayerSP) player);
+		}
+
+		if (ID == Reference.BOSS_BLOCK_GUI_ID) {
+			return new GuiBossBlock(this.getServerGuiElement(ID, player, world, x, y, z));
 		}
 
 		return null;

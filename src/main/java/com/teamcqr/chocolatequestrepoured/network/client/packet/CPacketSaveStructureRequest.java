@@ -1,72 +1,35 @@
 package com.teamcqr.chocolatequestrepoured.network.client.packet;
 
+import com.teamcqr.chocolatequestrepoured.util.ByteBufUtil;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class CPacketSaveStructureRequest implements IMessage {
 
-	private BlockPos startPos;
-	private BlockPos endPos;
-	private String author;
-	private String structureName;
-	private boolean ignoreEntities;
+	private BlockPos pos;
 
 	public CPacketSaveStructureRequest() {
 
 	}
 
-	public CPacketSaveStructureRequest(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean ignoreEntities) {
-		this.startPos = startPos;
-		this.endPos = endPos;
-		this.author = authorName;
-		this.structureName = name;
-		this.ignoreEntities = ignoreEntities;
+	public CPacketSaveStructureRequest(BlockPos pos) {
+		this.pos = pos;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.startPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
-		this.endPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
-		this.author = ByteBufUtils.readUTF8String(buf);
-		this.structureName = ByteBufUtils.readUTF8String(buf);
-		this.ignoreEntities = buf.readBoolean();
+		this.pos = ByteBufUtil.readBlockPos(buf);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.startPos.getX());
-		buf.writeInt(this.startPos.getY());
-		buf.writeInt(this.startPos.getZ());
-
-		buf.writeInt(this.endPos.getX());
-		buf.writeInt(this.endPos.getY());
-		buf.writeInt(this.endPos.getZ());
-
-		ByteBufUtils.writeUTF8String(buf, this.author);
-		ByteBufUtils.writeUTF8String(buf, this.structureName);
-		buf.writeBoolean(this.ignoreEntities);
+		ByteBufUtil.writeBlockPos(buf, this.pos);
 	}
 
-	public BlockPos getStartPos() {
-		return this.startPos;
-	}
-
-	public BlockPos getEndPos() {
-		return this.endPos;
-	}
-
-	public String getAuthor() {
-		return this.author;
-	}
-
-	public String getName() {
-		return this.structureName;
-	}
-
-	public boolean ignoreEntities() {
-		return this.ignoreEntities;
+	public BlockPos getPos() {
+		return this.pos;
 	}
 
 }
