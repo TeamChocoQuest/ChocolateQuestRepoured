@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.network.server.handler;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.SyncEntityPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSyncEntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
@@ -12,10 +12,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class SyncEntityPacketHandler implements IMessageHandler<SyncEntityPacket, IMessage> {
+public class SPacketHandlerSyncEntity implements IMessageHandler<CPacketSyncEntity, IMessage> {
 
 	@Override
-	public IMessage onMessage(SyncEntityPacket message, MessageContext ctx) {
+	public IMessage onMessage(CPacketSyncEntity message, MessageContext ctx) {
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			if (CQRMain.proxy.getPlayer(ctx).isCreative()) {
 				World world = CQRMain.proxy.getWorld(ctx);

@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class SaveStructureRequestPacket implements IMessage {
+public class CPacketSaveStructureRequest implements IMessage {
 
 	private BlockPos startPos;
 	private BlockPos endPos;
@@ -13,11 +13,11 @@ public class SaveStructureRequestPacket implements IMessage {
 	private String structureName;
 	private boolean ignoreEntities;
 
-	public SaveStructureRequestPacket() {
+	public CPacketSaveStructureRequest() {
 
 	}
 
-	public SaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean ignoreEntities) {
+	public CPacketSaveStructureRequest(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean ignoreEntities) {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.author = authorName;

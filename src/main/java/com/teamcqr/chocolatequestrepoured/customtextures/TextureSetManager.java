@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.server.packet.CustomTexturesPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketCustomTextures;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -100,7 +100,7 @@ public class TextureSetManager {
 	}
 
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
-		CustomTexturesPacket packet = new CustomTexturesPacket();
+		SPacketCustomTextures packet = new SPacketCustomTextures();
 		/*for (File texture : TextureSet.getLoadedTextures()) {
 			String base64 = CompressionUtil.encodeFileToBase64(texture);
 			String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());

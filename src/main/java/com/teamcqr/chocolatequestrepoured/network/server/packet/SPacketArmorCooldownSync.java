@@ -10,15 +10,15 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class ArmorCooldownSyncPacket implements IMessage {
+public class SPacketArmorCooldownSync implements IMessage {
 
 	private Map<Item, Integer> itemCooldownMap = new HashMap<>();
 
-	public ArmorCooldownSyncPacket() {
+	public SPacketArmorCooldownSync() {
 
 	}
 
-	public ArmorCooldownSyncPacket(Map<Item, Integer> itemCooldownMap) {
+	public SPacketArmorCooldownSync(Map<Item, Integer> itemCooldownMap) {
 		this.itemCooldownMap = itemCooldownMap;
 	}
 

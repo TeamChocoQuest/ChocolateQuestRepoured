@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.StructureSelectorPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketStructureSelector;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -185,7 +185,7 @@ public class ItemStructureSelector extends Item {
 			ItemStack stack = player.getHeldItem(event.getHand());
 
 			if (stack.getItem() instanceof ItemStructureSelector && player.isSneaking()) {
-				CQRMain.NETWORK.sendToServer(new StructureSelectorPacket(event.getHand()));
+				CQRMain.NETWORK.sendToServer(new CPacketStructureSelector(event.getHand()));
 			}
 		}
 

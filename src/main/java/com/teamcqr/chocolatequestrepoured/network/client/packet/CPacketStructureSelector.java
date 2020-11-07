@@ -4,15 +4,15 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class StructureSelectorPacket implements IMessage {
+public class CPacketStructureSelector implements IMessage {
 
 	private EnumHand hand;
 
-	public StructureSelectorPacket() {
+	public CPacketStructureSelector() {
 
 	}
 
-	public StructureSelectorPacket(EnumHand hand) {
+	public CPacketStructureSelector(EnumHand hand) {
 		this.hand = hand;
 	}
 

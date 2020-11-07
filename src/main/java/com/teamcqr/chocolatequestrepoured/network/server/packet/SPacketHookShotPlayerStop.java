@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.network.server.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class HookShotPlayerStopPacket implements IMessage {
+public class SPacketHookShotPlayerStop implements IMessage {
 
-	public HookShotPlayerStopPacket() {
+	public SPacketHookShotPlayerStop() {
 
 	}
 

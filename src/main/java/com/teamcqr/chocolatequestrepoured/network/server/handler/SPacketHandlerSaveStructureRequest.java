@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.network.server.handler;
 import java.io.File;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.SaveStructureRequestPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSaveStructureRequest;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,10 +14,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class SaveStructureRequestPacketHandler implements IMessageHandler<SaveStructureRequestPacket, IMessage> {
+public class SPacketHandlerSaveStructureRequest implements IMessageHandler<CPacketSaveStructureRequest, IMessage> {
 
 	@Override
-	public IMessage onMessage(SaveStructureRequestPacket message, MessageContext ctx) {
+	public IMessage onMessage(CPacketSaveStructureRequest message, MessageContext ctx) {
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			if (ctx.side.isServer()) {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);

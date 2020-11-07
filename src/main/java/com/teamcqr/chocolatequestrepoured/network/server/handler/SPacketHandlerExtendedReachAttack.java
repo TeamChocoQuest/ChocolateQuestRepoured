@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.network.server.handler;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.ExtendedReachAttackPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketExtendedReachAttack;
 import com.teamcqr.chocolatequestrepoured.objects.items.spears.ItemSpearBase;
 
 import net.minecraft.entity.Entity;
@@ -12,9 +12,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class ExtendedReachAttackPacketHandler implements IMessageHandler<ExtendedReachAttackPacket, IMessage> {
+public class SPacketHandlerExtendedReachAttack implements IMessageHandler<CPacketExtendedReachAttack, IMessage> {
 	@Override
-	public IMessage onMessage(final ExtendedReachAttackPacket message, MessageContext ctx) {
+	public IMessage onMessage(final CPacketExtendedReachAttack message, MessageContext ctx) {
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			if (ctx.side.isServer()) {
 				EntityPlayer attackingPlayer = CQRMain.proxy.getPlayer(ctx);

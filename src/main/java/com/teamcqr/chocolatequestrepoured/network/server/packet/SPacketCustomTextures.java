@@ -12,12 +12,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class CustomTexturesPacket implements IMessage {
+public class SPacketCustomTextures implements IMessage {
 
 	private Map<String, byte[]> entries = new HashMap<>();
 	private Map<String, Map<ResourceLocation, Set<ResourceLocation>>> textureSets = new HashMap<>();
 
-	public CustomTexturesPacket() {
+	public SPacketCustomTextures() {
 
 	}
 

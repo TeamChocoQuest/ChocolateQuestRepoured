@@ -17,7 +17,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.init.CQRSounds;
-import com.teamcqr.chocolatequestrepoured.network.server.packet.ItemStackSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketItemStackSync;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
@@ -608,7 +608,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		if (!this.world.isRemote && stack != this.prevPotion) {
-			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
+			CQRMain.NETWORK.sendToAll(new SPacketItemStackSync(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
 

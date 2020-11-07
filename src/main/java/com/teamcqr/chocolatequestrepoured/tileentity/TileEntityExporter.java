@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.SaveStructureRequestPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSaveStructureRequest;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.client.Minecraft;
@@ -150,7 +150,7 @@ public class TileEntityExporter extends TileEntity {
 			exportThread.setName("CQR Export Thread");
 			exportThread.start();
 		} else {
-			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, this.ignoreEntities));
+			CQRMain.NETWORK.sendToServer(new CPacketSaveStructureRequest(startPos, endPos, author.getName(), this.structureName, this.ignoreEntities));
 		}
 	}
 

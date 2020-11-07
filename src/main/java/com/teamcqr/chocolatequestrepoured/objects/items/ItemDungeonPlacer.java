@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.server.packet.DungeonSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketDungeonSync;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
@@ -168,7 +168,7 @@ public class ItemDungeonPlacer extends Item {
 		@SubscribeEvent
 		public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.player.world.isRemote) {
-				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(DungeonRegistry.getInstance().getDungeons()), (EntityPlayerMP) event.player);
+				CQRMain.NETWORK.sendTo(new SPacketDungeonSync(DungeonRegistry.getInstance().getDungeons()), (EntityPlayerMP) event.player);
 			}
 		}
 

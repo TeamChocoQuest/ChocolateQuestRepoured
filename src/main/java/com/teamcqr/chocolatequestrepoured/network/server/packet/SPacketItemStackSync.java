@@ -5,17 +5,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class ItemStackSyncPacket implements IMessage {
+public class SPacketItemStackSync implements IMessage {
 
 	private int entityId;
 	private int slotIndex;
 	private ItemStack stack;
 
-	public ItemStackSyncPacket() {
+	public SPacketItemStackSync() {
 
 	}
 
-	public ItemStackSyncPacket(int entityId, int slotIndex, ItemStack stack) {
+	public SPacketItemStackSync(int entityId, int slotIndex, ItemStack stack) {
 		this.entityId = entityId;
 		this.slotIndex = slotIndex;
 		this.stack = stack;

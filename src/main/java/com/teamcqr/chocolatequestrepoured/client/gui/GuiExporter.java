@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.ExporterUpdatePacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketExporterUpdate;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.Minecraft;
@@ -93,7 +93,7 @@ public class GuiExporter extends GuiScreen {
 			}
 
 			this.exporter.setValues(startX, startY, startZ, endX, endY, endZ, structName, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked());
-			CQRMain.NETWORK.sendToServer(new ExporterUpdatePacket(this.exporter));
+			CQRMain.NETWORK.sendToServer(new CPacketExporterUpdate(this.exporter));
 
 			if (this.saveStructOnExit) {
 				this.exporter.saveStructure(this.mc.world, new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ), this.mc.player);

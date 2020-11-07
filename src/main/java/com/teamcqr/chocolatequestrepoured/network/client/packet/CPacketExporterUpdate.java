@@ -15,17 +15,17 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
  * Developed by MrMarnic on 28.08.2019
  * GitHub: https://github.com/MrMarnic
  */
-public class ExporterUpdatePacket implements IMessage {
+public class CPacketExporterUpdate implements IMessage {
 
 	private TileEntityExporter entityExporter;
 	private NBTTagCompound data;
 	private BlockPos pos;
 
-	public ExporterUpdatePacket() {
+	public CPacketExporterUpdate() {
 
 	}
 
-	public ExporterUpdatePacket(TileEntityExporter entityExporter) {
+	public CPacketExporterUpdate(TileEntityExporter entityExporter) {
 		this.entityExporter = entityExporter;
 	}
 

@@ -5,7 +5,7 @@ import java.util.Map;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandler;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandlerProvider;
-import com.teamcqr.chocolatequestrepoured.network.server.packet.ArmorCooldownSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketArmorCooldownSync;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -14,10 +14,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class ArmorCooldownSyncPacketHandler implements IMessageHandler<ArmorCooldownSyncPacket, IMessage> {
+public class CPacketHandlerArmorCooldownSync implements IMessageHandler<SPacketArmorCooldownSync, IMessage> {
 
 	@Override
-	public IMessage onMessage(ArmorCooldownSyncPacket message, MessageContext ctx) {
+	public IMessage onMessage(SPacketArmorCooldownSync message, MessageContext ctx) {
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			if (ctx.side.isClient()) {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);

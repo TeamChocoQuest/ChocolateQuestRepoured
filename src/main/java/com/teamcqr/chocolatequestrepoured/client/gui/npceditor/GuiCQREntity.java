@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.gui.npceditor;
 import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.client.packet.SyncEntityPacket;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSyncEntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -133,7 +133,7 @@ public class GuiCQREntity extends GuiContainer {
 		this.entity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) dropChanceOffhand / 100.0F);
 		this.entity.setSizeVariation((float) sizeScaling / 100.0F);
 
-		CQRMain.NETWORK.sendToServer(new SyncEntityPacket(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
+		CQRMain.NETWORK.sendToServer(new CPacketSyncEntity(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
 	}
 
 	@Override

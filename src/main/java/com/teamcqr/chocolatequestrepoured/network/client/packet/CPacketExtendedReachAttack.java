@@ -3,16 +3,16 @@ package com.teamcqr.chocolatequestrepoured.network.client.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class ExtendedReachAttackPacket implements IMessage {
+public class CPacketExtendedReachAttack implements IMessage {
 
 	private int entityId;
 	private boolean isExtended;
 
-	public ExtendedReachAttackPacket() {
+	public CPacketExtendedReachAttack() {
 
 	}
 
-	public ExtendedReachAttackPacket(int entityId, boolean isExtended) {
+	public CPacketExtendedReachAttack(int entityId, boolean isExtended) {
 		this.entityId = entityId;
 		this.isExtended = isExtended;
 	}

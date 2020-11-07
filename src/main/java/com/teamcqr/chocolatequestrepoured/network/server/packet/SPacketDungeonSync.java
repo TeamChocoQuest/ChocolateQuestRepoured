@@ -10,16 +10,16 @@ import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class DungeonSyncPacket implements IMessage {
+public class SPacketDungeonSync implements IMessage {
 
 	private List<DungeonBase> dungeons;
 	private List<FakeDungeon> fakeDungeonSet;
 
-	public DungeonSyncPacket() {
+	public SPacketDungeonSync() {
 
 	}
 
-	public DungeonSyncPacket(List<DungeonBase> dungeons) {
+	public SPacketDungeonSync(List<DungeonBase> dungeons) {
 		this.dungeons = dungeons;
 	}
 

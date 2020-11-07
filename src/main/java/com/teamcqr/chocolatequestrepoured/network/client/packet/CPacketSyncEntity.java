@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.network.client.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class SyncEntityPacket implements IMessage {
+public class CPacketSyncEntity implements IMessage {
 
 	private int entityId;
 	private int healthScaling;
@@ -15,11 +15,11 @@ public class SyncEntityPacket implements IMessage {
 	private int dropChanceOffhand;
 	private int sizeScaling;
 
-	public SyncEntityPacket() {
+	public CPacketSyncEntity() {
 
 	}
 
-	public SyncEntityPacket(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand, int sizeScaling) {
+	public CPacketSyncEntity(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand, int sizeScaling) {
 		this.entityId = entityId;
 		this.healthScaling = healthScaling;
 		this.dropChanceHelm = dropChanceHelm;
