@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class CPacketHandlerHookShotPlayerStop implements IMessageHandler<SPacketHookShotPlayerStop, IMessage> {
+
 	@Override
 	public IMessage onMessage(final SPacketHookShotPlayerStop message, MessageContext ctx) {
 		if (ctx.side.isClient()) {

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.util;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
 public class GuiHelper {
@@ -20,6 +21,17 @@ public class GuiHelper {
 		GL11.glTexCoord2d(u, v);
 		GL11.glVertex2d(x, y);
 		GL11.glEnd();
+	}
+
+	public static void drawString(FontRenderer fontRenderer, String text, int x, int y, int color, boolean centered, boolean withShadow) {
+		if (centered) {
+			x -= fontRenderer.getStringWidth(text) / 2;
+		}
+		if (withShadow) {
+			fontRenderer.drawStringWithShadow(text, x, y, color);
+		} else {
+			fontRenderer.drawString(text, x, y, color);
+		}
 	}
 
 	public static boolean isMouseOver(int mouseX, int mouseY, GuiTextField textField) {

@@ -258,7 +258,6 @@ public class CastleMainStructWall {
 	}
 
 	private IBlockState getRoofEdgeBlock(BlockPos pos, DungeonRandomizedCastle dungeon) {
-		IBlockState blockToBuild = dungeon.getMainBlockState();
 		int y = pos.getY() - this.origin.getY();
 		int dist = this.getLengthPoint(pos);
 

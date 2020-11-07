@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
+@SuppressWarnings("deprecation")
 public class ItemSpawnEggCQR extends Item {
 
 	private Class<? extends AbstractEntityCQR> entityClass;
@@ -124,35 +125,11 @@ public class ItemSpawnEggCQR extends Item {
 
 	public static List<Item> getItemList(Class<? extends AbstractEntityCQR> entityClass, String entityName) {
 		List<Item> itemList = new ArrayList<>();
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, ItemStack.EMPTY, ItemStack.EMPTY, ArmorMaterial.LEATHER));
 		itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.WOODEN_SWORD), ItemStack.EMPTY, ArmorMaterial.LEATHER));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.SHIELD), ArmorMaterial.LEATHER));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.BOW), ItemStack.EMPTY, ArmorMaterial.LEATHER));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(ModItems.STAFF_HEALING), ItemStack.EMPTY, ArmorMaterial.LEATHER));
-
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, ItemStack.EMPTY, ItemStack.EMPTY, ArmorMaterial.GOLD));
 		itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.GOLDEN_SWORD), ItemStack.EMPTY, ArmorMaterial.GOLD));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.GOLDEN_SWORD), new ItemStack(Items.SHIELD), ArmorMaterial.GOLD));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.BOW), ItemStack.EMPTY, ArmorMaterial.GOLD));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(ModItems.STAFF_HEALING), ItemStack.EMPTY, ArmorMaterial.GOLD));
-
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, ItemStack.EMPTY, ItemStack.EMPTY, ArmorMaterial.CHAIN));
 		itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.STONE_SWORD), ItemStack.EMPTY, ArmorMaterial.CHAIN));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.STONE_SWORD), new ItemStack(Items.SHIELD), ArmorMaterial.CHAIN));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.BOW), ItemStack.EMPTY, ArmorMaterial.CHAIN));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(ModItems.STAFF_HEALING), ItemStack.EMPTY, ArmorMaterial.CHAIN));
-
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, ItemStack.EMPTY, ItemStack.EMPTY, ArmorMaterial.IRON));
 		itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.IRON_SWORD), ItemStack.EMPTY, ArmorMaterial.IRON));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.IRON_SWORD), new ItemStack(Items.SHIELD), ArmorMaterial.IRON));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.BOW), ItemStack.EMPTY, ArmorMaterial.IRON));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(ModItems.STAFF_HEALING), ItemStack.EMPTY, ArmorMaterial.IRON));
-
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, ItemStack.EMPTY, ItemStack.EMPTY, ArmorMaterial.DIAMOND));
 		itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.DIAMOND_SWORD), ItemStack.EMPTY, ArmorMaterial.DIAMOND));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.SHIELD), ArmorMaterial.DIAMOND));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.BOW), ItemStack.EMPTY, ArmorMaterial.DIAMOND));
-		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(ModItems.STAFF_HEALING), ItemStack.EMPTY, ArmorMaterial.DIAMOND));
 		return itemList;
 	}
 

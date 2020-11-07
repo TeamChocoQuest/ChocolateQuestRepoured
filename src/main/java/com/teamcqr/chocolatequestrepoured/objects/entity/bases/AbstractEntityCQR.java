@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,8 @@ import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.objects.npc.trading.TraderOffer;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -503,10 +506,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		this.trades.readFromNBT(compound.getCompoundTag("trades"));
-		
-		if(compound.hasKey("textureOverride", Constants.NBT.TAG_STRING)) {
+
+		if (compound.hasKey("textureOverride", Constants.NBT.TAG_STRING)) {
 			String ct = compound.getString("textureOverride");
-			if(!ct.isEmpty()) {
+			if (!ct.isEmpty()) {
 				this.setCustomTexture(new ResourceLocation(ct));
 			}
 		}
@@ -519,7 +522,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (player.getHeldItem(hand).getItem() instanceof ItemNameTag) {
 			return super.processInteract(player, hand);
 		}
-		
+
 		if (!player.isSneaking()) {
 			if (player.isCreative() || this.getLeader() == player) {
 				if (!this.world.isRemote) {
@@ -608,7 +611,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		if (!this.world.isRemote && stack != this.prevPotion) {
-			CQRMain.NETWORK.sendToAll(new SPacketItemStackSync(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
+			CQRMain.NETWORK.sendToAllTracking(new SPacketItemStackSync(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack), this);
 		}
 		this.prevPotion = stack;
 
@@ -802,35 +805,28 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.trades.readFromNBT(ByteBufUtils.readTag(additionalData));
 	}
 
-	// Chocolate Quest Repoured
-	public EntityLivingBase getLeader() {
-		if (this.leaderUUID != null) {
-			if (this.leader != null) {
-				if (this.leader.isEntityAlive()) {
-					return this.leader;
-				}
-				this.leader = null;
-				this.leaderUUID = null;
-			} else {
-				if (this.world instanceof WorldServer) {
-					Entity leader = ((WorldServer) this.world).getEntityFromUuid(this.leaderUUID);
-					if (leader instanceof EntityLivingBase) {
-						this.leader = (EntityLivingBase) leader;
-						return (EntityLivingBase) leader;
-					}
-					return null;
-				}
+	// #################### Chocolate Quest Repoured ####################
 
-				/*
-				 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) &&
-				 * entity.isEntityAlive()) { this.leader = (EntityLivingBase) entity; return
-				 * (EntityLivingBase) entity; } }
-				 */
+	public EntityLivingBase getLeader() {
+		if (this.leaderUUID == null) {
+			this.leader = null;
+			return null;
+		}
+
+		if (this.leader == null) {
+			Entity entity = EntityUtil.getEntityByUUID(this.world, this.leaderUUID);
+
+			if (entity instanceof EntityLivingBase) {
+				this.leader = (EntityLivingBase) entity;
 			}
-		} else {
+		}
+
+		if (this.leader != null && !this.leader.isEntityAlive()) {
+			this.leaderUUID = null;
 			this.leader = null;
 		}
-		return null;
+
+		return this.leader;
 	}
 
 	public void setLeader(EntityLivingBase leader) {
@@ -1024,7 +1020,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 	}
-	
+
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
 		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
 	}
@@ -1307,13 +1303,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.getHomePositionCQR() == null) {
 			this.setHomePositionCQR(position);
 		}
-		BlockPos[] newPosArr = new BlockPos[this.pathPoints.length + 1];
-		for (int i = 0; i < this.pathPoints.length; i++) {
-			newPosArr[i] = this.pathPoints[i];
-		}
-		position = position.subtract(this.getHomePositionCQR());
-		newPosArr[this.pathPoints.length] = position;
-		this.pathPoints = newPosArr;
+		this.pathPoints = Arrays.copyOf(this.pathPoints, this.pathPoints.length + 1);
+		this.pathPoints[this.pathPoints.length] = position.subtract(this.getHomePositionCQR());
 	}
 
 	public void clearPathPoints() {
@@ -1412,10 +1403,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Shoulder entity stuff
 
-	public boolean addShoulderEntity(NBTTagCompound p_192027_1_) {
+	public boolean addShoulderEntity(NBTTagCompound compound) {
 		if (!this.isRiding() && this.onGround && !this.isInWater()) {
 			if (this.getLeftShoulderEntity().isEmpty()) {
-				this.setLeftShoulderEntity(p_192027_1_);
+				this.setLeftShoulderEntity(compound);
 				return true;
 			} else {
 				return false;
@@ -1430,9 +1421,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setLeftShoulderEntity(new NBTTagCompound());
 	}
 
-	private void spawnShoulderEntity(@Nullable NBTTagCompound p_192026_1_) {
-		if (!this.world.isRemote && !p_192026_1_.isEmpty()) {
-			Entity entity = EntityList.createEntityFromNBT(p_192026_1_, this.world);
+	private void spawnShoulderEntity(@Nullable NBTTagCompound compound) {
+		if (!this.world.isRemote && compound != null && !compound.isEmpty()) {
+			Entity entity = EntityList.createEntityFromNBT(compound, this.world);
 
 			if (entity instanceof EntityTameable) {
 				((EntityTameable) entity).setOwnerId(this.entityUniqueID);
@@ -1444,7 +1435,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public NBTTagCompound getLeftShoulderEntity() {
-		return (NBTTagCompound) this.dataManager.get(SHOULDER_ENTITY);
+		return this.dataManager.get(SHOULDER_ENTITY);
 	}
 
 	protected void setLeftShoulderEntity(NBTTagCompound tag) {
@@ -1486,7 +1477,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public ResourceLocation getTextureOverride() {
-		if (this.textureOverride == null || this.textureOverride.toString() != this.dataManager.get(TEXTURE_OVERRIDE)) {
+		if (this.textureOverride == null || !this.textureOverride.toString().equals(this.dataManager.get(TEXTURE_OVERRIDE))) {
 			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
 		}
 		return this.textureOverride;

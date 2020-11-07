@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.network.server.packet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer.FakeDungeon;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer.ClientDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 
 import io.netty.buffer.ByteBuf;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 public class SPacketDungeonSync implements IMessage {
 
 	private List<DungeonBase> dungeons;
-	private List<FakeDungeon> fakeDungeonSet;
+	private List<ClientDungeon> fakeDungeonSet;
 
 	public SPacketDungeonSync() {
 
@@ -36,7 +36,7 @@ public class SPacketDungeonSync implements IMessage {
 				dependencies[j] = ByteBufUtils.readUTF8String(buf);
 			}
 
-			this.fakeDungeonSet.add(new FakeDungeon(name, iconID, dependencies));
+			this.fakeDungeonSet.add(new ClientDungeon(name, iconID, dependencies));
 		}
 	}
 
@@ -53,7 +53,7 @@ public class SPacketDungeonSync implements IMessage {
 		}
 	}
 
-	public List<FakeDungeon> getFakeDungeonList() {
+	public List<ClientDungeon> getFakeDungeonList() {
 		return this.fakeDungeonSet;
 	}
 

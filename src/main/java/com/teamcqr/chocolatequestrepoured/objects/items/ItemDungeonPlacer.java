@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDungeonPlacer extends Item {
 
-	public static List<FakeDungeon> fakeDungeonSet = Collections.emptyList();
+	private static final List<ClientDungeon> CLIENT_DUNGEON_LIST = new ArrayList<>();
 
 	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
@@ -54,7 +55,7 @@ public class ItemDungeonPlacer extends Item {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
-			for (FakeDungeon fakeDungeon : fakeDungeonSet) {
+			for (ClientDungeon fakeDungeon : CLIENT_DUNGEON_LIST) {
 				int iconID = fakeDungeon.getIconID() <= HIGHEST_ICON_NUMBER ? fakeDungeon.getIconID() : 0;
 				if (iconID == this.iconID) {
 					ItemStack stack = new ItemStack(this);
@@ -75,9 +76,12 @@ public class ItemDungeonPlacer extends Item {
 		}
 	}
 
+	/**
+	 * Overriding this instead of {@link Item#getEquipmentSlot(ItemStack)} to prevent this item being placed into the head slot when shift-clicked.
+	 */
 	@Override
-	public EntityEquipmentSlot getEquipmentSlot(ItemStack stack) {
-		return EntityEquipmentSlot.HEAD;
+	public boolean isValidArmor(ItemStack stack, EntityEquipmentSlot armorType, Entity entity) {
+		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
 	@Override
@@ -136,13 +140,18 @@ public class ItemDungeonPlacer extends Item {
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
-	public static class FakeDungeon {
+	public static void updateClientDungeonList(List<ClientDungeon> list) {
+		CLIENT_DUNGEON_LIST.clear();
+		CLIENT_DUNGEON_LIST.addAll(list);
+	}
+
+	public static class ClientDungeon {
 
 		private String dungeonName;
 		private int iconID;
 		private String[] dependencies;
 
-		public FakeDungeon(String dungeonName, int iconID, String[] dependencies) {
+		public ClientDungeon(String dungeonName, int iconID, String[] dependencies) {
 			this.dungeonName = dungeonName;
 			this.iconID = iconID;
 			this.dependencies = dependencies;

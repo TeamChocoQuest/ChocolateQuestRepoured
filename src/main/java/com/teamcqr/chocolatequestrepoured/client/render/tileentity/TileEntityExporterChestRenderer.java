@@ -34,7 +34,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 		EnumFacing facing = EnumFacing.SOUTH;
 		ModelChestNormal model = this.chestNormal;
 		ResourceLocation texture = new ResourceLocation(Reference.MODID, "textures/entity/chest/exporter_chest.png");
-		ResourceLocation itemTexture = new ResourceLocation("textures/items/stick.png");
+		ResourceLocation overlayTexture = new ResourceLocation("textures/items/stick.png");
 
 		if (world != null) {
 			facing = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
@@ -50,8 +50,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 			}
 		}
 
-		if (block != null && block instanceof BlockExporterChest) {
-			itemTexture = ((BlockExporterChest) block).itemTexture;
+		if (block instanceof BlockExporterChest) {
 		}
 
 		GlStateManager.pushMatrix();
@@ -72,7 +71,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 
 		GlStateManager.popMatrix();
 
-		this.renderItem(x, y, z, itemTexture, facing.getOpposite().getHorizontalAngle());
+		this.renderOverlay(x, y, z, overlayTexture, facing.getOpposite().getHorizontalAngle());
 	}
 
 	private boolean isChest(Block block) {
@@ -88,7 +87,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 		return false;
 	}
 
-	private void renderItem(double x, double y, double z, ResourceLocation texture, double rotation) {
+	private void renderOverlay(double x, double y, double z, ResourceLocation texture, double rotation) {
 		GL11.glPushMatrix();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		GL11.glTranslated(x + 0.5D, y + 0.5D, z + 0.5D);

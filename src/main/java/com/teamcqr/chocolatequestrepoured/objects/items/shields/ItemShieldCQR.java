@@ -8,6 +8,7 @@ import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 
+@SuppressWarnings("deprecation")
 public class ItemShieldCQR extends ItemShield {
 
 	public static final String[] SHIELD_NAMES = { "bull", "carl", "dragonslayer", "fire", "goblin", "monking", "moon", "mummy", "pigman", "pirate", "pirate2", "rainbow", "reflective", "rusted", "skeleton_friends", "specter", "spider", "sun", "tomb", "triton", "turtle", "walker", "warped", "zombie" };

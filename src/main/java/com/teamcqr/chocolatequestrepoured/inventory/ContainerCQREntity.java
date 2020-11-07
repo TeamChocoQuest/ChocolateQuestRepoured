@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -192,7 +191,6 @@ public class ContainerCQREntity extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		/* return playerIn.isCreative(); */
 		return true;
 	}
 
@@ -212,7 +210,7 @@ public class ContainerCQREntity extends Container {
 			} else {
 				if (this.mergeItemStack(itemstack1, 36, 39, false)) {
 					return itemstack;
-				} else if (EntityLiving.getSlotForItemStack(itemstack1) == EntityEquipmentSlot.HEAD && this.mergeItemStack(itemstack1, 39, 40, false)) {
+				} else if (this.isHelmet(itemstack1) && this.mergeItemStack(itemstack1, 39, 40, false)) {
 					return itemstack;
 				} else if (this.mergeItemStack(itemstack1, 42, 45, false)) {
 					return itemstack;
@@ -220,13 +218,25 @@ public class ContainerCQREntity extends Container {
 					return itemstack;
 				} else if (this.mergeItemStack(itemstack1, 40, 42, false)) {
 					return itemstack;
-				} else if (this.mergeItemStack(itemstack1, 39, 40, false)) {
-					return itemstack;
+				} else {
+					if (index > 26) {
+						if (this.mergeItemStack(itemstack1, 0, 27, false)) {
+							return ItemStack.EMPTY;
+						}
+					} else {
+						if (this.mergeItemStack(itemstack1, 27, 36, false)) {
+							return ItemStack.EMPTY;
+						}
+					}
 				}
 			}
-
 		}
+
 		return ItemStack.EMPTY;
+	}
+
+	private boolean isHelmet(ItemStack stack) {
+		return (stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.HEAD) || stack.getItem().getEquipmentSlot(stack) == EntityEquipmentSlot.HEAD;
 	}
 
 }

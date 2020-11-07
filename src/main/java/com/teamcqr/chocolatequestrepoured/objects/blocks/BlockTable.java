@@ -6,11 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -58,7 +58,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		if (state.getValue(TOP) == true) {
+		if (Boolean.TRUE.equals(state.getValue(TOP))) {
 			return TABLE_AABB;
 		} else {
 			return TABLE_TOP_AABB;
@@ -78,7 +78,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		if (state.getValue(TOP) == true) {
+		if (Boolean.TRUE.equals(state.getValue(TOP))) {
 			return 1;
 		} else {
 			return 0;
@@ -87,7 +87,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { TOP });
+		return new BlockStateContainer(this, TOP);
 	}
 
 	@Override

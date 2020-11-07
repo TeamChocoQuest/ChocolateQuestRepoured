@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionMethod;
 
@@ -19,11 +20,13 @@ import net.minecraftforge.common.util.BlockSnapshot;
 public class BlockPlacingHelper {
 
 	private static ReflectionField<int[]> precipitationHeightMapField = new ReflectionField<>(Chunk.class, "field_76638_b", "precipitationHeightMap");
+	@SuppressWarnings("unused")
 	private static ReflectionMethod<Object> relightBlockMethod = new ReflectionMethod<>(Chunk.class, "func_76615_h", "relightBlock", int.class, int.class, int.class);
+	@SuppressWarnings("unused")
 	private static ReflectionMethod<Object> propagateSkylightOcclusionMethod = new ReflectionMethod<>(Chunk.class, "func_76595_e", "propagateSkylightOcclusion", int.class, int.class);
 
 	public static boolean setBlockState(World world, BlockPos pos, IBlockState newState, int flags, boolean updateLight) {
-		if (updateLight) {
+		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates || updateLight) {
 			return world.setBlockState(pos, newState, flags);
 		}
 

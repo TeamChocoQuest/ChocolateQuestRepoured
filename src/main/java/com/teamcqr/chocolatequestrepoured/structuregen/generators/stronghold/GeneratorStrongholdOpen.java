@@ -185,10 +185,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		for (StrongholdFloorOpen floor : this.floors) {
 			floor.generateRooms(this.world, this.dungeonGenerator, mobType);
 		}
-	}
 
-	@Override
-	public void postProcess() {
 		// build all the structures in the map
 		for (StrongholdFloorOpen floor : this.floors) {
 			if (floor == null) {
@@ -201,7 +198,10 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				}
 			}
 		}
+	}
 
+	@Override
+	public void postProcess() {
 		if (this.dungeon.isCoverBlockEnabled()) {
 			// needs update
 			/*

@@ -202,10 +202,9 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
-		if (!(event.player instanceof EntityPlayerMP)) {
-			return;
+		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
+			FactionRegistry.instance().handlePlayerLogout((EntityPlayerMP) event.player);
 		}
-		FactionRegistry.instance().handlePlayerLogout((EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent

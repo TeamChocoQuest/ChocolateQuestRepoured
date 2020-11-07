@@ -1,8 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class EntityUtil {
 
@@ -84,4 +90,18 @@ public class EntityUtil {
 		return !entity.getEntityWorld().checkBlockCollision(entity.getEntityBoundingBox());
 	}
 
+	@Nullable
+	public static Entity getEntityByUUID(World world, UUID uuid) {
+		if (!world.isRemote) {
+			return ((WorldServer) world).getEntityFromUuid(uuid);
+		}
+
+		for (Entity entity : world.loadedEntityList) {
+			if (entity.getPersistentID().equals(uuid)) {
+				return entity;
+			}
+		}
+
+		return null;
+	}
 }

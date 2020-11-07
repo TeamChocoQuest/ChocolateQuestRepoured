@@ -53,7 +53,7 @@ public class PlateauBuilder {
 						}
 					}
 
-					blockInfoList.add(new BlockInfo(new BlockPos(iX, iY, iZ), fillBlock.getDefaultState(), null));
+					blockInfoList.add(new BlockInfo(iX, iY, iZ, fillBlock.getDefaultState(), null));
 				}
 			}
 		}

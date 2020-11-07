@@ -10,9 +10,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class CPacketHandlerSyncTextureSets implements IMessageHandler<SPacketCustomTextures, IMessage> {
 
-	public CPacketHandlerSyncTextureSets() {
-	}
-
 	@Override
 	public IMessage onMessage(SPacketCustomTextures message, MessageContext ctx) {
 		if (ctx.side.isClient()) {

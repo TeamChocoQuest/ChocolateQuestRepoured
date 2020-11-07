@@ -37,6 +37,7 @@ public class DungeonPartCover extends AbstractDungeonPart {
 		return compound;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);

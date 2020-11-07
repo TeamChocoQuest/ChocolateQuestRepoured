@@ -22,7 +22,4 @@ public class Reference {
 	public static final int MERCHANT_GUI_ID = 8;
 	public static final int MERCHANT_EDIT_TRADE_GUI_ID = 9;
 
-	public static final int TARGET_EFFECT_MESSAGE_ID = 30;
-	public static final int SAVE_STRUCUTRE_REQUEST_MESSAGE_ID = 31;
-
 }

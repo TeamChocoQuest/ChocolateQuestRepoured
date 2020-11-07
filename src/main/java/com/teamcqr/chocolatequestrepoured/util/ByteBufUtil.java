@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class ByteBufUtil {
 
@@ -17,13 +18,16 @@ public class ByteBufUtil {
 	}
 
 	public static void writeBlockPos(ByteBuf buf, BlockPos pos) {
-		buf.writeInt(pos.getX());
-		buf.writeInt(pos.getY());
-		buf.writeInt(pos.getZ());
+		ByteBufUtils.writeVarInt(buf, pos.getX(), 5);
+		ByteBufUtils.writeVarInt(buf, pos.getY(), 5);
+		ByteBufUtils.writeVarInt(buf, pos.getZ(), 5);
 	}
 
 	public static BlockPos readBlockPos(ByteBuf buf) {
-		return new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+		int x = ByteBufUtils.readVarInt(buf, 5);
+		int y = ByteBufUtils.readVarInt(buf, 5);
+		int z = ByteBufUtils.readVarInt(buf, 5);
+		return new BlockPos(x, y, z);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -134,7 +135,7 @@ public abstract class DungeonBase {
 	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		this.generate(world, x, getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);
 	}
-	
+
 	public int getYForPos(World world, int x, int z, Random rand) {
 		int y = 0;
 		if (!this.fixedY) {
@@ -170,22 +171,30 @@ public abstract class DungeonBase {
 		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
 	}
 
-	//private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
+	/*
+	private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
+
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
 		if (!files.isEmpty()) {
 			File file = files.get(rand.nextInt(files.size()));
-			//Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
-			/*if(lastUsedFileHash == 0) {
+			Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
+			if (lastUsedFileHash == 0) {
 				lastUsedFileHash = file.hashCode();
-			} else */if(files.size() > 1 /*&& file.hashCode() == lastUsedFileHash*/) {
-				//while(file.hashCode() == lastUsedFileHash) {
+			} else if (files.size() > 1 && file.hashCode() == lastUsedFileHash) {
+				while (file.hashCode() == lastUsedFileHash) {
 					file = files.get(rand.nextInt(files.size()));
-				//}
+				}
 			}
 			return file;
 		}
 		return null;
+	}
+	*/
+
+	public File getStructureFileFromDirectory(File parentDir, Random rand) {
+		Collection<File> files = FileUtils.listFiles(parentDir, new String[] { "nbt" }, true);
+		return (files instanceof List ? ((List<File>) files) : new ArrayList<>(files)).get(rand.nextInt(files.size()));
 	}
 
 	public boolean canSpawnAtPos(World world, BlockPos pos, boolean behindWall) {

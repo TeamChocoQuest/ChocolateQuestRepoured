@@ -50,7 +50,6 @@ public class WallPartWall implements IWallPart {
 				}
 			}
 
-			// Places the blocks at the calculated positions
 			DungeonInhabitant dungeonMob = DungeonInhabitantManager.instance().getInhabitant("SPECTER");
 			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), dungeonMob));
 		}

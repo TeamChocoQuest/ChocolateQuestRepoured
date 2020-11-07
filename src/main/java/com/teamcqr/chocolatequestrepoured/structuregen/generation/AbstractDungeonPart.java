@@ -43,6 +43,7 @@ public abstract class AbstractDungeonPart {
 			String id = compound.getString("id");
 			try {
 				AbstractDungeonPart dungeonPart = null;
+
 				switch (id) {
 				case DUNGEON_PART_BLOCK_ID:
 					dungeonPart = new DungeonPartBlock(world, dungeonGenerator);
@@ -65,10 +66,14 @@ public abstract class AbstractDungeonPart {
 				default:
 					break;
 				}
-				dungeonPart.readFromNBT(compound);
+
+				if (dungeonPart != null) {
+					dungeonPart.readFromNBT(compound);
+				}
+
 				return dungeonPart;
 			} catch (Exception e) {
-				CQRMain.logger.error("Failed to create dungeon part for id " + id, e);
+				CQRMain.logger.error(String.format("Failed to create dungeon part for id %s", id), e);
 			}
 		}
 

@@ -8,7 +8,6 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -25,8 +24,6 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 	protected final DungeonGenerator dungeonGenerator;
 
 	private final Map<File, CQStructure> cachedStructures = new HashMap<>();
-
-	// Why remove all parameters from the functions?!?!? Those were supposed to be all the same! It is even needed like that for some generators
 
 	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon, Random rand) {
 		this.random = rand;
@@ -49,23 +46,16 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 			this.postProcess();
 			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon, spawnType, generateImmediately);
 		} catch (Exception e) {
-			CQRMain.logger.error("Failed to prepare dungeon " + this.dungeon + " for generation at " + this.pos, e);
+			CQRMain.logger.error(String.format("Failed to prepare dungeon %s for generation at %s", this.dungeon, this.pos), e);
 		}
 	}
 
-	/**
-	 * Now all pre-processing should be done (for example loading a file).
-	 */
+	// Actually having 3 methods here is useless as they are just called one after another
+
 	protected abstract void preProcess();
 
-	/**
-	 * Now all {@link AbstractDungeonPart} objects should be added to the {@link AbstractDungeonGenerator#dungeonGenerator}.
-	 */
 	protected abstract void buildStructure();
 
-	/**
-	 * Now all post-processing should be done (Note that the dungeon hasn't been generated yet).
-	 */
 	protected abstract void postProcess();
 
 	public CQStructure loadStructureFromFile(File file) {

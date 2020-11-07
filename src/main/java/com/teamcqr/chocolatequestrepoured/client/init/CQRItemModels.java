@@ -26,7 +26,7 @@ public class CQRItemModels {
 
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {
-		for (Block block : BlockExporterChest.EXPORTER_CHESTS) {
+		for (Block block : BlockExporterChest.getExporterChests()) {
 			ModelLoader.setCustomStateMapper(block, stateMapper -> Collections.emptyMap());
 		}
 
