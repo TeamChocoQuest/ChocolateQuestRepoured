@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGridCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
@@ -180,10 +181,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 	@Override
 	public void postProcess() {
-		String mobType = this.dungeon.getDungeonMob();
-		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		Map<BlockPos, CQStructure> structureMap = new HashMap<>();
 		for (int iX = 0; iX < this.gridPositions.length && iX < this.structures.length; iX++) {
 			for (int iZ = 0; iZ < this.gridPositions[iX].length && iZ < this.structures[iX].length; iZ++) {

@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -120,7 +121,7 @@ public class StrongholdFloorOpen {
 		this.entranceStairBlockPosition = new Tuple<>(exitPos.getX(), exitPos.getZ());
 	}
 
-	public void generateRooms(World world, DungeonGenerator dungeonGenerator, String mobType) {
+	public void generateRooms(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
 		for (int x = 0; x < this.sideLength; x++) {
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos pos = this.roomGrid[x][z];
@@ -153,7 +154,7 @@ public class StrongholdFloorOpen {
 		}
 	}
 
-	public void buildWalls(World world, DungeonGenerator dungeonGenerator) {
+	public void buildWalls(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
 		if (this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}
@@ -201,7 +202,8 @@ public class StrongholdFloorOpen {
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
 		}
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.generator.getPos(), blockInfoList, new PlacementSettings(), "ZOMBIE"));
+
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.generator.getPos(), blockInfoList, new PlacementSettings(), mobType));
 	}
 
 }

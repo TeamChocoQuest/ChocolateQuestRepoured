@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastleRoomSelector;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
@@ -45,10 +46,7 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 	public void buildStructure() {
 		BlockStateGenArray genArray = new BlockStateGenArray(this.random);
 		ArrayList<String> bossUuids = new ArrayList<>();
-		String mobType = this.dungeon.getDungeonMob();
-		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
 
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, genArray.getMainMap().values(), new PlacementSettings(), mobType));

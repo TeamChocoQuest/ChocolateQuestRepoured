@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -231,7 +232,7 @@ public class SpiralStrongholdFloor {
 		return this.roomGrid;
 	}
 
-	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, World world, String mobType) {
+	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, World world, DungeonInhabitant mobType) {
 		List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
 		for (int iX = 0; iX < this.sideLength; iX++) {

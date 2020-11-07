@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 
 import net.minecraft.block.state.IBlockState;
@@ -37,15 +36,14 @@ public class BlockInfoBanner extends BlockInfo {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion) {
 		super.generate(world, dungeonPos, dungeonPartPos, settings, dungeonMob, protectedRegion);
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 		TileEntity tileEntity = world.getTileEntity(transformedPos);
 
 		if (tileEntity instanceof TileEntityBanner) {
-			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(dungeonMob);
-			if (inha != null && inha.getBanner() != null) {
-				((TileEntityBanner) tileEntity).setItemValues(inha.getBanner().getBanner(), true);
+			if (dungeonMob != null && dungeonMob.getBanner() != null) {
+				((TileEntityBanner) tileEntity).setItemValues(dungeonMob.getBanner().getBanner(), true);
 			}
 		} else {
 			CQRMain.logger.warn("Failed to place banner at {}", transformedPos);

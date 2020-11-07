@@ -145,13 +145,11 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobName) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, DungeonInhabitant mobType) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
 		this.generateWalls(genArray, dungeon);
 
-		DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobName);
-
-		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, inha);
+		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, mobType);
 
 		this.generateRoofs(startPos, genArray, dungeon);
 	}
@@ -213,7 +211,7 @@ public class CastleRoomSelector {
 
 		// Keep trying until we find a faction with potential enemies
 		for (CQRFaction enemyFaction : enemies) {
-			List<DungeonInhabitant> possibleJailed = DungeonInhabitantManager.getAllInhabitantsFromFaction(enemyFaction, world);
+			List<DungeonInhabitant> possibleJailed = DungeonInhabitantManager.instance().getListOfFactionInhabitants(enemyFaction, world);
 			if (!possibleJailed.isEmpty()) {
 				jailed = possibleJailed.get(this.random.nextInt(possibleJailed.size()));
 				break;

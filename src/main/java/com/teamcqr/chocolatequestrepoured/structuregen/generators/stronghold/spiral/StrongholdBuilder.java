@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerat
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -48,7 +49,7 @@ public class StrongholdBuilder {
 		this.random = rand;
 	}
 
-	public void generate(int cX, int cZ, String mobType) {
+	public void generate(int cX, int cZ, DungeonInhabitant mobType) {
 
 		Vec3i expansionVector = new Vec3i(0, 0, 0);
 		switch (this.direction) {
@@ -80,7 +81,7 @@ public class StrongholdBuilder {
 		this.buildStronghold(pos.add(0, -1, 0), this.world, cX, cZ, mobType);
 	}
 
-	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, String mobType) {
+	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, DungeonInhabitant mobType) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
 		stronghold.calculateFloors(pos, world2, mobType);
 		stronghold.buildFloors(pos.add(0, -1, 0), this.world, mobType);

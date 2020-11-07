@@ -11,8 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 enum EDefaultInhabitants {
 
-	DEFAULT(null, null, null),
-	// DONT_REPLACE(null),
+	DEFAULT(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "dummy") }, new ResourceLocation[] { new ResourceLocation(Reference.MODID, "dummy") }, null, Items.SHIELD),
 	DWARF(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "dwarf") }, null, null, CQRItems.SHIELD_CARL),
 	SKELETON(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "skeleton") }, new ResourceLocation[] { new ResourceLocation(Reference.MODID, "necromancer") }, EBanners.SKELETON_BANNER, CQRItems.SHIELD_SKELETON_FRIENDS),
 	ZOMBIE(new ResourceLocation[] { new ResourceLocation(Reference.MODID, "zombie") }, new ResourceLocation[] { new ResourceLocation(Reference.MODID, "lich") }, null, CQRItems.SHIELD_ZOMBIE),

@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEnt
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -149,10 +150,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	@Override
 	public void buildStructure() {
 		File building = this.dungeon.getEntranceBuilding(this.random);
-		String mobType = this.dungeon.getDungeonMob();
-		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
 			return;
@@ -197,7 +195,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
 				try {
-					floor.buildWalls(this.world, this.dungeonGenerator);
+					floor.buildWalls(this.world, this.dungeonGenerator, mobType);
 				} catch (NullPointerException ex) {
 					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(), this.pos.getZ());
 				}

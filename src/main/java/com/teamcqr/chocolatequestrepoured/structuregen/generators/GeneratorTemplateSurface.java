@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -59,10 +60,7 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 
 	@Override
 	protected void buildStructure() {
-		String mobType = this.dungeon.getDungeonMob();
-		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.structurePos, this.structure.getBlockInfoList(), this.settings, mobType));
 		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.structurePos, this.structure.getEntityInfoList(), this.settings, mobType));
 		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, this.structurePos, this.structure.getSpecialBlockInfoList(), this.settings, mobType));

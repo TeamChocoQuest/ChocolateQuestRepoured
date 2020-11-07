@@ -57,7 +57,7 @@ public abstract class DungeonBase {
 	protected int yOffsetMin = 0;
 	protected int yOffsetMax = 0;
 
-	protected String dungeonMob = DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT;
+	protected String dungeonMob = DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName();
 	protected boolean replaceBanners = true;
 
 	protected boolean buildSupportPlatform = true;

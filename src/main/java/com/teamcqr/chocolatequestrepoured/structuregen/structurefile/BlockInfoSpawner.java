@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
@@ -55,13 +56,13 @@ public class BlockInfoSpawner extends BlockInfo {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion) {
 		super.generate(world, dungeonPos, dungeonPartPos, settings, dungeonMob, protectedRegion);
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 		TileEntity tileEntity = world.getTileEntity(transformedPos);
 
 		if (tileEntity instanceof TileEntitySpawner) {
-			((TileEntitySpawner) tileEntity).setInDungeon(dungeonPos.getX() >> 4, dungeonPos.getZ() >> 4, dungeonMob);
+			((TileEntitySpawner) tileEntity).setInDungeon(dungeonPos.getX() >> 4, dungeonPos.getZ() >> 4, dungeonMob.getName());
 		} else {
 			CQRMain.logger.warn("Failed to place spawner at {}", transformedPos);
 		}

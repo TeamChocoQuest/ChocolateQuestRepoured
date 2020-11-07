@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
@@ -76,10 +77,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	@Override
 	public void buildStructure() {
-		String mobType = this.dungeon.getDungeonMob();
-		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 
 		// Builds the platforms
 		// Builds the chains
@@ -118,7 +116,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	 * Dec Rad # # # # # # # # # # # # # # # # # # # # 0 10 # # # # # # # # # # # # # # # # # # 1 9 # # # # # # # # # # # # # # 2 7 # # # # # # # # 3 4
 	 * 
 	 */
-	private void buildBuilding(BlockPos centeredPos, CQStructure structure, String mobType) {
+	private void buildBuilding(BlockPos centeredPos, CQStructure structure, DungeonInhabitant mobType) {
 		int longestSide = structure != null ? Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
 		int radius = (int) (0.7071D * (double) longestSide) + 5;
 
@@ -132,7 +130,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		}
 	}
 
-	private void buildPlatform(BlockPos center, int radius, String mobType) {
+	private void buildPlatform(BlockPos center, int radius, DungeonInhabitant mobType) {
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
 		int rad = (int) (1.5D * radius);

@@ -47,7 +47,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, IBlockState> blocks = new ConcurrentHashMap<>();
 	private IBlockState[][][] centralCaveBlocks;
-	private String mobtype;
+	private DungeonInhabitant mobtype;
 
 	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
@@ -55,10 +55,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 
 	@Override
 	public void preProcess() {
-		this.mobtype = this.dungeon.getDungeonMob();
-		if (this.mobtype.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			this.mobtype = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		IBlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
 		this.centralCaveBlocks = blocks;
@@ -204,8 +201,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			Block block = Blocks.MOB_SPAWNER;
 			IBlockState state = block.getDefaultState();
 			TileEntityMobSpawner spawner = (TileEntityMobSpawner) block.createTileEntity(this.world, state);
-			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(this.mobtype);
-			spawner.getSpawnerBaseLogic().setEntityId(inha.getEntityID());
+			spawner.getSpawnerBaseLogic().setEntityId(this.mobtype.getEntityID());
 			spawner.updateContainingBlockInfo();
 
 			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());

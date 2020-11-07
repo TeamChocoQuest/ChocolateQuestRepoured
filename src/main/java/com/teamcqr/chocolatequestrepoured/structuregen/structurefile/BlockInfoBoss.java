@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -43,17 +42,15 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion) {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.getPos()));
 
 		if (!world.isOutsideBuildHeight(transformedPos)) {
 			BlockPlacingHelper.setBlockState(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates);
 
-			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(dungeonMob);
-
-			if (inha != null) {
-				if (inha.getBossID() != null) {
-					Entity entity = EntityList.createEntityByIDFromName(inha.getBossID(), world);
+			if (dungeonMob != null) {
+				if (dungeonMob.getBossID() != null) {
+					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossID(), world);
 
 					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 
@@ -62,9 +59,9 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 						((EntityLiving) entity).enablePersistence();
 
 						if (entity instanceof AbstractEntityCQR) {
-							((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
-							if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
-								((AbstractEntityCQR) entity).setFaction(inha.getFactionOverride());
+							((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(settings, dungeonMob);
+							if (dungeonMob.getFactionOverride() != null && !dungeonMob.getFactionOverride().isEmpty()) {
+								((AbstractEntityCQR) entity).setFaction(dungeonMob.getFactionOverride());
 							}
 						}
 					}
@@ -74,14 +71,14 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 					if (protectedRegion != null) {
 						protectedRegion.addEntityDependency(entity.getPersistentID());
 					}
-				} else if (inha.getEntityID() != null) {
+				} else if (dungeonMob.getEntityID() != null) {
 					/*
 					 * EntityArmorStand indicator = new EntityArmorStand(world);
 					 * indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!"); indicator.setPosition(transformedPos.getX() + 0.5D,
 					 * transformedPos.getY(), transformedPos.getZ() + 0.5D); indicator.setEntityInvulnerable(true); indicator.setInvisible(true);
 					 * indicator.setAlwaysRenderNameTag(true); indicator.setSilent(true); indicator.setNoGravity(true);
 					 */
-					Entity entity = EntityList.createEntityByIDFromName(inha.getEntityID(), world);
+					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getEntityID(), world);
 
 					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 					entity.setCustomNameTag("Temporary Boss");
@@ -91,10 +88,10 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 						((EntityLiving) entity).enablePersistence();
 
 						if (entity instanceof AbstractEntityCQR) {
-							((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
+							((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(settings, dungeonMob);
 							((AbstractEntityCQR) entity).setSizeVariation(1.1F);
-							if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
-								((AbstractEntityCQR) entity).setFaction(inha.getFactionOverride());
+							if (dungeonMob.getFactionOverride() != null && !dungeonMob.getFactionOverride().isEmpty()) {
+								((AbstractEntityCQR) entity).setFaction(dungeonMob.getFactionOverride());
 							}
 						}
 
@@ -103,7 +100,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 						// Some gear
 						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND));
-						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(inha.getShieldReplacement()));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(dungeonMob.getShieldReplacement()));
 
 						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND));
 						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND));

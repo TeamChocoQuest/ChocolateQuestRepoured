@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -141,7 +142,7 @@ public class StrongholdFloor {
 		}
 	}
 
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, DungeonGenerator dungeonGenerator, World world, String mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, DungeonGenerator dungeonGenerator, World world, DungeonInhabitant mobType) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				EStrongholdRoomType room = this.roomPattern[iX][iZ];

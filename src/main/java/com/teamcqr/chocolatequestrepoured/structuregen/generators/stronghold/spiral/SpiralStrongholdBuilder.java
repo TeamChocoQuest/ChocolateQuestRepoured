@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -51,7 +52,7 @@ public class SpiralStrongholdBuilder {
 		this.floors = new SpiralStrongholdFloor[this.floorCount];
 	}
 
-	public void calculateFloors(BlockPos strongholdEntrancePos, World world, String mobType) {
+	public void calculateFloors(BlockPos strongholdEntrancePos, World world, DungeonInhabitant mobType) {
 		Tuple<Integer, Integer> posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());
 		int middle = this.floorSideLength / 2;
 		int entranceX = 0;
@@ -172,7 +173,7 @@ public class SpiralStrongholdBuilder {
 		}
 	}
 
-	public void buildFloors(BlockPos strongholdEntrancePos, World world, String mobType) {
+	public void buildFloors(BlockPos strongholdEntrancePos, World world, DungeonInhabitant mobType) {
 		// BlockPos currentPos = strongholdEntrancePos;
 		List<AbstractDungeonPart> floors = new ArrayList<>();
 		for (int i = 0; i < this.floorCount; i++) {

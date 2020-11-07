@@ -58,7 +58,7 @@ public class PlateauBuilder {
 			}
 		}
 
-		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
+		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT);
 	}
 
 }

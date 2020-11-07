@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPla
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
@@ -185,10 +186,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			this.generatePillars(new BlockPos(r, 0, r - innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), blocks, this.dungeon.getPillarBlock());
 		}
 
-		String mobType = this.dungeon.getDungeonMob();
-		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
-			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
-		}
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 
 		// Add block state array to dungeonGenerator
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>(blocks.length * blocks[0].length * blocks[0][0].length / 2);
@@ -261,7 +259,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generateSpawnersAndChests(List<BlockPos> spawnerAndChestList, String mobType) {
+	private void generateSpawnersAndChests(List<BlockPos> spawnerAndChestList, DungeonInhabitant mobType) {
 		if (!spawnerAndChestList.isEmpty()) {
 			ResourceLocation[] lootTables = this.dungeon.getChestIDs();
 			GearedMobFactory mobFactory = new GearedMobFactory(spawnerAndChestList.size(), this.dungeon.getRampMob(), this.random);
@@ -285,7 +283,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generateStronghold(int radius, String mobType) {
+	private void generateStronghold(int radius, DungeonInhabitant mobType) {
 		if (this.dungeon.doBuildStronghold()) {
 			EStairSection entranceDirection = this.startStairSection.getSuccessor();
 			int entranceDistToWall = radius / 3;
