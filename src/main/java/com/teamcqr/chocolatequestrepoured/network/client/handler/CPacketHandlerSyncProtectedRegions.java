@@ -16,8 +16,8 @@ public class CPacketHandlerSyncProtectedRegions implements IMessageHandler<SPack
 
 	@Override
 	public IMessage onMessage(SPacketSyncProtectedRegions message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
 
@@ -30,8 +30,8 @@ public class CPacketHandlerSyncProtectedRegions implements IMessageHandler<SPack
 						protectedRegionManager.addProtectedRegion(new ProtectedRegion(world, buf));
 					}
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

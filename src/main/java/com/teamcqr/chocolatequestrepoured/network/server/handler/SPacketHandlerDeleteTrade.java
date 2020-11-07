@@ -17,8 +17,8 @@ public class SPacketHandlerDeleteTrade implements IMessageHandler<CPacketDeleteT
 
 	@Override
 	public IMessage onMessage(CPacketDeleteTrade message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
 
@@ -29,8 +29,8 @@ public class SPacketHandlerDeleteTrade implements IMessageHandler<CPacketDeleteT
 						CQRMain.NETWORK.sendToAllTracking(new SPacketDeleteTrade(message.getEntityId(), message.getTradeIndex()), entity);
 					}
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

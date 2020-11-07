@@ -15,10 +15,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class SPacketHandlerExtendedReachAttack implements IMessageHandler<CPacketExtendedReachAttack, IMessage> {
 	@Override
 	public IMessage onMessage(final CPacketExtendedReachAttack message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer attackingPlayer = CQRMain.proxy.getPlayer(ctx);
-				World world = CQRMain.proxy.getPlayer(ctx).world;
+				World world = CQRMain.proxy.getWorld(ctx);
 				Entity attackTarget = world.getEntityByID(message.getEntityId());
 
 				if (attackTarget == null) {
@@ -30,8 +30,8 @@ public class SPacketHandlerExtendedReachAttack implements IMessageHandler<CPacke
 				if (attackingPlayer.getDistanceSq(attackTarget) < 144.0D) {
 					attackingPlayer.attackTargetEntityWithCurrentItem(attackTarget);
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 }

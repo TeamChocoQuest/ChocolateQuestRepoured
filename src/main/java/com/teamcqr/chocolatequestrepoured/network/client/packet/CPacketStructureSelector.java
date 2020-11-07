@@ -23,7 +23,7 @@ public class CPacketStructureSelector implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(this.hand == EnumHand.MAIN_HAND ? true : false);
+		buf.writeBoolean(this.hand == EnumHand.MAIN_HAND);
 	}
 
 	public EnumHand getHand() {

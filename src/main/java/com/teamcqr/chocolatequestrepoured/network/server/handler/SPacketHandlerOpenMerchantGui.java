@@ -17,8 +17,8 @@ public class SPacketHandlerOpenMerchantGui implements IMessageHandler<CPacketOpe
 
 	@Override
 	public IMessage onMessage(CPacketOpenMerchantGui message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
@@ -26,8 +26,8 @@ public class SPacketHandlerOpenMerchantGui implements IMessageHandler<CPacketOpe
 				if (entity instanceof AbstractEntityCQR) {
 					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, world, message.getEntityId(), 0, 0);
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

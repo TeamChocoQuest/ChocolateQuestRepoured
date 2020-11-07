@@ -16,16 +16,24 @@ public class CPacketHandlerItemStackSync implements IMessageHandler<SPacketItemS
 
 	@Override
 	public IMessage onMessage(SPacketItemStackSync message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
-				World world = CQRMain.proxy.getPlayer(ctx).world;
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
+
 				if (entity != null) {
 					CapabilityExtraItemHandler capability = entity.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
-					capability.setStackInSlot(message.getSlotIndex(), message.getStack());
+
+					if (capability != null) {
+						int slot = message.getSlotIndex();
+
+						if (slot >= 0 && slot < capability.getSlots()) {
+							capability.setStackInSlot(slot, message.getStack());
+						}
+					}
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

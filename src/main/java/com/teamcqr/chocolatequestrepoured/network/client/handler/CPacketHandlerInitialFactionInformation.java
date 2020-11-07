@@ -14,19 +14,19 @@ public class CPacketHandlerInitialFactionInformation implements IMessageHandler<
 
 	@Override
 	public IMessage onMessage(SPacketInitialFactionInformation message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
-				System.out.println("Received packet");
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+				// System.out.println("Received packet");
 				FactionRegistry FAC_REG = FactionRegistry.instance();
-				//FAC_REG.clearData();
+				// FAC_REG.clearData();
 				for(CQRFaction faction : message.getFactions()) {
 					FAC_REG.addFaction(faction);
 				}
 				for(Tuple<CQRFaction, Integer> rd : message.getReputations()) {
 					FAC_REG.setReputation(message.getPlayerId(), rd.getSecond(), rd.getFirst());
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

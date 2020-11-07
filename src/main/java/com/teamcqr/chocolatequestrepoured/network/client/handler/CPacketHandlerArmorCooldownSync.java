@@ -18,16 +18,18 @@ public class CPacketHandlerArmorCooldownSync implements IMessageHandler<SPacketA
 
 	@Override
 	public IMessage onMessage(SPacketArmorCooldownSync message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 				CapabilityCooldownHandler icapability = player.getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 
-				for (Map.Entry<Item, Integer> entry : message.getItemCooldownMap().entrySet()) {
-					icapability.setCooldown(entry.getKey(), entry.getValue());
+				if (icapability != null) {
+					for (Map.Entry<Item, Integer> entry : message.getItemCooldownMap().entrySet()) {
+						icapability.setCooldown(entry.getKey(), entry.getValue());
+					}
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

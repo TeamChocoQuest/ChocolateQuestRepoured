@@ -12,11 +12,11 @@ public class CPacketHandlerDungeonSync implements IMessageHandler<SPacketDungeon
 
 	@Override
 	public IMessage onMessage(SPacketDungeonSync message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				ItemDungeonPlacer.fakeDungeonSet = message.getFakeDungeonList();
-			}
-		});
+			});
+		}
 		return null;
 	}
 

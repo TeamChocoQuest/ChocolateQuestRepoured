@@ -17,8 +17,8 @@ public class SPacketHandlerOpenEditTradeGui implements IMessageHandler<CPacketOp
 
 	@Override
 	public IMessage onMessage(CPacketOpenEditTradeGui message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
@@ -26,8 +26,8 @@ public class SPacketHandlerOpenEditTradeGui implements IMessageHandler<CPacketOp
 				if (entity instanceof AbstractEntityCQR && message.getTradeIndex() >= 0 && message.getTradeIndex() <= ((AbstractEntityCQR) entity).getTrades().size()) {
 					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_EDIT_TRADE_GUI_ID, world, message.getEntityId(), message.getTradeIndex(), 0);
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

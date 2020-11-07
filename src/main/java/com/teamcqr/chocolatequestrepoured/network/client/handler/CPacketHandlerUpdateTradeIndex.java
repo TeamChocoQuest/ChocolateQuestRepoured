@@ -16,8 +16,8 @@ public class CPacketHandlerUpdateTradeIndex implements IMessageHandler<SPacketUp
 
 	@Override
 	public IMessage onMessage(SPacketUpdateTradeIndex message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
 
@@ -27,8 +27,8 @@ public class CPacketHandlerUpdateTradeIndex implements IMessageHandler<SPacketUp
 					trades.updateTradeIndex(message.getTradeIndex(), message.getNewTradeIndex());
 					CQRMain.proxy.updateGui();
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

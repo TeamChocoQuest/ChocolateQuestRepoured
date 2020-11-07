@@ -16,23 +16,25 @@ public class SPacketHandlerSyncEntity implements IMessageHandler<CPacketSyncEnti
 
 	@Override
 	public IMessage onMessage(CPacketSyncEntity message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (CQRMain.proxy.getPlayer(ctx).isCreative()) {
-				World world = CQRMain.proxy.getWorld(ctx);
-				Entity entity = world.getEntityByID(message.getEntityId());
-				if (entity instanceof AbstractEntityCQR) {
-					AbstractEntityCQR cqrentity = (AbstractEntityCQR) entity;
-					cqrentity.setHealthScale((double) message.getHealthScaling() / 100.0D);
-					cqrentity.setDropChance(EntityEquipmentSlot.HEAD, (float) message.getDropChanceHelm() / 100.0F);
-					cqrentity.setDropChance(EntityEquipmentSlot.CHEST, (float) message.getDropChanceChest() / 100.0F);
-					cqrentity.setDropChance(EntityEquipmentSlot.LEGS, (float) message.getDropChanceLegs() / 100.0F);
-					cqrentity.setDropChance(EntityEquipmentSlot.FEET, (float) message.getDropChanceFeet() / 100.0F);
-					cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) message.getDropChanceMainhand() / 100.0F);
-					cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) message.getDropChanceOffhand() / 100.0F);
-					cqrentity.setSizeVariation((float) message.getSizeScaling() / 100.0F);
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+				if (CQRMain.proxy.getPlayer(ctx).isCreative()) {
+					World world = CQRMain.proxy.getWorld(ctx);
+					Entity entity = world.getEntityByID(message.getEntityId());
+					if (entity instanceof AbstractEntityCQR) {
+						AbstractEntityCQR cqrentity = (AbstractEntityCQR) entity;
+						cqrentity.setHealthScale((double) message.getHealthScaling() / 100.0D);
+						cqrentity.setDropChance(EntityEquipmentSlot.HEAD, (float) message.getDropChanceHelm() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.CHEST, (float) message.getDropChanceChest() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.LEGS, (float) message.getDropChanceLegs() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.FEET, (float) message.getDropChanceFeet() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) message.getDropChanceMainhand() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) message.getDropChanceOffhand() / 100.0F);
+						cqrentity.setSizeVariation((float) message.getSizeScaling() / 100.0F);
+					}
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

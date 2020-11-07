@@ -17,11 +17,13 @@ public class SPacketHandlerExporterUpdate implements IMessageHandler<CPacketExpo
 
 	@Override
 	public IMessage onMessage(CPacketExporterUpdate message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			TileEntityExporter tileEntity = (TileEntityExporter) CQRMain.proxy.getPlayer(ctx).world.getTileEntity(message.getPos());
-			tileEntity.setExporterData(message.getExporterData());
-			tileEntity.markDirty();
-		});
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+				TileEntityExporter tileEntity = (TileEntityExporter) CQRMain.proxy.getPlayer(ctx).world.getTileEntity(message.getPos());
+				tileEntity.setExporterData(message.getExporterData());
+				tileEntity.markDirty();
+			});
+		}
 		return null;
 	}
 

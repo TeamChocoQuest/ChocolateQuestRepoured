@@ -14,16 +14,16 @@ public class SPacketHandlerSyncSelectedTrade implements IMessageHandler<CPacketS
 
 	@Override
 	public IMessage onMessage(CPacketSyncSelectedTrade message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 
 				if (player.openContainer instanceof ContainerMerchant) {
 					((ContainerMerchant) player.openContainer).setCurrentTradeIndex(message.getSelectedTradeIndex());
 					((ContainerMerchant) player.openContainer).updateInputsForTrade(message.getSelectedTradeIndex());
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

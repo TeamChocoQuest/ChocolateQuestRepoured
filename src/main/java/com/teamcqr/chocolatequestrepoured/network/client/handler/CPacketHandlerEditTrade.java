@@ -17,8 +17,8 @@ public class CPacketHandlerEditTrade implements IMessageHandler<SPacketEditTrade
 
 	@Override
 	public IMessage onMessage(SPacketEditTrade message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
 
@@ -29,8 +29,8 @@ public class CPacketHandlerEditTrade implements IMessageHandler<SPacketEditTrade
 					trades.editTrade(message.getTradeIndex(), trade);
 					CQRMain.proxy.updateGui();
 				}
-			}
-		});
+			});
+		}
 		return null;
 	}
 

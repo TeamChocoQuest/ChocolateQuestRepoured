@@ -18,8 +18,8 @@ public class SPacketHandlerSaveStructureRequest implements IMessageHandler<CPack
 
 	@Override
 	public IMessage onMessage(CPacketSaveStructureRequest message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 				World world = CQRMain.proxy.getWorld(ctx);
 				CQStructure structure = CQStructure.createFromWorld(world, message.getStartPos(), message.getEndPos(), message.ignoreEntities(), player.getName());
@@ -27,8 +27,8 @@ public class SPacketHandlerSaveStructureRequest implements IMessageHandler<CPack
 					structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, message.getName() + ".nbt"));
 					player.sendMessage(new TextComponentString("Successfully exported structure: " + message.getName()));
 				}).start();
-			}
-		});
+			});
+		}
 		return null;
 	}
 

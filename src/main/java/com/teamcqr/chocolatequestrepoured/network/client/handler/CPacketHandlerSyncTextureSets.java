@@ -15,12 +15,11 @@ public class CPacketHandlerSyncTextureSets implements IMessageHandler<SPacketCus
 
 	@Override
 	public IMessage onMessage(SPacketCustomTextures message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			if (ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				ClientPacketHandler.handleCTPacketClientside(message);
-			}
-		});
-
+			});
+		}
 		return null;
 	}
 

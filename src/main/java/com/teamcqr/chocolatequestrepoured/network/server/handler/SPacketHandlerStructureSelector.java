@@ -16,14 +16,16 @@ public class SPacketHandlerStructureSelector implements IMessageHandler<CPacketS
 
 	@Override
 	public IMessage onMessage(CPacketStructureSelector message, MessageContext ctx) {
-		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-			EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
-			ItemStack stack = player.getHeldItem(message.getHand());
+		if (ctx.side.isServer()) {
+			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				ItemStack stack = player.getHeldItem(message.getHand());
 
-			if (stack.getItem() instanceof ItemStructureSelector) {
-				((ItemStructureSelector) stack.getItem()).setFirstPos(stack, new BlockPos(player));
-			}
-		});
+				if (stack.getItem() instanceof ItemStructureSelector) {
+					((ItemStructureSelector) stack.getItem()).setFirstPos(stack, new BlockPos(player));
+				}
+			});
+		}
 		return null;
 	}
 
