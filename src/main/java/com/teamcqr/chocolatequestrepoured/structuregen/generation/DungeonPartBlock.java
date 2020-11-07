@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Queue;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -28,7 +28,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartBlock extends AbstractDungeonPart {
 
-	protected final Deque<AbstractBlockInfo> blockInfoList = new LinkedList<>();
+	protected final Queue<AbstractBlockInfo> blockInfoList = new ArrayDeque<>();
 	protected PlacementSettings settings;
 	protected DungeonInhabitant dungeonMobType;
 
@@ -47,7 +47,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		this.dungeonMobType = dungeonMobType;
 
 		if (!this.blockInfoList.isEmpty()) {
-			AbstractBlockInfo firstBlockInfo = this.blockInfoList.getFirst();
+			AbstractBlockInfo firstBlockInfo = this.blockInfoList.peek();
 			this.minPos = partPos.add(Template.transformedBlockPos(settings, firstBlockInfo.getPos()));
 			this.maxPos = this.minPos;
 
@@ -158,8 +158,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 	@Override
 	public void generateNext() {
 		if (!this.blockInfoList.isEmpty()) {
-			AbstractBlockInfo blockInfo = this.blockInfoList.removeFirst();
-			blockInfo.generate(this.world, this.dungeonGenerator.getPos(), this.partPos, this.settings, this.dungeonMobType, this.dungeonGenerator.getProtectedRegion());
+			this.blockInfoList.poll().generate(this.world, this.dungeonGenerator.getPos(), this.partPos, this.settings, this.dungeonMobType, this.dungeonGenerator.getProtectedRegion());
 		}
 	}
 

@@ -29,7 +29,7 @@ public class DungeonPartBlockSpecial extends DungeonPartBlock {
 	@Override
 	public void generateNext() {
 		while (!this.blockInfoList.isEmpty()) {
-			AbstractBlockInfo blockInfo = this.blockInfoList.removeFirst();
+			AbstractBlockInfo blockInfo = this.blockInfoList.poll();
 			blockInfo.generate(this.world, this.dungeonGenerator.getPos(), this.partPos, this.settings, this.dungeonMobType, this.dungeonGenerator.getProtectedRegion());
 		}
 	}

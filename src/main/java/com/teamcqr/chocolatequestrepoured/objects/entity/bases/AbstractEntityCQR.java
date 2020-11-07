@@ -117,6 +117,9 @@ import net.minecraftforge.items.IItemHandler;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
 
+	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
+	private static final UUID HEALTH_SCALE_DISTANCE_TO_SPAWN_ID = UUID.fromString("cf718cfe-d6a1-4cf6-b6c8-b5cf397f334c");
+
 	protected BlockPos homePosition = null;
 	protected UUID leaderUUID;
 	protected EntityLivingBase leader = null;
@@ -484,10 +487,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
-		this.healthScale = compound.getDouble("healthScale");
-		if (this.healthScale <= 1.0D) {
-			this.healthScale = 1.0D;
-		}
+		this.setHealthScale(compound.getDouble("healthScale"));
 
 		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
@@ -861,25 +861,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public abstract float getBaseHealth();
 
-	public float calculateBaseHealth(double x, double z, float health) {
-		if (CQRConfig.mobs.enableHealthChangeOnDistance) {
-			BlockPos spawn = this.world.getSpawnPoint();
-			x -= (double) spawn.getX();
-			z -= (double) spawn.getZ();
-			float distance = (float) Math.sqrt(x * x + z * z);
+	public void setBaseHealthDependingOnPos(BlockPos pos) {
+		if (CQRConfig.mobs.enableHealthChangeOnDistance && !this.world.isRemote) {
+			int x = pos.getX() - DungeonGenUtils.getSpawnX(this.world);
+			int z = pos.getZ() - DungeonGenUtils.getSpawnZ(this.world);
+			double distance = Math.sqrt(x * x + z * z);
+			double amount = 0.1D * (int) (distance / CQRConfig.mobs.distanceDivisor);
 
-			health *= 1.0F + 0.1F * (int) (distance / CQRConfig.mobs.distanceDivisor);
-			health *= this.healthScale;
-
-			return (float) (int) health;
+			EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_DISTANCE_TO_SPAWN_ID, "Health Scale Distance To Spawn", amount);
 		}
-		return health;
-	}
-
-	public void setBaseHealth(BlockPos pos, float health) {
-		health = this.calculateBaseHealth(pos.getX(), pos.getZ(), health);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
-		this.setHealth(health);
 	}
 
 	public void handleArmorBreaking() {
@@ -1062,8 +1052,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, DungeonInhabitant mobType) {
-		this.setHomePositionCQR(this.getPosition());
-		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
+		this.setHomePositionCQR(new BlockPos(this));
+		this.setBaseHealthDependingOnPos(new BlockPos(this));
 
 		// Recalculate path points
 		if (this.pathPoints.length > 0) {
@@ -1207,8 +1197,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return ItemUtil.compareRotations(this.rotationPitch, d1, 50.0D);
 	}
 
-	public void setHealthScale(double healthScale) {
-		this.healthScale = healthScale;
+	public void setHealthScale(double newHealthScale) {
+		if (this.healthScale != newHealthScale) {
+			if (!this.world.isRemote) {
+				EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_SLIDER_ID, "Health Scale Slider", 1.0D - newHealthScale);
+			}
+			this.healthScale = newHealthScale;
+		}
 	}
 
 	public double getHealthScale() {

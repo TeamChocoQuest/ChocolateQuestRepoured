@@ -6,6 +6,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -104,4 +108,24 @@ public class EntityUtil {
 
 		return null;
 	}
+
+	public static void applyMaxHealthModifier(EntityLivingBase entity, UUID uuid, String name, double amount) {
+		IAttributeInstance attribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		if (attribute == null) {
+			return;
+		}
+		AttributeModifier oldModifier = attribute.getModifier(uuid);
+		float oldHealth = entity.getHealth();
+		double oldAmount = 0.0D;
+		if (oldModifier != null) {
+			oldAmount = oldModifier.getAmount();
+			if (Math.abs(amount - oldAmount) < 0.01D) {
+				return;
+			}
+			attribute.removeModifier(oldModifier);
+		}
+		attribute.applyModifier(new AttributeModifier(uuid, name, amount, 2));
+		entity.setHealth((float) ((double) oldHealth / (1.0D + oldAmount) * (1.0D + amount) + 1e-7D));
+	}
+
 }
