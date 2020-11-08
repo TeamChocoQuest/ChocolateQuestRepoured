@@ -22,7 +22,7 @@ public abstract class DataEntry<T> {
 	public abstract NBTBase write();
 
 	public void read(NBTBase nbt) {
-		this.read(nbt);
+		this.readInternal(nbt);
 		this.onValueChanged();
 	}
 
@@ -31,7 +31,7 @@ public abstract class DataEntry<T> {
 	public abstract void writeChanges(ByteBuf buf);
 
 	public void readChanges(ByteBuf buf) {
-		this.readChanges(buf);
+		this.readChangesInternal(buf);
 		this.onValueChanged();
 	}
 
