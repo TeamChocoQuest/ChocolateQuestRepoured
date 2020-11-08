@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,14 +25,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class BlockExporterChest extends BlockHorizontal {
+public abstract class BlockExporterChest extends BlockHorizontal {
 
-	public static final Set<BlockExporterChest> EXPORTER_CHESTS = new HashSet<>();
-
-	public final ResourceLocation lootTable;
-	public final ResourceLocation itemTexture;
+	private static final Set<BlockExporterChest> EXPORTER_CHESTS = new HashSet<>();
 
 	protected static final AxisAlignedBB NORTH_CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0D, 0.9375D, 0.875D, 0.9375D);
 	protected static final AxisAlignedBB SOUTH_CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 1.0D);
@@ -39,19 +38,30 @@ public class BlockExporterChest extends BlockHorizontal {
 	protected static final AxisAlignedBB EAST_CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 1.0D, 0.875D, 0.9375D);
 	protected static final AxisAlignedBB NOT_CONNECTED_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
 
-	public BlockExporterChest(ResourceLocation lootTable, String resourceName) {
-		this(lootTable, new ResourceLocation(resourceName));
+	private final ResourceLocation overlayTexture;
+
+	public BlockExporterChest(String resourceName) {
+		this(new ResourceLocation(resourceName));
 	}
 
-	public BlockExporterChest(ResourceLocation lootTable, String resourceDomain, String resourcePath) {
-		this(lootTable, new ResourceLocation(resourceDomain, resourcePath));
+	public BlockExporterChest(String resourceDomain, String resourcePath) {
+		this(new ResourceLocation(resourceDomain, resourcePath));
 	}
 
-	public BlockExporterChest(ResourceLocation lootTable, ResourceLocation itemTexture) {
+	public BlockExporterChest(ResourceLocation overlayTexture) {
 		super(Material.WOOD);
-		this.lootTable = lootTable;
-		this.itemTexture = itemTexture;
+		this.overlayTexture = overlayTexture;
 		EXPORTER_CHESTS.add(this);
+	}
+
+	public static Set<BlockExporterChest> getExporterChests() {
+		return Collections.unmodifiableSet(EXPORTER_CHESTS);
+	}
+
+	public abstract ResourceLocation getLootTable(World world, BlockPos pos);
+
+	public ResourceLocation getOverlayTexture() {
+		return this.overlayTexture;
 	}
 
 	@Override
@@ -185,16 +195,6 @@ public class BlockExporterChest extends BlockHorizontal {
 		return false;
 	}
 
-	@EventBusSubscriber(modid = Reference.MODID)
-	private static class EventHandler {
-		@SubscribeEvent
-		public static void onPlaceBlockEvent(BlockEvent.EntityPlaceEvent event) {
-			if (event.getPlacedBlock().getBlock() == Blocks.CHEST && !canPlaceChestAt(event.getWorld(), event.getPos())) {
-				event.setCanceled(true);
-			}
-		}
-	}
-
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityExporterChest();
@@ -208,6 +208,16 @@ public class BlockExporterChest extends BlockHorizontal {
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+
+	@EventBusSubscriber(modid = Reference.MODID)
+	private static class EventHandler {
+		@SubscribeEvent(priority = EventPriority.HIGH)
+		public static void onPlaceBlockEvent(BlockEvent.EntityPlaceEvent event) {
+			if (event.getPlacedBlock().getBlock() == Blocks.CHEST && !canPlaceChestAt(event.getWorld(), event.getPos())) {
+				event.setCanceled(true);
+			}
+		}
 	}
 
 }

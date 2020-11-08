@@ -1051,9 +1051,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, DungeonInhabitant mobType) {
+	public void onSpawnFromCQRSpawnerInDungeon(BlockPos dungeonPos, PlacementSettings placementSettings, DungeonInhabitant mobType) {
 		this.setHomePositionCQR(new BlockPos(this));
-		this.setBaseHealthDependingOnPos(new BlockPos(this));
+		this.setBaseHealthDependingOnPos(dungeonPos);
 
 		// Recalculate path points
 		if (this.pathPoints.length > 0) {

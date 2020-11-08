@@ -12,6 +12,8 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockBossBlock;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChestCQR;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChestCustom;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockFireCQR;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
@@ -21,8 +23,10 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTemporaryWeb;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityBoss;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChest;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChestCustom;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
@@ -128,12 +132,15 @@ public class CQRBlocks {
 	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
 
 	// Loot Chests
-	// Standard
+	// CQR
 	public static final BlockExporterChest EXPORTER_CHEST_VALUABLE = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_FOOD = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_EQUIPMENT = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_UTILITY = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_CLUTTER = Null();
+
+	// Custom
+	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM = Null();
 
 	// Vanilla
 	public static final BlockExporterChest EXPORTER_CHEST_VANILLA_BLACKSMITH = Null();
@@ -150,22 +157,6 @@ public class CQRBlocks {
 	public static final BlockExporterChest EXPORTER_CHEST_VANILLA_STRONGHOLD = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_VANILLA_STRONGHOLD_LIBRARY = Null();
 	public static final BlockExporterChest EXPORTER_CHEST_VANILLA_STRONGHOLD_STOREROOM = Null();
-
-	// Custom / User
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_1 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_2 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_3 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_4 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_5 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_6 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_7 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_8 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_9 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_10 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_11 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_12 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_13 = Null();
-	public static final BlockExporterChest EXPORTER_CHEST_CUSTOM_14 = Null();
 
 	// Technical
 	public static final BlockPhylactery PHYLACTERY = Null();
@@ -252,41 +243,28 @@ public class CQRBlocks {
 					setBlockNameAndTab(new BlockBossBlock(), "boss_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockForceFieldNexus(Material.IRON), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
 
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_TREASURE, "textures/items/diamond.png"), "exporter_chest_valuable", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_FOOD, "textures/items/porkchop_raw.png"), "exporter_chest_food", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_EQUIPMENT, "textures/items/iron_pickaxe.png"), "exporter_chest_equipment", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_MATERIAL, "textures/items/iron_ingot.png"), "exporter_chest_utility", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CLUTTER, "textures/items/gunpowder.png"), "exporter_chest_clutter", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_TREASURE, "textures/items/diamond.png"), "exporter_chest_valuable", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_FOOD, "textures/items/porkchop_raw.png"), "exporter_chest_food", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_EQUIPMENT, "textures/items/iron_pickaxe.png"), "exporter_chest_equipment", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_MATERIAL, "textures/items/iron_ingot.png"), "exporter_chest_utility", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_CLUTTER, "textures/items/gunpowder.png"), "exporter_chest_clutter", CQRMain.CQR_EXPORTER_CHEST_TAB),
 
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_VILLAGE_BLACKSMITH, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_blacksmith.png"), "exporter_chest_vanilla_blacksmith", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_SPAWN_BONUS_CHEST, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_bonus.png"), "exporter_chest_vanilla_bonus", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_SIMPLE_DUNGEON, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_dungeon.png"), "exporter_chest_vanilla_dungeon", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_END_CITY_TREASURE, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_end_city.png"), "exporter_chest_vanilla_end_city", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_IGLOO_CHEST, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_igloo.png"), "exporter_chest_vanilla_igloo", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_JUNGLE_TEMPLE, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_jungle.png"), "exporter_chest_vanilla_jungle", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_JUNGLE_TEMPLE_DISPENSER, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_jungle_dispenser.png"), "exporter_chest_vanilla_jungle_dispenser", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_WOODLAND_MANSION, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_mansion.png"), "exporter_chest_vanilla_mansion", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_ABANDONED_MINESHAFT, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_mineshaft.png"), "exporter_chest_vanilla_mineshaft", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_NETHER_BRIDGE, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_nether.png"), "exporter_chest_vanilla_nether", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_DESERT_PYRAMID, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_pyramid.png"), "exporter_chest_vanilla_pyramid", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_STRONGHOLD_CORRIDOR, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_stronghold.png"), "exporter_chest_vanilla_stronghold", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_STRONGHOLD_LIBRARY, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_stronghold_library.png"), "exporter_chest_vanilla_stronghold_library", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(LootTableList.CHESTS_STRONGHOLD_CROSSING, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_stronghold_storeroom.png"), "exporter_chest_vanilla_stronghold_storeroom", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCustom("textures/items/blaze_rod.png"), "exporter_chest_custom", CQRMain.CQR_EXPORTER_CHEST_TAB),
 
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_1, "textures/items/blaze_powder.png"), "exporter_chest_custom_1", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_2, "textures/items/wood_pickaxe.png"), "exporter_chest_custom_2", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_3, "textures/items/book_normal.png"), "exporter_chest_custom_3", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_4, "textures/items/rotten_flesh.png"), "exporter_chest_custom_4", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_5, "textures/items/cookie.png"), "exporter_chest_custom_5", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_6, "textures/items/emerald.png"), "exporter_chest_custom_6", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_7, "textures/items/feather.png"), "exporter_chest_custom_7", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_8, "textures/items/fishing_rod_uncast.png"), "exporter_chest_custom_8", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_9, "textures/items/gold_ingot.png"), "exporter_chest_custom_9", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_10, "textures/items/iron_chestplate.png"), "exporter_chest_custom_10", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_11, "textures/items/iron_hoe.png"), "exporter_chest_custom_11", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_12, "textures/items/potato.png"), "exporter_chest_custom_12", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_13, Reference.MODID, "textures/items/potion_healing.png"), "exporter_chest_custom_13", CQRMain.CQR_EXPORTER_CHEST_TAB),
-					setBlockNameAndTab(new BlockExporterChest(CQRLoottables.CHESTS_CUSTOM_14, "textures/items/record_strad.png"), "exporter_chest_custom_14", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_VILLAGE_BLACKSMITH, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_blacksmith.png"), "exporter_chest_vanilla_blacksmith", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_SPAWN_BONUS_CHEST, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_bonus.png"), "exporter_chest_vanilla_bonus", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_SIMPLE_DUNGEON, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_dungeon.png"), "exporter_chest_vanilla_dungeon", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_END_CITY_TREASURE, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_end_city.png"), "exporter_chest_vanilla_end_city", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_IGLOO_CHEST, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_igloo.png"), "exporter_chest_vanilla_igloo", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_JUNGLE_TEMPLE, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_jungle.png"), "exporter_chest_vanilla_jungle", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_JUNGLE_TEMPLE_DISPENSER, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_jungle_dispenser.png"), "exporter_chest_vanilla_jungle_dispenser", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_WOODLAND_MANSION, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_mansion.png"), "exporter_chest_vanilla_mansion", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_ABANDONED_MINESHAFT, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_mineshaft.png"), "exporter_chest_vanilla_mineshaft", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_NETHER_BRIDGE, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_nether.png"), "exporter_chest_vanilla_nether", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_DESERT_PYRAMID, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_pyramid.png"), "exporter_chest_vanilla_pyramid", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_CORRIDOR, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_stronghold.png"), "exporter_chest_vanilla_stronghold", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_LIBRARY, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_stronghold_library.png"), "exporter_chest_vanilla_stronghold_library", CQRMain.CQR_EXPORTER_CHEST_TAB),
+					setBlockNameAndTab(new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_CROSSING, Reference.MODID, "textures/blocks/exporter_chest_overlays/vanilla_stronghold_storeroom.png"), "exporter_chest_vanilla_stronghold_storeroom", CQRMain.CQR_EXPORTER_CHEST_TAB),
 
 					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
 					setBlockNameAndTab(new BlockTemporaryWeb(), "temporary_web", null), };
@@ -309,6 +287,7 @@ public class CQRBlocks {
 			GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(Reference.MODID, "TileEntitySpawner"));
 			GameRegistry.registerTileEntity(TileEntityForceFieldNexus.class, new ResourceLocation(Reference.MODID, "TileEntityForceFieldNexus"));
 			GameRegistry.registerTileEntity(TileEntityExporterChest.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChest"));
+			GameRegistry.registerTileEntity(TileEntityExporterChestCustom.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChestCustom"));
 			GameRegistry.registerTileEntity(TileEntityBoss.class, new ResourceLocation(Reference.MODID, "TileEntityBoss"));
 		}
 

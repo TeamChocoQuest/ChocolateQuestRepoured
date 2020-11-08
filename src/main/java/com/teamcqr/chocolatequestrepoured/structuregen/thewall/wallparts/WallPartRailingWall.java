@@ -98,7 +98,7 @@ public class WallPartRailingWall implements IWallPart {
 			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
-			blockInfoList.add(new BlockInfoSpawner(spawnerPos, state2, tileSpawner.writeToNBT(new NBTTagCompound())));
+			blockInfoList.add(new BlockInfoSpawner(spawnerPos, tileSpawner.writeToNBT(new NBTTagCompound())));
 		}
 	}
 

@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.client.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBadge;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBossBlock;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporterChestCustom;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiSpawner;
 import com.teamcqr.chocolatequestrepoured.client.gui.npceditor.GuiCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.gui.npceditor.GuiMerchant;
@@ -21,6 +22,7 @@ import com.teamcqr.chocolatequestrepoured.inventory.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityBoss;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChestCustom;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -80,7 +82,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == Reference.SPAWNER_GUI_ID) {
-			return new GuiSpawner(this.getServerGuiElement(ID, player, world, x, y, z));
+			return new GuiSpawner((TileEntitySpawner) world.getTileEntity(new BlockPos(x, y, z)), this.getServerGuiElement(ID, player, world, x, y, z));
 		}
 
 		if (ID == Reference.BACKPACK_GUI_ID) {
@@ -109,6 +111,10 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == Reference.REPUTATION_GUI_ID) {
 			return new GuiReputation((EntityPlayerSP) player);
+		}
+
+		if (ID == Reference.EXPORTER_CHEST_GUI_ID) {
+			return new GuiExporterChestCustom((TileEntityExporterChestCustom) world.getTileEntity(new BlockPos(x, y, z)));
 		}
 
 		if (ID == Reference.BOSS_BLOCK_GUI_ID) {

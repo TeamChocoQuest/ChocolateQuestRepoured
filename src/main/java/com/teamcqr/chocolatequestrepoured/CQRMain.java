@@ -217,6 +217,7 @@ public class CQRMain {
 		isEntityCullingInstalled = Loader.isModLoaded("entity_culling");
 
 		DungeonRegistry.getInstance().loadDungeonFiles();
+		CQStructure.checkAndUpdateStructureFiles();
 		CQStructure.cacheFiles();
 		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();

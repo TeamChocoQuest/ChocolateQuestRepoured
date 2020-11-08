@@ -18,7 +18,7 @@ public class DungeonPartBlockSpecial extends DungeonPartBlock {
 	}
 
 	public DungeonPartBlockSpecial(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, DungeonInhabitant dungeonMobType) {
-		super(world, dungeonGenerator, partPos, blocks, settings, dungeonMobType);
+		super(world, dungeonGenerator, partPos, blocks, settings, dungeonMobType, true);
 	}
 
 	@Override
@@ -28,8 +28,8 @@ public class DungeonPartBlockSpecial extends DungeonPartBlock {
 
 	@Override
 	public void generateNext() {
-		while (!this.blockInfoList.isEmpty()) {
-			AbstractBlockInfo blockInfo = this.blockInfoList.poll();
+		while (!this.blockInfoQueue.isEmpty()) {
+			AbstractBlockInfo blockInfo = this.blockInfoQueue.poll();
 			blockInfo.generate(this.world, this.dungeonGenerator.getPos(), this.partPos, this.settings, this.dungeonMobType, this.dungeonGenerator.getProtectedRegion());
 		}
 	}

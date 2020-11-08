@@ -72,6 +72,8 @@ public class CQRConfig {
 
 		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
 		public boolean multithreadedDungeonPreparation = true;
+
+		public boolean checkAndUpdateDeprecatedStructureFiles = false;
 	}
 
 	public static class Materials {
