@@ -49,6 +49,10 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 		if (compound.hasKey("assignedRegion")) {
 			this.assignedRegionID = compound.getString("assignedRegion");
 		}
+		if (this.hasCustomName())
+        {
+            this.bossInfoServer.setName(this.getDisplayName());
+        }
 	}
 
 	@Override

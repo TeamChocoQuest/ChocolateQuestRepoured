@@ -74,6 +74,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -99,6 +100,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -168,6 +171,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<String> TEXTURE_OVERRIDE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected ResourceLocation textureOverride = null;
 
+	private BossInfoServer bossInfoServer = null;
+
 	// Client only
 	@SideOnly(Side.CLIENT)
 	protected int currentSpeechBubbleID;
@@ -179,6 +184,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		this.experienceValue = 5;
 		this.setSize(this.getDefaultWidth(), this.getDefaultHeight());
+	}
+
+	public void enableBossBar() {
+		bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
+		bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
 	}
 
 	@Override
@@ -513,6 +523,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.setCustomTexture(new ResourceLocation(ct));
 			}
 		}
+
+		if (this.hasCustomName() && this.bossInfoServer != null) {
+			this.bossInfoServer.setName(this.getDisplayName());
+		}
 	}
 
 	@Override
@@ -673,6 +687,35 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
 		super.onLivingUpdate();
+
+		// Bossbar
+		if (this.bossInfoServer != null) {
+			this.bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
+		}
+	}
+
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player) {
+		super.addTrackingPlayer(player);
+		if (this.bossInfoServer != null) {
+			this.bossInfoServer.addPlayer(player);
+		}
+	}
+
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player) {
+		super.removeTrackingPlayer(player);
+		if (this.bossInfoServer != null) {
+			this.bossInfoServer.removePlayer(player);
+		}
+	}
+
+	@Override
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		if (this.bossInfoServer != null) {
+			this.bossInfoServer.setName(this.getDisplayName());
+		}
 	}
 
 	@Override
@@ -835,9 +878,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leader = leader;
 			}
 			this.leaderUUID = leader.getPersistentID();
-			
+
 			CQRFaction leaderFaction = FactionRegistry.instance().getFactionOf(leader);
-			if(leaderFaction != null) {
+			if (leaderFaction != null) {
 				this.setFaction(leaderFaction.getName(), true);
 			}
 		}
@@ -965,11 +1008,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Nullable
 	public CQRFaction getFaction() {
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			// Leader faction is set when assigning the leader
-			/*if (this.hasLeader()) {
-				return FactionRegistry.instance().getFactionOf(this.getLeader());
-			}*/
+			/*
+			 * if (this.hasLeader()) {
+			 * return FactionRegistry.instance().getFactionOf(this.getLeader());
+			 * }
+			 */
 			if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
 				this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
 			}
@@ -978,7 +1023,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		} else {
 			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
-			if(syncedFaction != null && !syncedFaction.isEmpty() && !(factionName != null && this.factionName.equals(syncedFaction))) {
+			if (syncedFaction != null && !syncedFaction.isEmpty() && !(factionName != null && this.factionName.equals(syncedFaction))) {
 				this.factionName = syncedFaction;
 				this.factionInstance = FactionRegistry.instance().getFactionInstance(syncedFaction);
 			}
@@ -988,21 +1033,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		return this.getDefaultFactionInstance();
 	}
-	
+
 	public void setFaction(String newFac) {
 		this.setFaction(newFac, false);
 	}
 
 	public void setFaction(String newFac, boolean ignoreCTS) {
-		//TODO: Update faction on client too!!
-		if(!world.isRemote) {
+		// TODO: Update faction on client too!!
+		if (!world.isRemote) {
 			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
-			if(faction != null) {
+			if (faction != null) {
 				this.factionInstance = null;
 				this.factionName = newFac;
-				if(!ignoreCTS) {
+				if (!ignoreCTS) {
 					ResourceLocation rs = faction.getRandomTextureFor(this);
-					if(rs != null) {
+					if (rs != null) {
 						this.setCustomTexture(rs);
 					}
 				}
