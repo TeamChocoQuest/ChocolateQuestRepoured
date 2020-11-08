@@ -2,10 +2,12 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityBoss;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -98,6 +100,10 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(dungeonPos, settings, dungeonMob);
+					
+					if(!(entity instanceof AbstractEntityCQRBoss) && CQRConfig.bosses.enableBossBars) {
+						((AbstractEntityCQR) entity).enableBossBar();
+					}
 				}
 			}
 
@@ -119,6 +125,9 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(dungeonPos, settings, dungeonMob);
 					((AbstractEntityCQR) entity).setSizeVariation(1.1F);
+					if(CQRConfig.bosses.enableBossBars) {
+						((AbstractEntityCQR) entity).enableBossBar();
+					}
 				}
 
 				((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
