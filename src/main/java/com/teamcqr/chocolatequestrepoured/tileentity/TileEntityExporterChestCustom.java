@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.network.datasync.DataEntryResourceLocation;
 import com.teamcqr.chocolatequestrepoured.network.datasync.TileEntityDataManager;
 
@@ -9,6 +11,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -66,6 +70,11 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 
 	public ResourceLocation getLootTable() {
 		return this.lootTable.get();
+	}
+
+	@Nullable
+	public ITextComponent getDisplayName() {
+		return new TextComponentString("Loottable: " + this.lootTable.get().toString());
 	}
 
 }
