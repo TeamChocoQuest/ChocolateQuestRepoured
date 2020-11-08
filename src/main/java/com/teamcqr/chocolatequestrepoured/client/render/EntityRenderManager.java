@@ -259,13 +259,13 @@ public class EntityRenderManager {
 					} else if (d4 < d5) {
 						enumfacing = j > i1 ? EnumFacing.DOWN : EnumFacing.UP;
 						x = x + d6 * d4;
-						y = y + d1;
+						y = d1;
 						z = z + d8 * d4;
 					} else {
 						enumfacing = k > j1 ? EnumFacing.NORTH : EnumFacing.SOUTH;
 						x = x + d6 * d5;
 						y = y + d7 * d5;
-						z = z + d2;
+						z = d2;
 					}
 
 					l = MathHelper.floor(x) - (enumfacing == EnumFacing.EAST ? 1 : 0);
