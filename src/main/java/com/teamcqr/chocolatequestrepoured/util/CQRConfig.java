@@ -262,6 +262,8 @@ public class CQRConfig {
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
 
 		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
+		
+		public float giantSpiderMaxHealByBite = 8F;
 	}
 
 	public static class BossDamageCaps {

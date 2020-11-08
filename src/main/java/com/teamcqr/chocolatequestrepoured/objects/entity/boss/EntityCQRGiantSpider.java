@@ -204,7 +204,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			int effectlvl = 1;
 			if (this.getRNG().nextDouble() > 0.7) {
 				effectlvl = 2;
-				this.heal(((EntityLivingBase) entityIn).getHealth() * 0.25F);
+				this.heal(Math.min(CQRConfig.bosses.giantSpiderMaxHealByBite, ((EntityLivingBase) entityIn).getHealth() * 0.25F));
 			}
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
 		}
