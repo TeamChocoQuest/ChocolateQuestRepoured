@@ -219,7 +219,6 @@ public class CQStructure {
 		NBTTagList compoundTagList = new NBTTagList();
 
 		// Save normal blocks
-		this.blockInfoList.sort(SORT_FOR_EXPORTATION);
 		ByteBuf buf = Unpooled.buffer(this.blockInfoList.size() * 2);
 		for (AbstractBlockInfo blockInfo : this.blockInfoList) {
 			blockInfo.writeToByteBuf(buf, blockStatePalette, compoundTagList);
@@ -261,6 +260,7 @@ public class CQStructure {
 		String cqrFileVersion = compound.getString("cqr_file_version");
 		if (!cqrFileVersion.equals(CQR_FILE_VERSION)) {
 			if (cqrFileVersion.equals("1.1.0")) {
+				CQRMain.logger.warn("Structure nbt is deprecated! Expected {} but got {}.", CQR_FILE_VERSION, cqrFileVersion);
 				this.readFromDeprecatedNBT(compound);
 				return;
 			} else {
@@ -298,7 +298,6 @@ public class CQStructure {
 				}
 			}
 		}
-		this.blockInfoList.sort(SORT_FOR_GENERATION);
 
 		// Load special blocks
 		buf = Unpooled.wrappedBuffer(compound.getByteArray("specialBlockInfoList"));
@@ -492,7 +491,7 @@ public class CQStructure {
 				z++;
 			}
 		}
-		this.blockInfoList.sort(SORT_FOR_GENERATION);
+		this.blockInfoList.sort(SORT_FOR_EXPORTATION);
 
 		// Load special blocks
 		for (NBTBase nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
