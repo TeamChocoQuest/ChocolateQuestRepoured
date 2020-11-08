@@ -496,6 +496,7 @@ tile.exporter_chest_vanilla_pyramid.name=Exporter Chest - Pyramid
 tile.exporter_chest_vanilla_stronghold.name=Exporter Chest - Stronghold Corridor
 tile.exporter_chest_vanilla_stronghold_library.name=Exporter Chest - Stronghold Library
 tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Chest - Stronghold Mine
+tile.exporter_chest_custom.name=Exporter Chest - Custom
 
 #technical
 tile.phylactery.name=Lich Phylactery
