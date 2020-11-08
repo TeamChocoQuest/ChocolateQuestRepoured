@@ -487,7 +487,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
-		this.setHealthScale(compound.getDouble("healthScale"));
+		this.setHealthScale(compound.hasKey("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
 
 		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
@@ -1053,6 +1053,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void onSpawnFromCQRSpawnerInDungeon(BlockPos dungeonPos, PlacementSettings placementSettings, DungeonInhabitant mobType) {
 		this.setHomePositionCQR(new BlockPos(this));
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
+		this.setHealth(this.getMaxHealth());
 		this.setBaseHealthDependingOnPos(dungeonPos);
 
 		// Recalculate path points
@@ -1200,7 +1202,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setHealthScale(double newHealthScale) {
 		if (this.healthScale != newHealthScale) {
 			if (!this.world.isRemote) {
-				EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_SLIDER_ID, "Health Scale Slider", 1.0D - newHealthScale);
+				EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_SLIDER_ID, "Health Scale Slider", newHealthScale - 1.0D);
 			}
 			this.healthScale = newHealthScale;
 		}
