@@ -74,7 +74,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 		this.experienceValue = 200;
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();

@@ -72,6 +72,7 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 		return this.lootTable.get();
 	}
 
+	@Override
 	@Nullable
 	public ITextComponent getDisplayName() {
 		return new TextComponentString("Loottable: " + this.lootTable.get().toString());

@@ -39,7 +39,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
 	}
-	
+
 	private void processStructure(CQStructure structure, BlockPos position) {
 		PlacementSettings settings = new PlacementSettings();
 		if (this.dungeon.rotateDungeon()) {
@@ -47,7 +47,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
 		}
 		BlockPos structurePos = DungeonGenUtils.getCentralizedPosForStructure(position, structure, settings);
-		if(this.dungeon.doBuildSupportPlatform()) {
+		if (this.dungeon.doBuildSupportPlatform()) {
 			BlockPos startPos = structurePos.up(this.dungeon.getUnderGroundOffset()).down();
 			BlockPos endPos = startPos.add(Template.transformedBlockPos(settings, new BlockPos(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1)));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
@@ -62,30 +62,29 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	public void preProcess() {
 		int buildings = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
 		Double degrees = 360.0 / buildings;
-		
+
 		File structure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder(), this.random);
 		BlockPos position = this.pos;
 		for (int i = 0; i < buildings; i++) {
-			processStructure(loadStructureFromFile(structure), position);
+			this.processStructure(this.loadStructureFromFile(structure), position);
 			structure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder(), this.random);
 			Vec3i v = new Vec3i(DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random), 0, 0);
 			v = VectorUtil.rotateVectorAroundY(v, degrees * i);
 			position = this.pos.add(v);
-			position = new BlockPos(position.getX(), this.dungeon.getYForPos(getWorld(), position.getX(), position.getZ(), this.random), position.getZ());
+			position = new BlockPos(position.getX(), this.dungeon.getYForPos(this.getWorld(), position.getX(), position.getZ(), this.random), position.getZ());
 		}
-		processStructure(loadStructureFromFile(structure), position);
+		this.processStructure(this.loadStructureFromFile(structure), position);
 
-		
 	}
 
 	@Override
 	public void buildStructure() {
 		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
-		for(Map.Entry<BlockPos, CQStructure> entry : this.toGenerate.entrySet()) {
+		for (Map.Entry<BlockPos, CQStructure> entry : this.toGenerate.entrySet()) {
 			PlacementSettings settings = this.settingsMap.get(entry.getKey());
 			CQStructure structure = entry.getValue();
 			BlockPos structurePos = entry.getKey();
-			
+
 			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, structurePos, structure.getBlockInfoList(), settings, mobType));
 			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, structurePos, structure.getEntityInfoList(), settings, mobType));
 			this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, structurePos, structure.getSpecialBlockInfoList(), settings, mobType));
@@ -94,12 +93,12 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 	@Override
 	public void postProcess() {
-		if(this.dungeon.isCoverBlockEnabled()) {
-			for(Map.Entry<BlockPos, CQStructure> entry : this.toGenerate.entrySet()) {
+		if (this.dungeon.isCoverBlockEnabled()) {
+			for (Map.Entry<BlockPos, CQStructure> entry : this.toGenerate.entrySet()) {
 				PlacementSettings settings = this.settingsMap.get(entry.getKey());
 				CQStructure structure = entry.getValue();
 				BlockPos structurePos = entry.getKey();
-				
+
 				BlockPos startPos = structurePos;
 				BlockPos endPos = startPos.add(Template.transformedBlockPos(settings, new BlockPos(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1)));
 				BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);

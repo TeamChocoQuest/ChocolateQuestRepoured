@@ -70,16 +70,16 @@ public class FactionRegistry {
 	}
 
 	public void loadFactions() {
-		if(!this.factions.isEmpty()) {
+		if (!this.factions.isEmpty()) {
 			this.factions.clear();
 		}
-		if(!this.playerFactionRepuMap.isEmpty()) {
+		if (!this.playerFactionRepuMap.isEmpty()) {
 			this.playerFactionRepuMap.clear();
 		}
-		if(!this.entityFactionMap.isEmpty()) {
+		if (!this.entityFactionMap.isEmpty()) {
 			this.entityFactionMap.clear();
 		}
-		
+
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
 
@@ -104,7 +104,7 @@ public class FactionRegistry {
 		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
 		factionsOfPlayer.put(faction.getName(), reputation);
 
-		sendRepuUpdatePacket(player, reputation, faction.getName());
+		this.sendRepuUpdatePacket(player, reputation, faction.getName());
 	}
 
 	private void loadEntityFactionRelations() {
@@ -313,7 +313,7 @@ public class FactionRegistry {
 		try {
 			return instance.get();
 		} catch (NullPointerException npe) {
-			//Will also set the instance field
+			// Will also set the instance field
 			new FactionRegistry();
 			return instance.get();
 		}
@@ -367,7 +367,7 @@ public class FactionRegistry {
 
 			// send packet to player
 			if (player instanceof EntityPlayerMP) {
-				sendRepuUpdatePacket((EntityPlayerMP) player, score + oldScore, faction);
+				this.sendRepuUpdatePacket((EntityPlayerMP) player, score + oldScore, faction);
 			}
 		}
 	}
@@ -424,7 +424,7 @@ public class FactionRegistry {
 				final UUID uuid = player.getPersistentID();
 				if (f.exists()) {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
-					//NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
+					// NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 					if (!root.isEmpty()) {
 						while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
 							// Wait until the uuid isnt active
@@ -432,24 +432,26 @@ public class FactionRegistry {
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
 							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
-							/*repuDataList.forEach(new Consumer<NBTBase>() {
-
-								@Override
-								public void accept(NBTBase t) {
-									NBTTagCompound tag = (NBTTagCompound) t;
-									String fac = tag.getString("factionName");
-									if (FactionRegistry.this.factions.containsKey(fac)) {
-										int reputation = tag.getInteger("reputation");
-										mapping.put(fac, reputation);
-									}
-								}
-							});*/
-							for(String key : root.getKeySet()) {
+							/*
+							 * repuDataList.forEach(new Consumer<NBTBase>() {
+							 * 
+							 * @Override
+							 * public void accept(NBTBase t) {
+							 * NBTTagCompound tag = (NBTTagCompound) t;
+							 * String fac = tag.getString("factionName");
+							 * if (FactionRegistry.this.factions.containsKey(fac)) {
+							 * int reputation = tag.getInteger("reputation");
+							 * mapping.put(fac, reputation);
+							 * }
+							 * }
+							 * });
+							 */
+							for (String key : root.getKeySet()) {
 								try {
 									int value = root.getInteger(key);
 									mapping.put(key, value);
-								} catch(Exception ex) {
-									//Ignore
+								} catch (Exception ex) {
+									// Ignore
 								}
 							}
 						} finally {
@@ -476,7 +478,7 @@ public class FactionRegistry {
 				@Override
 				public void run() {
 					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(player.getPersistentID());
-					//Map<String, Integer> entryMapping = new HashMap<>();
+					// Map<String, Integer> entryMapping = new HashMap<>();
 					final UUID uuid = player.getPersistentID();
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
@@ -487,24 +489,26 @@ public class FactionRegistry {
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
 							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
-							/*NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
-							for (int i = 0; i < repuDataList.tagCount(); i++) {
-								NBTTagCompound tag = repuDataList.getCompoundTagAt(i);
-								if (mapping.containsKey(tag.getString("factionName"))) {
-									entryMapping.put(tag.getString("factionName"), i);
-								}
-							}
-							for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
-								if (entryMapping.containsKey(entry.getKey())) {
-									repuDataList.removeTag(entryMapping.get(entry.getKey()));
-								}
-								NBTTagCompound tag = new NBTTagCompound();
-								tag.setString("factionName", entry.getKey());
-								tag.setInteger("reputation", entry.getValue());
-								repuDataList.appendTag(tag);
-							}
-							root.removeTag("reputationdata");
-							root.setTag("reputationdata", repuDataList);*/
+							/*
+							 * NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
+							 * for (int i = 0; i < repuDataList.tagCount(); i++) {
+							 * NBTTagCompound tag = repuDataList.getCompoundTagAt(i);
+							 * if (mapping.containsKey(tag.getString("factionName"))) {
+							 * entryMapping.put(tag.getString("factionName"), i);
+							 * }
+							 * }
+							 * for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
+							 * if (entryMapping.containsKey(entry.getKey())) {
+							 * repuDataList.removeTag(entryMapping.get(entry.getKey()));
+							 * }
+							 * NBTTagCompound tag = new NBTTagCompound();
+							 * tag.setString("factionName", entry.getKey());
+							 * tag.setInteger("reputation", entry.getValue());
+							 * repuDataList.appendTag(tag);
+							 * }
+							 * root.removeTag("reputationdata");
+							 * root.setTag("reputationdata", repuDataList);
+							 */
 							for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
 								root.setInteger(entry.getKey(), entry.getValue());
 							}

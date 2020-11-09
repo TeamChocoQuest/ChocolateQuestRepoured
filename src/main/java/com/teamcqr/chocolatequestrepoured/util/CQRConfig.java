@@ -263,7 +263,7 @@ public class CQRConfig {
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
 
 		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
-		
+
 		public float giantSpiderMaxHealByBite = 8F;
 	}
 
@@ -377,68 +377,68 @@ public class CQRConfig {
 		@Config.RangeInt(min = 0, max = 10)
 		public int towerDistance = 3;
 	}
-	
+
 	public static class BaseHealths {
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Dummy = 1F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Dwarf = 30F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Enderman = 40F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Goblin = 20F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Golem = 40F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Gremlin = 30F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Human = 20F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Illager = 25F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Minotaur = 30F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Mummy = 20F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float NPC = 20F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Ogre = 35F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Orc = 30F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Boarman = 25F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Pirate = 25F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Skeleton = 20F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Spectre = 30F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Triton = 30F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float AbyssWalker = 40F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Zombie = 25F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Mandril = 30F;
-		
-		@Config.RangeDouble(min=1, max = 1000)
+
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float NetherDragon = 250F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float GiantTortoise = 400F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Lich = 200F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Necromancer = 150F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float Boarmage = 250F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float AbyssWalkerKing = 300F;
-		@Config.RangeDouble(min=1, max = 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float PirateCaptain = 200F;
-		@Config.RangeDouble(min=1, max = 1000)
-		public float GiantSpider = 150F; 
-		
+		@Config.RangeDouble(min = 1, max = 1000)
+		public float GiantSpider = 150F;
+
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID)

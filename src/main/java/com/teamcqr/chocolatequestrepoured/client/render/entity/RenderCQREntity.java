@@ -209,11 +209,11 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		//Custom texture start
-		if(entity.hasTextureOverride()) {
+		// Custom texture start
+		if (entity.hasTextureOverride()) {
 			return entity.getTextureOverride();
 		}
-		//Custom texture end
+		// Custom texture end
 		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png") : this.texture;
 	}
 

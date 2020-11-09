@@ -28,7 +28,7 @@ public class EntityCQRHuman extends AbstractEntityCQR {
 	protected EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.PLAYERS;
 	}
-	
+
 	@Override
 	public int getTextureCount() {
 		return 10;

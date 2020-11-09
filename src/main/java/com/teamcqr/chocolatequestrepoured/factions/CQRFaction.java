@@ -44,7 +44,7 @@ public class CQRFaction {
 	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange) {
 		this(name, defaultReputationState, canRepuChange, Optional.empty(), Optional.empty(), Optional.empty());
 	}
-	
+
 	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
@@ -103,10 +103,10 @@ public class CQRFaction {
 			this.enemies.add(enemy);
 		}
 	}
-	
+
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity entity) {
-		if(this.textureSet != null) {
+		if (this.textureSet != null) {
 			return this.textureSet.getRandomTextureFor(entity);
 		}
 		return null;

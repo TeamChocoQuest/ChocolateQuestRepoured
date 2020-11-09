@@ -114,7 +114,7 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 	}
 
 	public ItemStackHandler getInventory() {
-		return inventory.get();
+		return this.inventory.get();
 	}
 
 	public int getRotation() {

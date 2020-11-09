@@ -43,7 +43,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	public void onRemovedFromBody() {
 		this.dataManager.set(IS_REMOVED, true);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -85,11 +85,11 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		++this.ticksExisted;
 
 		if (this.dataManager.get(IS_REMOVED)) {
-			//this.world.removeEntityDangerously(this);
-			setDead();
+			// this.world.removeEntityDangerously(this);
+			this.setDead();
 		}
-		if(world.isRemote && (this.dragon == null || this.dragon.isDead)) {
-			setDead();
+		if (this.world.isRemote && (this.dragon == null || this.dragon.isDead)) {
+			this.setDead();
 		}
 
 	}

@@ -21,7 +21,7 @@ public class EntitySpiderEgg extends Entity {
 
 	public EntitySpiderEgg(World worldIn) {
 		super(worldIn);
-		setSize(1F, 1F);
+		this.setSize(1F, 1F);
 
 	}
 
@@ -43,10 +43,10 @@ public class EntitySpiderEgg extends Entity {
 	@Override
 	public void onUpdate() {
 		// TODO: Play particles and sound on mob spawning
-		if (!world.isRemote) {
+		if (!this.world.isRemote) {
 			this.currentStageDuration++;
 			if (this.currentStageDuration > STAGE_DURATION) {
-				this.dataManager.set(STAGE, getStage() + 1);
+				this.dataManager.set(STAGE, this.getStage() + 1);
 				this.currentStageDuration = 0;
 			}
 			super.onUpdate();
@@ -57,7 +57,7 @@ public class EntitySpiderEgg extends Entity {
 					spider.setPosition(this.posX, this.posY + 0.5D, this.posZ);
 					this.world.spawnEntity(spider);
 				}
-				setDead();
+				this.setDead();
 			}
 		} else {
 			super.onUpdate();
@@ -72,8 +72,8 @@ public class EntitySpiderEgg extends Entity {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
-		compound.setInteger("stage", getStage());
-		compound.setInteger("stage_duration", currentStageDuration);
+		compound.setInteger("stage", this.getStage());
+		compound.setInteger("stage_duration", this.currentStageDuration);
 	}
 
 	public int getStage() {

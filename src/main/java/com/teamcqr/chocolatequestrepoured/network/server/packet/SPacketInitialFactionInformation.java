@@ -18,21 +18,21 @@ public class SPacketInitialFactionInformation implements IMessage {
 
 	private String[] factions;
 	private int[] reputations;
-	private	boolean[] lockedRepu;
+	private boolean[] lockedRepu;
 	private String[] defaultRepu;
 	private UUID playerId;
-	
+
 	public SPacketInitialFactionInformation() {
-		//Default constructor for client side
+		// Default constructor for client side
 	}
 
 	public SPacketInitialFactionInformation(UUID playerID) {
 		this.playerId = playerID;
 		int arrSize = FactionRegistry.instance().getLoadedFactions().size();
-		factions = new String[arrSize];
-		reputations = new int[arrSize];
-		lockedRepu = new boolean[arrSize];
-		defaultRepu = new String[arrSize];
+		this.factions = new String[arrSize];
+		this.reputations = new int[arrSize];
+		this.lockedRepu = new boolean[arrSize];
+		this.defaultRepu = new String[arrSize];
 		for (int i = 0; i < this.factions.length; i++) {
 			CQRFaction fac = FactionRegistry.instance().getLoadedFactions().get(i);
 			this.factions[i] = fac.getName();
@@ -42,24 +42,24 @@ public class SPacketInitialFactionInformation implements IMessage {
 			this.reputations[i] = score;
 		}
 	}
-	
+
 	public List<CQRFaction> getFactions() {
 		List<CQRFaction> result = new ArrayList<>();
-		
-		for(int i = 0; i < factions.length; i++) {
-			result.add(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), !lockedRepu[i]));
+
+		for (int i = 0; i < this.factions.length; i++) {
+			result.add(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), !this.lockedRepu[i]));
 		}
-		
+
 		return result;
 	}
-	
+
 	public List<Tuple<CQRFaction, Integer>> getReputations() {
 		List<Tuple<CQRFaction, Integer>> data = new ArrayList<>();
-		
-		for(int i = 0; i < reputations.length; i++) {
-			data.add(new Tuple<CQRFaction, Integer>(new CQRFaction(factions[i], EReputationState.valueOf(defaultRepu[i]), lockedRepu[i]), reputations[i]));
+
+		for (int i = 0; i < this.reputations.length; i++) {
+			data.add(new Tuple<CQRFaction, Integer>(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.lockedRepu[i]), this.reputations[i]));
 		}
-		
+
 		return data;
 	}
 
@@ -71,7 +71,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		this.reputations = new int[count];
 		this.lockedRepu = new boolean[count];
 		this.defaultRepu = new String[count];
-		for(int i = 0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			this.factions[i] = ByteBufUtils.readUTF8String(buf);
 			this.lockedRepu[i] = buf.readBoolean();
 			this.defaultRepu[i] = ByteBufUtils.readUTF8String(buf);
@@ -81,11 +81,11 @@ public class SPacketInitialFactionInformation implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, playerId);
+		ByteBufUtil.writeUuid(buf, this.playerId);
 		buf.writeInt(this.factions.length);
 		for (int i = 0; i < this.factions.length; i++) {
 			ByteBufUtils.writeUTF8String(buf, this.factions[i]);
-			buf.writeBoolean(lockedRepu[i]);
+			buf.writeBoolean(this.lockedRepu[i]);
 			ByteBufUtils.writeUTF8String(buf, this.defaultRepu[i]);
 			buf.writeInt(this.reputations[i]);
 		}

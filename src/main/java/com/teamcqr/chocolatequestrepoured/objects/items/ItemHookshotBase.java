@@ -173,7 +173,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 	public abstract String getTranslationKey();
 
 	public abstract double getHookRange();
-	
+
 	public abstract ProjectileHookShotHook getNewHookEntity(World worldIn, EntityLivingBase shooter, ItemStack stack);
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -209,7 +209,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 			 * bulletE.motionX = v.x; bulletE.motionY = v.y; bulletE.motionZ = v.z;
 			 * bulletE.velocityChanged = true; worldIn.spawnEntity(bulletE);
 			 */
-			ProjectileHookShotHook hookEntity = getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack()); //new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());
+			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack()); // new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			hookEntity.shoot(v.x, v.y, v.z, (float) hookEntity.getTravelSpeed(), 0);
 			worldIn.spawnEntity(hookEntity);

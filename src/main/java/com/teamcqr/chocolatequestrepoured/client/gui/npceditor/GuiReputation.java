@@ -70,14 +70,14 @@ public class GuiReputation extends GuiScreen {
 		this.drawHoveringText(I18n.format(this.lblDungeonsConqueredLangKey) + ": missingNo", this.width / 2 - 70, this.height / 2 + 45);
 
 		// Draw images
-		//Minecraft.getMinecraft().renderEngine.bindTexture(TEXTURE_REPU_BAR);
+		// Minecraft.getMinecraft().renderEngine.bindTexture(TEXTURE_REPU_BAR);
 		// Reputation Bar
-		//this.drawTexturedModalRect(this.REPU_BAR_X, this.REPU_BAR_Y, 0, 0, this.width, this.height);
+		// this.drawTexturedModalRect(this.REPU_BAR_X, this.REPU_BAR_Y, 0, 0, this.width, this.height);
 
 		// TODO: Calculate coordinates for head -> Recalculate X coordinate
 
 		// Draw player head
-		Minecraft.getMinecraft().renderEngine.bindTexture(imgPlayerHead);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.imgPlayerHead);
 		// Face
 		this.drawTexturedModalRect(this.width / 2 - 70, this.height / 2 + 65, 8, 8, 8, 8);
 		// Headwear

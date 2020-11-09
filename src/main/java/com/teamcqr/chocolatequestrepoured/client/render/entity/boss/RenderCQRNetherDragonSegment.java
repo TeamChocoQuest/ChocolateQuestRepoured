@@ -101,12 +101,12 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
-		if(!entity.isSkeletal()) {
-			//Custom texture start
-			if(entity.getParent() != null && entity.getParent().hasTextureOverride()) {
+		if (!entity.isSkeletal()) {
+			// Custom texture start
+			if (entity.getParent() != null && entity.getParent().hasTextureOverride()) {
 				return entity.getParent().getTextureOverride();
 			}
-			//Custom texture end
+			// Custom texture end
 			return TEXTURES_NORMAL;
 		}
 		return TEXTURES_SKELETAL;

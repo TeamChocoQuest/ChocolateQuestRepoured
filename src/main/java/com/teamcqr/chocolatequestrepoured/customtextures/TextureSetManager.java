@@ -33,12 +33,12 @@ public class TextureSetManager {
 	public static TextureSetManager getInstance() {
 		try {
 			return INSTANCE.get();
-		} catch(NullPointerException npe) {
+		} catch (NullPointerException npe) {
 			INSTANCE = new TextureSetManager();
 			return INSTANCE;
 		}
 	}
-	
+
 	TextureSetManager get() {
 		return this;
 	}
@@ -86,8 +86,8 @@ public class TextureSetManager {
 	}
 
 	private void clearData() {
-		if(!textureSets.isEmpty()) {
-			textureSets.clear();
+		if (!this.textureSets.isEmpty()) {
+			this.textureSets.clear();
 		}
 	}
 
@@ -101,16 +101,18 @@ public class TextureSetManager {
 
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
 		SPacketCustomTextures packet = new SPacketCustomTextures();
-		/*for (File texture : TextureSet.getLoadedTextures()) {
-			String base64 = CompressionUtil.encodeFileToBase64(texture);
-			String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
-
-			packet.addPair(base64, path);
-		}*/
+		/*
+		 * for (File texture : TextureSet.getLoadedTextures()) {
+		 * String base64 = CompressionUtil.encodeFileToBase64(texture);
+		 * String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
+		 * 
+		 * packet.addPair(base64, path);
+		 * }
+		 */
 		for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
 			byte[] base64 = CompressionUtil.encodeFileToBase64(entry.getValue());
 			String path = entry.getKey();
-			
+
 			packet.addPair(base64, path);
 		}
 		for (TextureSet ts : this.textureSets.values()) {
@@ -137,7 +139,7 @@ public class TextureSetManager {
 		}
 		this.textureSets.clear();
 	}
-	
+
 	@Nullable
 	public TextureSet getTextureSet(String name) {
 		return this.textureSets.getOrDefault(name, null);

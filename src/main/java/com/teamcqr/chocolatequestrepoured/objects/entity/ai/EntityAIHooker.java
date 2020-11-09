@@ -49,9 +49,9 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (this.entity.hasPath()) {
 			this.entity.getNavigator().clearPath();
 			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
-			if (dist > MAX_RANGE) {
+			if (dist > this.MAX_RANGE) {
 				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
-			} else if (dist >= MIN_RANGE) {
+			} else if (dist >= this.MIN_RANGE) {
 				this.entity.getNavigator().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
@@ -80,12 +80,12 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			if (this.hook == null || this.hook.isDead) {
 				this.state = STATE.PREPARING;
-				this.cooldown = MAX_COOLDOWN / 2;
+				this.cooldown = this.MAX_COOLDOWN / 2;
 			}
 			break;
 		case PREPARING:
 			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
-			if (dist > MAX_RANGE) {
+			if (dist > this.MAX_RANGE) {
 				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
 			} else if (dist >= 64) {
 				this.entity.getNavigator().clearPath();

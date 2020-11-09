@@ -40,8 +40,8 @@ public class CTResourcepack implements IResourcePack {
 
 	@Override
 	public InputStream getInputStream(ResourceLocation var1) throws IOException {
-		File file = FILES.getOrDefault(var1, null);
-		if(file != null) {
+		File file = this.FILES.getOrDefault(var1, null);
+		if (file != null) {
 			return new FileInputStream(file);
 		}
 		return null;
@@ -49,12 +49,12 @@ public class CTResourcepack implements IResourcePack {
 
 	@Override
 	public boolean resourceExists(ResourceLocation var1) {
-		return FILES.containsKey(var1);
+		return this.FILES.containsKey(var1);
 	}
 
 	@Override
 	public Set<String> getResourceDomains() {
-		return DOMAIN_SET;
+		return this.DOMAIN_SET;
 	}
 
 	@Override
@@ -81,10 +81,10 @@ public class CTResourcepack implements IResourcePack {
 			this.VALID_TEXTURES.add(resLoc);
 			this.DOMAIN_SET.add(resLoc.getNamespace());
 			this.FILES.put(resLoc, file);
-		} catch(Exception ex) {
-			//Ignore
+		} catch (Exception ex) {
+			// Ignore
 		}
-		
+
 	}
 
 	public static void remove(ResourceLocation texture) {
@@ -118,7 +118,7 @@ public class CTResourcepack implements IResourcePack {
 			try {
 				tex.setBufferedImage(ImageIO.read(entry.getValue()));
 			} catch (IOException e) {
-				//Ignore
+				// Ignore
 			}
 			tm.loadTexture(entry.getKey(), tex);
 		}

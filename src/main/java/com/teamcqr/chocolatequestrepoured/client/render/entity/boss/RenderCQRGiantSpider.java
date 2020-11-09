@@ -18,11 +18,11 @@ public class RenderCQRGiantSpider extends RenderLiving<EntityCQRGiantSpider> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRGiantSpider entity) {
-		//Custom texture start
-		if(entity.hasTextureOverride()) {
+		// Custom texture start
+		if (entity.hasTextureOverride()) {
 			return entity.getTextureOverride();
 		}
-		//Custom texture end
+		// Custom texture end
 		return TEXTURE;
 	}
 

@@ -50,15 +50,15 @@ public abstract class AbstractEntityAIAttackSpecial {
 	}
 
 	public boolean needsTargetToContinue() {
-		return needsTargetToContinue;
+		return this.needsTargetToContinue;
 	}
 
 	public boolean needsSightToContinue() {
-		return needsSightToContinue;
+		return this.needsSightToContinue;
 	}
 
 	public int getMaxUseTime() {
-		return maxUseTime;
+		return this.maxUseTime;
 	}
 
 	public int getCooldown(AbstractEntityCQR attacker) {

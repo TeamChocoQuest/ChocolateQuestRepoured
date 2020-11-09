@@ -119,13 +119,13 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.setBesideClimbableBlock(this.collidedHorizontally);
 		}
 	}
-	
+
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
-	
+
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);

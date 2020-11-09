@@ -13,6 +13,7 @@ public class UniversalImageBuffer implements IImageBuffer {
 	private int imageWidth;
 	private int imageHeight;
 
+	@Override
 	@Nullable
 	public BufferedImage parseUserSkin(BufferedImage image) {
 		if (image == null) {
@@ -25,11 +26,12 @@ public class UniversalImageBuffer implements IImageBuffer {
 			graphics.drawImage(image, 0, 0, (ImageObserver) null);
 
 			graphics.dispose();
-			
+
 			return bufferedimage;
 		}
 	}
 
+	@Override
 	public void skinAvailable() {
 	}
 

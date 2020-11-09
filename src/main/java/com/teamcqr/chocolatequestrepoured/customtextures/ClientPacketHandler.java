@@ -30,7 +30,7 @@ public class ClientPacketHandler {
 				if (tf.exists()) {
 					tf.delete();
 				}
-				if(tf.getParentFile() != null && !tf.getParentFile().exists()) {
+				if (tf.getParentFile() != null && !tf.getParentFile().exists()) {
 					tf.getParentFile().mkdirs();
 				}
 				if (CompressionUtil.decodeBase64ToFile(tf, textureEntry.getValue())) {

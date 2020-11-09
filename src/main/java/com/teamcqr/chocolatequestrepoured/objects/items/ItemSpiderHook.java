@@ -22,7 +22,7 @@ public class ItemSpiderHook extends ItemHookshotBase {
 	public double getHookRange() {
 		return 40;
 	}
-	
+
 	@Override
 	public int getCooldown() {
 		return 50;

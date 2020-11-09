@@ -4,14 +4,14 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHooker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantSpider;
 
 public class BossAISpiderHook extends EntityAIHooker {
-	
+
 	public BossAISpiderHook(EntityCQRGiantSpider entity) {
 		super(entity);
-		this.MIN_RANGE = 81; //9 blocks
-		this.MAX_RANGE = 576; //24 blocks
+		this.MIN_RANGE = 81; // 9 blocks
+		this.MAX_RANGE = 576; // 24 blocks
 		this.MAX_COOLDOWN = 30;
 	}
-	
+
 	@Override
 	public boolean shouldExecute() {
 		if (this.hasHookShoot(this.entity)) {
@@ -19,12 +19,12 @@ public class BossAISpiderHook extends EntityAIHooker {
 				this.cooldown--;
 				return false;
 			}
-			return this.entity.hasAttackTarget() && this.entity.getDistanceSq(entity.getAttackTarget()) >= this.MIN_RANGE && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return this.entity.hasAttackTarget() && this.entity.getDistanceSq(this.entity.getAttackTarget()) >= this.MIN_RANGE && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		return false;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
@@ -32,13 +32,13 @@ public class BossAISpiderHook extends EntityAIHooker {
 		if (this.entity.hasPath()) {
 			this.entity.getNavigator().clearPath();
 			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
-			if (dist > MAX_RANGE) {
+			if (dist > this.MAX_RANGE) {
 				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
-			} else if (dist >= MIN_RANGE) {
+			} else if (dist >= this.MIN_RANGE) {
 				this.entity.getNavigator().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
-				resetTask();
+				this.resetTask();
 			}
 		}
 	}

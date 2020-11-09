@@ -182,7 +182,7 @@ public class CQREntities {
 					createEntityEntry(EntityGiantSilverfishNormal.class, "giant_silverfish", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityGiantSilverfishRed.class, "giant_silverfish1", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityGiantSilverfishGreen.class, "giant_silverfish2", 64, 1, true, 0xC29D62, 0xEA9393),
-					/*createEntityEntry(EntityPollo.class, "pollo", 64, 1, true, 0xC29D62, 0xEA9393),*/
+					/* createEntityEntry(EntityPollo.class, "pollo", 64, 1, true, 0xC29D62, 0xEA9393), */
 
 					// Bosses
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000),
@@ -199,7 +199,7 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityBubble.class, "bubble_entity", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
-					/*createEntityEntry(EntityCQRWasp.class, "wasp", 64, 1, true, 0xC29D62, 0xEA9393),*/
+					/* createEntityEntry(EntityCQRWasp.class, "wasp", 64, 1, true, 0xC29D62, 0xEA9393), */
 					createEntityEntryWithoutEgg(EntityColoredLightningBolt.class, "colored_lightning_bolt", 512, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerTornado.class, "walker_tornado", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCQRPirateParrot.class, "pirate_parrot", 64, 1, true),
@@ -209,7 +209,8 @@ public class CQREntities {
 			event.getRegistry().registerAll(entityEntries);
 
 			// Spawns
-			// EntityRegistry.addSpawn(EntityCQRWasp.class, 24, 3, 9, EnumCreatureType.CREATURE, Biomes.SWAMPLAND, Biomes.MUTATED_SWAMPLAND, Biomes.JUNGLE, Biomes.MUTATED_JUNGLE);
+			// EntityRegistry.addSpawn(EntityCQRWasp.class, 24, 3, 9, EnumCreatureType.CREATURE, Biomes.SWAMPLAND, Biomes.MUTATED_SWAMPLAND, Biomes.JUNGLE,
+			// Biomes.MUTATED_JUNGLE);
 		}
 
 		private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1, int eggColor2) {

@@ -87,7 +87,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
 
-	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[INITIAL_SEGMENT_COUNT];
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[this.INITIAL_SEGMENT_COUNT];
 
 	// private boolean mouthOpen = false;
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);

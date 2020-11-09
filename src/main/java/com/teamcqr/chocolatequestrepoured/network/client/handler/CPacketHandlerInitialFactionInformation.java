@@ -19,10 +19,10 @@ public class CPacketHandlerInitialFactionInformation implements IMessageHandler<
 				// System.out.println("Received packet");
 				FactionRegistry FAC_REG = FactionRegistry.instance();
 				// FAC_REG.clearData();
-				for(CQRFaction faction : message.getFactions()) {
+				for (CQRFaction faction : message.getFactions()) {
 					FAC_REG.addFaction(faction);
 				}
-				for(Tuple<CQRFaction, Integer> rd : message.getReputations()) {
+				for (Tuple<CQRFaction, Integer> rd : message.getReputations()) {
 					FAC_REG.setReputation(message.getPlayerId(), rd.getSecond(), rd.getFirst());
 				}
 			});

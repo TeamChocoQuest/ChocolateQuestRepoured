@@ -49,14 +49,16 @@ public class ProjectileWeb extends ProjectileBase {
 					this.world.setBlockState(entity.getPosition(), CQRBlocks.TEMPORARY_WEB.getDefaultState());
 					this.setDead();
 				}
-			}
-			else if(DungeonGenUtils.percentageRandom(75)) {
+			} else if (DungeonGenUtils.percentageRandom(75)) {
 				GeneratorVolcano.forEachSpherePosition(this.getPosition(), DungeonGenUtils.randomBetween(1, 3), new Consumer<BlockPos.MutableBlockPos>() {
 
 					@Override
 					public void accept(MutableBlockPos t) {
-						if(world.getBlockState(t).getBlock() instanceof BlockAir) world.setBlockState(t, CQRBlocks.TEMPORARY_WEB.getDefaultState());
-					}});
+						if (ProjectileWeb.this.world.getBlockState(t).getBlock() instanceof BlockAir) {
+							ProjectileWeb.this.world.setBlockState(t, CQRBlocks.TEMPORARY_WEB.getDefaultState());
+						}
+					}
+				});
 			}
 			super.onImpact(result);
 		}

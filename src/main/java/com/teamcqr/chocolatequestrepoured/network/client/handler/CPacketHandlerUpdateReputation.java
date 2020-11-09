@@ -16,15 +16,15 @@ public class CPacketHandlerUpdateReputation implements IMessageHandler<SPacketUp
 		if (ctx.side.isClient()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				// System.out.println("Received repu update packet!");
-				// System.out.println("Faction: " + message.getFaction() + "    Reputation: " + message.getScore());
+				// System.out.println("Faction: " + message.getFaction() + " Reputation: " + message.getScore());
 				FactionRegistry FAC_REG = FactionRegistry.instance();
 				try {
 					CQRFaction faction = FAC_REG.getFactionInstance(message.getFaction());
-					if(faction != null) {
+					if (faction != null) {
 						FAC_REG.setReputation(message.getPlayerId(), message.getScore(), faction);
 					}
-				} catch(Exception ex) {
-					//IGNORE
+				} catch (Exception ex) {
+					// IGNORE
 					ex.printStackTrace();
 				}
 			});

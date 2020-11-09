@@ -10,15 +10,15 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-//TODO: Rendering the string
+// TODO: Rendering the string
 public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
-	
+
 	public static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/blocks/web.png");
 
 	public RenderProjectileSpiderHook(RenderManager renderManager) {
 		super(renderManager);
 	}
-	
+
 	@Override
 	public void doRender(ProjectileSpiderHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
@@ -52,7 +52,7 @@ public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
 		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-	
+
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileSpiderHook entity) {
 		return TEXTURE;

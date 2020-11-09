@@ -148,7 +148,7 @@ public class CQRMain {
 
 		// !!Custom texture system has to load BEFORE the faction system!!
 		// Custom Textures System => Moved to server start
-		//TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
+		// TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
 		// Faction system => Moved to EventHandler (FMLServerStartingEvent)
 		// FactionRegistry.instance().loadFactions();
@@ -185,8 +185,7 @@ public class CQRMain {
 				CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures"),
 				CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"),
 				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"),
-				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync")
-		};
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync") };
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
@@ -206,7 +205,7 @@ public class CQRMain {
 		CQRMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
 		BlockFire.init();
-		
+
 	}
 
 	@EventHandler
@@ -225,7 +224,8 @@ public class CQRMain {
 		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
-		DungeonInhabitantManager.instance().loadDungeonInhabitants();;
+		DungeonInhabitantManager.instance().loadDungeonInhabitants();
+		;
 	}
 
 	@EventHandler
@@ -233,12 +233,12 @@ public class CQRMain {
 		event.registerServerCommand(new CommandExport());
 		event.registerServerCommand(new CommandChangeReputation());
 	}
-	
+
 	@EventHandler
 	public static void onVirtualServerStart(FMLServerStartingEvent event) {
-		//Since the CTS manager could also be corrupted, let's make him reload his data...
+		// Since the CTS manager could also be corrupted, let's make him reload his data...
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
-		
+
 		FactionRegistry.instance().loadFactions();
 	}
 

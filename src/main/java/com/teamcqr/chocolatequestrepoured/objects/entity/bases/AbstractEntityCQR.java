@@ -188,8 +188,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void enableBossBar() {
 		if (!this.world.isRemote) {
-			bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
-			bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
+			this.bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
+			this.bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
 		}
 	}
 
@@ -473,11 +473,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		compound.setTag("trades", this.trades.writeToNBT(new NBTTagCompound()));
-		if (hasTextureOverride()) {
-			compound.setString("textureOverride", getTextureOverride().toString());
+		if (this.hasTextureOverride()) {
+			compound.setString("textureOverride", this.getTextureOverride().toString());
 		}
-		
-		if(this.bossInfoServer != null) {
+
+		if (this.bossInfoServer != null) {
 			compound.setBoolean("hasBossBar", true);
 		}
 	}
@@ -533,9 +533,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.hasCustomName() && this.bossInfoServer != null) {
 			this.bossInfoServer.setName(this.getDisplayName());
 		}
-		
-		if(compound.hasKey("hasBossBar")) {
-			enableBossBar();
+
+		if (compound.hasKey("hasBossBar")) {
+			this.enableBossBar();
 		}
 	}
 
@@ -883,7 +883,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setLeader(EntityLivingBase leader) {
-		if (leader != null && leader.isEntityAlive() && !world.isRemote) {
+		if (leader != null && leader.isEntityAlive() && !this.world.isRemote) {
 			if (this.dimension == leader.dimension) {
 				this.leader = leader;
 			}
@@ -1018,7 +1018,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Nullable
 	public CQRFaction getFaction() {
-		if (!world.isRemote) {
+		if (!this.world.isRemote) {
 			// Leader faction is set when assigning the leader
 			/*
 			 * if (this.hasLeader()) {
@@ -1033,7 +1033,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		} else {
 			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
-			if (syncedFaction != null && !syncedFaction.isEmpty() && !(factionName != null && this.factionName.equals(syncedFaction))) {
+			if (syncedFaction != null && !syncedFaction.isEmpty() && !(this.factionName != null && this.factionName.equals(syncedFaction))) {
 				this.factionName = syncedFaction;
 				this.factionInstance = FactionRegistry.instance().getFactionInstance(syncedFaction);
 			}
@@ -1050,7 +1050,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
-		if (!world.isRemote) {
+		if (!this.world.isRemote) {
 			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
 			if (faction != null) {
 				this.factionInstance = null;
@@ -1075,7 +1075,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void updateReputationOnDeath(DamageSource cause) {
-		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction() && !world.isRemote) {
+		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction() && !this.world.isRemote) {
 			EntityPlayer player = (EntityPlayer) cause.getTrueSource();
 			int range = CQRConfig.mobs.factionUpdateRadius;
 			double x1 = player.posX - range;

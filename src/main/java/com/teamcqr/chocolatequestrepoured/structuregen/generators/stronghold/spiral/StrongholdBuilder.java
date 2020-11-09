@@ -18,7 +18,6 @@ import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockTorch;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -148,10 +147,10 @@ public class StrongholdBuilder {
 		}
 		if (corner1 != null && corner2 != null && pillar1 != null && pillar2 != null) {
 			/*
-			for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) {
-				blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null));
-			}
-			*/
+			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) {
+			 * blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null));
+			 * }
+			 */
 			this.buildFloorAndCeiling(corner1, corner2, 5, blockInfoList);
 
 			// Left torch -> Facing side: rotate right (90.0°)

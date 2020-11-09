@@ -20,7 +20,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook> {
 	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/hook.png");
-	
+
 	protected ModelBase model = new ModelHook();
 
 	public RenderProjectileHookShotHook(RenderManager renderManager) {
@@ -36,7 +36,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.scale(.5F, .5F, .5F);
-		//GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		// GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		if (entity.isReturning()) {
 			entityYaw -= 180F;
 		}
@@ -48,9 +48,9 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		if(this.model != null) {
-			this.bindTexture(TEXTURE);
-			model.render(entity, 0, 0, 0, 0, 0, /*0.0625F*/ 0.4F);
+		if (this.model != null) {
+			this.bindTexture(this.TEXTURE);
+			this.model.render(entity, 0, 0, 0, 0, 0, /* 0.0625F */ 0.4F);
 		} else {
 			// This seems to render the texture....
 			Tessellator tessellator = Tessellator.getInstance();

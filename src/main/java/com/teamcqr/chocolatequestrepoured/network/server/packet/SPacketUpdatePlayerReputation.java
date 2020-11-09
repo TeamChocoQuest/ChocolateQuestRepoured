@@ -10,15 +10,15 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class SPacketUpdatePlayerReputation implements IMessage {
-	
+
 	private int score;
 	private String faction;
 	private UUID playerId;
-	
+
 	public SPacketUpdatePlayerReputation() {
-		
+
 	}
-	
+
 	public SPacketUpdatePlayerReputation(EntityPlayerMP player, String faction, int score) {
 		this.score = score;
 		this.faction = faction;
@@ -27,28 +27,28 @@ public class SPacketUpdatePlayerReputation implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		playerId = ByteBufUtil.readUuid(buf);
-		faction = ByteBufUtils.readUTF8String(buf);
-		score = buf.readInt();
+		this.playerId = ByteBufUtil.readUuid(buf);
+		this.faction = ByteBufUtils.readUTF8String(buf);
+		this.score = buf.readInt();
 	}
 
 	public int getScore() {
-		return score;
+		return this.score;
 	}
 
 	public String getFaction() {
-		return faction;
+		return this.faction;
 	}
 
 	public UUID getPlayerId() {
-		return playerId;
+		return this.playerId;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, playerId);
-		ByteBufUtils.writeUTF8String(buf, faction);
-		buf.writeInt(score);
+		ByteBufUtil.writeUuid(buf, this.playerId);
+		ByteBufUtils.writeUTF8String(buf, this.faction);
+		buf.writeInt(this.score);
 	}
 
 }
