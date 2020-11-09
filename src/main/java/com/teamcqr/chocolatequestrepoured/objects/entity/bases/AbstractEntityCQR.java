@@ -171,7 +171,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<String> TEXTURE_OVERRIDE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected ResourceLocation textureOverride = null;
 
-	private BossInfoServer bossInfoServer = null;
+	protected BossInfoServer bossInfoServer = null;
 
 	// Client only
 	@SideOnly(Side.CLIENT)
@@ -474,6 +474,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (hasTextureOverride()) {
 			compound.setString("textureOverride", getTextureOverride().toString());
 		}
+		
+		if(this.bossInfoServer != null) {
+			compound.setBoolean("hasBossBar", true);
+		}
 	}
 
 	@Override
@@ -526,6 +530,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (this.hasCustomName() && this.bossInfoServer != null) {
 			this.bossInfoServer.setName(this.getDisplayName());
+		}
+		
+		if(compound.hasKey("hasBossBar")) {
+			enableBossBar();
 		}
 	}
 

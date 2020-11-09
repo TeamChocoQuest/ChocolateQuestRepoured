@@ -4,21 +4,14 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 
 public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
-
-	protected String assignedRegionID = null;
-
-	protected final BossInfoServer bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
 	public int deathTicks = 0;
 	public static final int MAX_DEATH_TICKS = 200;
@@ -26,7 +19,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public AbstractEntityCQRBoss(World worldIn) {
 		super(worldIn);
 		this.experienceValue = 50;
-		this.bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
+		this.enableBossBar();
 	}
 
 	@Override
@@ -46,27 +39,10 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if (compound.hasKey("assignedRegion")) {
-			this.assignedRegionID = compound.getString("assignedRegion");
-		}
 		if (this.hasCustomName())
         {
             this.bossInfoServer.setName(this.getDisplayName());
         }
-	}
-
-	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
-		if (this.assignedRegionID != null) {
-			compound.setString("assignedRegion", this.assignedRegionID);
-		}
-	}
-
-	public void assignRegion(String regionID) {
-		if (regionID != null) {
-			this.assignedRegionID = regionID;
-		}
 	}
 
 	@Override
@@ -76,38 +52,10 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
 	@Override
 	public void onLivingUpdate() {
-		super.onLivingUpdate();
-
 		if (CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
 			this.heal(this.getMaxHealth() * 0.005F);
 		}
-
-		this.bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
-	}
-
-	@Override
-	public void addTrackingPlayer(EntityPlayerMP player) {
-		super.addTrackingPlayer(player);
-		this.bossInfoServer.addPlayer(player);
-	}
-
-	@Override
-	public void removeTrackingPlayer(EntityPlayerMP player) {
-		super.removeTrackingPlayer(player);
-		this.bossInfoServer.removePlayer(player);
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-
-		// TOOD: Destroy protected region
-	}
-
-	@Override
-	public void setCustomNameTag(String name) {
-		super.setCustomNameTag(name);
-		this.bossInfoServer.setName(this.getDisplayName());
+		super.onLivingUpdate();
 	}
 
 	@Override
