@@ -73,7 +73,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			}
 			//this.setNoGravity(true);
 			//DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
-			this.move(MoverType.SELF, 0, (10 / MAX_DEATH_TICKS) , 0);
+			this.move(MoverType.SELF, 0, (10.0D / (double)MAX_DEATH_TICKS) , 0);
 			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote) {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				this.setDead();
