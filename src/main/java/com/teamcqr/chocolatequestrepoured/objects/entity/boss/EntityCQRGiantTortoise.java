@@ -94,10 +94,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public EntityCQRGiantTortoise(World worldIn) {
 		super(worldIn);
 
-		if (this.bossInfoServer != null) {
-			this.bossInfoServer.setColor(Color.GREEN);
-		}
-
 		this.stepHeight = 2.1F;
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
@@ -111,6 +107,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.experienceValue = 100;
 
 		this.ignoreFrustumCheck = true;
+	}
+	
+	@Override
+	public void enableBossBar() {
+		super.enableBossBar();
+		
+		if (this.bossInfoServer != null) {
+			this.bossInfoServer.setColor(Color.GREEN);
+		}
 	}
 
 	public static void realoadHardBlocks() {

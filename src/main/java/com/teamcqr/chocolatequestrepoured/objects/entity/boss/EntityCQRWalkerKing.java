@@ -65,14 +65,19 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	public EntityCQRWalkerKing(World worldIn) {
 		super(worldIn);
 
+		this.experienceValue = 200;
+	}
+	
+	@Override
+	public void enableBossBar() {
+		super.enableBossBar();
+		
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setColor(Color.PURPLE);
 			this.bossInfoServer.setCreateFog(true);
 			this.bossInfoServer.setDarkenSky(true);
 			this.bossInfoServer.setPlayEndBossMusic(true);
 		}
-
-		this.experienceValue = 200;
 	}
 
 	@Override
