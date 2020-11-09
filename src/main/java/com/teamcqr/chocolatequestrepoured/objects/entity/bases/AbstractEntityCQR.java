@@ -530,12 +530,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
-		if (this.hasCustomName() && this.bossInfoServer != null) {
-			this.bossInfoServer.setName(this.getDisplayName());
-		}
-
 		if (compound.hasKey("hasBossBar")) {
 			this.enableBossBar();
+		}
+		
+		if (this.hasCustomName() && this.bossInfoServer != null) {
+			this.bossInfoServer.setName(this.getDisplayName());
 		}
 	}
 
