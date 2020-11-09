@@ -168,14 +168,6 @@
 				}
 			}
 		},
-		"wasp": {
-			"trigger": "minecraft:entity_killed_player",
-			"conditions": {
-				"entity": {
-					"type": "cqrepoured:wasp"
-				}
-			}
-		},
 		"walker_tornado": {
 			"trigger": "minecraft:entity_killed_player",
 			"conditions": {
@@ -271,7 +263,6 @@
 			"zombie",
 			"flying_skull",
 			"illusion_walker_king",
-			"wasp",
 			"walker_tornado",
 			"omg_its_godzilla",
 			"tortoise",
