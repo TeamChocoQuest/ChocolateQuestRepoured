@@ -13,7 +13,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -23,8 +22,6 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	public AbstractEntityCQRMageBase(World worldIn) {
 		super(worldIn);
-
-		this.bossInfoServer.setColor(Color.RED);
 	}
 
 	@Override

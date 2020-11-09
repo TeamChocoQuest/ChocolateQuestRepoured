@@ -91,6 +91,28 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private static final Animation[] ANIMATIONS = { ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT, ANIMATION_SPIN, ANIMATION_IDLE, ANIMATION_STUNNED, ANIMATION_DEATH, };
 	// End of Animations
 
+	public EntityCQRGiantTortoise(World worldIn) {
+		super(worldIn);
+
+		if (this.bossInfoServer != null) {
+			this.bossInfoServer.setColor(Color.GREEN);
+		}
+
+		this.stepHeight = 2.1F;
+
+		for (int i = 0; i < this.parts.length - 1; i++) {
+			this.parts[i] = new EntityCQRGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
+		}
+		this.parts[this.parts.length - 1] = new EntityCQRGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
+
+		this.noClip = false;
+		this.setNoGravity(false);
+		this.isImmuneToFire = true;
+		this.experienceValue = 100;
+
+		this.ignoreFrustumCheck = true;
+	}
+
 	public static void realoadHardBlocks() {
 		hardBlocks.clear();
 		for (String s : CQRConfig.bosses.giantTortoiseHardBlocks) {
@@ -137,26 +159,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public float getDefaultHeight() {
 		return 1.7F;
-	}
-
-	public EntityCQRGiantTortoise(World worldIn) {
-		super(worldIn);
-
-		this.bossInfoServer.setColor(Color.GREEN);
-
-		this.stepHeight = 2.1F;
-
-		for (int i = 0; i < this.parts.length - 1; i++) {
-			this.parts[i] = new EntityCQRGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
-		}
-		this.parts[this.parts.length - 1] = new EntityCQRGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
-
-		this.noClip = false;
-		this.setNoGravity(false);
-		this.isImmuneToFire = true;
-		this.experienceValue = 100;
-
-		this.ignoreFrustumCheck = true;
 	}
 
 	@Override
