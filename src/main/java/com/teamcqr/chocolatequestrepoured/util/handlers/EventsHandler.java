@@ -225,8 +225,10 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
 		if (CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
-			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
-					event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius))).isEmpty());
+			BlockPos pos = new BlockPos(event.getEntityPlayer());
+			int radius = CQRConfig.bosses.antiCowardRadius;
+			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
+			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
 		}
 	}
 
