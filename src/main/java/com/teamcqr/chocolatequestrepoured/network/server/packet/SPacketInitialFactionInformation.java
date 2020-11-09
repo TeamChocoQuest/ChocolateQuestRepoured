@@ -57,7 +57,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		List<Tuple<CQRFaction, Integer>> data = new ArrayList<>();
 
 		for (int i = 0; i < this.reputations.length; i++) {
-			data.add(new Tuple<CQRFaction, Integer>(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.lockedRepu[i]), this.reputations[i]));
+			data.add(new Tuple<>(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.lockedRepu[i]), this.reputations[i]));
 		}
 
 		return data;

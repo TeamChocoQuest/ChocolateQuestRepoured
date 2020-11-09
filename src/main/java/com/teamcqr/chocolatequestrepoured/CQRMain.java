@@ -225,7 +225,7 @@ public class CQRMain {
 		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
 		DungeonInhabitantManager.instance().loadDungeonInhabitants();
-		;
+
 	}
 
 	@EventHandler
