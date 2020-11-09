@@ -71,7 +71,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 				float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
 				this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 			}
-			//this.setNoGravity(true);
+			this.setNoGravity(true);
 			//DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
 			this.move(MoverType.SELF, 0, (10.0D / (double)MAX_DEATH_TICKS) , 0);
 			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote) {
