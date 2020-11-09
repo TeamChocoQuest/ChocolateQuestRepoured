@@ -81,6 +81,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(dungeonPos, settings, dungeonMob);
+					((AbstractEntityCQR) entity).enableBossBar();
 				}
 			}
 
@@ -100,10 +101,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(dungeonPos, settings, dungeonMob);
-
-					if (!(entity instanceof AbstractEntityCQRBoss) && CQRConfig.bosses.enableBossBars) {
-						((AbstractEntityCQR) entity).enableBossBar();
-					}
+					((AbstractEntityCQR) entity).enableBossBar();
 				}
 			}
 
@@ -125,9 +123,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(dungeonPos, settings, dungeonMob);
 					((AbstractEntityCQR) entity).setSizeVariation(1.1F);
-					if (CQRConfig.bosses.enableBossBars) {
-						((AbstractEntityCQR) entity).enableBossBar();
-					}
+					((AbstractEntityCQR) entity).enableBossBar();
 				}
 
 				((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
