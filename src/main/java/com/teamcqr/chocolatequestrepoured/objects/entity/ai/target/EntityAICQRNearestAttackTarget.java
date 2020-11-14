@@ -134,18 +134,14 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			return false;
 		}
 		CQRFaction faction = this.entity.getFaction();
-		if (this.canTargetAlly()) {
-			if ((faction == null || !faction.isAlly(possibleTarget)) && possibleTarget != this.entity.getLeader()) {
+		if (faction == null) {
+			return false;
+		}
+		if (faction.isAlly(possibleTarget) || possibleTarget == this.entity.getLeader()) {
+			if (!this.canTargetAlly()) {
 				return false;
 			}
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
-				return false;
-			}
-		} else {
-			if (faction != null && faction.isAlly(possibleTarget)) {
-				return false;
-			}
-			if (possibleTarget == this.entity.getLeader()) {
 				return false;
 			}
 		}
