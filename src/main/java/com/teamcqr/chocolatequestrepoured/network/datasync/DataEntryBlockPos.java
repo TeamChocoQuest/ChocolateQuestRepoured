@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 
 	public DataEntryBlockPos(String name, @Nonnull BlockPos defaultValue, boolean isClientModificationAllowed) {
-		super(name, defaultValue, isClientModificationAllowed);
+		super(name, defaultValue.toImmutable(), isClientModificationAllowed);
 	}
 
 	@Override
@@ -36,6 +36,11 @@ public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 	@Override
 	protected void readChangesInternal(ByteBuf buf) {
 		this.value = ByteBufUtil.readBlockPos(buf);
+	}
+
+	@Override
+	protected void setInternal(BlockPos value) {
+		super.setInternal(value.toImmutable());
 	}
 
 }
