@@ -359,6 +359,8 @@ public class CQStructure {
 				this.blockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 			}
 		}
+
+		this.blockInfoList.sort(SORT_FOR_EXPORTATION);
 	}
 
 	private NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
