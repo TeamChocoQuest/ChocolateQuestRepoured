@@ -1,9 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -17,8 +19,8 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 	private IBlockState supportHillBlock;
 	private IBlockState supportHillTopBlock;
 	private int wallSize;
-	private int x1;
-	private int z1;
+	private BlockPos.MutableBlockPos pos1 = new BlockPos.MutableBlockPos();
+	private BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
 	private Perlin3D perlin1;
 	private Perlin3D perlin2;
 
@@ -32,8 +34,8 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 		this.supportHillBlock = supportHillBlock;
 		this.supportHillTopBlock = supportHillTopBlock;
 		this.wallSize = wallSize;
-		this.x1 = this.minPos.getX();
-		this.z1 = this.minPos.getZ();
+		this.pos1.setPos(this.minPos.getX(), 0, this.minPos.getZ());
+		this.pos2.setPos(this.minPos.getX(), 0, this.minPos.getZ());
 		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize);
 		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4);
 	}
@@ -50,8 +52,10 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 			compound.setInteger("supportHillTopBlockMeta", this.supportHillTopBlock.getBlock().getMetaFromState(this.supportHillTopBlock));
 		}
 		compound.setInteger("wallSize", this.wallSize);
-		compound.setInteger("x1", this.x1);
-		compound.setInteger("z1", this.z1);
+		compound.setInteger("x1", this.pos1.getX());
+		compound.setInteger("z1", this.pos1.getZ());
+		compound.setInteger("x2", this.pos2.getX());
+		compound.setInteger("z2", this.pos2.getZ());
 		return compound;
 	}
 
@@ -74,8 +78,8 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 			}
 		}
 		this.wallSize = compound.getInteger("wallSize");
-		this.x1 = compound.getInteger("x1");
-		this.z1 = compound.getInteger("z1");
+		this.pos1.setPos(compound.getInteger("x1"), 0, compound.getInteger("z1"));
+		this.pos2.setPos(compound.getInteger("x2"), 0, compound.getInteger("z2"));
 		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize);
 		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4);
 	}
@@ -87,34 +91,35 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 
 	@Override
 	public void generateNext() {
-		if (this.x1 <= this.maxPos.getX()) {
-			Biome biome = this.world.getBiome(new BlockPos(this.x1, 0, this.z1));
+		if (this.pos1.getX() <= this.maxPos.getX()) {
+			Biome biome = this.world.getBiome(this.pos1);
 			IBlockState state1 = this.supportHillBlock != null ? this.supportHillBlock : biome.fillerBlock;
 			IBlockState state2 = this.supportHillTopBlock != null ? this.supportHillTopBlock : biome.topBlock;
-			int posY = this.world.getTopSolidOrLiquidBlock(new BlockPos(this.x1, 0, this.z1)).getY();
+			int posY = this.world.getTopSolidOrLiquidBlock(new BlockPos(this.pos1.getX(), 0, this.pos1.getZ())).getY();
 			int i = Math.max((this.maxPos.getY() - 1) - posY, 1);
 			int y1 = posY;
 
 			while (y1 < this.maxPos.getY()) {
-				if ((this.x1 >= this.minPos.getX() + this.wallSize) && (this.x1 <= this.maxPos.getX() - this.wallSize) && (this.z1 >= this.minPos.getZ() + this.wallSize) && (this.z1 <= this.maxPos.getZ() - this.wallSize)) {
-					this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), state1, 18);
+				if ((this.pos1.getX() >= this.minPos.getX() + this.wallSize) && (this.pos1.getX() <= this.maxPos.getX() - this.wallSize) && (this.pos1.getZ() >= this.minPos.getZ() + this.wallSize) && (this.pos1.getZ() <= this.maxPos.getZ() - this.wallSize)) {
+					this.pos1.setY(y1);
+					this.world.setBlockState(this.pos1, state1, 18);
 				} else {
 					float noiseVar = (y1 - (this.maxPos.getY() - 1)) / (i * 1.5F);
 
-					noiseVar += Math.max((this.wallSize - (this.x1 - this.minPos.getX())) / 8.0F, 0.0F);
-					noiseVar += Math.max((this.wallSize - ((this.maxPos.getX() + 1) - this.x1)) / 8.0F, 0.0F);
+					noiseVar += Math.max((this.wallSize - (this.pos1.getX() - this.minPos.getX())) / 8.0F, 0.0F);
+					noiseVar += Math.max((this.wallSize - ((this.maxPos.getX() + 1) - this.pos1.getX())) / 8.0F, 0.0F);
 
-					noiseVar += Math.max((this.wallSize - (this.z1 - this.minPos.getZ())) / 8.0F, 0.0F);
-					noiseVar += Math.max((this.wallSize - ((this.maxPos.getZ() + 1) - this.z1)) / 8.0F, 0.0F);
+					noiseVar += Math.max((this.wallSize - (this.pos1.getZ() - this.minPos.getZ())) / 8.0F, 0.0F);
+					noiseVar += Math.max((this.wallSize - ((this.maxPos.getZ() + 1) - this.pos1.getZ())) / 8.0F, 0.0F);
 
 					if (noiseVar / 3.0D + (y1 - posY) / i * 0.25D >= 0.5D) {
 						break;
 					}
 
-					double value = (this.perlin1.getNoiseAt(this.x1, y1, this.z1) + this.perlin2.getNoiseAt(this.x1, y1, this.z1) + noiseVar) / 3.0D + (y1 - posY) / i * 0.25D;
+					double value = (this.perlin1.getNoiseAt(this.pos1.getX(), y1, this.pos1.getZ()) + this.perlin2.getNoiseAt(this.pos1.getX(), y1, this.pos1.getZ()) + noiseVar) / 3.0D + (y1 - posY) / i * 0.25D;
 
 					if (value < 0.5D) {
-						this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), state1, 18);
+						this.world.setBlockState(new BlockPos(this.pos1.getX(), y1, this.pos1.getZ()), state1, 18);
 					} else {
 						break;
 					}
@@ -123,20 +128,46 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 			}
 
 			if (y1 <= this.maxPos.getY()) {
-				this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), state2, 18);
+				this.world.setBlockState(new BlockPos(this.pos1.getX(), y1, this.pos1.getZ()), state2, 18);
 			}
 
-			this.z1++;
-			if (this.z1 > this.maxPos.getZ()) {
-				this.z1 = this.minPos.getZ();
-				this.x1++;
+			this.pos1.setPos(this.pos1.getX(), this.pos1.getY(), this.pos1.getZ() + 1);
+			if (this.pos1.getZ() > this.maxPos.getZ()) {
+				this.pos1.setPos(this.pos1.getX() + 1, this.pos1.getY(), this.minPos.getZ());
+			}
+		} else if (this.pos2.getX() <= this.maxPos.getX()) {
+			this.pos2.setY(255);
+
+			if (this.world.getBlockState(this.pos2).getBlock() == Blocks.AIR) {
+				this.pos2.setY(this.pos2.getY() - 1);
+
+				while (this.pos2.getY() > 0) {
+					IBlockState state = this.world.getBlockState(this.pos2);
+
+					if (state.getBlock() == Blocks.AIR) {
+						this.pos2.setY(this.pos2.getY() - 1);
+					} else {
+						if (this.pos2.getY() == this.maxPos.getY()) {
+							Biome biome = this.world.getBiome(this.pos2);
+							if (DungeonGenUtils.percentageRandom(biome.decorator.grassPerChunk / 512.0D)) {
+								biome.getRandomWorldGenForGrass(this.world.rand).generate(this.world, this.world.rand, this.pos2);
+							}
+						}
+						break;
+					}
+				}
+			}
+
+			this.pos2.setPos(this.pos2.getX(), this.pos2.getY(), this.pos2.getZ() + 1);
+			if (this.pos2.getZ() > this.maxPos.getZ()) {
+				this.pos2.setPos(this.pos2.getX() + 1, this.pos2.getY(), this.minPos.getZ());
 			}
 		}
 	}
 
 	@Override
 	public boolean isGenerated() {
-		return this.x1 > this.maxPos.getX();
+		return this.pos2.getX() > this.maxPos.getX();
 	}
 
 }
