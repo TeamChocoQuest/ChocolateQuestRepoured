@@ -33,6 +33,7 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 	public static final byte NEXUS_INFO_ID = 4;
 	public static final byte CHEST_INFO_ID = 5;
 	public static final byte SPAWNER_INFO_ID = 6;
+	public static final byte MAP_INFO_ID = 7;
 
 	private short x;
 	private short y;
@@ -127,6 +128,9 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 			break;
 		case SPAWNER_INFO_ID:
 			blockInfo = new BlockInfoSpawner(x, y, z);
+			break;
+		case MAP_INFO_ID:
+			blockInfo = new BlockInfoMap(x, y, z);
 			break;
 		default:
 			throw new IllegalArgumentException(String.format("Can't create AbstractBlockInfo with id %d", id));

@@ -410,6 +410,7 @@ tile.table_acacia.name=Acacia Table
 tile.table_dark.name=Dark Oak Table
 tile.boss_block.name=Boss Block
 tile.force_field_nexus.name=Force Field Nexus
+tile.map_placeholder.name=Map Placeholder
 
 #Andesite blocks
 tile.andesite_carved.name=Carved Andesite

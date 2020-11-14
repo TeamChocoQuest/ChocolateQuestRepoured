@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityMap;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -32,6 +33,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockCommandBlock;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -355,6 +357,8 @@ public class CQStructure {
 				this.blockInfoList.add(new BlockInfoForceFieldNexus(pos));
 			} else if (block == CQRBlocks.BOSS_BLOCK) {
 				this.blockInfoList.add(new BlockInfoBoss(pos));
+			} else if (block == CQRBlocks.MAP_PLACEHOLDER) {
+				this.blockInfoList.add(new BlockInfoMap(pos, state.getValue(BlockHorizontal.FACING), (TileEntityMap) tileEntity));
 			} else {
 				this.blockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 			}

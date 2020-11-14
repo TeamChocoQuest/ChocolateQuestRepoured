@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "item_frame_map" },
+        "facing=east": { "model": "item_frame_map", "y": 90 },
+        "facing=south": { "model": "item_frame_map", "y": 180 },
+        "facing=west": { "model": "item_frame_map", "y": 270 }
+    }
+}

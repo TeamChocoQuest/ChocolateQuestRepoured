@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChestCQR;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChestCustom;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockFireCQR;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockForceFieldNexus;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockMapPlaceholder;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPhylactery;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
@@ -28,6 +29,7 @@ import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChest;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChestCustom;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityMap;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -130,6 +132,7 @@ public class CQRBlocks {
 	public static final BlockSpawner SPAWNER = Null();
 	public static final BlockBossBlock BOSS_BLOCK = Null();
 	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
+	public static final BlockMapPlaceholder MAP_PLACEHOLDER = Null();
 
 	// Loot Chests
 	// CQR
@@ -242,6 +245,7 @@ public class CQRBlocks {
 					setBlockNameAndTab(new BlockSpawner(), "spawner", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockBossBlock(), "boss_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockForceFieldNexus(Material.IRON), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockMapPlaceholder(), "map_placeholder", CQRMain.CQR_CREATIVE_TOOL_TAB),
 
 					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_TREASURE, "textures/items/diamond.png"), "exporter_chest_valuable", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_FOOD, "textures/items/porkchop_raw.png"), "exporter_chest_food", CQRMain.CQR_EXPORTER_CHEST_TAB),
@@ -289,6 +293,7 @@ public class CQRBlocks {
 			GameRegistry.registerTileEntity(TileEntityExporterChest.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChest"));
 			GameRegistry.registerTileEntity(TileEntityExporterChestCustom.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChestCustom"));
 			GameRegistry.registerTileEntity(TileEntityBoss.class, new ResourceLocation(Reference.MODID, "TileEntityBoss"));
+			GameRegistry.registerTileEntity(TileEntityMap.class, new ResourceLocation(Reference.MODID, "TileEntityMapPlaceholder"));
 		}
 
 		private static Block setBlockName(Block block, String name) {

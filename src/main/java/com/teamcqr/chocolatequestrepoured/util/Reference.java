@@ -23,5 +23,6 @@ public class Reference {
 	public static final int MERCHANT_EDIT_TRADE_GUI_ID = 9;
 	public static final int EXPORTER_CHEST_GUI_ID = 10;
 	public static final int BOSS_BLOCK_GUI_ID = 11;
+	public static final int MAP_GUI_ID = 12;
 
 }
