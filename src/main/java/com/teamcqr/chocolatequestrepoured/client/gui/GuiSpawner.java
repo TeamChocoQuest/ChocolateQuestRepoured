@@ -129,6 +129,7 @@ public class GuiSpawner extends GuiContainer {
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
+		GlStateManager.disableLighting();
 		this.minSpawnDelayTextField.drawTextBox();
 		this.maxSpawnDelayTextField.drawTextBox();
 		this.spawnCountTextField.drawTextBox();
