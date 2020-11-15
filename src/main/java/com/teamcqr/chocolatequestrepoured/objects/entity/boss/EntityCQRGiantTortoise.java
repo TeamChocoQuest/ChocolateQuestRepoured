@@ -108,11 +108,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.ignoreFrustumCheck = true;
 	}
-	
+
 	@Override
 	public void enableBossBar() {
 		super.enableBossBar();
-		
+
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setColor(Color.GREEN);
 		}

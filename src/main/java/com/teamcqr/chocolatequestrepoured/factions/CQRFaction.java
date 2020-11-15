@@ -115,8 +115,8 @@ public class CQRFaction {
 
 	// DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
-		if(CQRConfig.advanced.enableOldFactionMemberTeams) {
-			if(ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
+		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
+			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
 				return false;
 			}
 		}
@@ -153,8 +153,8 @@ public class CQRFaction {
 
 	// DONE: Special case for player faction!!
 	public boolean isAlly(Entity ent) {
-		if(CQRConfig.advanced.enableOldFactionMemberTeams) {
-			if(ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
+		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
+			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
 				return true;
 			}
 		}

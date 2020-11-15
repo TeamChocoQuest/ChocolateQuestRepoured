@@ -6,7 +6,6 @@ import com.teamcqr.chocolatequestrepoured.client.util.GuiHelper;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityMap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumFacing;

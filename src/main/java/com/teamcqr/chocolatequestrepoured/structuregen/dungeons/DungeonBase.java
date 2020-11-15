@@ -202,7 +202,7 @@ public abstract class DungeonBase {
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		Collection<File> files = FileUtils.listFiles(parentDir, new String[] { "nbt" }, true);
 		List<File> filesL = (files instanceof List ? ((List<File>) files) : new ArrayList<>(files));
-		if(filesL.isEmpty()) {
+		if (filesL.isEmpty()) {
 			return null;
 		}
 		if (CQRConfig.advanced.tryPreventingDuplicateDungeons) {

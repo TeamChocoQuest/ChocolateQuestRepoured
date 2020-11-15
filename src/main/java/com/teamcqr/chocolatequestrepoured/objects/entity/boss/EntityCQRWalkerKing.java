@@ -67,11 +67,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 		this.experienceValue = 200;
 	}
-	
+
 	@Override
 	public void enableBossBar() {
 		super.enableBossBar();
-		
+
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setColor(Color.PURPLE);
 			this.bossInfoServer.setCreateFog(true);

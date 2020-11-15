@@ -81,7 +81,7 @@ public class CQRConfig {
 
 		@Config.Comment("When enabled when starting the game it checks all structure files and tries to update the deprecated ones.")
 		public boolean checkAndUpdateDeprecatedStructureFiles = false;
-		
+
 		@Config.Comment("If activated, it will try to avoid generating the same structure of a dungeon type again and again.")
 		public boolean tryPreventingDuplicateDungeons = true;
 

@@ -2,12 +2,10 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.init.CQRItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityBoss;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
-import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
