@@ -25,6 +25,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationS
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketInitialFactionInformation;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
@@ -243,6 +244,12 @@ public class FactionRegistry {
 	public CQRFaction getFactionOf(Entity entity) {
 		if (entity == null) {
 			return null;
+		}
+		
+		if(CQRConfig.advanced.enableOldFactionMemberTeams) {
+			if(entity.getTeam() != null && factions.containsKey(entity.getTeam().getName()) && factions.get(entity.getTeam().getName()) != null) {
+				return factions.get(entity.getTeam().getName());
+			}
 		}
 
 		if (entity instanceof EntityPlayer) {
