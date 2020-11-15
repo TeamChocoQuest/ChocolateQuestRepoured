@@ -88,6 +88,7 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 			return;
 		}
 		this.isDirty = true;
+		this.dirtySlots[slot] = true;
 		dataManager.markDirty();
 	}
 
