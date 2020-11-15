@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSet;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
@@ -114,6 +115,11 @@ public class CQRFaction {
 
 	// DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
+		if(CQRConfig.advanced.enableOldFactionMemberTeams) {
+			if(ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
+				return false;
+			}
+		}
 		if (ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
 			return false;
 		}
@@ -147,6 +153,11 @@ public class CQRFaction {
 
 	// DONE: Special case for player faction!!
 	public boolean isAlly(Entity ent) {
+		if(CQRConfig.advanced.enableOldFactionMemberTeams) {
+			if(ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
+				return true;
+			}
+		}
 		if (ent instanceof EntityPlayer) {
 			// Special case for player
 			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;

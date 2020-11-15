@@ -82,8 +82,11 @@ public class CQRConfig {
 		@Config.Comment("When enabled when starting the game it checks all structure files and tries to update the deprecated ones.")
 		public boolean checkAndUpdateDeprecatedStructureFiles = false;
 		
-		@Config.Comment("If activated, it will try to avoid generating the same structure of a dungeon type again and again")
+		@Config.Comment("If activated, it will try to avoid generating the same structure of a dungeon type again and again.")
 		public boolean tryPreventingDuplicateDungeons = true;
+
+		@Config.Comment("If enabled, a faction will consider you as ally when you are on a team with the same name as the faction.")
+		public boolean enableOldFactionMemberTeams = false;
 	}
 
 	public static class Materials {
