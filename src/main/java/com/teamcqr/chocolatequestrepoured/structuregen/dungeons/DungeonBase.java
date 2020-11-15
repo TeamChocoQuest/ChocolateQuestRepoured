@@ -4,9 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
@@ -192,9 +196,30 @@ public abstract class DungeonBase {
 	 * }
 	 */
 
+	private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
+
+	@Nullable
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		Collection<File> files = FileUtils.listFiles(parentDir, new String[] { "nbt" }, true);
-		return (files instanceof List ? ((List<File>) files) : new ArrayList<>(files)).get(rand.nextInt(files.size()));
+		List<File> filesL = (files instanceof List ? ((List<File>) files) : new ArrayList<>(files));
+		if(filesL.isEmpty()) {
+			return null;
+		}
+		if (CQRConfig.advanced.tryPreventingDuplicateDungeons) {
+			File file;
+			Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
+			do {
+				file = filesL.get(rand.nextInt(files.size()));
+				if (lastUsedFileHash == 0 || filesL.size() == 1) {
+					lastUsedFileHash = file.hashCode();
+					break;
+				}
+			} while (file.hashCode() == lastUsedFileHash);
+			lastUsedFileHash = file.hashCode();
+			return file;
+		} else {
+			return filesL.get(rand.nextInt(files.size()));
+		}
 	}
 
 	public boolean canSpawnAtPos(World world, BlockPos pos, boolean behindWall) {
