@@ -31,6 +31,7 @@ public class CQRConfig {
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand", "minecraft:minecart", "minecraft:chest_minecart", "minecraft:furnace_minecart", "minecraft:tnt_minecart", "minecraft:hopper_minecart", "minecraft:boat" };
 
+		@Config.Comment("When enabled cqr mobs only take 50% damage from IceAndFire mobs and deal 200% damage against IceAndFire mobs.")
 		public boolean enableSpecialFeatures = true;
 
 		@Config.Comment("Only render the nearest 'limitEntityRenderingCount' amount of CQR entities. Bosses will be rendered normally.")
@@ -53,18 +54,23 @@ public class CQRConfig {
 		@Config.RangeInt(min = 1, max = 16384)
 		public int cachedStructureFilesMaxAmount = 256;
 
+		@Config.Comment("The amount of milliseconds each dungeon is allowed to consume per tick during generation.")
 		@Config.RangeInt(min = 1, max = 100)
 		public int generationSpeed = 20;
+		@Config.Comment("The amount of operations each dungeon is allowed to do each tick during generation.")
 		@Config.RangeInt(min = 1, max = 1000000000)
 		public int generationLimit = 20000;
+		@Config.Comment("When disable all light updates are delayed until the dungeon is generated which is usually a lot faster. (When Phosphor is installed this has no effect and light updates are processed immediately)")
 		public boolean instantLightUpdates = false;
 
+		@Config.Comment("When enabled and a flying entity is hit by a cqr lightning it gets extra damage.")
 		public boolean flyingCowardPenaltyEnabled = true;
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
 
 		public boolean enableMaxDamageCaps = true;
 
+		@Config.Comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon.")
 		public boolean generationRespectOtherStructures = true;
 		public double generationMinDistanceToOtherStructure = 64;
 		@Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures")
@@ -73,6 +79,7 @@ public class CQRConfig {
 		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
 		public boolean multithreadedDungeonPreparation = true;
 
+		@Config.Comment("When enabled when starting the game it checks all structure files and tries to update the deprecated ones.")
 		public boolean checkAndUpdateDeprecatedStructureFiles = false;
 	}
 
