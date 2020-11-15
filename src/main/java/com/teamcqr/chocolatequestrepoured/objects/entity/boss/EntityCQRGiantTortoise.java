@@ -194,7 +194,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative()) {
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
