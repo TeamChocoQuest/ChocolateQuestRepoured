@@ -39,9 +39,9 @@ public class CQRConfig {
 		@Config.Comment("The maximum amount of entities that get rendered.")
 		@Config.RangeInt(min = 8, max = 256)
 		public int limitEntityRenderingCount = 64;
-		@Config.Comment("Skip rendering of entities that are visible/not behind blocks. Bosses will be rendered normally. This probably will cause issues where a mob should be render but it won't.")
+		@Config.Comment("Skip rendering of entities that are behind blocks/not visible. Bosses will be rendered normally. This might cause issues where a mob is partly behind a block and thus does not get rendered but it's usually not really noticable. This setting has no effect when Entity Culling is installed.")
 		public boolean skipHiddenEntityRendering = true;
-		@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the block positions that were hit and only renders the entity when the difference on each axis is lower than this setting.")
+		@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the positions that were hit and only renders the entity when no block was hit or the distance between both points is lower than this setting. This setting has no effect when Entity Culling is installed.")
 		@Config.RangeInt(min = 0, max = 256)
 		public int skipHiddenEntityRenderingDiff = 16;
 
