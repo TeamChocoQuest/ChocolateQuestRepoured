@@ -47,7 +47,7 @@ public class LootTableLoader {
 	private static final ReflectionField<ThreadLocal<Deque<?>>> LOOT_CONTEXT = new ReflectionField<>(ForgeHooks.class, "lootContext", "lootContext");
 	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class, Boolean.TYPE);
 	private static final ReflectionField<Gson> GSON_INSTANCE = new ReflectionField<>(LootTableManager.class, "field_186526_b", "GSON_INSTANCE");
-	private static final ReflectionField<LoadingCache<ResourceLocation, LootTable>> FIELD_REGISTERED_LOOT_TABLES = new ReflectionField<>(LootTableManager.class, "registeredLootTables", "registeredLootTables");
+	private static final ReflectionField<LoadingCache<ResourceLocation, LootTable>> FIELD_REGISTERED_LOOT_TABLES = new ReflectionField<>(LootTableManager.class, "field_186527_c", "registeredLootTables");
 
 	private static LootTable loadingLootTable;
 
