@@ -70,21 +70,6 @@ public class CQRLoottables {
 	public static final ResourceLocation CHESTS_MATERIAL = createChestLootTable("material");
 	public static final ResourceLocation CHESTS_CLUTTER = createChestLootTable("clutter");
 
-	public static final ResourceLocation CHESTS_CUSTOM_1 = createChestLootTable("custom_1");
-	public static final ResourceLocation CHESTS_CUSTOM_2 = createChestLootTable("custom_2");
-	public static final ResourceLocation CHESTS_CUSTOM_3 = createChestLootTable("custom_3");
-	public static final ResourceLocation CHESTS_CUSTOM_4 = createChestLootTable("custom_4");
-	public static final ResourceLocation CHESTS_CUSTOM_5 = createChestLootTable("custom_5");
-	public static final ResourceLocation CHESTS_CUSTOM_6 = createChestLootTable("custom_6");
-	public static final ResourceLocation CHESTS_CUSTOM_7 = createChestLootTable("custom_7");
-	public static final ResourceLocation CHESTS_CUSTOM_8 = createChestLootTable("custom_8");
-	public static final ResourceLocation CHESTS_CUSTOM_9 = createChestLootTable("custom_9");
-	public static final ResourceLocation CHESTS_CUSTOM_10 = createChestLootTable("custom_10");
-	public static final ResourceLocation CHESTS_CUSTOM_11 = createChestLootTable("custom_11");
-	public static final ResourceLocation CHESTS_CUSTOM_12 = createChestLootTable("custom_12");
-	public static final ResourceLocation CHESTS_CUSTOM_13 = createChestLootTable("custom_13");
-	public static final ResourceLocation CHESTS_CUSTOM_14 = createChestLootTable("custom_14");
-
 	public static ResourceLocation createChestLootTable(String name) {
 		return createLootTable("chests/" + name);
 	}
