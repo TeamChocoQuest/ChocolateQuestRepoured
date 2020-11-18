@@ -187,7 +187,6 @@ public class LootTableLoader {
 
 			LootTable table = new LootTable(new LootPool[0]);
 			ForgeEventFactory.loadLootTable(name, table, lootTableManager);
-			CQRMain.logger.info(name.hashCode());
 			registeredLootTables.put(name, table);
 		}
 	}
