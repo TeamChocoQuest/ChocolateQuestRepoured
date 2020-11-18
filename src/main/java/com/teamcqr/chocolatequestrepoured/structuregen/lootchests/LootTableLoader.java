@@ -6,22 +6,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.commons.io.FileUtils;
+
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Queues;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionConstructor;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
@@ -29,6 +37,7 @@ import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.ForgeEventFactory;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -38,6 +47,7 @@ public class LootTableLoader {
 	private static final ReflectionField<ThreadLocal<Deque<?>>> LOOT_CONTEXT = new ReflectionField<>(ForgeHooks.class, "lootContext", "lootContext");
 	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class, Boolean.TYPE);
 	private static final ReflectionField<Gson> GSON_INSTANCE = new ReflectionField<>(LootTableManager.class, "field_186526_b", "GSON_INSTANCE");
+	private static final ReflectionField<LoadingCache<ResourceLocation, LootTable>> FIELD_REGISTERED_LOOT_TABLES = new ReflectionField<>(LootTableManager.class, "registeredLootTables", "registeredLootTables");
 
 	private static LootTable loadingLootTable;
 
@@ -158,6 +168,27 @@ public class LootTableLoader {
 		if (loadingLootTable != null) {
 			loadingLootTable.freeze();
 			loadingLootTable = null;
+		}
+	}
+
+	public static void registerCustomLootTables(WorldServer worldServer) {
+		Collection<File> files = FileUtils.listFiles(new File(CQRMain.CQ_CHEST_FOLDER, "chests"), new String[] { "json", "properties" }, false);
+		Set<ResourceLocation> cqrChestLootTables = CQRLoottables.getChestLootTables();
+		LootTableManager lootTableManager = worldServer.getLootTableManager();
+		LoadingCache<ResourceLocation, LootTable> registeredLootTables = FIELD_REGISTERED_LOOT_TABLES.get(lootTableManager);
+
+		for (File file : files) {
+			String s = file.getName();
+			ResourceLocation name = new ResourceLocation(Reference.MODID, "chests/" + s.substring(0, s.lastIndexOf('.')));
+
+			if (cqrChestLootTables.contains(name)) {
+				continue;
+			}
+
+			LootTable table = new LootTable(new LootPool[0]);
+			ForgeEventFactory.loadLootTable(name, table, lootTableManager);
+			CQRMain.logger.info(name.hashCode());
+			registeredLootTables.put(name, table);
 		}
 	}
 

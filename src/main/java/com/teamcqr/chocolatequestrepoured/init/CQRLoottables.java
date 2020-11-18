@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import net.minecraft.world.storage.loot.LootTableList;
 public class CQRLoottables {
 
 	private static final Set<ResourceLocation> LOOT_TABLES = new HashSet<>();
+	private static final Set<ResourceLocation> CHEST_LOOT_TABLES = new HashSet<>();
+	private static final Set<ResourceLocation> ENTITY_LOOT_TABLES = new HashSet<>();
 
 	public static final ResourceLocation ENTITIES_BOARMAN = createEntityLootTable("boarman");
 	public static final ResourceLocation ENTITIES_DWARF = createEntityLootTable("dwarf");
@@ -71,11 +74,15 @@ public class CQRLoottables {
 	public static final ResourceLocation CHESTS_CLUTTER = createChestLootTable("clutter");
 
 	public static ResourceLocation createChestLootTable(String name) {
-		return createLootTable("chests/" + name);
+		ResourceLocation loc = createLootTable("chests/" + name);
+		CHEST_LOOT_TABLES.add(loc);
+		return loc;
 	}
 
 	public static ResourceLocation createEntityLootTable(String name) {
-		return createLootTable("entities/" + name);
+		ResourceLocation loc = createLootTable("entities/" + name);
+		ENTITY_LOOT_TABLES.add(loc);
+		return loc;
 	}
 
 	public static ResourceLocation createLootTable(String name) {
@@ -88,6 +95,18 @@ public class CQRLoottables {
 		for (ResourceLocation lootTable : LOOT_TABLES) {
 			LootTableList.register(lootTable);
 		}
+	}
+
+	public static Set<ResourceLocation> getLootTables() {
+		return Collections.unmodifiableSet(LOOT_TABLES);
+	}
+
+	public static Set<ResourceLocation> getChestLootTables() {
+		return Collections.unmodifiableSet(CHEST_LOOT_TABLES);
+	}
+
+	public static Set<ResourceLocation> getEntityLootTables() {
+		return Collections.unmodifiableSet(ENTITY_LOOT_TABLES);
 	}
 
 }

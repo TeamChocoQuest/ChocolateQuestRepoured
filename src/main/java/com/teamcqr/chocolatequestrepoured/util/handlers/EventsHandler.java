@@ -161,6 +161,10 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
+
+		if (!e.getWorld().isRemote && e.getWorld().provider.getDimension() == 0) {
+			LootTableLoader.registerCustomLootTables((WorldServer) e.getWorld());
+		}
 	}
 
 	@SubscribeEvent
