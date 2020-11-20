@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerAddOrResetProtectedRegionIndicator;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerAddProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerDeleteProtectedRegion;
@@ -39,6 +40,7 @@ import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerS
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerSyncSelectedTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerSyncTileEntity;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerUpdateTradeIndex;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketAddProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketArmorCooldownSync;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketCustomTextures;
@@ -73,6 +75,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerDeleteProtectedRegion.class, SPacketDeleteProtectedRegion.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerProtectedRegionRemoveBlockDependency.class, SPacketProtectedRegionRemoveBlockDependency.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerProtectedRegionRemoveEntityDependency.class, SPacketProtectedRegionRemoveEntityDependency.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerAddOrResetProtectedRegionIndicator.class, SPacketAddOrResetProtectedRegionIndicator.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTextureSets.class, SPacketCustomTextures.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerDeleteTrade.class, SPacketDeleteTrade.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerEditTrade.class, SPacketEditTrade.class, messageID++, Side.CLIENT);

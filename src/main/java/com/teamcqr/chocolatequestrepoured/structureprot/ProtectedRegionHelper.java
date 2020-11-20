@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.client.structureprot.ProtectedRegionClientEventHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
@@ -13,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBucket;
@@ -55,6 +57,10 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity) {
+		return isBlockBreakingPrevented(world, pos, entity, false);
+	}
+
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean addOrResetProtectedRegionIndicator) {
 		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockBreaking) {
 			return false;
 		}
@@ -81,6 +87,9 @@ public class ProtectedRegionHelper {
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 			if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
+				if (addOrResetProtectedRegionIndicator) {
+					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(protectedRegion, pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+				}
 				return true;
 			}
 		}
@@ -89,6 +98,10 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, Block block) {
+		return isBlockPlacingPrevented(world, pos, entity, block, false);
+	}
+
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, Block block, boolean addOrResetProtectedRegionIndicator) {
 		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockPlacing) {
 			return false;
 		}
@@ -109,6 +122,9 @@ public class ProtectedRegionHelper {
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 			if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
+				if (addOrResetProtectedRegionIndicator) {
+					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(protectedRegion, pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+				}
 				return true;
 			}
 		}
@@ -117,6 +133,10 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack) {
+		return isBlockPlacingPrevented(world, pos, entity, stack, false);
+	}
+
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack, boolean addOrResetProtectedRegionIndicator) {
 		if (stack.isEmpty()) {
 			return false;
 		}
@@ -124,7 +144,7 @@ public class ProtectedRegionHelper {
 		if (block == null) {
 			return false;
 		}
-		return isBlockPlacingPrevented(world, pos, entity, block);
+		return isBlockPlacingPrevented(world, pos, entity, block, addOrResetProtectedRegionIndicator);
 	}
 
 	private static Block getBlockFromItem(Item item) {
@@ -149,8 +169,13 @@ public class ProtectedRegionHelper {
 		}
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventExplosionsTNT() && (protectedRegion.isInsideProtectedRegion(pos) || (checkForOrigin && origin != null && protectedRegion.isInsideProtectedRegion(origin)))) {
-				return true;
+			if (protectedRegion.preventExplosionsTNT()) {
+				if (protectedRegion.isInsideProtectedRegion(pos)) {
+					return true;
+				}
+				if (checkForOrigin && origin != null && protectedRegion.isInsideProtectedRegion(origin)) {
+					return true;
+				}
 			}
 		}
 
@@ -169,8 +194,13 @@ public class ProtectedRegionHelper {
 		}
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventExplosionsOther() && (protectedRegion.isInsideProtectedRegion(pos) || (checkForOrigin && origin != null && protectedRegion.isInsideProtectedRegion(origin)))) {
-				return true;
+			if (protectedRegion.preventExplosionsOther()) {
+				if (protectedRegion.isInsideProtectedRegion(pos)) {
+					return true;
+				}
+				if (checkForOrigin && origin != null && protectedRegion.isInsideProtectedRegion(origin)) {
+					return true;
+				}
 			}
 		}
 
@@ -228,8 +258,13 @@ public class ProtectedRegionHelper {
 		}
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventFireSpreading() && (protectedRegion.isInsideProtectedRegion(pos) || (checkForOrigin && origin != null && protectedRegion.isInsideProtectedRegion(origin)))) {
-				return true;
+			if (protectedRegion.preventFireSpreading()) {
+				if (protectedRegion.isInsideProtectedRegion(pos)) {
+					return true;
+				}
+				if (checkForOrigin && origin != null && protectedRegion.isInsideProtectedRegion(origin)) {
+					return true;
+				}
 			}
 		}
 

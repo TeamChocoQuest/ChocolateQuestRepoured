@@ -88,14 +88,14 @@ public class ProtectedRegionEventHandler {
 			}
 		}
 
-		if (!isBlockDependency && ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, event.getPlayer())) {
+		if (!isBlockDependency && ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, event.getPlayer(), true)) {
 			event.setCanceled(true);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
-		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntity(), event.getPlacedBlock().getBlock())) {
+		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntity(), event.getPlacedBlock().getBlock(), true)) {
 			event.setCanceled(true);
 		}
 	}
@@ -112,11 +112,11 @@ public class ProtectedRegionEventHandler {
 			return;
 		}
 		if (item == Items.BUCKET) {
-			if (ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer())) {
+			if (ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true)) {
 				event.setCanceled(true);
 			}
 		} else {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), stack)) {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), stack, true)) {
 				event.setCanceled(true);
 			}
 		}
