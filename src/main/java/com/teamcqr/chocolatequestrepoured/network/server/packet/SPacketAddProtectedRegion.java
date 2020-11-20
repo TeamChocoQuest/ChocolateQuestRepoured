@@ -1,26 +1,21 @@
 package com.teamcqr.chocolatequestrepoured.network.server.packet;
 
-import java.util.List;
-
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class SPacketSyncProtectedRegions implements IMessage {
+public class SPacketAddProtectedRegion implements IMessage {
 
 	private ByteBuf buffer = Unpooled.buffer();
 
-	public SPacketSyncProtectedRegions() {
+	public SPacketAddProtectedRegion() {
 
 	}
 
-	public SPacketSyncProtectedRegions(List<ProtectedRegion> protectedRegions) {
-		this.buffer.writeShort(protectedRegions.size());
-		for (ProtectedRegion protectedRegion : protectedRegions) {
-			protectedRegion.writeToByteBuf(this.buffer);
-		}
+	public SPacketAddProtectedRegion(ProtectedRegion protectedRegion) {
+		protectedRegion.writeToByteBuf(this.buffer);
 	}
 
 	@Override

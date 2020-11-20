@@ -1,13 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerAddProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
+import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerDeleteProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerDungeonSync;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerEditTrade;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerHookShotPlayerStop;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerInitialFactionInformation;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerItemStackSync;
+import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerProtectedRegionRemoveBlockDependency;
+import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerProtectedRegionRemoveEntityDependency;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerSyncProtectedRegions;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerSyncTextureSets;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
@@ -35,14 +39,18 @@ import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerS
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerSyncSelectedTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerSyncTileEntity;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerUpdateTradeIndex;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketAddProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketArmorCooldownSync;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketCustomTextures;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketDeleteProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketDungeonSync;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketEditTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketHookShotPlayerStop;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketInitialFactionInformation;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketItemStackSync;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketProtectedRegionRemoveBlockDependency;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketProtectedRegionRemoveEntityDependency;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncTileEntity;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketUpdatePlayerReputation;
@@ -61,6 +69,10 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerItemStackSync.class, SPacketItemStackSync.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerHookShotPlayerStop.class, SPacketHookShotPlayerStop.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncProtectedRegions.class, SPacketSyncProtectedRegions.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerAddProtectedRegion.class, SPacketAddProtectedRegion.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerDeleteProtectedRegion.class, SPacketDeleteProtectedRegion.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerProtectedRegionRemoveBlockDependency.class, SPacketProtectedRegionRemoveBlockDependency.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerProtectedRegionRemoveEntityDependency.class, SPacketProtectedRegionRemoveEntityDependency.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTextureSets.class, SPacketCustomTextures.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerDeleteTrade.class, SPacketDeleteTrade.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerEditTrade.class, SPacketEditTrade.class, messageID++, Side.CLIENT);

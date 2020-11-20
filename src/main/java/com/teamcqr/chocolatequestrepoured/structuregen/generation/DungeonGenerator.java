@@ -118,7 +118,7 @@ public class DungeonGenerator {
 				} else {
 					this.state = EnumDungeonGeneratorState.POST_GENERATION;
 					if (this.protectedRegion != null) {
-						this.protectedRegion.setGenerating(false);
+						this.protectedRegion.finishGenerating();
 						if (!this.protectedRegion.isValid()) {
 							ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 							if (manager != null) {
@@ -186,7 +186,7 @@ public class DungeonGenerator {
 
 	public void setupProtectedRegion(DungeonBase dungeon) {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION && dungeon.isProtectionSystemEnabled()) {
-			this.protectedRegion = new ProtectedRegion(this.world, this.minPos, this.maxPos);
+			this.protectedRegion = new ProtectedRegion(this.world, dungeon.getDungeonName(), this.pos.up(dungeon.getUnderGroundOffset()), this.minPos, this.maxPos);
 			this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
 		}
 	}

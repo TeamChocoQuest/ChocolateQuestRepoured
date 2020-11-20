@@ -19,7 +19,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketAddProtectedRegion;
+import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketDeleteProtectedRegion;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -88,8 +89,7 @@ public class ProtectedRegionManager {
 				this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
 
 				if (this.world != null && !this.world.isRemote) {
-					// TODO Only send changes to clients
-					CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(this.getProtectedRegions()), this.world.provider.getDimension());
+					CQRMain.NETWORK.sendToDimension(new SPacketAddProtectedRegion(protectedRegion), this.world.provider.getDimension());
 				}
 			}
 		}
@@ -104,8 +104,7 @@ public class ProtectedRegionManager {
 			this.protectedRegions.remove(uuid);
 
 			if (this.world != null && !this.world.isRemote) {
-				// TODO Only send changes to clients
-				CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(this.getProtectedRegions()), this.world.provider.getDimension());
+				CQRMain.NETWORK.sendToDimension(new SPacketDeleteProtectedRegion(uuid), this.world.provider.getDimension());
 			}
 		}
 	}
@@ -142,7 +141,7 @@ public class ProtectedRegionManager {
 				CompressedStreamTools.writeCompressed(protectedRegion.writeToNBT(), outputStream);
 			}
 		} catch (IOException e) {
-			CQRMain.logger.info("Failed to save protected region to file: " + file.getName(), e);
+			CQRMain.logger.info(String.format("Failed to save protected region to file: %s", file.getName()), e);
 		}
 	}
 
@@ -173,7 +172,7 @@ public class ProtectedRegionManager {
 				this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
 			}
 		} catch (IOException e) {
-			CQRMain.logger.info("Failed to load protected region from file: " + file.getName(), e);
+			CQRMain.logger.info(String.format("Failed to load protected region from file: %s", file.getName()), e);
 		}
 	}
 
