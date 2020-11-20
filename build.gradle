@@ -46,13 +46,15 @@ minecraft {
 }
 
 repositories {
+    maven { url = 'https://www.cursemaven.com' }
     maven { url = 'https://maven.mcmoddev.com/' }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:1.12.2-${forge_version}"
 
-    compile 'net.ilexiconn:llibrary:1.7.19-1.12.2'
+    compile 'curse.maven:Llibrary:3116493'
+    //compile 'net.ilexiconn:llibrary:1.7.20-1.12.2'
     compile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
 }
 
