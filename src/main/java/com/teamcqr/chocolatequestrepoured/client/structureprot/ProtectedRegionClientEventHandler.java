@@ -102,6 +102,7 @@ public class ProtectedRegionClientEventHandler {
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableAlpha();
 		GlStateManager.disableLighting();
+		GlStateManager.depthMask(false);
 
 		mc.getTextureManager().bindTexture(TEXTURE);
 		for (ProtectedRegionIndicator protectedRegionIndicator : PROTECTED_REGION_INDICATORS.values()) {
@@ -109,6 +110,7 @@ public class ProtectedRegionClientEventHandler {
 			render(protectedRegionIndicator, pos.getX() - x, pos.getY() - y, pos.getZ() - z, partialTicks);
 		}
 
+		GlStateManager.depthMask(true);
 		GlStateManager.enableLighting();
 		GlStateManager.enableAlpha();
 		GlStateManager.enableCull();
