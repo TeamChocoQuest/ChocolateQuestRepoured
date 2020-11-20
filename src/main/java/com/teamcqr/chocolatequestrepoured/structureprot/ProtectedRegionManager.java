@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketDeletePro
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ProtectedRegionManager {
@@ -174,6 +175,16 @@ public class ProtectedRegionManager {
 		} catch (IOException e) {
 			CQRMain.logger.info(String.format("Failed to load protected region from file: %s", file.getName()), e);
 		}
+	}
+
+	public List<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
+		List<ProtectedRegion> list = new ArrayList<>();
+		for (ProtectedRegion protectedRegion : this.protectedRegions.values()) {
+			if (protectedRegion.isInsideProtectedRegion(pos)) {
+				list.add(protectedRegion);
+			}
+		}
+		return list;
 	}
 
 }

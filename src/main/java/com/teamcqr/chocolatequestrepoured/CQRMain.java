@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.teamcqr.chocolatequestrepoured.command.CommandChangeReputation;
 import com.teamcqr.chocolatequestrepoured.command.CommandExport;
+import com.teamcqr.chocolatequestrepoured.command.CommandGetProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
@@ -229,13 +230,11 @@ public class CQRMain {
 	}
 
 	@EventHandler
-	public static void registerCommands(FMLServerStartingEvent event) {
+	public static void onFMLServerStartingEvent(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandExport());
 		event.registerServerCommand(new CommandChangeReputation());
-	}
+		event.registerServerCommand(new CommandGetProtectedRegion());
 
-	@EventHandler
-	public static void onVirtualServerStart(FMLServerStartingEvent event) {
 		// Since the CTS manager could also be corrupted, let's make him reload his data...
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
