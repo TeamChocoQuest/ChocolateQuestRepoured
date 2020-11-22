@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
@@ -100,8 +101,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand);
+	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	public int getMinFloors() {

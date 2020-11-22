@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuardedStructure;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -39,8 +40,8 @@ public class DungeonGuardedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonGuardedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorGuardedStructure(world, new BlockPos(x, y, z), this, rand);
+	public AbstractDungeonGenerator<DungeonGuardedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorGuardedStructure(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	public int getMinDistance() {

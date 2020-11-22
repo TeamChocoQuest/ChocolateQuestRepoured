@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.CQRBlocks;
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
@@ -125,8 +126,8 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	@Override
-	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand);
+	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	public File getRoomNBTFileForType(EStrongholdRoomType type, Random rand) {

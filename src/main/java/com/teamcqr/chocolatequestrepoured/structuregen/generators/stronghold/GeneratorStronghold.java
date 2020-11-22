@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
 
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
@@ -29,8 +30,8 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 
 	private StrongholdFloor[] floors;
 
-	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
+	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		super(world, pos, dungeon, rand, spawnType);
 	}
 
 	@Override

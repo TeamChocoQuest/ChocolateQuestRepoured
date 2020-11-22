@@ -134,7 +134,7 @@ public abstract class DungeonBase {
 		return this.name;
 	}
 
-	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand);
+	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType);
 
 	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		this.generate(world, x, this.getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);
@@ -160,10 +160,12 @@ public abstract class DungeonBase {
 	}
 
 	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+		AbstractDungeonGenerator<?> dungeonGenerator = this.createDungeonGenerator(world, x, y, z, rand, spawnType);
+
 		if (!generateImmediately && CQRConfig.advanced.multithreadedDungeonPreparation) {
-			new DungeonGeneratorThread(this.createDungeonGenerator(world, x, y, z, rand)).start();
+			DungeonGeneratorThread.add(dungeonGenerator);
 		} else {
-			this.createDungeonGenerator(world, x, y, z, rand).generate(spawnType, generateImmediately);
+			dungeonGenerator.generate(generateImmediately);
 		}
 	}
 

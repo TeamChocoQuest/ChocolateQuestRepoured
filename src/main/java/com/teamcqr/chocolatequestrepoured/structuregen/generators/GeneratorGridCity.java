@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGridCity;
@@ -52,8 +53,8 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 	private CQStructure[][] structures;
 
-	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
+	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		super(world, pos, dungeon, rand, spawnType);
 	}
 
 	@Override

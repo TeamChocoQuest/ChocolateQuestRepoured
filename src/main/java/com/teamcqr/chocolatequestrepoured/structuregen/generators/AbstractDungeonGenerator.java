@@ -22,18 +22,20 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 	protected final BlockPos pos;
 	protected final T dungeon;
 	protected final DungeonGenerator dungeonGenerator;
+	private final DungeonDataManager.DungeonSpawnType spawnType;
 
 	private final Map<File, CQStructure> cachedStructures = new HashMap<>();
 
-	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon, Random rand) {
-		this.random = rand;
+	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		this.world = world;
 		this.pos = pos;
 		this.dungeon = dungeon;
+		this.random = rand;
+		this.spawnType = spawnType;
 		this.dungeonGenerator = new DungeonGenerator(world, pos, dungeon.getDungeonName());
 	}
 
-	public void generate(DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+	public void generate(boolean generateImmediately) {
 		if (this.world.isRemote) {
 			return;
 		}
@@ -44,7 +46,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 			this.preProcess();
 			this.buildStructure();
 			this.postProcess();
-			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon, spawnType, generateImmediately);
+			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon, this.spawnType, generateImmediately);
 		} catch (Exception e) {
 			CQRMain.logger.error(String.format("Failed to prepare dungeon %s for generation at %s", this.dungeon, this.pos), e);
 		}

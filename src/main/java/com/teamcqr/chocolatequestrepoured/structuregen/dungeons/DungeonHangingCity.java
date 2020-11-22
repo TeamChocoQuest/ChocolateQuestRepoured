@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorHangingCity;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -56,8 +57,8 @@ public class DungeonHangingCity extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this, rand);
+	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	// Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!

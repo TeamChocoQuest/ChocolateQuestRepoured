@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -40,6 +41,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -227,6 +230,17 @@ public class CQRMain {
 		EntityCQRNetherDragon.reloadBreakableBlocks();
 		DungeonInhabitantManager.instance().loadDungeonInhabitants();
 
+		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, new ForgeChunkManager.OrderedLoadingCallback() {
+			@Override
+			public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
+
+			}
+
+			@Override
+			public List<ForgeChunkManager.Ticket> ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world, int maxTicketCount) {
+				return Collections.emptyList();
+			}
+		});
 	}
 
 	@EventHandler

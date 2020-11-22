@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorRandomizedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
@@ -130,8 +131,8 @@ public class DungeonRandomizedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this, rand);
+	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	public IBlockState getMainBlockState() {

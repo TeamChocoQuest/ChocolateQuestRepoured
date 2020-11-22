@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
@@ -45,8 +46,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	private final CQRWeightedRandom<IBlockState> volcanoBlocks;
 	private final CQRWeightedRandom<IBlockState> volcanoBlocksWithLava;
 
-	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
+	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		super(world, pos, dungeon, rand, spawnType);
 
 		this.volcanoHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight(), this.random);
 		this.steepness = dungeon.getSteepness();

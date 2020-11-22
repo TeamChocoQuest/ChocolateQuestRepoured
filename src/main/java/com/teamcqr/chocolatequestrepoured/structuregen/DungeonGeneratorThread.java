@@ -1,15 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.world.World;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -18,59 +17,86 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Reference.MODID)
 public class DungeonGeneratorThread extends Thread {
 
-	private static final Map<Integer, List<DungeonGeneratorThread>> DUNGEON_GENERATOR_THREADS = Collections.synchronizedMap(new HashMap<>());
-	private final int dim;
-	private final AbstractDungeonGenerator<?> dungeonGenerator;
+	private static final Int2ObjectMap<DungeonGeneratorThread> DUNGEON_GENERATOR_THREADS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
+	private final BlockingQueue<GeneratorInfo> queue = new LinkedBlockingQueue<>();
+	private static final GeneratorInfo STOP = new GeneratorInfo(null);
 
-	public DungeonGeneratorThread(AbstractDungeonGenerator<?> dungeonGenerator) {
-		this.setName("CQR Dungeon Generator Thread");
-		this.dim = dungeonGenerator.getWorld().provider.getDimension();
-		this.dungeonGenerator = dungeonGenerator;
+	private static class GeneratorInfo {
+		private final AbstractDungeonGenerator<?> dungeonGenerator;
+
+		public GeneratorInfo(AbstractDungeonGenerator<?> dungeonGenerator) {
+			this.dungeonGenerator = dungeonGenerator;
+		}
 	}
 
-	@Override
-	public synchronized void start() {
-		DUNGEON_GENERATOR_THREADS.computeIfAbsent(this.dim, key -> Collections.synchronizedList(new ArrayList<>())).add(this);
-		super.start();
+	private DungeonGeneratorThread() {
+		this.setName("CQR Dungeon Generator Thread");
 	}
 
 	@Override
 	public void run() {
-		this.dungeonGenerator.generate(DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, false);
-		DUNGEON_GENERATOR_THREADS.get(this.dim).remove(this);
-	}
-
-	public static boolean isDungeonGeneratorThreadRunning(World world) {
-		return isDungeonGeneratorThreadRunning(world.provider.getDimension());
-	}
-
-	public static boolean isDungeonGeneratorThreadRunning(int dim) {
-		if (!DUNGEON_GENERATOR_THREADS.containsKey(dim)) {
-			return false;
-		}
-		return !DUNGEON_GENERATOR_THREADS.get(dim).isEmpty();
-	}
-
-	public static void waitForRunningDungeonGeneratorThreads(World world) {
-		waitForRunningDungeonGeneratorThreads(world.provider.getDimension());
-	}
-
-	public static void waitForRunningDungeonGeneratorThreads(int dim) {
-		if (!DUNGEON_GENERATOR_THREADS.containsKey(dim)) {
-			return;
-		}
-		for (DungeonGeneratorThread dungeonGeneratorThread : DUNGEON_GENERATOR_THREADS.get(dim)) {
+		while (true) {
 			try {
-				dungeonGeneratorThread.join();
+				GeneratorInfo generatorInfo = this.queue.take();
+
+				if (generatorInfo == STOP) {
+					break;
+				}
+
+				generatorInfo.dungeonGenerator.generate(false);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
 		}
 	}
 
+	public void stopAndWait() {
+		try {
+			this.queue.put(STOP);
+			this.join();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	public static boolean add(AbstractDungeonGenerator<?> dungeonGenerator) {
+		if (dungeonGenerator == null) {
+			return false;
+		}
+
+		DungeonGeneratorThread dungeonGeneratorThread = DUNGEON_GENERATOR_THREADS.get(dungeonGenerator.getWorld().provider.getDimension());
+
+		if (dungeonGeneratorThread == null) {
+			return false;
+		}
+
+		return dungeonGeneratorThread.queue.offer(new GeneratorInfo(dungeonGenerator));
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onWorldLoadEvent(WorldEvent.Load event) {
+		int dim = event.getWorld().provider.getDimension();
+
+		if (DUNGEON_GENERATOR_THREADS.containsKey(dim)) {
+			return;
+		}
+
+		DungeonGeneratorThread dungeonGeneratorThread = new DungeonGeneratorThread();
+		DUNGEON_GENERATOR_THREADS.put(dim, dungeonGeneratorThread);
+		dungeonGeneratorThread.start();
+	}
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
-		waitForRunningDungeonGeneratorThreads(event.getWorld());
+		int dim = event.getWorld().provider.getDimension();
+		DungeonGeneratorThread dungeonGeneratorThread = DUNGEON_GENERATOR_THREADS.get(dim);
+
+		if (dungeonGeneratorThread == null) {
+			return;
+		}
+
+		dungeonGeneratorThread.stopAndWait();
+		DUNGEON_GENERATOR_THREADS.remove(dim);
 	}
 
 }

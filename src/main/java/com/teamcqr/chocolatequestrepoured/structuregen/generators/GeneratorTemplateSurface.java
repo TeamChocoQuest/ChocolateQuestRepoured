@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.io.File;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonTemplateSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
@@ -28,8 +29,8 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 	private PlacementSettings settings;
 	private BlockPos structurePos;
 
-	public GeneratorTemplateSurface(World world, BlockPos pos, DungeonTemplateSurface dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
+	public GeneratorTemplateSurface(World world, BlockPos pos, DungeonTemplateSurface dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		super(world, pos, dungeon, rand, spawnType);
 	}
 
 	@Override

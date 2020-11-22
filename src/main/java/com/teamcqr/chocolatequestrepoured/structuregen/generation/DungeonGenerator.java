@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.ChunkUtil;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.nbt.NBTBase;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 
 public class DungeonGenerator {
@@ -33,6 +35,7 @@ public class DungeonGenerator {
 	protected DungeonPartLight dungeonPartLight;
 	protected EnumDungeonGeneratorState state = EnumDungeonGeneratorState.PRE_GENERATION;
 	private long tickTime;
+	private ForgeChunkManager.Ticket chunkTicket;
 
 	public enum EnumDungeonGeneratorState {
 		PRE_GENERATION, GENERATION, POST_GENERATION;
@@ -97,6 +100,10 @@ public class DungeonGenerator {
 		}
 		this.state = EnumDungeonGeneratorState.values()[compound.getInteger("state")];
 		this.dungeonName = compound.getString("dungeonName");
+
+		if (this.state == EnumDungeonGeneratorState.GENERATION) {
+			this.chunkTicket = ChunkUtil.getTicket(this.world, this.minPos, this.maxPos, true);
+		}
 	}
 
 	public void tick() {
@@ -116,16 +123,7 @@ public class DungeonGenerator {
 				} else if (!this.dungeonPartLight.isGenerated()) {
 					this.dungeonPartLight.generateNext();
 				} else {
-					this.state = EnumDungeonGeneratorState.POST_GENERATION;
-					if (this.protectedRegion != null) {
-						this.protectedRegion.finishGenerating();
-						if (!this.protectedRegion.isValid()) {
-							ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
-							if (manager != null) {
-								manager.removeProtectedRegion(this.protectedRegion);
-							}
-						}
-					}
+					this.endGeneration();
 				}
 
 				i++;
@@ -194,6 +192,30 @@ public class DungeonGenerator {
 	public void startGeneration() {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.state = EnumDungeonGeneratorState.GENERATION;
+
+			this.chunkTicket = ChunkUtil.getTicket(this.world, this.minPos, this.maxPos, true);
+		}
+	}
+
+	public void endGeneration() {
+		if (this.state == EnumDungeonGeneratorState.GENERATION) {
+			this.state = EnumDungeonGeneratorState.POST_GENERATION;
+
+			if (this.protectedRegion != null) {
+				if (this.protectedRegion.isValid()) {
+					this.protectedRegion.finishGenerating();
+				} else {
+					ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
+
+					if (manager != null) {
+						manager.removeProtectedRegion(this.protectedRegion);
+					}
+				}
+			}
+
+			if (this.chunkTicket != null) {
+				ForgeChunkManager.releaseTicket(this.chunkTicket);
+			}
 		}
 	}
 

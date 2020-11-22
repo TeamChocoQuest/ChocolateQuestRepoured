@@ -87,6 +87,9 @@ public class CQRConfig {
 
 		@Config.Comment("If enabled, a faction will consider you as ally when you are on a team with the same name as the faction.")
 		public boolean enableOldFactionMemberTeams = false;
+
+		@Config.Comment("When enabled overwrites the amount of chunks a ticket can keep loaded when generating/exporting dungeons.")
+		public boolean overwriteForgeChunkLoadingLimit = true;
 	}
 
 	public static class Materials {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
@@ -36,8 +37,8 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	private Map<BlockPos, CQStructure> toGenerate = new HashMap<>();
 	private Map<BlockPos, PlacementSettings> settingsMap = new HashMap<>();
 
-	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
+	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		super(world, pos, dungeon, rand, spawnType);
 	}
 
 	private void processStructure(CQStructure structure, BlockPos position) {

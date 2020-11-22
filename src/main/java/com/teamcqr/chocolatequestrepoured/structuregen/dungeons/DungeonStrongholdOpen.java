@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -62,8 +63,8 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this, rand);
+	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	public File getStairFolder() {

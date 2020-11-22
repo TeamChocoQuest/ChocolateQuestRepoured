@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.CQRLoottables;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -71,8 +72,8 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z, Random rand) {
-		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this, rand);
+	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this, rand, spawnType);
 	}
 
 	public File getRandomCentralBuilding(Random rand) {

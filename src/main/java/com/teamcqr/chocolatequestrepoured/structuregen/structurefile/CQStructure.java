@@ -26,6 +26,7 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityMap;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.ChunkUtil;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import io.netty.buffer.ByteBuf;
@@ -53,6 +54,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import scala.actors.threadpool.Arrays;
@@ -323,8 +325,14 @@ public class CQStructure {
 
 		this.size = pos2.subtract(pos1).add(1, 1, 1);
 
+		ForgeChunkManager.Ticket chunkTicket = ChunkUtil.getTicket(world, pos1, pos2, true);
+
 		this.takeBlocksFromWorld(world, pos1, pos2);
 		this.takeEntitiesFromWorld(world, pos1, pos2, ignoreBasicEntities);
+
+		if (chunkTicket != null) {
+			ForgeChunkManager.releaseTicket(chunkTicket);
+		}
 	}
 
 	private void takeBlocksFromWorld(World world, BlockPos pos1, BlockPos pos2) {
