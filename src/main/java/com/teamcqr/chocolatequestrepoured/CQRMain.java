@@ -29,6 +29,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
@@ -228,6 +229,7 @@ public class CQRMain {
 		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
+		ProtectedRegion.updateMaterialBlacklist();
 		DungeonInhabitantManager.instance().loadDungeonInhabitants();
 
 		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, new ForgeChunkManager.OrderedLoadingCallback() {

@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
 
 import net.minecraftforge.common.config.Config;
@@ -304,6 +305,9 @@ public class CQRConfig {
 
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
 		public String[] protectionSystemPlaceableBlockWhitelist = { "minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch" };
+
+		@Config.Comment("When a dungeon is generated all blocks with a material which is not blacklisted get protected by the protection system. Protected blocks can't be mined or replaced with other blocks.")
+		public String[] protectionSystemMaterialBlacklist = { "AIR", "LIQUID" };
 	}
 
 	public static class General {
@@ -470,6 +474,7 @@ public class CQRConfig {
 				ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 				EntityCQRNetherDragon.reloadBreakableBlocks();
 				EntityCQRGiantTortoise.realoadHardBlocks();
+				ProtectedRegion.updateMaterialBlacklist();
 			}
 		}
 

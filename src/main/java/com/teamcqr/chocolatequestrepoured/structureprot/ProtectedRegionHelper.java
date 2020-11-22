@@ -86,7 +86,7 @@ public class ProtectedRegionHelper {
 		}
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
+			if (protectedRegion.preventBlockBreaking() && protectedRegion.isProtected(pos)) {
 				if (addOrResetProtectedRegionIndicator) {
 					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(protectedRegion, pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
 				}
@@ -121,7 +121,7 @@ public class ProtectedRegionHelper {
 		}
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
+			if (protectedRegion.preventBlockPlacing() && protectedRegion.isProtected(pos)) {
 				if (addOrResetProtectedRegionIndicator) {
 					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(protectedRegion, pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
 				}

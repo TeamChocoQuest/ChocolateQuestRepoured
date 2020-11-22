@@ -203,6 +203,7 @@ public class DungeonGenerator {
 
 			if (this.protectedRegion != null) {
 				if (this.protectedRegion.isValid()) {
+					this.protectedRegion.updateProtectedBlocks();
 					this.protectedRegion.finishGenerating();
 				} else {
 					ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
