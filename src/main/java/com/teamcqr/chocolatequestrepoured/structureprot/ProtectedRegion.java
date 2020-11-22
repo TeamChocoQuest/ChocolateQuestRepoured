@@ -147,11 +147,6 @@ public class ProtectedRegion {
 		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
 			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
 		}
-
-		// TODO Fix for protected regions not deleting themselves. Should be removed in the future.
-		if (!version.equals(PROTECTED_REGION_VERSION)) {
-			this.isGenerating = false;
-		}
 	}
 
 	public void writeToByteBuf(ByteBuf buf) {
@@ -263,6 +258,10 @@ public class ProtectedRegion {
 		this.preventFireSpreading = preventFireSpreading;
 		this.preventEntitySpawning = preventEntitySpawning;
 		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
+
+		if (this.world != null && !this.world.isRemote) {
+			// TODO sync
+		}
 	}
 
 	public void updateProtectedBlocks() {
@@ -283,6 +282,10 @@ public class ProtectedRegion {
 
 		if (chunkTicket != null) {
 			ForgeChunkManager.releaseTicket(chunkTicket);
+		}
+
+		if (this.world != null && !this.world.isRemote) {
+			// TODO sync
 		}
 	}
 
@@ -310,56 +313,28 @@ public class ProtectedRegion {
 		return this.endPos;
 	}
 
-	public void setPreventBlockBreaking(boolean preventBlockBreaking) {
-		this.preventBlockBreaking = preventBlockBreaking;
-	}
-
 	public boolean preventBlockBreaking() {
 		return this.preventBlockBreaking;
-	}
-
-	public void setPreventBlockPlacing(boolean preventBlockPlacing) {
-		this.preventBlockPlacing = preventBlockPlacing;
 	}
 
 	public boolean preventBlockPlacing() {
 		return this.preventBlockPlacing;
 	}
 
-	public void setPreventExplosionsTNT(boolean preventExplosionsTNT) {
-		this.preventExplosionsTNT = preventExplosionsTNT;
-	}
-
 	public boolean preventExplosionsTNT() {
 		return this.preventExplosionsTNT;
-	}
-
-	public void setPreventExplosionsOther(boolean preventExplosionsOther) {
-		this.preventExplosionsOther = preventExplosionsOther;
 	}
 
 	public boolean preventExplosionsOther() {
 		return this.preventExplosionsOther;
 	}
 
-	public void setPreventFireSpreading(boolean preventFireSpreading) {
-		this.preventFireSpreading = preventFireSpreading;
-	}
-
 	public boolean preventFireSpreading() {
 		return this.preventFireSpreading;
 	}
 
-	public void setPreventEntitySpawning(boolean preventEntitySpawning) {
-		this.preventEntitySpawning = preventEntitySpawning;
-	}
-
 	public boolean preventEntitySpawning() {
 		return this.preventEntitySpawning;
-	}
-
-	public void setIgnoreNoBossOrNexus(boolean ignoreNoBossOrNexus) {
-		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
 	}
 
 	public boolean ignoreNoBossOrNexus() {
@@ -370,7 +345,12 @@ public class ProtectedRegion {
 		if (!this.isGenerating) {
 			return;
 		}
-		this.entityDependencies.add(uuid);
+
+		boolean flag = this.entityDependencies.add(uuid);
+
+		if (flag && this.world != null && !this.world.isRemote) {
+			// TODO sync
+		}
 	}
 
 	public void removeEntityDependency(UUID uuid) {
@@ -400,7 +380,12 @@ public class ProtectedRegion {
 		if (!this.isGenerating) {
 			return;
 		}
-		this.blockDependencies.add(pos);
+
+		boolean flag = this.blockDependencies.add(pos);
+
+		if (flag && this.world != null && !this.world.isRemote) {
+			// TODO sync
+		}
 	}
 
 	public void removeBlockDependency(BlockPos pos) {
@@ -427,7 +412,15 @@ public class ProtectedRegion {
 	}
 
 	public void finishGenerating() {
+		if (!this.isGenerating) {
+			return;
+		}
+
 		this.isGenerating = false;
+
+		if (this.world != null && !this.world.isRemote) {
+			// TODO sync
+		}
 	}
 
 	public boolean isGenerating() {
