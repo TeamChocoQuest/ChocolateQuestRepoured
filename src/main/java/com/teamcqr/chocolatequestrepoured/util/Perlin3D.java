@@ -20,28 +20,39 @@ public class Perlin3D {
 	}
 
 	public float getNoiseAt(float x, float y, float z) {
-		float f1 = y / this.frequency;
-		float ymin = MathHelper.floor(f1);
-		float ymax = ymin + 1.0F;
-		float f2 = f1 - ymin;
-
-		return this.cosineInterpolate(this.getNoiseLevelAtPosition(x, ymin, z), this.getNoiseLevelAtPosition(x, ymax, z), f2);
-	}
-
-	private float getNoiseLevelAtPosition(float x, float y, float z) {
-		float f1 = x / this.frequency;
-		float xmin = MathHelper.floor(f1);
+		float fx1 = x / this.frequency;
+		float xmin = MathHelper.floor(fx1);
 		float xmax = xmin + 1.0F;
-		float f2 = f1 - xmin;
+		float fx2 = fx1 - xmin;
 
-		float f3 = z / this.frequency;
-		float zmin = MathHelper.floor(f3);
+		float fy1 = y / this.frequency;
+		float ymin = MathHelper.floor(fy1);
+		float ymax = ymin + 1.0F;
+		float fy2 = fy1 - ymin;
+
+		float fz1 = z / this.frequency;
+		float zmin = MathHelper.floor(fz1);
 		float zmax = zmin + 1.0F;
-		float f4 = f3 - zmin;
+		float fz2 = fz1 - zmin;
 
-		float f5 = this.cosineInterpolate(this.getRandomAtPosition(xmin, y, zmin), this.getRandomAtPosition(xmax, y, zmin), f2);
-		float f6 = this.cosineInterpolate(this.getRandomAtPosition(xmin, y, zmax), this.getRandomAtPosition(xmax, y, zmax), f2);
-		return this.cosineInterpolate(f5, f6, f4);
+		float f1 = this.getRandomAtPosition(xmin, ymin, zmin);
+		float f2 = this.getRandomAtPosition(xmin, ymin, zmax);
+		float f3 = this.getRandomAtPosition(xmin, ymax, zmin);
+		float f4 = this.getRandomAtPosition(xmin, ymax, zmax);
+		float f5 = this.getRandomAtPosition(xmax, ymin, zmin);
+		float f6 = this.getRandomAtPosition(xmax, ymin, zmax);
+		float f7 = this.getRandomAtPosition(xmax, ymax, zmin);
+		float f8 = this.getRandomAtPosition(xmax, ymax, zmax);
+
+		float f11 = this.cosineInterpolate(f1, f5, fx2);
+		float f12 = this.cosineInterpolate(f2, f6, fx2);
+		float f13 = this.cosineInterpolate(f3, f7, fx2);
+		float f14 = this.cosineInterpolate(f4, f8, fx2);
+
+		float f21 = this.cosineInterpolate(f11, f12, fz2);
+		float f22 = this.cosineInterpolate(f13, f14, fz2);
+
+		return this.cosineInterpolate(f21, f22, fy2);
 	}
 
 	private float cosineInterpolate(float a, float b, float x) {
