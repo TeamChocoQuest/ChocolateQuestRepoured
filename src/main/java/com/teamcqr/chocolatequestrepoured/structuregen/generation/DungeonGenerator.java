@@ -5,6 +5,8 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
@@ -176,21 +178,20 @@ public class DungeonGenerator {
 		}
 	}
 
-	public void setupLight() {
+	public void startGeneration(@Nullable DungeonBase dungeon) {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.dungeonPartLight = new DungeonPartLight(this.world, this, this.minPos, this.maxPos);
-		}
-	}
 
-	public void setupProtectedRegion(DungeonBase dungeon) {
-		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION && dungeon.isProtectionSystemEnabled()) {
-			this.protectedRegion = new ProtectedRegion(this.world, dungeon.getDungeonName(), this.pos.up(dungeon.getUnderGroundOffset()), this.minPos, this.maxPos);
-			this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
-		}
-	}
+			if (dungeon != null && dungeon.isProtectionSystemEnabled()) {
+				this.protectedRegion = new ProtectedRegion(this.world, dungeon.getDungeonName(), this.pos.up(dungeon.getUnderGroundOffset()), this.minPos, this.maxPos);
+				this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
+				ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 
-	public void startGeneration() {
-		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
+				if (manager != null) {
+					manager.addProtectedRegion(this.protectedRegion);
+				}
+			}
+
 			this.state = EnumDungeonGeneratorState.GENERATION;
 
 			this.chunkTicket = ChunkUtil.getTicket(this.world, this.minPos, this.maxPos, true);
@@ -199,6 +200,10 @@ public class DungeonGenerator {
 
 	public void endGeneration() {
 		if (this.state == EnumDungeonGeneratorState.GENERATION) {
+			if (this.chunkTicket != null) {
+				ForgeChunkManager.releaseTicket(this.chunkTicket);
+			}
+
 			this.state = EnumDungeonGeneratorState.POST_GENERATION;
 
 			if (this.protectedRegion != null) {
@@ -212,10 +217,6 @@ public class DungeonGenerator {
 						manager.removeProtectedRegion(this.protectedRegion);
 					}
 				}
-			}
-
-			if (this.chunkTicket != null) {
-				ForgeChunkManager.releaseTicket(this.chunkTicket);
 			}
 		}
 	}

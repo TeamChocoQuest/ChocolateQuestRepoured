@@ -20,7 +20,6 @@ import org.apache.commons.io.FileUtils;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -82,19 +81,17 @@ public class DungeonGenerationManager {
 
 	public static void addStructure(World world, DungeonGenerator structure, @Nullable DungeonBase dungeon, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		if (world != null && !world.isRemote) {
-			if (dungeon != null) {
-				structure.setupProtectedRegion(dungeon);
-			}
-			structure.setupLight();
-			structure.startGeneration();
+			structure.startGeneration(dungeon);
+
 			if (dungeon != null) {
 				DungeonDataManager.addDungeonEntry(world, dungeon, structure.getPos(), spawnType);
 			}
-			ProtectedRegionManager.getInstance(world).addProtectedRegion(structure.getProtectedRegion());
+
 			if (generateImmediately) {
 				while (!structure.isGenerated()) {
 					structure.tick();
 				}
+
 				CQRMain.logger.info("Generated dungeon {} at {}", structure.getDungeonName(), structure.getPos());
 			} else {
 				INSTANCES.get(world).dungeonGeneratorList.add(structure);
