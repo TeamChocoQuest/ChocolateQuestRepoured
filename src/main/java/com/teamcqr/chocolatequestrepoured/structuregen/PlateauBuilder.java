@@ -61,4 +61,44 @@ public class PlateauBuilder {
 		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT);
 	}
 
+	public static DungeonPartBlock makeRandomBlob2(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world, DungeonGenerator dungeonGenerator) {
+		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
+		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
+
+		int sizeX = endPos.getX() - startPos.getX() + 1 + wallSize * 2;
+		int sizeZ = endPos.getZ() - startPos.getZ() + 1 + wallSize * 2;
+		int sizeY = endPos.getY() - startPos.getY() + 1 + wallSize * 2;
+
+		for (int iX = 0; iX < sizeX; ++iX) {
+			for (int iY = 0; iY < sizeY; ++iY) {
+				for (int iZ = 0; iZ < sizeZ; ++iZ) {
+
+					float noise = Math.max(0.0F, (float) wallSize - (float) iY * 0.5F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeY - iY) * 0.5F);
+					noise += Math.max(0.0F, (float) wallSize - (float) iX * 0.5F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeX - iX) * 0.5F);
+					noise += Math.max(0.0F, (float) wallSize - (float) iZ * 0.5F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeZ - iZ) * 0.5F);
+
+					if (noise >= 0.5F) {
+						double perlin1 = perlinNoise1.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
+
+						if (perlin1 * (double) noise >= 0.5D) {
+							double perlin2 = perlinNoise2.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
+
+							if (perlin1 * perlin2 * (double) noise >= 0.5D) {
+								continue;
+							}
+						}
+					}
+
+					blockInfoList.add(new BlockInfo(iX, iY, iZ, fillBlock.getDefaultState(), null));
+				}
+			}
+		}
+
+		return new DungeonPartBlock(world, dungeonGenerator, startPos.add(-wallSize, -wallSize, -wallSize), blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT);
+	}
+
 }
