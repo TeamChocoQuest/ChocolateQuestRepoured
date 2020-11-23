@@ -69,7 +69,7 @@ dependencies {
     compile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
 	
 	// compile against the JEI API but do not include it at runtime
-	compile "mezz.jei:jei_${mc_version}:${jei_version}:api"
+	compileOnly "mezz.jei:jei_${mc_version}:${jei_version}:api"
 	// at runtime, use the full JEI jar
 	runtimeOnly "mezz.jei:jei_${mc_version}:${jei_version}"
 }
