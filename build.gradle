@@ -10,6 +10,7 @@ buildscript {
 }
         
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
@@ -48,7 +49,6 @@ minecraft {
 repositories {
     maven { url = 'https://www.cursemaven.com' }
     maven { url = 'https://maven.mcmoddev.com/' }
-	
 	maven {
 		// location of the maven that hosts JEI files
 		name = "Progwml6 maven"
@@ -69,9 +69,14 @@ dependencies {
     compile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
 	
 	// compile against the JEI API but do not include it at runtime
-	deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
+	compile "mezz.jei:jei_${mc_version}:${jei_version}:api"
 	// at runtime, use the full JEI jar
-	runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+	runtimeOnly "mezz.jei:jei_${mc_version}:${jei_version}"
+}
+
+configurations {
+	api
+	compile.extendsFrom api
 }
 
 sourceSets {
