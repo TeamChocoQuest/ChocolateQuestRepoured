@@ -161,6 +161,10 @@ public class CQStructure {
 		}
 	}
 
+	public static void clearCache() {
+		CACHED_STRUCTURES.clear();
+	}
+
 	public static CQStructure createFromFile(File file) {
 		if (CACHED_STRUCTURES.containsKey(file)) {
 			return CACHED_STRUCTURES.get(file);
