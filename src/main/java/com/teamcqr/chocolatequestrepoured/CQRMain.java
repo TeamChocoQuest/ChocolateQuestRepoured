@@ -54,6 +54,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -222,7 +223,6 @@ public class CQRMain {
 
 		DungeonRegistry.getInstance().loadDungeonFiles();
 		CQStructure.checkAndUpdateStructureFiles();
-		CQStructure.cacheFiles();
 		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();
 		ProtectedRegionHelper.updateBreakableBlockWhitelist();
@@ -255,6 +255,13 @@ public class CQRMain {
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
 		FactionRegistry.instance().loadFactions();
+
+		CQStructure.cacheFiles();
+	}
+
+	@EventHandler
+	public static void onFMLServerStoppingEvent(FMLServerStoppingEvent event) {
+		CQStructure.clearCache();
 	}
 
 }
