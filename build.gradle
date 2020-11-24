@@ -5,11 +5,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
         
-apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -18,61 +18,67 @@ version = "${mc_version}-${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_name}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
-    mapping_channel = "${mappings_channel}"
-    mapping_version = "${mappings_version}"
+	version = "${mc_version}-${forge_version}"
+	runDir = "run"
+	mappings = "${mappings_channel}_${mappings_version}"
+	//Below is for 2854 and up
+    //mapping_channel = "${mappings_channel}"
+    //mapping_version = "${mappings_version}"
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-
-        server {
+    //runs {
+       // client {
+            //workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
             // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-    }
+            //property 'forge.logging.console.level', 'debug'
+        //}
+
+        //server {
+
+            // Recommended logging data for a userdev environment
+            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            //property 'forge.logging.console.level', 'debug'
+        //}
+    //}
 }
 
 repositories {
     maven { url = 'https://www.cursemaven.com' }
     maven { url = 'https://maven.mcmoddev.com/' }
-	//maven {
+	maven {
 		// location of the maven that hosts JEI files
-		//name = "Progwml6 maven"
-		//url = "https://dvs1.progwml6.com/files/maven/"
-	//}
-	//maven {
+		name = "Progwml6 maven"
+		url = "https://dvs1.progwml6.com/files/maven/"
+	}
+	maven {
 		// location of a maven mirror for JEI files, as a fallback
-		//name = "ModMaven"
-		//url = "https://modmaven.k-4u.nl"
-	//}
+		name = "ModMaven"
+		url = "https://modmaven.k-4u.nl"
+	}
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.12.2-${forge_version}"
+    //minecraft "net.minecraftforge:forge:1.12.2-${forge_version}"
 
     compile 'curse.maven:Llibrary:3116493'
     //compile 'net.ilexiconn:llibrary:1.7.20-1.12.2'
     compile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
 	
 	// compile against the JEI API but do not include it at runtime
-	//Doesn't work properly, JEI causes the dev env to instant crash when trying to start or open the inventory
-	//compileOnly "mezz.jei:jei_${mc_version}:${jei_version}:api"
+	deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
 	// at runtime, use the full JEI jar
-	//runtimeOnly "mezz.jei:jei_${mc_version}:${jei_version}"
+	runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 }
 
 configurations {
