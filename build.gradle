@@ -2,7 +2,7 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        mavenCentral()
+        //mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -10,9 +10,9 @@ buildscript {
 }
         
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven'
+// apply plugin: 'maven'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
+// apply plugin: 'eclipse'
 
 version = "${mc_version}-${mod_version}"
 group = "${mod_group}"
@@ -81,11 +81,21 @@ dependencies {
 	runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 }
 
-configurations {
-	api
-	compile.extendsFrom api
-}
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-sourceSets {
-    main { output.resourcesDir = output.classesDir }
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
 }
