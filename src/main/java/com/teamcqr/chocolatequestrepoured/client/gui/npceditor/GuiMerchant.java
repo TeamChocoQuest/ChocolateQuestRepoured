@@ -33,8 +33,6 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant.png");
 	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant_creative.png");
 
-	private static final int GUI_WIDTH = 307;
-	private static final int GUI_HEIGHT = 166;
 	private final AbstractEntityCQR entity;
 	private final TraderOffer trades;
 	private final GuiButtonTrade[] tradeButtons = new GuiButtonTrade[7];
@@ -50,14 +48,13 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		super(container);
 		this.entity = entity;
 		this.trades = entity.getTrades();
+		this.xSize = 307;
+		this.ySize = 166;
 	}
 
 	@Override
 	public void initGui() {
 		super.initGui();
-
-		this.guiLeft = (this.width - GUI_WIDTH) / 2;
-		this.guiTop = (this.height - GUI_HEIGHT) / 2;
 
 		for (int i = 0; i < this.tradeButtons.length; i++) {
 			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(10 + i, this.guiLeft + 8, this.guiTop + 18 + i * 20, i));
@@ -88,10 +85,10 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 
 		if (this.mc.player.isCreative()) {
 			this.mc.getTextureManager().bindTexture(BG_TEXTURE_CREATIVE);
-			GuiHelper.drawTexture(this.guiLeft - 20.0D, this.guiTop, 0.0D, 0.0D, GUI_WIDTH + 20.0D, GUI_HEIGHT, (GUI_WIDTH + 20) / 512.0D, GUI_HEIGHT / 256.0D);
+			GuiHelper.drawTexture(this.guiLeft - 20.0D, this.guiTop, 0.0D, 0.0D, this.xSize + 20.0D, this.ySize, (this.xSize + 20) / 512.0D, this.ySize / 256.0D);
 		} else {
 			this.mc.getTextureManager().bindTexture(BG_TEXTURE);
-			GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH / 512.0D, GUI_HEIGHT / 256.0D);
+			GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, this.xSize, this.ySize, this.xSize / 512.0D, this.ySize / 256.0D);
 		}
 
 		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
@@ -210,6 +207,16 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 	@Override
 	public void renderToolTip(ItemStack stack, int x, int y) {
 		super.renderToolTip(stack, x, y);
+	}
+
+	@Override
+	public int getGuiLeft() {
+		return super.getGuiLeft() - (this.mc.player.isCreative() ? 20 : 0);
+	}
+
+	@Override
+	public int getXSize() {
+		return super.getXSize() + (this.mc.player.isCreative() ? 20 : 0);
 	}
 
 }

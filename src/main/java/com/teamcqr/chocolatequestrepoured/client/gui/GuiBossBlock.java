@@ -15,19 +15,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiBossBlock extends GuiContainer {
 
 	private static final ResourceLocation GUI_BOSS_BLOCK = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_boss_block.png");
-	private static final int GUI_WIDTH = 176;
-	private static final int GUI_HEIGHT = 132;
 
 	public GuiBossBlock(Container inventorySlotsIn) {
 		super(inventorySlotsIn);
-	}
-
-	@Override
-	public void initGui() {
-		super.initGui();
-
-		this.guiLeft = (this.width - GUI_WIDTH) / 2;
-		this.guiTop = (this.height - GUI_HEIGHT) / 2;
+		this.xSize = 176;
+		this.ySize = 132;
 	}
 
 	@Override
@@ -47,7 +39,7 @@ public class GuiBossBlock extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(GUI_BOSS_BLOCK);
-		GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH / 256.0D, GUI_HEIGHT / 256.0D);
+		GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, this.xSize, this.ySize, this.xSize / 256.0D, this.ySize / 256.0D);
 	}
 
 }

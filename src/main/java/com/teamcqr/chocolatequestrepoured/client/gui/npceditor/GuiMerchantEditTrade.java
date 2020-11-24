@@ -29,8 +29,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiMerchantEditTrade extends GuiContainer {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
-	private static final int GUI_WIDTH = 304;
-	private static final int GUI_HEIGHT = 166;
 
 	private final AbstractEntityCQR entity;
 	private final int tradeIndex;
@@ -52,14 +50,13 @@ public class GuiMerchantEditTrade extends GuiContainer {
 		this.entity = entity;
 		this.tradeIndex = tradeIndex;
 		this.trade = entity.getTrades().get(tradeIndex);
+		this.xSize = 304;
+		this.ySize = 166;
 	}
 
 	@Override
 	public void initGui() {
 		super.initGui();
-
-		this.guiLeft = (this.width - GUI_WIDTH) / 2;
-		this.guiTop = (this.height - GUI_HEIGHT) / 2;
 
 		this.addButton(new GuiButton(0, this.guiLeft + 155, this.guiTop + 139, 142, 20, "Cancel"));
 		this.addButton(new GuiButton(1, this.guiLeft + 7, this.guiTop + 139, 142, 20, "Apply"));
@@ -154,7 +151,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		this.drawDefaultBackground();
 		this.mc.getTextureManager().bindTexture(BG_TEXTURE);
-		GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH / 512.0D, GUI_HEIGHT / 256.0D);
+		GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, this.xSize, this.ySize, this.xSize / 512.0D, this.ySize / 256.0D);
 
 		this.fontRenderer.drawString("Ignore Meta", this.guiLeft + 7, this.guiTop + 33, 0x404040);
 		this.fontRenderer.drawString("Ignore NBT", this.guiLeft + 7, this.guiTop + 46, 0x404040);
