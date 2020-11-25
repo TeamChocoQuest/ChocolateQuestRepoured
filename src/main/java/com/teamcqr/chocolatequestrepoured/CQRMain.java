@@ -60,7 +60,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:llibrary@[1.7.20]; required:forge@[14.23.5.2817,)")
+@Mod(modid = Reference.MODID)
 public class CQRMain {
 
 	@Instance
