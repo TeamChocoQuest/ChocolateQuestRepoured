@@ -38,6 +38,7 @@ public class DungeonGenerator {
 	protected EnumDungeonGeneratorState state = EnumDungeonGeneratorState.PRE_GENERATION;
 	private long tickTime;
 	private ForgeChunkManager.Ticket chunkTicket;
+	private boolean ticketRequested;
 
 	public enum EnumDungeonGeneratorState {
 		PRE_GENERATION, GENERATION, POST_GENERATION;
@@ -102,14 +103,15 @@ public class DungeonGenerator {
 		}
 		this.state = EnumDungeonGeneratorState.values()[compound.getInteger("state")];
 		this.dungeonName = compound.getString("dungeonName");
-
-		if (this.state == EnumDungeonGeneratorState.GENERATION) {
-			this.chunkTicket = ChunkUtil.getTicket(this.world, this.minPos, this.maxPos, true);
-		}
 	}
 
 	public void tick() {
 		if (this.state == EnumDungeonGeneratorState.GENERATION) {
+			if (!this.ticketRequested) {
+				this.chunkTicket = ChunkUtil.getTicket(this.world, this.minPos, this.maxPos, true);
+				this.ticketRequested = true;
+			}
+
 			this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1000000, CQRConfig.advanced.generationSpeed * 1000000);
 			int i = 0;
 
@@ -193,8 +195,6 @@ public class DungeonGenerator {
 			}
 
 			this.state = EnumDungeonGeneratorState.GENERATION;
-
-			this.chunkTicket = ChunkUtil.getTicket(this.world, this.minPos, this.maxPos, true);
 		}
 	}
 
