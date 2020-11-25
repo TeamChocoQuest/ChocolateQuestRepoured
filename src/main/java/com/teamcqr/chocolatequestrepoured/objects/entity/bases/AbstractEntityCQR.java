@@ -2,7 +2,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -126,6 +128,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected BlockPos homePosition = null;
 	protected UUID leaderUUID;
 	protected EntityLivingBase leader = null;
+	private final Map<UUID, EntityLivingBase> followers = new HashMap<>();
 	protected boolean holdingPotion;
 	protected byte usedPotions = (byte) 0;
 	protected double healthScale = 1.0D;
@@ -900,6 +903,58 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.getLeader() != null;
 	}
 
+	public boolean isLeader() {
+		boolean isLeader = false;
+		List<UUID> toRemove = new ArrayList<>();
+
+		for (Map.Entry<UUID, EntityLivingBase> entry : this.followers.entrySet()) {
+			UUID uuid = entry.getKey();
+			EntityLivingBase entity = entry.getValue();
+
+			if (entity != null) {
+				if (!entity.isEntityAlive()) {
+					toRemove.add(uuid);
+				} else {
+					isLeader = true;
+				}
+			} else {
+				Entity newEntity = EntityUtil.getEntityByUUID(this.world, uuid);
+
+				if (newEntity != null) {
+					if (newEntity instanceof EntityLivingBase && newEntity.isEntityAlive()) {
+						this.followers.put(uuid, (EntityLivingBase) newEntity);
+						isLeader = true;
+					} else {
+						toRemove.add(uuid);
+					}
+				}
+			}
+		}
+
+		for (UUID uuid : toRemove) {
+			this.followers.remove(uuid);
+		}
+
+		return isLeader;
+	}
+
+	public void addFollower(EntityLivingBase entity) {
+		if (entity == null) {
+			return;
+		}
+		if (!entity.isEntityAlive()) {
+			return;
+		}
+		this.followers.put(entity.getPersistentID(), entity);
+	}
+
+	public void removeFollower(EntityLivingBase entity) {
+		if (entity == null) {
+			return;
+		}
+		this.followers.remove(entity.getPersistentID());
+	}
+
 	public BlockPos getHomePositionCQR() {
 		return this.homePosition;
 	}
@@ -1171,11 +1226,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public ECQREntityArmPoses getArmPose() {
 		return ECQREntityArmPoses.valueOf(this.dataManager.get(ARM_POSE));
-	}
-
-	public boolean isLeader() {
-		// TODO: Implement team building
-		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -1497,7 +1547,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onPutInSpawner() {
 		if (this.hasHomePositionCQR() && this.getHomePositionCQR() != null) {
 			// Recalculate the path positions to my new home
-			BlockPos homeNew = this.getPosition();
+			BlockPos homeNew = new BlockPos(this);
 			BlockPos v = homeNew.subtract(this.getHomePositionCQR());
 			for (int i = 0; i < this.pathPoints.length; i++) {
 				this.pathPoints[i] = this.pathPoints[i].subtract(v);
