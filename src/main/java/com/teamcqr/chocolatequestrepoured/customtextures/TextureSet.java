@@ -72,11 +72,14 @@ public class TextureSet {
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity ent) {
 		ResourceLocation ers = EntityList.getKey(ent);
-		if (this.entityTextureMap.containsKey(ers)) {
+		System.out.println("Searching texture for " + ers.toString() +" in texture set: " + name);
+		if (this.entityTextureMap.containsKey(ers) && this.entityTextureMap.get(ers).size() > 0) {
 			Object[] textures = this.entityTextureMap.get(ers).toArray();
 			int indx = random.nextInt(textures.length);
+			System.out.println("Returning: " + ((ResourceLocation) textures[indx]).toString());
 			return (ResourceLocation) textures[indx];
 		}
+		System.out.println("No textures defined! Returning null as resloc");
 		return null;
 	}
 
