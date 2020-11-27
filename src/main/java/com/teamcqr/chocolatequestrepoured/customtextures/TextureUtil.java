@@ -2,7 +2,12 @@ package com.teamcqr.chocolatequestrepoured.customtextures;
 
 import java.io.File;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.resource.VanillaResourceType;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,6 +36,17 @@ public class TextureUtil {
 			// Ignore
 		}
 		return false;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void reloadResourcepacks() {
+		CTResourcepack.loadAllTextures();
+		IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
+		if (rm instanceof SimpleReloadableResourceManager) {
+			((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
+		} else {
+			FMLClientHandler.instance().refreshResources(VanillaResourceType.TEXTURES);
+		}
 	}
 
 }

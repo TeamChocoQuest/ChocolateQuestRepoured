@@ -59,13 +59,7 @@ public class ClientPacketHandler {
 		}
 
 		// and finally we need to reload our resourcepack
-		IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
-		if (rm instanceof SimpleReloadableResourceManager) {
-			((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
-		} else {
-			FMLClientHandler.instance().refreshResources(VanillaResourceType.TEXTURES);
-		}
-		CTResourcepack.loadAllTextures();
+		TextureUtil.reloadResourcepacks();
 	}
 
 }

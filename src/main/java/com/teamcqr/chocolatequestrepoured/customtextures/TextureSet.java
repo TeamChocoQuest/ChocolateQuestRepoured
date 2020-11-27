@@ -23,6 +23,7 @@ public class TextureSet {
 	private String name;
 	private Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
 	private static Map<String, File> textures = new HashMap<>();
+	private static Map<String, ResourceLocation> texNameRLMap = new HashMap<>();
 
 	// FOR CLIENT
 	public TextureSet(String name) {
@@ -55,6 +56,7 @@ public class TextureSet {
 					if (tf != null && tf.exists()) {
 						textures.put(texture + ".png", tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
+						texNameRLMap.put(texture + ".png",rs);
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
 						// }
@@ -113,6 +115,10 @@ public class TextureSet {
 
 	public static Map<String, File> getLoadedTextures() {
 		return new HashMap<>(TextureSet.textures);
+	}
+	
+	public static ResourceLocation getResLocOfTexture(String textureFilePath) {
+		return texNameRLMap.getOrDefault(textureFilePath, new ResourceLocation("cqrepoured:wtf"));
 	}
 
 	public Map<ResourceLocation, Set<ResourceLocation>> getMappings() {

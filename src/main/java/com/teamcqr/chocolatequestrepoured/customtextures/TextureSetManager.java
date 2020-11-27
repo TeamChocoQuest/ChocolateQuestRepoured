@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketCustomTex
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,6 +58,7 @@ public class TextureSetManager {
 
 	public static void loadTextureSetsFromFolder(File folder) {
 		getInstance().clearData();
+		unloadTextures();
 		if (folder.isDirectory()) {
 			List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "cfg", "prop", "properties" }, true));
 			int loadedSets = 0;
@@ -82,6 +84,14 @@ public class TextureSetManager {
 				}
 			}
 			CQRMain.logger.info("Loaded " + loadedSets + " texture Sets!");
+			
+			if(!FMLCommonHandler.instance().getSide().isServer()) {
+				//Load the textures
+				for(Map.Entry<String, File>  entry : TextureSet.getLoadedTextures().entrySet()) {
+					TextureUtil.loadTextureInternal(entry.getValue(), TextureSet.getResLocOfTexture(entry.getKey()));
+				}
+				TextureUtil.reloadResourcepacks();
+			}
 		}
 	}
 
@@ -143,6 +153,14 @@ public class TextureSetManager {
 	@Nullable
 	public TextureSet getTextureSet(String name) {
 		return this.textureSets.getOrDefault(name, null);
+	}
+	
+	public static List<TextureSet> getAllTextureSets() {
+		return getInstance().getAllTextureSetsImpl();
+	}
+
+	private List<TextureSet> getAllTextureSetsImpl() {
+		return new ArrayList<>(this.textureSets.values());
 	}
 
 }
