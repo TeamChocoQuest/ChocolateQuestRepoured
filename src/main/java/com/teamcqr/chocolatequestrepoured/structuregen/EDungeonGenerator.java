@@ -18,19 +18,12 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
  */
 public enum EDungeonGenerator {
 
-	TEMPLATE_SURFACE(DungeonTemplateSurface::new),
-	RANDOMIZED_CASTLE(DungeonRandomizedCastle::new),
-	VOLCANO(DungeonVolcano::new),
-	GRID_CITY(DungeonGridCity::new),
-	HANGING_CITY(DungeonHangingCity::new),
-	LINEAR_STRONGHOLD(DungeonStrongholdLinear::new),
+	TEMPLATE_SURFACE(DungeonTemplateSurface::new), RANDOMIZED_CASTLE(DungeonRandomizedCastle::new), VOLCANO(DungeonVolcano::new), GRID_CITY(DungeonGridCity::new), HANGING_CITY(DungeonHangingCity::new), LINEAR_STRONGHOLD(DungeonStrongholdLinear::new),
 	VEGETATED_CAVE(DungeonVegetatedCave::new),
 
-	OPEN_STRONGHOLD(DungeonStrongholdOpen::new),
-	GUARDED_CASTLE(DungeonGuardedCastle::new),
+	OPEN_STRONGHOLD(DungeonStrongholdOpen::new), GUARDED_CASTLE(DungeonGuardedCastle::new),
 
-	ABANDONED((name, prop) -> null),
-	RUIN((name, prop) -> null);
+	ABANDONED((name, prop) -> null), RUIN((name, prop) -> null);
 
 	private IDungeonGenerator generator;
 

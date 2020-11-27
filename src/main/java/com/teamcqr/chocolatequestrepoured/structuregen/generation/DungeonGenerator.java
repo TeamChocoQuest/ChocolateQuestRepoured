@@ -186,7 +186,8 @@ public class DungeonGenerator {
 
 			if (dungeon != null && dungeon.isProtectionSystemEnabled()) {
 				this.protectedRegion = new ProtectedRegion(this.world, dungeon.getDungeonName(), this.pos.up(dungeon.getUnderGroundOffset()), this.minPos, this.maxPos);
-				this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
+				this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon
+						.ignoreNoBossOrNexus());
 				ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 
 				if (manager != null) {

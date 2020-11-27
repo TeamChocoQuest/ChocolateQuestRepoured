@@ -189,12 +189,8 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 						}
 						break;
 					/*
-					 * case 2:
-					 * if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(5,
-					 * this.random))) {
-					 * RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
-					 * }
-					 * break;
+					 * case 2: if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(5, this.random))) { RoomDecorTypes.UNLIT_TORCH.build(world, genArray,
+					 * this, dungeon, pos, side, this.usedDecoPositions); } break;
 					 */
 					default:
 						break;

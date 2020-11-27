@@ -112,8 +112,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D,
-							-player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
@@ -137,8 +137,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D,
-							-player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
@@ -162,8 +162,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D,
-							-player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}
@@ -183,8 +183,8 @@ public class ItemSpikedGlove extends Item {
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
 				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
-					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D,
-							-player.motionZ * 4.0D, Block.getStateId(iblockstate));
+					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + ((double) itemRand.nextFloat() - 0.5D) * (double) player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + ((double) itemRand.nextFloat()
+							- 0.5D) * (double) player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, Block.getStateId(iblockstate));
 				}
 			}
 		}

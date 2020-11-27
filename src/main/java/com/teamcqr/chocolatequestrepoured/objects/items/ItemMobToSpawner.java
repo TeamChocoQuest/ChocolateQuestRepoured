@@ -25,8 +25,7 @@ public class ItemMobToSpawner extends Item {
 	}
 
 	/*
-	 * @Override public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) { Block block =
-	 * world.getBlockState(pos).getBlock(); return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER; }
+	 * @Override public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) { Block block = world.getBlockState(pos).getBlock(); return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER; }
 	 */
 
 	@Override

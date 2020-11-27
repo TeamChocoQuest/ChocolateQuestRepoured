@@ -18,7 +18,19 @@ package com.teamcqr.chocolatequestrepoured.util;
  */
 
 public class SimplexNoise { // Simplex noise in 2D, 3D and 4D
-	private static Grad grad3[] = { new Grad(1, 1, 0), new Grad(-1, 1, 0), new Grad(1, -1, 0), new Grad(-1, -1, 0), new Grad(1, 0, 1), new Grad(-1, 0, 1), new Grad(1, 0, -1), new Grad(-1, 0, -1), new Grad(0, 1, 1), new Grad(0, -1, 1), new Grad(0, 1, -1), new Grad(0, -1, -1) };
+	private static Grad grad3[] = {
+			new Grad(1, 1, 0),
+			new Grad(-1, 1, 0),
+			new Grad(1, -1, 0),
+			new Grad(-1, -1, 0),
+			new Grad(1, 0, 1),
+			new Grad(-1, 0, 1),
+			new Grad(1, 0, -1),
+			new Grad(-1, 0, -1),
+			new Grad(0, 1, 1),
+			new Grad(0, -1, 1),
+			new Grad(0, 1, -1),
+			new Grad(0, -1, -1) };
 
 	private static Grad grad4[] = {
 			new Grad(0, 1, 1, 1),

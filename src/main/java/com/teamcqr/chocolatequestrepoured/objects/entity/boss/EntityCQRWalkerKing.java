@@ -261,7 +261,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 		boolean spectralFlag = false;
 		if (source.getTrueSource() instanceof EntityLivingBase) {
-			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
+			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source
+					.getTrueSource()).getHeldItemOffhand()) > 0) {
 				amount *= 2;
 				spectralFlag = true;
 			}
@@ -475,8 +476,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		ItemStack sword = new ItemStack(CQRItems.SWORD_WALKER, 1);
 
 		/*
-		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20
-		 * + getRNG().nextInt(41), true); }
+		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true); }
 		 */
 		sword = EnchantmentHelper.addRandomEnchantment(this.getRNG(), sword, 30, true);
 		if (!EnchantmentHelper.hasVanishingCurse(sword)) {

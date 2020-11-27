@@ -56,7 +56,7 @@ public class TextureSet {
 					if (tf != null && tf.exists()) {
 						textures.put(texture + ".png", tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
-						texNameRLMap.put(texture + ".png",rs);
+						texNameRLMap.put(texture + ".png", rs);
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
 						// }
@@ -74,7 +74,7 @@ public class TextureSet {
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity ent) {
 		ResourceLocation ers = EntityList.getKey(ent);
-		System.out.println("Searching texture for " + ers.toString() +" in texture set: " + name);
+		System.out.println("Searching texture for " + ers.toString() + " in texture set: " + name);
 		if (this.entityTextureMap.containsKey(ers) && this.entityTextureMap.get(ers).size() > 0) {
 			Object[] textures = this.entityTextureMap.get(ers).toArray();
 			int indx = random.nextInt(textures.length);
@@ -116,7 +116,7 @@ public class TextureSet {
 	public static Map<String, File> getLoadedTextures() {
 		return new HashMap<>(TextureSet.textures);
 	}
-	
+
 	public static ResourceLocation getResLocOfTexture(String textureFilePath) {
 		return texNameRLMap.getOrDefault(textureFilePath, new ResourceLocation("cqrepoured:wtf"));
 	}

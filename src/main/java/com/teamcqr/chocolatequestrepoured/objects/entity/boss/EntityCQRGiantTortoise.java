@@ -199,10 +199,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 
 		/*
-		 * if (source.isExplosion() && isInShell() && canBeStunned && !stunned) {
-		 * stunned = true;
-		 * canBeStunned = false;
-		 * }
+		 * if (source.isExplosion() && isInShell() && canBeStunned && !stunned) { stunned = true; canBeStunned = false; }
 		 */
 		this.partSoundFlag = sentFromPart;
 

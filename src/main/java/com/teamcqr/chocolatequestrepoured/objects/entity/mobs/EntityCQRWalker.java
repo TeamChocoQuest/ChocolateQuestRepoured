@@ -59,7 +59,8 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 			amount *= 2;
 		}
 		if (source.getTrueSource() instanceof EntityLivingBase) {
-			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
+			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source
+					.getTrueSource()).getHeldItemOffhand()) > 0) {
 				amount *= 2;
 			}
 		}

@@ -199,12 +199,12 @@ public class EventsHandler {
 		// Send packets with ct's to player
 		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
 			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
-			
+
 			FactionRegistry.instance().handlePlayerLogin((EntityPlayerMP) event.player);
-		} else if(CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
-			//TODO: Load textures
+		} else if (CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
+			// TODO: Load textures
 		}
-		
+
 	}
 
 	@SubscribeEvent

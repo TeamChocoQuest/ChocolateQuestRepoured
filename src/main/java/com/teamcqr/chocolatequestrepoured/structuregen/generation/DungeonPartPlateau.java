@@ -100,7 +100,8 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 			int y1 = posY;
 
 			while (y1 < this.maxPos.getY()) {
-				if ((this.pos1.getX() >= this.minPos.getX() + this.wallSize) && (this.pos1.getX() <= this.maxPos.getX() - this.wallSize) && (this.pos1.getZ() >= this.minPos.getZ() + this.wallSize) && (this.pos1.getZ() <= this.maxPos.getZ() - this.wallSize)) {
+				if ((this.pos1.getX() >= this.minPos.getX() + this.wallSize) && (this.pos1.getX() <= this.maxPos.getX() - this.wallSize) && (this.pos1.getZ() >= this.minPos.getZ() + this.wallSize) && (this.pos1.getZ() <= this.maxPos.getZ()
+						- this.wallSize)) {
 					this.pos1.setY(y1);
 					this.world.setBlockState(this.pos1, state1, 18);
 				} else {

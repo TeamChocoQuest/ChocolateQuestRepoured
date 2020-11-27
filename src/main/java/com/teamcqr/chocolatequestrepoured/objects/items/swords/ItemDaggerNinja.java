@@ -39,7 +39,8 @@ public class ItemDaggerNinja extends ItemDagger {
 			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat()
+						- 0.5F, itemRand.nextFloat() - 0.5F);
 			}
 
 			double x = -Math.sin(Math.toRadians(playerIn.rotationYaw));
@@ -61,7 +62,8 @@ public class ItemDaggerNinja extends ItemDagger {
 			stack.damageItem(1, playerIn);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat()
+						- 0.5F, itemRand.nextFloat() - 0.5F);
 			}
 		} else {
 			super.onItemRightClick(worldIn, playerIn, handIn);

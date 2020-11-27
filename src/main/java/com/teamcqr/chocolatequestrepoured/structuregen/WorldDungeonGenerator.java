@@ -88,11 +88,11 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			BlockPos p = new BlockPos((chunkX << 4) + 8, world.getSeaLevel(), (chunkZ << 4) + 8);
 			for (String sn : STRUCTURE_NAMES_INTERNAL) {
 				try {
-					BlockPos vanillaStructurePos = world.findNearestStructure(sn, p, /*CQRConfig.advanced.generationRespectUnexploredStructures*/false);
+					BlockPos vanillaStructurePos = world.findNearestStructure(sn, p, /* CQRConfig.advanced.generationRespectUnexploredStructures */false);
 					if (vanillaStructurePos != null && p.distanceSq(vanillaStructurePos) <= CQRConfig.advanced.generationMinDistanceToOtherStructure * CQRConfig.advanced.generationMinDistanceToOtherStructure) {
 						return;
 					}
-					if(chunkGenerator.isInsideStructure(world, sn, p)) {
+					if (chunkGenerator.isInsideStructure(world, sn, p)) {
 						return;
 					}
 				} catch (NullPointerException e) {

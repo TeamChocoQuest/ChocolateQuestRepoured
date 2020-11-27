@@ -5,8 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * ModelHook - DerToaster98
- * Created using Tabula 7.0.1
+ * ModelHook - DerToaster98 Created using Tabula 7.0.1
  */
 public class ModelHook extends ModelBase {
 	public ModelRenderer stem;

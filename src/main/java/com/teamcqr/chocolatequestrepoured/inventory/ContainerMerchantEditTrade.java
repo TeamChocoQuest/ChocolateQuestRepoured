@@ -81,15 +81,8 @@ public class ContainerMerchantEditTrade extends Container {
 		super.onContainerClosed(playerIn);
 
 		/*
-		 * if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected()) {
-		 * for (int i = 0; i < 4; i++) {
-		 * playerIn.dropItem(this.tradeInventory.removeStackFromSlot(i), false);
-		 * }
-		 * } else {
-		 * for (int i = 0; i < 4; i++) {
-		 * playerIn.inventory.placeItemBackInInventory(playerIn.world, this.tradeInventory.removeStackFromSlot(i));
-		 * }
-		 * }
+		 * if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected()) { for (int i = 0; i < 4; i++) { playerIn.dropItem(this.tradeInventory.removeStackFromSlot(i), false); } } else { for (int
+		 * i = 0; i < 4; i++) { playerIn.inventory.placeItemBackInInventory(playerIn.world, this.tradeInventory.removeStackFromSlot(i)); } }
 		 */
 	}
 

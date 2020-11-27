@@ -102,7 +102,8 @@ public class StrongholdFloorOpen {
 					int multiplierX = iX - this.entranceStairIndex.getFirst();
 					int multiplierZ = iZ - this.entranceStairIndex.getSecond();
 
-					BlockPos pos = new BlockPos(this.entranceStairBlockPosition.getFirst() + (multiplierX * this.generator.getDungeon().getRoomSizeX()), this.yPos, this.entranceStairBlockPosition.getSecond() + (multiplierZ * this.generator.getDungeon().getRoomSizeZ()));
+					BlockPos pos = new BlockPos(this.entranceStairBlockPosition.getFirst() + (multiplierX * this.generator.getDungeon().getRoomSizeX()), this.yPos, this.entranceStairBlockPosition.getSecond() + (multiplierZ * this.generator
+							.getDungeon().getRoomSizeZ()));
 
 					this.roomGrid[iX][iZ] = pos;
 					if (iX == this.exitStairIndex.getFirst() && iZ == this.exitStairIndex.getSecond()) {
@@ -187,14 +188,15 @@ public class StrongholdFloorOpen {
 		}
 		// Top
 		for (BlockPos pT : BlockPos.getAllInBoxMutable(p1.add(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.add(0, addY, 0))) {
-			if (!(pT.getX() >= this.entranceStairCorners.getFirst().getX() && pT.getX() <= this.entranceStairCorners.getSecond().getX() && pT.getZ() >= this.entranceStairCorners.getFirst().getZ() && pT.getZ() <= this.entranceStairCorners.getSecond().getZ())) {
+			if (!(pT.getX() >= this.entranceStairCorners.getFirst().getX() && pT.getX() <= this.entranceStairCorners.getSecond().getX() && pT.getZ() >= this.entranceStairCorners.getFirst().getZ() && pT.getZ() <= this.entranceStairCorners.getSecond()
+					.getZ())) {
 				stateMap.put(pT, state);
 			}
 		}
 		// Bottom
 		for (BlockPos pB : BlockPos.getAllInBoxMutable(p1, p4)) {
-			if (this.exitStairIsBossRoom
-					|| (pB != null && this.exitStairCorners != null && !(pB.getX() >= this.exitStairCorners.getFirst().getX() && pB.getX() <= this.exitStairCorners.getSecond().getX() && pB.getZ() >= this.exitStairCorners.getFirst().getZ() && pB.getZ() <= this.exitStairCorners.getSecond().getZ()))) {
+			if (this.exitStairIsBossRoom || (pB != null && this.exitStairCorners != null && !(pB.getX() >= this.exitStairCorners.getFirst().getX() && pB.getX() <= this.exitStairCorners.getSecond().getX() && pB.getZ() >= this.exitStairCorners
+					.getFirst().getZ() && pB.getZ() <= this.exitStairCorners.getSecond().getZ()))) {
 				stateMap.put(pB, state);
 			}
 		}

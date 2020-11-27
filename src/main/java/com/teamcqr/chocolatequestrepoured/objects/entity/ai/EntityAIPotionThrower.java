@@ -26,12 +26,14 @@ public class EntityAIPotionThrower extends EntityAIAttack {
 
 	@Override
 	public boolean shouldExecute() {
-		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion || this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion) && super.shouldExecute();
+		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion || this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion)
+				&& super.shouldExecute();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion || this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion) && super.shouldContinueExecuting();
+		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion || this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion)
+				&& super.shouldContinueExecuting();
 	}
 
 	@Override

@@ -84,10 +84,10 @@ public class TextureSetManager {
 				}
 			}
 			CQRMain.logger.info("Loaded " + loadedSets + " texture Sets!");
-			
-			if(!FMLCommonHandler.instance().getSide().isServer()) {
-				//Load the textures
-				for(Map.Entry<String, File>  entry : TextureSet.getLoadedTextures().entrySet()) {
+
+			if (!FMLCommonHandler.instance().getSide().isServer()) {
+				// Load the textures
+				for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
 					TextureUtil.loadTextureInternal(entry.getValue(), TextureSet.getResLocOfTexture(entry.getKey()));
 				}
 				TextureUtil.reloadResourcepacks();
@@ -112,12 +112,9 @@ public class TextureSetManager {
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
 		SPacketCustomTextures packet = new SPacketCustomTextures();
 		/*
-		 * for (File texture : TextureSet.getLoadedTextures()) {
-		 * String base64 = CompressionUtil.encodeFileToBase64(texture);
-		 * String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
+		 * for (File texture : TextureSet.getLoadedTextures()) { String base64 = CompressionUtil.encodeFileToBase64(texture); String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
 		 * 
-		 * packet.addPair(base64, path);
-		 * }
+		 * packet.addPair(base64, path); }
 		 */
 		for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
 			byte[] base64 = CompressionUtil.encodeFileToBase64(entry.getValue());
@@ -154,7 +151,7 @@ public class TextureSetManager {
 	public TextureSet getTextureSet(String name) {
 		return this.textureSets.getOrDefault(name, null);
 	}
-	
+
 	public static List<TextureSet> getAllTextureSets() {
 		return getInstance().getAllTextureSetsImpl();
 	}

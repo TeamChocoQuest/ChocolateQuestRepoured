@@ -180,22 +180,9 @@ public abstract class DungeonBase {
 	/*
 	 * private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
 	 * 
-	 * public File getStructureFileFromDirectory(File parentDir, Random rand) {
-	 * List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
-	 * if (!files.isEmpty()) {
-	 * File file = files.get(rand.nextInt(files.size()));
-	 * Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
-	 * if (lastUsedFileHash == 0) {
-	 * lastUsedFileHash = file.hashCode();
-	 * } else if (files.size() > 1 && file.hashCode() == lastUsedFileHash) {
-	 * while (file.hashCode() == lastUsedFileHash) {
-	 * file = files.get(rand.nextInt(files.size()));
-	 * }
-	 * }
-	 * return file;
-	 * }
-	 * return null;
-	 * }
+	 * public File getStructureFileFromDirectory(File parentDir, Random rand) { List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true)); if (!files.isEmpty()) { File file =
+	 * files.get(rand.nextInt(files.size())); Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0)); if (lastUsedFileHash == 0) { lastUsedFileHash = file.hashCode(); } else if
+	 * (files.size() > 1 && file.hashCode() == lastUsedFileHash) { while (file.hashCode() == lastUsedFileHash) { file = files.get(rand.nextInt(files.size())); } } return file; } return null; }
 	 */
 
 	private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();

@@ -196,7 +196,8 @@ public class GuiSpawner extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.minSpawnDelayTextField.isFocused() || this.maxSpawnDelayTextField.isFocused() || this.spawnCountTextField.isFocused() || this.maxNearbyEntitiesTextField.isFocused() || this.activatingRangeFromPlayerTextField.isFocused() || this.spawnRangeTextField.isFocused()) {
+		if (this.minSpawnDelayTextField.isFocused() || this.maxSpawnDelayTextField.isFocused() || this.spawnCountTextField.isFocused() || this.maxNearbyEntitiesTextField.isFocused() || this.activatingRangeFromPlayerTextField.isFocused()
+				|| this.spawnRangeTextField.isFocused()) {
 			if (keyCode == 1) {
 				this.minSpawnDelayTextField.setFocused(false);
 				this.maxSpawnDelayTextField.setFocused(false);

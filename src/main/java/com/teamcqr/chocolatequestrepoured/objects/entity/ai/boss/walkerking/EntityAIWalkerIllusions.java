@@ -29,15 +29,16 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 	@Override
 	public void startCastingSpell() {
 		// entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-		this.entity.world.getEntitiesInAABBexcluding(this.entity, new AxisAlignedBB(this.entity.getPosition().add(-20, -10, -20), this.entity.getPosition().add(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(new Consumer<Entity>() {
+		this.entity.world.getEntitiesInAABBexcluding(this.entity, new AxisAlignedBB(this.entity.getPosition().add(-20, -10, -20), this.entity.getPosition().add(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(
+				new Consumer<Entity>() {
 
-			@Override
-			public void accept(Entity t) {
-				if (t instanceof EntityLivingBase) {
-					((EntityLivingBase) t).addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-				}
-			}
-		});
+					@Override
+					public void accept(Entity t) {
+						if (t instanceof EntityLivingBase) {
+							((EntityLivingBase) t).addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
+						}
+					}
+				});
 		Vec3d v = new Vec3d(2.5, 0, 0);
 		for (int i = 0; i < 3; i++) {
 			Vec3d pos = this.entity.getPositionVector().add(VectorUtil.rotateVectorAroundY(v, 120 * i));

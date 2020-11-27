@@ -5,8 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * SpiderEgg - DerToaster
- * Created using Tabula 7.0.1
+ * SpiderEgg - DerToaster Created using Tabula 7.0.1
  */
 public class ModelSpiderEgg extends ModelBase {
 	public ModelRenderer shape1;

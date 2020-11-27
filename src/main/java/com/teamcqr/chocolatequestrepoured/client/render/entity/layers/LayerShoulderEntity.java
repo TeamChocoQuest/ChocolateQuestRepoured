@@ -41,8 +41,8 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
 			NBTTagCompound nbttagcompound = entitylivingbaseIn.getLeftShoulderEntity();
 
 			if (!nbttagcompound.isEmpty()) {
-				LayerShoulderEntity.DataHolder layerentityonshoulder$dataholder = this.renderEntityOnShoulder(entitylivingbaseIn, this.leftUniqueId, nbttagcompound, this.leftRenderer, this.leftModel, this.leftResource, this.leftEntityClass, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch,
-						scale, true);
+				LayerShoulderEntity.DataHolder layerentityonshoulder$dataholder = this.renderEntityOnShoulder(entitylivingbaseIn, this.leftUniqueId, nbttagcompound, this.leftRenderer, this.leftModel, this.leftResource, this.leftEntityClass,
+						limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, true);
 				this.leftUniqueId = layerentityonshoulder$dataholder.entityId;
 				this.leftRenderer = layerentityonshoulder$dataholder.renderer;
 				this.leftResource = layerentityonshoulder$dataholder.textureLocation;
@@ -54,8 +54,8 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
 		}
 	}
 
-	private LayerShoulderEntity.DataHolder renderEntityOnShoulder(AbstractEntityCQR p_192864_1_, @Nullable UUID p_192864_2_, NBTTagCompound p_192864_3_, RenderLivingBase<? extends EntityLivingBase> p_192864_4_, ModelBase p_192864_5_, ResourceLocation p_192864_6_, Class<?> p_192864_7_, float p_192864_8_,
-			float p_192864_9_, float p_192864_10_, float p_192864_11_, float p_192864_12_, float p_192864_13_, float p_192864_14_, boolean p_192864_15_) {
+	private LayerShoulderEntity.DataHolder renderEntityOnShoulder(AbstractEntityCQR p_192864_1_, @Nullable UUID p_192864_2_, NBTTagCompound p_192864_3_, RenderLivingBase<? extends EntityLivingBase> p_192864_4_, ModelBase p_192864_5_,
+			ResourceLocation p_192864_6_, Class<?> p_192864_7_, float p_192864_8_, float p_192864_9_, float p_192864_10_, float p_192864_11_, float p_192864_12_, float p_192864_13_, float p_192864_14_, boolean p_192864_15_) {
 		if (p_192864_2_ == null || !p_192864_2_.equals(p_192864_3_.getUniqueId("UUID"))) {
 			p_192864_2_ = p_192864_3_.getUniqueId("UUID");
 			p_192864_7_ = EntityList.getClassFromName(p_192864_3_.getString("id"));

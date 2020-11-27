@@ -92,8 +92,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
 	}
 
 	/**
-	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and legs, where par1 represents the time(so
-	 * that arms and legs swing back and forth) and par2 represents how "far" arms and legs
+	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how "far" arms and legs
 	 * can swing at most.
 	 */
 	@Override
@@ -141,10 +140,8 @@ public class ModelCQRIllager extends ModelCQRBiped {
 			this.bipedLeftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
 		}
 		/*
-		 * else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.SPELLCASTING) { this.bipedRightArm.rotationPointZ = 0.0F;
-		 * this.bipedRightArm.rotationPointX = -5.0F; this.bipedLeftArm.rotationPointZ = 0.0F;
-		 * this.bipedLeftArm.rotationPointX = 5.0F; this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F; this.bipedLeftArm.rotateAngleX =
-		 * MathHelper.cos(ageInTicks * 0.6662F) * 0.25F; this.bipedRightArm.rotateAngleZ =
+		 * else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.SPELLCASTING) { this.bipedRightArm.rotationPointZ = 0.0F; this.bipedRightArm.rotationPointX = -5.0F; this.bipedLeftArm.rotationPointZ = 0.0F;
+		 * this.bipedLeftArm.rotationPointX = 5.0F; this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F; this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F; this.bipedRightArm.rotateAngleZ =
 		 * 2.3561945F; this.bipedLeftArm.rotateAngleZ = -2.3561945F; this.bipedRightArm.rotateAngleY = 0.0F; this.bipedLeftArm.rotateAngleY = 0.0F; }
 		 */
 		else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.BOW_AND_ARROW) {

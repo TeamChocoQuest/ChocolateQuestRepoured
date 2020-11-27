@@ -72,8 +72,7 @@ public class EntityWalkerTornado extends Entity {
 			}
 
 			/*
-			 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.getOwnerID().equals(entity.getPersistentID()) &&
-			 * entity.isEntityAlive()) { this.owner = entity; } }
+			 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.getOwnerID().equals(entity.getPersistentID()) && entity.isEntityAlive()) { this.owner = entity; } }
 			 */
 		}
 

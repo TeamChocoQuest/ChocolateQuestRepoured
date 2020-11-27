@@ -147,9 +147,7 @@ public class StrongholdBuilder {
 		}
 		if (corner1 != null && corner2 != null && pillar1 != null && pillar2 != null) {
 			/*
-			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) {
-			 * blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null));
-			 * }
+			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) { blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null)); }
 			 */
 			this.buildFloorAndCeiling(corner1, corner2, 5, blockInfoList);
 

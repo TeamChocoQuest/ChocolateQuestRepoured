@@ -8,12 +8,7 @@ import java.util.Set;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.server.packet.SPacketCustomTextures;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.resource.VanillaResourceType;
-import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ClientPacketHandler {
 

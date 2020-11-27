@@ -82,7 +82,8 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 	}
 
 	private void shootBubbles(Vec3d velocity, EntityLivingBase shooter) {
-		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
+		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2
+				* this.getInaccurary() * this.rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 

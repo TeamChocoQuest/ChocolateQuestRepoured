@@ -1076,9 +1076,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (!this.world.isRemote) {
 			// Leader faction is set when assigning the leader
 			/*
-			 * if (this.hasLeader()) {
-			 * return FactionRegistry.instance().getFactionOf(this.getLeader());
-			 * }
+			 * if (this.hasLeader()) { return FactionRegistry.instance().getFactionOf(this.getLeader()); }
 			 */
 			if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
 				this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
