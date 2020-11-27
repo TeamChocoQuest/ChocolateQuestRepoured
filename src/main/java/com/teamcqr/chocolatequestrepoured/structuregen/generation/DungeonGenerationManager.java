@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeModContainer;
 
 public class DungeonGenerationManager {
 
@@ -88,9 +89,12 @@ public class DungeonGenerationManager {
 			}
 
 			if (generateImmediately) {
+				boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
+				ForgeModContainer.logCascadingWorldGeneration = false;
 				while (!structure.isGenerated()) {
 					structure.tick();
 				}
+				ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;
 
 				CQRMain.logger.info("Generated dungeon {} at {}", structure.getDungeonName(), structure.getPos());
 			} else {
