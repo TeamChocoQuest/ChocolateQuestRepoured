@@ -8,8 +8,10 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.VanillaStructureHelper;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -22,8 +24,6 @@ import net.minecraftforge.fml.common.IWorldGenerator;
  * GitHub: https://github.com/DerToaster98
  */
 public class WorldDungeonGenerator implements IWorldGenerator {
-
-	private static final String[] STRUCTURE_NAMES_INTERNAL = { "Stronghold", "Mansion", "Monument", "Village", "Mineshaft", "Temple", "EndCity", "Fortress" };
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -85,19 +85,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 		// Check if no vanilla structure is near
 		if (CQRConfig.advanced.generationRespectOtherStructures) {
-			BlockPos p = new BlockPos((chunkX << 4) + 8, world.getSeaLevel(), (chunkZ << 4) + 8);
-			for (String sn : STRUCTURE_NAMES_INTERNAL) {
-				try {
-					BlockPos vanillaStructurePos = world.findNearestStructure(sn, p, /* CQRConfig.advanced.generationRespectUnexploredStructures */false);
-					if (vanillaStructurePos != null && p.distanceSq(vanillaStructurePos) <= CQRConfig.advanced.generationMinDistanceToOtherStructure * CQRConfig.advanced.generationMinDistanceToOtherStructure) {
-						return;
-					}
-					if (chunkGenerator.isInsideStructure(world, sn, p)) {
-						return;
-					}
-				} catch (NullPointerException e) {
-					// ignore
-				}
+			if (VanillaStructureHelper.isStructureInRange(world, new BlockPos((chunkX << 4) + 8, 64, (chunkZ << 4) + 8), MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16.0D))) {
+				return;
 			}
 		}
 
