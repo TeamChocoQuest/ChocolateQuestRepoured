@@ -92,6 +92,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 					if (vanillaStructurePos != null && p.distanceSq(vanillaStructurePos) <= CQRConfig.advanced.generationMinDistanceToOtherStructure * CQRConfig.advanced.generationMinDistanceToOtherStructure) {
 						return;
 					}
+					if(chunkGenerator.isInsideStructure(world, sn, p)) {
+						return;
+					}
 				} catch (NullPointerException e) {
 					// ignore
 				}
