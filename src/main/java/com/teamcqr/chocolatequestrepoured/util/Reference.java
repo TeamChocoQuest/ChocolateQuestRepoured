@@ -3,14 +3,10 @@ package com.teamcqr.chocolatequestrepoured.util;
 public class Reference {
 
 	public static final String MODID = "cqrepoured";
-	public static final String NAME = "Chocolate Quest Repoured";
 	public static final String VERSION = "2.1.2B";
-	public static final String ACCEPTED_VERSIONS = "[1.12.2]";
+	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 	public static final String CLIENT_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.ClientProxy";
 	public static final String COMMON_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.ServerProxy";
-	public static final String DUNGEON_REGISTRY = "com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry";
-	public static final String DUNGEON_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator";
-	public static final String WALL_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator";
 
 	public static final int EXPORTER_GUI_ID = 1;
 	public static final int SPAWNER_GUI_ID = 2;
