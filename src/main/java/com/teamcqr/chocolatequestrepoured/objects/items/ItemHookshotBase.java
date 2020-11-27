@@ -205,7 +205,8 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 			/*
 			 * ProjectileHookShotHook bulletE = new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());
 			 * 
-			 * Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector()); v = v.normalize(); v = v.scale(3.5D); //bulletE.setVelocity(v.x, v.y, v.z); bulletE.motionX = v.x; bulletE.motionY = v.y; bulletE.motionZ = v.z;
+			 * Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector()); v = v.normalize(); v = v.scale(3.5D); //bulletE.setVelocity(v.x, v.y, v.z);
+			 * bulletE.motionX = v.x; bulletE.motionY = v.y; bulletE.motionZ = v.z;
 			 * bulletE.velocityChanged = true; worldIn.spawnEntity(bulletE);
 			 */
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack()); // new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());

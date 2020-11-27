@@ -69,8 +69,7 @@ public class BlockInfoMap extends AbstractBlockInfo {
 	}
 
 	public BlockInfoMap(int x, int y, int z, EnumFacing facing, TileEntityMap tileEntity) {
-		this(x, y, z, facing, tileEntity.getScale(), tileEntity.getOrientation(), tileEntity.lockOrientation(), tileEntity.getOriginX(), tileEntity.getOriginZ(), tileEntity.getOffsetX(), tileEntity.getOffsetZ(), tileEntity.fillMap(), tileEntity
-				.getFillRadius());
+		this(x, y, z, facing, tileEntity.getScale(), tileEntity.getOrientation(), tileEntity.lockOrientation(), tileEntity.getOriginX(), tileEntity.getOriginZ(), tileEntity.getOffsetX(), tileEntity.getOffsetZ(), tileEntity.fillMap(), tileEntity.getFillRadius());
 	}
 
 	public BlockInfoMap(BlockPos pos, EnumFacing facing, TileEntityMap tileEntity) {

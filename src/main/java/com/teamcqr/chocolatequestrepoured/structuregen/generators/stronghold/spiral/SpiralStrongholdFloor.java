@@ -36,8 +36,7 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 
-	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount,
-			Random rand) {
+	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.entranceCoordinates = entrancePos;

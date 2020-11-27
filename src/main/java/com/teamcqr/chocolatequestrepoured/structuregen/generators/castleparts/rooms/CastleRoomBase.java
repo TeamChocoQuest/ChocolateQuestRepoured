@@ -286,7 +286,8 @@ public abstract class CastleRoomBase {
 	}
 
 	/*
-	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In other words, the layer just above the floor that is not already occupied by walls.
+	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In other words, the layer just above the
+	 * floor that is not already occupied by walls.
 	 */
 	protected ArrayList<BlockPos> getDecorationLayer(int layer) {
 		ArrayList<BlockPos> result = this.getDecorationArea();

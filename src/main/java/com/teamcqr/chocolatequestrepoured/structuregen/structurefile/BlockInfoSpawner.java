@@ -126,8 +126,7 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 		return tileEntitySpawner.writeToNBT(new NBTTagCompound());
 	}
 
-	private void vanillaSpawnerReadFromNBT(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion, TileEntityMobSpawner tileEntityMobSpawner,
-			NBTTagCompound tileentityData) {
+	private void vanillaSpawnerReadFromNBT(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion, TileEntityMobSpawner tileEntityMobSpawner, NBTTagCompound tileentityData) {
 		MobSpawnerBaseLogic spawnerBaseLogic = tileEntityMobSpawner.getSpawnerBaseLogic();
 		NBTTagCompound compound = new NBTTagCompound();
 
@@ -168,8 +167,7 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 		spawnerBaseLogic.readFromNBT(compound);
 	}
 
-	private void cqrSpawnerReadFromNBT(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion, TileEntitySpawner tileEntitySpawner,
-			NBTTagCompound tileentityData) {
+	private void cqrSpawnerReadFromNBT(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion, TileEntitySpawner tileEntitySpawner, NBTTagCompound tileentityData) {
 		NBTTagList items = tileentityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < items.tagCount() && i < tileEntitySpawner.inventory.getSlots(); i++) {
 			NBTTagCompound entityTag = ((NBTTagCompound) items.get(i)).getCompoundTag("tag").getCompoundTag("EntityIn");

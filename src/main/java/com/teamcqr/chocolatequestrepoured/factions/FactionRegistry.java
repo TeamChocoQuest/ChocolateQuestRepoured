@@ -442,7 +442,8 @@ public class FactionRegistry {
 							/*
 							 * repuDataList.forEach(new Consumer<NBTBase>() {
 							 * 
-							 * @Override public void accept(NBTBase t) { NBTTagCompound tag = (NBTTagCompound) t; String fac = tag.getString("factionName"); if (FactionRegistry.this.factions.containsKey(fac)) { int reputation =
+							 * @Override public void accept(NBTBase t) { NBTTagCompound tag = (NBTTagCompound) t; String fac = tag.getString("factionName"); if
+							 * (FactionRegistry.this.factions.containsKey(fac)) { int reputation =
 							 * tag.getInteger("reputation"); mapping.put(fac, reputation); } } });
 							 */
 							for (String key : root.getKeySet()) {
@@ -489,9 +490,12 @@ public class FactionRegistry {
 						try {
 							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 							/*
-							 * NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND); for (int i = 0; i < repuDataList.tagCount(); i++) { NBTTagCompound tag = repuDataList.getCompoundTagAt(i); if
-							 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for (Map.Entry<String, Integer> entry : mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
-							 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound(); tag.setString("factionName", entry.getKey()); tag.setInteger("reputation", entry.getValue());
+							 * NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND); for (int i = 0; i < repuDataList.tagCount();
+							 * i++) { NBTTagCompound tag = repuDataList.getCompoundTagAt(i); if
+							 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for (Map.Entry<String, Integer> entry :
+							 * mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
+							 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound(); tag.setString("factionName", entry.getKey());
+							 * tag.setInteger("reputation", entry.getValue());
 							 * repuDataList.appendTag(tag); } root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
 							 */
 							for (Map.Entry<String, Integer> entry : mapping.entrySet()) {

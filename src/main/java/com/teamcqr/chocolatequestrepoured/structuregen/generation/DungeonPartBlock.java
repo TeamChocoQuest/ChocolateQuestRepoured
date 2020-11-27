@@ -49,7 +49,8 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 	}
 
 	/**
-	 * @param keepOrder Set to true when you want to keep order of the passed collection or when you want to generate just a few blocks which are far away from each other.
+	 * @param keepOrder Set to true when you want to keep order of the passed collection or when you want to generate just a few blocks which are far away from each
+	 *                  other.
 	 */
 	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, DungeonInhabitant dungeonMobType, boolean keepOrder) {
 		super(world, dungeonGenerator, partPos);

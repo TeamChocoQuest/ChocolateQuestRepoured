@@ -88,8 +88,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		// Support platform
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, this.dungeon.getSupportBlock(),
-					this.dungeon.getSupportTopBlock(), 8));
+			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 
 		// basic volcano shape with air inside
@@ -118,8 +117,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
 				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && (!DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius - 2) || (iY == this.volcanoHeight + this.caveDepth - 1 && !DungeonGenUtils.isInsideCircle(iX, iZ,
-							innerRadiusArray[iY])))) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && (!DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius - 2) || (iY == this.volcanoHeight + this.caveDepth - 1 && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadiusArray[iY])))) {
 						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
 							forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
 								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == null) {

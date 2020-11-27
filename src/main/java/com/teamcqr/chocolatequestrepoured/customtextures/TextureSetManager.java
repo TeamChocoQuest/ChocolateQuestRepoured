@@ -112,7 +112,8 @@ public class TextureSetManager {
 	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
 		SPacketCustomTextures packet = new SPacketCustomTextures();
 		/*
-		 * for (File texture : TextureSet.getLoadedTextures()) { String base64 = CompressionUtil.encodeFileToBase64(texture); String path = texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
+		 * for (File texture : TextureSet.getLoadedTextures()) { String base64 = CompressionUtil.encodeFileToBase64(texture); String path =
+		 * texture.getAbsolutePath().substring(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath().length());
 		 * 
 		 * packet.addPair(base64, path); }
 		 */
