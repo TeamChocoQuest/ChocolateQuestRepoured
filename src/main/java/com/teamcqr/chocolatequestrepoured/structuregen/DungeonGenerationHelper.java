@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.util.ChunkUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
@@ -15,6 +16,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -73,23 +75,26 @@ public class DungeonGenerationHelper {
 			Integer dim = world.provider.getDimension();
 
 			if (TRAVELING_PLAYERS.containsKey(dim) && !TRAVELING_PLAYERS.get(dim).isEmpty()) {
-				for (TravelingPlayer travellingPlayer : TRAVELING_PLAYERS.get(dim)) {
-					if (travellingPlayer.flag) {
+				for (TravelingPlayer travelingPlayer : TRAVELING_PLAYERS.get(dim)) {
+					if (travelingPlayer.flag) {
 						continue;
 					}
 
-					travellingPlayer.flag = true;
-					EntityPlayer player = travellingPlayer.player;
+					travelingPlayer.flag = true;
+					EntityPlayer player = travelingPlayer.player;
 					int chunkX = MathHelper.floor(player.posX) >> 4;
 					int chunkZ = MathHelper.floor(player.posZ) >> 4;
+					int radius = 4;
+					ForgeChunkManager.Ticket ticket = ChunkUtil.getTicket(world, chunkX - radius, chunkZ - radius, chunkX + radius + 1, chunkZ + radius + 1, true);
 
-					int radius = 8;
-					for (int x = -radius; x <= radius; x++) {
-						for (int z = -radius; z <= radius; z++) {
-							if (!world.isChunkGeneratedAt(chunkX + x, chunkZ + z)) {
-								world.getChunk(chunkX + x, chunkZ + z);
-							}
+					for (int x = -radius; x <= radius + 1; x++) {
+						for (int z = -radius; z <= radius + 1; z++) {
+							world.getChunk(chunkX + x, chunkZ + z);
 						}
+					}
+
+					if (ticket != null) {
+						ForgeChunkManager.releaseTicket(ticket);
 					}
 				}
 			}
