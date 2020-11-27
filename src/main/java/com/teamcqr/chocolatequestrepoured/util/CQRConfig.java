@@ -77,8 +77,8 @@ public class CQRConfig {
 		@Config.Comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon.")
 		public boolean generationRespectOtherStructures = true;
 		public double generationMinDistanceToOtherStructure = 64;
-		@Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures")
-		public boolean generationRespectUnexploredStructures = true;
+		/*@Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures")
+		public boolean generationRespectUnexploredStructures = true;*/
 
 		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
 		public boolean multithreadedDungeonPreparation = true;
