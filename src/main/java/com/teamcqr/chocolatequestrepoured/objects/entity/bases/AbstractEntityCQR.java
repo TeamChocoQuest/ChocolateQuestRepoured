@@ -1103,8 +1103,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
-		System.out.println("Setting faction...");
-		System.out.println("Fac: " + newFac + "   ignoreCTS: " + ignoreCTS);
+		//System.out.println("Setting faction...");
+		//System.out.println("Fac: " + newFac + "   ignoreCTS: " + ignoreCTS);
 		if (!this.world.isRemote) {
 			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
 			if (faction != null) {
@@ -1113,7 +1113,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				if (!ignoreCTS) {
 					ResourceLocation rs = faction.getRandomTextureFor(this);
 					if (rs != null) {
-						System.out.println("Setting custom texture");
+						//System.out.println("Setting custom texture");
 						this.setCustomTexture(rs);
 					}
 				}
@@ -1123,7 +1123,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
-		System.out.println("Applying texture to dataManager");
+		//System.out.println("Applying texture to dataManager");
 		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
 	}
 
