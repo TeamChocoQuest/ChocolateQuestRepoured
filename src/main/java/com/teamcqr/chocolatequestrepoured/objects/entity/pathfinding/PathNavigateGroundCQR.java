@@ -147,8 +147,10 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 	@Override
 	protected void checkForStuck(Vec3d positionVec3) {
-		if (this.totalTicks - this.ticksAtLastPos > 100) {
-			if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D) {
+		if (this.totalTicks - this.ticksAtLastPos >= 100) {
+			double aiMoveSpeed = (double) this.entity.getAIMoveSpeed();
+			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
+			if (positionVec3.distanceTo(this.lastPosCheck) / 100.0D < aiMoveSpeed * 0.5D) {
 				this.clearPath();
 			}
 
@@ -159,22 +161,25 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		if (this.currentPath != null && !this.currentPath.isFinished()) {
 			Vec3d vec3d = this.currentPath.getCurrentPos();
 
-			if (vec3d.equals(this.timeoutCachedNode)) {
-				this.timeoutTimer += System.currentTimeMillis() - this.lastTimeoutCheck;
-			} else {
+			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
-				double d0 = positionVec3.distanceTo(this.timeoutCachedNode);
-				this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? d0 / (double) this.entity.getAIMoveSpeed() * 1000.0D : 0.0D;
+				this.timeoutTimer = this.totalTicks;
+				if (this.entity.getAIMoveSpeed() > 0.0F) {
+					double aiMoveSpeed = (double) this.entity.getAIMoveSpeed();
+					aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
+					double distance = positionVec3.distanceTo(this.timeoutCachedNode);
+					this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? MathHelper.ceil(distance / aiMoveSpeed) : 0.0D;
+				} else {
+					this.timeoutLimit = 0.0D;
+				}
 			}
 
-			if (this.timeoutLimit > 0.0D && (double) this.timeoutTimer > this.timeoutLimit * 3.0D) {
+			if (this.timeoutLimit > 0.0D && (double) (this.totalTicks - this.timeoutTimer) > this.timeoutLimit * 2.0D) {
 				this.timeoutCachedNode = Vec3d.ZERO;
 				this.timeoutTimer = 0L;
 				this.timeoutLimit = 0.0D;
 				this.clearPath();
 			}
-
-			this.lastTimeoutCheck = System.currentTimeMillis();
 		}
 	}
 
