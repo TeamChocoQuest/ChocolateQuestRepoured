@@ -58,6 +58,9 @@ public class BlockInfo extends AbstractBlockInfo {
 				this.tileentityData.setInteger("y", pos.getY());
 				this.tileentityData.setInteger("z", pos.getZ());
 				tileentity.readFromNBT(this.tileentityData);
+				this.tileentityData.removeTag("x");
+				this.tileentityData.removeTag("y");
+				this.tileentityData.removeTag("z");
 				tileentity.mirror(settings.getMirror());
 				tileentity.rotate(settings.getRotation());
 			}

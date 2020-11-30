@@ -199,11 +199,14 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 		entityTag.removeTag("UUIDMost");
 		entityTag.removeTag("Pos");
 
-		if (entityTag.getString("id").equals(Reference.MODID + ":dummy")) {
+		String id = entityTag.getString("id");
+		if (id.equals(Reference.MODID + ":dummy")) {
 			entityTag.setString("id", dungeonMob.getEntityID().toString());
 		}
 
 		Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+
+		entityTag.setString("id", id);
 
 		if (entity != null) {
 			BlockPos pos = this.getTransformedBlockPos(dungeonPartPos, settings.getMirror(), settings.getRotation());
