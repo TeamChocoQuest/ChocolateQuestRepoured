@@ -146,12 +146,14 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 		NBTTagList nbttaglist = new NBTTagList();
 		NBTTagList items = tileentityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound entityTag = ((NBTTagCompound) items.get(i)).getCompoundTag("tag").getCompoundTag("EntityIn");
+			NBTTagCompound itemTag = items.getCompoundTagAt(i);
+			NBTTagCompound entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
 			Entity entity = this.createEntityFromTag(world, dungeonPos, dungeonPartPos, settings, dungeonMob, protectedRegion, entityTag);
 
 			if (entity != null) {
 				NBTTagCompound newEntityTag = new NBTTagCompound();
 				entity.writeToNBTAtomically(newEntityTag);
+
 				newEntityTag.removeTag("UUIDLeast");
 				newEntityTag.removeTag("UUIDMost");
 				newEntityTag.removeTag("Pos");
@@ -159,7 +161,7 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 				if (nbttaglist.isEmpty()) {
 					compound.setTag("SpawnData", newEntityTag);
 				}
-				nbttaglist.appendTag(new WeightedSpawnerEntity(1, newEntityTag).toCompoundTag());
+				nbttaglist.appendTag(new WeightedSpawnerEntity(itemTag.getByte("Count"), newEntityTag).toCompoundTag());
 			}
 		}
 		compound.setTag("SpawnPotentials", nbttaglist);
@@ -170,7 +172,8 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 	private void cqrSpawnerReadFromNBT(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, DungeonInhabitant dungeonMob, ProtectedRegion protectedRegion, TileEntitySpawner tileEntitySpawner, NBTTagCompound tileentityData) {
 		NBTTagList items = tileentityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < items.tagCount() && i < tileEntitySpawner.inventory.getSlots(); i++) {
-			NBTTagCompound entityTag = ((NBTTagCompound) items.get(i)).getCompoundTag("tag").getCompoundTag("EntityIn");
+			NBTTagCompound itemTag = items.getCompoundTagAt(i);
+			NBTTagCompound entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
 			Entity entity = this.createEntityFromTag(world, dungeonPos, dungeonPartPos, settings, dungeonMob, protectedRegion, entityTag);
 
 			if (entity != null) {
@@ -181,7 +184,7 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 				newEntityTag.removeTag("UUIDMost");
 				newEntityTag.removeTag("Pos");
 
-				ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE);
+				ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE, itemTag.getByte("Count"));
 				NBTTagCompound stackTag = new NBTTagCompound();
 				stackTag.setTag("EntityIn", newEntityTag);
 				stack.setTagCompound(stackTag);
