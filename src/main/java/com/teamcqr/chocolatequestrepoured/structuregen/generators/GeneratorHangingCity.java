@@ -119,7 +119,10 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	 */
 	private void buildBuilding(BlockPos centeredPos, CQStructure structure, DungeonInhabitant mobType) {
 		int longestSide = structure != null ? Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
-		int radius = (int) (Math.round(Math.sqrt(2* ( longestSide * longestSide)))) + 5;//(int) (0.7071D * (double) longestSide) + 5;
+		int radius = longestSide / 2;
+		radius *= radius;
+		radius *= 2;
+		radius = (int) (Math.round(Math.sqrt(radius))) + 5;//(int) (0.7071D * (double) longestSide) + 5;
 
 		this.buildPlatform(centeredPos, radius, mobType);
 		if (structure != null) {
