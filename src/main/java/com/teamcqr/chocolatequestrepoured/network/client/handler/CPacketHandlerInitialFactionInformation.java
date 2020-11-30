@@ -18,7 +18,6 @@ public class CPacketHandlerInitialFactionInformation implements IMessageHandler<
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				// System.out.println("Received packet");
 				FactionRegistry FAC_REG = FactionRegistry.instance();
-				// FAC_REG.clearData();
 				for (CQRFaction faction : message.getFactions()) {
 					FAC_REG.addFaction(faction);
 				}

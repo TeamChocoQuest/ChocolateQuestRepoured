@@ -261,6 +261,7 @@ public class CQRMain {
 
 	@EventHandler
 	public static void onFMLServerStoppingEvent(FMLServerStoppingEvent event) {
+		FactionRegistry.instance().saveAllReputationData(true);
 		CQStructure.clearCache();
 	}
 

@@ -18,7 +18,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 
 	private String[] factions;
 	private int[] reputations;
-	private boolean[] lockedRepu;
+	private boolean[] repuCanChange;
 	private String[] defaultRepu;
 	private UUID playerId;
 
@@ -31,13 +31,13 @@ public class SPacketInitialFactionInformation implements IMessage {
 		int arrSize = FactionRegistry.instance().getLoadedFactions().size();
 		this.factions = new String[arrSize];
 		this.reputations = new int[arrSize];
-		this.lockedRepu = new boolean[arrSize];
+		this.repuCanChange = new boolean[arrSize];
 		this.defaultRepu = new String[arrSize];
 		for (int i = 0; i < this.factions.length; i++) {
 			CQRFaction fac = FactionRegistry.instance().getLoadedFactions().get(i);
 			this.factions[i] = fac.getName();
 			int score = FactionRegistry.instance().getExactReputationOf(playerID, fac);
-			this.lockedRepu[i] = fac.isRepuStatic();
+			this.repuCanChange[i] = fac.canRepuChange();
 			this.defaultRepu[i] = fac.getDefaultReputation().toString();
 			this.reputations[i] = score;
 		}
@@ -47,7 +47,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		List<CQRFaction> result = new ArrayList<>();
 
 		for (int i = 0; i < this.factions.length; i++) {
-			result.add(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), !this.lockedRepu[i]));
+			result.add(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.repuCanChange[i]));
 		}
 
 		return result;
@@ -57,7 +57,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		List<Tuple<CQRFaction, Integer>> data = new ArrayList<>();
 
 		for (int i = 0; i < this.reputations.length; i++) {
-			data.add(new Tuple<>(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.lockedRepu[i]), this.reputations[i]));
+			data.add(new Tuple<>(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.repuCanChange[i]), this.reputations[i]));
 		}
 
 		return data;
@@ -69,11 +69,11 @@ public class SPacketInitialFactionInformation implements IMessage {
 		int count = buf.readInt();
 		this.factions = new String[count];
 		this.reputations = new int[count];
-		this.lockedRepu = new boolean[count];
+		this.repuCanChange = new boolean[count];
 		this.defaultRepu = new String[count];
 		for (int i = 0; i < count; i++) {
 			this.factions[i] = ByteBufUtils.readUTF8String(buf);
-			this.lockedRepu[i] = buf.readBoolean();
+			this.repuCanChange[i] = buf.readBoolean();
 			this.defaultRepu[i] = ByteBufUtils.readUTF8String(buf);
 			this.reputations[i] = buf.readInt();
 		}
@@ -85,7 +85,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		buf.writeInt(this.factions.length);
 		for (int i = 0; i < this.factions.length; i++) {
 			ByteBufUtils.writeUTF8String(buf, this.factions[i]);
-			buf.writeBoolean(this.lockedRepu[i]);
+			buf.writeBoolean(this.repuCanChange[i]);
 			ByteBufUtils.writeUTF8String(buf, this.defaultRepu[i]);
 			buf.writeInt(this.reputations[i]);
 		}

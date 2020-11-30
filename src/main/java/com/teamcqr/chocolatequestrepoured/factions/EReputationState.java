@@ -37,7 +37,7 @@ public enum EReputationState {
 	}
 
 	public enum EReputationStateRough {
-		NEUTRAL(250, -250), ENEMY(-251, -10000), ALLY(251, 10000);
+		NEUTRAL(250, -249), ENEMY(-250, -10000), ALLY(251, 10000);
 
 		private final int high;
 		private final int low;

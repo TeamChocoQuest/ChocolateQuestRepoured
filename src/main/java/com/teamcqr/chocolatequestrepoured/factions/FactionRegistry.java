@@ -94,9 +94,10 @@ public class FactionRegistry {
 
 	@SideOnly(Side.CLIENT)
 	public synchronized void setReputation(UUID player, int reputation, CQRFaction faction) {
-		if (!faction.isRepuStatic()) {
+		if (faction.canRepuChange()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new ConcurrentHashMap<>());
 			factionsOfPlayer.put(faction.getName(), reputation);
+			// System.out.println("Repu of " + player.toString() + " set to " + reputation + " for faction " + faction.getName());
 		}
 	}
 
@@ -330,7 +331,7 @@ public class FactionRegistry {
 		if (this.factions.containsKey(factionName)) {
 			return this.factions.get(factionName);
 		}
-		return this.factions.get(EDefaultFaction.UNDEAD.name());
+		return this.factions.get(EDefaultFaction.NEUTRAL.name());
 	}
 
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
@@ -338,7 +339,7 @@ public class FactionRegistry {
 	}
 
 	public int getExactReputationOf(UUID playerID, CQRFaction faction) {
-		if (faction.isRepuStatic()) {
+		if (!faction.canRepuChange()) {
 			return faction.getDefaultReputation().getValue();
 		}
 		if (playerID != null && this.playerFactionRepuMap.containsKey(playerID)) {
@@ -358,15 +359,19 @@ public class FactionRegistry {
 	}
 
 	private void changeRepuOf(EntityPlayer player, String faction, int score) {
-		boolean flag = false;
-		if (this.canRepuChange(player)) {
-			if (score < 0) {
-				flag = this.canDecrementRepu(player, faction);
-			} else {
-				flag = this.canIncrementRepu(player, faction);
-			}
-		}
-		if (flag) {
+		// System.out.println("Changing repu...");
+
+		/*
+		 * boolean flag = false;
+		 * if (this.canRepuChange(player)) {
+		 * if (score < 0) {
+		 * flag = this.canDecrementRepu(player, faction);
+		 * } else {
+		 * flag = this.canIncrementRepu(player, faction);
+		 * }
+		 * }
+		 */
+		if (this.canDecrementRepu(player, faction) || this.canIncrementRepu(player, faction)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
 			int oldScore = factionsOfPlayer.getOrDefault(faction, this.factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
@@ -377,9 +382,11 @@ public class FactionRegistry {
 				this.sendRepuUpdatePacket((EntityPlayerMP) player, score + oldScore, faction);
 			}
 		}
+		// System.out.println("Repu of " + player.getDisplayNameString() + " is " + this.getExactReputationOf(player.getPersistentID(), getFactionInstance(faction)));
 	}
 
 	private void sendRepuUpdatePacket(EntityPlayerMP player, int reputation, String faction) {
+		// System.out.println("Sending update packet...");
 		IMessage packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
 		CQRMain.NETWORK.sendTo(packet, player);
 	}
@@ -477,52 +484,74 @@ public class FactionRegistry {
 
 				@Override
 				public void run() {
-					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(player.getPersistentID());
-					// Map<String, Integer> entryMapping = new HashMap<>();
-					final UUID uuid = player.getPersistentID();
-					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
-					if (f != null) {
-						while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
-							// Wait until the uuid isnt active
-						}
-						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
-						try {
-							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
-							/*
-							 * NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND); for (int i = 0; i < repuDataList.tagCount();
-							 * i++) { NBTTagCompound tag = repuDataList.getCompoundTagAt(i); if
-							 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for (Map.Entry<String, Integer> entry :
-							 * mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
-							 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound(); tag.setString("factionName", entry.getKey());
-							 * tag.setInteger("reputation", entry.getValue());
-							 * repuDataList.appendTag(tag); } root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
-							 */
-							for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
-								root.setInteger(entry.getKey(), entry.getValue());
-							}
-
-							FileIOUtil.saveNBTCompoundToFile(root, f);
-						} finally {
-							FactionRegistry.this.playerFactionRepuMap.remove(player.getPersistentID());
-							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
-						}
-					}
+					savePlayerReputation(player.getPersistentID(), true);
 				}
 			});
+			t.setName("CQR-Reputation-Data-Saver");
 			t.setDaemon(true);
 			t.start();
 		}
 	}
 
-	public List<CQRFaction> getLoadedFactions() {
-		return new ArrayList<>(this.factions.values());
+	public void saveAllReputationData(final boolean removeMapsFromMemory) {
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (UUID playerID : FactionRegistry.this.playerFactionRepuMap.keySet()) {
+					try {
+						savePlayerReputation(playerID, removeMapsFromMemory);
+					} catch (Exception ex) {
+						System.out.println("Unable to save reputation data of " + playerID + "!");
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
+		t.setName("CQR-Reputation-Data-Saver");
+		t.setDaemon(true);
+		t.start();
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void clearData() {
-		this.factions.clear();
-		this.playerFactionRepuMap.clear();
+	public boolean savePlayerReputation(final UUID playerID, final boolean removeFromMap) {
+		Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(playerID);
+		// Map<String, Integer> entryMapping = new HashMap<>();
+		final UUID uuid = playerID;
+		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
+		File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
+		if (f != null) {
+			while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
+				// Wait until the uuid isnt active
+			}
+			FactionRegistry.this.uuidsBeingLoaded.add(uuid);
+			try {
+				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
+				/*
+				 * NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND); for (int i = 0; i < repuDataList.tagCount();
+				 * i++) { NBTTagCompound tag = repuDataList.getCompoundTagAt(i); if
+				 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for (Map.Entry<String, Integer> entry :
+				 * mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
+				 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound(); tag.setString("factionName", entry.getKey());
+				 * tag.setInteger("reputation", entry.getValue());
+				 * repuDataList.appendTag(tag); } root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
+				 */
+				for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
+					root.setInteger(entry.getKey(), entry.getValue());
+				}
+
+				FileIOUtil.saveNBTCompoundToFile(root, f);
+			} finally {
+				if (removeFromMap) {
+					FactionRegistry.this.playerFactionRepuMap.remove(playerID);
+				}
+				FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
+			}
+		}
+		return true;
+	}
+
+	public List<CQRFaction> getLoadedFactions() {
+		return new ArrayList<>(this.factions.values());
 	}
 
 }

@@ -175,6 +175,7 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
 		DungeonDataManager.handleWorldSave(e.getWorld());
+		FactionRegistry.instance().saveAllReputationData(false);
 	}
 
 	@SubscribeEvent

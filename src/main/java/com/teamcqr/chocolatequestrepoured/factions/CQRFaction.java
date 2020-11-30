@@ -196,8 +196,8 @@ public class CQRFaction {
 		}
 	}
 
-	public boolean isRepuStatic() {
-		return !this.repuMayChange;
+	public boolean canRepuChange() {
+		return this.repuMayChange;
 	}
 
 	public void saveToFile(File folder) {
@@ -215,7 +215,7 @@ public class CQRFaction {
 						return;
 					}
 					prop.setProperty(ConfigKeys.FACTION_NAME_KEY, CQRFaction.this.name);
-					prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(CQRFaction.this.isRepuStatic()));
+					prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(!CQRFaction.this.canRepuChange()));
 					prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, CQRFaction.this.getDefaultReputation().toString());
 					prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(CQRFaction.this.getRepuAllyKill()));
 					prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(CQRFaction.this.getRepuMemberKill()));
