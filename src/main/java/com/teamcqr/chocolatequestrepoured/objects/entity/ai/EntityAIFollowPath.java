@@ -1,12 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.pathfinding.Path;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
-	private boolean isReversingPath = false;
+	private boolean hasPath;
+	private int ticksToWait;
+	private int tick;
 
 	public EntityAIFollowPath(AbstractEntityCQR entity) {
 		super(entity);
@@ -15,58 +19,84 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.getGuardPathPoints().length <= 1) {
+		if (this.entity.getPath().getSize() <= 1) {
 			return false;
 		}
 		return this.entity.hasHomePositionCQR();
 	}
 
 	@Override
-	public void startExecuting() {
-		int index = this.entity.getCurrentGuardPathTargetPoint();
-		BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
-		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 0.75D);
-	}
-
-	@Override
 	public void resetTask() {
 		this.entity.getNavigator().clearPath();
+		this.hasPath = false;
+		this.ticksToWait = 0;
+		this.tick = 0;
 	}
 
 	@Override
 	public void updateTask() {
-		if (this.entity.hasPath()) {
-			int index = this.entity.getCurrentGuardPathTargetPoint();
-			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
-			this.entity.getLookHelper().setLookPosition(pos.getX(), pos.getY() + this.entity.getEyeHeight(), pos.getZ(), 30, 30);
+		Path path = this.entity.getPath();
+		Path.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
+
+		if (currentNode != null) {
+			BlockPos pos = this.entity.getHomePositionCQR().add(currentNode.getPos());
+
+			if (this.entity.hasPath()) {
+				this.entity.getLookHelper().setLookPosition(pos.getX() + 0.5D, pos.getY() + this.entity.getEyeHeight(), pos.getZ() + 0.5D, 30.0F, 30.0F);
+			} else if (this.hasPath) {
+				this.hasPath = false;
+				if (this.entity.getDistanceSq(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D) <= 1.0D) {
+					this.ticksToWait = MathHelper.getInt(this.random, currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
+				}
+			} else if (this.ticksToWait > 0) {
+				this.ticksToWait--;
+				this.entity.rotationYaw = currentNode.getWaitingRotation();
+				long time = this.world.getWorldTime() % 24000;
+				if (time < currentNode.getTimeMin() || time > currentNode.getTimeMax()) {
+					this.ticksToWait = 0;
+				}
+			} else {
+				this.calculateNextNode();
+			}
 		} else {
-			int index = this.getNextPathIndex();
-			this.entity.setCurrentGuardPathTargetPoint(index);
-			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
-			this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 0.75D);
-			this.entity.getLookHelper().setLookPosition(pos.getX(), pos.getY() + this.entity.getEyeHeight(), pos.getZ(), 30, 30);
+			this.entity.getNavigator().clearPath();
+			this.calculateNextNode();
 		}
 	}
 
-	private int getNextPathIndex() {
-		BlockPos[] pathPoints = this.entity.getGuardPathPoints();
-		int index = this.entity.getCurrentGuardPathTargetPoint() + (this.isReversingPath ? -1 : 1);
-		if (this.entity.isGuardPathLoop()) {
-			if (index == pathPoints.length) {
-				index = 0;
-			}
-		} else if (index >= pathPoints.length - 1) {
-			this.isReversingPath = true;
-			if (index > pathPoints.length - 1) {
-				index = pathPoints.length - 2;
-			}
-		} else if (index <= 0) {
-			this.isReversingPath = false;
-			if (index < 0) {
-				index = 1;
+	private void calculateNextNode() {
+		if (this.tick > 0) {
+			this.tick--;
+			return;
+		}
+
+		Path path = this.entity.getPath();
+		Path.PathNode prevNode = path.getNode(this.entity.getPrevPathTargetPoint());
+		Path.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
+		Path.PathNode nextNode = null;
+
+		if (currentNode != null) {
+			nextNode = currentNode.getNextNode(this.world, this.entity.getRNG(), prevNode);
+		} else {
+			BlockPos pos = new BlockPos(this.entity).subtract(this.entity.getHomePositionCQR());
+			double min = Double.MAX_VALUE;
+			for (Path.PathNode node : path.getNodes()) {
+				double dist = pos.distanceSq(node.getPos());
+				if (dist < min) {
+					min = dist;
+					nextNode = node;
+				}
 			}
 		}
-		return index;
+
+		if (nextNode != null) {
+			this.entity.setCurrentPathTargetPoint(nextNode.getIndex());
+			BlockPos pos = this.entity.getHomePositionCQR().add(nextNode.getPos());
+			this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 2D);
+			this.hasPath = true;
+		} else {
+			this.tick = 40;
+		}
 	}
 
 }

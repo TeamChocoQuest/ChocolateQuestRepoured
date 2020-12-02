@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiAddPathNode;
 import com.teamcqr.chocolatequestrepoured.client.gui.IUpdatableGui;
 import com.teamcqr.chocolatequestrepoured.client.init.CQREntityRenderers;
 import com.teamcqr.chocolatequestrepoured.customtextures.CTResourcepack;
@@ -27,7 +28,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -132,6 +135,15 @@ public class ClientProxy implements IProxy {
 	public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
 		IntegratedServer integratedServer = Minecraft.getMinecraft().getIntegratedServer();
 		return integratedServer != null && player.getName().equals(integratedServer.getServerOwner());
+	}
+
+	@Override
+	public void openGui(int id, EntityPlayer player, World world, int... args) {
+		Minecraft mc = Minecraft.getMinecraft();
+
+		if (id == Reference.ADD_PATH_NODE_GUI_ID) {
+			mc.displayGuiScreen(new GuiAddPathNode(EnumHand.values()[args[0]], args[1], new BlockPos(args[2], args[3], args[4])));
+		}
 	}
 
 }

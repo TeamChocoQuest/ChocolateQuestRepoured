@@ -63,4 +63,9 @@ public class ServerProxy implements IProxy {
 		return false;
 	}
 
+	@Override
+	public void openGui(int id, EntityPlayer player, World world, int... args) {
+
+	}
+
 }

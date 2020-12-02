@@ -18,6 +18,7 @@ import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerS
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerUpdateReputation;
 import com.teamcqr.chocolatequestrepoured.network.client.handler.CPacketHandlerUpdateTradeIndex;
+import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketAddPathNode;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketEditTrade;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketExtendedReachAttack;
@@ -29,6 +30,7 @@ import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSyncEntit
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSyncSelectedTrade;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketSyncTileEntity;
 import com.teamcqr.chocolatequestrepoured.network.client.packet.CPacketUpdateTradeIndex;
+import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerAddPathNode;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerDeleteTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerEditTrade;
 import com.teamcqr.chocolatequestrepoured.network.server.handler.SPacketHandlerExtendedReachAttack;
@@ -95,6 +97,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncSelectedTrade.class, CPacketSyncSelectedTrade.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerUpdateTradeIndex.class, CPacketUpdateTradeIndex.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncTileEntity.class, CPacketSyncTileEntity.class, messageID++, Side.SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerAddPathNode.class, CPacketAddPathNode.class, messageID++, Side.SERVER);
 	}
 
 }

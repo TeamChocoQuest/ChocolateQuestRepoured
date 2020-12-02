@@ -32,4 +32,6 @@ public interface IProxy {
 
 	boolean isOwnerOfIntegratedServer(EntityPlayer player);
 
+	void openGui(int id, EntityPlayer player, World world, int... args);
+
 }

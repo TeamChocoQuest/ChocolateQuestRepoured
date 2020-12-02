@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISpell
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.pathfinding.Path;
 import com.teamcqr.chocolatequestrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.IFakeWeapon;
@@ -95,7 +95,9 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -151,9 +153,41 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int magicArmorCooldown = 300;
 
 	// Pathing AI stuff
-	protected BlockPos[] pathPoints = new BlockPos[] {};
-	protected boolean pathIsLoop = false;
-	protected int currentTargetPoint = 0;
+	protected Path path = new Path() {
+		@Override
+		public boolean removeNode(Path.PathNode node) {
+			boolean flag = super.removeNode(node);
+			if (flag) {
+				if (AbstractEntityCQR.this.prevPathTargetPoint == node.getIndex()) {
+					AbstractEntityCQR.this.prevPathTargetPoint = -1;
+				} else if (AbstractEntityCQR.this.prevPathTargetPoint > node.getIndex()) {
+					AbstractEntityCQR.this.prevPathTargetPoint--;
+				}
+				if (AbstractEntityCQR.this.currentPathTargetPoint == node.getIndex()) {
+					AbstractEntityCQR.this.currentPathTargetPoint = -1;
+				} else if (AbstractEntityCQR.this.currentPathTargetPoint > node.getIndex()) {
+					AbstractEntityCQR.this.currentPathTargetPoint--;
+				}
+			}
+			return flag;
+		}
+
+		@Override
+		public void clear() {
+			super.clear();
+			AbstractEntityCQR.this.prevPathTargetPoint = -1;
+			AbstractEntityCQR.this.currentPathTargetPoint = -1;
+		}
+
+		@Override
+		public void copyFrom(Path path, BlockPos offset) {
+			super.copyFrom(path, offset);
+			AbstractEntityCQR.this.prevPathTargetPoint = -1;
+			AbstractEntityCQR.this.currentPathTargetPoint = -1;
+		}
+	};
+	protected int prevPathTargetPoint = -1;
+	protected int currentPathTargetPoint = -1;
 
 	private TraderOffer trades = new TraderOffer(this);
 
@@ -460,17 +494,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
 
-		if (this.pathPoints.length > 0) {
-			NBTTagCompound pathTag = new NBTTagCompound();
-			pathTag.setBoolean("isLoop", this.pathIsLoop);
-			pathTag.setInteger("currentPathPoint", this.currentTargetPoint);
-			NBTTagList nbtTagList = new NBTTagList();
-			for (int i = 0; i < this.pathPoints.length; i++) {
-				nbtTagList.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
-			}
-			pathTag.setTag("pathPoints", nbtTagList);
-			compound.setTag("pathingAI", pathTag);
-		}
+		NBTTagCompound pathTag = new NBTTagCompound();
+		pathTag.setTag("path", this.path.writeToNBT());
+		pathTag.setInteger("prevPathTargetPoint", this.prevPathTargetPoint);
+		pathTag.setInteger("currentPathTargetPoint", this.currentPathTargetPoint);
+		compound.setTag("pathTag", pathTag);
 
 		// Shoulder entity stuff
 		if (!this.getLeftShoulderEntity().isEmpty()) {
@@ -512,13 +540,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
-			this.pathIsLoop = pathTag.getBoolean("isLoop");
-			this.currentTargetPoint = pathTag.getInteger("currentPathPoint");
 			NBTTagList nbtTagList = pathTag.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
-			this.pathPoints = new BlockPos[nbtTagList.tagCount()];
+			this.path.clear();
 			for (int i = 0; i < nbtTagList.tagCount(); i++) {
-				this.pathPoints[i] = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
+				BlockPos pos = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
+				this.path.addNode(this.path.getNode(i - 1), pos, 0, 0, 0.0F, 1, 0, 24000, true);
 			}
+			this.currentPathTargetPoint = pathTag.getInteger("currentPathPoint");
+			if (nbtTagList.tagCount() > 1) {
+				if (this.currentPathTargetPoint > 0) {
+					this.prevPathTargetPoint = this.currentPathTargetPoint - 1;
+				} else {
+					this.prevPathTargetPoint = nbtTagList.tagCount();
+				}
+			} else {
+				this.prevPathTargetPoint = -1;
+			}
+		} else {
+			NBTTagCompound pathTag = compound.getCompoundTag("pathTag");
+			this.path.readFromNBT(pathTag.getCompoundTag("path"));
+			this.prevPathTargetPoint = pathTag.getInteger("prevPathTargetPoint");
+			this.currentPathTargetPoint = pathTag.getInteger("currentPathTargetPoint");
 		}
 
 		// Shoulder entity stuff
@@ -1177,10 +1219,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setBaseHealthDependingOnPos(dungeonPos);
 
 		// Recalculate path points
-		if (this.pathPoints.length > 0) {
-			for (int i = 0; i < this.pathPoints.length; i++) {
-				this.pathPoints[i] = Template.transformedBlockPos(placementSettings, this.pathPoints[i]);
-			}
+		for (Path.PathNode node : this.path.getNodes()) {
+			node.setPos(Template.transformedBlockPos(placementSettings, node.getPos()));
+			node.setWaitingRotation(this.getTransformedYaw(node.getWaitingRotation(), placementSettings.getMirror(), placementSettings.getRotation()));
 		}
 
 		// Replace shield
@@ -1194,6 +1235,34 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
 			this.setFaction(mobType.getFactionOverride());
 		}
+	}
+
+	private float getTransformedYaw(float rotationYaw, Mirror mirror, Rotation rotation) {
+		float f = MathHelper.wrapDegrees(rotationYaw);
+		switch (mirror) {
+		case LEFT_RIGHT:
+			f = 180.0F - f;
+			break;
+		case FRONT_BACK:
+			f = -f;
+			break;
+		default:
+			break;
+		}
+		switch (rotation) {
+		case CLOCKWISE_90:
+			f += 90.0F;
+			break;
+		case CLOCKWISE_180:
+			f += 180.0F;
+			break;
+		case COUNTERCLOCKWISE_90:
+			f -= 90.0F;
+			break;
+		default:
+			break;
+		}
+		return MathHelper.wrapDegrees(f);
 	}
 
 	public boolean hasCape() {
@@ -1394,45 +1463,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public BlockPos[] getGuardPathPoints() {
-		return this.pathPoints;
+	public Path getPath() {
+		return this.path;
 	}
 
-	public boolean isGuardPathLoop() {
-		return this.pathIsLoop;
+	public void setCurrentPathTargetPoint(int value) {
+		this.prevPathTargetPoint = this.currentPathTargetPoint;
+		this.currentPathTargetPoint = value;
 	}
 
-	public int getCurrentGuardPathTargetPoint() {
-		return this.currentTargetPoint;
+	public int getCurrentPathTargetPoint() {
+		return this.currentPathTargetPoint;
 	}
 
-	public void setCurrentGuardPathTargetPoint(int value) {
-		this.currentTargetPoint = value;
-	}
-
-	public void addPathPoint(BlockPos position) {
-		if (this.getHomePositionCQR() == null) {
-			this.setHomePositionCQR(position);
-		}
-		this.pathPoints = Arrays.copyOf(this.pathPoints, this.pathPoints.length + 1);
-		this.pathPoints[this.pathPoints.length] = position.subtract(this.getHomePositionCQR());
-	}
-
-	public void clearPathPoints() {
-		this.pathPoints = new BlockPos[] {};
-	}
-
-	public void setPath(final BlockPos[] path) {
-		if (path.length <= 0) {
-			this.pathPoints = new BlockPos[] {};
-		}
-		this.pathPoints = new BlockPos[path.length];
-		for (int i = 0; i < path.length; i++) {
-			if (this.getHomePositionCQR() == null) {
-				this.setHomePositionCQR(path[i]);
-			}
-			this.pathPoints[i] = path[i].subtract(this.getHomePositionCQR());
-		}
+	public int getPrevPathTargetPoint() {
+		return this.prevPathTargetPoint;
 	}
 
 	public int getLastTickWithAttackTarget() {
@@ -1558,8 +1603,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			// Recalculate the path positions to my new home
 			BlockPos homeNew = new BlockPos(this);
 			BlockPos v = homeNew.subtract(this.getHomePositionCQR());
-			for (int i = 0; i < this.pathPoints.length; i++) {
-				this.pathPoints[i] = this.pathPoints[i].subtract(v);
+			for (Path.PathNode node : this.path.getNodes()) {
+				node.setPos(node.getPos().subtract(v));
 			}
 			this.setHomePositionCQR(homeNew);
 		}
