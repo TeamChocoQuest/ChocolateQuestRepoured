@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -22,10 +23,12 @@ import net.minecraftforge.common.util.Constants;
 
 public class Path {
 
+	private static final String VERSION = "1.0.0";
 	private final List<PathNode> nodes = new ArrayList<>();
 
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
+		compound.setString("version", VERSION);
 		NBTTagList nbtTagList = new NBTTagList();
 		for (PathNode node : this.nodes) {
 			nbtTagList.appendTag(node.writeToNBT());
@@ -36,6 +39,10 @@ public class Path {
 
 	public void readFromNBT(NBTTagCompound compound) {
 		this.nodes.clear();
+		String s = compound.getString("version");
+		if (!s.equals(VERSION)) {
+			CQRMain.logger.warn("Reading path: Expected version {} but got {}", VERSION, s);
+		}
 		for (NBTBase nbt : compound.getTagList("nodes", Constants.NBT.TAG_COMPOUND)) {
 			this.nodes.add(new PathNode(this, (NBTTagCompound) nbt));
 		}
