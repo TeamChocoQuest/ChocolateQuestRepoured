@@ -319,10 +319,42 @@ public class GuiAddPathNode extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		this.drawPathMap(this.pathMapX, this.pathMapY, this.pathMapWidth, this.pathMapHeight, this.centerOffsetX, this.centerOffsetY);
+		GuiHelper.drawString(this.fontRenderer, "Help?", this.pathMapX, this.pathMapY + this.pathMapHeight + 4, 0xE0E0E0, false, true);
 
 		Path.PathNode selectedNode = this.getNodeAt(mouseX, mouseY);
 		if (selectedNode != null) {
 			this.drawHoveringText(String.format("Index: %d, %s", selectedNode.getIndex(), selectedNode.getPos()), mouseX, mouseY);
+		}
+
+		if (mouseX >= this.pathMapX && mouseX <= this.pathMapX + this.fontRenderer.getStringWidth("Help?") && mouseY >= this.pathMapY + this.pathMapHeight + 4 && mouseY <= this.pathMapY + this.pathMapHeight + 12) {
+			List<String> tooltip = new ArrayList<>();
+			tooltip.add("The path map shows the current path from above and visualizes the 'new node'.");
+			tooltip.add("Also it allows you to select 'blacklisted previous nodes' for the 'new node'. That means when an entity is at one of the nodes connected with the 'new node' and comes from a 'blacklisted previous node' it won't go to the 'new node'.");
+			tooltip.add("");
+			tooltip.add("Blue Node: New Node");
+			tooltip.add("Black Node: Selected Node");
+			tooltip.add("Grey Node: Normal Node");
+			tooltip.add("Red Node: Blacklisted Previous Node");
+			this.drawHoveringText(tooltip, mouseX, mouseY);
+		}
+
+		if (this.textFieldWaitingTimeMin.isMouseOver(mouseX, mouseY)) {
+			this.drawHoveringText("When reaching this node this defines how long the entity waits at least before walking to the next node. (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		}
+		if (this.textFieldWaitingTimeMax.isMouseOver(mouseX, mouseY)) {
+			this.drawHoveringText("When reaching this node this defines how long the entity waits at most before walking to the next node. (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		}
+		if (this.textFieldWaitingRotation.isMouseOver(mouseX, mouseY)) {
+			this.drawHoveringText("When waiting at this node this defines where the entity should look. (min: 0, max: 360 degree)", mouseX, mouseY);
+		}
+		if (this.textFieldWeight.isMouseOver(mouseX, mouseY)) {
+			this.drawHoveringText("The weight that this node is selected as the next node when there are multiple options. (min: 1, max: 10000)", mouseX, mouseY);
+		}
+		if (this.textFieldTimeMin.isMouseOver(mouseX, mouseY)) {
+			this.drawHoveringText("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		}
+		if (this.textFieldTimeMax.isMouseOver(mouseX, mouseY)) {
+			this.drawHoveringText("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)", mouseX, mouseY);
 		}
 	}
 
