@@ -165,8 +165,8 @@ public class Path {
 			this.waitingTimeMax = MathHelper.clamp(Math.max(waitingTimeMin, waitingTimeMax), 0, 24000);
 			this.waitingRotation = MathHelper.wrapDegrees(waitingRotation);
 			this.weight = MathHelper.clamp(weight, 1, 10000);
-			this.timeMin = MathHelper.clamp(Math.min(timeMin, timeMax), 0, 24000);
-			this.timeMax = MathHelper.clamp(Math.max(timeMin, timeMax), 0, 24000);
+			this.timeMin = MathHelper.clamp(timeMin, 0, 24000);
+			this.timeMax = MathHelper.clamp(timeMax, 0, 24000);
 			this.index = index;
 		}
 
