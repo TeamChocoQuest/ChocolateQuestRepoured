@@ -544,7 +544,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.path.clear();
 			for (int i = 0; i < nbtTagList.tagCount(); i++) {
 				BlockPos pos = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
-				this.path.addNode(this.path.getNode(i - 1), pos, 0, 0, 0.0F, 1, 0, 24000, true);
+				this.path.addNode(this.path.getNode(this.path.getSize() - 1), pos, 0, 0, 0.0F, 1, 0, 24000, true);
 			}
 			this.currentPathTargetPoint = pathTag.getInteger("currentPathPoint");
 			if (nbtTagList.tagCount() > 1) {
