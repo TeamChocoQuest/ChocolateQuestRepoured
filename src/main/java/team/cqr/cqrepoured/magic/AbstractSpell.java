@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.magic;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -21,7 +21,11 @@ public abstract class AbstractSpell {
 	}
 	
 	public abstract int getSpellCosts();
+	public abstract int getCastingTime();
+	public abstract int getSpellCooldown();
+	
 	public abstract DamageSource getDamageSourceToUse();
-	public abstract void castSpell(Entity caster, World world, BlockPos clickedPos, AbstractSpellCastingItem castingItem, ItemStack castingItemStack);
+	//ONly gets called server side
+	public abstract boolean castSpell(EntityLivingBase caster, World world, BlockPos clickedPos, AbstractSpellCastingItem castingItem, ItemStack castingItemStack, float power);
 
 }
