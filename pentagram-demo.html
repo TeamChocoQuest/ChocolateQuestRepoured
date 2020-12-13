@@ -21,9 +21,6 @@
 				var xCenter = canvas.width / 2;
 				var yCenter = canvas.height / 2;
 				var steps = Math.floor(points / 2);
-				if(points % 2 == 0) {
-					steps = steps -1;
-				}
 				
 				var context = canvas.getContext("2d");
 				context.clearRect(0,0,canvas.width,canvas.height);
