@@ -31,7 +31,7 @@ public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 
 		BlockPlacingHelper.setBlockState(world, pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 18, false);
 
-		if (world.getBlockState(pos) == CQRBlocks.FORCE_FIELD_NEXUS) {
+		if (world.getBlockState(pos).getBlock() == CQRBlocks.FORCE_FIELD_NEXUS) {
 			protectedRegion.addBlockDependency(pos);
 		} else {
 			CQRMain.logger.warn("Failed to place force field nexus at {}", pos);
