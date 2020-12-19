@@ -1,1 +1,1 @@
-gradlew eclipse && gradlew genEclipseRuns && pause
+gradlew setupDecompWorkspace && gradlew eclipse && pause
