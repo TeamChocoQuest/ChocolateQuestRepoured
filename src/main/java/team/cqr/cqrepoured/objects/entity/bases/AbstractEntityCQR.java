@@ -67,6 +67,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
@@ -121,7 +124,7 @@ import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.Reference;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, IAnimatable {
 
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
 	private static final UUID HEALTH_SCALE_DISTANCE_TO_SPAWN_ID = UUID.fromString("cf718cfe-d6a1-4cf6-b6c8-b5cf397f334c");
@@ -1636,6 +1639,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
 		}
 		return this.textureOverride;
+	}
+	
+	//Geckolib
+	//By default, there are no animations
+	@Override
+	public void registerControllers(AnimationData data) {
+		//Empty by default
+	}
+	@Override
+	public AnimationFactory getFactory() {
+		return null;
 	}
 
 }
