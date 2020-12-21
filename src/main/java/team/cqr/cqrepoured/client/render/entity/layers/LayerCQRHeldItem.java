@@ -1,37 +1,34 @@
 package team.cqr.cqrepoured.client.render.entity.layers;
 
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.util.EnumHandSide;
+import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import team.cqr.cqrepoured.client.models.IBipedModel;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
-public class LayerCQRHeldItem extends LayerHeldItem {
+public class LayerCQRHeldItem<T extends AbstractEntityCQR> extends LayerHeldItemGeckoLib<T> {
 
-	public LayerCQRHeldItem(RenderLivingBase<?> livingEntityRendererIn) {
-		super(livingEntityRendererIn);
+	public LayerCQRHeldItem(IGeoRenderer<T> entityRendererIn) {
+		super(entityRendererIn);
 	}
 
 	@Override
 	protected void translateToHand(EnumHandSide handSide) {
-		super.translateToHand(handSide);
-		if (this.livingEntityRenderer.getMainModel() instanceof ModelBiped) {
-			ModelBiped model = (ModelBiped) this.livingEntityRenderer.getMainModel();
-			ModelRenderer armRenderer;
+		if (this.getEntityModel() instanceof IBipedModel) {
+			IBipedModel model = (IBipedModel) this.getEntityModel();
+			GeoCube armRenderer;
 			if (handSide == EnumHandSide.RIGHT) {
-				armRenderer = model.bipedRightArm;
+				armRenderer = model.getRightHandCube();
 			} else {
-				armRenderer = model.bipedLeftArm;
+				armRenderer = model.getLeftHandCube();
 			}
-			if (!armRenderer.cubeList.isEmpty()) {
-				ModelBox armBox = armRenderer.cubeList.get(0);
-				float x = 0.125F - 0.03125F * (armBox.posX2 - armBox.posX1);
+			if(armRenderer != null) {
+				float x = 0.125F - 0.03125F * (armRenderer.size.x);
 				if (handSide == EnumHandSide.LEFT) {
 					x *= -1.0F;
 				}
-				float y = 0.0625F * (armBox.posY2 - armBox.posY1 - 12.0F);
+				float y = 0.0625F * (armRenderer.size.y -12F);
 				GlStateManager.translate(x, y, 0.0F);
 			}
 		}
