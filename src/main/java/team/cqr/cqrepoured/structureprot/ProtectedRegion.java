@@ -51,6 +51,8 @@ public class ProtectedRegion {
 	private boolean isGenerating = true;
 	private final Set<UUID> entityDependencies = new HashSet<>();
 	private final Set<BlockPos> blockDependencies = new HashSet<>();
+	//Save handling
+	private boolean hasBeenModified = false;
 
 	public ProtectedRegion(World world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
 		this.world = world;
@@ -63,20 +65,32 @@ public class ProtectedRegion {
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
 		this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
+		this.hasBeenModified = false;
 	}
 
 	public ProtectedRegion(World world, NBTTagCompound compound) {
 		this.world = world;
 		this.readFromNBT(compound);
+		this.hasBeenModified = false;
 	}
 
 	public ProtectedRegion(World world, ByteBuf buf) {
 		this.world = world;
 		this.readFromByteBuf(buf);
+		this.hasBeenModified = false;
 	}
 
 	public NBTTagCompound writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToNBT(tag);
+		return tag;
+	}
+	
+	public boolean shouldBeSaved() {
+		return this.hasBeenModified;
+	}
+	
+	public void writeToNBT(NBTTagCompound compound) {
 		compound.setString("version", PROTECTED_REGION_VERSION);
 		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
 		compound.setString("name", this.name);
@@ -102,7 +116,7 @@ public class ProtectedRegion {
 			nbtTagList1.appendTag(NBTUtil.createPosTag(blockPos));
 		}
 		compound.setTag("blockDependencies", nbtTagList2);
-		return compound;
+		this.hasBeenModified = false;
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
@@ -146,6 +160,7 @@ public class ProtectedRegion {
 		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
 			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
 		}
+		this.hasBeenModified = true;
 	}
 
 	public void writeToByteBuf(ByteBuf buf) {
@@ -261,6 +276,8 @@ public class ProtectedRegion {
 		if (this.world != null && !this.world.isRemote) {
 			// TODO sync
 		}
+		
+		this.hasBeenModified = true;
 	}
 
 	public void updateProtectedBlocks() {
@@ -349,6 +366,8 @@ public class ProtectedRegion {
 
 		if (flag && this.world != null && !this.world.isRemote) {
 			// TODO sync
+			
+			this.hasBeenModified = true;
 		}
 	}
 
@@ -356,6 +375,7 @@ public class ProtectedRegion {
 		boolean flag = this.entityDependencies.remove(uuid);
 
 		if (flag && this.world != null && !this.world.isRemote) {
+			this.hasBeenModified = true;
 			if (!this.isValid()) {
 				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 				if (protectedRegionManager != null) {
@@ -384,6 +404,7 @@ public class ProtectedRegion {
 
 		if (flag && this.world != null && !this.world.isRemote) {
 			// TODO sync
+			this.hasBeenModified = true;
 		}
 	}
 
@@ -391,6 +412,7 @@ public class ProtectedRegion {
 		boolean flag = this.blockDependencies.remove(pos);
 
 		if (flag && this.world != null && !this.world.isRemote) {
+			this.hasBeenModified = true;
 			if (!this.isValid()) {
 				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 				if (protectedRegionManager != null) {
@@ -419,6 +441,7 @@ public class ProtectedRegion {
 
 		if (this.world != null && !this.world.isRemote) {
 			// TODO sync
+			this.hasBeenModified = true;
 		}
 	}
 

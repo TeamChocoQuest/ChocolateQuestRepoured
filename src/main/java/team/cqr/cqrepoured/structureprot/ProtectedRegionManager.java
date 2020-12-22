@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketAddProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketDeleteProtectedRegion;
+import team.cqr.cqrepoured.util.data.FileIOUtil;
 
 public class ProtectedRegionManager {
 
@@ -104,6 +105,23 @@ public class ProtectedRegionManager {
 			this.protectedRegions.remove(uuid);
 
 			if (this.world != null && !this.world.isRemote) {
+				
+				Thread deleteThread  = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							File regionFile = new File(ProtectedRegionManager.this.folder,  uuid.toString() + ".nbt");
+							regionFile.delete();
+						} catch(Exception ex) {
+							//TODO: Log failure
+						}
+					}
+				});
+				deleteThread.setName("CQR-Prot-File-Deletion-Thread");
+				deleteThread.setDaemon(true);
+				deleteThread.start();
+				
 				CQRMain.NETWORK.sendToDimension(new SPacketDeleteProtectedRegion(uuid), this.world.provider.getDimension());
 			}
 		}
@@ -122,12 +140,41 @@ public class ProtectedRegionManager {
 			if (!this.folder.exists()) {
 				this.folder.mkdirs();
 			}
-			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
+			/*for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
 				file.delete();
 			}
 			for (ProtectedRegion protectedRegion : this.protectedRegions.values()) {
 				this.createFileFromProtectedRegion(this.folder, protectedRegion);
-			}
+			}*/
+			Thread t = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					for (ProtectedRegion protectedRegion : ProtectedRegionManager.this.protectedRegions.values()) {
+						if(protectedRegion.shouldBeSaved()) {
+							File file = new File(folder, protectedRegion.getUuid().toString() + ".nbt");
+							try {
+								if (!file.exists() && !file.createNewFile()) {
+									throw new FileNotFoundException();
+								}
+								try  {
+									NBTTagCompound rootCompound = FileIOUtil.getRootNBTTagOfFile(file);
+									protectedRegion.writeToNBT(rootCompound);
+									FileIOUtil.saveNBTCompoundToFile(rootCompound, file);
+								} catch(Exception ex) {
+									//TODO: Warning
+								}
+							} catch (IOException e) {
+								CQRMain.logger.info(String.format("Failed to save protected region to file: %s", file.getName()), e);
+							}
+						}
+					}
+				}
+				
+			});
+			t.setName("CQR-Protection-Save-Thread");
+			t.setDaemon(true);
+			t.start();
 		}
 	}
 
