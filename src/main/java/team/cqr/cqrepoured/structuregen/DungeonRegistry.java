@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.structuregen;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +14,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
+import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -106,12 +104,8 @@ public class DungeonRegistry {
 	}
 
 	private DungeonBase createDungeonFromFile(File file) {
-		Properties prop = new Properties();
-
-		try (InputStream inputStream = new FileInputStream(file)) {
-			prop.load(inputStream);
-		} catch (IOException e) {
-			CQRMain.logger.error("Failed to load file " + file.getName(), e);
+		Properties prop = PropertyFileHelper.readPropFile(file);
+		if(prop == null) {
 			return null;
 		}
 

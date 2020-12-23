@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -63,6 +65,7 @@ public class FileIOUtil {
 		}
 	}
 
+	@Nullable
 	public static NBTTagCompound getRootNBTTagOfFile(File file) {
 		if (file.exists() && file.isFile() && file.getName().contains(".nbt")) {
 			InputStream stream = null;

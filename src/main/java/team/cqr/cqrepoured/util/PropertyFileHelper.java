@@ -1,7 +1,12 @@
 package team.cqr.cqrepoured.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -18,6 +23,22 @@ import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class PropertyFileHelper {
+
+	@Nullable
+	public static Properties readPropFile(File file) {
+		if (file.exists() && file.isFile()) {
+			Properties prop = new Properties();
+
+			try (InputStream inputStream = new FileInputStream(file)) {
+				prop.load(inputStream);
+				return prop;
+			} catch (IOException e) {
+				CQRMain.logger.error("Failed to load file " + file.getName(), e);
+				return null;
+			}
+		}
+		return null;
+	}
 
 	public static String getStringProperty(Properties prop, String key, String defVal) {
 		String s = prop.getProperty(key);
