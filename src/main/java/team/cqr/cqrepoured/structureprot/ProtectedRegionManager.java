@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketAddProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketDeleteProtectedRegion;
-import team.cqr.cqrepoured.util.data.FileIOUtil;
 
 public class ProtectedRegionManager {
 
@@ -132,21 +131,7 @@ public class ProtectedRegionManager {
 			Thread t = new Thread(() -> {
 				for (ProtectedRegion protectedRegion : ProtectedRegionManager.this.protectedRegions.values()) {
 					if (protectedRegion.shouldBeSaved()) {
-						File file = new File(folder, protectedRegion.getUuid().toString() + ".nbt");
-						try {
-							if (!file.exists() && !file.createNewFile()) {
-								throw new FileNotFoundException();
-							}
-							try {
-								NBTTagCompound rootCompound = FileIOUtil.getRootNBTTagOfFile(file);
-								protectedRegion.writeToNBT(rootCompound);
-								FileIOUtil.saveNBTCompoundToFile(rootCompound, file);
-							} catch (Exception ex) {
-								// TODO: Warning
-							}
-						} catch (IOException e) {
-							CQRMain.logger.info(String.format("Failed to save protected region to file: %s", file.getName()), e);
-						}
+						ProtectedRegionManager.this.createFileFromProtectedRegion(ProtectedRegionManager.this.folder, protectedRegion);
 					}
 				}
 			});
