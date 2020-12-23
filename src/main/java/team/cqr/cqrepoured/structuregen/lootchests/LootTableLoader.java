@@ -103,7 +103,7 @@ public class LootTableLoader {
 			WeightedItemStack itemstack = new WeightedItemStack(item, damage, min_count, max_count, chance, enchant, min_lvl, max_lvl, treasure, enchChance);
 			return itemstack;
 		} else {
-			CQRMain.logger.error("Config string is invalid! Not enough arguments!");
+			CQRMain.logger.error("Config string (%s) is invalid! Not enough arguments!", entry);
 			return null;
 		}
 	}
