@@ -555,7 +555,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			} else {
 				this.prevPathTargetPoint = -1;
 			}
-		} else {
+		} else if (compound.hasKey("pathTag", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathTag");
 			this.path.readFromNBT(pathTag.getCompoundTag("path"));
 			this.prevPathTargetPoint = pathTag.getInteger("prevPathTargetPoint");
