@@ -65,7 +65,7 @@ public class ProtectedRegion {
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
 		this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
-		this.hasBeenModified = true;
+		this.hasBeenModified = false;
 	}
 
 	public ProtectedRegion(World world, NBTTagCompound compound) {
@@ -77,7 +77,7 @@ public class ProtectedRegion {
 	public ProtectedRegion(World world, ByteBuf buf) {
 		this.world = world;
 		this.readFromByteBuf(buf);
-		this.hasBeenModified = true;
+		this.hasBeenModified = false;
 	}
 
 	public NBTTagCompound writeToNBT() {
