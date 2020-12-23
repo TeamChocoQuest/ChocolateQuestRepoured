@@ -51,7 +51,7 @@ public class ProtectedRegion {
 	private boolean isGenerating = true;
 	private final Set<UUID> entityDependencies = new HashSet<>();
 	private final Set<BlockPos> blockDependencies = new HashSet<>();
-	//Save handling
+	// Save handling
 	private boolean hasBeenModified = false;
 
 	public ProtectedRegion(World world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
@@ -85,11 +85,11 @@ public class ProtectedRegion {
 		writeToNBT(tag);
 		return tag;
 	}
-	
+
 	public boolean shouldBeSaved() {
 		return this.hasBeenModified;
 	}
-	
+
 	public void writeToNBT(NBTTagCompound compound) {
 		compound.setString("version", PROTECTED_REGION_VERSION);
 		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
@@ -276,7 +276,7 @@ public class ProtectedRegion {
 		if (this.world != null && !this.world.isRemote) {
 			// TODO sync
 		}
-		
+
 		this.hasBeenModified = true;
 	}
 
@@ -366,7 +366,7 @@ public class ProtectedRegion {
 
 		if (flag && this.world != null && !this.world.isRemote) {
 			// TODO sync
-			
+
 			this.hasBeenModified = true;
 		}
 	}
