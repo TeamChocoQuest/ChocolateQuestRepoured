@@ -180,6 +180,9 @@ public class ProtectedRegionManager {
 			ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
 			if (!this.protectedRegions.containsKey(protectedRegion.getUuid())) {
 				this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
+				if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
+					this.createFileFromProtectedRegion(this.folder, protectedRegion);
+				}
 			}
 		} catch (IOException e) {
 			CQRMain.logger.info(String.format("Failed to load protected region from file: %s", file.getName()), e);

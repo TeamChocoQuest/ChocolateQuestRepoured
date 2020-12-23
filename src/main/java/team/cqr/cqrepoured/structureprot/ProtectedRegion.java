@@ -32,7 +32,7 @@ public class ProtectedRegion {
 	private static final Set<Material> MATERIAL_BLACKLIST = new HashSet<>();
 	private static boolean liquidsWhitelisted = false;
 
-	private static final String PROTECTED_REGION_VERSION = "1.1.0";
+	public static final String PROTECTED_REGION_VERSION = "1.1.0";
 	private final World world;
 	private UUID uuid = MathHelper.getRandomUUID();
 	private String name;
