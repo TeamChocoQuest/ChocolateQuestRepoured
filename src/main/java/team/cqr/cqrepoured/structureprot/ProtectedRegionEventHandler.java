@@ -54,17 +54,17 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onWorldUnloadEvent(ChunkEvent.Load event) {
+	public static void onChunkUnloadEvent(ChunkEvent.Load event) {
 		ProtectedRegionManager.handleChunkLoad(event.getWorld(), event.getChunk());
 	}
 
 	@SubscribeEvent
-	public static void onWorldUnloadEvent(ChunkEvent.Unload event) {
+	public static void onChunkUnloadEvent(ChunkEvent.Unload event) {
 		ProtectedRegionManager.handleChunkUnload(event.getWorld(), event.getChunk());
 	}
 
 	@SubscribeEvent
-	public static void onWorldUnloadEvent(TickEvent.WorldTickEvent event) {
+	public static void onWorldTickEvent(TickEvent.WorldTickEvent event) {
 		ProtectedRegionManager.handleWorldTick(event.world);
 	}
 

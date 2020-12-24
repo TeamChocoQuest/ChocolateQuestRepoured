@@ -140,7 +140,7 @@ public class ProtectedRegionManager {
 				container.lastTickForceLoaded = time;
 			} else if (time - container.lastTickForceLoaded > 1200) {
 				if (container.protectedRegion.isDirty()) {
-					instance.createFileFromProtectedRegion(container.protectedRegion);
+					instance.saveProtectedRegionToFile(container.protectedRegion);
 				}
 				iterator.remove();
 			}
@@ -251,12 +251,12 @@ public class ProtectedRegionManager {
 				}
 				iterator.remove();
 			} else if (container.protectedRegion.isDirty()) {
-				this.createFileFromProtectedRegion(container.protectedRegion);
+				this.saveProtectedRegionToFile(container.protectedRegion);
 			}
 		}
 	}
 
-	private void createFileFromProtectedRegion(ProtectedRegion protectedRegion) {
+	private void saveProtectedRegionToFile(ProtectedRegion protectedRegion) {
 		File file = new File(this.folder, protectedRegion.getUuid().toString() + ".nbt");
 		try {
 			if (!file.exists()) {
@@ -282,7 +282,7 @@ public class ProtectedRegionManager {
 			ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
 
 			if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
-				this.createFileFromProtectedRegion(protectedRegion);
+				this.saveProtectedRegionToFile(protectedRegion);
 			}
 
 			return protectedRegion;
