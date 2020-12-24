@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.util.Reference;
 public class CapabilityHandler {
 
 	@SubscribeEvent
-	public static void attachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
+	public static void onEntityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityLivingBase) {
 			event.addCapability(CapabilityCooldownHandlerProvider.REGISTRY_NAME, CapabilityCooldownHandlerProvider.createProvider());
 		}
