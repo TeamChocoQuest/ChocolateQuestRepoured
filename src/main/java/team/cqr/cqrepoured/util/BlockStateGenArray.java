@@ -135,7 +135,7 @@ public class BlockStateGenArray {
 		return this.addInternal(new EntityInfo(structurePos, entity));
 	}
 
-	private boolean addInternal(GenerationPhase phase, AbstractBlockInfo blockInfo, EnumPriority priority) {
+	public boolean addInternal(GenerationPhase phase, AbstractBlockInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
 		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
 

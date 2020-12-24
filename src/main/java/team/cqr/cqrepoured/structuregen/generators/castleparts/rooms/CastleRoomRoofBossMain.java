@@ -7,29 +7,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.factories.GearedMobFactory;
-import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonRandomizedCastle;
-import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
+import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoBoss;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -82,38 +75,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	@Override
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		BlockPos pos = this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
-		if (bossResourceLocation == null) {
-
-			EntityArmorStand indicator = new EntityArmorStand(world);
-			indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
-			indicator.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-			indicator.setEntityInvulnerable(true);
-			indicator.setInvisible(true);
-			indicator.setAlwaysRenderNameTag(true);
-			indicator.setSilent(true);
-			indicator.setNoGravity(true);
-
-			genArray.addEntity(BlockPos.ORIGIN, indicator);
-
-			return;
-		}
-
-		Entity mobEntity = EntityList.createEntityByIDFromName(bossResourceLocation, world);
-
-		// SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
-
-		if (mobEntity != null) {
-			Block spawnerBlock = CQRBlocks.SPAWNER;
-			IBlockState state = spawnerBlock.getDefaultState();
-			TileEntitySpawner spawner = (TileEntitySpawner) spawnerBlock.createTileEntity(world, state);
-			if (spawner != null) {
-				spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
-				NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
-				genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
-
-				bossUuids.add(mobEntity.getUniqueID().toString());
-			}
-		}
+		genArray.addInternal(BlockStateGenArray.GenerationPhase.POST, new BlockInfoBoss(pos), BlockStateGenArray.EnumPriority.MEDIUM);
 	}
 
 	private void placeTorches(BlockPos nwCorner, BlockStateGenArray genArray) {
