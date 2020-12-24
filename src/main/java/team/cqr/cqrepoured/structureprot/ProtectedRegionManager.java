@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.structureprot;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,89 +9,184 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.io.FileUtils;
-
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.SPacketAddProtectedRegion;
-import team.cqr.cqrepoured.network.server.packet.SPacketDeleteProtectedRegion;
+import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
+import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 
 public class ProtectedRegionManager {
 
-	private static final ProtectedRegionManager CLIENT_INSTANCE = new ProtectedRegionManager(null);
-	private static final Map<World, ProtectedRegionManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
-	private final Map<UUID, ProtectedRegion> protectedRegions = Collections.synchronizedMap(new HashMap<>());
+	private static final Int2ObjectMap<ProtectedRegionManager> INSTANCES = new Int2ObjectOpenHashMap<>();
+	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new HashMap<>();
 	private final World world;
 	private final File folder;
 
+	public static class ProtectedRegionContainer {
+		public final ProtectedRegion protectedRegion;
+		public long lastTickForceLoaded;
+		public final Set<Chunk> chunkSet = new HashSet<>();
+
+		public ProtectedRegionContainer(ProtectedRegion protectedRegion) {
+			this.protectedRegion = protectedRegion;
+			this.lastTickForceLoaded = protectedRegion.getWorld().getTotalWorldTime();
+
+			BlockPos p1 = protectedRegion.getStartPos();
+			BlockPos p2 = protectedRegion.getEndPos();
+			for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
+				for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
+					Chunk chunk = protectedRegion.getWorld().getChunkProvider().getLoadedChunk(x, z);
+					if (chunk != null) {
+						this.chunkSet.add(chunk);
+					}
+				}
+			}
+		}
+	}
+
 	public ProtectedRegionManager(World world) {
 		this.world = world;
-		if (world != null) {
-			int dim = world.provider.getDimension();
-			if (dim == 0) {
-				this.folder = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/protected_regions");
-			} else {
-				this.folder = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/protected_regions");
-			}
+		int dim = world.provider.getDimension();
+		if (dim == 0) {
+			this.folder = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/protected_regions");
 		} else {
-			this.folder = null;
+			this.folder = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/protected_regions");
 		}
 	}
 
 	@Nullable
 	public static ProtectedRegionManager getInstance(World world) {
-		if (!world.isRemote) {
-			return ProtectedRegionManager.INSTANCES.get(world);
+		if (world.isRemote) {
+			return null;
 		}
-		return ProtectedRegionManager.CLIENT_INSTANCE;
+		return INSTANCES.get(world.provider.getDimension());
 	}
 
 	public static void handleWorldLoad(World world) {
-		if (!world.isRemote && !INSTANCES.containsKey(world)) {
-			INSTANCES.put(world, new ProtectedRegionManager(world));
-			INSTANCES.get(world).loadData();
+		if (world.isRemote) {
+			return;
 		}
+		INSTANCES.computeIfAbsent(world.provider.getDimension(), key -> new ProtectedRegionManager(world));
 	}
 
 	public static void handleWorldSave(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).saveData();
+		if (world.isRemote) {
+			return;
+		}
+		ProtectedRegionManager manager = INSTANCES.get(world.provider.getDimension());
+		if (manager != null) {
+			manager.saveProtectedRegions();
 		}
 	}
 
 	public static void handleWorldUnload(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).saveData();
-			INSTANCES.remove(world);
+		if (world.isRemote) {
+			return;
+		}
+		INSTANCES.remove(world.provider.getDimension());
+	}
+
+	public static void handleChunkLoad(World world, Chunk chunk) {
+		if (world.isRemote) {
+			return;
+		}
+		ProtectedRegionManager instance = INSTANCES.get(world.provider.getDimension());
+		if (instance == null) {
+			return;
+		}
+		CapabilityProtectedRegionData capabilityProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+		capabilityProtectedRegionData.removeIf(uuid -> instance.provideProtectedRegion(uuid) == null);
+	}
+
+	public static void handleChunkUnload(World world, Chunk chunk) {
+		if (world.isRemote) {
+			return;
+		}
+		ProtectedRegionManager instance = INSTANCES.get(world.provider.getDimension());
+		if (instance == null) {
+			return;
+		}
+		for (ProtectedRegionContainer container : instance.protectedRegions.values()) {
+			container.chunkSet.remove(chunk);
+		}
+	}
+
+	public static void handleWorldTick(World world) {
+		if (world.isRemote) {
+			return;
+		}
+		ProtectedRegionManager instance = INSTANCES.get(world.provider.getDimension());
+		if (instance == null) {
+			return;
+		}
+		long time = world.getTotalWorldTime();
+		for (Iterator<ProtectedRegionContainer> iterator = instance.protectedRegions.values().iterator(); iterator.hasNext();) {
+			ProtectedRegionContainer container = iterator.next();
+			if (!container.chunkSet.isEmpty()) {
+				container.lastTickForceLoaded = time;
+			} else if (time - container.lastTickForceLoaded > 1200) {
+				if (container.protectedRegion.isDirty()) {
+					instance.createFileFromProtectedRegion(container.protectedRegion);
+				}
+				iterator.remove();
+			}
 		}
 	}
 
 	@Nullable
+	public ProtectedRegion provideProtectedRegion(UUID uuid) {
+		ProtectedRegionContainer container = this.protectedRegions.get(uuid);
+		if (container != null) {
+			return container.protectedRegion;
+		}
+		ProtectedRegion protectedRegion = this.createProtectedRegionFromFile(uuid);
+		if (protectedRegion != null) {
+			this.protectedRegions.put(uuid, new ProtectedRegionContainer(protectedRegion));
+		}
+		return protectedRegion;
+	}
+
+	@Nullable
 	public ProtectedRegion getProtectedRegion(UUID uuid) {
-		return this.protectedRegions.get(uuid);
+		ProtectedRegionContainer container = this.protectedRegions.get(uuid);
+		return container != null ? container.protectedRegion : null;
 	}
 
 	public void addProtectedRegion(ProtectedRegion protectedRegion) {
-		if (protectedRegion != null) {
-			if (this.protectedRegions.containsKey(protectedRegion.getUuid())) {
-				CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.getUuid());
-			} else {
-				this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
+		if (!protectedRegion.isValid()) {
+			return;
+		}
 
-				if (this.world != null && !this.world.isRemote) {
-					CQRMain.NETWORK.sendToDimension(new SPacketAddProtectedRegion(protectedRegion), this.world.provider.getDimension());
-				}
+		if (this.protectedRegions.containsKey(protectedRegion.getUuid())) {
+			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.getUuid());
+			return;
+		}
+
+		BlockPos p1 = protectedRegion.getStartPos();
+		BlockPos p2 = protectedRegion.getEndPos();
+		for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
+			for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
+				Chunk chunk = this.world.getChunk(x, z);
+				CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+				capProtectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid());
 			}
 		}
+
+		this.protectedRegions.put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
 	}
 
 	public void removeProtectedRegion(ProtectedRegion protectedRegion) {
@@ -100,103 +194,102 @@ public class ProtectedRegionManager {
 	}
 
 	public void removeProtectedRegion(UUID uuid) {
-		if (this.protectedRegions.containsKey(uuid)) {
-			this.protectedRegions.remove(uuid);
+		ProtectedRegionContainer container = this.protectedRegions.remove(uuid);
 
-			if (this.world != null && !this.world.isRemote) {
+		File file = new File(ProtectedRegionManager.this.folder, uuid.toString() + ".nbt");
+		if (file.exists()) {
+			file.delete();
+		}
 
-				Thread deleteThread = new Thread(new File(ProtectedRegionManager.this.folder, uuid.toString() + ".nbt")::delete);
-				deleteThread.setName("CQR-Prot-File-Deletion-Thread");
-				deleteThread.setDaemon(true);
-				deleteThread.start();
-
-				CQRMain.NETWORK.sendToDimension(new SPacketDeleteProtectedRegion(uuid), this.world.provider.getDimension());
+		if (container != null) {
+			for (Chunk chunk : container.chunkSet) {
+				CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+				capProtectedRegionData.removeProtectedRegionUuid(uuid);
 			}
 		}
 	}
 
-	public List<ProtectedRegion> getProtectedRegions() {
-		return new ArrayList<>(this.protectedRegions.values());
-	}
+	public Iterable<ProtectedRegion> getProtectedRegions() {
+		return () -> new Iterator<ProtectedRegion>() {
+			private final Iterator<ProtectedRegionContainer> iterator = Collections.unmodifiableCollection(ProtectedRegionManager.this.protectedRegions.values()).iterator();
 
-	public void clearProtectedRegions() {
-		this.protectedRegions.clear();
-	}
+			@Override
+			public boolean hasNext() {
+				return this.iterator.hasNext();
+			}
 
-	private void saveData() {
-		if (!this.world.isRemote) {
-			if (!this.folder.exists()) {
-				this.folder.mkdirs();
+			@Override
+			public ProtectedRegion next() {
+				return this.iterator.next().protectedRegion;
 			}
-			Thread t = new Thread(() -> {
-				for (ProtectedRegion protectedRegion : ProtectedRegionManager.this.protectedRegions.values()) {
-					if (protectedRegion.shouldBeSaved()) {
-						ProtectedRegionManager.this.createFileFromProtectedRegion(ProtectedRegionManager.this.folder, protectedRegion);
-					}
-				}
-			});
-			t.setName("CQR-Protection-Save-Thread");
-			t.setDaemon(true);
-			t.start();
-		}
-	}
-
-	private void createFileFromProtectedRegion(File folder, ProtectedRegion protectedRegion) {
-		File file = new File(folder, protectedRegion.getUuid().toString() + ".nbt");
-		try {
-			if (!file.exists() && !file.createNewFile()) {
-				throw new FileNotFoundException();
-			}
-			try (OutputStream outputStream = new FileOutputStream(file)) {
-				CompressedStreamTools.writeCompressed(protectedRegion.writeToNBT(), outputStream);
-			}
-		} catch (IOException e) {
-			CQRMain.logger.info(String.format("Failed to save protected region to file: %s", file.getName()), e);
-		}
-	}
-
-	private void loadData() {
-		if (!this.world.isRemote) {
-			if (!this.folder.exists()) {
-				this.folder.mkdirs();
-			}
-			this.protectedRegions.clear();
-			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
-				this.createProtectedRegionFromFile(file);
-			}
-			List<UUID> keys = new ArrayList<>(this.protectedRegions.keySet());
-			for (UUID key : keys) {
-				ProtectedRegion protectedRegion = this.protectedRegions.get(key);
-				if (protectedRegion == null || !protectedRegion.isValid()) {
-					this.protectedRegions.remove(key);
-				}
-			}
-		}
-	}
-
-	private void createProtectedRegionFromFile(File file) {
-		try (InputStream inputStream = new FileInputStream(file)) {
-			NBTTagCompound compound = CompressedStreamTools.readCompressed(inputStream);
-			ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
-			if (!this.protectedRegions.containsKey(protectedRegion.getUuid())) {
-				this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
-				if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
-					this.createFileFromProtectedRegion(this.folder, protectedRegion);
-				}
-			}
-		} catch (IOException e) {
-			CQRMain.logger.info(String.format("Failed to load protected region from file: %s", file.getName()), e);
-		}
+		};
 	}
 
 	public List<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
+		// load chunk which also loads all associated protected regions
+		this.world.getChunk(pos);
 		List<ProtectedRegion> list = new ArrayList<>();
-		for (ProtectedRegion protectedRegion : this.protectedRegions.values()) {
-			if (protectedRegion.isInsideProtectedRegion(pos)) {
-				list.add(protectedRegion);
+		for (ProtectedRegionContainer container : this.protectedRegions.values()) {
+			if (container.protectedRegion.isInsideProtectedRegion(pos)) {
+				list.add(container.protectedRegion);
 			}
 		}
 		return list;
+	}
+
+	private void saveProtectedRegions() {
+		if (!this.folder.exists()) {
+			this.folder.mkdirs();
+		}
+
+		for (Iterator<ProtectedRegionContainer> iterator = this.protectedRegions.values().iterator(); iterator.hasNext();) {
+			ProtectedRegionContainer container = iterator.next();
+			if (!container.protectedRegion.isValid()) {
+				File file = new File(this.folder, container.protectedRegion.getUuid() + ".nbt");
+				if (file.exists()) {
+					file.delete();
+				}
+				iterator.remove();
+			} else if (container.protectedRegion.isDirty()) {
+				this.createFileFromProtectedRegion(container.protectedRegion);
+			}
+		}
+	}
+
+	private void createFileFromProtectedRegion(ProtectedRegion protectedRegion) {
+		File file = new File(this.folder, protectedRegion.getUuid().toString() + ".nbt");
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			try (OutputStream out = new FileOutputStream(file)) {
+				NBTTagCompound compound = protectedRegion.writeToNBT();
+				CompressedStreamTools.writeCompressed(compound, out);
+			}
+		} catch (IOException e) {
+			CQRMain.logger.error(String.format("Failed to write protected region to file: %s", file.getName()), e);
+		}
+	}
+
+	@Nullable
+	private ProtectedRegion createProtectedRegionFromFile(UUID uuid) {
+		File file = new File(this.folder, uuid.toString() + ".nbt");
+		if (!file.exists()) {
+			return null;
+		}
+		try (InputStream in = new FileInputStream(file)) {
+			NBTTagCompound compound = CompressedStreamTools.readCompressed(in);
+			ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
+
+			if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
+				this.createFileFromProtectedRegion(protectedRegion);
+			}
+
+			return protectedRegion;
+		} catch (IOException e) {
+			CQRMain.logger.error(String.format("Failed to read protected region from file: %s", file.getName()), e);
+		}
+		return null;
 	}
 
 }

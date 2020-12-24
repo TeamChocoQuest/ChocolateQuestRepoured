@@ -1,11 +1,8 @@
 package team.cqr.cqrepoured.structureprot;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
@@ -16,14 +13,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import team.cqr.cqrepoured.util.Reference;
 
 @EventBusSubscriber(modid = Reference.MODID)
@@ -35,20 +31,6 @@ public class ProtectedRegionEventHandler {
 
 	private ProtectedRegionEventHandler() {
 
-	}
-
-	@SubscribeEvent
-	public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-		ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
-		List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
-		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(protectedRegions), (EntityPlayerMP) event.player);
-	}
-
-	@SubscribeEvent
-	public static void onPlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
-		ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
-		List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
-		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(protectedRegions), (EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent
@@ -69,6 +51,21 @@ public class ProtectedRegionEventHandler {
 	@SubscribeEvent
 	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
 		ProtectedRegionManager.handleWorldUnload(event.getWorld());
+	}
+
+	@SubscribeEvent
+	public static void onWorldUnloadEvent(ChunkEvent.Load event) {
+		ProtectedRegionManager.handleChunkLoad(event.getWorld(), event.getChunk());
+	}
+
+	@SubscribeEvent
+	public static void onWorldUnloadEvent(ChunkEvent.Unload event) {
+		ProtectedRegionManager.handleChunkUnload(event.getWorld(), event.getChunk());
+	}
+
+	@SubscribeEvent
+	public static void onWorldUnloadEvent(TickEvent.WorldTickEvent event) {
+		ProtectedRegionManager.handleWorldTick(event.world);
 	}
 
 	@SubscribeEvent

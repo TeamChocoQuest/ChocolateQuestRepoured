@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.client.structureprot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,7 +31,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.util.Reference;
 
 @Mod.EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
@@ -46,16 +44,17 @@ public class ProtectedRegionClientEventHandler {
 
 	}
 
-	public static void addOrResetProtectedRegionIndicator(ProtectedRegion protectedRegion, BlockPos pos, @Nullable EntityPlayerMP player) {
-		if (protectedRegion.getWorld().isRemote) {
-			ProtectedRegionIndicator protectedRegionIndicator = PROTECTED_REGION_INDICATORS.get(protectedRegion.getUuid());
+	public static void addOrResetProtectedRegionIndicator(World world, UUID uuid, BlockPos start, BlockPos end, BlockPos pos, @Nullable EntityPlayerMP player) {
+		if (world.isRemote) {
+			ProtectedRegionIndicator protectedRegionIndicator = PROTECTED_REGION_INDICATORS.get(uuid);
 			if (protectedRegionIndicator != null) {
+				protectedRegionIndicator.setStart(start);
+				protectedRegionIndicator.setEnd(end);
 				protectedRegionIndicator.resetLifeTime();
 			} else {
-				PROTECTED_REGION_INDICATORS.put(protectedRegion.getUuid(), new ProtectedRegionIndicator(protectedRegion));
+				PROTECTED_REGION_INDICATORS.put(uuid, new ProtectedRegionIndicator(uuid, start, end));
 			}
 
-			World world = protectedRegion.getWorld();
 			for (int i = 0; i < 4; i++) {
 				double x = pos.getX() - 0.1D + 1.2D * world.rand.nextDouble();
 				double y = pos.getY() - 0.1D + 1.2D * world.rand.nextDouble();
@@ -63,7 +62,7 @@ public class ProtectedRegionClientEventHandler {
 				world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, x, y, z, 0.0D, 0.0D, 0.0D);
 			}
 		} else if (player != null) {
-			CQRMain.NETWORK.sendTo(new SPacketAddOrResetProtectedRegionIndicator(protectedRegion.getUuid(), pos), player);
+			CQRMain.NETWORK.sendTo(new SPacketAddOrResetProtectedRegionIndicator(uuid, start, end, pos), player);
 		}
 	}
 
@@ -72,16 +71,11 @@ public class ProtectedRegionClientEventHandler {
 		if (event.phase == Phase.START) {
 			return;
 		}
-		List<UUID> toRemove = new ArrayList<>();
-		for (ProtectedRegionIndicator protectedRegionIndicator : PROTECTED_REGION_INDICATORS.values()) {
+		for (Iterator<ProtectedRegionIndicator> iterator = PROTECTED_REGION_INDICATORS.values().iterator(); iterator.hasNext();) {
+			ProtectedRegionIndicator protectedRegionIndicator = iterator.next();
 			if (protectedRegionIndicator.getLifeTime() <= 0) {
-				toRemove.add(protectedRegionIndicator.getProtectedRegion().getUuid());
-			} else {
-				protectedRegionIndicator.update();
+				iterator.remove();
 			}
-		}
-		for (UUID uuid : toRemove) {
-			PROTECTED_REGION_INDICATORS.remove(uuid);
 		}
 	}
 
@@ -105,7 +99,7 @@ public class ProtectedRegionClientEventHandler {
 
 		mc.getTextureManager().bindTexture(TEXTURE);
 		for (ProtectedRegionIndicator protectedRegionIndicator : PROTECTED_REGION_INDICATORS.values()) {
-			BlockPos pos = protectedRegionIndicator.getProtectedRegion().getStartPos();
+			BlockPos pos = protectedRegionIndicator.getStart();
 			render(protectedRegionIndicator, pos.getX() - x, pos.getY() - y, pos.getZ() - z, partialTicks);
 		}
 
@@ -117,9 +111,8 @@ public class ProtectedRegionClientEventHandler {
 	}
 
 	private static void render(ProtectedRegionIndicator protectedRegionIndicator, double x, double y, double z, float partialTicks) {
-		ProtectedRegion protectedRegion = protectedRegionIndicator.getProtectedRegion();
-		BlockPos pos1 = protectedRegion.getStartPos();
-		BlockPos pos2 = protectedRegion.getEndPos();
+		BlockPos pos1 = protectedRegionIndicator.getStart();
+		BlockPos pos2 = protectedRegionIndicator.getEnd();
 		int sizeX = pos2.getX() - pos1.getX() + 1;
 		int sizeY = pos2.getY() - pos1.getY() + 1;
 		int sizeZ = pos2.getZ() - pos1.getZ() + 1;

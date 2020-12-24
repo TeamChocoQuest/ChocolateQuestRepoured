@@ -87,7 +87,7 @@ public class ProtectedRegionHelper {
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 			if (protectedRegion.preventBlockBreaking() && protectedRegion.isProtected(pos)) {
 				if (addOrResetProtectedRegionIndicator) {
-					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(protectedRegion, pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
 				}
 				return true;
 			}
@@ -122,7 +122,7 @@ public class ProtectedRegionHelper {
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 			if (protectedRegion.preventBlockPlacing() && protectedRegion.isProtected(pos)) {
 				if (addOrResetProtectedRegionIndicator) {
-					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(protectedRegion, pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
 				}
 				return true;
 			}

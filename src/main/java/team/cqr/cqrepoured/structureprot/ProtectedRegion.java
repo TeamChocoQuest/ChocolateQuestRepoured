@@ -20,8 +20,6 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.SPacketProtectedRegionRemoveBlockDependency;
-import team.cqr.cqrepoured.network.server.packet.SPacketProtectedRegionRemoveEntityDependency;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.ChunkUtil;
@@ -52,7 +50,7 @@ public class ProtectedRegion {
 	private final Set<UUID> entityDependencies = new HashSet<>();
 	private final Set<BlockPos> blockDependencies = new HashSet<>();
 	// Save handling
-	private boolean hasBeenModified = false;
+	private boolean dirty = false;
 
 	public ProtectedRegion(World world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
 		this.world = world;
@@ -65,19 +63,19 @@ public class ProtectedRegion {
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
 		this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
-		this.hasBeenModified = false;
+		this.dirty = false;
 	}
 
 	public ProtectedRegion(World world, NBTTagCompound compound) {
 		this.world = world;
 		this.readFromNBT(compound);
-		this.hasBeenModified = false;
+		this.dirty = false;
 	}
 
 	public ProtectedRegion(World world, ByteBuf buf) {
 		this.world = world;
 		this.readFromByteBuf(buf);
-		this.hasBeenModified = false;
+		this.dirty = false;
 	}
 
 	public NBTTagCompound writeToNBT() {
@@ -86,8 +84,12 @@ public class ProtectedRegion {
 		return tag;
 	}
 
-	public boolean shouldBeSaved() {
-		return this.hasBeenModified;
+	public void setIsDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	public boolean isDirty() {
+		return this.dirty;
 	}
 
 	public void writeToNBT(NBTTagCompound compound) {
@@ -116,7 +118,6 @@ public class ProtectedRegion {
 			nbtTagList1.appendTag(NBTUtil.createPosTag(blockPos));
 		}
 		compound.setTag("blockDependencies", nbtTagList2);
-		this.hasBeenModified = false;
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
@@ -160,9 +161,10 @@ public class ProtectedRegion {
 		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
 			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
 		}
-		this.hasBeenModified = true;
+		this.dirty = true;
 	}
 
+	@Deprecated
 	public void writeToByteBuf(ByteBuf buf) {
 		ByteBufUtil.writeUuid(buf, this.uuid);
 		ByteBufUtils.writeUTF8String(buf, this.name);
@@ -193,6 +195,7 @@ public class ProtectedRegion {
 		}
 	}
 
+	@Deprecated
 	public void readFromByteBuf(ByteBuf buf) {
 		this.uuid = ByteBufUtil.readUuid(buf);
 		this.name = ByteBufUtils.readUTF8String(buf);
@@ -225,6 +228,7 @@ public class ProtectedRegion {
 		for (int i = 0; i < blockDependenciesCount; i++) {
 			this.blockDependencies.add(ByteBufUtil.readBlockPos(buf));
 		}
+		this.dirty = true;
 	}
 
 	public boolean isInsideProtectedRegion(BlockPos pos) {
@@ -273,11 +277,7 @@ public class ProtectedRegion {
 		this.preventEntitySpawning = preventEntitySpawning;
 		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
 
-		if (this.world != null && !this.world.isRemote) {
-			// TODO sync
-		}
-
-		this.hasBeenModified = true;
+		this.dirty = true;
 	}
 
 	public void updateProtectedBlocks() {
@@ -298,10 +298,6 @@ public class ProtectedRegion {
 
 		if (chunkTicket != null) {
 			ForgeChunkManager.releaseTicket(chunkTicket);
-		}
-
-		if (this.world != null && !this.world.isRemote) {
-			// TODO sync
 		}
 	}
 
@@ -362,12 +358,8 @@ public class ProtectedRegion {
 			return;
 		}
 
-		boolean flag = this.entityDependencies.add(uuid);
-
-		if (flag && this.world != null && !this.world.isRemote) {
-			// TODO sync
-
-			this.hasBeenModified = true;
+		if (this.entityDependencies.add(uuid)) {
+			this.dirty = true;
 		}
 	}
 
@@ -375,14 +367,12 @@ public class ProtectedRegion {
 		boolean flag = this.entityDependencies.remove(uuid);
 
 		if (flag && this.world != null && !this.world.isRemote) {
-			this.hasBeenModified = true;
+			this.dirty = true;
 			if (!this.isValid()) {
 				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 				if (protectedRegionManager != null) {
 					ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
 				}
-			} else {
-				CQRMain.NETWORK.sendToDimension(new SPacketProtectedRegionRemoveEntityDependency(this.uuid, uuid), this.world.provider.getDimension());
 			}
 		}
 	}
@@ -400,26 +390,20 @@ public class ProtectedRegion {
 			return;
 		}
 
-		boolean flag = this.blockDependencies.add(pos);
-
-		if (flag && this.world != null && !this.world.isRemote) {
-			// TODO sync
-			this.hasBeenModified = true;
+		if (this.blockDependencies.add(pos)) {
+			this.dirty = true;
 		}
 	}
 
 	public void removeBlockDependency(BlockPos pos) {
-		boolean flag = this.blockDependencies.remove(pos);
+		if (this.blockDependencies.remove(pos)) {
+			this.dirty = true;
 
-		if (flag && this.world != null && !this.world.isRemote) {
-			this.hasBeenModified = true;
 			if (!this.isValid()) {
 				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 				if (protectedRegionManager != null) {
 					ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
 				}
-			} else {
-				CQRMain.NETWORK.sendToDimension(new SPacketProtectedRegionRemoveBlockDependency(this.uuid, pos), this.world.provider.getDimension());
 			}
 		}
 	}
@@ -438,11 +422,7 @@ public class ProtectedRegion {
 		}
 
 		this.isGenerating = false;
-
-		if (this.world != null && !this.world.isRemote) {
-			// TODO sync
-			this.hasBeenModified = true;
-		}
+		this.dirty = true;
 	}
 
 	public boolean isGenerating() {
