@@ -206,11 +206,10 @@ public class DungeonGenerator {
 			this.state = EnumDungeonGeneratorState.POST_GENERATION;
 
 			if (this.protectedRegion != null) {
+				this.protectedRegion.updateProtectedBlocks();
 				this.protectedRegion.finishGenerating();
 
-				if (this.protectedRegion.isValid()) {
-					this.protectedRegion.updateProtectedBlocks();
-				} else {
+				if (!this.protectedRegion.isValid()) {
 					ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 
 					if (manager != null) {
