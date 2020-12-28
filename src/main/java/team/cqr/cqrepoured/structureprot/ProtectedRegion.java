@@ -50,7 +50,8 @@ public class ProtectedRegion {
 	private final Set<UUID> entityDependencies = new HashSet<>();
 	private final Set<BlockPos> blockDependencies = new HashSet<>();
 	// Save handling
-	private boolean dirty = false;
+	private boolean needsSaving = false;
+	private boolean needsSyncing = false;
 
 	public ProtectedRegion(World world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
 		this.world = world;
@@ -63,19 +64,20 @@ public class ProtectedRegion {
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
 		this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
-		this.dirty = false;
 	}
 
 	public ProtectedRegion(World world, NBTTagCompound compound) {
 		this.world = world;
 		this.readFromNBT(compound);
-		this.dirty = false;
+		this.clearNeedsSaving();
+		this.clearNeedsSyncing();
 	}
 
 	public ProtectedRegion(World world, ByteBuf buf) {
 		this.world = world;
 		this.readFromByteBuf(buf);
-		this.dirty = false;
+		this.clearNeedsSaving();
+		this.clearNeedsSyncing();
 	}
 
 	public NBTTagCompound writeToNBT() {
@@ -84,12 +86,25 @@ public class ProtectedRegion {
 		return tag;
 	}
 
-	public void setIsDirty(boolean dirty) {
-		this.dirty = dirty;
+	public void markDirty() {
+		this.needsSaving = true;
+		this.needsSyncing = true;
 	}
 
-	public boolean isDirty() {
-		return this.dirty;
+	public void clearNeedsSaving() {
+		this.needsSaving = false;
+	}
+
+	public void clearNeedsSyncing() {
+		this.needsSyncing = false;
+	}
+
+	public boolean needsSaving() {
+		return this.needsSaving;
+	}
+
+	public boolean needsSyncing() {
+		return this.needsSyncing;
 	}
 
 	public void writeToNBT(NBTTagCompound compound) {
@@ -161,10 +176,10 @@ public class ProtectedRegion {
 		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
 			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
 		}
-		this.dirty = true;
+
+		this.markDirty();
 	}
 
-	@Deprecated
 	public void writeToByteBuf(ByteBuf buf) {
 		ByteBufUtil.writeUuid(buf, this.uuid);
 		ByteBufUtils.writeUTF8String(buf, this.name);
@@ -195,7 +210,6 @@ public class ProtectedRegion {
 		}
 	}
 
-	@Deprecated
 	public void readFromByteBuf(ByteBuf buf) {
 		this.uuid = ByteBufUtil.readUuid(buf);
 		this.name = ByteBufUtils.readUTF8String(buf);
@@ -228,7 +242,8 @@ public class ProtectedRegion {
 		for (int i = 0; i < blockDependenciesCount; i++) {
 			this.blockDependencies.add(ByteBufUtil.readBlockPos(buf));
 		}
-		this.dirty = true;
+
+		this.markDirty();
 	}
 
 	public boolean isInsideProtectedRegion(BlockPos pos) {
@@ -260,6 +275,28 @@ public class ProtectedRegion {
 		return this.protectedBlocks[x + y + z] != 0;
 	}
 
+	public int getProtectionState(BlockPos pos) {
+		if (!this.isInsideProtectedRegion(pos)) {
+			return -1;
+		}
+		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
+		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
+		int z = pos.getZ() - this.startPos.getZ();
+		return this.protectedBlocks[x + y + z];
+	}
+
+	public void setProtectionState(BlockPos pos, int i) {
+		if (!this.isInsideProtectedRegion(pos)) {
+			return;
+		}
+		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
+		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
+		int z = pos.getZ() - this.startPos.getZ();
+		this.protectedBlocks[x + y + z] = (byte) (i & 255);
+
+		this.markDirty();
+	}
+
 	public boolean isValid() {
 		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty() || this.ignoreNoBossOrNexus;
 	}
@@ -277,7 +314,7 @@ public class ProtectedRegion {
 		this.preventEntitySpawning = preventEntitySpawning;
 		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
 
-		this.dirty = true;
+		this.markDirty();
 	}
 
 	public void updateProtectedBlocks() {
@@ -359,7 +396,7 @@ public class ProtectedRegion {
 		}
 
 		if (this.entityDependencies.add(uuid)) {
-			this.dirty = true;
+			this.markDirty();
 		}
 	}
 
@@ -367,11 +404,12 @@ public class ProtectedRegion {
 		boolean flag = this.entityDependencies.remove(uuid);
 
 		if (flag && this.world != null && !this.world.isRemote) {
-			this.dirty = true;
+			this.markDirty();
+
 			if (!this.isValid()) {
-				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+				IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 				if (protectedRegionManager != null) {
-					ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
+					protectedRegionManager.removeProtectedRegion(this);
 				}
 			}
 		}
@@ -391,18 +429,18 @@ public class ProtectedRegion {
 		}
 
 		if (this.blockDependencies.add(pos)) {
-			this.dirty = true;
+			this.markDirty();
 		}
 	}
 
 	public void removeBlockDependency(BlockPos pos) {
 		if (this.blockDependencies.remove(pos)) {
-			this.dirty = true;
+			this.markDirty();
 
 			if (!this.isValid()) {
-				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+				IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 				if (protectedRegionManager != null) {
-					ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
+					protectedRegionManager.removeProtectedRegion(this);
 				}
 			}
 		}
@@ -422,7 +460,7 @@ public class ProtectedRegion {
 		}
 
 		this.isGenerating = false;
-		this.dirty = true;
+		this.markDirty();
 	}
 
 	public boolean isGenerating() {

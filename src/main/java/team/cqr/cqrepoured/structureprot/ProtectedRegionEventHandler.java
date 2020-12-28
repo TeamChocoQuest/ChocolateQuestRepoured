@@ -1,15 +1,21 @@
 package team.cqr.cqrepoured.structureprot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -19,7 +25,12 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.util.Reference;
 
 @EventBusSubscriber(modid = Reference.MODID)
@@ -31,6 +42,35 @@ public class ProtectedRegionEventHandler {
 
 	private ProtectedRegionEventHandler() {
 
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
+
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
+		if (protectedRegionManager == null) {
+			return;
+		}
+		List<ProtectedRegion> list = new ArrayList<>();
+		protectedRegionManager.getProtectedRegions().forEach(list::add);
+		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list), (EntityPlayerMP) event.player);
+	}
+
+	@SubscribeEvent
+	public static void onPlayerChangedDimensionEvent(PlayerChangedDimensionEvent event) {
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
+		if (protectedRegionManager == null) {
+			return;
+		}
+		List<ProtectedRegion> list = new ArrayList<>();
+		protectedRegionManager.getProtectedRegions().forEach(list::add);
+		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list), (EntityPlayerMP) event.player);
+	}
+
+	public static void onPlayerDisconnectedEvent(ClientDisconnectionFromServerEvent event) {
+		ProtectedRegionManager.getInstance(net.minecraft.client.Minecraft.getMinecraft().world).clearProtectedRegions();
+		ProtectedRegionHelper.updateBreakableBlockWhitelist();
+		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 	}
 
 	@SubscribeEvent
@@ -106,8 +146,41 @@ public class ProtectedRegionEventHandler {
 			}
 		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), stack, true)) {
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
+		EntityPlayer player = event.getEntityPlayer();
+		BlockPos pos = event.getPos();
+
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true)) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onRightClickBlockEvent(PlayerInteractEvent.RightClickBlock event) {
+		EntityPlayer player = event.getEntityPlayer();
+		BlockPos pos = event.getPos();
+		ItemStack stack = event.getItemStack();
+
+		if (player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos)) {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos, player, stack, true)) {
 				event.setCanceled(true);
 			}
+		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(event.getFace()), player, stack, true)) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
+		EntityPlayer player = event.getEntityPlayer();
+		BlockPos pos = event.getPos();
+
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true)) {
+			event.setCanceled(true);
 		}
 	}
 
@@ -132,7 +205,7 @@ public class ProtectedRegionEventHandler {
 		Entity entity = event.getEntity();
 		World world = entity.world;
 		UUID uuid = entity.getPersistentID();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {

@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 import team.cqr.cqrepoured.util.CQRConfig;
@@ -94,7 +95,7 @@ public class DungeonGenerator {
 		this.dungeonPartLight = new DungeonPartLight(this.world, this);
 		this.dungeonPartLight.readFromNBT(compound.getCompoundTag("partLight"));
 		if (compound.hasKey("protectedRegion", Constants.NBT.TAG_COMPOUND)) {
-			ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 			if (protectedRegionManager != null) {
 				UUID protectedRegionUuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("protectedRegion"));
 				this.protectedRegion = protectedRegionManager.getProtectedRegion(protectedRegionUuid);
@@ -186,7 +187,7 @@ public class DungeonGenerator {
 			if (dungeon != null && dungeon.isProtectionSystemEnabled()) {
 				this.protectedRegion = new ProtectedRegion(this.world, dungeon.getDungeonName(), this.pos.up(dungeon.getUnderGroundOffset()), this.minPos, this.maxPos);
 				this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
-				ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
+				IProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 
 				if (manager != null) {
 					manager.addProtectedRegion(this.protectedRegion);
@@ -210,7 +211,7 @@ public class DungeonGenerator {
 				this.protectedRegion.finishGenerating();
 
 				if (!this.protectedRegion.isValid()) {
-					ProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
+					IProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 
 					if (manager != null) {
 						manager.removeProtectedRegion(this.protectedRegion);

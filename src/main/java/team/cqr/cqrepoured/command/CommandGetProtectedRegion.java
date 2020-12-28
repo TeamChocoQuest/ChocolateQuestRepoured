@@ -10,6 +10,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 
@@ -37,7 +38,7 @@ public class CommandGetProtectedRegion extends CommandBase {
 		}
 
 		BlockPos pos = parseBlockPos(sender, args, 0, false);
-		ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(sender.getEntityWorld());
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(sender.getEntityWorld());
 
 		if (protectedRegionManager != null) {
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(pos);
