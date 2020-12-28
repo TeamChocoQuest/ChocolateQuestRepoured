@@ -6,7 +6,6 @@ import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
@@ -477,7 +476,7 @@ public class CQRConfig {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
 				CQStructure.updateSpecialBlocks();
 				CQStructure.updateSpecialEntities();
-				if (CQRMain.proxy.isOwnerOfIntegratedServer(Minecraft.getMinecraft().player)) {
+				if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().isIntegratedServerRunning()) {
 					ProtectedRegionHelper.updateBreakableBlockWhitelist();
 					ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 				}
