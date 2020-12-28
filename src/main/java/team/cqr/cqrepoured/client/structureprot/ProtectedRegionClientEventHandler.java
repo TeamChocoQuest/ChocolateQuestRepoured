@@ -21,6 +21,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -46,6 +47,7 @@ public class ProtectedRegionClientEventHandler {
 
 	public static void addOrResetProtectedRegionIndicator(World world, UUID uuid, BlockPos start, BlockPos end, BlockPos pos, @Nullable EntityPlayerMP player) {
 		if (world.isRemote) {
+			/*
 			ProtectedRegionIndicator protectedRegionIndicator = PROTECTED_REGION_INDICATORS.get(uuid);
 			if (protectedRegionIndicator != null) {
 				protectedRegionIndicator.setStart(start);
@@ -60,6 +62,11 @@ public class ProtectedRegionClientEventHandler {
 				double y = pos.getY() - 0.1D + 1.2D * world.rand.nextDouble();
 				double z = pos.getZ() - 0.1D + 1.2D * world.rand.nextDouble();
 				world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, x, y, z, 0.0D, 0.0D, 0.0D);
+			}
+			*/
+			RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
+			if (result != null && result.hitVec != null) {
+				world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, result.hitVec.x, result.hitVec.y, result.hitVec.z, 0.0D, 0.0D, 0.0D);
 			}
 		} else if (player != null) {
 			CQRMain.NETWORK.sendTo(new SPacketAddOrResetProtectedRegionIndicator(uuid, start, end, pos), player);
