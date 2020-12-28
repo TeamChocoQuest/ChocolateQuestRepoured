@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionWhitelists;
 import team.cqr.cqrepoured.util.Reference;
 
 @EventBusSubscriber(modid = Reference.MODID)
@@ -46,6 +47,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
+		CQRMain.NETWORK.sendTo(new SPacketSyncProtectionWhitelists(ProtectedRegionHelper.BREAKABLE_BLOCK_WHITELIST, ProtectedRegionHelper.PLACEABLE_BLOCK_WHITELIST), (EntityPlayerMP) event.player);
 
 		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
 		if (protectedRegionManager == null) {
