@@ -2,10 +2,8 @@ package team.cqr.cqrepoured.structureprot;
 
 import java.util.UUID;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -16,6 +14,8 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -72,19 +72,8 @@ public class ProtectedRegionEventHandler {
 	public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-		boolean isBlockDependency = false;
 
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.isBlockDependency(pos)) {
-					protectedRegion.removeBlockDependency(pos);
-					isBlockDependency = true;
-				}
-			}
-		}
-
-		if (!isBlockDependency && ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, event.getPlayer(), true)) {
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, event.getPlayer(), true, true)) {
 			event.setCanceled(true);
 		}
 	}
@@ -102,17 +91,21 @@ public class ProtectedRegionEventHandler {
 		if (result == null) {
 			return;
 		}
+		World world = event.getWorld();
+		BlockPos pos = result.getBlockPos();
 		ItemStack stack = event.getEmptyBucket();
-		Item item = stack.getItem();
-		if (!(item instanceof ItemBucket)) {
-			return;
-		}
-		if (item == Items.BUCKET) {
-			if (ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true)) {
+		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+		if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null) {
+			IBlockState state = world.getBlockState(pos.offset(result.sideHit));
+			if (state.getMaterial().isLiquid() && ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
 				event.setCanceled(true);
 			}
-		} else {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), stack, true)) {
+		} else if (world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos, event.getEntityPlayer(), stack, true)) {
+				event.setCanceled(true);
+			}
+		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), stack, true)) {
+			event.setCanceled(true);
 				event.setCanceled(true);
 			}
 		}

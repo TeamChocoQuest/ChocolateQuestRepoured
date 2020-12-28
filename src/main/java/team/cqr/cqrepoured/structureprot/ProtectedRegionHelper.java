@@ -19,6 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.client.structureprot.ProtectedRegionClientEventHandler;
 import team.cqr.cqrepoured.util.CQRConfig;
@@ -56,10 +58,31 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity) {
-		return isBlockBreakingPrevented(world, pos, entity, false);
+		return isBlockBreakingPrevented(world, pos, entity, false, false);
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean removeIfBlockDependency, boolean addOrResetProtectedRegionIndicator) {
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+
+		if (manager == null) {
+			return false;
+		}
+
+		boolean flag = false;
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+			if (protectedRegion.isBlockDependency(pos)) {
+				if (removeIfBlockDependency) {
+					protectedRegion.removeBlockDependency(pos);
+					flag = true;
+				} else {
+					return false;
+				}
+			}
+		}
+		if (flag) {
+			return false;
+		}
+
 		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockBreaking) {
 			return false;
 		}
@@ -70,18 +93,6 @@ public class ProtectedRegionHelper {
 
 		if (BREAKABLE_BLOCK_WHITELIST.contains(world.getBlockState(pos).getBlock())) {
 			return false;
-		}
-
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-		if (manager == null) {
-			return false;
-		}
-
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.isBlockDependency(pos)) {
-				return false;
-			}
 		}
 
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
@@ -136,22 +147,24 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack, boolean addOrResetProtectedRegionIndicator) {
-		if (stack.isEmpty()) {
-			return false;
-		}
-		Block block = getBlockFromItem(stack.getItem());
+		Block block = getBlockFromItem(stack);
 		if (block == null) {
 			return false;
 		}
 		return isBlockPlacingPrevented(world, pos, entity, block, addOrResetProtectedRegionIndicator);
 	}
 
-	private static Block getBlockFromItem(Item item) {
+	private static Block getBlockFromItem(ItemStack stack) {
+		if (stack.isEmpty()) {
+			return null;
+		}
+		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
 			return ((ItemBlock) item).getBlock();
 		}
-		if (item instanceof ItemBucket) {
-			return CONTAINED_BLOCK_FIELD.get((ItemBucket) item);
+		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null) {
+			return fluidStack.getFluid().getBlock();
 		}
 		return null;
 	}
@@ -207,40 +220,49 @@ public class ProtectedRegionHelper {
 	}
 
 	public static void removeExplosionPreventedPositions(World world, Explosion explosion, boolean checkForOrigin) {
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled) {
-			return;
-		}
-
 		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return;
 		}
 
-		Entity exploder = EXPLODER_FIELD.get(explosion);
-		boolean flag = exploder instanceof EntityTNTPrimed;
-		if ((flag && !CQRConfig.dungeonProtection.preventExplosionTNT) || (!flag && !CQRConfig.dungeonProtection.preventExplosionOther)) {
+		List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
+
+		if (affectedBlockPositions.isEmpty()) {
 			return;
 		}
-		List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
-		BlockPos pos = new BlockPos(explosion.getPosition());
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (affectedBlockPositions.isEmpty()) {
-				break;
-			}
+		Entity exploder = EXPLODER_FIELD.get(explosion);
+		boolean flag = exploder instanceof EntityTNTPrimed;
+		boolean flag1 = (flag && CQRConfig.dungeonProtection.preventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.preventExplosionOther);
+		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;
 
-			if ((flag && protectedRegion.preventExplosionsTNT()) || (!flag && protectedRegion.preventExplosionsOther())) {
-				if (checkForOrigin && protectedRegion.isInsideProtectedRegion(pos)) {
-					affectedBlockPositions.clear();
-				}
+		if (flag2) {
+			BlockPos pos = new BlockPos(explosion.getPosition());
 
-				for (int i = 0; i < affectedBlockPositions.size(); i++) {
-					BlockPos pos1 = affectedBlockPositions.get(i);
-					if (protectedRegion.isInsideProtectedRegion(pos1)) {
-						affectedBlockPositions.remove(i--);
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if ((flag && protectedRegion.preventExplosionsTNT()) || (!flag && protectedRegion.preventExplosionsOther())) {
+					if (checkForOrigin && protectedRegion.isInsideProtectedRegion(pos)) {
+						affectedBlockPositions.clear();
+					} else {
+						for (int i = 0; i < affectedBlockPositions.size(); i++) {
+							BlockPos pos1 = affectedBlockPositions.get(i);
+							if (protectedRegion.isInsideProtectedRegion(pos1)) {
+								affectedBlockPositions.remove(i--);
+							}
+						}
 					}
 				}
+
+				if (affectedBlockPositions.isEmpty()) {
+					return;
+				}
+			}
+		}
+
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+			for (BlockPos pos1 : affectedBlockPositions) {
+				protectedRegion.setProtectionState(pos1, 0);
 			}
 		}
 	}
