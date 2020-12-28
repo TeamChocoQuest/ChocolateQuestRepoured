@@ -62,7 +62,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean removeIfBlockDependency, boolean addOrResetProtectedRegionIndicator) {
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
@@ -124,7 +124,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
@@ -174,7 +174,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
@@ -199,7 +199,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
@@ -220,7 +220,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static void removeExplosionPreventedPositions(World world, Explosion explosion, boolean checkForOrigin) {
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return;
@@ -272,7 +272,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
@@ -297,7 +297,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
