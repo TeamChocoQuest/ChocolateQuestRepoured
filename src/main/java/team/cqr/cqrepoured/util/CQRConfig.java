@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
@@ -467,7 +468,7 @@ public class CQRConfig {
 
 	}
 
-	@EventBusSubscriber(modid = Reference.MODID)
+	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
 	private static class EventHandler {
 
 		@SubscribeEvent

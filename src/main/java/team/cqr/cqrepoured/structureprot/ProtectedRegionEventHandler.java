@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -29,6 +30,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensio
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionWhitelists;
@@ -69,8 +72,10 @@ public class ProtectedRegionEventHandler {
 		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list), (EntityPlayerMP) event.player);
 	}
 
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
 	public static void onPlayerDisconnectedEvent(ClientDisconnectionFromServerEvent event) {
-		ProtectedRegionManager.getInstance(net.minecraft.client.Minecraft.getMinecraft().world).clearProtectedRegions();
+		ProtectedRegionManager.getInstance(Minecraft.getMinecraft().world).clearProtectedRegions();
 		ProtectedRegionHelper.updateBreakableBlockWhitelist();
 		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 	}
