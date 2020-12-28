@@ -13,6 +13,10 @@ public class SPacketSyncProtectionWhitelists implements IMessage {
 	private List<Block> breakableBlocks = new ArrayList<>();
 	private List<Block> placeableBlocks = new ArrayList<>();
 
+	public SPacketSyncProtectionWhitelists() {
+
+	}
+
 	public SPacketSyncProtectionWhitelists(Collection<Block> breakableBlocks, Collection<Block> placeableBlocks) {
 		this.breakableBlocks.addAll(breakableBlocks);
 		this.placeableBlocks.addAll(placeableBlocks);
