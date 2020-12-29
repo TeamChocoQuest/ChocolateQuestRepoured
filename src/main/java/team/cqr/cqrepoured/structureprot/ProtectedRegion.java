@@ -5,32 +5,22 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.ByteBufUtil;
-import team.cqr.cqrepoured.util.CQRConfig;
-import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class ProtectedRegion {
 
-	private static final Set<Material> MATERIAL_BLACKLIST = new HashSet<>();
-	private static boolean liquidsWhitelisted = false;
-
-	public static final String PROTECTED_REGION_VERSION = "1.1.0";
+	public static final String PROTECTED_REGION_VERSION = "1.2.0";
 	private final World world;
 	private UUID uuid = MathHelper.getRandomUUID();
 	private String name;
@@ -38,7 +28,7 @@ public class ProtectedRegion {
 	private BlockPos startPos;
 	private BlockPos endPos;
 	private BlockPos size;
-	private byte[] protectedBlocks;
+	private byte[] protectionStates;
 	private boolean preventBlockBreaking = false;
 	private boolean preventBlockPlacing = false;
 	private boolean preventExplosionsTNT = false;
@@ -63,7 +53,7 @@ public class ProtectedRegion {
 		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
+		this.protectionStates = new byte[sizeX * sizeY * sizeZ];
 	}
 
 	public ProtectedRegion(World world, NBTTagCompound compound) {
@@ -114,7 +104,7 @@ public class ProtectedRegion {
 		compound.setTag("pos", NBTUtil.createPosTag(this.pos));
 		compound.setTag("startPos", NBTUtil.createPosTag(this.startPos));
 		compound.setTag("endPos", NBTUtil.createPosTag(this.endPos));
-		compound.setByteArray("protectedBlocks", this.protectedBlocks);
+		compound.setByteArray("protectedBlocks", this.protectionStates);
 		compound.setBoolean("preventBlockBreaking", this.preventBlockBreaking);
 		compound.setBoolean("preventBlockPlacing", this.preventBlockPlacing);
 		compound.setBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
@@ -151,11 +141,11 @@ public class ProtectedRegion {
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
 		if (compound.hasKey("protectedBlocks", Constants.NBT.TAG_BYTE_ARRAY)) {
-			this.protectedBlocks = compound.getByteArray("protectedBlocks");
+			this.protectionStates = compound.getByteArray("protectedBlocks");
 		} else {
-			this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
-			for (int i = 0; i < this.protectedBlocks.length; i++) {
-				this.protectedBlocks[i] = 1;
+			this.protectionStates = new byte[sizeX * sizeY * sizeZ];
+			for (int i = 0; i < this.protectionStates.length; i++) {
+				this.protectionStates[i] = 1;
 			}
 		}
 		this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
@@ -186,7 +176,7 @@ public class ProtectedRegion {
 		ByteBufUtil.writeBlockPos(buf, this.pos);
 		ByteBufUtil.writeBlockPos(buf, this.startPos);
 		ByteBufUtil.writeBlockPos(buf, this.endPos);
-		buf.writeBytes(this.protectedBlocks);
+		buf.writeBytes(this.protectionStates);
 
 		byte flags = 0;
 		flags |= this.preventBlockBreaking ? 1 : 0;
@@ -220,8 +210,8 @@ public class ProtectedRegion {
 		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		this.protectedBlocks = new byte[sizeX * sizeY * sizeZ];
-		buf.readBytes(this.protectedBlocks);
+		this.protectionStates = new byte[sizeX * sizeY * sizeZ];
+		buf.readBytes(this.protectionStates);
 
 		byte flags = buf.readByte();
 		this.preventBlockBreaking = (flags & 1) == 1;
@@ -265,14 +255,14 @@ public class ProtectedRegion {
 		return pos.getZ() <= this.endPos.getZ();
 	}
 
-	public boolean isProtected(BlockPos pos) {
+	public boolean isBreakable(BlockPos pos) {
 		if (!this.isInsideProtectedRegion(pos)) {
-			return false;
+			return true;
 		}
 		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
 		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
 		int z = pos.getZ() - this.startPos.getZ();
-		return this.protectedBlocks[x + y + z] != 0;
+		return this.protectionStates[x + y + z] == 1;
 	}
 
 	public int getProtectionState(BlockPos pos) {
@@ -282,7 +272,7 @@ public class ProtectedRegion {
 		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
 		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
 		int z = pos.getZ() - this.startPos.getZ();
-		return this.protectedBlocks[x + y + z];
+		return this.protectionStates[x + y + z];
 	}
 
 	public void setProtectionState(BlockPos pos, int i) {
@@ -292,9 +282,11 @@ public class ProtectedRegion {
 		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
 		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
 		int z = pos.getZ() - this.startPos.getZ();
-		this.protectedBlocks[x + y + z] = (byte) (i & 255);
-
-		this.markDirty();
+		byte newState = (byte) (i & 255);
+		if (this.protectionStates[x + y + z] != newState) {
+			this.protectionStates[x + y + z] = newState;
+			this.markDirty();
+		}
 	}
 
 	public boolean isValid() {
@@ -315,27 +307,6 @@ public class ProtectedRegion {
 		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
 
 		this.markDirty();
-	}
-
-	public void updateProtectedBlocks() {
-		if (!this.isGenerating) {
-			return;
-		}
-
-		ForgeChunkManager.Ticket chunkTicket = ChunkUtil.getTicket(this.world, this.startPos, this.endPos, true);
-
-		for (BlockPos.MutableBlockPos mutablePos : BlockPos.getAllInBoxMutable(this.startPos, this.endPos)) {
-			IBlockState state = this.world.getBlockState(mutablePos);
-			Material material = state.getMaterial();
-			int x = (mutablePos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
-			int y = (mutablePos.getY() - this.startPos.getY()) * this.size.getZ();
-			int z = mutablePos.getZ() - this.startPos.getZ();
-			this.protectedBlocks[x + y + z] = (byte) (!MATERIAL_BLACKLIST.contains(material) && (!liquidsWhitelisted || !material.isLiquid()) ? 1 : 0);
-		}
-
-		if (chunkTicket != null) {
-			ForgeChunkManager.releaseTicket(chunkTicket);
-		}
 	}
 
 	public World getWorld() {
@@ -465,102 +436,6 @@ public class ProtectedRegion {
 
 	public boolean isGenerating() {
 		return this.isGenerating;
-	}
-
-	public static void updateMaterialBlacklist() {
-		MATERIAL_BLACKLIST.clear();
-		liquidsWhitelisted = false;
-
-		for (String s : CQRConfig.dungeonProtection.protectionSystemMaterialBlacklist) {
-			if (s.equalsIgnoreCase("liquid")) {
-				liquidsWhitelisted = true;
-			} else {
-				Material m = getMaterialByName(s);
-				if (m != null) {
-					MATERIAL_BLACKLIST.add(m);
-				}
-			}
-		}
-	}
-
-	@Nullable
-	private static Material getMaterialByName(String name) {
-		switch (name.toLowerCase()) {
-		case "air":
-			return Material.AIR;
-		case "grass":
-			return Material.GRASS;
-		case "ground":
-			return Material.GROUND;
-		case "wood":
-			return Material.WOOD;
-		case "rock":
-			return Material.ROCK;
-		case "iron":
-			return Material.IRON;
-		case "anvil":
-			return Material.ANVIL;
-		case "water":
-			return Material.WATER;
-		case "lava":
-			return Material.LAVA;
-		case "leaves":
-			return Material.LEAVES;
-		case "plants":
-			return Material.PLANTS;
-		case "vine":
-			return Material.VINE;
-		case "sponge":
-			return Material.SPONGE;
-		case "cloth":
-			return Material.CLOTH;
-		case "fire":
-			return Material.FIRE;
-		case "sand":
-			return Material.SAND;
-		case "circuits":
-			return Material.CIRCUITS;
-		case "carpet":
-			return Material.CARPET;
-		case "glass":
-			return Material.GLASS;
-		case "redstone_light":
-			return Material.REDSTONE_LIGHT;
-		case "tnt":
-			return Material.TNT;
-		case "coral":
-			return Material.CORAL;
-		case "ice":
-			return Material.ICE;
-		case "packed_ice":
-			return Material.PACKED_ICE;
-		case "snow":
-			return Material.SNOW;
-		case "crafted_snow":
-			return Material.CRAFTED_SNOW;
-		case "cactus":
-			return Material.CACTUS;
-		case "clay":
-			return Material.CLAY;
-		case "gourd":
-			return Material.GOURD;
-		case "dragon_egg":
-			return Material.DRAGON_EGG;
-		case "portal":
-			return Material.PORTAL;
-		case "cake":
-			return Material.CAKE;
-		case "web":
-			return Material.WEB;
-		case "piston":
-			return Material.PISTON;
-		case "barrier":
-			return Material.BARRIER;
-		case "structure_void":
-			return Material.STRUCTURE_VOID;
-		default:
-			return null;
-		}
 	}
 
 }

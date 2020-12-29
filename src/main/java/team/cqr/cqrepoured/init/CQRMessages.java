@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerHookShotPlayerSt
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerInitialFactionInformation;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerItemStackSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectedRegions;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectionWhitelists;
+import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectionConfig;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTextureSets;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUnloadProtectedRegion;
@@ -52,7 +52,7 @@ import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionWhitelists;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
@@ -70,7 +70,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerItemStackSync.class, SPacketItemStackSync.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerHookShotPlayerStop.class, SPacketHookShotPlayerStop.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncProtectedRegions.class, SPacketSyncProtectedRegions.class, messageID++, Side.CLIENT);
-		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncProtectionWhitelists.class, SPacketSyncProtectionWhitelists.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncProtectionConfig.class, SPacketSyncProtectionConfig.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateProtectedRegion.class, SPacketUpdateProtectedRegion.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUnloadProtectedRegion.class, SPacketUnloadProtectedRegion.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerAddOrResetProtectedRegionIndicator.class, SPacketAddOrResetProtectedRegionIndicator.class, messageID++, Side.CLIENT);

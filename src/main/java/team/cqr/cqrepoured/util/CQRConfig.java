@@ -10,7 +10,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
 
 @Config(modid = Reference.MODID)
@@ -299,7 +298,7 @@ public class CQRConfig {
 
 	public static class DungeonProtection {
 		public boolean preventBlockBreaking = true;
-		public boolean preventBlockPlacing = true;
+		public boolean preventBlockPlacing = false;
 		public boolean preventEntitySpawning = true;
 		public boolean preventExplosionOther = true;
 		public boolean preventExplosionTNT = true;
@@ -310,11 +309,16 @@ public class CQRConfig {
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "minecraft:fire", "minecraft:cobweb", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus" };
 
+		@Config.Comment("")
+		public String[] protectionSystemBreakableMaterialWhitelist = {};
+
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
 		public String[] protectionSystemPlaceableBlockWhitelist = { "minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch" };
 
-		@Config.Comment("When a dungeon is generated all blocks with a material which is not blacklisted get protected by the protection system. Protected blocks can't be mined or replaced with other blocks.")
-		public String[] protectionSystemMaterialBlacklist = { "AIR", "LIQUID" };
+		@Config.Comment("")
+		public String[] protectionSystemPlaceableMaterialWhitelist = {};
+
+		public boolean protectionSystemReplaceableBlocksWhitelisted = true;
 	}
 
 	public static class General {
@@ -478,12 +482,10 @@ public class CQRConfig {
 				CQStructure.updateSpecialBlocks();
 				CQStructure.updateSpecialEntities();
 				if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().isIntegratedServerRunning()) {
-					ProtectedRegionHelper.updateBreakableBlockWhitelist();
-					ProtectedRegionHelper.updatePlaceableBlockWhitelist();
+					ProtectedRegionHelper.updateWhitelists();
 				}
 				EntityCQRNetherDragon.reloadBreakableBlocks();
 				EntityCQRGiantTortoise.realoadHardBlocks();
-				ProtectedRegion.updateMaterialBlacklist();
 			}
 		}
 

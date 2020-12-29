@@ -7,13 +7,14 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -29,142 +30,180 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 public class ProtectedRegionHelper {
 
 	public static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
+	public static final Set<Material> BREAKABLE_MATERIAL_WHITELIST = new HashSet<>();
 	public static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
-	private static final ReflectionField<Block> CONTAINED_BLOCK_FIELD = new ReflectionField<>(ItemBucket.class, "field_77876_a", "containedBlock");
+	public static final Set<Material> PLACEABLE_MATERIAL_WHITELIST = new HashSet<>();
+
 	private static final ReflectionField<Entity> EXPLODER_FIELD = new ReflectionField<>(Explosion.class, "field_77283_e", "exploder");
 
 	private ProtectedRegionHelper() {
 
 	}
 
-	public static void updateBreakableBlockWhitelist() {
+	public static void updateWhitelists() {
 		BREAKABLE_BLOCK_WHITELIST.clear();
+		BREAKABLE_MATERIAL_WHITELIST.clear();
+		PLACEABLE_BLOCK_WHITELIST.clear();
+		PLACEABLE_MATERIAL_WHITELIST.clear();
 		for (String s : CQRConfig.dungeonProtection.protectionSystemBreakableBlockWhitelist) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				BREAKABLE_BLOCK_WHITELIST.add(b);
 			}
 		}
-	}
-
-	public static void updatePlaceableBlockWhitelist() {
-		PLACEABLE_BLOCK_WHITELIST.clear();
+		for (String s : CQRConfig.dungeonProtection.protectionSystemBreakableMaterialWhitelist) {
+			try {
+				BREAKABLE_MATERIAL_WHITELIST.add((Material) Material.class.getField(s.toUpperCase()).get(null));
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
+				// ignore
+			}
+		}
 		for (String s : CQRConfig.dungeonProtection.protectionSystemPlaceableBlockWhitelist) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				PLACEABLE_BLOCK_WHITELIST.add(b);
 			}
 		}
+		for (String s : CQRConfig.dungeonProtection.protectionSystemPlaceableMaterialWhitelist) {
+			try {
+				PLACEABLE_MATERIAL_WHITELIST.add((Material) Material.class.getField(s.toUpperCase()).get(null));
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
+				// ignore
+			}
+		}
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity) {
-		return isBlockBreakingPrevented(world, pos, entity, false, false);
-	}
-
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean removeIfBlockDependency, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
 		}
 
-		boolean flag = false;
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+		List<ProtectedRegion> protectedRegions = manager.getProtectedRegionsAt(pos);
+
+		if (protectedRegions.isEmpty()) {
+			return false;
+		}
+
+		boolean isBlockDependency = false;
+
+		for (ProtectedRegion protectedRegion : protectedRegions) {
 			if (protectedRegion.isBlockDependency(pos)) {
-				if (removeIfBlockDependency) {
+				if (updateProtectedRegions) {
 					protectedRegion.removeBlockDependency(pos);
-					flag = true;
-				} else {
-					return false;
 				}
-			}
-		}
-		if (flag) {
-			return false;
-		}
-
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockBreaking) {
-			return false;
-		}
-
-		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
-			return false;
-		}
-
-		if (BREAKABLE_BLOCK_WHITELIST.contains(world.getBlockState(pos).getBlock())) {
-			return false;
-		}
-
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventBlockBreaking() && protectedRegion.isProtected(pos)) {
-				if (addOrResetProtectedRegionIndicator) {
-					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
-				}
-				return true;
+				isBlockDependency = true;
 			}
 		}
 
+		boolean isBreakingPrevented = false;
+
+		if (!isBlockDependency
+				&& CQRConfig.dungeonProtection.protectionSystemEnabled
+				&& CQRConfig.dungeonProtection.preventBlockBreaking
+				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
+				&& !isBlockBreakingWhitelisted(world, pos)) {
+			for (ProtectedRegion protectedRegion : protectedRegions) {
+				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
+					if (addOrResetProtectedRegionIndicator) {
+						ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+					}
+					isBreakingPrevented = true;
+					break;
+				}
+			}
+		}
+
+		if (updateProtectedRegions && !isBreakingPrevented) {
+			for (ProtectedRegion protectedRegion : protectedRegions) {
+				protectedRegion.setProtectionState(pos, 0);
+			}
+		}
+
+		return isBreakingPrevented;
+	}
+
+	private static boolean isBlockBreakingWhitelisted(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		if (BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
+			return true;
+		}
+		if (BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial())) {
+			return true;
+		}
+		if (CQRConfig.dungeonProtection.protectionSystemReplaceableBlocksWhitelisted) {
+			return state.getBlock().isReplaceable(world, pos);
+		}
 		return false;
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, Block block) {
-		return isBlockPlacingPrevented(world, pos, entity, block, false);
-	}
-
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, Block block, boolean addOrResetProtectedRegionIndicator) {
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockPlacing) {
-			return false;
-		}
-
-		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
-			return false;
-		}
-
-		if (PLACEABLE_BLOCK_WHITELIST.contains(block)) {
-			return false;
-		}
-
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, IBlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
 			return false;
 		}
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-			if (protectedRegion.preventBlockPlacing() && protectedRegion.isProtected(pos)) {
-				if (addOrResetProtectedRegionIndicator) {
-					ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+		List<ProtectedRegion> protectedRegions = manager.getProtectedRegionsAt(pos);
+
+		if (protectedRegions.isEmpty()) {
+			return false;
+		}
+
+		boolean isPlacingPrevented = false;
+
+		if (CQRConfig.dungeonProtection.protectionSystemEnabled
+				&& CQRConfig.dungeonProtection.preventBlockPlacing
+				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
+				&& !isBlockPlacingWhitelisted(state)) {
+			for (ProtectedRegion protectedRegion : protectedRegions) {
+				if (protectedRegion.preventBlockPlacing()) {
+					if (addOrResetProtectedRegionIndicator) {
+						ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+					}
+					isPlacingPrevented = true;
+					break;
 				}
-				return true;
 			}
 		}
 
-		return false;
+		if (updateProtectedRegions && !isPlacingPrevented) {
+			for (ProtectedRegion protectedRegion : protectedRegions) {
+				protectedRegion.setProtectionState(pos, 1);
+			}
+		}
+
+		return isPlacingPrevented;
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack) {
-		return isBlockPlacingPrevented(world, pos, entity, stack, false);
+	private static boolean isBlockPlacingWhitelisted(IBlockState state) {
+		if (PLACEABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
+			return true;
+		}
+		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack, boolean addOrResetProtectedRegionIndicator) {
-		Block block = getBlockFromItem(stack);
-		if (block == null) {
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+		IBlockState state = getBlockFromItem(stack);
+		if (state == null) {
 			return false;
 		}
-		return isBlockPlacingPrevented(world, pos, entity, block, addOrResetProtectedRegionIndicator);
+		return isBlockPlacingPrevented(world, pos, entity, state, updateProtectedRegions, addOrResetProtectedRegionIndicator);
 	}
 
-	private static Block getBlockFromItem(ItemStack stack) {
+	@SuppressWarnings("deprecation")
+	private static IBlockState getBlockFromItem(ItemStack stack) {
 		if (stack.isEmpty()) {
 			return null;
 		}
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
-			return ((ItemBlock) item).getBlock();
+			return ((ItemBlock) item).getBlock().getStateFromMeta(((ItemBlock) item).getMetadata(stack.getItemDamage()));
 		}
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null) {
-			return fluidStack.getFluid().getBlock();
+			return fluidStack.getFluid().getBlock().getDefaultState();
 		}
 		return null;
 	}

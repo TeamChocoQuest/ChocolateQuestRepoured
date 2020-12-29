@@ -23,18 +23,21 @@ import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionWhitelists;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
+import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 @EventBusSubscriber(modid = Reference.MODID)
@@ -50,7 +53,9 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
-		CQRMain.NETWORK.sendTo(new SPacketSyncProtectionWhitelists(ProtectedRegionHelper.BREAKABLE_BLOCK_WHITELIST, ProtectedRegionHelper.PLACEABLE_BLOCK_WHITELIST), (EntityPlayerMP) event.player);
+		if (FMLCommonHandler.instance().getSide().isServer() || CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
+			CQRMain.NETWORK.sendTo(new SPacketSyncProtectionConfig(CQRConfig.dungeonProtection), (EntityPlayerMP) event.player);
+		}
 
 		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
 		if (protectedRegionManager == null) {
@@ -73,11 +78,24 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
+	private static CQRConfig.DungeonProtection cachedProtectionConfig;
+
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public static void onPlayerDisconnectedEvent(ClientDisconnectionFromServerEvent event) {
+	public static void onClientConnectedToServerEvent(ClientConnectedToServerEvent event) {
+		if (!Minecraft.getMinecraft().isIntegratedServerRunning()) {
+			cachedProtectionConfig = CQRConfig.dungeonProtection;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onClientDisconnectionFromServerEvent(ClientDisconnectionFromServerEvent event) {
 		ProtectedRegionManager.getInstance(Minecraft.getMinecraft().world).clearProtectedRegions();
-		ProtectedRegionHelper.updateBreakableBlockWhitelist();
-		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
+		if (!Minecraft.getMinecraft().isIntegratedServerRunning()) {
+			CQRConfig.dungeonProtection = cachedProtectionConfig;
+			ProtectedRegionHelper.updateWhitelists();
+		}
 	}
 
 	@SubscribeEvent
@@ -127,7 +145,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
-		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntity(), event.getPlacedBlock().getBlock(), true)) {
+		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntity(), event.getPlacedBlock(), true, true)) {
 			event.setCanceled(true);
 		}
 	}
@@ -148,10 +166,10 @@ public class ProtectedRegionEventHandler {
 				event.setCanceled(true);
 			}
 		} else if (world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos, event.getEntityPlayer(), stack, true)) {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos, event.getEntityPlayer(), stack, true, true)) {
 				event.setCanceled(true);
 			}
-		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), stack, true)) {
+		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), stack, true, true)) {
 			event.setCanceled(true);
 		}
 	}
@@ -173,10 +191,10 @@ public class ProtectedRegionEventHandler {
 		ItemStack stack = event.getItemStack();
 
 		if (player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos)) {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos, player, stack, true)) {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos, player, stack, false, true)) {
 				event.setCanceled(true);
 			}
-		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(event.getFace()), player, stack, true)) {
+		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(event.getFace()), player, stack, false, true)) {
 			event.setCanceled(true);
 		}
 	}
