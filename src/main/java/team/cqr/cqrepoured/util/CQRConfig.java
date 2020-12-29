@@ -343,8 +343,8 @@ public class CQRConfig {
 		@Config.RangeInt(min = 0, max = 100)
 		public int overallDungeonChance = 100;
 		public boolean moreDungeonsBehindWall = true;
-		@Config.RangeInt(min = 1, max = 10)
-		public int densityBehindWallFactor = 2;
+		@Config.RangeDouble(min = 0.0D, max = 10.0D)
+		public double densityBehindWallFactor = 2.0D;
 		public boolean enableSpeechBubbles = true;
 		public boolean hookOnlyPullsSmallerEntities = true;
 	}
