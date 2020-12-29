@@ -190,11 +190,16 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	@Override
 	public List<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
 		// load chunk which also loads all associated protected regions
-		this.world.getChunk(pos);
+		Chunk chunk = this.world.getChunk(pos);
+		CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+		if (cap == null) {
+			return Collections.emptyList();
+		}
 		List<ProtectedRegion> list = new ArrayList<>();
-		for (ProtectedRegionContainer container : this.protectedRegions.values()) {
-			if (container.protectedRegion.isInsideProtectedRegion(pos)) {
-				list.add(container.protectedRegion);
+		for (UUID uuid : cap.getProtectedRegionUuids()) {
+			ProtectedRegion protectedRegion = this.protectedRegions.get(uuid).protectedRegion;
+			if (protectedRegion.isInsideProtectedRegion(pos)) {
+				list.add(protectedRegion);
 			}
 		}
 		return list;
