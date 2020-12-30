@@ -21,6 +21,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 public class ProtectedRegion {
 
 	public static final String PROTECTED_REGION_VERSION = "1.2.0";
+	public static boolean logVersionWarnings = true;
 	private final World world;
 	private UUID uuid = MathHelper.getRandomUUID();
 	private String name;
@@ -127,7 +128,7 @@ public class ProtectedRegion {
 
 	public void readFromNBT(NBTTagCompound compound) {
 		String version = compound.getString("version");
-		if (!version.equals(PROTECTED_REGION_VERSION)) {
+		if (logVersionWarnings && !version.equals(PROTECTED_REGION_VERSION)) {
 			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
 		}
 

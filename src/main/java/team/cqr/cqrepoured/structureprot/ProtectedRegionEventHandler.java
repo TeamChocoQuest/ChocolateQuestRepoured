@@ -1,8 +1,14 @@
 package team.cqr.cqrepoured.structureprot;
 
+import java.io.DataInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -10,9 +16,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+import net.minecraft.world.chunk.storage.RegionFileCache;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -35,10 +51,16 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
+import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
+import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager.ProtectedRegionContainer;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.util.data.FileIOUtil;
+import team.cqr.cqrepoured.util.reflection.ReflectionField;
+import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class ProtectedRegionEventHandler {
@@ -105,6 +127,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onWorldLoadEvent(WorldEvent.Load event) {
+		checkDeprecatedProtectedRegions(event.getWorld());
 		ProtectedRegionManager.handleWorldLoad(event.getWorld());
 	}
 
@@ -239,6 +262,109 @@ public class ProtectedRegionEventHandler {
 				}
 			}
 		}
+	}
+
+	@Deprecated
+	private static void checkDeprecatedProtectedRegions(World world) {
+		if (world.isRemote) {
+			return;
+		}
+		File folder;
+		int dim = world.provider.getDimension();
+		if (dim == 0) {
+			folder = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/protected_regions");
+		} else {
+			folder = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/protected_regions");
+		}
+		List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "nbt" }, false));
+		if (files.isEmpty()) {
+			return;
+		}
+		NBTTagCompound compound = FileIOUtil.getRootNBTTagOfFile(files.get(0));
+		if (compound != null && compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
+			return;
+		}
+		boolean flag = ProtectedRegion.logVersionWarnings;
+		ProtectedRegion.logVersionWarnings = false;
+		CQRMain.logger.info("Updating deprectated protected region files...");
+		long t = System.currentTimeMillis();
+		for (int i = 0; i < files.size(); i++) {
+			if (System.currentTimeMillis() - t > 2000) {
+				CQRMain.logger.info("{}%", (double) i / files.size());
+				t = System.currentTimeMillis();
+			}
+			File file = files.get(i);
+			NBTTagCompound tag = FileIOUtil.getRootNBTTagOfFile(file);
+			if (tag != null) {
+				ProtectedRegion protectedRegion = new ProtectedRegion(world, tag);
+				FileIOUtil.saveNBTCompoundToFile(protectedRegion.writeToNBT(), file);
+				updateChunkCapabilityEfficiently((WorldServer) world, protectedRegion);
+			}
+		}
+		ProtectedRegion.logVersionWarnings = flag;
+		RegionFileCache.clearRegionFileReferences();
+	}
+
+	@Deprecated
+	private static final ReflectionMethod<Object> METHOD_WRITE_CHUNK_DATA = new ReflectionMethod<>(AnvilChunkLoader.class, "", "writeChunkData", ChunkPos.class, NBTTagCompound.class);
+
+	@Deprecated
+	private static final ReflectionField<Map<UUID, ProtectedRegionContainer>> FIELD_PROTECTED_REGIONS = new ReflectionField<>(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
+
+	@Deprecated
+	private static final ReflectionField<Set<UUID>> FIELD_PROTECTED_REGION_UUIDS = new ReflectionField<>(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
+
+	@Deprecated
+	private static void updateChunkCapabilityEfficiently(WorldServer world, ProtectedRegion protectedRegion) {
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		BlockPos p1 = protectedRegion.getStartPos();
+		BlockPos p2 = protectedRegion.getEndPos();
+		for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
+			for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
+				Chunk chunk = world.getChunkProvider().getLoadedChunk(x, z);
+				if (chunk != null) {
+					CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+					cap.addProtectedRegionUuid(protectedRegion.getUuid());
+					FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
+				} else {
+					NBTTagCompound chunkNBT = getChunkNBT(world, x, z);
+					if (chunkNBT != null) {
+						NBTTagCompound levelTag = chunkNBT.getCompoundTag("Level");
+						if (!levelTag.hasKey("ForgeCaps", Constants.NBT.TAG_COMPOUND)) {
+							levelTag.setTag("ForgeCaps", new NBTTagCompound());
+						}
+						NBTTagCompound capabilityTag = levelTag.getCompoundTag("ForgeCaps");
+						CapabilityProtectedRegionData cap = new CapabilityProtectedRegionData(null);
+						cap.readFromNBT(capabilityTag.getCompoundTag(CapabilityProtectedRegionDataProvider.LOCATION.toString()));
+						FIELD_PROTECTED_REGION_UUIDS.get(cap).add(protectedRegion.getUuid());
+						capabilityTag.setTag(CapabilityProtectedRegionDataProvider.LOCATION.toString(), cap.writeToNBT());
+						METHOD_WRITE_CHUNK_DATA.invoke((AnvilChunkLoader) world.getChunkProvider().chunkLoader, new ChunkPos(x, z), chunkNBT);
+					} else {
+						chunk = world.getChunk(x, z);
+						CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+						cap.addProtectedRegionUuid(protectedRegion.getUuid());
+						FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
+					}
+				}
+			}
+		}
+	}
+
+	@Deprecated
+	private static final ReflectionField<DataFixer> FIELD_FIXER = new ReflectionField<>(AnvilChunkLoader.class, "field_193416_e", "fixer");
+
+	@Deprecated
+	private static NBTTagCompound getChunkNBT(WorldServer world, int chunkX, int chunkZ) {
+		AnvilChunkLoader chunkLoader = (AnvilChunkLoader) world.getChunkProvider().chunkLoader;
+		try (DataInputStream datainputstream = RegionFileCache.getChunkInputStream(chunkLoader.chunkSaveLocation, chunkX, chunkZ)) {
+			if (datainputstream != null) {
+				DataFixer f = FIELD_FIXER.get(chunkLoader);
+				return f.process(FixTypes.CHUNK, CompressedStreamTools.read(datainputstream));
+			}
+		} catch (Exception e) {
+			// ignore
+		}
+		return null;
 	}
 
 }
