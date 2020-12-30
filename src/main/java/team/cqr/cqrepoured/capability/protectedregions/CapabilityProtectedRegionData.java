@@ -77,7 +77,7 @@ public class CapabilityProtectedRegionData {
 		this.protectedRegionUuids.clear();
 		int[] data = compound.getIntArray("protectedRegionUuids");
 		for (int i = 0; i < data.length / 4; i++) {
-			this.protectedRegionUuids.add(new UUID(((long) data[i * 4] << 32) | (long) data[i * 4 + 1], ((long) data[i * 4 + 2] << 32) | (long) data[i * 4 + 3]));
+			this.protectedRegionUuids.add(new UUID(((long) data[i * 4] << 32) | (data[i * 4 + 1] & 0xFFFFFFFFL), ((long) data[i * 4 + 2] << 32) | (data[i * 4 + 3] & 0xFFFFFFFFL)));
 		}
 	}
 
