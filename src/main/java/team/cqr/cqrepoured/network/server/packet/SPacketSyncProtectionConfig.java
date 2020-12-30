@@ -27,7 +27,6 @@ public class SPacketSyncProtectionConfig implements IMessage {
 		this.protectionConfig.preventExplosionOther = buf.readBoolean();
 		this.protectionConfig.preventExplosionTNT = buf.readBoolean();
 		this.protectionConfig.preventFireSpreading = buf.readBoolean();
-		this.protectionConfig.protectionSystemReplaceableBlocksWhitelisted = buf.readBoolean();
 		this.protectionConfig.protectionSystemBreakableBlockWhitelist = new String[buf.readInt()];
 		for (int i = 0; i < this.protectionConfig.protectionSystemBreakableBlockWhitelist.length; i++) {
 			this.protectionConfig.protectionSystemBreakableBlockWhitelist[i] = ByteBufUtils.readUTF8String(buf);
@@ -55,7 +54,6 @@ public class SPacketSyncProtectionConfig implements IMessage {
 		buf.writeBoolean(this.protectionConfig.preventExplosionOther);
 		buf.writeBoolean(this.protectionConfig.preventExplosionTNT);
 		buf.writeBoolean(this.protectionConfig.preventFireSpreading);
-		buf.writeBoolean(this.protectionConfig.protectionSystemReplaceableBlocksWhitelisted);
 		buf.writeInt(this.protectionConfig.protectionSystemBreakableBlockWhitelist.length);
 		for (String s : this.protectionConfig.protectionSystemBreakableBlockWhitelist) {
 			ByteBufUtils.writeUTF8String(buf, s);

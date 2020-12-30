@@ -103,7 +103,7 @@ public class ProtectedRegionHelper {
 				&& CQRConfig.dungeonProtection.protectionSystemEnabled
 				&& CQRConfig.dungeonProtection.preventBlockBreaking
 				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
-				&& !isBlockBreakingWhitelisted(world, pos)) {
+				&& !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
@@ -124,18 +124,11 @@ public class ProtectedRegionHelper {
 		return isBreakingPrevented;
 	}
 
-	private static boolean isBlockBreakingWhitelisted(World world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
+	private static boolean isBlockBreakingWhitelisted(IBlockState state) {
 		if (BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
 			return true;
 		}
-		if (BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial())) {
-			return true;
-		}
-		if (CQRConfig.dungeonProtection.protectionSystemReplaceableBlocksWhitelisted) {
-			return state.getBlock().isReplaceable(world, pos);
-		}
-		return false;
+		return BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
 	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, IBlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {

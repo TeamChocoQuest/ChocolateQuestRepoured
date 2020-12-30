@@ -307,18 +307,16 @@ public class CQRConfig {
 		public boolean protectionSystemEnabled = true;
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "minecraft:fire", "minecraft:cobweb", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus" };
+		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus" };
 
 		@Config.Comment("")
-		public String[] protectionSystemBreakableMaterialWhitelist = {};
+		public String[] protectionSystemBreakableMaterialWhitelist = { "WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB" };
 
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
 		public String[] protectionSystemPlaceableBlockWhitelist = { "minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch" };
 
 		@Config.Comment("")
 		public String[] protectionSystemPlaceableMaterialWhitelist = {};
-
-		public boolean protectionSystemReplaceableBlocksWhitelisted = true;
 	}
 
 	public static class General {
