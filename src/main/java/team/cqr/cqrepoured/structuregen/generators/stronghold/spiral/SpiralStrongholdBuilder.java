@@ -90,7 +90,7 @@ public class SpiralStrongholdBuilder {
 				PlacementSettings settings = new PlacementSettings();
 				BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(strongholdEntrancePos, room, settings);
 				p = new BlockPos(p.getX(), y, p.getZ());
-				room.addAll(world, dungeonGenerator, p, settings, mobType);
+				room.addAll(world, this.dungeonGenerator, p, settings, mobType);
 			}
 			strongholdEntrancePos = strongholdEntrancePos.add(offsetVector);
 			posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());

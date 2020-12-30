@@ -17,7 +17,7 @@ public class GUIHandlerMerchantEditTrade<T extends GuiMerchantEditTrade> impleme
 
 	@Override
 	public Class<T> getGuiContainerClass() {
-		return GUI_CLASS;
+		return this.GUI_CLASS;
 	}
 
 	@Override

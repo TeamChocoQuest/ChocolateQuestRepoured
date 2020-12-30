@@ -247,8 +247,8 @@ public class FactionRegistry {
 		}
 
 		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
-			if (entity.getTeam() != null && factions.containsKey(entity.getTeam().getName()) && factions.get(entity.getTeam().getName()) != null) {
-				return factions.get(entity.getTeam().getName());
+			if (entity.getTeam() != null && this.factions.containsKey(entity.getTeam().getName()) && this.factions.get(entity.getTeam().getName()) != null) {
+				return this.factions.get(entity.getTeam().getName());
 			}
 		}
 
@@ -483,7 +483,7 @@ public class FactionRegistry {
 
 				@Override
 				public void run() {
-					savePlayerReputation(player.getPersistentID(), true);
+					FactionRegistry.this.savePlayerReputation(player.getPersistentID(), true);
 				}
 			});
 			t.setName("CQR-Reputation-Data-Saver");
@@ -499,7 +499,7 @@ public class FactionRegistry {
 			public void run() {
 				for (UUID playerID : FactionRegistry.this.playerFactionRepuMap.keySet()) {
 					try {
-						savePlayerReputation(playerID, removeMapsFromMemory);
+						FactionRegistry.this.savePlayerReputation(playerID, removeMapsFromMemory);
 					} catch (Exception ex) {
 						System.out.println("Unable to save reputation data of " + playerID + "!");
 						ex.printStackTrace();

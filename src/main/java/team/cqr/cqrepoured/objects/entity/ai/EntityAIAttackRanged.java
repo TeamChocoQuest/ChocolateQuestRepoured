@@ -66,7 +66,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 	@Override
 	public void updateTask() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if(attackTarget == null) {
+		if (attackTarget == null) {
 			return;
 		}
 		double distance = this.entity.getDistance(attackTarget);

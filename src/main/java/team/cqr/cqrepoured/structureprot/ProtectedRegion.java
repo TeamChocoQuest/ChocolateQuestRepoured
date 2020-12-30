@@ -73,7 +73,7 @@ public class ProtectedRegion {
 
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
-		writeToNBT(tag);
+		this.writeToNBT(tag);
 		return tag;
 	}
 

@@ -73,7 +73,7 @@ public class SPacketSyncProtectionConfig implements IMessage {
 	}
 
 	public CQRConfig.DungeonProtection getProtectionConfig() {
-		return protectionConfig;
+		return this.protectionConfig;
 	}
 
 }

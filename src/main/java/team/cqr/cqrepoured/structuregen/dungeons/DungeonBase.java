@@ -198,7 +198,7 @@ public abstract class DungeonBase {
 		}
 		if (CQRConfig.advanced.tryPreventingDuplicateDungeons) {
 			File file;
-			Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
+			Integer lastUsedFileHash = this.lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new Integer(0));
 			do {
 				file = filesL.get(rand.nextInt(files.size()));
 				if (lastUsedFileHash == 0 || filesL.size() == 1) {

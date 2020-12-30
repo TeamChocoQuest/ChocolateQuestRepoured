@@ -242,7 +242,7 @@ public class SpiralStrongholdFloor {
 							if (file != null) {
 								CQStructure room = this.generator.loadStructureFromFile(file);
 								BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.coordinateGrid[iX][iZ], room, settings);
-								room.addAll(world, dungeonGenerator, p, settings, mobType);
+								room.addAll(world, this.dungeonGenerator, p, settings, mobType);
 							}
 						}
 					}

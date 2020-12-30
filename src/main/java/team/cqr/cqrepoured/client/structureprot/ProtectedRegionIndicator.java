@@ -25,7 +25,7 @@ public class ProtectedRegionIndicator {
 	}
 
 	public UUID getUuid() {
-		return uuid;
+		return this.uuid;
 	}
 
 	public void setStart(BlockPos start) {
@@ -33,7 +33,7 @@ public class ProtectedRegionIndicator {
 	}
 
 	public BlockPos getStart() {
-		return start;
+		return this.start;
 	}
 
 	public void setEnd(BlockPos end) {
@@ -41,7 +41,7 @@ public class ProtectedRegionIndicator {
 	}
 
 	public BlockPos getEnd() {
-		return end;
+		return this.end;
 	}
 
 	public void resetLifeTime() {

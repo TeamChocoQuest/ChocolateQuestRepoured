@@ -1187,27 +1187,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			AxisAlignedBB aabb = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 
 			List<CQRFaction> checkedFactions = new ArrayList<>();
-			//boolean setRepu = false;
+			// boolean setRepu = false;
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
 					CQRFaction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
 						// DONE decrement the players repu on this entity's faction
 						faction.decrementReputation(player, faction.getRepuMemberKill());
-						//setRepu = true;
+						// setRepu = true;
 					} else if (this.getFaction().isEnemy(faction)) {
 						// DONE increment the players repu at CQREntity's faction
 						faction.incrementReputation(player, faction.getRepuEnemyKill());
-						//setRepu = true;
+						// setRepu = true;
 					} else if (this.getFaction().isAlly(faction)) {
 						// DONE decrement the players repu on CQREntity's faction
 						faction.decrementReputation(player, faction.getRepuAllyKill());
-						//setRepu = true;
+						// setRepu = true;
 					}
 					checkedFactions.add(faction);
 				}
 			}
-			//System.out.println("Repu changed: " + setRepu);
+			// System.out.println("Repu changed: " + setRepu);
 		}
 	}
 

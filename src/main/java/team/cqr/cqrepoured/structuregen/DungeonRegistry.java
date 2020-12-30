@@ -105,7 +105,7 @@ public class DungeonRegistry {
 
 	private DungeonBase createDungeonFromFile(File file) {
 		Properties prop = PropertyFileHelper.readPropFile(file);
-		if(prop == null) {
+		if (prop == null) {
 			return null;
 		}
 

@@ -62,6 +62,7 @@ public class ClientProtectedRegionManager implements IProtectedRegionManager {
 		return list;
 	}
 
+	@Override
 	public void clearProtectedRegions() {
 		this.protectedRegions.clear();
 	}

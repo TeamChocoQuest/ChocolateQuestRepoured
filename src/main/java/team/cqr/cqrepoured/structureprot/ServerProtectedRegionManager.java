@@ -79,7 +79,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	public void handleWorldTick() {
-		long time = world.getTotalWorldTime();
+		long time = this.world.getTotalWorldTime();
 		for (Iterator<ProtectedRegionContainer> iterator = this.protectedRegions.values().iterator(); iterator.hasNext();) {
 			ProtectedRegionContainer container = iterator.next();
 			if (!container.chunkSet.isEmpty()) {
