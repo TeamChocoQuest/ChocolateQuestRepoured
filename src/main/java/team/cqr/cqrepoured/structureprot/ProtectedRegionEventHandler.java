@@ -306,7 +306,7 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static final ReflectionMethod<Object> METHOD_WRITE_CHUNK_DATA = new ReflectionMethod<>(AnvilChunkLoader.class, "", "writeChunkData", ChunkPos.class, NBTTagCompound.class);
+	private static final ReflectionMethod<Object> METHOD_WRITE_CHUNK_DATA = new ReflectionMethod<>(AnvilChunkLoader.class, "func_183013_b", "writeChunkData", ChunkPos.class, NBTTagCompound.class);
 
 	@Deprecated
 	private static final ReflectionField<Map<UUID, ProtectedRegionContainer>> FIELD_PROTECTED_REGIONS = new ReflectionField<>(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
