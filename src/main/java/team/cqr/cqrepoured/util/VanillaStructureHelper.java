@@ -3,9 +3,6 @@ package team.cqr.cqrepoured.util;
 import java.util.Map;
 import java.util.Random;
 
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
-import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -25,6 +22,8 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
+import team.cqr.cqrepoured.util.reflection.ReflectionField;
+import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public class VanillaStructureHelper {
 

@@ -29,6 +29,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.World;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIIdleSit;
@@ -45,7 +46,6 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.VectorUtil;
-import net.minecraft.world.World;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatedEntity {
 

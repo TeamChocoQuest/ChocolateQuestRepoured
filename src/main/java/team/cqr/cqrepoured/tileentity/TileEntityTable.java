@@ -21,8 +21,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.network.datasync.DataEntryByte;
 import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler;
-import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler.CustomItemStackHandler;
+import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
 public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 

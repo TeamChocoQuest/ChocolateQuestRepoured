@@ -29,6 +29,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
@@ -48,9 +51,6 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.VectorUtil;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
