@@ -144,9 +144,6 @@ public class ProtectedRegion {
 			this.protectionStates = compound.getByteArray("protectionStates");
 		} else {
 			this.protectionStates = new byte[sizeX * sizeY * sizeZ];
-			for (int i = 0; i < this.protectionStates.length; i++) {
-				this.protectionStates[i] = 1;
-			}
 		}
 		this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
 		this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
