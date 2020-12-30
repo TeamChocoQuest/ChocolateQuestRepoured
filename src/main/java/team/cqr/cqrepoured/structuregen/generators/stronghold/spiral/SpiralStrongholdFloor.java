@@ -12,8 +12,6 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.structuregen.generation.AbstractDungeonPart;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -244,9 +242,7 @@ public class SpiralStrongholdFloor {
 							if (file != null) {
 								CQStructure room = this.generator.loadStructureFromFile(file);
 								BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.coordinateGrid[iX][iZ], room, settings);
-								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getBlockInfoList(), settings, mobType));
-								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getSpecialBlockInfoList(), settings, mobType));
-								strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, p, room.getEntityInfoList(), settings, mobType));
+								room.addAll(world, dungeonGenerator, p, settings, mobType);
 							}
 						}
 					}

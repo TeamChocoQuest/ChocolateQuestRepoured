@@ -449,6 +449,18 @@ public class CQStructure {
 		return this.author;
 	}
 
+	public void addAll(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, PlacementSettings settings, DungeonInhabitant dungeonMobType) {
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, partPos, this.getBlockInfoList(), settings, dungeonMobType));
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, partPos, this.getSpecialBlockInfoList(), settings, dungeonMobType));
+		dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, partPos, this.getEntityInfoList(), settings, dungeonMobType));
+		if (!this.unprotectedBlockList.isEmpty()) {
+			for (int i : this.unprotectedBlockList) {
+				BlockPos p = new BlockPos((i >>> 20) & 0xFFF, (i >>> 12) & 0xFF, i & 0xFFF);
+				dungeonGenerator.addUnprotectedPosition(partPos.add(Template.transformedBlockPos(settings, p)));
+			}
+		}
+	}
+
 	public static void updateSpecialBlocks() {
 		CQStructure.SPECIAL_BLOCKS.clear();
 		for (String s : CQRConfig.advanced.specialBlocks) {

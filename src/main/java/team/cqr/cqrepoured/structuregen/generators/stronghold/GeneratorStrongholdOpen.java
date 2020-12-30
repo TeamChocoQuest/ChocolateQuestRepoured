@@ -16,9 +16,6 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonStrongholdOpen;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
@@ -164,9 +161,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		this.entranceSizeZ = structure.getSize().getX();
 
 		BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.pos, structure, this.settings);
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getBlockInfoList(), this.settings, mobType));
-		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, structure.getEntityInfoList(), this.settings, mobType));
-		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p, structure.getSpecialBlockInfoList(), this.settings, mobType));
+		structure.addAll(this.world, this.dungeonGenerator, p, this.settings, mobType);
 		/*
 		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications()); BlockPos pastePosForStair =
 		 * new BlockPos(x, y - stairs.getSizeY(), z); stairs.placeBlocksInWorld(world,

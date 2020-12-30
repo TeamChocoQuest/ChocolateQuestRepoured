@@ -28,7 +28,6 @@ import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -220,9 +219,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 				// DONE: Support platform -> not needed
 				PlacementSettings settings = new PlacementSettings();
 				BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), pY, this.pos.getZ()), structure, settings);
-				this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getBlockInfoList(), settings, this.mobtype));
-				this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, this.mobtype));
-				this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, structure.getEntityInfoList(), settings, this.mobtype));
+				structure.addAll(this.world, this.dungeonGenerator, p, settings, this.mobtype);
 			}
 		}
 	}

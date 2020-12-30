@@ -17,8 +17,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -145,9 +143,7 @@ public class StrongholdFloorOpen {
 				if (pos != null && file != null) {
 					CQStructure structure = this.generator.loadStructureFromFile(file);
 					BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(pos, structure, this.generator.getPlacementSettings());
-					dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getBlockInfoList(), this.generator.getPlacementSettings(), mobType));
-					dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, p, structure.getEntityInfoList(), this.generator.getPlacementSettings(), mobType));
-					dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, p, structure.getSpecialBlockInfoList(), this.generator.getPlacementSettings(), mobType));
+					structure.addAll(world, dungeonGenerator, p, this.generator.getPlacementSettings(), mobType);
 				}
 			}
 		}

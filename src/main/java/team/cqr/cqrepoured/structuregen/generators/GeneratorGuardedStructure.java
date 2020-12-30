@@ -14,10 +14,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonGuardedCastle;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartCover;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -85,9 +82,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			CQStructure structure = entry.getValue();
 			BlockPos structurePos = entry.getKey();
 
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, structurePos, structure.getBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, structurePos, structure.getEntityInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, structurePos, structure.getSpecialBlockInfoList(), settings, mobType));
+			structure.addAll(this.world, this.dungeonGenerator, structurePos, settings, mobType);
 		}
 	}
 

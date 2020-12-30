@@ -8,9 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -158,9 +155,7 @@ public class StrongholdFloor {
 					if (struct != null) {
 						CQStructure structure = this.generator.loadStructureFromFile(struct);
 						BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(pos, structure, settings);
-						dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getBlockInfoList(), settings, mobType));
-						dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, p, structure.getEntityInfoList(), settings, mobType));
-						dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobType));
+						structure.addAll(world, dungeonGenerator, p, settings, mobType);
 					}
 				}
 			}

@@ -18,7 +18,6 @@ import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -127,9 +126,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		if (structure != null) {
 			PlacementSettings settings = new PlacementSettings();
 			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(centeredPos.up(), structure, settings);
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, structure.getEntityInfoList(), settings, mobType));
+			structure.addAll(this.world, this.dungeonGenerator, p, settings, mobType);
 		}
 	}
 

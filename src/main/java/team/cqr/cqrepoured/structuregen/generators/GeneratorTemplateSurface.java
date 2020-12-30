@@ -11,10 +11,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonTemplateSurface;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartCover;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -61,9 +58,7 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 	@Override
 	protected void buildStructure() {
 		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.structurePos, this.structure.getBlockInfoList(), this.settings, mobType));
-		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.structurePos, this.structure.getEntityInfoList(), this.settings, mobType));
-		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, this.structurePos, this.structure.getSpecialBlockInfoList(), this.settings, mobType));
+		this.structure.addAll(this.world, this.dungeonGenerator, this.structurePos, this.settings, mobType);
 	}
 
 	@Override

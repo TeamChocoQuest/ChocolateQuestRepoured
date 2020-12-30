@@ -20,7 +20,6 @@ import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonGridCity;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -207,9 +206,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
 			PlacementSettings settings = new PlacementSettings();
 			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(entry.getKey(), entry.getValue(), settings);
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, entry.getValue().getBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, entry.getValue().getSpecialBlockInfoList(), settings, mobType));
-			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, entry.getValue().getEntityInfoList(), settings, mobType));
+			entry.getValue().addAll(this.world, this.dungeonGenerator, p, settings, mobType);
 		}
 	}
 
