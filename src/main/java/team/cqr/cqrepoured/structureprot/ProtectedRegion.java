@@ -104,7 +104,7 @@ public class ProtectedRegion {
 		compound.setTag("pos", NBTUtil.createPosTag(this.pos));
 		compound.setTag("startPos", NBTUtil.createPosTag(this.startPos));
 		compound.setTag("endPos", NBTUtil.createPosTag(this.endPos));
-		compound.setByteArray("protectedBlocks", this.protectionStates);
+		compound.setByteArray("protectionStates", this.protectionStates);
 		compound.setBoolean("preventBlockBreaking", this.preventBlockBreaking);
 		compound.setBoolean("preventBlockPlacing", this.preventBlockPlacing);
 		compound.setBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
@@ -140,8 +140,8 @@ public class ProtectedRegion {
 		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		if (compound.hasKey("protectedBlocks", Constants.NBT.TAG_BYTE_ARRAY)) {
-			this.protectionStates = compound.getByteArray("protectedBlocks");
+		if (compound.hasKey("protectionStates", Constants.NBT.TAG_BYTE_ARRAY)) {
+			this.protectionStates = compound.getByteArray("protectionStates");
 		} else {
 			this.protectionStates = new byte[sizeX * sizeY * sizeZ];
 			for (int i = 0; i < this.protectionStates.length; i++) {
