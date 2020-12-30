@@ -1,10 +1,14 @@
 package team.cqr.cqrepoured.tileentity;
 
 import java.io.File;
+import java.util.Arrays;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -15,9 +19,11 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
+import team.cqr.cqrepoured.network.datasync.DataEntryObject;
 import team.cqr.cqrepoured.network.datasync.DataEntryString;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
+import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class TileEntityExporter extends TileEntity implements ITileEntitySyncable {
 
@@ -73,7 +79,52 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 			TileEntityExporter.this.onPositionsChanged();
 		}
 	};
-	private final DataEntryBoolean ignoreEntities = new DataEntryBoolean("IgnoreEntities", true, true);
+	private final DataEntryBoolean ignoreEntities = new DataEntryBoolean("IgnoreEntities", true, true) {
+		@Override
+		protected void onValueChanged() {
+			super.onValueChanged();
+			TileEntityExporter.this.onPositionsChanged();
+		}
+	};
+	private final DataEntryObject<BlockPos[]> unprotectedBlocks = new DataEntryObject<BlockPos[]>("UnprotectedBlocks", new BlockPos[0], true) {
+		@Override
+		public NBTBase write() {
+			int[] data = new int[this.value.length * 3];
+			for (int i = 0; i < this.value.length; i++) {
+				data[i * 3] = this.value[i].getX();
+				data[i * 3 + 1] = this.value[i].getY();
+				data[i * 3 + 2] = this.value[i].getZ();
+			}
+			return new NBTTagIntArray(data);
+		}
+
+		@Override
+		protected void readInternal(NBTBase nbt) {
+			if (nbt instanceof NBTTagIntArray) {
+				int[] data = ((NBTTagIntArray) nbt).getIntArray();
+				this.value = new BlockPos[data.length / 3];
+				for (int i = 0; i < this.value.length; i++) {
+					this.value[i] = new BlockPos(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
+				}
+			}
+		}
+
+		@Override
+		public void writeChanges(ByteBuf buf) {
+			buf.writeInt(this.value.length);
+			for (BlockPos pos : this.value) {
+				ByteBufUtil.writeBlockPos(buf, pos);
+			}
+		}
+
+		@Override
+		protected void readChangesInternal(ByteBuf buf) {
+			this.value = new BlockPos[buf.readInt()];
+			for (int i = 0; i < this.value.length; i++) {
+				this.value[i] = ByteBufUtil.readBlockPos(buf);
+			}
+		}
+	};
 
 	private final BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos();
 	private final BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos();
@@ -90,6 +141,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		this.dataManager.register(this.endZ);
 		this.dataManager.register(this.relativeMode);
 		this.dataManager.register(this.ignoreEntities);
+		this.dataManager.register(this.unprotectedBlocks);
 	}
 
 	@Override
@@ -187,7 +239,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 		if (!this.world.isRemote) {
 			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), author.getName());
+			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
 					author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName.get()));
@@ -201,11 +253,11 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 	}
 
-	public void setValues(String structName, BlockPos startPos, BlockPos endPos, boolean useRelativeMode, boolean ignoreEntities) {
-		this.setValues(structName, startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), useRelativeMode, ignoreEntities);
+	public void setValues(String structName, BlockPos startPos, BlockPos endPos, boolean useRelativeMode, boolean ignoreEntities, BlockPos[] unprotectedBlocks) {
+		this.setValues(structName, startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), useRelativeMode, ignoreEntities, unprotectedBlocks);
 	}
 
-	public void setValues(String structName, int sX, int sY, int sZ, int eX, int eY, int eZ, boolean useRelativeMode, boolean ignoreEntities) {
+	public void setValues(String structName, int sX, int sY, int sZ, int eX, int eY, int eZ, boolean useRelativeMode, boolean ignoreEntities, BlockPos[] unprotectedBlocks) {
 		this.structureName.set(structName);
 		this.startX.set(sX);
 		this.startY.set(sY);
@@ -215,6 +267,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		this.endZ.set(eZ);
 		this.relativeMode.set(useRelativeMode);
 		this.ignoreEntities.set(ignoreEntities);
+		this.unprotectedBlocks.set(unprotectedBlocks);
 	}
 
 	public String getStructureName() {
@@ -251,6 +304,10 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 
 	public boolean isRelativeMode() {
 		return this.relativeMode.getBoolean();
+	}
+
+	public BlockPos[] getUnprotectedBlocks() {
+		return this.unprotectedBlocks.get();
 	}
 
 	public BlockPos.MutableBlockPos getMinPos() {

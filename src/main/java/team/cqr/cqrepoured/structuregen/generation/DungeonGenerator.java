@@ -2,13 +2,16 @@ package team.cqr.cqrepoured.structuregen.generation;
 
 import java.util.Collection;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
@@ -33,6 +36,7 @@ public class DungeonGenerator {
 	protected BlockPos pos;
 	protected BlockPos minPos;
 	protected BlockPos maxPos;
+	protected final Set<BlockPos> unprotectedPositions = new HashSet<>();
 	protected ProtectedRegion protectedRegion;
 	protected DungeonPartLight dungeonPartLight;
 	protected EnumDungeonGeneratorState state = EnumDungeonGeneratorState.PRE_GENERATION;
@@ -76,6 +80,16 @@ public class DungeonGenerator {
 		compound.setInteger("state", this.state.ordinal());
 		compound.setString("dungeonName", this.dungeonName);
 
+		int[] data = new int[this.unprotectedPositions.size() * 3];
+		int i = 0;
+		for (BlockPos p : this.unprotectedPositions) {
+			data[i * 3] = p.getX();
+			data[i * 3 + 1] = p.getY();
+			data[i * 3 + 2] = p.getZ();
+			i++;
+		}
+		compound.setTag("unprotectedPositions", new NBTTagIntArray(data));
+
 		return compound;
 	}
 
@@ -103,6 +117,12 @@ public class DungeonGenerator {
 		}
 		this.state = EnumDungeonGeneratorState.values()[compound.getInteger("state")];
 		this.dungeonName = compound.getString("dungeonName");
+
+		this.unprotectedPositions.clear();
+		int[] data = compound.getIntArray("unprotectedPositions");
+		for (int i = 0; i < data.length / 3; i++) {
+			this.unprotectedPositions.add(new BlockPos(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]));
+		}
 	}
 
 	public void tick() {
@@ -180,6 +200,10 @@ public class DungeonGenerator {
 		}
 	}
 
+	public void addUnprotectedPosition(BlockPos p) {
+		this.unprotectedPositions.add(p.toImmutable());
+	}
+
 	public void startGeneration(@Nullable DungeonBase dungeon) {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.dungeonPartLight = new DungeonPartLight(this.world, this, this.minPos, this.maxPos);
@@ -187,6 +211,9 @@ public class DungeonGenerator {
 			if (dungeon != null && dungeon.isProtectionSystemEnabled()) {
 				this.protectedRegion = new ProtectedRegion(this.world, dungeon.getDungeonName(), this.pos.up(dungeon.getUnderGroundOffset()), this.minPos, this.maxPos);
 				this.protectedRegion.setup(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
+				for (BlockPos p : this.unprotectedPositions) {
+					this.protectedRegion.setProtectionState(p, 1);
+				}
 				IProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 
 				if (manager != null) {

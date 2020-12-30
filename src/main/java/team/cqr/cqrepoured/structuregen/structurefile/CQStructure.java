@@ -23,6 +23,9 @@ import org.apache.commons.io.FileUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockCommandBlock;
@@ -46,6 +49,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -53,6 +58,10 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
+import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
+import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
+import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
+import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.ChunkUtil;
@@ -124,6 +133,7 @@ public class CQStructure {
 	private final List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
 	private final List<AbstractBlockInfo> specialBlockInfoList = new ArrayList<>();
 	private final List<EntityInfo> entityInfoList = new ArrayList<>();
+	private final IntList unprotectedBlockList = new IntArrayList();
 	private BlockPos size = BlockPos.ORIGIN;
 	private String author = "";
 
@@ -173,10 +183,10 @@ public class CQStructure {
 		return structure;
 	}
 
-	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, String author) {
+	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks, String author) {
 		CQStructure structure = new CQStructure();
 		structure.author = author;
-		structure.takeBlocksAndEntitiesFromWorld(world, startPos, endPos, ignoreBasicEntities);
+		structure.takeBlocksAndEntitiesFromWorld(world, startPos, endPos, ignoreBasicEntities, unprotectedBlocks);
 		return structure;
 	}
 
@@ -260,6 +270,8 @@ public class CQStructure {
 		// Save compound tags
 		compound.setTag("compoundTagList", compoundTagList);
 
+		compound.setTag("unprotectedBlockList", new NBTTagIntArray(this.unprotectedBlockList.toIntArray()));
+
 		return compound;
 	}
 
@@ -320,9 +332,12 @@ public class CQStructure {
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new EntityInfo((NBTTagCompound) nbt));
 		}
+
+		this.unprotectedBlockList.clear();
+		this.unprotectedBlockList.addElements(0, compound.getIntArray("unprotectedBlockList"));
 	}
 
-	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities) {
+	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
 		BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 		BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 
@@ -335,6 +350,17 @@ public class CQStructure {
 
 		if (chunkTicket != null) {
 			ForgeChunkManager.releaseTicket(chunkTicket);
+		}
+
+		this.unprotectedBlockList.clear();
+		for (BlockPos pos : unprotectedBlocks) {
+			if (pos.getX() < pos1.getX() && pos.getY() < pos1.getY() && pos.getZ() < pos1.getZ()) {
+				continue;
+			}
+			if (pos.getX() > pos2.getX() && pos.getY() > pos2.getY() && pos.getZ() > pos2.getZ()) {
+				continue;
+			}
+			this.unprotectedBlockList.add((((pos.getX() - pos1.getX()) & 0xFFF) << 20) | (((pos.getY() - pos1.getY()) & 0xFF) << 12) | ((pos.getZ() - pos1.getZ()) & 0xFFF));
 		}
 	}
 
@@ -409,6 +435,10 @@ public class CQStructure {
 
 	public List<EntityInfo> getEntityInfoList() {
 		return Collections.unmodifiableList(this.entityInfoList);
+	}
+
+	public IntList getUnprotectedBlockList() {
+		return IntLists.unmodifiable(this.unprotectedBlockList);
 	}
 
 	public BlockPos getSize() {

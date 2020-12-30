@@ -23,7 +23,7 @@ public class GuiExporter extends GuiScreen {
 	private TileEntityExporter exporter;
 
 	private GuiButtonExt btnExport;
-	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
+	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ, edtUnprotectedBlocks;
 	private GuiCheckBox chbxRelativeMode, chbxIgnoreEntities;
 
 	public GuiExporter(TileEntityExporter exporter) {
@@ -41,31 +41,73 @@ public class GuiExporter extends GuiScreen {
 		this.edtName.setText(this.exporter.getStructureName());
 		this.chbxRelativeMode.setIsChecked(this.exporter.isRelativeMode());
 		this.chbxIgnoreEntities.setIsChecked(this.exporter.isIgnoreEntities());
+		StringBuilder sb = new StringBuilder();
+		BlockPos[] arr = this.exporter.getUnprotectedBlocks();
+		if (arr.length > 0) {
+			sb.append(arr[0].getX());
+			sb.append(',');
+			sb.append(arr[0].getY());
+			sb.append(',');
+			sb.append(arr[0].getZ());
+			for (int i = 1; i < arr.length; i++) {
+				sb.append(';');
+				sb.append(' ');
+				sb.append(arr[i].getX());
+				sb.append(',');
+				sb.append(arr[i].getY());
+				sb.append(',');
+				sb.append(arr[i].getZ());
+			}
+		}
+		this.edtUnprotectedBlocks.setText(sb.toString());
 	}
 
 	@Override
 	public void initGui() {
-		this.edtName = new GuiTextField(0, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
+		int index = 0;
+
+		this.edtName = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
 		this.edtName.setText(this.exporter.getStructureName());
 
-		this.edtEndX = new GuiTextField(1, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 10, 40, 20);
+		this.edtEndX = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 10, 40, 20);
 		this.edtEndX.setText(String.valueOf(this.exporter.getEndX()));
-		this.edtEndY = new GuiTextField(2, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 + 10, 40, 20);
+		this.edtEndY = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 + 10, 40, 20);
 		this.edtEndY.setText(String.valueOf(this.exporter.getEndY()));
-		this.edtEndZ = new GuiTextField(3, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 + 10, 40, 20);
+		this.edtEndZ = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 + 10, 40, 20);
 		this.edtEndZ.setText(String.valueOf(this.exporter.getEndZ()));
 
-		this.edtStartX = new GuiTextField(1, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 30, 40, 20);
+		this.edtStartX = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 30, 40, 20);
 		this.edtStartX.setText(String.valueOf(this.exporter.getStartX()));
-		this.edtStartY = new GuiTextField(2, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 - 30, 40, 20);
+		this.edtStartY = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 - 30, 40, 20);
 		this.edtStartY.setText(String.valueOf(this.exporter.getStartY()));
-		this.edtStartZ = new GuiTextField(3, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20);
+		this.edtStartZ = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20);
 		this.edtStartZ.setText(String.valueOf(this.exporter.getStartZ()));
 
-		this.chbxRelativeMode = new GuiCheckBox(5, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.isRelativeMode());
-		this.chbxIgnoreEntities = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 40, "Ignore Entities", this.exporter.isIgnoreEntities());
+		this.chbxRelativeMode = new GuiCheckBox(index++, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.isRelativeMode());
+		this.chbxIgnoreEntities = new GuiCheckBox(index++, this.width / 2 - 70, this.height / 2 + 40, "Ignore Entities", this.exporter.isIgnoreEntities());
 
-		this.btnExport = new GuiButtonExt(4, this.width / 2 - 70, this.height / 2 + 60, 140, 20, "Export");
+		this.edtUnprotectedBlocks = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 60, 140, 20);
+		StringBuilder sb = new StringBuilder();
+		BlockPos[] arr = this.exporter.getUnprotectedBlocks();
+		if (arr.length > 0) {
+			sb.append(arr[0].getX());
+			sb.append(',');
+			sb.append(arr[0].getY());
+			sb.append(',');
+			sb.append(arr[0].getZ());
+			for (int i = 1; i < arr.length; i++) {
+				sb.append(';');
+				sb.append(' ');
+				sb.append(arr[i].getX());
+				sb.append(',');
+				sb.append(arr[i].getY());
+				sb.append(',');
+				sb.append(arr[i].getZ());
+			}
+		}
+		this.edtUnprotectedBlocks.setText(sb.toString());
+
+		this.btnExport = new GuiButtonExt(index++, this.width / 2 - 70, this.height / 2 + 90, 140, 20, "Export");
 
 		this.buttonList.add(this.chbxRelativeMode);
 		this.buttonList.add(this.chbxIgnoreEntities);
@@ -75,23 +117,34 @@ public class GuiExporter extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		try {
+			String structName = this.edtName.getText();
+			if (structName.isEmpty()) {
+				throw new IllegalArgumentException();
+			}
 			int startX = Integer.parseInt(this.edtStartX.getText());
 			int startY = Integer.parseInt(this.edtStartY.getText());
 			int startZ = Integer.parseInt(this.edtStartZ.getText());
 			int endX = Integer.parseInt(this.edtEndX.getText());
 			int endY = Integer.parseInt(this.edtEndY.getText());
 			int endZ = Integer.parseInt(this.edtEndZ.getText());
-			String structName = this.edtName.getText();
-			if (structName.isEmpty()) {
-				throw new IllegalArgumentException();
+			BlockPos[] unprotectedBlocks;
+			if (!this.edtUnprotectedBlocks.getText().isEmpty()) {
+				String[] arr = this.edtUnprotectedBlocks.getText().split(";");
+				unprotectedBlocks = new BlockPos[arr.length];
+				for (int i = 0; i < arr.length; i++) {
+					String[] arr1 = arr[i].split(",");
+					unprotectedBlocks[i] = new BlockPos(Integer.parseInt(arr1[0].trim()), Integer.parseInt(arr1[1].trim()), Integer.parseInt(arr1[2].trim()));
+				}
+			} else {
+				unprotectedBlocks = new BlockPos[0];
 			}
 
-			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked());
+			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked(), unprotectedBlocks);
 
 			if (this.saveStructOnExit) {
 				this.exporter.saveStructure(this.mc.player);
 			}
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Invalid exporter arguments"));
 		}
 
@@ -101,7 +154,7 @@ public class GuiExporter extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.edtName.isFocused() || this.edtStartX.isFocused() || this.edtStartY.isFocused() || this.edtStartZ.isFocused() || this.edtEndX.isFocused() || this.edtEndY.isFocused() || this.edtEndZ.isFocused()) {
+		if (this.edtName.isFocused() || this.edtStartX.isFocused() || this.edtStartY.isFocused() || this.edtStartZ.isFocused() || this.edtEndX.isFocused() || this.edtEndY.isFocused() || this.edtEndZ.isFocused() || this.edtUnprotectedBlocks.isFocused()) {
 			if (keyCode == 1) {
 				this.edtName.setFocused(false);
 				this.edtStartX.setFocused(false);
@@ -110,6 +163,7 @@ public class GuiExporter extends GuiScreen {
 				this.edtEndX.setFocused(false);
 				this.edtEndY.setFocused(false);
 				this.edtEndZ.setFocused(false);
+				this.edtUnprotectedBlocks.setFocused(false);
 			} else {
 				this.edtName.textboxKeyTyped(typedChar, keyCode);
 				if (GuiHelper.isValidCharForNumberTextField(typedChar, keyCode, true, false)) {
@@ -120,6 +174,7 @@ public class GuiExporter extends GuiScreen {
 					this.edtEndY.textboxKeyTyped(typedChar, keyCode);
 					this.edtEndZ.textboxKeyTyped(typedChar, keyCode);
 				}
+				this.edtUnprotectedBlocks.textboxKeyTyped(typedChar, keyCode);
 			}
 		} else if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
 			this.mc.player.closeScreen();
@@ -141,6 +196,8 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartX.mouseClicked(mouseX, mouseY, mouseButton);
 		this.edtStartY.mouseClicked(mouseX, mouseY, mouseButton);
 		this.edtStartZ.mouseClicked(mouseX, mouseY, mouseButton);
+
+		this.edtUnprotectedBlocks.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
@@ -156,12 +213,14 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartX.updateCursorCounter();
 		this.edtStartY.updateCursorCounter();
 		this.edtStartZ.updateCursorCounter();
+
+		this.edtUnprotectedBlocks.updateCursorCounter();
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, I18n.format("tile.exporter.name"), this.width / 2, 20, 16777215);
+		this.drawCenteredString(this.fontRenderer, I18n.format("tile.exporter.name"), this.width / 2, 20, 0xFFFFFF);
 
 		this.edtName.drawTextBox();
 
@@ -173,15 +232,17 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartY.drawTextBox();
 		this.edtStartZ.drawTextBox();
 
-		this.drawString(this.fontRenderer, "Structure Name", this.width / 2 - 70, this.height / 2 - 80, 10526880);
+		this.edtUnprotectedBlocks.drawTextBox();
 
-		this.drawString(this.fontRenderer, "Start X", this.width / 2 - 70, this.height / 2 - 40, 10526880);
-		this.drawString(this.fontRenderer, "Start Y", this.width / 2 - 20, this.height / 2 - 40, 10526880);
-		this.drawString(this.fontRenderer, "Start Z", this.width / 2 + 30, this.height / 2 - 40, 10526880);
+		this.drawString(this.fontRenderer, "Structure Name", this.width / 2 - 70, this.height / 2 - 80, 0xA0A0A0);
 
-		this.drawString(this.fontRenderer, "End X", this.width / 2 - 70, this.height / 2, 10526880);
-		this.drawString(this.fontRenderer, "End Y", this.width / 2 - 20, this.height / 2, 10526880);
-		this.drawString(this.fontRenderer, "End Z", this.width / 2 + 30, this.height / 2, 10526880);
+		this.drawString(this.fontRenderer, "Start X", this.width / 2 - 70, this.height / 2 - 40, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "Start Y", this.width / 2 - 20, this.height / 2 - 40, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "Start Z", this.width / 2 + 30, this.height / 2 - 40, 0xA0A0A0);
+
+		this.drawString(this.fontRenderer, "End X", this.width / 2 - 70, this.height / 2, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "End Y", this.width / 2 - 20, this.height / 2, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "End Z", this.width / 2 + 30, this.height / 2, 0xA0A0A0);
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 

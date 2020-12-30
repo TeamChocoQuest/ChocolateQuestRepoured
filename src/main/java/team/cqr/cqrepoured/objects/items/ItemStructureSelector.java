@@ -59,7 +59,7 @@ public class ItemStructureSelector extends Item {
 					pos2 = pos2.subtract(pos);
 				}
 
-				tileEntity.setValues(tileEntity.getStructureName(), DungeonGenUtils.getMinPos(pos1, pos2), DungeonGenUtils.getMaxPos(pos1, pos2), tileEntity.isRelativeMode(), tileEntity.isIgnoreEntities());
+				tileEntity.setValues(tileEntity.getStructureName(), DungeonGenUtils.getMinPos(pos1, pos2), DungeonGenUtils.getMaxPos(pos1, pos2), tileEntity.isRelativeMode(), tileEntity.isIgnoreEntities(), tileEntity.getUnprotectedBlocks());
 			}
 		} else if (!world.isRemote) {
 			if (player.isSneaking()) {
