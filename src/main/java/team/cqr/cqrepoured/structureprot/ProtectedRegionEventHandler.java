@@ -276,6 +276,9 @@ public class ProtectedRegionEventHandler {
 		} else {
 			folder = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/protected_regions");
 		}
+		if (!folder.exists()) {
+			return;
+		}
 		List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "nbt" }, false));
 		if (files.isEmpty()) {
 			return;
