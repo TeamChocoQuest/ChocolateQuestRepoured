@@ -18,6 +18,9 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import team.cqr.cqrepoured.client.models.entities.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.EntityRenderManager;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityArmor;
@@ -34,7 +37,7 @@ import team.cqr.cqrepoured.objects.items.guns.ItemMusketKnife;
 import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
 import team.cqr.cqrepoured.util.Reference;
 
-public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
+public class RenderCQREntity<T extends AbstractEntityCQR & IAnimatable> extends RenderLiving<T> implements IGeoRenderer<T> {
 
 	public ResourceLocation texture;
 	public double widthScale;
@@ -275,6 +278,17 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), -1.0F, 0.0F, 0.0F);
 		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, -1.0F, 0.0F);
 		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, -1.0F);
+	}
+
+	@Override
+	public GeoModelProvider<T> getGeoModelProvider() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(T instance) {
+		return getEntityTexture(instance);
 	}
 
 }
