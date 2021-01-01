@@ -44,6 +44,7 @@ import team.cqr.cqrepoured.objects.items.ItemBullBattleAxe;
 import team.cqr.cqrepoured.objects.items.ItemDungeonPlacer;
 import team.cqr.cqrepoured.objects.items.ItemGoldenFeather;
 import team.cqr.cqrepoured.objects.items.ItemHookshot;
+import team.cqr.cqrepoured.objects.items.ItemLore;
 import team.cqr.cqrepoured.objects.items.ItemLongshot;
 import team.cqr.cqrepoured.objects.items.ItemMobToSpawner;
 import team.cqr.cqrepoured.objects.items.ItemPathTool;
@@ -391,13 +392,13 @@ public class CQRItems {
 					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_iron_dyable"),
 					setItemName(new ItemArmorDyable(CQRMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_iron_dyable"),
 
-					setItemName(new Item(), "scale_turtle"),
-					setItemName(new Item(), "leather_bull"),
-					setItemName(new Item(), "horn_bull"),
-					setItemName(new Item(), "ball_slime"),
-					setItemName(new Item(), "leather_spider"),
-					setItemName(new Item(), "bone_monking"),
-					setItemName(new Item(), "giant_spider_poison"),
+					setItemName(new ItemLore(), "scale_turtle"),
+					setItemName(new ItemLore(), "leather_bull"),
+					setItemName(new ItemLore(), "horn_bull"),
+					setItemName(new ItemLore(), "ball_slime"),
+					setItemName(new ItemLore(), "leather_spider"),
+					setItemName(new ItemLore(), "bone_monking"),
+					setItemName(new ItemLore(), "giant_spider_poison"),
 					setItemName(new ItemGoldenFeather(), "feather_golden"),
 
 					setItemName(new ItemPotionHealing(), "potion_healing"),

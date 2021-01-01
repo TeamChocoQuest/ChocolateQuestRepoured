@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -17,9 +16,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.objects.items.ItemLore;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
-public class ItemBubblePistol extends Item implements IRangedWeapon {
+public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 
 	private final Random rng = new Random();
 

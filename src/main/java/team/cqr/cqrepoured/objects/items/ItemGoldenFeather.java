@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.objects.items;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class ItemGoldenFeather extends Item {
+public class ItemGoldenFeather extends ItemLore {
 	public ItemGoldenFeather() {
+		super();
 		this.setMaxStackSize(1);
 		this.setMaxDamage(385);
 	}
