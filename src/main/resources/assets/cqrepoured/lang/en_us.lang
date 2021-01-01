@@ -237,7 +237,7 @@ item.dagger_monking.name=Monking Dagger
 item.dagger_ninja.name=Ninja Dagger
 
 #Swords
-item.sword_turtle.name=Turtle Sword
+item.sword_turtle.name=Tortoise Blade
 item.sword_spider.name=Spider Sword
 item.sword_moonlight.name=Moonlight
 item.sword_sunshine.name=Sunshine
@@ -250,7 +250,7 @@ item.cqr_shield_r04.name=Goblin Shield
 item.cqr_shield_r05.name=Mummy Shield
 item.cqr_shield_r06.name=Rainbow Shield
 item.cqr_shield_r07.name=Rusted Shield
-item.cqr_shield_r08.name=Turtles Shield
+item.cqr_shield_r08.name=Tortoise Shield
 item.cqr_shield_r09.name=Triton Shield
 
 #Walker set
@@ -278,7 +278,7 @@ item.shield_spider.name=Spider Shield
 item.shield_sun.name=Sun Shield
 item.shield_tomb.name=Tomb Shield
 item.shield_triton.name=Triton Shield
-item.shield_turtle.name=Turtle Infantry Shield
+item.shield_turtle.name=Tortoise Infantry Shield
 item.shield_warped.name=Warped Shield
 item.shield_walker.name=Walker Shield
 item.shield_walker_normal.name=Walker Shield
@@ -352,11 +352,11 @@ item.leather_bull.name=Bull Leather
 item.horn_bull.name=Bull Horn
 
 #Turtle Armor
-item.helmet_turtle.name=Turtle Helmet
-item.chestplate_turtle.name=Turtle Chestplate
-item.leggings_turtle.name=Turtle Leggings
-item.boots_turtle.name=Turtle Boots
-item.scale_turtle.name=Turtle Scale
+item.helmet_turtle.name=Tortoiseshell Helmet
+item.chestplate_turtle.name=Tortoiseshell Chestplate
+item.leggings_turtle.name=Tortoiseshell Leggings
+item.boots_turtle.name=Tortoiseshell Boots
+item.scale_turtle.name=Giant Tortoise Scale
 
 #Slime Armor
 item.helmet_slime.name=Slime Helmet
@@ -501,14 +501,14 @@ tile.exporter_chest_custom.name=Exporter Chest - Custom
 
 #technical
 tile.phylactery.name=Lich Phylactery
-tile.temporary_web.name=Temporary Web
+tile.temporary_web.name=Decaying Web
 
 #Descriptions
 description.spider_armor.name=Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.
 description.spider_sword.name=Flowing forth from the fangs that made this simple sword a toxic blade, Shelob's poison can't be stayed once your foe is stuck by this blade.
 description.bull_armor.name=Wear the bull to become the bull. A full set allows you to charge forward at great speed, destroying everything in your path.
 description.great_sword.name=Hold right click to strike a large area.
-description.turtle_armor.name=The turtle's power, should you fashion a full set from its shell, will allow you to regain health much faster. The shell prevents most damage from the rear, as well.
+description.turtle_armor.name=The Giant Tortoise's power, should you fashion a full set from its shell, will allow you to regain health much faster. The shell prevents most forms of damage from the rear, as well.
 description.slime_armor.name=With a full set of the regenerating goo touching your skin, you can feel your maximum health overflowing, and whenever you are damaged, a small slime may appear which can restore your health, if you can reach it.
 description.cloud_boots.name=Those who tread to the angels song the prophets say can do no wrong. A single leap becomes a bound, a brisk walk breaks the speed of sound, no fall can stop the chosen few, and with these boots, that extends to you! 
 #description.dragon_helmet.name=You can feel the dragon's power coursing through your veins. Attacks that once were a threat to you seem meaningless now, yet your own strikes are twice as strong!
@@ -552,12 +552,23 @@ description.attack_damage_at_day.name=Attack Damage during the Day
 description.staff_vampiric.name=This rod radiates dark energy as you hold it in your hand. If you move it near your ear you will hear its demand. Its call is simple: "Right-click with me" and when you do then you will see, a projectile it does emit. Though the damage is slight, if you land it just right, it will heal you when it does hit. 
 description.staff_wind.name=Whatever incredible magical power this once held, it is currently completely dormant. (Whatever this is supposed to do, it doesn't work yet. #TODO)
 description.staff_poison.name=Venom bubbles at the tip, careful that it doesn't drip, it eats through skin and flesh and bone, best be careful it's not your own. Shoot it out at your own peril, and beware that not all would call it a fair kill...
-description.staff.name=Missing #TODO
+description.staff.name=A long strong stick. There's probably someone out there who knows how to apply magic to it.
 description.staff_thunder.name=The gem atop this staff sputters and sparks with electric charge. With a right-click, to hit your mark, one could simply redirect the arc.
-description.spiked_glove.name=With the claws of a bear, and the strength of your arms, these gloves shall lead you far from harm. While wielding two, enjoy the view, for walls no longer hinder you.
+description.spiked_glove.name=With the claws of a beast, and the strength of your arm, these gloves shall lead you far from harm. While wielding two, enjoy the view, for walls no longer hinder you.
 description.spear_diamond.name=A well-made weapon with longer reach than a sword. Right-click to charge an extended thrust.
 description.cursed_bone.name=Mob to be summoned:
 description.dummy_shield.name=A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.
+description.giant_spider_poison.name=This stuff is crazy corrosive! Definitely far too dangerous for you to work with, but maybe there's a toxin expert you can talk to about crafting with it.
+description.feather_golden.name=Take up a feather, gild it in gold, take a great leap and believe in the powers of old. You won't be harmed, provided you're armed, with the feather of Gold. But use sparingly, my falling friend, if the feather breaks, your life may end.
+description.scale_turtle.name=One of a few pieces of the Giant Tortoise's shell you managed to salvage. Its sheer strength is such that none of your tools can even chip it. Perhaps there's someone out there with stronger crafting tools than yours who you can convince to lend you a hand?
+description.horn_bull.name=This horn is tough enough that you could probably make a great weapon with it if you knew how to craft with animal horns. Maybe there's a craftsman out there who's more experiened on the subject.
+description.leather_bull.name=Very high quality leather. The right craftsman could probably use this to forge the most aerodynamic gear you've ever seen!
+description.ball_slime.name=Amazing. Slime with regeneration powers. The fact that it always returns to the same shape makes it difficult to work with, but the right craftsman could probably use this to make some gear with health-manipulating abilities, and any weapons that use slime as ammo are going to get a lot out of this stuff.
+description.bone_monking.name=Whatever primal energy made the Monking so much more powerful than his peers still clings to his bones. Perhaps the right craftsman would know how to work with such power?
+description.leather_spider.name=The Giant Spider's hide still sticks to everything it touches. It's too gross for you to touch for a long period of time, but a craftsman who's more accustomed to such work can probably fashion this into something neat.
+description.king_crown.name=Can be worn on its own, or combined with a helmet. Either way, you'll look as regal as you've always felt.
+description.bubble_pistol.name=Undertech Commercial Turbo Dampener 33.6mm nozzle bubble explusion unit. A right-mouse press will expell a quick flurry of bubbles, large enough to capture a horse and drift upward. Bubbles are non-lethal, but can't say so much for the fall. Hold down Right Mouse Button for a steady stream. 
+description.bubble_rifle.name=Undertech Prototype advanced Turbo Dampener. Not for public access. Expells liquid faster and further than a traditional bubble gun, and holding the Right Mouse button lasts for longer. Unfortunately, reloading it is far slower.
 
 #Trading GUI
 description.gui_merchant_edit_trade.ignore_meta_check_box.name=When checked the input does not have to be similar in terms of meta data. For example you set a diamond sword as input, it will also accept damaged diamond swords for it.
@@ -641,8 +652,8 @@ advancements.cqrepoured.challenger.title=Challenger of the Chocolate
 advancements.cqrepoured.challenger.description=Defeat a CQR Boss
 advancements.cqrepoured.champion.title=Champion of the Chocolate
 advancements.cqrepoured.champion.description=Defeat every CQR Boss at least once
-advancements.cqrepoured.wear_the_turtle.title=Wear the turtle!
-advancements.cqrepoured.wear_the_turtle.description=Now I'm a tank! Obtain a full set of turtle armor
+advancements.cqrepoured.wear_the_turtle.title=Wear the Tortoise!
+advancements.cqrepoured.wear_the_turtle.description=Now I'm a tank! Obtain a full set of Tortoiseshell armor
 advancements.cqrepoured.kill_boar_mage.title=This girl is on fire
 advancements.cqrepoured.kill_boar_mage.description=Defeat a boarmage
 advancements.cqrepoured.kill_lich.title=What is dead may still yet die!
