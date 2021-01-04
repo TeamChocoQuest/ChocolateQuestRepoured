@@ -309,13 +309,13 @@ public class CQRConfig {
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus" };
 
-		@Config.Comment("")
+		@Config.Comment("Blocks with a whitelisted material will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableMaterialWhitelist = { "WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB" };
 
-		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
+		@Config.Comment("Blocks which will be placeable at positions protected by the protection system.")
 		public String[] protectionSystemPlaceableBlockWhitelist = { "minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch" };
 
-		@Config.Comment("")
+		@Config.Comment("Blocks with a whitelisted material will be placeable at positions protected by the protection system.")
 		public String[] protectionSystemPlaceableMaterialWhitelist = {};
 	}
 
