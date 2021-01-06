@@ -199,9 +199,13 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}
 		List<ProtectedRegion> list = new ArrayList<>();
 		for (UUID uuid : cap.getProtectedRegionUuids()) {
-			ProtectedRegion protectedRegion = this.protectedRegions.get(uuid).protectedRegion;
-			if (protectedRegion.isInsideProtectedRegion(pos)) {
-				list.add(protectedRegion);
+			try {
+				ProtectedRegion protectedRegion = this.protectedRegions.get(uuid).protectedRegion;
+				if (protectedRegion.isInsideProtectedRegion(pos)) {
+					list.add(protectedRegion);
+				}
+			} catch(NullPointerException npe) {
+				continue;
 			}
 		}
 		return list;
