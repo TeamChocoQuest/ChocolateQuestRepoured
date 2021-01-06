@@ -8,13 +8,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
@@ -22,6 +21,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
@@ -31,14 +31,14 @@ import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
-	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new HashMap<>();
+	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new ConcurrentHashMap<>();
 	private final World world;
 	private final File folder;
 
 	public static class ProtectedRegionContainer {
 		public final ProtectedRegion protectedRegion;
 		public long lastTickForceLoaded;
-		public final Set<Chunk> chunkSet = new HashSet<>();
+		public final Set<Chunk> chunkSet = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 		public ProtectedRegionContainer(ProtectedRegion protectedRegion) {
 			this.protectedRegion = protectedRegion;
