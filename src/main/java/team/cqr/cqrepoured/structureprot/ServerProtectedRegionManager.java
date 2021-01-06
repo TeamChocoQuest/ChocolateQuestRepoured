@@ -132,15 +132,17 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			return;
 		}
 
-		BlockPos p1 = protectedRegion.getStartPos();
-		BlockPos p2 = protectedRegion.getEndPos();
-		for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
-			for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
-				Chunk chunk = this.world.getChunk(x, z);
-				CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
-				capProtectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid());
+		((WorldServer) this.world).addScheduledTask(() -> {
+			BlockPos p1 = protectedRegion.getStartPos();
+			BlockPos p2 = protectedRegion.getEndPos();
+			for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
+				for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
+					Chunk chunk = this.world.getChunk(x, z);
+					CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+					capProtectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid());
+				}
 			}
-		}
+		});
 
 		this.protectedRegions.put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
 		CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
