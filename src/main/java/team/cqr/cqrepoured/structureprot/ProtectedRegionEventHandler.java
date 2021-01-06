@@ -18,11 +18,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -188,12 +191,11 @@ public class ProtectedRegionEventHandler {
 			if (state.getMaterial().isLiquid() && ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
 				event.setCanceled(true);
 			}
-		} else if (world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos, event.getEntityPlayer(), stack, true, true)) {
+		} else {
+			IBlockState state = fluidStack.getFluid().getBlock().getDefaultState();
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), state, true, true)) {
 				event.setCanceled(true);
 			}
-		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), stack, true, true)) {
-			event.setCanceled(true);
 		}
 	}
 
@@ -212,13 +214,19 @@ public class ProtectedRegionEventHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 		ItemStack stack = event.getItemStack();
+		EnumFacing facing = event.getFace();
+		Vec3d hitVec = event.getHitVec();
+		EnumHand hand = event.getHand();
+		IBlockState state = ProtectedRegionHelper.getBlockFromItem(stack, player.world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, player, hand);
 
 		if (player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos)) {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos, player, stack, false, true)) {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(facing), player, state, false, true)) {
 				event.setCanceled(true);
 			}
-		} else if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(event.getFace()), player, stack, false, true)) {
-			event.setCanceled(true);
+		} else {
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(facing), player, state, false, true)) {
+				event.setCanceled(true);
+			}
 		}
 	}
 

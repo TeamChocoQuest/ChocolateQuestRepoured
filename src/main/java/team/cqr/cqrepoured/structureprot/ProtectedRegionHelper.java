@@ -10,12 +10,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -177,22 +180,14 @@ public class ProtectedRegionHelper {
 		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
-		IBlockState state = getBlockFromItem(stack);
-		if (state == null) {
-			return false;
-		}
-		return isBlockPlacingPrevented(world, pos, entity, state, updateProtectedRegions, addOrResetProtectedRegionIndicator);
-	}
-
-	@SuppressWarnings("deprecation")
-	private static IBlockState getBlockFromItem(ItemStack stack) {
+	public static IBlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, EntityLivingBase placer, EnumHand hand) {
 		if (stack.isEmpty()) {
 			return null;
 		}
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
-			return ((ItemBlock) item).getBlock().getStateFromMeta(((ItemBlock) item).getMetadata(stack.getItemDamage()));
+			int meta = ((ItemBlock) item).getMetadata(stack.getItemDamage());
+			return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
 		}
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null) {
