@@ -45,6 +45,8 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			this.protectedRegion = protectedRegion;
 			this.lastTickForceLoaded = protectedRegion.getWorld().getTotalWorldTime();
 
+			boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
+			ForgeModContainer.logCascadingWorldGeneration = false;
 			((WorldServer) protectedRegion.getWorld()).addScheduledTask(() -> {
 				BlockPos p1 = protectedRegion.getStartPos();
 				BlockPos p2 = protectedRegion.getEndPos();
@@ -64,6 +66,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 					}
 				}
 			});
+			ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;
 		}
 	}
 
