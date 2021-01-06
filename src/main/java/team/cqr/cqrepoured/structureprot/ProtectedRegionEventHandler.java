@@ -336,7 +336,7 @@ public class ProtectedRegionEventHandler {
 				if (chunk != null) {
 					CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 					cap.addProtectedRegionUuid(protectedRegion.getUuid());
-					FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
+					FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
 				} else {
 					NBTTagCompound chunkNBT = getChunkNBT(world, x, z);
 					if (chunkNBT != null) {
@@ -354,7 +354,7 @@ public class ProtectedRegionEventHandler {
 						chunk = world.getChunk(x, z);
 						CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 						cap.addProtectedRegionUuid(protectedRegion.getUuid());
-						FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
+						FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
 					}
 				}
 			}

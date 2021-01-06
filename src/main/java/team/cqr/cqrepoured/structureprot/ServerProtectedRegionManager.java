@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.ForgeModContainer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -40,20 +41,29 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		public long lastTickForceLoaded;
 		public final Set<Chunk> chunkSet = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-		public ProtectedRegionContainer(ProtectedRegion protectedRegion) {
+		public ProtectedRegionContainer(ProtectedRegion protectedRegion, boolean loadChunks) {
 			this.protectedRegion = protectedRegion;
 			this.lastTickForceLoaded = protectedRegion.getWorld().getTotalWorldTime();
 
-			BlockPos p1 = protectedRegion.getStartPos();
-			BlockPos p2 = protectedRegion.getEndPos();
-			for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
-				for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
-					Chunk chunk = protectedRegion.getWorld().getChunkProvider().getLoadedChunk(x, z);
-					if (chunk != null) {
-						this.chunkSet.add(chunk);
+			((WorldServer) protectedRegion.getWorld()).addScheduledTask(() -> {
+				BlockPos p1 = protectedRegion.getStartPos();
+				BlockPos p2 = protectedRegion.getEndPos();
+				for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
+					for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
+						Chunk chunk;
+						if (loadChunks) {
+							chunk = protectedRegion.getWorld().getChunk(x, z);
+						} else {
+							chunk = protectedRegion.getWorld().getChunkProvider().getLoadedChunk(x, z);
+						}
+						if (chunk != null) {
+							this.chunkSet.add(chunk);
+							CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+							capProtectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid());
+						}
 					}
 				}
-			}
+			});
 		}
 	}
 
@@ -107,7 +117,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}
 		ProtectedRegion protectedRegion = this.createProtectedRegionFromFile(uuid);
 		if (protectedRegion != null) {
-			this.protectedRegions.put(uuid, new ProtectedRegionContainer(protectedRegion));
+			this.protectedRegions.put(uuid, new ProtectedRegionContainer(protectedRegion, false));
 			CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
 			protectedRegion.clearNeedsSyncing();
 		}
@@ -132,19 +142,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			return;
 		}
 
-		((WorldServer) this.world).addScheduledTask(() -> {
-			BlockPos p1 = protectedRegion.getStartPos();
-			BlockPos p2 = protectedRegion.getEndPos();
-			for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
-				for (int z = p1.getZ() >> 4; z <= p2.getZ() >> 4; z++) {
-					Chunk chunk = this.world.getChunk(x, z);
-					CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
-					capProtectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid());
-				}
-			}
-		});
-
-		this.protectedRegions.put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion));
+		this.protectedRegions.put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, true));
 		CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
 		protectedRegion.clearNeedsSyncing();
 	}
