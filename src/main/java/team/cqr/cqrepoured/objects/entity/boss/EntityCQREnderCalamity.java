@@ -38,7 +38,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
 		
-		setSizeVariation(2F);
+		setSizeVariation(2.5F);
 	}
 	
 	@Override
