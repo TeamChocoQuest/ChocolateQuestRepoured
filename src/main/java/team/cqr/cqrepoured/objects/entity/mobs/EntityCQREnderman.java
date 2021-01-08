@@ -6,6 +6,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -119,5 +120,16 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	public float getDefaultHeight() {
 		return 2.9F;
 	}
-
+	
+	@Override
+	public void onLivingUpdate() {
+		if (this.world.isRemote) {
+			//Client
+			for (int i = 0; i < 2; ++i) {
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D,
+						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+			}
+		}
+		super.onLivingUpdate();
+	}
 }
