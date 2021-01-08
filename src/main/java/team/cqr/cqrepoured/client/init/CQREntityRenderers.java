@@ -15,6 +15,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSpiderEgg;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantSpider;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
@@ -67,6 +68,7 @@ import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
+import team.cqr.cqrepoured.objects.entity.boss.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRLich;
@@ -236,6 +238,11 @@ public class CQREntityRenderers {
 
 		// Shelob
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, RenderCQRGiantSpider::new);
+		
+		
+		//Geckolib
+		//Ender Calamity
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);
 	}
 
 }

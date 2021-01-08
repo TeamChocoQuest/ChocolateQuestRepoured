@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import team.cqr.cqrepoured.objects.entity.EntitySlimePart;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
+import team.cqr.cqrepoured.objects.entity.boss.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRLich;
@@ -122,6 +123,7 @@ public class CQREntities {
 	public static final EntityEntry WALKER_KING = Null();
 	public static final EntityEntry PIRATE_CAPTAIN = Null();
 	public static final EntityEntry GIANT_SPIDER = Null();
+	public static final EntityEntry ENDER_CALAMITY = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -192,6 +194,7 @@ public class CQREntities {
 					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantSpider.class, "giant_spider", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
