@@ -26,18 +26,17 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (super.attackEntityFrom(source, amount)) {
-			if (source instanceof EntityDamageSourceIndirect) {
-				for (int i = 0; i < 64; ++i) {
-					if (this.teleportRandomly()) {
-						return false;
-					}
+		if(!super.attackEntityFrom(source, amount)) {
+			return false;
+		}
+		if (source instanceof EntityDamageSourceIndirect) {
+			for (int i = 0; i < 64; ++i) {
+				if (this.teleportRandomly()) {
+					return false;
 				}
-
-				return true;
 			}
 		}
-		return super.attackEntityFrom(source, amount);
+		return true;
 	}
 
 	protected boolean teleportRandomly() {
