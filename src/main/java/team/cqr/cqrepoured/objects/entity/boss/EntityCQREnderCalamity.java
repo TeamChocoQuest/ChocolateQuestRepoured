@@ -3,6 +3,9 @@ package team.cqr.cqrepoured.objects.entity.boss;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -22,12 +25,23 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable {
+	
+	private static final int HURT_DURATION = 24; //1.2 * 20
+	private int cqrHurtTime = 0;
+	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
+	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		
+		this.dataManager.register(IS_HURT, false);
 	}
 
 	@Override
@@ -48,25 +62,25 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
 		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
-		if(this.hurtTime > 0) {
+		if (this.dataManager.get(IS_HURT)) {
 			return PlayState.STOP;
 		}
 		return PlayState.CONTINUE;
 	}
-	
+
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if(this.hurtTime > 0) {
+		if (this.dataManager.get(IS_HURT)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-	
+
 	@Override
 	public void registerControllers(AnimationData data) {
 		// Idle
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controllerIdle", 0, this::predicateIdle));
-		//Everything else
+		// Everything else
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
 	}
 
@@ -89,12 +103,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	protected EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.ENDERMEN;
 	}
-	
+
 	@Override
 	public boolean isSitting() {
 		return false;
 	}
-	
+
 	@Override
 	public void enableBossBar() {
 		super.enableBossBar();
@@ -103,20 +117,20 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.bossInfoServer.setColor(Color.PURPLE);
 		}
 	}
-	
+
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean canBePushed() {
 		return false;
 	}
-	
+
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
-		//super.move(type, x, y, z);
+		// super.move(type, x, y, z);
 		return;
 	}
 
@@ -124,38 +138,38 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public int getHealingPotions() {
 		return 0;
 	}
-	
+
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ENDERMEN_HURT;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_ENDERMEN_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ENDERMEN_DEATH;
 	}
-	
+
 	@Override
 	protected float getSoundVolume() {
 		return 2F * super.getSoundVolume();
 	}
-	
+
 	@Override
 	protected float getSoundPitch() {
 		return 0.75F * super.getSoundPitch();
 	}
-	
+
 	@Override
 	public int getTalkInterval() {
-		//Super: 80
+		// Super: 80
 		return 60;
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -165,21 +179,34 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		return (this.hurtTime <= 0) && super.attackEntityFrom(source, amount, sentFromPart);
+		if(!this.dataManager.get(IS_HURT) && super.attackEntityFrom(source, amount, sentFromPart)) {
+			if(!this.world.isRemote) {
+				this.dataManager.set(IS_HURT, true);
+				this.cqrHurtTime = HURT_DURATION;
+			}
+			return true;
+		}
+		return false;
 	}
-	
-	@Override
-	public void onLivingUpdate()
-    {
-        if (this.world.isRemote)
-        {
-            for (int i = 0; i < 2; ++i)
-            {
-                this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
-            }
-        }
 
-        this.isJumping = false;
-        super.onLivingUpdate();
-    }
+	@Override
+	public void onLivingUpdate() {
+		if (this.world.isRemote) {
+			//Client
+			for (int i = 0; i < 2; ++i) {
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D,
+						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+			}
+		} else {
+			//SErver
+			if (this.cqrHurtTime > 0) {
+				this.cqrHurtTime--;
+			}
+			this.dataManager.set(IS_HURT, cqrHurtTime > 0);
+		}
+
+		this.isJumping = false;
+		super.onLivingUpdate();
+	}
+
 }
