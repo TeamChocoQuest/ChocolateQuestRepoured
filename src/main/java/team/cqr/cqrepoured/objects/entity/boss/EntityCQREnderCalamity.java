@@ -7,6 +7,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -29,6 +30,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final int HURT_DURATION = 24; //1.2 * 20
 	private int cqrHurtTime = 0;
 	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
@@ -42,6 +44,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		super.entityInit();
 		
 		this.dataManager.register(IS_HURT, false);
+		this.dataManager.register(SHIELD_ACTIVE, true);
 	}
 
 	@Override
@@ -179,7 +182,19 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if(!this.dataManager.get(IS_HURT) && super.attackEntityFrom(source, amount, sentFromPart)) {
+		boolean superResult = super.attackEntityFrom(source, amount, sentFromPart);
+		if(!superResult) {
+			return false;
+		}
+		
+		//Projectile attack
+		if (source instanceof EntityDamageSourceIndirect) {
+			
+			return false;
+		}
+		
+		//Other attack
+		if(!this.dataManager.get(IS_HURT) && !this.dataManager.get(SHIELD_ACTIVE)) {
 			if(!this.world.isRemote) {
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
@@ -208,5 +223,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.isJumping = false;
 		super.onLivingUpdate();
 	}
+	
+	
 
 }
