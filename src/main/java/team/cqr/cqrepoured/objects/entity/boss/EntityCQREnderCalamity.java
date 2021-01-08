@@ -184,11 +184,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		boolean superResult = super.attackEntityFrom(source, amount, sentFromPart);
-		if(!superResult) {
-			return false;
-		}
-		
 		//Projectile attack
 		if (source instanceof EntityDamageSourceIndirect) {
 			
@@ -197,6 +192,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		
 		//Other attack
 		if(!this.dataManager.get(IS_HURT) && !this.dataManager.get(SHIELD_ACTIVE)) {
+			if(!super.attackEntityFrom(source, amount, sentFromPart)) {
+				return false;
+			}
 			if(!this.world.isRemote) {
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
