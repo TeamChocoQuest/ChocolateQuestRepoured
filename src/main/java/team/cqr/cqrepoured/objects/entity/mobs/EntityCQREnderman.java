@@ -30,11 +30,11 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 			if (source instanceof EntityDamageSourceIndirect) {
 				for (int i = 0; i < 64; ++i) {
 					if (this.teleportRandomly()) {
-						return true;
+						return false;
 					}
 				}
 
-				return false;
+				return true;
 			}
 		}
 		return super.attackEntityFrom(source, amount);
