@@ -190,7 +190,7 @@ public class ProtectedRegionHelper {
 			return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
 		}
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
-		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null) {
+		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null && fluidStack.getFluid().canBePlacedInWorld()) {
 			return fluidStack.getFluid().getBlock().getDefaultState();
 		}
 		return null;
