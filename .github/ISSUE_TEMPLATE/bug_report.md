@@ -21,7 +21,7 @@ assignees: ''
  
  
  **Versions**
-Chocolate Quest Repoured:
+Chocolate Quest Repoured ('latest' IS NOT a valid version! Please use the version string that shows up in the mod overview of forge):
 Forge:
 Minecraft:
 
