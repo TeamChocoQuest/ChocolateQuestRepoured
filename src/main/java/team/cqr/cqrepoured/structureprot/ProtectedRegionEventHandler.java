@@ -217,8 +217,10 @@ public class ProtectedRegionEventHandler {
 		EnumFacing facing = event.getFace();
 		Vec3d hitVec = event.getHitVec();
 		EnumHand hand = event.getHand();
-		IBlockState state = ProtectedRegionHelper.getBlockFromItem(stack, player.world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, player, hand);
-
+		IBlockState state = ProtectedRegionHelper.getBlockFromItem(stack, event.getWorld(), pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, player, hand);
+		if(state == null) {
+			return;
+		}
 		if (player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos)) {
 			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(facing), player, state, false, true)) {
 				event.setCanceled(true);
