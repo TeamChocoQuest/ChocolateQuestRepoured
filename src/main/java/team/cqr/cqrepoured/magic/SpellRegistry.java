@@ -13,6 +13,7 @@ import team.cqr.cqrepoured.API.events.CQRMagicSystemRegisterSpellsEvent;
 
 public class SpellRegistry {
 
+	//Structure: Spell-Namespace: Spellname => Spell object
 	private static final Map<String, Map<String, AbstractSpell>> SPELL_REGISTRY = new ConcurrentHashMap<>();
 
 	public static void initialize() {
