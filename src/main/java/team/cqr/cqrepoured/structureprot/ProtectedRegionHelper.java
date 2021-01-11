@@ -21,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -180,14 +181,18 @@ public class ProtectedRegionHelper {
 		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static IBlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, EntityLivingBase placer, EnumHand hand) {
+	public static IBlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing, @Nullable Vec3d hitVec, EntityLivingBase placer, EnumHand hand) {
 		if (stack.isEmpty()) {
 			return null;
 		}
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
 			int meta = ((ItemBlock) item).getMetadata(stack.getItemDamage());
-			return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+			if (hitVec != null) {
+				return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
+			} else {
+				return ((ItemBlock) item).getBlock().getDefaultState();
+			}
 		}
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null && fluidStack.getFluid().canBePlacedInWorld()) {
