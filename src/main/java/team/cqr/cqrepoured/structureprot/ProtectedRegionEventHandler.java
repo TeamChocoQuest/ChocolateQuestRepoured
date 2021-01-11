@@ -223,14 +223,11 @@ public class ProtectedRegionEventHandler {
 		if (state == null) {
 			return;
 		}
-		if (player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos)) {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(facing), player, state, false, true)) {
-				event.setCanceled(true);
-			}
-		} else {
-			if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, pos.offset(facing), player, state, false, true)) {
-				event.setCanceled(true);
-			}
+
+		BlockPos blockpos = player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos) ? pos : pos.offset(facing);
+
+		if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, blockpos, player, state, false, true)) {
+			event.setCanceled(true);
 		}
 	}
 
