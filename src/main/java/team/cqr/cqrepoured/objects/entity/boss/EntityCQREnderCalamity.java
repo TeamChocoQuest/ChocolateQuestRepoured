@@ -181,6 +181,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(16.0D);
 	}
+	
+	public boolean isShieldActive() {
+		return this.dataManager.get(SHIELD_ACTIVE);
+	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
@@ -191,7 +195,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		
 		//Other attack
-		if(!this.dataManager.get(IS_HURT) && !this.dataManager.get(SHIELD_ACTIVE)) {
+		if(!this.dataManager.get(IS_HURT) && !this.isShieldActive()) {
 			if(!super.attackEntityFrom(source, amount, sentFromPart)) {
 				return false;
 			}
