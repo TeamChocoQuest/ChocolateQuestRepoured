@@ -40,6 +40,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -186,7 +187,7 @@ public class ProtectedRegionEventHandler {
 		BlockPos pos = result.getBlockPos();
 		ItemStack stack = event.getEmptyBucket();
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
-		if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null) {
+		if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null || !fluidStack.getFluid().canBePlacedInWorld()) {
 			IBlockState state = world.getBlockState(pos.offset(result.sideHit));
 			if (state.getMaterial().isLiquid() && ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
 				event.setCanceled(true);
