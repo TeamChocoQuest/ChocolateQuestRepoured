@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.util;
 public class Reference {
 
 	public static final String MODID = "cqrepoured";
-	public static final String VERSION = "2.2.1B";
+	public static final String VERSION = "2.2.2B";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 	public static final String CLIENT_PROXY_CLASS = "team.cqr.cqrepoured.proxy.ClientProxy";
 	public static final String COMMON_PROXY_CLASS = "team.cqr.cqrepoured.proxy.ServerProxy";
