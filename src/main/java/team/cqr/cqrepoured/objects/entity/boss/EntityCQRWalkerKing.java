@@ -133,14 +133,14 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 		if (this.active && !this.world.isRemote) {
-			if (this.getAttackTarget() == null && !this.world.isRemote) {
+			if (this.getAttackTarget() == null) {
 				this.activationCooldown--;
 				if (this.activationCooldown < 0) {
 					this.active = false;
 					this.world.getWorldInfo().setThundering(false);
 					this.activationCooldown = 80;
 				}
-			} else if (!this.world.isRemote) {
+			} else {
 				this.world.getWorldInfo().setCleanWeatherTime(0);
 				this.world.getWorldInfo().setRainTime(400);
 				this.world.getWorldInfo().setThunderTime(200);
