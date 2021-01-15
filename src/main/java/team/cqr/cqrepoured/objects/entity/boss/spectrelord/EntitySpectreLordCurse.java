@@ -28,7 +28,7 @@ public class EntitySpectreLordCurse extends Entity {
 
 	@Override
 	public void onEntityUpdate() {
-		if (!this.world.isRemote && (!this.caster.isEntityAlive() || !this.target.isEntityAlive())) {
+		if (!this.world.isRemote && (this.caster == null || !this.caster.isEntityAlive() || !this.target.isEntityAlive())) {
 			this.setDead();
 		}
 

@@ -52,6 +52,9 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			Vec3d look = Vec3d.fromPitchYaw(30.0F, (float) d1);
 			Vec3d end = start.add(look.scale(8.0D));
 			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, true);
+			if(result == null || result.hitVec == null) {
+				return;
+			}
 
 			double x = result.hitVec.x;
 			double y = result.hitVec.y;
