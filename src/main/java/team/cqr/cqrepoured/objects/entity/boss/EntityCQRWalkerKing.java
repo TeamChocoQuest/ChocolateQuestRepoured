@@ -153,7 +153,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				this.lightningTick = 0;
 				this.borderLightning = 50;
 				int x = -20 + this.getRNG().nextInt(41);
-				int z = -15 + this.getRNG().nextInt(41);
+				int z = -20 + this.getRNG().nextInt(41);
 				int y = -10 + this.getRNG().nextInt(21);
 
 				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, this.posX + x, this.posY + y, this.posZ + z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
