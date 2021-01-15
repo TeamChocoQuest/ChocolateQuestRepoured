@@ -6,7 +6,6 @@ import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -42,7 +41,7 @@ public class SphereHelper {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
 		// The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
 		// control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-		sphere.draw(this.radius, detail, detail);
+		sphere.draw(this.radius + 0.05F, detail, detail);
 		GlStateManager.glEndList();
 
 		// Now make the call list for the inside of the sphere
@@ -60,8 +59,8 @@ public class SphereHelper {
 		GlStateManager.scale(scaleW, scaleH, scaleW);
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
-		GlStateManager.disableCull();
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+		/*boolean flag = entity.isInvisible();
+		GlStateManager.depthMask(flag);*/
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		GlStateManager.color(colorR, colorG, colorB, colorA);
 		
@@ -71,7 +70,7 @@ public class SphereHelper {
 		GlStateManager.resetColor();
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
-		GlStateManager.enableCull();
+		//GlStateManager.depthMask(!flag);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(previousTexture);
 	}
 

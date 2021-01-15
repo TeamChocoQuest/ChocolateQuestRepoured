@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -45,7 +44,6 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
             GlStateManager.matrixMode(5888);
             GlStateManager.disableLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
             Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
             
 			sphereHelper.render(animatable, 0,0,0, TEXTURE, color, color, color, 0.5F, this.getWidthScale(animatable), this.getHeightScale(animatable));
