@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.potion.PotionEffect;
@@ -13,6 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
 
@@ -68,7 +70,38 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D, this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
 		CQRFaction faction = this.entity.getFaction();
-		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> faction == null || !faction.isAlly(e))) {
+		List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
+		list.sort((e1, e2) -> {
+			if (faction != null) {
+				boolean flag1 = faction.isEnemy(e1);
+				boolean flag2 = faction.isEnemy(e2);
+				if (flag1 && !flag2) {
+					return -1;
+				}
+				if (!flag1 && flag2) {
+					return 1;
+				}
+			}
+			boolean flag1 = e1 instanceof EntityPlayer;
+			boolean flag2 = e2 instanceof EntityPlayer;
+			if (flag1 && !flag2) {
+				return -1;
+			}
+			if (!flag1 && flag2) {
+				return 1;
+			}
+			double d1 = this.entity.getDistanceSq(e1);
+			double d2 = this.entity.getDistanceSq(e2);
+			if (d1 < d2) {
+				return -1;
+			}
+			if (d1 > d2) {
+				return 1;
+			}
+			return 0;
+		});
+		for (int i = 0; i < 8 && i < list.size(); i++) {
+			EntityLivingBase e = list.get(i);
 			EntitySpectreLordCurse curse = new EntitySpectreLordCurse(this.world, this.entity, e);
 			curse.setPosition(this.entity.posX, this.entity.posY, this.entity.posZ);
 			this.world.spawnEntity(curse);
@@ -88,7 +121,7 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 			this.entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 200, 1, false, true));
 			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D, this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
 			CQRFaction faction = this.entity.getFaction();
-			for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> faction == null || !faction.isAlly(e))) {
+			for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 				e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);
 				e.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1, false, true));
 			}

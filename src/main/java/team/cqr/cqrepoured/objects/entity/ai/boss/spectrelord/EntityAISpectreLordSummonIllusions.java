@@ -17,6 +17,7 @@ import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordIllusion;
 
@@ -94,7 +95,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 8.0D, this.entity.posY - 0.5D, this.entity.posZ - 8.0D, this.entity.posX + 8.0D, this.entity.posY + this.entity.height + 0.5D, this.entity.posZ + 8.0D);
 		CQRFaction faction = this.entity.getFaction();
-		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> faction == null || !faction.isAlly(e))) {
+		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 			heal += 0.05F;
 			e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);
 			e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1, false, false));
