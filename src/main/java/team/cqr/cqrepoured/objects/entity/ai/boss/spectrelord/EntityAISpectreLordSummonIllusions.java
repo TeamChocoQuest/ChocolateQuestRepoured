@@ -51,20 +51,26 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			double d1 = d + ((double) i / (double) this.amount + (this.random.nextDouble() - 0.5D) * 0.1D) * 360.0D;
 			Vec3d look = Vec3d.fromPitchYaw(30.0F, (float) d1);
 			Vec3d end = start.add(look.scale(8.0D));
-			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, true);
-			if(result == null || result.hitVec == null) {
-				return;
-			}
+			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 
-			double x = result.hitVec.x;
-			double y = result.hitVec.y;
-			double z = result.hitVec.z;
-			if (result.sideHit != EnumFacing.UP) {
-				double dx = this.entity.posX - x;
-				double dz = this.entity.posZ - z;
-				double d2 = 0.5D / Math.sqrt(dx * dx + dz * dz);
-				x += dx * d2;
-				z += dz * d2;
+			double x;
+			double y;
+			double z;
+			if (result != null) {
+				x = result.hitVec.x;
+				y = result.hitVec.y;
+				z = result.hitVec.z;
+				if (result.sideHit != EnumFacing.UP) {
+					double dx = this.entity.posX - x;
+					double dz = this.entity.posZ - z;
+					double d2 = 0.5D / Math.sqrt(dx * dx + dz * dz);
+					x += dx * d2;
+					z += dz * d2;
+				}
+			} else {
+				x = end.x;
+				y = end.y;
+				z = end.z;
 			}
 
 			EntitySpectreLordIllusion illusion = new EntitySpectreLordIllusion(this.world, this.entity, this.lifeTime, i == 0, i == 2);
