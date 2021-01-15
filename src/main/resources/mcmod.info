@@ -11,7 +11,7 @@
   "credits": "Everyone who made textures, dungeons and other content, developers and ArloTheEpic and DerToaster (main developer)",
   "logoFile": "assets/cqrepoured/logo.png",
   "screenshots": [],
-  "dependencies": ["phosphor-lighting", "jei", "entity_culling"],
+  "dependencies": ["phosphor-lighting", "jei", "entity_culling", "geckolib3"],
   "requiredMods": ["llibrary@[1.7.19,)", "forge@[14.23.5.2817,)"],
   "useDependencyInformation": true
 }
