@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.client.models.entities.boss.spectrelord.ModelLaser;
-import team.cqr.cqrepoured.objects.entity.boss.spectrelord.AbstractEntityLaser;
+import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderLaser extends Render<AbstractEntityLaser> {
@@ -52,7 +52,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		double d3 = 1.0D;
 		GlStateManager.scale(d3, d3, d);
 		float f3 = 1.0F / 3.0F;
-		GlStateManager.color(0.1F, 0.7F, 0.9F, f3);
+		GlStateManager.color(entity.getColorR(), entity.getColorG(), entity.getColorB(), f3);
 		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 
@@ -60,7 +60,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		double d2 = 2.0D / 3.0D;
 		GlStateManager.scale(d2, d2, d);
 		float f2 = 2.0F / 3.0F;
-		GlStateManager.color(0.1F, 0.7F, 0.9F, f2);
+		GlStateManager.color(entity.getColorR(), entity.getColorG(), entity.getColorB(), f2);
 		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 

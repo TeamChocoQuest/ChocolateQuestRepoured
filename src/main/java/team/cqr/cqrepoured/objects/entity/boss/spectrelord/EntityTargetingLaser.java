@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 
 public class EntityTargetingLaser extends AbstractEntityLaser {
 

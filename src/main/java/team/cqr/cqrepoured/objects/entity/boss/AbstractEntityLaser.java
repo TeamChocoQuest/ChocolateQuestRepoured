@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss.spectrelord;
+package team.cqr.cqrepoured.objects.entity.boss;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -100,6 +100,10 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		return compound;
 	}
+	
+	protected double laserEffectRadius() {
+		return 0.25D;
+	}
 
 	@Override
 	public void onEntityUpdate() {
@@ -142,8 +146,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 				}
 			}
 
-			Vec3d vec1 = new Vec3d(-0.25D, -0.25D, 0.0D);
-			Vec3d vec2 = new Vec3d(0.25D, 0.25D, d);
+			Vec3d vec1 = new Vec3d(-laserEffectRadius(), -laserEffectRadius(), 0.0D);
+			Vec3d vec2 = new Vec3d(laserEffectRadius(), laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
 			CQRFaction faction = FactionRegistry.instance().getFactionOf(this.caster);
 			for (EntityLivingBase entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, EntityLivingBase.class, bb)) {
@@ -184,6 +188,16 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.rotationPitchCQR = additionalData.readFloat();
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
+	}
+	
+	public float getColorR() {
+		return 0.1F;
+	}
+	public float getColorG() {
+		return 0.7F;
+	}
+	public float getColorB() {
+		return 0.9F;
 	}
 
 }
