@@ -92,28 +92,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final String ANIM_NAME_DEFLECT_BALL = "animation.ender_calamity.deflectBall";
 	private static final String ANIM_NAME_SHOOT_BALL = "animation.ender_calamity.shootEnergyBall";
 
-	private <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
-		System.out.println("World is remote: " + this.world.isRemote);
-		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
-		if (this.dataManager.get(IS_HURT)) {
-			return PlayState.STOP;
-		}
-		return PlayState.CONTINUE;
-	}
-
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.dataManager.get(IS_HURT)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, true));
 			return PlayState.CONTINUE;
 		}
-		return PlayState.STOP;
+		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
+		return PlayState.CONTINUE;
 	}
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		// Idle
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controllerIdle", 10, this::predicateIdle));
-		// Everything else
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
 	}
 
