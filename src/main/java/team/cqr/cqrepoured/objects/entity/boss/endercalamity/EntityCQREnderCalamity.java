@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss;
+package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
 
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
