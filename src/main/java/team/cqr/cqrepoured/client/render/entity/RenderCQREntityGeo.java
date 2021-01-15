@@ -47,11 +47,19 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	private boolean redGlintFlag = false;
 	
+	protected double getWidthScale(T entity) {
+		return this.widthScale * entity.getSizeVariation();
+	}
+	
+	protected double getHeightScale(T entity) {
+		return this.heightScale * entity.getSizeVariation();
+	}
+	
 	@Override
 	public void renderEarly(T animatable, float ticks, float red, float green, float blue, float partialTicks) {
-		double width = this.widthScale * animatable.getSizeVariation();
-		double height = this.heightScale * animatable.getSizeVariation();
-		GL11.glScaled(width, height, width);
+		double width = this.getWidthScale(animatable);
+		double height = this.getHeightScale(animatable);
+		GlStateManager.scale(width, height, width);
 		
 		//Red glint when hit
 		this.redGlintFlag = this.setDoRenderBrightness(animatable, partialTicks);

@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -288,6 +289,10 @@ public class CQRConfig {
 		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
 
 		public float giantSpiderMaxHealByBite = 8F;
+		
+		@Config.Comment("Controls the roundness of the ender-calamity's shield, has a massive impact on performance. The higher, the rounder")
+		@RequiresMcRestart
+		public int enderCalamityShieldRoundness = 16;
 	}
 
 	public static class BossDamageCaps {
