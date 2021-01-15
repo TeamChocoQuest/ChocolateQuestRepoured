@@ -33,7 +33,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 			if (e.getHealth() / e.getMaxHealth() > 0.9F) {
 				return false;
 			}
-			if (!faction.isAlly(e)) {
+			if (faction == null || !faction.isAlly(e)) {
 				return false;
 			}
 			return this.entity.canEntityBeSeen(e);

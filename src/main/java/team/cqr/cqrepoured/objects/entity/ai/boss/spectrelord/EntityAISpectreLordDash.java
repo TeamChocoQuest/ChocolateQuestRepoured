@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.spectrelord;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.init.SoundEvents;
@@ -52,7 +51,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 			this.target = this.entity.getAttackTarget();
 		} else {
 			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 16.0D, this.entity.posY - 2.0D, this.entity.posZ - 16.0D, this.entity.posX + 16.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 16.0D);
-			List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> faction.isEnemy(e));
+			List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && faction.isEnemy(e));
 			if (list.isEmpty()) {
 				this.target = this.entity.getAttackTarget();
 			} else {
@@ -132,7 +131,10 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		BoundingBox bb = new BoundingBox(vec3, vec4, this.yawRadian, 0.0D, vec1);
 		List<EntityLivingBase> list = BoundingBox.getEntitiesInsideBB(this.world, this.entity, EntityLivingBase.class, bb);
 		CQRFaction faction = this.entity.getFaction();
-		for (Entity entity : list) {
+		for (EntityLivingBase entity : list) {
+			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(entity)) {
+				continue;
+			}
 			if (faction != null && faction.isAlly(entity)) {
 				continue;
 			}

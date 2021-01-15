@@ -17,6 +17,7 @@ import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordIllusion;
 
@@ -51,20 +52,26 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			double d1 = d + ((double) i / (double) this.amount + (this.random.nextDouble() - 0.5D) * 0.1D) * 360.0D;
 			Vec3d look = Vec3d.fromPitchYaw(30.0F, (float) d1);
 			Vec3d end = start.add(look.scale(8.0D));
-			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, true);
-			if(result == null || result.hitVec == null) {
-				return;
-			}
+			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 
-			double x = result.hitVec.x;
-			double y = result.hitVec.y;
-			double z = result.hitVec.z;
-			if (result.sideHit != EnumFacing.UP) {
-				double dx = this.entity.posX - x;
-				double dz = this.entity.posZ - z;
-				double d2 = 0.5D / Math.sqrt(dx * dx + dz * dz);
-				x += dx * d2;
-				z += dz * d2;
+			double x;
+			double y;
+			double z;
+			if (result != null) {
+				x = result.hitVec.x;
+				y = result.hitVec.y;
+				z = result.hitVec.z;
+				if (result.sideHit != EnumFacing.UP) {
+					double dx = this.entity.posX - x;
+					double dz = this.entity.posZ - z;
+					double d2 = 0.5D / Math.sqrt(dx * dx + dz * dz);
+					x += dx * d2;
+					z += dz * d2;
+				}
+			} else {
+				x = end.x;
+				y = end.y;
+				z = end.z;
 			}
 
 			EntitySpectreLordIllusion illusion = new EntitySpectreLordIllusion(this.world, this.entity, this.lifeTime, i == 0, i == 2);
@@ -88,7 +95,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 8.0D, this.entity.posY - 0.5D, this.entity.posZ - 8.0D, this.entity.posX + 8.0D, this.entity.posY + this.entity.height + 0.5D, this.entity.posZ + 8.0D);
 		CQRFaction faction = this.entity.getFaction();
-		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> faction == null || !faction.isAlly(e))) {
+		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 			heal += 0.05F;
 			e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);
 			e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1, false, false));
