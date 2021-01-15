@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.models.entities.boss;
 
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.util.Reference;
 
 public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity> {

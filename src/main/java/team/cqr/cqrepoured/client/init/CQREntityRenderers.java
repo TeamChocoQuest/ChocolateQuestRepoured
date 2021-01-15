@@ -72,8 +72,8 @@ import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRende
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
+import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRLich;
@@ -82,7 +82,7 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
-import team.cqr.cqrepoured.objects.entity.boss.spectrelord.AbstractEntityLaser;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordExplosion;
