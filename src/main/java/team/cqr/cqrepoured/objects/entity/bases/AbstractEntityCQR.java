@@ -717,7 +717,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 			this.dataManager.set(SPELL_INFORMATION, spellInformation);
 		} else {
-			if (this.isSpellAnimated()) {
+			if (this.isSpellCharging() && this.isSpellAnimated()) {
 				int spellColor = this.dataManager.get(SPELL_INFORMATION);
 				double red = (double) ((spellColor >> 16) & 255) / 255.0D;
 				double green = (double) ((spellColor >> 8) & 255) / 255.0D;
