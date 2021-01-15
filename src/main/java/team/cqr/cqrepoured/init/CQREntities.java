@@ -23,6 +23,12 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordExplosion;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordIllusion;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityTargetingLaser;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.objects.entity.misc.EntityFlyingSkullMinion;
@@ -195,6 +201,12 @@ public class CQREntities {
 					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantSpider.class, "giant_spider", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),
+					createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),

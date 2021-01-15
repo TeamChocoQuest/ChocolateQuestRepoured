@@ -25,6 +25,11 @@ import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNetherDragon;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKing;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderLaser;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderSpectreLordCurse;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderSpectreLordExplosion;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderSpectreLordIllusion;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDwarf;
@@ -77,6 +82,11 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.AbstractEntityLaser;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordExplosion;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordIllusion;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
@@ -238,10 +248,16 @@ public class CQREntityRenderers {
 
 		// Shelob
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, RenderCQRGiantSpider::new);
-		
-		
-		//Geckolib
-		//Ender Calamity
+
+		// Spectre Lord
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectreLord.class, RenderCQRSpectreLord::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordIllusion.class, RenderSpectreLordIllusion::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordCurse.class, RenderSpectreLordCurse::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordExplosion.class, RenderSpectreLordExplosion::new);
+		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityLaser.class, RenderLaser::new);
+
+		// Geckolib
+		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);
 	}
 
