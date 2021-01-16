@@ -25,28 +25,33 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 	
 	@Override
-	public void renderEarly(EntityCQREnderCalamity animatable, float ticks, float red, float green, float blue, float partialTicks) {
-		// Render the sphere
-		if (animatable.isShieldActive()) {
+	public boolean isMultipass() {
+		return true;
+	}
+	
+	@Override
+	public void renderMultipass(EntityCQREnderCalamity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
+		
+		//since the sphere is transparent it needs to render in the "transparent entity" render-pass
+		if (entityIn.isShieldActive()) {
 			GlStateManager.pushMatrix();
 			
 			this.bindTexture(SPHERE_TEXTURE);
 			
-			GlStateManager.rotate(partialTicks, 0.0F, 1.0F, 0.0F);
-			float color = new Float(0.25 + 0.5 * (0.5 * Math.cos(0.0625 * animatable.ticksExisted) + 0.5));
-			//GlStateManager.color(color,color,color);
+			float color = new Float(0.5 + 0.5 * (0.5 * Math.cos(0.0625 * entityIn.ticksExisted) + 0.5));
 			
 			//"Animation"
 			GlStateManager.matrixMode(5890);
             GlStateManager.loadIdentity();
-            float f = (float)animatable.ticksExisted + partialTicks;
+            float f = (float)entityIn.ticksExisted + partialTicks;
             GlStateManager.translate(f * 0.01F, f * 0.01F, 0.0F);
             GlStateManager.matrixMode(5888);
             GlStateManager.disableLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
             
-			sphereHelper.render(animatable, 0,0,0, TEXTURE, color, color, color, 0.5F, this.getWidthScale(animatable), this.getHeightScale(animatable));
+			sphereHelper.render(entityIn, x,y,z, TEXTURE, color, color, color, 0.5F, this.getWidthScale(entityIn), this.getHeightScale(entityIn));
 			
 			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
 			GlStateManager.matrixMode(5890);
@@ -54,12 +59,10 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
             GlStateManager.matrixMode(5888);
             GlStateManager.enableLighting();
 			
-			this.bindTexture(getEntityTexture(animatable));
+			this.bindTexture(getEntityTexture(entityIn));
 			
 			GlStateManager.popMatrix();
 		}
-		
-		super.renderEarly(animatable, ticks, red, green, blue, partialTicks);
 	}
 
 	// we do not hold items, so we can ignore this
