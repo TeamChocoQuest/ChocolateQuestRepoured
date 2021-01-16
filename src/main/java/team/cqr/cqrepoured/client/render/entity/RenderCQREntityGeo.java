@@ -94,6 +94,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
 		
+		this.renderRecursivelyCQR(currentEntityBeingRendered, builder, bone, red, green, blue, alpha);
+		
 		ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 		if(boneItem != null) {
 			preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
@@ -102,6 +104,10 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			
 			postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 		}
+	}
+	
+	protected void renderRecursivelyCQR(T currentEntity, BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
+		//Not used by default
 	}
 	
 	/*
