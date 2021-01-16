@@ -3,6 +3,8 @@ package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
@@ -11,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -33,6 +36,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -69,12 +73,41 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 
 	public static enum HANDS {
-		LEFT_UPPER, 
-		LEFT_MIDDLE, 
-		LEFT_LOWER, 
-		RIGHT_UPPER, 
-		RIGHT_MIDDLE, 
-		RIGHT_LOWER
+		LEFT_UPPER("handLeftUpper"), 
+		LEFT_MIDDLE("handLeftMiddle"), 
+		LEFT_LOWER("handLeftLower"), 
+		RIGHT_UPPER("handRightUpper"), 
+		RIGHT_MIDDLE("handRightMiddle"), 
+		RIGHT_LOWER("handRightLower");
+		
+		private String boneName;
+		
+		public String getBoneName() {
+			return this.boneName;
+		}
+		
+		private HANDS(String bone) {
+			this.boneName = bone;
+		}
+		
+		@Nullable
+		public static HANDS getFromBone(GeoBone bone) {
+			switch(bone.getName()) {
+			case "handRightUpper":
+				return RIGHT_UPPER;
+			case "handRightMiddle":
+				return RIGHT_MIDDLE;
+			case "handRightLower":
+				return RIGHT_LOWER;
+			case "handLeftUpper":
+				return LEFT_UPPER;
+			case "handLeftMiddle":
+				return LEFT_MIDDLE;
+			case "handLeftLower":
+				return LEFT_LOWER;
+			}
+			return null;
+		}
 	}
 
 	// Geckolib
@@ -93,11 +126,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
 
-		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());
+		//LEFT_UPPER doesn't get rendererd for some reason
+		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.of(Blocks.END_STONE.getDefaultState()));
 		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
 		this.dataManager.register(BLOCK_LEFT_LOWER, Optional.absent());
 		this.dataManager.register(BLOCK_RIGHT_UPPER, Optional.absent());
-		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());
+		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.of(Blocks.OBSIDIAN.getDefaultState()));
 		this.dataManager.register(BLOCK_RIGHT_LOWER, Optional.absent());
 	}
 
@@ -421,6 +455,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	public Optional<IBlockState> getBlockFromHand(HANDS hand) {
+		if(hand == null) {
+			return Optional.absent();
+		}
 		switch(hand) {
 		case LEFT_LOWER:
 			return this.dataManager.get(BLOCK_LEFT_LOWER);
