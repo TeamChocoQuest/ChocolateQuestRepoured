@@ -44,6 +44,7 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.util.CQRConfig;
 
+//TODO: Move the minion & lightning handling to a AI class, it is cleaner that way
 public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner {
 
 	private static final int HURT_DURATION = 24; // 1.2 * 20
@@ -230,8 +231,22 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		// Projectile attack
+		if(source.getImmediateSource() instanceof EntityEnergyOrb || source.getTrueSource() instanceof EntityEnergyOrb) {
+			//TODO: Hit by energy ball
+			/*
+			 * If already hit often enough, Spawn explosion, then teleport to center and be unconscious 
+			 */
+			return false;
+		}
+		
 		if (source instanceof EntityDamageSourceIndirect) {
-
+			//TODO: Switch attack target to the shooter
+			//TODO: Teleport
+			/*
+			 * Spawn a few homing ender eyes at random, then teleport to a different location
+			 * There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds, waits 1 second, repeat
+			 */
+			
 			return false;
 		}
 
