@@ -4,8 +4,6 @@ import java.nio.FloatBuffer;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
