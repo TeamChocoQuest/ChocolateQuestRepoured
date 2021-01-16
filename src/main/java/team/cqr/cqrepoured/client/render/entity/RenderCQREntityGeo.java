@@ -3,21 +3,33 @@ package team.cqr.cqrepoured.client.render.entity;
 import java.nio.FloatBuffer;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.util.MatrixStack;
+import team.cqr.cqrepoured.client.util.MatrixUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -71,7 +83,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
             this.unsetBrightness();
         }
 	}
-
+	
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
 		// Custom texture start
@@ -92,18 +104,73 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	
 	@Override
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
-		super.renderRecursively(builder, bone, red, green, blue, alpha);
-		
-		this.renderRecursivelyCQR(currentEntityBeingRendered, builder, bone, red, green, blue, alpha);
-		
 		ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
-		if(boneItem != null) {
-			preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+		//IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
+		if(boneItem != null /*|| boneBlock != null*/) {
+			//Huge thanks to McHorse and Gecko to get this to work!!
+			Tessellator.getInstance().draw();
 			
-			Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, ItemCameraTransforms.TransformType.NONE);
+			multiplyMatrix(IGeoRenderer.MATRIX_STACK, bone);
 			
-			postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+			if(boneItem != null) {
+				preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+				
+				Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, ItemCameraTransforms.TransformType.NONE);
+				
+				postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+			}
+			/*if(boneBlock != null) {
+				preRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
+				
+				renderBlock(boneBlock, this.currentEntityBeingRendered);
+				
+				postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
+			}*/
+			this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
+			
+			builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 		}
+		super.renderRecursively(builder, bone, red, green, blue, alpha);
+	}
+	
+	private void renderBlock(IBlockState iBlockState, Entity currentEntity) {
+		BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.pushMatrix();
+        /*GlStateManager.translate(0.0F, 0.6875F, -0.75F);
+        GlStateManager.rotate(20.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(0.25F, 0.1875F, 0.25F);
+        GlStateManager.scale(-0.5F, -0.5F, 0.5F);*/
+        int i = currentEntity.getBrightnessForRender();
+        int j = i % 65536;
+        int k = i / 65536;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        blockrendererdispatcher.renderBlockBrightness(iBlockState, 1.0F);
+        
+        GlStateManager.popMatrix();
+        GlStateManager.disableRescaleNormal();
+	}
+	
+	//Code by McHorse
+	private static Matrix4f matrix = new Matrix4f();
+	/**
+	 * Multiply given matrix stack onto OpenGL's matrix stack
+	 */
+	public static void multiplyMatrix(MatrixStack stack, GeoBone bone)
+	{
+		matrix.set(stack.getModelMatrix());
+		matrix.transpose();
+
+		MatrixUtil.matrixToFloat(MatrixUtil.floats, matrix);
+		MatrixUtil.buffer.clear();
+		MatrixUtil.buffer.put(MatrixUtil.floats);
+		MatrixUtil.buffer.flip();
+
+		GlStateManager.multMatrix(MatrixUtil.buffer);
+		GlStateManager.translate(bone.rotationPointX / 16, bone.rotationPointY / 16, bone.rotationPointZ / 16);
 	}
 
 	/*
@@ -111,15 +178,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	 * MATRIX_STACK.pop() needs to be called after this method
 	 */
 	protected void prepareRotationAndTranslationForBone(GeoBone bone) {
-		MATRIX_STACK.translate(bone);
-		MATRIX_STACK.moveToPivot(bone);
-		MATRIX_STACK.rotate(bone);
-		MATRIX_STACK.scale(bone);
-		MATRIX_STACK.moveBackFromPivot(bone);
-	}
-	
-	protected void renderRecursivelyCQR(T currentEntity, BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
-		//Not used by default
+		IGeoRenderer.MATRIX_STACK.translate(bone);
+		IGeoRenderer.MATRIX_STACK.moveToPivot(bone);
+		IGeoRenderer.MATRIX_STACK.rotate(bone);
+		IGeoRenderer.MATRIX_STACK.scale(bone);
+		IGeoRenderer.MATRIX_STACK.moveBackFromPivot(bone);
 	}
 	
 	/*
@@ -127,9 +190,16 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	 */
 	@Nullable
 	protected abstract ItemStack getHeldItemForBone(String boneName, T currentEntity);
+	/*
+	 * Return null if there is no held block
+	 */
+	@Nullable
+	protected abstract IBlockState getHeldBlockForBone(String boneName, T currentEntity);
 	
 	protected abstract void preRenderItem(ItemStack item, String boneName, T currentEntity);
+	protected abstract void preRenderBlock(IBlockState block, String boneName, T currentEntity);
 	protected abstract void postRenderItem(ItemStack item, String boneName, T currentEntity);
+	protected abstract void postRenderBlock(IBlockState block, String boneName, T currentEntity);
 	
 	//Copied from RenderLivingBase
 	protected FloatBuffer brightnessBuffer = GLAllocation.createDirectFloatBuffer(4);

@@ -36,7 +36,6 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -91,8 +90,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		
 		@Nullable
-		public static HANDS getFromBone(GeoBone bone) {
-			switch(bone.getName()) {
+		public static HANDS getFromBoneName(String bone) {
+			switch(bone) {
 			case "handRightUpper":
 				return RIGHT_UPPER;
 			case "handRightMiddle":
@@ -126,7 +125,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
 
-		//LEFT_UPPER doesn't get rendererd for some reason
 		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.of(Blocks.END_STONE.getDefaultState()));
 		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
 		this.dataManager.register(BLOCK_LEFT_LOWER, Optional.absent());

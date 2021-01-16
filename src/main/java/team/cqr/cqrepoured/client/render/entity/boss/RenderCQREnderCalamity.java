@@ -1,14 +1,21 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Optional;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.util.SphereHelper;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.HANDS;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -68,6 +75,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	// we do not hold items, so we can ignore this
 	@Override
 	protected ItemStack getHeldItemForBone(String boneName, EntityCQREnderCalamity currentEntity) {
+		if(boneName.equalsIgnoreCase("handLeftMiddle")) {
+			return new ItemStack(Items.DIAMOND_SWORD);
+		}
+		/*if(boneName.equalsIgnoreCase("handRightUpper")) {
+			return new ItemStack(Items.IRON_SWORD);
+		}*/
 		return null;
 	}
 
@@ -80,5 +93,27 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	protected void postRenderItem(ItemStack item, String boneName, EntityCQREnderCalamity currentEntity) {
 
 	}
+
+
+	@Nullable
+	@Override
+	protected IBlockState getHeldBlockForBone(String boneName, EntityCQREnderCalamity currentEntity) {
+		Optional<IBlockState> optional = currentEntity.getBlockFromHand(HANDS.getFromBoneName(boneName));
+		if(optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
+	}
+
+	@Override
+	protected void preRenderBlock(IBlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(IBlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+		
+	}
 	
+
 }
