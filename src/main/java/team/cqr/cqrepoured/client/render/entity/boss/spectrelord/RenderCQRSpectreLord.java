@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.boss.spectrelord;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -19,15 +21,15 @@ public class RenderCQRSpectreLord extends RenderCQREntity<EntityCQRSpectreLord> 
 	protected void renderModel(EntityCQRSpectreLord entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
 		if (flag) {
-			GlStateManager.alphaFunc(516, entitylivingbaseIn.getInvisibility());
+			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());
 			this.bindTexture(TEXTURE_INVISIBLE);
 			this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-			GlStateManager.alphaFunc(516, 0.1F);
-			GlStateManager.depthFunc(514);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.depthFunc(GL11.GL_EQUAL);
 		}
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		if (flag) {
-			GlStateManager.depthFunc(515);
+			GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		}
 	}
 
