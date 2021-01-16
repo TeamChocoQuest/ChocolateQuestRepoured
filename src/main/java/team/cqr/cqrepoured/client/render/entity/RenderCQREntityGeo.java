@@ -105,6 +105,18 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 		}
 	}
+
+	/*
+	 * MATRIX_STACK.push() needs to be called before this method
+	 * MATRIX_STACK.pop() needs to be called after this method
+	 */
+	protected void prepareRotationAndTranslationForBone(GeoBone bone) {
+		MATRIX_STACK.translate(bone);
+		MATRIX_STACK.moveToPivot(bone);
+		MATRIX_STACK.rotate(bone);
+		MATRIX_STACK.scale(bone);
+		MATRIX_STACK.moveBackFromPivot(bone);
+	}
 	
 	protected void renderRecursivelyCQR(T currentEntity, BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
 		//Not used by default
