@@ -8,7 +8,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelEnderCalamity;
@@ -75,12 +74,6 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	// we do not hold items, so we can ignore this
 	@Override
 	protected ItemStack getHeldItemForBone(String boneName, EntityCQREnderCalamity currentEntity) {
-		if(boneName.equalsIgnoreCase("handLeftMiddle")) {
-			return new ItemStack(Items.DIAMOND_SWORD);
-		}
-		/*if(boneName.equalsIgnoreCase("handRightUpper")) {
-			return new ItemStack(Items.IRON_SWORD);
-		}*/
 		return null;
 	}
 
