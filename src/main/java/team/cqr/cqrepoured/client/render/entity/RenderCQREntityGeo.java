@@ -4,8 +4,6 @@ import java.nio.FloatBuffer;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
@@ -96,6 +94,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
 		
+		this.renderRecursivelyCQR(currentEntityBeingRendered, builder, bone, red, green, blue, alpha);
+		
 		ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 		if(boneItem != null) {
 			preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
@@ -104,6 +104,22 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			
 			postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 		}
+	}
+
+	/*
+	 * MATRIX_STACK.push() needs to be called before this method
+	 * MATRIX_STACK.pop() needs to be called after this method
+	 */
+	protected void prepareRotationAndTranslationForBone(GeoBone bone) {
+		MATRIX_STACK.translate(bone);
+		MATRIX_STACK.moveToPivot(bone);
+		MATRIX_STACK.rotate(bone);
+		MATRIX_STACK.scale(bone);
+		MATRIX_STACK.moveBackFromPivot(bone);
+	}
+	
+	protected void renderRecursivelyCQR(T currentEntity, BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
+		//Not used by default
 	}
 	
 	/*
