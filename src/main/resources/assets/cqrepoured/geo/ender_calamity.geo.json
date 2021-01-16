@@ -206,7 +206,7 @@
 				{
 					"name": "handLeftMiddle",
 					"parent": "lowerArm6",
-					"pivot": [-15, 14.5, 0],
+					"pivot": [-11, 14.5, 0],
 					"cubes": [
 						{"origin": [-11, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
