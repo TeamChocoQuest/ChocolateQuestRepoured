@@ -85,9 +85,9 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISpectreLordChannelHate(this, 600, 60, 600));
+		this.spellHandler.addSpell(0, new EntityAISpectreLordChannelHate(this, 600, 60, 480));
 		this.spellHandler.addSpell(1, new EntityAISpectreLordDash(this, 200, 40, 3, 3.0D, 1.5D));
-		this.spellHandler.addSpell(2, new EntityAISpectreLordLaser(this, 600, 60, 240));
+		this.spellHandler.addSpell(2, new EntityAISpectreLordLaser(this, 600, 60, 320));
 		this.spellHandler.addSpell(3, new EntityAISpectreLordSummonIllusions(this, 400, 40, 4, 800));
 		this.spellHandler.addSpell(4, new EntityAISpectreLordSwordShield(this, 600, 60));
 	}

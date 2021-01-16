@@ -149,7 +149,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 
 	@Override
 	public int getWeight() {
-		return 20;
+		return 10;
 	}
 
 	@Override

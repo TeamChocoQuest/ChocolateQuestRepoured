@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.spectrelord;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import team.cqr.cqrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
@@ -7,6 +10,8 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanill
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 
 public class EntityAISpectreLordSwordShield extends AbstractEntityAISpell<EntityCQRSpectreLord> implements IEntityAISpellAnimatedVanilla {
+
+	private final List<Object> summonedOrbs = new ArrayList<>();
 
 	public EntityAISpectreLordSwordShield(EntityCQRSpectreLord entity, int cooldown, int chargeUpTicks) {
 		super(entity, cooldown, chargeUpTicks, 0);
@@ -22,7 +27,7 @@ public class EntityAISpectreLordSwordShield extends AbstractEntityAISpell<Entity
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.ENTITY_ILLAGER_PREPARE_MIRROR;
 	}
 
 	@Override

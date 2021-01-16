@@ -24,14 +24,6 @@ public class EntityAISpectreLordLaser extends AbstractEntityAISpell<EntityCQRSpe
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		if (!super.shouldContinueExecuting()) {
-			return false;
-		}
-		return this.target.isEntityAlive();
-	}
-
-	@Override
 	public void resetTask() {
 		super.resetTask();
 		for (AbstractEntityLaser laser : this.lasers) {
