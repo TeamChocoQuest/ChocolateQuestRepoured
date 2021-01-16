@@ -105,7 +105,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
 		ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 		IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
-		if (boneItem != null /* || boneBlock != null */) {
+		if (boneItem != null || boneBlock != null) {
 			// Huge thanks to McHorse and Gecko to get this to work!!
 			Tessellator.getInstance().draw();
 
@@ -139,13 +139,9 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.pushMatrix();
-		/*
-		 * GlStateManager.translate(0.0F, 0.6875F, -0.75F);
-		 * GlStateManager.rotate(20.0F, 1.0F, 0.0F, 0.0F);
-		 * GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
-		 * GlStateManager.translate(0.25F, 0.1875F, 0.25F);
-		 * GlStateManager.scale(-0.5F, -0.5F, 0.5F);
-		 */
+
+		GlStateManager.scale(0.5F, 0.5F, 0.5F);
+
 		int i = currentEntity.getBrightnessForRender();
 		int j = i % 65536;
 		int k = i / 65536;
@@ -175,18 +171,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 		GlStateManager.multMatrix(MatrixUtil.buffer);
 		GlStateManager.translate(bone.rotationPointX / 16, bone.rotationPointY / 16, bone.rotationPointZ / 16);
-	}
-
-	/*
-	 * MATRIX_STACK.push() needs to be called before this method
-	 * MATRIX_STACK.pop() needs to be called after this method
-	 */
-	protected void prepareRotationAndTranslationForBone(GeoBone bone) {
-		IGeoRenderer.MATRIX_STACK.translate(bone);
-		IGeoRenderer.MATRIX_STACK.moveToPivot(bone);
-		IGeoRenderer.MATRIX_STACK.rotate(bone);
-		IGeoRenderer.MATRIX_STACK.scale(bone);
-		IGeoRenderer.MATRIX_STACK.moveBackFromPivot(bone);
 	}
 
 	/*
