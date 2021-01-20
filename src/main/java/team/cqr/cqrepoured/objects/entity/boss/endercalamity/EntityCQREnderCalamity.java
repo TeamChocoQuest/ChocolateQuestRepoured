@@ -297,6 +297,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 * There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds, waits 1 second, repeat
 			 */
 			if(this.teleportAI != null) {
+				if(source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
+					this.setAttackTarget((EntityLivingBase) source.getTrueSource());
+				}
+					
 				this.teleportAI.forceExecution();
 			}
 			return false;
