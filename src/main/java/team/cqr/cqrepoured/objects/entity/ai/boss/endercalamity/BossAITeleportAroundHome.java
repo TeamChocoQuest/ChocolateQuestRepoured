@@ -9,6 +9,7 @@ public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnder
 
 	private final int MAX_COOLDOWN;
 	private int cooldown = 40;
+	private final double HOVER_DISTANCE = 8D;
 
 	public BossAITeleportAroundHome(EntityCQREnderCalamity entity, final int cooldownTime) {
 		super(entity);
@@ -50,7 +51,7 @@ public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnder
 			return;
 		}
 		double x = home.getX() + vec.x;
-		double y = home.getY() + vec.y;
+		double y = home.getY() + HOVER_DISTANCE + vec.y;
 		double z = home.getZ() + vec.z;
 
 		this.entity.teleport(x, y, z);
