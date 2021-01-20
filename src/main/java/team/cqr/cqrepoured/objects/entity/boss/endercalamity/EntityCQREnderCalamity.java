@@ -290,8 +290,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		
 		if (source instanceof EntityDamageSourceIndirect) {
-			//TODO: Switch attack target to the shooter
-			//TODO: Teleport
+			//DONE: Switch attack target to the shooter
+			//DONE: Teleport
+			//TODO: Spawn homing ender eyes
 			/*
 			 * Spawn a few homing ender eyes at random, then teleport to a different location
 			 * There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds, waits 1 second, repeat
