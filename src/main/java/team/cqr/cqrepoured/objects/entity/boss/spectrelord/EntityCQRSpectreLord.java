@@ -19,11 +19,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.objects.entity.ai.boss.spectrelord.EntityAISpectreLordChannelHate;
 import team.cqr.cqrepoured.objects.entity.ai.boss.spectrelord.EntityAISpectreLordDash;
 import team.cqr.cqrepoured.objects.entity.ai.boss.spectrelord.EntityAISpectreLordLaser;
@@ -184,12 +182,12 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 		return this.dataManager.get(CHANNELING_LASER);
 	}
 
+	@Override
 	public void teleport(double x, double y, double z) {
 		double oldX = this.posX;
 		double oldY = this.posY;
 		double oldZ = this.posZ;
-		this.setPosition(x, y, z);
-		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this), this);
+		super.teleport(x,y,z);
 		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 1.0F, 0.9F + this.rand.nextFloat() * 0.2F);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);

@@ -78,6 +78,7 @@ import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.objects.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttack;
@@ -1624,6 +1625,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public TraderOffer getTrades() {
 		return this.trades;
+	}
+	
+	public void teleport(double x, double y, double z) {
+		this.setPosition(x, y, z);
+		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this), this);
 	}
 
 	// Custom textures
