@@ -79,12 +79,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQREnderCalamity currentEntity) {
-
+		//Unused
 	}
 
 	@Override
 	protected void postRenderItem(ItemStack item, String boneName, EntityCQREnderCalamity currentEntity) {
-
+		//Unused
 	}
 
 
@@ -100,12 +100,13 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 	@Override
 	protected void preRenderBlock(IBlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
-		
+		//Unused
+		GlStateManager.scale(0.9, 0.9, 0.9);
 	}
 
 	@Override
 	protected void postRenderBlock(IBlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
-		
+		//Unused
 	}
 	
 

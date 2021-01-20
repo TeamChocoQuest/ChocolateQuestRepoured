@@ -90,12 +90,12 @@
 				{
 					"name": "handRightUpper",
 					"parent": "lowerArm4",
-					"pivot": [-19, 18.5, 0],
+					"pivot": [-23, 18.5, 0],
 					"cubes": [
-						{"origin": [-19, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-23, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandrightupper": [-18.42982, 18.44836, 0]
+						"particleshandrightupper": [-22.42982, 18.44836, 0]
 					}
 				},
 				{
@@ -117,12 +117,12 @@
 				{
 					"name": "handRightMiddle",
 					"parent": "lowerArm2",
-					"pivot": [-19, 14.5, 0],
+					"pivot": [-23, 14.5, 0],
 					"cubes": [
-						{"origin": [-19, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-23, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandrightmiddle": [-18, 14, 0]
+						"particleshandrightmiddle": [-22, 14, 0]
 					}
 				},
 				{
@@ -145,12 +145,12 @@
 				{
 					"name": "handRightLower",
 					"parent": "lowerArm3",
-					"pivot": [-18, 10.5, 0],
+					"pivot": [-22, 10.5, 0],
 					"cubes": [
-						{"origin": [-18, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-22, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandrightlower": [-17.25099, 9.97013, 0]
+						"particleshandrightlower": [-21.25099, 9.97013, 0]
 					}
 				},
 				{
@@ -179,12 +179,12 @@
 				{
 					"name": "handLeftUpper",
 					"parent": "lowerArm5",
-					"pivot": [-11, 18.5, 0],
+					"pivot": [-15, 18.5, 0],
 					"cubes": [
-						{"origin": [-11, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-15, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandleftupper": [-10.18657, 18.22728, 0]
+						"particleshandleftupper": [-14.18657, 18.22728, 0]
 					}
 				},
 				{
@@ -206,12 +206,12 @@
 				{
 					"name": "handLeftMiddle",
 					"parent": "lowerArm6",
-					"pivot": [-11, 14.5, 0],
+					"pivot": [-15, 14.5, 0],
 					"cubes": [
-						{"origin": [-11, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-15, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandleftmiddle": [-10, 14, 0]
+						"particleshandleftmiddle": [-14, 14, 0]
 					}
 				},
 				{
@@ -234,12 +234,12 @@
 				{
 					"name": "handLeftLower",
 					"parent": "lowerArm7",
-					"pivot": [-10, 10.5, 0],
+					"pivot": [-14, 10.5, 0],
 					"cubes": [
-						{"origin": [-10, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-14, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandleftlower": [-9.00774, 10.1912, 0]
+						"particleshandleftlower": [-13.00774, 10.1912, 0]
 					}
 				}
 			]

@@ -140,6 +140,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.pushMatrix();
 
+		GlStateManager.translate(-0.25F, -0.25F, 0.25F);
 		GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
 		int i = currentEntity.getBrightnessForRender();
