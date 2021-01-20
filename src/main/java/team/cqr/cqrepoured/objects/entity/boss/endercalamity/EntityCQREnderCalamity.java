@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -29,6 +30,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -40,6 +42,7 @@ import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
@@ -70,7 +73,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-
+	
+	//AI stuff
+	private boolean isDowned = false;
+	
 	public static enum HANDS {
 		LEFT_UPPER("handLeftUpper"), 
 		LEFT_MIDDLE("handLeftMiddle"), 
@@ -112,10 +118,19 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 
+	//Direct AI access
+	private BossAITeleportAroundHome teleportAI;
+	
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
-
 		setSizeVariation(2.5F);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.teleportAI = new BossAITeleportAroundHome(this, 200);
+		this.tasks.addTask(8, teleportAI);
 	}
 
 	@Override
@@ -281,7 +296,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 * Spawn a few homing ender eyes at random, then teleport to a different location
 			 * There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds, waits 1 second, repeat
 			 */
-			
+			if(this.teleportAI != null) {
+				this.teleportAI.forceExecution();
+			}
 			return false;
 		}
 
@@ -298,6 +315,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		return false;
 	}
+
+	@Override
+	public void onEntityUpdate() {
+		if(this.firstUpdate && !this.hasHomePositionCQR() && !this.world.isRemote) {
+			this.setHomePositionCQR(this.getPosition());
+			this.teleportAI.forceExecution();
+		}
+		super.onEntityUpdate();
+	}
 	
 	@Override
 	public void onLivingUpdate() {
@@ -308,10 +334,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		} else {
-			if(this.firstUpdate && !this.hasHomePositionCQR()) {
-				this.setHomePositionCQR(this.getPosition());
-			}
-			
 			// SErver
 			if (this.cqrHurtTime > 0) {
 				this.cqrHurtTime--;
@@ -543,5 +565,36 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedEntities.add(summoned);
 	}
+	
+	public boolean isDowned() {
+		return this.isDowned;
+	}
+	
+	@Override
+	public void teleport(double x, double y, double z) {
+		double oldX = this.posX;
+		double oldY = this.posY;
+		double oldZ = this.posZ;
+		super.teleport(x,y,z);
+		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 1.0F, 0.9F + this.rand.nextFloat() * 0.2F);
+		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+	}
 
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("isDowned", isDowned);
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.isDowned = compound.getBoolean("isDowned");
+	}
+	
+	public static int getArenaRadius() {
+		return ARENA_RADIUS;
+	}
+	
 }
