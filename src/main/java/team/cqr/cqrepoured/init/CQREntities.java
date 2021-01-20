@@ -68,6 +68,7 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderHook;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileWeb;
 import team.cqr.cqrepoured.objects.mounts.EntityGiantEndermite;
@@ -92,6 +93,7 @@ public class CQREntities {
 	public static final EntityEntry PROJECTILE_BUBBLE = Null();
 	public static final EntityEntry PROJECTILE_HOT_FIREBALL = Null();
 	public static final EntityEntry PROJECTILE_WEB = Null();
+	public static final EntityEntry PROJECTILE_THROWN_BLOCK = Null();
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
@@ -161,6 +163,7 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(ProjectileBubble.class, "projectile_bubble", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHotFireball.class, "projectile_hot_fireball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileWeb.class, "projectile_web", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileThrownBlock.class, "projectile_thrown_block", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),

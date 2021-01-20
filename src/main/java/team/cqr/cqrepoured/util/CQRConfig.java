@@ -293,6 +293,8 @@ public class CQRConfig {
 		@Config.Comment("Controls the roundness of the ender-calamity's shield, has a massive impact on performance. The higher, the rounder")
 		@RequiresMcRestart
 		public int enderCalamityShieldRoundness = 32;
+		public boolean thrownBlocksDestroyTerrain = true;
+		public boolean thrownBlocksGetPlaced = true;
 	}
 
 	public static class BossDamageCaps {
