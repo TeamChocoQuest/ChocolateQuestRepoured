@@ -78,36 +78,36 @@ public class BlockFireCQR extends BlockFire {
 					this.tryCatchFire(worldIn, pos.up(), 250 + j, rand, i, EnumFacing.DOWN);
 					this.tryCatchFire(worldIn, pos.north(), 300 + j, rand, i, EnumFacing.SOUTH);
 					this.tryCatchFire(worldIn, pos.south(), 300 + j, rand, i, EnumFacing.NORTH);
-				}
 
-				for (int k = -1; k <= 1; ++k) {
-					for (int l = -1; l <= 1; ++l) {
-						for (int i1 = -1; i1 <= 4; ++i1) {
-							if (k != 0 || i1 != 0 || l != 0) {
-								int j1 = 100;
-
-								if (i1 > 1) {
-									j1 += (i1 - 1) * 100;
-								}
-
-								BlockPos blockpos = pos.add(k, i1, l);
-								int k1 = this.getNeighborEncouragement(worldIn, blockpos);
-
-								if (k1 > 0) {
-									int l1 = (k1 + 40 + worldIn.getDifficulty().getId() * 7) / (i + 30);
-
-									if (flag1) {
-										l1 /= 2;
+					for (int k = -1; k <= 1; ++k) {
+						for (int l = -1; l <= 1; ++l) {
+							for (int i1 = -1; i1 <= 4; ++i1) {
+								if (k != 0 || i1 != 0 || l != 0) {
+									int j1 = 100;
+	
+									if (i1 > 1) {
+										j1 += (i1 - 1) * 100;
 									}
-
-									if (l1 > 0 && rand.nextInt(j1) <= l1 && (!worldIn.isRaining() || !this.canDie(worldIn, blockpos))) {
-										int i2 = i + rand.nextInt(5) / 4;
-
-										if (i2 > 15) {
-											i2 = 15;
+	
+									BlockPos blockpos = pos.add(k, i1, l);
+									int k1 = this.getNeighborEncouragement(worldIn, blockpos);
+	
+									if (k1 > 0) {
+										int l1 = (k1 + 40 + worldIn.getDifficulty().getId() * 7) / (i + 30);
+	
+										if (flag1) {
+											l1 /= 2;
 										}
-
-										worldIn.setBlockState(blockpos, state.withProperty(AGE, i2), 3);
+	
+										if (l1 > 0 && rand.nextInt(j1) <= l1 && (!worldIn.isRaining() || !this.canDie(worldIn, blockpos))) {
+											int i2 = i + rand.nextInt(5) / 4;
+	
+											if (i2 > 15) {
+												i2 = 15;
+											}
+	
+											worldIn.setBlockState(blockpos, state.withProperty(AGE, i2), 3);
+										}
 									}
 								}
 							}
