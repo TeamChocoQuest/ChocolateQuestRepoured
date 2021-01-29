@@ -45,7 +45,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source instanceof EntityDamageSourceIndirect) {
+		if (source instanceof EntityDamageSourceIndirect || this.getRNG().nextBoolean() || source.isUnblockable()) {
 			for (int i = 0; i < 64; ++i) {
 				if (this.teleportRandomly()) {
 					return false;
