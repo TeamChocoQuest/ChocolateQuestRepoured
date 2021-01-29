@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.structureprot;
 import java.io.DataInputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +41,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -87,9 +87,7 @@ public class ProtectedRegionEventHandler {
 		if (protectedRegionManager == null) {
 			return;
 		}
-		List<ProtectedRegion> list = new ArrayList<>();
-		protectedRegionManager.getProtectedRegions().forEach(list::add);
-		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list), (EntityPlayerMP) event.player);
+		syncProtectedRegions(protectedRegionManager, (EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent
@@ -98,9 +96,34 @@ public class ProtectedRegionEventHandler {
 		if (protectedRegionManager == null) {
 			return;
 		}
+		syncProtectedRegions(protectedRegionManager, (EntityPlayerMP) event.player);
+	}
+
+	private static void syncProtectedRegions(IProtectedRegionManager protectedRegionManager, EntityPlayerMP player) {
 		List<ProtectedRegion> list = new ArrayList<>();
 		protectedRegionManager.getProtectedRegions().forEach(list::add);
-		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list), (EntityPlayerMP) event.player);
+		if (!list.isEmpty()) {
+			List<ProtectedRegion> list1 = new ArrayList<>();
+			boolean firstPacket = true;
+			int sum = 0;
+			for (int i = 0; i < list.size(); i++) {
+				ProtectedRegion protectedRegion = list.get(i);
+				BlockPos size = protectedRegion.getEndPos().subtract(protectedRegion.getStartPos()).add(1, 1, 1);
+				int j = size.getX() * size.getY() * size.getZ();
+				if (sum + j > 10_000_000) {
+					CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list1, firstPacket), player);
+					list1.clear();
+					firstPacket = false;
+				}
+				list1.add(protectedRegion);
+				sum += j;
+				if (i == list.size() - 1) {
+					CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list1, firstPacket), player);
+				}
+			}
+		} else {
+			CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(Collections.emptyList(), true), player);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -20,10 +20,12 @@ public class CPacketHandlerSyncProtectedRegions implements IMessageHandler<SPack
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
-
-				protectedRegionManager.clearProtectedRegions();
-
 				ByteBuf buf = message.getBuffer();
+
+				if (buf.readBoolean()) {
+					protectedRegionManager.clearProtectedRegions();
+				}
+
 				int protectedRegionsCount = buf.readShort();
 				for (int i = 0; i < protectedRegionsCount; i++) {
 					protectedRegionManager.addProtectedRegion(new ProtectedRegion(world, buf));

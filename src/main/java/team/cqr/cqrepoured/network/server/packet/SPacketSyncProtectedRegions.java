@@ -15,7 +15,8 @@ public class SPacketSyncProtectedRegions implements IMessage {
 
 	}
 
-	public SPacketSyncProtectedRegions(Collection<ProtectedRegion> protectedRegions) {
+	public SPacketSyncProtectedRegions(Collection<ProtectedRegion> protectedRegions, boolean clearExisting) {
+		this.buffer.writeBoolean(clearExisting);
 		this.buffer.writeShort(protectedRegions.size());
 		for (ProtectedRegion protectedRegion : protectedRegions) {
 			protectedRegion.writeToByteBuf(this.buffer);
