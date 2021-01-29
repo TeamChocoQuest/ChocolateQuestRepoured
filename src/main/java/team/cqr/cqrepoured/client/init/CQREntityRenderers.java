@@ -16,6 +16,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderSpiderEgg;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderCalamity;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantSpider;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
@@ -81,6 +82,7 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
@@ -253,6 +255,9 @@ public class CQREntityRenderers {
 		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordExplosion.class, RenderSpectreLordExplosion::new);
 		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityLaser.class, RenderLaser::new);
 
+		// Ender King
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderKing.class, RenderCQREnderKing::new);
+		
 		// Geckolib
 		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);

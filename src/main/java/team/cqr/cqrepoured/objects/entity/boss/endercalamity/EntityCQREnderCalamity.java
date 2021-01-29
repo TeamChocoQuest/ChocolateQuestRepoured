@@ -172,6 +172,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
 		return PlayState.CONTINUE;
 	}
+	
+	boolean forceTeleport() {
+		try {
+			this.teleportAI.forceExecution();
+			return true;
+		} catch(NullPointerException npe) {
+			//Ignore
+		}
+		return false;
+	}
 
 	@Override
 	public void registerControllers(AnimationData data) {
