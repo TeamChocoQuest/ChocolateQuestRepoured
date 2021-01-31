@@ -155,9 +155,9 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 			return null;
 		}
 
-		entityTag.removeTag("UUIDLeast");
+		/*entityTag.removeTag("UUIDLeast");
 		entityTag.removeTag("UUIDMost");
-		entityTag.removeTag("Pos");
+		entityTag.removeTag("Pos");*/
 
 		// compatibility with old spawners
 		if (entityTag.getString("id").equals(Reference.MODID + ":dummy")) {
