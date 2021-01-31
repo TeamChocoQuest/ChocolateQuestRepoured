@@ -38,7 +38,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -76,7 +75,6 @@ import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
-import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
@@ -107,6 +105,7 @@ import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarg
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
 import team.cqr.cqrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
+import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
 import team.cqr.cqrepoured.objects.items.ISupportWeapon;
 import team.cqr.cqrepoured.objects.items.ItemBadge;
@@ -117,7 +116,6 @@ import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
 import team.cqr.cqrepoured.objects.npc.trading.TraderOffer;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -678,7 +676,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.updateCooldownForMagicArmor();
 		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			BlockPos pos = new BlockPos(this);
+			/*BlockPos pos = new BlockPos(this);
 			TileEntity te = this.world.getTileEntity(pos);
 			if (!(te instanceof TileEntitySpawner)) {
 				this.world.setBlockState(pos, CQRBlocks.SPAWNER.getDefaultState(), 3);
@@ -698,7 +696,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 						break;
 					}
 				}
-			}
+			}*/
+			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
 			this.setDead();
 		}
 
