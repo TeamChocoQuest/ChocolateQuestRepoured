@@ -38,6 +38,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -75,6 +76,7 @@ import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
@@ -105,7 +107,6 @@ import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarg
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
 import team.cqr.cqrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
-import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
 import team.cqr.cqrepoured.objects.items.ISupportWeapon;
 import team.cqr.cqrepoured.objects.items.ItemBadge;
@@ -116,6 +117,7 @@ import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
 import team.cqr.cqrepoured.objects.npc.trading.TraderOffer;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
+import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -676,7 +678,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.updateCooldownForMagicArmor();
 		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
+			BlockPos pos = new BlockPos(this);
+			TileEntity te = this.world.getTileEntity(pos);
+			if (!(te instanceof TileEntitySpawner)) {
+				this.world.setBlockState(pos, CQRBlocks.SPAWNER.getDefaultState(), 3);
+				te = this.world.getTileEntity(pos);
+			}
+			if (te instanceof TileEntitySpawner) {
+				TileEntitySpawner spawner = (TileEntitySpawner) te;
+				for (int i = 0; i < spawner.inventory.getSlots(); i++) {
+					if (spawner.inventory.getStackInSlot(i).isEmpty()) {
+						ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE);
+						NBTTagCompound stackNBT = new NBTTagCompound();
+						NBTTagCompound entityNBT = new NBTTagCompound();
+						this.writeToNBTAtomically(entityNBT);
+						stackNBT.setTag("EntityIn", entityNBT);
+						stack.setTagCompound(stackNBT);
+						spawner.inventory.setStackInSlot(i, stack);
+						break;
+					}
+				}
+			}
 			this.setDead();
 		}
 
@@ -1626,7 +1648,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public TraderOffer getTrades() {
 		return this.trades;
 	}
-	
+
 	public void teleport(double x, double y, double z) {
 		this.setPosition(x, y, z);
 		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this), this);
