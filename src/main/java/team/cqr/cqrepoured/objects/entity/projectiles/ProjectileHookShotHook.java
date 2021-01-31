@@ -209,7 +209,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit != this.thrower && result.entityHit instanceof EntityLivingBase) {
 					if (CQRConfig.general.hookOnlyPullsSmallerEntities) {
-						double sizeOwner = this.thrower.width * this.thrower.height;
+						double sizeOwner = this.thrower != null ? (this.thrower.width * this.thrower.height) : 2D;
 						sizeOwner *= 1.25;
 						double sizeHit = result.entityHit.width * result.entityHit.height;
 						if (sizeOwner >= sizeHit) {
