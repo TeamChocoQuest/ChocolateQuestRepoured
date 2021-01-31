@@ -70,7 +70,7 @@ public abstract class SpawnerFactory {
 	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
-		world.setBlockState(pos, (multiUseSpawner == true /* && spawnerSettingsOverrides != null */) ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
+		world.setBlockState(pos, multiUseSpawner ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (multiUseSpawner) {
@@ -83,14 +83,14 @@ public abstract class SpawnerFactory {
 				if (entities[i] != null) {
 					{
 						// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
-						/*entities[i].removeTag("UUIDLeast");
+						entities[i].removeTag("UUIDLeast");
 						entities[i].removeTag("UUIDMost");
-						*/
+						
 						entities[i].removeTag("Pos");
 						NBTTagList passengers = entities[i].getTagList("Passengers", 10);
 						for (NBTBase passenger : passengers) {
-							/*((NBTTagCompound) passenger).removeTag("UUIDLeast");
-							((NBTTagCompound) passenger).removeTag("UUIDMost");*/
+							((NBTTagCompound) passenger).removeTag("UUIDLeast");
+							((NBTTagCompound) passenger).removeTag("UUIDMost");
 							((NBTTagCompound) passenger).removeTag("Pos");
 						}
 					}
