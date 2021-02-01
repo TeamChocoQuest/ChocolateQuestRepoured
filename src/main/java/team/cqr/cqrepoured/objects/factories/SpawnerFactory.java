@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 /**
@@ -69,7 +70,7 @@ public abstract class SpawnerFactory {
 	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
-		world.setBlockState(pos, (multiUseSpawner == true /* && spawnerSettingsOverrides != null */) ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
+		world.setBlockState(pos, multiUseSpawner ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (multiUseSpawner) {
@@ -84,6 +85,7 @@ public abstract class SpawnerFactory {
 						// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
 						entities[i].removeTag("UUIDLeast");
 						entities[i].removeTag("UUIDMost");
+						
 						entities[i].removeTag("Pos");
 						NBTTagList passengers = entities[i].getTagList("Passengers", 10);
 						for (NBTBase passenger : passengers) {
@@ -244,18 +246,26 @@ public abstract class SpawnerFactory {
 	}
 
 	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity) {
+		return createSpawnerNBTFromEntity(entity, !(entity instanceof AbstractEntityCQRBoss || !entity.isNonBoss()));
+	}
+
+	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity, boolean removeUUID) {
 		NBTTagCompound entityCompound = new NBTTagCompound();
 		if (entity instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR) entity).onPutInSpawner();
 		}
 		entity.writeToNBTOptional(entityCompound);
-		entityCompound.removeTag("UUIDLeast");
-		entityCompound.removeTag("UUIDMost");
+		if (removeUUID) {
+			entityCompound.removeTag("UUIDLeast");
+			entityCompound.removeTag("UUIDMost");
+		}
 		entityCompound.removeTag("Pos");
 		NBTTagList passengerList = entityCompound.getTagList("Passengers", 10);
 		for (NBTBase passengerTag : passengerList) {
-			((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
-			((NBTTagCompound) passengerTag).removeTag("UUIDMost");
+			if (removeUUID) {
+				((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
+				((NBTTagCompound) passengerTag).removeTag("UUIDMost");
+			}
 			((NBTTagCompound) passengerTag).removeTag("Pos");
 		}
 
