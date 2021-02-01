@@ -27,6 +27,7 @@ import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public class VanillaStructureHelper {
 
+	private static final ReflectionField<World> FIELD_WORLD = new ReflectionField<>(MapGenBase.class, "field_75039_c", "world");
 	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	// ChunkGeneratorOverworld
@@ -120,6 +121,7 @@ public class VanillaStructureHelper {
 		int z = startPos.getZ() >> 4;
 		Random random = new Random();
 
+		FIELD_WORLD.set(structureType, worldIn);
 		for (int i = 0; i <= radius; ++i) {
 			for (int x1 = -i; x1 <= i; ++x1) {
 				boolean flag = x1 == -i || x1 == i;
