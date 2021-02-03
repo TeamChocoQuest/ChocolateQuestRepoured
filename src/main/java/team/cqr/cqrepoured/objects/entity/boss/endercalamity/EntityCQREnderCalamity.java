@@ -51,6 +51,7 @@ import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.util.CQRConfig;
 
 //TODO: Move the minion & lightning handling to a AI class, it is cleaner that way
+//TODO: Create helper classes to control arm management (status, animations, etc)
 public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner {
 
 	private static final int HURT_DURATION = 24; // 1.2 * 20
