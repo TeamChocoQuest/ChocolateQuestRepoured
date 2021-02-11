@@ -7,6 +7,7 @@ assignees: ''
 
 ---
 **Common sense Info**
+To check a checkbox: Insert a lower case X between the square brackets, you need to remove the space though.
  - I play...
    - [ ] With a large modpack
    - [ ] Only with CQR and it's dependencies
