@@ -80,7 +80,7 @@
 					]
 				},
 				{
-					"name": "lowerArm4",
+					"name": "forearmRightUpper",
 					"parent": "armRightUpper",
 					"pivot": [-11, 18.5, 0],
 					"cubes": [
@@ -89,13 +89,13 @@
 				},
 				{
 					"name": "handRightUpper",
-					"parent": "lowerArm4",
-					"pivot": [-23, 18.5, 0],
+					"parent": "forearmRightUpper",
+					"pivot": [-19, 18.5, 0],
 					"cubes": [
-						{"origin": [-23, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-19, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandrightupper": [-22.42982, 18.44836, 0]
+						"particleshandrightupper": [-18.42982, 18.44836, 0]
 					}
 				},
 				{
@@ -107,7 +107,7 @@
 					]
 				},
 				{
-					"name": "lowerArm2",
+					"name": "forearmRightMiddle",
 					"parent": "armRightMiddle",
 					"pivot": [-11, 14.5, 0],
 					"cubes": [
@@ -116,13 +116,13 @@
 				},
 				{
 					"name": "handRightMiddle",
-					"parent": "lowerArm2",
-					"pivot": [-23, 14.5, 0],
+					"parent": "forearmRightMiddle",
+					"pivot": [-19, 14.5, 0],
 					"cubes": [
-						{"origin": [-23, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-19, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandrightmiddle": [-22, 14, 0]
+						"particleshandrightmiddle": [-18, 14, 0]
 					}
 				},
 				{
@@ -135,7 +135,7 @@
 					]
 				},
 				{
-					"name": "lowerArm3",
+					"name": "forearmRightLower",
 					"parent": "armRightLower",
 					"pivot": [-10, 10.5, 0],
 					"cubes": [
@@ -144,13 +144,13 @@
 				},
 				{
 					"name": "handRightLower",
-					"parent": "lowerArm3",
-					"pivot": [-22, 10.5, 0],
+					"parent": "forearmRightLower",
+					"pivot": [-18, 10.5, 0],
 					"cubes": [
-						{"origin": [-22, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-18, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandrightlower": [-21.25099, 9.97013, 0]
+						"particleshandrightlower": [-17.25099, 9.97013, 0]
 					}
 				},
 				{
@@ -169,7 +169,7 @@
 					]
 				},
 				{
-					"name": "lowerArm5",
+					"name": "forearmLeftUpper",
 					"parent": "armLeftUpper",
 					"pivot": [-3, 18.5, 0],
 					"cubes": [
@@ -178,13 +178,13 @@
 				},
 				{
 					"name": "handLeftUpper",
-					"parent": "lowerArm5",
-					"pivot": [-15, 18.5, 0],
+					"parent": "forearmLeftUpper",
+					"pivot": [-11, 18.5, 0],
 					"cubes": [
-						{"origin": [-15, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-11, 18.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandleftupper": [-14.18657, 18.22728, 0]
+						"particleshandleftupper": [-10.18657, 18.22728, 0]
 					}
 				},
 				{
@@ -196,7 +196,7 @@
 					]
 				},
 				{
-					"name": "lowerArm6",
+					"name": "forearmLeftMiddle",
 					"parent": "armLeftMiddle",
 					"pivot": [-3, 14.5, 0],
 					"cubes": [
@@ -205,13 +205,13 @@
 				},
 				{
 					"name": "handLeftMiddle",
-					"parent": "lowerArm6",
-					"pivot": [-15, 14.5, 0],
+					"parent": "forearmLeftMiddle",
+					"pivot": [-11, 14.5, 0],
 					"cubes": [
-						{"origin": [-15, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-11, 14.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandleftmiddle": [-14, 14, 0]
+						"particleshandleftmiddle": [-10, 14, 0]
 					}
 				},
 				{
@@ -224,7 +224,7 @@
 					]
 				},
 				{
-					"name": "lowerArm7",
+					"name": "forearmLeftLower",
 					"parent": "armLeftLower",
 					"pivot": [-2, 10.5, 0],
 					"cubes": [
@@ -233,13 +233,13 @@
 				},
 				{
 					"name": "handLeftLower",
-					"parent": "lowerArm7",
-					"pivot": [-14, 10.5, 0],
+					"parent": "forearmLeftLower",
+					"pivot": [-10, 10.5, 0],
 					"cubes": [
-						{"origin": [-14, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
+						{"origin": [-10, 10.5, 0], "size": [0, 0, 0], "uv": [28, 45]}
 					],
 					"locators": {
-						"particleshandleftlower": [-13.00774, 10.1912, 0]
+						"particleshandleftlower": [-9.00774, 10.1912, 0]
 					}
 				}
 			]
