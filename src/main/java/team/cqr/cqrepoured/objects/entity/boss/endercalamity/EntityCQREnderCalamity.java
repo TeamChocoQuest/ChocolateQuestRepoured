@@ -159,20 +159,78 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return 2F;
 	}
 
-	private static final String ANIM_NAME_IDLE = "animation.ender_calamity.idle";
-	private static final String ANIM_NAME_HURT = "animation.ender_calamity.hit";
-	private static final String ANIM_NAME_SHOOT_LASER = "animation.ender_calamity.shootLaser";
-	private static final String ANIM_NAME_DEFLECT_BALL = "animation.ender_calamity.deflectBall";
-	private static final String ANIM_NAME_SHOOT_BALL = "animation.ender_calamity.shootEnergyBall";
+	private static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
+	private static final String ANIM_NAME_IDLE = ANIM_NAME_PREFIX +"idle";
+	private static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX +"hit";
+	private static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX +"shootLaser";
+	private static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX +"deflectBall";
+	private static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX +"shootEnergyBall";
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.dataManager.get(IS_HURT)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, false));
 			return PlayState.CONTINUE;
 		}
 		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
 		return PlayState.CONTINUE;
 	}
+	
+	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
+	private static final String ANIM_NAME_ARM_RU_THROW = ANIM_NAME_PREFIX + "throwBlock_RU";
+	private <E extends IAnimatable> PlayState predicateArmRightUpper(AnimationEvent<E> event) {
+		if(event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_IDLE));
+		}
+		
+		return PlayState.CONTINUE;
+	}
+	private static final String ANIM_NAME_ARM_RM_IDLE = ANIM_NAME_PREFIX + "idle_armRM";
+	private static final String ANIM_NAME_ARM_RM_THROW = ANIM_NAME_PREFIX + "throwBlock_RM";
+	private <E extends IAnimatable> PlayState predicateArmRightMiddle(AnimationEvent<E> event) {
+		if(event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_IDLE));
+		}
+		
+		return PlayState.CONTINUE;
+	}
+	private static final String ANIM_NAME_ARM_RL_IDLE = ANIM_NAME_PREFIX + "idle_armRL";
+	private static final String ANIM_NAME_ARM_RL_THROW = ANIM_NAME_PREFIX + "throwBlock_RL";
+	private <E extends IAnimatable> PlayState predicateArmRightLower(AnimationEvent<E> event) {
+		if(event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_IDLE));
+		}
+		
+		return PlayState.CONTINUE;
+	}
+	
+	private static final String ANIM_NAME_ARM_LU_IDLE = ANIM_NAME_PREFIX + "idle_armLU";
+	private static final String ANIM_NAME_ARM_LU_THROW = ANIM_NAME_PREFIX + "throwBlock_LU";
+	private <E extends IAnimatable> PlayState predicateArmLeftUpper(AnimationEvent<E> event) {
+		if(event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_IDLE));
+		}
+		
+		return PlayState.CONTINUE;
+	}
+	private static final String ANIM_NAME_ARM_LM_IDLE = ANIM_NAME_PREFIX + "idle_armLM";
+	private static final String ANIM_NAME_ARM_LM_THROW = ANIM_NAME_PREFIX + "throwBlock_LM";
+	private <E extends IAnimatable> PlayState predicateArmLeftMiddle(AnimationEvent<E> event) {
+		if(event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_IDLE));
+		}
+		
+		return PlayState.CONTINUE;
+	}
+	private static final String ANIM_NAME_ARM_LL_IDLE = ANIM_NAME_PREFIX + "idle_armLL";
+	private static final String ANIM_NAME_ARM_LL_THROW = ANIM_NAME_PREFIX + "throwBlock_LL";
+	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
+		if(event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_IDLE));
+		}
+		
+		return PlayState.CONTINUE;
+	}
+	
 	
 	boolean forceTeleport() {
 		try {
@@ -187,6 +245,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
+		
+		//Arms
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rl", 5, this::predicateArmRightLower));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lu", 5, this::predicateArmLeftUpper));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower));
 	}
 
 	@Override
