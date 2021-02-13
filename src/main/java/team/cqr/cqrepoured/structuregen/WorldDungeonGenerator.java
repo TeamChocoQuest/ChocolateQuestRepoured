@@ -11,6 +11,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.integration.IntegrationInformation;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
@@ -84,7 +85,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 		// Check if no vanilla structure is near
 		if (CQRConfig.advanced.generationRespectOtherStructures) {
+			//Vanilla Structures
 			if (VanillaStructureHelper.isStructureInRange(world, new BlockPos((chunkX << 4) + 8, 64, (chunkZ << 4) + 8), MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16.0D))) {
+				return;
+			}
+			//AW2-Structures
+			if(IntegrationInformation.isAW2StructureAlreadyThere(chunkX, chunkZ, world)) {
 				return;
 			}
 		}

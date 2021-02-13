@@ -84,6 +84,9 @@ dependencies {
 	
 	//Geckolib
 	deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.2')
+	
+	//AW2-Jar
+	compile files('libs/ancientwarfare-1.12.2-2.7.0.1032.jar')
 }
 
 processResources {
