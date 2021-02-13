@@ -326,7 +326,7 @@ public class ProtectedRegionEventHandler {
 		long t = System.currentTimeMillis();
 		for (int i = 0; i < files.size(); i++) {
 			if (System.currentTimeMillis() - t > 2000) {
-				CQRMain.logger.info(String.format("%.2f%", (double) i / files.size() * 100.0D));
+				CQRMain.logger.info(String.format("%.2f%%", (double) i / files.size() * 100.0D));
 				t = System.currentTimeMillis();
 			}
 			File file = files.get(i);
