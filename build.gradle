@@ -55,7 +55,10 @@ minecraft {
 
 repositories {
     maven { url = 'https://www.cursemaven.com' }
-    maven { url = 'https://maven.mcmoddev.com/' }
+    maven { 
+		name = "ilexiconn"
+		url = 'https://maven.mcmoddev.com/' 
+	}
 	maven {
 		// location of the maven that hosts JEI files
 		name = "Progwml6 maven"
@@ -75,7 +78,7 @@ dependencies {
 
     compile 'curse.maven:Llibrary:3116493'
     //compile 'net.ilexiconn:llibrary:1.7.20-1.12.2'
-    compile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
+    deobfCompile 'net.ilexiconn:llibrary:1.7.19-1.12.2:dev'
 	
 	// compile against the JEI API but do not include it at runtime
 	deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
