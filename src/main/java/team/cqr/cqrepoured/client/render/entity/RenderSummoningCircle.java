@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -8,6 +9,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
@@ -44,9 +46,16 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
 		this.bindTexture(this.getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);*/
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		double xo = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
+        double yo = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
+        double zo = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
 		
+		GlStateManager.pushMatrix();
+        GlStateManager.translate((float)x, (float)y, (float)z);
 		GlStateManager.disableFog();
 		GlStateManager.disableLighting();
+		GlStateManager.disableCull();
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -55,12 +64,12 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder builder = tess.getBuffer();
 		
-		GlStateManager.glLineWidth(2.0F);
+		GlStateManager.glLineWidth(4.0F);
 		builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
 		
-		double radius = 0.75D;
+		double radius = 1.5D;
 		double corners = 5;
-		int r =  (int) (255 * Math.round(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)));
+		int r =  128 + (int) (127 * Math.round(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)));
 		int g = 1;
 		int b = 1;
 
@@ -71,13 +80,16 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		alpha *= (double)skipCorners;
 		for(int i = 0; i <= corners; i++) {
 			
-			addPoint(vector, center, r, g, b, 255, builder);
+			Vec3d pos1 = center.add(vector);
+			builder.pos(pos1.x -xo + 0.5D, pos1.y -yo + 0.5D, pos1.z -zo + 0.5D).color(r, g, b, 255).endVertex();
 			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
 		alpha /= (double)skipCorners;
+		vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		for(int i = 0; i < corners; i++) {
-			addPoint(vector, center, r, g, b, 255, builder);
+			Vec3d pos1 = center.add(vector);
+			builder.pos(pos1.x -xo + 0.5D, pos1.y -yo + 0.5D, pos1.z -zo + 0.5D).color(r, g, b, 255).endVertex();
 			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
@@ -88,9 +100,11 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		GlStateManager.glLineWidth(1.0F);
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
+		GlStateManager.enableCull();
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
 		GlStateManager.enableFog();
+		GlStateManager.popMatrix();
 		
 	}
 	
@@ -109,11 +123,6 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
-	
-	private void addPoint(Vec3d vector, Vec3d centerPos, int colorR, int colorG, int colorB, int colorA, BufferBuilder bb) {
-		Vec3d pos1 = centerPos.add(vector);
-		bb.pos(pos1.x, pos1.y, pos1.z).color(colorR, colorG, colorB, colorA).endVertex();
-	}
 
 	@Override
 	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
