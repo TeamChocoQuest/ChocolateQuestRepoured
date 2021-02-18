@@ -69,7 +69,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		
 		double radius = 1.5D;
 		double corners = 5;
-		int r =  128 + (int) (127 * Math.round(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)));
+		int r =  128 + (int)  Math.round(127 * 0.5 * (Math.sin(0.125 * entity.ticksExisted) + 1));
 		int g = 1;
 		int b = 1;
 
