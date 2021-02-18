@@ -1,14 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelSummoningCircle;
+import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.util.VectorUtil;
 
 public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
@@ -19,11 +23,8 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_sword.png"),
 			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/meteor.png") };
 
-	private final ModelBase model;
-
 	public RenderSummoningCircle(RenderManager renderManager) {
 		super(renderManager);
-		this.model = new ModelSummoningCircle(0);
 	}
 
 	@Override
@@ -37,14 +38,84 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
 	@Override
 	public void doRender(EntitySummoningCircle entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
+		//GlStateManager.translate((float) x, (float) y, (float) z);
 
-		GlStateManager.color(new Float(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)), 0F, 0F);
+		/*GlStateManager.color(new Float(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)), 0F, 0F);
 
 		this.bindTexture(this.getEntityTexture(entity));
-		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GlStateManager.popMatrix();
+		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);*/
+		x = entity.posX;
+		y = entity.posY;
+		z = entity.posZ;
+		
+		GlStateManager.disableFog();
+		GlStateManager.disableLighting();
+		GlStateManager.disableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		this.setLightmapDisabled(true);
+		
+		Tessellator tess = Tessellator.getInstance();
+		BufferBuilder builder = tess.getBuffer();
+		
+		GlStateManager.glLineWidth(2.0F);
+		builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+		
+		double radius = 0.75D;
+		double corners = 5;
+		int r =  (int) (255 * Math.round(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)));
+		int g = 1;
+		int b = 1;
+
+		Vec3d vector = new Vec3d(radius, 0, 0);
+		Vec3d center = new Vec3d(x,y,z);
+		double alpha = 360D / corners;
+		int skipCorners = 2;
+		alpha *= (double)skipCorners;
+		for(int i = 0; i <= corners; i++) {
+			
+			addPoint(vector, center, r, g, b, 255, builder);
+			
+			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
+		}
+		alpha /= (double)skipCorners;
+		for(int i = 0; i < corners; i++) {
+			addPoint(vector, center, r, g, b, 255, builder);
+			
+			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
+		}
+		
+		tess.draw();
+		
+		this.setLightmapDisabled(false);
+		GlStateManager.glLineWidth(1.0F);
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
+		GlStateManager.enableFog();
+		
+	}
+	
+	protected void setLightmapDisabled(boolean disabled)
+    {
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+
+        if (disabled)
+        {
+            GlStateManager.disableTexture2D();
+        }
+        else
+        {
+            GlStateManager.enableTexture2D();
+        }
+
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+	
+	private void addPoint(Vec3d vector, Vec3d centerPos, int colorR, int colorG, int colorB, int colorA, BufferBuilder bb) {
+		Vec3d pos1 = centerPos.add(vector);
+		bb.pos(pos1.x, pos1.y, pos1.z).color(colorR, colorG, colorB, colorA).endVertex();
 	}
 
 	@Override
