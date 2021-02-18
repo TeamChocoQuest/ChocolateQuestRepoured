@@ -90,7 +90,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		for(int i = 0; i < corners; i++) {
 			Vec3d pos1 = center.add(vector);
-			builder.pos(pos1.x -xo + 0.5D, pos1.y -yo + 0.5D, pos1.z -zo + 0.5D).color(r, g, b, 255).endVertex();
+			builder.pos(pos1.x -xo + 0.5D, pos1.y -yo, pos1.z -zo + 0.5D).color(r, g, b, 255).endVertex();
 			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
