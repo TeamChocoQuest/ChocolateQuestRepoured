@@ -85,6 +85,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
+		vector = VectorUtil.rotateVectorAroundY(vector, -alpha);
 		alpha /= (double)skipCorners;
 		vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		for(int i = 0; i < corners; i++) {
