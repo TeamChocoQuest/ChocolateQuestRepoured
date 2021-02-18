@@ -90,7 +90,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				return;
 			}
 			//AW2-Structures
-			if(IntegrationInformation.isAW2StructureAlreadyThere(chunkX, chunkZ, world)) {
+			//MAybe change the "64" to the actual Y?
+			if(IntegrationInformation.isAW2StructureAlreadyThere((chunkX << 4) + 8, 64, (chunkZ << 4) + 8, world)) {
 				return;
 			}
 		}
