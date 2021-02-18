@@ -70,6 +70,9 @@ repositories {
 	}
 	//Geckolib
 	maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -77,6 +80,7 @@ dependencies {
 
     //compile 'net.ilexiconn:llibrary:1.7.20-1.12.2'
     deobfCompile 'net.ilexiconn:llibrary:1.7.19-1.12.2:dev'
+    deobfCompile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
 	
 	// compile against the JEI API but do not include it at runtime
 	deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
@@ -87,7 +91,8 @@ dependencies {
 	deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.2')
 	
 	//AW2-Jar
-	compile files('libs/ancientwarfare-1.12.2-2.7.0.1032.jar')
+	compile 'curse.maven:AncientWarfare2-224602:3199040'
+	compile 'curse.maven:CodeChickenLib-242818:2779848'
 }
 
 processResources {
