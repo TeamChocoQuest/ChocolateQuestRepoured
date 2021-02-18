@@ -35,6 +35,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.disableLighting();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 		GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
+		GlStateManager.depthMask(false);
 		this.bindEntityTexture(entity);
 		GlStateManager.translate(x, y, z);
 		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
@@ -72,6 +73,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 
+		GlStateManager.depthMask(true);
 		GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
