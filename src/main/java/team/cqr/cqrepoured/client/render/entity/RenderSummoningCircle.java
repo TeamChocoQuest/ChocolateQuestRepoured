@@ -44,9 +44,6 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
 		this.bindTexture(this.getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);*/
-		x = entity.posX;
-		y = entity.posY;
-		z = entity.posZ;
 		
 		GlStateManager.disableFog();
 		GlStateManager.disableLighting();
@@ -68,7 +65,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		int b = 1;
 
 		Vec3d vector = new Vec3d(radius, 0, 0);
-		Vec3d center = new Vec3d(x,y,z);
+		Vec3d center = entity.getPositionVector();
 		double alpha = 360D / corners;
 		int skipCorners = 2;
 		alpha *= (double)skipCorners;
