@@ -64,7 +64,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder builder = tess.getBuffer();
 		
-		GlStateManager.glLineWidth(4.0F);
+		GlStateManager.glLineWidth(8.0F);
 		builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
 		
 		double radius = 1.5D;
