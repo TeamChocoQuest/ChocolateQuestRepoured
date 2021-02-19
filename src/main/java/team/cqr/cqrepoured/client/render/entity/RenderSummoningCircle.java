@@ -16,6 +16,9 @@ import team.cqr.cqrepoured.util.VectorUtil;
 
 public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
+	//TODO: Move corner count, color and radius to the entity
+	//TODO: Render the letters on the corners
+	
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
 			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/zombie.png"),
 			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/skeleton.png"),
