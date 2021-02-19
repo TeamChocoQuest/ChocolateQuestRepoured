@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -9,7 +8,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
@@ -46,10 +44,6 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
 		this.bindTexture(this.getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);*/
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		double xo = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
-        double yo = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
-        double zo = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
 		
 		GlStateManager.pushMatrix();
         GlStateManager.translate((float)x, (float)y, (float)z);
@@ -74,14 +68,12 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		int b = 1;
 
 		Vec3d vector = new Vec3d(radius, 0, 0);
-		Vec3d center = entity.getPositionVector();
 		double alpha = 360D / corners;
 		int skipCorners = 2;
 		alpha *= (double)skipCorners;
 		for(int i = 0; i <= corners; i++) {
 			
-			Vec3d pos1 = center.add(vector);
-			builder.pos(pos1.x -xo + 0.5D, pos1.y -yo, pos1.z -zo + 0.5D).color(r, g, b, 255).endVertex();
+			builder.pos(vector.x, 0, vector.z).color(r, g, b, 255).endVertex();
 			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
@@ -89,8 +81,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		alpha /= (double)skipCorners;
 		vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		for(int i = 0; i < corners; i++) {
-			Vec3d pos1 = center.add(vector);
-			builder.pos(pos1.x -xo + 0.5D, pos1.y -yo, pos1.z -zo + 0.5D).color(r, g, b, 255).endVertex();
+			builder.pos(vector.x, 0, vector.z).color(r, g, b, 255).endVertex();
 			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
