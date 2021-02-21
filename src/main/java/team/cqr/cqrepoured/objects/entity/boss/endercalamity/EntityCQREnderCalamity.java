@@ -486,6 +486,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return;
 		}
 		
+		if(!this.hasAttackTarget()) {
+			this.switchToNextPhaseOf(EEnderCalamityPhase.PHASE_NO_TARGET.getPhaseObject());
+			return;
+		}
+		
 		boolean timedPhaseChange = false;
 		if(phase.isPhaseTimed()) {
 			this.currentPhaseTimer--;
