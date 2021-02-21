@@ -13,12 +13,17 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,8 +39,11 @@ import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager;
 import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss {
+	
+	protected static final DataParameter<Boolean> WIDE = EntityDataManager.<Boolean>createKey(EntityCQREnderKing.class, DataSerializers.BOOLEAN);
 
 	public EntityCQREnderKing(World worldIn) {
 		super(worldIn);
@@ -56,6 +64,25 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 			}
 		}
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+
+		this.dataManager.register(WIDE, DungeonGenUtils.percentageRandom(0.05));
+	}
+	
+	@Override
+	public ITextComponent getDisplayName() {
+		if(this.isWide()) {
+			return new TextComponentString("Wide Enderman");
+		}
+		return super.getDisplayName();
+	}
+	
+	public boolean isWide() {
+		return this.dataManager.get(WIDE);
 	}
 
 	@Override

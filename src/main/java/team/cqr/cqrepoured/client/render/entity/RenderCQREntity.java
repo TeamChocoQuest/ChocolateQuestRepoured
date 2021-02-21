@@ -79,11 +79,19 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			this.addLayer(new LayerShoulderEntity(this));
 		}
 	}
+	
+	protected double getWidthScale(T entity) {
+		return  this.widthScale * entity.getSizeVariation();
+	}
+	
+	protected double getHeightScale(T entity) {
+		return this.heightScale * entity.getSizeVariation();
+	}
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
-		double width = this.widthScale * entitylivingbaseIn.getSizeVariation();
-		double height = this.heightScale * entitylivingbaseIn.getSizeVariation();
+		double width = this.getWidthScale(entitylivingbaseIn);
+		double height = this.getHeightScale(entitylivingbaseIn);
 		GL11.glScaled(width, height, width);
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}

@@ -44,5 +44,14 @@ public class RenderCQREnderKing  extends RenderCQREntity<EntityCQREnderKing> {
 			this.resetRotations(modelRenderer);
 		}
 	}
+	
+	@Override
+	protected double getWidthScale(EntityCQREnderKing entity) {
+		double superVal = super.getWidthScale(entity);
+		if(entity.isWide()) {
+			superVal *= 2;
+		}
+		return superVal;
+	}
 
 }
