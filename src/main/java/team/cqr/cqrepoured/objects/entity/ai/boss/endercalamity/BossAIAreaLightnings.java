@@ -59,6 +59,8 @@ public class BossAIAreaLightnings extends AbstractCQREntityAI<EntityCQREnderCala
 			borderLightning += 5;
 			break;
 		}
+		//AI only executes every 3 ticks!
+		borderLightning /= 3;
 		int x = -LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * LIGHTNING_AREA_RADIUS) + 1);
 		int z = -LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * LIGHTNING_AREA_RADIUS) + 1);
 		int y = (-LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * LIGHTNING_AREA_RADIUS) + 1)) / 2;
