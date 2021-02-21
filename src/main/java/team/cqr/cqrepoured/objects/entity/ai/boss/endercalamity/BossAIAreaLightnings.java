@@ -41,7 +41,9 @@ public class BossAIAreaLightnings extends AbstractCQREntityAI<EntityCQREnderCala
 
 	@Override
 	public void updateTask() {
-
+		if(this.lightningTick < this.borderLightning) {
+			return;
+		}
 		// strike lightning
 		this.lightningTick = 0;
 		this.borderLightning = 20;
