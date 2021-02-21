@@ -37,6 +37,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -145,6 +146,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.teleportAI = new BossAITeleportAroundHome(this, 200);
 		this.tasks.addTask(8, teleportAI);
 		this.tasks.addTask(8, new BossAISummonMinions(this));
+		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
 	}
 
 	@Override
