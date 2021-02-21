@@ -32,4 +32,9 @@ public class ECPhaseStunned implements IEnderCalamityPhase {
 		return new IEnderCalamityPhase[] {EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject(), EEnderCalamityPhase.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhase.PHASE_LASERING.getPhaseObject()};
 	}
 
+	@Override
+	public boolean isPhaseTimed() {
+		return false;
+	}
+
 }

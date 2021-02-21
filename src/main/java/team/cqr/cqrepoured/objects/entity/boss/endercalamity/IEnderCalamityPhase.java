@@ -10,6 +10,11 @@ public interface IEnderCalamityPhase {
 	public boolean canSummonAlliesDuringPhase();
 	public boolean canPickUpBlocksDuringPhase();
 	public boolean canThrowBlocksDuringPhase();
+	public boolean isPhaseTimed();
+	//Implement this for all timed phases
+	public default Optional<Integer> getRandomExecutionTime() {
+		return Optional.empty();
+	}
 	@Nullable
 	IEnderCalamityPhase[] getPossibleSuccessors();
 	

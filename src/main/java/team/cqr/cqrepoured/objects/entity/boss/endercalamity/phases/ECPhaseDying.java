@@ -32,4 +32,9 @@ public class ECPhaseDying implements IEnderCalamityPhase {
 		return null;
 	}
 
+	@Override
+	public boolean isPhaseTimed() {
+		return false;
+	}
+
 }

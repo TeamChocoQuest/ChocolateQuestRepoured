@@ -32,4 +32,9 @@ public class ECPhaseEnergyTennis implements IEnderCalamityPhase {
 		return new IEnderCalamityPhase[] {EEnderCalamityPhase.PHASE_IDLE.getPhaseObject()};
 	}
 
+	@Override
+	public boolean isPhaseTimed() {
+		return false;
+	}
+
 }
