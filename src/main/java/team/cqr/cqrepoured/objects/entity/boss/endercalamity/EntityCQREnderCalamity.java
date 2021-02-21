@@ -14,10 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -27,7 +24,6 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -40,31 +36,21 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
-import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
-import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.util.CQRConfig;
 
 //TODO: Move the minion & lightning handling to a AI class, it is cleaner that way
-//TODO: Create helper classes to control arm management (status, animations, etc)
+//DONE: Create helper classes to control arm management (status, animations, etc)
 public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner {
 
 	private static final int HURT_DURATION = 24; // 1.2 * 20
 	private static final int ARENA_RADIUS = 20;
-	
-	private int lightningTick = 0;
-	private int borderLightning = 20;
-	
-	private int minionSpawnTick = 0;
-	private int borderMinion = 80;
-	private float borderHPForMinions = 0.75F;
-	
+
 	private int cqrHurtTime = 0;
 	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
@@ -75,41 +61,36 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	
-	//AI stuff
+
+	// AI stuff
 	private boolean isDowned = false;
-	
+
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
-	
-	public static enum E_CALAMITY_ANIMATION_SPECIAL {
-		SHOOT_LASER,
-		STUNNED,
-		SHOOT_ENERGY_BALL,
-		DYING,
-		LASERING
+
+	public EEnderCalamityPhase getCurrentPhase() {
+		return this.currentPhase;
 	}
-	
+
+	public static enum E_CALAMITY_ANIMATION_SPECIAL {
+		SHOOT_LASER, STUNNED, SHOOT_ENERGY_BALL, DYING, LASERING
+	}
+
 	public static enum E_CALAMITY_HAND {
-		LEFT_UPPER("handLeftUpper"), 
-		LEFT_MIDDLE("handLeftMiddle"), 
-		LEFT_LOWER("handLeftLower"), 
-		RIGHT_UPPER("handRightUpper"), 
-		RIGHT_MIDDLE("handRightMiddle"), 
-		RIGHT_LOWER("handRightLower");
-		
+		LEFT_UPPER("handLeftUpper"), LEFT_MIDDLE("handLeftMiddle"), LEFT_LOWER("handLeftLower"), RIGHT_UPPER("handRightUpper"), RIGHT_MIDDLE("handRightMiddle"), RIGHT_LOWER("handRightLower");
+
 		private String boneName;
-		
+
 		public String getBoneName() {
 			return this.boneName;
 		}
-		
+
 		private E_CALAMITY_HAND(String bone) {
 			this.boneName = bone;
 		}
-		
+
 		@Nullable
 		public static E_CALAMITY_HAND getFromBoneName(String bone) {
-			switch(bone) {
+			switch (bone) {
 			case "handRightUpper":
 				return RIGHT_UPPER;
 			case "handRightMiddle":
@@ -125,9 +106,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			}
 			return null;
 		}
-		
+
 		public int getIndex() {
-			switch(this) {
+			switch (this) {
 			case LEFT_LOWER:
 				return 2;
 			case LEFT_MIDDLE:
@@ -149,19 +130,20 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 
-	//Direct AI access
+	// Direct AI access
 	private BossAITeleportAroundHome teleportAI;
-	
+
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
 		setSizeVariation(2.5F);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.teleportAI = new BossAITeleportAroundHome(this, 200);
 		this.tasks.addTask(8, teleportAI);
+		this.tasks.addTask(8, new BossAISummonMinions(this));
 	}
 
 	@Override
@@ -190,11 +172,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	private static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
-	private static final String ANIM_NAME_IDLE = ANIM_NAME_PREFIX +"idle";
-	private static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX +"hit";
-	private static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX +"shootLaser";
-	private static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX +"deflectBall";
-	private static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX +"shootEnergyBall";
+	private static final String ANIM_NAME_IDLE = ANIM_NAME_PREFIX + "idle";
+	private static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
+	private static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shootLaser";
+	private static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
+	private static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.dataManager.get(IS_HURT)) {
@@ -204,94 +186,103 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
 		return PlayState.CONTINUE;
 	}
-	
+
 	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
 	private static final String ANIM_NAME_ARM_RU_THROW = ANIM_NAME_PREFIX + "throwBlock_RU";
 	private boolean updateIndicator_Hand_RU = false;
+
 	private <E extends IAnimatable> PlayState predicateArmRightUpper(AnimationEvent<E> event) {
-		if(event.getController().getCurrentAnimation() == null) {
+		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_IDLE));
 		}
-		if(this.updateIndicator_Hand_RU) {
+		if (this.updateIndicator_Hand_RU) {
 			this.updateIndicator_Hand_RU = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).addAnimation(ANIM_NAME_ARM_RU_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
+
 	private static final String ANIM_NAME_ARM_RM_IDLE = ANIM_NAME_PREFIX + "idle_armRM";
 	private static final String ANIM_NAME_ARM_RM_THROW = ANIM_NAME_PREFIX + "throwBlock_RM";
 	private boolean updateIndicator_Hand_RM = false;
+
 	private <E extends IAnimatable> PlayState predicateArmRightMiddle(AnimationEvent<E> event) {
-		if(event.getController().getCurrentAnimation() == null) {
+		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_IDLE));
 		}
-		if(this.updateIndicator_Hand_RM) {
+		if (this.updateIndicator_Hand_RM) {
 			this.updateIndicator_Hand_RM = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_THROW).addAnimation(ANIM_NAME_ARM_RM_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
+
 	private static final String ANIM_NAME_ARM_RL_IDLE = ANIM_NAME_PREFIX + "idle_armRL";
 	private static final String ANIM_NAME_ARM_RL_THROW = ANIM_NAME_PREFIX + "throwBlock_RL";
 	private boolean updateIndicator_Hand_RL = false;
+
 	private <E extends IAnimatable> PlayState predicateArmRightLower(AnimationEvent<E> event) {
-		if(event.getController().getCurrentAnimation() == null) {
+		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_IDLE));
 		}
-		if(this.updateIndicator_Hand_RL) {
+		if (this.updateIndicator_Hand_RL) {
 			this.updateIndicator_Hand_RL = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_THROW).addAnimation(ANIM_NAME_ARM_RL_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
-	
+
 	private static final String ANIM_NAME_ARM_LU_IDLE = ANIM_NAME_PREFIX + "idle_armLU";
 	private static final String ANIM_NAME_ARM_LU_THROW = ANIM_NAME_PREFIX + "throwBlock_LU";
 	private boolean updateIndicator_Hand_LU = false;
+
 	private <E extends IAnimatable> PlayState predicateArmLeftUpper(AnimationEvent<E> event) {
-		if(event.getController().getCurrentAnimation() == null) {
+		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_IDLE));
 		}
-		if(this.updateIndicator_Hand_LU) {
+		if (this.updateIndicator_Hand_LU) {
 			this.updateIndicator_Hand_LU = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_THROW).addAnimation(ANIM_NAME_ARM_LU_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
+
 	private static final String ANIM_NAME_ARM_LM_IDLE = ANIM_NAME_PREFIX + "idle_armLM";
 	private static final String ANIM_NAME_ARM_LM_THROW = ANIM_NAME_PREFIX + "throwBlock_LM";
 	private boolean updateIndicator_Hand_LM = false;
+
 	private <E extends IAnimatable> PlayState predicateArmLeftMiddle(AnimationEvent<E> event) {
-		if(event.getController().getCurrentAnimation() == null) {
+		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_IDLE));
 		}
-		if(this.updateIndicator_Hand_LM) {
+		if (this.updateIndicator_Hand_LM) {
 			this.updateIndicator_Hand_LM = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_THROW).addAnimation(ANIM_NAME_ARM_LM_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
+
 	private static final String ANIM_NAME_ARM_LL_IDLE = ANIM_NAME_PREFIX + "idle_armLL";
 	private static final String ANIM_NAME_ARM_LL_THROW = ANIM_NAME_PREFIX + "throwBlock_LL";
 	private boolean updateIndicator_Hand_LL = false;
+
 	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
-		if(event.getController().getCurrentAnimation() == null) {
+		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_IDLE));
 		}
-		if(this.updateIndicator_Hand_LL) {
+		if (this.updateIndicator_Hand_LL) {
 			this.updateIndicator_Hand_LL = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_THROW).addAnimation(ANIM_NAME_ARM_LL_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
-	
-	
+
 	boolean forceTeleport() {
 		try {
 			this.teleportAI.forceExecution();
 			return true;
-		} catch(NullPointerException npe) {
-			//Ignore
+		} catch (NullPointerException npe) {
+			// Ignore
 		}
 		return false;
 	}
@@ -299,8 +290,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
-		
-		//Arms
+
+		// Arms
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper));
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle));
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rl", 5, this::predicateArmRightLower));
@@ -412,27 +403,27 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 		// Projectile attack
-		if(source.getImmediateSource() instanceof EntityEnergyOrb || source.getTrueSource() instanceof EntityEnergyOrb) {
-			//TODO: Hit by energy ball
+		if (source.getImmediateSource() instanceof EntityEnergyOrb || source.getTrueSource() instanceof EntityEnergyOrb) {
+			// TODO: Hit by energy ball
 			/*
-			 * If already hit often enough, Spawn explosion, then teleport to center and be unconscious 
+			 * If already hit often enough, Spawn explosion, then teleport to center and be unconscious
 			 */
 			return false;
 		}
-		
+
 		if (source instanceof EntityDamageSourceIndirect) {
-			//DONE: Switch attack target to the shooter
-			//DONE: Teleport
-			//TODO: Spawn homing ender eyes
+			// DONE: Switch attack target to the shooter
+			// DONE: Teleport
+			// TODO: Spawn homing ender eyes
 			/*
-			 * Spawn a few homing ender eyes at random, then teleport to a different location
-			 * There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds, waits 1 second, repeat
+			 * Spawn a few homing ender eyes at random, then teleport to a different location There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds,
+			 * waits 1 second, repeat
 			 */
-			if(this.teleportAI != null) {
-				if(source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
+			if (this.teleportAI != null) {
+				if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
 					this.setAttackTarget((EntityLivingBase) source.getTrueSource());
 				}
-					
+
 				this.teleportAI.forceExecution();
 			}
 			return false;
@@ -454,20 +445,20 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public void onEntityUpdate() {
-		if(this.firstUpdate && !this.hasHomePositionCQR() && !this.world.isRemote) {
+		if (this.firstUpdate && !this.hasHomePositionCQR() && !this.world.isRemote) {
 			this.setHomePositionCQR(this.getPosition());
 			this.teleportAI.forceExecution();
 		}
 		super.onEntityUpdate();
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D,
-						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D)
+						* (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		} else {
 			// SErver
@@ -475,31 +466,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				this.cqrHurtTime--;
 			}
 			this.dataManager.set(IS_HURT, cqrHurtTime > 0);
-			
-			if(this.hasAttackTarget()) {
-				//Lightnings
-				this.handleAreaLightnings();
-				
-				//Minions
-				this.handleMinions();
-			}
 		}
 
 		this.isJumping = false;
 		super.onLivingUpdate();
 	}
-	
-	private int getMaxMinionsPerTime() {
-		int absoluteMax = 5;
-		absoluteMax += this.world.getDifficulty().getId();
-		
-		float hpPercentage = this.getHealth() / this.getMaxHealth();
-		hpPercentage = 1F - hpPercentage;
-		
-		return Math.round(absoluteMax * hpPercentage);
-	}
-	
-	private boolean filterSummonLists() {
+
+	public boolean filterSummonLists() {
 		List<Entity> tmp = new ArrayList<>();
 		boolean result = false;
 		for (Entity ent : this.summonedEntities) {
@@ -514,110 +487,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		tmp.clear();
 		return result;
 	}
-	
-	private void handleMinions() {
-		if(this.getHealth() <= (borderHPForMinions * this.getMaxHealth())) {
-			this.minionSpawnTick++;
-			if(this.minionSpawnTick > this.borderMinion) {
-				this.minionSpawnTick = 0;
-				if(this.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
-					this.borderMinion = 80;
-					//Check list
-					if(this.filterSummonLists()) {
-						this.borderMinion = 50;
-					}
-				} else {
-					this.borderMinion = 160;
-					
-					double seed = 1- this.getHealth() / this.getMaxHealth();
-					seed *= 4;
-					
-					AbstractEntityCQR minion = this.getNewMinion((int) seed, this.world);
-					BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition();
-					pos = pos.add(-2 + this.getRNG().nextInt(3), 0, -2 + this.getRNG().nextInt(3));
-					minion.setPosition(pos.getX(), pos.getY(), pos.getZ());
-					this.setSummonedEntityFaction(minion);
-					minion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(minion)), null);
-					this.addSummonedEntityToList(minion);
-					world.spawnEntity(minion);
-				}
-			}
-		}
-	}
-	
-	private AbstractEntityCQR getNewMinion(int seed, World world) {
-		AbstractEntityCQR entity = new EntityCQREnderman(world);
-		switch(seed) {
-		case 4:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
-			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-			entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-			break;
-		case 3:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-			entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-			break;
-		case 2:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-			break;
-		case 1:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-			break;
-		}
-		
-		return entity;
-	}
-
-	private void handleAreaLightnings() {
-		this.lightningTick++;
-		if (this.lightningTick > this.borderLightning) {
-			// strike lightning
-			this.lightningTick = 0;
-			this.borderLightning = 20;
-			switch(this.world.getDifficulty()) {
-			case EASY:
-			case PEACEFUL:
-				borderLightning += 30;
-				break;
-			case HARD:
-				borderLightning -= 5;
-				break;
-			case NORMAL:
-				borderLightning += 5;
-				break;
-			}
-			int x = -ARENA_RADIUS + this.getRNG().nextInt((2* ARENA_RADIUS) +1);
-			int z = -ARENA_RADIUS + this.getRNG().nextInt((2* ARENA_RADIUS) +1);
-			int y = (-ARENA_RADIUS + this.getRNG().nextInt((2* ARENA_RADIUS) +1)) /2;
-
-			BlockPos cp;
-			if(this.hasHomePositionCQR()) {
-				cp = this.getHomePositionCQR();
-			} else {
-				cp = this.getPosition();
-			}
-			x += cp.getX();
-			y += cp.getY();
-			z += cp.getZ();
-			
-			EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, x, y, z, true, false, 0.8F, 0.01F, 0.98F, 0.4F);
-			this.world.spawnEntity(entitybolt);
-		}
-	}
 
 	public Optional<IBlockState> getBlockFromHand(E_CALAMITY_HAND hand) {
-		if(hand == null) {
+		if (hand == null) {
 			return Optional.absent();
 		}
-		switch(hand) {
+		switch (hand) {
 		case LEFT_LOWER:
 			return this.dataManager.get(BLOCK_LEFT_LOWER);
 		case LEFT_MIDDLE:
@@ -634,22 +509,22 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return Optional.absent();
 		}
 	}
-	
+
 	public void removeHandBlock(E_CALAMITY_HAND hand) {
 		Optional<IBlockState> value = Optional.absent();
 		this.equipBlock(hand, value);
 	}
-	
+
 	public void equipBlock(E_CALAMITY_HAND hand, Block block) {
 		this.equipBlock(hand, block.getDefaultState());
 	}
-	
+
 	public void equipBlock(E_CALAMITY_HAND hand, Optional<IBlockState> value) {
-		//Don't execute this on client side
-		if(this.world.isRemote) {
+		// Don't execute this on client side
+		if (this.world.isRemote) {
 			return;
 		}
-		switch(hand) {
+		switch (hand) {
 		case LEFT_LOWER:
 			this.dataManager.set(BLOCK_LEFT_LOWER, value);
 			break;
@@ -672,25 +547,24 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			break;
 		}
 	}
-	
+
 	public void equipBlock(E_CALAMITY_HAND hand, IBlockState blockstate) {
 		equipBlock(hand, Optional.of(blockstate));
 	}
-	
+
 	@Override
 	public void setFire(int seconds) {
-		//Nope
+		// Nope
 	}
 
-	
-	//ISummoner stuff
+	// ISummoner stuff
 	@Override
 	public CQRFaction getSummonerFaction() {
 		return this.getFaction();
 	}
 
 	private List<Entity> summonedEntities = new ArrayList<>();
-	
+
 	@Override
 	public List<Entity> getSummonedEntities() {
 		return this.summonedEntities;
@@ -705,17 +579,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedEntities.add(summoned);
 	}
-	
+
 	public boolean isDowned() {
 		return this.isDowned;
 	}
-	
+
 	@Override
 	public void teleport(double x, double y, double z) {
 		double oldX = this.posX;
 		double oldY = this.posY;
 		double oldZ = this.posZ;
-		super.teleport(x,y,z);
+		super.teleport(x, y, z);
 		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 1.0F, 0.9F + this.rand.nextFloat() * 0.2F);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
@@ -726,25 +600,25 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("isDowned", isDowned);
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		this.isDowned = compound.getBoolean("isDowned");
 	}
-	
+
 	public static int getArenaRadius() {
 		return ARENA_RADIUS;
 	}
-	
-	//Hand syncing
+
+	// Hand syncing
 	public void processHandUpdates(byte[] handStates) {
-		//Only process this on client!!
-		if(this.world.isRemote) {
-			for(int i = 0; i < handStates.length; i++) {
+		// Only process this on client!!
+		if (this.world.isRemote) {
+			for (int i = 0; i < handStates.length; i++) {
 				E_CALAMITY_HAND hand = E_CALAMITY_HAND.values()[i];
-				if(handStates[i] != 0) {
-					switch(hand) {
+				if (handStates[i] != 0) {
+					switch (hand) {
 					case LEFT_LOWER:
 						this.updateIndicator_Hand_LL = true;
 						break;
@@ -768,5 +642,5 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			}
 		}
 	}
-	
+
 }
