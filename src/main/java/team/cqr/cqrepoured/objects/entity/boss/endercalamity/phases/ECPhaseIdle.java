@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases;
 
 import java.util.Optional;
 
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.IEnderCalamityPhase;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -46,6 +47,18 @@ public final class ECPhaseIdle implements IEnderCalamityPhase {
 	@Override
 	public Optional<Integer> getRandomExecutionTime() {
 		return Optional.of(DungeonGenUtils.randomBetween(MIN_EXECUTION_TIME, MAX_EXECUTION_TIME));
+	}
+	
+	@Override
+	public Optional<IEnderCalamityPhase> getNextPhase(EntityCQREnderCalamity boss) {
+		if(!boss.hasAttackTarget()) {
+			return Optional.of(EEnderCalamityPhase.PHASE_NO_TARGET.getPhaseObject());
+		}
+		IEnderCalamityPhase[] successors = this.getPossibleSuccessors();
+		if(successors != null && successors.length > 0) {
+			return Optional.of(successors[boss.getRNG().nextInt(successors.length)]);
+		}
+		return Optional.empty();
 	}
 
 }
