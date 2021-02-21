@@ -50,6 +50,15 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
+	
+	@Override
+	protected void updateAITasks() {
+		if (this.isWet() || this.isInWater()) {
+			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+		}
+
+		super.updateAITasks();
+	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {

@@ -36,6 +36,15 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		}
 		return super.attackEntityFrom(source, amount);
 	}
+	
+	@Override
+	protected void updateAITasks() {
+		if (this.isWet() || this.isInWater()) {
+			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+		}
+
+		super.updateAITasks();
+	}
 
 	protected boolean teleportRandomly() {
 		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
