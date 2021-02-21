@@ -88,7 +88,7 @@ dependencies {
 	runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 	
 	//Geckolib
-	deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.2')
+	deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.7')
 	
 	//AW2-Jar
 	compile 'curse.maven:AncientWarfare2-224602:3199040'
