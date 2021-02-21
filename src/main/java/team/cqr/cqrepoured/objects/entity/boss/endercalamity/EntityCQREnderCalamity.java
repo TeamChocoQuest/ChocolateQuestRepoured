@@ -78,7 +78,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	//AI stuff
 	private boolean isDowned = false;
 	
-	public static enum HANDS {
+	public static enum E_CALAMITY_ANIMATION_SPECIAL {
+		SHOOT_LASER,
+		SHOOT_LASER_SHORT,
+		SHOOT_ENERGY_BALL
+	}
+	
+	public static enum E_CALAMITY_HAND {
 		LEFT_UPPER("handLeftUpper"), 
 		LEFT_MIDDLE("handLeftMiddle"), 
 		LEFT_LOWER("handLeftLower"), 
@@ -92,12 +98,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return this.boneName;
 		}
 		
-		private HANDS(String bone) {
+		private E_CALAMITY_HAND(String bone) {
 			this.boneName = bone;
 		}
 		
 		@Nullable
-		public static HANDS getFromBoneName(String bone) {
+		public static E_CALAMITY_HAND getFromBoneName(String bone) {
 			switch(bone) {
 			case "handRightUpper":
 				return RIGHT_UPPER;
@@ -113,6 +119,25 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				return LEFT_LOWER;
 			}
 			return null;
+		}
+		
+		public int getIndex() {
+			switch(this) {
+			case LEFT_LOWER:
+				return 2;
+			case LEFT_MIDDLE:
+				return 1;
+			case LEFT_UPPER:
+				return 0;
+			case RIGHT_LOWER:
+				return 5;
+			case RIGHT_MIDDLE:
+				return 4;
+			case RIGHT_UPPER:
+				return 3;
+			default:
+				return 0;
+			}
 		}
 	}
 
@@ -177,57 +202,81 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	
 	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
 	private static final String ANIM_NAME_ARM_RU_THROW = ANIM_NAME_PREFIX + "throwBlock_RU";
+	private boolean updateIndicator_Hand_RU = false;
 	private <E extends IAnimatable> PlayState predicateArmRightUpper(AnimationEvent<E> event) {
 		if(event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_IDLE));
 		}
-		
+		if(this.updateIndicator_Hand_RU) {
+			this.updateIndicator_Hand_RU = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).addAnimation(ANIM_NAME_ARM_RU_IDLE));
+		}
 		return PlayState.CONTINUE;
 	}
 	private static final String ANIM_NAME_ARM_RM_IDLE = ANIM_NAME_PREFIX + "idle_armRM";
 	private static final String ANIM_NAME_ARM_RM_THROW = ANIM_NAME_PREFIX + "throwBlock_RM";
+	private boolean updateIndicator_Hand_RM = false;
 	private <E extends IAnimatable> PlayState predicateArmRightMiddle(AnimationEvent<E> event) {
 		if(event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_IDLE));
 		}
-		
+		if(this.updateIndicator_Hand_RM) {
+			this.updateIndicator_Hand_RM = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_THROW).addAnimation(ANIM_NAME_ARM_RM_IDLE));
+		}
 		return PlayState.CONTINUE;
 	}
 	private static final String ANIM_NAME_ARM_RL_IDLE = ANIM_NAME_PREFIX + "idle_armRL";
 	private static final String ANIM_NAME_ARM_RL_THROW = ANIM_NAME_PREFIX + "throwBlock_RL";
+	private boolean updateIndicator_Hand_RL = false;
 	private <E extends IAnimatable> PlayState predicateArmRightLower(AnimationEvent<E> event) {
 		if(event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_IDLE));
 		}
-		
+		if(this.updateIndicator_Hand_RL) {
+			this.updateIndicator_Hand_RL = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_THROW).addAnimation(ANIM_NAME_ARM_RL_IDLE));
+		}
 		return PlayState.CONTINUE;
 	}
 	
 	private static final String ANIM_NAME_ARM_LU_IDLE = ANIM_NAME_PREFIX + "idle_armLU";
 	private static final String ANIM_NAME_ARM_LU_THROW = ANIM_NAME_PREFIX + "throwBlock_LU";
+	private boolean updateIndicator_Hand_LU = false;
 	private <E extends IAnimatable> PlayState predicateArmLeftUpper(AnimationEvent<E> event) {
 		if(event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_IDLE));
 		}
-		
+		if(this.updateIndicator_Hand_LU) {
+			this.updateIndicator_Hand_LU = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_THROW).addAnimation(ANIM_NAME_ARM_LU_IDLE));
+		}
 		return PlayState.CONTINUE;
 	}
 	private static final String ANIM_NAME_ARM_LM_IDLE = ANIM_NAME_PREFIX + "idle_armLM";
 	private static final String ANIM_NAME_ARM_LM_THROW = ANIM_NAME_PREFIX + "throwBlock_LM";
+	private boolean updateIndicator_Hand_LM = false;
 	private <E extends IAnimatable> PlayState predicateArmLeftMiddle(AnimationEvent<E> event) {
 		if(event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_IDLE));
 		}
-		
+		if(this.updateIndicator_Hand_LM) {
+			this.updateIndicator_Hand_LM = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_THROW).addAnimation(ANIM_NAME_ARM_LM_IDLE));
+		}
 		return PlayState.CONTINUE;
 	}
 	private static final String ANIM_NAME_ARM_LL_IDLE = ANIM_NAME_PREFIX + "idle_armLL";
 	private static final String ANIM_NAME_ARM_LL_THROW = ANIM_NAME_PREFIX + "throwBlock_LL";
+	private boolean updateIndicator_Hand_LL = false;
 	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
 		if(event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_IDLE));
 		}
-		
+		if(this.updateIndicator_Hand_LL) {
+			this.updateIndicator_Hand_LL = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_THROW).addAnimation(ANIM_NAME_ARM_LL_IDLE));
+		}
 		return PlayState.CONTINUE;
 	}
 	
@@ -559,7 +608,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 	}
 
-	public Optional<IBlockState> getBlockFromHand(HANDS hand) {
+	public Optional<IBlockState> getBlockFromHand(E_CALAMITY_HAND hand) {
 		if(hand == null) {
 			return Optional.absent();
 		}
@@ -581,16 +630,20 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 	}
 	
-	public void removeHandBlock(HANDS hand) {
+	public void removeHandBlock(E_CALAMITY_HAND hand) {
 		Optional<IBlockState> value = Optional.absent();
 		this.equipBlock(hand, value);
 	}
 	
-	public void equipBlock(HANDS hand, Block block) {
+	public void equipBlock(E_CALAMITY_HAND hand, Block block) {
 		this.equipBlock(hand, block.getDefaultState());
 	}
 	
-	public void equipBlock(HANDS hand, Optional<IBlockState> value) {
+	public void equipBlock(E_CALAMITY_HAND hand, Optional<IBlockState> value) {
+		//Don't execute this on client side
+		if(this.world.isRemote) {
+			return;
+		}
 		switch(hand) {
 		case LEFT_LOWER:
 			this.dataManager.set(BLOCK_LEFT_LOWER, value);
@@ -615,7 +668,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 	}
 	
-	public void equipBlock(HANDS hand, IBlockState blockstate) {
+	public void equipBlock(E_CALAMITY_HAND hand, IBlockState blockstate) {
 		equipBlock(hand, Optional.of(blockstate));
 	}
 	
@@ -677,6 +730,38 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	
 	public static int getArenaRadius() {
 		return ARENA_RADIUS;
+	}
+	
+	//Hand syncing
+	public void processHandUpdates(byte[] handStates) {
+		//Only process this on client!!
+		if(this.world.isRemote) {
+			for(int i = 0; i < handStates.length; i++) {
+				E_CALAMITY_HAND hand = E_CALAMITY_HAND.values()[i];
+				if(handStates[i] != 0) {
+					switch(hand) {
+					case LEFT_LOWER:
+						this.updateIndicator_Hand_LL = true;
+						break;
+					case LEFT_MIDDLE:
+						this.updateIndicator_Hand_LM = true;
+						break;
+					case LEFT_UPPER:
+						this.updateIndicator_Hand_LU = true;
+						break;
+					case RIGHT_LOWER:
+						this.updateIndicator_Hand_RL = true;
+						break;
+					case RIGHT_MIDDLE:
+						this.updateIndicator_Hand_RM = true;
+						break;
+					case RIGHT_UPPER:
+						this.updateIndicator_Hand_RU = true;
+						break;
+					}
+				}
+			}
+		}
 	}
 	
 }
