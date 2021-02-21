@@ -459,8 +459,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	protected void updateAITasks() {
-		if (this.isWet() || this.isInWater()) {
-			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+		if (this.isWet() && !this.getSummonedEntities().isEmpty()) {
+			
+			this.world.getWorldInfo().setCleanWeatherTime(20000);
+			this.world.getWorldInfo().setRainTime(0);
+			this.world.getWorldInfo().setThunderTime(0);
+			this.world.getWorldInfo().setRaining(false);
+			this.world.getWorldInfo().setThundering(false);
+			
+			this.world.playSound(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ, SoundEvents.ENTITY_ENDERMEN_STARE, this.getSoundCategory(), 2.5F,this.getSoundPitch(), false);
 		}
 
 		super.updateAITasks();
