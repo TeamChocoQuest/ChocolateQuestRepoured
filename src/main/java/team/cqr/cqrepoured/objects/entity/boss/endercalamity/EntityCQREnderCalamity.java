@@ -65,6 +65,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// AI stuff
 	private boolean isDowned = false;
 
+	private int currentPhaseTimer = 0;
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
 
 	public EEnderCalamityPhase getCurrentPhase() {
@@ -466,10 +467,48 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				this.cqrHurtTime--;
 			}
 			this.dataManager.set(IS_HURT, cqrHurtTime > 0);
+			
+			this.handlePhases();
 		}
 
 		this.isJumping = false;
 		super.onLivingUpdate();
+	}
+
+	private void handlePhases() {
+		IEnderCalamityPhase phase = this.currentPhase.getPhaseObject();
+		if(this.currentPhase.equals(EEnderCalamityPhase.PHASE_NO_TARGET)) {
+			if(this.hasAttackTarget()) {
+				this.switchToNextPhaseOf(phase);
+			}
+			return;
+		}
+		
+		boolean timedPhaseChange = false;
+		if(phase.isPhaseTimed()) {
+			this.currentPhaseTimer--;
+			timedPhaseChange = this.currentPhaseTimer < 0;
+		}
+		if(timedPhaseChange) {
+			this.switchToNextPhaseOf(phase);
+		}
+	}
+	
+	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
+		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
+		if(nextPhase.isPresent()) {
+			this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase.get());
+			if(nextPhase.get().isPhaseTimed()) {
+				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
+			}
+		}
+	}
+	
+	public void forcePhaseChange() {
+		this.forcePhaseChangeToNextOf(this.currentPhase.getPhaseObject());
+	}
+	public void forcePhaseChangeToNextOf(IEnderCalamityPhase phase) {
+		this.switchToNextPhaseOf(phase);
 	}
 
 	public boolean filterSummonLists() {

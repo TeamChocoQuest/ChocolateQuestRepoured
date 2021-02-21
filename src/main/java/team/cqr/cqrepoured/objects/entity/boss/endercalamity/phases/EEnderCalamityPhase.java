@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases;
 
+import javax.annotation.Nullable;
+
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.IEnderCalamityPhase;
 
 public enum EEnderCalamityPhase {
@@ -21,6 +23,16 @@ public enum EEnderCalamityPhase {
 	
 	public final IEnderCalamityPhase getPhaseObject() {
 		return this.phaseObject;
+	}
+	
+	@Nullable
+	public static EEnderCalamityPhase getByPhaseObject(final IEnderCalamityPhase phase) {
+		for(EEnderCalamityPhase ephase : values()) {
+			if(ephase.getPhaseObject() == phase) {
+				return ephase;
+			}
+		}
+		return null;
 	}
 
 }
