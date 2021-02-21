@@ -23,7 +23,7 @@ public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnder
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.entity.getCurrentPhase().getPhaseObject().canRandomTeleportDuringPhase() && checkHome()) {
+		if (this.entity.getCurrentPhase().getPhaseObject().canRandomTeleportDuringPhase() && checkHome()) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
