@@ -46,6 +46,7 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAr
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.util.CQRConfig;
@@ -78,10 +79,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	//AI stuff
 	private boolean isDowned = false;
 	
+	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
+	
 	public static enum E_CALAMITY_ANIMATION_SPECIAL {
 		SHOOT_LASER,
-		SHOOT_LASER_SHORT,
-		SHOOT_ENERGY_BALL
+		STUNNED,
+		SHOOT_ENERGY_BALL,
+		DYING,
+		LASERING
 	}
 	
 	public static enum E_CALAMITY_HAND {

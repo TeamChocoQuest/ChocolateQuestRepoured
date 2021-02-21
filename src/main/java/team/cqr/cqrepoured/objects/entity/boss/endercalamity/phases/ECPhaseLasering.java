@@ -29,7 +29,7 @@ public class ECPhaseLasering implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		return new IEnderCalamityPhase[] {EEnderCalamityPhases.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhases.PHASE_ENERGY_TENNIS.getPhaseObject()};
+		return new IEnderCalamityPhase[] {EEnderCalamityPhase.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject()};
 	}
 
 }

@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases;
 
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.IEnderCalamityPhase;
 
-public enum EEnderCalamityPhases {
+public enum EEnderCalamityPhase {
 	
 	PHASE_NO_TARGET(new ECPhaseNoTarget()),
 	PHASE_IDLE(new ECPhaseIdle()),
@@ -15,7 +15,7 @@ public enum EEnderCalamityPhases {
 	
 	private IEnderCalamityPhase phaseObject;
 	
-	EEnderCalamityPhases(final IEnderCalamityPhase phaseObject) {
+	EEnderCalamityPhase(final IEnderCalamityPhase phaseObject) {
 		this.phaseObject = phaseObject;
 	}
 	

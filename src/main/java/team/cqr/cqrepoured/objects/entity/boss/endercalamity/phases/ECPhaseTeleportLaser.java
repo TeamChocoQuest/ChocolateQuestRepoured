@@ -29,7 +29,7 @@ public class ECPhaseTeleportLaser implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		return new IEnderCalamityPhase[] {EEnderCalamityPhases.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhases.PHASE_LASERING.getPhaseObject()};
+		return new IEnderCalamityPhase[] {EEnderCalamityPhase.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhase.PHASE_LASERING.getPhaseObject()};
 	}
 
 }
