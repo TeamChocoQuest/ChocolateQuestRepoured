@@ -297,5 +297,18 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
 	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("wide_enderman", isWide());
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.dataManager.set(WIDE, compound.getBoolean("wide_enderman"));
+	}
+	
 
 }
