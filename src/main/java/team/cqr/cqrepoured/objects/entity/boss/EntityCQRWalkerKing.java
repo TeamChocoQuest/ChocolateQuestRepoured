@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -35,6 +36,7 @@ import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -534,6 +536,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			p_184668_1_ -= i;
 			this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
 		}
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
 	}
 
 }

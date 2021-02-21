@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -290,6 +292,11 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	public int getTalkInterval() {
 		// Super: 80
 		return 60;
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
 	}
 
 }

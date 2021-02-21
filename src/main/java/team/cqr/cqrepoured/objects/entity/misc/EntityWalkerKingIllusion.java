@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import com.google.common.base.Predicates;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -19,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.objects.entity.Capes;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -188,4 +190,9 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 		this.parentUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("illusionParent"));
 	}
 
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
+	}
+	
 }

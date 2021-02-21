@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.mobs;
 
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -13,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CQRConfig;
@@ -140,5 +142,10 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 			}
 		}
 		super.onLivingUpdate();
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
 	}
 }

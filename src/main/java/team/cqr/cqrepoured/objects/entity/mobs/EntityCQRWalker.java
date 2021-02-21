@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.objects.entity.mobs;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.SoundEvents;
@@ -10,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
@@ -76,4 +78,9 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 		this.heal(new Float(this.getMaxHealth() * 0.025));
 	}
 
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
+	}
+	
 }
