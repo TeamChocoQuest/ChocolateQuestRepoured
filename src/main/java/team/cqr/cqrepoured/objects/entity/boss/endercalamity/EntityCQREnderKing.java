@@ -55,10 +55,9 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	protected void updateAITasks() {
-		if (this.isWet() || this.isInWater()) {
+		if (this.isInWater() || (this.isWet() && !this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty())) {
 			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
 		}
-
 		super.updateAITasks();
 	}
 

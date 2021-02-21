@@ -4,6 +4,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -41,10 +42,9 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	
 	@Override
 	protected void updateAITasks() {
-		if (this.isWet() || this.isInWater()) {
+		if (this.isInWater() || (this.isWet() && !this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty())) {
 			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
 		}
-
 		super.updateAITasks();
 	}
 
