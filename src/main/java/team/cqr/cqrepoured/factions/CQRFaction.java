@@ -142,6 +142,9 @@ public class CQRFaction {
 		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
 		}
+		if (faction != null && faction.getName().equalsIgnoreCase("ALL_ENEMY")) {
+			return true;
+		}
 		if (faction != null) {
 			for (CQRFaction str : this.enemies) {
 				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
