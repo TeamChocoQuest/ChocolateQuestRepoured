@@ -196,10 +196,10 @@ public class FactionRegistry {
 				String name = fIDs.get(i);
 				CQRFaction fac = this.factions.get(name);
 				for (String s : allyTmp.get(i)) {
-					fac.addAlly(this.factions.get(s));
+					fac.addAlly(this.factions.getOrDefault(s, null));
 				}
 				for (String s : enemyTmp.get(i)) {
-					fac.addEnemy(this.factions.get(s));
+					fac.addEnemy(this.factions.getOrDefault(s, null));
 				}
 			}
 		}
