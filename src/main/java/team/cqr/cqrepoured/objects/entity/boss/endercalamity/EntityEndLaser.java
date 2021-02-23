@@ -14,13 +14,13 @@ public class EntityEndLaser extends AbstractEntityLaser {
 	private BlockPos target;
 
 	public EntityEndLaser(World worldIn) {
-		this(worldIn, null, 4, new BlockPos(0,0,0));
+		this(worldIn, null, 4, new BlockPos(0, 0, 0));
 	}
-	
+
 	public EntityEndLaser(EntityLivingBase caster, BlockPos target) {
 		this(caster.world, caster, 32, target);
 	}
-	
+
 	public EntityEndLaser(World worldIn, EntityLivingBase caster, float length, BlockPos target) {
 		super(worldIn, caster, length);
 		this.target = target;
@@ -42,7 +42,7 @@ public class EntityEndLaser extends AbstractEntityLaser {
 		Vec3d vec4 = Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
 		this.setPosition(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
 	}
-	
+
 	@Override
 	protected double laserEffectRadius() {
 		return 0.5D;
@@ -59,17 +59,17 @@ public class EntityEndLaser extends AbstractEntityLaser {
 		super.readSpawnData(additionalData);
 		this.target = ByteBufUtil.readBlockPos(additionalData);
 	}
-	
+
 	@Override
 	public float getColorR() {
 		return 0.8F;
 	}
-	
+
 	@Override
 	public float getColorG() {
 		return 0.01F;
 	}
-	
+
 	@Override
 	public float getColorB() {
 		return 0.98F;

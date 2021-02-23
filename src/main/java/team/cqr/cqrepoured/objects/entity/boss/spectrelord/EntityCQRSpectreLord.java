@@ -187,7 +187,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 		double oldX = this.posX;
 		double oldY = this.posY;
 		double oldZ = this.posZ;
-		super.teleport(x,y,z);
+		super.teleport(x, y, z);
 		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 1.0F, 0.9F + this.rand.nextFloat() * 0.2F);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);

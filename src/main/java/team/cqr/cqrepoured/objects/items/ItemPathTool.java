@@ -55,8 +55,7 @@ public class ItemPathTool extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
 		/*
-		 * sneak + left click -> apply path points to entity
-		 * left click -> get path points from entity
+		 * sneak + left click -> apply path points to entity left click -> get path points from entity
 		 */
 		if (!player.world.isRemote && entity instanceof AbstractEntityCQR) {
 			if (player.isSneaking()) {
@@ -77,8 +76,7 @@ public class ItemPathTool extends Item {
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		/*
-		 * sneak + right click -> edit existing position
-		 * right click -> select existing position or add new position
+		 * sneak + right click -> edit existing position right click -> select existing position or add new position
 		 */
 		ItemStack stack = player.getHeldItem(hand);
 		BlockPos position = pos.offset(side);

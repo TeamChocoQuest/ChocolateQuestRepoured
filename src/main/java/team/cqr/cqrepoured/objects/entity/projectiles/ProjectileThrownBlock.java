@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.util.CQRConfig;
 
 public class ProjectileThrownBlock extends ProjectileBase implements IEntityAdditionalSpawnData {
-	
+
 	private ResourceLocation block;
 	private IBlockState state = null;
 	private boolean explosive = false;
@@ -24,12 +24,12 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 	public ProjectileThrownBlock(World worldIn) {
 		super(worldIn);
-		this.setSize(1,1);
+		this.setSize(1, 1);
 	}
 
 	private ProjectileThrownBlock(World worldIn, double x, double y, double z) {
 		super(worldIn, x, y, z);
-		this.setSize(1,1);
+		this.setSize(1, 1);
 	}
 
 	public ProjectileThrownBlock(World worldIn, EntityLivingBase shooter, IBlockState block, boolean explodeOnImpact, boolean placeOnImpact) {
@@ -38,7 +38,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.explosive = explodeOnImpact;
 		this.placeOnImpact = placeOnImpact;
 		this.state = block;
-		this.setSize(1,1);
+		this.setSize(1, 1);
 	}
 
 	@Override
@@ -51,28 +51,28 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.block = new ResourceLocation(ByteBufUtils.readUTF8String(additionalData));
 		this.state = Block.REGISTRY.getObject(this.block).getDefaultState();
 	}
-	
+
 	public IBlockState getBlock() {
 		return this.state != null ? this.state : Blocks.BEDROCK.getDefaultState();
 	}
-	
+
 	@Override
 	public boolean hasNoGravity() {
 		return false;
 	}
-	
+
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (this.world.isRemote) {
 			return;
 		}
-		
-		if(this.explosive) {
+
+		if (this.explosive) {
 			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 3.0F, CQRConfig.bosses.thrownBlocksDestroyTerrain);
-		} else if(CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
+		} else if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
 			this.world.setBlockState(this.getPosition(), this.state);
 		}
-		
+
 		if (result.typeOfHit == Type.ENTITY) {
 			if (result.entityHit == this.thrower) {
 				return;
@@ -81,11 +81,11 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			if (result.entityHit instanceof MultiPartEntityPart && ((MultiPartEntityPart) result.entityHit).parent == this.thrower) {
 				return;
 			}
-			
+
 			result.entityHit.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), 10);
-			
+
 		}
-		
+
 		this.setDead();
 	}
 

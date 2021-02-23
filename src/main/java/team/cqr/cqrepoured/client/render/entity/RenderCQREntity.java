@@ -79,11 +79,11 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			this.addLayer(new LayerShoulderEntity(this));
 		}
 	}
-	
+
 	protected double getWidthScale(T entity) {
-		return  this.widthScale * entity.getSizeVariation();
+		return this.widthScale * entity.getSizeVariation();
 	}
-	
+
 	protected double getHeightScale(T entity) {
 		return this.heightScale * entity.getSizeVariation();
 	}

@@ -38,27 +38,14 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.length = length;
 
 		/*
-		 * Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
-		 * Vec3d vec2 = new Vec3d(this.target.posX, this.target.posY + this.target.height * 0.6D, this.target.posZ);
-		 * Vec3d vec3 = vec2.subtract(vec1).normalize();
-		 * double d = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z);
-		 * float yaw = (float) Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
-		 * float pitch = (float) Math.toDegrees(Math.atan2(-vec3.y, d));
-		 * this.posX = vec1.x;
-		 * this.posY = vec1.y;
-		 * this.posZ = vec1.z;
-		 * this.prevPosX = vec1.x;
-		 * this.prevPosY = vec1.y;
-		 * this.prevPosZ = vec1.z;
-		 * this.lastTickPosX = vec1.x;
-		 * this.lastTickPosY = vec1.y;
-		 * this.lastTickPosZ = vec1.z;
-		 * //this.rotationYawCQR = yaw;
-		 * //this.rotationPitchCQR = pitch;
-		 * this.setRotationYawCQR(yaw);
-		 * this.setRotationPitchCQR(pitch);
-		 * this.prevRotationYawCQR = yaw;
-		 * this.prevRotationPitchCQR = pitch;
+		 * Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ); Vec3d vec2 = new Vec3d(this.target.posX,
+		 * this.target.posY + this.target.height * 0.6D, this.target.posZ); Vec3d vec3 =
+		 * vec2.subtract(vec1).normalize(); double d = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z); float yaw = (float) Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
+		 * float pitch = (float) Math.toDegrees(Math.atan2(-vec3.y, d)); this.posX = vec1.x;
+		 * this.posY = vec1.y; this.posZ = vec1.z; this.prevPosX = vec1.x; this.prevPosY = vec1.y; this.prevPosZ = vec1.z; this.lastTickPosX = vec1.x; this.lastTickPosY
+		 * = vec1.y; this.lastTickPosZ = vec1.z; //this.rotationYawCQR = yaw;
+		 * //this.rotationPitchCQR = pitch; this.setRotationYawCQR(yaw); this.setRotationPitchCQR(pitch); this.prevRotationYawCQR = yaw; this.prevRotationPitchCQR =
+		 * pitch;
 		 */
 
 		this.setSize(0.1F, 0.1F);
@@ -100,7 +87,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		return compound;
 	}
-	
+
 	protected double laserEffectRadius() {
 		return 0.25D;
 	}
@@ -189,13 +176,15 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
 	}
-	
+
 	public float getColorR() {
 		return 0.1F;
 	}
+
 	public float getColorG() {
 		return 0.7F;
 	}
+
 	public float getColorB() {
 		return 0.9F;
 	}

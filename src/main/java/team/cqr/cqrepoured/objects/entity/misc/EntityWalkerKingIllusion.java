@@ -194,5 +194,5 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
 	}
-	
+
 }

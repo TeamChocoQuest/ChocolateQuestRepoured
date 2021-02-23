@@ -32,7 +32,7 @@ public class ECPhaseTeleportLaser implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		return new IEnderCalamityPhase[] {EEnderCalamityPhase.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhase.PHASE_LASERING.getPhaseObject()};
+		return new IEnderCalamityPhase[] { EEnderCalamityPhase.PHASE_IDLE.getPhaseObject(), EEnderCalamityPhase.PHASE_LASERING.getPhaseObject() };
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ECPhaseTeleportLaser implements IEnderCalamityPhase {
 
 	private static final int MIN_EXECUTION_TIME = 200;
 	private static final int MAX_EXECUTION_TIME = 400;
-	
+
 	@Override
 	public Optional<Integer> getRandomExecutionTime() {
 		return Optional.of(DungeonGenUtils.randomBetween(MIN_EXECUTION_TIME, MAX_EXECUTION_TIME));

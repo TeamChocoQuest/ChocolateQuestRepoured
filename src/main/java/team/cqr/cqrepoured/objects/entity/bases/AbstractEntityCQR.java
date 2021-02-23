@@ -676,27 +676,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.updateCooldownForMagicArmor();
 		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			/*BlockPos pos = new BlockPos(this);
-			TileEntity te = this.world.getTileEntity(pos);
-			if (!(te instanceof TileEntitySpawner)) {
-				this.world.setBlockState(pos, CQRBlocks.SPAWNER.getDefaultState(), 3);
-				te = this.world.getTileEntity(pos);
-			}
-			if (te instanceof TileEntitySpawner) {
-				TileEntitySpawner spawner = (TileEntitySpawner) te;
-				for (int i = 0; i < spawner.inventory.getSlots(); i++) {
-					if (spawner.inventory.getStackInSlot(i).isEmpty()) {
-						ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE);
-						NBTTagCompound stackNBT = new NBTTagCompound();
-						NBTTagCompound entityNBT = new NBTTagCompound();
-						this.writeToNBTAtomically(entityNBT);
-						stackNBT.setTag("EntityIn", entityNBT);
-						stack.setTagCompound(stackNBT);
-						spawner.inventory.setStackInSlot(i, stack);
-						break;
-					}
-				}
-			}*/
+			/*
+			 * BlockPos pos = new BlockPos(this); TileEntity te = this.world.getTileEntity(pos); if (!(te instanceof TileEntitySpawner)) { this.world.setBlockState(pos,
+			 * CQRBlocks.SPAWNER.getDefaultState(), 3); te = this.world.getTileEntity(pos); } if
+			 * (te instanceof TileEntitySpawner) { TileEntitySpawner spawner = (TileEntitySpawner) te; for (int i = 0; i < spawner.inventory.getSlots(); i++) { if
+			 * (spawner.inventory.getStackInSlot(i).isEmpty()) { ItemStack stack = new
+			 * ItemStack(CQRItems.SOUL_BOTTLE); NBTTagCompound stackNBT = new NBTTagCompound(); NBTTagCompound entityNBT = new NBTTagCompound();
+			 * this.writeToNBTAtomically(entityNBT); stackNBT.setTag("EntityIn", entityNBT);
+			 * stack.setTagCompound(stackNBT); spawner.inventory.setStackInSlot(i, stack); break; } } }
+			 */
 			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
 			this.setDead();
 		}

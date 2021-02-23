@@ -34,7 +34,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	private String entityName;
 	private ResourceLocation texture;
-	
+
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(Reference.MODID, "textures/entity/magic_armor/mages.png");
 
 	protected double widthScale;
@@ -53,21 +53,21 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
 	}
-	
+
 	private int renderPass = 0;
-	
+
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		this.renderPass = 0;
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		
-		//Magic armor rendering, this is how you render a overlay using geckolib
-		if(entity.isMagicArmorActive()) {
+
+		// Magic armor rendering, this is how you render a overlay using geckolib
+		if (entity.isMagicArmorActive()) {
 			GlStateManager.pushMatrix();
-			
+
 			this.renderPass = 1;
-			//GlStateManager.scale(1.1, 1.1, 1.1);
-			
+			// GlStateManager.scale(1.1, 1.1, 1.1);
+
 			GlStateManager.depthMask(!entity.isInvisible());
 			GlStateManager.matrixMode(5890);
 			GlStateManager.loadIdentity();
@@ -81,16 +81,16 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			GlStateManager.disableLighting();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-			
+
 			super.doRender(entity, x, y, z, entityYaw, partialTicks);
-			
+
 			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
 			GlStateManager.matrixMode(5890);
 			GlStateManager.loadIdentity();
 			GlStateManager.matrixMode(5888);
 			GlStateManager.enableLighting();
 			GlStateManager.disableBlend();
-			
+
 			GlStateManager.popMatrix();
 		}
 	}
@@ -117,10 +117,10 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
-		if(this.renderPass != 0) {
+		if (this.renderPass != 0) {
 			return TEXTURES_ARMOR;
 		}
-		
+
 		// Custom texture start
 		if (entity.hasTextureOverride()) {
 			return entity.getTextureOverride();
@@ -139,7 +139,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
-		if(this.renderPass == 0) {
+		if (this.renderPass == 0) {
 			ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 			IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
 			if (boneItem != null || boneBlock != null) {

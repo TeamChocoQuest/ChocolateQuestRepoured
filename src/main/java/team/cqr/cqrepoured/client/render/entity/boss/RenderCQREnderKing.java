@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 
 @SideOnly(Side.CLIENT)
-public class RenderCQREnderKing  extends RenderCQREntity<EntityCQREnderKing> {
+public class RenderCQREnderKing extends RenderCQREntity<EntityCQREnderKing> {
 
 	public RenderCQREnderKing(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelEnderman(0.0F), 0.5F, "mob/enderman", 1.0D, 1.0D);
@@ -44,11 +44,11 @@ public class RenderCQREnderKing  extends RenderCQREntity<EntityCQREnderKing> {
 			this.resetRotations(modelRenderer);
 		}
 	}
-	
+
 	@Override
 	protected double getWidthScale(EntityCQREnderKing entity) {
 		double superVal = super.getWidthScale(entity);
-		if(entity.isWide()) {
+		if (entity.isWide()) {
 			superVal *= 2;
 		}
 		return superVal;

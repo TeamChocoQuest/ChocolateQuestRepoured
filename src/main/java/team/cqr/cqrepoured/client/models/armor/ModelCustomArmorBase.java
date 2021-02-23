@@ -59,8 +59,9 @@ public class ModelCustomArmorBase extends ModelBiped {
 
 	private Deque<Float> rotations = new LinkedList<>();
 
-	//TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations of the armor bones => interface that has to be implemented by the model!
-	//TODO: Move the "setupXOffsets" methods to an interface that needs to be implemented by the renderer
+	// TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations of the armor bones => interface that
+	// has to be implemented by the model!
+	// TODO: Move the "setupXOffsets" methods to an interface that needs to be implemented by the renderer
 	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EntityEquipmentSlot slot) {
 		this.applyRotations(model);
 

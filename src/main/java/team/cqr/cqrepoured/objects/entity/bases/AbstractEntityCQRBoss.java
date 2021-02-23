@@ -80,7 +80,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 				if (this.doesExplodeOnDeath()) {
 					this.world.createExplosion(this, this.posX, this.posY, this.posZ, 8.0F, true);
 				}
-				
+
 				this.onFinalDeath();
 			}
 		} else {

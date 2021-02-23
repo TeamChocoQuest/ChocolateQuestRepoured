@@ -289,7 +289,7 @@ public class CQRConfig {
 		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
 
 		public float giantSpiderMaxHealByBite = 8F;
-		
+
 		@Config.Comment("Controls the roundness of the ender-calamity's shield, has a massive impact on performance. The higher, the rounder")
 		@RequiresMcRestart
 		public int enderCalamityShieldRoundness = 32;
@@ -474,7 +474,7 @@ public class CQRConfig {
 		public float PirateCaptain = 200F;
 		@Config.RangeDouble(min = 1, max = 1000)
 		public float GiantSpider = 150F;
-		@Config.RangeDouble(min=1, max= 1000)
+		@Config.RangeDouble(min = 1, max = 1000)
 		public float EnderCalamity = 300F;
 
 	}

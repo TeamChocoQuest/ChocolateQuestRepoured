@@ -257,7 +257,7 @@ public class CQREntityRenderers {
 
 		// Ender King
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderKing.class, RenderCQREnderKing::new);
-		
+
 		// Geckolib
 		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);

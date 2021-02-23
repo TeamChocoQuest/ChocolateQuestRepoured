@@ -65,5 +65,5 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL;
 	}
-	
+
 }

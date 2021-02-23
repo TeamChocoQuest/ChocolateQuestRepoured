@@ -103,11 +103,7 @@ public class ProtectedRegionHelper {
 
 		boolean isBreakingPrevented = false;
 
-		if (!isBlockDependency
-				&& CQRConfig.dungeonProtection.protectionSystemEnabled
-				&& CQRConfig.dungeonProtection.preventBlockBreaking
-				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
-				&& !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.preventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
@@ -150,10 +146,7 @@ public class ProtectedRegionHelper {
 
 		boolean isPlacingPrevented = false;
 
-		if (CQRConfig.dungeonProtection.protectionSystemEnabled
-				&& CQRConfig.dungeonProtection.preventBlockPlacing
-				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
-				&& !isBlockPlacingWhitelisted(state)) {
+		if (CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.preventBlockPlacing && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {

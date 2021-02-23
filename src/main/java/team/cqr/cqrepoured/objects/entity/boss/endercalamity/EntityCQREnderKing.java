@@ -44,7 +44,7 @@ import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss {
-	
+
 	protected static final DataParameter<Boolean> WIDE = EntityDataManager.<Boolean>createKey(EntityCQREnderKing.class, DataSerializers.BOOLEAN);
 
 	public EntityCQREnderKing(World worldIn) {
@@ -52,7 +52,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
-	
+
 	@Override
 	protected void updateAITasks() {
 		if (this.isInWater() || (this.isWet() && this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty())) {
@@ -66,7 +66,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		if (source instanceof EntityDamageSourceIndirect || source.isUnblockable()) {
 			for (int i = 0; i < 64; ++i) {
 				if (this.teleportRandomly()) {
-					if(source.isUnblockable()) {
+					if (source.isUnblockable()) {
 						return super.attackEntityFrom(source, amount);
 					}
 					return false;
@@ -75,22 +75,22 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 
 		this.dataManager.register(WIDE, DungeonGenUtils.percentageRandom(0.05));
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
-		if(this.isWide()) {
+		if (this.isWide()) {
 			return new TextComponentString("Wide Enderman");
 		}
 		return super.getDisplayName();
 	}
-	
+
 	public boolean isWide() {
 		return this.dataManager.get(WIDE);
 	}
@@ -110,21 +110,21 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		// TODO: SPawn the true boss, BEFORE super.onDeath (that one creates the living death event)
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 		if (manager instanceof ServerProtectedRegionManager) {
-			
+
 			EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(world);
 			calamity.setFaction(getFaction().getName(), false);
 			calamity.setHomePositionCQR(hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition());
 			calamity.setHealthScale(this.getHealthScale());
 			calamity.setPosition(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
-			
+
 			calamity.forceTeleport();
-			
-			if(cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase) {
+
+			if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase) {
 				calamity.setAttackTarget((EntityLivingBase) cause.getTrueSource());
 			}
-			
+
 			world.spawnEntity(calamity);
-			
+
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = this.hasHomePositionCQR() ? regionManager.getProtectedRegionsAt(getHomePositionCQR()) : regionManager.getProtectedRegionsAt(getPosition());
 			if (regions != null && !regions.isEmpty()) {
@@ -242,7 +242,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		}
 		super.onLivingUpdate();
 	}
-	
+
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		this.setEquipmentBasedOnDifficulty(difficulty);
@@ -271,7 +271,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 9437439);
 		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return CQRLoottables.ENTITIES_ENDERMAN;
@@ -292,23 +292,22 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		// Super: 80
 		return 60;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("wide_enderman", isWide());
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		this.dataManager.set(WIDE, compound.getBoolean("wide_enderman"));
 	}
-	
 
 }

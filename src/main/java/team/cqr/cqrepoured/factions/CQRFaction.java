@@ -109,8 +109,8 @@ public class CQRFaction {
 		if (this.textureSet != null) {
 			return this.textureSet.getRandomTextureFor(entity);
 		}
-		//Debug
-		//System.out.println("No texture set defined for faction: " + this.name);
+		// Debug
+		// System.out.println("No texture set defined for faction: " + this.name);
 		return null;
 	}
 

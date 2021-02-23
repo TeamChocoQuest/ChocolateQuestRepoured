@@ -84,28 +84,28 @@ public class BlockFireCQR extends BlockFire {
 							for (int i1 = -1; i1 <= 4; ++i1) {
 								if (k != 0 || i1 != 0 || l != 0) {
 									int j1 = 100;
-	
+
 									if (i1 > 1) {
 										j1 += (i1 - 1) * 100;
 									}
-	
+
 									BlockPos blockpos = pos.add(k, i1, l);
 									int k1 = this.getNeighborEncouragement(worldIn, blockpos);
-	
+
 									if (k1 > 0) {
 										int l1 = (k1 + 40 + worldIn.getDifficulty().getId() * 7) / (i + 30);
-	
+
 										if (flag1) {
 											l1 /= 2;
 										}
-	
+
 										if (l1 > 0 && rand.nextInt(j1) <= l1 && (!worldIn.isRaining() || !this.canDie(worldIn, blockpos))) {
 											int i2 = i + rand.nextInt(5) / 4;
-	
+
 											if (i2 > 15) {
 												i2 = 15;
 											}
-	
+
 											worldIn.setBlockState(blockpos, state.withProperty(AGE, i2), 3);
 										}
 									}

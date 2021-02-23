@@ -16,9 +16,9 @@ import team.cqr.cqrepoured.util.VectorUtil;
 
 public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
-	//TODO: Move corner count, color and radius to the entity
-	//TODO: Render the letters on the corners
-	
+	// TODO: Move corner count, color and radius to the entity
+	// TODO: Render the letters on the corners
+
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
 			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/zombie.png"),
 			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/skeleton.png"),
@@ -51,7 +51,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y + 0.02, (float) z);
-		GlStateManager.rotate((float) ( 4 * entity.ticksExisted), 0F, 1F, 0F);
+		GlStateManager.rotate((float) (4 * entity.ticksExisted), 0F, 1F, 0F);
 		GlStateManager.disableFog();
 		GlStateManager.disableLighting();
 		GlStateManager.disableCull();

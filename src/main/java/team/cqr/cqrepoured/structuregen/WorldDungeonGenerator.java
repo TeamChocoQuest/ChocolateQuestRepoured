@@ -85,13 +85,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 		// Check if no vanilla structure is near
 		if (CQRConfig.advanced.generationRespectOtherStructures) {
-			//Vanilla Structures
+			// Vanilla Structures
 			if (VanillaStructureHelper.isStructureInRange(world, new BlockPos((chunkX << 4) + 8, 64, (chunkZ << 4) + 8), MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16.0D))) {
 				return;
 			}
-			//AW2-Structures
-			//MAybe change the "64" to the actual Y?
-			if(IntegrationInformation.isAW2StructureAlreadyThere((chunkX << 4) + 8, 64, (chunkZ << 4) + 8, world)) {
+			// AW2-Structures
+			// MAybe change the "64" to the actual Y?
+			if (IntegrationInformation.isAW2StructureAlreadyThere((chunkX << 4) + 8, 64, (chunkZ << 4) + 8, world)) {
 				return;
 			}
 		}

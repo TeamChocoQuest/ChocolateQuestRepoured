@@ -59,18 +59,19 @@ public class SphereHelper {
 		GlStateManager.scale(scaleW, scaleH, scaleW);
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
-		/*boolean flag = entity.isInvisible();
-		GlStateManager.depthMask(flag);*/
+		/*
+		 * boolean flag = entity.isInvisible(); GlStateManager.depthMask(flag);
+		 */
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		GlStateManager.color(colorR, colorG, colorB, colorA);
-		
+
 		GlStateManager.callList(this.sphereIdOutside);
 		GlStateManager.callList(this.sphereIdInside);
 
 		GlStateManager.resetColor();
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
-		//GlStateManager.depthMask(!flag);
+		// GlStateManager.depthMask(!flag);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(previousTexture);
 	}
 

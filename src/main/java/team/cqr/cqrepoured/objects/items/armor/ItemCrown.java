@@ -77,7 +77,7 @@ public class ItemCrown extends ItemArmor {
 		if (capability.getAttachedItem() != null) {
 			tooltip.add("Attached helmet: " + new ItemStack(capability.getAttachedItem(), 1).getDisplayName());
 		}
-		
+
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description." + this.getRegistryName().getPath() + ".name"));
 		} else {

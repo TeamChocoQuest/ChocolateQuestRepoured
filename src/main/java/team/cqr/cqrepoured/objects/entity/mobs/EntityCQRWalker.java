@@ -82,5 +82,5 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
 	}
-	
+
 }

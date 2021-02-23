@@ -8,10 +8,9 @@ import org.lwjgl.opengl.GL11;
 import javax.vecmath.Matrix4f;
 import java.nio.FloatBuffer;
 
-//Copied from https://github.com/mchorse/mclib/blob/1.12/src/main/java/mchorse/mclib/utils/MatrixUtils.java
+// Copied from https://github.com/mchorse/mclib/blob/1.12/src/main/java/mchorse/mclib/utils/MatrixUtils.java
 @SideOnly(Side.CLIENT)
-public class MatrixUtil
-{
+public class MatrixUtil {
 	/**
 	 * Model view matrix buffer
 	 */
@@ -30,8 +29,7 @@ public class MatrixUtil
 	/**
 	 * Read OpenGL's model view matrix
 	 */
-	public static Matrix4f readModelView(Matrix4f matrix4f)
-	{
+	public static Matrix4f readModelView(Matrix4f matrix4f) {
 		buffer.clear();
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
 		buffer.get(floats);
@@ -45,8 +43,7 @@ public class MatrixUtil
 	/**
 	 * Replace model view matrix with given matrix
 	 */
-	public static void loadModelView(Matrix4f matrix4f)
-	{
+	public static void loadModelView(Matrix4f matrix4f) {
 		matrixToFloat(floats, matrix4f);
 
 		buffer.clear();
@@ -58,8 +55,7 @@ public class MatrixUtil
 	/**
 	 * Private method to fill the float array with values from the matrix
 	 */
-	public static void matrixToFloat(float[] floats, Matrix4f matrix4f)
-	{
+	public static void matrixToFloat(float[] floats, Matrix4f matrix4f) {
 		floats[0] = matrix4f.m00;
 		floats[1] = matrix4f.m01;
 		floats[2] = matrix4f.m02;
@@ -78,10 +74,8 @@ public class MatrixUtil
 		floats[15] = matrix4f.m33;
 	}
 
-	public static boolean captureMatrix()
-	{
-		if (matrix == null)
-		{
+	public static boolean captureMatrix() {
+		if (matrix == null) {
 			matrix = MatrixUtil.readModelView(new Matrix4f());
 
 			return true;
@@ -90,8 +84,7 @@ public class MatrixUtil
 		return false;
 	}
 
-	public static void releaseMatrix()
-	{
+	public static void releaseMatrix() {
 		matrix = null;
 	}
 }

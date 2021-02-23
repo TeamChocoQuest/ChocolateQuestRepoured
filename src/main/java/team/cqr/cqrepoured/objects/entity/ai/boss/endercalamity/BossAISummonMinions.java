@@ -52,7 +52,7 @@ public class BossAISummonMinions extends AbstractCQREntityAI<EntityCQREnderCalam
 		if (this.minionSpawnTick < this.borderMinion) {
 			return;
 		}
-		
+
 		this.minionSpawnTick = 0;
 		if (this.entity.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
 			this.borderMinion = 80;

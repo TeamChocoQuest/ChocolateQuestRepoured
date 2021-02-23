@@ -87,9 +87,9 @@ public class CQRMain {
 
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
-	
+
 	public CQRMain() {
-		//Geckolib
+		// Geckolib
 		GeckoLib.initialize();
 	}
 

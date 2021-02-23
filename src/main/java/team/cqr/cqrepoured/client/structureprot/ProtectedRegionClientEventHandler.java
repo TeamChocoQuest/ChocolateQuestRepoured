@@ -48,21 +48,13 @@ public class ProtectedRegionClientEventHandler {
 	public static void addOrResetProtectedRegionIndicator(World world, UUID uuid, BlockPos start, BlockPos end, BlockPos pos, @Nullable EntityPlayerMP player) {
 		if (world.isRemote) {
 			/*
-			 * ProtectedRegionIndicator protectedRegionIndicator = PROTECTED_REGION_INDICATORS.get(uuid);
-			 * if (protectedRegionIndicator != null) {
-			 * protectedRegionIndicator.setStart(start);
-			 * protectedRegionIndicator.setEnd(end);
-			 * protectedRegionIndicator.resetLifeTime();
-			 * } else {
-			 * PROTECTED_REGION_INDICATORS.put(uuid, new ProtectedRegionIndicator(uuid, start, end));
-			 * }
+			 * ProtectedRegionIndicator protectedRegionIndicator = PROTECTED_REGION_INDICATORS.get(uuid); if (protectedRegionIndicator != null) {
+			 * protectedRegionIndicator.setStart(start); protectedRegionIndicator.setEnd(end);
+			 * protectedRegionIndicator.resetLifeTime(); } else { PROTECTED_REGION_INDICATORS.put(uuid, new ProtectedRegionIndicator(uuid, start, end)); }
 			 * 
-			 * for (int i = 0; i < 4; i++) {
-			 * double x = pos.getX() - 0.1D + 1.2D * world.rand.nextDouble();
-			 * double y = pos.getY() - 0.1D + 1.2D * world.rand.nextDouble();
+			 * for (int i = 0; i < 4; i++) { double x = pos.getX() - 0.1D + 1.2D * world.rand.nextDouble(); double y = pos.getY() - 0.1D + 1.2D * world.rand.nextDouble();
 			 * double z = pos.getZ() - 0.1D + 1.2D * world.rand.nextDouble();
-			 * world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, x, y, z, 0.0D, 0.0D, 0.0D);
-			 * }
+			 * world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, x, y, z, 0.0D, 0.0D, 0.0D); }
 			 */
 			RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
 			if (result != null && result.hitVec != null) {

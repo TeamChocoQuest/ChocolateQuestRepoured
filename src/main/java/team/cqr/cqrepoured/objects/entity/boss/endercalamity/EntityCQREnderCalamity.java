@@ -47,8 +47,8 @@ import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.util.CQRConfig;
 
-//TODO: Move the minion & lightning handling to a AI class, it is cleaner that way
-//DONE: Create helper classes to control arm management (status, animations, etc)
+// TODO: Move the minion & lightning handling to a AI class, it is cleaner that way
+// DONE: Create helper classes to control arm management (status, animations, etc)
 public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner {
 
 	private static final int HURT_DURATION = 24; // 1.2 * 20
@@ -421,7 +421,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			// DONE: Teleport
 			// TODO: Spawn homing ender eyes
 			/*
-			 * Spawn a few homing ender eyes at random, then teleport to a different location There also is the chance for it to start "lazoring", in this stage, it teleports to a different location, waits 2 seconds, fires a laser for 3 seconds,
+			 * Spawn a few homing ender eyes at random, then teleport to a different location There also is the chance for it to start "lazoring", in this stage, it
+			 * teleports to a different location, waits 2 seconds, fires a laser for 3 seconds,
 			 * waits 1 second, repeat
 			 */
 			if (this.teleportAI != null) {
@@ -460,14 +461,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	protected void updateAITasks() {
 		if (this.isWet() && !this.getSummonedEntities().isEmpty()) {
-			
+
 			this.world.getWorldInfo().setCleanWeatherTime(20000);
 			this.world.getWorldInfo().setRainTime(0);
 			this.world.getWorldInfo().setThunderTime(0);
 			this.world.getWorldInfo().setRaining(false);
 			this.world.getWorldInfo().setThundering(false);
-			
-			this.world.playSound(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ, SoundEvents.ENTITY_ENDERMEN_STARE, this.getSoundCategory(), 2.5F,this.getSoundPitch(), false);
+
+			this.world.playSound(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, SoundEvents.ENTITY_ENDERMEN_STARE, this.getSoundCategory(), 2.5F, this.getSoundPitch(), false);
 		}
 
 		super.updateAITasks();
@@ -478,8 +479,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D)
-						* (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D,
+						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		} else {
 			// SErver
@@ -702,7 +703,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			}
 		}
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;

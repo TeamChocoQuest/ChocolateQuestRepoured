@@ -361,14 +361,8 @@ public class FactionRegistry {
 		// System.out.println("Changing repu...");
 
 		/*
-		 * boolean flag = false;
-		 * if (this.canRepuChange(player)) {
-		 * if (score < 0) {
-		 * flag = this.canDecrementRepu(player, faction);
-		 * } else {
-		 * flag = this.canIncrementRepu(player, faction);
-		 * }
-		 * }
+		 * boolean flag = false; if (this.canRepuChange(player)) { if (score < 0) { flag = this.canDecrementRepu(player, faction); } else { flag =
+		 * this.canIncrementRepu(player, faction); } }
 		 */
 		if (this.canDecrementRepu(player, faction) || this.canIncrementRepu(player, faction)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
@@ -531,8 +525,8 @@ public class FactionRegistry {
 				 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for (Map.Entry<String, Integer> entry :
 				 * mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
 				 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound(); tag.setString("factionName", entry.getKey());
-				 * tag.setInteger("reputation", entry.getValue());
-				 * repuDataList.appendTag(tag); } root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
+				 * tag.setInteger("reputation", entry.getValue()); repuDataList.appendTag(tag); }
+				 * root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
 				 */
 				for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
 					root.setInteger(entry.getKey(), entry.getValue());

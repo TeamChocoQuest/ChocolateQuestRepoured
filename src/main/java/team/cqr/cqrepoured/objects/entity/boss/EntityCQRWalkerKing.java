@@ -537,7 +537,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
 		}
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;

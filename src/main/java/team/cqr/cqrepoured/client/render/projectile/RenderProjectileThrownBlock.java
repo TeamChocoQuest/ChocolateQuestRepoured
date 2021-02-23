@@ -42,5 +42,5 @@ public class RenderProjectileThrownBlock extends Render<ProjectileThrownBlock> {
 		// GlStateManager.translate(0.25F, 0.0F, 0.55F);
 		GL11.glPopMatrix();
 	}
-	
+
 }
