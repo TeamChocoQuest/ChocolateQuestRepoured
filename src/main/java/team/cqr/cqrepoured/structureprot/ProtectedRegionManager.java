@@ -18,6 +18,9 @@ public class ProtectedRegionManager {
 
 	@Nullable
 	public static IProtectedRegionManager getInstance(World world) {
+		if(world == null) {
+			return null;
+		}
 		if (world.isRemote) {
 			return CLIENT_INSTANCE;
 		}
