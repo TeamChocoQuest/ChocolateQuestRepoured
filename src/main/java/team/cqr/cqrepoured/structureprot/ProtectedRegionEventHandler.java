@@ -140,7 +140,11 @@ public class ProtectedRegionEventHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onClientDisconnectionFromServerEvent(ClientDisconnectionFromServerEvent event) {
-		ProtectedRegionManager.getInstance(Minecraft.getMinecraft().world).clearProtectedRegions();
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(Minecraft.getMinecraft().world);
+		if (protectedRegionManager == null) {
+			return;
+		}
+		protectedRegionManager.clearProtectedRegions();
 		if (!Minecraft.getMinecraft().isIntegratedServerRunning()) {
 			CQRConfig.dungeonProtection = cachedProtectionConfig;
 			ProtectedRegionHelper.updateWhitelists();
