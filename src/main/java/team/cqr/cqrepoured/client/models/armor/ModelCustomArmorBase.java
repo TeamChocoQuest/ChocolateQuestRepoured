@@ -12,7 +12,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityArmor;
 
 @SideOnly(Side.CLIENT)
 public class ModelCustomArmorBase extends ModelBiped {
@@ -60,7 +59,9 @@ public class ModelCustomArmorBase extends ModelBiped {
 
 	private Deque<Float> rotations = new LinkedList<>();
 
-	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
+	//TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations of the armor bones => interface that has to be implemented by the model!
+	//TODO: Move the "setupXOffsets" methods to an interface that needs to be implemented by the renderer
+	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EntityEquipmentSlot slot) {
 		this.applyRotations(model);
 
 		GlStateManager.pushMatrix();
