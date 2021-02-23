@@ -1,12 +1,14 @@
 package team.cqr.cqrepoured.client.util;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.nio.FloatBuffer;
+
+import javax.vecmath.Matrix4f;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Matrix4f;
-import java.nio.FloatBuffer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // Copied from https://github.com/mchorse/mclib/blob/1.12/src/main/java/mchorse/mclib/utils/MatrixUtils.java
 @SideOnly(Side.CLIENT)
