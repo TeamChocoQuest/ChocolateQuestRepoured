@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityArmor;
 
 /**
  * ModelCrown - DerToaster Created using Tabula 7.0.1
@@ -87,7 +86,7 @@ public class ModelCrown extends ModelCustomArmorBase {
 	}
 
 	@Override
-	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
+	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EntityEquipmentSlot slot) {
 		this.render(entityIn, scale, renderer, model);
 	}
 
