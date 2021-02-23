@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -33,6 +34,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	private String entityName;
 	private ResourceLocation texture;
+	
+	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(Reference.MODID, "textures/entity/magic_armor/mages.png");
 
 	protected double widthScale;
 	protected double heightScale;
@@ -49,6 +52,52 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this.heightScale = heightScale;
 
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
+	}
+	
+	private int renderPass = 0;
+	
+	@Override
+	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.renderPass = 0;
+		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		
+		//Magic armor rendering, this is how you render a overlay using geckolib
+		if(entity.isMagicArmorActive()) {
+			GlStateManager.pushMatrix();
+			
+			this.renderPass = 1;
+			//GlStateManager.scale(1.1, 1.1, 1.1);
+			
+			GlStateManager.depthMask(!entity.isInvisible());
+			GlStateManager.matrixMode(5890);
+			GlStateManager.loadIdentity();
+			float f = (float) entity.ticksExisted + partialTicks;
+			float f1 = MathHelper.cos(f * 0.02F) * 3.0F;
+			float f2 = f * 0.01F;
+			GlStateManager.translate(f1, f2, 0.0F);
+			GlStateManager.matrixMode(5888);
+			GlStateManager.enableBlend();
+			GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
+			GlStateManager.disableLighting();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+			
+			super.doRender(entity, x, y, z, entityYaw, partialTicks);
+			
+			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+			GlStateManager.matrixMode(5890);
+			GlStateManager.loadIdentity();
+			GlStateManager.matrixMode(5888);
+			GlStateManager.enableLighting();
+			GlStateManager.disableBlend();
+			
+			GlStateManager.popMatrix();
+		}
+	}
+
+	@Override
+	public void renderMultipass(T entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
 	}
 
 	protected double getWidthScale(T entity) {
@@ -68,6 +117,10 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
+		if(this.renderPass != 0) {
+			return TEXTURES_ARMOR;
+		}
+		
 		// Custom texture start
 		if (entity.hasTextureOverride()) {
 			return entity.getTextureOverride();
@@ -86,34 +139,36 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
-		ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
-		IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
-		if (boneItem != null || boneBlock != null) {
-			// Huge thanks to McHorse and Gecko to get this to work!!
-			Tessellator.getInstance().draw();
+		if(this.renderPass == 0) {
+			ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
+			IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
+			if (boneItem != null || boneBlock != null) {
+				// Huge thanks to McHorse and Gecko to get this to work!!
+				Tessellator.getInstance().draw();
 
-			GlStateManager.pushMatrix();
-			multiplyMatrix(IGeoRenderer.MATRIX_STACK, bone);
+				GlStateManager.pushMatrix();
+				multiplyMatrix(IGeoRenderer.MATRIX_STACK, bone);
 
-			if (boneItem != null) {
-				preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+				if (boneItem != null) {
+					preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 
-				Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, ItemCameraTransforms.TransformType.NONE);
+					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, ItemCameraTransforms.TransformType.NONE);
 
-				postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+					postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+				}
+				if (boneBlock != null) {
+					preRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
+
+					renderBlock(boneBlock, this.currentEntityBeingRendered);
+
+					postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
+				}
+
+				GlStateManager.popMatrix();
+				this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
+
+				builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 			}
-			if (boneBlock != null) {
-				preRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
-
-				renderBlock(boneBlock, this.currentEntityBeingRendered);
-
-				postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
-			}
-
-			GlStateManager.popMatrix();
-			this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
-
-			builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 		}
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
 	}
