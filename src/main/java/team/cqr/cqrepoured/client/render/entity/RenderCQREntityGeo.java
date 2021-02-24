@@ -39,7 +39,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	protected double widthScale;
 	protected double heightScale;
-
+	
 	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, String entityName) {
 		this(renderManager, modelProvider, entityName, 1D, 1D, 0);
 	}
@@ -53,7 +53,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
 	}
-
+	
 	/*
 	 * 0 => Normal model
 	 * 1 => Magical armor overlay
@@ -100,12 +100,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			GlStateManager.popMatrix();
 		}
 	}
-
-	@Override
-	public void renderMultipass(T entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
-	}
-
+	
 	protected double getWidthScale(T entity) {
 		return this.widthScale * entity.getSizeVariation();
 	}
@@ -114,6 +109,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		return this.heightScale * entity.getSizeVariation();
 	}
 
+	
+	
 	@Override
 	public void renderEarly(T animatable, float ticks, float red, float green, float blue, float partialTicks) {
 		double width = this.getWidthScale(animatable);
