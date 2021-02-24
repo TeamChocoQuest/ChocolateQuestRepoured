@@ -108,4 +108,9 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		// Unused
 	}
 
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, EntityCQREnderCalamity currentEntity) {
+		return null;
+	}
+
 }
