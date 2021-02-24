@@ -49,6 +49,28 @@ public class DungeonGenUtils {
 	public static boolean isInsideSphere(int x, int y, int z, int radius) {
 		return x * x + y * y + z * z < radius * radius;
 	}
+	//Center of spheroid is (0/0/0)
+	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radX, double radY, double radZ) {
+		double axisX = pointOnSphere.getX();
+		axisX *= axisX;
+		axisX /= ((double) radX * radX);
+		double axisY = pointOnSphere.getY();
+		axisY *= axisY;
+		axisY /= ((double) radY * radY);
+		double axisZ = pointOnSphere.getZ();
+		axisZ *= axisZ;
+		axisZ /= ((double) radZ * radZ);
+		return axisX + axisY + axisZ == 1.0D;
+	}
+	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radX, double radY, double radZ) {
+		return isInsideSpheroid(pointInSpace.subtract(spheroidCenter), radX, radY, radZ);
+	}
+	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radWidth, double radHeight) {
+		return isInsideSpheroid(pointOnSphere, radWidth, radHeight, radWidth);
+	}
+	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radWidth, double radHeight) {
+		return isInsideSpheroid(pointInSpace, spheroidCenter, radWidth, radHeight, radWidth);
+	}
 
 	public static boolean percentageRandom(int chance) {
 		return percentageRandom(chance, RAND);
