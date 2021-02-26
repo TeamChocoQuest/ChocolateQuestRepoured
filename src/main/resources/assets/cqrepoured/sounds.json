@@ -10,77 +10,108 @@
         "category": "item",
         "sounds": [{"name" : "cqrepoured:item/magic"}]
     },
-	
-	"entity.player.classic_hurt":
-	{
-		"category": "neutral",
-		"sounds": [{"name": "cqrepoured:entity/player/classic_hurt"}]
-	},
-	
-	"entity.goblin.ambient":
-	{
-		"category": "neutral",
-		"sounds": 
-		[
-			{"name": "cqrepoured:entity/goblin/ambient_1"},
-			{"name": "cqrepoured:entity/goblin/ambient_2"},
-			{"name": "cqrepoured:entity/goblin/ambient_3"},
-			{"name": "cqrepoured:entity/goblin/ambient_4"},
-			{"name": "cqrepoured:entity/goblin/ambient_5"}
-		]
-	},
-	"entity.goblin.hurt":
-	{
-		"category": "neutral",
-		"sounds": 
-		[
-			{"name": "cqrepoured:entity/goblin/hurt_1"},
-			{"name": "cqrepoured:entity/goblin/hurt_2"},
-			{"name": "cqrepoured:entity/goblin/hurt_3"},
-			{"name": "cqrepoured:entity/goblin/hurt_4"}
-		]
-	},
-	"entity.goblin.death":
-	{
-		"category": "neutral",
-		"sounds": 
-		[
-			{"name": "cqrepoured:entity/goblin/death"}
-		]
-	},
-	
-	"entity.nether_dragon.hurt":
-	{
-		"category": "neutral",
-		"sounds": 
-		[
-			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt_0"},
-			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt_1"}
-		]
-	},
-	"entity.nether_dragon.ambient":
-	{
-		"category": "neutral",
-		"sounds":
-		[
-			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_ambient_0"}
-		]
-	},
-	"entity.nether_dragon.death":
-	{
-		"category": "neutral",
-		"sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_death"}]
-	},
-	"entity.bubble.bubble":
-	{
-		"category": "neutral",
-		"sounds":
-		[
-			{"name": "cqrepoured:entity/bubble/bubble_0"},
-			{"name": "cqrepoured:entity/bubble/bubble_1"},
-			{"name": "cqrepoured:entity/bubble/bubble_2"},
-			{"name": "cqrepoured:entity/bubble/bubble_3"},
-			{"name": "cqrepoured:entity/bubble/bubble_4"}
-		]
-	}
+    
+    "entity.player.classic_hurt":
+    {
+        "category": "neutral",
+        "sounds": [{"name": "cqrepoured:entity/player/classic_hurt"}]
+    },
+    
+    "entity.goblin.ambient":
+    {
+        "category": "neutral",
+        "sounds": 
+        [
+            {"name": "cqrepoured:entity/goblin/ambient_1"},
+            {"name": "cqrepoured:entity/goblin/ambient_2"},
+            {"name": "cqrepoured:entity/goblin/ambient_3"},
+            {"name": "cqrepoured:entity/goblin/ambient_4"},
+            {"name": "cqrepoured:entity/goblin/ambient_5"}
+        ]
+    },
+    "entity.goblin.hurt":
+    {
+        "category": "neutral",
+        "sounds": 
+        [
+            {"name": "cqrepoured:entity/goblin/hurt_1"},
+            {"name": "cqrepoured:entity/goblin/hurt_2"},
+            {"name": "cqrepoured:entity/goblin/hurt_3"},
+            {"name": "cqrepoured:entity/goblin/hurt_4"}
+        ]
+    },
+    "entity.goblin.death":
+    {
+        "category": "neutral",
+        "sounds": 
+        [
+            {"name": "cqrepoured:entity/goblin/death"}
+        ]
+    },
+    
+    "entity.gremlin.ambient":    
+    {
+        "cateogry": "neutral",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/gremlin/ambient_1"},
+            {"name": "cqrepoured:entity/gremlin/ambient_2"},
+            {"name": "cqrepoured:entity/gremlin/ambient_3"}
+        ]
+    },
+    "entity.gremlin.hurt":
+    {
+        "cateogry": "neutral",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/gremlin/hurt_1"},
+            {"name": "cqrepoured:entity/gremlin/hurt_2"},
+            {"name": "cqrepoured:entity/gremlin/hurt_3"},
+            {"name": "cqrepoured:entity/gremlin/hurt_4"}
+        ]
+    },
+    "entity.gremlin.death":
+    {
+        "cateogry": "neutral",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/gremlin/death_1"},
+            {"name": "cqrepoured:entity/gremlin/death_2"}
+        ]
+    },
+    
+    "entity.nether_dragon.hurt":
+    {
+        "category": "neutral",
+        "sounds": 
+        [
+            {"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt_0"},
+            {"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt_1"}
+        ]
+    },
+    "entity.nether_dragon.ambient":
+    {
+        "category": "neutral",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/nether_dragon/nether_dragon_ambient_0"}
+        ]
+    },
+    "entity.nether_dragon.death":
+    {
+        "category": "neutral",
+        "sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_death"}]
+    },
+    "entity.bubble.bubble":
+    {
+        "category": "neutral",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/bubble/bubble_0"},
+            {"name": "cqrepoured:entity/bubble/bubble_1"},
+            {"name": "cqrepoured:entity/bubble/bubble_2"},
+            {"name": "cqrepoured:entity/bubble/bubble_3"},
+            {"name": "cqrepoured:entity/bubble/bubble_4"}
+        ]
+    }
 }   

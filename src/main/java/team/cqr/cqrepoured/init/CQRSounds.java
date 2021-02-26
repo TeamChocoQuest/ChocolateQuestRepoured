@@ -27,6 +27,13 @@ public class CQRSounds {
 	@ObjectHolder("entity.nether_dragon.death")
 	public static final SoundEvent NETHER_DRAGON_DEATH = Null();
 
+	@ObjectHolder("entity.gremlin.ambient")
+	public static final SoundEvent GREMLIN_AMBIENT = Null();
+	@ObjectHolder("entity.gremlin.hurt")
+	public static final SoundEvent GREMLIN_HURT = Null();
+	@ObjectHolder("entity.gremlin.death")
+	public static final SoundEvent GREMLIN_DEATH = Null();
+	
 	// Source for goblin sounds: https://opengameart.org/content/goblins-sound-pack
 	@ObjectHolder("entity.goblin.ambient")
 	public static final SoundEvent GOBLIN_AMBIENT = Null();
@@ -50,6 +57,9 @@ public class CQRSounds {
 					createSoundEvent("entity.goblin.ambient"),
 					createSoundEvent("entity.goblin.hurt"),
 					createSoundEvent("entity.goblin.death"),
+					createSoundEvent("entity.gremlin.ambient"),
+					createSoundEvent("entity.gremlin.hurt"),
+					createSoundEvent("entity.gremlin.death"),
 					createSoundEvent("entity.nether_dragon.hurt"),
 					createSoundEvent("entity.nether_dragon.death"),
 					createSoundEvent("entity.bubble.bubble") };
