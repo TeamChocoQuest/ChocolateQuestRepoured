@@ -16,8 +16,12 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class ProjectileHomingEnderEye extends ProjectileBase {
 	
-	private Entity target;
-	private EntityLivingBase shooter;
+	private Entity target = null;
+	private EntityLivingBase shooter = null;
+	
+	public ProjectileHomingEnderEye(World worldIn) {
+		super(worldIn);
+	}
 	
 	public ProjectileHomingEnderEye(World worldIn, EntityLivingBase shooter, Entity target) {
 		super(worldIn, shooter);
@@ -58,7 +62,9 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if(hitTarget) {
 			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 		}
-		entityIn.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.shooter), 2 + this.world.getDifficulty().getId());
+		if(this.shooter != null) {
+			entityIn.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.shooter), 2 + this.world.getDifficulty().getId());
+		}
 	}
 	
 	@Override
