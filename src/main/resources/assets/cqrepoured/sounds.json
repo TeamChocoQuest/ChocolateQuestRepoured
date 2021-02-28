@@ -102,6 +102,34 @@
         "category": "neutral",
         "sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_death"}]
     },
+	
+	"entity.pirate.ambient":
+	{
+		"category": "neutral",
+		"sounds": [
+			{"name": "cqrepoured:entity/pirate/ambient_1"},
+			{"name": "cqrepoured:entity/pirate/ambient_2"},
+			{"name": "cqrepoured:entity/pirate/ambient_3"}
+		]
+	},
+	"entity.pirate.hurt":
+	{
+		"category": "neutral",
+		"sounds": [
+			{"name": "cqrepoured:entity/pirate/hurt_1"},
+			{"name": "cqrepoured:entity/pirate/hurt_2"},
+			{"name": "cqrepoured:entity/pirate/hurt_3"}
+		]
+	},
+	"entity.pirate.death":
+	{
+		"category": "neutral",
+		"sounds": [
+			{"name": "cqrepoured:entity/pirate/death_1"},
+			{"name": "cqrepoured:entity/pirate/death_2"}
+		]
+	},
+	
     "entity.bubble.bubble":
     {
         "category": "neutral",

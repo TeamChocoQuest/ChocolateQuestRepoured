@@ -41,6 +41,13 @@ public class CQRSounds {
 	public static final SoundEvent GOBLIN_HURT = Null();
 	@ObjectHolder("entity.goblin.death")
 	public static final SoundEvent GOBLIN_DEATH = Null();
+	
+	@ObjectHolder("entity.pirate.ambient")
+	public static final SoundEvent PIRATE_AMBIENT = Null();
+	@ObjectHolder("entity.pirate.hurt")
+	public static final SoundEvent PIRATE_HURT = Null();
+	@ObjectHolder("entity.pirate.death")
+	public static final SoundEvent PIRATE_DEATH = Null();
 
 	@ObjectHolder("entity.bubble.bubble")
 	public static final SoundEvent BUBBLE_BUBBLE = Null();
@@ -62,6 +69,9 @@ public class CQRSounds {
 					createSoundEvent("entity.gremlin.death"),
 					createSoundEvent("entity.nether_dragon.hurt"),
 					createSoundEvent("entity.nether_dragon.death"),
+					createSoundEvent("entity.pirate.ambient"),
+					createSoundEvent("entity.pirate.hurt"),
+					createSoundEvent("entity.pirate.death"),
 					createSoundEvent("entity.bubble.bubble") };
 
 			IForgeRegistry<SoundEvent> registry = event.getRegistry();
