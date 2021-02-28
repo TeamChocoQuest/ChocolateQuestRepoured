@@ -37,7 +37,6 @@ import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.Capes;
@@ -260,14 +259,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			return true;
 		}
 
-		boolean spectralFlag = false;
+		
+		// Now handled by enchantment itself
+		/*boolean spectralFlag = false;
 		if (source.getTrueSource() instanceof EntityLivingBase) {
 			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
 				amount *= 2;
 				spectralFlag = true;
 			}
-		}
-		if (!spectralFlag && !(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
+		}*/
+		if (/*!spectralFlag && */!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
 			amount *= 0.5F;
 		}
 
