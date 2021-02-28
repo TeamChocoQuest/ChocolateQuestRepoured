@@ -59,6 +59,7 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileFirewallPart;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHomingEnderEye;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHookShotHook;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHotFireball;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectilePoisonSpell;
@@ -121,6 +122,7 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
@@ -174,6 +176,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, RenderProjectileWeb::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderHook.class, RenderProjectileSpiderHook::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileThrownBlock.class, RenderProjectileThrownBlock::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHomingEnderEye.class, RenderProjectileHomingEnderEye::new);
 
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);

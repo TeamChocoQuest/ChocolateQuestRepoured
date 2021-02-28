@@ -31,7 +31,7 @@ public abstract class ProjectileBase extends EntityThrowable {
 
 	@Override
 	public void onUpdate() {
-		if (this.ticksExisted > 80) {
+		if (this.ticksExisted > 400) {
 			this.setDead();
 		}
 
