@@ -26,7 +26,7 @@ public class RenderProjectileHomingEnderEye extends Render<ProjectileHomingEnder
 		this.bindEntityTexture(entity);
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(.75F, .75F, .75F);
+		GlStateManager.scale(.5F, .5F, .5F);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
@@ -52,11 +52,13 @@ public class RenderProjectileHomingEnderEye extends Render<ProjectileHomingEnder
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 		
-		WorldClient world = Minecraft.getMinecraft().world;
-		double dx = entity.posX + (-0.5 + (world.rand.nextDouble()));
-		double dy = 0.25 + entity.posY + (-0.5 + (world.rand.nextDouble()));
-		double dz = entity.posZ + (-0.5 + (world.rand.nextDouble()));
-		world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
+		if(entity.ticksExisted % 10 == 0) {
+			WorldClient world = Minecraft.getMinecraft().world;
+			double dx = entity.posX + (-0.25 + (0.5 * world.rand.nextDouble()));
+			double dy = 0.125 + entity.posY + (-0.25 + (0.5 * world.rand.nextDouble()));
+			double dz = entity.posZ + (-0.25 + (0.5 * world.rand.nextDouble()));
+			world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
+		}
 		
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
