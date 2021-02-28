@@ -443,6 +443,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (!this.world.isRemote) {
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
+				
+				if(this.getRNG().nextBoolean()) {
+					this.dataManager.set(SHIELD_ACTIVE, true);
+					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_STUNNED.getPhaseObject());
+				}
 			}
 			return true;
 		}
@@ -677,8 +682,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		// Only process this on client!!
 		if (this.world.isRemote) {
 			for (int i = 0; i < handStates.length; i++) {
-				E_CALAMITY_HAND hand = E_CALAMITY_HAND.values()[i];
 				if (handStates[i] != 0) {
+					E_CALAMITY_HAND hand = E_CALAMITY_HAND.values()[i];
 					switch (hand) {
 					case LEFT_LOWER:
 						this.updateIndicator_Hand_LL = true;
