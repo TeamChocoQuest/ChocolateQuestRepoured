@@ -1,9 +1,12 @@
 package team.cqr.cqrepoured.objects.entity.mobs;
 
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CQRConfig;
 
@@ -66,6 +69,26 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	@Override
 	public float getDefaultHeight() {
 		return 1.2F;
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return CQRSounds.GREMLIN_AMBIENT;
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		return CQRSounds.GREMLIN_DEATH;
+	}
+	
+	@Override
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
+		return CQRSounds.GREMLIN_HURT;
+	}
+	
+	@Override
+	protected float getSoundVolume() {
+		return 0.5F * super.getSoundVolume();
 	}
 
 }

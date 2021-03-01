@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.objects.entity.mobs;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
@@ -12,7 +10,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -59,11 +56,12 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 		if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
 		}
-		if (source.getTrueSource() instanceof EntityLivingBase) {
+		// Now handled by enchantment
+		/*if (source.getTrueSource() instanceof EntityLivingBase) {
 			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
 				amount *= 2;
 			}
-		}
+		}*/
 		return super.attackEntityFrom(source, amount);
 	}
 

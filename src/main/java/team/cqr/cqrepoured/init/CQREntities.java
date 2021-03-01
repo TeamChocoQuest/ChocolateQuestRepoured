@@ -64,6 +64,7 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
@@ -95,6 +96,7 @@ public class CQREntities {
 	public static final EntityEntry PROJECTILE_HOT_FIREBALL = Null();
 	public static final EntityEntry PROJECTILE_WEB = Null();
 	public static final EntityEntry PROJECTILE_THROWN_BLOCK = Null();
+	public static final EntityEntry PROJECTILE_HOMING_ENDER_EYE = Null();
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
@@ -149,7 +151,7 @@ public class CQREntities {
 	public static class EntityRegistrationHandler {
 
 		@SubscribeEvent
-		public static void registerTileEntities(RegistryEvent.Register<EntityEntry> event) {
+		public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
 			final EntityEntry[] entityEntries = {
 					createEntityEntryWithoutEgg(EntitySlimePart.class, "slime_part", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileBullet.class, "projectile_bullet", 64, 1, true),
@@ -165,6 +167,7 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(ProjectileHotFireball.class, "projectile_hot_fireball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileWeb.class, "projectile_web", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileThrownBlock.class, "projectile_thrown_block", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileHomingEnderEye.class, "projectile_homing_ender_eye", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),

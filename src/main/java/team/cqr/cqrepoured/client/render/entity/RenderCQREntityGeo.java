@@ -70,9 +70,9 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			GlStateManager.pushMatrix();
 
 			this.renderPass = 1;
-			//TODO: Figure out how to properly "inflate" the model
-			//GlStateManager.scale(1.1, 1.1, 1.1);
-			//GlStateManager.translate(x * 1.1, y * 1.1, z * 1.1);
+			// TODO: Figure out how to properly "inflate" the model
+			// GlStateManager.scale(1.1, 1.1, 1.1);
+			// GlStateManager.translate(x * 1.1, y * 1.1, z * 1.1);
 
 			GlStateManager.depthMask(!entity.isInvisible());
 			GlStateManager.matrixMode(5890);
@@ -99,11 +99,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 			GlStateManager.popMatrix();
 		}
-	}
-
-	@Override
-	public void renderMultipass(T entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
 	}
 
 	protected double getWidthScale(T entity) {
@@ -145,6 +140,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
+		boolean customTextureMarker = this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered) != null;
+		if (customTextureMarker) {
+			this.bindTexture(this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered));
+		}
+
 		if (this.renderPass == 0) {
 			ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 			IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
@@ -177,6 +177,9 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			}
 		}
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
+		if (customTextureMarker) {
+			this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
+		}
 	}
 
 	private void renderBlock(IBlockState iBlockState, Entity currentEntity) {
@@ -237,5 +240,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	protected abstract void postRenderItem(ItemStack item, String boneName, T currentEntity);
 
 	protected abstract void postRenderBlock(IBlockState block, String boneName, T currentEntity);
+
+	/*
+	 * Return null, if the entity's texture is used
+	 */
+	@Nullable
+	protected abstract ResourceLocation getTextureForBone(String boneName, T currentEntity);
 
 }

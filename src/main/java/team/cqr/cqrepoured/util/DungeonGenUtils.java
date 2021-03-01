@@ -63,7 +63,7 @@ public class DungeonGenUtils {
 		return axisX + axisY + axisZ == 1.0D;
 	}
 	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radX, double radY, double radZ) {
-		return isInsideSpheroid(pointInSpace.subtract(spheroidCenter), radX, radY, radZ);
+		return isInsideSpheroid(new Vec3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(), pointInSpace.getZ() - spheroidCenter.getZ()) , radX, radY, radZ);
 	}
 	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radWidth, double radHeight) {
 		return isInsideSpheroid(pointOnSphere, radWidth, radHeight, radWidth);
