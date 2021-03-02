@@ -168,8 +168,11 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		 */
 		int deltaYPerChainSegment = 5;
 
-		int maxY = DungeonGenUtils.getYForPos(this.world, pos.getX(), pos.getZ(), true);
-		maxY = maxY >= 255 ? 255 : maxY;
+		/*int maxY = DungeonGenUtils.getYForPos(this.world, pos.getX(), pos.getZ(), true);
+		maxY = maxY >= 255 ? 255 : maxY;*/
+		//TODO: Move this option to the config of the dungeon, that is cleaner
+		//Or: Change this to something like "world.getMaxBuildHeight()", if that exists.
+		int maxY = 255;
 		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
 		for (int i = 0; i < chainCount; i++) {
 			// Check the direction of the chain
