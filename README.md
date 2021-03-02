@@ -8,7 +8,7 @@ Please refer to the curseforge page, our website, the wiki or our discord for in
 
 [Discord](https://discord.gg/StWzzFw)
 
-[VERY WIP Wiki](www.wiki.cq-repoured.net)
+[Wiki(WIP)](www.wiki.cq-repoured.net)
 
 [Website](https://cq-repoured.net)
 
