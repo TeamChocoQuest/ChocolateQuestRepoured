@@ -298,7 +298,7 @@ public abstract class DungeonBase {
 		if (!flag) {
 			for (BiomeDictionary.Type biomeType : biomeTypes) {
 				for (String s : this.allowedBiomeTypes) {
-					if (s.equals(biomeType.getName())) {
+					if (s.equalsIgnoreCase(biomeType.getName())) {
 						flag = true;
 						break;
 					}
@@ -317,7 +317,7 @@ public abstract class DungeonBase {
 		if (flag) {
 			for (BiomeDictionary.Type biomeType : biomeTypes) {
 				for (String s : this.disallowedBiomeTypes) {
-					if (s.equals(biomeType.getName())) {
+					if (s.equalsIgnoreCase(biomeType.getName())) {
 						flag = false;
 						break;
 					}
