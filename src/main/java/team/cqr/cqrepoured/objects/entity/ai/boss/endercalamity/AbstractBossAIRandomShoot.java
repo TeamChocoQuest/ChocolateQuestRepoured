@@ -48,7 +48,9 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 	@Override
 	public void updateTask() {
 		this.cooldown--;
-		this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+		if(this.entity.hasAttackTarget()) {
+			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+		}
 		if(this.cooldown <= 0) {
 			switch(this.currentPhase) {
 			case PREPARING_TO_SHOOT:
