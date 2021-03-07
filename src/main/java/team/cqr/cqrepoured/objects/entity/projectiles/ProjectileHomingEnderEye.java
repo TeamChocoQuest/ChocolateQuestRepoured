@@ -45,6 +45,8 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
          entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
 		
 		super.onImpact(result);
+		
+		this.setDead();
 	}
 	
 	@Override
@@ -70,7 +72,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if(this.ticksExisted > 400) {
+		if(this.ticksExisted > 400 && !world.isRemote) {
 			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 			this.setDead();
 			return;
@@ -78,7 +80,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if(!world.isRemote && this.target != null) {
 			Vec3d v = this.target.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
-			v = v.scale(2);
+			v = v.scale(0.5);
 			
 			this.motionX = v.x;
 			this.motionY = v.y;
