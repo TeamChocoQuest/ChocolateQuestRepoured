@@ -1,0 +1,31 @@
+package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
+
+import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
+
+public class BossAIRandomTeleportEyes extends AbstractBossAIRandomShoot {
+
+	public BossAIRandomTeleportEyes(EntityCQREnderCalamity entity) {
+		super(entity);
+	}
+
+	@Override
+	protected int execRandomShoot() {
+		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector()).normalize();
+		ProjectileHomingEnderEye eye = new ProjectileHomingEnderEye(this.entity.world, this.entity, this.entity.getAttackTarget());
+		eye.motionX = v.x / 10;
+		eye.motionY = v.y / 10;
+		eye.motionZ = v.z / 10;
+		eye.velocityChanged = true;
+		this.world.spawnEntity(eye);
+		return 18;
+	}
+
+	@Override
+	protected boolean canExecuteDuringPhase(EEnderCalamityPhase phase) {
+		return phase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER;
+	}
+
+}

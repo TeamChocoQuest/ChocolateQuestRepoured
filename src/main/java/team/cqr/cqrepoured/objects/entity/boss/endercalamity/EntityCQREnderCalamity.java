@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -40,6 +39,8 @@ import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -149,6 +150,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.tasks.addTask(8, teleportAI);
 		this.tasks.addTask(8, new BossAISummonMinions(this));
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
+		this.tasks.addTask(7, new BossAIRandomTeleportEyes(this));
+		this.tasks.addTask(7, new BossAIRandomTeleportLaser(this));
 	}
 
 	@Override
@@ -158,11 +161,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
 
-		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.of(Blocks.END_STONE.getDefaultState()));
+		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());//of(Blocks.END_STONE.getDefaultState()));
 		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
 		this.dataManager.register(BLOCK_LEFT_LOWER, Optional.absent());
 		this.dataManager.register(BLOCK_RIGHT_UPPER, Optional.absent());
-		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.of(Blocks.OBSIDIAN.getDefaultState()));
+		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());//of(Blocks.OBSIDIAN.getDefaultState()));
 		this.dataManager.register(BLOCK_RIGHT_LOWER, Optional.absent());
 	}
 
@@ -282,7 +285,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return PlayState.CONTINUE;
 	}
 
-	boolean forceTeleport() {
+	public boolean forceTeleport() {
 		try {
 			this.teleportAI.forceExecution();
 			return true;
@@ -521,9 +524,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
+		System.out.println("Switching phase! Old phase: " +  this.currentPhase.name());
 		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
 		if (nextPhase.isPresent()) {
 			this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase.get());
+			System.out.println("New phase: " + this.currentPhase.name());
 			if (nextPhase.get().isPhaseTimed()) {
 				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
 			}
