@@ -24,6 +24,8 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -524,11 +526,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
-		System.out.println("Switching phase! Old phase: " +  this.currentPhase.name());
+		ITextComponent msg = new TextComponentString("Switching phase! Old phase: " +  this.currentPhase.name());
+		if(this.getServer() != null) this.getServer().getPlayerList().sendMessage(msg);
+		
 		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
 		if (nextPhase.isPresent()) {
 			this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase.get());
-			System.out.println("New phase: " + this.currentPhase.name());
+			if(this.getServer() != null) this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
 			if (nextPhase.get().isPhaseTimed()) {
 				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
 			}
