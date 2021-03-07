@@ -93,7 +93,6 @@ public class ProtectedRegionClientEventHandler {
 		// GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableAlpha();
-		GlStateManager.disableLighting();
 		GlStateManager.depthMask(false);
 
 		mc.getTextureManager().bindTexture(TEXTURE);
@@ -103,7 +102,6 @@ public class ProtectedRegionClientEventHandler {
 		}
 
 		GlStateManager.depthMask(true);
-		GlStateManager.enableLighting();
 		GlStateManager.enableAlpha();
 		GlStateManager.enableCull();
 		GlStateManager.disableBlend();
