@@ -15,71 +15,74 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class ProjectileHomingEnderEye extends ProjectileBase {
-	
+
 	private Entity target = null;
 	private EntityLivingBase shooter = null;
-	
+
 	public ProjectileHomingEnderEye(World worldIn) {
 		super(worldIn);
 	}
-	
+
 	public ProjectileHomingEnderEye(World worldIn, EntityLivingBase shooter, Entity target) {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.target = target;
 		this.isImmuneToFire = true;
 	}
-	
+
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+		EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+		entityareaeffectcloud.setOwner(this.shooter);
+		entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
+		entityareaeffectcloud.setRadius(2F);
+		entityareaeffectcloud.setDuration(300);
+		entityareaeffectcloud.setRadiusPerTick((7.0F - entityareaeffectcloud.getRadius()) / (float) entityareaeffectcloud.getDuration());
+		entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
+
+		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
+			this.setDead();
+		} else if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
 			this.applyEntityCollisionEye(result.entityHit);
 		}
 
-		 EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
-         entityareaeffectcloud.setOwner(this.shooter);
-         entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
-         entityareaeffectcloud.setRadius(2F);
-         entityareaeffectcloud.setDuration(300);
-         entityareaeffectcloud.setRadiusPerTick((7.0F - entityareaeffectcloud.getRadius()) / (float)entityareaeffectcloud.getDuration());
-         entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
-		
 		super.onImpact(result);
 	}
-	
+
 	public void applyEntityCollisionEye(Entity entityIn) {
-		if(entityIn == null) {
+		if (entityIn == null) {
 			return;
 		}
-		if(entityIn == this.shooter) {
+		if (entityIn == this.shooter) {
 			return;
 		}
-		if(entityIn instanceof ProjectileBase || entityIn instanceof EntityEnderman || (entityIn instanceof EntityLivingBase && ((EntityLivingBase)entityIn).getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN)) {
+		if (entityIn instanceof ProjectileBase || entityIn instanceof EntityEnderman || (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN)) {
 			return;
 		}
 		boolean hitTarget = this.target != null && entityIn != this.shooter;
-		if(hitTarget) {
+		if (hitTarget) {
 			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 			this.setDead();
 		}
-		if(this.shooter != null) {
+		if (this.shooter != null) {
 			entityIn.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.shooter), 2 + this.world.getDifficulty().getId());
 		}
 	}
-	
+
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if(this.ticksExisted > 400 && !world.isRemote) {
+		if (this.ticksExisted > 400 && !world.isRemote) {
 			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 			this.setDead();
 			return;
 		}
-		if(!world.isRemote && this.target != null) {
+		if (!world.isRemote && this.target != null) {
 			Vec3d v = this.target.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
-			v = v.scale(0.25);
-			
+			v = v.scale(0.4);
+
 			this.motionX = v.x;
 			this.motionY = v.y;
 			this.motionZ = v.z;
