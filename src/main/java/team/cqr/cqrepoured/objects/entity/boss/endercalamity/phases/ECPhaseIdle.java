@@ -33,7 +33,7 @@ public final class ECPhaseIdle implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		return new IEnderCalamityPhase[] { EEnderCalamityPhase.PHASE_LASERING.getPhaseObject(), EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject() };
+		return new IEnderCalamityPhase[] { /*EEnderCalamityPhase.PHASE_LASERING.getPhaseObject(), EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject(),*/ EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject() };
 	}
 
 	@Override
@@ -41,8 +41,8 @@ public final class ECPhaseIdle implements IEnderCalamityPhase {
 		return true;
 	}
 
-	private static final int MIN_EXECUTION_TIME = 100;
-	private static final int MAX_EXECUTION_TIME = 300;
+	private static final int MIN_EXECUTION_TIME = 50;
+	private static final int MAX_EXECUTION_TIME = 150;
 
 	@Override
 	public Optional<Integer> getRandomExecutionTime() {
