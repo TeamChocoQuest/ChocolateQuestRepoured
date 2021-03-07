@@ -52,13 +52,13 @@ public class RenderProjectileHomingEnderEye extends Render<ProjectileHomingEnder
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 		
-		if(entity.ticksExisted % 4 == 0) {
+		//if(entity.ticksExisted % 4 == 0) {
 			WorldClient world = Minecraft.getMinecraft().world;
 			double dx = entity.posX + (-0.25 + (0.5 * world.rand.nextDouble()));
 			double dy = 0.125 + entity.posY + (-0.25 + (0.5 * world.rand.nextDouble()));
 			double dz = entity.posZ + (-0.25 + (0.5 * world.rand.nextDouble()));
 			world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
-		}
+		//}
 		
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}

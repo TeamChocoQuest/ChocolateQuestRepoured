@@ -33,7 +33,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
-			this.applyEntityCollision(result.entityHit);
+			this.applyEntityCollisionEye(result.entityHit);
 		}
 
 		 EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
@@ -45,12 +45,9 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
          entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
 		
 		super.onImpact(result);
-		
-		this.setDead();
 	}
 	
-	@Override
-	public void applyEntityCollision(Entity entityIn) {
+	public void applyEntityCollisionEye(Entity entityIn) {
 		if(entityIn == null) {
 			return;
 		}
@@ -60,9 +57,10 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if(entityIn instanceof ProjectileBase || entityIn instanceof EntityEnderman || (entityIn instanceof EntityLivingBase && ((EntityLivingBase)entityIn).getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN)) {
 			return;
 		}
-		boolean hitTarget = this.target != null && entityIn == this.target;
+		boolean hitTarget = this.target != null && entityIn != this.shooter;
 		if(hitTarget) {
 			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
+			this.setDead();
 		}
 		if(this.shooter != null) {
 			entityIn.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.shooter), 2 + this.world.getDifficulty().getId());
@@ -80,7 +78,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if(!world.isRemote && this.target != null) {
 			Vec3d v = this.target.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
-			v = v.scale(0.5);
+			v = v.scale(0.25);
 			
 			this.motionX = v.x;
 			this.motionY = v.y;
