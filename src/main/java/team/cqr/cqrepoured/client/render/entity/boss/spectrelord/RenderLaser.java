@@ -1,10 +1,12 @@
 package team.cqr.cqrepoured.client.render.entity.boss.spectrelord;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -30,6 +32,15 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 
 	@Override
 	public void doRender(AbstractEntityLaser entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		Minecraft mc = Minecraft.getMinecraft();
+		double entityX = entity.prevX + (entity.x - entity.prevX) * partialTicks;
+		double entityY = entity.prevY + (entity.y - entity.prevY) * partialTicks;
+		double entityZ = entity.prevZ + (entity.z - entity.prevZ) * partialTicks;
+		Entity renderViewEntity = mc.getRenderViewEntity();
+		double renderViewEntityX = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
+		double renderViewEntityY = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
+		double renderViewEntityZ = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
+
 		GlStateManager.pushMatrix();
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
@@ -37,7 +48,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.depthMask(false);
 		this.bindEntityTexture(entity);
-		GlStateManager.translate(x, y, z);
+		GlStateManager.translate(entityX - renderViewEntityX, entityY - renderViewEntityY, entityZ - renderViewEntityZ);
 		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
 		float pitch = this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
@@ -45,7 +56,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.scale(-1.0D, -1.0D, 1.0D);
 
 		Vec3d start = entity.getPositionVector();
-		Vec3d end = start.add(Vec3d.fromPitchYaw(entity.rotationPitchCQR, entity.rotationYawCQR).scale(entity.length));
+		Vec3d end = start.add(Vec3d.fromPitchYaw(pitch, yaw).scale(entity.length));
 		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
 		double d = result != null ? (float) result.hitVec.subtract(entity.getPositionVector()).length() : entity.length;
 

@@ -21,6 +21,12 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	protected EntityLivingBase caster;
 	public float length;
+	public double x;
+	public double y;
+	public double z;
+	public double prevX;
+	public double prevY;
+	public double prevZ;
 	public float rotationYawCQR;
 	public float rotationPitchCQR;
 	public float prevRotationYawCQR;

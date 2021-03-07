@@ -23,6 +23,9 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 
 	@Override
 	public void updatePositionAndRotation() {
+		this.prevX = this.x;
+		this.prevY = this.y;
+		this.prevZ = this.z;
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
 		Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
@@ -43,7 +46,10 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 		this.rotationYawCQR = MathHelper.wrapDegrees(this.rotationYawCQR);
 		this.rotationPitchCQR += deltaPitch;
 		Vec3d vec4 = Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
-		this.setPosition(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
+		this.x = vec1.x + vec4.x * 0.25D;
+		this.y = vec1.y + vec4.y * 0.25D;
+		this.z = vec1.z + vec4.z * 0.25D;
+		this.setPosition(this.x, this.y, this.z);
 	}
 
 	@Override
