@@ -13,24 +13,22 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.util.math.BoundingBox;
 
 public abstract class AbstractEntityLaser extends Entity implements IEntityAdditionalSpawnData {
 
-	protected EntityLivingBase caster;
+	public EntityLivingBase caster;
 	public float length;
-	public double x;
-	public double y;
-	public double z;
-	public double prevX;
-	public double prevY;
-	public double prevZ;
 	public float rotationYawCQR;
 	public float rotationPitchCQR;
 	public float prevRotationYawCQR;
 	public float prevRotationPitchCQR;
+	public float serverRotationYawCQR;
+	public float serverRotationPitchCQR;
 	private final Object2IntMap<EntityLivingBase> hitInfoMap = new Object2IntOpenHashMap<>();
 	private final Object2IntMap<BlockPos> blockBreakMap = new Object2IntOpenHashMap<>();
 
@@ -106,7 +104,16 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 		super.onEntityUpdate();
 
-		this.updatePositionAndRotation();
+		this.prevRotationYawCQR = this.rotationYawCQR;
+		this.prevRotationPitchCQR = this.rotationPitchCQR;
+
+		if (this.world.isRemote) {
+			this.rotationYawCQR = this.serverRotationYawCQR;
+			this.rotationPitchCQR = this.serverRotationPitchCQR;
+		} else {
+			this.updatePositionAndRotation();
+			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncLaserRotation(this), this);
+		}
 
 		if (!this.world.isRemote) {
 			Vec3d start = this.getPositionVector();

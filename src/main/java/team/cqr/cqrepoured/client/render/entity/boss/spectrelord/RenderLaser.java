@@ -33,13 +33,13 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 	@Override
 	public void doRender(AbstractEntityLaser entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		Minecraft mc = Minecraft.getMinecraft();
-		double entityX = entity.prevX + (entity.x - entity.prevX) * partialTicks;
-		double entityY = entity.prevY + (entity.y - entity.prevY) * partialTicks;
-		double entityZ = entity.prevZ + (entity.z - entity.prevZ) * partialTicks;
+		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
+		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
+		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
 		Entity renderViewEntity = mc.getRenderViewEntity();
-		double renderViewEntityX = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
-		double renderViewEntityY = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
-		double renderViewEntityZ = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
+		double x2 = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
+		double y2 = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
+		double z2 = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.disableTexture2D();
@@ -48,7 +48,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.depthMask(false);
 		this.bindEntityTexture(entity);
-		GlStateManager.translate(entityX - renderViewEntityX, entityY - renderViewEntityY, entityZ - renderViewEntityZ);
+		GlStateManager.translate(x1 - x2, y1 - y2, z1 - z2);
 		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
 		float pitch = this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
