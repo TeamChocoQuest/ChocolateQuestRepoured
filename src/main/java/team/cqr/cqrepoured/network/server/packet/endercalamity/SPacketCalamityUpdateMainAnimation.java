@@ -3,64 +3,61 @@ package team.cqr.cqrepoured.network.server.packet.endercalamity;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 
-public class SPacketCalamityUpdateHand implements IMessage {
+public class SPacketCalamityUpdateMainAnimation implements IMessage {
 
 	private int entityId;
-	private byte[] handStates = new byte[6];
+	private String animationID;
 	
-	public SPacketCalamityUpdateHand() {
+	public SPacketCalamityUpdateMainAnimation() {
 		
 	}
 
-	SPacketCalamityUpdateHand(Builder builder) {
+	SPacketCalamityUpdateMainAnimation(Builder builder) {
 		this.entityId = builder.getEntityID();
-		for (int i = 0; i < builder.getStates().length; i++) {
-			this.handStates[i] = builder.getStates()[i];
-		}
+		this.animationID = builder.getValue();
+	}
+	
+	public String getAnimationID() {
+		return this.animationID;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		buf.readBytes(this.handStates);
+		this.animationID = ByteBufUtils.readUTF8String(buf);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(entityId);
-		buf.writeBytes(handStates);
+		ByteBufUtils.writeUTF8String(buf, this.animationID);
 	}
 
-	public byte[] getHandStates() {
-		return this.handStates;
-	}
 
 	public static Builder builder(EntityCQREnderCalamity entity) {
 		return new Builder(entity);
 	}
 
-	static class Builder {
+	public static class Builder {
 
 		Builder(EntityCQREnderCalamity entity) {
 			this.entityID = entity.getEntityId();
 		}
 
 		private int entityID;
-		private byte[] states = new byte[] { 0, 0, 0, 0, 0, 0 };
+		private String value;
 
-		public Builder swingArm(E_CALAMITY_HAND hand, boolean swinging) {
-
-			this.states[hand.getIndex()] = (byte) (swinging ? 1 : 0);
-
+		public Builder animate(String value) {
+			this.value = value;
 			return this;
 		}
 
-		byte[] getStates() {
-			return this.states;
+		String getValue() {
+			return this.value;
 		}
 
 		int getEntityID() {
@@ -68,9 +65,9 @@ public class SPacketCalamityUpdateHand implements IMessage {
 		}
 
 		@Nullable
-		public SPacketCalamityUpdateHand build() {
+		public SPacketCalamityUpdateMainAnimation build() {
 			try {
-				return new SPacketCalamityUpdateHand(this);
+				return new SPacketCalamityUpdateMainAnimation(this);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
