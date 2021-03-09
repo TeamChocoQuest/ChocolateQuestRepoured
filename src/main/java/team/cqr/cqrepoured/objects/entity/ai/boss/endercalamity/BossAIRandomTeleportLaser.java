@@ -1,6 +1,9 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
@@ -19,12 +22,40 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
 		this.world.spawnEntity(laser);
 		this.projectile = laser;
-		return 18;
+		//Animation length: 2,68s => 54 ticks
+		//Animation warmup time: 0.72s => 21 ticks
+		//Animation cooldown time: 0.28s => 6 ticks
+		//2 ticks buffer
+		return 23;
 	}
 
 	@Override
 	protected boolean canExecuteDuringPhase(EEnderCalamityPhase phase) {
 		return phase == EEnderCalamityPhase.PHASE_TELEPORT_LASER;
+	}
+
+	@Override
+	public int execPrepareShoot() {
+		//40 is the transition time of the animation controller
+		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
+		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		//40 is the transition time
+		//animation warmup is 0.72s => 15 ticks
+		//5 ticks is a little buffer
+		return 55;
+	}
+	
+	@Override
+	public void execAfterShoot() {
+		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+	}
+	
+	@Override
+	public void resetTask() {
+		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		super.resetTask();
 	}
 
 }

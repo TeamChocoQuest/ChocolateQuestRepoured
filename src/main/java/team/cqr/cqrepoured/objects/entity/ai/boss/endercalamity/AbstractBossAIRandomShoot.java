@@ -41,7 +41,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		this.currentPhase = E_PHASE.PREPARING_TO_SHOOT;
+		this.currentPhase = E_PHASE.PREPARING_TO_TELEPORT;
 		this.cooldown = 10;
 	}
 	
@@ -50,11 +50,14 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 		this.cooldown--;
 		if(this.entity.hasAttackTarget()) {
 			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+			this.entity.setCantUpdatePhase(false);
 		}
+		//Timer gets set to the timer of the NEXT phase
+		//The case basically checks for the phase we are in CURRENTLY
 		if(this.cooldown <= 0) {
 			switch(this.currentPhase) {
 			case PREPARING_TO_SHOOT:
-				this.cooldown = 1;
+				this.cooldown = this.execRandomShoot();
 				this.currentPhase = E_PHASE.SHOOTING;
 				break;
 			case PREPARING_TO_TELEPORT:
@@ -65,26 +68,32 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 				this.currentPhase = E_PHASE.TELEPORT;
 				break;
 			case SHOOTING:
-				this.cooldown = this.execRandomShoot();
+				this.cooldown = 10;
 				this.currentPhase = E_PHASE.PREPARING_TO_TELEPORT;
+				this.execAfterShoot();
 				break;
 			case TELEPORT:
 				this.entity.forceTeleport();
-				this.cooldown = 5;
+				this.cooldown = this.execPrepareShoot();
 				this.currentPhase = E_PHASE.PREPARING_TO_SHOOT;
 				break;
 			default:
 				break;
-			
 			}
+			this.entity.setCantUpdatePhase(this.currentPhase == E_PHASE.SHOOTING);
 		}
 	}
+	
+	public void execAfterShoot() {}
+	
+	public abstract int execPrepareShoot();
 	
 	@Override
 	public void resetTask() {
 		if(this.projectile != null) {
 			this.projectile.setDead();
 		}
+		this.entity.setCantUpdatePhase(false);
 		super.resetTask();
 	}
 	
