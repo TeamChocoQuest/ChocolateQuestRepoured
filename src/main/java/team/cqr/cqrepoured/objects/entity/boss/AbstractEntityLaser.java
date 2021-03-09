@@ -153,10 +153,14 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 			for (EntityLivingBase entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, EntityLivingBase.class, bb)) {
 				if ((faction == null || !faction.isAlly(entity)) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= 10) {
 					this.hitInfoMap.put(entity, this.ticksExisted);
-					entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), 3.0F);
+					entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), this.getDamage());
 				}
 			}
 		}
+	}
+	
+	protected float getDamage() {
+		return 3.0F;
 	}
 
 	@Override
