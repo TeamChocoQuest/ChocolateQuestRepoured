@@ -80,7 +80,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 			default:
 				break;
 			}
-			this.entity.setCantUpdatePhase(this.currentPhase == E_PHASE.SHOOTING);
+			this.entity.setCantUpdatePhase(this.currentPhase != E_PHASE.PREPARING_TO_TELEPORT || this.currentPhase != E_PHASE.TELEPORT );
 		}
 	}
 	
