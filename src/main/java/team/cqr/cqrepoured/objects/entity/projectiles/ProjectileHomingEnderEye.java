@@ -35,10 +35,13 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 		entityareaeffectcloud.setOwner(this.shooter);
 		entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
-		entityareaeffectcloud.setRadius(1F);
+		entityareaeffectcloud.setRadius(2F);
 		entityareaeffectcloud.setDuration(150);
-		entityareaeffectcloud.setRadiusPerTick((3.5F - entityareaeffectcloud.getRadius()) / (float) entityareaeffectcloud.getDuration());
-		entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
+		entityareaeffectcloud.setRadiusOnUse(-0.25F);
+        entityareaeffectcloud.setWaitTime(10);
+        entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float)entityareaeffectcloud.getDuration());
+        entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
+		
 		this.world.spawnEntity(entityareaeffectcloud);
 
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
