@@ -18,7 +18,7 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 
 	public EntityTargetingLaser(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target) {
 		super(worldIn, caster, length);
-		this.target = world.playerEntities.get(0);
+		this.target = target;
 	}
 
 	@Override
