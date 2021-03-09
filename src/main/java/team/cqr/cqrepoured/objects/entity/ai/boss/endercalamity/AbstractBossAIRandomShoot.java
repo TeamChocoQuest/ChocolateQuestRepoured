@@ -70,7 +70,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 			case SHOOTING:
 				this.cooldown = 10;
 				this.currentPhase = E_PHASE.PREPARING_TO_TELEPORT;
-				this.execAfterShoot();
+				this.cooldown += this.execAfterShoot();
 				break;
 			case TELEPORT:
 				this.entity.forceTeleport();
@@ -84,7 +84,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 		}
 	}
 	
-	public void execAfterShoot() {}
+	public int execAfterShoot() {return 1;}
 	
 	public abstract int execPrepareShoot();
 	

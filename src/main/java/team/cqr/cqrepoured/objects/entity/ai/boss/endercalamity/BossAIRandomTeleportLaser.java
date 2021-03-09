@@ -42,13 +42,16 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		//40 is the transition time
 		//animation warmup is 0.72s => 15 ticks
 		//5 ticks is a little buffer
-		return 55;
+		return 25;
 	}
 	
 	@Override
-	public void execAfterShoot() {
+	public int execAfterShoot() {
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		//Animation cooldown time: 0.28s => 6 ticks
+		//Transition time: 10 ticks
+		return 16;
 	}
 	
 	@Override

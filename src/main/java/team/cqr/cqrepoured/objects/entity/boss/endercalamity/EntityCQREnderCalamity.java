@@ -319,7 +319,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 40, this::predicate));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
 
 		// Arms
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper));
