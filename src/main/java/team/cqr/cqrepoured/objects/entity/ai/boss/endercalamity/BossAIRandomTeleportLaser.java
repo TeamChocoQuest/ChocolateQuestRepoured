@@ -26,6 +26,9 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		//Animation warmup time: 0.72s => 21 ticks
 		//Animation cooldown time: 0.28s => 6 ticks
 		//2 ticks buffer
+		//TODO: Make animation longer to make this longer
+		//TODO: Mark AI to not change looking direction when in shooting state
+		//TODO: Calculate new starting position of laser to match animation
 		return 23;
 	}
 
