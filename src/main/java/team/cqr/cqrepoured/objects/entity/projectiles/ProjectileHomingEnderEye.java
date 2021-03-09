@@ -40,7 +40,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		entityareaeffectcloud.setRadiusOnUse(-0.25F);
         entityareaeffectcloud.setWaitTime(10);
         entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float)entityareaeffectcloud.getDuration());
-        entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 1, 1));
+        entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 20, 1));
 		
 		this.world.spawnEntity(entityareaeffectcloud);
 
