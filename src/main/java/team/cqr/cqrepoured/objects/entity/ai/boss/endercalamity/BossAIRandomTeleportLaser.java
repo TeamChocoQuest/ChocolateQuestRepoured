@@ -18,6 +18,12 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	@Override
 	protected int execRandomShoot() {
 		Vec3d eyePos = this.entity.getPositionEyes(1);
+		//DONE: Calculate new starting position of laser to match animation
+		//Head distance with scale = 100%: 0.75 blocks
+		Vec3d v = this.entity.getLookVec().normalize();
+		v = v.scale(0.75);
+		v = v.scale(this.entity.getSizeVariation());
+		eyePos = eyePos.add(v);
 		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget());
 		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
 		this.world.spawnEntity(laser);
@@ -29,7 +35,6 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		//5 ticks buffer
 		//DONE: Make animation longer to make this longer
 		//TODO: Mark AI to not change looking direction when in shooting state
-		//TODO: Calculate new starting position of laser to match animation
 		return 70;
 	}
 
