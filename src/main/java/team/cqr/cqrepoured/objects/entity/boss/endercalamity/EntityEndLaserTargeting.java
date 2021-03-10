@@ -32,5 +32,10 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	public float getColorB() {
 		return 0.98F;
 	}
+	
+	@Override
+	protected float getDamage() {
+		return 5F;
+	}
 
 }

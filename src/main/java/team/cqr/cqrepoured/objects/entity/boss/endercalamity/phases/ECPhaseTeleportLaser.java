@@ -40,8 +40,8 @@ public class ECPhaseTeleportLaser implements IEnderCalamityPhase {
 		return true;
 	}
 
-	private static final int MIN_EXECUTION_TIME = 200;
-	private static final int MAX_EXECUTION_TIME = 400;
+	private static final int MIN_EXECUTION_TIME = 400;
+	private static final int MAX_EXECUTION_TIME = 600;
 
 	@Override
 	public Optional<Integer> getRandomExecutionTime() {

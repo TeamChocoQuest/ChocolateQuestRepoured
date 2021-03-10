@@ -163,11 +163,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
 
-		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());//of(Blocks.END_STONE.getDefaultState()));
+		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());// of(Blocks.END_STONE.getDefaultState()));
 		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
 		this.dataManager.register(BLOCK_LEFT_LOWER, Optional.absent());
 		this.dataManager.register(BLOCK_RIGHT_UPPER, Optional.absent());
-		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());//of(Blocks.OBSIDIAN.getDefaultState()));
+		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());// of(Blocks.OBSIDIAN.getDefaultState()));
 		this.dataManager.register(BLOCK_RIGHT_LOWER, Optional.absent());
 	}
 
@@ -181,19 +181,38 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return 2F;
 	}
 
-	private static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
-	private static final String ANIM_NAME_IDLE = ANIM_NAME_PREFIX + "idle";
-	private static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
-	private static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shootLaser";
-	private static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
-	private static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
+	public static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
+	public static final String ANIM_NAME_IDLE_BODY = ANIM_NAME_PREFIX + "idle";
+	public static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
+	//Duration: 5.0s => 100 ticks
+	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shootLaser";
+	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shootLaser";
+	public static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
+	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 
+	private String currentAnimation = null;
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.dataManager.get(IS_HURT)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, false));
 			return PlayState.CONTINUE;
 		}
-		event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
+
+		if (this.newAnimation.isPresent()) {
+			this.currentAnimation = newAnimation.get();
+			this.newAnimation = Optional.absent();
+		}
+		if(this.currentAnimation != null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation, false));
+		}
+
+		if (event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, true));
+		}
+
+		/*if(this.ticksExisted % 5 == 0) {
+			System.out.println("Animation: " + event.getController().getCurrentAnimation().animationName);
+		}*/
+		
 		return PlayState.CONTINUE;
 	}
 
@@ -275,6 +294,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final String ANIM_NAME_ARM_LL_IDLE = ANIM_NAME_PREFIX + "idle_armLL";
 	private static final String ANIM_NAME_ARM_LL_THROW = ANIM_NAME_PREFIX + "throwBlock_LL";
 	private boolean updateIndicator_Hand_LL = false;
+	private boolean dontUpdatePhase = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
@@ -448,8 +468,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (!this.world.isRemote) {
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
-				
-				if(this.getRNG().nextBoolean()) {
+
+				if (this.getRNG().nextBoolean()) {
 					this.dataManager.set(SHIELD_ACTIVE, true);
 					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_STUNNED.getPhaseObject());
 				}
@@ -507,6 +527,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	private void handlePhases() {
+		if (this.cantUpdatePhase()) {
+			return;
+		}
 		IEnderCalamityPhase phase = this.currentPhase.getPhaseObject();
 		if (this.currentPhase.equals(EEnderCalamityPhase.PHASE_NO_TARGET)) {
 			if (this.hasAttackTarget()) {
@@ -523,16 +546,33 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (timedPhaseChange) {
 			this.switchToNextPhaseOf(phase);
 		}
+
+	}
+
+	public void setCantUpdatePhase(boolean value) {
+		if (this.world.isRemote) {
+			return;
+		}
+		this.dontUpdatePhase = value;
+	}
+
+	private boolean cantUpdatePhase() {
+		if (this.world.isRemote) {
+			return true;
+		}
+		return this.dontUpdatePhase;
 	}
 
 	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
-		ITextComponent msg = new TextComponentString("Switching phase! Old phase: " +  this.currentPhase.name());
-		if(this.getServer() != null) this.getServer().getPlayerList().sendMessage(msg);
-		
+		ITextComponent msg = new TextComponentString("Switching phase! Old phase: " + this.currentPhase.name());
+		if (this.getServer() != null)
+			this.getServer().getPlayerList().sendMessage(msg);
+
 		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
 		if (nextPhase.isPresent()) {
 			this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase.get());
-			if(this.getServer() != null) this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
+			if (this.getServer() != null)
+				this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
 			if (nextPhase.get().isPhaseTimed()) {
 				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
 			}
@@ -721,6 +761,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
+	}
+
+	private Optional<String> newAnimation = Optional.absent();
+
+	public void processAnimationUpdate(String animationID) {
+		// Only process this on client!!
+		//if (this.world.isRemote) {
+			this.newAnimation = Optional.of(animationID);
+			System.out.println("New animation!" + this.newAnimation.get());
+		//}
 	}
 
 }
