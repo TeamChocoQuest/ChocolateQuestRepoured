@@ -19,8 +19,10 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	protected int execRandomShoot() {
 		Vec3d eyePos = this.entity.getPositionEyes(1);
 		System.out.println("original eyepos: " + eyePos.toString());
-		//TODO: Calculate new starting position of laser to match animation
+		//DONE: Calculate new starting position of laser to match animation
 		//Head distance with scale = 100%: 0.75 blocks
+		//TODO: Add sub entity for the laser itself!
+		//TODO: Or bug meldex to change the laser to use a position for it's start rather than an entity or create a special sub-laser entity for exactly that
 		Vec3d v = this.entity.getLookVec().normalize();
 		System.out.println("vector v: " + v.toString());
 		System.out.println("entity scale: " + entity.getSizeVariation());
