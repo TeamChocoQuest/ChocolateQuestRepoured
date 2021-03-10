@@ -32,25 +32,26 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
-		entityareaeffectcloud.setOwner(this.shooter);
-		entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
-		entityareaeffectcloud.setRadius(2F);
-		entityareaeffectcloud.setDuration(150);
-		entityareaeffectcloud.setRadiusOnUse(-0.25F);
-        entityareaeffectcloud.setWaitTime(10);
-        entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float)entityareaeffectcloud.getDuration());
-        entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 20, 1));
-		
-		this.world.spawnEntity(entityareaeffectcloud);
+		if (!this.world.isRemote) {
+			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+			entityareaeffectcloud.setOwner(this.shooter);
+			entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
+			entityareaeffectcloud.setRadius(2F);
+			entityareaeffectcloud.setDuration(150);
+			entityareaeffectcloud.setRadiusOnUse(-0.25F);
+			entityareaeffectcloud.setWaitTime(10);
+			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
+			entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 20, 1));
 
-		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
-			this.setDead();
-		} else if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
-			this.applyEntityCollisionEye(result.entityHit);
+			this.world.spawnEntity(entityareaeffectcloud);
+
+			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+				world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
+				this.setDead();
+			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+				this.applyEntityCollisionEye(result.entityHit);
+			}
 		}
-
 		super.onImpact(result);
 	}
 
