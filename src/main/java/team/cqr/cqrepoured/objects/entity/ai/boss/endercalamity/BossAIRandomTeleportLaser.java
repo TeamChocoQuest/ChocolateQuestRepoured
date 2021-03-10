@@ -22,14 +22,15 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
 		this.world.spawnEntity(laser);
 		this.projectile = laser;
-		//Animation length: 2,68s => 54 ticks
+		//Animation total length: 5s => 100 ticks
 		//Animation warmup time: 0.72s => 21 ticks
 		//Animation cooldown time: 0.28s => 6 ticks
-		//2 ticks buffer
-		//TODO: Make animation longer to make this longer
+		//Animation lasering time: 3.94s => 79 ticks
+		//5 ticks buffer
+		//DONE: Make animation longer to make this longer
 		//TODO: Mark AI to not change looking direction when in shooting state
 		//TODO: Calculate new starting position of laser to match animation
-		return 23;
+		return 70;
 	}
 
 	@Override
@@ -39,13 +40,13 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	public int execPrepareShoot() {
-		//40 is the transition time of the animation controller
+		//10 is the transition time of the animation controller
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
-		//40 is the transition time
+		//10 is the transition time
 		//animation warmup is 0.72s => 15 ticks
 		//5 ticks is a little buffer
-		return 25;
+		return 30;
 	}
 	
 	@Override

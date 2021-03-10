@@ -184,7 +184,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
 	public static final String ANIM_NAME_IDLE_BODY = ANIM_NAME_PREFIX + "idle";
 	public static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
-	//Duration: 2.68s => 54 ticks
+	//Duration: 5.0s => 100 ticks
 	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shootLaser";
 	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shootLaser";
 	public static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
