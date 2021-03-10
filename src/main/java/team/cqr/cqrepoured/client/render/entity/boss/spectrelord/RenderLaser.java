@@ -36,6 +36,12 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
 		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
 		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
+		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
+		float pitch = this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
+		Vec3d vec = Vec3d.fromPitchYaw(pitch, yaw).scale(0.25D);
+		x1 += vec.x;
+		y1 += vec.y;
+		z1 += vec.z;
 		Entity renderViewEntity = mc.getRenderViewEntity();
 		double x2 = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
 		double y2 = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
@@ -49,8 +55,6 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.depthMask(false);
 		this.bindEntityTexture(entity);
 		GlStateManager.translate(x1 - x2, y1 - y2, z1 - z2);
-		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
-		float pitch = this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-pitch, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0D, -1.0D, 1.0D);
