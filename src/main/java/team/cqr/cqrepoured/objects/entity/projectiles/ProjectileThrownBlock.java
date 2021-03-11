@@ -67,12 +67,6 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			return;
 		}
 
-		if (this.explosive) {
-			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 3.0F, CQRConfig.bosses.thrownBlocksDestroyTerrain);
-		} else if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
-			this.world.setBlockState(this.getPosition(), this.state);
-		}
-
 		if (result.typeOfHit == Type.ENTITY) {
 			if (result.entityHit == this.thrower) {
 				return;
@@ -84,6 +78,11 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 			result.entityHit.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), 10);
 
+		} 
+		if (this.explosive) {
+			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 3.0F, CQRConfig.bosses.thrownBlocksDestroyTerrain);
+		} else if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
+			this.world.setBlockState(this.getPosition(), this.state);
 		}
 
 		this.setDead();

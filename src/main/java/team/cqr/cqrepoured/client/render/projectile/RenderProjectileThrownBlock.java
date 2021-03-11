@@ -30,9 +30,9 @@ public class RenderProjectileThrownBlock extends Render<ProjectileThrownBlock> {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		this.bindEntityTexture(entity);
-		GlStateManager.translate(-0.25F, 0F, 0.25F);
+		GlStateManager.translate(-0.35F, 0F, 0.35F);
 		// GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
-		GlStateManager.scale(0.5F, 0.5F, 0.5F);
+		GlStateManager.scale(0.7F, 0.7F, 0.7F);
 		WorldClient world = Minecraft.getMinecraft().world;
 		double dx = entity.posX + (-0.5 + (world.rand.nextDouble()));
 		double dy = 0.25 + entity.posY + (-0.5 + (world.rand.nextDouble()));
