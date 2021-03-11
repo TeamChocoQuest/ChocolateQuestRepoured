@@ -116,8 +116,9 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 
 		if (!this.world.isRemote) {
-			Vec3d start = this.getPositionVector();
-			Vec3d end = start.add(Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
+			Vec3d dir = Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
+			Vec3d start = this.getPositionVector().add(dir.scale(0.25D));
+			Vec3d end = start.add(dir.scale(this.length));
 			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 			double d = result != null ? (float) result.hitVec.subtract(this.getPositionVector()).length() : this.length;
 
