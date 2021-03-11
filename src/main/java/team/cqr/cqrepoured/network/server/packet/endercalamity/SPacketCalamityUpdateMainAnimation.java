@@ -44,7 +44,7 @@ public class SPacketCalamityUpdateMainAnimation implements IMessage {
 
 	public static class Builder {
 
-		Builder(EntityCQREnderCalamity entity) {
+		private Builder(EntityCQREnderCalamity entity) {
 			this.entityID = entity.getEntityId();
 		}
 

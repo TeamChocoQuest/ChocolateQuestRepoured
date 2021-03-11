@@ -43,9 +43,9 @@ public class SPacketCalamityUpdateHand implements IMessage {
 		return new Builder(entity);
 	}
 
-	static class Builder {
+	public static class Builder {
 
-		Builder(EntityCQREnderCalamity entity) {
+		private Builder(EntityCQREnderCalamity entity) {
 			this.entityID = entity.getEntityId();
 		}
 
