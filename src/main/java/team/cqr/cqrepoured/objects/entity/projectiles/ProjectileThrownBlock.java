@@ -82,7 +82,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		if (this.explosive) {
 			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 3.0F, CQRConfig.bosses.thrownBlocksDestroyTerrain);
 		} else if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
-			this.world.setBlockState(this.getPosition(), this.state);
+			this.world.setBlockState(result.getBlockPos(), this.state);
+			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 		}
 
 		this.setDead();
