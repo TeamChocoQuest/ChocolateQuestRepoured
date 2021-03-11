@@ -36,11 +36,14 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
@@ -86,13 +89,19 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		LEFT_UPPER("handLeftUpper"), LEFT_MIDDLE("handLeftMiddle"), LEFT_LOWER("handLeftLower"), RIGHT_UPPER("handRightUpper"), RIGHT_MIDDLE("handRightMiddle"), RIGHT_LOWER("handRightLower");
 
 		private String boneName;
+		private boolean isLeft;
 
 		public String getBoneName() {
 			return this.boneName;
 		}
+		
+		public boolean isLeftSided() {
+			return this.isLeft;
+		}
 
 		private E_CALAMITY_HAND(String bone) {
 			this.boneName = bone;
+			this.isLeft = bone.startsWith("handLeft");
 		}
 
 		@Nullable
@@ -139,6 +148,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	// Direct AI access
 	private BossAITeleportAroundHome teleportAI;
+	private BossAIBlockThrower blockThrowerAI;
 
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
@@ -148,8 +158,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
+		
 		this.teleportAI = new BossAITeleportAroundHome(this, 200);
 		this.tasks.addTask(8, teleportAI);
+		
+		this.blockThrowerAI = new BossAIBlockThrower(this);
+		this.tasks.addTask(6, blockThrowerAI);
+		
 		this.tasks.addTask(8, new BossAISummonMinions(this));
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
 		this.tasks.addTask(7, new BossAIRandomTeleportEyes(this));
@@ -576,6 +591,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (nextPhase.get().isPhaseTimed()) {
 				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
 			}
+			switch(this.currentPhase) {
+			case PHASE_DYING:
+			case PHASE_ENERGY_TENNIS:
+			case PHASE_NO_TARGET:
+			case PHASE_STUNNED:
+				this.blockThrowerAI.forceDropAllBlocks();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -601,6 +626,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		result = !tmp.isEmpty();
 		tmp.clear();
 		return result;
+	}
+	
+	public void swingHand(E_CALAMITY_HAND hand) {
+		SPacketCalamityUpdateHand packet = SPacketCalamityUpdateHand.builder(this).swingArm(hand, true).build();
+		CQRMain.NETWORK.sendToAllTracking(packet, this);
 	}
 
 	public Optional<IBlockState> getBlockFromHand(E_CALAMITY_HAND hand) {
