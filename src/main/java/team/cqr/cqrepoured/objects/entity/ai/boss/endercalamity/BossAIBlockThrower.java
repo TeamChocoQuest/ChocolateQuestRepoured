@@ -61,6 +61,7 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 			if (entity.getBlockFromHand(hand).isPresent()) {
 				this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
 			}
+			this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(200, 400);
 		}
 	}
 
@@ -97,8 +98,9 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 					if (this.getCooldownOfHand(hand) <= 0) {
 						IBlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
 						this.entity.equipBlock(hand, block);
-						this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(100, 300, this.entity.getRNG());
+						this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
 						this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
+						//TODO: SPawn some particles
 					}
 				}
 				break;
@@ -106,7 +108,7 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 				this.handCooldowns[hand.getIndex()]--;
 				if (this.getCooldownOfHand(hand) <= 0) {
 					this.setStateOfHand(hand, E_HAND_STATE.NO_BLOCK);
-					this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(100, 300, this.entity.getRNG());
+					this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(80, 140, this.entity.getRNG());
 				}
 
 				break;
