@@ -37,7 +37,7 @@ public class RenderProjectileThrownBlock extends Render<ProjectileThrownBlock> {
 		double dx = entity.posX + (-0.5 + (world.rand.nextDouble()));
 		double dy = 0.25 + entity.posY + (-0.5 + (world.rand.nextDouble()));
 		double dz = entity.posZ + (-0.5 + (world.rand.nextDouble()));
-		world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+		world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
 		blockrendererdispatcher.renderBlockBrightness(entity.getBlock(), 8);
 		// GlStateManager.translate(0.25F, 0.0F, 0.55F);
 		GL11.glPopMatrix();
