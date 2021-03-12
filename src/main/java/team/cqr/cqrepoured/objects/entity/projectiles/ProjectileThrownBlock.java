@@ -6,6 +6,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
@@ -17,7 +19,7 @@ import team.cqr.cqrepoured.util.CQRConfig;
 
 public class ProjectileThrownBlock extends ProjectileBase implements IEntityAdditionalSpawnData {
 
-	private ResourceLocation block;
+	private ResourceLocation block = Blocks.END_STONE.getRegistryName();
 	private IBlockState state = null;
 	private boolean explosive = false;
 	private boolean placeOnImpact = false;
@@ -87,6 +89,26 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		}
 
 		this.setDead();
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		NBTTagCompound blockstate = new NBTTagCompound();
+		NBTUtil.writeBlockState(blockstate, this.state);
+		compound.setTag("blockdata", blockstate);
+		super.writeEntityToNBT(compound);
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		try {
+			NBTTagCompound blockstate = compound.getCompoundTag("blockdata");
+			this.state = NBTUtil.readBlockState(blockstate);
+		} catch(Exception ex) {
+			//Ignore
+			this.state = Blocks.END_STONE.getDefaultState();
+		}
+		super.readEntityFromNBT(compound);
 	}
 
 }
