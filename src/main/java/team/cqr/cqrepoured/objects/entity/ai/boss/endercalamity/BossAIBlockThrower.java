@@ -2,7 +2,10 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
@@ -100,7 +103,21 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 						this.entity.equipBlock(hand, block);
 						this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
 						this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
-						//TODO: SPawn some particles
+						// TODO: SPawn some particles
+						if (this.world instanceof WorldServer) {
+							WorldServer ws = (WorldServer) this.world;
+							Vec3d pos = this.getPositionOfHand(hand);
+							for(int i = 0; i < 50; i++) {
+								double dx = -0.5 + this.entity.getRNG().nextDouble();
+								dx *= 0.5;
+								double dy = -0.5 + this.entity.getRNG().nextDouble();
+								dy *= 0.5;
+								double dz = -0.5 + this.entity.getRNG().nextDouble();
+								dz *= 0.5;
+								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE,pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
+								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 5.0F, 1.25F);
+							}
+						}
 					}
 				}
 				break;
@@ -133,6 +150,28 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 		return this.throwBlockOfHand(hand, v);
 	}
 
+	private Vec3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+		Vec3d offset = this.entity.getLookVec().normalize().scale(1.25);
+		offset = new Vec3d(offset.x, 0, offset.z);
+		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 270 : 90);
+		switch (hand.name().split("_")[1].toUpperCase()) {
+		case "LOWER":
+			offset = offset.add(0, 0.5D, 0);
+			break;
+		case "MIDDLE":
+			offset = offset.add(0, 1.0D, 0);
+			break;
+		case "UPPER":
+			offset = offset.add(0, 1.5D, 0);
+			break;
+		default:
+			break;
+		}
+		offset = offset.scale(this.entity.getSizeVariation());
+		Vec3d position = this.entity.getPositionVector().add(offset);
+		return position;
+	}
+
 	private boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vec3d velocity) {
 		if (this.getStateOfHand(hand) == E_HAND_STATE.BLOCK) {
 			// DONE: Implement
@@ -140,24 +179,7 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 			 * Calculate offset vector to spawn the projectile
 			 * Actually spawn the projectile and send it flying
 			 */
-			Vec3d offset = this.entity.getLookVec().normalize().scale(1.25);
-			offset = new Vec3d(offset.x, 0, offset.z);
-			offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 270 : 90);
-			switch(hand.name().split("_")[1].toUpperCase() ) {
-			case "LOWER":
-				offset = offset.add(0, 0.5D, 0);
-				break;
-			case "MIDDLE":
-				offset = offset.add(0, 1.0D, 0);
-				break;
-			case "UPPER":
-				offset = offset.add(0, 1.5D, 0);
-				break;
-			default:
-				break;
-			}
-			offset = offset.scale(this.entity.getSizeVariation());
-			Vec3d position = this.entity.getPositionVector().add(offset);
+			Vec3d position = this.getPositionOfHand(hand);
 			IBlockState block = this.entity.getBlockFromHand(hand).get();
 			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, block.getBlock() == Blocks.OBSIDIAN, block.getBlock() != Blocks.OBSIDIAN);
 			blockProj.setPosition(position.x, position.y, position.z);
@@ -165,10 +187,9 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 			blockProj.motionY = velocity.y;
 			blockProj.motionZ = velocity.z;
 			blockProj.velocityChanged = true;
-			
+
 			this.world.spawnEntity(blockProj);
-			
-			
+
 			this.setStateOfHand(hand, E_HAND_STATE.THROWING);
 			this.handCooldowns[hand.getIndex()] = THROWING_TIME;
 			this.entity.swingHand(hand);
