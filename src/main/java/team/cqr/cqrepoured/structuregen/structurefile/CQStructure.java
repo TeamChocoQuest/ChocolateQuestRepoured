@@ -62,6 +62,7 @@ import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
+import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.ChunkUtil;
@@ -392,8 +393,8 @@ public class CQStructure {
 				this.blockInfoList.add(new BlockInfoLootChest(pos, ((BlockExporterChest) block).getLootTable(world, mutablePos), state.getValue(BlockChest.FACING)));
 			} else if (block == CQRBlocks.FORCE_FIELD_NEXUS) {
 				this.blockInfoList.add(new BlockInfoForceFieldNexus(pos));
-			} else if (block == CQRBlocks.BOSS_BLOCK) {
-				this.blockInfoList.add(new BlockInfoBoss(pos));
+			} else if (block == CQRBlocks.BOSS_BLOCK && tileEntity instanceof TileEntityBoss) {
+				this.blockInfoList.add(new BlockInfoBoss(pos, (TileEntityBoss)tileEntity));
 			} else if (block == CQRBlocks.MAP_PLACEHOLDER) {
 				this.blockInfoList.add(new BlockInfoMap(pos, state.getValue(BlockHorizontal.FACING), (TileEntityMap) tileEntity));
 			} else {
