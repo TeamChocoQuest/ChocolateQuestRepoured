@@ -109,11 +109,11 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 							Vec3d pos = this.getPositionOfHand(hand);
 							for(int i = 0; i < 50; i++) {
 								double dx = -0.5 + this.entity.getRNG().nextDouble();
-								dx *= 0.5;
+								dx *= 1.5;
 								double dy = -0.5 + this.entity.getRNG().nextDouble();
-								dy *= 0.5;
+								dy *= 1.5;
 								double dz = -0.5 + this.entity.getRNG().nextDouble();
-								dz *= 0.5;
+								dz *= 1.5;
 								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE,pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
 								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 5.0F, 1.25F);
 							}
