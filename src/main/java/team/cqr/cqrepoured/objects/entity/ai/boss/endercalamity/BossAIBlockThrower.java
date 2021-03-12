@@ -115,7 +115,7 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 								double dz = -0.5 + this.entity.getRNG().nextDouble();
 								dz *= 1.5;
 								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE,pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
-								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 5.0F, 1.25F);
+								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 							}
 						}
 					}
@@ -153,7 +153,7 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 	private Vec3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		Vec3d offset = this.entity.getLookVec().normalize().scale(1.25);
 		offset = new Vec3d(offset.x, 0, offset.z);
-		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 270 : 90);
+		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 90 : 270);
 		switch (hand.name().split("_")[1].toUpperCase()) {
 		case "LOWER":
 			offset = offset.add(0, 0.5D, 0);

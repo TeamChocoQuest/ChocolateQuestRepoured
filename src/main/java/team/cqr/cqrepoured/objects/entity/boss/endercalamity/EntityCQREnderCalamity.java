@@ -101,7 +101,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		private E_CALAMITY_HAND(String bone) {
 			this.boneName = bone;
-			this.isLeft = bone.startsWith("handLeft");
+			this.isLeft = this.name().startsWith("LEFT");
 		}
 
 		@Nullable
