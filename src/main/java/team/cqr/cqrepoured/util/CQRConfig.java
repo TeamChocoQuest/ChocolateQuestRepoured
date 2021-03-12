@@ -295,6 +295,7 @@ public class CQRConfig {
 		public int enderCalamityShieldRoundness = 32;
 		public boolean thrownBlocksDestroyTerrain = true;
 		public boolean thrownBlocksGetPlaced = true;
+		public boolean calamityBlockEquipParticles = true;
 	}
 
 	public static class BossDamageCaps {

@@ -10,6 +10,7 @@ import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileThrownBlock;
+import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
@@ -103,17 +104,17 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 						this.entity.equipBlock(hand, block);
 						this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
 						this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
-						// TODO: SPawn some particles
-						if (this.world instanceof WorldServer) {
+						// DONE: SPawn some particles
+						if (this.world instanceof WorldServer && CQRConfig.bosses.calamityBlockEquipParticles) {
 							WorldServer ws = (WorldServer) this.world;
 							Vec3d pos = this.getPositionOfHand(hand);
 							for(int i = 0; i < 50; i++) {
 								double dx = -0.5 + this.entity.getRNG().nextDouble();
-								dx *= 1.5;
+								dx *= 2;
 								double dy = -0.5 + this.entity.getRNG().nextDouble();
-								dy *= 1.5;
+								dy *= 2;
 								double dz = -0.5 + this.entity.getRNG().nextDouble();
-								dz *= 1.5;
+								dz *= 2;
 								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE,pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
 								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 							}
