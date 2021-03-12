@@ -159,7 +159,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	protected void initEntityAI() {
 		super.initEntityAI();
 		
-		this.teleportAI = new BossAITeleportAroundHome(this, 200);
+		this.teleportAI = new BossAITeleportAroundHome(this, 40);
 		this.tasks.addTask(8, teleportAI);
 		
 		this.blockThrowerAI = new BossAIBlockThrower(this);
