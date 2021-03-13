@@ -13,7 +13,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	}
 
 	public EntityEndLaserTargeting(EntityLivingBase caster, EntityLivingBase target, Vec3d offset) {
-		this(caster.world, caster, 32, target, offset);
+		this(caster.world, caster, 48, target, offset);
 	}
 
 	public EntityEndLaserTargeting(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target, Vec3d offset) {
