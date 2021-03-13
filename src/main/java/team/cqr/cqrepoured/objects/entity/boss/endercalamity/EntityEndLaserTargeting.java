@@ -12,12 +12,14 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 		super(worldIn);
 	}
 
-	public EntityEndLaserTargeting(EntityLivingBase caster, EntityLivingBase target) {
-		this(caster.world, caster, 32, target);
+	public EntityEndLaserTargeting(EntityLivingBase caster, EntityLivingBase target, Vec3d offset) {
+		this(caster.world, caster, 32, target, offset);
 	}
 
-	public EntityEndLaserTargeting(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target) {
+	public EntityEndLaserTargeting(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target, Vec3d offset) {
 		super(worldIn, caster, length, target);
+		
+		this.offsetVector = offset;
 		
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;

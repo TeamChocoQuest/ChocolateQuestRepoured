@@ -18,20 +18,21 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	@Override
 	protected int execRandomShoot() {
 		Vec3d eyePos = this.entity.getPositionEyes(1);
-		System.out.println("original eyepos: " + eyePos.toString());
+		//System.out.println("original eyepos: " + eyePos.toString());
 		//DONE: Calculate new starting position of laser to match animation
 		//Head distance with scale = 100%: 0.75 blocks
-		//TODO: Add sub entity for the laser itself!
-		//TODO: Or bug meldex to change the laser to use a position for it's start rather than an entity or create a special sub-laser entity for exactly that
+		//Scrapped: Add sub entity for the laser itself!
+		//DONE: Or bug meldex to change the laser to use a position for it's start rather than an entity or create a special sub-laser entity for exactly that
 		Vec3d v = this.entity.getLookVec().normalize();
-		System.out.println("vector v: " + v.toString());
-		System.out.println("entity scale: " + entity.getSizeVariation());
-		v = v.scale(0.75);
+		v = new Vec3d(v.x, 0, v.z);
+		//System.out.println("vector v: " + v.toString());
+		//System.out.println("entity scale: " + entity.getSizeVariation());
+		v = v.scale(1.0);
 		v = v.scale(this.entity.getSizeVariation());
-		System.out.println("V after transformation: " + v.toString());
+		//System.out.println("V after transformation: " + v.toString());
 		eyePos = eyePos.add(v);
-		System.out.println("Eyepos: " + eyePos.toString());
-		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget());
+		//System.out.println("Eyepos: " + eyePos.toString());
+		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget(), v);
 		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
 		this.world.spawnEntity(laser);
 		this.projectile = laser;
