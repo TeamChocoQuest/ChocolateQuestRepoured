@@ -21,8 +21,6 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 
 	@Override
 	public void updatePositionAndRotation() {
-		this.prevRotationYawCQR = this.rotationYawCQR;
-		this.prevRotationPitchCQR = this.rotationPitchCQR;
 		this.rotationYawCQR += this.rotationPerTick;
 		Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
 		vec1 = vec1.add(this.getOffsetVector());
