@@ -33,7 +33,6 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		System.out.println("Eyepos: " + eyePos.toString());
 		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget());
 		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
-		laser.updatePositionAndRotation();
 		this.world.spawnEntity(laser);
 		this.projectile = laser;
 		//Animation total length: 5s => 100 ticks
