@@ -16,7 +16,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 
 	public EntityEndLaserTargeting(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target) {
 		super(worldIn, caster, length, target);
-		this.maxRotationPerTick = 16;
+		this.maxRotationPerTick = 8;
 	}
 
 	@Override
