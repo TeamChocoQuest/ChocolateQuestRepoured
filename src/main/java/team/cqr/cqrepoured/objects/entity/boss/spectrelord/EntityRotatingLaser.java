@@ -26,6 +26,7 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 	public void updatePositionAndRotation() {
 		this.rotationYawCQR = MathHelper.wrapDegrees(this.rotationYawCQR + this.deltaRotationYawPerTick);
 		this.rotationPitchCQR = MathHelper.wrapDegrees(this.rotationPitchCQR + this.deltaRotationPitchPerTick);
+		// TODO reduce unnecessary vec3d creation
 		Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
 		vec1 = vec1.add(this.getOffsetVector());
 		Vec3d vec4 = Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
