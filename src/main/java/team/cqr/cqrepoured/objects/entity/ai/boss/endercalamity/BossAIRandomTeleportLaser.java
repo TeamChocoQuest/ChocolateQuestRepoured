@@ -6,7 +6,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 
 public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
@@ -31,7 +31,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		System.out.println("V after transformation: " + v.toString());
 		eyePos = eyePos.add(v);
 		System.out.println("Eyepos: " + eyePos.toString());
-		AbstractEntityLaser laser = new EntityEndLaser(this.entity, this.entity.getAttackTarget().getPosition());
+		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget());
 		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
 		this.world.spawnEntity(laser);
 		this.projectile = laser;
