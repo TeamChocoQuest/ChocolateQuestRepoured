@@ -45,7 +45,7 @@ public class EntityEndLaser extends AbstractEntityLaser {
 
 	@Override
 	protected double laserEffectRadius() {
-		return 1D;
+		return 0.5D;
 	}
 
 	@Override
