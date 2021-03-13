@@ -11,6 +11,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQRWasp;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderFlyingSkull;
 import team.cqr.cqrepoured.client.render.entity.RenderIceSpike;
+import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSpiderEgg;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
@@ -27,7 +28,6 @@ import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNetherDragonSegmen
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKing;
 import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
-import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderLaser;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDwarf;

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.boss.spectrelord;
+package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
