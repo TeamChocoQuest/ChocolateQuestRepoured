@@ -13,7 +13,7 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
-public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI<EntityCQRNetherDragon> {
+public class EntityAINearestAttackTargetAtHomeArea extends AbstractCQREntityAI<EntityCQRNetherDragon> {
 
 	protected final Predicate<EntityLivingBase> predicate = input -> {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
@@ -22,10 +22,10 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 		if (!EntitySelectors.IS_ALIVE.apply(input)) {
 			return false;
 		}
-		return EntityAINetherDragonNearestAttackTarget.this.isSuitableTarget(input);
+		return EntityAINearestAttackTargetAtHomeArea.this.isSuitableTarget(input);
 	};
 
-	public EntityAINetherDragonNearestAttackTarget(EntityCQRNetherDragon entity) {
+	public EntityAINearestAttackTargetAtHomeArea(EntityCQRNetherDragon entity) {
 		super(entity);
 	}
 

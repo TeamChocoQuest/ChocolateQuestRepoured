@@ -51,7 +51,7 @@ import team.cqr.cqrepoured.objects.entity.ai.navigator.MoveHelperDirectFlight;
 import team.cqr.cqrepoured.objects.entity.ai.navigator.PathNavigateDirectLine;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
-import team.cqr.cqrepoured.objects.entity.ai.target.EntityAINetherDragonNearestAttackTarget;
+import team.cqr.cqrepoured.objects.entity.ai.target.EntityAINearestAttackTargetAtHomeArea;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
@@ -287,7 +287,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.tasks.addTask(10, new BossAISpiralUpToCirclingCenter(this));
 		this.tasks.addTask(12, new BossAICircleAroundLocation(this));
 
-		this.targetTasks.addTask(0, new EntityAINetherDragonNearestAttackTarget(this));
+		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea(this));
 		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
