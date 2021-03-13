@@ -176,7 +176,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.tasks.addTask(7, new BossAIRandomTeleportLaser(this));
 		
 		this.targetTasks.taskEntries.clear();
-		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea(this));
+		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea<EntityCQREnderCalamity>(this));
 		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}

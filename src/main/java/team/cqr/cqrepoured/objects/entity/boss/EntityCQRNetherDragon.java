@@ -288,7 +288,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.tasks.addTask(10, new BossAISpiralUpToCirclingCenter(this));
 		this.tasks.addTask(12, new BossAICircleAroundLocation(this));
 
-		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea(this));
+		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea<EntityCQRNetherDragon>(this));
 		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
