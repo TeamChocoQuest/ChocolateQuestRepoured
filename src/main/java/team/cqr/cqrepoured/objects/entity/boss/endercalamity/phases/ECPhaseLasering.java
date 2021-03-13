@@ -27,7 +27,7 @@ public class ECPhaseLasering implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canThrowBlocksDuringPhase() {
-		return true;
+		return false;
 	}
 
 	@Override

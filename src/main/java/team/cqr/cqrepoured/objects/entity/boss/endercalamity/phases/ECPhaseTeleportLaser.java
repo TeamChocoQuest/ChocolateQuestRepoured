@@ -22,12 +22,12 @@ public class ECPhaseTeleportLaser implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canPickUpBlocksDuringPhase() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean canThrowBlocksDuringPhase() {
-		return false;
+		return true;
 	}
 
 	@Override
