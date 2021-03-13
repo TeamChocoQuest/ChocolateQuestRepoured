@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 public class EntityTargetingLaser extends AbstractEntityLaser {
 
 	private EntityLivingBase target;
-	private float maxRotationPerTick = 2.0F;
+	protected float maxRotationPerTick = 2.0F;
 
 	public EntityTargetingLaser(World worldIn) {
 		this(worldIn, null, 4.0F, null);
