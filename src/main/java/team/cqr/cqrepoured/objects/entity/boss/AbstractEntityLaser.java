@@ -31,6 +31,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public float serverRotationPitchCQR;
 	private final Object2IntMap<EntityLivingBase> hitInfoMap = new Object2IntOpenHashMap<>();
 	private final Object2IntMap<BlockPos> blockBreakMap = new Object2IntOpenHashMap<>();
+	protected Vec3d offsetVector = Vec3d.ZERO;
 
 	public AbstractEntityLaser(World worldIn) {
 		this(worldIn, null, 4.0F);
@@ -55,6 +56,15 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.setSize(0.1F, 0.1F);
 		this.ignoreFrustumCheck = true;
 		this.noClip = true;
+	}
+	
+	public Vec3d getOffsetVector() {
+		return this.offsetVector;
+	}
+	
+	@Override
+	public Vec3d getPositionVector() {
+		return super.getPositionVector().add(this.getOffsetVector());
 	}
 
 	@Override
@@ -183,6 +193,10 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		buffer.writeFloat(this.length);
 		buffer.writeFloat(this.rotationYawCQR);
 		buffer.writeFloat(this.rotationPitchCQR);
+		
+		buffer.writeDouble(this.offsetVector.x);
+		buffer.writeDouble(this.offsetVector.y);
+		buffer.writeDouble(this.offsetVector.z);
 	}
 
 	@Override
@@ -193,6 +207,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.rotationPitchCQR = additionalData.readFloat();
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
+		
+		double vx = additionalData.readDouble();
+		double vy = additionalData.readDouble();
+		double vz = additionalData.readDouble();
+		this.offsetVector = new Vec3d(vx,vy,vz);
 	}
 
 	public float getColorR() {

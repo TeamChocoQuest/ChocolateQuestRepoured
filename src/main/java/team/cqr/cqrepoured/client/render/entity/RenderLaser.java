@@ -34,8 +34,11 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 	public void doRender(AbstractEntityLaser entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		Minecraft mc = Minecraft.getMinecraft();
 		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
+		x1 += entity.getOffsetVector().x;
 		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
+		y1 += entity.getOffsetVector().y;
 		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
+		z1 += entity.getOffsetVector().z;
 		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
 		float pitch = this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 		Vec3d vec = Vec3d.fromPitchYaw(pitch, yaw).scale(0.25D);
