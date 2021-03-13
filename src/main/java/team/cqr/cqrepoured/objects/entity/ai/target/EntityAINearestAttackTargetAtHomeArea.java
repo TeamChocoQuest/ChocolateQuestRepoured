@@ -10,10 +10,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
-public class EntityAINearestAttackTargetAtHomeArea extends AbstractCQREntityAI<EntityCQRNetherDragon> {
+public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR & ICirclingEntity> extends AbstractCQREntityAI<T> {
 
 	protected final Predicate<EntityLivingBase> predicate = input -> {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
@@ -25,7 +26,7 @@ public class EntityAINearestAttackTargetAtHomeArea extends AbstractCQREntityAI<E
 		return EntityAINearestAttackTargetAtHomeArea.this.isSuitableTarget(input);
 	};
 
-	public EntityAINearestAttackTargetAtHomeArea(EntityCQRNetherDragon entity) {
+	public EntityAINearestAttackTargetAtHomeArea(T entity) {
 		super(entity);
 	}
 

@@ -43,6 +43,7 @@ import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRSounds;
+import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
 import team.cqr.cqrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyToLocation;
 import team.cqr.cqrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyToTarget;
@@ -60,7 +61,7 @@ import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
+public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, ICirclingEntity {
 
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks

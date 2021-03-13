@@ -24,6 +24,7 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.BossInfo.Color;
@@ -42,12 +43,16 @@ import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
+import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
+import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import team.cqr.cqrepoured.objects.entity.ai.target.EntityAINearestAttackTargetAtHomeArea;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
@@ -55,7 +60,7 @@ import team.cqr.cqrepoured.util.CQRConfig;
 
 // TODO: Move the minion & lightning handling to a AI class, it is cleaner that way
 // DONE: Create helper classes to control arm management (status, animations, etc)
-public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner {
+public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner, ICirclingEntity {
 
 	private static final int HURT_DURATION = 24; // 1.2 * 20
 	private static final int ARENA_RADIUS = 20;
@@ -169,6 +174,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
 		this.tasks.addTask(7, new BossAIRandomTeleportEyes(this));
 		this.tasks.addTask(7, new BossAIRandomTeleportLaser(this));
+		
+		this.targetTasks.taskEntries.clear();
+		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea(this));
+		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
@@ -801,6 +811,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.newAnimation = Optional.of(animationID);
 			System.out.println("New animation!" + this.newAnimation.get());
 		//}
+	}
+
+	@Override
+	public BlockPos getCirclingCenter() {
+		if(this.hasHomePositionCQR()) {
+			return this.getHomePositionCQR();
+		}
+		return this.getPosition();
 	}
 
 }
