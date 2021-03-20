@@ -486,15 +486,14 @@ public class CQRConfig {
 	}
 	
 	public static boolean isAprilFoolsEnabled() {
-		/*if(general.enableAprilFools) {
+		if(general.enableAprilFools) {
 			Calendar calendar = new GregorianCalendar();
 			calendar.setTime(new Date());
 			if(calendar.get(Calendar.MONTH) == 4) {
 				return calendar.get(Calendar.DAY_OF_MONTH) == 1;
 			}
 		}
-		return false;*/
-		return true;
+		return false;
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
