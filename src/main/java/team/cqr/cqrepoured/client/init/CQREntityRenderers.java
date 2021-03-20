@@ -8,6 +8,7 @@ import team.cqr.cqrepoured.client.models.entities.boss.ModelPigMage;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRWasp;
+import team.cqr.cqrepoured.client.render.entity.RenderChungus;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderFlyingSkull;
 import team.cqr.cqrepoured.client.render.entity.RenderIceSpike;
@@ -72,6 +73,7 @@ import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRende
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
@@ -140,6 +142,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
+import team.cqr.cqrepoured.util.CQRConfig;
 
 public class CQREntityRenderers {
 
@@ -150,8 +153,18 @@ public class CQREntityRenderers {
 	public static void registerRenderers() {
 		registerTileRenderers();
 		registerProjectileAndMiscRenderers();
-		registerEntityRenderers();
+		if(CQRConfig.isAprilFoolsEnabled()) {
+			registerAprilFoolsRenderer();
+		} else {
+			registerEntityRenderers();
+		}
 		registerBossRenderers();
+		registerMountRenderers();
+	}
+
+	//Registers a big chungus renderer that renders on april the first
+	protected static void registerAprilFoolsRenderer() {
+		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityCQR.class, RenderChungus::new);
 	}
 
 	protected static void registerTileRenderers() {
@@ -215,7 +228,9 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, RenderCQRWalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);
-
+	}
+	
+	protected static void registerMountRenderers() {
 		// Mounts
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class, RenderGiantSilverfish::new);

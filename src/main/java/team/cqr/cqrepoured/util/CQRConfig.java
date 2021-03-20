@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
@@ -357,6 +361,7 @@ public class CQRConfig {
 		public double densityBehindWallFactor = 2.0D;
 		public boolean enableSpeechBubbles = true;
 		public boolean hookOnlyPullsSmallerEntities = true;
+		public boolean enableAprilFools = true;
 	}
 
 	public static class Mobs {
@@ -478,6 +483,18 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 1, max = 1000)
 		public float EnderCalamity = 300F;
 
+	}
+	
+	public static boolean isAprilFoolsEnabled() {
+		/*if(general.enableAprilFools) {
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(new Date());
+			if(calendar.get(Calendar.MONTH) == 4) {
+				return calendar.get(Calendar.DAY_OF_MONTH) == 1;
+			}
+		}
+		return false;*/
+		return true;
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
