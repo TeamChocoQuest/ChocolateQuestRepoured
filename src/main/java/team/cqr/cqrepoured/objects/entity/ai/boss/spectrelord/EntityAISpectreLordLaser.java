@@ -42,13 +42,13 @@ public class EntityAISpectreLordLaser extends AbstractEntityAISpell<EntityCQRSpe
 	public void startCastingSpell() {
 		super.startCastingSpell();
 		float yaw = (float) Math.toDegrees(Math.atan2(-(this.target.posX - this.entity.posX), this.target.posZ - this.entity.posZ));
-		AbstractEntityLaser laser1 = new EntityRotatingLaser(this.world, this.entity, 32.0F, 1.0F);
+		AbstractEntityLaser laser1 = new EntityRotatingLaser(this.world, this.entity, 32.0F, 1.0F, 0.0F);
 		laser1.rotationYawCQR = yaw - 90.0F;
 		Vec3d vec1 = Vec3d.fromPitchYaw(0.0F, laser1.rotationYawCQR);
 		laser1.setPosition(this.entity.posX + vec1.x * 0.25D, this.entity.posY + this.entity.height * 0.6D + vec1.y * 0.25D, this.entity.posZ + vec1.z * 0.25D);
 		this.world.spawnEntity(laser1);
 		this.lasers.add(laser1);
-		AbstractEntityLaser laser2 = new EntityRotatingLaser(this.world, this.entity, 32.0F, -2.0F);
+		AbstractEntityLaser laser2 = new EntityRotatingLaser(this.world, this.entity, 32.0F, -2.0F, 0.0F);
 		laser2.rotationYawCQR = yaw + 90.0F;
 		Vec3d vec2 = Vec3d.fromPitchYaw(0.0F, laser2.rotationYawCQR);
 		laser2.setPosition(this.entity.posX + vec2.x * 0.25D, this.entity.posY + this.entity.height * 0.6D + vec2.y * 0.25D, this.entity.posZ + vec2.z * 0.25D);
