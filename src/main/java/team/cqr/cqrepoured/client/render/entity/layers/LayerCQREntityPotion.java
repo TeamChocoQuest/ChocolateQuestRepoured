@@ -10,20 +10,19 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import software.bernie.geckolib3.core.IAnimatable;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 @SideOnly(Side.CLIENT)
-public class LayerCQREntityPotion<T extends AbstractEntityCQR & IAnimatable> extends AbstractLayerCQR<T> {
+public class LayerCQREntityPotion extends AbstractLayerCQR {
 
 	public LayerCQREntityPotion(RenderCQREntity<?> renderCQREntity) {
 		super(renderCQREntity);
 	}
 
 	@Override
-	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity.getHealingPotions() > 0 && this.entityRenderer.getMainModel() instanceof ModelBiped) {
 			ModelBiped model = (ModelBiped) this.entityRenderer.getMainModel();
 			ModelRenderer body = model.bipedBody;

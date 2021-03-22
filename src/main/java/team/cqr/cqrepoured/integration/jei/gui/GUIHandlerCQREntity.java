@@ -17,7 +17,7 @@ public class GUIHandlerCQREntity<T extends GuiCQREntity> implements IAdvancedGui
 
 	@Override
 	public Class<T> getGuiContainerClass() {
-		return GUI_CLASS;
+		return this.GUI_CLASS;
 	}
 
 	@Override

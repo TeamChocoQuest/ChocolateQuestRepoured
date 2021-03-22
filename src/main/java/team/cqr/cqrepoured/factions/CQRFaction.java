@@ -109,7 +109,8 @@ public class CQRFaction {
 		if (this.textureSet != null) {
 			return this.textureSet.getRandomTextureFor(entity);
 		}
-		System.out.println("No texture set defined for faction: " + name);
+		// Debug
+		// System.out.println("No texture set defined for faction: " + this.name);
 		return null;
 	}
 
@@ -140,6 +141,9 @@ public class CQRFaction {
 	public boolean isEnemy(CQRFaction faction) {
 		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
+		}
+		if (faction != null && faction.getName().equalsIgnoreCase("ALL_ENEMY")) {
+			return true;
 		}
 		if (faction != null) {
 			for (CQRFaction str : this.enemies) {

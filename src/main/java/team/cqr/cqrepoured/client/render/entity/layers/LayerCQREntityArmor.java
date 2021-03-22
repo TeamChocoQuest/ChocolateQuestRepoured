@@ -62,7 +62,7 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 						float f2 = (float) (i & 255) / 255.0F;
 						GlStateManager.color(this.colorR * f, this.colorG * f1, this.colorB * f2, this.alpha);
 						if (model instanceof ModelCustomArmorBase && this.renderer.getMainModel() instanceof ModelBiped) {
-							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, this, (ModelBiped) this.renderer.getMainModel(), slotIn);
+							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, (ModelBiped) this.renderer.getMainModel(), slotIn);
 						} else {
 							model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						}
@@ -71,7 +71,7 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 					{ // Non-colored
 						GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
 						if (model instanceof ModelCustomArmorBase && this.renderer.getMainModel() instanceof ModelBiped) {
-							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, this, (ModelBiped) this.renderer.getMainModel(), slotIn);
+							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, (ModelBiped) this.renderer.getMainModel(), slotIn);
 						} else {
 							model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						}

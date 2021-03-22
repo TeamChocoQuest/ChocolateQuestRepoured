@@ -6,11 +6,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import software.bernie.geckolib3.core.IAnimatable;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
-public class LayerCQRLeaderFeather<T extends AbstractEntityCQR & IAnimatable> extends AbstractLayerCQR<T> {
+public class LayerCQRLeaderFeather extends AbstractLayerCQR {
 
 	private ModelRenderer bipedHead;
 
@@ -20,7 +19,7 @@ public class LayerCQRLeaderFeather<T extends AbstractEntityCQR & IAnimatable> ex
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity.isLeader()) {
 			GlStateManager.pushMatrix();
 

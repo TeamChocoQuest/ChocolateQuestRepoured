@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.List;
+import java.util.Collection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -15,7 +15,8 @@ public class SPacketSyncProtectedRegions implements IMessage {
 
 	}
 
-	public SPacketSyncProtectedRegions(List<ProtectedRegion> protectedRegions) {
+	public SPacketSyncProtectedRegions(Collection<ProtectedRegion> protectedRegions, boolean clearExisting) {
+		this.buffer.writeBoolean(clearExisting);
 		this.buffer.writeShort(protectedRegions.size());
 		for (ProtectedRegion protectedRegion : protectedRegions) {
 			protectedRegion.writeToByteBuf(this.buffer);

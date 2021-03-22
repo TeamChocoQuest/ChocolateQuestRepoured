@@ -17,7 +17,7 @@ public class GUIHandlerMerchant<T extends GuiMerchant> implements IAdvancedGuiHa
 
 	@Override
 	public Class<T> getGuiContainerClass() {
-		return GUI_CLASS;
+		return this.GUI_CLASS;
 	}
 
 	@Override

@@ -49,7 +49,7 @@ public class CQRLoottables {
 	public static final ResourceLocation ENTITIES_LICH = createEntityLootTable("bosses/lich");
 	public static final ResourceLocation ENTITIES_BOARMAGE = createEntityLootTable("bosses/boar_mage");
 	public static final ResourceLocation ENTITIES_PHARAO = createEntityLootTable("bosses/pharao");
-	public static final ResourceLocation ENTITIES_ENDERMAN_LORD = createEntityLootTable("bosses/enderman_bosses");
+	public static final ResourceLocation ENTITIES_ENDERMAN_BOSS = createEntityLootTable("bosses/enderman_boss");
 	public static final ResourceLocation ENTITIES_WALKER_KING = createEntityLootTable("bosses/walker_king");
 	public static final ResourceLocation ENTITIES_WALKER_QUEEN = createEntityLootTable("bosses/walker_queen");
 	public static final ResourceLocation ENTITIES_PIRATE_CAPTAIN = createEntityLootTable("bosses/pirate_captain");

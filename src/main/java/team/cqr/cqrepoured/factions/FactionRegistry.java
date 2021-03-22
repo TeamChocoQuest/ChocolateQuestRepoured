@@ -196,10 +196,10 @@ public class FactionRegistry {
 				String name = fIDs.get(i);
 				CQRFaction fac = this.factions.get(name);
 				for (String s : allyTmp.get(i)) {
-					fac.addAlly(this.factions.get(s));
+					fac.addAlly(this.factions.getOrDefault(s, null));
 				}
 				for (String s : enemyTmp.get(i)) {
-					fac.addEnemy(this.factions.get(s));
+					fac.addEnemy(this.factions.getOrDefault(s, null));
 				}
 			}
 		}
@@ -247,8 +247,8 @@ public class FactionRegistry {
 		}
 
 		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
-			if (entity.getTeam() != null && factions.containsKey(entity.getTeam().getName()) && factions.get(entity.getTeam().getName()) != null) {
-				return factions.get(entity.getTeam().getName());
+			if (entity.getTeam() != null && this.factions.containsKey(entity.getTeam().getName()) && this.factions.get(entity.getTeam().getName()) != null) {
+				return this.factions.get(entity.getTeam().getName());
 			}
 		}
 
@@ -361,14 +361,8 @@ public class FactionRegistry {
 		// System.out.println("Changing repu...");
 
 		/*
-		 * boolean flag = false;
-		 * if (this.canRepuChange(player)) {
-		 * if (score < 0) {
-		 * flag = this.canDecrementRepu(player, faction);
-		 * } else {
-		 * flag = this.canIncrementRepu(player, faction);
-		 * }
-		 * }
+		 * boolean flag = false; if (this.canRepuChange(player)) { if (score < 0) { flag = this.canDecrementRepu(player, faction); } else { flag =
+		 * this.canIncrementRepu(player, faction); } }
 		 */
 		if (this.canDecrementRepu(player, faction) || this.canIncrementRepu(player, faction)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
@@ -483,7 +477,7 @@ public class FactionRegistry {
 
 				@Override
 				public void run() {
-					savePlayerReputation(player.getPersistentID(), true);
+					FactionRegistry.this.savePlayerReputation(player.getPersistentID(), true);
 				}
 			});
 			t.setName("CQR-Reputation-Data-Saver");
@@ -499,7 +493,7 @@ public class FactionRegistry {
 			public void run() {
 				for (UUID playerID : FactionRegistry.this.playerFactionRepuMap.keySet()) {
 					try {
-						savePlayerReputation(playerID, removeMapsFromMemory);
+						FactionRegistry.this.savePlayerReputation(playerID, removeMapsFromMemory);
 					} catch (Exception ex) {
 						System.out.println("Unable to save reputation data of " + playerID + "!");
 						ex.printStackTrace();
@@ -531,8 +525,8 @@ public class FactionRegistry {
 				 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for (Map.Entry<String, Integer> entry :
 				 * mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
 				 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound(); tag.setString("factionName", entry.getKey());
-				 * tag.setInteger("reputation", entry.getValue());
-				 * repuDataList.appendTag(tag); } root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
+				 * tag.setInteger("reputation", entry.getValue()); repuDataList.appendTag(tag); }
+				 * root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
 				 */
 				for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
 					root.setInteger(entry.getKey(), entry.getValue());

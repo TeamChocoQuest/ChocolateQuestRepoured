@@ -54,8 +54,10 @@ minecraft {
 }
 
 repositories {
-    maven { url = 'https://www.cursemaven.com' }
-    maven { url = 'https://maven.mcmoddev.com/' }
+    maven { 
+		name = "ilexiconn"
+		url = 'https://maven.mcmoddev.com/' 
+	}
 	maven {
 		// location of the maven that hosts JEI files
 		name = "Progwml6 maven"
@@ -68,14 +70,17 @@ repositories {
 	}
 	//Geckolib
 	maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
     //minecraft "net.minecraftforge:forge:1.12.2-${forge_version}"
 
-    compile 'curse.maven:Llibrary:3116493'
     //compile 'net.ilexiconn:llibrary:1.7.20-1.12.2'
-    compile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
+    deobfCompile 'net.ilexiconn:llibrary:1.7.19-1.12.2:dev'
+    deobfCompile 'net.ilexiconn:llibrary-core:1.0.11-1.12.2'
 	
 	// compile against the JEI API but do not include it at runtime
 	deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
@@ -83,7 +88,11 @@ dependencies {
 	runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 	
 	//Geckolib
-	deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.2')
+	deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.7')
+	
+	//AW2-Jar
+	compile 'curse.maven:AncientWarfare2-224602:3199040'
+	compile 'curse.maven:CodeChickenLib-242818:2779848'
 }
 
 processResources {

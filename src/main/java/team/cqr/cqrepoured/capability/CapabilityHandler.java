@@ -4,11 +4,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
+import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -16,13 +18,18 @@ import team.cqr.cqrepoured.util.Reference;
 public class CapabilityHandler {
 
 	@SubscribeEvent
-	public static void attachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
+	public static void onEntityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityLivingBase) {
 			event.addCapability(CapabilityCooldownHandlerProvider.REGISTRY_NAME, CapabilityCooldownHandlerProvider.createProvider());
 		}
 		if (event.getObject() instanceof AbstractEntityCQR) {
 			event.addCapability(CapabilityExtraItemHandlerProvider.REGISTRY_NAME, CapabilityExtraItemHandlerProvider.createProvider(3));
 		}
+	}
+
+	@SubscribeEvent
+	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<Chunk> event) {
+		event.addCapability(CapabilityProtectedRegionDataProvider.LOCATION, CapabilityProtectedRegionDataProvider.createProvider(event.getObject()));
 	}
 
 	public static void writeToItemStackNBT(ItemStack stack, String key, NBTTagCompound compound) {

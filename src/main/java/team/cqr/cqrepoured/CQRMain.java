@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.command.CommandChangeReputation;
 import team.cqr.cqrepoured.command.CommandExport;
 import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
@@ -52,7 +53,6 @@ import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.thewall.WorldWallGenerator;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.CopyHelper;
@@ -87,6 +87,11 @@ public class CQRMain {
 
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
+
+	public CQRMain() {
+		// Geckolib
+		GeckoLib.initialize();
+	}
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(Reference.MODID + "_items") {
 		@Override
@@ -224,11 +229,9 @@ public class CQRMain {
 		CQStructure.checkAndUpdateStructureFiles();
 		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();
-		ProtectedRegionHelper.updateBreakableBlockWhitelist();
-		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
+		ProtectedRegionHelper.updateWhitelists();
 		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
-		ProtectedRegion.updateMaterialBlacklist();
 		DungeonInhabitantManager.instance().loadDungeonInhabitants();
 
 		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, new ForgeChunkManager.OrderedLoadingCallback() {

@@ -22,6 +22,15 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordExplosion;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordIllusion;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityTargetingLaser;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.objects.entity.misc.EntityFlyingSkullMinion;
@@ -56,11 +65,13 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderHook;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileWeb;
 import team.cqr.cqrepoured.objects.mounts.EntityGiantEndermite;
@@ -85,6 +96,8 @@ public class CQREntities {
 	public static final EntityEntry PROJECTILE_BUBBLE = Null();
 	public static final EntityEntry PROJECTILE_HOT_FIREBALL = Null();
 	public static final EntityEntry PROJECTILE_WEB = Null();
+	public static final EntityEntry PROJECTILE_THROWN_BLOCK = Null();
+	public static final EntityEntry PROJECTILE_HOMING_ENDER_EYE = Null();
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
@@ -122,6 +135,7 @@ public class CQREntities {
 	public static final EntityEntry WALKER_KING = Null();
 	public static final EntityEntry PIRATE_CAPTAIN = Null();
 	public static final EntityEntry GIANT_SPIDER = Null();
+	public static final EntityEntry ENDER_CALAMITY = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -138,7 +152,7 @@ public class CQREntities {
 	public static class EntityRegistrationHandler {
 
 		@SubscribeEvent
-		public static void registerTileEntities(RegistryEvent.Register<EntityEntry> event) {
+		public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
 			final EntityEntry[] entityEntries = {
 					createEntityEntryWithoutEgg(EntitySlimePart.class, "slime_part", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileBullet.class, "projectile_bullet", 64, 1, true),
@@ -153,6 +167,8 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(ProjectileBubble.class, "projectile_bubble", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHotFireball.class, "projectile_hot_fireball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileWeb.class, "projectile_web", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileThrownBlock.class, "projectile_thrown_block", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileHomingEnderEye.class, "projectile_homing_ender_eye", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
@@ -192,7 +208,16 @@ public class CQREntities {
 					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantSpider.class, "giant_spider", 64, 1, true, 3289650, 000000),
-
+					createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQREnderKing.class, "ender_king", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),
+					createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityEndLaserTargeting.class, "end_targeting_laser", 64, 1, true),
+					
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),

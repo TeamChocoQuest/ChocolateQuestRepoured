@@ -3,14 +3,13 @@ package team.cqr.cqrepoured.client.render.entity.layers;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.core.IAnimatable;
 import team.cqr.cqrepoured.client.models.entities.ModelBoneShield;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNecromancer;
 import team.cqr.cqrepoured.util.Reference;
 
-public class LayerCQRNecromancerBoneShield<T extends EntityCQRNecromancer & IAnimatable> extends AbstractLayerCQR<T> {
+public class LayerCQRNecromancerBoneShield extends AbstractLayerCQR {
 
 	protected final ModelBase ring1;
 	protected final ModelBase ring2;
@@ -26,7 +25,9 @@ public class LayerCQRNecromancerBoneShield<T extends EntityCQRNecromancer & IAni
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+
 		if (entity instanceof EntityCQRNecromancer && ((EntityCQRNecromancer) entity).isBoneShieldActive()) {
 			this.RENDERER.bindTexture(this.TEXTURE);
 

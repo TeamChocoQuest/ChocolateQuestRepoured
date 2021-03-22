@@ -7,12 +7,11 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import software.bernie.geckolib3.core.IAnimatable;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CQRConfig;
 
-public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> extends AbstractLayerCQR<T> {
+public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 
 	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
@@ -21,7 +20,7 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> ext
 	}
 
 	@Override
-	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (CQRConfig.general.enableSpeechBubbles && entity.isChatting()) {
 			Tessellator tessellator = Tessellator.getInstance();
 			Minecraft minecraft = Minecraft.getMinecraft();
@@ -57,6 +56,5 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> ext
 	public boolean shouldCombineTextures() {
 		return false;
 	}
-
 
 }

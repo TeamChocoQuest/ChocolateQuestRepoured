@@ -8,13 +8,17 @@ import team.cqr.cqrepoured.client.models.entities.boss.ModelPigMage;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRWasp;
+import team.cqr.cqrepoured.client.render.entity.RenderChungus;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderFlyingSkull;
 import team.cqr.cqrepoured.client.render.entity.RenderIceSpike;
+import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSpiderEgg;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderCalamity;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantSpider;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
@@ -24,6 +28,7 @@ import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNetherDragon;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKing;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDwarf;
@@ -55,17 +60,21 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileFirewallPart;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHomingEnderEye;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHookShotHook;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHotFireball;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderHook;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileThrownBlock;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
@@ -75,6 +84,9 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
+import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
@@ -112,11 +124,13 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderHook;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileWeb;
 import team.cqr.cqrepoured.objects.mounts.EntityGiantEndermite;
@@ -128,6 +142,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
+import team.cqr.cqrepoured.util.CQRConfig;
 
 public class CQREntityRenderers {
 
@@ -138,8 +153,18 @@ public class CQREntityRenderers {
 	public static void registerRenderers() {
 		registerTileRenderers();
 		registerProjectileAndMiscRenderers();
-		registerEntityRenderers();
+		if(CQRConfig.isAprilFoolsEnabled()) {
+			registerAprilFoolsRenderer();
+		} else {
+			registerEntityRenderers();
+		}
 		registerBossRenderers();
+		registerMountRenderers();
+	}
+
+	//Registers a big chungus renderer that renders on april the first
+	protected static void registerAprilFoolsRenderer() {
+		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityCQR.class, RenderChungus::new);
 	}
 
 	protected static void registerTileRenderers() {
@@ -163,6 +188,8 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, RenderProjectileWeb::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderHook.class, RenderProjectileSpiderHook::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileThrownBlock.class, RenderProjectileThrownBlock::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHomingEnderEye.class, RenderProjectileHomingEnderEye::new);
 
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
@@ -201,7 +228,9 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, RenderCQRWalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);
-
+	}
+	
+	protected static void registerMountRenderers() {
 		// Mounts
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class, RenderGiantSilverfish::new);
@@ -236,6 +265,20 @@ public class CQREntityRenderers {
 
 		// Shelob
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, RenderCQRGiantSpider::new);
+
+		// Spectre Lord
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectreLord.class, RenderCQRSpectreLord::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordIllusion.class, RenderSpectreLordIllusion::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordCurse.class, RenderSpectreLordCurse::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntitySpectreLordExplosion.class, RenderSpectreLordExplosion::new);
+		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityLaser.class, RenderLaser::new);
+
+		// Ender King
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderKing.class, RenderCQREnderKing::new);
+
+		// Geckolib
+		// Ender Calamity
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);
 	}
 
 }

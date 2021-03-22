@@ -10,7 +10,6 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-//This layer does not have to be adjusted to geckolib!! Parrot is a "vanilla" entity and thus has no animations
 @SideOnly(Side.CLIENT)
 public class LayerCQRPirateParrotHeldItem extends LayerHeldItem {
 
