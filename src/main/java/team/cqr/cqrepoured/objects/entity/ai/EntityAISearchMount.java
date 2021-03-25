@@ -2,9 +2,8 @@ package team.cqr.cqrepoured.objects.entity.ai;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -19,7 +18,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	protected static final boolean FORCE_MOUNTING = true;
 	protected static final double WALK_SPEED_TO_MOUNT = 1.0D;
 
-	protected EntityAnimal entityToMount = null;
+	protected EntityLiving entityToMount = null;
 
 	public EntityAISearchMount(AbstractEntityCQR entity) {
 		super(entity);
@@ -38,7 +37,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			Vec3d vec1 = this.entity.getPositionVector().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<EntityAnimal> possibleMounts = this.world.getEntitiesWithinAABB(EntityAnimal.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && this.entity.getEntitySenses().canSee(input));
+			List<EntityLiving> possibleMounts = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && this.entity.getEntitySenses().canSee(input));
 			if (!possibleMounts.isEmpty()) {
 				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
 				return true;
@@ -92,8 +91,6 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 				// Should that stay? -> Arlo says yes.
 				horse.replaceItemInInventory(400, new ItemStack(Items.SADDLE));
 				horse.replaceItemInInventory(401, new ItemStack(Items.IRON_HORSE_ARMOR));
-			} else if (this.entityToMount instanceof EntityPig) {
-				((EntityPig) this.entityToMount).setSaddled(true);
 			}
 			this.entity.getNavigator().clearPath();
 			this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);

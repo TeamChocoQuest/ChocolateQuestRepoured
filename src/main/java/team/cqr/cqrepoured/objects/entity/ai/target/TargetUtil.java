@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.pathfinding.Path;
@@ -45,10 +44,10 @@ public class TargetUtil {
 		if (input.isBeingRidden()) {
 			return false;
 		}
-		if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
+		/*if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
 			return false;
-		}
-		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse || input instanceof EntityPig;
+		}*/
+		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse /*|| input instanceof EntityPig*/;
 	};
 
 	public static final Predicate<EntityTameable> PREDICATE_PETS = input -> {
