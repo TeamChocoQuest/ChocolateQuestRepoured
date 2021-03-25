@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.objects.entity.pathfinding;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
@@ -48,6 +49,9 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 	@Override
 	public void updatePath() {
+		if(this.hasMount()) {
+			this.getMount().getNavigator().updatePath();
+		}
 		if (this.world.getTotalWorldTime() - this.lastTimeUpdated > 20L) {
 			if (this.targetPos != null) {
 				this.currentPath = null;
@@ -112,13 +116,14 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		} else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
 			return this.currentPath;
 		} else {
-			float distance = MathHelper.sqrt(this.entity.getDistanceSqToCenter(pos));
+			Entity ent = this.hasMount() ? this.getMount() : this.entity;
+			float distance = MathHelper.sqrt(ent.getDistanceSqToCenter(pos));
 			if (distance > this.getPathSearchRange()) {
 				return null;
 			}
 
 			this.world.profiler.startSection("pathfind");
-			BlockPos entityPos = new BlockPos(this.entity);
+			BlockPos entityPos = new BlockPos(this.hasMount() ? this.getMount() : this.entity);
 			ChunkCache chunkcache = new ChunkCacheCQR(this.world, entityPos, pos, entityPos, 32, false);
 			Path path = this.pathFinder.findPath(chunkcache, this.hasMount() ? this.getMount() : this.entity, pos, MathHelper.ceil(distance + 32.0F));
 			this.world.profiler.endSection();
@@ -169,7 +174,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	@Override
 	protected void checkForStuck(Vec3d positionVec3) {
 		if (this.totalTicks - this.ticksAtLastPos >= 100) {
-			double aiMoveSpeed = (double) this.entity.getAIMoveSpeed();
+			double aiMoveSpeed = (double) (this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed());
 			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
 			if (positionVec3.distanceTo(this.lastPosCheck) / 100.0D < aiMoveSpeed * 0.5D) {
 				this.clearPath();
@@ -185,11 +190,12 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
 				this.timeoutTimer = this.totalTicks;
-				if (this.entity.getAIMoveSpeed() > 0.0F) {
-					double aiMoveSpeed = (double) this.entity.getAIMoveSpeed();
+				double aiMoveSpeedOrig = (double) (this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed());
+				double aiMoveSpeed = aiMoveSpeedOrig;
+				if (aiMoveSpeed > 0.0F) {
 					aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
 					double distance = positionVec3.distanceTo(this.timeoutCachedNode);
-					this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? MathHelper.ceil(distance / aiMoveSpeed) : 0.0D;
+					this.timeoutLimit = aiMoveSpeedOrig > 0.0F ? MathHelper.ceil(distance / aiMoveSpeed) : 0.0D;
 				} else {
 					this.timeoutLimit = 0.0D;
 				}
