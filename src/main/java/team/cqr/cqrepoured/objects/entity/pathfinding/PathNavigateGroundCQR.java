@@ -59,6 +59,18 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			this.tryUpdatePath = true;
 		}
 	}
+	
+	@Override
+	public void onUpdateNavigation() {
+		super.onUpdateNavigation();
+		if(!noPath() && this.hasMount()) {
+			getMount().getNavigator().onUpdateNavigation();
+		}
+	}
+	
+	private boolean hasMount() {
+		return entity.getRidingEntity() instanceof EntityLiving;
+	}
 
 	@Override
 	public Path getPathToPos(BlockPos pos) {
@@ -108,7 +120,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			this.world.profiler.startSection("pathfind");
 			BlockPos entityPos = new BlockPos(this.entity);
 			ChunkCache chunkcache = new ChunkCacheCQR(this.world, entityPos, pos, entityPos, 32, false);
-			Path path = this.pathFinder.findPath(chunkcache, this.entity, pos, MathHelper.ceil(distance + 32.0F));
+			Path path = this.pathFinder.findPath(chunkcache, this.hasMount() ? this.getMount() : this.entity, pos, MathHelper.ceil(distance + 32.0F));
 			this.world.profiler.endSection();
 			return path;
 		}
@@ -121,6 +133,11 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			this.targetPos = null;
 			return false;
 		} else {
+			
+			if(this.hasMount()) {
+				this.getMount().getNavigator().setPath(pathentityIn, speedIn);
+			}
+			
 			if (pathentityIn.isSamePath(this.currentPath)) {
 				return true;
 			}
@@ -142,6 +159,11 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				return true;
 			}
 		}
+	}
+	
+	@Override
+	protected boolean canNavigate() {
+		return super.canNavigate() || this.hasMount();
 	}
 
 	@Override
@@ -181,11 +203,24 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			}
 		}
 	}
+	
+	@Nullable
+	private EntityLiving getMount() {
+		try {
+			return (EntityLiving)entity.getRidingEntity();
+		} catch(NullPointerException npe) {
+			return null;
+		}
+	}
 
 	@Override
 	public void clearPath() {
+		if(this.hasMount()) {
+			getMount().getNavigator().clearPath();
+		}
 		this.currentPath = null;
 		this.targetPos = null;
+		super.clearPath();
 	}
 
 }

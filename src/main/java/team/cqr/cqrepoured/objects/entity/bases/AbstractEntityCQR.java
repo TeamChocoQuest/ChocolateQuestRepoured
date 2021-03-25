@@ -96,6 +96,7 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAILooter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToHome;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIPotionThrower;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIRideHorse;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAISearchMount;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITorchIgniter;
@@ -151,6 +152,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected float damageBlockedWithShield = 0.0F;
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
+	
+	//Riding AI
+	protected EntityAIRideHorse<AbstractEntityCQR> horseAI = null;
 
 	// Pathing AI stuff
 	protected Path path = new Path() {
@@ -400,6 +404,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		});
 
+		if(this.canMountEntity()) {
+			this.horseAI = new EntityAIRideHorse<AbstractEntityCQR>(this, 1.5);
+			this.tasks.addTask(8, this.horseAI);
+		}
 		this.tasks.addTask(9, new EntityAIHealingPotion(this));
 		this.tasks.addTask(11, this.spellHandler);
 		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
@@ -1355,9 +1363,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canStrafe() {
+		if(this.canMountEntity() && this.horseAI != null) {
+			return this.getRidingEntity() == null;
+		}
 		return true;
 	}
-
+	
 	public boolean canOpenDoors() {
 		return true;
 	}
