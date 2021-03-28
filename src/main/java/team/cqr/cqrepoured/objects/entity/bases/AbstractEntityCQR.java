@@ -1363,8 +1363,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canStrafe() {
-		if(this.canMountEntity() && this.horseAI != null) {
-			return this.getRidingEntity() == null;
+		if(this.horseAI != null) {
+			return this.getLowestRidingEntity() == null;
 		}
 		return true;
 	}
