@@ -231,7 +231,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, false));
 		}
 
 		/*if(this.ticksExisted % 5 == 0) {
@@ -240,20 +240,24 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		
 		return PlayState.CONTINUE;
 	}
+	
+	private <E extends IAnimatable> PlayState execHandAnimationPredicate(AnimationEvent<E> event, final String IDLE_ANIM, final String THROW_ANIM, boolean updateIndicator) {
+		if (event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(IDLE_ANIM, false));
+		}
+		if (updateIndicator) {
+			updateIndicator = false;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(THROW_ANIM, false).addAnimation(THROW_ANIM, false));
+		}
+		return PlayState.CONTINUE;
+	}
 
 	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
 	private static final String ANIM_NAME_ARM_RU_THROW = ANIM_NAME_PREFIX + "throwBlock_RU";
 	private boolean updateIndicator_Hand_RU = false;
 
 	private <E extends IAnimatable> PlayState predicateArmRightUpper(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_IDLE));
-		}
-		if (this.updateIndicator_Hand_RU) {
-			this.updateIndicator_Hand_RU = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).addAnimation(ANIM_NAME_ARM_RU_IDLE));
-		}
-		return PlayState.CONTINUE;
+		return execHandAnimationPredicate(event, ANIM_NAME_ARM_RU_IDLE, ANIM_NAME_ARM_RU_THROW, updateIndicator_Hand_RU);
 	}
 
 	private static final String ANIM_NAME_ARM_RM_IDLE = ANIM_NAME_PREFIX + "idle_armRM";
@@ -261,14 +265,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean updateIndicator_Hand_RM = false;
 
 	private <E extends IAnimatable> PlayState predicateArmRightMiddle(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_IDLE));
-		}
-		if (this.updateIndicator_Hand_RM) {
-			this.updateIndicator_Hand_RM = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_THROW).addAnimation(ANIM_NAME_ARM_RM_IDLE));
-		}
-		return PlayState.CONTINUE;
+		return execHandAnimationPredicate(event, ANIM_NAME_ARM_RM_IDLE, ANIM_NAME_ARM_RM_THROW, updateIndicator_Hand_RM);
 	}
 
 	private static final String ANIM_NAME_ARM_RL_IDLE = ANIM_NAME_PREFIX + "idle_armRL";
@@ -276,14 +273,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean updateIndicator_Hand_RL = false;
 
 	private <E extends IAnimatable> PlayState predicateArmRightLower(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_IDLE));
-		}
-		if (this.updateIndicator_Hand_RL) {
-			this.updateIndicator_Hand_RL = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_THROW).addAnimation(ANIM_NAME_ARM_RL_IDLE));
-		}
-		return PlayState.CONTINUE;
+		return execHandAnimationPredicate(event, ANIM_NAME_ARM_RL_IDLE, ANIM_NAME_ARM_RL_THROW, updateIndicator_Hand_RL);
 	}
 
 	private static final String ANIM_NAME_ARM_LU_IDLE = ANIM_NAME_PREFIX + "idle_armLU";
@@ -291,14 +281,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean updateIndicator_Hand_LU = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftUpper(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_IDLE));
-		}
-		if (this.updateIndicator_Hand_LU) {
-			this.updateIndicator_Hand_LU = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_THROW).addAnimation(ANIM_NAME_ARM_LU_IDLE));
-		}
-		return PlayState.CONTINUE;
+		return execHandAnimationPredicate(event, ANIM_NAME_ARM_LU_IDLE, ANIM_NAME_ARM_LU_THROW, updateIndicator_Hand_LU);
 	}
 
 	private static final String ANIM_NAME_ARM_LM_IDLE = ANIM_NAME_PREFIX + "idle_armLM";
@@ -306,14 +289,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean updateIndicator_Hand_LM = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftMiddle(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_IDLE));
-		}
-		if (this.updateIndicator_Hand_LM) {
-			this.updateIndicator_Hand_LM = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_THROW).addAnimation(ANIM_NAME_ARM_LM_IDLE));
-		}
-		return PlayState.CONTINUE;
+		return execHandAnimationPredicate(event, ANIM_NAME_ARM_LM_IDLE, ANIM_NAME_ARM_LM_THROW, updateIndicator_Hand_LM);
 	}
 
 	private static final String ANIM_NAME_ARM_LL_IDLE = ANIM_NAME_PREFIX + "idle_armLL";
@@ -322,14 +298,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean dontUpdatePhase = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_IDLE));
-		}
-		if (this.updateIndicator_Hand_LL) {
-			this.updateIndicator_Hand_LL = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_THROW).addAnimation(ANIM_NAME_ARM_LL_IDLE));
-		}
-		return PlayState.CONTINUE;
+		return execHandAnimationPredicate(event, ANIM_NAME_ARM_LL_IDLE, ANIM_NAME_ARM_LL_THROW, updateIndicator_Hand_LL);
 	}
 
 	public boolean forceTeleport() {
