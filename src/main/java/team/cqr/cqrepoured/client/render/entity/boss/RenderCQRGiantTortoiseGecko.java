@@ -17,41 +17,42 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	public RenderCQRGiantTortoiseGecko(RenderManager renderManager) {
 		super(renderManager, new ModelGiantTortoiseGecko(TEXTURE), "boss/giant_tortoise");
 	}
-	
+
 	// we do not hold items, so we can ignore this
-		@Override
-		protected ItemStack getHeldItemForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
-			return null;
-		}
+	@Override
+	protected ItemStack getHeldItemForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
+		return null;
+	}
 
-		@Override
-		protected void preRenderItem(ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity) {
-			// Unused
-		}
+	@Override
+	protected void preRenderItem(ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity) {
+		// Unused
+	}
 
-		@Override
-		protected void postRenderItem(ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity) {
-			// Unused
-		}
+	@Override
+	protected void postRenderItem(ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity) {
+		// Unused
+	}
 
-		@Nullable
-		@Override
-		protected IBlockState getHeldBlockForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
-			return null;
-		}
+	@Nullable
+	@Override
+	protected IBlockState getHeldBlockForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
+		return null;
+	}
 
-		@Override
-		protected void preRenderBlock(IBlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
-			// Unused
-		}
+	@Override
+	protected void preRenderBlock(IBlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+		// Unused
+	}
 
-		@Override
-		protected void postRenderBlock(IBlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
-			// Unused
-		}
+	@Override
+	protected void postRenderBlock(IBlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+		// Unused
+	}
 
-		@Override
-		protected ResourceLocation getTextureForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
-			return null;
-		}
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
+		return null;
+	}
+
 }
