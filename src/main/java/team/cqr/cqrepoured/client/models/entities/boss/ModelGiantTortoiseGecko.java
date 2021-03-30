@@ -56,7 +56,7 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 	@Override
 	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID) {
 		super.setLivingAnimations(entity, uniqueID);
-		if (!entity.isInShell()) {
+		if (entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
 			IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
 			IBone legFL = this.getAnimationProcessor().getBone(BONE_IDENT_LEGJOINT_FL);
 			IBone legFR = this.getAnimationProcessor().getBone(BONE_IDENT_LEGJOINT_FR);
@@ -70,12 +70,12 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 			legFL.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 1.4F * entity.limbSwingAmount);
 			legBL.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 1.4F * entity.limbSwingAmount);
 			legFR.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 1.4F * entity.limbSwingAmount);
-			
+
 			legFR.setRotationY(MathHelper.sin(entity.limbSwing * 0.6662F) * entity.limbSwingAmount + 0.7853981633974483F);
 			legFL.setRotationY(MathHelper.sin(entity.limbSwing * 0.6662F + (float) Math.PI) * entity.limbSwingAmount - 0.7853981633974483F);
 			legBL.setRotationY(MathHelper.sin(entity.limbSwing * 0.6662F) * entity.limbSwingAmount - 2.356194490192345F);
-			legBR.setRotationY( MathHelper.sin(entity.limbSwing * 0.6662F + (float) Math.PI) * entity.limbSwingAmount + 2.356194490192345F);
-			
+			legBR.setRotationY(MathHelper.sin(entity.limbSwing * 0.6662F + (float) Math.PI) * entity.limbSwingAmount + 2.356194490192345F);
+
 		}
 	}
 
