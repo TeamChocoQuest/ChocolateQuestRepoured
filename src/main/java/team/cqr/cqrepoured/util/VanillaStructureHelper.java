@@ -28,6 +28,7 @@ import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 public class VanillaStructureHelper {
 
 	private static final ReflectionField<World> FIELD_WORLD = new ReflectionField<>(MapGenBase.class, "field_75039_c", "world");
+	private static final ReflectionField<Random> FIELD_RAND = new ReflectionField<>(MapGenBase.class, "field_75038_b", "rand");
 	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	// ChunkGeneratorOverworld
@@ -119,7 +120,7 @@ public class VanillaStructureHelper {
 	private static boolean isStructureInRange(World worldIn, MapGenStructure structureType, BlockPos startPos, int radius) {
 		int x = startPos.getX() >> 4;
 		int z = startPos.getZ() >> 4;
-		Random random = new Random();
+		Random random = FIELD_RAND.get(structureType);
 
 		FIELD_WORLD.set(structureType, worldIn);
 		for (int i = 0; i <= radius; ++i) {
@@ -133,8 +134,10 @@ public class VanillaStructureHelper {
 						int x2 = x + x1;
 						int z2 = z + z1;
 
-						MapGenBase.setupChunkSeed(worldIn.getSeed(), random, x2, z2);
-						random.nextInt();
+						if (structureType instanceof MapGenMineshaft) {
+							random.setSeed((long) (x2 ^ z2) ^ worldIn.getSeed());
+							random.nextInt();
+						}
 
 						if (Boolean.TRUE.equals(METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS.invoke(structureType, x2, z2))) {
 							return true;
