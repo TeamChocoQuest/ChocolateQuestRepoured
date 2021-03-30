@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -189,16 +188,17 @@ public class CommandLocateDungeon extends CommandBase {
 
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-		if (args.length >= 1 && args.length <= 3) {
+		if (args.length >= 1 && args.length <= 2) {
 			return getTabCompletionCoordinateXZ(args, 0, targetPos);
+		} else if (args.length == 3) {
+			return args[2].isEmpty() ? Arrays.asList("64") : Collections.emptyList();
 		} else if (args.length == 4) {
-			return Arrays.asList("64");
+			return getListOfStringsMatchingLastWord(args, "true", "false");
 		} else if (args.length == 5) {
-			return Arrays.asList("true", "false");
+			return getListOfStringsMatchingLastWord(args, "true", "false");
 		} else if (args.length == 6) {
-			return Arrays.asList("true", "false");
-		} else if (args.length == 7) {
-			return DungeonRegistry.getInstance().getDungeons().stream().map(dungeon -> dungeon.getDungeonName()).collect(Collectors.toList());
+			DungeonRegistry dungeonRegistry = DungeonRegistry.getInstance();
+			return getListOfStringsMatchingLastWord(args, dungeonRegistry.getDungeons().stream().map(DungeonBase::getDungeonName).toArray(String[]::new));
 		} else {
 			return Collections.emptyList();
 		}
