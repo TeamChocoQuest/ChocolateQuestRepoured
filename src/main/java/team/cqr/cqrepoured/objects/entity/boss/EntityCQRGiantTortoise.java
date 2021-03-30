@@ -85,7 +85,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final int ANIMATION_ID_WALK = 0;
 	public static final AnimationGecko[] ANIMATIONS = {
 			new AnimationGecko("", 1),
-			new AnimationGecko("animation.giant_tortoise.spin", 20),
+			new AnimationGecko("animation.giant_tortoise.spin", 260),
 			new AnimationGecko("animation.giant_tortoise.stun", 140),
 			new AnimationGecko("animation.giant_tortoise.enter_shell", 31),
 			new AnimationGecko("animation.giant_tortoise.exit_shell", 31),
