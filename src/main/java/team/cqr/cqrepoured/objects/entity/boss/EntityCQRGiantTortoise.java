@@ -173,7 +173,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
-		//this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATIONS[ANIMATION_ID_ENTER_SHELL], ANIMATIONS[ANIMATION_ID_EXIT_SHELL]));
+		this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATIONS[ANIMATION_ID_ENTER_SHELL], ANIMATIONS[ANIMATION_ID_EXIT_SHELL]));
 		this.tasks.addTask(2, new BossAITortoiseStun(this));
 		this.tasks.addTask(4, new BossAITortoiseHealing(this));
 		this.tasks.addTask(6, new BossAITortoiseSpinAttack(this));
