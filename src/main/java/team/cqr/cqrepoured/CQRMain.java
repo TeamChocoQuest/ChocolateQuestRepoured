@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.command.CommandChangeReputation;
+import team.cqr.cqrepoured.command.CommandDeleteProtectedRegion;
 import team.cqr.cqrepoured.command.CommandExport;
 import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
 import team.cqr.cqrepoured.command.CommandLocateDungeon;
@@ -253,6 +254,7 @@ public class CQRMain {
 		event.registerServerCommand(new CommandExport());
 		event.registerServerCommand(new CommandChangeReputation());
 		event.registerServerCommand(new CommandGetProtectedRegion());
+		event.registerServerCommand(new CommandDeleteProtectedRegion());
 		event.registerServerCommand(new CommandLocateDungeon());
 
 		// Since the CTS manager could also be corrupted, let's make him reload his data...

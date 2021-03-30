@@ -14,16 +14,16 @@ import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 
-public class CommandGetProtectedRegion extends CommandBase {
+public class CommandDeleteProtectedRegion extends CommandBase {
 
 	@Override
 	public String getName() {
-		return "cqr_get_protected_region";
+		return "cqr_delete_protected_region";
 	}
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/cqr_get_protected_region x y z";
+		return "/cqr_delete_protected_region x y z";
 	}
 
 	@Override
@@ -43,35 +43,11 @@ public class CommandGetProtectedRegion extends CommandBase {
 		if (protectedRegionManager != null) {
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(pos);
 
-			StringBuilder sb = new StringBuilder("Protected Regions at (");
-			sb.append(pos.getX());
-			sb.append(',');
-			sb.append(' ');
-			sb.append(pos.getY());
-			sb.append(',');
-			sb.append(' ');
-			sb.append(pos.getZ());
-			sb.append(')');
-			sb.append(':');
-			sb.append('\n');
-			if (protectedRegions.isEmpty()) {
-				sb.append(" NONE");
-			} else {
-				for (int i = 0; i < protectedRegions.size(); i++) {
-					ProtectedRegion protectedRegion = protectedRegions.get(i);
-					sb.append(' ');
-					sb.append(i);
-					sb.append(':');
-					sb.append(' ');
-					sb.append(protectedRegion.getName());
-					sb.append(' ');
-					sb.append(protectedRegion.getUuid());
-					if (i < protectedRegions.size() - 1) {
-						sb.append('\n');
-					}
-				}
+			for (ProtectedRegion protectedRegion : protectedRegions) {
+				protectedRegionManager.removeProtectedRegion(protectedRegion);
 			}
-			sender.sendMessage(new TextComponentString(sb.toString()));
+
+			sender.sendMessage(new TextComponentString(String.format("Deleted %d protected regions.", protectedRegions.size())));
 		}
 	}
 
