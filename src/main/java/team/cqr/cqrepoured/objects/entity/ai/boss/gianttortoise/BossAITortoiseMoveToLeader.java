@@ -26,12 +26,16 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 			return false;
 		}
 		if (!this.getBoss().hasAttackTarget() && !(this.getBoss().isStunned() || this.getBoss().isSpinning() || this.getBoss().isHealing())) {
-			if (this.getBoss().isInShell()) {
+			/*if (this.getBoss().isInShell()) {
 				this.getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
-			}
+			}*/
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean isTortoiseReadyToWalk() {
+		return this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK;
 	}
 
 	@Override
@@ -44,9 +48,19 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 
 	@Override
 	public void updateTask() {
+		if(!this.isTortoiseReadyToWalk() && this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
+			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_EXIT_SHELL);
+			return;
+		}
 		if (!this.getBoss().isInShell()) {
 			super.updateTask();
 		}
+	}
+	
+	@Override
+	public void resetTask() {
+		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
+		super.resetTask();
 	}
 
 	@Override
