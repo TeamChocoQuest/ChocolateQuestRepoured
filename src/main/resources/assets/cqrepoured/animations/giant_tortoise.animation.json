@@ -766,6 +766,64 @@
 					}
 				}
 			}
+		},
+		"animation.giant_tortoise.walk": {
+			"loop": true,
+			"animation_length": 1.04,
+			"bones": {
+				"legJointFR": {
+					"rotation": {
+						"0.0": {
+							"vector": [12.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [-25, 0, 0]
+						},
+						"1.04": {
+							"vector": [12.5, 0, 0]
+						}
+					}
+				},
+				"legJointFL": {
+					"rotation": {
+						"0.0": {
+							"vector": [-25, 0, 0]
+						},
+						"0.52": {
+							"vector": [12.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-25, 0, 0]
+						}
+					}
+				},
+				"legJointBR": {
+					"rotation": {
+						"0.0": {
+							"vector": [-25, 0, 0]
+						},
+						"0.52": {
+							"vector": [12.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-25, 0, 0]
+						}
+					}
+				},
+				"legJointBL": {
+					"rotation": {
+						"0.0": {
+							"vector": [12.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [-25, 0, 0]
+						},
+						"1.04": {
+							"vector": [12.5, 0, 0]
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2
