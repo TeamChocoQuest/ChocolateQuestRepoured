@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +36,7 @@ public class CommandLocateDungeon extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/cqr_locate_dungeon x z chunkRadius";
+		return "/cqr_locate_dungeon x z chunkRadius [generatedDungeon] [notGeneratedDungeon] [dungeonName]";
 	}
 
 	@Override
@@ -53,6 +54,9 @@ public class CommandLocateDungeon extends CommandBase {
 		int x = parseInt(args[0]);
 		int z = parseInt(args[1]);
 		int chunkRadius = parseInt(args[2], 0, 0x10000);
+		boolean searchForGeneratedDungeon = args.length < 5 || parseBoolean(args[4]);
+		boolean searchForNotGeneratedDungeon = args.length < 6 || parseBoolean(args[5]);
+		String dungeonToSearchFor = args.length >= 7 ? args[6] : null;
 
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			sender.sendMessage(new TextComponentString("Structures are disabled."));
@@ -66,7 +70,7 @@ public class CommandLocateDungeon extends CommandBase {
 
 		// TODO send warning if aw2 integration is enabled
 
-		DungeonGenInfo dungeonGenInfo = getNearestDungeon(world, x >> 4, z >> 4, chunkRadius);
+		DungeonGenInfo dungeonGenInfo = getNearestDungeon(world, x >> 4, z >> 4, chunkRadius, dungeonToSearchFor, searchForGeneratedDungeon, searchForNotGeneratedDungeon);
 		if (dungeonGenInfo != null) {
 			int dungeonX = (dungeonGenInfo.chunkX << 4) + 8;
 			int dungeonZ = (dungeonGenInfo.chunkZ << 4) + 8;
@@ -78,7 +82,15 @@ public class CommandLocateDungeon extends CommandBase {
 	}
 
 	@Nullable
-	public static DungeonGenInfo getNearestDungeon(World world, int chunkX, int chunkZ, int chunkRadius) {
+	public static DungeonGenInfo getNearestDungeon(World world, int chunkX, int chunkZ, int chunkRadius, @Nullable String dungeonToSearchFor, boolean searchForGeneratedDungeon, boolean searchForNotGeneratedDungeon) {
+		if (!searchForGeneratedDungeon && !searchForNotGeneratedDungeon) {
+			return null;
+		}
+
+		if (dungeonToSearchFor != null && DungeonRegistry.getInstance().getDungeons().stream().noneMatch(dungeon -> dungeon.getDungeonName().equals(dungeonToSearchFor))) {
+			return null;
+		}
+		
 		int spawnX = DungeonGenUtils.getSpawnX(world) >> 4;
 		int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4;
 		Random rand = new Random();
@@ -128,6 +140,16 @@ public class CommandLocateDungeon extends CommandBase {
 						continue;
 					}
 
+					boolean isChunkGenerated = world.isChunkGeneratedAt(x, z);
+
+					if (searchForGeneratedDungeon && !searchForNotGeneratedDungeon && !isChunkGenerated) {
+						continue;
+					}
+
+					if (!searchForGeneratedDungeon && searchForNotGeneratedDungeon && isChunkGenerated) {
+						continue;
+					}
+
 					mutablePos.setPos((x << 4) + 8, 64, (z << 4) + 8);
 
 					if (CQRConfig.advanced.generationRespectOtherStructures) {
@@ -153,6 +175,10 @@ public class CommandLocateDungeon extends CommandBase {
 						continue;
 					}
 
+					if (dungeonToSearchFor != null && !dungeon.getDungeonName().equals(dungeonToSearchFor)) {
+						continue;
+					}
+
 					return new DungeonGenInfo(dungeon.getDungeonName(), x, z);
 				}
 			}
@@ -167,6 +193,12 @@ public class CommandLocateDungeon extends CommandBase {
 			return getTabCompletionCoordinateXZ(args, 0, targetPos);
 		} else if (args.length == 4) {
 			return Arrays.asList("64");
+		} else if (args.length == 5) {
+			return Arrays.asList("true", "false");
+		} else if (args.length == 6) {
+			return Arrays.asList("true", "false");
+		} else if (args.length == 7) {
+			return DungeonRegistry.getInstance().getDungeons().stream().map(dungeon -> dungeon.getDungeonName()).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}
