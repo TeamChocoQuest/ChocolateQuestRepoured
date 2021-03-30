@@ -35,7 +35,7 @@ public class CommandLocateDungeon extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/cqr_locate_dungeon x y z chunkRadius";
+		return "/cqr_locate_dungeon x z chunkRadius";
 	}
 
 	@Override
@@ -50,8 +50,9 @@ public class CommandLocateDungeon extends CommandBase {
 		}
 
 		World world = sender.getEntityWorld();
-		BlockPos pos = parseBlockPos(sender, args, 0, false);
 		int chunkRadius = Integer.parseInt(args[3]);
+		int x = parseInt(args[0]);
+		int z = parseInt(args[1]);
 
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			sender.sendMessage(new TextComponentString("Structures are disabled."));
@@ -65,11 +66,11 @@ public class CommandLocateDungeon extends CommandBase {
 
 		// TODO send warning if aw2 integration is enabled
 
-		DungeonGenInfo dungeonGenInfo = getNearestDungeon(world, pos.getX() >> 4, pos.getZ() >> 4, chunkRadius);
+		DungeonGenInfo dungeonGenInfo = getNearestDungeon(world, x >> 4, z >> 4, chunkRadius);
 		if (dungeonGenInfo != null) {
-			int x = (dungeonGenInfo.chunkX << 4) + 8;
-			int z = (dungeonGenInfo.chunkZ << 4) + 8;
-			String s = String.format("Nearest dungeon: %s at x=%d z=%d", dungeonGenInfo.dungeonName, x, z);
+			int dungeonX = (dungeonGenInfo.chunkX << 4) + 8;
+			int dungeonZ = (dungeonGenInfo.chunkZ << 4) + 8;
+			String s = String.format("Nearest dungeon: %s at x=%d z=%d", dungeonGenInfo.dungeonName, dungeonX, dungeonZ);
 			sender.sendMessage(new TextComponentString(s));
 		} else {
 			sender.sendMessage(new TextComponentString("No dungeon found."));
@@ -163,7 +164,7 @@ public class CommandLocateDungeon extends CommandBase {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
 		if (args.length >= 1 && args.length <= 3) {
-			return getTabCompletionCoordinate(args, 0, targetPos);
+			return getTabCompletionCoordinateXZ(args, 0, targetPos);
 		} else if (args.length == 4) {
 			return Arrays.asList("64");
 		} else {
