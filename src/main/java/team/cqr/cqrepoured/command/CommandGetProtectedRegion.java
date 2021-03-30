@@ -54,17 +54,21 @@ public class CommandGetProtectedRegion extends CommandBase {
 			sb.append(')');
 			sb.append(':');
 			sb.append('\n');
-			for (int i = 0; i < protectedRegions.size(); i++) {
-				ProtectedRegion protectedRegion = protectedRegions.get(i);
-				sb.append(' ');
-				sb.append(i);
-				sb.append(':');
-				sb.append(' ');
-				sb.append(protectedRegion.getName());
-				sb.append(' ');
-				sb.append(protectedRegion.getUuid());
-				if (i < protectedRegions.size() - 1) {
-					sb.append('\n');
+			if (protectedRegions.isEmpty()) {
+				sb.append(" NONE");
+			} else {
+				for (int i = 0; i < protectedRegions.size(); i++) {
+					ProtectedRegion protectedRegion = protectedRegions.get(i);
+					sb.append(' ');
+					sb.append(i);
+					sb.append(':');
+					sb.append(' ');
+					sb.append(protectedRegion.getName());
+					sb.append(' ');
+					sb.append(protectedRegion.getUuid());
+					if (i < protectedRegions.size() - 1) {
+						sb.append('\n');
+					}
 				}
 			}
 			sender.sendMessage(new TextComponentString(sb.toString()));
