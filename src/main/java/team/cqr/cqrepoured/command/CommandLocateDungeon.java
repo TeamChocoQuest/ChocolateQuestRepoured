@@ -86,7 +86,8 @@ public class CommandLocateDungeon extends CommandBase {
 			return null;
 		}
 
-		if (dungeonToSearchFor != null && DungeonRegistry.getInstance().getDungeons().stream().noneMatch(dungeon -> dungeon.getDungeonName().equals(dungeonToSearchFor))) {
+		int dim = world.provider.getDimension();
+		if (dungeonToSearchFor != null && DungeonRegistry.getInstance().getDungeons().stream().noneMatch(dungeon -> dungeon.canSpawnInDim(dim) && dungeon.getDungeonName().equals(dungeonToSearchFor))) {
 			return null;
 		}
 		
@@ -198,7 +199,8 @@ public class CommandLocateDungeon extends CommandBase {
 			return getListOfStringsMatchingLastWord(args, "true", "false");
 		} else if (args.length == 6) {
 			DungeonRegistry dungeonRegistry = DungeonRegistry.getInstance();
-			return getListOfStringsMatchingLastWord(args, dungeonRegistry.getDungeons().stream().map(DungeonBase::getDungeonName).toArray(String[]::new));
+			int dim = sender.getEntityWorld().provider.getDimension();
+			return getListOfStringsMatchingLastWord(args, dungeonRegistry.getDungeons().stream().filter(dungeon -> dungeon.canSpawnInDim(dim)).map(DungeonBase::getDungeonName).toArray(String[]::new));
 		} else {
 			return Collections.emptyList();
 		}

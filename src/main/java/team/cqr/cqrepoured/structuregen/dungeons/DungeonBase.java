@@ -213,6 +213,22 @@ public abstract class DungeonBase {
 		}
 	}
 
+	public boolean canSpawnInDim(int dim) {
+		if (this.isModDependencyMissing()) {
+			return false;
+		}
+		if (!this.enabled) {
+			return false;
+		}
+		if (this.weight <= 0) {
+			return false;
+		}
+		if (this.chance <= 0) {
+			return false;
+		}
+		return this.isValidDim(dim);
+	}
+
 	public boolean canSpawnAtPos(World world, BlockPos pos, boolean behindWall) {
 		if (!this.enabled) {
 			return false;
