@@ -33,6 +33,7 @@ import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.command.CommandChangeReputation;
 import team.cqr.cqrepoured.command.CommandExport;
 import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
+import team.cqr.cqrepoured.command.CommandLocateDungeon;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -252,6 +253,7 @@ public class CQRMain {
 		event.registerServerCommand(new CommandExport());
 		event.registerServerCommand(new CommandChangeReputation());
 		event.registerServerCommand(new CommandGetProtectedRegion());
+		event.registerServerCommand(new CommandLocateDungeon());
 
 		// Since the CTS manager could also be corrupted, let's make him reload his data...
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
