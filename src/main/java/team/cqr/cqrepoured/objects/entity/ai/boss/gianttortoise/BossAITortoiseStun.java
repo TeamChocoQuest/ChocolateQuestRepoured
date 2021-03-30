@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise;
 
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationAI;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise.AnimationGecko;
 
-public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 
 	public BossAITortoiseStun(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -15,14 +14,8 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 		return (EntityCQRGiantTortoise) this.entity;
 	}
 
-	@Override
-	public Animation getAnimation() {
-		return EntityCQRGiantTortoise.ANIMATION_STUNNED;
-	}
-
-	@Override
-	public boolean isAutomatic() {
-		return false;
+	public AnimationGecko getAnimation() {
+		return EntityCQRGiantTortoise.ANIMATIONS[EntityCQRGiantTortoise.ANIMATION_ID_STUNNED];
 	}
 
 	@Override
@@ -32,6 +25,11 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean shouldContinueExecuting() {
+		return super.shouldContinueExecuting() && this.getBoss().shouldCurrentAnimationBePlaying() && this.getBoss().isStunned();
+	}
 
 	@Override
 	public void startExecuting() {
@@ -40,9 +38,7 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 		this.getBoss().setSpinning(false);
 		this.getBoss().setStunned(true);
 		this.getBoss().setCanBeStunned(false);
-		this.getBoss().setAnimation(this.getAnimation());
-		this.getBoss().currentAnim = this;
-		this.getBoss().setAnimationTick(0);
+		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_STUNNED);
 	}
 
 	@Override
@@ -51,7 +47,7 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 		this.getBoss().setStunned(true);
 		this.getBoss().setCanBeStunned(false);
 
-		if (this.getBoss().getAnimationTick() >= 10 && this.getBoss().getAnimationTick() <= this.getAnimation().getDuration() - 10) {
+		if (this.getBoss().getCurrentAnimationTick() >= 10 && this.getBoss().getCurrentAnimationTick() <= this.getAnimation().getAnimationDuration() - 10) {
 			this.getBoss().setInShell(false);
 		} else {
 			this.getBoss().setInShell(true);
@@ -61,9 +57,7 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		this.getBoss().setAnimationTick(0);
-		this.getBoss().currentAnim = null;
-		this.getBoss().setAnimation(IAnimatedEntity.NO_ANIMATION);
+		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL);
 		this.getBoss().setCanBeStunned(true);
 		this.getBoss().setStunned(false);
 	}

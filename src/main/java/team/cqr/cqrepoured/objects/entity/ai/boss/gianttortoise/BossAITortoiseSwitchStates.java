@@ -1,17 +1,16 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise;
 
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationAI;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise.AnimationGecko;
 
-public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseSwitchStates extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 
 	protected EntityCQRGiantTortoise turtle;
-	protected Animation animationIn;
-	protected Animation animationOut;
+	protected AnimationGecko animationIn;
+	protected AnimationGecko animationOut;
 
-	public BossAITortoiseSwitchStates(EntityCQRGiantTortoise entity, Animation animIn, Animation animOut) {
+	public BossAITortoiseSwitchStates(EntityCQRGiantTortoise entity, AnimationGecko animIn, AnimationGecko animOut) {
 		super(entity);
 		this.setMutexBits(8);
 		this.turtle = entity;
@@ -19,8 +18,7 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 		this.animationOut = animOut;
 	}
 
-	@Override
-	public Animation getAnimation() {
+	public AnimationGecko getAnimation() {
 		if (this.turtle.getTargetedState() != 0) {
 			return this.turtle.getTargetedState() < 0 ? this.animationIn : this.animationOut;
 		}
@@ -41,24 +39,23 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 	}
 
 	@Override
+	public boolean shouldContinueExecuting() {
+		return super.shouldContinueExecuting() && (this.turtle.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL || this.turtle.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_EXIT_SHELL)&& this.turtle.shouldCurrentAnimationBePlaying();
+	}
+	
+	@Override
 	public void startExecuting() {
 		super.startExecuting();
-		this.turtle.currentAnim = this;
 		this.turtle.setReadyToSpin(false);
-		this.turtle.setAnimationTick(0);
 		this.turtle.setInShell(false);
 		if (this.turtle.getTargetedState() < 0) {
-			this.turtle.setAnimation(this.animationIn);
+			//this.turtle.setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 		} else {
-			this.turtle.setAnimation(this.animationOut);
+			//this.turtle.setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_EXIT_SHELL);
 		}
 		this.turtle.setBypassInShell(true);
 	}
 
-	@Override
-	public boolean isAutomatic() {
-		return false;
-	}
 
 	@Override
 	public boolean isInterruptible() {
@@ -68,12 +65,8 @@ public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoi
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		this.turtle.setAnimationTick(0);
-		this.turtle.currentAnim = null;
-		this.turtle.setAnimation(IAnimatedEntity.NO_ANIMATION);
 		this.turtle.setInShell(this.turtle.getTargetedState() < 0);
 		this.turtle.changedState();
-		this.turtle.targetNewState(0);
 		this.turtle.setBypassInShell(false);
 	}
 

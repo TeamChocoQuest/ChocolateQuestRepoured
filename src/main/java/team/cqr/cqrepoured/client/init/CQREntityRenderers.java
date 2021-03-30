@@ -20,7 +20,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantSpider;
-import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRMage;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNecromancer;
@@ -245,7 +245,8 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);
 
 		// Giant Tortoise
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
+		//RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoiseGecko::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, RenderCQRGiantTortoisePart::new);
 
 		// Lich

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise;
 
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.DamageSource;
@@ -11,10 +9,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBubble;
 
-public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 
 	private Vec3d movementVector;
 
@@ -39,11 +38,6 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 
 	private EntityCQRGiantTortoise getBoss() {
 		return (EntityCQRGiantTortoise) this.entity;
-	}
-
-	@Override
-	public Animation getAnimation() {
-		return EntityCQRGiantTortoise.ANIMATION_SPIN;
 	}
 
 	@Override
@@ -74,8 +68,8 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.getBoss() != null && this.getBoss().getAnimation() == this.getAnimation() && !this.getBoss().isStunned() && this.getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !this.getBoss().isDead && this.getBoss().getAttackTarget() != null
-				&& !this.getBoss().getAttackTarget().isDead && !this.getBoss().isHealing();
+		return this.getBoss() != null && this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_SPINNING && !this.getBoss().isStunned() && this.getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !this.getBoss().isDead && this.getBoss().getAttackTarget() != null
+				&& !this.getBoss().getAttackTarget().isDead && !this.getBoss().isHealing() && this.getBoss().shouldCurrentAnimationBePlaying();
 	}
 
 	private void calculateVelocity() {
@@ -85,11 +79,6 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		}
 		this.movementVector = this.movementVector.normalize();
 		this.movementVector = this.movementVector.scale(1.125D);
-	}
-
-	@Override
-	public boolean isAutomatic() {
-		return false;
 	}
 
 	@Override
@@ -104,9 +93,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		this.getBoss().setCanBeStunned(false);
 		this.getBoss().setInShell(true);
 		this.getBoss().setReadyToSpin(false);
-		this.getBoss().setAnimation(this.getAnimation());
-		this.getBoss().currentAnim = this;
-		this.getBoss().setAnimationTick(0);
+		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_SPINNING);
 	}
 
 	@Override
@@ -116,7 +103,8 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		if (this.getBoss().getSpinsBlocked() >= MAX_BLOCKED_SPINS) {
 			this.getBoss().setSpinning(false);
 			this.getBoss().setStunned(true);
-		} else if (this.getBoss().getAnimationTick() > this.BUBBLE_SHOOT_DURATION && this.getAnimation().getDuration() - this.getBoss().getAnimationTick() > this.AFTER_IDLE_TIME) {
+		} else if (this.getBoss().getCurrentAnimationTick() > this.BUBBLE_SHOOT_DURATION && EntityCQRGiantTortoise.ANIMATIONS[EntityCQRGiantTortoise.ANIMATION_ID_SPINNING].getAnimationDuration() - this.getBoss().getCurrentAnimationTick() > this.AFTER_IDLE_TIME) {
+			//Spinning phase
 			if (this.explosionCooldown > 0) {
 				this.explosionCooldown--;
 			}
@@ -152,9 +140,10 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 			this.getBoss().motionZ = this.movementVector.z;
 			this.getBoss().motionY = this.entity.collidedHorizontally ? this.movementVector.y : 0.5 * this.movementVector.y;
 			this.getBoss().velocityChanged = true;
-		} else if (this.getBoss().getAnimationTick() <= this.BUBBLE_SHOOT_DURATION) {
+		} else if (this.getBoss().getCurrentAnimationTick() <= this.BUBBLE_SHOOT_DURATION) {
+			//Shooting bubbles
 			this.getBoss().setSpinning(false);
-			if (this.getBoss().getAnimationTick() % 5 == 0) {
+			if (this.getBoss().getCurrentAnimationTick() % 5 == 0) {
 				this.getBoss().playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * this.getBoss().getRNG().nextFloat()));
 			}
 			Vec3d v = new Vec3d(this.entity.getRNG().nextDouble() - 0.5D, 0.125D * (this.entity.getRNG().nextDouble() - 0.5D), this.entity.getRNG().nextDouble() - 0.5D);
@@ -216,7 +205,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		if (!(this.getBoss().getAttackTarget() != null && !this.getBoss().getAttackTarget().isDead)) {
 			this.cooldown /= 3;
 		}
-		this.getBoss().setAnimationTick(0);
+		//this.getBoss().setAnimationTick(0);
 		if (this.getBoss().getSpinsBlocked() >= MAX_BLOCKED_SPINS) {
 			this.cooldown *= 1.5;
 			this.getBoss().setStunned(true);
