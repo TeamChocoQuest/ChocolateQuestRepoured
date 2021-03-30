@@ -84,7 +84,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final int ANIMATION_ID_SPINNING = 1;
 	public static final int ANIMATION_ID_WALK = 0;
 	public static final AnimationGecko[] ANIMATIONS = {
-			new AnimationGecko("", 1),
+			new AnimationGecko("animation.giant_tortoise.walk", 20),
 			new AnimationGecko("animation.giant_tortoise.spin", 260),
 			new AnimationGecko("animation.giant_tortoise.stun", 140),
 			new AnimationGecko("animation.giant_tortoise.enter_shell", 31),
@@ -172,15 +172,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	protected void initEntityAI() {
-		// this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
 		//this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATIONS[ANIMATION_ID_ENTER_SHELL], ANIMATIONS[ANIMATION_ID_EXIT_SHELL]));
 		this.tasks.addTask(2, new BossAITortoiseStun(this));
 		this.tasks.addTask(4, new BossAITortoiseHealing(this));
 		this.tasks.addTask(6, new BossAITortoiseSpinAttack(this));
-		//this.tasks.addTask(19, new BossAITortoiseMoveToLeader(this));
-		//this.tasks.addTask(20, new BossAITortoiseMoveToHome(this));
-		/*this.tasks.addTask(21, new EntityAIIdleSit(this) {
+		this.tasks.addTask(19, new BossAITortoiseMoveToLeader(this));
+		this.tasks.addTask(20, new BossAITortoiseMoveToHome(this));
+		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
 				if (super.shouldExecute() && ((EntityCQRGiantTortoise) this.entity).isInShell() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
@@ -190,7 +189,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				}
 				return false;
 			}
-		});*/
+		});
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -532,93 +531,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.setInShell(compound.getBoolean("inShell"));
 	}
 
-	// IAnimatedEntity Interface
-	/*@Override
-	public int getAnimationTick() {
-		return this.animationTick;
-	}
-
-	@Override
-	public void setAnimationTick(int tick) {
-		this.animationTick = tick;
-	}
-
-	@Override
-	public Animation getAnimation() {
-		return this.animation;
-	}
-
-	@Override
-	public void setAnimation(Animation animation) {
-		if (animation == NO_ANIMATION) {
-			this.onAnimationFinish(this.animation);
-			this.animation = animation;
-			this.setAnimationTick(0);
-		} else if (this.animation != animation) {
-			this.animation = animation;
-			// AnimationHandler.INSTANCE.sendAnimationMessage(this, this.animation);
-		}
-
-	}
-
-	@Override
-	public Animation[] getAnimations() {
-		return ANIMATIONS;
-	}
-
-	protected void onAnimationFinish(Animation animation) {
-
-	}
-
-	public Animation getDeathAnimation() {
-		return ANIMATION_DEATH;
-	}
-
-	protected void onDeathAIUpdate() {
-		if (this.getAnimation() != ANIMATION_DEATH) {
-			AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_DEATH);
-		}
-	}*/
-
-	/*@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-
-		if (this.hasAttackTarget()) {
-			if (this.lastTickPos == null) {
-				this.lastTickPos = this.getPositionVector();
-			}
-			if (this.getHomePositionCQR() == null) {
-				this.setHomePositionCQR(this.getPosition());
-			}
-			Vec3d curPos = this.getPositionVector();
-			if (this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
-				if (curPos.distanceTo(this.lastTickPos) <= 0.05) {
-					this.stuckTicks++;
-				} else {
-					this.lastTickPos = curPos;
-				}
-				if (this.stuckTicks >= MAX_STUCK_TICKS) {
-					this.setAttackTarget(null);
-					this.stuckTicks = 0;
-				}
-			}
-		} else {
-			this.stuckTicks = 0;
-		}
-
-		if (this.getAnimation() != NO_ANIMATION) {
-			this.animationTick++;
-			if (this.world.isRemote && this.animationTick >= this.animation.getDuration()) {
-				if (this.getAnimation() == ANIMATION_MOVE_LEGS_IN) {
-					this.setInShell(true);
-				}
-				this.setAnimation(NO_ANIMATION);
-				AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
-			}
-		}
-	}*/
-
 	public void targetNewState(int newStateID) {
 		if (newStateID != this.targetedState) {
 			this.targetedState = newStateID;
@@ -736,7 +648,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 		if(this.currentAnimationClient != this.getCurrentAnimationId()) {
 			this.currentAnimationClient = this.getCurrentAnimationId();
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATIONS[this.currentAnimationClient].getAnimationName(), false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATIONS[this.currentAnimationClient].getAnimationName(), this.currentAnimationClient == 0));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -788,7 +700,18 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 	
 	protected void onAnimationEnd(int animationID, boolean endByAnimationFinished) {
-		
+		if(endByAnimationFinished) {
+			switch(animationID) {
+			case ANIMATION_ID_EXIT_SHELL:
+				this.setNextAnimation(ANIMATION_ID_WALK);
+				break;
+			case ANIMATION_ID_STUNNED:
+			case ANIMATION_ID_ENTER_SHELL:
+			case ANIMATION_ID_SPINNING:
+				this.setNextAnimation(ANIMATION_ID_IN_SHELL);
+				break;
+			}
+		}
 	}
 	
 }

@@ -26,7 +26,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 	private final int BUBBLE_SHOOT_DURATION = 20;
 
 	static final int MAX_DISTANCE_TO_BEGIN_SPIN = 16;
-	static final int MAX_DISTANCE_TO_TARGET = 20;
+	static final int MAX_DISTANCE_TO_TARGET = 40;
 
 	private int explosionCooldown = 0;
 	private static final int MAX_EXPLOSION_COOLDOWN = 20;
@@ -114,7 +114,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 					this.getBoss().getWorld().newExplosion(this.getBoss(), this.entity.getPositionVector().x, this.entity.getPositionVector().y, this.entity.getPositionVector().z, 2, false, false);
 				}
 
-				if (this.hitHardBlock(this.movementVector)) {
+				if (this.hitHardBlock(this.movementVector) && this.getBoss().collidedHorizontally) {
 					this.getBoss().setSpinning(false);
 					this.getBoss().setStunned(true);
 				}
@@ -201,6 +201,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 		this.getBoss().setSpinning(false);
 		this.getBoss().setReadyToSpin(true);
 		this.getBoss().setCanBeStunned(true);
+		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL);
 		this.cooldown = COOLDOWN;
 		if (!(this.getBoss().getAttackTarget() != null && !this.getBoss().getAttackTarget().isDead)) {
 			this.cooldown /= 3;
