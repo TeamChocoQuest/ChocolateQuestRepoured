@@ -50,9 +50,9 @@ public class CommandLocateDungeon extends CommandBase {
 		}
 
 		World world = sender.getEntityWorld();
-		int chunkRadius = Integer.parseInt(args[3]);
 		int x = parseInt(args[0]);
 		int z = parseInt(args[1]);
+		int chunkRadius = parseInt(args[2], 0, 0x10000);
 
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			sender.sendMessage(new TextComponentString("Structures are disabled."));
