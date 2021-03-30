@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.integration.ancientwarfare;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
 import net.shadowmage.ancientwarfare.structure.gamedata.StructureEntry;
@@ -15,7 +16,7 @@ public class AW2Integration {
 	public static boolean isAW2StructureInChunk(int x, int y, int z, World world) {
 		try {
 			StructureMap data = AWGameData.INSTANCE.getPerWorldData(world, StructureMap.class);
-			Collection<StructureEntry> iterator = data.getEntriesNear(world, x, z, (int) Math.round(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16), true, new ArrayList<StructureEntry>());
+			Collection<StructureEntry> iterator = data.getEntriesNear(world, x, z, MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16), true, new ArrayList<StructureEntry>());
 			return !iterator.isEmpty();
 		} catch (Exception ex) {
 			CQRMain.logger.warn("Unable to process AW2-Dependency! Error: ", ex);
