@@ -50,8 +50,8 @@ public class CommandLocateDungeon extends CommandBase {
 		}
 
 		World world = sender.getEntityWorld();
-		int x = parseInt(args[0]);
-		int z = parseInt(args[1]);
+		int x = MathHelper.floor(parseDouble(args[0]));
+		int z = MathHelper.floor(parseDouble(args[1]));
 		int chunkRadius = parseInt(args[2], 0, 0x10000);
 		boolean searchForGeneratedDungeon = args.length < 5 || parseBoolean(args[4]);
 		boolean searchForNotGeneratedDungeon = args.length < 6 || parseBoolean(args[5]);
