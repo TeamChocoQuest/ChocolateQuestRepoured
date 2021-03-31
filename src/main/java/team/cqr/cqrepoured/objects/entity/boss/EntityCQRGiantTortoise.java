@@ -403,7 +403,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if(rotYawHead > 180F) {
 			rotYawHead -= 360F;
 		}
-		System.out.println("Rotationyawhead: " + rotYawHead);
 		//v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
 		Vec3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
 
