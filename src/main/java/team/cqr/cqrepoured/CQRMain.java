@@ -57,6 +57,7 @@ import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.thewall.WorldWallGenerator;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
 import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.util.ConfigBackupHandler;
 import team.cqr.cqrepoured.util.CopyHelper;
 import team.cqr.cqrepoured.util.Reference;
 import team.cqr.cqrepoured.util.handlers.GuiHandler;
@@ -199,8 +200,18 @@ public class CQRMain {
 				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"),
 				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync") };
 
+		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "1.0.0");
+
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
+		} else {
+			ConfigBackupHandler.checkAndBackupConfigs();
 		}
 
 		int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
