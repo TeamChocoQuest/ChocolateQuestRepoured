@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
 
-@Config(modid = Reference.MODID)
+@Config(modid = Reference.MODID, name = "CQR/" + Reference.MODID)
 public class CQRConfig {
 
 	public static Advanced advanced = new Advanced();
