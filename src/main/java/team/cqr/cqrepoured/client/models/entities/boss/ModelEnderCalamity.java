@@ -59,7 +59,7 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
 
 		headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch));
-		headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead +90)));
+		headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw)));
 
 	}
 

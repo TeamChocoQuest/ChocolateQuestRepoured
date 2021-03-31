@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.client.models.entities.boss;
 
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
@@ -52,17 +53,16 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 	 * - legJoint BL
 	 * - head
 	 */
+	
 	@Override
-	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID) {
+	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID, AnimationEvent customPredicate) {
+		super.setLivingAnimations(entity, uniqueID, customPredicate);
 		if (entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
 			IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
 
-			headBone.setRotationX(360* entity.rotationPitch * 0.017453292F);
-			headBone.setRotationY(360* entity.rotationYawHead * 0.017453292F);
+			headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch));
+			headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw)));
 
-		}
-		else {
-			super.setLivingAnimations(entity, uniqueID);
 		}
 	}
 
