@@ -19,6 +19,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -83,6 +84,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final int ANIMATION_ID_STUNNED = 2;
 	public static final int ANIMATION_ID_SPINNING = 1;
 	public static final int ANIMATION_ID_WALK = 0;
+	public static final String ANIMATION_NAME_DEATH = "animation.giant_tortoise.death";
 	public static final AnimationGecko[] ANIMATIONS = {
 			new AnimationGecko("animation.giant_tortoise.walk", 20),
 			new AnimationGecko("animation.giant_tortoise.spin", 260),
@@ -642,6 +644,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int currentAnimationClient = 0;
 	//Animation controller
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+		//Death animation
+		if(this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATION_NAME_DEATH, false));
+			return PlayState.CONTINUE;
+		}
 		//DONE: Idle animation
 		if(this.getCurrentAnimationId() < 0) {
 			return PlayState.STOP;
@@ -711,6 +718,51 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				this.setNextAnimation(ANIMATION_ID_IN_SHELL);
 				break;
 			}
+		}
+	}
+	
+	private DamageSource deathCause = null;
+	
+	@Override
+	public void onDeath(DamageSource cause) {
+		this.deathCause = cause;
+		super.onDeath(cause);
+	}
+	
+	@Override
+	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+		//Nope
+	}
+	
+	//Death animation
+	//Death animation time: 1.44s => 29 ticks
+	@Override
+	protected void onDeathUpdate() {
+		++this.deathTicks;
+		if(this.deathTicks > 20) {
+			float sizeVariation = this.getSizeVariation();
+			sizeVariation *= 1.5F;
+			double f = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
+			double f1 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
+			double f2 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
+			for(int i = 0; i < 20; i++) {
+				this.world.spawnParticle(EnumParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+			}
+		}
+		if(this.deathTicks == 34 && this.isServerWorld()) {
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+		}
+		if(this.deathTicks >= 35 && this.isServerWorld()) {
+			if(this.deathCause != null) {
+				super.dropLoot(
+						this.recentlyHit > 0,
+						net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause),
+						this.deathCause);
+			}
+			this.setDead();
+
+			this.onFinalDeath();
 		}
 	}
 	

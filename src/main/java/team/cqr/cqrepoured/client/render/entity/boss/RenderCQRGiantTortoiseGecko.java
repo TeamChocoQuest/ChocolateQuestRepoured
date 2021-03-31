@@ -54,5 +54,10 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	protected ResourceLocation getTextureForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
 		return null;
 	}
+	
+	@Override
+	protected float getDeathMaxRotation(EntityCQRGiantTortoise entityLivingBaseIn) {
+		return 0;
+	}
 
 }
