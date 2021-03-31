@@ -4,7 +4,6 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -37,57 +36,63 @@ public class SPacketHandlerCloseMapPlaceholderGuiSimple implements IMessageHandl
 				boolean fillMap = message.isFillMap();
 				int fillRadius = message.getFillRadius();
 
+				EnumFacing facingOpposite = facing.getOpposite();
 				BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 				for (int leftRight = -message.getSizeLeft(); leftRight <= message.getSizeRight(); leftRight++) {
 					for (int downUp = -message.getSizeDown(); downUp <= message.getSizeUp(); downUp++) {
-						int x = facing.getAxis() == Axis.Z ? leftRight : 0;
-						int z = facing.getAxis() == Axis.X ? leftRight : 0;
+						int x = 0;
+						int z = 0;
+						switch (facingOpposite) {
+						case NORTH:
+							x = leftRight;
+							break;
+						case SOUTH:
+							x = -leftRight;
+							break;
+						case WEST:
+							z = -leftRight;
+							break;
+						case EAST:
+							z = leftRight;
+							break;
+						default:
+							break;
+						}
 						mutablePos.setPos(pos.getX() + x, pos.getY() + downUp, pos.getZ() + z);
 
-						if (!world.isAirBlock(mutablePos)) {
-							continue;
-						}
-						if (!CQRBlocks.MAP_PLACEHOLDER.canAttachTo(world, mutablePos.offset(facing.getOpposite()), facing)) {
-							continue;
-						}
+						if (world.isAirBlock(mutablePos)) {
+							if (!CQRBlocks.MAP_PLACEHOLDER.canAttachTo(world, mutablePos.offset(facingOpposite), facing)) {
+								continue;
+							}
 
-						world.setBlockState(mutablePos, CQRBlocks.MAP_PLACEHOLDER.getDefaultState().withProperty(BlockHorizontal.FACING, facing));
+							world.setBlockState(mutablePos, CQRBlocks.MAP_PLACEHOLDER.getDefaultState().withProperty(BlockHorizontal.FACING, facing));
+						}
 
 						TileEntity tileEntity = world.getTileEntity(mutablePos);
 						if (tileEntity instanceof TileEntityMap) {
-							int originX = 0;
-							int originZ = 0;
 							int offsetX = 0;
 							int offsetZ = 0;
 							switch (facing) {
 							case NORTH:
-								originX = -leftRight;
-								originZ = 0;
 								offsetX = leftRight;
 								offsetZ = -downUp;
 								break;
 							case SOUTH:
-								originX = leftRight;
-								originZ = 0;
 								offsetX = -leftRight;
 								offsetZ = downUp;
 								break;
 							case WEST:
-								originX = 0;
-								originZ = leftRight;
 								offsetX = -downUp;
 								offsetZ = -leftRight;
 								break;
 							case EAST:
-								originX = 0;
-								originZ = -leftRight;
 								offsetX = downUp;
 								offsetZ = leftRight;
 								break;
 							default:
 								break;
 							}
-							((TileEntityMap) tileEntity).set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
+							((TileEntityMap) tileEntity).set(scale, orientation, lockOrientation, -x, -z, offsetX, offsetZ, fillMap, fillRadius);
 						}
 					}
 				}
