@@ -98,7 +98,7 @@ public class BlockMapPlaceholder extends BlockHorizontal {
 		}
 	}
 
-	private boolean canAttachTo(World world, BlockPos pos, EnumFacing side) {
+	public boolean canAttachTo(World world, BlockPos pos, EnumFacing side) {
 		IBlockState iblockstate = world.getBlockState(pos);
 		boolean flag = isExceptBlockForAttachWithPiston(iblockstate.getBlock());
 		return !flag && iblockstate.getBlockFaceShape(world, pos, side) == BlockFaceShape.SOLID && !iblockstate.canProvidePower();
