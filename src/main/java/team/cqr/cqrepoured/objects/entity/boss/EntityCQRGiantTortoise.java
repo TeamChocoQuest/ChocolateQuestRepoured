@@ -402,22 +402,24 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		float vy = this.isInShell() || this.isStunned() ? 0.1F : 0.5F;
 
+		//First, position your head
 		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
 		this.parts[this.parts.length - 1].setRotation(this.rotationYawHead, this.rotationPitch);
 
+		//Then rotate 45 degrees to the right so that you face the front right leg
 		v = VectorUtil.rotateVectorAroundY(v, 45D);
 
-		for (int i = 0; i < this.parts.length - 1; i++) {
-			if (i > 0) {
-				v = VectorUtil.rotateVectorAroundY(v, 90D);
-			}
-
+		//Now, position each individual leg
+		for (int i = 0; i < (this.parts.length - 1); i++) {
 			double x = this.posX + v.x;
 			double y = this.posY;
 			double z = this.posZ + v.z;
 
 			this.parts[i].setPosition(x, y, z);
-			this.parts[i].setRotation(this.rotationYaw + i * 45F, this.rotationPitch);
+			this.parts[i].setRotation(this.rotationYawHead + (i * 90F + 45F), this.rotationPitch);
+			
+			//leg positioned, now rotate to the next leg (clockwise)
+			v = VectorUtil.rotateVectorAroundY(v, 90D);
 		}
 	}
 
