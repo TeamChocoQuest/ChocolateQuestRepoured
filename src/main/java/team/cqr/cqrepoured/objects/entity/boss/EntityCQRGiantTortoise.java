@@ -509,7 +509,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	public void setInShell(boolean val) {
 		this.dataManager.set(IN_SHELL, val);
-		this.readyToSpin = val;
+		this.readyToSpin = val && !this.isHealing();
 	}
 
 	@Override

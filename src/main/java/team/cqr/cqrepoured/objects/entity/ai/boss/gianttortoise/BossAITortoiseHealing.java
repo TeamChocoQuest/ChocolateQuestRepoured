@@ -27,12 +27,14 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 		this.healingActive = false;
 		if (!this.getBoss().isSpinning() && !this.getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
 			((EntityCQRGiantTortoise) this.entity).setHealing(true);
-			if (((EntityCQRGiantTortoise) this.entity).isInShell()) {
+			if (((EntityCQRGiantTortoise) this.entity).isInShell() || this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
+				this.entity.setInShell(true);
 				this.healingActive = true;
 				return true;
-			} else {
-				((EntityCQRGiantTortoise) this.entity).targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_IN);
-				return true;
+			}
+			if(this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
+				this.entity.setInShell(true);
+				this.entity.setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 			}
 		}
 		return false;
@@ -47,6 +49,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	public void startExecuting() {
 		super.startExecuting();
 		this.getBoss().setCanBeStunned(false);
+		this.entity.setReadyToSpin(false);
 		this.getBoss().setStunned(false);
 		this.currHealTicks = 0;
 		this.updateTask();
@@ -59,7 +62,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 			if (((EntityCQRGiantTortoise) this.entity).isInShell()) {
 				this.healingActive = true;
 			}
-			return true;
+			return this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL;
 		}
 		return false;
 	}
@@ -67,6 +70,10 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	@Override
 	public void updateTask() {
 		((EntityCQRGiantTortoise) this.entity).setHealing(true);
+		if(this.entity.getCurrentAnimationId() != EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
+			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
+			return;
+		}
 		if (this.healingActive) {
 			((EntityCQRGiantTortoise) this.entity).setInShell(true);
 			if (this.currHealTicks >= this.getHealingAmount() || (this.entity.getHealth() / this.entity.getMaxHealth() >= 0.8F)) {
@@ -96,7 +103,9 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 		super.resetTask();
 		this.getBoss().setCanBeStunned(true);
 		this.currHealTicks = 0;
-		((EntityCQRGiantTortoise) this.entity).setHealing(false);
+		this.entity.setHealing(false);
+		this.entity.setInShell(true);
+		this.entity.setReadyToSpin(true);
 		this.healingActive = false;
 	}
 
