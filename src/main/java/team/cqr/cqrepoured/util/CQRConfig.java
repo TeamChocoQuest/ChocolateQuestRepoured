@@ -384,6 +384,15 @@ public class CQRConfig {
 				"iceandfire:firedragon=DRAGONS",
 				"iceandfire:icedragon=DRAGONS"
 		};
+
+		@Config.Comment("Each entry represents one set of mobtypes per \"ring\"")
+		public String[] defaultInhabitantConfig = {
+				"SKELETON",
+				"ZOMBIE,MUMMY",
+				"ILLAGER",
+				"SPECTER",
+				"MINOTAUR"
+		};
 	}
 
 	public static class Mobs {

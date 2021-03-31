@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.structuregen.inhabitants;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -76,31 +74,19 @@ public class DungeonInhabitantManager {
 	}
 
 	private void loadDistantMapping() {
-		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "defaultInhabitantConfig.properties");
-		if (file.exists()) {
-			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-				String currentLine;
-
-				while ((currentLine = br.readLine()) != null) {
-					if (currentLine.startsWith("#")) {
-						continue;
-					}
-
-					String[] entries = currentLine.split(",");
-					List<String> tmpList = new ArrayList<>();
-					for (String s : entries) {
-						s = s.trim();
-						if (this.inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_DUNGEON_INHABITANT.getName())) {
-							tmpList.add(s);
-						}
-					}
-
-					if (!tmpList.isEmpty()) {
-						this.distantMapping.add(tmpList);
-					}
+		for (String s : CQRConfig.general.defaultInhabitantConfig) {
+			String[] entries = s.split(",");
+			ArrayList<String> tmpList = new ArrayList<>();
+			for (String s1 : entries) {
+				s1 = s1.trim();
+				if (this.inhabitantMapping.containsKey(s1) && !s1.equalsIgnoreCase(DEFAULT_DUNGEON_INHABITANT.getName())) {
+					tmpList.add(s1);
 				}
-			} catch (IOException e) {
-				CQRMain.logger.error(String.format("Failed to load file %s", file.getName()), e);
+			}
+
+			if (!tmpList.isEmpty()) {
+				tmpList.trimToSize();
+				this.distantMapping.add(tmpList);
 			}
 		}
 	}
