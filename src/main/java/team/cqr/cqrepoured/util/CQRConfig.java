@@ -521,8 +521,10 @@ public class CQRConfig {
 			Calendar calendar = new GregorianCalendar();
 			calendar.setTime(new Date());
 			//Counting begins at 0, not one!! Read the documentation properly...
-			if(calendar.get(Calendar.MONTH) == 3) {
-				return calendar.get(Calendar.DAY_OF_MONTH) == 0;
+			//Or just use constants...
+			if(calendar.get(Calendar.MONTH) == Calendar.APRIL) {
+				//Days are initiated with 1
+				return calendar.get(Calendar.DAY_OF_MONTH) == 1;
 			}
 		}
 		return false;
