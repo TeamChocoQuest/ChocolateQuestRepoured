@@ -308,6 +308,9 @@ public class CQRBlocks {
 			IForgeRegistry<Item> registry = event.getRegistry();
 
 			for (Block block : BLOCKS) {
+				if (block.getCreativeTab() == null) {
+					continue;
+				}
 				ItemBlock itemBlock = createItemBlock(block);
 				registry.register(itemBlock);
 				ITEM_BLOCKS.add(itemBlock);
