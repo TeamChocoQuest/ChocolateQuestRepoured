@@ -161,6 +161,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 		GuiHelper.drawString(this.fontRenderer, "Offset Z", this.width / 2 + 4, this.height / 2 - 72 + 3 + 96, 0xE0E0E0, false, true);
 		GuiHelper.drawString(this.fontRenderer, "Fill Radius", this.width / 2 + 4, this.height / 2 - 72 + 3 + 128, 0xE0E0E0, false, true);
 		GuiHelper.drawString(this.fontRenderer, "Map", this.width / 2, this.height / 2 - 96, 0xFFFFFF, true, true);
+		GuiHelper.drawString(this.fontRenderer, "Advanced Mode", this.width / 2, this.height / 2 - 86, 0xFF0F0F, true, true);
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 		return false;
 	}
 
-	public class GuiButtonOrientation extends GuiButtonCustom {
+	public static class GuiButtonOrientation extends GuiButtonCustom {
 		private final String[] displayStrings = { "North", "East", "South", "West" };
 		private int index = 0;
 

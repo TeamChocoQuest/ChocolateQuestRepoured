@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.util.handlers;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,6 +15,7 @@ import team.cqr.cqrepoured.client.gui.GuiBossBlock;
 import team.cqr.cqrepoured.client.gui.GuiExporter;
 import team.cqr.cqrepoured.client.gui.GuiExporterChestCustom;
 import team.cqr.cqrepoured.client.gui.GuiMapPlaceholder;
+import team.cqr.cqrepoured.client.gui.GuiMapPlaceholderSimple;
 import team.cqr.cqrepoured.client.gui.GuiSpawner;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiCQREntity;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchant;
@@ -124,6 +126,10 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == Reference.MAP_GUI_ID) {
 			return new GuiMapPlaceholder((TileEntityMap) world.getTileEntity(new BlockPos(x, y, z)));
+		}
+
+		if (ID == Reference.MAP_GUI_SIMPLE_ID) {
+			return new GuiMapPlaceholderSimple(new BlockPos(x, y & 0xBFFFFFFF, z), EnumFacing.byHorizontalIndex((y >> 29) & 3));
 		}
 
 		return null;
