@@ -520,8 +520,9 @@ public class CQRConfig {
 		if(general.enableAprilFools) {
 			Calendar calendar = new GregorianCalendar();
 			calendar.setTime(new Date());
-			if(calendar.get(Calendar.MONTH) == 4) {
-				return calendar.get(Calendar.DAY_OF_MONTH) == 1;
+			//Counting begins at 0, not one!! Read the documentation properly...
+			if(calendar.get(Calendar.MONTH) == 3) {
+				return calendar.get(Calendar.DAY_OF_MONTH) == 0;
 			}
 		}
 		return false;
