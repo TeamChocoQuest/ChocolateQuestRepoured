@@ -72,6 +72,7 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
+import team.cqr.cqrepoured.client.render.tileentity.TileEntityMapPlaceHolderRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
@@ -141,6 +142,7 @@ import team.cqr.cqrepoured.objects.mounts.EntityPollo;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
+import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
 import team.cqr.cqrepoured.util.CQRConfig;
 
@@ -172,6 +174,7 @@ public class CQREntityRenderers {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporterChest.class, new TileEntityExporterChestRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMap.class, new TileEntityMapPlaceHolderRenderer());
 	}
 
 	protected static void registerProjectileAndMiscRenderers() {
