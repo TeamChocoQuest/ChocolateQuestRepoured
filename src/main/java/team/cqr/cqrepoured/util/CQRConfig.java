@@ -362,6 +362,28 @@ public class CQRConfig {
 		public boolean enableSpeechBubbles = true;
 		public boolean hookOnlyPullsSmallerEntities = true;
 		public boolean enableAprilFools = true;
+
+		public String[] entityFactionRelation = {
+				"minecraft:enderman=ENDERMEN",
+				"minecraft:endermite=ENDERMEN",
+				"minecraft:villager=VILLAGERS",
+				"minecraft:villager_golem=VILLAGERS",
+				"minecraft:vindication_illager=ILLAGERS",
+				"minecraft:evocation_illager=ILLAGERS",
+				"minecraft:vex=ILLAGERS",
+				"minecraft:zombie=UNDEAD",
+				"minecraft:zombie_villager=UNDEAD",
+				"minecraft:husk=UNDEAD",
+				"minecraft:skeleton=UNDEAD",
+				"minecraft:skeleton_horse=UNDEAD",
+				"minecraft:stray=UNDEAD",
+				"minecraft:spider=BEASTS",
+				"minecraft:cave_spider=BEASTS",
+				"minecraft:ender_dragon=DRAGONS",
+				"iceandfire:dragonegg=DRAGONS",
+				"iceandfire:firedragon=DRAGONS",
+				"iceandfire:icedragon=DRAGONS"
+		};
 	}
 
 	public static class Mobs {

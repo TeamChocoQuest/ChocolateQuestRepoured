@@ -40,6 +40,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
@@ -109,32 +110,27 @@ public class FactionRegistry {
 	}
 
 	private void loadEntityFactionRelations() {
-		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "entityFactionRelation.properties");
-		if (file.exists()) {
-			Properties prop = new Properties();
-			boolean flag = true;
-			try (InputStream inputStream = new FileInputStream(file)) {
-				prop.load(inputStream);
-				flag = true;
-			} catch (IOException e) {
-				CQRMain.logger.error("Failed to load file" + file.getName(), e);
-				flag = false;
+		for (String s : CQRConfig.general.entityFactionRelation) {
+			int i = s.indexOf('=');
+			if (i == -1) {
+				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Format is incorrect!", s);
+				continue;
 			}
-			if (flag) {
-				for (String key : prop.stringPropertyNames()) {
-					if (key.startsWith("#")) {
-						continue;
-					}
-					String rlkey = key.replace('.', ':');
-					ResourceLocation resLoc = new ResourceLocation(rlkey);
-					// if(EntityList.isRegistered(resLoc)) {
-					String faction = prop.getProperty(key, null);
-					if (faction != null && this.factions.containsKey(faction)) {
-						this.entityFactionMap.put(resLoc, this.factions.get(faction));
-					}
-					// }
-				}
+			ResourceLocation registryName = new ResourceLocation(s.substring(0, i));
+			if (!ForgeRegistries.ENTITIES.containsKey(registryName)) {
+				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity does not exists!", s);
+				continue;
 			}
+			if (this.entityFactionMap.containsKey(registryName)) {
+				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity already has an assigned faction!", s);
+				continue;
+			}
+			CQRFaction faction = this.factions.get(s.substring(i + 1));
+			if (faction == null) {
+				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Faction does not exists!", s);
+				continue;
+			}
+			this.entityFactionMap.put(registryName, faction);
 		}
 	}
 
