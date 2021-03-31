@@ -9,6 +9,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -39,6 +40,18 @@ public class BlockMapPlaceholder extends BlockHorizontal {
 		this.setSoundType(SoundType.WOOD);
 		this.setBlockUnbreakable();
 		this.setResistance(Float.MAX_VALUE);
+	}
+
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		if (worldIn.isRemote && (placer instanceof EntityPlayer) && !placer.isSneaking()) {
+			EnumFacing facing1 = state.getValue(FACING);
+			int x = pos.getX() - facing1.getXOffset();
+			int y = (pos.getY() & 0xBFFFFFFF) | (facing1.getHorizontalIndex() << 29);
+			int z = pos.getZ() - facing1.getZOffset();
+			((EntityPlayer) placer).openGui(CQRMain.INSTANCE, Reference.MAP_GUI_SIMPLE_ID, worldIn, x, y, z);
+		}
 	}
 
 	@Override
@@ -98,7 +111,7 @@ public class BlockMapPlaceholder extends BlockHorizontal {
 		}
 	}
 
-	private boolean canAttachTo(World world, BlockPos pos, EnumFacing side) {
+	public boolean canAttachTo(World world, BlockPos pos, EnumFacing side) {
 		IBlockState iblockstate = world.getBlockState(pos);
 		boolean flag = isExceptBlockForAttachWithPiston(iblockstate.getBlock());
 		return !flag && iblockstate.getBlockFaceShape(world, pos, side) == BlockFaceShape.SOLID && !iblockstate.canProvidePower();

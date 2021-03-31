@@ -81,72 +81,77 @@ public class BlockInfoMap extends AbstractBlockInfo {
 		BlockPlacingHelper.setBlockState(world, pos, Blocks.AIR.getDefaultState(), 18, false);
 		EnumFacing transformedFacing = settings.getRotation().rotate(settings.getMirror().mirror(this.facing));
 		EntityItemFrame entity = new EntityItemFrame(world, pos.toImmutable(), transformedFacing);
-		if (!this.lockOrientation) {
-			switch (this.orientation) {
-			case EAST:
-				entity.setItemRotation(entity.getRotation() + 3);
-				break;
-			case SOUTH:
-				entity.setItemRotation(entity.getRotation() + 2);
-				break;
-			case WEST:
-				entity.setItemRotation(entity.getRotation() + 1);
-				break;
-			default:
-				break;
-			}
+		switch (this.orientation) {
+		case EAST:
+			entity.setItemRotation(entity.getRotation() + 3);
+			break;
+		case SOUTH:
+			entity.setItemRotation(entity.getRotation() + 2);
+			break;
+		case WEST:
+			entity.setItemRotation(entity.getRotation() + 1);
+			break;
+		default:
+			break;
 		}
+
 		int x1 = this.offsetX * (128 << this.scale);
 		int z1 = this.offsetZ * (128 << this.scale);
 		int x2 = this.originX;
 		int z2 = this.originZ;
-		switch (settings.getMirror()) {
-		case LEFT_RIGHT:
-			entity.setItemRotation(entity.getRotation() + 2);
-			z1 = -z1;
-			z2 = -z2;
-			break;
-		case FRONT_BACK:
-			x1 = -x1;
-			x2 = -x2;
-			break;
-		default:
-			break;
+		if (!this.lockOrientation) {
+			switch (settings.getMirror()) {
+			case LEFT_RIGHT:
+				z1 = -z1;
+				z2 = -z2;
+				break;
+			case FRONT_BACK:
+				entity.setItemRotation(entity.getRotation() + 2);
+				x1 = -x1;
+				x2 = -x2;
+				break;
+			default:
+				break;
+			}
 		}
 
 		int x3 = x1;
 		int z3 = z1;
 		int x4 = x2;
 		int z4 = z2;
-		switch (settings.getRotation()) {
-		case COUNTERCLOCKWISE_90:
-			entity.setItemRotation(entity.getRotation() + 1);
-			x1 = z3;
-			z1 = -x3;
-			x2 = z4;
-			z2 = -x4;
-			break;
-		case CLOCKWISE_90:
-			entity.setItemRotation(entity.getRotation() + 3);
-			x1 = -z3;
-			z1 = x3;
-			x2 = -z4;
-			z2 = x4;
-			break;
-		case CLOCKWISE_180:
-			entity.setItemRotation(entity.getRotation() + 2);
-			x1 = -x3;
-			z1 = -z3;
-			x2 = -x4;
-			z2 = -z4;
-			break;
-		default:
-			break;
+		if (!this.lockOrientation) {
+			switch (settings.getRotation()) {
+			case COUNTERCLOCKWISE_90:
+				entity.setItemRotation(entity.getRotation() + 1);
+				x1 = z3;
+				z1 = -x3;
+				x2 = z4;
+				z2 = -x4;
+				break;
+			case CLOCKWISE_90:
+				entity.setItemRotation(entity.getRotation() + 3);
+				x1 = -z3;
+				z1 = x3;
+				x2 = -z4;
+				z2 = x4;
+				break;
+			case CLOCKWISE_180:
+				entity.setItemRotation(entity.getRotation() + 2);
+				x1 = -x3;
+				z1 = -z3;
+				x2 = -x4;
+				z2 = -z4;
+				break;
+			default:
+				break;
+			}
 		}
+
 		ItemStack stack = ItemMap.setupNewMap(world, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, (byte) this.scale, true, true);
 		if (this.fillMap) {
 			updateMapData(world, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.fillRadius, ((ItemMap) stack.getItem()).getMapData(stack, world));
 		}
+
 		entity.setDisplayedItem(stack);
 		world.spawnEntity(entity);
 	}
