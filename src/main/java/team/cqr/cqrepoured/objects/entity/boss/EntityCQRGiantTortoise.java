@@ -397,14 +397,21 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private void alignParts() {
 		// Legs
-		Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1);
-		v = VectorUtil.rotateVectorAroundY(v, this.rotationYawHead);
+		/*Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1);*/
+		
+		float rotYawHead = this.rotationYawHead;// - 90;
+		if(rotYawHead > 180F) {
+			rotYawHead -= 360F;
+		}
+		System.out.println("Rotationyawhead: " + rotYawHead);
+		//v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
+		Vec3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
 
 		float vy = this.isInShell() || this.isStunned() ? 0.1F : 0.5F;
 
 		//First, position your head
 		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
-		this.parts[this.parts.length - 1].setRotation(this.rotationYawHead, this.rotationPitch);
+		this.parts[this.parts.length - 1].setRotation(rotYawHead, this.rotationPitch);
 
 		//Then rotate 45 degrees to the right so that you face the front right leg
 		v = VectorUtil.rotateVectorAroundY(v, 45D);
@@ -416,7 +423,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double z = this.posZ + v.z;
 
 			this.parts[i].setPosition(x, y, z);
-			this.parts[i].setRotation(this.rotationYawHead + (i * 90F + 45F), this.rotationPitch);
+			this.parts[i].setRotation(rotYawHead + (i * 90F + 45F), this.rotationPitch);
 			
 			//leg positioned, now rotate to the next leg (clockwise)
 			v = VectorUtil.rotateVectorAroundY(v, 90D);
