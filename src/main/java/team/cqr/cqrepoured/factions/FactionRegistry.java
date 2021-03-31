@@ -116,7 +116,7 @@ public class FactionRegistry {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Format is incorrect!", s);
 				continue;
 			}
-			ResourceLocation registryName = new ResourceLocation(s.substring(0, i));
+			ResourceLocation registryName = new ResourceLocation(s.substring(0, i).trim());
 			if (!ForgeRegistries.ENTITIES.containsKey(registryName)) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity does not exists!", s);
 				continue;
@@ -125,7 +125,7 @@ public class FactionRegistry {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity already has an assigned faction!", s);
 				continue;
 			}
-			CQRFaction faction = this.factions.get(s.substring(i + 1));
+			CQRFaction faction = this.factions.get(s.substring(i + 1).trim());
 			if (faction == null) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Faction does not exists!", s);
 				continue;
