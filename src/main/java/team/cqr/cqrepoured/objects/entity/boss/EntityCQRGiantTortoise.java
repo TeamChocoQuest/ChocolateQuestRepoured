@@ -663,7 +663,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 		if(this.currentAnimationClient != this.getCurrentAnimationId()) {
 			this.currentAnimationClient = this.getCurrentAnimationId();
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATIONS[this.currentAnimationClient].getAnimationName(), this.currentAnimationClient == 0));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATIONS[this.currentAnimationClient].getAnimationName()));
 		}
 		return PlayState.CONTINUE;
 	}
