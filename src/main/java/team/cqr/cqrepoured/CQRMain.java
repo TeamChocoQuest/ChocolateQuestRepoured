@@ -216,7 +216,7 @@ public class CQRMain {
 
 		int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
 		for (File folder : subfolders) {
-			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs/" + folder.getAbsolutePath().substring(i), folder, false);
+			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs" + folder.getAbsolutePath().substring(i), folder, false);
 		}
 	}
 
