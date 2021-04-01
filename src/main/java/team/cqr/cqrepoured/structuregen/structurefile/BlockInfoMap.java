@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -99,52 +100,77 @@ public class BlockInfoMap extends AbstractBlockInfo {
 		int z1 = this.offsetZ * (128 << this.scale);
 		int x2 = this.originX;
 		int z2 = this.originZ;
-		if (!this.lockOrientation) {
-			switch (settings.getMirror()) {
-			case LEFT_RIGHT:
+		switch (settings.getMirror()) {
+		case LEFT_RIGHT:
+			if (!this.lockOrientation) {
+				if (this.orientation.getAxis() == Axis.Z) {
+					entity.setItemRotation(entity.getRotation() + 2);
+				}
 				z1 = -z1;
-				z2 = -z2;
-				break;
-			case FRONT_BACK:
-				entity.setItemRotation(entity.getRotation() + 2);
-				x1 = -x1;
-				x2 = -x2;
-				break;
-			default:
-				break;
+			} else {
+				if (this.orientation.getAxis() == Axis.X) {
+					z1 = -z1;
+				}
+				if (this.orientation.getAxis() == Axis.Z) {
+					x1 = -x1;
+				}
 			}
+			z2 = -z2;
+			break;
+		case FRONT_BACK:
+			if (!this.lockOrientation) {
+				if (this.orientation.getAxis() == Axis.X) {
+					entity.setItemRotation(entity.getRotation() + 2);
+				}
+				x1 = -x1;
+			} else {
+				if (this.orientation.getAxis() == Axis.X) {
+					z1 = -z1;
+				}
+				if (this.orientation.getAxis() == Axis.Z) {
+					x1 = -x1;
+				}
+			}
+			x2 = -x2;
+			break;
+		default:
+			break;
 		}
 
 		int x3 = x1;
 		int z3 = z1;
 		int x4 = x2;
 		int z4 = z2;
-		if (!this.lockOrientation) {
-			switch (settings.getRotation()) {
-			case COUNTERCLOCKWISE_90:
+		switch (settings.getRotation()) {
+		case COUNTERCLOCKWISE_90:
+			if (!this.lockOrientation) {
 				entity.setItemRotation(entity.getRotation() + 1);
 				x1 = z3;
 				z1 = -x3;
-				x2 = z4;
-				z2 = -x4;
-				break;
-			case CLOCKWISE_90:
+			}
+			x2 = z4;
+			z2 = -x4;
+			break;
+		case CLOCKWISE_90:
+			if (!this.lockOrientation) {
 				entity.setItemRotation(entity.getRotation() + 3);
 				x1 = -z3;
 				z1 = x3;
-				x2 = -z4;
-				z2 = x4;
-				break;
-			case CLOCKWISE_180:
+			}
+			x2 = -z4;
+			z2 = x4;
+			break;
+		case CLOCKWISE_180:
+			if (!this.lockOrientation) {
 				entity.setItemRotation(entity.getRotation() + 2);
 				x1 = -x3;
 				z1 = -z3;
-				x2 = -x4;
-				z2 = -z4;
-				break;
-			default:
-				break;
 			}
+			x2 = -x4;
+			z2 = -z4;
+			break;
+		default:
+			break;
 		}
 
 		ItemStack stack = ItemMap.setupNewMap(world, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, (byte) this.scale, true, true);

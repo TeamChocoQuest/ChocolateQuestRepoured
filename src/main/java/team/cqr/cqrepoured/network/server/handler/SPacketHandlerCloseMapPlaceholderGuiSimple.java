@@ -70,29 +70,39 @@ public class SPacketHandlerCloseMapPlaceholderGuiSimple implements IMessageHandl
 
 						TileEntity tileEntity = world.getTileEntity(mutablePos);
 						if (tileEntity instanceof TileEntityMap) {
+							int originX = 0;
+							int originZ = 0;
 							int offsetX = 0;
 							int offsetZ = 0;
-							switch (facing) {
+							switch (orientation) {
 							case NORTH:
+								originX = -leftRight;
+								originZ = 0;
 								offsetX = leftRight;
 								offsetZ = -downUp;
 								break;
 							case SOUTH:
+								originX = leftRight;
+								originZ = 0;
 								offsetX = -leftRight;
 								offsetZ = downUp;
 								break;
 							case WEST:
+								originX = 0;
+								originZ = leftRight;
 								offsetX = -downUp;
 								offsetZ = -leftRight;
 								break;
 							case EAST:
+								originX = 0;
+								originZ = -leftRight;
 								offsetX = downUp;
 								offsetZ = leftRight;
 								break;
 							default:
 								break;
 							}
-							((TileEntityMap) tileEntity).set(scale, orientation, lockOrientation, -x, -z, offsetX, offsetZ, fillMap, fillRadius);
+							((TileEntityMap) tileEntity).set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 						}
 					}
 				}

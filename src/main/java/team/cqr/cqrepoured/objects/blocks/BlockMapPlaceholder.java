@@ -48,7 +48,7 @@ public class BlockMapPlaceholder extends BlockHorizontal {
 		if (worldIn.isRemote && (placer instanceof EntityPlayer) && !placer.isSneaking()) {
 			EnumFacing facing1 = state.getValue(FACING);
 			int x = pos.getX() - facing1.getXOffset();
-			int y = (pos.getY() & 0xBFFFFFFF) | (facing1.getHorizontalIndex() << 29);
+			int y = (pos.getY() & 0x9FFFFFFF) | (facing1.getHorizontalIndex() << 29);
 			int z = pos.getZ() - facing1.getZOffset();
 			((EntityPlayer) placer).openGui(CQRMain.INSTANCE, Reference.MAP_GUI_SIMPLE_ID, worldIn, x, y, z);
 		}

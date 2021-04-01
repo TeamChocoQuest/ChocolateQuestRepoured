@@ -129,7 +129,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == Reference.MAP_GUI_SIMPLE_ID) {
-			return new GuiMapPlaceholderSimple(new BlockPos(x, y & 0xBFFFFFFF, z), EnumFacing.byHorizontalIndex((y >> 29) & 3));
+			return new GuiMapPlaceholderSimple(new BlockPos(x, y & 0x9FFFFFFF, z), EnumFacing.byHorizontalIndex((y >> 29) & 3));
 		}
 
 		return null;

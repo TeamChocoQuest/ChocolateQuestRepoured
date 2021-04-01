@@ -55,7 +55,7 @@ public class GuiMapPlaceholderSimple extends GuiScreen {
 		this.sizeDown.setText("0");
 		this.sizeRight.setText("0");
 		this.sizeLeft.setText("0");
-		this.fillRadius.setText("0");
+		this.fillRadius.setText("64");
 
 		this.buttonList.add(this.orientation);
 		this.buttonList.add(this.lockOrientation);
