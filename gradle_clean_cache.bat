@@ -1,1 +1,2 @@
-gradlew cleanCache && pause
+call gradlew cleanCache
+pause

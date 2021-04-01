@@ -1,1 +1,2 @@
-gradlew genIntellijRuns && pause
+call gradlew genIntellijRuns
+pause

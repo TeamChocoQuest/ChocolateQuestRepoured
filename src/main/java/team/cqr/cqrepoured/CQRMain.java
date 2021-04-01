@@ -91,11 +91,6 @@ public class CQRMain {
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
 
-	public CQRMain() {
-		// Geckolib
-		GeckoLib.initialize();
-	}
-
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(Reference.MODID + "_items") {
 		@Override
 		public ItemStack createIcon() {
@@ -153,6 +148,9 @@ public class CQRMain {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		// The geckolib comment says this should be in the constructor but that only applies to MC 1.16+
+		GeckoLib.initialize();
+
 		logger = event.getModLog();
 		// Important: This has to be the F I R S T statement
 		this.initConfigFolder(event);
