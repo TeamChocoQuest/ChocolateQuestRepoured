@@ -45,7 +45,6 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseMo
 import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSpinAttack;
 import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseStun;
 import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSwimming;
-import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSwitchStates;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -100,7 +99,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	public static final int TARGET_MOVE_OUT = 1;
 	public static final int TARGET_MOVE_IN = -1;
-	private int targetedState = 0;
 	private boolean partSoundFlag = false;
 	private boolean stunned = false;
 	private boolean canBeStunned = true;
@@ -114,27 +112,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int stuckTicks = 0;
 	private static final int MAX_STUCK_TICKS = 60;
 
-	// Animations
-	/*
-	 * private Animation animation = NO_ANIMATION;
-	 * private int animationTick;
-	 * public AnimationAI<EntityCQRGiantTortoise> currentAnim;
-	 */
-
 	private static ArrayList<ResourceLocation> hardBlocks = new ArrayList<>();
-
-	/*
-	 * public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
-	 * public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
-	 * public static final Animation ANIMATION_SPIN = Animation.create(250).setLooping(false);
-	 * public static final Animation ANIMATION_IDLE = Animation.create(100);
-	 * public static final Animation ANIMATION_STUNNED = Animation.create(140).setLooping(false);
-	 * public static final Animation ANIMATION_DEATH = Animation.create(300);
-	 */
-
-	// private static final Animation[] ANIMATIONS = { ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT, ANIMATION_SPIN, ANIMATION_IDLE, ANIMATION_STUNNED,
-	// ANIMATION_DEATH, };
-	// End of Animations
 
 	public EntityCQRGiantTortoise(World worldIn) {
 		super(worldIn);
@@ -178,7 +156,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
-		//this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATIONS[ANIMATION_ID_ENTER_SHELL], ANIMATIONS[ANIMATION_ID_EXIT_SHELL]));
 		this.tasks.addTask(2, new BossAITortoiseStun(this));
 		this.tasks.addTask(4, new BossAITortoiseHealing(this));
 		this.tasks.addTask(6, new BossAITortoiseSpinAttack(this));
@@ -416,7 +393,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		// v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
 		Vec3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
 
-		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.1F : 0.5F;
+		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.15F : 0.5F;
 
 		// First, position your head
 		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
@@ -549,44 +526,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			this.setTimesHealed(1);
 		}
 		this.setInShell(compound.getBoolean("inShell"));
-	}
-
-	/*
-	 * public void targetNewState(int newStateID) {
-	 * if (newStateID != this.targetedState) {
-	 * this.targetedState = newStateID;
-	 * if (newStateID != 0) {
-	 * if (newStateID < 0) {
-	 * //AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_IN);
-	 * if(this.getCurrentAnimationId() == ANIMATION_ID_IN_SHELL) {
-	 * return;
-	 * }
-	 * this.nextAnimationId = ANIMATION_ID_ENTER_SHELL;
-	 * } else {
-	 * //AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_OUT);
-	 * if(this.getCurrentAnimationId() == ANIMATION_ID_WALK) {
-	 * return;
-	 * }
-	 * this.nextAnimationId = ANIMATION_ID_EXIT_SHELL;
-	 * }
-	 * } else {
-	 * //AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
-	 * //this.nextAnimationId = ANIMATION_ID_IN_SHELL;
-	 * }
-	 * }
-	 * }
-	 */
-
-	public int getTargetedState() {
-		return this.targetedState;
-	}
-
-	public boolean wantsToChangeState() {
-		return this.targetedState != 0;
-	}
-
-	public void changedState() {
-		this.targetedState = 0;
 	}
 
 	public int getTimesHealed() {
