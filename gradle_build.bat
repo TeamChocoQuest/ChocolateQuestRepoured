@@ -1,2 +1,2 @@
-call gradlew build
+call gradlew build -Pbuildjar
 pause
