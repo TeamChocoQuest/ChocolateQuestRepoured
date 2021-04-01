@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -92,13 +89,6 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		// after this, we need to render the outline
 		for (int i = 0; i < corners; i++) {
 			builder.pos(vector.x, 0, vector.z).color(r, g, b, 255).endVertex();
-			
-			GlStateManager.pushAttrib();
-			FontRenderer fontrenderer = Minecraft.getMinecraft().standardGalacticFontRenderer;
-			GlStateManager.alphaFunc(516, 0.1F);
-			EntityRenderer.drawNameplate(fontrenderer, "a", (float) x, (float) y, (float) z, 0, this.renderManager.playerViewY, this.renderManager.playerViewY, true, false);
-			GlStateManager.popAttrib();
-			
 			vector = VectorUtil.rotateVectorAroundY(vector, alpha);
 		}
 
