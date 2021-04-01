@@ -60,6 +60,7 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL);
 		this.getBoss().setCanBeStunned(true);
 		this.getBoss().setStunned(false);
+		this.getBoss().setReadyToSpin(true);
 	}
 
 }

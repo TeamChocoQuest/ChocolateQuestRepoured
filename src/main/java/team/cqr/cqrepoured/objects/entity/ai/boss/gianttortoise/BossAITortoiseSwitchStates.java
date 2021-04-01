@@ -68,6 +68,7 @@ public class BossAITortoiseSwitchStates extends AbstractCQREntityAI<EntityCQRGia
 		this.turtle.setInShell(this.turtle.getTargetedState() < 0);
 		this.turtle.changedState();
 		this.turtle.setBypassInShell(false);
+		this.turtle.setReadyToSpin(true);
 	}
 
 }

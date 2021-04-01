@@ -4,6 +4,9 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
 public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
+	
+	private static final int PREPARE_TIME = 60;
+	private int prepareTime = PREPARE_TIME;
 
 	public BossAITortoiseMoveToLeader(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -15,6 +18,10 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 
 	@Override
 	public boolean shouldExecute() {
+		if(this.prepareTime > 0) {
+			this.prepareTime--;
+			return false;
+		}
 		if (super.shouldExecute()) {
 			return this.checkTurtleSpecific();
 		}
@@ -22,6 +29,9 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	}
 
 	private boolean checkTurtleSpecific() {
+		if(this.getBoss().hasAttackTarget()) {
+			return false;
+		}
 		if (!this.getBoss().hasLeader()) {
 			return false;
 		}
@@ -60,12 +70,15 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	@Override
 	public void resetTask() {
 		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
+		this.prepareTime = PREPARE_TIME;
+		this.getBoss().setInShell(true);
 		super.resetTask();
 	}
 
 	@Override
 	public void startExecuting() {
 		this.getBoss().setInShell(false);
+		this.prepareTime = PREPARE_TIME;
 		super.startExecuting();
 	}
 

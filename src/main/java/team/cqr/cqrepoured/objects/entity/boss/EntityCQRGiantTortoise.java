@@ -54,24 +54,25 @@ import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatable {
-	
+
 	public static class AnimationGecko {
 		private final String animationName;
 		private final int animationDuration;
-		
+
 		public AnimationGecko(String name, int duration) {
 			this.animationDuration = duration;
 			this.animationName = name;
 		}
-		
+
 		public String getAnimationName() {
 			return this.animationName;
 		}
+
 		public int getAnimationDuration() {
 			return this.animationDuration;
 		}
 	}
-	
+
 	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 
@@ -91,10 +92,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			new AnimationGecko("animation.giant_tortoise.stun", 140),
 			new AnimationGecko("animation.giant_tortoise.enter_shell", 31),
 			new AnimationGecko("animation.giant_tortoise.exit_shell", 31),
-			new AnimationGecko("animation.giant_tortoise.in_shell", 1)
-	};
-	
-	
+			new AnimationGecko("animation.giant_tortoise.in_shell", 1) };
+
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
 
 	static int EAnimStateGlobalID = 0;
@@ -105,7 +104,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private boolean partSoundFlag = false;
 	private boolean stunned = false;
 	private boolean canBeStunned = true;
-	private boolean wantsToSpin = false;
 	private boolean readyToSpin = true;
 	private boolean spinning = false;
 	private int spinsBlocked = 0;
@@ -117,20 +115,25 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private static final int MAX_STUCK_TICKS = 60;
 
 	// Animations
-	/*private Animation animation = NO_ANIMATION;
-	private int animationTick;
-	public AnimationAI<EntityCQRGiantTortoise> currentAnim;*/
+	/*
+	 * private Animation animation = NO_ANIMATION;
+	 * private int animationTick;
+	 * public AnimationAI<EntityCQRGiantTortoise> currentAnim;
+	 */
 
 	private static ArrayList<ResourceLocation> hardBlocks = new ArrayList<>();
 
-	/*public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
-	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
-	public static final Animation ANIMATION_SPIN = Animation.create(250).setLooping(false);
-	public static final Animation ANIMATION_IDLE = Animation.create(100);
-	public static final Animation ANIMATION_STUNNED = Animation.create(140).setLooping(false);
-	public static final Animation ANIMATION_DEATH = Animation.create(300);*/
+	/*
+	 * public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
+	 * public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
+	 * public static final Animation ANIMATION_SPIN = Animation.create(250).setLooping(false);
+	 * public static final Animation ANIMATION_IDLE = Animation.create(100);
+	 * public static final Animation ANIMATION_STUNNED = Animation.create(140).setLooping(false);
+	 * public static final Animation ANIMATION_DEATH = Animation.create(300);
+	 */
 
-	//private static final Animation[] ANIMATIONS = { ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT, ANIMATION_SPIN, ANIMATION_IDLE, ANIMATION_STUNNED, ANIMATION_DEATH, };
+	// private static final Animation[] ANIMATIONS = { ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT, ANIMATION_SPIN, ANIMATION_IDLE, ANIMATION_STUNNED,
+	// ANIMATION_DEATH, };
 	// End of Animations
 
 	public EntityCQRGiantTortoise(World worldIn) {
@@ -175,7 +178,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
-		this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATIONS[ANIMATION_ID_ENTER_SHELL], ANIMATIONS[ANIMATION_ID_EXIT_SHELL]));
+		//this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATIONS[ANIMATION_ID_ENTER_SHELL], ANIMATIONS[ANIMATION_ID_EXIT_SHELL]));
 		this.tasks.addTask(2, new BossAITortoiseStun(this));
 		this.tasks.addTask(4, new BossAITortoiseHealing(this));
 		this.tasks.addTask(6, new BossAITortoiseSpinAttack(this));
@@ -187,7 +190,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				if (super.shouldExecute() && ((EntityCQRGiantTortoise) this.entity).isInShell() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
 					return true;
 				} else if (super.shouldExecute() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
-					((EntityCQRGiantTortoise) this.entity).targetNewState(TARGET_MOVE_IN);
+					if (EntityCQRGiantTortoise.this.getCurrentAnimationId() != ANIMATION_ID_IN_SHELL) {
+						if (EntityCQRGiantTortoise.this.getCurrentAnimationId() == ANIMATION_ID_WALK) {
+							EntityCQRGiantTortoise.this.setNextAnimation(ANIMATION_ID_ENTER_SHELL);
+						}
+					}
 				}
 				return false;
 			}
@@ -215,13 +222,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.dataManager.register(IN_SHELL_BYPASS, false);
 		this.dataManager.register(CURRENT_ANIMATION_ID, this.nextAnimationId);
 	}
-	
+
 	public int getCurrentAnimationId() {
 		return this.dataManager.get(CURRENT_ANIMATION_ID);
 	}
+
 	private void setCurrentAnimation(int id) {
-		if(this.isServerWorld()) {
-			if(id >= 0 && id < ANIMATIONS.length) {
+		if (this.isServerWorld()) {
+			if (id >= 0 && id < ANIMATIONS.length) {
 				this.dataManager.set(CURRENT_ANIMATION_ID, id);
 			}
 		}
@@ -250,7 +258,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD) {
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
@@ -283,14 +291,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	public boolean isInShell() {
-		/*if(this.isServerWorld()) {
-			return this.getCurrentAnimationId() > ANIMATION_ID_STUNNED;
-		}*/
+		/*
+		 * if(this.isServerWorld()) {
+		 * return this.getCurrentAnimationId() > ANIMATION_ID_STUNNED;
+		 * }
+		 */
 		return this.dataManager.get(IN_SHELL);
 	}
 
 	public boolean isStunned() {
-		return this.stunned /*|| this.getCurrentAnimationId() == ANIMATION_ID_STUNNED*/;
+		return this.stunned /* || this.getCurrentAnimationId() == ANIMATION_ID_STUNNED */;
 	}
 
 	public boolean canBeStunned() {
@@ -304,7 +314,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void setStunned(boolean value) {
 		this.stunned = value;
 		this.readyToSpin = !this.stunned;
-		//this.nextAnimationId = ANIMATION_ID_STUNNED;
+		// this.nextAnimationId = ANIMATION_ID_STUNNED;
 	}
 
 	public boolean bypassInShell() {
@@ -356,7 +366,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.alignParts();
 		this.breakBlocksInWay();
 	}
-	
+
 	@Override
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
@@ -382,7 +392,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		} else {
 			this.stuckTicks = 0;
 		}
-		
+
 		this.updateAnimations();
 	}
 
@@ -397,25 +407,25 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private void alignParts() {
 		// Legs
-		/*Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1);*/
-		
+		/* Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1); */
+
 		float rotYawHead = this.rotationYawHead;// - 90;
-		if(rotYawHead > 180F) {
+		if (rotYawHead > 180F) {
 			rotYawHead -= 360F;
 		}
-		//v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
+		// v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
 		Vec3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
 
-		float vy = this.isInShell() || this.isStunned() ? 0.1F : 0.5F;
+		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.1F : 0.5F;
 
-		//First, position your head
+		// First, position your head
 		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
 		this.parts[this.parts.length - 1].setRotation(rotYawHead, this.rotationPitch);
 
-		//Then rotate 45 degrees to the right so that you face the front right leg
+		// Then rotate 45 degrees to the right so that you face the front right leg
 		v = VectorUtil.rotateVectorAroundY(v, 45D);
 
-		//Now, position each individual leg
+		// Now, position each individual leg
 		for (int i = 0; i < (this.parts.length - 1); i++) {
 			double x = this.posX + v.x;
 			double y = this.posY;
@@ -423,8 +433,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 			this.parts[i].setPosition(x, y, z);
 			this.parts[i].setRotation(rotYawHead + (i * 90F + 45F), this.rotationPitch);
-			
-			//leg positioned, now rotate to the next leg (clockwise)
+
+			// leg positioned, now rotate to the next leg (clockwise)
 			v = VectorUtil.rotateVectorAroundY(v, 90D);
 		}
 	}
@@ -541,23 +551,31 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.setInShell(compound.getBoolean("inShell"));
 	}
 
-	public void targetNewState(int newStateID) {
-		if (newStateID != this.targetedState) {
-			this.targetedState = newStateID;
-			if (newStateID != 0) {
-				if (newStateID < 0) {
-					//AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_IN);
-					this.nextAnimationId = ANIMATION_ID_ENTER_SHELL;
-				} else {
-					//AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_OUT);
-					this.nextAnimationId = ANIMATION_ID_EXIT_SHELL;
-				}
-			} else {
-				//AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
-				//this.nextAnimationId = ANIMATION_ID_IN_SHELL;
-			}
-		}
-	}
+	/*
+	 * public void targetNewState(int newStateID) {
+	 * if (newStateID != this.targetedState) {
+	 * this.targetedState = newStateID;
+	 * if (newStateID != 0) {
+	 * if (newStateID < 0) {
+	 * //AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_IN);
+	 * if(this.getCurrentAnimationId() == ANIMATION_ID_IN_SHELL) {
+	 * return;
+	 * }
+	 * this.nextAnimationId = ANIMATION_ID_ENTER_SHELL;
+	 * } else {
+	 * //AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_OUT);
+	 * if(this.getCurrentAnimationId() == ANIMATION_ID_WALK) {
+	 * return;
+	 * }
+	 * this.nextAnimationId = ANIMATION_ID_EXIT_SHELL;
+	 * }
+	 * } else {
+	 * //AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
+	 * //this.nextAnimationId = ANIMATION_ID_IN_SHELL;
+	 * }
+	 * }
+	 * }
+	 */
 
 	public int getTargetedState() {
 		return this.targetedState;
@@ -591,26 +609,20 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void setSpinning(boolean value) {
 		this.spinning = value;
 		this.readyToSpin = !this.spinning;
-		/*if(this.getCurrentAnimationId() != ANIMATION_ID_SPINNING) {
-			this.nextAnimationId = ANIMATION_ID_SPINNING;
-		}*/
+		/*
+		 * if(this.getCurrentAnimationId() != ANIMATION_ID_SPINNING) {
+		 * this.nextAnimationId = ANIMATION_ID_SPINNING;
+		 * }
+		 */
 	}
 
 	public boolean isSpinning() {
-		return this.spinning /*|| this.getCurrentAnimationId() == ANIMATION_ID_SPINNING*/;
+		return this.spinning /* || this.getCurrentAnimationId() == ANIMATION_ID_SPINNING */;
 	}
 
 	@Override
 	public boolean canOpenDoors() {
 		return false;
-	}
-
-	public void setWantsToSpin(boolean value) {
-		this.wantsToSpin = value;
-	}
-
-	public boolean wantsToSpin() {
-		return this.wantsToSpin;
 	}
 
 	public void setReadyToSpin(boolean value) {
@@ -644,31 +656,31 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public boolean canIgniteTorch() {
 		return false;
 	}
-	
-	
+
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 	@SideOnly(Side.CLIENT)
 	private int currentAnimationClient = 0;
-	//Animation controller
+
+	// Animation controller
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		//Death animation
-		if(this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATION_NAME_DEATH, false));
 			return PlayState.CONTINUE;
 		}
-		//DONE: Idle animation
-		if(this.getCurrentAnimationId() < 0) {
+		// DONE: Idle animation
+		if (this.getCurrentAnimationId() < 0) {
 			return PlayState.STOP;
 		}
-		if(this.currentAnimationClient != this.getCurrentAnimationId()) {
+		if (this.currentAnimationClient != this.getCurrentAnimationId()) {
 			this.currentAnimationClient = this.getCurrentAnimationId();
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATIONS[this.currentAnimationClient].getAnimationName()));
 		}
 		return PlayState.CONTINUE;
 	}
-	
-	//GeckoLib
+
+	// GeckoLib
 	@Override
 	public void registerControllers(AnimationData data) {
 		AnimationController<EntityCQRGiantTortoise> controller = new AnimationController<EntityCQRGiantTortoise>(this, "controller", 10, this::predicate);
@@ -679,44 +691,48 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public AnimationFactory getFactory() {
 		return this.factory;
 	}
-	
+
 	public void setNextAnimation(int id) {
 		this.nextAnimationId = id;
 	}
-	
-	//DONE: Call on entity update
+
+	// DONE: Call on entity update
 	private void updateAnimations() {
-		if(this.isServerWorld()) {
+		if (this.isServerWorld()) {
 			int currentAnimation = this.getCurrentAnimationId();
-			if(this.nextAnimationId != currentAnimation) {
+			if (this.nextAnimationId != currentAnimation) {
 				AnimationGecko nextAnimation = ANIMATIONS[this.nextAnimationId];
 				this.currentAnimationTick = nextAnimation.getAnimationDuration();
 				this.setCurrentAnimation(nextAnimationId);
 				this.onAnimationEnd(nextAnimationId, false);
 				return;
 			}
-			if(this.currentAnimationTick >= 0) {
+			if (this.currentAnimationTick >= 0) {
 				this.currentAnimationTick--;
-			} else if(this.currentAnimationTick == -1) {
+			} else if (this.currentAnimationTick == -1) {
 				this.onAnimationEnd(currentAnimation, true);
 			}
 		}
 	}
-	
+
 	public int getCurrentAnimationTick() {
 		return ANIMATIONS[this.getCurrentAnimationId()].getAnimationDuration() - this.currentAnimationTick;
 	}
-	
+
+	public void resetCurrentAnimationTickTime() {
+		this.currentAnimationTick = ANIMATIONS[this.getCurrentAnimationId()].getAnimationDuration();
+	}
+
 	public boolean shouldCurrentAnimationBePlaying() {
-		if(!this.isServerWorld()) {
+		if (!this.isServerWorld()) {
 			return false;
 		}
 		return this.currentAnimationTick >= 0;
 	}
-	
+
 	protected void onAnimationEnd(int animationID, boolean endByAnimationFinished) {
-		if(endByAnimationFinished) {
-			switch(animationID) {
+		if (endByAnimationFinished) {
+			switch (animationID) {
 			case ANIMATION_ID_EXIT_SHELL:
 				this.setNextAnimation(ANIMATION_ID_WALK);
 				break;
@@ -728,50 +744,47 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 		}
 	}
-	
+
 	private DamageSource deathCause = null;
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
 		this.deathCause = cause;
 		super.onDeath(cause);
 	}
-	
+
 	@Override
 	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
-		//Nope
+		// Nope
 	}
-	
-	//Death animation
-	//Death animation time: 1.44s => 29 ticks
+
+	// Death animation
+	// Death animation time: 1.44s => 29 ticks
 	@Override
 	protected void onDeathUpdate() {
 		++this.deathTicks;
-		if(this.deathTicks > 20) {
+		if (this.deathTicks > 20) {
 			float sizeVariation = this.getSizeVariation();
 			sizeVariation *= 1.5F;
 			double f = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
 			double f1 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
 			double f2 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
-			for(int i = 0; i < 20; i++) {
+			for (int i = 0; i < 20; i++) {
 				this.world.spawnParticle(EnumParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 				this.world.spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 			}
 		}
-		if(this.deathTicks == 34 && this.isServerWorld()) {
+		if (this.deathTicks == 34 && this.isServerWorld()) {
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
 		}
-		if(this.deathTicks >= 35 && this.isServerWorld()) {
-			if(this.deathCause != null) {
-				super.dropLoot(
-						this.recentlyHit > 0,
-						net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause),
-						this.deathCause);
+		if (this.deathTicks >= 35 && this.isServerWorld()) {
+			if (this.deathCause != null) {
+				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
 			this.setDead();
 
 			this.onFinalDeath();
 		}
 	}
-	
+
 }
