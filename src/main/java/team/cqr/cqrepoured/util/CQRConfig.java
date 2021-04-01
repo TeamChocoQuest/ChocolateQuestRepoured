@@ -382,17 +382,10 @@ public class CQRConfig {
 				"minecraft:ender_dragon=DRAGONS",
 				"iceandfire:dragonegg=DRAGONS",
 				"iceandfire:firedragon=DRAGONS",
-				"iceandfire:icedragon=DRAGONS"
-		};
+				"iceandfire:icedragon=DRAGONS" };
 
 		@Config.Comment("Each entry represents one set of mobtypes per \"ring\"")
-		public String[] defaultInhabitantConfig = {
-				"SKELETON",
-				"ZOMBIE,MUMMY",
-				"ILLAGER",
-				"SPECTER",
-				"MINOTAUR"
-		};
+		public String[] defaultInhabitantConfig = { "SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR" };
 	}
 
 	public static class Mobs {
@@ -515,14 +508,23 @@ public class CQRConfig {
 		public float EnderCalamity = 300F;
 
 	}
-	
+
+	private static Boolean aprilFoolsResult = null;
+
 	public static boolean isAprilFoolsEnabled() {
-		if(general.enableAprilFools) {
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(new Date());
-			if(calendar.get(Calendar.MONTH) == 4) {
-				return calendar.get(Calendar.DAY_OF_MONTH) == 1;
+		if (general.enableAprilFools) {
+			if (aprilFoolsResult == null) {
+				Calendar calendar = new GregorianCalendar();
+				calendar.setTime(new Date());
+				// Counting begins at 0, not one!! Read the documentation properly...
+				// Or just use constants...
+				if (calendar.get(Calendar.MONTH) == Calendar.APRIL) {
+					// Days are initiated with 1
+					aprilFoolsResult = calendar.get(Calendar.DAY_OF_MONTH) == 1;
+				}
+				aprilFoolsResult = false;
 			}
+			return aprilFoolsResult;
 		}
 		return false;
 	}
