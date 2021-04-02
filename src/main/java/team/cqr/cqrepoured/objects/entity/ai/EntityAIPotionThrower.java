@@ -69,13 +69,15 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged {
 					int indx = this.entity.getRNG().nextInt(inventory.getSlots());
 					ItemStack st = inventory.getStackInSlot(indx);
 					Set<Integer> usedIDs = new HashSet<>();
-					while ((st == null || st.isEmpty()) && !usedIDs.contains(indx)) {
+					int counter = 0;
+					while ((st == null || st.isEmpty()) && !usedIDs.contains(indx) && counter > inventory.getSlots()) {
 						indx = this.entity.getRNG().nextInt(inventory.getSlots());
 						usedIDs.add(indx);
 						st = inventory.getStackInSlot(indx);
 						st = inventory.extractItem(indx, st.getCount(), false);
+						counter++;
 					}
-					boolean removeBag = false;
+					boolean removeBag = st == null || st.isEmpty() || st == ItemStack.EMPTY;
 					if (st != null && !st.isEmpty()) {
 						ItemStack potion = st.copy();
 						if (CQRConfig.mobs.potionsInBagAreSingleUse) {
@@ -99,15 +101,6 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged {
 							this.entity.swingArm(EnumHand.OFF_HAND);
 							this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 						}
-						int itemsInBag = 0;
-						for (int s = 0; s < inventory.getSlots(); s++) {
-							if (inventory.getStackInSlot(s) != null && !inventory.getStackInSlot(s).isEmpty()) {
-								itemsInBag++;
-							}
-						}
-						removeBag = itemsInBag <= 0;
-					} else {
-						removeBag = true;
 					}
 
 					if (removeBag) {
