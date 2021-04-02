@@ -26,10 +26,14 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 		super(entity);
 		this.setMutexBits(3);
 	}
+	
+	protected ItemStack getEquippedWeapon() {
+		return this.entity.getHeldItemMainhand();
+	}
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.isRangedWeapon(this.entity.getHeldItemMainhand().getItem())) {
+		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
@@ -41,7 +45,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (!this.isRangedWeapon(this.entity.getHeldItemMainhand().getItem())) {
+		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
@@ -108,7 +112,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 		}
 	}
 
-	private boolean canStrafe() {
+	protected boolean canStrafe() {
 		if (!this.entity.canStrafe()) {
 			return false;
 		}
@@ -123,7 +127,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 			}
 
 			if (this.entity.getItemInUseMaxCount() >= this.getAttackChargeTicks()) {
-				ItemStack stack = this.entity.getHeldItemMainhand();
+				ItemStack stack = this.getEquippedWeapon();
 				Item item = stack.getItem();
 
 				if (item instanceof ItemBow) {
@@ -175,7 +179,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	protected double getAttackRange() {
-		ItemStack stack = this.entity.getHeldItemMainhand();
+		ItemStack stack = this.getEquippedWeapon();
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBow) {
@@ -188,7 +192,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	protected int getAttackCooldown() {
-		ItemStack stack = this.entity.getHeldItemMainhand();
+		ItemStack stack = this.getEquippedWeapon();
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBow) {
@@ -208,7 +212,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	protected int getAttackChargeTicks() {
-		ItemStack stack = this.entity.getHeldItemMainhand();
+		ItemStack stack = this.getEquippedWeapon();
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBow) {
