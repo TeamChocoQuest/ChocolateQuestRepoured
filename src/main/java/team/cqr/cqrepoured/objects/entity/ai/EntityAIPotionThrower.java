@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemLingeringPotion;
 import net.minecraft.item.ItemSplashPotion;
 import net.minecraft.item.ItemStack;
@@ -17,137 +18,133 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.ItemAlchemyBag;
 import team.cqr.cqrepoured.util.CQRConfig;
 
-public class EntityAIPotionThrower extends EntityAIAttack {
+public class EntityAIPotionThrower extends EntityAIAttackRanged {
 
 	public EntityAIPotionThrower(AbstractEntityCQR entity) {
 		super(entity);
 	}
 
-	@Override
-	public boolean shouldExecute() {
-		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion || this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion) && super.shouldExecute();
-	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion || this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion) && super.shouldContinueExecuting();
+	protected ItemStack getEquippedWeapon() {
+		return this.entity.getHeldItemOffhand();
 	}
-
+	
 	@Override
-	public void startExecuting() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-
-		if (this.entity.getDistance(attackTarget) < 14.0D) {
-			this.entity.setActiveHand(EnumHand.OFF_HAND);
-			this.entity.isSwingInProgress = true;
-		} else {
-			this.updatePath(attackTarget);
-		}
+	protected boolean isRangedWeapon(Item item) {
+		return (item instanceof ItemAlchemyBag || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion);
 	}
-
-	@Override
-	public void resetTask() {
-		super.resetTask();
-		this.entity.isSwingInProgress = false;
-	}
-
-	@Override
-	public void updateTask() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-
-		if (attackTarget != null) {
-			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 12.0F, 12.0F);
-
-			double distance = this.entity.getDistance(attackTarget);
-			if (distance < 14.0D || (!this.entity.hasPath() && distance < 16.0D)) {
-				this.checkAndPerformAttack(this.entity.getAttackTarget());
-				this.entity.getNavigator().clearPath();
-				this.entity.setActiveHand(EnumHand.OFF_HAND);
-				this.entity.isSwingInProgress = true;
-			} else {
-				this.updatePath(attackTarget);
-				this.entity.resetActiveHand();
-				this.entity.isSwingInProgress = false;
-			}
-		}
-	}
-
+	
 	@Override
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
-		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 16.0D) {
-			ItemStack stack = this.entity.getHeldItemOffhand();
-			if (stack.getItem() instanceof ItemSplashPotion || stack.getItem() instanceof ItemLingeringPotion) {
-				this.attackTick = 60;
-				EntityPotion proj = new EntityPotion(this.world, this.entity, stack.copy());
-				double x = attackTarget.posX - this.entity.posX;
-				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
-				double z = attackTarget.posZ - this.entity.posZ;
-				double distance = Math.sqrt(x * x + z * z);
-				proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
-				proj.motionX += this.entity.motionX;
-				proj.motionZ += this.entity.motionZ;
-				if (!this.entity.onGround) {
-					proj.motionY += this.entity.motionY;
-				}
-				this.entity.world.spawnEntity(proj);
-				this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
-
-				if (CQRConfig.mobs.offhandPotionsAreSingleUse) {
-					stack.shrink(1);
-				}
-
-			} else if (stack.getItem() instanceof ItemAlchemyBag) {
-				this.attackTick = 60;
-				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				int indx = this.entity.getRNG().nextInt(inventory.getSlots());
-				ItemStack st = inventory.getStackInSlot(indx);
-				Set<Integer> usedIDs = new HashSet<>();
-				while ((st == null || st.isEmpty()) && !usedIDs.contains(indx)) {
-					indx = this.entity.getRNG().nextInt(inventory.getSlots());
-					usedIDs.add(indx);
-					st = inventory.getStackInSlot(indx);
-				}
-				boolean removeBag = false;
-				if (st != null && !st.isEmpty()) {
-					ItemStack potion = st.copy();
-					if (CQRConfig.mobs.potionsInBagAreSingleUse) {
-						st.shrink(1);
+		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
+				ItemStack stack = this.getEquippedWeapon();
+				Item item = stack.getItem();
+				
+				//Throwable potions
+				if(item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion) {
+					EntityPotion proj = new EntityPotion(this.world, this.entity, stack.copy());
+					double x = attackTarget.posX - this.entity.posX;
+					double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
+					double z = attackTarget.posZ - this.entity.posZ;
+					double distance = Math.sqrt(x * x + z * z);
+					proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
+					proj.motionX += this.entity.motionX;
+					proj.motionZ += this.entity.motionZ;
+					if (!this.entity.onGround) {
+						proj.motionY += this.entity.motionY;
 					}
+					this.entity.world.spawnEntity(proj);
+					this.entity.swingArm(EnumHand.OFF_HAND);
+					this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 
-					// Now throw it
-					if (potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {
-						EntityPotion proj = new EntityPotion(this.world, this.entity, potion);
-						double x = attackTarget.posX - this.entity.posX;
-						double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
-						double z = attackTarget.posZ - this.entity.posZ;
-						double distance = Math.sqrt(x * x + z * z);
-						proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
-						proj.motionX += this.entity.motionX;
-						proj.motionZ += this.entity.motionZ;
-						if (!this.entity.onGround) {
-							proj.motionY += this.entity.motionY;
+					if (CQRConfig.mobs.offhandPotionsAreSingleUse) {
+						stack.shrink(1);
+					}
+					
+					this.prevTimeAttacked = this.entity.ticksExisted;
+				}
+				else if(item instanceof ItemAlchemyBag) {
+					IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+					int indx = this.entity.getRNG().nextInt(inventory.getSlots());
+					ItemStack st = inventory.getStackInSlot(indx);
+					Set<Integer> usedIDs = new HashSet<>();
+					while ((st == null || st.isEmpty()) && !usedIDs.contains(indx)) {
+						indx = this.entity.getRNG().nextInt(inventory.getSlots());
+						usedIDs.add(indx);
+						st = inventory.getStackInSlot(indx);
+					}
+					boolean removeBag = false;
+					if (st != null && !st.isEmpty()) {
+						ItemStack potion = st.copy();
+						if (CQRConfig.mobs.potionsInBagAreSingleUse) {
+							st.shrink(1);
 						}
-						this.entity.world.spawnEntity(proj);
-						this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
-					}
-					int itemsInBag = 0;
-					for (int s = 0; s < inventory.getSlots(); s++) {
-						if (inventory.getStackInSlot(s) != null && !inventory.getStackInSlot(s).isEmpty()) {
-							itemsInBag++;
-						}
-					}
-					removeBag = itemsInBag <= 0;
-				} else {
-					removeBag = true;
-				}
 
-				if (removeBag) {
-					// Remove the bag
-					this.entity.entityDropItem(stack, 1);
-					this.entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						// Now throw it
+						if (potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {
+							EntityPotion proj = new EntityPotion(this.world, this.entity, potion);
+							double x = attackTarget.posX - this.entity.posX;
+							double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
+							double z = attackTarget.posZ - this.entity.posZ;
+							double distance = Math.sqrt(x * x + z * z);
+							proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
+							proj.motionX += this.entity.motionX;
+							proj.motionZ += this.entity.motionZ;
+							if (!this.entity.onGround) {
+								proj.motionY += this.entity.motionY;
+							}
+							this.entity.world.spawnEntity(proj);
+							this.entity.swingArm(EnumHand.OFF_HAND);
+							this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+						}
+						int itemsInBag = 0;
+						for (int s = 0; s < inventory.getSlots(); s++) {
+							if (inventory.getStackInSlot(s) != null && !inventory.getStackInSlot(s).isEmpty()) {
+								itemsInBag++;
+							}
+						}
+						removeBag = itemsInBag <= 0;
+					} else {
+						removeBag = true;
+					}
+
+					if (removeBag) {
+						// Remove the bag
+						this.entity.entityDropItem(stack, 1);
+						this.entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+					}
+					
+					this.prevTimeAttacked = this.entity.ticksExisted;
 				}
 			}
+	}
+	
+	@Override
+	protected int getAttackCooldown() {
+		switch (this.world.getDifficulty()) {
+		case HARD:
+			return 20;
+		case NORMAL:
+			return 30;
+		default:
+			return 40;
 		}
+	}
+	
+	@Override
+	protected int getAttackChargeTicks() {
+		return 0;
+	}
+	
+	@Override
+	protected boolean canStrafe() {
+		return true;
+	}
+	
+	@Override
+	protected double getAttackRange() {
+		return 12;
 	}
 
 }
