@@ -73,6 +73,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged {
 						indx = this.entity.getRNG().nextInt(inventory.getSlots());
 						usedIDs.add(indx);
 						st = inventory.getStackInSlot(indx);
+						st = inventory.extractItem(indx, st.getCount(), false);
 					}
 					boolean removeBag = false;
 					if (st != null && !st.isEmpty()) {
