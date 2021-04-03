@@ -52,7 +52,7 @@ public class CapabilityItemHandlerItem extends ItemStackHandler {
 	}
 
 	@Override
-	protected void onContentsChanged(int slot) {
+	public void onContentsChanged(int slot) {
 		this.serializeNBT();
 	}
 

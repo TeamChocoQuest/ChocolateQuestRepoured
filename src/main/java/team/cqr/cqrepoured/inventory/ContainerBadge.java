@@ -9,6 +9,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItem;
 
 public class ContainerBadge extends Container {
 
@@ -32,17 +33,30 @@ public class ContainerBadge extends Container {
 				this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142));
 			} else {
 				this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142) {
+
 					@Override
 					public boolean canTakeStack(EntityPlayer playerIn) {
 						return false;
 					}
+
 				});
 			}
 		}
 
 		for (int l = 0; l < 3; l++) {
 			for (int m = 0; m < 3; m++) {
-				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18));
+				int index = m + l * 3;
+				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
+
+					@Override
+					public void onSlotChanged() {
+						super.onSlotChanged();
+						if (this.getItemHandler() instanceof CapabilityItemHandlerItem) {
+							((CapabilityItemHandlerItem) this.getItemHandler()).onContentsChanged(index);
+						}
+					}
+
+				});
 			}
 		}
 	}
@@ -56,28 +70,28 @@ public class ContainerBadge extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
 		Slot slot = this.inventorySlots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
-			ItemStack itemstack = itemstack1.copy();
+		if (slot == null) {
+			return ItemStack.EMPTY;
+		}
 
-			if (index > 35) {
-				if (this.mergeItemStack(itemstack1, 0, 36, false)) {
-					return itemstack;
-				}
-			} else {
-				if (this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
-					return itemstack;
-				}
+		ItemStack stack = slot.getStack();
+
+		if (stack.isEmpty()) {
+			return ItemStack.EMPTY;
+		}
+
+		if (index > 35) {
+			if (!this.mergeItemStack(stack, 0, 36, false)) {
+				return ItemStack.EMPTY;
+			}
+		} else {
+			if (!this.mergeItemStack(stack, 36, this.inventorySlots.size(), false)) {
+				return ItemStack.EMPTY;
 			}
 		}
 
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public void onContainerClosed(EntityPlayer playerIn) {
-		super.onContainerClosed(playerIn);
-		playerIn.setHeldItem(this.hand, this.stack);
+		slot.onSlotChanged();
+		return stack;
 	}
 
 }
