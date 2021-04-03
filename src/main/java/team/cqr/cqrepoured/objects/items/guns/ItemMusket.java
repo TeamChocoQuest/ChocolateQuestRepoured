@@ -40,6 +40,11 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
+	
+	@Override
+	protected float getRecoil() {
+		return 0.5F * super.getRecoil();
+	}
 
 	@Override
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {

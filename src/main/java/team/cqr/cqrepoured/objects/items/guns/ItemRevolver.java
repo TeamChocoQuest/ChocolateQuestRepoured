@@ -91,7 +91,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 			}
 
 			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
-			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
+			player.rotationPitch -= worldIn.rand.nextFloat() * this.getRecoil();
 
 			if (!flag) {
 				itemstack.shrink(1);
@@ -101,6 +101,10 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 				}
 			}
 		}
+	}
+	
+	protected float getRecoil() {
+		return 10F;
 	}
 
 	protected boolean isBullet(ItemStack stack) {
