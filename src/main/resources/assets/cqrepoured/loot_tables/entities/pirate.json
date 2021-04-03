@@ -1,3 +1,132 @@
 {
-
+	"pools": [
+		{
+			"rolls": 1,
+			"name": "bullet_iron",
+			"entries": [
+				{
+					"type": "item",
+					"name": "cqrepoured:bullet_iron",
+					"weight": 40,
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 8,
+								"max": 16
+							}
+						}
+					],
+					"conditions": [
+						{
+						  "condition": "killed_by_player"
+						},
+						{
+							"condition": "random_chance_with_looting",
+							"chance": 0.15,
+							"looting_multiplier": 0.05
+						},
+						{
+							"condition": "entity_properties",
+							"entity": "this",
+							"properties": {
+								"on_fire": false
+							}
+						}
+					]
+				}
+			]	 
+		},
+		{
+			"rolls": 1,
+			"name": "bullet_fire",
+			"entries": [
+				{
+					"type": "item",
+					"name": "cqrepoured:bullet_fire",
+					"weight": 40,
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 4,
+								"max": 8
+							}
+						}
+					],
+					"conditions": [
+						{
+						  "condition": "killed_by_player"
+						},
+						{
+							"condition": "random_chance_with_looting",
+							"chance": 0.1,
+							"looting_multiplier": 0.03
+						},
+						{
+							"condition": "entity_properties",
+							"entity": "this",
+							"properties": {
+								"on_fire": true
+							}
+						}
+					]
+				}
+			]	 
+		},
+		{
+			"rolls": 1,
+			"name": "bullet_special",
+			"entries": [
+				{
+					"type": "item",
+					"name": "cqrepoured:bullet_gold",
+					"weight": 2,
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 2,
+								"max": 6
+							}
+						}
+					],
+					"conditions": [
+						{
+						  "condition": "killed_by_player"
+						},
+						{
+							"condition": "random_chance_with_looting",
+							"chance": 0.05,
+							"looting_multiplier": 0.025
+						}
+					]
+				},
+				{
+					"type": "item",
+					"name": "cqrepoured:bullet_diamond",
+					"weight": 1,
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 3,
+								"max": 9
+							}
+						}
+					],
+					"conditions": [
+						{
+						  "condition": "killed_by_player"
+						},
+						{
+							"condition": "random_chance_with_looting",
+							"chance": 0.03,
+							"looting_multiplier": 0.025
+						}
+					]
+				}
+			]	 
+		}
+	]
 }
