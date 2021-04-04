@@ -108,7 +108,16 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * on fire It will also break obsidian blocks, but not command blocks or structure blocks
 	 * or bedrock
 	 */
-
+	
+	@Override
+	public void setSizeVariation(float size) {
+	}
+	
+	@Override
+	public float getSizeVariation() {
+		return 0F;
+	}
+	
 	public EntityCQRNetherDragon(World worldIn) {
 		super(worldIn);
 		this.experienceValue = 100;
