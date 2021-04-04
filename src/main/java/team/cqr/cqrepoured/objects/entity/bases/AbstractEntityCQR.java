@@ -1366,6 +1366,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if(this.horseAI != null) {
 			return this.getLowestRidingEntity() == null;
 		}
+		if(this.getRidingEntity() != null) {
+			return false;
+		}
 		return true;
 	}
 	
