@@ -32,7 +32,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		//Animation prep: 1s
 		//Animation cooldown: 1s
 		//Animation length total: 6s
-		return 80;
+		return 70;
 	}
 
 	@Override

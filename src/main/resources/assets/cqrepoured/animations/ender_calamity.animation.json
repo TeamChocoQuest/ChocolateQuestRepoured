@@ -598,6 +598,7 @@
 			}
 		},
 		"animation.ender_calamity.shoot_laser": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 6,
 			"bones": {
 				"root": {
@@ -934,6 +935,7 @@
 			}
 		},
 		"animation.ender_calamity.shoot_laser_long": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 12,
 			"bones": {
 				"root": {
