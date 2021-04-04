@@ -75,7 +75,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			Vec3d vec1 = this.entity.getPositionVector().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<EntityLiving> possibleMounts = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && this.isMountOwnedByPlayer(input) && this.entity.getEntitySenses().canSee(input));
+			List<EntityLiving> possibleMounts = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && !this.isMountOwnedByPlayer(input) && this.entity.getEntitySenses().canSee(input));
 			if (!possibleMounts.isEmpty()) {
 				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
 				return true;
