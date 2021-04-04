@@ -80,6 +80,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean isDowned = false;
 
 	private int currentPhaseTimer = 0;
+	private int currentPhaseRunningTime = 0;
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
 
 	public EEnderCalamityPhase getCurrentPhase() {
@@ -210,8 +211,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_IDLE_BODY = ANIM_NAME_PREFIX + "idle";
 	public static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
 	//Duration: 5.0s => 100 ticks
-	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shootLaser";
-	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shootLaser";
+	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shoot_laser"; //6s
+	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shoot_laser_long"; //12s
 	public static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
 	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 
@@ -241,13 +242,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return PlayState.CONTINUE;
 	}
 	
-	private <E extends IAnimatable> PlayState execHandAnimationPredicate(AnimationEvent<E> event, final String IDLE_ANIM, final String THROW_ANIM, boolean updateIndicator) {
+	private <E extends IAnimatable> PlayState execHandAnimationPredicate(AnimationEvent<E> event, final String IDLE_ANIM, final String THROW_ANIM, Boolean updateIndicator) {
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(IDLE_ANIM, false));
 		}
 		if (updateIndicator) {
 			updateIndicator = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(THROW_ANIM, false).addAnimation(THROW_ANIM, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(THROW_ANIM).addAnimation(IDLE_ANIM, false));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -519,6 +520,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.isJumping = false;
 		super.onLivingUpdate();
 	}
+	
+	public int getCurrentPhaseRunningTicks() {
+		return this.currentPhaseRunningTime;
+	}
 
 	private void handlePhases() {
 		if (this.cantUpdatePhase()) {
@@ -532,6 +537,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return;
 		}
 
+		this.currentPhaseRunningTime++;
 		boolean timedPhaseChange = false;
 		if (phase.isPhaseTimed()) {
 			this.currentPhaseTimer--;
@@ -570,6 +576,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (nextPhase.get().isPhaseTimed()) {
 				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
 			}
+			this.currentPhaseRunningTime = 0;
 			switch(this.currentPhase) {
 			case PHASE_DYING:
 			case PHASE_ENERGY_TENNIS:
@@ -776,10 +783,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	public void processAnimationUpdate(String animationID) {
 		// Only process this on client!!
-		//if (this.world.isRemote) {
+		if (this.world.isRemote) {
 			this.newAnimation = Optional.of(animationID);
-			System.out.println("New animation!" + this.newAnimation.get());
-		//}
+			//System.out.println("New animation!" + this.newAnimation.get());
+		}
 	}
 
 	@Override

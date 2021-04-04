@@ -42,7 +42,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 	public void startExecuting() {
 		super.startExecuting();
 		this.currentPhase = E_PHASE.PREPARING_TO_TELEPORT;
-		this.cooldown = 10;
+		this.cooldown = this.execPrepareShoot();
 	}
 	
 	@Override
@@ -90,11 +90,15 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 	
 	@Override
 	public void resetTask() {
+		this.killProjectile();
+		this.entity.setCantUpdatePhase(false);
+		super.resetTask();
+	}
+	
+	protected void killProjectile() {
 		if(this.projectile != null) {
 			this.projectile.setDead();
 		}
-		this.entity.setCantUpdatePhase(false);
-		super.resetTask();
 	}
 	
 	/*

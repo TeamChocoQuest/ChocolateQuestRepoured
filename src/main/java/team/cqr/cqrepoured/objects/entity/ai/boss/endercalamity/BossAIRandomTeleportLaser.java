@@ -17,33 +17,22 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	protected int execRandomShoot() {
-		Vec3d eyePos = this.entity.getPositionEyes(1);
+		Vec3d laserPosition = this.entity.getPositionVector();
+		laserPosition = laserPosition.add(0, this.entity.height / 2, 0);
 		//System.out.println("original eyepos: " + eyePos.toString());
 		//DONE: Calculate new starting position of laser to match animation
 		//Head distance with scale = 100%: 0.75 blocks
-		//Scrapped: Add sub entity for the laser itself!
-		//DONE: Or bug meldex to change the laser to use a position for it's start rather than an entity or create a special sub-laser entity for exactly that
-		Vec3d v = this.entity.getLookVec().normalize();
-		v = new Vec3d(v.x, 0, v.z);
-		//System.out.println("vector v: " + v.toString());
-		//System.out.println("entity scale: " + entity.getSizeVariation());
-		v = v.scale(1.0);
-		v = v.scale(this.entity.getSizeVariation());
-		//System.out.println("V after transformation: " + v.toString());
-		eyePos = eyePos.add(v);
-		//System.out.println("Eyepos: " + eyePos.toString());
-		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget(), v);
-		laser.setPosition(eyePos.x, eyePos.y, eyePos.z);
+		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget(), Vec3d.ZERO);
+		laser.setPosition(laserPosition.x, laserPosition.y, laserPosition.z);
 		this.world.spawnEntity(laser);
 		this.projectile = laser;
-		//Animation total length: 5s => 100 ticks
-		//Animation warmup time: 0.72s => 21 ticks
-		//Animation cooldown time: 0.28s => 6 ticks
-		//Animation lasering time: 3.94s => 79 ticks
 		//5 ticks buffer
 		//DONE: Make animation longer to make this longer
 		//TODO: Mark AI to not change looking direction when in shooting state
-		return 70;
+		//Animation prep: 1s
+		//Animation cooldown: 1s
+		//Animation length total: 6s
+		return 80;
 	}
 
 	@Override
@@ -57,15 +46,16 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		//10 is the transition time
-		//animation warmup is 0.72s => 15 ticks
+		//animation warmup is 1s => 20 ticks
 		//5 ticks is a little buffer
-		return 40;
+		return 35;
 	}
 	
 	@Override
 	public int execAfterShoot() {
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		this.killProjectile();
 		//Animation cooldown time: 0.28s => 6 ticks
 		//Transition time: 10 ticks
 		return 30;

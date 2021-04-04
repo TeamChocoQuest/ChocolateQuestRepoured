@@ -36,5 +36,9 @@ public class BossAIRandomTeleportEyes extends AbstractBossAIRandomShoot {
 		//3: AI only executes every 3 ticks
 		return 40 / 3;
 	}
+	
+	@Override
+	protected void killProjectile() {
+	}
 
 }
