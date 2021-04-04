@@ -72,7 +72,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * fire or shoot fireballs
 	 */
 
-	public final int INITIAL_SEGMENT_COUNT = 18;
+	public final int INITIAL_SEGMENT_COUNT = CQRConfig.bosses.netherDragonLength;
 	public final int SEGMENT_COUNT_ON_DEATH = 4;
 	public int segmentCount = this.INITIAL_SEGMENT_COUNT;
 	/*

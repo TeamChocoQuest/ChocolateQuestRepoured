@@ -300,6 +300,7 @@ public class CQRConfig {
 		public boolean thrownBlocksDestroyTerrain = true;
 		public boolean thrownBlocksGetPlaced = true;
 		public boolean calamityBlockEquipParticles = true;
+		public int netherDragonLength = 28;
 	}
 
 	public static class BossDamageCaps {
