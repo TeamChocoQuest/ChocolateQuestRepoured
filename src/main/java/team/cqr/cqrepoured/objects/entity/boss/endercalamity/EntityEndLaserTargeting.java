@@ -14,6 +14,11 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	public EntityEndLaserTargeting(EntityLivingBase caster, EntityLivingBase target, Vec3d offset) {
 		this(caster.world, caster, 48, target, offset);
 	}
+	
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1 || pass == 0;
+	}
 
 	public EntityEndLaserTargeting(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target, Vec3d offset) {
 		super(worldIn, caster, length, target);

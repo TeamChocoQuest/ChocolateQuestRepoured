@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.MinecraftForgeClient;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
@@ -14,50 +15,48 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 	public RenderEndLaser(RenderManager renderManager) {
 		super(renderManager);
 	}
-	
-	@Override
-	public boolean isMultipass() {
-		return true;
-	}
-	
-	@Override
-	public void renderMultipass(T entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
-		GlStateManager.pushAttrib();
-		super.doRender(entityIn, x, y, z, entityYaw, partialTicks);
-		GlStateManager.popAttrib();
-	}
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		Minecraft mc = Minecraft.getMinecraft();
+		int renderPass = MinecraftForgeClient.getRenderPass();
+		//Solid objects
+		if(renderPass == 0) {
+			Minecraft mc = Minecraft.getMinecraft();
 
-		float yaw = this.getYaw(entity, partialTicks);
-		float pitch = this.getPitch(entity, partialTicks);
+			float yaw = this.getYaw(entity, partialTicks);
+			float pitch = this.getPitch(entity, partialTicks);
 
-		//World coordinates
-		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
-		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
-		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
+			//World coordinates
+			double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
+			double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
+			double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
 
-		Vec3d laserDirection = Vec3d.fromPitchYaw(pitch, yaw).scale(0.5D);
-		x1 += laserDirection.x;
-		y1 += laserDirection.y;
-		z1 += laserDirection.z;
-		
-		Vec3d worldPos = new Vec3d(x1,y1,z1);
-		
-		// REnder ring 1
-		renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, mc);
-		if (entity.length >= 4) {
-			Vec3d increment = Vec3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
-			worldPos = worldPos.add(increment);
-			renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, mc);
-			if(entity.length >= 8) {
+			Vec3d laserDirection = Vec3d.fromPitchYaw(pitch, yaw).scale(0.5D);
+			x1 += laserDirection.x;
+			y1 += laserDirection.y;
+			z1 += laserDirection.z;
+			
+			Vec3d worldPos = new Vec3d(x1,y1,z1);
+			
+			// REnder ring 1
+			renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, mc);
+			if (entity.length >= 4) {
+				Vec3d increment = Vec3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
 				worldPos = worldPos.add(increment);
-				renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, mc);
-			}
-		} 
+				renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, mc);
+				if(entity.length >= 8) {
+					worldPos = worldPos.add(increment);
+					renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, mc);
+				}
+			} 
+		}
+		//Transparent objects
+		else if (renderPass == 1) {
+			GlStateManager.pushAttrib();
+			super.doRender(entity, x, y, z, entityYaw, partialTicks);
+			GlStateManager.popAttrib();
+		}
+		
 		
 	}
 
