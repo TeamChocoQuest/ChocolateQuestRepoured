@@ -1142,13 +1142,10 @@
 							"vector": [0, 0, 0]
 						},
 						"6.52": {
-							"vector": [22.5, 0, 0]
+							"vector": [-22.5, 0, 0]
 						},
 						"6.0": {
 							"vector": [0, 0, 0]
-						},
-						"6.52": {
-							"vector": [-22.5, 0, 0]
 						},
 						"7.0": {
 							"vector": [0, 0, 0]
@@ -1182,6 +1179,90 @@
 						},
 						"12.0": {
 							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.ender_calamity.spin_hands": {
+			"loop": true,
+			"animation_length": 0.52,
+			"bones": {
+				"handLeftUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 360]
+						},
+						"0.24": {
+							"vector": [166.15, -180, 0]
+						},
+						"0.52": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"handLeftMiddle": {
+					"rotation": {
+						"0.0": {
+							"vector": [360, 0, 0]
+						},
+						"0.24": {
+							"vector": [166.15, 180, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 360]
+						}
+					}
+				},
+				"handLeftLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 360]
+						},
+						"0.24": {
+							"vector": [166.15, -180, 0]
+						},
+						"0.52": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"handRightUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [360, 0, 0]
+						},
+						"0.24": {
+							"vector": [166.15, 180, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 360]
+						}
+					}
+				},
+				"handRightMiddle": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 360]
+						},
+						"0.24": {
+							"vector": [166.15, -180, 0]
+						},
+						"0.52": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"handRightLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [360, 0, 0]
+						},
+						"0.24": {
+							"vector": [166.15, 180, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 360]
 						}
 					}
 				}

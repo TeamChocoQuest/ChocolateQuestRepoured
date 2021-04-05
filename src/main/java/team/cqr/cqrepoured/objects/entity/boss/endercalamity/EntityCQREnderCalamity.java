@@ -215,6 +215,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shoot_laser_long"; //12s
 	public static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
 	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
+	public static final String ANIM_NAME_SPIN_HANDS = ANIM_NAME_PREFIX + "spin_hands";
 
 	private String currentAnimation = null;
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -238,6 +239,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		/*if(this.ticksExisted % 5 == 0) {
 			System.out.println("Animation: " + event.getController().getCurrentAnimation().animationName);
 		}*/
+		
+		return PlayState.CONTINUE;
+	}
+	
+	private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
+		if (event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS));
+		}
 		
 		return PlayState.CONTINUE;
 	}
@@ -315,6 +324,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
+		//Spin hands controller
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10, this::predicateSpinHands));
 
 		// Arms
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper));
