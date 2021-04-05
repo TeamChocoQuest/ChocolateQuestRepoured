@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.boss;
+package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
 import net.minecraft.client.model.ModelEnderman;
 import net.minecraft.client.model.ModelRenderer;

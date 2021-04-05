@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.boss;
+package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
 import javax.annotation.Nullable;
 
