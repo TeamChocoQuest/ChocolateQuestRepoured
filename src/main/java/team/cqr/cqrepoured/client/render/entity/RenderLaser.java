@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import team.cqr.cqrepoured.client.models.entities.boss.spectrelord.ModelLaser;
+import team.cqr.cqrepoured.client.models.entities.ModelLaser;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.util.Reference;
 
