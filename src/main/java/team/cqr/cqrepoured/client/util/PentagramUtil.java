@@ -23,8 +23,6 @@ public class PentagramUtil {
 	}
 	
 	public static void preRenderPentagram(double x, double y, double z, int ticksExisted) {
-		GlStateManager.translate((float) x, (float) y + 0.02, (float) z);
-		GlStateManager.rotate((float) (4 * ticksExisted), 0F, 1F, 0F);
 		GlStateManager.disableFog();
 		GlStateManager.disableLighting();
 		GlStateManager.disableCull();

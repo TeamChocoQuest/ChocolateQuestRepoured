@@ -22,13 +22,29 @@ public class RenderEndLaser extends RenderLaser<EntityEndLaserTargeting> {
 		GlStateManager.pushAttrib();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GlStateManager.popAttrib();
+		Minecraft mc = Minecraft.getMinecraft();
 
 		float yaw = this.getYaw(entity, partialTicks);
 		float pitch = this.getPitch(entity, partialTicks);
 
+		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
+		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
+		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
+		
+		Vec3d vec = Vec3d.fromPitchYaw(pitch, yaw).scale(0.25D);
+		x1 += vec.x;
+		y1 += vec.y;
+		z1 += vec.z;
+		Entity renderViewEntity = mc.getRenderViewEntity();
+		double x2 = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
+		double y2 = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
+		double z2 = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x1 - x2, y1 - y2, z1 - z2);
+		
 		double entityLength = this.getLaserLength(entity, pitch, yaw);
 		Vec3d laserVector = Vec3d.fromPitchYaw(this.getPitch(entity, partialTicks), this.getYaw(entity, partialTicks)).scale(entityLength);
-		Vec3d startPos = entity.getPositionVector();
+		Vec3d startPos = new Vec3d(x2,y2,z2);
 		Vec3d increment = new Vec3d(laserVector.x, laserVector.y, laserVector.z).normalize().scale(5);
 
 		// REnder ring 1
@@ -46,6 +62,7 @@ public class RenderEndLaser extends RenderLaser<EntityEndLaserTargeting> {
 
 			renderRing(9, startPos, entity, pitch, yaw, 2D, partialTicks);
 		}
+		GlStateManager.popMatrix();
 
 	}
 
@@ -53,19 +70,19 @@ public class RenderEndLaser extends RenderLaser<EntityEndLaserTargeting> {
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(scale, 1, scale);
 		//TODO: Find a better and more reliable way to transform from world to view coordinates...
-		Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+		/*Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
         double d3 = viewEntity.lastTickPosX + (viewEntity.posX - viewEntity.lastTickPosX) * (double)partialTicks;
         double d4 = viewEntity.lastTickPosY + (viewEntity.posY - viewEntity.lastTickPosY) * (double)partialTicks;
         double d5 = viewEntity.lastTickPosZ + (viewEntity.posZ - viewEntity.lastTickPosZ) * (double)partialTicks;
 		double x = worldPos.x - d3;
 		double y = worldPos.y - d4; 
-		double z = worldPos.z - d5;
+		double z = worldPos.z - d5;*/
 		
-		PentagramUtil.preRenderPentagram(x,y,z, entity.ticksExisted);
+		PentagramUtil.preRenderPentagram(worldPos.x,worldPos.y,worldPos.z, entity.ticksExisted);
 
 		// Rotate pentagram
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(-pitch, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(-pitch - 90.0F, 1.0F, 0.0F, 0.0F);
 		PentagramUtil.renderPentagram(entity.ticksExisted, entity.getColorR(), entity.getColorG(), entity.getColorB(), corners);
 
 		WorldClient world = Minecraft.getMinecraft().world;
