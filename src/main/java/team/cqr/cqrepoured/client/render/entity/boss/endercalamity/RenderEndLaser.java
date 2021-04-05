@@ -14,12 +14,22 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 	public RenderEndLaser(RenderManager renderManager) {
 		super(renderManager);
 	}
+	
+	@Override
+	public boolean isMultipass() {
+		return true;
+	}
+	
+	@Override
+	public void renderMultipass(T entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
+		GlStateManager.pushAttrib();
+		super.doRender(entityIn, x, y, z, entityYaw, partialTicks);
+		GlStateManager.popAttrib();
+	}
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushAttrib();
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		GlStateManager.popAttrib();
 		Minecraft mc = Minecraft.getMinecraft();
 
 		float yaw = this.getYaw(entity, partialTicks);
