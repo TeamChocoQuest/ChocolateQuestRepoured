@@ -38,5 +38,10 @@ public class EntityCQRSpectre extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
+	
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
+	}
 
 }
