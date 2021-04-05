@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.client.models.entities.ModelLaser;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.util.Reference;
 
-public class RenderLaser extends Render<AbstractEntityLaser> {
+public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/effects/ray.png");
 	private final ModelBase model;
@@ -26,12 +26,12 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(AbstractEntityLaser entity) {
+	protected ResourceLocation getEntityTexture(T entity) {
 		return TEXTURE;
 	}
 
 	@Override
-	public void doRender(AbstractEntityLaser entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		Minecraft mc = Minecraft.getMinecraft();
 		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
 		x1 += entity.getOffsetVector().x;
@@ -95,19 +95,19 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.popMatrix();
 	}
 	
-	protected float getPitch(AbstractEntityLaser entity, float partialTicks) {
+	protected float getPitch(T entity, float partialTicks) {
 		return this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 	}
 	
-	protected float getYaw(AbstractEntityLaser entity, float partialTicks) {
+	protected float getYaw(T entity, float partialTicks) {
 		return this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
 	}
 	
-	protected double getLaserLength(AbstractEntityLaser entity, float partialTicks) {
+	protected double getLaserLength(T entity, float partialTicks) {
 		return this.getLaserLength(entity, this.getPitch(entity, partialTicks), getYaw(entity, partialTicks));
 	}
 	
-	protected double getLaserLength(AbstractEntityLaser entity, float pitch, float yaw) {
+	protected double getLaserLength(T entity, float pitch, float yaw) {
 		Vec3d start = entity.getPositionVector();
 		Vec3d end = start.add(Vec3d.fromPitchYaw(pitch, yaw).scale(entity.length));
 		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
