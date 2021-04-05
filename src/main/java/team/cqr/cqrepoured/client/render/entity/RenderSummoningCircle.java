@@ -46,7 +46,8 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y + 0.02, (float) z);
-		GlStateManager.rotate((float) (4 * entity.ticksExisted), 0F, 1F, 0F);
+		float f = (entity.ticksExisted - 1.0F + partialTicks) * 4.0F;
+		GlStateManager.rotate(f, 0F, 1F, 0F);
 		PentagramUtil.preRenderPentagram(x, y, z, entity.ticksExisted);
 		PentagramUtil.renderPentagram(entity.ticksExisted);
 		PentagramUtil.postRenderPentagram();
