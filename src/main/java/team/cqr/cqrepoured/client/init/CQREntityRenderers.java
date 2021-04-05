@@ -285,7 +285,7 @@ public class CQREntityRenderers {
 		// Geckolib
 		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityEndLaserTargeting.class, RenderEndLaser:: new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityEndLaserTargeting.class, RenderEndLaser<AbstractEntityLaser>:: new);
 	}
 
 }

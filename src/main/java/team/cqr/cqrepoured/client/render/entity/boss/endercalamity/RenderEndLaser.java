@@ -7,16 +7,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
+import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 
-public class RenderEndLaser extends RenderLaser<EntityEndLaserTargeting> {
+public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T> {
 
 	public RenderEndLaser(RenderManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void doRender(EntityEndLaserTargeting entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushAttrib();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GlStateManager.popAttrib();
@@ -51,7 +51,7 @@ public class RenderEndLaser extends RenderLaser<EntityEndLaserTargeting> {
 		
 	}
 
-	private void renderRing(double corners, Vec3d worldPos, EntityEndLaserTargeting entity, float pitch, float yaw, double scale, float partialTicks, Minecraft mc) {
+	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Minecraft mc) {
 		GlStateManager.pushMatrix();
 		
 		//View coordinates
