@@ -53,6 +53,10 @@ public class PentagramUtil {
 		renderPentagram(ticksExisted, r, g, b, corners);
 	}
 	
+	public static void renderPentagram(int ticksExisted, float r, float g, float b, double corners) {
+		renderPentagram(ticksExisted, (int) r * 255, (int) g * 255, (int) b * 255, corners);
+	}
+	
 	public static void renderPentagram(int ticksExisted, int r, int g, int b, double corners) {
 		setLightmapDisabled(true);
 

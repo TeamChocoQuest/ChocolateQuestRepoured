@@ -39,8 +39,8 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		y1 += entity.getOffsetVector().y;
 		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
 		z1 += entity.getOffsetVector().z;
-		float yaw = this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
-		float pitch = this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
+		float yaw = this.getYaw(entity, partialTicks);
+		float pitch = this.getPitch(entity, partialTicks);
 		Vec3d vec = Vec3d.fromPitchYaw(pitch, yaw).scale(0.25D);
 		x1 += vec.x;
 		y1 += vec.y;
@@ -62,14 +62,11 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.rotate(-pitch, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0D, -1.0D, 1.0D);
 
-		Vec3d start = entity.getPositionVector();
-		Vec3d end = start.add(Vec3d.fromPitchYaw(pitch, yaw).scale(entity.length));
-		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
-		double d = result != null ? (float) result.hitVec.subtract(entity.getPositionVector()).length() : entity.length;
+		double laserLength = this.getLaserLength(entity, pitch, yaw);
 
 		GlStateManager.pushMatrix();
 		double d3 = 1.0D;
-		GlStateManager.scale(d3, d3, d);
+		GlStateManager.scale(d3, d3, laserLength);
 		float f3 = 1.0F / 3.0F;
 		GlStateManager.color(entity.getColorR(), entity.getColorG(), entity.getColorB(), f3);
 		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
@@ -77,7 +74,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 
 		GlStateManager.pushMatrix();
 		double d2 = 2.0D / 3.0D;
-		GlStateManager.scale(d2, d2, d);
+		GlStateManager.scale(d2, d2, laserLength);
 		float f2 = 2.0F / 3.0F;
 		GlStateManager.color(entity.getColorR(), entity.getColorG(), entity.getColorB(), f2);
 		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
@@ -85,7 +82,7 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 
 		GlStateManager.pushMatrix();
 		double d1 = 1.0D / 3.0D;
-		GlStateManager.scale(d1, d1, d);
+		GlStateManager.scale(d1, d1, laserLength);
 		float f1 = 1.0F;
 		GlStateManager.color(1.0F, 1.0F, 1.0F, f1);
 		this.model.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
@@ -96,6 +93,27 @@ public class RenderLaser extends Render<AbstractEntityLaser> {
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
 		GlStateManager.popMatrix();
+	}
+	
+	protected float getPitch(AbstractEntityLaser entity, float partialTicks) {
+		return this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
+	}
+	
+	protected float getYaw(AbstractEntityLaser entity, float partialTicks) {
+		return this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
+	}
+	
+	protected double getLaserLength(AbstractEntityLaser entity, float partialTicks) {
+		return this.getLaserLength(entity, this.getPitch(entity, partialTicks), getYaw(entity, partialTicks));
+	}
+	
+	protected double getLaserLength(AbstractEntityLaser entity, float pitch, float yaw) {
+		Vec3d start = entity.getPositionVector();
+		Vec3d end = start.add(Vec3d.fromPitchYaw(pitch, yaw).scale(entity.length));
+		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
+		double d = result != null ? (float) result.hitVec.subtract(entity.getPositionVector()).length() : entity.length;
+		
+		return d;
 	}
 
 	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
