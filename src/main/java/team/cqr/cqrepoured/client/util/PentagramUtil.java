@@ -1,11 +1,14 @@
 package team.cqr.cqrepoured.client.util;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.client.models.entities.ModelPentagram;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class PentagramUtil {
@@ -61,6 +64,7 @@ public class PentagramUtil {
 	public static void renderPentagram(int ticksExisted, int r, int g, int b, double corners) {
 		setLightmapDisabled(true);
 
+		/*
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder builder = tess.getBuffer();
 
@@ -90,6 +94,9 @@ public class PentagramUtil {
 		}
 
 		tess.draw();
+		*/
+		GL11.glColor4ub((byte) r, (byte) g, (byte) b, (byte) 255);
+		ModelPentagram.render((int) corners, 0.75F, 0.05F, 0.05F);
 
 		setLightmapDisabled(false);
 	}
