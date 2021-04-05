@@ -53,8 +53,11 @@ public class PentagramUtil {
 		renderPentagram(ticksExisted, r, g, b, corners);
 	}
 	
-	public static void renderPentagram(int ticksExisted, float r, float g, float b, double corners) {
-		renderPentagram(ticksExisted, (int) r * 255, (int) g * 255, (int) b * 255, corners);
+	public static void renderPentagram(int ticksExisted, float rf, float gf, float bf, double corners) {
+		int r = (int) Math.floor(Math.max(1, rf * 255));
+		int g = (int) Math.floor(Math.max(1, gf * 255));
+		int b = (int) Math.floor(Math.max(1, bf * 255));
+		renderPentagram(ticksExisted, r, g, b, corners);
 	}
 	
 	public static void renderPentagram(int ticksExisted, int r, int g, int b, double corners) {
@@ -70,7 +73,7 @@ public class PentagramUtil {
 		
 		Vec3d vector = new Vec3d(radius, 0, 0);
 		double alpha = 360D / corners;
-		int skipCorners = 2;
+		int skipCorners = Math.floorDiv((int)corners, 2);
 		alpha *= (double) skipCorners;
 		// First, draw the diagonal lines (get one point, and move to the over-next point
 		for (int i = 0; i <= corners; i++) {
