@@ -21,8 +21,6 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 		int renderPass = MinecraftForgeClient.getRenderPass();
 		//Solid objects
 		if(renderPass == 0) {
-			Minecraft mc = Minecraft.getMinecraft();
-
 			float yaw = this.getYaw(entity, partialTicks);
 			float pitch = this.getPitch(entity, partialTicks);
 
@@ -39,17 +37,18 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 			Vec3d worldPos = new Vec3d(x1,y1,z1);
 			
 			// REnder ring 1
-			float colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(0.25F * entity.ticksExisted)));
-			renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, mc, colorMultiplier);
+			float ticks = 0.25F * entity.ticksExisted;
+			float colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(ticks)));
+			renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, laserDirection, colorMultiplier);
 			if (entity.length >= 4) {
 				Vec3d increment = Vec3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
 				worldPos = worldPos.add(increment);
-				colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(0.25F * entity.ticksExisted + 300)));
-				renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, mc, colorMultiplier);
+				colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(ticks + (Math.PI / 2))));
+				renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, laserDirection, colorMultiplier);
 				if(entity.length >= 8) {
 					worldPos = worldPos.add(increment);
-					colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(0.25F * entity.ticksExisted + 600)));
-					renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, mc, colorMultiplier);
+					colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(ticks + Math.PI)));
+					renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, laserDirection, colorMultiplier);
 				}
 			} 
 		}
@@ -63,11 +62,11 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 		
 	}
 
-	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Minecraft mc, float colorMultiplier) {
+	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection, float colorMultiplier) {
 		GlStateManager.pushMatrix();
 		
 		//View coordinates
-		Entity renderViewEntity = mc.getRenderViewEntity();
+		Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
 		double x2 = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
 		double y2 = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
 		double z2 = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
