@@ -450,7 +450,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (source instanceof EntityDamageSourceIndirect) {
 			// DONE: Switch attack target to the shooter
 			// DONE: Teleport
-			// TODO: Spawn homing ender eyes
+			// DONE: Spawn homing ender eyes => Handled by AI
 			/*
 			 * Spawn a few homing ender eyes at random, then teleport to a different location There also is the chance for it to start "lazoring", in this stage, it
 			 * teleports to a different location, waits 2 seconds, fires a laser for 3 seconds,
@@ -462,6 +462,19 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				}
 
 				this.teleportAI.forceExecution();
+				
+				switch(this.getCurrentPhase()) {
+				case PHASE_DYING:
+				case PHASE_ENERGY_TENNIS:
+				case PHASE_LASERING:
+				case PHASE_STUNNED:
+				case PHASE_TELEPORT_EYE_THROWER:
+				case PHASE_TELEPORT_LASER:
+					break;
+				default:
+					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject());
+					break;
+				}
 			}
 			return false;
 		}
