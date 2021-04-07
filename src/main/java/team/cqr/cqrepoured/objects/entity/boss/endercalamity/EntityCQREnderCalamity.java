@@ -245,7 +245,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	
 	private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS, true));
 		}
 		
 		return PlayState.CONTINUE;
