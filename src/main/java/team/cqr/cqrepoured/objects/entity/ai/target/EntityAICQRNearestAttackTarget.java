@@ -143,6 +143,23 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 				return false;
 			}
+		} else if (this.canTargetAlly()) {
+			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
+			List<EntityLivingBase> possibleTargets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
+			for (EntityLivingBase possibleTargetAlly : possibleTargets) {
+				if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTargetAlly)) {
+					continue;
+				}
+				if (!EntitySelectors.IS_ALIVE.apply(possibleTargetAlly)) {
+					continue;
+				}
+				if (possibleTargetAlly == this.entity) {
+					continue;
+				}
+				if (this.isSuitableTargetAlly(possibleTargetAlly)) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}
