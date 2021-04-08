@@ -122,6 +122,9 @@ public class EntityCalamityCrystal extends Entity {
 					if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() + 1)) {
 						this.setAbsorbing(false);
 						this.currentTarget = this.owningEntity;
+						if(this.owningEntity == null) {
+							this.setBeamTarget(null);
+						}
 					}
 				} else {
 					this.currentTarget.heal(1F);
@@ -138,6 +141,9 @@ public class EntityCalamityCrystal extends Entity {
 				if (this.isAbsorbing()) {
 					this.setAbsorbing(false);
 					this.currentTarget = this.owningEntity;
+					if(this.currentTarget == null) {
+						this.setBeamTarget(null);
+					}
 				} else {
 					this.setDead();
 					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
