@@ -250,6 +250,7 @@ public class CQRConfig {
 
 	public static class Bosses {
 		public boolean antiCowardMode = true;
+		public boolean preventBlockPlacingNearBosses = false;
 		public int antiCowardRadius = 16;
 		public boolean enableHealthRegen = true;
 		@Config.RequiresWorldRestart

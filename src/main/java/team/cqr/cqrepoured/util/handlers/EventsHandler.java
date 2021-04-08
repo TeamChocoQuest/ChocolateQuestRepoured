@@ -27,6 +27,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -232,6 +233,16 @@ public class EventsHandler {
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
 		if (CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
 			BlockPos pos = new BlockPos(event.getEntityPlayer());
+			int radius = CQRConfig.bosses.antiCowardRadius;
+			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
+			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
+		}
+	}
+	
+	@SubscribeEvent
+	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
+		if (CQRConfig.bosses.preventBlockPlacingNearBosses && !(event.getEntity() instanceof EntityPlayer && ((EntityPlayer)event.getEntity()).isCreative())) {
+			BlockPos pos = new BlockPos(event.getEntity());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
 			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
