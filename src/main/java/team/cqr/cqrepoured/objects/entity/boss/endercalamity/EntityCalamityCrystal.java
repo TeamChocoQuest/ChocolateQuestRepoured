@@ -34,7 +34,7 @@ public class EntityCalamityCrystal extends Entity {
 	private EntityLiving owningEntity;
 	private EntityLivingBase currentTarget;
 	public int innerRotation;
-	
+
 	private int noTargetTicks = 0;
 	private static final int MAX_NO_TARGET_TICKS = 100;
 
@@ -42,9 +42,9 @@ public class EntityCalamityCrystal extends Entity {
 
 	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.<Optional<BlockPos>>createKey(EntityCalamityCrystal.class, DataSerializers.OPTIONAL_BLOCK_POS);
 	private static final DataParameter<Boolean> ABSORBING = EntityDataManager.<Boolean>createKey(EntityCalamityCrystal.class, DataSerializers.BOOLEAN);
-	
+
 	private static final int EXPLOSION_EFFECT_RADIUS = 16;
-	
+
 	public EntityCalamityCrystal(World worldIn) {
 		super(worldIn);
 		this.preventEntitySpawning = true;
@@ -79,7 +79,7 @@ public class EntityCalamityCrystal extends Entity {
 		if (compound.hasKey("BeamTarget", 10)) {
 			this.setBeamTarget(NBTUtil.getPosFromTag(compound.getCompoundTag("BeamTarget")));
 		}
-		if(compound.hasKey("Absorbing", Constants.NBT.TAG_BYTE)) {
+		if (compound.hasKey("Absorbing", Constants.NBT.TAG_BYTE)) {
 			this.setAbsorbing(compound.getBoolean("Absorbing"));
 		}
 	}
@@ -97,42 +97,42 @@ public class EntityCalamityCrystal extends Entity {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		
+
 		++this.innerRotation;
 
-		//Following code must not be run on the client
-		if(this.world.isRemote) {
+		// Following code must not be run on the client
+		if (this.world.isRemote) {
 			return;
 		}
-		
+
 		this.checkCurrentTarget();
 		if (this.currentTarget != null && this.currentTarget.isEntityAlive()) {
-			if(this.noTargetTicks != 0) {
+			if (this.noTargetTicks != 0) {
 				this.noTargetTicks = 0;
 			}
 			this.setBeamTarget(this.currentTarget.getPosition());
 			if (this.isAbsorbing()) {
-				
-				if(this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 4F)) {
+
+				if (this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 4F)) {
 					this.absorbedHealth += 2F;
 				}
-				
-				if(this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() +1)) {
+
+				if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() + 1)) {
 					this.setAbsorbing(false);
 					this.currentTarget = this.owningEntity;
 				}
 			} else {
 				this.currentTarget.heal(1F);
 				this.absorbedHealth--;
-				if(this.absorbedHealth <= 0F) {
+				if (this.absorbedHealth <= 0F) {
 					this.setDead();
 					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
 				}
 			}
 		} else {
 			this.noTargetTicks++;
-			if(this.noTargetTicks >= MAX_NO_TARGET_TICKS) {
-				if(this.isAbsorbing()) {
+			if (this.noTargetTicks >= MAX_NO_TARGET_TICKS) {
+				if (this.isAbsorbing()) {
 					this.setAbsorbing(false);
 					this.currentTarget = this.owningEntity;
 				} else {
@@ -144,24 +144,24 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	private void checkCurrentTarget() {
-		if(this.currentTarget == null || (this.currentTarget != null && (this.currentTarget.isDead || !this.currentTarget.isEntityAlive()))) {
-			//Target is dead or remove => search a different one!
-			this.currentTarget = null;
+		if (this.currentTarget != null) {
+			if (this.currentTarget.isDead || !this.currentTarget.isEntityAlive()) {
+				// Target is dead or remove => search a different one!
+				this.currentTarget = null;
+			} else if (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F) {
+				// Target has way too less health, so we need to search a new one as well
+				this.currentTarget = null;
+			}
 		}
-		else if(this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F) {
-			//Target has way too less health, so we need to search a new one as well
-			this.currentTarget = null;
-		}
-		
-		//Our old target was not good, we need a new one
-		if(this.currentTarget == null) {
-			//DONE: Create faction based predicate that checks for entities, also check their health
+		// Our old target was not good, we need a new one
+		if (this.currentTarget == null) {
+			// DONE: Create faction based predicate that checks for entities, also check their health
 			Vec3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			Vec3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> this.doesEntityFitForAbsorbing(input));
-			if(!affectedEntities.isEmpty()) {
-				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() -1, this.rand));
+			if (!affectedEntities.isEmpty()) {
+				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() - 1, this.rand));
 			}
 		}
 	}
@@ -195,27 +195,28 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	private void onCrystalDestroyed(DamageSource source) {
-		
-		//Special case when dying normally => it is out of world
-		if(source != DamageSource.OUT_OF_WORLD) {
+
+		// Special case when dying normally => it is out of world
+		if (source != DamageSource.OUT_OF_WORLD) {
 			// DONE: Implement healing of all entities nearby
-			
+
 			Vec3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			Vec3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb);
-			if(!affectedEntities.isEmpty()) {
-				final float healingAmount = 4* (this.absorbedHealth / affectedEntities.size());
+			if (!affectedEntities.isEmpty()) {
+				final float healingAmount = 4 * (this.absorbedHealth / affectedEntities.size());
 				affectedEntities.forEach(new Consumer<EntityLiving>() {
 
 					@Override
 					public void accept(EntityLiving arg0) {
 						arg0.heal(healingAmount);
-						
-					}});
+
+					}
+				});
 			}
 		}
-		//TODO: Play some fancy effects and sounds
+		// TODO: Play some fancy effects and sounds
 	}
 
 	private void setBeamTarget(@Nullable BlockPos beamTarget) {
@@ -232,24 +233,24 @@ public class EntityCalamityCrystal extends Entity {
 	public boolean isInRangeToRenderDist(double distance) {
 		return super.isInRangeToRenderDist(distance) || this.getBeamTarget() != null;
 	}
-	
+
 	@Nullable
 	private CQRFaction getFaction() {
-		if(this.world.isRemote) {
+		if (this.world.isRemote) {
 			return null;
 		}
-		if(this.owningEntity != null) {
-			return FactionRegistry.instance().getFactionOf(this.owningEntity); 
+		if (this.owningEntity != null) {
+			return FactionRegistry.instance().getFactionOf(this.owningEntity);
 		}
 		return null;
 	}
-	
+
 	private boolean doesEntityFitForAbsorbing(EntityLiving living) {
-		if(living != this.owningEntity) {
-			if(TargetUtil.PREDICATE_LIVING.apply(living)) {
+		if (living != this.owningEntity) {
+			if (TargetUtil.PREDICATE_LIVING.apply(living)) {
 				CQRFaction myFaction = this.getFaction();
-				if(myFaction != null) {
-					if(myFaction.isAlly(living)) {
+				if (myFaction != null) {
+					if (myFaction.isAlly(living)) {
 						return false;
 					}
 				}
@@ -262,12 +263,11 @@ public class EntityCalamityCrystal extends Entity {
 	public boolean isAbsorbing() {
 		return this.dataManager.get(ABSORBING);
 	}
-	
+
 	private void setAbsorbing(boolean value) {
-		if(!this.world.isRemote) {
+		if (!this.world.isRemote) {
 			this.dataManager.set(ABSORBING, value);
 		}
 	}
-	
-}
 
+}
