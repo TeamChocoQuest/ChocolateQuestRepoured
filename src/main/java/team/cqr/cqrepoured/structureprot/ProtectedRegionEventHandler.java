@@ -239,22 +239,24 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onRightClickBlockEvent(PlayerInteractEvent.RightClickBlock event) {
+		World world = event.getWorld();
 		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
-		ItemStack stack = event.getItemStack();
 		EnumFacing facing = event.getFace();
+		if (!world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
+			pos = pos.offset(facing);
+		}
+		ItemStack stack = event.getItemStack();
 		Vec3d hitVec = event.getHitVec();
 		EnumHand hand = event.getHand();
 
-		IBlockState state = ProtectedRegionHelper.getBlockFromItem(stack, event.getWorld(), pos, facing, hitVec, player, hand);
+		IBlockState state = ProtectedRegionHelper.getBlockFromItem(stack, world, pos, facing, hitVec, player, hand);
 
 		if (state == null) {
 			return;
 		}
 
-		BlockPos blockpos = player.world.getBlockState(pos).getBlock().isReplaceable(player.world, pos) ? pos : pos.offset(facing);
-
-		if (ProtectedRegionHelper.isBlockPlacingPrevented(player.world, blockpos, player, state, false, true)) {
+		if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos, player, state, false, true)) {
 			event.setCanceled(true);
 		}
 	}
