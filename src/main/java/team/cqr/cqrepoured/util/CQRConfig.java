@@ -258,7 +258,7 @@ public class CQRConfig {
 
 		public boolean hotFireballsDestroyTerrain = true;
 
-		public boolean harderWalkerKing = false;
+		public boolean harderWalkerKing = true;
 		public boolean armorForTheWalkerKing = true;
 
 		public boolean netherDragonDestroysBlocks = true;
