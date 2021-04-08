@@ -24,6 +24,7 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
@@ -147,6 +148,7 @@ public class CQREntities {
 	public static final EntityEntry WALKER_TORNADO = Null();
 	public static final EntityEntry PIRATE_PARROT = Null();
 	public static final EntityEntry ICE_SPIKE = Null();
+	public static final EntityEntry CALAMITY_CRYSTAL = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EntityRegistrationHandler {
@@ -228,7 +230,9 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(EntityWalkerTornado.class, "walker_tornado", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCQRPirateParrot.class, "pirate_parrot", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityIceSpike.class, "ice_spike", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true), };
+					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true), 
+					createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
+			};
 
 			event.getRegistry().registerAll(entityEntries);
 

@@ -17,7 +17,7 @@ public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation("textures/entity/endercrystal/endercrystal.png");
     private final ModelBase modelEnderCrystal = new ModelCalamityCrystal(0.0F);
 	
-	protected RenderCalamityCrystal(RenderManager renderManager) {
+	public RenderCalamityCrystal(RenderManager renderManager) {
 		super(renderManager);
 	}
 
