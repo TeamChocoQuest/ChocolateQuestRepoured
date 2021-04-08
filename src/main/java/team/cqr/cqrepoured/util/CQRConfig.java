@@ -301,6 +301,7 @@ public class CQRConfig {
 		public boolean thrownBlocksGetPlaced = true;
 		public boolean calamityBlockEquipParticles = true;
 		public int netherDragonLength = 28;
+		public int enderCalamityHealingCrystalAbsorbAmount = 40;
 	}
 
 	public static class BossDamageCaps {
