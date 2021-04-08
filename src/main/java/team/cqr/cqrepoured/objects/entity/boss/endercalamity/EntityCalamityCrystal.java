@@ -148,12 +148,10 @@ public class EntityCalamityCrystal extends Entity {
 
 	private void checkCurrentTarget() {
 		if (this.currentTarget != null) {
-			if (this.currentTarget.isDead || !this.currentTarget.isEntityAlive()) {
-				// Target is dead or remove => search a different one!
+			if (this.currentTarget.isDead || !this.currentTarget.isEntityAlive() || (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
+				// Target is dead or remove or has too few hp=> search a different one!
 				this.currentTarget = null;
-			} else if (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F) {
-				// Target has way too less health, so we need to search a new one as well
-				this.currentTarget = null;
+				this.setBeamTarget(null);
 			}
 		}
 		// Our old target was not good, we need a new one
