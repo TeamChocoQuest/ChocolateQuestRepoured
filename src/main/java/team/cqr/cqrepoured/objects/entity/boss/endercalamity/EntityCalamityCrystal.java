@@ -111,22 +111,25 @@ public class EntityCalamityCrystal extends Entity {
 				this.noTargetTicks = 0;
 			}
 			this.setBeamTarget(this.currentTarget.getPosition());
-			if (this.isAbsorbing()) {
+			//Only absorb health every 10 ticks, other wise it is too op
+			if(this.ticksExisted % 10 == 0) {
+				if (this.isAbsorbing()) {
 
-				if (this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 4F)) {
-					this.absorbedHealth += 2F;
-				}
+					if (this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 4F)) {
+						this.absorbedHealth += 2F;
+					}
 
-				if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() + 1)) {
-					this.setAbsorbing(false);
-					this.currentTarget = this.owningEntity;
-				}
-			} else {
-				this.currentTarget.heal(1F);
-				this.absorbedHealth--;
-				if (this.absorbedHealth <= 0F) {
-					this.setDead();
-					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
+					if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() + 1)) {
+						this.setAbsorbing(false);
+						this.currentTarget = this.owningEntity;
+					}
+				} else {
+					this.currentTarget.heal(1F);
+					this.absorbedHealth--;
+					if (this.absorbedHealth <= 0F) {
+						this.setDead();
+						this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
+					}
 				}
 			}
 		} else {
