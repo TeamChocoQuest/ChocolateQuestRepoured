@@ -33,6 +33,7 @@ public class EntityCalamityCrystal extends Entity {
 
 	private EntityLiving owningEntity;
 	private EntityLivingBase currentTarget;
+	public int innerRotation;
 	
 	private int noTargetTicks = 0;
 	private static final int MAX_NO_TARGET_TICKS = 100;
@@ -48,6 +49,7 @@ public class EntityCalamityCrystal extends Entity {
 		super(worldIn);
 		this.preventEntitySpawning = true;
 		this.setSize(2.0F, 2.0F);
+		this.innerRotation = this.rand.nextInt(100000);
 	}
 
 	public EntityCalamityCrystal(World world, EntityLiving owningEntity, double x, double y, double z) {
@@ -95,6 +97,8 @@ public class EntityCalamityCrystal extends Entity {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
+		
+		++this.innerRotation;
 
 		//Following code must not be run on the client
 		if(this.world.isRemote) {
