@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.boss;
 
+import net.minecraft.block.BlockWeb;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -49,6 +50,7 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
+import team.cqr.cqrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -168,6 +170,19 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 			if (this.lavaCounterAttackCooldown > 0) {
 				this.lavaCounterAttackCooldown--;
+			}
+			
+			//Anti cobweb stuff
+			if(this.isInWeb || this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockWeb) {
+				if(this.hasAttackTarget()) {
+					this.world.setBlockToAir(this.getPosition());
+					EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this, this.getEntityWorld());
+					illusion.setPosition(this.posX, this.posY, this.posZ);
+					this.world.spawnEntity(illusion);
+					
+					this.teleportBehindEntity(this.getAttackTarget());
+					this.attackEntityAsMob(this.getAttackTarget());
+				}
 			}
 
 		} else if (this.world.isRemote) {
