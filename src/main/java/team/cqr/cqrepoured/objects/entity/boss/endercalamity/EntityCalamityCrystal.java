@@ -126,13 +126,14 @@ public class EntityCalamityCrystal extends Entity {
 							this.setBeamTarget(null);
 						}
 					}
-				} else {
-					this.currentTarget.heal(1F);
-					this.absorbedHealth--;
-					if (this.absorbedHealth <= 0F) {
-						this.setDead();
-						this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
-					}
+				}
+			}
+			if(!this.isAbsorbing() && this.owningEntity != null) {
+				this.owningEntity.heal(1F);
+				this.absorbedHealth--;
+				if (this.absorbedHealth <= 0F) {
+					this.setDead();
+					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
 				}
 			}
 		} else {
@@ -159,12 +160,16 @@ public class EntityCalamityCrystal extends Entity {
 				this.currentTarget = null;
 				this.setBeamTarget(null);
 			}
+			else if(this.getDistance(this.currentTarget) >= 3* EXPLOSION_EFFECT_RADIUS) {
+				this.currentTarget = null;
+				this.setBeamTarget(null);
+			}
 		}
 		// Our old target was not good, we need a new one
 		if (this.currentTarget == null) {
 			// DONE: Create faction based predicate that checks for entities, also check their health
-			Vec3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
-			Vec3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			Vec3d p1 = this.getPositionVector().add(2*EXPLOSION_EFFECT_RADIUS, 2*EXPLOSION_EFFECT_RADIUS, 2*EXPLOSION_EFFECT_RADIUS);
+			Vec3d p2 = this.getPositionVector().subtract(2*EXPLOSION_EFFECT_RADIUS, 2*EXPLOSION_EFFECT_RADIUS, 2*EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> this.doesEntityFitForAbsorbing(input));
 			if (!affectedEntities.isEmpty()) {
