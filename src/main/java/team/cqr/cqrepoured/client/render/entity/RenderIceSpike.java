@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.client.render.entity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.ModelIceSpike;
 import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
@@ -32,6 +33,10 @@ public class RenderIceSpike extends Render<EntityIceSpike> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityIceSpike p_110775_1_) {
 		return TEXTURE;
+	}
+	
+	@Override
+	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
 	}
 
 }

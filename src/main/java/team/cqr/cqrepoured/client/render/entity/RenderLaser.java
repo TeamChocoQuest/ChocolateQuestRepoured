@@ -119,5 +119,9 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
 		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
+	
+	@Override
+	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
+	}
 
 }
