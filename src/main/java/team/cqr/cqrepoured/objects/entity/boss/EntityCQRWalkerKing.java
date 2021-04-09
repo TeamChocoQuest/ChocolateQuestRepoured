@@ -18,10 +18,13 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -53,6 +56,7 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
 import team.cqr.cqrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
@@ -324,6 +328,28 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		if (CQRConfig.bosses.harderWalkerKing && !this.world.isRemote) {
+			
+			//How about killing the one who tries with the axe?
+			//Maybe move this whole ability to the king shield itself??
+			ItemStack shieldStack = this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+			if(amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ItemShield) {
+				if (source.getImmediateSource() instanceof EntityLivingBase /*&& (source.getImmediateSource() instanceof EntityPlayer)*/ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+					if(DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
+						Vec3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
+						v = v.add(0,0.75, 0);
+						
+						EntityLivingBase attacker = (EntityLivingBase) source.getImmediateSource();
+						attacker.motionX = v.x;
+						attacker.motionY = v.y;
+						attacker.motionZ = v.z;
+						attacker.velocityChanged = true;
+						this.swingArm(EnumHand.OFF_HAND);
+						
+						return false;
+					}
+				}
+			}
+			
 			if (this.getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
 				// Revenge Attack
 				if (this.getRNG().nextDouble() < 0.7) {
