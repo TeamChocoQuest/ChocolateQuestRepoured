@@ -46,6 +46,7 @@ import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUp
 import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityHealing;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
@@ -171,6 +172,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.blockThrowerAI = new BossAIBlockThrower(this);
 		this.tasks.addTask(6, blockThrowerAI);
 		
+		this.tasks.addTask(6, new BossAICalamityHealing(this));
 		this.tasks.addTask(8, new BossAISummonMinions(this));
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
 		this.tasks.addTask(7, new BossAIRandomTeleportEyes(this));
