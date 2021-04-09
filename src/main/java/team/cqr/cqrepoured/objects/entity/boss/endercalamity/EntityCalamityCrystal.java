@@ -135,6 +135,8 @@ public class EntityCalamityCrystal extends Entity {
 					this.setDead();
 					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
 				}
+			} else if(!this.isAbsorbing()) {
+				this.currentTarget = null;
 			}
 		} else {
 			this.noTargetTicks++;
