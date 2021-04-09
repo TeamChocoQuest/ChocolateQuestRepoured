@@ -178,21 +178,25 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			
 			//Anti cobweb stuff
 			if(this.isInWeb || this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockWeb) {
-				if(this.hasAttackTarget()) {
-					this.world.setBlockToAir(this.getPosition());
-					EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this, this.getEntityWorld());
-					illusion.setPosition(this.posX, this.posY, this.posZ);
-					this.world.spawnEntity(illusion);
-					
-					this.teleportBehindEntity(this.getAttackTarget());
-					this.attackEntityAsMob(this.getAttackTarget());
-				}
+				handleInWeb();
 			}
 
 		} else if (this.world.isRemote) {
 			this.active = false;
 		}
 		super.onLivingUpdate();
+	}
+
+	private void handleInWeb() {
+		if(this.hasAttackTarget()) {
+			this.world.setBlockToAir(this.getPosition());
+			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this, this.getEntityWorld());
+			illusion.setPosition(this.posX, this.posY, this.posZ);
+			this.world.spawnEntity(illusion);
+			
+			this.teleportBehindEntity(this.getAttackTarget());
+			this.attackEntityAsMob(this.getAttackTarget());
+		}
 	}
 
 	@Override
@@ -361,6 +365,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
 
+	@Override
+	public void setInWeb() {
+		super.setInWeb();
+		this.handleInWeb();
+	}
+	
 	@Override
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
 		if (!CQRConfig.bosses.harderWalkerKing) {
