@@ -11,10 +11,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.models.entities.ModelCalamityCrystal;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
+import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 
-	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation("textures/entity/endercrystal/endercrystal.png");
+	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/calamity_crystal.png");
 	private final ModelBase modelEnderCrystal = new ModelCalamityCrystal(0.0F);
 
 	public RenderCalamityCrystal(RenderManager renderManager) {
