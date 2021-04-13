@@ -364,12 +364,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
-
-	@Override
-	public void setInWeb() {
-		super.setInWeb();
-		this.handleInWeb();
-	}
 	
 	@Override
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
