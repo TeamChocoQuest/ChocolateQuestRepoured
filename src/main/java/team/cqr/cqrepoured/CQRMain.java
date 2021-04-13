@@ -200,7 +200,7 @@ public class CQRMain {
 
 		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "1.0.0");
-		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.0.1");
 		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "1.0.0");
