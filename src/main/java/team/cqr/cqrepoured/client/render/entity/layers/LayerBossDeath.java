@@ -15,11 +15,17 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
 	private final int red;
 	private final int green;
 	private final int blue;
+	private final float raySize;
 
 	public LayerBossDeath(int red, int green, int blue) {
+		this(red, green, blue, 20F);
+	}
+
+	public LayerBossDeath(int red, int green, int blue, float raySize) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
+		this.raySize = raySize;
 	}
 
 	@Override
@@ -53,8 +59,8 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
 				GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 				GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(random.nextFloat() * 360.0F + f * 90.0F, 0.0F, 0.0F, 1.0F);
-				float f2 = random.nextFloat() * 20.0F + 5.0F + f1 * 10.0F;
-				float f3 = random.nextFloat() * 2.0F + 1.0F + f1 * 2.0F;
+				float f2 = random.nextFloat() * this.raySize + (this.raySize / 4) + f1 * (this.raySize / 2F);
+				float f3 = random.nextFloat() * (this.raySize / 10F) + 1.0F + f1 * (this.raySize / 10F);
 				bufferbuilder.begin(6, DefaultVertexFormats.POSITION_COLOR);
 				bufferbuilder.pos(0.0D, 0.0D, 0.0D).color(this.red, this.green, this.blue, (int) (255.0F * (1.0F - f1))).endVertex();
 				bufferbuilder.pos(-0.866D * (double) f3, (double) f2, (double) (-0.5F * f3)).color(this.red, this.green, this.blue, 0).endVertex();
