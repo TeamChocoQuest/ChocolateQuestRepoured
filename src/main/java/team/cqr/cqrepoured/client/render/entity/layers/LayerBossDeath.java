@@ -8,9 +8,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityLivingBase;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
-public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
+public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 
 	private final int red;
 	private final int green;
@@ -27,14 +28,22 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
 		this.blue = blue;
 		this.raySize = raySize;
 	}
+	
+	protected int getAnimationTick(EntityLivingBase entity) {
+		if(entity instanceof AbstractEntityCQRBoss) {
+			return ((AbstractEntityCQRBoss)entity).deathTicks;
+		}
+		return entity.ticksExisted;
+	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQRBoss entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		if (entitylivingbaseIn.deathTicks > 0) {
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		int ticks = this.getAnimationTick(entitylivingbaseIn);
+		if (ticks > 0) {
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder bufferbuilder = tessellator.getBuffer();
 			RenderHelper.disableStandardItemLighting();
-			float f = ((float) entitylivingbaseIn.deathTicks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
+			float f = ((float) ticks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
 			float f1 = 0.0F;
 
 			if (f > 0.8F) {
