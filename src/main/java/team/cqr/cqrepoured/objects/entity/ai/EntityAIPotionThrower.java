@@ -6,7 +6,6 @@ import java.util.Set;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemLingeringPotion;
 import net.minecraft.item.ItemSplashPotion;
@@ -74,15 +73,10 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged {
 						indx = this.entity.getRNG().nextInt(inventory.getSlots());
 						usedIDs.add(indx);
 						st = inventory.getStackInSlot(indx);
-						st = inventory.extractItem(indx, st.getCount(), false);
 						counter++;
 					}
-					boolean removeBag = st == null || st.isEmpty() || st == ItemStack.EMPTY;
 					if (st != null && !st.isEmpty()) {
 						ItemStack potion = st.copy();
-						if (CQRConfig.mobs.potionsInBagAreSingleUse) {
-							st.shrink(1);
-						}
 
 						// Now throw it
 						if (potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {
@@ -91,24 +85,19 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged {
 							double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
 							double z = attackTarget.posZ - this.entity.posZ;
 							double distance = Math.sqrt(x * x + z * z);
-							proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
+							proj.shoot(x, y + distance * 0.08D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
 							proj.motionX += this.entity.motionX;
 							proj.motionZ += this.entity.motionZ;
 							if (!this.entity.onGround) {
 								proj.motionY += this.entity.motionY;
 							}
+							proj.velocityChanged = true;
 							this.entity.world.spawnEntity(proj);
 							this.entity.swingArm(EnumHand.OFF_HAND);
 							this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 						}
 					}
 
-					if (removeBag) {
-						// Remove the bag
-						this.entity.entityDropItem(stack, 1);
-						this.entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-					}
-					
 					this.prevTimeAttacked = this.entity.ticksExisted;
 				}
 			}

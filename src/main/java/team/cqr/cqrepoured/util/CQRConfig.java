@@ -428,7 +428,6 @@ public class CQRConfig {
 		public int looterAIStealableItems = 4;
 
 		public boolean offhandPotionsAreSingleUse = true;
-		public boolean potionsInBagAreSingleUse = true;
 
 		public boolean enableDamageCapForNonBossMobs = false;
 		public float maxUncappedDamageForNonBossMobs = 50F;
