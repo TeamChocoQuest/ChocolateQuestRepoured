@@ -1,13 +1,5 @@
 package team.cqr.cqrepoured.objects.items;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.input.Keyboard;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.init.SoundEvents;
@@ -20,18 +12,15 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItemProvider;
 import team.cqr.cqrepoured.util.Reference;
 
-public class ItemAlchemyBag extends Item {
+public class ItemAlchemyBag extends ItemLore {
 
 	public ItemAlchemyBag() {
 		this.setMaxStackSize(1);
@@ -67,16 +56,6 @@ public class ItemAlchemyBag extends Item {
 			
 		}
 		return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.alchemy_bag.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
 	}
 
 	@Override

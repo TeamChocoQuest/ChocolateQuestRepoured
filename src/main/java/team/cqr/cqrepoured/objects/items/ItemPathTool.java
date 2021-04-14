@@ -8,7 +8,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -28,7 +27,7 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
 import team.cqr.cqrepoured.util.Reference;
 
-public class ItemPathTool extends Item {
+public class ItemPathTool extends ItemLore {
 
 	public ItemPathTool() {
 		this.setMaxStackSize(1);
