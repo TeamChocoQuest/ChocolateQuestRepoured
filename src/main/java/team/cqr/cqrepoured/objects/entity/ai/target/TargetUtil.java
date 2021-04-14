@@ -23,6 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.factions.CQRFaction;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.EntityCQRMountBase;
 
 public class TargetUtil {
@@ -180,6 +181,13 @@ public class TargetUtil {
 			}
 		}
 
+	}
+	
+	public static boolean areInSameParty(Entity ent1, Entity ent2) {
+		if(ent1 instanceof AbstractEntityCQR) {
+			return (ent2 instanceof AbstractEntityCQR && ((AbstractEntityCQR)ent2).getLeader() == ((AbstractEntityCQR) ent1).getLeader());
+		}
+		return false;
 	}
 
 }

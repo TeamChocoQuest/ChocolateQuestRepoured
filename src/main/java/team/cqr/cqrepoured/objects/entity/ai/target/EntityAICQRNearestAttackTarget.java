@@ -4,11 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.factions.CQRFaction;
+import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
@@ -84,6 +86,19 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (faction == null) {
 			return false;
 		}
+		if(this.entity.hasLeader()) {
+			if(this.entity.getLeader() instanceof EntityPlayer) {
+				if(!TargetUtil.areInSameParty(possibleTarget, entity)) {
+					return false;
+				}
+				CQRFaction enemyFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
+				if(enemyFaction != null) {
+					if(!enemyFaction.isAlly(this.entity.getLeader())) {
+						return false;
+					}
+				}
+			}
+		}
 		if (!faction.isAlly(possibleTarget) && possibleTarget != this.entity.getLeader()) {
 			return false;
 		}
@@ -100,6 +115,21 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		CQRFaction faction = this.entity.getFaction();
 		if (faction == null) {
 			return false;
+		}
+		if(TargetUtil.areInSameParty(possibleTarget, entity)) {
+			return false;
+		}
+		if(this.entity.hasLeader()) {
+			if(this.entity.getLeader() instanceof EntityPlayer) {
+				if(possibleTarget.getAttackingEntity() == this.entity.getLeader()) {
+					return true;
+				}
+				CQRFaction enemyFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
+				if(enemyFaction != null) {
+					 return enemyFaction.isEnemy(this.entity.getLeader());
+				}
+				return false;
+			}
 		}
 		if (!faction.isEnemy(possibleTarget)) {
 			return false;
