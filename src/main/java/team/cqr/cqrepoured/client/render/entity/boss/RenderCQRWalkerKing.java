@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerBossDeath;
+import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingEyes;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.util.Reference;
@@ -16,6 +17,7 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 	public RenderCQRWalkerKing(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, "boss/walker_king", true);
 
+		this.addLayer(new LayerGlowingEyes<EntityCQRWalkerKing>(this, new ResourceLocation(Reference.MODID, "textures/entity/boss/walker_king_eyes.png")));
 		this.addLayer(new LayerBossDeath(191, 0, 255));
 	}
 
