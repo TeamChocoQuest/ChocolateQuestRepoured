@@ -9,7 +9,7 @@ public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnder
 
 	private final int MAX_COOLDOWN;
 	private int cooldown = 40;
-	private final double HOVER_DISTANCE = 8D;
+	private final double HOVER_DISTANCE = 12D;
 
 	public BossAITeleportAroundHome(EntityCQREnderCalamity entity, final int cooldownTime) {
 		super(entity);
