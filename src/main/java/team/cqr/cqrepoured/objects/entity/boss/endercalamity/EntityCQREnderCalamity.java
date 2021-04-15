@@ -58,6 +58,7 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 // DONE: Move the minion & lightning handling to a AI class, it is cleaner that way
 // DONE: Create helper classes to control arm management (status, animations, etc)
@@ -434,6 +435,19 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public boolean isShieldActive() {
 		return this.dataManager.get(SHIELD_ACTIVE);
 	}
+	
+	private boolean canSphereDestroyShield(ProjectileEnergyOrb orb) {
+		if(orb.getDeflectionCount() >= 5) {
+			return true;
+		}
+		if(orb.getDeflectionCount() < this.world.getDifficulty().getId()) {
+			return false;
+		}
+		
+		double chance = (1.0D - (1.0D / (double)orb.getDeflectionCount()));
+		return DungeonGenUtils.percentageRandom(chance, this.getRNG());
+		
+	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
@@ -441,11 +455,24 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 		// Projectile attack
-		if (source.getImmediateSource() instanceof EntityEnergyOrb || source.getTrueSource() instanceof EntityEnergyOrb) {
+		if (source.getImmediateSource() instanceof ProjectileEnergyOrb) {
 			// TODO: Hit by energy ball
 			/*
 			 * If already hit often enough, Spawn explosion, then teleport to center and be unconscious
 			 */
+			if(this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
+				
+				this.dataManager.set(SHIELD_ACTIVE, true);
+				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_STUNNED.getPhaseObject());
+				
+				this.world.createExplosion(this, posX, posY, posZ, 3, false);
+				this.world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, getSoundCategory(), 10.0F, 1.0F, false);
+				
+				return true;
+			} else {
+				((ProjectileEnergyOrb) source.getImmediateSource()).attackEntityFrom(DamageSource.causeThornsDamage(this), 1);
+			}
+			
 			return false;
 		}
 
@@ -492,7 +519,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 				if (this.getRNG().nextBoolean()) {
 					this.dataManager.set(SHIELD_ACTIVE, true);
-					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_STUNNED.getPhaseObject());
+					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 				}
 			}
 			return true;

@@ -26,6 +26,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalam
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
@@ -99,6 +100,7 @@ public class CQREntities {
 	public static final EntityEntry PROJECTILE_WEB = Null();
 	public static final EntityEntry PROJECTILE_THROWN_BLOCK = Null();
 	public static final EntityEntry PROJECTILE_HOMING_ENDER_EYE = Null();
+	public static final EntityEntry PROJECTILE_ENERGY_ORB = Null();
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
@@ -171,6 +173,7 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(ProjectileWeb.class, "projectile_web", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileThrownBlock.class, "projectile_thrown_block", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHomingEnderEye.class, "projectile_homing_ender_eye", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileEnergyOrb.class, "projectile_energy_orb", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),

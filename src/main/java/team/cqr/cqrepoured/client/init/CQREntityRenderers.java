@@ -57,6 +57,7 @@ import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfish;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfishGreen;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfishRed;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderPollo;
+import team.cqr.cqrepoured.client.render.projectile.RenderEnergyOrb;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
@@ -91,6 +92,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalam
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
@@ -159,7 +161,7 @@ public class CQREntityRenderers {
 	public static void registerRenderers() {
 		registerTileRenderers();
 		registerProjectileAndMiscRenderers();
-		if(CQRConfig.isAprilFoolsEnabled()) {
+		if (CQRConfig.isAprilFoolsEnabled()) {
 			registerAprilFoolsRenderer();
 		} else {
 			registerEntityRenderers();
@@ -168,7 +170,7 @@ public class CQREntityRenderers {
 		registerMountRenderers();
 	}
 
-	//Registers a big chungus renderer that renders on april the first
+	// Registers a big chungus renderer that renders on april the first
 	protected static void registerAprilFoolsRenderer() {
 		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityCQR.class, RenderChungus::new);
 	}
@@ -209,6 +211,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, RenderIceSpike::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiderEgg.class, RenderSpiderEgg::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCalamityCrystal.class, RenderCalamityCrystal::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileEnergyOrb.class, RenderEnergyOrb::new);
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}
@@ -237,7 +240,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);
 	}
-	
+
 	protected static void registerMountRenderers() {
 		// Mounts
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
@@ -253,7 +256,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);
 
 		// Giant Tortoise
-		//RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
+		// RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoiseGecko::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, RenderCQRGiantTortoisePart::new);
 
@@ -288,7 +291,7 @@ public class CQREntityRenderers {
 		// Geckolib
 		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityEndLaserTargeting.class, RenderEndLaser<AbstractEntityLaser>:: new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityEndLaserTargeting.class, RenderEndLaser<AbstractEntityLaser>::new);
 	}
 
 }
