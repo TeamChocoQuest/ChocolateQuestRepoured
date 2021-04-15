@@ -20,7 +20,7 @@ public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 
 	public RenderEnergyOrb(RenderManager renderManager) {
 		super(renderManager);
-		this.rayHelper = new BossDeathRayHelper(255, 255, 0, 1);
+		this.rayHelper = new BossDeathRayHelper(255, 255, 0, 1, 15);
 	}
 
 	@Override
@@ -67,6 +67,7 @@ public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
 		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translate(0.0F, 0.5F, 0.0F);
 		int ticks = entityIn.ticksExisted + 200;
 		if (ticks > 0) {
 			this.rayHelper.renderRays(ticks, partialTicks);

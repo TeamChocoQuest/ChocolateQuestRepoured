@@ -21,6 +21,7 @@ public class ModelEnergyOrb extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
+		GlStateManager.translate(0.0F, 0.5F, 0.0F);
 
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
 		GlStateManager.rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
