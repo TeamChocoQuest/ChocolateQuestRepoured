@@ -20,7 +20,7 @@ public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 
 	public RenderEnergyOrb(RenderManager renderManager) {
 		super(renderManager);
-		this.rayHelper = new BossDeathRayHelper(255, 255, 0, 4);
+		this.rayHelper = new BossDeathRayHelper(255, 255, 0, 1);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
 		}
-
+		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
@@ -64,10 +64,14 @@ public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 	
 	@Override
 	public void renderMultipass(ProjectileEnergyOrb entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+		GlStateManager.translate((float) x, (float) y, (float) z);
 		int ticks = entityIn.ticksExisted + 200;
 		if (ticks > 0) {
 			this.rayHelper.renderRays(ticks, partialTicks);
 		}
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
 	}
 }

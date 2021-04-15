@@ -15,6 +15,7 @@ public class BossDeathRayHelper {
 	private final int green;
 	private final int blue;
 	private final float raySize;
+	private final int maxRays = 30;
 	
 	public BossDeathRayHelper(int red, int green, int blue, float raySize) {
 		this.red = red;
@@ -28,6 +29,7 @@ public class BossDeathRayHelper {
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		RenderHelper.disableStandardItemLighting();
 		float f = ((float) ticks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
+		//f = Math.min(f, 1F);
 		float f1 = 0.0F;
 
 		if (f > 0.8F) {
@@ -48,7 +50,9 @@ public class BossDeathRayHelper {
 		GlStateManager.pushMatrix();
 		// GlStateManager.translate(0.0F, -entitylivingbaseIn.height / 2, 0.0F);
 
-		for (int i = 0; (float) i < (f + f * f) / 2.0F * 60.0F; ++i) {
+		float rays = (f + f * f) / 2.0F * 60.0F;
+		rays = Math.min(maxRays, rays);
+		for (int i = 0; (float) i < rays; ++i) {
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);

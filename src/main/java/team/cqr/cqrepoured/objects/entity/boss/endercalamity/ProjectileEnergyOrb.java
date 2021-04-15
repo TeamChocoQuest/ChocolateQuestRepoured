@@ -91,10 +91,10 @@ public class ProjectileEnergyOrb extends EntityFireball {
 				}
 				this.applyEnchantments(this.shootingEntity, result.entityHit);
 			}
-
+			this.world.createExplosion(this.shootingEntity, posX, posY, posZ, 0.0F, false);
 			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shootingEntity);
-			entityareaeffectcloud.setParticle(EnumParticleTypes.REDSTONE);
+			entityareaeffectcloud.setParticle(EnumParticleTypes.SPELL_MOB);
 			entityareaeffectcloud.setColor(0xFFFF26);// Yellow
 			entityareaeffectcloud.setRadius(4F);
 			entityareaeffectcloud.setDuration(400);

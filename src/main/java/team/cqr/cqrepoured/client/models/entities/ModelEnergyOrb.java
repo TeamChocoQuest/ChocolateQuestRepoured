@@ -12,7 +12,7 @@ public class ModelEnergyOrb extends ModelBase {
 
 	public ModelEnergyOrb(float p_i1170_1_) {
 		this.cube = new ModelRenderer(this, "cube");
-		this.cube.setTextureOffset(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8, 8, 8);
+		this.cube.setTextureOffset(0, 0).addBox(-8.0F, -8.0F, -8.0F, 16, 16, 16);
 	}
 
 	/**
@@ -21,13 +21,11 @@ public class ModelEnergyOrb extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
-		GlStateManager.scale(2.0F, 2.0F, 2.0F);
-		GlStateManager.translate(0.0F, -0.5F, 0.0F);
 
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
 		GlStateManager.rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
 		GlStateManager.rotate(limbSwingAmount, 0.0F, 1.0F, 0.0F);
-		float color = 0.5F + (float) (0.25F * (1+Math.sin(entity.ticksExisted)));
+		float color = 0.5F + (float) (0.25F * (1+Math.sin(entity.ticksExisted / Math.PI)));
 		GlStateManager.color(color, color, 0.0F);
 		this.cube.render(scale);
 		GlStateManager.popAttrib();
