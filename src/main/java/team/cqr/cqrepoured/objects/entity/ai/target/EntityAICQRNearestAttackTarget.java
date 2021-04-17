@@ -87,6 +87,36 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (faction == null) {
 			return false;
 		}
+		EntityLivingBase leader = this.entity.getLeader();
+		if (leader == null) {
+			// no leader
+			// assist allies
+			if (!faction.isAlly(possibleTarget)) {
+				return false;
+			}
+		} else if (!(leader instanceof EntityPlayer)) {
+			// non-player leader
+			// assist leader, cqr entities with same leader and allies
+			if (possibleTarget != leader && !faction.isAlly(possibleTarget)) {
+				if (!(possibleTarget instanceof AbstractEntityCQR)) {
+					return false;
+				}
+				if (leader != ((AbstractEntityCQR) possibleTarget).getLeader()) {
+					return false;
+				}
+			}
+		} else {
+			// player leader
+			// assist leader and cqr entities with same leader
+			if (possibleTarget != leader) {
+				if (!(possibleTarget instanceof AbstractEntityCQR)) {
+					return false;
+				}
+				if (leader != ((AbstractEntityCQR) possibleTarget).getLeader()) {
+					return false;
+				}
+			}
+		}
 		if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 			return false;
 		}
