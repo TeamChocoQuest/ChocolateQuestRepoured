@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.objects.entity.ai.target;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -86,22 +87,6 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (faction == null) {
 			return false;
 		}
-		if(this.entity.hasLeader()) {
-			if(this.entity.getLeader() instanceof EntityPlayer) {
-				if(!TargetUtil.areInSameParty(possibleTarget, entity)) {
-					return false;
-				}
-				CQRFaction enemyFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
-				if(enemyFaction != null) {
-					if(!enemyFaction.isAlly(this.entity.getLeader())) {
-						return false;
-					}
-				}
-			}
-		}
-		if (!faction.isAlly(possibleTarget) && possibleTarget != this.entity.getLeader()) {
-			return false;
-		}
 		if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 			return false;
 		}
@@ -116,26 +101,42 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (faction == null) {
 			return false;
 		}
-		if(TargetUtil.areInSameParty(possibleTarget, entity)) {
-			return false;
-		}
-		if(this.entity.hasLeader()) {
-			if(this.entity.getLeader() instanceof EntityPlayer) {
-				if(possibleTarget.getAttackingEntity() == this.entity.getLeader()) {
-					return true;
-				}
-				CQRFaction enemyFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
-				if(enemyFaction != null) {
-					 return enemyFaction.isEnemy(this.entity.getLeader());
-				}
+		EntityLivingBase leader = this.entity.getLeader();
+		if (leader == null) {
+			// no leader
+			// attack enemies
+			if (!faction.isEnemy(possibleTarget)) {
 				return false;
 			}
-		}
-		if (!faction.isEnemy(possibleTarget)) {
-			return false;
-		}
-		if (possibleTarget == this.entity.getLeader()) {
-			return false;
+		} else if (!(leader instanceof EntityPlayer)) {
+			// non-player leader
+			// attack enemies except leader and cqr entities with same leader
+			if (possibleTarget == leader) {
+				return false;
+			}
+			if (possibleTarget instanceof AbstractEntityCQR && leader == ((AbstractEntityCQR) possibleTarget).getLeader()) {
+				return false;
+			}
+			if (!faction.isEnemy(possibleTarget)) {
+				return false;
+			}
+		} else {
+			// player leader
+			// attack entities which count leader as their enemy except leader and cqr entities with same leader
+			if (possibleTarget == leader) {
+				return false;
+			}
+			if (possibleTarget instanceof AbstractEntityCQR && leader == ((AbstractEntityCQR) possibleTarget).getLeader()) {
+				return false;
+			}
+			Entity e = possibleTarget.getAttackingEntity();
+			if (e == leader) {
+				return true;
+			}
+			CQRFaction targetFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
+			if (targetFaction != null && !targetFaction.isEnemy(leader)) {
+				return false;
+			}
 		}
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
 			return false;
