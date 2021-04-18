@@ -1443,7 +1443,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		double sightRange = 32.0D;
 		sightRange *= 0.6D + 0.4D * (double) this.world.getLight(new BlockPos(target)) / 15.0D;
 		sightRange *= this.isPotionActive(MobEffects.BLINDNESS) ? 0.5D : 1.0D;
-		return this.getDistance(target) <= sightRange;
+		return this.getDistanceSq(target) <= sightRange * sightRange;
 	}
 
 	public ItemStack getHeldItemWeapon() {
