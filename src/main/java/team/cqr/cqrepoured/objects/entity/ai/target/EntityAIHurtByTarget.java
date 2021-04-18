@@ -107,7 +107,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 			}
 		}
 		EntityLivingBase oldAttackTarget = entityLiving.getAttackTarget();
-		if (oldAttackTarget != null && entityLiving.getEntitySenses().canSee(oldAttackTarget) && entityLiving.getDistance(oldAttackTarget) < entityLiving.getDistance(this.attackTarget)) {
+		if (oldAttackTarget != null && entityLiving.getEntitySenses().canSee(oldAttackTarget) && entityLiving.getDistanceSq(oldAttackTarget) < entityLiving.getDistanceSq(this.attackTarget)) {
 			return false;
 		}
 		entityLiving.setAttackTarget(this.attackTarget);
