@@ -212,7 +212,7 @@ public class BlockInfoSpawner extends AbstractBlockInfo {
 
 		if (entity != null) {
 			BlockPos pos = this.getTransformedBlockPos(dungeonPartPos, settings.getMirror(), settings.getRotation());
-			entity.setPosition(pos.getX(), pos.getY() + 1.0D, pos.getZ());
+			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 
 			if (entity instanceof EntityLiving) {
 				if (CQRConfig.general.mobsFromCQSpawnerDontDespawn) {
