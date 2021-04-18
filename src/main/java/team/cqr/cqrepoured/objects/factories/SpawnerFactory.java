@@ -252,7 +252,7 @@ public abstract class SpawnerFactory {
 	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity, boolean removeUUID) {
 		NBTTagCompound entityCompound = new NBTTagCompound();
 		if (entity instanceof AbstractEntityCQR) {
-			((AbstractEntityCQR) entity).onPutInSpawner();
+			//((AbstractEntityCQR) entity).onPutInSpawner();
 		}
 		entity.writeToNBTOptional(entityCompound);
 		if (removeUUID) {

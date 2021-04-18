@@ -1621,18 +1621,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(SHOULDER_ENTITY, tag);
 	}
 
-	public void onPutInSpawner() {
-		if (this.hasHomePositionCQR() && this.getHomePositionCQR() != null) {
-			// Recalculate the path positions to my new home
-			BlockPos homeNew = new BlockPos(this);
-			BlockPos v = homeNew.subtract(this.getHomePositionCQR());
-			for (Path.PathNode node : this.path.getNodes()) {
-				node.setPos(node.getPos().subtract(v));
-			}
-			this.setHomePositionCQR(homeNew);
-		}
-	}
-
 	public boolean canUseSpinToWinAttack() {
 		return true;
 	}
