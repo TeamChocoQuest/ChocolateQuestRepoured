@@ -498,7 +498,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", this.usedPotions);
 		compound.setFloat("sizeScaling", this.sizeScaling);
-		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
+		//compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
 
@@ -542,7 +542,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
 		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
-		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
+		//this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.setHealthScale(compound.hasKey("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
 
