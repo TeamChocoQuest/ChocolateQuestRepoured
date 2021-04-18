@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EntitySelectors;
@@ -160,8 +161,14 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 				return false;
 			}
 			CQRFaction targetFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
-			if (targetFaction != null && !targetFaction.isEnemy(leader)) {
-				return false;
+			if (targetFaction != null) {
+				if (!targetFaction.isEnemy(leader)) {
+					return false;
+				}
+			} else {
+				if (!(possibleTarget instanceof EntityMob)) {
+					return false;
+				}
 			}
 		}
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
