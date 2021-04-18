@@ -159,10 +159,6 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			if (possibleTarget instanceof AbstractEntityCQR && leader == ((AbstractEntityCQR) possibleTarget).getLeader()) {
 				return false;
 			}
-			Entity e = possibleTarget.getAttackingEntity();
-			if (e == leader) {
-				return true;
-			}
 			CQRFaction targetFaction = FactionRegistry.instance().getFactionOf(possibleTarget);
 			if (targetFaction != null && !targetFaction.isEnemy(leader)) {
 				return false;
