@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.util.handlers;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,6 +47,8 @@ import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.objects.items.IFakeWeapon;
+import team.cqr.cqrepoured.objects.items.ISupportWeapon;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.lootchests.LootTableLoader;
 import team.cqr.cqrepoured.util.CQRConfig;
@@ -246,6 +249,70 @@ public class EventsHandler {
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
 			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLeaderAttackedEvent(LivingAttackEvent event) {
+		if (event.getEntity().world.isRemote) {
+			return;
+		}
+		if (!(event.getEntity() instanceof EntityPlayer)) {
+			return;
+		}
+		if (!(event.getSource().getTrueSource() instanceof EntityLivingBase)) {
+			return;
+		}
+		EntityPlayer player = (EntityPlayer) event.getEntity();
+		EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
+		double x = player.posX;
+		double y = player.posY + player.eyeHeight;
+		double z = player.posZ;
+		double r = 8.0D;
+		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
+		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> {
+			return e.getLeader() == player;
+		})) {
+			ItemStack stack = entity.getHeldItemMainhand();
+			if (stack.getItem() instanceof ISupportWeapon) {
+				continue;
+			}
+			if (stack.getItem() instanceof IFakeWeapon) {
+				continue;
+			}
+			if (entity.hasAttackTarget()) {
+				continue;
+			}
+			entity.setAttackTarget(attacker);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLeaderAttackingEvent(AttackEntityEvent event) {
+		if (event.getEntityPlayer().world.isRemote) {
+			return;
+		}
+		if (!(event.getTarget() instanceof EntityLivingBase)) {
+			return;
+		}
+		EntityPlayer player = event.getEntityPlayer();
+		EntityLivingBase target = (EntityLivingBase) event.getTarget();
+		double x = player.posX;
+		double y = player.posY + player.eyeHeight;
+		double z = player.posZ;
+		double r = 8.0D;
+		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
+		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> {
+			return e.getLeader() == player;
+		})) {
+			ItemStack stack = entity.getHeldItemMainhand();
+			if (stack.getItem() instanceof ISupportWeapon) {
+				continue;
+			}
+			if (stack.getItem() instanceof IFakeWeapon) {
+				continue;
+			}
+			entity.setAttackTarget(target);
 		}
 	}
 
