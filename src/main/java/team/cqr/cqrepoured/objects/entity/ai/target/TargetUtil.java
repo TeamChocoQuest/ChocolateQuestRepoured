@@ -11,10 +11,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,6 +25,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.factions.CQRFaction;
+import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.EntityCQRMountBase;
 
@@ -188,6 +191,82 @@ public class TargetUtil {
 			return (ent2 instanceof AbstractEntityCQR && ((AbstractEntityCQR)ent2).getLeader() == ((AbstractEntityCQR) ent1).getLeader());
 		}
 		return false;
+	}
+
+	public static boolean isAllyCheckingLeaders(AbstractEntityCQR entity, EntityLivingBase possibleAlly) {
+		CQRFaction faction = entity.getFaction();
+		EntityLivingBase leader = entity.getLeader();
+		if (!(leader instanceof EntityPlayer)) {
+			// non-player leader
+			if (possibleAlly == leader) {
+				return true;
+			}
+			if (faction.isAlly(possibleAlly)) {
+				return true;
+			}
+			if (possibleAlly instanceof AbstractEntityCQR) {
+				EntityLivingBase possibleAllyLeader = ((AbstractEntityCQR) possibleAlly).getLeader();
+				if (leader != null && possibleAllyLeader == leader) {
+					return true;
+				}
+				if (possibleAllyLeader instanceof EntityPlayer && faction.isAlly(possibleAllyLeader)) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			// player leader
+			if (possibleAlly == leader) {
+				return true;
+			}
+			if (possibleAlly instanceof AbstractEntityCQR && ((AbstractEntityCQR) possibleAlly).getLeader() == leader) {
+				return true;
+			}
+			return false;
+		}
+	}
+
+	public static boolean isEnemyCheckingLeaders(AbstractEntityCQR entity, EntityLivingBase possibleEnemy) {
+		CQRFaction faction = entity.getFaction();
+		EntityLivingBase leader = entity.getLeader();
+		if (!(leader instanceof EntityPlayer)) {
+			// non-player leader
+			if (possibleEnemy == leader) {
+				return false;
+			}
+			if (!faction.isEnemy(possibleEnemy)) {
+				return false;
+			}
+			if (possibleEnemy instanceof AbstractEntityCQR) {
+				EntityLivingBase possibleEnemyLeader = ((AbstractEntityCQR) possibleEnemy).getLeader();
+				if (leader != null && possibleEnemyLeader == leader) {
+					return false;
+				}
+				if (possibleEnemyLeader instanceof EntityPlayer && !faction.isEnemy(possibleEnemyLeader)) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			// player leader
+			if (possibleEnemy == leader) {
+				return false;
+			}
+			if (possibleEnemy instanceof AbstractEntityCQR && ((AbstractEntityCQR) possibleEnemy).getLeader() == leader) {
+				return false;
+			}
+			CQRFaction possibleEnemyFaction = FactionRegistry.instance().getFactionOf(possibleEnemy);
+			if (possibleEnemyFaction != null) {
+				if (!possibleEnemyFaction.isEnemy(leader)) {
+					return false;
+				}
+			} else {
+				if (!(possibleEnemy instanceof EntityMob)) {
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 
 }
