@@ -201,9 +201,6 @@ public class TargetUtil {
 			if (possibleAlly == leader) {
 				return true;
 			}
-			if (faction.isAlly(possibleAlly)) {
-				return true;
-			}
 			if (possibleAlly instanceof AbstractEntityCQR) {
 				EntityLivingBase possibleAllyLeader = ((AbstractEntityCQR) possibleAlly).getLeader();
 				if (leader != null && possibleAllyLeader == leader) {
@@ -212,6 +209,9 @@ public class TargetUtil {
 				if (possibleAllyLeader instanceof EntityPlayer && faction.isAlly(possibleAllyLeader)) {
 					return true;
 				}
+			}
+			if (faction.isAlly(possibleAlly)) {
+				return true;
 			}
 			return false;
 		} else {
@@ -234,16 +234,19 @@ public class TargetUtil {
 			if (possibleEnemy == leader) {
 				return false;
 			}
-			if (!faction.isEnemy(possibleEnemy)) {
-				return false;
-			}
 			if (possibleEnemy instanceof AbstractEntityCQR) {
 				EntityLivingBase possibleEnemyLeader = ((AbstractEntityCQR) possibleEnemy).getLeader();
 				if (leader != null && possibleEnemyLeader == leader) {
 					return false;
 				}
-				if (possibleEnemyLeader instanceof EntityPlayer && !faction.isEnemy(possibleEnemyLeader)) {
-					return false;
+				if (possibleEnemyLeader instanceof EntityPlayer) {
+					if (!faction.isEnemy(possibleEnemyLeader)) {
+						return false;
+					}
+				} else {
+					if (!faction.isEnemy(possibleEnemy)) {
+						return false;
+					}
 				}
 			}
 			return true;

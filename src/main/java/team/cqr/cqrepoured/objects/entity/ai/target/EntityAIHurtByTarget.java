@@ -159,9 +159,6 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 			if (possibleEnemy == leader) {
 				return false;
 			}
-			if (faction.isAlly(possibleEnemy)) {
-				return false;
-			}
 			if (possibleEnemy instanceof AbstractEntityCQR) {
 				EntityLivingBase possibleEnemyLeader = ((AbstractEntityCQR) possibleEnemy).getLeader();
 				if (leader != null && possibleEnemyLeader == leader) {
@@ -169,6 +166,15 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 				}
 				if (possibleEnemyLeader instanceof EntityPlayer && faction.isAlly(possibleEnemyLeader)) {
 					return false;
+				}
+				if (possibleEnemyLeader instanceof EntityPlayer) {
+					if (faction.isAlly(possibleEnemyLeader)) {
+						return false;
+					}
+				} else {
+					if (faction.isAlly(possibleEnemy)) {
+						return false;
+					}
 				}
 			}
 			return true;
