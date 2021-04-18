@@ -1229,6 +1229,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
+	public void onExportFromWorld() {
+		int x = MathHelper.floor(this.posX);
+		int y = MathHelper.floor(this.posY);
+		int z = MathHelper.floor(this.posZ);
+
+		for (Path.PathNode node : this.path.getNodes()) {
+			node.setPos(node.getPos().add(-x, -y, -z));
+		}
+	}
+
 	public void onSpawnFromCQRSpawnerInDungeon(BlockPos dungeonPos, PlacementSettings placementSettings, DungeonInhabitant mobType) {
 		this.setHomePositionCQR(new BlockPos(this));
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());

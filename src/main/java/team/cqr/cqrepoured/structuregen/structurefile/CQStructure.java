@@ -35,6 +35,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTHelper;
@@ -58,6 +59,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
@@ -388,7 +390,23 @@ public class CQStructure {
 			} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
 				this.blockInfoList.add(new BlockInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 			} else if (block == CQRBlocks.SPAWNER) {
-				this.blockInfoList.add(new BlockInfoSpawner(pos, this.writeTileEntityToNBT(tileEntity)));
+				NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
+				compound.removeTag("x");
+				compound.removeTag("y");
+				compound.removeTag("z");
+				NBTTagList items = compound.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
+				for (int i = 0; i < items.tagCount(); i++) {
+					NBTTagCompound itemTag = items.getCompoundTagAt(i);
+					NBTTagCompound itemTagCompound = itemTag.getCompoundTag("tag");
+					NBTTagCompound entityTag = itemTagCompound.getCompoundTag("EntityIn");
+					Entity entity = this.createEntityForExporting(entityTag, world, mutablePos);
+					if (entity != null) {
+						NBTTagCompound newEntityTag = new NBTTagCompound();
+						entity.writeToNBTAtomically(newEntityTag);
+						itemTagCompound.setTag("EntityIn", newEntityTag);
+					}
+				}
+				this.blockInfoList.add(new BlockInfoSpawner(pos, compound));
 			} else if (block instanceof BlockExporterChest) {
 				this.blockInfoList.add(new BlockInfoLootChest(pos, ((BlockExporterChest) block).getLootTable(world, mutablePos), state.getValue(BlockChest.FACING)));
 			} else if (block == CQRBlocks.FORCE_FIELD_NEXUS) {
@@ -403,6 +421,22 @@ public class CQStructure {
 		}
 
 		this.blockInfoList.sort(SORT_FOR_EXPORTATION);
+	}
+
+	private Entity createEntityForExporting(NBTTagCompound entityTag, World world, BlockPos pos) {
+		Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+		if (entity != null) {
+			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
+			if (entity instanceof AbstractEntityCQR) {
+				((AbstractEntityCQR) entity).onExportFromWorld();
+			}
+			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+			for (NBTBase passengerNBT : passengers) {
+				Entity passenger = this.createEntityForExporting((NBTTagCompound) passengerNBT, world, pos);
+				passenger.startRiding(entity);
+			}
+		}
+		return entity;
 	}
 
 	private NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
