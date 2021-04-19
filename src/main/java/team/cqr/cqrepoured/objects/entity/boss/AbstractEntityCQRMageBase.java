@@ -32,7 +32,9 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	public void revealIdentity() {
 		this.dataManager.set(IDENTITY_HIDDEN, false);
-		this.bossInfoServer.setName(this.getDisplayName());
+		if(this.bossInfoServer != null) {
+			this.bossInfoServer.setName(this.getDisplayName());
+		}
 	}
 
 	public boolean isIdentityHidden() {
