@@ -180,6 +180,9 @@ public class ProtectedRegionHelper {
 		}
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
+			if (!((ItemBlock) item).getBlock().canPlaceBlockOnSide(world, pos, facing)) {
+				return ((ItemBlock) item).getBlock().getDefaultState();
+			}
 			int meta = ((ItemBlock) item).getMetadata(stack.getItemDamage());
 			if (hitVec != null) {
 				return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
