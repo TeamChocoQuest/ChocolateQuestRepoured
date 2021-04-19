@@ -143,6 +143,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int lastTimeSeenAttackTarget = Integer.MIN_VALUE;
 	protected Vec3d lastPosAttackTarget = Vec3d.ZERO;
 	protected EntityAISpellHandler spellHandler;
+	private int invisibilityTick;
 
 	private CQRFaction factionInstance;
 	private CQRFaction defaultFactionInstance;
@@ -196,6 +197,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private TraderOffer trades = new TraderOffer(this);
 
 	// Sync with client
+	protected static final DataParameter<Float> INVISIBILITY = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> HAS_TARGET = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
@@ -238,6 +240,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void entityInit() {
 		super.entityInit();
 
+		this.dataManager.register(INVISIBILITY, 0.0F);
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(HAS_TARGET, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
@@ -750,6 +753,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.chooseNewRandomSpeechBubble();
 			}
 		}
+
+		this.updateInvisibility();
 	}
 
 	@Override
@@ -1663,6 +1668,36 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
 		}
 		return this.textureOverride;
+	}
+
+	public void updateInvisibility() {
+		if (!this.world.isRemote) {
+			if (this.invisibilityTick > 0) {
+				this.invisibilityTick--;
+				this.dataManager.set(INVISIBILITY, Math.min(this.dataManager.get(INVISIBILITY) + 1.0F / this.getInvisibilityTurningTime(), 1.0F));
+			} else {
+				this.dataManager.set(INVISIBILITY, Math.max(this.dataManager.get(INVISIBILITY) - 1.0F / this.getInvisibilityTurningTime(), 0.0F));
+			}
+		}
+	}
+
+	protected int getInvisibilityTurningTime() {
+		return 15;
+	}
+
+	/**
+	 * Makes the entity invisible for the passed amount of ticks.<br>
+	 * Keep in mind that the entity needs {@link AbstractEntityCQR#getInvisibilityTurningTime()} ticks
+	 * to get fully invisible.<br>
+	 * After the passed amount of ticks have passed the entity needs
+	 * {@link AbstractEntityCQR#getInvisibilityTurningTime()} ticks to get fully visible again.
+	 */
+	public void setInvisibility(int ticks) {
+		this.invisibilityTick = ticks;
+	}
+
+	public float getInvisibility() {
+		return this.dataManager.get(INVISIBILITY);
 	}
 
 }
