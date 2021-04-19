@@ -47,8 +47,10 @@ import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityHealing;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIEnergyTennis;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIStunned;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAISummonMinions;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -170,9 +172,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.teleportAI = new BossAITeleportAroundHome(this, 40);
 		this.tasks.addTask(8, teleportAI);
 		
+		this.tasks.addTask(5, new BossAIEnergyTennis(this));
+		
 		this.blockThrowerAI = new BossAIBlockThrower(this);
 		this.tasks.addTask(6, blockThrowerAI);
 		
+		this.tasks.addTask(6, new BossAIStunned(this));
 		this.tasks.addTask(6, new BossAICalamityHealing(this));
 		this.tasks.addTask(8, new BossAISummonMinions(this));
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
@@ -232,11 +237,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.newAnimation = Optional.absent();
 		}
 		if(this.currentAnimation != null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation).addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
 
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
 
 		/*if(this.ticksExisted % 5 == 0) {
@@ -256,11 +261,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	
 	private <E extends IAnimatable> PlayState execHandAnimationPredicate(AnimationEvent<E> event, final String IDLE_ANIM, final String THROW_ANIM, Boolean updateIndicator) {
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(IDLE_ANIM, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(IDLE_ANIM, true));
 		}
 		if (updateIndicator) {
 			updateIndicator = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(THROW_ANIM).addAnimation(IDLE_ANIM, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(THROW_ANIM).addAnimation(IDLE_ANIM, true));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -522,6 +527,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 				}
 			}
+			
 			return true;
 		}
 		return false;
@@ -640,6 +646,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			default:
 				break;
 			}
+			
+			this.isDowned = this.currentPhase == EEnderCalamityPhase.PHASE_STUNNED;
 		}
 	}
 

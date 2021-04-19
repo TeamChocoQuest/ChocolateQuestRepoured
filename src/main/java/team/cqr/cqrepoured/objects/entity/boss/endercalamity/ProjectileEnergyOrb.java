@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -67,6 +68,29 @@ public class ProjectileEnergyOrb extends EntityFireball {
         world.spawnEntity(orb);
         
         return orb;
+	}
+	
+	public void redirect(Entity target, EntityLivingBase shooter) {
+		this.shootingEntity = shooter;
+		Vec3d vec3d = shooter.getLook(1.0F);
+		double accelX = target.posX - (shooter.posX + vec3d.x * shooter.width);
+		double accelY = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (0.5D + shooter.posY + (double) (shooter.height / 2.0F));
+		double accelZ = target.posZ - (shooter.posZ + vec3d.z * shooter.width);
+		this.posX = shooter.posX + vec3d.x * shooter.width;
+		this.posY = shooter.posY + (double)(shooter.height / 2.0F) + 0.5D;
+		this.posZ = shooter.posZ + vec3d.z * shooter.width;
+		
+		this.motionX = 0.0D;
+        this.motionY = 0.0D;
+        this.motionZ = 0.0D;
+        accelX = accelX + this.rand.nextGaussian() * 0.4D;
+        accelY = accelY + this.rand.nextGaussian() * 0.4D;
+        accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
+        double d0 = (double)MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        this.accelerationX = accelX / d0 * 0.1D;
+        this.accelerationY = accelY / d0 * 0.1D;
+        this.accelerationZ = accelZ / d0 * 0.1D;
+		
 	}
 
 	@Override
