@@ -39,6 +39,9 @@ public class BossAIEnergyTennis extends AbstractCQREntityAI<EntityCQREnderCalami
 	
 	@Override
 	public void updateTask() {
+		if(this.entity.hasAttackTarget()) {
+			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+		}
 		if(this.cooldown > 0) {
 			this.cooldown--;
 			return;
