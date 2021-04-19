@@ -60,7 +60,9 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -339,6 +341,36 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		return flag;
+	}
+
+	public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) {
+		LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(this, entityIn, strength, xRatio, zRatio);
+		if (event.isCanceled())
+			return;
+		strength = event.getStrength();
+		xRatio = event.getRatioX();
+		zRatio = event.getRatioZ();
+
+		// CQR: reduce knockback strength instead of having a chance to not be knocked backed
+		double knockbackResistance = this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE)
+				.getAttributeValue();
+		strength *= 1.0F - MathHelper.clamp((float) knockbackResistance, 0.0F, 1.0F);
+
+		this.isAirBorne = true;
+		double d = 1.0D / MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
+		this.motionX *= 0.5D;
+		this.motionZ *= 0.5D;
+		this.motionX -= xRatio * d * (double) strength;
+		this.motionZ -= zRatio * d * (double) strength;
+
+		if (this.onGround) {
+			this.motionY *= 0.5D;
+			this.motionY += (double) strength;
+
+			if (this.motionY > 0.4D) {
+				this.motionY = 0.4D;
+			}
+		}
 	}
 
 	protected boolean damageCapEnabled() {
