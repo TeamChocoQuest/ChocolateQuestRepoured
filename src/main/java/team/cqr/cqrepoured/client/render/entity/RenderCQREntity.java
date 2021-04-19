@@ -198,6 +198,9 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			}
 		}
 
+		if (this.mainModel instanceof ModelBiped) {
+			((ModelBiped) this.mainModel).isSneak = entity.isSneaking();
+		}
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 		if (this.mainModel instanceof ModelBiped) {
