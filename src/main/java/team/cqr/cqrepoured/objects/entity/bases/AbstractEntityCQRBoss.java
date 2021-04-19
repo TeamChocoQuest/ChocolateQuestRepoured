@@ -38,7 +38,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if (this.hasCustomName()) {
+		if (this.hasCustomName() && this.bossInfoServer != null) {
 			this.bossInfoServer.setName(this.getDisplayName());
 		}
 	}
