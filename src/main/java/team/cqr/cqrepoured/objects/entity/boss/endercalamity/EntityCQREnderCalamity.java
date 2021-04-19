@@ -475,7 +475,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				
 				return true;
 			} else {
-				((ProjectileEnergyOrb) source.getImmediateSource()).attackEntityFrom(DamageSource.causeThornsDamage(this), 1);
+				((ProjectileEnergyOrb) source.getImmediateSource()).redirect(source.getTrueSource(), this);
 			}
 			
 			return false;

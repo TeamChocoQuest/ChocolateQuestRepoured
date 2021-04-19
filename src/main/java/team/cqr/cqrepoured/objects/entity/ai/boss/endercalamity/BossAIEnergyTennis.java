@@ -58,6 +58,7 @@ public class BossAIEnergyTennis extends AbstractCQREntityAI<EntityCQREnderCalami
 		}
 		this.tennisball = null;
 		this.cooldown = 15;
+		this.ballTicks = 0;
 		this.entity.setCantUpdatePhase(false);
 	}
 
