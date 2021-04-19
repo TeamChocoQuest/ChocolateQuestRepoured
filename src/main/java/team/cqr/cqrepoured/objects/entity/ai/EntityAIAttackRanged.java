@@ -73,9 +73,10 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (attackTarget == null) {
 			return;
 		}
-		double distance = this.entity.getDistance(attackTarget);
+		double distanceSq = this.entity.getDistanceSq(attackTarget);
+		double attackRangeSq = this.getAttackRange() * this.getAttackRange();
 
-		if (this.entity.getEntitySenses().canSee(attackTarget) && (distance < this.getAttackRange() * 0.9D || (distance < this.getAttackRange() && !this.entity.hasPath()))) {
+		if (this.entity.getEntitySenses().canSee(attackTarget) && (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.hasPath()))) {
 			// this.entity.faceEntity(attackTarget, 30.0F, 30.0F);
 			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 			this.checkAndPerformAttack(attackTarget);
@@ -101,9 +102,9 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 		}
 
 		if (this.canStrafe() && this.strafingTime > -1) {
-			if (distance > this.getAttackRange() * 0.75D) {
+			if (distanceSq > attackRangeSq * 0.75D * 0.75D) {
 				this.strafingBackwards = false;
-			} else if (distance < this.getAttackRange() * 0.25D) {
+			} else if (distanceSq < attackRangeSq * 0.25D * 0.25D) {
 				this.strafingBackwards = true;
 			}
 

@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.objects.entity.ai;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.swords.ItemDagger;
 
@@ -36,7 +37,7 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 		if (attackTarget instanceof AbstractEntityCQR) {
 			AbstractEntityCQR target = (AbstractEntityCQR) attackTarget;
-			boolean flag = this.entity.getDistance(target) < 20.0D && target.getEntitySenses().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
+			boolean flag = this.entity.getDistanceSq(target) < 20.0D * 20.0D && target.getEntitySenses().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
 			this.entity.setSneaking(flag);
 		}
 	}
@@ -45,8 +46,8 @@ public class EntityAIBackstab extends EntityAIAttack {
 	protected void updatePath(EntityLivingBase target) {
 		double distance = Math.min(4.0D, this.entity.getDistance(target.posX, target.posY, target.posZ) * 0.5D);
 		double rad = Math.toRadians(target.rotationYaw);
-		double sin = Math.sin(rad);
-		double cos = Math.cos(rad);
+		double sin = MathHelper.sin((float) rad);
+		double cos = MathHelper.cos((float) rad);
 		PathNavigate navigator = this.entity.getNavigator();
 		Path path = null;
 		for (int i = 4; path == null && i >= 0; i--) {
