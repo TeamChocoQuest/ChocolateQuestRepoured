@@ -180,16 +180,15 @@ public class ProtectedRegionHelper {
 		}
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
-			int meta = ((ItemBlock) item).getMetadata(stack.getItemDamage());
-			IBlockState result = ((ItemBlock) item).getBlock().getDefaultState();
-			if (hitVec != null) {
-				try{
-					result =  ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
-				} catch(IllegalArgumentException iae) {
-					result = ((ItemBlock) item).getBlock().getDefaultState();
-				}
+			Block block = ((ItemBlock) item).getBlock();
+			if (hitVec == null) {
+				return block.getDefaultState();
 			}
-			return result;
+			if (!block.canPlaceBlockOnSide(world, pos, facing)) {
+				return block.getDefaultState();
+			}
+			int meta = ((ItemBlock) item).getMetadata(stack.getItemDamage());
+			return block.getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
 		}
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null && fluidStack.getFluid().canBePlacedInWorld()) {
