@@ -23,6 +23,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 	public ProjectileEnergyOrb(World worldIn) {
 		super(worldIn);
 		this.innerRotation = this.rand.nextInt(100000);
+		this.setSize(1.5F, 1.5F);
 	}
 
 	public ProjectileEnergyOrb(World world, EntityLivingBase shooter, double vx, double vy, double vz) {
