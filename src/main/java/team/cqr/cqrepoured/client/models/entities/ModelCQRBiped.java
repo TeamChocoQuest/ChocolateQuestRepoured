@@ -112,7 +112,6 @@ public class ModelCQRBiped extends ModelBiped {
 					}
 				}
 			}
-			this.isRiding = cqrEnt.isSitting() || cqrEnt.isRiding();
 		}
 
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);

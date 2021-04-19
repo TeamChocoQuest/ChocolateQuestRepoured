@@ -90,10 +90,15 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
+		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
+
 		double width = this.getWidthScale(entitylivingbaseIn);
 		double height = this.getHeightScale(entitylivingbaseIn);
 		GL11.glScaled(width, height, width);
-		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
+
+		if (this.mainModel.isRiding) {
+			GL11.glTranslatef(0, 0.6F, 0);
+		}
 	}
 
 	@Override
@@ -198,9 +203,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			}
 		}
 
-		if (this.mainModel instanceof ModelBiped) {
-			((ModelBiped) this.mainModel).isSneak = entity.isSneaking();
-		}
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 		if (this.mainModel instanceof ModelBiped) {
@@ -210,11 +212,17 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-		if (this.mainModel.isRiding) {
-			GL11.glTranslatef(0, 0.6F, 0);
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+	}
+
+	@Override
+	protected void renderLivingAt(T entityLivingBaseIn, double x, double y, double z) {
+		if (this.mainModel instanceof ModelBiped) {
+			((ModelBiped) this.mainModel).isRiding = entityLivingBaseIn.isRiding() || entityLivingBaseIn.isSitting();
+			((ModelBiped) this.mainModel).isSneak = entityLivingBaseIn.isSneaking();
 		}
 
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		super.renderLivingAt(entityLivingBaseIn, x, y, z);
 	}
 
 	@Override
