@@ -17,7 +17,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
@@ -97,6 +96,7 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIIdleSit;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAILooter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToHome;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIPotionThrower;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIRideHorse;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAISearchMount;
@@ -432,12 +432,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void initEntityAI() {
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIOpenDoor(this, true) {
-			@Override
-			public boolean shouldExecute() {
-				return AbstractEntityCQR.this.canOpenDoors() && super.shouldExecute();
-			}
-		});
+		this.tasks.addTask(1, new EntityAIOpenCloseDoor(this));
 
 		if(this.canMountEntity()) {
 			this.horseAI = new EntityAIRideHorse<AbstractEntityCQR>(this, 1.5);
