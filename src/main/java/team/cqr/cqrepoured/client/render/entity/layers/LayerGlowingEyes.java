@@ -9,10 +9,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 
 public class LayerGlowingEyes<T extends EntityLiving> implements LayerRenderer<T> {
-	
+
 	protected final ResourceLocation EYE_TEXTURES;
 	protected final RenderLiving<T> renderer;
-	
+
 	public LayerGlowingEyes(RenderLiving<T> renderer, ResourceLocation eyeTextures) {
 		this.EYE_TEXTURES = eyeTextures;
 		this.renderer = renderer;
@@ -22,27 +22,23 @@ public class LayerGlowingEyes<T extends EntityLiving> implements LayerRenderer<T
 	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		GlStateManager.pushAttrib();
 		GlStateManager.pushMatrix();
-		
-		this.renderer.bindTexture(EYE_TEXTURES);
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 
-        int i = 61680;
-        int j = i % 65536;
-        int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-        this.renderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-        Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
-        i = entitylivingbaseIn.getBrightnessForRender();
-        j = i % 65536;
-        k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-        this.renderer.setLightmap(entitylivingbaseIn);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
+		this.renderer.bindTexture(EYE_TEXTURES);
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+		GlStateManager.disableLighting();
+		GlStateManager.depthFunc(514);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+		GlStateManager.enableLighting();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+		this.renderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+		this.renderer.setLightmap(entitylivingbaseIn);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.depthFunc(515);
 
 		GlStateManager.popMatrix();
 		GlStateManager.popAttrib();
