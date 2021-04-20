@@ -354,7 +354,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// CQR: reduce knockback strength instead of having a chance to not be knocked backed
 		double knockbackResistance = this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE)
 				.getAttributeValue();
-		strength *= 1.0F - MathHelper.clamp((float) knockbackResistance, 0.0F, 1.0F);
+		strength *= 1.0F - Math.min((float) knockbackResistance, 1.0F);
 
 		this.isAirBorne = true;
 		double d = 1.0D / MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
