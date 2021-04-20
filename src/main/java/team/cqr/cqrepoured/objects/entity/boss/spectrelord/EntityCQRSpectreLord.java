@@ -33,12 +33,10 @@ import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 
 public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISummoner {
 
-	private static final DataParameter<Float> INVISIBILITY = EntityDataManager.<Float>createKey(EntityCQRSpectreLord.class, DataSerializers.FLOAT);
 	private static final DataParameter<Integer> SWORD_SHIELD_ACTIVE = EntityDataManager.<Integer>createKey(EntityCQRSpectreLord.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> CHANNELING_LASER = EntityDataManager.<Boolean>createKey(EntityCQRSpectreLord.class, DataSerializers.BOOLEAN);
 
 	private final List<Entity> summonedEntities = new ArrayList<>();
-	private int invisibilityTick;
 
 	public EntityCQRSpectreLord(World world) {
 		super(world);
@@ -119,16 +117,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 			}
 		}
 
-		if (this.invisibilityTick > 0) {
-			this.invisibilityTick--;
-		}
 		if (!this.world.isRemote) {
-			if (this.invisibilityTick > 0) {
-				this.dataManager.set(INVISIBILITY, Math.min(this.dataManager.get(INVISIBILITY) + 1.0F / 15.0F, 1.0F));
-			} else {
-				this.dataManager.set(INVISIBILITY, Math.max(this.dataManager.get(INVISIBILITY) - 1.0F / 15.0F, 0.0F));
-			}
-
 			if (this.dataManager.get(SWORD_SHIELD_ACTIVE) > 0) {
 				this.dataManager.set(SWORD_SHIELD_ACTIVE, this.dataManager.get(SWORD_SHIELD_ACTIVE) - 1);
 			}
@@ -156,10 +145,6 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 			}
 		}
 		return super.attackEntityFrom(source, amount);
-	}
-
-	public void setInvisibility(int ticks) {
-		this.invisibilityTick = ticks;
 	}
 
 	public float getInvisibility() {
