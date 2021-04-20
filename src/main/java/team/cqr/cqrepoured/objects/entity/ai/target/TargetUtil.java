@@ -206,12 +206,19 @@ public class TargetUtil {
 				if (leader != null && possibleAllyLeader == leader) {
 					return true;
 				}
-				if (possibleAllyLeader instanceof EntityPlayer && faction.isAlly(possibleAllyLeader)) {
+				if (possibleAllyLeader instanceof EntityPlayer) {
+					if (faction.isAlly(possibleAllyLeader)) {
+						return true;
+					}
+				} else {
+					if (faction.isAlly(possibleAlly)) {
+						return true;
+					}
+				}
+			} else {
+				if (faction.isAlly(possibleAlly)) {
 					return true;
 				}
-			}
-			if (faction.isAlly(possibleAlly)) {
-				return true;
 			}
 			return false;
 		} else {
@@ -247,6 +254,10 @@ public class TargetUtil {
 					if (!faction.isEnemy(possibleEnemy)) {
 						return false;
 					}
+				}
+			} else {
+				if (!faction.isEnemy(possibleEnemy)) {
+					return false;
 				}
 			}
 			return true;

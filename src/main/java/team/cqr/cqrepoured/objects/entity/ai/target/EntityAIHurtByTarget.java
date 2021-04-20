@@ -133,10 +133,15 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 				}
 				if (possibleAllyLeader instanceof EntityPlayer) {
 					return false;
+				} else {
+					if (faction.isAlly(possibleAlly)) {
+						return true;
+					}
 				}
-			}
-			if (faction.isAlly(possibleAlly)) {
-				return true;
+			} else {
+				if (faction.isAlly(possibleAlly)) {
+					return true;
+				}
 			}
 			return false;
 		} else {
@@ -164,9 +169,6 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 				if (leader != null && possibleEnemyLeader == leader) {
 					return false;
 				}
-				if (possibleEnemyLeader instanceof EntityPlayer && faction.isAlly(possibleEnemyLeader)) {
-					return false;
-				}
 				if (possibleEnemyLeader instanceof EntityPlayer) {
 					if (faction.isAlly(possibleEnemyLeader)) {
 						return false;
@@ -175,6 +177,10 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 					if (faction.isAlly(possibleEnemy)) {
 						return false;
 					}
+				}
+			} else {
+				if (faction.isAlly(possibleEnemy)) {
+					return false;
 				}
 			}
 			return true;
