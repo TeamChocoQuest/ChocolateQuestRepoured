@@ -1,19 +1,34 @@
 package team.cqr.cqrepoured.objects.entity.pathfinding;
 
+import java.util.EnumSet;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCache;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
 
 /**
@@ -37,9 +52,92 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 	@Override
 	protected PathFinder getPathFinder() {
-		PathFinder newPathFinder = super.getPathFinder();
-		this.pathFinder = newPathFinder;
-		return newPathFinder;
+		this.nodeProcessor = new WalkNodeProcessor() {
+			
+			@Override
+			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
+				for (int i = 0; i < xSize; ++i) {
+					for (int j = 0; j < ySize; ++j) {
+						for (int k = 0; k < zSize; ++k) {
+							int l = i + x;
+							int i1 = j + y;
+							int j1 = k + z;
+							PathNodeType pathnodetype = this.getPathNodeType(p_193577_1_, l, i1, j1);
+
+							if (pathnodetype == PathNodeType.DOOR_WOOD_CLOSED && canOpenDoorsIn && canEnterDoorsIn) {
+								pathnodetype = PathNodeType.WALKABLE;
+							}
+
+							// TODO better method for calculating the facing from which the door will be entered
+							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn && EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
+								pathnodetype = PathNodeType.WALKABLE;
+							}
+
+							if (pathnodetype == PathNodeType.DOOR_OPEN && !canEnterDoorsIn) {
+								pathnodetype = PathNodeType.BLOCKED;
+							}
+
+							if (pathnodetype == PathNodeType.RAIL && !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof BlockRailBase) && !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof BlockRailBase)) {
+								pathnodetype = PathNodeType.FENCE;
+							}
+
+							if (i == 0 && j == 0 && k == 0) {
+								p_193577_11_ = pathnodetype;
+							}
+
+							p_193577_10_.add(pathnodetype);
+						}
+					}
+				}
+
+				return p_193577_11_;
+			}
+
+			protected PathNodeType getPathNodeTypeRaw(IBlockAccess p_189553_1_, int p_189553_2_, int p_189553_3_, int p_189553_4_) {
+				BlockPos blockpos = new BlockPos(p_189553_2_, p_189553_3_, p_189553_4_);
+				IBlockState iblockstate = p_189553_1_.getBlockState(blockpos);
+				Block block = iblockstate.getBlock();
+				Material material = iblockstate.getMaterial();
+
+				PathNodeType type = block.getAiPathNodeType(iblockstate, p_189553_1_, blockpos, this.currentEntity);
+				if (type != null)
+					return type;
+
+				if (material == Material.AIR) {
+					return PathNodeType.OPEN;
+				} else if (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY) {
+					if (block == Blocks.FIRE) {
+						return PathNodeType.DAMAGE_FIRE;
+					} else if (block == Blocks.CACTUS) {
+						return PathNodeType.DAMAGE_CACTUS;
+					} else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+						return PathNodeType.DOOR_WOOD_CLOSED;
+					} else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+						return PathNodeType.DOOR_IRON_CLOSED;
+					} else if (block instanceof BlockDoor && iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+						return PathNodeType.DOOR_OPEN;
+					} else if (block instanceof BlockRailBase) {
+						return PathNodeType.RAIL;
+					} else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockstate.getValue(BlockFenceGate.OPEN)).booleanValue())) {
+						if (material == Material.WATER) {
+							return PathNodeType.WATER;
+						} else if (material == Material.LAVA) {
+							return PathNodeType.LAVA;
+						} else {
+							return block.isPassable(p_189553_1_, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
+						}
+					} else {
+						return PathNodeType.FENCE;
+					}
+				} else {
+					return PathNodeType.TRAPDOOR;
+				}
+			}
+			
+        };
+        this.nodeProcessor.setCanEnterDoors(true);
+		this.pathFinder = new PathFinder(this.nodeProcessor);
+		return this.pathFinder;
 	}
 
 	@Override
