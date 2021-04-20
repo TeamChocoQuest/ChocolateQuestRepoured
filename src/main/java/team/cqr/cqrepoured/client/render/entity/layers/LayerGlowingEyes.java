@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity.layers;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -20,28 +19,15 @@ public class LayerGlowingEyes<T extends EntityLiving> implements LayerRenderer<T
 
 	@Override
 	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		GlStateManager.pushAttrib();
-		GlStateManager.pushMatrix();
-
-		this.renderer.bindTexture(EYE_TEXTURES);
 		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableLighting();
-		GlStateManager.depthFunc(514);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
-		GlStateManager.enableLighting();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+		
+		this.renderer.bindTexture(EYE_TEXTURES);
 		this.renderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-		Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+
 		this.renderer.setLightmap(entitylivingbaseIn);
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
-		GlStateManager.depthFunc(515);
-
-		GlStateManager.popMatrix();
-		GlStateManager.popAttrib();
 	}
 
 	@Override
