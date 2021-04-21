@@ -470,6 +470,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				this.dataManager.set(SHIELD_ACTIVE, false);
 				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 				
+				//TODO: Create own particle explosion that just looks nice
 				this.world.createExplosion(this, posX, posY, posZ, 3, false);
 				this.world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, getSoundCategory(), 10.0F, 1.0F, false);
 				
