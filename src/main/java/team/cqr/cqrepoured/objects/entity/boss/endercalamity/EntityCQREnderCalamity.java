@@ -467,8 +467,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 */
 			if(this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
 				
-				this.dataManager.set(SHIELD_ACTIVE, true);
-				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_STUNNED.getPhaseObject());
+				this.dataManager.set(SHIELD_ACTIVE, false);
+				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 				
 				this.world.createExplosion(this, posX, posY, posZ, 3, false);
 				this.world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, getSoundCategory(), 10.0F, 1.0F, false);
