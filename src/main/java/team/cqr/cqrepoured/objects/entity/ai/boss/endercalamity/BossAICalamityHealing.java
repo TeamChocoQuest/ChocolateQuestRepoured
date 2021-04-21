@@ -79,7 +79,7 @@ public class BossAICalamityHealing extends AbstractCQREntityAI<EntityCQREnderCal
 	
 	@Override
 	public void resetTask() {
-		this.cooldown = 200;
+		this.cooldown = 400;
 	}
 	
 }

@@ -9,7 +9,7 @@ public class ECPhaseEnergyTennis implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canRandomTeleportDuringPhase() {
-		return true;
+		return false;
 	}
 
 	@Override
