@@ -84,6 +84,23 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return this.shouldExecute();
 	}
 
+	protected void execHandStateBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand ) {
+		this.throwBlockOfHand(hand);
+	}
+	
+	protected void execHandStateThrowingWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(80, 140, this.entity.getRNG());
+	}
+	
+	protected void execHandStateNoBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand ) {
+		IBlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
+		this.entity.equipBlock(hand, block);
+		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
+		this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
+		// DONE: SPawn some particles
+		this.spawnEquipParticlesForHand(hand);
+	}
+	
 	@Override
 	public void updateTask() {
 		super.updateTask();
@@ -94,7 +111,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 				if (this.entity.getCurrentPhase().getPhaseObject().canThrowBlocksDuringPhase()) {
 					this.handCooldowns[hand.getIndex()]--;
 					if (this.getCooldownOfHand(hand) <= 0) {
-						this.throwBlockOfHand(hand);
+						this.execHandStateBlockWhenDone(hand);
 					}
 				}
 				break;
@@ -102,12 +119,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 				if (this.entity.getCurrentPhase().getPhaseObject().canPickUpBlocksDuringPhase() && !this.blockLimitReached()) {
 					this.handCooldowns[hand.getIndex()]--;
 					if (this.getCooldownOfHand(hand) <= 0) {
-						IBlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
-						this.entity.equipBlock(hand, block);
-						this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
-						this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
-						// DONE: SPawn some particles
-						this.spawnEquipParticlesForHand(hand);
+						this.execHandStateNoBlockWhenDone(hand);
 					}
 				}
 				break;
@@ -115,7 +127,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 				this.handCooldowns[hand.getIndex()]--;
 				if (this.getCooldownOfHand(hand) <= 0) {
 					this.setStateOfHand(hand, E_HAND_STATE.NO_BLOCK);
-					this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(80, 140, this.entity.getRNG());
+					this.execHandStateThrowingWhenDone(hand);
 				}
 
 				break;

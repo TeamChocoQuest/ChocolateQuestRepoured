@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.init.Blocks;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 
 public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
@@ -10,6 +11,7 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 	private int teleportCooldown = 10;
 	private int blockEquipTimer = 5;
 	private int blockThrowTimer = 5;
+	private boolean waitingForAnimationEnd = false;
 	
 	public BossAIEnderCalamityBuilder(EntityCQREnderCalamity entity) {
 		super(entity);
@@ -26,6 +28,19 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 	}
 	
 	@Override
+	protected void execHandStateBlockWhenDone(E_CALAMITY_HAND hand) {
+	}
+	
+	@Override
+	protected void execHandStateNoBlockWhenDone(E_CALAMITY_HAND hand) {
+	}
+	
+	@Override
+	protected void execHandStateThrowingWhenDone(E_CALAMITY_HAND hand) {
+		this.waitingForAnimationEnd = false;
+	}
+	
+	@Override
 	public void startExecuting() {
 		super.startExecuting();
 		this.forceDropAllBlocks();
@@ -33,8 +48,6 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 	
 	@Override
 	public void updateTask() {
-		super.updateTask();
-
 		if(this.blockEquipTimer > 0 && this.getCountOfEquippedHands() < 6) {
 			this.blockEquipTimer--;
 			
@@ -64,12 +77,12 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 				for (EntityCQREnderCalamity.E_CALAMITY_HAND hand : EntityCQREnderCalamity.E_CALAMITY_HAND.values()) {
 					this.throwBlockOfHand(hand);
 				}
-				
+				this.waitingForAnimationEnd = true;
 				this.blockThrowTimer = 0;
 			}
 		}
 		
-		if(this.blockThrowTimer <= 0 && this.getCountOfEquippedHands() <= 0) {
+		if(!this.waitingForAnimationEnd && this.blockThrowTimer <= 0 && this.getCountOfEquippedHands() <= 0) {
 			this.teleportCooldown--;
 			if(this.teleportCooldown <= 0) {
 				this.buildingCycles--;
@@ -85,6 +98,7 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 		this.teleportCooldown = 10;
 		this.blockEquipTimer = 5;
 		this.blockThrowTimer = 5;
+		this.waitingForAnimationEnd = false;
 		
 		this.entity.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_BUILDING.getPhaseObject());
 	}
