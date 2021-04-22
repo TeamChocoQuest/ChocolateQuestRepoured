@@ -19,7 +19,7 @@ public class BossAIStunned extends AbstractCQREntityAI<EntityCQREnderCalamity> {
 	public void startExecuting() {
 		if(this.entity.hasHomePositionCQR()) {
 			BlockPos home = this.entity.getHomePositionCQR();
-			this.entity.attemptTeleport(home.getX(), home.getY(), home.getZ());
+			this.entity.teleport(home.getX(), home.getY(), home.getZ());
 		}
 	}
 	
