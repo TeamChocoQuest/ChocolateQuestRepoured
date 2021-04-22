@@ -85,6 +85,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private int currentPhaseTimer = 0;
 	private int currentPhaseRunningTime = 0;
+	private int noTennisCounter = 0;
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
 
 	public EEnderCalamityPhase getCurrentPhase() {
@@ -605,6 +606,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		if (timedPhaseChange) {
 			this.switchToNextPhaseOf(phase);
+			if(this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
+				if(this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
+					this.noTennisCounter++;
+					if(this.noTennisCounter > (this.world.getDifficulty().getId() +2) * 2 ) {
+						this.switchToPhase(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
+						this.noTennisCounter = 0;
+					}
+				} else {
+					this.noTennisCounter = 0;
+				}
+			}
 		}
 
 	}
@@ -623,6 +635,28 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return this.dontUpdatePhase;
 	}
 
+	private void switchToPhase(IEnderCalamityPhase nextPhase) {
+		this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase);
+		if (this.getServer() != null)
+			this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
+		if (nextPhase.isPhaseTimed()) {
+			this.currentPhaseTimer = nextPhase.getRandomExecutionTime().get();
+		}
+		this.currentPhaseRunningTime = 0;
+		switch(this.currentPhase) {
+		case PHASE_DYING:
+		case PHASE_ENERGY_TENNIS:
+		case PHASE_NO_TARGET:
+		case PHASE_STUNNED:
+			this.blockThrowerAI.forceDropAllBlocks();
+			break;
+		default:
+			break;
+		}
+		
+		this.isDowned = this.currentPhase == EEnderCalamityPhase.PHASE_STUNNED;
+	}
+	
 	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
 		ITextComponent msg = new TextComponentString("Switching phase! Old phase: " + this.currentPhase.name());
 		if (this.getServer() != null)
@@ -630,25 +664,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
 		if (nextPhase.isPresent()) {
-			this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase.get());
-			if (this.getServer() != null)
-				this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
-			if (nextPhase.get().isPhaseTimed()) {
-				this.currentPhaseTimer = nextPhase.get().getRandomExecutionTime().get();
-			}
-			this.currentPhaseRunningTime = 0;
-			switch(this.currentPhase) {
-			case PHASE_DYING:
-			case PHASE_ENERGY_TENNIS:
-			case PHASE_NO_TARGET:
-			case PHASE_STUNNED:
-				this.blockThrowerAI.forceDropAllBlocks();
-				break;
-			default:
-				break;
-			}
-			
-			this.isDowned = this.currentPhase == EEnderCalamityPhase.PHASE_STUNNED;
+			this.switchToPhase(nextPhase.get());
 		}
 	}
 
