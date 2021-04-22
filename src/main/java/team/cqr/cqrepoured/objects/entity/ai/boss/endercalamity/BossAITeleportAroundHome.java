@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 
-public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnderCalamity> {
+public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 
 	private final int MAX_COOLDOWN;
 	private int cooldown = 40;
@@ -23,7 +23,7 @@ public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnder
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.getCurrentPhase().getPhaseObject().canRandomTeleportDuringPhase() && checkHome()) {
+		if (super.shouldExecute() && checkHome()) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -69,6 +69,11 @@ public class BossAITeleportAroundHome extends AbstractCQREntityAI<EntityCQREnder
 	@Override
 	public boolean shouldContinueExecuting() {
 		return false;
+	}
+
+	@Override
+	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
+		return currentPhase.getPhaseObject().canRandomTeleportDuringPhase();
 	}
 
 }

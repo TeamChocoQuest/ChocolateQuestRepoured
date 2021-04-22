@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 
-public class BossAIAreaLightnings extends AbstractCQREntityAI<EntityCQREnderCalamity> {
+public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 
 	private int lightningTick = 0;
 	private int borderLightning = 20;
@@ -77,6 +77,11 @@ public class BossAIAreaLightnings extends AbstractCQREntityAI<EntityCQREnderCala
 
 		EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, x, y, z, true, false, 0.8F, 0.01F, 0.98F, 0.4F);
 		this.world.spawnEntity(entitybolt);
+	}
+
+	@Override
+	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
+		return true;
 	}
 
 }

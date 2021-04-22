@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class BossAICalamityHealing extends AbstractCQREntityAI<EntityCQREnderCalamity> {
+public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	
 	protected static final float MAX_HEALTH_PERCENT_TO_START = 0.5F;
 	private int cooldown = 0;
@@ -34,7 +34,7 @@ public class BossAICalamityHealing extends AbstractCQREntityAI<EntityCQREnderCal
 	protected boolean internalCheck() {
 		if(this.entity.isEntityAlive()) {
 			if(this.entity.getHealth() / this.entity.getMaxHealth() <= MAX_HEALTH_PERCENT_TO_START) {
-				return this.entity.getCurrentPhase().getPhaseObject().canSummonAlliesDuringPhase();
+				return super.shouldExecute();
 			}
 			
 		}
@@ -80,6 +80,11 @@ public class BossAICalamityHealing extends AbstractCQREntityAI<EntityCQREnderCal
 	@Override
 	public void resetTask() {
 		this.cooldown = 400;
+	}
+
+	@Override
+	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
+		return currentPhase.getPhaseObject().canSummonAlliesDuringPhase();
 	}
 	
 }

@@ -3,11 +3,9 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 
-public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<EntityCQREnderCalamity> {
+public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalamity {
 
 	private int cooldown = 0;
 	private E_PHASE currentPhase = E_PHASE.PREPARING_TO_SHOOT;
@@ -105,6 +103,5 @@ public abstract class AbstractBossAIRandomShoot extends AbstractCQREntityAI<Enti
 	 * Returns the duration of the random shoot
 	 */
 	protected abstract int execRandomShoot();
-	protected abstract boolean canExecuteDuringPhase(EEnderCalamityPhase phase);
 
 }

@@ -6,15 +6,15 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
-import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalamity> {
+public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 
 	enum E_HAND_STATE {
 		NO_BLOCK, BLOCK, THROWING;
@@ -72,7 +72,7 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 	@Override
 	public boolean shouldExecute() {
 		if (this.entity != null && this.entity.hasAttackTarget()) {
-			return this.entity.getCurrentPhase().getPhaseObject().canPickUpBlocksDuringPhase() || this.entity.getCurrentPhase().getPhaseObject().canThrowBlocksDuringPhase();
+			return super.shouldExecute();
 		}
 		return false;
 	}
@@ -108,14 +108,14 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 						if (this.world instanceof WorldServer && CQRConfig.bosses.calamityBlockEquipParticles) {
 							WorldServer ws = (WorldServer) this.world;
 							Vec3d pos = this.getPositionOfHand(hand);
-							for(int i = 0; i < 50; i++) {
+							for (int i = 0; i < 50; i++) {
 								double dx = -0.5 + this.entity.getRNG().nextDouble();
 								dx *= 2;
 								double dy = -0.5 + this.entity.getRNG().nextDouble();
 								dy *= 2;
 								double dz = -0.5 + this.entity.getRNG().nextDouble();
 								dz *= 2;
-								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE,pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
+								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
 								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 							}
 						}
@@ -207,6 +207,11 @@ public class BossAIBlockThrower extends AbstractCQREntityAI<EntityCQREnderCalami
 		for (EntityCQREnderCalamity.E_CALAMITY_HAND hand : EntityCQREnderCalamity.E_CALAMITY_HAND.values()) {
 			throwBlockOfHand(hand, new Vec3d(0, -0.5, 0));
 		}
+	}
+
+	@Override
+	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
+		return currentPhase.getPhaseObject().canPickUpBlocksDuringPhase() || currentPhase.getPhaseObject().canThrowBlocksDuringPhase();
 	}
 
 }

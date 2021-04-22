@@ -6,12 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 
-public class BossAISummonMinions extends AbstractCQREntityAI<EntityCQREnderCalamity> {
+public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	private int minionSpawnTick = 0;
 	private int borderMinion = 80;
@@ -29,7 +29,7 @@ public class BossAISummonMinions extends AbstractCQREntityAI<EntityCQREnderCalam
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.hasAttackTarget() && this.entity.getCurrentPhase().getPhaseObject().canSummonAlliesDuringPhase()) {
+		if (this.entity.hasAttackTarget() && super.shouldExecute()) {
 			return true;
 		}
 		return false;
@@ -116,6 +116,11 @@ public class BossAISummonMinions extends AbstractCQREntityAI<EntityCQREnderCalam
 		}
 
 		return entity;
+	}
+
+	@Override
+	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
+		return currentPhase.getPhaseObject().canSummonAlliesDuringPhase();
 	}
 
 }
