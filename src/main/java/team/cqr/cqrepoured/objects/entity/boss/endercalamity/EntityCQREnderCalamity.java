@@ -47,6 +47,7 @@ import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityHealing;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIEnderCalamityBuilder;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIEnergyTennis;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
@@ -177,6 +178,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		
 		this.blockThrowerAI = new BossAIBlockThrower(this);
 		this.tasks.addTask(6, blockThrowerAI);
+		this.tasks.addTask(6, new BossAIEnderCalamityBuilder(this));
 		
 		this.tasks.addTask(6, new BossAIStunned(this));
 		this.tasks.addTask(6, new BossAICalamityHealing(this));
@@ -606,7 +608,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		if (timedPhaseChange) {
 			this.switchToNextPhaseOf(phase);
-			if(this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
+			if(this.currentPhase == EEnderCalamityPhase.PHASE_BUILDING || this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
 				if(this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
 					this.noTennisCounter++;
 					if(this.noTennisCounter > (this.world.getDifficulty().getId() +2) * 2 ) {

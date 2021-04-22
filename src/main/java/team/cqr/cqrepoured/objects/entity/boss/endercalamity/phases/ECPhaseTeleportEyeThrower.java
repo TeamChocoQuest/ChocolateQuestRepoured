@@ -32,7 +32,7 @@ public class ECPhaseTeleportEyeThrower implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		return new IEnderCalamityPhase[] { EEnderCalamityPhase.PHASE_IDLE.getPhaseObject() };
+		return new IEnderCalamityPhase[] { EEnderCalamityPhase.PHASE_BUILDING.getPhaseObject(), EEnderCalamityPhase.PHASE_IDLE.getPhaseObject() };
 	}
 
 	@Override

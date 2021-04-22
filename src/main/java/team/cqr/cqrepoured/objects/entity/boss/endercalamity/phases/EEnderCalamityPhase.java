@@ -13,7 +13,8 @@ public enum EEnderCalamityPhase {
 	PHASE_ENERGY_TENNIS(new ECPhaseEnergyTennis()),
 	PHASE_LASERING(new ECPhaseLasering()),
 	PHASE_STUNNED(new ECPhaseStunned()),
-	PHASE_DYING(new ECPhaseDying());
+	PHASE_DYING(new ECPhaseDying()),
+	PHASE_BUILDING(new ECPhaseBuilding());
 
 	private IEnderCalamityPhase phaseObject;
 

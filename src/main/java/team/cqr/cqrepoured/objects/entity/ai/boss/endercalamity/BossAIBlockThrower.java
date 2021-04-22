@@ -32,31 +32,33 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		}
 	}
 
-	private static final int THROWING_TIME = 40; // Animation length is 1 second => 20 ticks
+	protected static final int THROWING_TIME = 40; // Animation length is 1 second => 20 ticks
 
 	private E_HAND_STATE[] handstates = new E_HAND_STATE[] { E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK };
 	private int[] handCooldowns = new int[] { 100, 100, 100, 100, 100, 100 };
-	private static final int MAX_EQUIPPED_BLOCKS = 3;
+	protected static final int MAX_EQUIPPED_BLOCKS = 3;
 
-	private E_HAND_STATE getStateOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+	protected E_HAND_STATE getStateOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		return handstates[hand.getIndex()];
 	}
 
-	private int getCooldownOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+	protected int getCooldownOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		return handCooldowns[hand.getIndex()];
 	}
 
-	private boolean blockLimitReached() {
+	protected int getCountOfEquippedHands() {
 		int counter = 0;
 		for (E_HAND_STATE state : this.handstates) {
 			if (state == E_HAND_STATE.BLOCK) {
 				counter++;
-				if (counter >= MAX_EQUIPPED_BLOCKS) {
-					return true;
-				}
 			}
 		}
-		return false;
+		return counter;
+	}
+
+	protected boolean blockLimitReached() {
+		int counter = this.getCountOfEquippedHands();
+		return counter >= MAX_EQUIPPED_BLOCKS;
 	}
 
 	public BossAIBlockThrower(EntityCQREnderCalamity entity) {
@@ -105,20 +107,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 						this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
 						this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
 						// DONE: SPawn some particles
-						if (this.world instanceof WorldServer && CQRConfig.bosses.calamityBlockEquipParticles) {
-							WorldServer ws = (WorldServer) this.world;
-							Vec3d pos = this.getPositionOfHand(hand);
-							for (int i = 0; i < 50; i++) {
-								double dx = -0.5 + this.entity.getRNG().nextDouble();
-								dx *= 2;
-								double dy = -0.5 + this.entity.getRNG().nextDouble();
-								dy *= 2;
-								double dz = -0.5 + this.entity.getRNG().nextDouble();
-								dz *= 2;
-								ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
-								this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
-							}
-						}
+						this.spawnEquipParticlesForHand(hand);
 					}
 				}
 				break;
@@ -134,13 +123,30 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		}
 
 	}
+	
+	protected void spawnEquipParticlesForHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+		if (this.world instanceof WorldServer && CQRConfig.bosses.calamityBlockEquipParticles) {
+			WorldServer ws = (WorldServer) this.world;
+			Vec3d pos = this.getPositionOfHand(hand);
+			for (int i = 0; i < 50; i++) {
+				double dx = -0.5 + this.entity.getRNG().nextDouble();
+				dx *= 2;
+				double dy = -0.5 + this.entity.getRNG().nextDouble();
+				dy *= 2;
+				double dz = -0.5 + this.entity.getRNG().nextDouble();
+				dz *= 2;
+				ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
+				this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
+			}
+		}
+	}
 
 	@Override
 	public void resetTask() {
 		super.resetTask();
 	}
 
-	private boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		Vec3d v = this.entity.getLookVec().normalize();
 		if (this.entity.hasAttackTarget()) {
 			v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
@@ -151,7 +157,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return this.throwBlockOfHand(hand, v);
 	}
 
-	private Vec3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+	protected Vec3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		Vec3d offset = this.entity.getLookVec().normalize().scale(1.25);
 		offset = new Vec3d(offset.x, 0, offset.z);
 		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 90 : 270);
@@ -173,7 +179,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return position;
 	}
 
-	private boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vec3d velocity) {
+	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vec3d velocity) {
 		if (this.getStateOfHand(hand) == E_HAND_STATE.BLOCK) {
 			// DONE: Implement
 			/*
@@ -199,7 +205,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return false;
 	}
 
-	private void setStateOfHand(E_CALAMITY_HAND hand, E_HAND_STATE state) {
+	protected void setStateOfHand(E_CALAMITY_HAND hand, E_HAND_STATE state) {
 		this.handstates[hand.getIndex()] = state;
 	}
 
