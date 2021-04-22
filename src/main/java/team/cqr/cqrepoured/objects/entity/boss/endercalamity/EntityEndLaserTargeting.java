@@ -58,7 +58,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	
 	@Override
 	protected float getDamage() {
-		return 5F;
+		return 2.5F;
 	}
 
 }
