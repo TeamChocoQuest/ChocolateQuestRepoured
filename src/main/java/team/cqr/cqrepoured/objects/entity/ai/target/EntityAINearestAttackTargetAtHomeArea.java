@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -48,9 +49,11 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		return false;
 	}
 
+	private static final Vec3i SIZE_VECTOR = new Vec3i(32,32,32);
+	
 	@Override
 	public void startExecuting() {
-		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().add(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
 		List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
 		if (!possibleTargets.isEmpty()) {
 			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
@@ -125,7 +128,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 
 	private boolean isInHomeZone(EntityLivingBase possibleTarget) {
 		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
-		return distance <= 24 + 8 * (this.world.getDifficulty().ordinal());
+		return Math.abs(distance) <= 48 + 8 * (this.world.getDifficulty().ordinal());
 	}
 
 }

@@ -58,6 +58,7 @@ import team.cqr.cqrepoured.objects.entity.ai.target.EntityAINearestAttackTargetA
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -873,6 +874,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return this.getHomePositionCQR();
 		}
 		return this.getPosition();
+	}
+	
+	@Override
+	public boolean canEntityBeSeen(Entity entityIn) {
+		//48 * 48 = 
+		return entityIn.getDistanceSq(this.getCirclingCenter()) <= 2304;
 	}
 
 }
