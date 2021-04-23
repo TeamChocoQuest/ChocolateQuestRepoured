@@ -79,7 +79,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	
 	@Override
 	public void resetTask() {
-		this.cooldown = 400;
+		this.cooldown = 100;
 	}
 
 	@Override
