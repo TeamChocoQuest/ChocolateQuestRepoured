@@ -1,5 +1,5 @@
 {
-	"parent": "cqrepoured:cqr/challenger",
+	"parent": "cqrepoured:cqr/bosses/kill_pirate_captain",
 	"display": {
 		"title": {
 			"translate": "advancements.cqrepoured.kill_walker_king.title"

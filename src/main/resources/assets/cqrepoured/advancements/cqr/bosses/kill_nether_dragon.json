@@ -1,5 +1,5 @@
 {
-	"parent": "cqrepoured:cqr/challenger",
+	"parent": "cqrepoured:cqr/bosses/kill_giant_tortoise",
 	"display": {
 		"title": {
 			"translate": "advancements.cqrepoured.kill_nether_dragon.title"

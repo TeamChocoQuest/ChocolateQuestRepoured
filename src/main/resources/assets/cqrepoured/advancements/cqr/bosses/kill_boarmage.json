@@ -1,5 +1,5 @@
 {
-	"parent": "cqrepoured:cqr/challenger",
+	"parent": "cqrepoured:cqr/bosses/kill_lich",
 	"display": {
 		"title": {
 			"translate": "advancements.cqrepoured.kill_boar_mage.title"
