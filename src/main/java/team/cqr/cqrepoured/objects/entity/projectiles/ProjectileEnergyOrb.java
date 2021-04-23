@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
+package team.cqr.cqrepoured.objects.entity.projectiles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAreaEffectCloud;
