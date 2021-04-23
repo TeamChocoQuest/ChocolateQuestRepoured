@@ -80,7 +80,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			}
 
 			result.entityHit.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), 10);
-
+			this.setDead();
+			return;
 		} 
 		if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
 			this.world.setBlockState(this.getPosition(), this.state);
