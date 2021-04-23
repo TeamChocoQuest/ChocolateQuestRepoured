@@ -262,12 +262,12 @@ public class EntityCalamityCrystal extends Entity {
 	private boolean doesEntityFitForAbsorbing(EntityLiving living) {
 		if (living != this.owningEntity) {
 			if (TargetUtil.PREDICATE_LIVING.apply(living)) {
-				CQRFaction myFaction = this.getFaction();
+				/*CQRFaction myFaction = this.getFaction();
 				if (myFaction != null) {
 					if (myFaction.isAlly(living)) {
 						return false;
 					}
-				}
+				}*/
 				return living.getHealth() / living.getMaxHealth() >= 0.5F;
 			}
 		}
