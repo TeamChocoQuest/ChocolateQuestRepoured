@@ -25,8 +25,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -46,8 +44,8 @@ import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUp
 import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
-import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityHealing;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityBuilding;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityHealing;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIEnergyTennis;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
@@ -639,8 +637,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private void switchToPhase(IEnderCalamityPhase nextPhase) {
 		this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase);
-		if (this.getServer() != null)
-			this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
+		/*if (this.getServer() != null)
+			this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));*/
 		if (nextPhase.isPhaseTimed()) {
 			this.currentPhaseTimer = nextPhase.getRandomExecutionTime().get();
 		}
@@ -660,9 +658,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 	
 	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
-		ITextComponent msg = new TextComponentString("Switching phase! Old phase: " + this.currentPhase.name());
+		/*ITextComponent msg = new TextComponentString("Switching phase! Old phase: " + this.currentPhase.name());
 		if (this.getServer() != null)
-			this.getServer().getPlayerList().sendMessage(msg);
+			this.getServer().getPlayerList().sendMessage(msg);*/
 
 		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
 		if (nextPhase.isPresent()) {
