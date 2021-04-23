@@ -48,6 +48,7 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 	
 	@Override
 	public void updateTask() {
+		super.updateTask();
 		if(this.blockEquipTimer > 0 && this.getCountOfEquippedHands() < 6) {
 			this.blockEquipTimer--;
 			
