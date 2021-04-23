@@ -15,15 +15,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import team.cqr.cqrepoured.objects.factories.GearedMobFactory;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVegetatedCave;
@@ -32,6 +33,7 @@ import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
+import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoSpawner;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -193,18 +195,21 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
 	}
 
+	private static final int FLOORS = 100;
+	
 	public void placeSpawners() {
 		// DONE: Place spawners
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		
+		GearedMobFactory mobFactory = new GearedMobFactory(FLOORS, this.mobtype.getEntityID(), this.random);
 		for (BlockPos spawnerpos : this.spawners) {
-			Block block = Blocks.MOB_SPAWNER;
-			IBlockState state = block.getDefaultState();
-			TileEntityMobSpawner spawner = (TileEntityMobSpawner) block.createTileEntity(this.world, state);
-			spawner.getSpawnerBaseLogic().setEntityId(this.mobtype.getEntityID());
-			spawner.updateContainingBlockInfo();
-
-			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());
-			blockInfoList.add(new BlockInfo(spawnerpos.subtract(this.pos), state, nbt));
+			int entityCount = 1 + this.random.nextInt(3);
+			List<Entity> entityList = new ArrayList<>(entityCount);
+			for (int i = 0; i < entityCount; i++) {
+				int floor = this.random.nextInt(FLOORS);
+				entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
+			}
+			blockInfoList.add(new BlockInfoSpawner(spawnerpos.subtract(this.pos), entityList));
 		}
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
 	}
