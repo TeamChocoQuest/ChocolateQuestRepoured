@@ -26,7 +26,6 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalam
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
@@ -66,6 +65,7 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEarthQuake;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
