@@ -19,27 +19,14 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.monster.AbstractIllager;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityEndermite;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityVex;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,7 +48,7 @@ public class FactionRegistry {
 	private volatile Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
 	private volatile List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
-	private Map<ResourceLocation, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
+	private Map<Class<? extends Entity>, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
 
 	public static final DummyFaction DUMMY_FACTION = new DummyFaction();
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
@@ -83,6 +70,7 @@ public class FactionRegistry {
 		}
 
 		this.factions.put(DUMMY_FACTION.getName(), DUMMY_FACTION);
+		this.entityFactionMap.put(Entity.class, DUMMY_FACTION);
 
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
@@ -120,11 +108,12 @@ public class FactionRegistry {
 				continue;
 			}
 			ResourceLocation registryName = new ResourceLocation(s.substring(0, i).trim());
-			if (!ForgeRegistries.ENTITIES.containsKey(registryName)) {
+			EntityEntry entry = ForgeRegistries.ENTITIES.getValue(registryName);
+			if (entry == null) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity does not exists!", s);
 				continue;
 			}
-			if (this.entityFactionMap.containsKey(registryName)) {
+			if (this.entityFactionMap.containsKey(entry.getClass())) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity already has an assigned faction!", s);
 				continue;
 			}
@@ -133,7 +122,7 @@ public class FactionRegistry {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Faction does not exists!", s);
 				continue;
 			}
-			this.entityFactionMap.put(registryName, faction);
+			this.entityFactionMap.put(entry.getEntityClass(), faction);
 		}
 	}
 
@@ -242,76 +231,48 @@ public class FactionRegistry {
 		CQRMain.logger.info("Default factions loaded and initialized!");
 	}
 
-	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
-		if (entity == null) {
-			return null;
-		}
-
 		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
-			if (entity.getTeam() != null && this.factions.containsKey(entity.getTeam().getName()) && this.factions.get(entity.getTeam().getName()) != null) {
-				return this.factions.get(entity.getTeam().getName());
+			if (entity.getTeam() != null) {
+				CQRFaction teamFaction = this.factions.get(entity.getTeam().getName());
+				if (teamFaction != null) {
+					return teamFaction;
+				}
 			}
-		}
-
-		if (entity instanceof EntityPlayer) {
-			return this.factions.get(EDefaultFaction.PLAYERS.name());
 		}
 
 		if (entity instanceof MultiPartEntityPart && ((MultiPartEntityPart) entity).parent instanceof Entity) {
 			return this.getFactionOf((Entity) ((MultiPartEntityPart) entity).parent);
 		}
-		if (entity.getControllingPassenger() != null) {
-			return this.getFactionOf(entity.getControllingPassenger());
+
+		/*
+		TODO handle in TargetUtil
+		if (entity instanceof EntityPlayer) {
+			return this.factions.get(EDefaultFaction.PLAYERS.name());
 		}
 		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		}
-
 		if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() != null) {
 			return this.getFactionOf(((IEntityOwnable) entity).getOwner());
 		}
+		*/
 
 		if (entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
 
-		// Faction overriding
-		ResourceLocation registryName = EntityList.getKey(entity);
-		if (registryName != null && this.entityFactionMap.containsKey(registryName)) {
-			return this.entityFactionMap.get(registryName);
-		}
-		// Overriding end
+		return this.getFactionOf(entity.getClass());
+	}
 
-		if (entity instanceof EntityArmorStand) {
-			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
+	@SuppressWarnings("unchecked")
+	private CQRFaction getFactionOf(Class<? extends Entity> entityClass) {
+		CQRFaction faction = this.entityFactionMap.get(entityClass);
+		if (faction == null && entityClass != Entity.class) {
+			faction = this.getFactionOf((Class<? extends Entity>) entityClass.getSuperclass());
+			this.entityFactionMap.put(entityClass, faction);
 		}
-
-		if (entity instanceof EntityVillager || entity instanceof EntityGolem) {
-			return this.factions.get(EDefaultFaction.VILLAGERS.name());
-		}
-
-		if (entity instanceof AbstractIllager || entity instanceof EntityVex) {
-			return this.factions.get(EDefaultFaction.ILLAGERS.name());
-		}
-
-		if (entity instanceof EntityEnderman || entity instanceof EntityEndermite || entity instanceof EntityDragon) {
-			return this.factions.get(EDefaultFaction.ENDERMEN.name());
-		}
-
-		if (entity instanceof EntityAnimal) {
-			return this.factions.get(EDefaultFaction.NEUTRAL.name());
-		}
-
-		if (entity instanceof EntityMob) {
-			return this.factions.get(EDefaultFaction.UNDEAD.name());
-		}
-
-		if (entity instanceof EntityWaterMob) {
-			return this.factions.get(EDefaultFaction.TRITONS.name());
-		}
-
-		return null;
+		return faction;
 	}
 
 	public FactionRegistry get() {
