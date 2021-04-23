@@ -1,6 +1,9 @@
 #The English US language file for Chocolate Quest Repoured Mod!
 #This translation was created by basically every dev and polished out by ArloTheEpic
 
+#DamageSources
+death.attack.ray=%1$s was fired by mah lazor!
+death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
 #CreativeTabs
 itemGroup.cqrepoured_blocks=CQR Blocks
