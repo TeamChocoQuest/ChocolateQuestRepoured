@@ -1,5 +1,5 @@
 {
-	"parent": "cqrepoured:cqr/root",
+	"parent": "cqrepoured:cqr/not_so_strong",
 	"display": {
 		"title": {
 			"translate": "advancements.cqrepoured.not_so_friendly.title"
