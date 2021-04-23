@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 import javax.annotation.Nullable;
 
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
 
 public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 
