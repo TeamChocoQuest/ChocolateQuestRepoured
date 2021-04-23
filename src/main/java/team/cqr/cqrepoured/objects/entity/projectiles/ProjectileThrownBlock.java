@@ -9,10 +9,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.util.CQRConfig;
@@ -21,7 +24,6 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 	private ResourceLocation block = Blocks.END_STONE.getRegistryName();
 	private IBlockState state = null;
-	private boolean explosive = false;
 	private boolean placeOnImpact = false;
 
 	public ProjectileThrownBlock(World worldIn) {
@@ -34,10 +36,9 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.setSize(1, 1);
 	}
 
-	public ProjectileThrownBlock(World worldIn, EntityLivingBase shooter, IBlockState block, boolean explodeOnImpact, boolean placeOnImpact) {
+	public ProjectileThrownBlock(World worldIn, EntityLivingBase shooter, IBlockState block, boolean placeOnImpact) {
 		super(worldIn, shooter);
 		this.block = block.getBlock().getRegistryName();
-		this.explosive = explodeOnImpact;
 		this.placeOnImpact = placeOnImpact;
 		this.state = block;
 		this.setSize(1, 1);
@@ -81,11 +82,24 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			result.entityHit.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), 10);
 
 		} 
-		if (this.explosive) {
-			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 3.0F, CQRConfig.bosses.thrownBlocksDestroyTerrain);
-		} else if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
-			this.world.setBlockState(result.getBlockPos() != null ? result.getBlockPos() : this.getPosition(), this.state);
-			this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
+		if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
+			this.world.setBlockState(this.getPosition(), this.state);
+			//this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
+			if (this.world instanceof WorldServer) {
+				WorldServer ws = (WorldServer) this.world;
+				Vec3d pos = this.getPositionVector();
+				double particleRadius = 2.0D;
+				for (int i = 0; i < 50; i++) {
+					double dx = -0.5 + this.rand.nextDouble();
+					dx *= particleRadius;
+					double dy = -0.5 + this.rand.nextDouble();
+					dy *= particleRadius;
+					double dz = -0.5 + this.rand.nextDouble();
+					dz *= particleRadius;
+					ws.spawnParticle(EnumParticleTypes.REDSTONE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
+					this.playSound(this.state.getBlock().getSoundType(this.state, this.world, this.getPosition(), this).getPlaceSound(), 1.5F, 1.25F);
+				}
+			}
 		}
 
 		this.setDead();

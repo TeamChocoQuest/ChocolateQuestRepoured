@@ -200,7 +200,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			 */
 			Vec3d position = this.getPositionOfHand(hand);
 			IBlockState block = this.entity.getBlockFromHand(hand).get();
-			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, block.getBlock() == Blocks.OBSIDIAN, block.getBlock() != Blocks.OBSIDIAN);
+			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, true);
 			blockProj.setPosition(position.x, position.y, position.z);
 			blockProj.motionX = velocity.x;
 			blockProj.motionY = velocity.y;
