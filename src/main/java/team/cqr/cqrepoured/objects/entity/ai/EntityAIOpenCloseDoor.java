@@ -44,7 +44,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			return false;
 		}
 		
-		this.doorPos.setPos(this.entity);
+		this.doorPos.setPos(this.entity.posX, this.entity.posY, this.entity.posZ);
 		IBlockState state = this.world.getBlockState(this.doorPos);
 		if (state.getBlock() instanceof BlockDoor) {
 			this.doorBlock = (BlockDoor) state.getBlock();
