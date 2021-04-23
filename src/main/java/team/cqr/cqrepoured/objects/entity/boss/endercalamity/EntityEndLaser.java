@@ -75,4 +75,14 @@ public class EntityEndLaser extends AbstractEntityLaser {
 		return 0.98F;
 	}
 
+	@Override
+	protected int getBreakingSpeed() {
+		return 10;
+	}
+	
+	@Override
+	protected boolean canBreakBlocks() {
+		return true;
+	}
+	
 }

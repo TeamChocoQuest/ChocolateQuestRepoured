@@ -135,28 +135,31 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 			Vec3d end = start.add(Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
 			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 			double d = result != null ? (float) result.hitVec.subtract(this.getPositionVector()).length() : this.length;
-
-			if (false) {
-				if (result != null) {
-					BlockPos p = result.getBlockPos();
-					int value = this.blockBreakMap.getInt(p);
-					int breakProgress = value & 0xFFFF;
-					if (++breakProgress >= 60) {
-						IBlockState state = this.world.getBlockState(p);
-						state.getBlock().dropBlockAsItem(this.world, p, state, 0);
-						this.world.setBlockToAir(p);
-						this.blockBreakMap.remove(p);
-						this.world.sendBlockBreakProgress(this.getEntityId(), p, -1);
-					} else {
-						this.blockBreakMap.put(p, (this.ticksExisted << 16) | breakProgress);
-						this.world.sendBlockBreakProgress(this.getEntityId(), p, (int) (breakProgress / 60.0F * 10.0F));
+			if(this.canBreakBlocks()) {
+				boolean hitBlock = this.world.getBlockState(result.getBlockPos()).getBlock().canCollideCheck(this.world.getBlockState(result.getBlockPos()), false);
+				if (hitBlock) {
+					if (result != null) {
+						BlockPos p = result.getBlockPos();
+						int value = this.blockBreakMap.getInt(p);
+						int breakProgress = value & 0xFFFF;
+						breakProgress += this.getBreakingSpeed();
+						if (breakProgress >= 60) {
+							IBlockState state = this.world.getBlockState(p);
+							state.getBlock().dropBlockAsItem(this.world, p, state, 0);
+							this.world.setBlockToAir(p);
+							this.blockBreakMap.remove(p);
+							this.world.sendBlockBreakProgress(this.getEntityId(), p, -1);
+						} else {
+							this.blockBreakMap.put(p, (this.ticksExisted << 16) | breakProgress);
+							this.world.sendBlockBreakProgress(this.getEntityId(), p, (int) (breakProgress / 60.0F * 10.0F));
+						}
 					}
-				}
-				for (Object2IntMap.Entry<BlockPos> entry : this.blockBreakMap.object2IntEntrySet()) {
-					int value = entry.getIntValue();
-					int lastTimeHit = value >> 16;
-					if (this.ticksExisted - lastTimeHit >= 40) {
-						entry.setValue(lastTimeHit | Math.max((value & 0xFFFF) - 1, 0));
+					for (Object2IntMap.Entry<BlockPos> entry : this.blockBreakMap.object2IntEntrySet()) {
+						int value = entry.getIntValue();
+						int lastTimeHit = value >> 16;
+						if (this.ticksExisted - lastTimeHit >= 40) {
+							entry.setValue(lastTimeHit | Math.max((value & 0xFFFF) - 1, 0));
+						}
 					}
 				}
 			}
@@ -174,6 +177,14 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 	}
 	
+	protected boolean canBreakBlocks() {
+		return false;
+	}
+	
+	protected int getBreakingSpeed() {
+		return 1;
+	}
+
 	protected float getDamage() {
 		return 3.0F;
 	}

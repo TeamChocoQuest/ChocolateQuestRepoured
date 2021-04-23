@@ -60,5 +60,15 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	protected float getDamage() {
 		return 2.5F;
 	}
+	
+	@Override
+	protected boolean canBreakBlocks() {
+		return true;
+	}
+	
+	@Override
+	protected int getBreakingSpeed() {
+		return 3;
+	}
 
 }
