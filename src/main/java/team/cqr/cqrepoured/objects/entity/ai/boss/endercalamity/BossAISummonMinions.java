@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	private int minionSpawnTick = 0;
-	private int borderMinion = 80;
+	private int borderMinion = 20;
 	private float borderHPForMinions = 0.75F;
 
 	public BossAISummonMinions(EntityCQREnderCalamity entity) {
@@ -37,7 +37,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (super.shouldContinueExecuting() && this.shouldExecute()) {
+		if (this.shouldExecute()) {
 			if (this.entity.getHealth() <= (borderHPForMinions * this.entity.getMaxHealth())) {
 				this.minionSpawnTick++;
 				return (this.minionSpawnTick > this.borderMinion);
@@ -55,10 +55,10 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 		this.minionSpawnTick = 0;
 		if (this.entity.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
-			this.borderMinion = 80;
+			this.borderMinion = 40;
 			// Check list
 			if (this.entity.filterSummonLists()) {
-				this.borderMinion = 50;
+				this.borderMinion = 10;
 			}
 		} else {
 			this.borderMinion = 160;
