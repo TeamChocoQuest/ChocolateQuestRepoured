@@ -10,7 +10,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 	private int buildingCycles = 3;
 	private int teleportCooldown = 10;
 	private int blockEquipTimer = 5;
-	private int blockThrowTimer = 5;
+	private int blockThrowTimer = 15;
 	private boolean waitingForAnimationEnd = false;
 	
 	public BossAICalamityBuilding(EntityCQREnderCalamity entity) {
@@ -49,10 +49,13 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if(this.blockEquipTimer > 0 && this.getCountOfEquippedHands() < 6) {
+		if (this.entity.hasAttackTarget()) {
+			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+		}
+		if(this.blockEquipTimer > 0) {
 			this.blockEquipTimer--;
 			
-			if(this.blockEquipTimer <= 0) {
+			if(this.blockEquipTimer <= 0 && this.getCountOfEquippedHands() < 6) {
 				//Equip random hand
 				
 				for(EntityCQREnderCalamity.E_CALAMITY_HAND hand : EntityCQREnderCalamity.E_CALAMITY_HAND.values()) {
@@ -71,7 +74,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 			}
 		}
 		
-		if(this.getCountOfEquippedHands() >= 6) {
+		if(this.getCountOfEquippedHands() >= 6 && this.blockEquipTimer <= 0) {
 			this.blockThrowTimer--;
 			if(this.blockThrowTimer <= 0) {
 				//Throw all the blocks
@@ -86,9 +89,12 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 		if(!this.waitingForAnimationEnd && this.blockThrowTimer <= 0 && this.getCountOfEquippedHands() <= 0) {
 			this.teleportCooldown--;
 			if(this.teleportCooldown <= 0) {
+				this.teleportCooldown = 10;
 				this.buildingCycles--;
 				this.entity.forceTeleport();
-				this.blockThrowTimer = 5;
+				this.blockEquipTimer = 5;
+				this.blockThrowTimer = 15;
+				
 			}
 		}
 	}
@@ -98,7 +104,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 		this.buildingCycles = 3;
 		this.teleportCooldown = 10;
 		this.blockEquipTimer = 5;
-		this.blockThrowTimer = 5;
+		this.blockThrowTimer = 15;
 		this.waitingForAnimationEnd = false;
 		
 		this.entity.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_BUILDING.getPhaseObject());
