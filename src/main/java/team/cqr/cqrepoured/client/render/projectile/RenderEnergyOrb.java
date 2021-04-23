@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.models.entities.ModelEnergyOrb;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.ProjectileEnergyOrb;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
