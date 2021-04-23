@@ -77,7 +77,7 @@ public class EntityEndLaser extends AbstractEntityLaser {
 
 	@Override
 	protected int getBreakingSpeed() {
-		return 10;
+		return 18;
 	}
 	
 	@Override

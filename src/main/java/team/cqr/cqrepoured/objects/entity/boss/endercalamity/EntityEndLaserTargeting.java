@@ -68,7 +68,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	
 	@Override
 	protected int getBreakingSpeed() {
-		return 3;
+		return 6;
 	}
 
 }
