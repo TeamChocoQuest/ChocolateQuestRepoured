@@ -17,7 +17,7 @@ public class ECPhaseTeleportEyeThrower implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canSummonAlliesDuringPhase() {
-		return false;
+		return true;
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public final class ECPhaseIdle implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		return new IEnderCalamityPhase[] { /*EEnderCalamityPhase.PHASE_LASERING.getPhaseObject(),*/ EEnderCalamityPhase.PHASE_BUILDING.getPhaseObject(), EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject() };
+		return new IEnderCalamityPhase[] { /*EEnderCalamityPhase.PHASE_LASERING.getPhaseObject(),*/ EEnderCalamityPhase.PHASE_BUILDING.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject(), EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject() };
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class ECPhaseBuilding implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canSummonAlliesDuringPhase() {
-		return false;
+		return true;
 	}
 
 	@Override
