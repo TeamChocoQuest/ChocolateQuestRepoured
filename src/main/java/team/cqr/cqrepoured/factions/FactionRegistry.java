@@ -63,6 +63,7 @@ public class FactionRegistry {
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
 	private Map<ResourceLocation, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
 
+	public static final DummyFaction DUMMY_FACTION = new DummyFaction();
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
 
@@ -80,6 +81,8 @@ public class FactionRegistry {
 		if (!this.entityFactionMap.isEmpty()) {
 			this.entityFactionMap.clear();
 		}
+
+		this.factions.put(DUMMY_FACTION.getName(), DUMMY_FACTION);
 
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
@@ -158,7 +161,10 @@ public class FactionRegistry {
 					List<String> fAlly = new ArrayList<>();
 					List<String> fEnemy = new ArrayList<>();
 					// CQRFaction fTmp =
-					String fName = prop.getProperty(ConfigKeys.FACTION_NAME_KEY, "FACTION_NAME");
+					String fName = prop.getProperty(ConfigKeys.FACTION_NAME_KEY);
+					if (fName == null || this.factions.containsKey(fName)) {
+						continue;
+					}
 					int repuChangeAlly = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, 2);
 					int repuChangeEnemy = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, 1);
 					int repuChangeMember = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, 5);
@@ -322,11 +328,9 @@ public class FactionRegistry {
 		}
 	}
 
+	@Nullable
 	public CQRFaction getFactionInstance(String factionName) {
-		if (this.factions.containsKey(factionName)) {
-			return this.factions.get(factionName);
-		}
-		return this.factions.get(EDefaultFaction.NEUTRAL.name());
+		return this.factions.get(factionName);
 	}
 
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
