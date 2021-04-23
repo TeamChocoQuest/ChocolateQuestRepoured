@@ -5,7 +5,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalam
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 
-public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
+public class BossAICalamityBuilding extends BossAIBlockThrower {
 
 	private int buildingCycles = 3;
 	private int teleportCooldown = 10;
@@ -13,7 +13,7 @@ public class BossAIEnderCalamityBuilder extends BossAIBlockThrower {
 	private int blockThrowTimer = 5;
 	private boolean waitingForAnimationEnd = false;
 	
-	public BossAIEnderCalamityBuilder(EntityCQREnderCalamity entity) {
+	public BossAICalamityBuilding(EntityCQREnderCalamity entity) {
 		super(entity);
 	}
 
