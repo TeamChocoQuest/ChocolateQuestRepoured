@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -84,11 +85,11 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			return;
 		} 
 		if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
-			this.world.setBlockState(this.getPosition(), this.state);
+			this.world.setBlockState(new BlockPos(result.hitVec.x, result.hitVec.y, result.hitVec.z), this.state);
 			//this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 			if (this.world instanceof WorldServer) {
 				WorldServer ws = (WorldServer) this.world;
-				Vec3d pos = this.getPositionVector();
+				Vec3d pos = result.hitVec;
 				double particleRadius = 2.0D;
 				for (int i = 0; i < 50; i++) {
 					double dx = -0.5 + this.rand.nextDouble();
