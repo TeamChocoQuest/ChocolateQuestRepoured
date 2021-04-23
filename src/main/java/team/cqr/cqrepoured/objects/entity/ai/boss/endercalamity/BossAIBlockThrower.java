@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
+import com.google.common.base.Optional;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -198,8 +200,12 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			 * Calculate offset vector to spawn the projectile
 			 * Actually spawn the projectile and send it flying
 			 */
+			Optional<IBlockState> handContent = this.entity.getBlockFromHand(hand);
+			if(!handContent.isPresent()) {
+				return false;
+			}
 			Vec3d position = this.getPositionOfHand(hand);
-			IBlockState block = this.entity.getBlockFromHand(hand).get();
+			IBlockState block = handContent.get();
 			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, true);
 			blockProj.setPosition(position.x, position.y, position.z);
 			blockProj.motionX = velocity.x;
@@ -213,6 +219,8 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			this.handCooldowns[hand.getIndex()] = THROWING_TIME;
 			this.entity.swingHand(hand);
 			this.entity.removeHandBlock(hand);
+			
+			return true;
 		}
 		return false;
 	}
