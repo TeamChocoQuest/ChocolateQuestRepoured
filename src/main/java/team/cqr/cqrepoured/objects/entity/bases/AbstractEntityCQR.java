@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.bases;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -133,7 +131,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected BlockPos homePosition = null;
 	protected UUID leaderUUID;
 	protected EntityLivingBase leader = null;
-	private final Map<UUID, EntityLivingBase> followers = new HashMap<>();
+	private int lastTickPingedAsLeader;
 	protected boolean holdingPotion;
 	protected byte usedPotions = (byte) 0;
 	protected double healthScale = 1.0D;
@@ -199,6 +197,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private TraderOffer trades = new TraderOffer(this);
 
 	// Sync with client
+	protected static final DataParameter<Boolean> IS_LEADER = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Float> INVISIBILITY = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> HAS_TARGET = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -242,6 +241,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void entityInit() {
 		super.entityInit();
 
+		this.dataManager.register(IS_LEADER, false);
 		this.dataManager.register(INVISIBILITY, 0.0F);
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(HAS_TARGET, false);
@@ -782,6 +782,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		this.updateInvisibility();
+		this.updateLeader();
 	}
 
 	@Override
@@ -956,39 +957,48 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// #################### Chocolate Quest Repoured ####################
 
-	public EntityLivingBase getLeader() {
+	public void updateLeader() {
+		if (this.world.isRemote) {
+			return;
+		}
+		// sync with clients that this is a leader
+		this.dataManager.set(IS_LEADER, this.ticksExisted - this.lastTickPingedAsLeader < 200);
 		if (this.leaderUUID == null) {
 			this.leader = null;
-			return null;
+			return;
 		}
-
 		if (this.leader == null) {
+			if (this.getEntityId() + this.ticksExisted % 20 != 0) {
+				return;
+			}
 			Entity entity = EntityUtil.getEntityByUUID(this.world, this.leaderUUID);
-
 			if (entity instanceof EntityLivingBase) {
 				this.leader = (EntityLivingBase) entity;
 			}
-		}
-
-		if (this.leader != null && !this.leader.isEntityAlive()) {
+		} else if (!this.leader.isEntityAlive()) {
 			this.leaderUUID = null;
 			this.leader = null;
 		}
+		// ping leader that a follower exists
+		if (this.leader instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR) this.leader).lastTickPingedAsLeader = this.leader.ticksExisted;
+		}
+	}
 
+	public EntityLivingBase getLeader() {
 		return this.leader;
 	}
 
 	public void setLeader(EntityLivingBase leader) {
-		if (leader != null && leader.isEntityAlive() && !this.world.isRemote) {
-			if (this.dimension == leader.dimension) {
-				this.leader = leader;
-			}
+		if (this.world.isRemote) {
+			return;
+		}
+		if (leader == null) {
+			this.leaderUUID = null;
+			this.leader = null;
+		} else {
 			this.leaderUUID = leader.getPersistentID();
-
-			CQRFaction leaderFaction = FactionRegistry.instance().getFactionOf(leader);
-			if (leaderFaction != null) {
-				this.setFaction(leaderFaction.getName(), true);
-			}
+			this.leader = leader;
 		}
 	}
 
@@ -997,55 +1007,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean isLeader() {
-		boolean isLeader = false;
-		List<UUID> toRemove = new ArrayList<>();
-
-		for (Map.Entry<UUID, EntityLivingBase> entry : this.followers.entrySet()) {
-			UUID uuid = entry.getKey();
-			EntityLivingBase entity = entry.getValue();
-
-			if (entity != null) {
-				if (!entity.isEntityAlive()) {
-					toRemove.add(uuid);
-				} else {
-					isLeader = true;
-				}
-			} else {
-				Entity newEntity = EntityUtil.getEntityByUUID(this.world, uuid);
-
-				if (newEntity != null) {
-					if (newEntity instanceof EntityLivingBase && newEntity.isEntityAlive()) {
-						this.followers.put(uuid, (EntityLivingBase) newEntity);
-						isLeader = true;
-					} else {
-						toRemove.add(uuid);
-					}
-				}
-			}
-		}
-
-		for (UUID uuid : toRemove) {
-			this.followers.remove(uuid);
-		}
-
-		return isLeader;
-	}
-
-	public void addFollower(EntityLivingBase entity) {
-		if (entity == null) {
-			return;
-		}
-		if (!entity.isEntityAlive()) {
-			return;
-		}
-		this.followers.put(entity.getPersistentID(), entity);
-	}
-
-	public void removeFollower(EntityLivingBase entity) {
-		if (entity == null) {
-			return;
-		}
-		this.followers.remove(entity.getPersistentID());
+		return this.dataManager.get(IS_LEADER);
 	}
 
 	public BlockPos getHomePositionCQR() {
