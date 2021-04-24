@@ -231,7 +231,7 @@ public class FactionRegistry {
 		CQRMain.logger.info("Default factions loaded and initialized!");
 	}
 
-	public CQRFaction getFactionOf(Entity entity) {
+	public CQRFaction getFactionOf(@Nullable Entity entity) {
 		if(entity == null) {
 			return FactionRegistry.DUMMY_FACTION;
 		}
