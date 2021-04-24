@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityOcelot;
@@ -193,94 +194,92 @@ public class TargetUtil {
 		return false;
 	}
 
-	public static boolean isAllyCheckingLeaders(AbstractEntityCQR entity, EntityLivingBase possibleAlly) {
-		CQRFaction faction = entity.getFaction();
-		EntityLivingBase leader = entity.getLeader();
-		if (!(leader instanceof EntityPlayer)) {
-			// non-player leader
-			if (possibleAlly == leader) {
-				return true;
-			}
-			if (possibleAlly instanceof AbstractEntityCQR) {
-				EntityLivingBase possibleAllyLeader = ((AbstractEntityCQR) possibleAlly).getLeader();
-				if (leader != null && possibleAllyLeader == leader) {
-					return true;
-				}
-				if (possibleAllyLeader instanceof EntityPlayer) {
-					if (faction.isAlly(possibleAllyLeader)) {
-						return true;
-					}
-				} else {
-					if (faction.isAlly(possibleAlly)) {
-						return true;
-					}
-				}
-			} else {
-				if (faction.isAlly(possibleAlly)) {
-					return true;
-				}
-			}
-			return false;
-		} else {
-			// player leader
-			if (possibleAlly == leader) {
-				return true;
-			}
-			if (possibleAlly instanceof AbstractEntityCQR && ((AbstractEntityCQR) possibleAlly).getLeader() == leader) {
-				return true;
-			}
-			return false;
+	public static boolean isAllyCheckingLeaders(EntityLivingBase entity, EntityLivingBase target) {
+		EntityLivingBase leader = getLeaderOrOwnerRecursive(entity);
+		if (leader instanceof EntityPlayer) {
+			entity = leader;
 		}
+		EntityLivingBase targetLeader = getLeaderOrOwnerRecursive(target);
+		if (targetLeader instanceof EntityPlayer) {
+			target = targetLeader;
+		}
+
+		if (entity == target) {
+			return true;
+		}
+
+		if (entity instanceof EntityPlayer) {
+			if (target instanceof EntityPlayer) {
+				// TODO add coop/pvp mode?
+				return false;
+			} else {
+				EntityLivingBase temp = entity;
+				entity = target;
+				target = temp;
+			}
+		}
+
+		CQRFaction faction = FactionRegistry.instance().getFactionOf(entity);
+		if (faction.isAlly(target)) {
+			return true;
+		}
+
+		return false;
 	}
 
-	public static boolean isEnemyCheckingLeaders(AbstractEntityCQR entity, EntityLivingBase possibleEnemy) {
-		CQRFaction faction = entity.getFaction();
-		EntityLivingBase leader = entity.getLeader();
-		if (!(leader instanceof EntityPlayer)) {
-			// non-player leader
-			if (possibleEnemy == leader) {
-				return false;
-			}
-			if (possibleEnemy instanceof AbstractEntityCQR) {
-				EntityLivingBase possibleEnemyLeader = ((AbstractEntityCQR) possibleEnemy).getLeader();
-				if (leader != null && possibleEnemyLeader == leader) {
-					return false;
-				}
-				if (possibleEnemyLeader instanceof EntityPlayer) {
-					if (!faction.isEnemy(possibleEnemyLeader)) {
-						return false;
-					}
-				} else {
-					if (!faction.isEnemy(possibleEnemy)) {
-						return false;
-					}
-				}
-			} else {
-				if (!faction.isEnemy(possibleEnemy)) {
-					return false;
-				}
-			}
-			return true;
-		} else {
-			// player leader
-			if (possibleEnemy == leader) {
-				return false;
-			}
-			if (possibleEnemy instanceof AbstractEntityCQR && ((AbstractEntityCQR) possibleEnemy).getLeader() == leader) {
-				return false;
-			}
-			CQRFaction possibleEnemyFaction = FactionRegistry.instance().getFactionOf(possibleEnemy);
-			if (possibleEnemyFaction != null) {
-				if (!possibleEnemyFaction.isEnemy(leader)) {
-					return false;
-				}
-			} else {
-				if (!(possibleEnemy instanceof EntityMob)) {
-					return false;
-				}
-			}
-			return true;
+	public static boolean isEnemyCheckingLeaders(EntityLivingBase entity, EntityLivingBase target) {
+		EntityLivingBase leader = getLeaderOrOwnerRecursive(entity);
+		if (leader instanceof EntityPlayer) {
+			entity = leader;
 		}
+		EntityLivingBase targetLeader = getLeaderOrOwnerRecursive(target);
+		if (targetLeader instanceof EntityPlayer) {
+			target = targetLeader;
+		}
+
+		if (entity == target) {
+			return false;
+		}
+
+		if (entity instanceof EntityPlayer) {
+			if (target instanceof EntityPlayer) {
+				// TODO add coop/pvp mode?
+				return false;
+			} else {
+				EntityLivingBase temp = entity;
+				entity = target;
+				target = temp;
+			}
+		}
+
+		CQRFaction faction = FactionRegistry.instance().getFactionOf(entity);
+		if (target instanceof EntityPlayer && faction == FactionRegistry.DUMMY_FACTION) {
+			if (!(entity instanceof EntityMob)) {
+				return false;
+			}
+		} else {
+			if (!faction.isEnemy(target)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private static EntityLivingBase getLeaderOrOwnerRecursive(EntityLivingBase entity) {
+		int i = 10;
+		while (i-- > 0) {
+			if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).hasLeader()) {
+				entity = ((AbstractEntityCQR) entity).getLeader();
+				continue;
+			}
+			if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() instanceof EntityLivingBase) {
+				entity = (EntityLivingBase) ((IEntityOwnable) entity).getOwner();
+				continue;
+			}
+			break;
+		}
+		return entity;
 	}
 
 }

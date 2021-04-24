@@ -245,19 +245,6 @@ public class FactionRegistry {
 			return this.getFactionOf((Entity) ((MultiPartEntityPart) entity).parent);
 		}
 
-		/*
-		TODO handle in TargetUtil
-		if (entity instanceof EntityPlayer) {
-			return this.factions.get(EDefaultFaction.PLAYERS.name());
-		}
-		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
-			return this.getFactionOf(((EntityTameable) entity).getOwner());
-		}
-		if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() != null) {
-			return this.getFactionOf(((IEntityOwnable) entity).getOwner());
-		}
-		*/
-
 		if (entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
