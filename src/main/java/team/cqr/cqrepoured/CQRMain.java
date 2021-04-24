@@ -88,6 +88,7 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = null;
 
+	public static boolean isWorkspaceEnvironment = true;
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
 
@@ -152,6 +153,7 @@ public class CQRMain {
 		GeckoLib.initialize();
 
 		logger = event.getModLog();
+		isWorkspaceEnvironment = !CQRMain.class.getResource("").getProtocol().equals("jar");
 		// Important: This has to be the F I R S T statement
 		this.initConfigFolder(event);
 

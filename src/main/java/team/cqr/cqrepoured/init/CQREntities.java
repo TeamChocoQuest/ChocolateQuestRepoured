@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.objects.entity.EntitySlimePart;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
@@ -213,15 +214,6 @@ public class CQREntities {
 					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantSpider.class, "giant_spider", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQREnderKing.class, "ender_king", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),
-					createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityEndLaserTargeting.class, "end_targeting_laser", 64, 1, true),
 					
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
@@ -233,11 +225,28 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(EntityWalkerTornado.class, "walker_tornado", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCQRPirateParrot.class, "pirate_parrot", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityIceSpike.class, "ice_spike", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true), 
-					createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true),
 			};
 
 			event.getRegistry().registerAll(entityEntries);
+
+			if (CQRMain.isWorkspaceEnvironment) {
+				event.getRegistry().registerAll(new EntityEntry[] {
+						// ender calamity
+						createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
+						createEntityEntry(EntityCQREnderKing.class, "ender_king", 64, 1, true, 3289650, 000000),
+						createEntityEntryWithoutEgg(EntityEndLaserTargeting.class, "end_targeting_laser", 64, 1, true),
+						createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
+						
+						// spectre lord
+						createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),
+						createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true),
+						createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
+						createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
+						createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
+						createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true),
+				});
+			}
 
 			// Spawns
 			// EntityRegistry.addSpawn(EntityCQRWasp.class, 24, 3, 9, EnumCreatureType.CREATURE, Biomes.SWAMPLAND, Biomes.MUTATED_SWAMPLAND, Biomes.JUNGLE,
