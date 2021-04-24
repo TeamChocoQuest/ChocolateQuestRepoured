@@ -131,7 +131,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected BlockPos homePosition = null;
 	protected UUID leaderUUID;
 	protected EntityLivingBase leader = null;
-	private int lastTickPingedAsLeader;
+	private int lastTickPingedAsLeader = -1000;
 	protected boolean holdingPotion;
 	protected byte usedPotions = (byte) 0;
 	protected double healthScale = 1.0D;
