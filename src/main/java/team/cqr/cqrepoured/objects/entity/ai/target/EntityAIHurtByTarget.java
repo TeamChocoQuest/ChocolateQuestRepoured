@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.objects.entity.ai.target;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
@@ -13,7 +12,6 @@ import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.factions.CQRFaction;
-import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
@@ -119,91 +117,20 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	private static boolean isAllyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, EntityLivingBase possibleAlly) {
-		CQRFaction faction = entity.getFaction();
-		EntityLivingBase leader = entity.getLeader();
-		if (!(leader instanceof EntityPlayer)) {
-			// non-player leader
-			if (possibleAlly == leader) {
-				return true;
-			}
-			if (possibleAlly instanceof AbstractEntityCQR) {
-				EntityLivingBase possibleAllyLeader = ((AbstractEntityCQR) possibleAlly).getLeader();
-				if (leader != null && possibleAllyLeader == leader) {
-					return true;
-				}
-				if (possibleAllyLeader instanceof EntityPlayer) {
-					return false;
-				} else {
-					if (faction.isAlly(possibleAlly)) {
-						return true;
-					}
-				}
-			} else {
-				if (faction.isAlly(possibleAlly)) {
-					return true;
-				}
-			}
-			return false;
-		} else {
-			// player leader
-			if (possibleAlly == leader) {
-				return true;
-			}
-			if (possibleAlly instanceof AbstractEntityCQR && ((AbstractEntityCQR) possibleAlly).getLeader() == leader) {
-				return true;
-			}
+		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
+		EntityLivingBase targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
+		if (!(leader instanceof EntityPlayer) && targetLeader instanceof EntityPlayer) {
 			return false;
 		}
+		return TargetUtil.isAllyCheckingLeaders(leader, targetLeader);
 	}
 
 	private static boolean isEnemyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, EntityLivingBase possibleEnemy) {
-		CQRFaction faction = entity.getFaction();
-		EntityLivingBase leader = entity.getLeader();
+		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
 		if (!(leader instanceof EntityPlayer)) {
-			// non-player leader
-			if (possibleEnemy == leader) {
-				return false;
-			}
-			if (possibleEnemy instanceof AbstractEntityCQR) {
-				EntityLivingBase possibleEnemyLeader = ((AbstractEntityCQR) possibleEnemy).getLeader();
-				if (leader != null && possibleEnemyLeader == leader) {
-					return false;
-				}
-				if (possibleEnemyLeader instanceof EntityPlayer) {
-					if (faction.isAlly(possibleEnemyLeader)) {
-						return false;
-					}
-				} else {
-					if (faction.isAlly(possibleEnemy)) {
-						return false;
-					}
-				}
-			} else {
-				if (faction.isAlly(possibleEnemy)) {
-					return false;
-				}
-			}
-			return true;
-		} else {
-			// player leader
-			if (possibleEnemy == leader) {
-				return false;
-			}
-			if (possibleEnemy instanceof AbstractEntityCQR && ((AbstractEntityCQR) possibleEnemy).getLeader() == leader) {
-				return false;
-			}
-			CQRFaction possibleEnemyFaction = FactionRegistry.instance().getFactionOf(possibleEnemy);
-			if (possibleEnemyFaction != null) {
-				if (!possibleEnemyFaction.isEnemy(leader)) {
-					return false;
-				}
-			} else {
-				if (!(possibleEnemy instanceof EntityMob)) {
-					return false;
-				}
-			}
-			return true;
+			return !TargetUtil.isAllyCheckingLeaders(leader, possibleEnemy);
 		}
+		return TargetUtil.isEnemyCheckingLeaders(leader, possibleEnemy);
 	}
 
 	private static int getPathComplexity(Path path) {

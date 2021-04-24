@@ -266,7 +266,7 @@ public class TargetUtil {
 		return true;
 	}
 
-	private static EntityLivingBase getLeaderOrOwnerRecursive(EntityLivingBase entity) {
+	public static EntityLivingBase getLeaderOrOwnerRecursive(EntityLivingBase entity) {
 		int i = 10;
 		while (i-- > 0) {
 			if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).hasLeader()) {
