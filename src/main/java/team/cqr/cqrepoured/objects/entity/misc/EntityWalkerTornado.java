@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -25,7 +26,7 @@ import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.objects.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.objects.entity.particle.ParticleWalkerTornado;
 
-public class EntityWalkerTornado extends Entity {
+public class EntityWalkerTornado extends Entity implements IEntityOwnable{
 
 	protected static final int PARTICLE_COUNT = 2;
 	protected static final int MAX_LIVING_TICKS = 200;
@@ -62,9 +63,9 @@ public class EntityWalkerTornado extends Entity {
 			this.handleNearbyEntities();
 		}
 
-		if (this.getOwnerID() != null && this.owner == null && this.ticksExisted % 10 == 0) {
+		if (this.getOwnerId() != null && this.owner == null && this.ticksExisted % 10 == 0) {
 			if (this.world instanceof WorldServer) {
-				Entity ent = ((WorldServer) this.world).getEntityFromUuid(this.getOwnerID());
+				Entity ent = ((WorldServer) this.world).getEntityFromUuid(this.getOwnerId());
 				if (ent.isEntityAlive()) {
 					this.owner = ent;
 				}
@@ -147,8 +148,8 @@ public class EntityWalkerTornado extends Entity {
 		if (ent instanceof EntityWalkerTornado) {
 			return false;
 		}
-		if (this.getOwnerID() != null) {
-			if (ent.getPersistentID().equals(this.getOwnerID())) {
+		if (this.getOwnerId() != null) {
+			if (ent.getPersistentID().equals(this.getOwnerId())) {
 				return false;
 			}
 			CQRFaction faction = FactionRegistry.instance().getFactionOf(this.owner);
@@ -161,8 +162,8 @@ public class EntityWalkerTornado extends Entity {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-		if (this.getOwnerID() != null) {
-			compound.setTag("summoner", NBTUtil.createUUIDTag(this.getOwnerID()));
+		if (this.getOwnerId() != null) {
+			compound.setTag("summoner", NBTUtil.createUUIDTag(this.getOwnerId()));
 		}
 		compound.setDouble("vX", this.velocity.x);
 		compound.setDouble("vY", this.velocity.y);
@@ -190,7 +191,8 @@ public class EntityWalkerTornado extends Entity {
 		this.dataManager.set(OWNER_ID, ownerID.toString());
 	}
 
-	public UUID getOwnerID() {
+	@Override
+	public UUID getOwnerId() {
 		if (this.dataManager.get(OWNER_ID) != null && !this.dataManager.get(OWNER_ID).isEmpty()) {
 			return UUID.fromString(this.dataManager.get(OWNER_ID));
 		}
@@ -203,6 +205,12 @@ public class EntityWalkerTornado extends Entity {
 
 	private Integer getColor() {
 		return this.dataManager.get(COLOR);
+	}
+
+
+	@Override
+	public Entity getOwner() {
+		return this.owner;
 	}
 
 }
