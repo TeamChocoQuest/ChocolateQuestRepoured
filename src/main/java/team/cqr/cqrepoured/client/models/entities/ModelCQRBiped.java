@@ -4,12 +4,17 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
 import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
 import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
+import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
+import team.cqr.cqrepoured.objects.items.swords.ItemGreatSword;
 
 public class ModelCQRBiped extends ModelBiped {
 
@@ -47,14 +52,14 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
 
-		this.bipedLeftArmwear = new ModelRenderer(this, 48, 48);
-		this.bipedLeftArmwear.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.25F);
-		this.bipedLeftArmwear.setRotationPoint(5.0F, 2.0F, 0.0F);
-
 		this.bipedRightArmwear = new ModelRenderer(this, 40, 32);
 		this.bipedRightArmwear.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, 0.25F);
 		this.bipedRightArmwear.setRotationPoint(-5.0F, 2.0F, 10.0F);
 
+		this.bipedLeftArmwear = new ModelRenderer(this, 48, 48);
+		this.bipedLeftArmwear.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.25F);
+		this.bipedLeftArmwear.setRotationPoint(5.0F, 2.0F, 0.0F);
+		
 		this.bipedLeftLegwear = new ModelRenderer(this, 0, 48);
 		this.bipedLeftLegwear.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.25F);
 		this.bipedLeftLegwear.setRotationPoint(1.9F, 12.0F, 0.0F);
@@ -114,6 +119,67 @@ public class ModelCQRBiped extends ModelBiped {
 			}
 		}
 
+		ItemStack stack = ((AbstractEntityCQR) entityIn).getHeldItemMainhand();
+		if (stack.getItem() instanceof ItemSpearBase) {
+			float f = (float) Math.toRadians(40.0F);
+			this.bipedBody.rotateAngleX = 0.0F;
+			this.bipedBody.rotateAngleY = f;
+			this.bipedBody.rotateAngleZ = 0.0F;
+
+			Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
+			this.bipedRightArm.rotationPointX = (float) v.x;
+			this.bipedRightArm.rotationPointZ = (float) v.z;
+			this.bipedRightArm.rotateAngleX = 0.0F;
+			this.bipedRightArm.rotateAngleY = f;
+			this.bipedRightArm.rotateAngleZ = 0.0F;
+
+			Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
+			this.bipedLeftArm.rotationPointX = (float) v1.x;
+			this.bipedLeftArm.rotationPointZ = (float) v1.z;
+			this.bipedLeftArm.rotateAngleX = 0.0F;
+			this.bipedLeftArm.rotateAngleY = f;
+			this.bipedLeftArm.rotateAngleZ = 0.0F;
+
+			float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
+			this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-10.0F - 20.0F * f1);
+			this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-45.0F);
+			this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-45.0F - 25.0F * f1);
+			this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(30.0F - 10.0F * f1);
+		}
+		if (true && stack.getItem() instanceof ItemGreatSword) {
+			//swingProgress = ageInTicks % 60F / 60F;
+			float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI * 2.0F);
+			float f = (float) Math.toRadians(20.0F + 30.0F * f3);
+			this.bipedBody.rotateAngleX = 0.0F;
+			this.bipedBody.rotateAngleY = f;
+			this.bipedBody.rotateAngleZ = 0.0F;
+
+			if (this.swingProgress > 0.0F) {
+				
+			}
+			Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
+			this.bipedRightArm.rotationPointX = (float) v.x;
+			this.bipedRightArm.rotationPointZ = (float) v.z;
+			this.bipedRightArm.rotateAngleX = 0.0F;
+			this.bipedRightArm.rotateAngleY = f;
+			this.bipedRightArm.rotateAngleZ = 0.0F;
+
+			Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
+			this.bipedLeftArm.rotationPointX = (float) v1.x;
+			this.bipedLeftArm.rotationPointZ = (float) v1.z;
+			this.bipedLeftArm.rotateAngleX = 0.0F;
+			this.bipedLeftArm.rotateAngleY = f;
+			this.bipedLeftArm.rotateAngleZ = 0.0F;
+
+			float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
+			this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-40.0F - 60.0F * f1);
+			this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-40.0F);
+			this.bipedRightArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
+			this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-35.0F - 60.0F * f1);
+			this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(50.0F);
+			this.bipedLeftArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
+		}
+
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
@@ -146,15 +212,50 @@ public class ModelCQRBiped extends ModelBiped {
 
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+        GlStateManager.pushMatrix();
 
+        if (this.isChild)
+        {
+            float f = 2.0F;
+            GlStateManager.scale(0.75F, 0.75F, 0.75F);
+            GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
+            this.bipedHead.render(scale);
+            GlStateManager.popMatrix();
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(0.5F, 0.5F, 0.5F);
+            GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
+            this.bipedBody.render(scale);
+            this.bipedRightArm.render(scale);
+            this.bipedLeftArm.render(scale);
+            this.bipedRightLeg.render(scale);
+            this.bipedLeftLeg.render(scale);
+            this.bipedHeadwear.render(scale);
+        }
+        else
+        {
+            if (entityIn.isSneaking())
+            {
+                GlStateManager.translate(0.0F, 0.2F, 0.0F);
+            }
+
+            this.bipedHead.render(scale);
+            this.bipedBody.render(scale);
+            this.bipedRightArm.render(scale);
+            this.bipedLeftArm.render(scale);
+            this.bipedRightLeg.render(scale);
+            this.bipedLeftLeg.render(scale);
+            this.bipedHeadwear.render(scale);
+        }
+
+        GlStateManager.popMatrix();
 		GlStateManager.pushMatrix();
 
 		if (this.hasExtraLayers) {
 			this.bipedLeftLegwear.render(scale);
 			this.bipedRightLegwear.render(scale);
-			this.bipedLeftArmwear.render(scale);
-			this.bipedRightArmwear.render(scale);
+			//this.bipedLeftArmwear.render(scale);
+			//this.bipedRightArmwear.render(scale);
 			this.bipedBodyWear.render(scale);
 		}
 		if (entityIn instanceof AbstractEntityCQR) {
