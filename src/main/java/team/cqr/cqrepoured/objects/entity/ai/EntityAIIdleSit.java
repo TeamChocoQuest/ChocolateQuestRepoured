@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -88,6 +89,9 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 				if (this.talkingPartner.isEntityAlive() && this.entity.getDistance(this.talkingPartner) < 8.0D) {
 					this.entity.setChatting(true);
 					this.entity.getLookHelper().setLookPositionWithEntity(this.talkingPartner, 15.0F, 15.0F);
+					double dx = this.talkingPartner.posX - this.entity.posX;
+					double dz = this.talkingPartner.posZ - this.entity.posZ;
+					this.entity.rotationYaw = (float) Math.toDegrees(MathHelper.atan2(dz, dx)) - 90.0F;
 				} else {
 					this.talkingPartner = null;
 					this.entity.setChatting(false);

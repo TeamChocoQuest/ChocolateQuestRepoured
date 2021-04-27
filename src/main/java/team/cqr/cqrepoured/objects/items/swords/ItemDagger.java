@@ -13,6 +13,7 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -22,12 +23,9 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -45,6 +43,13 @@ public class ItemDagger extends ItemSword {
 		this.cooldown = cooldown;
 		this.attackSpeed = attackSpeed;
 		this.movementSpeed = new AttributeModifier("DaggerSpeedModifier", 0.05D, 2);
+	}
+
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		boolean flag = ItemUtil.compareRotations(player.rotationYaw, entity.rotationYaw, 50.0D);
+		ItemUtil.attackTarget(stack, player, entity, flag, 0.0F, flag ? 1.0F : 0.0F, false, 0.0F, 0.0F);
+		return true;
 	}
 
 	@Override
@@ -85,14 +90,7 @@ public class ItemDagger extends ItemSword {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (!attacker.world.isRemote && ItemUtil.compareRotations(target.rotationYaw, attacker.rotationYaw, 50.0D)) {
-			float damage = (float) attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-			DamageSource source = attacker instanceof EntityPlayer ? DamageSource.causePlayerDamage((EntityPlayer) attacker) : DamageSource.causeMobDamage(attacker);
-
-			target.attackEntityFrom(source, damage * 2F * (attacker.fallDistance > 0.0F ? 1.5F : 1.0F));
-			((WorldServer) attacker.world).spawnParticle(EnumParticleTypes.CRIT, target.posX, target.posY, target.posZ, 12, 0.5D, 0.5D, 0.5D, 1.0D);
-		}
-		return true;
+		return super.hitEntity(stack, target, attacker);
 	}
 
 	@Override

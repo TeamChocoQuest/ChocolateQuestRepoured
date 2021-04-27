@@ -36,6 +36,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemGreatSword extends ItemSword {
 
@@ -49,6 +50,12 @@ public class ItemGreatSword extends ItemSword {
 		this.damage = damage;
 		this.cooldown = cooldown;
 		this.attackSpeed = attackSpeed;
+	}
+
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, true, 2.0F, 0.0F);
+		return true;
 	}
 
 	@Override
