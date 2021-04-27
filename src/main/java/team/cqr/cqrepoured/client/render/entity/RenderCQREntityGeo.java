@@ -7,14 +7,11 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -26,6 +23,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.MatrixStack;
+import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.client.util.MatrixUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.Reference;
@@ -183,23 +181,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	private void renderBlock(IBlockState iBlockState, Entity currentEntity) {
-		BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.pushMatrix();
-
-		GlStateManager.translate(-0.25F, -0.25F, 0.25F);
-		GlStateManager.scale(0.5F, 0.5F, 0.5F);
-
-		int i = currentEntity.getBrightnessForRender();
-		int j = i % 65536;
-		int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		blockrendererdispatcher.renderBlockBrightness(iBlockState, 1.0F);
-
-		GlStateManager.popMatrix();
-		GlStateManager.disableRescaleNormal();
+		BlockRenderUtil.renderBlockAtEntity(iBlockState, currentEntity, this);
 	}
 
 	// Code by McHorse
