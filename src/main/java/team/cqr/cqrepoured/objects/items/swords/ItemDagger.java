@@ -48,7 +48,7 @@ public class ItemDagger extends ItemSword {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
 		boolean flag = ItemUtil.compareRotations(player.rotationYaw, entity.rotationYaw, 50.0D);
-		ItemUtil.attackTarget(stack, player, entity, flag, 0.0F, flag ? 1.0F : 0.0F, false, 0.0F, 0.0F);
+		ItemUtil.attackTarget(stack, player, entity, flag, 0.0F, flag ? 1.0F : 0.0F, true, 1.0F, 0.0F, 0.5D, 0.25D);
 		return true;
 	}
 

@@ -73,19 +73,18 @@ public class ItemUtil {
 	}
 
 	/**
-	 * Copied from {@link EntityPlayer#attackTargetEntityWithCurrentItem(Entity)}
+	 * Copied from {@link EntityPlayer#attackTargetEntityWithCurrentItem(Entity)}<br>
+	 * Vanilla would be (stack, player, target, false, 0.0F, 0.0F, true, 1.0F, 0.0F, 1.0D, 0.25D)
 	 */
 	public static void attackTarget(ItemStack stack, EntityPlayer player, Entity targetEntity, boolean fakeCrit,
 			float damageBonusFlat, float damageBonusPercentage, boolean sweepingEnabled, float sweepingDamageFlat,
-			float sweepingDamagePercentage) {
+			float sweepingDamagePercentage, double sweepingRangeHorizontal, double sweepingRangeVertical) {
 		// CQR replacement for ForgeHooks.onPlayerAttackTarget to prevent infinity loop
 		if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player, targetEntity)))
 			return;
 		if (targetEntity.canBeAttackedWithItem()) {
 			if (!targetEntity.hitByEntity(player)) {
 				float f = (float) player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-				// CQR damage boni
-				f += damageBonusFlat + damageBonusPercentage * f;
 				float f1;
 
 				if (targetEntity instanceof EntityLivingBase) {
@@ -127,6 +126,7 @@ public class ItemUtil {
 					}
 
 					f = f + f1;
+					f += damageBonusFlat + f * (1.0F + damageBonusPercentage);
 					boolean flag3 = false;
 					double d0 = (double) (player.distanceWalkedModified - player.prevDistanceWalkedModified);
 
@@ -181,12 +181,13 @@ public class ItemUtil {
 							float f3 = sweepingDamageFlat + sweepingDamagePercentage * f;
 							f3 += EnchantmentHelper.getSweepingDamageRatio(player) * f;
 
+							double entityReachDistanceSqr = getEntityReachDistanceSqr(player);
 							for (EntityLivingBase entitylivingbase : player.world.getEntitiesWithinAABB(
 									EntityLivingBase.class,
-									targetEntity.getEntityBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
+									targetEntity.getEntityBoundingBox().grow(sweepingRangeHorizontal, sweepingRangeVertical, sweepingRangeHorizontal))) {
 								if (entitylivingbase != player && entitylivingbase != targetEntity
 										&& !player.isOnSameTeam(entitylivingbase)
-										&& player.getDistanceSq(entitylivingbase) < 9.0D) {
+										&& player.getDistanceSq(entitylivingbase) < entityReachDistanceSqr) {
 									entitylivingbase.knockBack(player, 0.4F,
 											(double) MathHelper.sin(player.rotationYaw * 0.017453292F),
 											(double) (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
@@ -288,6 +289,15 @@ public class ItemUtil {
 				}
 			}
 		}
+	}
+
+	private static double getEntityReachDistanceSqr(EntityPlayer player) {
+		double d = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+		if (!player.isCreative()) {
+			d -= 0.5D;
+		}
+		d -= 1.5D;
+		return d * d;
 	}
 
 }

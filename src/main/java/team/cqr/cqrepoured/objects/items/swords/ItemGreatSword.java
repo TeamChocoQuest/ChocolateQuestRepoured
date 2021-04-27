@@ -54,7 +54,7 @@ public class ItemGreatSword extends ItemSword {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, true, 2.0F, 0.0F);
+		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, true, 2.0F, 0.0F, 1.25D, 0.25D);
 		return true;
 	}
 
