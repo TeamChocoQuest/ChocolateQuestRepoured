@@ -23,6 +23,7 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateTradeIndex
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCalamityHandUpdateHand;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCalamityMainAnimationUpdate;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
+import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
 import team.cqr.cqrepoured.network.client.packet.CPacketDeleteTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketEditTrade;
@@ -36,6 +37,7 @@ import team.cqr.cqrepoured.network.client.packet.CPacketSyncSelectedTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.client.packet.CPacketUpdateTradeIndex;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerAddPathNode;
+import team.cqr.cqrepoured.network.server.handler.SPacketHandlerAttackEntity;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerCloseMapPlaceholderGuiSimple;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerDeleteTrade;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerEditTrade;
@@ -109,6 +111,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncTileEntity.class, CPacketSyncTileEntity.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerAddPathNode.class, CPacketAddPathNode.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerCloseMapPlaceholderGuiSimple.class, CPacketCloseMapPlaceholderGuiSimple.class, messageID++, Side.SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerAttackEntity.class, CPacketAttackEntity.class, messageID++, Side.SERVER);
 	}
 
 }

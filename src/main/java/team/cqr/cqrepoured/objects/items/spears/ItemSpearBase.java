@@ -13,6 +13,8 @@ import org.lwjgl.input.Keyboard;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -28,18 +30,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
 import team.cqr.cqrepoured.util.ItemUtil;
+import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 /**
  * Copyright (c) 20.12.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
@@ -68,7 +80,7 @@ public class ItemSpearBase extends ItemSword {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, false, 0.0F, 0.0F);
+		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, false, 1.0F, 0.0F, 0.5D, 0.25D);
 		return true;
 	}
 
@@ -191,6 +203,82 @@ public class ItemSpearBase extends ItemSword {
 				}
 			}
 		}
+	}
+
+	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
+	private static class EventHandler {
+
+		private static final ReflectionMethod<Object> METHOD_SYNC_CURRENT_PLAY_ITEM = new ReflectionMethod<>(PlayerControllerMP.class, "func_78750_j", "syncCurrentPlayItem");
+		
+		@SubscribeEvent
+		public static void onMouseEvent(MouseEvent event) {
+			if (event.getButton() != 0) {
+				return;
+			}
+			if (!event.isButtonstate()) {
+				return;
+			}
+			Minecraft mc = Minecraft.getMinecraft();
+			Entity entity = mc.getRenderViewEntity();
+			float partialTicks = mc.getRenderPartialTicks();
+			double blockReachDistance = mc.playerController.getBlockReachDistance();
+			RayTraceResult blockMouseOver = entity.rayTrace(blockReachDistance, partialTicks);
+
+			Vec3d eyeVec = entity.getPositionEyes(partialTicks);
+			double entityReachDistance = blockReachDistance - 1.5D;
+			if (blockMouseOver.typeOfHit != Type.MISS) {
+				entityReachDistance = Math.min(eyeVec.distanceTo(blockMouseOver.hitVec), entityReachDistance);
+			}
+
+			Vec3d lookVec = entity.getLook(partialTicks);
+			AxisAlignedBB aabb = entity.getEntityBoundingBox();
+			aabb = aabb.expand(lookVec.x * entityReachDistance, lookVec.y * entityReachDistance, lookVec.z * entityReachDistance);
+			aabb = aabb.grow(1.0D, 1.0D, 1.0D);
+			List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity, aabb, entity1 -> {
+				if (!EntitySelectors.NOT_SPECTATING.apply(entity1)) {
+					return false;
+				}
+				return entity1.canBeCollidedWith();
+			});
+
+			Entity pointedEntity = null;
+			Vec3d endVec = eyeVec.add(lookVec.x * entityReachDistance, lookVec.y * entityReachDistance, lookVec.z * entityReachDistance);
+			double minSqr = entityReachDistance * entityReachDistance;
+			for (Entity entity2 : list) {
+				if (entity.getLowestRidingEntity() == entity2.getLowestRidingEntity() && !entity2.canRiderInteract()) {
+					continue;
+				}
+
+				AxisAlignedBB aabb1 = entity2.getEntityBoundingBox().grow(entity2.getCollisionBorderSize());
+				if (aabb1.contains(eyeVec)) {
+					pointedEntity = entity2;
+					minSqr = 0.0D;
+					break;
+				}
+
+				RayTraceResult rayTraceResult = aabb1.calculateIntercept(eyeVec, endVec);
+				if (rayTraceResult == null) {
+					continue;
+				}
+
+				double dist = eyeVec.squareDistanceTo(rayTraceResult.hitVec);
+				if (dist < minSqr) {
+					pointedEntity = entity2;
+					minSqr = dist;
+				}
+			}
+
+			if (pointedEntity != null && (mc.objectMouseOver == null || pointedEntity != mc.objectMouseOver.entityHit)) {
+				METHOD_SYNC_CURRENT_PLAY_ITEM.invoke(mc.playerController);
+				CQRMain.NETWORK.sendToServer(new CPacketAttackEntity(pointedEntity));
+	
+				if (mc.playerController.getCurrentGameType() != GameType.SPECTATOR) {
+					mc.player.attackTargetEntityWithCurrentItem(pointedEntity);
+					mc.player.resetCooldown();
+				}
+			}
+		}
+
 	}
 
 }
