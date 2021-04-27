@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.ai;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
@@ -34,8 +34,8 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 
 	@Override
 	public void startExecuting() {
-		BlockPos target = new BlockPos(this.entity.getLastPosAttackTarget());
-		this.entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), 1.0D);
+		Vec3d v = this.entity.getLastPosAttackTarget();
+		this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 	@Override
 	public void updateTask() {
 		if (this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.ticksExisted) {
-			BlockPos target = new BlockPos(this.entity.getLastPosAttackTarget());
-			this.entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), 1.0D);
+			Vec3d v = this.entity.getLastPosAttackTarget();
+			this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
 		}
 		if (!this.entity.hasPath()) {
 			this.ticksWaiting++;

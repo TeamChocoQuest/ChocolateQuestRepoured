@@ -5,10 +5,12 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
@@ -68,16 +70,16 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void updateTask() {
 		if (++this.cooldown > COOLDOWN_BORDER) {
 			// Make entity sit
-			if (!this.entity.isSitting()) {
-				this.entity.setSitting(true);
-			}
+			this.entity.setSitting(true);
 
 			// search for new talking partner
 			if (++this.cooldwonForPartnerCycle > COOLDOWN_FOR_PARTNER_CYCLE_BORDER) {
 				this.cooldwonForPartnerCycle = 0;
-				Vec3d vec1 = this.entity.getPositionVector().subtract(6.0D, 3.0D, 6.0D);
-				Vec3d vec2 = this.entity.getPositionVector().add(6.0D, 3.0D, 6.0D);
-				AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
+				double x = this.entity.posX;
+				double y = this.entity.posY;
+				double z = this.entity.posZ;
+				double r = 6.0D;
+				AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
 				List<AbstractEntityCQR> friends = this.entity.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, this.predicate);
 				if (!friends.isEmpty()) {
 					this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
@@ -86,7 +88,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 			// check if talking partner is valid and either talk to him or stop talking
 			if (this.talkingPartner != null) {
-				if (this.talkingPartner.isEntityAlive() && this.entity.getDistance(this.talkingPartner) < 8.0D) {
+				if (this.talkingPartner.isEntityAlive() && this.entity.getDistanceSq(this.talkingPartner) < 8.0D * 8.0D) {
 					this.entity.setChatting(true);
 					this.entity.getLookHelper().setLookPositionWithEntity(this.talkingPartner, 15.0F, 15.0F);
 					double dx = this.talkingPartner.posX - this.entity.posX;
@@ -106,10 +108,12 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		if (this.entity.getFaction() == null) {
+		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
+		EntityLivingBase targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
+		if (!(leader instanceof EntityPlayer) && targetLeader instanceof EntityPlayer) {
 			return false;
 		}
-		if (!this.entity.getFaction().isAlly(possibleAlly)) {
+		if (!TargetUtil.isAllyCheckingLeaders(leader, targetLeader)) {
 			return false;
 		}
 		return this.entity.getEntitySenses().canSee(possibleAlly);

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.ai.target;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -30,9 +30,6 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			return false;
 		}
 		this.entity.setAttackTarget(null);
-		if (!this.entity.hasFaction()) {
-			return false;
-		}
 		return this.random.nextInt(3) == 0;
 	}
 
@@ -45,8 +42,8 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	public void startExecuting() {
 		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
 		List<EntityLivingBase> possibleTargets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
-		List<EntityLivingBase> possibleTargetsAlly = new LinkedList<>();
-		List<EntityLivingBase> possibleTargetsEnemy = new LinkedList<>();
+		List<EntityLivingBase> possibleTargetsAlly = new ArrayList<>();
+		List<EntityLivingBase> possibleTargetsEnemy = new ArrayList<>();
 		this.fillLists(possibleTargets, possibleTargetsAlly, possibleTargetsEnemy);
 		if (!possibleTargetsAlly.isEmpty()) {
 			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsAlly));
@@ -56,6 +53,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	private void fillLists(List<EntityLivingBase> list, List<EntityLivingBase> allies, List<EntityLivingBase> enemies) {
+		boolean canTargetAlly = this.canTargetAlly();
 		for (EntityLivingBase possibleTarget : list) {
 			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 				continue;
@@ -66,7 +64,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			if (possibleTarget == this.entity) {
 				continue;
 			}
-			if (this.canTargetAlly() && this.isSuitableTargetAlly(possibleTarget)) {
+			if (canTargetAlly && this.isSuitableTargetAlly(possibleTarget)) {
 				allies.add(possibleTarget);
 			} else if (this.isSuitableTargetEnemy(possibleTarget)) {
 				enemies.add(possibleTarget);
@@ -97,10 +95,6 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	private boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
-		CQRFaction faction = this.entity.getFaction();
-		if (faction == null) {
-			return false;
-		}
 		if (!TargetUtil.isEnemyCheckingLeaders(this.entity, possibleTarget)) {
 			return false;
 		}
@@ -113,7 +107,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (this.entity.isEntityInFieldOfView(possibleTarget)) {
 			return this.entity.isInSightRange(possibleTarget);
 		}
-		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 12.0D;
+		return !possibleTarget.isSneaking() && this.entity.getDistanceSq(possibleTarget) < 12.0D * 12.0D;
 	}
 
 	private boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
@@ -126,14 +120,10 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		if (this.entity.getDistance(possibleTarget) > 64.0D) {
+		if (this.entity.getDistanceSq(possibleTarget) > 64.0D * 64.0D) {
 			return false;
 		}
-		CQRFaction faction = this.entity.getFaction();
-		if (faction == null) {
-			return false;
-		}
-		if (faction.isAlly(possibleTarget) || possibleTarget == this.entity.getLeader()) {
+		if (TargetUtil.isAllyCheckingLeaders(this.entity, possibleTarget)) {
 			if (!this.canTargetAlly()) {
 				return false;
 			}

@@ -35,10 +35,11 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 			BlockPos pos = new BlockPos(this.entity);
 			Vec3d vec = this.entity.getPositionEyes(1.0F);
 			this.nearestFire = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, Blocks.FIRE, (mutablePos, state) -> {
-				BlockPos p = mutablePos.down();
-				if (this.world.getBlockState(p).getBlock().isFireSource(this.world, p, EnumFacing.UP)) {
+				mutablePos.setY(mutablePos.getY() - 1);
+				if (this.world.getBlockState(mutablePos).getBlock().isFireSource(this.world, mutablePos, EnumFacing.UP)) {
 					return false;
 				}
+				mutablePos.setY(mutablePos.getY() + 1);
 				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				return result == null || result.getBlockPos().equals(mutablePos);
 			});

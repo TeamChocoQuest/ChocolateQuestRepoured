@@ -104,6 +104,7 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAISpellHandler;
 import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
 import team.cqr.cqrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
@@ -1554,8 +1555,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void setAttackTarget(EntityLivingBase entitylivingbaseIn) {
+		EntityLivingBase prevAttackTarget = this.getAttackTarget();
 		super.setAttackTarget(entitylivingbaseIn);
 		EntityLivingBase attackTarget = this.getAttackTarget();
+		if (prevAttackTarget == attackTarget) {
+			return;
+		}
 		if (attackTarget == null) {
 			this.dataManager.set(HAS_TARGET, false);
 			this.lastTimeSeenAttackTarget = Integer.MIN_VALUE;
@@ -1570,16 +1575,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.lastTimeSeenAttackTarget = this.ticksExisted;
 			this.lastPosAttackTarget = attackTarget.getPositionVector();
 
-			CQRFaction faction = this.getFaction();
-			if (faction != null) {
-				Item item = this.getHeldItemMainhand().getItem();
-				if (faction.isAlly(attackTarget)) {
-					if (item instanceof IFakeWeapon<?>) {
-						this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
-					}
-				} else if (item instanceof ISupportWeapon<?>) {
-					this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeWeapon()));
+			Item item = this.getHeldItemMainhand().getItem();
+			if (TargetUtil.isAllyCheckingLeaders(this, attackTarget)) {
+				if (item instanceof IFakeWeapon<?>) {
+					this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
 				}
+			} else if (item instanceof ISupportWeapon<?>) {
+				this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeWeapon()));
 			}
 		}
 	}

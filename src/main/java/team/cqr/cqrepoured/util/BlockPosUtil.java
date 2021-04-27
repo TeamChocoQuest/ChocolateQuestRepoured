@@ -74,9 +74,9 @@ public class BlockPosUtil {
 					int blockEndY = Math.min((chunkY << 4) | 15, y2);
 					int blockEndZ = Math.min((chunkZ << 4) | 15, z2);
 
-					for (int x5 = blockStartX; x5 <= blockEndX; x5++) {
+					for (int z5 = blockStartZ; z5 <= blockEndZ; z5++) {
 						for (int y5 = blockStartY; y5 <= blockEndY; y5++) {
-							for (int z5 = blockStartZ; z5 <= blockEndZ; z5++) {
+							for (int x5 = blockStartX; x5 <= blockEndX; x5++) {
 								IBlockState state = extendedBlockStorage.get(x5 & 15, y5 & 15, z5 & 15);
 
 								if (skipAirBlocks && state.getBlock() == Blocks.AIR) {
@@ -112,17 +112,25 @@ public class BlockPosUtil {
 	}
 
 	public static BlockPos getNearest(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockPos pos, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
-		List<BlockPos> list = getAll(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, toCheck, predicate);
-		BlockPos p1 = null;
-		double min = Double.MAX_VALUE;
-		for (BlockPos p2 : list) {
-			double d = pos.distanceSq(p2);
-			if (d < min) {
-				p1 = p2;
-				min = d;
+		BlockPosDistInfo blockPosDistInfo = new BlockPosDistInfo();
+		blockPosDistInfo.d = Integer.MAX_VALUE;
+		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
+			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
+				double dist = pos.distanceSq(mutablePos);
+				if (dist < blockPosDistInfo.d) {
+					blockPosDistInfo.mutablePos.setPos(mutablePos);
+					blockPosDistInfo.d = dist;
+					blockPosDistInfo.empty = false;
+				}
 			}
-		}
-		return p1;
+		});
+		return !blockPosDistInfo.empty ? blockPosDistInfo.mutablePos.toImmutable() : null;
+	}
+
+	private static class BlockPosDistInfo {
+		public final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		public double d;
+		public boolean empty = true;
 	}
 
 }
