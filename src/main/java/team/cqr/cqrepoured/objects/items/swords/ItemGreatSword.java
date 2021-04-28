@@ -1,30 +1,20 @@
 package team.cqr.cqrepoured.objects.items.swords;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
-
-import com.google.common.collect.Multimap;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -38,42 +28,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-public class ItemGreatSword extends ItemSword {
+public class ItemGreatSword extends ItemCQRWeapon {
 
-	private float damage;
-	private int cooldown;
-	private float attackSpeed;
+	private final float specialAttackDamage;
+	private final int specialAttackCooldown;
 
-	public ItemGreatSword(ToolMaterial material, float damage, int cooldown, float attackSpeed) {
-		super(material);
-
-		this.damage = damage;
-		this.cooldown = cooldown;
-		this.attackSpeed = attackSpeed;
+	public ItemGreatSword(ToolMaterial material, double attackDamageMultiplier, float damage, int cooldown) {
+		super(material, attackDamageMultiplier);
+		this.specialAttackDamage = damage;
+		this.specialAttackCooldown = cooldown;
 	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, true, 2.0F, 0.0F, 1.25D, 0.25D);
+		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 1.0F, true, 2.0F, 0.0F, 1.25D, 0.25D, 0.5F);
 		return true;
-	}
-
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
-		this.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
-		return modifiers;
-	}
-
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
-
-		if (modifierOptional.isPresent()) {
-			AttributeModifier modifier = modifierOptional.get();
-			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
-		}
 	}
 
 	@Override
@@ -104,15 +73,15 @@ public class ItemGreatSword extends ItemSword {
 			EntityLiving entityInAABB = entitiesInAABB.get(i);
 
 			if (this.getMaxItemUseDuration(stack) - timeLeft <= 30) {
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.damage);
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.specialAttackDamage);
 			}
 
 			if (this.getMaxItemUseDuration(stack) - timeLeft > 30 && this.getMaxItemUseDuration(stack) - timeLeft <= 60) {
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.damage * 3);
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.specialAttackDamage * 3);
 			}
 
 			if (this.getMaxItemUseDuration(stack) - timeLeft > 60) {
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.damage * 4);
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.specialAttackDamage * 4);
 			}
 		}
 
@@ -130,7 +99,7 @@ public class ItemGreatSword extends ItemSword {
 				player.motionY += 0.35D;
 			}
 
-			player.getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+			player.getCooldownTracker().setCooldown(stack.getItem(), this.specialAttackCooldown);
 			player.swingArm(EnumHand.MAIN_HAND);
 			worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 			worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX + x, player.posY + y + 1.5D, player.posZ + z, 0D, 0D, 0D);

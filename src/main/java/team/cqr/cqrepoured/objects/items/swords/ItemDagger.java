@@ -1,8 +1,6 @@
 package team.cqr.cqrepoured.objects.items.swords;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -17,11 +15,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
@@ -31,24 +27,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-public class ItemDagger extends ItemSword {
+public class ItemDagger extends ItemCQRWeapon {
 
-	private int cooldown;
-	private float attackSpeed;
-	private AttributeModifier movementSpeed;
+	private static final UUID MOVEMENT_SPEED_MODIFIER = UUID.fromString("3915fbe7-e8ed-4032-9b18-749c96a37173");
+	private final double movementSpeedBonus;
+	private final int specialAttackCooldown;
 
-	public ItemDagger(ToolMaterial material, int cooldown, float attackSpeed) {
-		super(material);
-
-		this.cooldown = cooldown;
-		this.attackSpeed = attackSpeed;
-		this.movementSpeed = new AttributeModifier("DaggerSpeedModifier", 0.05D, 2);
+	public ItemDagger(ToolMaterial material, double attackDamageMultiplier, double movementSpeedBonus, int cooldown) {
+		super(material, attackDamageMultiplier);
+		this.movementSpeedBonus = movementSpeedBonus;
+		this.specialAttackCooldown = cooldown;
 	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
 		boolean flag = ItemUtil.compareRotations(player.rotationYaw, entity.rotationYaw, 50.0D);
-		ItemUtil.attackTarget(stack, player, entity, flag, 0.0F, flag ? 1.0F : 0.0F, true, 1.0F, 0.0F, 0.5D, 0.25D);
+		ItemUtil.attackTarget(stack, player, entity, flag, 0.0F, flag ? 2.0F : 1.0F, true, 1.0F, 0.0F, 0.25D, 0.25D, 0.3F);
 		return true;
 	}
 
@@ -57,22 +51,10 @@ public class ItemDagger extends ItemSword {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
-			this.replaceModifier(multimap, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
+			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, 2));
 		}
 
 		return multimap;
-	}
-
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
-
-		if (modifierOptional.isPresent()) {
-			AttributeModifier modifier = modifierOptional.get();
-			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
-		}
 	}
 
 	@Override
@@ -83,7 +65,7 @@ public class ItemDagger extends ItemSword {
 			EntityUtil.move2D(playerIn, playerIn.moveStrafing, playerIn.moveForward, 1.0D, playerIn.rotationYaw);
 
 			playerIn.motionY = 0.2D;
-			playerIn.getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+			playerIn.getCooldownTracker().setCooldown(stack.getItem(), this.specialAttackCooldown);
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
