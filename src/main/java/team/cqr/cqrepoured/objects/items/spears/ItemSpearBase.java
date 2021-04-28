@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.objects.items.spears;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -19,15 +17,12 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
@@ -49,6 +44,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
+import team.cqr.cqrepoured.objects.items.swords.ItemCQRWeapon;
 import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.Reference;
 import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
@@ -56,31 +52,28 @@ import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 /**
  * Copyright (c) 20.12.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
-public class ItemSpearBase extends ItemSword {
+public class ItemSpearBase extends ItemCQRWeapon {
 
-	public static final UUID ATTACK_RANGE_MODIFIER = new UUID(0x0, 0x1);
-	public static final float BASE_ATTACK_RANGE = 4.0F;
+	private static final UUID REACH_DISTANCE_MODIFIER = UUID.fromString("95dd73a8-c715-42f9-8f6d-abf5e40fa3cd");
 	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
-	private double reach;
-	private double attackSpeed;
+	private final double reachDistanceBonus;
 
-	public ItemSpearBase(ToolMaterial material, double reach, double attackSpeed) {
-		super(material);
-		this.reach = Math.max(reach, -3.5F);
-		this.attackSpeed = attackSpeed;
+	public ItemSpearBase(ToolMaterial material, double attackDamageMultiplier, double reachDistanceBonus) {
+		super(material, attackDamageMultiplier);
+		this.reachDistanceBonus = reachDistanceBonus;
 	}
 
 	public double getReach() {
-		return this.reach;
+		return this.reachDistanceBonus;
 	}
 
 	public double getReachExtended() {
-		return this.reach * SPECIAL_REACH_MULTIPLIER;
+		return this.reachDistanceBonus * SPECIAL_REACH_MULTIPLIER;
 	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 0.0F, false, 1.0F, 0.0F, 0.5D, 0.25D);
+		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 1.0F, true, 1.0F, 0.0F, 0.25D, 0.25D, 0.3F);
 		return true;
 	}
 
@@ -89,22 +82,10 @@ public class ItemSpearBase extends ItemSword {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
-			this.replaceModifier(multimap, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
-			multimap.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(ATTACK_RANGE_MODIFIER, "Weapon modifier", 1, 0));
+			multimap.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(REACH_DISTANCE_MODIFIER, "Weapon modifier", this.reachDistanceBonus, 0));
 		}
 
 		return multimap;
-	}
-
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
-
-		if (modifierOptional.isPresent()) {
-			AttributeModifier modifier = modifierOptional.get();
-			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
-		}
 	}
 
 	// Makes the right click a "charge attack" action
@@ -209,7 +190,7 @@ public class ItemSpearBase extends ItemSword {
 	private static class EventHandler {
 
 		private static final ReflectionMethod<Object> METHOD_SYNC_CURRENT_PLAY_ITEM = new ReflectionMethod<>(PlayerControllerMP.class, "func_78750_j", "syncCurrentPlayItem");
-		
+
 		@SubscribeEvent
 		public static void onMouseEvent(MouseEvent event) {
 			if (event.getButton() != 0) {
@@ -271,7 +252,7 @@ public class ItemSpearBase extends ItemSword {
 			if (pointedEntity != null && (mc.objectMouseOver == null || pointedEntity != mc.objectMouseOver.entityHit)) {
 				METHOD_SYNC_CURRENT_PLAY_ITEM.invoke(mc.playerController);
 				CQRMain.NETWORK.sendToServer(new CPacketAttackEntity(pointedEntity));
-	
+
 				if (mc.playerController.getCurrentGameType() != GameType.SPECTATOR) {
 					mc.player.attackTargetEntityWithCurrentItem(pointedEntity);
 					mc.player.resetCooldown();

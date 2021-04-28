@@ -135,25 +135,25 @@ public class CQRConfig {
 		public int monkingGreatSwordHarvestLevel = 0;
 		public int monkingGreatSwordDurability = 1560;
 		public float monkingGreatSwordEfficiency = 0F;
-		public float monkingGreatSwordDamage = 5F;
+		public float monkingGreatSwordDamage = 4F;
 		public int monkingGreatSwordEnchantability = 10;
 
 		public int bullGreatSwordHarvestLevel = 0;
 		public int bullGreatSwordDurability = 1560;
 		public float bullGreatSwordEfficiency = 0F;
-		public float bullGreatSwordDamage = 5F;
+		public float bullGreatSwordDamage = 4F;
 		public int bullGreatSwordEnchantability = 10;
 
 		public int diamondGreatSwordHarvestLevel = 0;
 		public int diamondGreatSwordDurability = 1560;
 		public float diamondGreatSwordEfficiency = 0F;
-		public float diamondGreatSwordDamage = 5F;
+		public float diamondGreatSwordDamage = 3F;
 		public int diamondGreatSwordEnchantability = 10;
 
 		public int ironGreatSwordHarvestLevel = 0;
 		public int ironGreatSwordDurability = 250;
 		public float ironGreatSwordEfficiency = 0F;
-		public float ironGreatSwordDamage = 4F;
+		public float ironGreatSwordDamage = 2F;
 		public int ironGreatSwordEnchantability = 14;
 
 		public int ironSpearHarvestLevel = 0;
@@ -171,25 +171,25 @@ public class CQRConfig {
 		public int ironDaggerHarvestLevel = 0;
 		public int ironDaggerDurability = 250;
 		public float ironDaggerEfficiency = 0F;
-		public float ironDaggerDamage = 0.5F;
+		public float ironDaggerDamage = 2F;
 		public int ironDaggerEnchantability = 14;
 
 		public int diamondDaggerHarvestLevel = 0;
 		public int diamondDaggerDurability = 1560;
 		public float diamondDaggerEfficiency = 0F;
-		public float diamondDaggerDamage = 1.5F;
+		public float diamondDaggerDamage = 3F;
 		public int diamondDaggerEnchantability = 10;
 
 		public int monkingDaggerHarvestLevel = 0;
 		public int monkingDaggerDurability = 1560;
 		public float monkingDaggerEfficiency = 0F;
-		public float monkingDaggerDamage = 2.5F;
+		public float monkingDaggerDamage = 4F;
 		public int monkingDaggerEnchantability = 10;
 
 		public int ninjaDaggerHarvestLevel = 0;
 		public int ninjaDaggerDurability = 2048;
 		public float ninjaDaggerEfficiency = 0F;
-		public float ninjaDaggerDamage = 2.5F;
+		public float ninjaDaggerDamage = 4F;
 		public int ninjaDaggerEnchantability = 10;
 
 		public int bullBattleAxeHarvestLevel = 0;
