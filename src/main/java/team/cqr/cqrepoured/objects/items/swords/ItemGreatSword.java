@@ -26,6 +26,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemGreatSword extends ItemCQRWeapon {
@@ -34,7 +35,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	private final int specialAttackCooldown;
 
 	public ItemGreatSword(ToolMaterial material, float damage, int cooldown) {
-		super(material, 2.0D, -0.45D);
+		super(material, CQRConfig.materials.toolMaterials.greatSwordAttackDamageBonus, CQRConfig.materials.toolMaterials.greatSwordAttackSpeedBonus);
 		this.specialAttackDamage = damage;
 		this.specialAttackCooldown = cooldown;
 	}

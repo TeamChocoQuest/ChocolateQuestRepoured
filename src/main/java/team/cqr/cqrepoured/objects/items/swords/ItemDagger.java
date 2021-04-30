@@ -35,7 +35,7 @@ public class ItemDagger extends ItemCQRWeapon {
 	private final int specialAttackCooldown;
 
 	public ItemDagger(ToolMaterial material, int cooldown) {
-		super(material, -1.0D, 0.4D);
+		super(material, CQRConfig.materials.toolMaterials.daggerAttackDamageBonus, CQRConfig.materials.toolMaterials.daggerAttackSpeedBonus);
 		this.movementSpeedBonus = CQRConfig.materials.toolMaterials.daggerMovementSpeedBonus;
 		this.specialAttackCooldown = cooldown;
 	}
