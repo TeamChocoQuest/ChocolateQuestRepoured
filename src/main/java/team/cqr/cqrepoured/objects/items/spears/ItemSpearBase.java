@@ -43,6 +43,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
 import team.cqr.cqrepoured.objects.items.swords.ItemCQRWeapon;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -58,9 +59,9 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
 	private final double reachDistanceBonus;
 
-	public ItemSpearBase(ToolMaterial material, double reachDistanceBonus) {
+	public ItemSpearBase(ToolMaterial material) {
 		super(material, 0.0D, -0.1D);
-		this.reachDistanceBonus = reachDistanceBonus;
+		this.reachDistanceBonus = CQRConfig.materials.toolMaterials.spearReachDistanceBonus;
 	}
 
 	public double getReach() {

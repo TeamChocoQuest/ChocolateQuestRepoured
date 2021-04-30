@@ -24,6 +24,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
 
@@ -33,9 +34,9 @@ public class ItemDagger extends ItemCQRWeapon {
 	private final double movementSpeedBonus;
 	private final int specialAttackCooldown;
 
-	public ItemDagger(ToolMaterial material, double movementSpeedBonus, int cooldown) {
+	public ItemDagger(ToolMaterial material, int cooldown) {
 		super(material, -1.0D, 0.4D);
-		this.movementSpeedBonus = movementSpeedBonus;
+		this.movementSpeedBonus = CQRConfig.materials.toolMaterials.daggerMovementSpeedBonus;
 		this.specialAttackCooldown = cooldown;
 	}
 
