@@ -10,6 +10,7 @@ import net.minecraft.world.biome.BiomeSnow;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.DungeonGenerationHelper;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
@@ -19,7 +20,6 @@ import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartRailingTower;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartTower;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartWall;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 /**
  * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

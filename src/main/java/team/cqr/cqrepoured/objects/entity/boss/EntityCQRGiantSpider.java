@@ -26,6 +26,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -44,7 +45,6 @@ import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarg
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISummoner {
 

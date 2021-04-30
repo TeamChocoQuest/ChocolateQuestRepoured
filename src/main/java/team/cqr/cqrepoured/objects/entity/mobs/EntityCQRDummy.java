@@ -4,9 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityCQRDummy extends AbstractEntityCQR {
 

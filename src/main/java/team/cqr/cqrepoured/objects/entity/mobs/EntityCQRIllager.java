@@ -15,10 +15,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.objects.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
 public class EntityCQRIllager extends AbstractEntityCQR {

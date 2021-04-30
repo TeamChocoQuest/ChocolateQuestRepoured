@@ -30,8 +30,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 

@@ -12,7 +12,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class DungeonPartLight extends AbstractDungeonPart {

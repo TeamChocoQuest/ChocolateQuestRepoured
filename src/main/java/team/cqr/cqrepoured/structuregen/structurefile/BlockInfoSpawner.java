@@ -22,6 +22,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -30,7 +31,6 @@ import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 public class BlockInfoSpawner extends AbstractBlockInfo {

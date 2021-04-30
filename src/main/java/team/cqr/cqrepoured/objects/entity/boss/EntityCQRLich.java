@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -23,7 +24,6 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAIShootPoisonProjectil
 import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner {

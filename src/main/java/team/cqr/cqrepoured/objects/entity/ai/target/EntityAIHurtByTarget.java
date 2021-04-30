@@ -11,12 +11,12 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
 import team.cqr.cqrepoured.objects.items.ISupportWeapon;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 

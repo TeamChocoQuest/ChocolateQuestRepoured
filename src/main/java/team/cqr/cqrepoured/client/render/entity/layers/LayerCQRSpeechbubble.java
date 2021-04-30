@@ -8,8 +8,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 

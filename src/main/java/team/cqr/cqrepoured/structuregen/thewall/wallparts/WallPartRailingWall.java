@@ -19,6 +19,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -32,7 +33,6 @@ import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoSpawner;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 /**
  * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

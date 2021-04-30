@@ -9,13 +9,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 /**
  * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

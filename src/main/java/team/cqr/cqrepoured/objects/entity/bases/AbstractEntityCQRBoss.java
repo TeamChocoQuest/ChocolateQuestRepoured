@@ -8,7 +8,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 
 public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 

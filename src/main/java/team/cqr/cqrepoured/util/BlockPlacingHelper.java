@@ -13,6 +13,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.util.BlockSnapshot;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 

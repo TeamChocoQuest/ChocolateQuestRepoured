@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.config;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +16,7 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
+import team.cqr.cqrepoured.util.Reference;
 
 @Config(modid = Reference.MODID, name = "CQR/" + Reference.MODID)
 public class CQRConfig {

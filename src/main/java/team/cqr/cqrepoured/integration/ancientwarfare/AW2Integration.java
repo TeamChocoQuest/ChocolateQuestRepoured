@@ -9,7 +9,7 @@ import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
 import net.shadowmage.ancientwarfare.structure.gamedata.StructureEntry;
 import net.shadowmage.ancientwarfare.structure.gamedata.StructureMap;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 
 public class AW2Integration {
 

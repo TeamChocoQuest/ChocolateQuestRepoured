@@ -10,9 +10,9 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.EnumDifficulty;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
 public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR> {

@@ -13,9 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.ItemAlchemyBag;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityAIPotionThrower extends EntityAIAttackRanged {
 

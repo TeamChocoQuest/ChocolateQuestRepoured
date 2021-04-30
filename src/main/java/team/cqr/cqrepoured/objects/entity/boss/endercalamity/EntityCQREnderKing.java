@@ -29,6 +29,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -40,7 +41,6 @@ import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss {

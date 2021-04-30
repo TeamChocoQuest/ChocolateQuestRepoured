@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.server.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 
 public class SPacketSyncProtectionConfig implements IMessage {
 

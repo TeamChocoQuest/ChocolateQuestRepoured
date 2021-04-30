@@ -56,6 +56,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
@@ -66,7 +67,6 @@ import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 
 public class ProjectileThrownBlock extends ProjectileBase implements IEntityAdditionalSpawnData {
 

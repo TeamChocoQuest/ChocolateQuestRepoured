@@ -18,7 +18,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class EntityColoredLightningBolt extends EntityLightningBolt implements IEntityAdditionalSpawnData {

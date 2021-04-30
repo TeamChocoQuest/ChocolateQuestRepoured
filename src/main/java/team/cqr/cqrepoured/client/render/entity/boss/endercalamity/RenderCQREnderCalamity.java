@@ -13,9 +13,9 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.util.SphereHelper;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCalamity> {

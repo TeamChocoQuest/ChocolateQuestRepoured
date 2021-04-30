@@ -37,6 +37,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.crafting.RecipeArmorDyableBreathing;
 import team.cqr.cqrepoured.crafting.RecipeArmorDyableRainbow;
 import team.cqr.cqrepoured.crafting.RecipeCrownAttach;
@@ -51,7 +52,6 @@ import team.cqr.cqrepoured.objects.items.IFakeWeapon;
 import team.cqr.cqrepoured.objects.items.ISupportWeapon;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.lootchests.LootTableLoader;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 @EventBusSubscriber

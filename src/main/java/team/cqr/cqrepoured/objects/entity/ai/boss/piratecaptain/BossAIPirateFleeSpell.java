@@ -10,11 +10,11 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirateCaptain> implements IEntityAISpellAnimatedVanilla {
 

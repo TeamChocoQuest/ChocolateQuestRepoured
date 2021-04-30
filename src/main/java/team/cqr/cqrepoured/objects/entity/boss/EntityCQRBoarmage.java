@@ -9,6 +9,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -19,7 +20,6 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
 import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
 

@@ -28,7 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.client.structureprot.ProtectedRegionClientEventHandler;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class ProtectedRegionHelper {

@@ -24,10 +24,10 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRSerializers;
 import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
 import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash

@@ -12,6 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -22,7 +23,6 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateSumm
 import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehindEnemy;
 import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTurnInvisible;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 

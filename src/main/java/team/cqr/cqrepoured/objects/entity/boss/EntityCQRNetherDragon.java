@@ -39,6 +39,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -57,7 +58,6 @@ import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 

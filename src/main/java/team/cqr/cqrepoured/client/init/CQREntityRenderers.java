@@ -77,6 +77,7 @@ import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityMapPlaceHolderRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRBoarmage;
@@ -150,7 +151,6 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class CQREntityRenderers {
 

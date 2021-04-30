@@ -22,12 +22,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.DungeonGeneratorThread;
 import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 

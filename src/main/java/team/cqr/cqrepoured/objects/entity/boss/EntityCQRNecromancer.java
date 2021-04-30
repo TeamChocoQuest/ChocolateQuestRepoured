@@ -15,6 +15,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -24,7 +25,6 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {

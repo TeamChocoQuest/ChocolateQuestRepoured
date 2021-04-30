@@ -11,8 +11,8 @@ import org.apache.commons.io.FileUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 

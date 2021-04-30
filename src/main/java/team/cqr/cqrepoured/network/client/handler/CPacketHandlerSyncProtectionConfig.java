@@ -4,9 +4,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
-import team.cqr.cqrepoured.util.CQRConfig;
 
 public class CPacketHandlerSyncProtectionConfig implements IMessageHandler<SPacketSyncProtectionConfig, IMessage> {
 

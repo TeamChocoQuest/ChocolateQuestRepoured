@@ -19,11 +19,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 

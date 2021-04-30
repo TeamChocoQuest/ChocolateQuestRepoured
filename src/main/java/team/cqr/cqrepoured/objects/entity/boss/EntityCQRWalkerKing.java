@@ -37,6 +37,7 @@ import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
@@ -55,7 +56,6 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
 import team.cqr.cqrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 

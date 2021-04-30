@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
 import team.cqr.cqrepoured.structuregen.DungeonRegistry;

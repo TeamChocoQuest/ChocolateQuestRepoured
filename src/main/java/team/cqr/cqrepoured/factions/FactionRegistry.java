@@ -31,13 +31,13 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.factions.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 

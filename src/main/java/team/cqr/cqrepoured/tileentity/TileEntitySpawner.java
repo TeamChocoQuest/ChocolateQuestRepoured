@@ -23,12 +23,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.util.CQRConfig;
 import team.cqr.cqrepoured.util.Reference;
 
 public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable {

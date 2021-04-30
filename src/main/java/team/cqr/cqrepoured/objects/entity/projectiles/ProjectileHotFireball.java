@@ -7,7 +7,7 @@ import net.minecraft.item.ItemShield;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.util.CQRConfig;
+import team.cqr.cqrepoured.config.CQRConfig;
 
 public class ProjectileHotFireball extends EntityThrowable {
 
