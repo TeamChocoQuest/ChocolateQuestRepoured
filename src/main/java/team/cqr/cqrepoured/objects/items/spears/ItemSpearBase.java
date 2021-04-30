@@ -58,8 +58,8 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
 	private final double reachDistanceBonus;
 
-	public ItemSpearBase(ToolMaterial material, double attackDamageMultiplier, double reachDistanceBonus) {
-		super(material, attackDamageMultiplier);
+	public ItemSpearBase(ToolMaterial material, double reachDistanceBonus) {
+		super(material, 0.0D, -0.1D);
 		this.reachDistanceBonus = reachDistanceBonus;
 	}
 
@@ -73,7 +73,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 1.0F, true, 1.0F, 0.0F, 0.25D, 0.25D, 0.3F);
+		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 1.0F, true, 1.0F, 0.0F, 0.25D, 0.25D, 0.2F);
 		return true;
 	}
 

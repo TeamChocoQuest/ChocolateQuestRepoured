@@ -159,7 +159,7 @@ public class ItemUtil {
 					boolean flag3 = false;
 					double d0 = (double) (player.distanceWalkedModified - player.prevDistanceWalkedModified);
 
-					// CQR: Disable sweep attack when sweepingEnable is false
+					// CQR: Disable sweep attack when sweepingEnabled is false
 					if (sweepingEnabled && flag && !flag2 && !flag1 && player.onGround && d0 < (double) player.getAIMoveSpeed()) {
 						ItemStack itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
 

@@ -288,10 +288,10 @@ public class CQRItems {
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
 			final Item[] items = {
-					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_IRON_DAGGER, 0.8D, 0.05D, 25), "dagger_iron"),
-					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 0.8D, 0.05D, 20), "dagger_diamond"),
-					setItemName(new ItemDaggerNinja(CQRMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 0.8D, 0.05D, 15), "dagger_ninja"),
-					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 0.8D, 0.05D, 10), "dagger_monking"),
+					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_IRON_DAGGER, 0.05D, 25), "dagger_iron"),
+					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 0.05D, 20), "dagger_diamond"),
+					setItemName(new ItemDaggerNinja(CQRMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 0.05D, 15), "dagger_ninja"),
+					setItemName(new ItemDagger(CQRMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 0.05D, 10), "dagger_monking"),
 
 					setItemName(new ItemSwordTurtle(CQRMaterials.ToolMaterials.TOOL_TURTLE_SWORD), "sword_turtle"),
 					setItemName(new ItemSwordSpider(CQRMaterials.ToolMaterials.TOOL_SPIDER_SWORD), "sword_spider"),
@@ -303,13 +303,13 @@ public class CQRItems {
 					setItemName(new ItemSwordWalker(CQRMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
 					setItemName(new ItemShieldWalkerKing(), "shield_walker_king"),
 
-					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 1.5D, 0.8F, 30), "great_sword_iron"),
-					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 1.5D, 0.9F, 25), "great_sword_diamond"),
-					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1.5D, 1.0F, 20), "great_sword_bull"),
-					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 1.5D, 2.0F, 20), "great_sword_monking"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30), "great_sword_iron"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25), "great_sword_diamond"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1.0F, 20), "great_sword_bull"),
+					setItemName(new ItemGreatSword(CQRMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2.0F, 20), "great_sword_monking"),
 
-					setItemName(new ItemSpearBase(CQRMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 1.0D, 1.0D), "spear_diamond"),
-					setItemName(new ItemSpearBase(CQRMaterials.ToolMaterials.TOOL_IRON_SPEAR, 1.0D, 1.0D), "spear_iron"),
+					setItemName(new ItemSpearBase(CQRMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 1.0D), "spear_diamond"),
+					setItemName(new ItemSpearBase(CQRMaterials.ToolMaterials.TOOL_IRON_SPEAR, 1.0D), "spear_iron"),
 
 					setItemName(new ItemStaff(), "staff"),
 					setItemName(new ItemStaffFire(), "staff_fire"),

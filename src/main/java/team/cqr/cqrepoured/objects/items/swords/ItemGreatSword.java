@@ -33,8 +33,8 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	private final float specialAttackDamage;
 	private final int specialAttackCooldown;
 
-	public ItemGreatSword(ToolMaterial material, double attackDamageMultiplier, float damage, int cooldown) {
-		super(material, attackDamageMultiplier);
+	public ItemGreatSword(ToolMaterial material, float damage, int cooldown) {
+		super(material, 2.0D, -0.45D);
 		this.specialAttackDamage = damage;
 		this.specialAttackCooldown = cooldown;
 	}
