@@ -19,7 +19,7 @@ public class ItemCQRWeapon extends ItemSword {
 	public ItemCQRWeapon(ToolMaterial material, double attackDamageBonus, double attackSpeedBonus) {
 		super(material);
 		this.attackDamageBonus = attackDamageBonus;
-		this.attackSpeedBonus = attackDamageBonus;
+		this.attackSpeedBonus = attackSpeedBonus;
 	}
 
 	@Override
