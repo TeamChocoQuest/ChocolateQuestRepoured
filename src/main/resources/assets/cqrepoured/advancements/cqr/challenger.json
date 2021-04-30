@@ -79,22 +79,6 @@
 					"type": "cqrepoured:giant_spider"
 				}
 			}
-		},
-		"ender_king": {
-			"trigger": "minecraft:player_killed_entity",
-			"conditions": {
-				"entity": {
-					"type": "cqrepoured:ender_king"
-				}
-			}
-		},
-		"ender_calamity": {
-			"trigger": "minecraft:player_killed_entity",
-			"conditions": {
-				"entity": {
-					"type": "cqrepoured:ender_calamity"
-				}
-			}
 		}
 	},
 	"requirements": [
@@ -106,9 +90,7 @@
 			"walker_king",
 			"boar_mage",
 			"pirate_captain",
-			"giant_spider",
-			"ender_king",
-			"ender_calamity"
+			"giant_spider"
 		]
 	]
 }
