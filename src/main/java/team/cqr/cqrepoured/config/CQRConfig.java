@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.config;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
@@ -412,7 +411,7 @@ public class CQRConfig {
 	public static boolean isAprilFoolsEnabled() {
 		if (general.enableAprilFools) {
 			if (aprilFoolsResult == null) {
-				Calendar calendar = new GregorianCalendar();
+				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(new Date());
 				// Counting begins at 0, not one!! Read the documentation properly...
 				// Or just use constants...
