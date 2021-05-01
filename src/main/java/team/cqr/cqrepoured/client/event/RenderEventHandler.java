@@ -171,7 +171,7 @@ public class RenderEventHandler {
 					applyRotations(entity, f8, f, partialTicks);
 					renderer.prepareScale(entity, partialTicks);
 					GlStateManager.enableAlpha();
-					if (renderer instanceof RenderCQREntity && model.isRiding) {
+					if (renderer instanceof RenderCQREntity && model.isRiding && entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemCrown) {
 						GlStateManager.translate(0.0F, 0.6F, 0.0F);
 					}
 					GlStateManager.depthMask(true);
