@@ -16,6 +16,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -126,6 +128,7 @@ import team.cqr.cqrepoured.util.Reference;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
 
+	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
 	private static final UUID HEALTH_SCALE_DISTANCE_TO_SPAWN_ID = UUID.fromString("cf718cfe-d6a1-4cf6-b6c8-b5cf397f334c");
 
@@ -707,6 +710,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (this.lastTickWithAttackTarget + 60 < this.ticksExisted && this.damageBlockedWithShield > 0.0F) {
 			this.damageBlockedWithShield = Math.max(this.damageBlockedWithShield - 0.02F, 0.0F);
+		}
+
+		ItemStack stackMainhand = this.getHeldItemMainhand();
+		if (!stackMainhand.getAttributeModifiers(EntityEquipmentSlot.MAINHAND).containsKey(SharedMonsterAttributes.ATTACK_SPEED.getName())) {
+			IAttributeInstance attribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+			if (attribute.getModifier(BASE_ATTACK_SPEED_ID) == null) {
+				AttributeModifier modifier = new AttributeModifier(BASE_ATTACK_SPEED_ID, "Base Attack Speed", -2.4D, 0);
+				modifier.setSaved(false);
+				attribute.applyModifier(modifier);
+			}
+		} else {
+			IAttributeInstance attribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+			attribute.removeModifier(BASE_ATTACK_SPEED_ID);
 		}
 
 		super.onUpdate();
