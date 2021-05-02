@@ -191,7 +191,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
-			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, (float) hookEntity.getTravelSpeed(), 0F);
+			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
 			player.getCooldownTracker().setCooldown(stack.getItem(), this.getCooldown());
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
@@ -201,16 +201,9 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 
 	public ProjectileHookShotHook entityAIshoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		if (!worldIn.isRemote) {
-			/*
-			 * ProjectileHookShotHook bulletE = new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());
-			 * 
-			 * Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector()); v = v.normalize(); v = v.scale(3.5D); //bulletE.setVelocity(v.x, v.y, v.z);
-			 * bulletE.motionX = v.x; bulletE.motionY = v.y; bulletE.motionZ = v.z;
-			 * bulletE.velocityChanged = true; worldIn.spawnEntity(bulletE);
-			 */
-			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack()); // new ProjectileHookShotHook(worldIn, shooter, this, shooter.getActiveItemStack());
+			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack());
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
-			hookEntity.shoot(v.x, v.y, v.z, (float) hookEntity.getTravelSpeed(), 0);
+			hookEntity.shootHook(shooter, v.x, v.y, v.z, this.getHookRange(), 1.8D);
 			worldIn.spawnEntity(hookEntity);
 			return hookEntity;
 		}

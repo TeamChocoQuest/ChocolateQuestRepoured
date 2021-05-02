@@ -1,104 +1,109 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.models.ModelHook;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook> {
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/hook.png");
 
-	protected ModelBase model = new ModelHook();
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/hook.png");
+	private final ModelBase model = new ModelHook();
 
 	public RenderProjectileHookShotHook(RenderManager renderManager) {
 		super(renderManager);
 	}
 
-	// TODO: Make this work the same as the snowball renderer so we can actually use item models for the model
-
 	@Override
 	public void doRender(ProjectileHookShotHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
-		this.bindEntityTexture(entity);
 		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(.5F, .5F, .5F);
-		// GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		if (entity.isReturning()) {
-			entityYaw -= 180F;
-		}
-		GlStateManager.rotate(entityYaw, 0, 1, 0);
-		GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		float yaw = 180.0F - (entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks);
+		float pitch = -(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks);
+		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
+		GlStateManager.translate(0.0F, 0.0F, -0.35F);
+		GlStateManager.scale(0.35F, 0.35F, 0.35F);
 
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		if (this.model != null) {
-			this.bindTexture(this.TEXTURE);
-			this.model.render(entity, 0, 0, 0, 0, 0, /* 0.0625F */ 0.4F);
-		} else {
-			// This seems to render the texture....
-			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder bufferbuilder = tessellator.getBuffer();
-			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-			bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			tessellator.draw();
-		}
+		this.bindEntityTexture(entity);
+		this.model.render(entity, 0, 0, 0, 0, 0, 0.4F);
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
 		}
 
-		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 
-		this.renderChain(entity);
+		this.renderChain(entity, partialTicks);
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
-	private void renderChain(ProjectileHookShotHook entity) {
+	private void renderChain(ProjectileHookShotHook entity, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.disableTexture2D();
+		GlStateManager.glLineWidth(2.0F);
 
-		Vec3d v = entity.getPositionVector().subtract(entity.getShooterPosition());// .add(new Vec3d(0,1.7,0));
-		int iterations = (int) Math.ceil(v.length());
-		v = v.normalize();
-		Vec3d loc = entity.getShooterPosition().add(v);
+		// calculate chain start and end point relative to the renderViewEntity
+		double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
+		double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+		double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
+		double x2 = entity.getThrower().lastTickPosX + (entity.getThrower().posX - entity.getThrower().lastTickPosX) * partialTicks;
+		double y2 = entity.getThrower().lastTickPosY + (entity.getThrower().posY - entity.getThrower().lastTickPosY) * partialTicks;
+		y2 += entity.getThrower().height * 0.7D;
+		double z2 = entity.getThrower().lastTickPosZ + (entity.getThrower().posZ - entity.getThrower().lastTickPosZ) * partialTicks;
+		Entity entity1 = Minecraft.getMinecraft().getRenderViewEntity();
+		double x3 = entity1.lastTickPosX + (entity1.posX - entity1.lastTickPosX) * partialTicks;
+		double y3 = entity1.lastTickPosY + (entity1.posY - entity1.lastTickPosY) * partialTicks;
+		double z3 = entity1.lastTickPosZ + (entity1.posZ - entity1.lastTickPosZ) * partialTicks;
+		x1 -= x3;
+		y1 -= y3;
+		z1 -= z3;
+		x2 -= x3;
+		y2 -= y3;
+		z2 -= z3;
 
-		// Offsets for camera
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		double xo = player.lastTickPosX + (player.posX - player.lastTickPosX) /* (double)partialTicks */;
-		double yo = player.lastTickPosY + (player.posY - player.lastTickPosY) /* (double)partialTicks */;
-		double zo = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) /* (double)partialTicks */;
+		// calculate chain direction, segmentCount and segmentLength
+		double x4 = x1 - x2;
+		double y4 = y1 - y2;
+		double z4 = z1 - z2;
+		double dist = Math.sqrt(x4 * x4 + y4 * y4 + z4 * z4);
+		double d = 1.0D / dist;
+		x4 *= d;
+		y4 *= d;
+		z4 *= d;
+		double sagginess = -0.3D;
+		double minSegmentLength = 0.125D;
+		int segmentCount = (int) (dist / minSegmentLength);
+		double segmentLength = dist / segmentCount;
 
-		for (int i = 1; i < iterations; i++) {
-			// Render code here -> render a small cube
-			RenderGlobal.renderFilledBox((new AxisAlignedBB(loc.subtract(0.125, 0.125, 0.125), loc.add(new Vec3d(0.125, 0.125, 0.125))).offset(-xo, -yo, -zo)), 96, 96, 96, 1);
-
-			loc = loc.add(v);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		GL11.glVertex3d(x2, y2, z2);
+		for (int i = 1; i < segmentCount; i++) {
+			double dy = MathHelper.sin((float) (i * Math.PI / segmentCount));
+			GL11.glVertex3d(x2 + (x4 * i * segmentLength), y2 + (y4 * i * segmentLength) + (dy * sagginess), z2 + (z4 * i * segmentLength));
 		}
+		GL11.glVertex3d(x1, y1, z1);
+		GL11.glEnd();
 
+		GlStateManager.glLineWidth(1.0F);
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
@@ -106,6 +111,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileHookShotHook entity) {
-		return this.TEXTURE;
+		return TEXTURE;
 	}
+
 }
