@@ -369,9 +369,10 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		Vec3d v = this.getLatchedPos();
 		this.setPosition(v.x, v.y, v.z);
 
-		double x = this.posX - this.thrower.posX;
+		Vec3d v1 = Vec3d.fromPitchYaw(0.0F, this.rotationYaw);
+		double x = this.posX - this.thrower.posX + v1.x * 0.1D;
 		double y = this.posY - this.thrower.posY + 1.0D;
-		double z = this.posZ - this.thrower.posZ;
+		double z = this.posZ - this.thrower.posZ + v1.z * 0.1D;
 		double distSqr = x * x + y * y + z * z;
 		double d = 0.1D;
 		if (y > 0.0D) {
@@ -420,9 +421,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.thrower.fallDistance = 0.0F;
 		}
 		if (distSqr < d * d) {
-			this.thrower.motionX *= 0.1D;
-			this.thrower.motionY *= 0.1D;
-			this.thrower.motionZ *= 0.1D;
+			this.thrower.motionX *= 0.05D;
+			this.thrower.motionY *= 0.05D;
+			this.thrower.motionZ *= 0.05D;
 			if (!this.world.isRemote) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
