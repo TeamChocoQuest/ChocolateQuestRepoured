@@ -181,13 +181,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-
-		if (stack.hasTagCompound() && stack.getTagCompound().getBoolean("isShooting")) {
-			return new ActionResult<>(EnumActionResult.FAIL, stack);
-		}
-
 		this.shoot(stack, worldIn, playerIn);
-
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
@@ -197,6 +191,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
 			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
 			worldIn.spawnEntity(hookEntity);
+			player.getCooldownTracker().setCooldown(this, 100);
 			stack.damageItem(1, player);
 			worldIn.playSound(null, player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		}

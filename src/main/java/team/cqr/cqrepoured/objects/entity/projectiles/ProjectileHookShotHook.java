@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -224,6 +225,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	@Override
 	public void onRemovedFromWorld() {
 		if (!this.world.isRemote) {
+			if (this.thrower instanceof EntityPlayer) {
+				((EntityPlayer) this.thrower).getCooldownTracker().removeCooldown(this.item);
+			}
 			this.setHookItemShootingTag(false);
 		}
 		super.onRemovedFromWorld();
