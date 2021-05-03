@@ -29,8 +29,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		SHOOT(0),
 		RETRACT(1),
 		PULL_ENTITY_TO_SHOOTER(2),
-		PULL_SHOOTER_TO_HOOK(3),
-		STOPPED(4);
+		PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK(3),
+		PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY(4),
+		STOPPED(5);
 
 		private final int index;
 
@@ -61,6 +62,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	private Vec3d startLocation = Vec3d.ZERO;
 	private ItemStack stack;
 	private ItemHookshotBase item;
+	private Entity latchedEntity;
 
 	// last recorded position of the shooter - used to detect blocked path
 	private Vec3d lastCheckedPosition;
@@ -182,12 +184,20 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 	@Nullable
 	private Entity getLatchedEntity() {
-		return this.world.getEntityByID(this.dataManager.get(LATCHED_ENTITY));
+		int latchedEntityId = this.dataManager.get(LATCHED_ENTITY);
+		if (latchedEntityId == -1) {
+			this.latchedEntity = null;
+			return null;
+		}
+		if (this.latchedEntity == null || this.latchedEntity.getEntityId() != latchedEntityId) {
+			this.latchedEntity = this.world.getEntityByID(latchedEntityId);
+		}
+		return this.latchedEntity;
 	}
 
 	private void setLatchedEntity(@Nullable Entity entity) {
-		int pulledEntityId = entity != null ? entity.getEntityId() : -1;
-		this.dataManager.set(LATCHED_ENTITY, pulledEntityId);
+		int latchedEntityId = entity != null ? entity.getEntityId() : -1;
+		this.dataManager.set(LATCHED_ENTITY, latchedEntityId);
 	}
 
 	private Vec3d getLatchedPos() {
@@ -253,8 +263,11 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		case PULL_ENTITY_TO_SHOOTER:
 			this.handleStatePullEntityToShooter();
 			break;
-		case PULL_SHOOTER_TO_HOOK:
-			this.handleStatePullShooterToHook();
+		case PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK:
+			this.handleStatePullShooterToHookLatchedToBlock();
+			break;
+		case PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY:
+			this.handleStatePullShooterToHookLatchedToEntity();
 			break;
 		case STOPPED:
 			this.setDead();
@@ -306,35 +319,41 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
 
-		Entity pulledEntity = this.getLatchedEntity();
+		Entity latchedEntity = this.getLatchedEntity();
+		if (latchedEntity == null) {
+			if (!this.world.isRemote) {
+				this.setHookState(EnumHookState.STOPPED);
+			}
+			return;
+		}
 		if (!this.world.isRemote) {
-			this.checkForEntityStuck(pulledEntity);
+			this.checkForEntityStuck(latchedEntity);
 		}
 
 		Vec3d v = this.getLatchedPos();
-		this.setPosition(pulledEntity.posX + v.x, pulledEntity.posY + v.y, pulledEntity.posZ + v.z);
+		this.setPosition(latchedEntity.posX + v.x, latchedEntity.posY + v.y, latchedEntity.posZ + v.z);
 
 		double x = this.thrower.posX - this.posX;
 		double y = (this.thrower.posY + this.thrower.getEyeHeight()) - this.posY;
 		double z = this.thrower.posZ - this.posZ;
 		double distSqr = x * x + y * y + z * z;
-		double d = pulledEntity.width * 0.5D + this.thrower.width * 0.5D + 1.5D;
+		double d = latchedEntity.width * 0.5D + this.thrower.width * 0.5D + 1.5D;
 		if (distSqr < d * d) {
-			pulledEntity.motionX = 0.0D;
-			pulledEntity.motionY = 0.0D;
-			pulledEntity.motionZ = 0.0D;
+			latchedEntity.motionX = 0.0D;
+			latchedEntity.motionY = 0.0D;
+			latchedEntity.motionZ = 0.0D;
 			if (!this.world.isRemote) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 		} else {
 			double d1 = this.speed * this.speed < distSqr ? this.speed / Math.sqrt(distSqr) : 1.0D;
-			pulledEntity.motionX = x * d1;
-			pulledEntity.motionY = y * d1;
-			pulledEntity.motionZ = z * d1;
+			latchedEntity.motionX = x * d1;
+			latchedEntity.motionY = y * d1;
+			latchedEntity.motionZ = z * d1;
 		}
 	}
 
-	private void handleStatePullShooterToHook() {
+	private void handleStatePullShooterToHookLatchedToBlock() {
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
@@ -343,25 +362,56 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.checkForEntityStuck(this.thrower);
 		}
 
-		Entity pulledEntity = this.getLatchedEntity();
 		Vec3d v = this.getLatchedPos();
-		if (pulledEntity != null) {
-			this.setPosition(pulledEntity.posX + v.x, pulledEntity.posY + v.y, pulledEntity.posZ + v.z);
-		} else {
-			this.setPosition(v.x, v.y, v.z);
-		}
+		this.setPosition(v.x, v.y, v.z);
 
 		double x = this.posX - this.thrower.posX;
 		double y = this.posY - this.thrower.posY + 1.0D;
 		double z = this.posZ - this.thrower.posZ;
-		if (pulledEntity != null) {
-			y = this.posY - (this.thrower.posY + this.thrower.getEyeHeight());
-		}
 		double distSqr = x * x + y * y + z * z;
 		double d = 0.1D;
-		if (pulledEntity != null) {
-			d = pulledEntity.width * 0.5D + this.thrower.width * 0.5D + 1.5D;
+		if (y > 0.0D) {
+			this.thrower.fallDistance = 0.0F;
 		}
+		if (distSqr < d * d) {
+			this.thrower.motionX *= 0.1D;
+			this.thrower.motionY *= 0.1D;
+			this.thrower.motionZ *= 0.1D;
+			if (!this.world.isRemote) {
+				this.setHookState(EnumHookState.STOPPED);
+			}
+		} else {
+			double d1 = this.speed * this.speed < distSqr ? this.speed / Math.sqrt(distSqr) : 1.0D;
+			this.thrower.motionX = x * d1;
+			this.thrower.motionY = y * d1;
+			this.thrower.motionZ = z * d1;
+		}
+	}
+
+	private void handleStatePullShooterToHookLatchedToEntity() {
+		this.motionX = 0.0D;
+		this.motionY = 0.0D;
+		this.motionZ = 0.0D;
+
+		Entity latchedEntity = this.getLatchedEntity();
+		if (latchedEntity == null) {
+			if (!this.world.isRemote) {
+				this.setHookState(EnumHookState.STOPPED);
+			}
+			return;
+		}
+		if (!this.world.isRemote) {
+			this.checkForEntityStuck(this.thrower);
+		}
+
+		Vec3d v = this.getLatchedPos();
+		this.setPosition(latchedEntity.posX + v.x, latchedEntity.posY + v.y, latchedEntity.posZ + v.z);
+
+		double x = this.posX - this.thrower.posX;
+		double y = this.posY - (this.thrower.posY + this.thrower.getEyeHeight());
+		double z = this.posZ - this.thrower.posZ;
+		double distSqr = x * x + y * y + z * z;
+		double d = latchedEntity.width * 0.5D + this.thrower.width * 0.5D + 1.5D;
 		if (y > 0.0D) {
 			this.thrower.fallDistance = 0.0F;
 		}
@@ -412,7 +462,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 					this.motionY = 0.0D;
 					this.motionZ = 0.0D;
 					this.setLatchedPos(v);
-					this.setHookState(EnumHookState.PULL_SHOOTER_TO_HOOK);
+					this.setHookState(EnumHookState.PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK);
 				} else {
 					// Hit something but this hookshot cannot latch to it, send the hook back
 					this.motionX = 0.0D;
@@ -423,13 +473,13 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit != this.thrower && result.entityHit instanceof EntityLivingBase) {
 					Entity entityHit = result.entityHit;
-					
+
 					// Recalculate the hitVec because result.hitVec is just the pos of result.entityHit
 					Vec3d start = new Vec3d(this.posX, this.posY, this.posZ);
 					Vec3d end = start.add(this.motionX, this.motionY, this.motionZ);
 					AxisAlignedBB aabb = entityHit.getEntityBoundingBox().grow(0.3D);
 					RayTraceResult result1 = aabb.calculateIntercept(start, end);
-					
+
 					Vec3d v = result1.hitVec;
 					this.setPosition(v.x, v.y, v.z);
 					this.motionX = 0.0D;
@@ -443,7 +493,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 						if (sizeOwner >= sizeHit) {
 							this.setHookState(EnumHookState.PULL_ENTITY_TO_SHOOTER);
 						} else {
-							this.setHookState(EnumHookState.PULL_SHOOTER_TO_HOOK);
+							this.setHookState(EnumHookState.PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY);
 						}
 					} else {
 						this.setHookState(EnumHookState.PULL_ENTITY_TO_SHOOTER);
