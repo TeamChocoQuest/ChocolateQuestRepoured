@@ -198,8 +198,8 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
+			worldIn.playSound(null, player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		}
-		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
 	}
 
 	public ProjectileHookShotHook entityAIshoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
