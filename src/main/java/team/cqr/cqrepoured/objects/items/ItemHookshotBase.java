@@ -182,6 +182,10 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
+		if (stack.hasTagCompound() && stack.getTagCompound().getBoolean("isShooting")) {
+			return new ActionResult<>(EnumActionResult.FAIL, stack);
+		}
+
 		this.shoot(stack, worldIn, playerIn);
 
 		return new ActionResult(EnumActionResult.SUCCESS, stack);
@@ -192,7 +196,6 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
 			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
-			player.getCooldownTracker().setCooldown(stack.getItem(), this.getCooldown());
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
 		}
