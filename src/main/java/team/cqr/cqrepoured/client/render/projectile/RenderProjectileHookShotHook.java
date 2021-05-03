@@ -40,7 +40,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		}
 
 		this.bindEntityTexture(entity);
-		this.model.render(entity, 0, 0, 0, 0, 0, 0.4F);
+		this.doRenderHook(entity, x, y, z, entityYaw, partialTicks);
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
@@ -52,6 +52,10 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		this.renderChain(entity, partialTicks);
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+	}
+	
+	public void doRenderHook(ProjectileHookShotHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.model.render(entity, 0, 0, 0, 0, 0, 0.4F);
 	}
 
 	private void renderChain(ProjectileHookShotHook entity, float partialTicks) {

@@ -3,14 +3,12 @@ package team.cqr.cqrepoured.client.render.projectile;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileSpiderHook;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 
-// TODO: Rendering the string
-public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
+public class RenderProjectileSpiderHook extends RenderProjectileHookShotHook {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/blocks/web.png");
 
@@ -19,21 +17,12 @@ public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
 	}
 
 	@Override
-	public void doRender(ProjectileSpiderHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRenderHook(ProjectileHookShotHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		this.bindEntityTexture(entity);
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(.5F, .5F, .5F);
+		GlStateManager.scale(1.5, 1.5, 1.5);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-
-		if (this.renderOutlines) {
-			GlStateManager.enableColorMaterial();
-			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
-		}
 
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
 		bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
@@ -41,20 +30,12 @@ public class RenderProjectileSpiderHook extends Render<ProjectileSpiderHook> {
 		bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
 		bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
 		tessellator.draw();
-
-		if (this.renderOutlines) {
-			GlStateManager.disableOutlineMode();
-			GlStateManager.disableColorMaterial();
-		}
-
-		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileSpiderHook entity) {
-		return TEXTURE;
+	protected ResourceLocation getEntityTexture(ProjectileHookShotHook entity) {
+		return RenderProjectileSpiderHook.TEXTURE;
 	}
 
 }
