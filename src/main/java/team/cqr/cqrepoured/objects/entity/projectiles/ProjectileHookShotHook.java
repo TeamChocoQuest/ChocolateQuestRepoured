@@ -90,9 +90,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double x = shooter.posX;
 		double y = shooter.posY + shooter.getEyeHeight();
 		double z = shooter.posZ;
-		float yaw = (float) Math.atan2(dirX, dirZ);
-		double d = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
-		float pitch = (float) Math.atan2(dirY, d);
+		float yaw = (float) -Math.toDegrees(Math.atan2(dirX, dirZ));
+		double d = Math.sqrt(dirX * dirX + dirZ * dirZ);
+		float pitch = (float) -Math.toDegrees(Math.atan2(dirY, d));
 		this.shootHook(x, y, z, yaw, pitch, range, speed);
 	}
 
