@@ -48,7 +48,10 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
 public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon */ {
 
 	private enum BlockGroup {
-		BASE_SOLID("BASE_SOLID"), BASE_WOOD("BASE_WOOD"), BASE_STONE("BASE_STONE"), BASE_DIRT("BASE_DIRT");
+		BASE_SOLID("BASE_SOLID"),
+		BASE_WOOD("BASE_WOOD"),
+		BASE_STONE("BASE_STONE"),
+		BASE_DIRT("BASE_DIRT");
 
 		private final String configName;
 
@@ -175,11 +178,8 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 
 	public abstract ProjectileHookShotHook getNewHookEntity(World worldIn, EntityLivingBase shooter, ItemStack stack);
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		// System.out.println("Firing hookshot");
-
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (stack.hasTagCompound() && stack.getTagCompound().getBoolean("isShooting")) {
@@ -188,7 +188,7 @@ public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon 
 
 		this.shoot(stack, worldIn, playerIn);
 
-		return new ActionResult(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
