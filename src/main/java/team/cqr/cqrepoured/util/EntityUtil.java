@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.util;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -145,21 +144,14 @@ public class EntityUtil {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
 			if (regions != null && !regions.isEmpty()) {
-				final UUID myId = entity.getPersistentID();
-				regions.removeIf(new Predicate<ProtectedRegion>() {
-
-					@Override
-					public boolean test(ProtectedRegion t) {
-						return !t.isEntityDependency(myId);
-					}
-				});
-
 				if (!regions.isEmpty()) {
 					regions.forEach(new Consumer<ProtectedRegion>() {
 
 						@Override
 						public void accept(ProtectedRegion t) {
-							t.addEntityDependency(entity.getPersistentID());
+							if (!t.isEntityDependency(entity.getPersistentID())) {
+								t.addEntityDependency(entity.getPersistentID());
+							}
 						}
 					});
 					return true;
@@ -181,15 +173,6 @@ public class EntityUtil {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
 			if (regions != null && !regions.isEmpty()) {
-				final UUID myId = entity.getPersistentID();
-				regions.removeIf(new Predicate<ProtectedRegion>() {
-
-					@Override
-					public boolean test(ProtectedRegion t) {
-						return !t.isEntityDependency(myId);
-					}
-				});
-
 				if (!regions.isEmpty()) {
 					regions.forEach(new Consumer<ProtectedRegion>() {
 
