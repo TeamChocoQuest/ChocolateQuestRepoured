@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.init.CQRParticles;
+import team.cqr.cqrepoured.init.CQRParticleType;
 import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
 
 public class CPacketHandlerSpawnParticles implements IMessageHandler<SPacketSpawnParticles, IMessage> {
@@ -29,7 +29,7 @@ public class CPacketHandlerSpawnParticles implements IMessageHandler<SPacketSpaw
 				double yOffset = message.getyOffset();
 				double zOffset = message.getzOffset();
 				int[] optionalArguments = message.getOptionalArguments();
-				CQRParticles.spawnParticles(particleId, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
+				CQRParticleType.spawnParticles(particleId, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
 			});
 		}
 		return null;
