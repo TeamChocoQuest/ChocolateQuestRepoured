@@ -84,7 +84,9 @@ public class EntityCalamitySpawner extends Entity {
 		{
 			int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
 			if (tmpTimer % 5 == 0) {
+				System.out.println(tmpTimer);
 				float percentage = tmpTimer / 60;
+				System.out.println(percentage);
 				// Percentage defines radius
 
 				double radius = EntityCQREnderCalamity.getArenaRadius();
@@ -109,7 +111,7 @@ public class EntityCalamitySpawner extends Entity {
 	private void spawnFirework(double x, double y, double z, ItemStack stack) {
 		EntityFireworkRocket firework = new EntityFireworkRocket(world, x, y, z, FIREWORK_PURPLE_SPARK);
 		// DONE: Modify the "lifetime" value using reflection
-		FW_LIFETIME_FIELD.set(firework, 1);
+		FW_LIFETIME_FIELD.set(firework, 3);
 
 		this.world.spawnEntity(firework);
 	}
@@ -177,6 +179,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	static {
+		NBTTagCompound compound = FIREWORK_PURPLE_SPARK.getTagCompound();
 		NBTTagCompound fwCompound = new NBTTagCompound();
 		NBTTagCompound explosionCompound = new NBTTagCompound();
 
@@ -185,7 +188,8 @@ public class EntityCalamitySpawner extends Entity {
 		explosionCompound.setIntArray("FadeColors", new int[] { 2437522, 6719955, 12801229 });
 
 		fwCompound.setTag("Explosions", explosionCompound);
-		FIREWORK_PURPLE_SPARK.setTagInfo("Fireworks", fwCompound);
+		compound.setTag("Fireworks", fwCompound);
+		FIREWORK_PURPLE_SPARK.setTagCompound(compound);
 	}
 
 }
