@@ -180,6 +180,9 @@ public class EntityCalamitySpawner extends Entity {
 
 	static {
 		NBTTagCompound compound = FIREWORK_PURPLE_SPARK.getTagCompound();
+		if(compound == null) {
+			compound = new NBTTagCompound();
+		}
 		NBTTagCompound fwCompound = new NBTTagCompound();
 		NBTTagCompound explosionCompound = new NBTTagCompound();
 
