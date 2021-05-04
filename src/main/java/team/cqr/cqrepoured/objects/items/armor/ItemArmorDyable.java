@@ -3,12 +3,14 @@ package team.cqr.cqrepoured.objects.items.armor;
 import java.awt.Color;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.util.Reference;
 
 public class ItemArmorDyable extends ItemArmor {
 
@@ -125,6 +127,17 @@ public class ItemArmorDyable extends ItemArmor {
 		}
 
 		return stack.getTagCompound().getCompoundTag("display").getInteger("color");
+	}
+
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+		if (this.getArmorMaterial() == ArmorMaterial.IRON) {
+			return Reference.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+		}
+		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND) {
+			return Reference.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+		}
+		return super.getArmorTexture(stack, entity, slot, type);
 	}
 
 }
