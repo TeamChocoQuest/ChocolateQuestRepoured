@@ -23,7 +23,8 @@ public class EntityCalamitySpawner extends Entity {
 
 	public EntityCalamitySpawner(World worldIn) {
 		super(worldIn);
-		this.setSize(0, 0);
+		this.setSize(1, 1);
+		this.setNoGravity(true);
 		this.setInvisible(true);
 		this.setEntityInvulnerable(true);
 	}
@@ -70,14 +71,17 @@ public class EntityCalamitySpawner extends Entity {
 
 		this.timer++;
 
-		if (!this.world.isRemote) {
-			if (this.timer >= CALAMITY_SPAWN_DURATION) {
+		if (this.timer >= CALAMITY_SPAWN_DURATION) {
+			if (this.timer == CALAMITY_SPAWN_DURATION && !this.world.isRemote) {
 				// DONE: SPawn ender calamity
 				this.spawnCalamity();
 			}
+			this.setDead();
 		}
 		// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
-		if (CALAMITY_SPAWN_DURATION - this.timer <= 60) {
+		if (CALAMITY_SPAWN_DURATION - this.timer <= 60)
+
+		{
 			int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
 			if (tmpTimer % 5 == 0) {
 				float percentage = tmpTimer / 60;
@@ -109,11 +113,11 @@ public class EntityCalamitySpawner extends Entity {
 
 		this.world.spawnEntity(firework);
 	}
-	
+
 	private Vec3d getRandomPositionAroundPosition() {
-		Vec3d v = new Vec3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0,0);
+		Vec3d v = new Vec3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.rand));
-		
+
 		return v;
 	}
 

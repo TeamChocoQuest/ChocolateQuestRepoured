@@ -17,6 +17,7 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.DifficultyInstance;
@@ -102,17 +103,18 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public void onDeath(DamageSource cause) {
-		// TODO: SPawn the true boss, BEFORE super.onDeath (that one creates the living death event)
+		// DONE: SPawn the true boss, BEFORE super.onDeath (that one creates the living death event)
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 		if (manager instanceof ServerProtectedRegionManager) {
 
 			EntityCalamitySpawner cs = new EntityCalamitySpawner(world);
+			BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition();
+			cs.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			cs.setFaction(this.getFaction().getName());
-			
 
 			world.spawnEntity(cs);
 
-			EntityUtil.addEntityToAllRegionsAt(this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition(), cs);
+			EntityUtil.addEntityToAllRegionsAt(pos, cs);
 		}
 		super.onDeath(cause);
 	}
