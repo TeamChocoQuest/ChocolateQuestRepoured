@@ -67,6 +67,9 @@ public class EntityCalamitySpawner extends Entity {
 
 	private static ReflectionField<Integer> FW_LIFETIME_FIELD = new ReflectionField<>(EntityFireworkRocket.class, "field_92055_b", "lifetime");
 
+	private static final int FIREWORK_DURATION = 120;
+	private static final int FIREWORK_DIVISOR = 4;
+
 	@Override
 	public void onEntityUpdate() {
 
@@ -80,21 +83,19 @@ public class EntityCalamitySpawner extends Entity {
 			this.setDead();
 		}
 		// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
-		if (CALAMITY_SPAWN_DURATION - this.timer <= 60)
-
-		{
+		if (CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION) {
 			int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
-			if (tmpTimer % 2 == 0) {
-				double percentage = (double)tmpTimer / 60.0D;
+			if (tmpTimer % FIREWORK_DIVISOR == 0) {
+				double percentage = (double) tmpTimer / (double) FIREWORK_DURATION;
 				// Percentage defines radius
 
-				double radius = EntityCQREnderCalamity.getArenaRadius();
+				double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
 				radius *= percentage;
 				radius += 1.5;
 				Vec3d vector = new Vec3d(radius, 0, 0);
 				final int lines = 5;
 				final int rotationDegree = 360 / lines;
-				vector = VectorUtil.rotateVectorAroundY(vector, 2 * rotationDegree * percentage);
+				vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
 				for (int i = 0; i < lines; i++) {
 					Vec3d particlePosition = this.getPositionVector().add(vector);
 
@@ -177,7 +178,7 @@ public class EntityCalamitySpawner extends Entity {
 
 	static {
 		NBTTagCompound compound = FIREWORK_PURPLE_SPARK.getTagCompound();
-		if(compound == null) {
+		if (compound == null) {
 			compound = new NBTTagCompound();
 		}
 		NBTTagCompound fwCompound = new NBTTagCompound();
