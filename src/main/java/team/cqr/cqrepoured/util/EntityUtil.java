@@ -1,6 +1,9 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +16,10 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
+import team.cqr.cqrepoured.structureprot.ProtectedRegion;
+import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
+import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager;
 
 public class EntityUtil {
 
@@ -126,6 +133,77 @@ public class EntityUtil {
 		}
 		attribute.applyModifier(new AttributeModifier(uuid, name, amount, 2));
 		entity.setHealth((float) ((double) oldHealth / (1.0D + oldAmount) * (1.0D + amount) + 1e-7D));
+	}
+
+	public static boolean addEntityToAllRegionsAt(BlockPos position, Entity entity) {
+		if (entity == null || position == null) {
+			return false;
+		}
+
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.world);
+		if (manager instanceof ServerProtectedRegionManager) {
+			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
+			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
+			if (regions != null && !regions.isEmpty()) {
+				final UUID myId = entity.getPersistentID();
+				regions.removeIf(new Predicate<ProtectedRegion>() {
+
+					@Override
+					public boolean test(ProtectedRegion t) {
+						return !t.isEntityDependency(myId);
+					}
+				});
+
+				if (!regions.isEmpty()) {
+					regions.forEach(new Consumer<ProtectedRegion>() {
+
+						@Override
+						public void accept(ProtectedRegion t) {
+							t.addEntityDependency(entity.getPersistentID());
+						}
+					});
+					return true;
+
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean removeEntityFromAllRegionsAt(BlockPos position, Entity entity) {
+		if (entity == null || position == null) {
+			return false;
+		}
+
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.world);
+		if (manager instanceof ServerProtectedRegionManager) {
+			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
+			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
+			if (regions != null && !regions.isEmpty()) {
+				final UUID myId = entity.getPersistentID();
+				regions.removeIf(new Predicate<ProtectedRegion>() {
+
+					@Override
+					public boolean test(ProtectedRegion t) {
+						return !t.isEntityDependency(myId);
+					}
+				});
+
+				if (!regions.isEmpty()) {
+					regions.forEach(new Consumer<ProtectedRegion>() {
+
+						@Override
+						public void accept(ProtectedRegion t) {
+							t.removeEntityDependency(entity.getPersistentID());
+						}
+					});
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
