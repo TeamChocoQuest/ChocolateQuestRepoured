@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -83,15 +84,13 @@ public class EntityCalamitySpawner extends Entity {
 
 		{
 			int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
-			if (tmpTimer % 5 == 0) {
-				System.out.println(tmpTimer);
-				float percentage = tmpTimer / 60;
-				System.out.println(percentage);
+			if (tmpTimer % 2 == 0) {
+				double percentage = (double)tmpTimer / 60.0D;
 				// Percentage defines radius
 
 				double radius = EntityCQREnderCalamity.getArenaRadius();
 				radius *= percentage;
-				radius += 3;
+				radius += 1.5;
 				Vec3d vector = new Vec3d(radius, 0, 0);
 				final int lines = 5;
 				final int rotationDegree = 360 / lines;
@@ -99,7 +98,7 @@ public class EntityCalamitySpawner extends Entity {
 				for (int i = 0; i < lines; i++) {
 					Vec3d particlePosition = this.getPositionVector().add(vector);
 
-					this.spawnFirework(particlePosition.x, particlePosition.y, particlePosition.z, FIREWORK_PURPLE_SPARK);
+					this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
 
 					vector = VectorUtil.rotateVectorAroundY(vector, rotationDegree);
 				}
@@ -128,8 +127,6 @@ public class EntityCalamitySpawner extends Entity {
 		calamity.setFaction(this.faction, false);
 		calamity.setHomePositionCQR(this.getPosition());
 		calamity.setPosition(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
-
-		calamity.forceTeleport();
 
 		world.spawnEntity(calamity);
 
@@ -184,13 +181,15 @@ public class EntityCalamitySpawner extends Entity {
 			compound = new NBTTagCompound();
 		}
 		NBTTagCompound fwCompound = new NBTTagCompound();
-		NBTTagCompound explosionCompound = new NBTTagCompound();
+		NBTTagList explosionCompoundList = new NBTTagList();
 
+		NBTTagCompound explosionCompound = new NBTTagCompound();
 		explosionCompound.setInteger("Type", 4);
 		explosionCompound.setIntArray("Colors", new int[] { 8073150 });
 		explosionCompound.setIntArray("FadeColors", new int[] { 2437522, 6719955, 12801229 });
 
-		fwCompound.setTag("Explosions", explosionCompound);
+		explosionCompoundList.appendTag(explosionCompound);
+		fwCompound.setTag("Explosions", explosionCompoundList);
 		compound.setTag("Fireworks", fwCompound);
 		FIREWORK_PURPLE_SPARK.setTagCompound(compound);
 	}
