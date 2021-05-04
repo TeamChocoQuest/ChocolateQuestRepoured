@@ -461,6 +461,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (source.canHarmInCreative()) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
+		amount /= 2;
 		// Projectile attack
 		if (source.getImmediateSource() instanceof ProjectileEnergyOrb) {
 			// TODO: Hit by energy ball

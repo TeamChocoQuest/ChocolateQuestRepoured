@@ -41,6 +41,9 @@ public class EnchantmentSpectral extends Enchantment {
 		if (creatureType == CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER) {
 			return (float) level * 2.5F;
 		}
+		if(creatureType == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN) {
+			return (float) level * 1.5F;
+		}
 		return 0;
 	}
 
@@ -55,7 +58,7 @@ public class EnchantmentSpectral extends Enchantment {
 	public void onEntityDamaged(EntityLivingBase user, Entity target, int level) {
 		if(target instanceof EntityLivingBase) {
 			EntityLivingBase livingTarget = (EntityLivingBase)target;
-			if(livingTarget.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER) {
+			if(livingTarget.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER || livingTarget.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN) {
 				int i = 20 + user.getRNG().nextInt(10 * level);
 				livingTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, i, 2));
 			}
