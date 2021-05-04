@@ -113,6 +113,9 @@ public class EntityCalamitySpawner extends Entity {
 		// DONE: Modify the "lifetime" value using reflection
 		FW_LIFETIME_FIELD.set(firework, 3);
 
+		firework.setInvisible(true);
+		firework.setSilent(true);
+		
 		this.world.spawnEntity(firework);
 	}
 
