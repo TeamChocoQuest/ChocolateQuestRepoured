@@ -4,12 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -20,7 +22,7 @@ public class EntityCalamitySpawner extends Entity {
 	private int timer;
 	private String faction;
 
-	private static final int CALAMITY_SPAWN_DURATION = 400;
+	private static final int CALAMITY_SPAWN_DURATION = 800;
 
 	public EntityCalamitySpawner(World worldIn) {
 		super(worldIn);
@@ -68,40 +70,58 @@ public class EntityCalamitySpawner extends Entity {
 	private static ReflectionField<Integer> FW_LIFETIME_FIELD = new ReflectionField<>(EntityFireworkRocket.class, "field_92055_b", "lifetime");
 
 	private static final int FIREWORK_DURATION = 120;
-	private static final int FIREWORK_DIVISOR = 4;
+	private static final int FIREWORK_DIVISOR = 6;
 
 	@Override
 	public void onEntityUpdate() {
 
 		this.timer++;
+		int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
+		double percentage = (double) tmpTimer / (double) FIREWORK_DURATION;
 
-		if (this.timer >= CALAMITY_SPAWN_DURATION) {
-			if (this.timer == CALAMITY_SPAWN_DURATION && !this.world.isRemote) {
-				// DONE: SPawn ender calamity
-				this.spawnCalamity();
+		if (this.timer >= 200) {
+			if (this.timer % 40 == 0) {
+				this.spawnScaryEffect((int) (Math.round(25.0D * percentage) + 5));
+				if (!(CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION + 60)) {
+					if (DungeonGenUtils.percentageRandom(0.75, this.rand)) {
+						spawnFireworks((int) (Math.round(3.0D * percentage) + 1));
+					}
+				}
 			}
-			this.setDead();
-		}
-		// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
-		if (CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION) {
-			int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
-			if (tmpTimer % FIREWORK_DIVISOR == 0) {
-				double percentage = (double) tmpTimer / (double) FIREWORK_DURATION;
-				// Percentage defines radius
+			//Keep the lightning? Idk, it looks cool but it is a bit overused :/
+			if ((this.timer - 2) % 40 == 0 && this.rand.nextBoolean()) {
+				EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+				lightning.setPosition(this.posX, this.posY, this.posZ);
+				this.world.spawnEntity(lightning);
+			}
 
-				double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
-				radius *= percentage;
-				radius += 1.5;
-				Vec3d vector = new Vec3d(radius, 0, 0);
-				final int lines = 5;
-				final int rotationDegree = 360 / lines;
-				vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
-				for (int i = 0; i < lines; i++) {
-					Vec3d particlePosition = this.getPositionVector().add(vector);
+			if (this.timer >= CALAMITY_SPAWN_DURATION) {
+				if (this.timer == CALAMITY_SPAWN_DURATION && !this.world.isRemote) {
+					// DONE: SPawn ender calamity
+					this.spawnCalamity();
+				}
+				this.setDead();
+			}
 
-					this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
+			// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
+			if (CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION) {
+				if (tmpTimer % FIREWORK_DIVISOR == 0) {
+					// Percentage defines radius
 
-					vector = VectorUtil.rotateVectorAroundY(vector, rotationDegree);
+					double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
+					radius *= percentage;
+					radius += 1.5;
+					Vec3d vector = new Vec3d(radius, 0, 0);
+					final int lines = 5;
+					final int rotationDegree = 360 / lines;
+					vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
+					for (int i = 0; i < lines; i++) {
+						Vec3d particlePosition = this.getPositionVector().add(vector);
+
+						this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
+
+						vector = VectorUtil.rotateVectorAroundY(vector, rotationDegree);
+					}
 				}
 			}
 		}
@@ -115,7 +135,7 @@ public class EntityCalamitySpawner extends Entity {
 
 		firework.setInvisible(true);
 		firework.setSilent(true);
-		
+
 		this.world.spawnEntity(firework);
 	}
 
@@ -123,7 +143,7 @@ public class EntityCalamitySpawner extends Entity {
 		Vec3d v = new Vec3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.rand));
 
-		return v;
+		return v.add(this.getPositionVector());
 	}
 
 	private void spawnCalamity() {
@@ -140,15 +160,14 @@ public class EntityCalamitySpawner extends Entity {
 
 	// Spawns some firework and flame particles and plays a scary sound
 	protected void spawnScaryEffect(int count) {
-		for (int i = 0; i < count; i++) {
-			Vec3d v = this.getRandomPositionAroundPosition();
-		}
+		this.playSound(SoundEvents.ENTITY_ENDERMEN_SCREAM, 1.0F, 0.5F + 0.5F * this.rand.nextFloat());
 	}
 
 	// Spawns some fireworks and a small enderman too
 	protected void spawnFireworks(int count) {
 		for (int i = 0; i < count; i++) {
 			Vec3d v = this.getRandomPositionAroundPosition();
+			this.spawnFirework(v.x, v.y, v.z, FIREWORK_PURPLE_SPARK);
 		}
 	}
 
