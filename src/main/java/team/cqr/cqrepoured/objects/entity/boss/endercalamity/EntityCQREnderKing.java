@@ -1,11 +1,5 @@
 package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -38,10 +32,10 @@ import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.EntityUtil;
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
@@ -112,43 +106,13 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 		if (manager instanceof ServerProtectedRegionManager) {
 
-			EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(world);
-			calamity.setFaction(getFaction().getName(), false);
-			calamity.setHomePositionCQR(hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition());
-			calamity.setHealthScale(this.getHealthScale());
-			calamity.setPosition(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
+			EntityCalamitySpawner cs = new EntityCalamitySpawner(world);
+			cs.setFaction(this.getFaction().getName());
+			
 
-			calamity.forceTeleport();
+			world.spawnEntity(cs);
 
-			if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase) {
-				calamity.setAttackTarget((EntityLivingBase) cause.getTrueSource());
-			}
-
-			world.spawnEntity(calamity);
-
-			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
-			List<ProtectedRegion> regions = this.hasHomePositionCQR() ? regionManager.getProtectedRegionsAt(getHomePositionCQR()) : regionManager.getProtectedRegionsAt(getPosition());
-			if (regions != null && !regions.isEmpty()) {
-				final UUID myId = this.getPersistentID();
-				regions.removeIf(new Predicate<ProtectedRegion>() {
-
-					@Override
-					public boolean test(ProtectedRegion t) {
-						return !t.isEntityDependency(myId);
-					}
-				});
-
-				if (!regions.isEmpty()) {
-					regions.forEach(new Consumer<ProtectedRegion>() {
-
-						@Override
-						public void accept(ProtectedRegion t) {
-							t.addEntityDependency(calamity.getPersistentID());
-						}
-					});
-
-				}
-			}
+			EntityUtil.addEntityToAllRegionsAt(this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition(), cs);
 		}
 		super.onDeath(cause);
 	}
