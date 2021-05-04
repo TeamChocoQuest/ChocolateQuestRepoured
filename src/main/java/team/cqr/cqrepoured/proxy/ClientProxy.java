@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
+import team.cqr.cqrepoured.client.init.CQRParticleManager;
 import team.cqr.cqrepoured.customtextures.CTResourcepack;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
@@ -53,6 +54,7 @@ public class ClientProxy implements IProxy {
 		List<IResourcePack> defaultResourcePacks = DEFAULT_RESOURCE_PACKS.get(Minecraft.getMinecraft());
 		defaultResourcePacks.add(CTResourcepack.getInstance());
 		CQREntityRenderers.registerRenderers();
+		CQRParticleManager.init();
 	}
 
 	@Override

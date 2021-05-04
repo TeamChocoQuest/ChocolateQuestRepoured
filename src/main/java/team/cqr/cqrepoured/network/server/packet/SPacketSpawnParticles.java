@@ -23,6 +23,18 @@ public class SPacketSpawnParticles implements IMessage {
 
 	}
 
+	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... optionalArguments) {
+		this.particleId = particleId;
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
+		this.zCoord = zCoord;
+		this.xSpeed = xSpeed;
+		this.ySpeed = ySpeed;
+		this.zSpeed = zSpeed;
+		this.count = 1;
+		this.optionalArguments = optionalArguments;
+	}
+
 	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
 		this.particleId = particleId;
 		this.xCoord = xCoord;
@@ -48,9 +60,11 @@ public class SPacketSpawnParticles implements IMessage {
 		this.ySpeed = buf.readFloat();
 		this.zSpeed = buf.readFloat();
 		this.count = ByteBufUtils.readVarInt(buf, 5);
-		this.xOffset = buf.readFloat();
-		this.yOffset = buf.readFloat();
-		this.zOffset = buf.readFloat();
+		if (this.count > 1) {
+			this.xOffset = buf.readFloat();
+			this.yOffset = buf.readFloat();
+			this.zOffset = buf.readFloat();
+		}
 		this.optionalArguments = new int[ByteBufUtils.readVarInt(buf, 5)];
 		for (int i = 0; i < this.optionalArguments.length; i++) {
 			this.optionalArguments[i] = ByteBufUtils.readVarInt(buf, 5);
@@ -67,9 +81,11 @@ public class SPacketSpawnParticles implements IMessage {
 		buf.writeFloat((float) this.ySpeed);
 		buf.writeFloat((float) this.zSpeed);
 		ByteBufUtils.writeVarInt(buf, this.count, 5);
-		buf.writeFloat((float) this.xOffset);
-		buf.writeFloat((float) this.yOffset);
-		buf.writeFloat((float) this.zOffset);
+		if (this.count > 1) {
+			buf.writeFloat((float) this.xOffset);
+			buf.writeFloat((float) this.yOffset);
+			buf.writeFloat((float) this.zOffset);
+		}
 		ByteBufUtils.writeVarInt(buf, this.optionalArguments.length, 5);
 		for (int i = 0; i < this.optionalArguments.length; i++) {
 			ByteBufUtils.writeVarInt(buf, this.optionalArguments[i], 5);
