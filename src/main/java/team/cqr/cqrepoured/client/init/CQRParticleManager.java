@@ -46,7 +46,7 @@ public class CQRParticleManager {
 				y += (Math.random() - Math.random()) * yOffset;
 			}
 			if (zOffset != 0.0D) {
-				y += (Math.random() - Math.random()) * zOffset;
+				z += (Math.random() - Math.random()) * zOffset;
 			}
 			Particle particle = factory.createParticle(particleType.getId(), world, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments);
 			// Can be replaced with a custom particle render manager too improve performance because particles with a custom texture are not batched.
