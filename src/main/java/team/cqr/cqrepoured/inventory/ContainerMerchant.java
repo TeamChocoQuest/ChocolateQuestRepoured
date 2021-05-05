@@ -139,25 +139,25 @@ public class ContainerMerchant extends Container {
 			}
 
 			for (int i = 0; i < 4 && i < input.size(); i++) {
-				this.fillSlot(i, input.get(i).getStack());
+				this.fillSlot(i, input.get(i));
 			}
 		}
 	}
 
-	private void fillSlot(int slotIndex, ItemStack stack) {
-		if (!stack.isEmpty()) {
+	private void fillSlot(int slotIndex, TradeInput input) {
+		if (!input.getStack().isEmpty()) {
 			for (int i = 0; i < 36; i++) {
 				ItemStack stack1 = ((Slot) this.inventorySlots.get(i)).getStack();
-				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(stack, stack1, false, false)) {
+				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(input.getStack(), stack1, input.ignoreMeta(), input.ignoreNBT())) {
 					ItemStack stack2 = this.merchantInventory.getStackInSlot(slotIndex);
 					int j = stack2.isEmpty() ? 0 : stack2.getCount();
-					int k = Math.min(stack.getMaxStackSize() - j, stack1.getCount());
+					int k = Math.min(input.getStack().getMaxStackSize() - j, stack1.getCount());
 					ItemStack stack3 = stack1.copy();
 					int l = j + k;
 					stack1.shrink(k);
 					stack3.setCount(l);
 					this.merchantInventory.setInventorySlotContents(slotIndex, stack3);
-					if (l >= stack.getMaxStackSize()) {
+					if (l >= input.getStack().getMaxStackSize()) {
 						break;
 					}
 				}
