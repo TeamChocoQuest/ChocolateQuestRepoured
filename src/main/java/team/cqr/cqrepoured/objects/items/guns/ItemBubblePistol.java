@@ -16,10 +16,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.objects.items.INonEnchantable;
 import team.cqr.cqrepoured.objects.items.ItemLore;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
-public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
+public class ItemBubblePistol extends ItemLore implements IRangedWeapon, INonEnchantable {
 
 	private final Random rng = new Random();
 

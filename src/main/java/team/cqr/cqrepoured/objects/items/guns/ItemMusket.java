@@ -19,9 +19,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.objects.items.INonEnchantable;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
-public class ItemMusket extends ItemRevolver implements IRangedWeapon {
+public class ItemMusket extends ItemRevolver implements IRangedWeapon, INonEnchantable {
 
 	public ItemMusket() {
 		this.setMaxDamage(300);

@@ -45,7 +45,7 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
-public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon */ {
+public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon */implements INonEnchantable {
 
 	private enum BlockGroup {
 		BASE_SOLID("BASE_SOLID"),

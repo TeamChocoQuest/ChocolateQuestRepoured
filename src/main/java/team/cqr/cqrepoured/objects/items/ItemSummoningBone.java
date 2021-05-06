@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,12 +32,17 @@ import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.util.Reference;
 
-public class ItemSummoningBone extends Item {
+public class ItemSummoningBone extends Item implements INonEnchantable {
 
 	public ItemSummoningBone() {
 		this.setMaxDamage(3);
 		this.setMaxStackSize(1);
 		this.setNoRepair();
+	}
+	
+	@Override
+	public boolean isRepairable() {
+		return false;
 	}
 
 	@Override
@@ -46,21 +50,6 @@ public class ItemSummoningBone extends Item {
 		return 40;
 	}
 	
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-		return false;
-	}
-	
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
-	}
-	
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
-
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if (!worldIn.isRemote && this.spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {

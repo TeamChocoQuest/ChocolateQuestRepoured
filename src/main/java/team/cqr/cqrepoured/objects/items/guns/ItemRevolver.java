@@ -28,9 +28,10 @@ import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.objects.items.INonEnchantable;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
-public class ItemRevolver extends Item implements IRangedWeapon {
+public class ItemRevolver extends Item implements IRangedWeapon, INonEnchantable {
 
 	public ItemRevolver() {
 		this.setMaxDamage(300);
@@ -102,7 +103,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 			}
 		}
 	}
-	
+
 	protected float getRecoil() {
 		return 10F;
 	}
