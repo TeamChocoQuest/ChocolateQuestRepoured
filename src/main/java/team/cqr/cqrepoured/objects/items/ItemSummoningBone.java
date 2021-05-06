@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +44,21 @@ public class ItemSummoningBone extends Item {
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 40;
+	}
+	
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return false;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return false;
 	}
 
 	@Override
