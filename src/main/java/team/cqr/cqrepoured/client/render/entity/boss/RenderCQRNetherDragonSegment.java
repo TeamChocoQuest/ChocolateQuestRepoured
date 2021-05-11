@@ -80,7 +80,7 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		/*
 		 * if(entity.isSkeletal() && entity.getHealthPercentage() > 0) { GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F); }
 		 */
-		if (entity.getParent() != null && entity.getParent().deathTicks > 0 && entity.getParent().deathTicks % 5 == 0) {
+		if (entity.getParent() != null && entity.getParent().deathTime > 0 && entity.getParent().deathTime % 5 == 0) {
 			float f = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
 			float f1 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 4.0F;
 			float f2 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;

@@ -19,7 +19,7 @@ public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 	
 	protected int getAnimationTick(EntityLivingBase entity) {
 		if(entity instanceof AbstractEntityCQRBoss) {
-			return ((AbstractEntityCQRBoss)entity).deathTicks;
+			return ((AbstractEntityCQRBoss)entity).deathTime;
 		}
 		return entity.ticksExisted;
 	}
