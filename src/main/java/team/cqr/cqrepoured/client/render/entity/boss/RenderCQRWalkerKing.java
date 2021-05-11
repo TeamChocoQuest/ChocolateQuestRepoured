@@ -6,13 +6,12 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerBossDeath;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingEyes;
+import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
-
-	private static final ResourceLocation WALKER_KING_EXPLODING = new ResourceLocation(Reference.MODID, "textures/entity/boss/walker_king_exploding.png");
 
 	public RenderCQRWalkerKing(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, "boss/walker_king", true);
@@ -27,7 +26,7 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 			float f = (float) entitylivingbaseIn.deathTime / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
 
 			GlStateManager.alphaFunc(516, f);
-			this.bindTexture(WALKER_KING_EXPLODING);
+			this.bindTexture(InvisibilityTexture.get(this.getEntityTexture(entitylivingbaseIn)));
 			this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.alphaFunc(516, 0.1F);
 			GlStateManager.depthFunc(514);

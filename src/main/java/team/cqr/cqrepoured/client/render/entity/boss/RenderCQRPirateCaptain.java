@@ -2,15 +2,12 @@ package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
-import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCaptain> {
-
-	private static final ResourceLocation DISINTEGRATION_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/pirate_captain_disintegrating.png");
 
 	public RenderCQRPirateCaptain(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, "boss/pirate_captain", true);
@@ -25,7 +22,7 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 			float f = (float) ticks / (float) EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
 
 			GlStateManager.alphaFunc(516, f);
-			this.bindTexture(DISINTEGRATION_TEXTURES);
+			this.bindTexture(InvisibilityTexture.get(this.getEntityTexture(entity)));
 			this.mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.alphaFunc(516, 0.1F);
 			GlStateManager.depthFunc(514);
