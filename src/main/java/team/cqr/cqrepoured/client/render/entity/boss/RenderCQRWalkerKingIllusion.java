@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.util.Reference;
 public class RenderCQRWalkerKingIllusion extends RenderCQREntity<EntityWalkerKingIllusion> {
 
 	public RenderCQRWalkerKingIllusion(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "boss/walker_king_exploding.png", true);
-		this.addLayer(new LayerGlowingEyes<EntityWalkerKingIllusion>(this, new ResourceLocation(Reference.MODID, "textures/entity/boss/walker_king_exploding.png")));
+		super(rendermanagerIn, "boss/walker_king", true);
+		this.addLayer(new LayerGlowingEyes<EntityWalkerKingIllusion>(this, new ResourceLocation(Reference.MODID, "textures/entity/boss/walker_king_eyes.png")));
 	}
 }
