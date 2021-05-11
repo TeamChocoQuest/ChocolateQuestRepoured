@@ -27,12 +27,12 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	@Override
 	public void startExecuting() {
 		this.invisibleTime = 200;
-		this.entity.setInvisibleTicks(1);
+		this.entity.setInvisibility(this.invisibleTime);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.invisibleTime > 0;
+		return this.entity.getInvisibility() > 0;
 	}
 
 	@Override
@@ -40,20 +40,19 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 		boolean disInt = false;
 		boolean reInt = false;
 		boolean invi = true;
-		if (this.invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+		if (this.entity.getInvisibility() <= 0.025F) {
 			reInt = true;
 			invi = false;
-			this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
+			//this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
-		} else if (this.invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+		} else if (this.entity.getInvisibility() >= 0.975F) {
 			disInt = true;
 			invi = false;
-			this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
+			//this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
 
-		this.invisibleTime--;
-		if (this.invisibleTime == 0) {
+		if (this.entity.getInvisibility() <= 0) {
 			disInt = false;
 			reInt = false;
 			invi = false;
