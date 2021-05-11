@@ -28,13 +28,10 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
 	private static final DataParameter<Boolean> IS_DISINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> INVISIBILITY_TICKS = EntityDataManager.<Integer>createKey(EntityCQRPirateCaptain.class, DataSerializers.VARINT);
 
 	public static int TURN_INVISIBLE_ANIMATION_TIME = 15;
 
 	private boolean spawnedParrot = false;
-
-	public int turnInvisibleTime = 1;
 
 	public EntityCQRPirateCaptain(World worldIn) {
 		super(worldIn);
@@ -97,7 +94,6 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		super.entityInit();
 		this.dataManager.register(IS_DISINTEGRATING, false);
 		this.dataManager.register(IS_REINTEGRATING, false);
-		this.dataManager.register(INVISIBILITY_TICKS, 1);
 	}
 
 	@Override
@@ -150,12 +146,13 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	public boolean isReintegrating() {
 		return this.dataManager.get(IS_REINTEGRATING);
 	}
-
-	public int getInvisibleTicks() {
-		return this.dataManager.get(INVISIBILITY_TICKS);
+	
+	public float getInvisibility() {
+		return this.dataManager.get(INVISIBILITY);
 	}
-
-	public void setInvisibleTicks(int value) {
-		this.dataManager.set(INVISIBILITY_TICKS, value);
+	
+	@Override
+	protected int getInvisibilityTurningTime() {
+		return EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
 	}
 }
