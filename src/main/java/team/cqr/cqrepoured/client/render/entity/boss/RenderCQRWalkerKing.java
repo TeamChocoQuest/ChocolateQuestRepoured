@@ -36,5 +36,10 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 			super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		}
 	}
+	
+	@Override
+	protected float getDeathMaxRotation(EntityCQRWalkerKing entityLivingBaseIn) {
+		return 0;
+	}
 
 }
