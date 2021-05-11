@@ -65,7 +65,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(INVISIBILITY, 0.0F);
+		//this.dataManager.register(INVISIBILITY, 0.0F);
 		this.dataManager.register(SWORD_SHIELD_ACTIVE, 0);
 		this.dataManager.register(CHANNELING_LASER, false);
 	}
