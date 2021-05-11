@@ -26,7 +26,7 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.getCirclingCenter() != null && this.entity.deathTicks <= 0 && !this.entity.isFlyingUp()) {
+		if (this.entity.getCirclingCenter() != null && this.entity.deathTime <= 0 && !this.entity.isFlyingUp()) {
 			return true;
 		}
 		return false;
