@@ -12,7 +12,6 @@ import team.cqr.cqrepoured.config.CQRConfig;
 
 public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
-	public int deathTicks = 0;
 	public static final int MAX_DEATH_TICKS = 200;
 
 	public AbstractEntityCQRBoss(World worldIn) {
@@ -63,8 +62,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 				this.setSitting(false);
 			}
 			// super.onDeathUpdate();
-			++this.deathTicks;
-			if (this.deathTicks >= 180 && this.deathTicks <= MAX_DEATH_TICKS) {
+			++this.deathTime;
+			if (this.deathTime >= 180 && this.deathTime <= MAX_DEATH_TICKS) {
 				float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
 				float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
 				float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
@@ -73,7 +72,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			this.setNoGravity(true);
 			// DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
 			this.move(MoverType.SELF, 0, (10.0D / (double) MAX_DEATH_TICKS), 0);
-			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote) {
+			if (this.deathTime == MAX_DEATH_TICKS && !this.world.isRemote) {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				this.setDead();
 

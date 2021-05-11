@@ -803,9 +803,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected void onDeathUpdate() {
-		++this.deathTicks;
+		++this.deathTime;
 
-		if (this.deathTicks % 5 == 0) {
+		if (this.deathTime % 5 == 0) {
 			if (this.dragonBodyParts.length > 0) {
 				EntityCQRNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
 				if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {

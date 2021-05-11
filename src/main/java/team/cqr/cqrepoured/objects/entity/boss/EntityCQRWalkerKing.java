@@ -441,7 +441,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean hasCape() {
-		return this.deathTicks <= 0;
+		return this.deathTime <= 0;
 	}
 
 	@Override
@@ -543,7 +543,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	protected void onDeathUpdate() {
 		super.onDeathUpdate();
 		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
-			if (this.deathTicks > 150 && this.deathTicks % 5 == 0) {
+			if (this.deathTime > 150 && this.deathTime % 5 == 0) {
 				this.dropExperience(MathHelper.floor((float) 50F));
 			}
 		}

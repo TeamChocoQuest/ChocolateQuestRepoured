@@ -701,8 +701,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	// Death animation time: 1.44s => 29 ticks
 	@Override
 	protected void onDeathUpdate() {
-		++this.deathTicks;
-		if (this.deathTicks > 20) {
+		++this.deathTime;
+		if (this.deathTime > 20) {
 			float sizeVariation = this.getSizeVariation();
 			sizeVariation *= 1.5F;
 			double f = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
@@ -713,10 +713,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				this.world.spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 			}
 		}
-		if (this.deathTicks == 34 && this.isServerWorld()) {
+		if (this.deathTime == 34 && this.isServerWorld()) {
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
 		}
-		if (this.deathTicks >= 35 && this.isServerWorld()) {
+		if (this.deathTime >= 35 && this.isServerWorld()) {
 			if (this.deathCause != null) {
 				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
