@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.layers;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -7,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.models.entities.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class LayerCQREntityCape extends AbstractLayerCQR {
@@ -26,7 +29,6 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 
 			if (itemstack.getItem() != Items.ELYTRA) {
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				this.entityRenderer.bindTexture(entitylivingbaseIn.getResourceLocationOfCape());
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0.0F, 0.0F, 0.125F);
 				// ChasingPos: Positions of the cape
@@ -57,9 +59,29 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 				GlStateManager.rotate(-f3 / 2.0F, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 				// DONE: Base model for Human shaped entities for capes
-				((ModelCQRBiped) this.entityRenderer.getMainModel()).renderCape(0.0625F);
+				this.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+				
 				GlStateManager.popMatrix();
 			}
+		}
+	}
+	
+	private void renderModel(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
+		if (flag) {
+			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());
+			this.entityRenderer.bindTexture(InvisibilityTexture.get(entitylivingbaseIn.getResourceLocationOfCape()));
+			((ModelCQRBiped) this.entityRenderer.getMainModel()).renderCape(0.0625F);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.depthFunc(GL11.GL_EQUAL);
+		}
+		//Standard texture
+		else {
+			this.entityRenderer.bindTexture(entitylivingbaseIn.getResourceLocationOfCape());
+		}
+		((ModelCQRBiped) this.entityRenderer.getMainModel()).renderCape(0.0625F);
+		if (flag) {
+			GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		}
 	}
 
