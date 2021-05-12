@@ -160,7 +160,6 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 					playerCount--;
 					if (playerCount > 0) {
 						int additionalEntities = (int) Math.round(entitiesToSpawn.size() * (playerCount * CQRConfig.advanced.entityCountGrowPerPlayer));
-						additionalEntities = Math.min(additionalEntities, entitiesToSpawn.size());
 						List<NBTTagCompound> additionals = new ArrayList<>(additionalEntities);
 						for (int i = 0; i < additionalEntities; i++) {
 							additionals.add(entitiesToSpawn.get(TileEntitySpawner.RANDOM.nextInt(entitiesToSpawn.size())));
