@@ -29,6 +29,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
@@ -49,6 +50,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
 	private final DataEntryBoolean vanillaSpawner = new DataEntryBoolean("vanillaSpawner", false, true);
+	private final DataEntryBoolean increaseHealthInsteadOfMobCount = new DataEntryBoolean("affectedByMPScaling", false, true);
 	private final DataEntryInt minSpawnDelay = new DataEntryInt("minSpawnDelay", 200, true);
 	private final DataEntryInt maxSpawnDelay = new DataEntryInt("maxSpawnDelay", 800, true);
 	private final DataEntryInt spawnCount = new DataEntryInt("spawnCount", 4, true);
@@ -57,6 +59,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	private final DataEntryInt spawnRange = new DataEntryInt("spawnRange", 4, true);
 
 	public TileEntitySpawner() {
+		this.dataManager.register(this.increaseHealthInsteadOfMobCount);
 		this.dataManager.register(this.vanillaSpawner);
 		this.dataManager.register(this.minSpawnDelay);
 		this.dataManager.register(this.maxSpawnDelay);
@@ -153,30 +156,35 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 				}
 			}
 
+			double growth = 0;
 			if (!entitiesToSpawn.isEmpty()) {
 				// Calculate additional entities
 				if (CQRConfig.advanced.scaleEntitiesOnPlayerCount) {
 					int playerCount = ProtectedRegionHelper.getEntitiesInProtectedRegionAt(EntityPlayer.class, this.pos, this.world).size();
 					playerCount--;
 					if (playerCount > 0) {
-						int additionalEntities = (int) Math.round(entitiesToSpawn.size() * (playerCount * CQRConfig.advanced.entityCountGrowPerPlayer));
-						List<NBTTagCompound> additionals = new ArrayList<>(additionalEntities);
-						for (int i = 0; i < additionalEntities; i++) {
-							additionals.add(entitiesToSpawn.get(TileEntitySpawner.RANDOM.nextInt(entitiesToSpawn.size())));
-						}
-						if (!additionals.isEmpty()) {
-							entitiesToSpawn.addAll(additionals);
+						growth = playerCount * CQRConfig.advanced.entityCountGrowPerPlayer;
+						if(!this.scalesHealthInsteadOfCount()) {
+							int additionalEntities = (int) Math.round(entitiesToSpawn.size() * growth);
+							List<NBTTagCompound> additionals = new ArrayList<>(additionalEntities);
+							for (int i = 0; i < additionalEntities; i++) {
+								additionals.add(entitiesToSpawn.get(TileEntitySpawner.RANDOM.nextInt(entitiesToSpawn.size())));
+							}
+							if (!additionals.isEmpty()) {
+								entitiesToSpawn.addAll(additionals);
+							}
 						}
 					}
 				}
 			}
+			final double g2 = growth;
 
 			// Now, spawn them all
-			entitiesToSpawn.forEach((NBTTagCompound nbt) -> spawnEntityFromNBT(nbt));
+			entitiesToSpawn.forEach((NBTTagCompound nbt) -> spawnEntityFromNBT(nbt, g2));
 		}
 	}
 
-	protected Entity spawnEntityFromNBT(NBTTagCompound entityTag) {
+	protected Entity spawnEntityFromNBT(NBTTagCompound entityTag, double mpGrowth) {
 		if (entityTag.isEmpty()) {
 			return null;
 		}
@@ -200,11 +208,15 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 			double z = this.pos.getZ() + 0.5D + (RANDOM.nextDouble() - RANDOM.nextDouble()) * offset;
 			entity.setPosition(x, y, z);
 
+			if(this.scalesHealthInsteadOfCount() && entity instanceof AbstractEntityCQR && mpGrowth > 0) {
+				((AbstractEntityCQR)entity).setHealthScale(((AbstractEntityCQR)entity).getHealthScale() * (1 + mpGrowth));
+			}
+			
 			this.world.spawnEntity(entity);
 
 			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
 			for (NBTBase passengerNBT : passengers) {
-				Entity passenger = this.spawnEntityFromNBT((NBTTagCompound) passengerNBT);
+				Entity passenger = this.spawnEntityFromNBT((NBTTagCompound) passengerNBT,mpGrowth);
 				passenger.startRiding(entity);
 			}
 		}
@@ -236,6 +248,14 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 
 	public void setCQRSpawner() {
 		this.vanillaSpawner.set(false);
+	}
+	
+	public void setScaleHPInsteadOfCount(boolean value) {
+		this.increaseHealthInsteadOfMobCount.set(value);
+	}
+	
+	public boolean scalesHealthInsteadOfCount() {
+		return this.increaseHealthInsteadOfMobCount.getBoolean();
 	}
 
 	public boolean isVanillaSpawner() {

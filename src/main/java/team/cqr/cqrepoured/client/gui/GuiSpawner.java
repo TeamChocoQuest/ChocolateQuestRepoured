@@ -21,6 +21,7 @@ public class GuiSpawner extends GuiContainer {
 
 	private final TileEntitySpawner tileEntity;
 	private GuiCheckBox vanillaSpawnerCheckBox;
+	private GuiCheckBox scaleHealthInsteadOfCountCheckBox;
 	private GuiTextField minSpawnDelayTextField;
 	private GuiTextField maxSpawnDelayTextField;
 	private GuiTextField spawnCountTextField;
@@ -36,6 +37,7 @@ public class GuiSpawner extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
+		this.scaleHealthInsteadOfCountCheckBox = this.addButton(new GuiCheckBox(7, this.width / 2 + 90, this.height / 2 - 94, "Scale health instead of count", this.tileEntity.scalesHealthInsteadOfCount()));
 		this.vanillaSpawnerCheckBox = this.addButton(new GuiCheckBox(0, this.width / 2 + 90, this.height / 2 - 80, "Vanilla Spawner", this.tileEntity.isVanillaSpawner()));
 		this.minSpawnDelayTextField = new GuiTextField(1, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 66, 32, 10);
 		this.maxSpawnDelayTextField = new GuiTextField(2, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 52, 32, 10);
@@ -102,11 +104,11 @@ public class GuiSpawner extends GuiContainer {
 			} catch (NumberFormatException e) {
 				// ignore
 			}
-
 			this.tileEntity.setVanillaSpawner(minSpawnDelay, maxSpawnDelay, spawnCount, maxNearbyEntities, activatingRangeFromPlayer, spawnRange);
 		} else {
 			this.tileEntity.setCQRSpawner();
 		}
+		this.tileEntity.setScaleHPInsteadOfCount(this.scaleHealthInsteadOfCountCheckBox.isChecked());
 	}
 
 	@Override
