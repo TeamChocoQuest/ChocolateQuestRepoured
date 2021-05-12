@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
@@ -338,6 +339,21 @@ public class ProtectedRegionHelper {
 		}
 
 		return false;
+	}
+	
+	public static <T extends Entity> Set<Entity> getEntitiesInProtectedRegionAt(Class<? extends Entity> entityClass, BlockPos position, World world) {
+		Set<Entity> set = new HashSet<>();
+		
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+
+		if (manager != null && manager instanceof ServerProtectedRegionManager) {
+			for(ProtectedRegion region: manager.getProtectedRegionsAt(position)) {
+				AxisAlignedBB regionAABB = new AxisAlignedBB(region.getStartPos(), region.getEndPos());
+				set.addAll(world.getEntitiesWithinAABB(entityClass, regionAABB));
+			}
+		}
+		
+		return set;
 	}
 
 }
