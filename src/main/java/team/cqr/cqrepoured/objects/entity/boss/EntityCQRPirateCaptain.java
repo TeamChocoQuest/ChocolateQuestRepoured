@@ -81,7 +81,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean hasCape() {
-		return this.getInvisibility() <= 0.0F;
+		return true;
 	}
 
 	@Override
