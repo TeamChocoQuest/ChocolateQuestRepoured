@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.tileentity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -29,6 +31,7 @@ import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
+import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
 import team.cqr.cqrepoured.util.Reference;
 
 public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable {
@@ -135,6 +138,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 		if (!this.world.isRemote) {
 			this.world.setBlockToAir(this.pos);
 
+			List<NBTTagCompound> entitiesToSpawn = new ArrayList<>();
+
 			for (int i = 0; i < this.inventory.getSlots(); i++) {
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
@@ -142,11 +147,33 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 					NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
 
 					while (!stack.isEmpty()) {
-						this.spawnEntityFromNBT(nbt);
+						entitiesToSpawn.add(nbt);
 						stack.shrink(1);
 					}
 				}
 			}
+
+			if (!entitiesToSpawn.isEmpty()) {
+				// Calculate additional entities
+				if (CQRConfig.advanced.scaleEntitiesOnPlayerCount) {
+					int playerCount = ProtectedRegionHelper.getEntitiesInProtectedRegionAt(EntityPlayer.class, this.pos, this.world).size();
+					playerCount--;
+					if (playerCount > 0) {
+						int additionalEntities = (int) Math.round(entitiesToSpawn.size() * (playerCount * CQRConfig.advanced.entityCountGrowPerPlayer));
+						additionalEntities = Math.min(additionalEntities, entitiesToSpawn.size());
+						List<NBTTagCompound> additionals = new ArrayList<>(additionalEntities);
+						for (int i = 0; i < additionalEntities; i++) {
+							additionals.add(entitiesToSpawn.get(TileEntitySpawner.RANDOM.nextInt(entitiesToSpawn.size())));
+						}
+						if (!additionals.isEmpty()) {
+							entitiesToSpawn.addAll(additionals);
+						}
+					}
+				}
+			}
+
+			// Now, spawn them all
+			entitiesToSpawn.forEach((NBTTagCompound nbt) -> spawnEntityFromNBT(nbt));
 		}
 	}
 
