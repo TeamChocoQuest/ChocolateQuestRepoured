@@ -102,7 +102,8 @@ public class CQRConfig {
 		@Config.Comment("When enabled overwrites the amount of chunks a ticket can keep loaded when generating/exporting dungeons.")
 		public boolean overwriteForgeChunkLoadingLimit = true;
 		
-		public boolean scaleEntitiesOnPlayerCount = true;
+		@Config.Comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer")
+		public boolean scaleEntitiesOnPlayerCount = false;
 		public double entityCountGrowPerPlayer = 0.25D;
 	}
 
