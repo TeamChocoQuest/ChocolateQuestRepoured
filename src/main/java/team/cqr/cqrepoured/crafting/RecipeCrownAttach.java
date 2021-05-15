@@ -31,7 +31,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 					} else {
 						return false;
 					}
-				} else if (helmet == ItemStack.EMPTY && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
+				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return false;
@@ -54,7 +54,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 					} else {
 						return ItemStack.EMPTY;
 					}
-				} else if (helmet == ItemStack.EMPTY && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
+				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return ItemStack.EMPTY;
