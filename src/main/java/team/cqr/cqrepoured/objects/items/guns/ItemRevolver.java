@@ -203,7 +203,7 @@ public class ItemRevolver extends Item implements IRangedWeapon, INonEnchantable
 
 	@Override
 	public SoundEvent getShootSound() {
-		return CQRSounds.GUN_SHOOT;
+		return CQRSounds.REVOLVER_SHOOT;
 	}
 
 	@Override
