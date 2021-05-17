@@ -1,15 +1,20 @@
-The English CN language file for Chocolate Quest Repoured Mod!
-This translation was created by basically every dev and polished out by ArloTheEpic
+#The English CN language file for Chocolate Quest Repoured Mod!
+#This translation was created by basically every dev and polished out by ArloTheEpic
 
+#DamageSources
+death.attack.ray=%1$s 被激光击中
+death.attack.ray.player=%1$s 被 %2$s 的激光击中
 
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=寻找巧克力重铸版-方块
-itemGroup.ChocolateQuestRepouredItemsTab=寻找巧克力重铸版-物品
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR-地牢放置
-itemGroup.ChocolateQuestRepouredBannerTab=旗帜
-itemGroup.ChocolateQuestRepouredExporterChests=输出箱
+itemGroup.cqrepoured_blocks=寻找巧克力-方块
+itemGroup.cqrepoured_items=寻找巧克力-物品
+itemGroup.cqrepoured_banners=寻找巧克力-地牢放置
+itemGroup.cqrepoured_creative_tools=寻找巧克力-创造工具
+itemGroup.cqrepoured_dungeon_placers=地牢发生器
+itemGroup.cqrepoured_exporter_chests=寻找巧克力-输出箱
+itemGroup.cqrepoured_spawn_eggs=寻找巧克力-刷怪蛋
 
-#Banners
+#Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-旗帜标记
 item.banner.cqrepoured_cq_blank.orange=CQR-旗帜标记
 item.banner.cqrepoured_cq_blank.magenta=CQR-旗帜标记
@@ -117,7 +122,7 @@ item.banner.cqrepoured_walker_black_bg.orange=橙色旗织物
 item.banner.cqrepoured_walker_black_bg.magenta=品红色旗织物
 item.banner.cqrepoured_walker_black_bg.light_blue=淡蓝色旗织物
 item.banner.cqrepoured_walker_black_bg.yellow=黄色旗织物
-item.banner.cqrepoured_walker_black_bg.lime=Lime 旗织物
+item.banner.cqrepoured_walker_black_bg.lime=黄绿色 旗织物
 item.banner.cqrepoured_walker_black_bg.pink=粉红色旗织物
 item.banner.cqrepoured_walker_black_bg.gray=灰色旗织物
 item.banner.cqrepoured_walker_black_bg.silver=淡灰色旗织物
@@ -129,13 +134,12 @@ item.banner.cqrepoured_walker_black_bg.green=绿色旗织物
 item.banner.cqrepoured_walker_black_bg.red=红色旗织物
 item.banner.cqrepoured_walker_black_bg.black=黑色旗织物
 
-
 item.banner.cqrepoured_walker_border.white=白色镶边
 item.banner.cqrepoured_walker_border.orange=橙色镶边
 item.banner.cqrepoured_walker_border.magenta=品红色镶边
 item.banner.cqrepoured_walker_border.light_blue=蓝色镶边
 item.banner.cqrepoured_walker_border.yellow=黄色镶边
-item.banner.cqrepoured_walker_border.lime=Lime 镶边
+item.banner.cqrepoured_walker_border.lime=黄绿色 镶边
 item.banner.cqrepoured_walker_border.pink=粉红色镶边
 item.banner.cqrepoured_walker_border.gray=灰色镶边
 item.banner.cqrepoured_walker_border.silver=淡灰色镶边
@@ -152,7 +156,7 @@ item.banner.cqrepoured_walker_inner_border.orange=橙色不规则结构
 item.banner.cqrepoured_walker_inner_border.magenta=品红色不规则结构
 item.banner.cqrepoured_walker_inner_border.light_blue=淡蓝色不规则结构
 item.banner.cqrepoured_walker_inner_border.yellow=黄色不规则结构
-item.banner.cqrepoured_walker_inner_border.lime=Lime 不规则结构
+item.banner.cqrepoured_walker_inner_border.lime=黄绿色 不规则结构
 item.banner.cqrepoured_walker_inner_border.pink=粉红色不规则结构
 item.banner.cqrepoured_walker_inner_border.gray=灰色不规则结构
 item.banner.cqrepoured_walker_inner_border.silver=淡灰色不规则结构
@@ -164,13 +168,12 @@ item.banner.cqrepoured_walker_inner_border.green=绿色不规则结构
 item.banner.cqrepoured_walker_inner_border.red=红色不规则结构
 item.banner.cqrepoured_walker_inner_border.black=黑色不规则结构
 
-
 item.banner.cqrepoured_walker_skull.white=白色漫步者脸庞
 item.banner.cqrepoured_walker_skull.orange=橙色漫步者脸庞
 item.banner.cqrepoured_walker_skull.magenta=品红色 漫步者脸庞
 item.banner.cqrepoured_walker_skull.light_blue=淡蓝色漫步者脸庞
 item.banner.cqrepoured_walker_skull.yellow=黄色漫步者脸庞
-item.banner.cqrepoured_walker_skull.lime=Lime 漫步者脸庞
+item.banner.cqrepoured_walker_skull.lime=黄绿色 漫步者脸庞
 item.banner.cqrepoured_walker_skull.pink=粉红色漫步者脸庞
 item.banner.cqrepoured_walker_skull.gray=灰色漫步者脸庞
 item.banner.cqrepoured_walker_skull.silver=淡灰色漫步者脸庞
@@ -182,6 +185,17 @@ item.banner.cqrepoured_walker_skull.green=绿色漫步者脸庞
 item.banner.cqrepoured_walker_skull.red=红色漫步者脸庞
 item.banner.cqrepoured_walker_skull.black=黑色漫步者脸庞
 
+#Banners
+item.banner.pirate_banner.name=海盗旗帜
+item.banner.walker_banner.name=漫步者旗帜
+item.banner.pigman_banner.name=猪人旗帜
+item.banner.enderman_banner.name=末影人旗帜
+item.banner.enderman_banner2.name=末影人旗帜2
+item.banner.npc_banner.name=NPC旗帜
+item.banner.skeleton_banner.name=骷髅旗帜
+item.banner.illager_banner.name=卫道士旗帜
+item.banner.walker_ordo.name=漫步者旗帜2
+item.banner.gremlin_banner.name=小鬼旗帜
 
 #Gui
 gui.repu.name=声望
@@ -213,6 +227,9 @@ item.path_tool.name=路径工具
 item.cursed_bone.name=诅咒之骨
 item.dummy_shield.name=假人盾
 
+#Axes
+item.battle_axe_bull.name=公牛战斧
+
 #Dragon Items
 item.helmet_dragon.name=龙之头盔
 
@@ -225,7 +242,6 @@ item.dagger_ninja.name=忍者匕首
 #Swords
 item.sword_turtle.name=乌龟之剑
 item.sword_spider.name=蜘蛛之剑
-item.battle_axe_bull.name=公牛战斧
 item.sword_moonlight.name=月牙之刃
 item.sword_sunshine.name=晨曦之剑
 
@@ -280,6 +296,7 @@ item.great_sword_iron.name=铁质巨剑
 #Spears
 item.spear_diamond.name=钻石矛
 item.spear_iron.name=铁质矛
+attribute.name.generic.attackRange=攻击范围
 
 #Staves
 item.staff.name=法杖
@@ -311,6 +328,7 @@ item.bubble_rifle.name=改进型泡泡枪
 #Hookshots
 item.hookshot.name=抓钩
 item.longshot.name=加长抓钩
+item.spiderhook.name=蜘蛛抓钩
 
 #Cloud Items
 item.boots_cloud.name=云靴
@@ -395,6 +413,7 @@ tile.table_acacia.name=金合欢木桌
 tile.table_dark.name=深色橡木桌
 tile.boss_block.name=Boss方块
 tile.force_field_nexus.name=力场关系(NYI)
+tile.map_placeholder.name=地图占位符
 
 #Andesite blocks
 tile.andesite_carved.name=雕刻的安山岩
@@ -466,6 +485,7 @@ tile.exporter_chest_valuable.name=输出箱 宝物
 tile.exporter_chest_food.name=输出箱 食物
 tile.exporter_chest_equipment.name=输出箱 装备
 tile.exporter_chest_utility.name=输出箱 多功能
+tile.exporter_chest_clutter.name=输出箱 杂物
 tile.exporter_chest_vanilla_blacksmith.name=输出箱 - 村庄铁匠铺
 tile.exporter_chest_vanilla_bonus.name=输出箱 - 奖励箱
 tile.exporter_chest_vanilla_dungeon.name=输出箱 - 地牢
@@ -480,23 +500,11 @@ tile.exporter_chest_vanilla_pyramid.name=输出箱 - 神殿
 tile.exporter_chest_vanilla_stronghold.name=输出箱 - 要塞走廊
 tile.exporter_chest_vanilla_stronghold_library.name=输出箱 - 要塞图书馆
 tile.exporter_chest_vanilla_stronghold_storeroom.name=输出箱 - 要塞矿井
-tile.exporter_chest_custom_1.name=输出箱 - 自定义 1
-tile.exporter_chest_custom_2.name=输出箱 - 自定义 2
-tile.exporter_chest_custom_3.name=输出箱 - 自定义 3
-tile.exporter_chest_custom_4.name=输出箱 - 自定义 4
-tile.exporter_chest_custom_5.name=输出箱 - 自定义 5
-tile.exporter_chest_custom_6.name=输出箱 - 自定义 6
-tile.exporter_chest_custom_7.name=输出箱 - 自定义 7
-tile.exporter_chest_custom_8.name=输出箱 - 自定义 8
-tile.exporter_chest_custom_9.name=输出箱 - 自定义 9
-tile.exporter_chest_custom_10.name=输出箱 - 自定义 10
-tile.exporter_chest_custom_11.name=输出箱 - 自定义 11
-tile.exporter_chest_custom_12.name=输出箱 - 自定义 12
-tile.exporter_chest_custom_13.name=输出箱 - 自定义 13
-tile.exporter_chest_custom_14.name=输出箱 - 自定义 14
+tile.exporter_chest_custom.name=Exporter Chest - Custom
 
 #technical
 tile.phylactery.name=巫妖的命匣
+tile.temporary_web.name=临时网
 
 #Descriptions
 description.spider_armor.name=穿上蜘蛛铠甲如同变成蜘蛛。 全套装备可以让你攀爬墙壁并且跳得更高。
@@ -549,34 +557,64 @@ description.staff_wind.name=不管这是做什么的，现在还不起作用。 
 description.staff_poison.name=不管这是做什么的，现在还不起作用。 #TODO
 description.staff.name=丢失 #TODO
 description.staff_thunder.name=丢失 #TODO
-description.spear_diamond.name=制作精良的武器，攻击距离可比普通的剑更长。右击效果：蓄力延长穿刺距离。
+description.spiked_glove.name=利用熊的爪子和你手臂的力量,这个拳套应能让你远离伤害. 双拳在手， 遇墙拆墙，尽情享受。
+description.spear_diamond.name=做工很好的武器，攻击距离可比普通的剑更长。右击效果：蓄力延长穿刺距离。
 description.cursed_bone.name=召唤的暴徒:
-description.dummy_shield.name=盾牌的大致形状。不会保护你免受攻击。当对应的地牢生成时，导出的假人持有这个，而不是持有其怪物类型的通常盾牌。
+description.dummy_shield.name=盾牌的大致形状。不会保护你免受攻击。当对应的地牢生成时，导出的假人会持有这个，而不是通常的盾牌。
+description.giant_spider_poison.name=这东西的腐蚀太疯狂了！对你来说实在危险，但也许你可以找一位毒素专家谈谈如何使用它。
+description.feather_golden.name=拿起一根羽毛，将它镀金，相信古老的力量然后信仰之跃。只要你带着黄金羽毛，你将不会受到伤害。但要谨慎使用，我正在坠落的朋友，如果羽毛折断，你的生命可能会结束。
+description.scale_turtle.name=你设法打捞到的几块巨龟壳中的一块。它是如此之强大，以至于你的任何工具都无法切割它。也许有拿着比你的更强大的工具的人，你能说服他帮你一把吗？
+description.horn_bull.name=这只角足够硬，如果你知道如何用动物角制作合成物品的话，你应该能做一件很棒的武器。也许有个工匠在这方面更有经验。
+description.leather_bull.name=非常优质的皮革。合适的工匠可能会用这个来锻造你见过的最符合空气动力学的装备！
+description.ball_slime.name=太神奇了！具有再生能力的黏液！事实上，它总是自动复原形状的特性使得它很难被加工，也许合适的工匠能帮助你制造具有回复生命值能力的装备，使用粘液作为弹药的武器将得到很多这方面的东西。
+description.bone_monking.name=不知是何种原始能量使得这只山魈比其它的同类更强大，这种能量仍存在与他的骨头上。也许合适的工匠会知道如何使用这种力量？
+description.leather_spider.name=巨型蜘蛛的皮仍然粘着它碰到的任何东西。触感很恶心，但是一个更习惯于这种工作的工匠可能会把它做成整洁的东西。
+description.king_crown.name=可以单独佩戴，也可以与头盔结合使用。无论哪种方式，你看起来都会像你一直感觉的那样非常高贵。
+description.bubble_pistol.name=Undertech商用涡轮阻尼器33.6mm喷嘴气泡喷射装置。用鼠标右键按一下，就会喷出一连串的气泡，大到足以抓住一匹马并向上漂移。泡沫是非致命的，但间接伤害是可能的。按住鼠标右键可持续输出。
+description.bubble_rifle.name=Undertech原型先进涡轮阻尼器。非法流出的款式。比传统的气泡枪更快速、更远地排出液体，按住鼠标右键持续时间更长。不幸的是，重新加载要慢得多。
+description.path_tool.name=潜行+左键单击一个实体以将路径应用于该实体。%s左键单击一个实体以复制该实体的路径。%s潜行+右键单击一个方块以添加新的路径节点。%s右键单击一个方块以选择现有的路径节点。%s潜行+右键对空单击以清除当前路径。
+
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=选中后，输入数据在元数据方面不必相似。例如，您将钻石剑设置为输入，它也将接受损坏的钻石剑。
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=选中后，输入的nbt数据不必相似。例如，您将钻石剑设置为输入，它也将接受附魔的钻石剑
+description.gui_merchant_edit_trade.reputation_button.name=要使用此交易，必须与交易者所属派系保持声誉。将其设置为“ NONE”则不需要任何声望。
+description.gui_merchant_edit_trade.advancement_text_field.name=使用该行业需要进度。指定进度资源位置（例如“ minecraft：story / mine_stone”），或将其留空以不需要任何进度。
+description.gui_merchant_edit_trade.stock_check_box.name=选中此选项可设置此交易的库存数量。这意味着该交易用途有限。
+description.gui_merchant_edit_trade.restock_text_field.name=补充库存后，使用量将增加。每次您购买某物时，它都会补充另一种未最大化的交易。
+description.gui_merchant_edit_trade.in_stock_text_field.name=当前的使用量。
+description.gui_merchant_edit_trade.max_stock_text_field.name=行业可以拥有的最高使用量。
+description.gui_button_trade.unlocked.name=交易已解锁。
+description.gui_button_trade.locked.name=交易还没有解锁！
+description.gui_button_trade.out_of_stock.name=缺货！如果可能的话，再买些其他的东西，那个交易也许又会开放了。
 
 #Enchantments
 enchantment.lightning_protection=雷击保护
+enchantment.spectral=幽灵香脂
 
 #Mobs
-entity.cqr_boarman.name=野猪人
 entity.cqr_dummy.name=木头人
-entity.cqr_dwarf.name=矮人
+entity.cqr_boarman.name=野猪人
 entity.cqr_enderman.name=末影人
-entity.cqr_goblin.name=哥布林
-entity.cqr_golem.name=铁傀儡
 entity.cqr_gremlin.name=小鬼
+entity.cqr_human.name=人类
 entity.cqr_illager.name=卫道士
-entity.cqr_npc.name=NPC
 entity.cqr_mandril.name=山魈
 entity.cqr_minotaur.name=牛头人
 entity.cqr_mummy.name=木乃伊
 entity.cqr_ogre.name=食人魔
-entity.cqr_orc.name=兽人
 entity.cqr_pirate.name=海盗
 entity.cqr_skeleton.name=骷髅
 entity.cqr_spectre.name=幽灵
-entity.cqr_triton.name=鱿鱼人
 entity.cqr_walker.name=深渊漫步者
 entity.cqr_zombie.name=僵尸
+
+#Friendly Races
+entity.cqr_npc.name=NPC
+entity.cqr_dwarf.name=矮人
+entity.cqr_golem.name=傀儡
+entity.cqr_orc.name=兽人
+entity.cqr_goblin.name=哥布林
+entity.cqr_triton.name=鱿鱼人
 
 #Mounts
 entity.cqr_giant_endermite.name=巨型末影螨
@@ -592,12 +630,20 @@ entity.cqr_necromancer.name=亡灵巫师
 entity.cqr_boar_mage.name=野猪法师
 entity.cqr_walker_king.name=深渊王
 entity.cqr_pirate_captain.name=海盗船长
+entity.cqr_giant_spider.name=巨蛛尸罗
+entity.cqr_ender_king.name=末影王
+entity.cqr_ender_calamity.name=ยง4末影之灾
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>五角星召唤物
+#This name should be the same as the walker king name
 entity.cqr_illusion_walker_king.name=深渊王
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>深渊旋风
 entity.cqr_pirate_parrot.name=叛贼鹦鹉
+entity.cqr_flying_skull.name=飞行的头骨
+entity.cqr_ice_spike.name=冰刺
+entity.cqr_wasp.name=Wasp (WIP)
+entity.cqr_pollo.name=Abomination (WIP)
 
 #Advancements
 advancements.cqrepoured.root.title=寻找巧克力重铸版
@@ -613,10 +659,10 @@ advancements.cqrepoured.challenger.description=打败模组里的一个BOSS
 advancements.cqrepoured.champion.title=地牢之王
 advancements.cqrepoured.champion.description=击败每一个BOSS至少一次
 advancements.cqrepoured.wear_the_turtle.title=双足铁王八
-advancements.cqrepoured.wear_the_turtle.description=现在我是坦克了！获得全套甲胄
+advancements.cqrepoured.wear_the_turtle.description=现在我是坦克了！获得全套巨龟盔甲
 advancements.cqrepoured.kill_boar_mage.title=这个女孩着火了
 advancements.cqrepoured.kill_boar_mage.description=打败一只野猪法师
-advancements.cqrepoured.kill_lich.title=已经够魔法了！
+advancements.cqrepoured.kill_lich.title=已经死了的可能再死！
 advancements.cqrepoured.kill_lich.description=打败一位巫妖
 advancements.cqrepoured.kill_walker_king.title=好对手
 advancements.cqrepoured.kill_walker_king.description=打败深渊王
@@ -630,3 +676,5 @@ advancements.cqrepoured.kill_pirate_captain.title=Arrr!
 advancements.cqrepoured.kill_pirate_captain.description=打败海盗船长
 advancements.cqrepoured.new_captain.title=现在谁是船长？
 advancements.cqrepoured.new_captain.description=获取海盗船长的武器
+advancements.cqrepoured.kill_giant_spider.title=唯一的好蜘蛛。。。
+advancements.cqrepoured.kill_giant_spider.description=。。。 死蜘蛛！打倒一只巨蛛

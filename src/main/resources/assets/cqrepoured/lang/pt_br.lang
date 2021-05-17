@@ -3,11 +3,13 @@ This translation was made possible by Atum262, Luker, Guilherme and sallomma
 
 
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=CQR Blocos
-itemGroup.ChocolateQuestRepouredItemsTab=CQR Itens
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Geradores de Masmorra
-itemGroup.ChocolateQuestRepouredBannerTab=CQR Estandartes
-itemGroup.ChocolateQuestRepouredExporterChests=CQR Baús Exportadores
+itemGroup.cqrepoured_blocks=CQR Blocos
+itemGroup.cqrepoured_items=CQR Itens
+itemGroup.cqrepoured_banners=CQR Estandartes
+itemGroup.cqrepoured_creative_tools=CQR Ferramentas do Criativo
+itemGroup.cqrepoured_dungeon_placers=CQR Geradores de Masmorra
+itemGroup.cqrepoured_exporter_chests=CQR Baús Exportadores
+itemGroup.cqrepoured_spawn_eggs=CQR Ovos Geradores
 
 #Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-marcador de estandarte
@@ -128,7 +130,6 @@ item.banner.cqrepoured_walker_black_bg.brown=Tecido marrom de bandeira
 item.banner.cqrepoured_walker_black_bg.green=Tecido verde de bandeira
 item.banner.cqrepoured_walker_black_bg.red=Tecido vermelho de bandeira
 item.banner.cqrepoured_walker_black_bg.black=Tecido preto de bandeira
-
 
 item.banner.cqrepoured_walker_border.white=Borda branca
 item.banner.cqrepoured_walker_border.orange=Borda laranja
@@ -257,7 +258,7 @@ item.sword_walker.name=Espada do Andarilho
 item.shield_walker_king.name=Escudo do Andarilho Rei
 
 #Shields
-item.shield_bull.name=Escudo de Touro de Gelo
+item.shield_bull.name=Escudo de Touro do Gelo
 item.shield_carl.name=Carl
 item.shield_dragonslayer.name=Escudo de Dragão
 item.shield_fire.name=Escudo Ardente
@@ -351,11 +352,11 @@ item.leather_bull.name=Couro de Touro
 item.horn_bull.name=Chifre de Touro
 
 #Turtle Armor
-item.helmet_turtle.name=Capacete de Tartaruga
-item.chestplate_turtle.name=Peitoral de Tartaruga
-item.leggings_turtle.name=Calças de Tartaruga
-item.boots_turtle.name=Botas de Tartaruga
-item.scale_turtle.name=Escama de Tartaruga
+item.helmet_turtle.name=Capacete de casco de Tartaruga
+item.chestplate_turtle.name=Peitoral de casco de Tartaruga
+item.leggings_turtle.name=Calças de casco de Tartaruga
+item.boots_turtle.name=Botas de casco de Tartaruga
+item.scale_turtle.name=Escama de Tartaruga Gigante
 
 #Slime Armor
 item.helmet_slime.name=Capacete de Slime
@@ -409,6 +410,7 @@ tile.table_acacia.name=Mesa de Acácia
 tile.table_dark.name=Mesa de Carvalho Escuro
 tile.boss_block.name=Bloco do Chefão
 tile.force_field_nexus.name=Nexo do Campo de Força
+tile.map_placeholder.name=Marcador do mapa
 
 #Andesite blocks
 tile.andesite_carved.name=Andesito Esculpido
@@ -495,37 +497,24 @@ tile.exporter_chest_vanilla_pyramid.name=Baú Exportador - Pirâmide
 tile.exporter_chest_vanilla_stronghold.name=Baú Exportador - Corredor da Fortaleza
 tile.exporter_chest_vanilla_stronghold_library.name=Baú Exportador - Biblioteca da Fortaleza
 tile.exporter_chest_vanilla_stronghold_storeroom.name=Baú Exportador - Mina da Fortaleza
-tile.exporter_chest_custom_1.name=Baú Exportador - Personalizado 1
-tile.exporter_chest_custom_2.name=Baú Exportador - Personalizado 2
-tile.exporter_chest_custom_3.name=Baú Exportador - Personalizado 3
-tile.exporter_chest_custom_4.name=Baú Exportador - Personalizado 4
-tile.exporter_chest_custom_5.name=Baú Exportador - Personalizado 5
-tile.exporter_chest_custom_6.name=Baú Exportador - Personalizado 6
-tile.exporter_chest_custom_7.name=Baú Exportador - Personalizado 7
-tile.exporter_chest_custom_8.name=Baú Exportador - Personalizado 8
-tile.exporter_chest_custom_9.name=Baú Exportador - Personalizado 9
-tile.exporter_chest_custom_10.name=Baú Exportador - Personalizado 10
-tile.exporter_chest_custom_11.name=Baú Exportador - Personalizado 11
-tile.exporter_chest_custom_12.name=Baú Exportador - Personalizado 12
-tile.exporter_chest_custom_13.name=Baú Exportador - Personalizado 13
-tile.exporter_chest_custom_14.name=Baú Exportador - Personalizado 14
+tile.exporter_chest_custom.name=Baú Exportador - Personalizado
 
 #technical
 tile.phylactery.name=Talismã do Lich
-tile.temporary_web.name=Teia Temporária
+tile.temporary_web.name=Teia Decadente
 
 #Descriptions
 description.spider_armor.name=Vista a aranha para se tornar a aranha. A armadura completa permite subir paredes e pular muito mais alto.
 description.spider_sword.name=Fluindo das presas que fizeram desta simples espada uma lâmina tóxica, o veneno de Shelob não pode ser retirado uma vez que seu inimgo for apunhalado por esta lâmina.
 description.bull_armor.name=Vista o touro para se tornar o touro. A armadura completa permite que você avance em alta velocidade, destruindo tudo em seu caminho.
 description.great_sword.name=Segure o botão direito para dar dano em área.
-description.turtle_armor.name=O poder da tartaruga, se você vestir a armadura completa de seu casco, permitirá recuperar a vida muito mais rápido. O casco protege de danos traseiros também.
+description.turtle_armor.name=O poder da Tartaruga Gigante, caso você vista a armadura completa de seu casco, você irá recuperar a vida muito mais rapidamente. O casco evita a maioria das formas de dano traseiro, também.
 description.slime_armor.name=Com a armadura completa de slime regenerador tocando sua pele, você pode sentir sua vida máxima transbordando, e quando sofrer dano, um pequeno slime pode aparecer o qual irá restaurar sua vida, se você alcançá-lo.
 description.cloud_boots.name=Aqueles que seguem a canção dos anjos os profetas dizem que não podem fazer nada de errado. Um simples salto se torna um voo, uma caminhada rápida quebra a velocidade do som, nenhuma queda pode parar os poucos escolhidos, e com essas botas, isso se extende a você!
 #description.dragon_helmet.name=Você pode sentir o poder do dragão correndo em suas veias. Ataques que antes eram uma ameaça para você parecem insignificantes agora, mas seus ataques são duas vezes mais fortes!
 description.dagger.name=Clique com o botão direito enquanto anda para saltar para frente
 description.ninja_dagger.name=Clique com o botão direito enquanto anda para saltar para frente. Dizem que o portador desta adaga pode, quando desejar, sumir sem deixar rastros. Você pode imitar este comportamento com um clique direito enquanto se agacha, mas quando você sumir de vista, não irá longe.
-description.bull_battle_axe.name=Grux clique direito no chão. Faz terremoto. Viaja para frente. Esmaga inimigos legal. Grux gosta.
+description.bull_battle_axe.name=Grux clique direito no chão. Faz terremoto. Vai para frente. Esmaga inimigos legal. Grux gosta.
 description.walker_set.name=Reza a lenda que aquele que atirar uma flecha no Andarilho Rei encontrará uma lâmina em suas costas e o Rei atrás dela. Talvez coletando sua espada e seu escudo permitirá que você utilize de uma habilidade semelhante?
 description.gun.name=Clique com o botão direito para atirar.
 description.bullet_damage.name=Dano da Bala
@@ -563,12 +552,23 @@ description.attack_damage_at_day.name=Dano de Ataque durante o Dia
 description.staff_vampiric.name=Este bastão irradia energia negra enquanto você o segura em sua mão. Se você o aproximar do ouvido ouvirá sua demanda. Seu chamado é simples: "Clique com o botão direito comigo" e quando você o fizer você verá, o projétil que ele emite. Embora o dano seja leve, se você mirou direito, ele irá te curar quando acertar.
 description.staff_wind.name=Qualquer que seja o incrível poder mágico que isto uma vez teve, está por enquanto completamente adormecido. (O que quer que isto deva fazer, ainda não funciona. #TODO)
 description.staff_poison.name=O veneno borbulha em sua ponta, cuidado para não pingar, ele consome a pele, carne e osso, é melhor tomar cuidado não é seu. Atire por sua própria conta e risco, e cuidado pois nem todos chamariam de uma morte justa...
-description.staff.name=Faltando #TODO
+description.staff.name=Um graveto longo e forte. Provavelmente existe alguém por aí que sabe como encantá-lo.
 description.staff_thunder.name=A joia no topo desse cajado estala e faisca com carga elétrica. Com um clique direito, para acertar sua marca, um pode simplesmente redirecionar seu circuito.
-description.spiked_glove.name=Com as garras de um urso, e a força de seus braços, essas luvas o levarão para longe do perigo. Enquanto empunha dois, aprecie a vista, pois paredes já não mais o impedem.
+description.spiked_glove.name=Com as garras de uma besta, e a força de seu braço, essas luvas o levarão para longe do perigo. Enquanto empunhar duas, aprecie a vista, pois paredes já não mais o impedem.
 description.spear_diamond.name=Uma arma bem feita com alcance maior que uma espada. Clique com o botão direito para carregar um impulso estendido.
 description.cursed_bone.name=Criatura a ser invocada:
 description.dummy_shield.name=Uma aproximação grosseira de como um escudo deve se parecer. Não irá te proteger de ataques. Um manequim exportado que estiver segurando isso estará na verdade segurando o escudo comum para seu tipo de criatura quando uma masmorra for gerada.
+description.giant_spider_poison.name=Essa coisa é extremamente corrosiva! Definitivamente muito perigosa para você trabalhar com ela, talvez haja um especialista em toxina com quem você possa falar sobre trabalhar com isso.
+description.feather_golden.name=Pegue uma pena, mergulhe-a em ouro, dê um salto de fé e acredite no poder dos antigos. Você não irá see ferir, desde que esteja armado com a Pena de Ouro. Mas use com sabedoria, meu amigo cadente, se a pena quebrar, sua vida poderá se acabar.
+description.scale_turtle.name=Uma das poucas peças do casco da Tartarua Gigante que você conseguiu recuperar. Sua resistência é tamanha que nenhuma de suas ferramentas pode sequer lascá-la. Talvez haja alguém por aí com ferramentas mais fortes que as suas que você possa convencer a te dar uma mão?
+description.horn_bull.name=Este chifre é tão forte que talvez você poderia fazer uma boa arma com ele, se você soubesse trabalhar com chifres de animais. Talvez haja um artesão por aí que seja mais experiente no assunto.
+description.leather_bull.name=Couro de altíssima qualidade. O artesão certo poderia provavelmente usar isso para forjar o equipamento mais aerodinâmico que você já viu!
+description.ball_slime.name=Extraordinário. Slime com poderes de regeneração. O fato de sempre retornar à forma original o torna difícil de trabalhar, mas o artesão certo poderia provavelmente usar isso para fazer algum equipamento com capacidade de auto-regeneração, e qualquer arma que use de slime como munição vai tirar muito proveito deste material.
+description.bone_monking.name=Qualquer que tenha sido a energia primordial que tornou o MacacoRei muito mais poderoso do que seus colegas ainda se agarra aos seus ossos. Talvez o artesão correto saiba trabalhar com tamanho poder?
+description.leather_spider.name=O couro de Aranha Gigante ainda gruda em tudo que toca. É muito nojento para você manusear por muito tempo, mas um artesão que está mais acostumado a esse tipo de trabalho pode provavelmente transformar isso em algo elegante.
+description.king_crown.name=Pode ser usado por si só, ou combinado com um capacete. Seja como for, terá um aspecto de realeza tão quanto sempre teve.
+description.bubble_pistol.name=Humidificador Turbo da Undertech Commercial, com uma unidade de explosão de bolha de 33,6mm. Um clique com o botão direito do mouse expelirá uma rajada rápida de bolhas, grande o suficiente para capturar um cavalo e fazê-lo flutuar. As bolhas não são letais, mas o mesmo não pode ser dito da queda. Mantenha pressionado o botão direito do mouse para um fluxo contínuo.
+description.bubble_rifle.name=Protótipo de Humidificador Turbo da Undertech. Não é para acesso público. Expele o líquido mais rápido e mais longe do que uma arma de bolhas tradicional, e segurar o botão direito do mouse dura mais tempo. Infelizmente, recarregá-lo é muito mais lento.
 
 #Trading GUI
 description.gui_merchant_edit_trade.ignore_meta_check_box.name=Quando marcado, a entrada não precisa ser semelhante em termos de metadados. Por exemplo, se você definir uma espada de diamante como entrada, também aceitará espadas de diamante danificadas.
@@ -579,6 +579,7 @@ description.gui_merchant_edit_trade.stock_check_box.name=Marque esta opção par
 description.gui_merchant_edit_trade.restock_text_field.name=Quantidade de usos, aumentará quando for reestocado. Toda vez que você compra algo, outro produto será reestocado.
 description.gui_merchant_edit_trade.in_stock_text_field.name=Quantidade atual de usos que a transação possui.
 description.gui_merchant_edit_trade.max_stock_text_field.name=Maior quantidade de usos que a transação pode ter.
+description.gui_button_trade.unlocked.name=Compra desbloqueada.
 description.gui_button_trade.locked.name=Essa compra ainda não foi desbloqueada!
 description.gui_button_trade.out_of_stock.name=Fora de estoque! Se possível compre outra coisa, então talvez esse produto estará em estoque novamente.
 
