@@ -16,6 +16,10 @@ public class CQRSounds {
 
 	@ObjectHolder("item.gun.shoot")
 	public static final SoundEvent GUN_SHOOT = Null();
+	@ObjectHolder("item.revolver.shoot")
+	public static final SoundEvent REVOLVER_SHOOT = Null();
+	@ObjectHolder("item.musket.shoot")
+	public static final SoundEvent MUSKET_SHOOT = Null();
 	@ObjectHolder("item.magic")
 	public static final SoundEvent MAGIC = Null();
 
@@ -59,6 +63,8 @@ public class CQRSounds {
 		public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
 			final SoundEvent[] sounds = {
 					createSoundEvent("item.gun.shoot"),
+					createSoundEvent("item.revolver.shoot"),
+					createSoundEvent("item.musket.shoot"),
 					createSoundEvent("item.magic"),
 					createSoundEvent("entity.player.classic_hurt"),
 					createSoundEvent("entity.goblin.ambient"),

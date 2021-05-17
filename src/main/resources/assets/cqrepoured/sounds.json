@@ -4,7 +4,27 @@
         "category": "item",
         "sounds": [{"name" : "cqrepoured:item/gunshoot"}]
     },
-    
+	
+	"item.revolver.shoot":
+	{
+		"category": "item",
+		"sounds": [
+			{
+				"name": "cqrepoured:item/firearm/revolver_shoot"
+			}
+		]
+    },
+	
+	"item.musket.shoot":
+	{
+		"category": "item",
+		"sounds": [
+			{
+				"name": "cqrepoured:item/firearm/musket_shoot"
+			}
+		]
+	}
+	
     "item.magic": 
     {
         "category": "item",
