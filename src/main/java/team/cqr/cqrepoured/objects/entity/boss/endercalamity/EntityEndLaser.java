@@ -36,7 +36,7 @@ public class EntityEndLaser extends EntityRotatingLaser {
 
 	@Override
 	public int getBreakingSpeed() {
-		return 18;
+		return 36;
 	}
 	
 	@Override
