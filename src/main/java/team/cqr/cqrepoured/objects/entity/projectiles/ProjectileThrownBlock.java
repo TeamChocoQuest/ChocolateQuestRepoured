@@ -90,15 +90,15 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			if (this.world instanceof WorldServer) {
 				WorldServer ws = (WorldServer) this.world;
 				Vec3d pos = result.hitVec;
-				double particleRadius = 2.0D;
+				double particleSpeed = 0.2D;
 				for (int i = 0; i < 50; i++) {
 					double dx = -0.5 + this.rand.nextDouble();
-					dx *= particleRadius;
+					dx *= particleSpeed;
 					double dy = -0.5 + this.rand.nextDouble();
-					dy *= particleRadius;
+					dy *= particleSpeed;
 					double dz = -0.5 + this.rand.nextDouble();
-					dz *= particleRadius;
-					ws.spawnParticle(EnumParticleTypes.REDSTONE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
+					dz *= particleSpeed;
+					ws.spawnParticle(EnumParticleTypes.BLOCK_CRACK, pos.x, pos.y, pos.z, dx, dy, dz, Block.getStateId(this.state));
 					this.playSound(this.state.getBlock().getSoundType(this.state, this.world, this.getPosition(), this).getPlaceSound(), 1.5F, 1.25F);
 				}
 			}
