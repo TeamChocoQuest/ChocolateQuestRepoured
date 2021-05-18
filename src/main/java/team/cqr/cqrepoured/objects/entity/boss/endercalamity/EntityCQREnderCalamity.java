@@ -47,6 +47,7 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightn
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityBuilding;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityHealing;
+import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIEndLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIEnergyTennis;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
@@ -172,14 +173,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		
 		this.teleportAI = new BossAITeleportAroundHome(this, 40);
 		this.tasks.addTask(8, teleportAI);
-		
+
+		this.tasks.addTask(4, new BossAIStunned(this));
 		this.tasks.addTask(5, new BossAIEnergyTennis(this));
 		
 		this.blockThrowerAI = new BossAIBlockThrower(this);
 		this.tasks.addTask(6, blockThrowerAI);
 		this.tasks.addTask(6, new BossAICalamityBuilding(this));
 		
-		this.tasks.addTask(6, new BossAIStunned(this));
+		this.tasks.addTask(5, new BossAIEndLaser(this));
 		this.tasks.addTask(6, new BossAICalamityHealing(this));
 		this.tasks.addTask(8, new BossAISummonMinions(this));
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
