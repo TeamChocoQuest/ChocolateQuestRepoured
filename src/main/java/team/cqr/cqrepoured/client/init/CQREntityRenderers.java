@@ -92,6 +92,7 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
@@ -292,6 +293,7 @@ public class CQREntityRenderers {
 		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderCalamity.class, RenderCQREnderCalamity::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityEndLaserTargeting.class, RenderEndLaser<AbstractEntityLaser>::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityEndLaser.class, RenderEndLaser<AbstractEntityLaser>::new);
 	}
 
 }

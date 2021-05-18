@@ -26,6 +26,8 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamitySpawner;
+import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
@@ -236,7 +238,9 @@ public class CQREntities {
 						createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
 						createEntityEntry(EntityCQREnderKing.class, "ender_king", 64, 1, true, 3289650, 000000),
 						createEntityEntryWithoutEgg(EntityEndLaserTargeting.class, "end_targeting_laser", 64, 1, true),
+						createEntityEntryWithoutEgg(EntityEndLaser.class, "end_laser", 64, 1, true),
 						createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
+						createEntityEntryWithoutEgg(EntityCalamitySpawner.class, "calamity_spawner", 64, 1, true),
 						
 						// spectre lord
 						createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),
