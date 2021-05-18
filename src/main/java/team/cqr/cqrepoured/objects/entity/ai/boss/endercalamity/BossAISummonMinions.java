@@ -39,8 +39,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	public boolean shouldContinueExecuting() {
 		if (this.shouldExecute()) {
 			if (this.entity.getHealth() <= (borderHPForMinions * this.entity.getMaxHealth())) {
-				this.minionSpawnTick++;
-				return (this.minionSpawnTick > this.borderMinion);
+				return true;//(this.minionSpawnTick > this.borderMinion);
 			}
 		}
 		return false;
@@ -50,18 +49,19 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	public void updateTask() {
 		super.updateTask();
 		if (this.minionSpawnTick < this.borderMinion) {
+			this.minionSpawnTick++;
 			return;
 		}
 
 		this.minionSpawnTick = 0;
 		if (this.entity.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
-			this.borderMinion = 40;
+			this.borderMinion = 30;
 			// Check list
 			if (this.entity.filterSummonLists()) {
 				this.borderMinion = 10;
 			}
 		} else {
-			this.borderMinion = 160;
+			this.borderMinion = 60;
 
 			double seed = 1 - this.entity.getHealth() / this.entity.getMaxHealth();
 			seed *= 4;
