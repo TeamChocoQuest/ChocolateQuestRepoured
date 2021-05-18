@@ -57,17 +57,17 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	}
 	
 	@Override
-	protected float getDamage() {
+	public float getDamage() {
 		return 2.5F;
 	}
 	
 	@Override
-	protected boolean canBreakBlocks() {
+	public boolean canBreakBlocks() {
 		return true;
 	}
 	
 	@Override
-	protected int getBreakingSpeed() {
+	public int getBreakingSpeed() {
 		return 6;
 	}
 

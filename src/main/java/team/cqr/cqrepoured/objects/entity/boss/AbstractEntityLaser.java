@@ -107,7 +107,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		return compound;
 	}
 
-	protected double laserEffectRadius() {
+	public double laserEffectRadius() {
 		return 0.25D;
 	}
 
@@ -135,7 +135,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 			Vec3d end = start.add(Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
 			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 			double d = result != null ? (float) result.hitVec.subtract(this.getPositionVector()).length() : this.length;
-			if(this.canBreakBlocks()) {
+			if(this.canBreakBlocks() && result != null && result.getBlockPos() != null) {
 				IBlockState blockState = this.world.getBlockState(result.getBlockPos()); 
 				if(blockState != null && blockState.getBlock() != null) {
 					boolean hitBlock = blockState.getBlock().canCollideCheck(blockState, false);
@@ -180,15 +180,15 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 	}
 	
-	protected boolean canBreakBlocks() {
+	public boolean canBreakBlocks() {
 		return false;
 	}
 	
-	protected int getBreakingSpeed() {
+	public int getBreakingSpeed() {
 		return 1;
 	}
 
-	protected float getDamage() {
+	public float getDamage() {
 		return 3.0F;
 	}
 
