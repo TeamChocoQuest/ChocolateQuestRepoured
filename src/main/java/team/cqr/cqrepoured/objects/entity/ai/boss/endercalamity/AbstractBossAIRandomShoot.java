@@ -21,6 +21,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 	
 	public AbstractBossAIRandomShoot(EntityCQREnderCalamity entity) {
 		super(entity);
+		this.setMutexBits(2);
 	}
 	
 	@Override
