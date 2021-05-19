@@ -34,6 +34,15 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		//Animation length total: 6s
 		return 70;
 	}
+	
+	@Override
+	public void updateTask() {
+		super.updateTask();
+		if(this.projectile != null && this.projectile instanceof AbstractEntityLaser) {
+			//this.entity.rotationPitch = ((AbstractEntityLaser)this.projectile).rotationPitchCQR;
+			this.entity.rotationYaw = (((AbstractEntityLaser)this.projectile).rotationYawCQR /*+ 90.0F*/);
+		}
+	}
 
 	@Override
 	protected boolean canExecuteDuringPhase(EEnderCalamityPhase phase) {

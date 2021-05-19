@@ -42,8 +42,10 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.createLaser();
 		}
 		if(this.endlaser != null) {
-			this.entity.rotationPitch = this.endlaser.rotationPitchCQR;
-			this.entity.rotationYaw = this.endlaser.rotationYawCQR;
+			//TODO: Fix buggy rotation
+			this.entity.rotationPitch = (float) -this.endlaser.rotationPitchCQR;
+			this.entity.rotationYaw = (float) -this.endlaser.rotationYawCQR - 90.0F;
+			this.entity.rotationYawHead = this.entity.rotationYaw;
 		}
 	}
 	
@@ -58,8 +60,9 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			 yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
 		}
 		
-		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 8.0F, 0.0F);
+		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 4.0F, -0.01F);
 		laser.rotationYawCQR = yaw;
+		laser.rotationPitchCQR = 11.25F;
 		laser.setPosition(laserPosition.x, laserPosition.y, laserPosition.z);
 		this.world.spawnEntity(laser);
 		this.endlaser = laser;
@@ -72,6 +75,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.endlaser = null;
 		}
 		this.entity.setCantUpdatePhase(false);
+		this.entity.forceTeleport();
 		super.resetTask();
 	}
 

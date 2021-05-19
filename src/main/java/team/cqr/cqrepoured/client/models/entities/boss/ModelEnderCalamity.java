@@ -39,7 +39,7 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/ender_calamity_" + entity.getTextureIndex() + ".png") : this.texture;
 	}
 	
-	//private static final String BONE_IDENT_ROOT = "root";
+	private static final String BONE_IDENT_ROOT = "root";
 	private static final String BONE_IDENT_HEAD = "head";
 	/*private static final String BONE_IDENT_LEGJOINT_BR = "legJointBR";
 	private static final String BONE_IDENT_LEGJOINT_BL = "legJointBL";
@@ -56,14 +56,15 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 	 */
 	@Override
 	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, AnimationEvent customPredicate) {
+		//TODO: Fix buggy rotation
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 		IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
-		/*IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
+		IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
 
-		rootBone.setRotationY(entity.rotationYaw);*/
+		rootBone.setRotationY(-entity.rotationYaw);
 		
-		headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch));
-		headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw)));
+		headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
+		//headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
 
 	}
 
