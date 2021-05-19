@@ -232,8 +232,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private String currentAnimation = null;
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.dataManager.get(IS_HURT)) {
+			event.getController().transitionLengthTicks = 0;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, false));
 			return PlayState.CONTINUE;
+		} else {
+			event.getController().transitionLengthTicks = 10;
 		}
 
 		if (this.newAnimation.isPresent()) {
