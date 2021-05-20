@@ -32,6 +32,9 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		if(entity.caster == null) {
+			return;
+		}
 		Minecraft mc = Minecraft.getMinecraft();
 		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
 		x1 += entity.getOffsetVector().x;
