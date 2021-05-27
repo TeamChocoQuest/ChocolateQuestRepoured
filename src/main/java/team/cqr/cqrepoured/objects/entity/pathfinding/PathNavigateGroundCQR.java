@@ -29,6 +29,7 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
+import team.cqr.cqrepoured.util.reflection.ReflectionField;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
 
 /**
@@ -36,6 +37,8 @@ import team.cqr.cqrepoured.world.ChunkCacheCQR;
  */
 public class PathNavigateGroundCQR extends PathNavigateGround {
 
+	private static final ReflectionField<EntityLiving> WALK_NODE_PROCESSOR_CURRENT_ENTITY = new ReflectionField<>(WalkNodeProcessor.class, "currentEntity", "currentEntity"); 
+	
 	private int ticksAtLastPos;
 	private Vec3d lastPosCheck = Vec3d.ZERO;
 	private Vec3d timeoutCachedNode = Vec3d.ZERO;
@@ -99,9 +102,11 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				Block block = iblockstate.getBlock();
 				Material material = iblockstate.getMaterial();
 
-				PathNodeType type = block.getAiPathNodeType(iblockstate, p_189553_1_, blockpos, this.currentEntity);
-				if (type != null)
-					return type;
+				if (WALK_NODE_PROCESSOR_CURRENT_ENTITY.isPresent()) {
+					PathNodeType type = block.getAiPathNodeType(iblockstate, p_189553_1_, blockpos, WALK_NODE_PROCESSOR_CURRENT_ENTITY.get(this));
+					if (type != null)
+						return type;
+				}
 
 				if (material == Material.AIR) {
 					return PathNodeType.OPEN;
