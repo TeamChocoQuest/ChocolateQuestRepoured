@@ -108,10 +108,10 @@ public class EntityAITasksProfiled extends EntityAITasks {
 					sb.append(' ');
 				}
 				double d = entry.getLongValue() / 1_000_000.0D;
-				int i = 10000;
-				while (d < i) {
-					i /= 10;
-					sb.append(' ');
+				for (int i = 10; i <= 10_000; i *= 10) {
+					if (d < i) {
+						sb.append(' ');
+					}
 				}
 				sb.append(String.format("%.4f", d));
 				sb.append('m');
@@ -120,7 +120,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 
 				entry.setValue(0);
 			}
-			//CQRMain.logger.info(sb);
+			CQRMain.logger.info(sb);
 		}
 	}
 
