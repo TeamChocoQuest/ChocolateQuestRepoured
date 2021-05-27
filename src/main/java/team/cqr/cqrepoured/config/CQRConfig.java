@@ -30,6 +30,8 @@ public class CQRConfig {
 	public static BaseHealths baseHealths = new BaseHealths();
 
 	public static class Advanced {
+		public boolean debugAI = false;
+
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = { "minecraft:bed", "minecraft:wooden_door", "minecraft:spruce_door", "minecraft:birch_door", "minecraft:jungle_door", "minecraft:acacia_door", "minecraft:dark_oak_door", "minecraft:iron_door", "minecraft:piston", "minecraft:sticky_piston", "minecraft:piston_head" };
 
