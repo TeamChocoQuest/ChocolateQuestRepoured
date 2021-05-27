@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.particle;
+package team.cqr.cqrepoured.client.particle;
 
 import org.lwjgl.opengl.GL11;
 
