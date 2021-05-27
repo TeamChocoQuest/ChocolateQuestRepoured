@@ -3,8 +3,6 @@ package team.cqr.cqrepoured.util.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import team.cqr.cqrepoured.CQRMain;
-
 public class ReflectionConstructor<C> {
 
 	private final Constructor<C> constructor;
@@ -14,21 +12,27 @@ public class ReflectionConstructor<C> {
 		try {
 			c = clazz.getDeclaredConstructor(parameterTypes);
 			c.setAccessible(true);
-		} catch (NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Failed to get constructor from class " + clazz, e);
+		} catch (NoSuchMethodException e) {
+			// ignore
 		}
 		this.constructor = c;
 	}
 
 	@SuppressWarnings("unchecked")
 	public ReflectionConstructor(String className, Class<?>... parameterTypes) {
+		Class<C> clazz;
+		try {
+			clazz = (Class<C>) Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			this.constructor = null;
+			return;
+		}
 		Constructor<C> c = null;
 		try {
-			Class<C> clazz = (Class<C>) Class.forName(className);
 			c = clazz.getDeclaredConstructor(parameterTypes);
 			c.setAccessible(true);
-		} catch (ClassNotFoundException | ClassCastException | NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Failed to get constructor from class " + className, e);
+		} catch (NoSuchMethodException e) {
+			// ignore
 		}
 		this.constructor = c;
 	}
@@ -36,10 +40,13 @@ public class ReflectionConstructor<C> {
 	public C newInstance(Object... initargs) {
 		try {
 			return this.constructor.newInstance(initargs);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			CQRMain.logger.error("Failed to create new instance for class " + this.constructor.getName() + " with parameters " + initargs, e);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
-		return null;
+	}
+
+	public boolean isPresent() {
+		return this.constructor != null;
 	}
 
 }

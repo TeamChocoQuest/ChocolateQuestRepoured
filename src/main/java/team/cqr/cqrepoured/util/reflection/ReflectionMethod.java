@@ -3,8 +3,6 @@ package team.cqr.cqrepoured.util.reflection;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import team.cqr.cqrepoured.CQRMain;
-
 public class ReflectionMethod<T> {
 
 	private final Method method;
@@ -12,32 +10,38 @@ public class ReflectionMethod<T> {
 	public ReflectionMethod(Class<?> clazz, String obfuscatedName, String deobfuscatedName, Class<?>... parameterTypes) {
 		Method m = null;
 		try {
+			m = clazz.getDeclaredMethod(obfuscatedName, parameterTypes);
+			m.setAccessible(true);
+		} catch (NoSuchMethodException e) {
 			try {
-				m = clazz.getDeclaredMethod(obfuscatedName, parameterTypes);
-				m.setAccessible(true);
-			} catch (NoSuchMethodException e) {
 				m = clazz.getDeclaredMethod(deobfuscatedName, parameterTypes);
 				m.setAccessible(true);
+			} catch (NoSuchMethodException e1) {
+				// ignore
 			}
-		} catch (NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Failed to get method from class " + clazz + " for name " + deobfuscatedName, e);
 		}
 		this.method = m;
 	}
 
 	public ReflectionMethod(String className, String obfuscatedName, String deobfuscatedName, Class<?>... parameterTypes) {
+		Class<?> clazz;
+		try {
+			clazz = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			this.method = null;
+			return;
+		}
 		Method m = null;
 		try {
-			Class<?> clazz = Class.forName(className);
+			m = clazz.getDeclaredMethod(obfuscatedName, parameterTypes);
+			m.setAccessible(true);
+		} catch (NoSuchMethodException e) {
 			try {
-				m = clazz.getDeclaredMethod(obfuscatedName, parameterTypes);
-				m.setAccessible(true);
-			} catch (NoSuchMethodException e) {
 				m = clazz.getDeclaredMethod(deobfuscatedName, parameterTypes);
 				m.setAccessible(true);
+			} catch (NoSuchMethodException e1) {
+				// ignore
 			}
-		} catch (ClassNotFoundException | ClassCastException | NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Failed to get method from class " + obfuscatedName + " for name " + deobfuscatedName, e);
 		}
 		this.method = m;
 	}
@@ -46,10 +50,13 @@ public class ReflectionMethod<T> {
 	public T invoke(Object obj, Object... args) {
 		try {
 			return (T) this.method.invoke(obj, args);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
-			CQRMain.logger.error("Failed to invoke method " + this.method.getName() + " for object " + obj + " with parameters " + args, e);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
-		return null;
+	}
+
+	public boolean isPresent() {
+		return this.method != null;
 	}
 
 }

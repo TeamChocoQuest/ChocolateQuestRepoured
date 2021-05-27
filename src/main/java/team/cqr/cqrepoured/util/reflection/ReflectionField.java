@@ -2,8 +2,6 @@ package team.cqr.cqrepoured.util.reflection;
 
 import java.lang.reflect.Field;
 
-import team.cqr.cqrepoured.CQRMain;
-
 public class ReflectionField<T> {
 
 	private final Field field;
@@ -11,32 +9,38 @@ public class ReflectionField<T> {
 	public ReflectionField(Class<?> clazz, String obfuscatedName, String deobfuscatedName) {
 		Field f = null;
 		try {
+			f = clazz.getDeclaredField(obfuscatedName);
+			f.setAccessible(true);
+		} catch (NoSuchFieldException e) {
 			try {
-				f = clazz.getDeclaredField(obfuscatedName);
-				f.setAccessible(true);
-			} catch (NoSuchFieldException e) {
 				f = clazz.getDeclaredField(deobfuscatedName);
 				f.setAccessible(true);
+			} catch (NoSuchFieldException e1) {
+				// ignore
 			}
-		} catch (NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error("Failed to get field from class " + clazz + " for name " + deobfuscatedName, e);
 		}
 		this.field = f;
 	}
 
 	public ReflectionField(String className, String obfuscatedName, String deobfuscatedName) {
+		Class<?> clazz;
+		try {
+			clazz = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			this.field = null;
+			return;
+		}
 		Field f = null;
 		try {
-			Class<?> clazz = Class.forName(className);
+			f = clazz.getDeclaredField(obfuscatedName);
+			f.setAccessible(true);
+		} catch (NoSuchFieldException e) {
 			try {
-				f = clazz.getDeclaredField(obfuscatedName);
-				f.setAccessible(true);
-			} catch (NoSuchFieldException e) {
 				f = clazz.getDeclaredField(deobfuscatedName);
 				f.setAccessible(true);
+			} catch (NoSuchFieldException e1) {
+				// ignore
 			}
-		} catch (ClassNotFoundException | ClassCastException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error("Failed to get field from class " + className + " for name " + deobfuscatedName, e);
 		}
 		this.field = f;
 	}
@@ -44,8 +48,8 @@ public class ReflectionField<T> {
 	public void set(Object obj, T value) {
 		try {
 			this.field.set(obj, value);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			CQRMain.logger.error("Failed to set field " + this.field.getName() + " for object " + obj + " with value " + value, e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -53,10 +57,13 @@ public class ReflectionField<T> {
 	public T get(Object obj) {
 		try {
 			return (T) this.field.get(obj);
-		} catch (IllegalArgumentException | IllegalAccessException | ClassCastException e) {
-			CQRMain.logger.error("Failed to get field " + this.field.getName() + " for object " + obj, e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
 		}
-		return null;
+	}
+
+	public boolean isPresent() {
+		return this.field != null;
 	}
 
 }
