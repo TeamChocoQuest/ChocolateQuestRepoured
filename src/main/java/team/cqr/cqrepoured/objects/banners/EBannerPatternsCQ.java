@@ -13,7 +13,7 @@ public enum EBannerPatternsCQ {
 	WITHER_SKULL(addPattern("cq_wither_skull", ItemStack.EMPTY)),
 	WITHER_SKULL_EYES(addPattern("cq_wither_eyes", ItemStack.EMPTY)),
 	FIRE(addPattern("cq_fire", ItemStack.EMPTY)),
-	MAGIC_SMOKE(addPattern("cq_magic", ItemStack.EMPTY)),
+	// MAGIC_SMOKE(addPattern("cq_magic", ItemStack.EMPTY)),
 	EMERALD(addPattern("cq_emerald", ItemStack.EMPTY)),
 	BONES(addPattern("cq_bones", ItemStack.EMPTY)),
 
