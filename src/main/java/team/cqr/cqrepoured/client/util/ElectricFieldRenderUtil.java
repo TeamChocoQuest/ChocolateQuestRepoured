@@ -66,9 +66,9 @@ public class ElectricFieldRenderUtil {
 	/*
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
-	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final double maxOffset, double renderX, double renderY, double renderZ, int boltCount) {
-		start = start.add(renderX, renderY, renderZ);
-		end = end.add(renderX, renderY, renderZ);
+	public static void renderElectricLineBetween(Vec3d startOffset, Vec3d endOffset, Random rng, final double maxOffset, double posX, double posY, double posZ, int boltCount) {
+		startOffset = startOffset.add(posX, posY, posZ);
+		endOffset = endOffset.add(posX, posY, posZ);
 		GlStateManager.pushMatrix();
 		
 		//First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
@@ -87,12 +87,12 @@ public class ElectricFieldRenderUtil {
 		GlStateManager.glLineWidth(3.0F);
 		
 		//Now we want to draw <boltCount> lightnings
-		Vec3d direction = end.subtract(start);
+		Vec3d direction = endOffset.subtract(startOffset);
 		final double lineLength = direction.length();
 		direction = direction.normalize();
 		
 		for(int i = 0; i < boltCount; i++) {
-			renderSingleElectricLine(builder, tess, start, end, direction, lineLength, rng, maxOffset);
+			renderSingleElectricLine(builder, tess, startOffset, endOffset, direction, lineLength, rng, maxOffset);
 		}
 		
 		//Finally re-enable tex2d and lightning and disable blending
