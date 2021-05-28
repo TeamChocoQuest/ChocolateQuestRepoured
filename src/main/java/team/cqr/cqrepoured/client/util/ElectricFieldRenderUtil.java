@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.VectorUtil;
 
 public class ElectricFieldRenderUtil {
 	
@@ -65,7 +65,7 @@ public class ElectricFieldRenderUtil {
 	/*
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
-	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final int angleRange, double x, double y, double z, int boltCount) {
+	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final double maxOffset, double x, double y, double z, int boltCount) {
 		start = start.add(x, y, z);
 		end = end.add(x, y, z);
 		GlStateManager.pushMatrix();
@@ -91,7 +91,7 @@ public class ElectricFieldRenderUtil {
 		direction = direction.normalize();
 		
 		for(int i = 0; i < boltCount; i++) {
-			renderSingleElectricLine(builder, tess, direction, direction, direction, lineLength, rng, angleRange);
+			renderSingleElectricLine(builder, tess, direction, direction, direction, lineLength, rng, maxOffset);
 		}
 		
 		//Finally re-enable tex2d and lightning and disable blending
@@ -102,7 +102,7 @@ public class ElectricFieldRenderUtil {
 		GlStateManager.popMatrix();
 	}
 
-	private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d end, Vec3d direction, final double lineLength, Random rng, final int angleRange) {
+	private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d end, Vec3d direction, final double lineLength, Random rng, final double maxOffset) {
 		//Initialize the drawing process, our vertices consist of positions and color information
 		builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
 		
@@ -116,10 +116,14 @@ public class ElectricFieldRenderUtil {
 			
 			pos = pos.add(increment);
 			
-			Vec3d renderPos = Vec3d.fromPitchYaw(DungeonGenUtils.randomBetween(0, angleRange, rng) - angleRange / 2, DungeonGenUtils.randomBetween(0, angleRange, rng) - angleRange / 2);
-			renderPos = renderPos.add(pos);
+			Vec3d offsetVector = direction.crossProduct(direction.scale(-1));
+			offsetVector = offsetVector.normalize();
+			offsetVector = offsetVector.scale(rng.nextDouble() * maxOffset);
 			
-			builder.pos(renderPos.x, renderPos.y, renderPos.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
+			offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, Math.toRadians(rng.nextDouble() * 360D));
+			
+			
+			builder.pos(pos.x + offsetVector.x, pos.y + offsetVector.y, pos.z + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
 			
 			processedLength += increment.length();
 		}
