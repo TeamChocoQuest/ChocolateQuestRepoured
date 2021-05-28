@@ -113,7 +113,6 @@ public class ElectricFieldRenderUtil {
 		
 		double processedLength = 0;
 		final Vec3d dirSecondary = VectorUtil.rotateVectorAroundY(direction, 90);
-		int lastAngle = 0;
 		while(processedLength < lineLength) {
 			Vec3d increment = direction.normalize().scale(0.5D + rng.nextDouble());
 			
@@ -123,8 +122,7 @@ public class ElectricFieldRenderUtil {
 			offsetVector = offsetVector.normalize();
 			offsetVector = offsetVector.scale(rng.nextDouble() * maxOffset);
 			
-			lastAngle += (DungeonGenUtils.randomBetween(45, 180));
-			offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, Math.toRadians(lastAngle));
+			offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, DungeonGenUtils.randomBetween(0,360,rng));
 			
 			
 			builder.pos(pos.x + offsetVector.x, pos.y + offsetVector.y, pos.z + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
