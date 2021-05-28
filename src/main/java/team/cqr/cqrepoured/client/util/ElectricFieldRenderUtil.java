@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class ElectricFieldRenderUtil {
@@ -66,8 +67,8 @@ public class ElectricFieldRenderUtil {
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
 	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final double maxOffset, double renderX, double renderY, double renderZ, int boltCount) {
-		start = start.add(renderX, renderY, renderZ);
-		end = end.add(renderX, renderY, renderZ);
+		//start = start.add(renderX, renderY, renderZ);
+		//end = end.add(renderX, renderY, renderZ);
 		GlStateManager.pushMatrix();
 		
 		//First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
@@ -111,16 +112,19 @@ public class ElectricFieldRenderUtil {
 		Vec3d pos = new Vec3d(start.x, start.y, start.z);
 		
 		double processedLength = 0;
+		final Vec3d dirSecondary = VectorUtil.rotateVectorAroundY(direction, 90);
+		int lastAngle = 0;
 		while(processedLength < lineLength) {
 			Vec3d increment = direction.normalize().scale(0.5D + rng.nextDouble());
 			
 			pos = pos.add(increment);
 			
-			Vec3d offsetVector = direction.crossProduct(direction.scale(-1));
+			Vec3d offsetVector = direction.crossProduct(dirSecondary);
 			offsetVector = offsetVector.normalize();
 			offsetVector = offsetVector.scale(rng.nextDouble() * maxOffset);
 			
-			offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, Math.toRadians(rng.nextDouble() * 360D));
+			lastAngle += (DungeonGenUtils.randomBetween(45, 180));
+			offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, Math.toRadians(lastAngle));
 			
 			
 			builder.pos(pos.x + offsetVector.x, pos.y + offsetVector.y, pos.z + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
@@ -129,7 +133,7 @@ public class ElectricFieldRenderUtil {
 		}
 		
 		//Put the last pos at end
-		builder.pos(end.x, end.y, end.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
+		// builder.pos(end.x, end.y, end.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
 		
 		tess.draw();
 	}
