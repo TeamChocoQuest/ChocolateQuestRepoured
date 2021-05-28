@@ -65,9 +65,9 @@ public class ElectricFieldRenderUtil {
 	/*
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
-	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final double maxOffset, double x, double y, double z, int boltCount) {
-		start = start.add(x, y, z);
-		end = end.add(x, y, z);
+	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final double maxOffset, double renderX, double renderY, double renderZ, int boltCount) {
+		start = start.add(renderX, renderY, renderZ);
+		end = end.add(renderX, renderY, renderZ);
 		GlStateManager.pushMatrix();
 		
 		//First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
