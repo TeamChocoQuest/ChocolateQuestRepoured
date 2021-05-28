@@ -67,8 +67,8 @@ public class ElectricFieldRenderUtil {
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
 	public static void renderElectricLineBetween(Vec3d start, Vec3d end, Random rng, final double maxOffset, double renderX, double renderY, double renderZ, int boltCount) {
-		//start = start.add(renderX, renderY, renderZ);
-		//end = end.add(renderX, renderY, renderZ);
+		start = start.add(renderX, renderY, renderZ);
+		end = end.add(renderX, renderY, renderZ);
 		GlStateManager.pushMatrix();
 		
 		//First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
@@ -92,7 +92,7 @@ public class ElectricFieldRenderUtil {
 		direction = direction.normalize();
 		
 		for(int i = 0; i < boltCount; i++) {
-			renderSingleElectricLine(builder, tess, direction, direction, direction, lineLength, rng, maxOffset);
+			renderSingleElectricLine(builder, tess, start, end, direction, lineLength, rng, maxOffset);
 		}
 		
 		//Finally re-enable tex2d and lightning and disable blending
@@ -131,7 +131,7 @@ public class ElectricFieldRenderUtil {
 		}
 		
 		//Put the last pos at end
-		// builder.pos(end.x, end.y, end.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
+		//builder.pos(end.x, end.y, end.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
 		
 		tess.draw();
 	}
