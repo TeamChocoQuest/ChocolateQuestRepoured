@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.particle.ParticleBeam;
 import team.cqr.cqrepoured.init.CQRParticleType;
-import team.cqr.cqrepoured.particle.ParticleBeam;
 
 @SideOnly(Side.CLIENT)
 public class CQRParticleManager {
