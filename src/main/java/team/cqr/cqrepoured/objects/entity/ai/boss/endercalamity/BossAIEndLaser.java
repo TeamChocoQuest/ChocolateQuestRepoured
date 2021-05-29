@@ -42,7 +42,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.createLaser();
 		}
 		if(this.endlaser != null) {
-			//TODO: Fix buggy rotation
+			//DONE: Fix buggy rotation
 			this.entity.rotationYaw = (float) this.endlaser.rotationYawCQR + 90.0F;
 			this.entity.prevRotationYaw = (float) this.endlaser.prevRotationYawCQR + 90.0F;
 			
