@@ -43,9 +43,14 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		}
 		if(this.endlaser != null) {
 			//TODO: Fix buggy rotation
-			this.entity.rotationPitch = (float) -this.endlaser.rotationPitchCQR;
-			this.entity.rotationYaw = (float) -this.endlaser.rotationYawCQR - 90.0F;
+			this.entity.rotationYaw = (float) this.endlaser.rotationYawCQR + 90.0F;
+			this.entity.prevRotationYaw = (float) this.endlaser.prevRotationYawCQR + 90.0F;
+			
+			this.entity.rotationPitch = (float) this.endlaser.rotationPitchCQR;
+			this.entity.prevRotationPitch = (float) this.endlaser.prevRotationPitchCQR;
+			
 			this.entity.rotationYawHead = this.entity.rotationYaw;
+			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
 		}
 	}
 	
