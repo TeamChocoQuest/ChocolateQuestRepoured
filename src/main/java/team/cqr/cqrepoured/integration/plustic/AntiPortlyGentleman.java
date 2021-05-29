@@ -17,7 +17,7 @@ public class AntiPortlyGentleman {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void blockPortlyRelocatorOnBosses(PlayerInteractEvent.EntityInteract event) {
 		ItemStack tool = event.getItemStack();
-		if(tool == null || tool.getItem() == null || tool.isEmpty() || !tool.hasTagCompound()) {
+		if(tool == null || tool.getItem() == null || tool.isEmpty() || !tool.hasTagCompound() || !event.getEntityPlayer().isSneaking()) {
 			return;
 		}
 		
