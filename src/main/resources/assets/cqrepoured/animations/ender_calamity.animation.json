@@ -597,7 +597,7 @@
 				}
 			}
 		},
-		"animation.ender_calamity.shootLaser": {
+		"animation.ender_calamity.shoot_laser_long": {
 			"animation_length": 5,
 			"bones": {
 				"root": {
@@ -903,7 +903,7 @@
 				}
 			}
 		},
-		"animation.ender_calamity.shoot_laser_alt": {
+		"animation.ender_calamity.shoot_laser": {
 			"animation_length": 6,
 			"bones": {
 				"body": {
