@@ -36,6 +36,7 @@ import team.cqr.cqrepoured.command.CommandExport;
 import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
 import team.cqr.cqrepoured.command.CommandLocateDungeon;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.crafting.smelting.SmeltingHandler;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -226,7 +227,7 @@ public class CQRMain {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		CQRMaterials.setRepairItemsForMaterials();
-		// SmeltingHandler.init();
+		SmeltingHandler.init();
 		BlockFire.init();
 
 	}
