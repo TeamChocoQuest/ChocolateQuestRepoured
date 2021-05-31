@@ -73,7 +73,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private int cqrHurtTime = 0;
 	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-
+	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
@@ -200,6 +201,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
+		this.dataManager.register(ROTATE_BODY_PITCH, false);
 
 		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());// of(Blocks.END_STONE.getDefaultState()));
 		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
@@ -207,6 +209,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(BLOCK_RIGHT_UPPER, Optional.absent());
 		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());// of(Blocks.OBSIDIAN.getDefaultState()));
 		this.dataManager.register(BLOCK_RIGHT_LOWER, Optional.absent());
+	}
+	
+	public boolean rotateBodyPitch() {
+		return this.dataManager.get(ROTATE_BODY_PITCH);
+	}
+	
+	public void setRotateBodyPitch(boolean value) {
+		if(this.isServerWorld()) {
+			this.dataManager.set(ROTATE_BODY_PITCH, value);
+		}
 	}
 
 	@Override

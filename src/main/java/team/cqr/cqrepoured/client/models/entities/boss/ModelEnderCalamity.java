@@ -1,7 +1,9 @@
 package team.cqr.cqrepoured.client.models.entities.boss;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.util.Reference;
@@ -53,6 +55,8 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 	 * - legJoint BL
 	 * - head
 	 */
+	
+	private static final String BONE_IDENT_BODY = "body";
 	@Override
 	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		//TODO: Fix buggy rotation
@@ -64,6 +68,11 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		
 		//headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
 		//headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
+		if(entity.rotateBodyPitch()) {
+			IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
+			float pitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) /** ((float) (Minecraft.getMinecraft().getRenderPartialTicks() - 0.1))*/;
+			bodyBone.setRotationX((float)pitch);
+		}
 
 	}
 

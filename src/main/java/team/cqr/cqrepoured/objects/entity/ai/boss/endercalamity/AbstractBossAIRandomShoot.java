@@ -44,11 +44,17 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 		this.cooldown = this.execPrepareShoot();
 	}
 	
+	public boolean faceTarget() {
+		return true;
+	}
+	
 	@Override
 	public void updateTask() {
 		this.cooldown--;
 		if(this.entity.hasAttackTarget()) {
-			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+			if(this.faceTarget()) {
+				this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+			}
 			this.entity.setCantUpdatePhase(false);
 		}
 		//Timer gets set to the timer of the NEXT phase
