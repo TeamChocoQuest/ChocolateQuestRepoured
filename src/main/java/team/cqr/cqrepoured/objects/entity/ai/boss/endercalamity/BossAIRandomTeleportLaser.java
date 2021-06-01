@@ -53,17 +53,15 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 			// this.entity.rotationPitch = ((AbstractEntityLaser)this.projectile).rotationPitchCQR;
 			// DONE: Fix buggy rotation
 			AbstractEntityLaser laser = (AbstractEntityLaser) this.projectile;
-			this.entity.rotationYaw = (float) laser.rotationYawCQR + 90.0F;
-			this.entity.prevRotationYaw = (float) laser.prevRotationYawCQR + 90.0F;
+			this.entity.rotationYaw = (float) laser.rotationYawCQR /*+ 90.0F*/;
+			this.entity.prevRotationYaw = (float) laser.prevRotationYawCQR /*+ 90.0F*/;
 
 			this.entity.rotationPitch = (float) laser.rotationPitchCQR;
 			this.entity.prevRotationPitch = (float) laser.prevRotationPitchCQR;
-
+			
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
 		}
-		
-		
 	}
 
 	@Override
