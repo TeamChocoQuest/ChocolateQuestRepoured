@@ -46,10 +46,10 @@ public class SmeltingHandler {
 		GameRegistry.addSmelting(Items.IRON_HELMET, new ItemStack(Items.IRON_NUGGET, 5), 1);
 
 		// GOLD ARMOR
-		GameRegistry.addSmelting(Items.GOLDEN_BOOTS, new ItemStack(Items.IRON_NUGGET, 4), 1);
-		GameRegistry.addSmelting(Items.GOLDEN_LEGGINGS, new ItemStack(Items.IRON_NUGGET, 7), 1);
-		GameRegistry.addSmelting(Items.GOLDEN_CHESTPLATE, new ItemStack(Items.IRON_NUGGET, 8), 1);
-		GameRegistry.addSmelting(Items.GOLDEN_HELMET, new ItemStack(Items.IRON_NUGGET, 5), 1);
+		GameRegistry.addSmelting(Items.GOLDEN_BOOTS, new ItemStack(Items.GOLD_NUGGET, 4), 1);
+		GameRegistry.addSmelting(Items.GOLDEN_LEGGINGS, new ItemStack(Items.GOLD_NUGGET, 7), 1);
+		GameRegistry.addSmelting(Items.GOLDEN_CHESTPLATE, new ItemStack(Items.GOLD_NUGGET, 8), 1);
+		GameRegistry.addSmelting(Items.GOLDEN_HELMET, new ItemStack(Items.GOLD_NUGGET, 5), 1);
 
 		// HEAVY IRON ARMOR
 		GameRegistry.addSmelting(CQRItems.BOOTS_HEAVY_IRON, new ItemStack(Items.IRON_NUGGET, 4), 1);
@@ -58,7 +58,7 @@ public class SmeltingHandler {
 		GameRegistry.addSmelting(CQRItems.HELMET_HEAVY_IRON, new ItemStack(Items.IRON_NUGGET, 5), 1);
 		
 		// CROWN
-		GameRegistry.addSmelting(CQRItems.KING_CROWN, new ItemStack(Items.IRON_NUGGET, 3), 1);
+		GameRegistry.addSmelting(CQRItems.KING_CROWN, new ItemStack(Items.GOLD_NUGGET, 3), 1);
 		
 		//Dyable iron armor
 		GameRegistry.addSmelting(CQRItems.HELMET_IRON_DYABLE, new ItemStack(Items.IRON_NUGGET, 5), 1);
