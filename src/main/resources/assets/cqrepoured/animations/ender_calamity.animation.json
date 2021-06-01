@@ -906,7 +906,7 @@
 		"animation.ender_calamity.shoot_laser": {
 			"animation_length": 6,
 			"bones": {
-				"body": {
+				"root": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
