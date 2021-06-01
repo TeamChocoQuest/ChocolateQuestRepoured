@@ -70,14 +70,17 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		
 		//headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
 		//headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
+		IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
+		IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
+		float correctPitch = bodyBone.getRotationX();
 		if(entity.rotateBodyPitch()) {
-			IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
-			IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
 			float pitch = (float)Math.toRadians(this.getPitch(entity, Minecraft.getMinecraft().getRenderPartialTicks()) -90F);
 			pitch -= rootBone.getRotationX();
 			//System.out.println("Client pitch: " + pitch);
 			//System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);
 			bodyBone.setRotationX(pitch);
+		} else {
+			bodyBone.setRotationX(correctPitch);
 		}
 
 	}
