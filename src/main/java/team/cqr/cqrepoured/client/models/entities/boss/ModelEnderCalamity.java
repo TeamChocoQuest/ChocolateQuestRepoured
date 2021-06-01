@@ -1,7 +1,9 @@
 package team.cqr.cqrepoured.client.models.entities.boss;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -40,7 +42,8 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/ender_calamity_" + entity.getTextureIndex() + ".png") : this.texture;
 	}
 	
-	//private static final String BONE_IDENT_ROOT = "root";
+	private static final String BONE_IDENT_ROOT = "root";
+	private static final String BONE_IDENT_BODY = "body";
 	//private static final String BONE_IDENT_HEAD = "head";
 	/*private static final String BONE_IDENT_LEGJOINT_BR = "legJointBR";
 	private static final String BONE_IDENT_LEGJOINT_BL = "legJointBL";
@@ -56,7 +59,6 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 	 * - head
 	 */
 	
-	private static final String BONE_IDENT_BODY = "body";
 	@Override
 	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		//TODO: Fix buggy rotation
@@ -69,13 +71,23 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		//headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
 		//headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
 		if(entity.rotateBodyPitch()) {
-			
+			IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
 			IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
-			float pitch = entity.rotationPitch;
-			System.out.println("Body pitch: " + pitch);
+			float pitch = (float)Math.toRadians(this.getPitch(entity, Minecraft.getMinecraft().getRenderPartialTicks()) -90F);
+			pitch -= rootBone.getRotationX();
+			//System.out.println("Client pitch: " + pitch);
+			//System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);
 			bodyBone.setRotationX(pitch);
 		}
 
 	}
+	
+	protected float getPitch(EntityCQREnderCalamity entity, float partialTicks) {
+		return this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
+	}
 
+	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
+		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
+	}
+	
 }

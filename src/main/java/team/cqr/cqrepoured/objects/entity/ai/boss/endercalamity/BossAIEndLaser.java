@@ -12,6 +12,8 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	private AbstractEntityLaser endlaser;
 	private int executionTime = 0;
 	
+	private static final int LASER_SPAWN_TIME = 1;
+	
 	public BossAIEndLaser(EntityCQREnderCalamity entity) {
 		super(entity);
 		this.setMutexBits(2);
@@ -46,8 +48,8 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.entity.rotationYaw = (float) this.endlaser.rotationYawCQR + 90.0F;
 			this.entity.prevRotationYaw = (float) this.endlaser.prevRotationYawCQR + 90.0F;
 			
-			this.entity.rotationPitch = (float) this.endlaser.rotationPitchCQR;
-			this.entity.prevRotationPitch = (float) this.endlaser.prevRotationPitchCQR;
+			this.entity.rotationPitchCQR = (float) this.endlaser.rotationPitchCQR;
+			this.entity.prevRotationPitchCQR = (float) this.endlaser.prevRotationPitchCQR;
 			
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
