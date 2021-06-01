@@ -42,6 +42,7 @@ import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
+import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
@@ -89,6 +90,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private int currentPhaseRunningTime = 0;
 	private int noTennisCounter = 0;
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
+	
+	
+	public float rotationPitchCQR;
+	public float prevRotationPitchCQR;
+	public float serverRotationPitchCQR;
 
 	public EEnderCalamityPhase getCurrentPhase() {
 		return this.currentPhase;
@@ -601,6 +607,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.teleportAI.forceExecution();
 		}
 		super.onEntityUpdate();
+		
+		this.prevRotationPitchCQR = this.rotationPitchCQR;
+		if(this.world.isRemote) {
+			this.rotationPitchCQR = this.serverRotationPitchCQR;
+		} else {
+			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncCalamityRotation(this), this);
+		}
 	}
 
 	@Override
