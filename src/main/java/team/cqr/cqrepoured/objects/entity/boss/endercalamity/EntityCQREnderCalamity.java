@@ -426,6 +426,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		// data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10, this::predicateSpinHands));
 
 		// Arms
+		@SuppressWarnings("rawtypes")
 		AnimationController[] handControllers = new AnimationController[] {
 			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper),
 			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle),
@@ -435,7 +436,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower) 
 		};
 
-		for (AnimationController ac : handControllers) {
+		for (@SuppressWarnings("rawtypes") AnimationController ac : handControllers) {
 			ac.registerSoundListener(this::soundListenerHandsThrow);
 			data.addAnimationController(ac);
 		}
