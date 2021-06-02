@@ -746,6 +746,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "calamity_throw"
+				}
 			}
 		},
 		"animation.ender_calamity.throwBlock_RM": {
@@ -776,6 +781,11 @@
 							"vector": [0, 0, 0]
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "calamity_throw"
 				}
 			}
 		},
@@ -808,6 +818,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "calamity_throw"
+				}
 			}
 		},
 		"animation.ender_calamity.throwBlock_LU": {
@@ -838,6 +853,11 @@
 							"vector": [0, 0, 0]
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "calamity_throw"
 				}
 			}
 		},
@@ -870,6 +890,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "calamity_throw"
+				}
 			}
 		},
 		"animation.ender_calamity.throwBlock_LL": {
@@ -900,6 +925,11 @@
 							"vector": [0, 0, 0]
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "calamity_throw"
 				}
 			}
 		},

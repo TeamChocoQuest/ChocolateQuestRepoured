@@ -32,6 +32,7 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -75,7 +76,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	
+
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
@@ -90,8 +91,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private int currentPhaseRunningTime = 0;
 	private int noTennisCounter = 0;
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
-	
-	
+
 	public float rotationPitchCQR;
 	public float prevRotationPitchCQR;
 	public float serverRotationPitchCQR;
@@ -113,7 +113,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		public String getBoneName() {
 			return this.boneName;
 		}
-		
+
 		public boolean isLeftSided() {
 			return this.isLeft;
 		}
@@ -177,24 +177,24 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		
+
 		this.teleportAI = new BossAITeleportAroundHome(this, 40);
 		this.tasks.addTask(8, teleportAI);
 
 		this.tasks.addTask(4, new BossAIStunned(this));
 		this.tasks.addTask(5, new BossAIEnergyTennis(this));
-		
+
 		this.blockThrowerAI = new BossAIBlockThrower(this);
 		this.tasks.addTask(6, blockThrowerAI);
 		this.tasks.addTask(6, new BossAICalamityBuilding(this));
-		
+
 		this.tasks.addTask(5, new BossAIEndLaser(this));
 		this.tasks.addTask(6, new BossAICalamityHealing(this));
 		this.tasks.addTask(8, new BossAISummonMinions(this));
 		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
 		this.tasks.addTask(7, new BossAIRandomTeleportEyes(this));
 		this.tasks.addTask(7, new BossAIRandomTeleportLaser(this));
-		
+
 		this.targetTasks.taskEntries.clear();
 		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea<EntityCQREnderCalamity>(this));
 		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
@@ -216,13 +216,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());// of(Blocks.OBSIDIAN.getDefaultState()));
 		this.dataManager.register(BLOCK_RIGHT_LOWER, Optional.absent());
 	}
-	
+
 	public boolean rotateBodyPitch() {
 		return this.dataManager.get(ROTATE_BODY_PITCH);
 	}
-	
+
 	public void setRotateBodyPitch(boolean value) {
-		if(this.isServerWorld()) {
+		if (this.isServerWorld()) {
 			this.dataManager.set(ROTATE_BODY_PITCH, value);
 		}
 	}
@@ -240,14 +240,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
 	public static final String ANIM_NAME_IDLE_BODY = ANIM_NAME_PREFIX + "idle";
 	public static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
-	//Duration: 5.0s => 100 ticks
-	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shoot_laser"; //6s
-	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shoot_laser_long"; //12s
+	// Duration: 5.0s => 100 ticks
+	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shoot_laser"; // 6s
+	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shoot_laser_long"; // 12s
 	public static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
 	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 	public static final String ANIM_NAME_SPIN_HANDS = ANIM_NAME_PREFIX + "spin_hands";
 
 	private String currentAnimation = null;
+
+	@SuppressWarnings("unchecked")
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.dataManager.get(IS_HURT)) {
 			event.getController().transitionLengthTicks = 0;
@@ -261,7 +263,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.currentAnimation = newAnimation.get();
 			this.newAnimation = Optional.absent();
 		}
-		if(this.currentAnimation != null) {
+		if (this.currentAnimation != null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation).addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
 
@@ -269,21 +271,45 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
 
-		/*if(this.ticksExisted % 5 == 0) {
-			System.out.println("Animation: " + event.getController().getCurrentAnimation().animationName);
-		}*/
-		
+		/*
+		 * if(this.ticksExisted % 5 == 0) {
+		 * System.out.println("Animation: " + event.getController().getCurrentAnimation().animationName);
+		 * }
+		 */
+
 		return PlayState.CONTINUE;
 	}
-	
-	/*private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
-		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS, true));
+
+	/*
+	 * private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
+	 * if (event.getController().getCurrentAnimation() == null) {
+	 * event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS, true));
+	 * }
+	 * 
+	 * return PlayState.CONTINUE;
+	 * }
+	 */
+
+	private <E extends IAnimatable> void soundListenerHandsThrow(SoundKeyframeEvent<E> event) {
+		SoundEvent sound = null;
+		float pitch = 1.0F;
+		float volume = 1.0F;
+
+		// System.out.println("WE GOT SOUND!!!");
+		// System.out.println("Sound: " + event.sound);
+
+		switch (event.sound.toLowerCase()) {
+		// Play throwing sound
+		case "calamity_throw":
+			sound = SoundEvents.ENTITY_SNOWBALL_THROW;
+			break;
+		default:
+			return;
 		}
-		
-		return PlayState.CONTINUE;
-	}*/
-	
+
+		this.world.playSound(this.posX, this.posY, this.posZ, sound, this.getSoundCategory(), volume, pitch, false);
+	}
+
 	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
 	private static final String ANIM_NAME_ARM_RU_THROW = ANIM_NAME_PREFIX + "throwBlock_RU";
 	private boolean updateIndicator_Hand_RU = false;
@@ -298,9 +324,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).addAnimation(ANIM_NAME_ARM_RU_IDLE, true));
 		}
 		return PlayState.CONTINUE;
-		
-		
-		//return execHandAnimationPredicate(event, ANIM_NAME_ARM_RU_IDLE, ANIM_NAME_ARM_RU_THROW, updateIndicator_Hand_RU);
+
+		// return execHandAnimationPredicate(event, ANIM_NAME_ARM_RU_IDLE, ANIM_NAME_ARM_RU_THROW, updateIndicator_Hand_RU);
 	}
 
 	private static final String ANIM_NAME_ARM_RM_IDLE = ANIM_NAME_PREFIX + "idle_armRM";
@@ -397,16 +422,23 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
-		//Spin hands controller
-		//data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10, this::predicateSpinHands));
+		// Spin hands controller
+		// data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10, this::predicateSpinHands));
 
 		// Arms
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper));
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle));
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rl", 5, this::predicateArmRightLower));
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lu", 5, this::predicateArmLeftUpper));
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle));
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower));
+		AnimationController[] handControllers = new AnimationController[] {
+			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper),
+			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle),
+			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rl", 5, this::predicateArmRightLower),
+			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lu", 5, this::predicateArmLeftUpper),
+			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle),
+			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower) 
+		};
+
+		for (AnimationController ac : handControllers) {
+			ac.registerSoundListener(this::soundListenerHandsThrow);
+			data.addAnimationController(ac);
+		}
 	}
 
 	@Override
@@ -505,18 +537,18 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public boolean isShieldActive() {
 		return this.dataManager.get(SHIELD_ACTIVE);
 	}
-	
+
 	private boolean canSphereDestroyShield(ProjectileEnergyOrb orb) {
-		if(orb.getDeflectionCount() >= 5) {
+		if (orb.getDeflectionCount() >= 5) {
 			return true;
 		}
-		if(orb.getDeflectionCount() < this.world.getDifficulty().getId()) {
+		if (orb.getDeflectionCount() < this.world.getDifficulty().getId()) {
 			return false;
 		}
-		
-		double chance = (1.0D - (1.0D / (double)orb.getDeflectionCount()));
+
+		double chance = (1.0D - (1.0D / (double) orb.getDeflectionCount()));
 		return DungeonGenUtils.percentageRandom(chance, this.getRNG());
-		
+
 	}
 
 	@Override
@@ -531,20 +563,20 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			/*
 			 * If already hit often enough, Spawn explosion, then teleport to center and be unconscious
 			 */
-			if(this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
-				
+			if (this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
+
 				this.dataManager.set(SHIELD_ACTIVE, false);
 				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
-				
-				//TODO: Create own particle explosion that just looks nice
+
+				// TODO: Create own particle explosion that just looks nice
 				this.world.createExplosion(this, posX, posY, posZ, 3, false);
 				this.world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, getSoundCategory(), 10.0F, 1.0F, false);
-				
+
 				return true;
 			} else {
 				((ProjectileEnergyOrb) source.getImmediateSource()).redirect(source.getTrueSource(), this);
 			}
-			
+
 			return false;
 		}
 
@@ -563,8 +595,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				}
 
 				this.teleportAI.forceExecution();
-				
-				switch(this.getCurrentPhase()) {
+
+				switch (this.getCurrentPhase()) {
 				case PHASE_DYING:
 				case PHASE_ENERGY_TENNIS:
 				case PHASE_LASERING:
@@ -594,7 +626,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 				}
 			}
-			
+
 			return true;
 		}
 		return false;
@@ -607,9 +639,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.teleportAI.forceExecution();
 		}
 		super.onEntityUpdate();
-		
+
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
-		if(this.world.isRemote) {
+		if (this.world.isRemote) {
 			this.rotationPitchCQR = this.serverRotationPitchCQR;
 		} else {
 			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncCalamityRotation(this), this);
@@ -653,7 +685,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.isJumping = false;
 		super.onLivingUpdate();
 	}
-	
+
 	public int getCurrentPhaseRunningTicks() {
 		return this.currentPhaseRunningTime;
 	}
@@ -678,10 +710,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		if (timedPhaseChange) {
 			this.switchToNextPhaseOf(phase);
-			if(this.currentPhase == EEnderCalamityPhase.PHASE_BUILDING || this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
-				if(this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
+			if (this.currentPhase == EEnderCalamityPhase.PHASE_BUILDING || this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
+				if (this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
 					this.noTennisCounter++;
-					if(this.noTennisCounter > (this.world.getDifficulty().getId() +2) * 2 ) {
+					if (this.noTennisCounter > (this.world.getDifficulty().getId() + 2) * 2) {
 						this.switchToPhase(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 						this.noTennisCounter = 0;
 					}
@@ -709,13 +741,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private void switchToPhase(IEnderCalamityPhase nextPhase) {
 		this.currentPhase = EEnderCalamityPhase.getByPhaseObject(nextPhase);
-		/*if (this.getServer() != null)
-			this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));*/
+		/*
+		 * if (this.getServer() != null)
+		 * this.getServer().getPlayerList().sendMessage(new TextComponentString("New phase: " + this.currentPhase.name()));
+		 */
 		if (nextPhase.isPhaseTimed()) {
 			this.currentPhaseTimer = nextPhase.getRandomExecutionTime().get();
 		}
 		this.currentPhaseRunningTime = 0;
-		switch(this.currentPhase) {
+		switch (this.currentPhase) {
 		case PHASE_DYING:
 		case PHASE_ENERGY_TENNIS:
 		case PHASE_NO_TARGET:
@@ -725,14 +759,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		default:
 			break;
 		}
-		
+
 		this.isDowned = this.currentPhase == EEnderCalamityPhase.PHASE_STUNNED;
 	}
-	
+
 	private void switchToNextPhaseOf(IEnderCalamityPhase phase) {
-		/*ITextComponent msg = new TextComponentString("Switching phase! Old phase: " + this.currentPhase.name());
-		if (this.getServer() != null)
-			this.getServer().getPlayerList().sendMessage(msg);*/
+		/*
+		 * ITextComponent msg = new TextComponentString("Switching phase! Old phase: " + this.currentPhase.name());
+		 * if (this.getServer() != null)
+		 * this.getServer().getPlayerList().sendMessage(msg);
+		 */
 
 		java.util.Optional<IEnderCalamityPhase> nextPhase = phase.getNextPhase(this);
 		if (nextPhase.isPresent()) {
@@ -763,7 +799,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		tmp.clear();
 		return result;
 	}
-	
+
 	public void swingHand(E_CALAMITY_HAND hand) {
 		SPacketCalamityUpdateHand packet = SPacketCalamityUpdateHand.builder(this).swingArm(hand, true).build();
 		CQRMain.NETWORK.sendToAllTracking(packet, this);
@@ -935,21 +971,21 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		// Only process this on client!!
 		if (this.world.isRemote) {
 			this.newAnimation = Optional.of(animationID);
-			//System.out.println("New animation!" + this.newAnimation.get());
+			// System.out.println("New animation!" + this.newAnimation.get());
 		}
 	}
 
 	@Override
 	public BlockPos getCirclingCenter() {
-		if(this.hasHomePositionCQR()) {
+		if (this.hasHomePositionCQR()) {
 			return this.getHomePositionCQR();
 		}
 		return this.getPosition();
 	}
-	
+
 	@Override
 	public boolean canEntityBeSeen(Entity entityIn) {
-		//48 * 48 = 
+		// 48 * 48 =
 		return entityIn.getDistanceSq(this.getCirclingCenter()) <= 2304;
 	}
 
