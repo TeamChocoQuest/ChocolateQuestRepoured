@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -77,8 +78,12 @@ public class ProtectedRegionHelper {
 			}
 		}
 	}
-
+	
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+		return isBlockBreakingPrevented(world,pos,entity,updateProtectedRegions,addOrResetProtectedRegionIndicator, null);
+	}
+
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable EnumFacing clickedFace) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -103,8 +108,9 @@ public class ProtectedRegionHelper {
 		}
 
 		boolean isBreakingPrevented = false;
+		boolean isUpperBlockFire = clickedFace != null && (world.getBlockState(pos.offset(clickedFace)).getBlock() instanceof BlockFire || world.getBlockState(pos.offset(clickedFace)).getMaterial() == Material.FIRE);
 
-		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.preventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.preventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !(isBlockBreakingWhitelisted(world.getBlockState(pos)) || isUpperBlockFire && isBlockBreakingWhitelisted(world.getBlockState(pos.offset(clickedFace))))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {

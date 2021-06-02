@@ -232,7 +232,7 @@ public class ProtectedRegionEventHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 
-		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true)) {
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true, event.getFace())) {
 			event.setCanceled(true);
 		}
 	}
