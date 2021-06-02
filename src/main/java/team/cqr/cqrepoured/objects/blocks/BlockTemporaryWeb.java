@@ -23,7 +23,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 
 	public BlockTemporaryWeb() {
 		super();
-		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
+		this.setDefaultState(super.getDefaultState().withProperty(AGE, 0));
 		this.setTickRandomly(true);
 	}
 	
