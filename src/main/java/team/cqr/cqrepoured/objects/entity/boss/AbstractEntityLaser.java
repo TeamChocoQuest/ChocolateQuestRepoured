@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.objects.entity.boss;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -9,14 +13,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.factions.CQRFaction;
-import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.util.math.BoundingBox;
 
 public abstract class AbstractEntityLaser extends Entity implements IEntityAdditionalSpawnData {
@@ -30,8 +34,15 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public float serverRotationYawCQR;
 	public float serverRotationPitchCQR;
 	private final Object2IntMap<EntityLivingBase> hitInfoMap = new Object2IntOpenHashMap<>();
-	private final Object2IntMap<BlockPos> blockBreakMap = new Object2IntOpenHashMap<>();
+	private final Map<BlockPos, BreakingInfo> blockBreakMap = new HashMap<>();
 	protected Vec3d offsetVector = Vec3d.ZERO;
+
+	private static class BreakingInfo {
+		private static int counter = 0;
+		public int lastTimeHit;
+		public float progress;
+		public int id = counter++ % 256;
+	}
 
 	public AbstractEntityLaser(World worldIn) {
 		this(worldIn, null, 4.0F);
@@ -133,51 +144,97 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		if (!this.world.isRemote) {
 			Vec3d start = this.getPositionVector();
 			Vec3d end = start.add(Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
-			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
+			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, false, false);
 			double d = result != null ? (float) result.hitVec.subtract(this.getPositionVector()).length() : this.length;
-			if(this.canBreakBlocks() && result != null && result.getBlockPos() != null) {
-				IBlockState blockState = this.world.getBlockState(result.getBlockPos()); 
-				if(blockState != null && blockState.getBlock() != null) {
-					boolean hitBlock = blockState.getBlock().canCollideCheck(blockState, false);
-					if (hitBlock) {
-						if (result != null) {
-							BlockPos p = result.getBlockPos();
-							int value = this.blockBreakMap.getInt(p);
-							int breakProgress = value & 0xFFFF;
-							breakProgress += this.getBreakingSpeed();
-							if (breakProgress >= 60) {
-								IBlockState state = this.world.getBlockState(p);
-								state.getBlock().dropBlockAsItem(this.world, p, state, 0);
-								this.world.setBlockToAir(p);
-								this.blockBreakMap.remove(p);
-								this.world.sendBlockBreakProgress(this.getEntityId(), p, -1);
-							} else {
-								this.blockBreakMap.put(p, (this.ticksExisted << 16) | breakProgress);
-								this.world.sendBlockBreakProgress(this.getEntityId(), p, (int) (breakProgress / 60.0F * 10.0F));
-							}
-						}
-						for (Object2IntMap.Entry<BlockPos> entry : this.blockBreakMap.object2IntEntrySet()) {
-							int value = entry.getIntValue();
-							int lastTimeHit = value >> 16;
-							if (this.ticksExisted - lastTimeHit >= 40) {
-								entry.setValue(lastTimeHit | Math.max((value & 0xFFFF) - 1, 0));
+
+			if (result != null) {
+				BlockPos pos = result.getBlockPos();
+				IBlockState state = this.world.getBlockState(pos);
+				if (this.canHitBlock(pos, state)) {
+					float breakProgress = this.onHitBlock(pos, state);
+					if (breakProgress > 0.0F) {
+						if (breakProgress >= 1.0F) {
+							// destroy block
+							this.world.setBlockToAir(pos);
+						} else {
+							BreakingInfo breakingInfo = this.blockBreakMap.computeIfAbsent(pos, key -> new BreakingInfo());
+							breakingInfo.lastTimeHit = this.ticksExisted;
+							breakingInfo.progress += breakProgress;
+							if (breakingInfo.progress >= 1.0F) {
+								// destroy block
+								this.world.setBlockToAir(pos);
+								this.blockBreakMap.remove(pos);
+								int i = 0x1000000 + this.getEntityId() * 256 + breakingInfo.id;
+								this.world.sendBlockBreakProgress(i, pos, -1);
 							}
 						}
 					}
+				}
+			}
+			Iterator<Map.Entry<BlockPos, BreakingInfo>> iterator = this.blockBreakMap.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<BlockPos, BreakingInfo> entry = iterator.next();
+				BreakingInfo breakingInfo = entry.getValue();
+				if (this.ticksExisted - breakingInfo.lastTimeHit >= this.blockBreakThreshhold()) {
+					breakingInfo.progress -= this.blockBreakRevert();
+				}
+				int i = 0x1000000 + this.getEntityId() * 256 + breakingInfo.id;
+				if (breakingInfo.progress <= 0.0F) {
+					iterator.remove();
+					this.world.sendBlockBreakProgress(i, entry.getKey(), -1);
+				} else {
+					this.world.sendBlockBreakProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
 				}
 			}
 
 			Vec3d vec1 = new Vec3d(-laserEffectRadius(), -laserEffectRadius(), 0.0D);
 			Vec3d vec2 = new Vec3d(laserEffectRadius(), laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
-			CQRFaction faction = FactionRegistry.instance().getFactionOf(this.caster);
 			for (EntityLivingBase entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, EntityLivingBase.class, bb)) {
-				if ((faction == null || !faction.isAlly(entity)) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= 10) {
+				if (this.canHitEntity(entity) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
+					this.onEntityHit(entity);
 					this.hitInfoMap.put(entity, this.ticksExisted);
-					entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), this.getDamage());
 				}
 			}
 		}
+	}
+
+	public boolean canHitBlock(BlockPos pos, IBlockState state) {
+		return true;
+	}
+
+	public float onHitBlock(BlockPos pos, IBlockState state) {
+		float hardness = state.getBlockHardness(this.world, pos);
+		if (hardness <= 0.0F) {
+			return 1.0F;
+		}
+		int ticks;
+		if (hardness <= 2.0F) {
+			ticks = 40 + MathHelper.ceil(hardness * 20.0F);
+		} else {
+			ticks = MathHelper.ceil(20.0F * (8.0F * hardness) / (hardness + 2.0F));
+		}
+		return 1.0F / (float) ticks + 1.0E-7F;
+	}
+
+	public int blockBreakThreshhold() {
+		return 60;
+	}
+
+	public float blockBreakRevert() {
+		return 0.02F;
+	}
+
+	public int getEntityHitRate() {
+		return 10;
+	}
+
+	public boolean canHitEntity(EntityLivingBase entity) {
+		return !TargetUtil.isAllyCheckingLeaders(this.caster, entity);
+	}
+
+	public void onEntityHit(EntityLivingBase entity) {
+		entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), this.getDamage());
 	}
 	
 	public boolean canBreakBlocks() {
@@ -195,7 +252,14 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	@Override
 	public void onRemovedFromWorld() {
 		super.onRemovedFromWorld();
-		this.world.sendBlockBreakProgress(this.getEntityId(), BlockPos.ORIGIN, -1);
+		if (!this.world.isRemote) {
+			Iterator<Map.Entry<BlockPos, BreakingInfo>> iterator = this.blockBreakMap.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<BlockPos, BreakingInfo> entry = iterator.next();
+				int i = 0x1000000 + this.getEntityId() * 256 + entry.getValue().id;
+				this.world.sendBlockBreakProgress(i, entry.getKey(), -1);
+			}
+		}
 	}
 
 	public abstract void updatePositionAndRotation();
