@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -83,29 +84,40 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return;
 		}
 
+		BlockPos pos = new BlockPos((chunkX << 4) + 8, 64, (chunkZ << 4) + 8);
+
 		// Check if no vanilla structure is near
 		if (CQRConfig.advanced.generationRespectOtherStructures) {
 			// Vanilla Structures
-			if (VanillaStructureHelper.isStructureInRange(world, new BlockPos((chunkX << 4) + 8, 64, (chunkZ << 4) + 8), MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16.0D))) {
+			if (VanillaStructureHelper.isStructureInRange(world, pos, MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16.0D))) {
+				CQRMain.logger.debug("Failed to generate structure at x={} z={} dim={}: Nearby vanilla structure was found", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension());
 				return;
 			}
 			// AW2-Structures
 			// MAybe change the "64" to the actual Y?
 			if (IntegrationInformation.isAW2StructureAlreadyThere((chunkX << 4) + 8, 64, (chunkZ << 4) + 8, world)) {
+				CQRMain.logger.debug("Failed to generate structure at x={} z={} dim={}: Nearby ancient warfare 2 structure was found", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension());
 				return;
 			}
 		}
 
 		Random rand = new Random(getSeed(world, (chunkX << 4) + 8, (chunkZ << 4) + 8));
 		if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
+			CQRMain.logger.debug("Failed to generate structure at x={} z={} dim={}: Global dungeon generation chance check failed", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension());
 			return;
 		}
 
-		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForPos(world, new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8));
+		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForPos(world, pos);
 		DungeonBase dungeon = possibleDungeons.next(rand);
-		if (dungeon != null && DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
-			dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8, rand, DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+		if (dungeon == null) {
+			CQRMain.logger.debug("Failed to generate structure at x={} z={} dim={}: Could not find any dungeon for biome: {} ({})", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), world.getBiome(pos), BiomeDictionary.getTypes(world.getBiome(pos)));
+			return;
 		}
+		if (!DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
+			CQRMain.logger.debug("Failed to generate structure at x={} z={} dim={}: Specific dungeon generation chance check failed for dungeon: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), dungeon);
+			return;
+		}
+		dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8, rand, DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 	}
 
 	// This is needed to calculate the seed, cause we need a new seed for every generation OR we'll have the same dungeon generating every time
