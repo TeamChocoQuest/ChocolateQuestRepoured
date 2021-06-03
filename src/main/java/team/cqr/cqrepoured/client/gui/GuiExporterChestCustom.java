@@ -53,7 +53,7 @@ public class GuiExporterChestCustom extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, I18n.format("tile.exporter.name"), this.width / 2, 20, 16777215);
+		this.drawCenteredString(this.fontRenderer, I18n.format("tile.exporter_chest_custom.name"), this.width / 2, 20, 16777215);
 
 		this.drawString(this.fontRenderer, "Loot Table", this.width / 2 - 70, this.height / 2 - 80, 10526880);
 		this.lootTableTextField.drawTextBox();
