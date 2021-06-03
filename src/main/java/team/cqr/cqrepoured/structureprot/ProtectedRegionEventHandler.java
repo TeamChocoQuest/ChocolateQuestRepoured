@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -231,8 +232,13 @@ public class ProtectedRegionEventHandler {
 	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
 		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
+		BlockPos offsetPos = pos.offset(event.getFace());
 
-		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true, event.getFace())) {
+		if (event.getWorld().getBlockState(offsetPos).getBlock() == Blocks.FIRE) {
+			if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, offsetPos, player, false, true, null)) {
+				event.setCanceled(true);
+			}
+		} else if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true, event.getFace())) {
 			event.setCanceled(true);
 		}
 	}

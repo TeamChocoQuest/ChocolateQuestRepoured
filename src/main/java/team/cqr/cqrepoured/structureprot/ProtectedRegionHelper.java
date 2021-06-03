@@ -108,9 +108,8 @@ public class ProtectedRegionHelper {
 		}
 
 		boolean isBreakingPrevented = false;
-		boolean isUpperBlockFire = clickedFace != null && (world.getBlockState(pos.offset(clickedFace)).getBlock() instanceof BlockFire || world.getBlockState(pos.offset(clickedFace)).getMaterial() == Material.FIRE);
 
-		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.preventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !(isBlockBreakingWhitelisted(world.getBlockState(pos)) || isUpperBlockFire && isBlockBreakingWhitelisted(world.getBlockState(pos.offset(clickedFace))))) {
+		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.preventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
