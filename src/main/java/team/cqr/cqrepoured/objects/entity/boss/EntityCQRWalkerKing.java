@@ -216,8 +216,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 	}
-
+	
 	private boolean teleportBehindEntity(Entity entity) {
+		return this.teleportBehindEntity(entity, false);
+	}
+
+	private boolean teleportBehindEntity(Entity entity, boolean force) {
 		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
 		if (this.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
@@ -226,6 +230,10 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 			}
 			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
+			if(force) {
+				this.teleport(p.x, p.y, p.z);
+				return true;
+			}
 			return this.attemptTeleport(p.x, p.y, p.z);
 		}
 		return false;
@@ -280,6 +288,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 		if (source == DamageSource.FALL) {
 			return true;
+		}
+		
+		if(source == DamageSource.IN_WALL && this.hasAttackTarget() && this.isServerWorld()) {
+			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this, this.getEntityWorld());
+			illusion.setPosition(this.posX, this.posY, this.posZ);
+			this.world.spawnEntity(illusion);
+			
+			this.teleportBehindEntity(this.getAttackTarget(), true);
+			this.attackEntityAsMob(this.getAttackTarget());
+			return false;
 		}
 
 		
