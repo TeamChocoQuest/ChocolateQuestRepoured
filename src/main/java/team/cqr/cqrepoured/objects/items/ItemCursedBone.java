@@ -6,7 +6,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -74,7 +77,7 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 				// DONE: Spawn circle
 				ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 				// Get entity id
-				if (item.hasTagCompound() && item.getTagCompound().hasKey("entity_to_summon")) {
+				if (hasCursedBoneEntityTag(item)) {
 					try {
 						NBTTagCompound tag = item.getTagCompound();// .getCompoundTag("tag");
 						resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
@@ -119,7 +122,7 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon")) {
+		if (hasCursedBoneEntityTag(stack)) {
 			try {
 				NBTTagCompound tag = stack.getTagCompound();// .getCompoundTag("tag");
 				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
@@ -138,5 +141,26 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		}
 		return "missingNO";
 	}
+	
+	public static boolean hasCursedBoneEntityTag(ItemStack stack) {
+		if(stack == null) {
+			return false;
+		}
+		return stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon", Constants.NBT.TAG_STRING);
+	}
 
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity clickedEntity) {
+		if(player.isCreative() && player.isSneaking() && !player.world.isRemote) {
+			if(clickedEntity instanceof EntityLiving && clickedEntity.isEntityAlive()) {
+				if(!stack.hasTagCompound()) {
+					stack.setTagCompound(new NBTTagCompound());
+				}
+				stack.getTagCompound().setString("entity_to_summon", EntityList.getKey(clickedEntity).toString());
+				return true;
+			}
+		}
+		return super.onLeftClickEntity(stack, player, clickedEntity);
+	}
+	
 }
