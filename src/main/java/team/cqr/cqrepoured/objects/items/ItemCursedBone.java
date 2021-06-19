@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -31,6 +33,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.util.Reference;
@@ -66,6 +69,32 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		}
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
+	
+	public Optional<Entity> spawnEntity(BlockPos pos, World worldIn, ItemStack item, EntityLivingBase summoner, ISummoner isummoner) {
+		if (worldIn.isAirBlock(pos.offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(pos.offset(EnumFacing.UP, 2))) {
+			// DONE: Spawn circle
+			ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
+			// Get entity id
+			if (hasCursedBoneEntityTag(item)) {
+				try {
+					NBTTagCompound tag = item.getTagCompound();// .getCompoundTag("tag");
+					resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
+					if (!EntityList.isRegistered(resLoc)) {
+						resLoc = new ResourceLocation(Reference.MODID, "skeleton");
+					}
+				} catch (Exception ex) {
+					resLoc = new ResourceLocation(Reference.MODID, "skeleton");
+				}
+			}
+			EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, isummoner, summoner);
+			circle.setSummon(resLoc);
+			circle.setNoGravity(false);
+			circle.setPosition(pos.getX(), pos.getY() + 1, pos.getZ());
+			worldIn.spawnEntity(circle);
+			return Optional.of(circle);
+		}
+		return Optional.absent();
+	}
 
 	public boolean spawnEntity(EntityPlayer player, World worldIn, ItemStack item) {
 		Vec3d start = player.getPositionEyes(1.0F);
@@ -73,28 +102,7 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null) {
-			if (worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(new BlockPos(result.hitVec).offset(EnumFacing.UP, 2))) {
-				// DONE: Spawn circle
-				ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
-				// Get entity id
-				if (hasCursedBoneEntityTag(item)) {
-					try {
-						NBTTagCompound tag = item.getTagCompound();// .getCompoundTag("tag");
-						resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
-						if (!EntityList.isRegistered(resLoc)) {
-							resLoc = new ResourceLocation(Reference.MODID, "skeleton");
-						}
-					} catch (Exception ex) {
-						resLoc = new ResourceLocation(Reference.MODID, "skeleton");
-					}
-				}
-				EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, null, player);
-				circle.setSummon(resLoc);
-				circle.setNoGravity(false);
-				circle.setPosition(result.hitVec.x, result.hitVec.y + 1, result.hitVec.z);
-				worldIn.spawnEntity(circle);
-				return true;
-			}
+			return this.spawnEntity(result.getBlockPos(), worldIn, item, player, null).isPresent();
 		}
 		return false;
 	}

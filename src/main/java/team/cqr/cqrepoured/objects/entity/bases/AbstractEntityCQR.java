@@ -89,6 +89,7 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttack;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
@@ -462,6 +463,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(16, new EntityAIHooker(this)); /* AI for secondary Item */
 		this.tasks.addTask(17, new EntityAIBackstab(this));
 		this.tasks.addTask(18, new EntityAIAttack(this));
+		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.MAIN_HAND));
+		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.OFF_HAND)); /* AI for secondary Item*/
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
 		this.tasks.addTask(21, new EntityAIFireFighter(this));
