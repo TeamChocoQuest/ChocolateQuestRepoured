@@ -30,12 +30,10 @@ public class PentagramUtil {
 	}
 	
 	public static void postRenderPentagram() {
-		GlStateManager.glLineWidth(1.0F);
-		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableCull();
-		GlStateManager.enableDepth();
-		GlStateManager.depthMask(true);
+		GlStateManager.enableLighting();
 		GlStateManager.enableFog();
 	}
 	
@@ -90,7 +88,8 @@ public class PentagramUtil {
 
 		tess.draw();
 		*/
-		GL11.glColor4ub((byte) r, (byte) g, (byte) b, (byte) 255);
+		//GL11.glColor4ub((byte) r, (byte) g, (byte) b, (byte) 255);
+		GlStateManager.color(r / 255.0F, g / 255.0F, b / 255.0F, 1.0F);
 		ModelPentagram.render((int) corners, 0.75F, 0.05F, 0.05F);
 
 		setLightmapDisabled(false);
