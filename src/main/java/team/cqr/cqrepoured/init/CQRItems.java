@@ -57,7 +57,7 @@ import team.cqr.cqrepoured.objects.items.ItemSpawnerConverter;
 import team.cqr.cqrepoured.objects.items.ItemSpiderHook;
 import team.cqr.cqrepoured.objects.items.ItemSpikedGlove;
 import team.cqr.cqrepoured.objects.items.ItemStructureSelector;
-import team.cqr.cqrepoured.objects.items.ItemSummoningBone;
+import team.cqr.cqrepoured.objects.items.ItemCursedBone;
 import team.cqr.cqrepoured.objects.items.ItemSuperTool;
 import team.cqr.cqrepoured.objects.items.ItemTeleportStone;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorBull;
@@ -404,7 +404,7 @@ public class CQRItems {
 
 					setItemName(new ItemPotionHealing(), "potion_healing"),
 					setItemName(new ItemTeleportStone(), "teleport_stone"),
-					setItemName(new ItemSummoningBone(), "cursed_bone"),
+					setItemName(new ItemCursedBone(), "cursed_bone"),
 
 					setItemNameAndTab(new ItemSuperTool(), "super_tool", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setItemNameAndTab(new ItemStructureSelector(), "structure_selector", CQRMain.CQR_CREATIVE_TOOL_TAB),

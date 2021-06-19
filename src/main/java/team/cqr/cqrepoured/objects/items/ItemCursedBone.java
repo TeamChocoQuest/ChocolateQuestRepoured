@@ -32,9 +32,9 @@ import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.util.Reference;
 
-public class ItemSummoningBone extends Item implements INonEnchantable {
+public class ItemCursedBone extends Item implements INonEnchantable {
 
-	public ItemSummoningBone() {
+	public ItemCursedBone() {
 		this.setMaxDamage(3);
 		this.setMaxStackSize(1);
 		this.setNoRepair();
