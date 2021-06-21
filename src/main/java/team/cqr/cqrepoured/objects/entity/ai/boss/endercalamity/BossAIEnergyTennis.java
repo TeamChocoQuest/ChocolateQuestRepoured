@@ -38,7 +38,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		}
 	}
 	
-	// TODO: Play animation
+	// TODO: Play sound
 
 	public BossAIEnergyTennis(EntityCQREnderCalamity entity) {
 		super(entity);
