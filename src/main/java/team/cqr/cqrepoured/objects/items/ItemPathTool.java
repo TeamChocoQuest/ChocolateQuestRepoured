@@ -1,10 +1,7 @@
 package team.cqr.cqrepoured.objects.items;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

@@ -1,15 +1,10 @@
 package team.cqr.cqrepoured.client.models.entities;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelShulker;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
-import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.objects.entity.misc.EntityCamoShulker;
 
 public class ModelCamoShulker extends ModelShulker {

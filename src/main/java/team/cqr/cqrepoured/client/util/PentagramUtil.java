@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.client.util;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import team.cqr.cqrepoured.client.models.entities.ModelPentagram;
