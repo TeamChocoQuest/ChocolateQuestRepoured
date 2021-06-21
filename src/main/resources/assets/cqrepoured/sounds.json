@@ -170,5 +170,13 @@
         [
             {"name": "cqrepoured:entity/ender_calamity/charge_energy_ball"}
         ]
+    },
+	"entity.ender_calamity.ready_energy_sphere":
+    {
+        "category": "boss",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/ender_calamity/ready_energy_ball"}
+        ]
     }
 }   

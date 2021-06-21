@@ -52,9 +52,11 @@ public class CQRSounds {
 	public static final SoundEvent PIRATE_HURT = Null();
 	@ObjectHolder("entity.pirate.death")
 	public static final SoundEvent PIRATE_DEATH = Null();
-	
+
 	@ObjectHolder("entity.ender_calamity.charge_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_CHARGE_ENERGY_BALL = Null();
+	@ObjectHolder("entity.ender_calamity.ready_energy_sphere")
+	public static final SoundEvent ENDER_CALAMITY_READY_ENERGY_BALL = Null();
 
 	@ObjectHolder("entity.bubble.bubble")
 	public static final SoundEvent BUBBLE_BUBBLE = Null();
@@ -82,8 +84,8 @@ public class CQRSounds {
 					createSoundEvent("entity.pirate.hurt"),
 					createSoundEvent("entity.pirate.death"),
 					createSoundEvent("entity.ender_calamity.charge_energy_sphere"),
-					createSoundEvent("entity.bubble.bubble") 
-				};
+					createSoundEvent("entity.ender_calamity.ready_energy_sphere"),
+					createSoundEvent("entity.bubble.bubble") };
 
 			IForgeRegistry<SoundEvent> registry = event.getRegistry();
 
