@@ -168,6 +168,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// Direct AI access
 	private BossAITeleportAroundHome teleportAI;
 	private BossAIBlockThrower blockThrowerAI;
+	private BossAIEnergyTennis tennisAI;
 
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
@@ -182,7 +183,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.tasks.addTask(8, teleportAI);
 
 		this.tasks.addTask(4, new BossAIStunned(this));
-		this.tasks.addTask(5, new BossAIEnergyTennis(this));
+		this.tennisAI = new BossAIEnergyTennis(this);
+		this.tasks.addTask(5, this.tennisAI);
 
 		this.blockThrowerAI = new BossAIBlockThrower(this);
 		this.tasks.addTask(6, blockThrowerAI);
@@ -244,6 +246,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_SHOOT_LASER = ANIM_NAME_PREFIX + "shoot_laser"; // 6s
 	public static final String ANIM_NAME_SHOOT_LASER_LONG = ANIM_NAME_PREFIX + "shoot_laser_long"; // 12s
 	public static final String ANIM_NAME_DEFLECT_BALL = ANIM_NAME_PREFIX + "deflectBall";
+	public static final String ANIM_NAME_CHARGE_ENERGY_BALL = ANIM_NAME_PREFIX + "prepareEnergyBall";;
 	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 	public static final String ANIM_NAME_SPIN_HANDS = ANIM_NAME_PREFIX + "spin_hands";
 
@@ -264,6 +267,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.newAnimation = Optional.absent();
 		}
 		if (this.currentAnimation != null) {
+			if(this.currentAnimation.equalsIgnoreCase(ANIM_NAME_SHOOT_BALL)) {
+				event.getController().transitionLengthTicks = 0;
+			} 
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation).addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
 
@@ -713,6 +719,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.switchToNextPhaseOf(phase);
 			if (this.currentPhase == EEnderCalamityPhase.PHASE_BUILDING || this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
 				if (this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
+					this.tennisAI.calculateRemainingAttempts();
 					this.noTennisCounter++;
 					if (this.noTennisCounter > (this.world.getDifficulty().getId() + 2) * 2) {
 						this.switchToPhase(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
