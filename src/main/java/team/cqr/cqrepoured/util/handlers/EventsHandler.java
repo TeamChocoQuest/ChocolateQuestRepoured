@@ -241,10 +241,10 @@ public class EventsHandler {
 			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
-		if (CQRConfig.bosses.preventBlockPlacingNearBosses && !(event.getEntity() instanceof EntityPlayer && ((EntityPlayer)event.getEntity()).isCreative())) {
+		if (CQRConfig.bosses.preventBlockPlacingNearBosses && !(event.getEntity() instanceof EntityPlayer && ((EntityPlayer) event.getEntity()).isCreative())) {
 			BlockPos pos = new BlockPos(event.getEntity());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));

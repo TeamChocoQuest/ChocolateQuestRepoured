@@ -45,7 +45,7 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		this.setMaxStackSize(1);
 		this.setNoRepair();
 	}
-	
+
 	@Override
 	public boolean isRepairable() {
 		return false;
@@ -55,7 +55,7 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 40;
 	}
-	
+
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if (!worldIn.isRemote && this.spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
@@ -69,7 +69,7 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		}
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
-	
+
 	public Optional<Entity> spawnEntity(BlockPos pos, World worldIn, ItemStack item, EntityLivingBase summoner, ISummoner isummoner) {
 		if (worldIn.isAirBlock(pos.offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(pos.offset(EnumFacing.UP, 2))) {
 			// DONE: Spawn circle
@@ -149,9 +149,9 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		}
 		return "missingNO";
 	}
-	
+
 	public static boolean hasCursedBoneEntityTag(ItemStack stack) {
-		if(stack == null) {
+		if (stack == null) {
 			return false;
 		}
 		return stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon", Constants.NBT.TAG_STRING);
@@ -159,9 +159,9 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity clickedEntity) {
-		if(player.isCreative() && player.isSneaking() && !player.world.isRemote) {
-			if(clickedEntity instanceof EntityLiving && clickedEntity.isEntityAlive()) {
-				if(!stack.hasTagCompound()) {
+		if (player.isCreative() && player.isSneaking() && !player.world.isRemote) {
+			if (clickedEntity instanceof EntityLiving && clickedEntity.isEntityAlive()) {
+				if (!stack.hasTagCompound()) {
 					stack.setTagCompound(new NBTTagCompound());
 				}
 				stack.getTagCompound().setString("entity_to_summon", EntityList.getKey(clickedEntity).toString());
@@ -170,5 +170,5 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		}
 		return super.onLeftClickEntity(stack, player, clickedEntity);
 	}
-	
+
 }

@@ -6,7 +6,7 @@ import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
 public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
-	
+
 	private final BossDeathRayHelper rayHelper;
 
 	public LayerBossDeath(int red, int green, int blue) {
@@ -16,10 +16,10 @@ public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 	public LayerBossDeath(int red, int green, int blue, float raySize) {
 		this.rayHelper = new BossDeathRayHelper(red, green, blue, raySize);
 	}
-	
+
 	protected int getAnimationTick(EntityLivingBase entity) {
-		if(entity instanceof AbstractEntityCQRBoss) {
-			return ((AbstractEntityCQRBoss)entity).deathTime;
+		if (entity instanceof AbstractEntityCQRBoss) {
+			return ((AbstractEntityCQRBoss) entity).deathTime;
 		}
 		return entity.ticksExisted;
 	}

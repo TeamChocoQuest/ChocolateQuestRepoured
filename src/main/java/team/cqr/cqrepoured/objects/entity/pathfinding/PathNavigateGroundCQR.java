@@ -37,8 +37,8 @@ import team.cqr.cqrepoured.world.ChunkCacheCQR;
  */
 public class PathNavigateGroundCQR extends PathNavigateGround {
 
-	private static final ReflectionField<EntityLiving> WALK_NODE_PROCESSOR_CURRENT_ENTITY = new ReflectionField<>(WalkNodeProcessor.class, "currentEntity", "currentEntity"); 
-	
+	private static final ReflectionField<EntityLiving> WALK_NODE_PROCESSOR_CURRENT_ENTITY = new ReflectionField<>(WalkNodeProcessor.class, "currentEntity", "currentEntity");
+
 	private int ticksAtLastPos;
 	private Vec3d lastPosCheck = Vec3d.ZERO;
 	private Vec3d timeoutCachedNode = Vec3d.ZERO;
@@ -56,7 +56,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	@Override
 	protected PathFinder getPathFinder() {
 		this.nodeProcessor = new WalkNodeProcessor() {
-			
+
 			@Override
 			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
 				for (int i = 0; i < xSize; ++i) {
@@ -72,7 +72,8 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 							}
 
 							// TODO better method for calculating the facing from which the door will be entered
-							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn && EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
+							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
+									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
 								pathnodetype = PathNodeType.WALKABLE;
 							}
 
@@ -138,9 +139,9 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 					return PathNodeType.TRAPDOOR;
 				}
 			}
-			
-        };
-        this.nodeProcessor.setCanEnterDoors(true);
+
+		};
+		this.nodeProcessor.setCanEnterDoors(true);
 		this.pathFinder = new PathFinder(this.nodeProcessor);
 		return this.pathFinder;
 	}
@@ -152,7 +153,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 	@Override
 	public void updatePath() {
-		if(this.hasMount()) {
+		if (this.hasMount()) {
 			this.getMount().getNavigator().updatePath();
 		}
 		if (this.world.getTotalWorldTime() - this.lastTimeUpdated > 20L) {
@@ -166,15 +167,15 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			this.tryUpdatePath = true;
 		}
 	}
-	
+
 	@Override
 	public void onUpdateNavigation() {
 		super.onUpdateNavigation();
-		if(!noPath() && this.hasMount()) {
+		if (!noPath() && this.hasMount()) {
 			getMount().getNavigator().onUpdateNavigation();
 		}
 	}
-	
+
 	private boolean hasMount() {
 		return entity.getRidingEntity() instanceof EntityLiving;
 	}
@@ -241,11 +242,11 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			this.targetPos = null;
 			return false;
 		} else {
-			
-			if(this.hasMount()) {
+
+			if (this.hasMount()) {
 				this.getMount().getNavigator().setPath(pathentityIn, speedIn);
 			}
-			
+
 			if (pathentityIn.isSamePath(this.currentPath)) {
 				return true;
 			}
@@ -268,7 +269,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			}
 		}
 	}
-	
+
 	@Override
 	protected boolean canNavigate() {
 		return super.canNavigate() || this.hasMount();
@@ -312,19 +313,19 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			}
 		}
 	}
-	
+
 	@Nullable
 	private EntityLiving getMount() {
 		try {
-			return (EntityLiving)entity.getRidingEntity();
-		} catch(NullPointerException npe) {
+			return (EntityLiving) entity.getRidingEntity();
+		} catch (NullPointerException npe) {
 			return null;
 		}
 	}
 
 	@Override
 	public void clearPath() {
-		if(this.hasMount()) {
+		if (this.hasMount()) {
 			getMount().getNavigator().clearPath();
 		}
 		this.currentPath = null;

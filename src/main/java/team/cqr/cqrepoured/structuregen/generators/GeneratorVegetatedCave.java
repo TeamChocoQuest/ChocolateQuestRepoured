@@ -196,11 +196,11 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	}
 
 	private static final int FLOORS = 100;
-	
+
 	public void placeSpawners() {
 		// DONE: Place spawners
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-		
+
 		GearedMobFactory mobFactory = new GearedMobFactory(FLOORS, this.mobtype.getEntityID(), this.random);
 		for (BlockPos spawnerpos : this.spawners) {
 			int entityCount = 1 + this.random.nextInt(3);

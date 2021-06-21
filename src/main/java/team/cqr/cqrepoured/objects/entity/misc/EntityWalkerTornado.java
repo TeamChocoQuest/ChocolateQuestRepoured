@@ -26,7 +26,7 @@ import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.objects.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.objects.entity.particle.ParticleWalkerTornado;
 
-public class EntityWalkerTornado extends Entity implements IEntityOwnable{
+public class EntityWalkerTornado extends Entity implements IEntityOwnable {
 
 	protected static final int PARTICLE_COUNT = 2;
 	protected static final int MAX_LIVING_TICKS = 200;
@@ -206,7 +206,6 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable{
 	private Integer getColor() {
 		return this.dataManager.get(COLOR);
 	}
-
 
 	@Override
 	public Entity getOwner() {

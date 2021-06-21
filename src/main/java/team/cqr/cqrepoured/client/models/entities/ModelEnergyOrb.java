@@ -26,7 +26,7 @@ public class ModelEnergyOrb extends ModelBase {
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
 		GlStateManager.rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
 		GlStateManager.rotate(limbSwingAmount, 0.0F, 1.0F, 0.0F);
-		float color = 0.5F + (float) (0.25F * (1+Math.sin(entity.ticksExisted / Math.PI)));
+		float color = 0.5F + (float) (0.25F * (1 + Math.sin(entity.ticksExisted / Math.PI)));
 		GlStateManager.color(color, color, 0.0F);
 		this.cube.render(scale);
 		GlStateManager.popAttrib();

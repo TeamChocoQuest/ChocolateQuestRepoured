@@ -37,7 +37,7 @@ public class CQRSounds {
 	public static final SoundEvent GREMLIN_HURT = Null();
 	@ObjectHolder("entity.gremlin.death")
 	public static final SoundEvent GREMLIN_DEATH = Null();
-	
+
 	// Source for goblin sounds: https://opengameart.org/content/goblins-sound-pack
 	@ObjectHolder("entity.goblin.ambient")
 	public static final SoundEvent GOBLIN_AMBIENT = Null();
@@ -45,7 +45,7 @@ public class CQRSounds {
 	public static final SoundEvent GOBLIN_HURT = Null();
 	@ObjectHolder("entity.goblin.death")
 	public static final SoundEvent GOBLIN_DEATH = Null();
-	
+
 	@ObjectHolder("entity.pirate.ambient")
 	public static final SoundEvent PIRATE_AMBIENT = Null();
 	@ObjectHolder("entity.pirate.hurt")

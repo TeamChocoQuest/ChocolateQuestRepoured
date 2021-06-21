@@ -56,23 +56,23 @@ public class SmeltingHandler {
 		GameRegistry.addSmelting(CQRItems.LEGGINGS_HEAVY_IRON, new ItemStack(Items.IRON_NUGGET, 7), 1);
 		GameRegistry.addSmelting(CQRItems.CHESTPLATE_HEAVY_IRON, new ItemStack(Items.IRON_NUGGET, 8), 1);
 		GameRegistry.addSmelting(CQRItems.HELMET_HEAVY_IRON, new ItemStack(Items.IRON_NUGGET, 5), 1);
-		
+
 		// CROWN
 		GameRegistry.addSmelting(CQRItems.KING_CROWN, new ItemStack(Items.GOLD_NUGGET, 3), 1);
-		
-		//Dyable iron armor
+
+		// Dyable iron armor
 		GameRegistry.addSmelting(CQRItems.HELMET_IRON_DYABLE, new ItemStack(Items.IRON_NUGGET, 5), 1);
 		GameRegistry.addSmelting(CQRItems.CHESTPLATE_IRON_DYABLE, new ItemStack(Items.IRON_NUGGET, 8), 1);
 		GameRegistry.addSmelting(CQRItems.LEGGINGS_IRON_DYABLE, new ItemStack(Items.IRON_NUGGET, 7), 1);
 		GameRegistry.addSmelting(CQRItems.BOOTS_IRON_DYABLE, new ItemStack(Items.IRON_NUGGET, 4), 1);
-		
-		//Iron dagger
+
+		// Iron dagger
 		GameRegistry.addSmelting(CQRItems.DAGGER_IRON, new ItemStack(Items.IRON_INGOT), 0.5F);
-		
-		//Iron spear
+
+		// Iron spear
 		GameRegistry.addSmelting(CQRItems.SPEAR_IRON, new ItemStack(Items.IRON_NUGGET, 3), 0.25F);
-		
-		//Iron great sword
+
+		// Iron great sword
 		GameRegistry.addSmelting(CQRItems.GREAT_SWORD_IRON, new ItemStack(Items.IRON_INGOT, 3), 1);
 	}
 }

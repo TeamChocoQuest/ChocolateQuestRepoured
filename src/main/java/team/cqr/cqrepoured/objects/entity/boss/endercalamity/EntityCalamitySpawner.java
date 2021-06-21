@@ -88,7 +88,7 @@ public class EntityCalamitySpawner extends Entity {
 					}
 				}
 			}
-			//Keep the lightning? Idk, it looks cool but it is a bit overused :/
+			// Keep the lightning? Idk, it looks cool but it is a bit overused :/
 			if ((this.timer - 2) % 40 == 0 && this.rand.nextBoolean()) {
 				EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 				lightning.setPosition(this.posX, this.posY, this.posZ);

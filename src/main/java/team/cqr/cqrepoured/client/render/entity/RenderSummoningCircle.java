@@ -51,7 +51,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 		PentagramUtil.preRenderPentagram(x, y, z, entity.ticksExisted);
 		PentagramUtil.renderPentagram(entity.ticksExisted);
 		PentagramUtil.postRenderPentagram();
-		
+
 		GlStateManager.popMatrix();
 
 	}

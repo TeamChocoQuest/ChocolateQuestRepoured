@@ -32,7 +32,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 				this.healingActive = true;
 				return true;
 			}
-			if(this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
+			if (this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
 				this.entity.setInShell(true);
 				this.entity.setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 			}
@@ -70,7 +70,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	@Override
 	public void updateTask() {
 		((EntityCQRGiantTortoise) this.entity).setHealing(true);
-		if(this.entity.getCurrentAnimationId() != EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
+		if (this.entity.getCurrentAnimationId() != EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 			return;
 		}

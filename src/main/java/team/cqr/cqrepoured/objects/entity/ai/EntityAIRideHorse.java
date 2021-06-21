@@ -13,10 +13,11 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 /*
  * Partly copied from AW2
- * https://github.com/P3pp3rF1y/AncientWarfare2/blob/faf3f1e632316811f8eb53449d56221e6e70beff/src/main/java/net/shadowmage/ancientwarfare/npc/ai/NpcAIRideHorse.java
+ * https://github.com/P3pp3rF1y/AncientWarfare2/blob/faf3f1e632316811f8eb53449d56221e6e70beff/src/main/java/net/shadowmage/ancientwarfare/npc/ai/NpcAIRideHorse.
+ * java
  */
 public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQREntityAI<T> {
-	
+
 	private static final AttributeModifier FOLLOW_RANGE_MODIFIER = new AttributeModifier("modifier.cqr_horse_path_extension", 24.d, 0).setSaved(false);
 	private final AttributeModifier moveSpeedModifier;
 
@@ -30,16 +31,16 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 
 	@Override
 	public boolean shouldExecute() {
-		if(this.entity != null && this.entity.canMountEntity()) {
+		if (this.entity != null && this.entity.canMountEntity()) {
 			return shouldRideHorse();
 		}
 		return false;
 	}
-	
+
 	protected boolean shouldRideHorse() {
 		return horse == null && this.entity.getRidingEntity() instanceof EntityHorse;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		horse = (EntityLiving) this.entity.getRidingEntity();

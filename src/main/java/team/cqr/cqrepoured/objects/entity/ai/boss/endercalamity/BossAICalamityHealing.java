@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalami
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
-	
+
 	protected static final float MAX_HEALTH_PERCENT_TO_START = 0.5F;
 	private int cooldown = 0;
 
@@ -24,23 +24,23 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 
 	@Override
 	public boolean shouldExecute() {
-		if(this.cooldown > 0) {
+		if (this.cooldown > 0) {
 			this.cooldown--;
 			return false;
 		}
 		return this.internalCheck();
 	}
-	
+
 	protected boolean internalCheck() {
-		if(this.entity.isEntityAlive()) {
-			if(this.entity.getHealth() / this.entity.getMaxHealth() <= MAX_HEALTH_PERCENT_TO_START) {
+		if (this.entity.isEntityAlive()) {
+			if (this.entity.getHealth() / this.entity.getMaxHealth() <= MAX_HEALTH_PERCENT_TO_START) {
 				return super.shouldExecute();
 			}
-			
+
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return false;
@@ -51,19 +51,19 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 		int crystalCount = 1 + Math.round(4F * healthPercent);
 		return crystalCount;
 	}
-	
+
 	@Override
 	public void startExecuting() {
-		//Spawn the crystals
+		// Spawn the crystals
 		final int crystalCount = this.getCrystalCount();
-		BlockPos centralPosition = this.entity.getCirclingCenter().add(0,8,0);
-		if(crystalCount > 1) {
+		BlockPos centralPosition = this.entity.getCirclingCenter().add(0, 8, 0);
+		if (crystalCount > 1) {
 			Vec3d direction = this.entity.getLookVec();
 			direction = direction.normalize().scale(16);
 			double angle = 360 / crystalCount;
-			for(int i = 0; i < crystalCount; i++) {
+			for (int i = 0; i < crystalCount; i++) {
 				this.spawnCrystal(centralPosition.add(direction.x, 0, direction.z));
-				
+
 				direction = VectorUtil.rotateVectorAroundY(direction, angle);
 			}
 		} else {
@@ -71,12 +71,12 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 		}
 		super.startExecuting();
 	}
-	
+
 	protected void spawnCrystal(BlockPos position) {
 		EntityCalamityCrystal crystal = new EntityCalamityCrystal(this.world, this.entity, position.getX(), position.getY(), position.getZ());
 		this.world.spawnEntity(crystal);
 	}
-	
+
 	@Override
 	public void resetTask() {
 		this.cooldown = 100;
@@ -86,5 +86,5 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
 		return currentPhase.getPhaseObject().canSummonAlliesDuringPhase();
 	}
-	
+
 }

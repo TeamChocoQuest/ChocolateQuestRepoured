@@ -146,11 +146,11 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	public boolean isReintegrating() {
 		return this.dataManager.get(IS_REINTEGRATING);
 	}
-	
+
 	public float getInvisibility() {
 		return this.dataManager.get(INVISIBILITY);
 	}
-	
+
 	@Override
 	protected int getInvisibilityTurningTime() {
 		return EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;

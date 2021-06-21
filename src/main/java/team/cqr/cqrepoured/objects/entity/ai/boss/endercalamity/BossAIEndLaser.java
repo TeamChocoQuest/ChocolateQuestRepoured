@@ -11,9 +11,9 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 
 	private AbstractEntityLaser endlaser;
 	private int executionTime = 0;
-	
+
 	private static final int LASER_SPAWN_TIME = 1;
-	
+
 	public BossAIEndLaser(EntityCQREnderCalamity entity) {
 		super(entity);
 		this.setMutexBits(2);
@@ -23,7 +23,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	protected boolean canExecuteDuringPhase(EEnderCalamityPhase currentPhase) {
 		return currentPhase == EEnderCalamityPhase.PHASE_LASERING;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		this.executionTime = 0;
@@ -32,41 +32,41 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.entity.teleport(home.getX(), home.getY(), home.getZ());
 		}
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		
+
 		this.executionTime++;
-		
-		//Summon laser
-		if(this.executionTime == 1) {
+
+		// Summon laser
+		if (this.executionTime == 1) {
 			this.createLaser();
 		}
-		if(this.endlaser != null) {
-			//DONE: Fix buggy rotation
+		if (this.endlaser != null) {
+			// DONE: Fix buggy rotation
 			this.entity.rotationYaw = (float) this.endlaser.rotationYawCQR + 90.0F;
 			this.entity.prevRotationYaw = (float) this.endlaser.prevRotationYawCQR + 90.0F;
-			
+
 			this.entity.rotationPitchCQR = (float) this.endlaser.rotationPitchCQR;
 			this.entity.prevRotationPitchCQR = (float) this.endlaser.prevRotationPitchCQR;
-			
+
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
 		}
 	}
-	
+
 	private void createLaser() {
 		Vec3d laserPosition = this.entity.getPositionVector();
 		laserPosition = laserPosition.add(0, this.entity.height / 2, 0);
-		//System.out.println("original eyepos: " + eyePos.toString());
-		//DONE: Calculate new starting position of laser to match animation
-		//Head distance with scale = 100%: 0.75 blocks
+		// System.out.println("original eyepos: " + eyePos.toString());
+		// DONE: Calculate new starting position of laser to match animation
+		// Head distance with scale = 100%: 0.75 blocks
 		float yaw = this.entity.rotationYaw;
-		if(this.entity.hasAttackTarget()) {
-			 yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
+		if (this.entity.hasAttackTarget()) {
+			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
 		}
-		
+
 		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 4.0F, -0.01F);
 		laser.rotationYawCQR = yaw;
 		laser.rotationPitchCQR = 11.25F;
@@ -77,7 +77,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 
 	@Override
 	public void resetTask() {
-		if(this.endlaser != null) {
+		if (this.endlaser != null) {
 			this.endlaser.setDead();
 			this.endlaser = null;
 		}

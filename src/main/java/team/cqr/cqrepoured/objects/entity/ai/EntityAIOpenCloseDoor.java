@@ -43,7 +43,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		if (!this.entity.hasPath()) {
 			return false;
 		}
-		
+
 		this.doorPos.setPos(this.entity.posX, this.entity.posY, this.entity.posZ);
 		IBlockState state = this.world.getBlockState(this.doorPos);
 		if (state.getBlock() instanceof BlockDoor) {
@@ -51,7 +51,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			this.doorEnterFacing = this.entity.getHorizontalFacing().getOpposite();
 			return canMoveThroughDoor(this.world, this.doorPos, this.doorEnterFacing, true);
 		}
-		
+
 		Path path = this.entity.getNavigator().getPath();
 		int end = Math.min(path.getCurrentPathIndex() + 2, path.getCurrentPathLength());
 		for (int i = path.getCurrentPathIndex(); i < end; i++) {
@@ -73,7 +73,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 				return canMoveThroughDoor(this.world, this.doorPos, this.doorEnterFacing, true);
 			}
 		}
-	
+
 		return false;
 	}
 
@@ -107,10 +107,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		double dz = this.doorPos.getZ() + 0.5D - this.entity.posZ;
 		double d = this.entityPositionX * dx + this.entityPositionZ * dz;
 
-		if (d < 0.0D
-				&& (MathHelper.floor(this.entity.posX) != this.doorPos.getX()
-				|| MathHelper.floor(this.entity.posY) != this.doorPos.getY()
-				|| MathHelper.floor(this.entity.posZ) != this.doorPos.getZ())) {
+		if (d < 0.0D && (MathHelper.floor(this.entity.posX) != this.doorPos.getX() || MathHelper.floor(this.entity.posY) != this.doorPos.getY() || MathHelper.floor(this.entity.posZ) != this.doorPos.getZ())) {
 			this.hasStoppedDoorInteraction = true;
 		}
 	}
@@ -199,9 +196,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			if (ally.getDistanceSq(this.entity) >= r * r) {
 				continue;
 			}
-			if (MathHelper.floor(ally.posX) == this.doorPos.getX()
-					&& MathHelper.floor(ally.posY) == this.doorPos.getY()
-					&& MathHelper.floor(ally.posZ) == this.doorPos.getZ()) {
+			if (MathHelper.floor(ally.posX) == this.doorPos.getX() && MathHelper.floor(ally.posY) == this.doorPos.getY() && MathHelper.floor(ally.posZ) == this.doorPos.getZ()) {
 				shouldCloseDoor = false;
 				break;
 			}
@@ -209,9 +204,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			int end = Math.min(path.getCurrentPathIndex() + 2, path.getCurrentPathLength());
 			for (int i = path.getCurrentPathIndex(); i < end; i++) {
 				PathPoint pathPoint = path.getPathPointFromIndex(i);
-				if (pathPoint.x == this.doorPos.getX()
-						&& pathPoint.y == this.doorPos.getY()
-						&& pathPoint.z == this.doorPos.getZ()) {
+				if (pathPoint.x == this.doorPos.getX() && pathPoint.y == this.doorPos.getY() && pathPoint.z == this.doorPos.getZ()) {
 					shouldCloseDoor = false;
 					break;
 				}

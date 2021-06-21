@@ -35,22 +35,22 @@ public class EntityCQRPirate extends AbstractEntityCQR {
 	public int getTextureCount() {
 		return 3;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return CQRSounds.PIRATE_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return CQRSounds.PIRATE_DEATH;
 	}
-	
+
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return CQRSounds.PIRATE_HURT;
 	}
-	
+
 	@Override
 	protected float getSoundVolume() {
 		return 0.5F * super.getSoundVolume();

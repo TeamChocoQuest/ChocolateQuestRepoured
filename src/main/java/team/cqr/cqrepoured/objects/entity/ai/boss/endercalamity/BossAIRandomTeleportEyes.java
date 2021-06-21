@@ -28,15 +28,15 @@ public class BossAIRandomTeleportEyes extends AbstractBossAIRandomShoot {
 	protected boolean canExecuteDuringPhase(EEnderCalamityPhase phase) {
 		return phase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER;
 	}
-	
+
 	@Override
 	public int execPrepareShoot() {
-		//TODO: play animation
-		//40 is the transition time of the animation controller
-		//3: AI only executes every 3 ticks
+		// TODO: play animation
+		// 40 is the transition time of the animation controller
+		// 3: AI only executes every 3 ticks
 		return 40 / 3;
 	}
-	
+
 	@Override
 	protected void killProjectile() {
 	}

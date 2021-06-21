@@ -11,16 +11,16 @@ public class SPacketCalamityUpdateMainAnimation implements IMessage {
 
 	private int entityId;
 	private String animationID;
-	
+
 	public SPacketCalamityUpdateMainAnimation() {
-		
+
 	}
 
 	SPacketCalamityUpdateMainAnimation(Builder builder) {
 		this.entityId = builder.getEntityID();
 		this.animationID = builder.getValue();
 	}
-	
+
 	public String getAnimationID() {
 		return this.animationID;
 	}
@@ -36,7 +36,6 @@ public class SPacketCalamityUpdateMainAnimation implements IMessage {
 		buf.writeInt(entityId);
 		ByteBufUtils.writeUTF8String(buf, this.animationID);
 	}
-
 
 	public static Builder builder(EntityCQREnderCalamity entity) {
 		return new Builder(entity);

@@ -70,22 +70,22 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	public float getDefaultHeight() {
 		return 1.2F;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return CQRSounds.GREMLIN_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return CQRSounds.GREMLIN_DEATH;
 	}
-	
+
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return CQRSounds.GREMLIN_HURT;
 	}
-	
+
 	@Override
 	protected float getSoundVolume() {
 		return 0.5F * super.getSoundVolume();

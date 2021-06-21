@@ -39,7 +39,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	public boolean shouldContinueExecuting() {
 		if (this.shouldExecute()) {
 			if (this.entity.getHealth() <= (borderHPForMinions * this.entity.getMaxHealth())) {
-				return true;//(this.minionSpawnTick > this.borderMinion);
+				return true;// (this.minionSpawnTick > this.borderMinion);
 			}
 		}
 		return false;

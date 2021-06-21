@@ -31,32 +31,32 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		super(entity);
 		this.setMutexBits(3);
 	}
-	
+
 	protected boolean belongsToPlayerEntity(@Nonnull UUID uuid) {
-		if(this.world instanceof WorldServer) {
+		if (this.world instanceof WorldServer) {
 			WorldServer server = (WorldServer) this.world;
 			Entity byUUID = server.getEntityFromUuid(uuid);
 			return byUUID != null && byUUID instanceof EntityPlayer;
 		}
-		
+
 		return this.world.getPlayerEntityByUUID(uuid) != null;
 	}
-	
+
 	protected boolean isMountOwnedByPlayer(EntityLiving mount) {
-		
-		if(mount instanceof AbstractHorse) {
+
+		if (mount instanceof AbstractHorse) {
 			AbstractHorse horse = (AbstractHorse) mount;
-			if(horse.getOwnerUniqueId() != null) {
+			if (horse.getOwnerUniqueId() != null) {
 				return this.belongsToPlayerEntity(horse.getOwnerUniqueId());
 			}
 		}
-		
-		if(mount instanceof IEntityOwnable) {
+
+		if (mount instanceof IEntityOwnable) {
 			IEntityOwnable ownable = (IEntityOwnable) mount;
-			if(ownable.getOwner() != null) {
+			if (ownable.getOwner() != null) {
 				return ownable.getOwner() instanceof EntityPlayer;
 			}
-			if(ownable.getOwnerId() != null) {
+			if (ownable.getOwnerId() != null) {
 				return this.belongsToPlayerEntity(ownable.getOwnerId());
 			}
 		}

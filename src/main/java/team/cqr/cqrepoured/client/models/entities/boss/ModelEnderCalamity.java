@@ -40,14 +40,16 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		// Custom texture end
 		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/ender_calamity_" + entity.getTextureIndex() + ".png") : this.texture;
 	}
-	
+
 	private static final String BONE_IDENT_ROOT = "root";
 	private static final String BONE_IDENT_BODY = "body";
-	//private static final String BONE_IDENT_HEAD = "head";
-	/*private static final String BONE_IDENT_LEGJOINT_BR = "legJointBR";
-	private static final String BONE_IDENT_LEGJOINT_BL = "legJointBL";
-	private static final String BONE_IDENT_LEGJOINT_FR = "legJointFR";
-	private static final String BONE_IDENT_LEGJOINT_FL = "legJointFL";*/
+	// private static final String BONE_IDENT_HEAD = "head";
+	/*
+	 * private static final String BONE_IDENT_LEGJOINT_BR = "legJointBR";
+	 * private static final String BONE_IDENT_LEGJOINT_BL = "legJointBL";
+	 * private static final String BONE_IDENT_LEGJOINT_FR = "legJointFR";
+	 * private static final String BONE_IDENT_LEGJOINT_FL = "legJointFL";
+	 */
 
 	/*
 	 * Bones needed for walking:
@@ -57,33 +59,33 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 	 * - legJoint BL
 	 * - head
 	 */
-	
+
 	@Override
 	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, AnimationEvent customPredicate) {
-		//TODO: Fix buggy rotation
+		// TODO: Fix buggy rotation
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
-		//IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
-		//IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
+		// IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
+		// IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
 
-		//rootBone.setRotationY(-entity.rotationYaw);
-		
-		//headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
-		//headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
+		// rootBone.setRotationY(-entity.rotationYaw);
+
+		// headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
+		// headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
 		IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
 		IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
 		float correctPitch = bodyBone.getRotationX();
-		if(entity.rotateBodyPitch()) {
-			float pitch = (float)Math.toRadians(this.getPitch(entity, Minecraft.getMinecraft().getRenderPartialTicks()) -90F);
+		if (entity.rotateBodyPitch()) {
+			float pitch = (float) Math.toRadians(this.getPitch(entity, Minecraft.getMinecraft().getRenderPartialTicks()) - 90F);
 			pitch -= rootBone.getRotationX();
-			//System.out.println("Client pitch: " + pitch);
-			//System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);
+			// System.out.println("Client pitch: " + pitch);
+			// System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);
 			bodyBone.setRotationX(pitch);
 		} else {
 			bodyBone.setRotationX(correctPitch);
 		}
 
 	}
-	
+
 	protected float getPitch(EntityCQREnderCalamity entity, float partialTicks) {
 		return this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 	}
@@ -91,5 +93,5 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
 		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
-	
+
 }

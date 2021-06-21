@@ -39,8 +39,8 @@ public class ModelCalamityCrystal extends ModelBase {
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
 		GlStateManager.rotate(60.0F, 0.7071F, 0.0F, 0.7071F);
 		GlStateManager.rotate(limbSwingAmount, 0.0F, 1.0F, 0.0F);
-		if(entity instanceof EntityCalamityCrystal) {
-			if(((EntityCalamityCrystal)entity).isAbsorbing()) {
+		if (entity instanceof EntityCalamityCrystal) {
+			if (((EntityCalamityCrystal) entity).isAbsorbing()) {
 				GlStateManager.color(1.0F, 0.0F, 0.0F);
 			} else {
 				GlStateManager.color(0.0F, 1.0F, 0.0F);

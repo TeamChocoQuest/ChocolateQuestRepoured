@@ -11,9 +11,9 @@ public class SPacketCalamityUpdateHand implements IMessage {
 
 	private int entityId;
 	private byte[] handStates = new byte[6];
-	
+
 	public SPacketCalamityUpdateHand() {
-		
+
 	}
 
 	SPacketCalamityUpdateHand(Builder builder) {

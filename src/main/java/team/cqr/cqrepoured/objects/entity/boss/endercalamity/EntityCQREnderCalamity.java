@@ -428,15 +428,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		// Arms
 		@SuppressWarnings("rawtypes")
 		AnimationController[] handControllers = new AnimationController[] {
-			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper),
-			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle),
-			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rl", 5, this::predicateArmRightLower),
-			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lu", 5, this::predicateArmLeftUpper),
-			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle),
-			new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower) 
-		};
+				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ru", 5, this::predicateArmRightUpper),
+				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rm", 5, this::predicateArmRightMiddle),
+				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_rl", 5, this::predicateArmRightLower),
+				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lu", 5, this::predicateArmLeftUpper),
+				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle),
+				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower) };
 
-		for (@SuppressWarnings("rawtypes") AnimationController ac : handControllers) {
+		for (@SuppressWarnings("rawtypes")
+		AnimationController ac : handControllers) {
 			ac.registerSoundListener(this::soundListenerHandsThrow);
 			data.addAnimationController(ac);
 		}

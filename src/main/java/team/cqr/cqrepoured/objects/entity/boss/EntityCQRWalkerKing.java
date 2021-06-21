@@ -175,9 +175,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			if (this.lavaCounterAttackCooldown > 0) {
 				this.lavaCounterAttackCooldown--;
 			}
-			
-			//Anti cobweb stuff
-			if(this.isInWeb || this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockWeb) {
+
+			// Anti cobweb stuff
+			if (this.isInWeb || this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockWeb) {
 				handleInWeb();
 			}
 
@@ -188,12 +188,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	private void handleInWeb() {
-		if(this.hasAttackTarget()) {
+		if (this.hasAttackTarget()) {
 			this.world.setBlockToAir(this.getPosition());
 			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this, this.getEntityWorld());
 			illusion.setPosition(this.posX, this.posY, this.posZ);
 			this.world.spawnEntity(illusion);
-			
+
 			this.teleportBehindEntity(this.getAttackTarget());
 			this.attackEntityAsMob(this.getAttackTarget());
 		}
@@ -216,7 +216,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 	}
-	
+
 	private boolean teleportBehindEntity(Entity entity) {
 		return this.teleportBehindEntity(entity, false);
 	}
@@ -230,7 +230,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 			}
 			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
-			if(force) {
+			if (force) {
 				this.teleport(p.x, p.y, p.z);
 				return true;
 			}
@@ -289,27 +289,29 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if (source == DamageSource.FALL) {
 			return true;
 		}
-		
-		if(source == DamageSource.IN_WALL && this.hasAttackTarget() && this.isServerWorld()) {
+
+		if (source == DamageSource.IN_WALL && this.hasAttackTarget() && this.isServerWorld()) {
 			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this, this.getEntityWorld());
 			illusion.setPosition(this.posX, this.posY, this.posZ);
 			this.world.spawnEntity(illusion);
-			
+
 			this.teleportBehindEntity(this.getAttackTarget(), true);
 			this.attackEntityAsMob(this.getAttackTarget());
 			return false;
 		}
 
-		
 		// Now handled by enchantment itself
-		/*boolean spectralFlag = false;
-		if (source.getTrueSource() instanceof EntityLivingBase) {
-			if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 || EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
-				amount *= 2;
-				spectralFlag = true;
-			}
-		}*/
-		if (/*!spectralFlag && */!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
+		/*
+		 * boolean spectralFlag = false;
+		 * if (source.getTrueSource() instanceof EntityLivingBase) {
+		 * if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 ||
+		 * EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
+		 * amount *= 2;
+		 * spectralFlag = true;
+		 * }
+		 * }
+		 */
+		if (/* !spectralFlag && */!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
 			amount *= 0.5F;
 		}
 
@@ -350,28 +352,28 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		if (CQRConfig.bosses.harderWalkerKing && !this.world.isRemote) {
-			
-			//How about killing the one who tries with the axe?
-			//Maybe move this whole ability to the king shield itself??
+
+			// How about killing the one who tries with the axe?
+			// Maybe move this whole ability to the king shield itself??
 			ItemStack shieldStack = this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
-			if(amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ItemShield) {
-				if (source.getImmediateSource() instanceof EntityLivingBase /*&& (source.getImmediateSource() instanceof EntityPlayer)*/ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
-					if(DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
+			if (amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ItemShield) {
+				if (source.getImmediateSource() instanceof EntityLivingBase /* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+					if (DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
 						Vec3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
-						v = v.add(0,0.75, 0);
-						
+						v = v.add(0, 0.75, 0);
+
 						EntityLivingBase attacker = (EntityLivingBase) source.getImmediateSource();
 						attacker.motionX = v.x;
 						attacker.motionY = v.y;
 						attacker.motionZ = v.z;
 						attacker.velocityChanged = true;
 						this.swingArm(EnumHand.OFF_HAND);
-						
+
 						return false;
 					}
 				}
 			}
-			
+
 			if (this.getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
 				// Revenge Attack
 				if (this.getRNG().nextDouble() < 0.7) {
@@ -382,7 +384,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
-	
+
 	@Override
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
 		if (!CQRConfig.bosses.harderWalkerKing) {

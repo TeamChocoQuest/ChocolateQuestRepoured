@@ -83,10 +83,10 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			result.entityHit.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), 10);
 			this.setDead();
 			return;
-		} 
+		}
 		if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
 			this.world.setBlockState(new BlockPos(result.hitVec.x, result.hitVec.y, result.hitVec.z), this.state);
-			//this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
+			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 			if (this.world instanceof WorldServer) {
 				WorldServer ws = (WorldServer) this.world;
 				Vec3d pos = result.hitVec;
@@ -106,7 +106,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 		this.setDead();
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		NBTTagCompound blockstate = new NBTTagCompound();
@@ -114,14 +114,14 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		compound.setTag("blockdata", blockstate);
 		super.writeEntityToNBT(compound);
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		try {
 			NBTTagCompound blockstate = compound.getCompoundTag("blockdata");
 			this.state = NBTUtil.readBlockState(blockstate);
-		} catch(Exception ex) {
-			//Ignore
+		} catch (Exception ex) {
+			// Ignore
 			this.state = Blocks.END_STONE.getDefaultState();
 		}
 		super.readEntityFromNBT(compound);

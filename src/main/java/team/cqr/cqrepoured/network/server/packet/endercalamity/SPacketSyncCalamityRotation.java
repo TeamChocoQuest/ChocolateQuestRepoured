@@ -8,15 +8,15 @@ public class SPacketSyncCalamityRotation implements IMessage {
 
 	private int entityId;
 	private float pitch;
-	
+
 	public SPacketSyncCalamityRotation() {
 	}
-	
+
 	public SPacketSyncCalamityRotation(EntityCQREnderCalamity entity) {
 		this.entityId = entity.getEntityId();
 		this.pitch = entity.rotationPitchCQR;
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
@@ -36,7 +36,5 @@ public class SPacketSyncCalamityRotation implements IMessage {
 	public float getPitch() {
 		return pitch;
 	}
-	
-	
 
 }

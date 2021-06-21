@@ -77,9 +77,9 @@ public class ProtectedRegionHelper {
 			}
 		}
 	}
-	
+
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
-		return isBlockBreakingPrevented(world,pos,entity,updateProtectedRegions,addOrResetProtectedRegionIndicator, null);
+		return isBlockBreakingPrevented(world, pos, entity, updateProtectedRegions, addOrResetProtectedRegionIndicator, null);
 	}
 
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable EnumFacing clickedFace) {
@@ -344,19 +344,19 @@ public class ProtectedRegionHelper {
 
 		return false;
 	}
-	
+
 	public static <T extends Entity> Set<Entity> getEntitiesInProtectedRegionAt(Class<? extends Entity> entityClass, BlockPos position, World world) {
 		Set<Entity> set = new HashSet<>();
-		
+
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager != null && manager instanceof ServerProtectedRegionManager) {
-			for(ProtectedRegion region: manager.getProtectedRegionsAt(position)) {
+			for (ProtectedRegion region : manager.getProtectedRegionsAt(position)) {
 				AxisAlignedBB regionAABB = new AxisAlignedBB(region.getStartPos(), region.getEndPos());
 				set.addAll(world.getEntitiesWithinAABB(entityClass, regionAABB));
 			}
 		}
-		
+
 		return set;
 	}
 

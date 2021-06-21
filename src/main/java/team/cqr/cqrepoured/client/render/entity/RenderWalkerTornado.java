@@ -16,7 +16,7 @@ public class RenderWalkerTornado extends Render<EntityWalkerTornado> {
 	protected ResourceLocation getEntityTexture(EntityWalkerTornado entity) {
 		return null;
 	}
-	
+
 	@Override
 	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
 	}

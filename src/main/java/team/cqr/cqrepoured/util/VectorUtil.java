@@ -61,7 +61,7 @@ public class VectorUtil {
 	public static Vec3d getVectorFromTag(NBTTagCompound tag) {
 		return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
 	}
-	
+
 	public static Vec3d rotateAroundAnyAxis(Vec3d axis, Vec3d toBeRotated, double rotationDegrees) {
 		// Mathematical theory => Rotation matrices
 		// https://de.wikipedia.org/wiki/Drehmatrix
@@ -71,7 +71,7 @@ public class VectorUtil {
 		Vec3d rotated = normaledAxis.scale(normaledAxis.dotProduct(toBeRotated));
 		rotated = rotated.add(axisCrossPoint.scale(Math.cos(alpha))).crossProduct(normaledAxis);
 		rotated = rotated.add(axisCrossPoint.scale(Math.sin(alpha)));
-		
+
 		return rotated;
 	}
 

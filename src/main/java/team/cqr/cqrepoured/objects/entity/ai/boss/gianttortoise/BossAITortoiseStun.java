@@ -25,7 +25,7 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return super.shouldContinueExecuting() && this.getBoss().shouldCurrentAnimationBePlaying() && this.getBoss().isStunned();

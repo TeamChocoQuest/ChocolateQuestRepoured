@@ -43,32 +43,34 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 
 	@Override
 	public boolean shouldExecute() {
-		//System.out.println("cooldown: " + this.cooldown);
+		// System.out.println("cooldown: " + this.cooldown);
 		if (this.cooldown > 0)
 			this.cooldown--;
 		if (!this.getBoss().isStunned() && this.getBoss().getAttackTarget() != null && this.getBoss().getAttackTarget().isEntityAlive()) {
-			//System.out.println("The entity is not stunned and has a living attack target");
-			/*if (this.getBoss().getDistance(this.getBoss().getAttackTarget()) > MAX_DISTANCE_TO_BEGIN_SPIN) {
-				System.out.println("Target too far away");
-				return false;
-			}*/
+			// System.out.println("The entity is not stunned and has a living attack target");
+			/*
+			 * if (this.getBoss().getDistance(this.getBoss().getAttackTarget()) > MAX_DISTANCE_TO_BEGIN_SPIN) {
+			 * System.out.println("Target too far away");
+			 * return false;
+			 * }
+			 */
 
 			if (this.cooldown <= 0 && !this.getBoss().isHealing() && this.getBoss().isReadyToSpin()) {
-				//System.out.println("Cooldown reached, not healing and ready to spin!");
+				// System.out.println("Cooldown reached, not healing and ready to spin!");
 				this.cooldown = 0;
 				this.previousBlocks = 0;
 				if (this.getBoss().isInShell() || this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
-					//System.out.println("Ready to spin!");
+					// System.out.println("Ready to spin!");
 					this.getBoss().setCanBeStunned(false);
 					this.getBoss().setSpinning(true);
 					this.getBoss().setInShell(true);
 					this.ignoreWallTicks = 10;
 					return true;
 				} else if (this.getBoss().getCurrentAnimationId() != EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL) {
-					//System.out.println("Not yet in in-shell animation, play enter shell animatio");
+					// System.out.println("Not yet in in-shell animation, play enter shell animatio");
 					this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 				}
-				//System.out.println("Internal state is not in shell");
+				// System.out.println("Internal state is not in shell");
 			}
 		}
 		return false;

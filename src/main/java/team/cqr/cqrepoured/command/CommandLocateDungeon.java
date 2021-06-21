@@ -90,7 +90,7 @@ public class CommandLocateDungeon extends CommandBase {
 		if (dungeonToSearchFor != null && DungeonRegistry.getInstance().getDungeons().stream().noneMatch(dungeon -> dungeon.canSpawnInDim(dim) && dungeon.getDungeonName().equals(dungeonToSearchFor))) {
 			return null;
 		}
-		
+
 		int spawnX = DungeonGenUtils.getSpawnX(world) >> 4;
 		int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4;
 		Random rand = new Random();

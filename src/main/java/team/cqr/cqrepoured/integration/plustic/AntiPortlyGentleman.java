@@ -17,25 +17,25 @@ public class AntiPortlyGentleman {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void blockPortlyRelocatorOnBosses(PlayerInteractEvent.EntityInteract event) {
 		ItemStack tool = event.getItemStack();
-		if(tool == null || tool.getItem() == null || tool.isEmpty() || !tool.hasTagCompound() || !event.getEntityPlayer().isSneaking()) {
+		if (tool == null || tool.getItem() == null || tool.isEmpty() || !tool.hasTagCompound() || !event.getEntityPlayer().isSneaking()) {
 			return;
 		}
-		
-		if(event.getEntityLiving() != null && event.getEntityLiving() instanceof AbstractEntityCQRBoss) {
+
+		if (event.getEntityLiving() != null && event.getEntityLiving() instanceof AbstractEntityCQRBoss) {
 			NBTTagCompound itemNBT = tool.getTagCompound();
-			if(itemNBT.hasKey("Traits", Constants.NBT.TAG_STRING)) {
+			if (itemNBT.hasKey("Traits", Constants.NBT.TAG_STRING)) {
 				NBTTagList tagList = itemNBT.getTagList("Traits", Constants.NBT.TAG_STRING);
-				for(int i = 0; i < tagList.tagCount(); i++) {
-					if(tagList.getStringTagAt(i).equals("portly")) {
+				for (int i = 0; i < tagList.tagCount(); i++) {
+					if (tagList.getStringTagAt(i).equals("portly")) {
 						event.setCanceled(true);
-						
+
 						event.getEntityPlayer().sendMessage(new TextComponentString("Hmm... this doesn't seem to work for bosses..."));
-						
+
 						return;
 					}
 				}
 			}
 		}
-		
+
 	}
 }

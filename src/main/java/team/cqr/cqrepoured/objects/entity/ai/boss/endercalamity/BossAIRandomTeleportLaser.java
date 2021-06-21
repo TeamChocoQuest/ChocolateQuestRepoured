@@ -39,29 +39,29 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	public boolean faceTarget() {
 		return false;
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
 		boolean value = this.projectile != null;
-		
-		if(this.entity.rotateBodyPitch() != value) {
+
+		if (this.entity.rotateBodyPitch() != value) {
 			this.entity.setRotateBodyPitch(value);
 		}
-		
+
 		if (value && this.projectile instanceof AbstractEntityLaser) {
 			// this.entity.rotationPitch = ((AbstractEntityLaser)this.projectile).rotationPitchCQR;
 			// DONE: Fix buggy rotation
 			AbstractEntityLaser laser = (AbstractEntityLaser) this.projectile;
-			this.entity.rotationYaw = (float) laser.rotationYawCQR /*+ 90.0F*/;
-			this.entity.prevRotationYaw = (float) laser.prevRotationYawCQR /*+ 90.0F*/;
+			this.entity.rotationYaw = (float) laser.rotationYawCQR /* + 90.0F */;
+			this.entity.prevRotationYaw = (float) laser.prevRotationYawCQR /* + 90.0F */;
 
 			this.entity.rotationPitchCQR = (float) laser.rotationPitchCQR;
 			this.entity.prevRotationPitchCQR = (float) laser.prevRotationPitchCQR;
-			
+
 			System.out.println("Laser pitch: " + laser.rotationPitchCQR);
 			System.out.println("Entity pitch: " + entity.rotationPitchCQR);
-			
+
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
 		}
@@ -97,7 +97,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	public void resetTask() {
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
-		
+
 		this.entity.setRotateBodyPitch(false);
 		super.resetTask();
 	}

@@ -64,13 +64,13 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		double vz = target.posZ - (shooter.posZ + vec3d.z * shooter.width);
 		ProjectileEnergyOrb orb = new ProjectileEnergyOrb(world, shooter, vx, vy, vz);
 		orb.posX = shooter.posX + vec3d.x * shooter.width;
-		orb.posY = shooter.posY + (double)(shooter.height / 2.0F) + 0.5D;
+		orb.posY = shooter.posY + (double) (shooter.height / 2.0F) + 0.5D;
 		orb.posZ = shooter.posZ + vec3d.z * shooter.width;
-        world.spawnEntity(orb);
-        
-        return orb;
+		world.spawnEntity(orb);
+
+		return orb;
 	}
-	
+
 	public void redirect(Entity target, EntityLivingBase shooter) {
 		this.shootingEntity = shooter;
 		Vec3d vec3d = shooter.getLook(1.0F);
@@ -78,20 +78,20 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		double accelY = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (0.5D + shooter.posY + (double) (shooter.height / 2.0F));
 		double accelZ = target.posZ - (shooter.posZ + vec3d.z * shooter.width);
 		this.posX = shooter.posX + vec3d.x * shooter.width;
-		this.posY = shooter.posY + (double)(shooter.height / 2.0F) + 0.5D;
+		this.posY = shooter.posY + (double) (shooter.height / 2.0F) + 0.5D;
 		this.posZ = shooter.posZ + vec3d.z * shooter.width;
-		
+
 		this.motionX = 0.0D;
-        this.motionY = 0.0D;
-        this.motionZ = 0.0D;
-        accelX = accelX + this.rand.nextGaussian() * 0.4D;
-        accelY = accelY + this.rand.nextGaussian() * 0.4D;
-        accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
-        double d0 = (double)MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.1D;
-        this.accelerationY = accelY / d0 * 0.1D;
-        this.accelerationZ = accelZ / d0 * 0.1D;
-		
+		this.motionY = 0.0D;
+		this.motionZ = 0.0D;
+		accelX = accelX + this.rand.nextGaussian() * 0.4D;
+		accelY = accelY + this.rand.nextGaussian() * 0.4D;
+		accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
+		double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		this.accelerationX = accelX / d0 * 0.1D;
+		this.accelerationY = accelY / d0 * 0.1D;
+		this.accelerationZ = accelZ / d0 * 0.1D;
+
 	}
 
 	@Override

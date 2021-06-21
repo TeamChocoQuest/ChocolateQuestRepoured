@@ -19,12 +19,12 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		int renderPass = MinecraftForgeClient.getRenderPass();
-		//Solid objects
-		if(renderPass == 0) {
+		// Solid objects
+		if (renderPass == 0) {
 			float yaw = this.getYaw(entity, partialTicks);
 			float pitch = this.getPitch(entity, partialTicks);
 
-			//World coordinates
+			// World coordinates
 			double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
 			double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
 			double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
@@ -33,46 +33,45 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 			x1 += laserDirection.x;
 			y1 += laserDirection.y;
 			z1 += laserDirection.z;
-			
-			Vec3d worldPos = new Vec3d(x1,y1,z1);
-			
+
+			Vec3d worldPos = new Vec3d(x1, y1, z1);
+
 			// REnder ring 1
 			float ticks = 0.25F * entity.ticksExisted;
-			float colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(ticks)));
+			float colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks)));
 			renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, laserDirection, colorMultiplier);
 			if (entity.length >= 4) {
 				Vec3d increment = Vec3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
 				worldPos = worldPos.add(increment);
-				colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(ticks + (Math.PI / 2))));
+				colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks + (Math.PI / 2))));
 				renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, laserDirection, colorMultiplier);
-				if(entity.length >= 8) {
+				if (entity.length >= 8) {
 					worldPos = worldPos.add(increment);
-					colorMultiplier = (float) (0.5F + 0.25F * (1+ Math.sin(ticks + Math.PI)));
+					colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks + Math.PI)));
 					renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, laserDirection, colorMultiplier);
 				}
-			} 
+			}
 		}
-		//Transparent objects
+		// Transparent objects
 		else if (renderPass == 1) {
 			GlStateManager.pushAttrib();
 			super.doRender(entity, x, y, z, entityYaw, partialTicks);
 			GlStateManager.popAttrib();
 		}
-		
-		
+
 	}
 
 	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection, float colorMultiplier) {
 		GlStateManager.pushMatrix();
-		
-		//View coordinates
+
+		// View coordinates
 		Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
 		double x2 = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
 		double y2 = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
 		double z2 = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
-		//From world to view coordinates...
+		// From world to view coordinates...
 		GlStateManager.translate(worldPos.x - x2, worldPos.y - y2, worldPos.z - z2);
-		
+
 		GlStateManager.scale(scale, scale, scale);
 		PentagramUtil.preRenderPentagram(worldPos.x, worldPos.y, worldPos.z, entity.ticksExisted);
 

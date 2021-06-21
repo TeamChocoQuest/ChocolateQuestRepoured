@@ -155,11 +155,11 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 			} else {
 				axis = Axis.Y;
 			}
-			
+
 			if (prevAxis == axis && prevAxis != prevPrevAxis && prevPrevAxis == prevPrevPrevAxis) {
 				pathComplexity++;
 			}
-			
+
 			prevPrevPrevAxis = prevPrevAxis;
 			prevPrevAxis = prevAxis;
 			prevAxis = axis;

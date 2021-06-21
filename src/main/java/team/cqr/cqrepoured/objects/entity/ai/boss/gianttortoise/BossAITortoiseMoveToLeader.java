@@ -4,7 +4,7 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
 public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
-	
+
 	private static final int PREPARE_TIME = 60;
 	private int prepareTime = PREPARE_TIME;
 
@@ -18,7 +18,7 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 
 	@Override
 	public boolean shouldExecute() {
-		if(this.prepareTime > 0) {
+		if (this.prepareTime > 0) {
 			this.prepareTime--;
 			return false;
 		}
@@ -29,21 +29,23 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	}
 
 	private boolean checkTurtleSpecific() {
-		if(this.getBoss().hasAttackTarget()) {
+		if (this.getBoss().hasAttackTarget()) {
 			return false;
 		}
 		if (!this.getBoss().hasLeader()) {
 			return false;
 		}
 		if (!this.getBoss().hasAttackTarget() && !(this.getBoss().isStunned() || this.getBoss().isSpinning() || this.getBoss().isHealing())) {
-			/*if (this.getBoss().isInShell()) {
-				this.getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
-			}*/
+			/*
+			 * if (this.getBoss().isInShell()) {
+			 * this.getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
+			 * }
+			 */
 			return true;
 		}
 		return false;
 	}
-	
+
 	private boolean isTortoiseReadyToWalk() {
 		return this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK;
 	}
@@ -58,7 +60,7 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 
 	@Override
 	public void updateTask() {
-		if(!this.isTortoiseReadyToWalk() && this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
+		if (!this.isTortoiseReadyToWalk() && this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_EXIT_SHELL);
 			return;
 		}
@@ -66,7 +68,7 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 			super.updateTask();
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
 		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);

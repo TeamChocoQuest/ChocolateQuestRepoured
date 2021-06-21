@@ -26,7 +26,7 @@ public class RenderCQRGiantSpider extends RenderLiving<EntityCQRGiantSpider> {
 		// Custom texture end
 		return TEXTURE;
 	}
-	
+
 	@Override
 	protected float getDeathMaxRotation(EntityCQRGiantSpider entityLivingBaseIn) {
 		return 180F;

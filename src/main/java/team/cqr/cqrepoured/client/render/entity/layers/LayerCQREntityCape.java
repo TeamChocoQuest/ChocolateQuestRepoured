@@ -60,12 +60,12 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 				// DONE: Base model for Human shaped entities for capes
 				this.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
-				
+
 				GlStateManager.popMatrix();
 			}
 		}
 	}
-	
+
 	private void renderModel(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
 		if (flag) {
@@ -75,7 +75,7 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.depthFunc(GL11.GL_EQUAL);
 		}
-		//Standard texture
+		// Standard texture
 		else {
 			this.entityRenderer.bindTexture(entitylivingbaseIn.getResourceLocationOfCape());
 		}

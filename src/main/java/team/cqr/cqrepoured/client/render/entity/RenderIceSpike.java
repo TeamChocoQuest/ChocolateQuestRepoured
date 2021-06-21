@@ -34,7 +34,7 @@ public class RenderIceSpike extends Render<EntityIceSpike> {
 	protected ResourceLocation getEntityTexture(EntityIceSpike p_110775_1_) {
 		return TEXTURE;
 	}
-	
+
 	@Override
 	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
 	}

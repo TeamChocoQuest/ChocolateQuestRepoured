@@ -13,26 +13,26 @@ import net.minecraft.world.World;
 public class EntityCamoShulker extends EntityShulker {
 
 	protected static final DataParameter<Optional<IBlockState>> CAMO_BLOCK = EntityDataManager.<Optional<IBlockState>>createKey(EntityCamoShulker.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	
+
 	public EntityCamoShulker(World worldIn) {
 		super(worldIn);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.set(CAMO_BLOCK, Optional.of(Blocks.PURPUR_BLOCK.getDefaultState()));
 	}
-	
+
 	public IBlockState getCamoBlock() {
-		if(this.dataManager.get(CAMO_BLOCK).isPresent()) {
+		if (this.dataManager.get(CAMO_BLOCK).isPresent()) {
 			return this.dataManager.get(CAMO_BLOCK).get();
 		}
 		return Blocks.PURPUR_BLOCK.getDefaultState();
 	}
-	
+
 	public void setCamoBlock(IBlockState block) {
-		if(this.isServerWorld()) {
+		if (this.isServerWorld()) {
 			this.dataManager.set(CAMO_BLOCK, Optional.of(block));
 		}
 	}

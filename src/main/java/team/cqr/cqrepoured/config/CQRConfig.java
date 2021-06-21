@@ -103,7 +103,7 @@ public class CQRConfig {
 
 		@Config.Comment("When enabled overwrites the amount of chunks a ticket can keep loaded when generating/exporting dungeons.")
 		public boolean overwriteForgeChunkLoadingLimit = true;
-		
+
 		@Config.Comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer")
 		public boolean scaleEntitiesOnPlayerCount = false;
 		public double entityCountGrowPerPlayer = 0.25D;
@@ -286,7 +286,7 @@ public class CQRConfig {
 				"iceandfire:dragonegg=DRAGONS",
 				"iceandfire:firedragon=DRAGONS",
 				"iceandfire:icedragon=DRAGONS",
-				"net.minecraft.entity.passive.EntityVillager=VILLAGERS"};
+				"net.minecraft.entity.passive.EntityVillager=VILLAGERS" };
 
 		@Config.Comment("Each entry represents one set of mobtypes per \"ring\"")
 		public String[] defaultInhabitantConfig = { "SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR" };

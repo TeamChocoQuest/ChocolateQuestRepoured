@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.util.Reference;
 
 public class RenderChungus<T extends AbstractEntityCQR> extends Render<T> {
 
-public double widthScale = 1;
+	public double widthScale = 1;
 	public double heightScale = 1;
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/chungus.png");
@@ -29,13 +29,13 @@ public double widthScale = 1;
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
 		GlStateManager.translate((float) x, (float) y + 0.02, (float) z);
-		GlStateManager.scale(-1,-1,-1);
+		GlStateManager.scale(-1, -1, -1);
 		double w = entity.getSizeVariation();
 		double h = entity.getSizeVariation();
 		GlStateManager.scale(w, h, w);
 		GlStateManager.rotate(-entity.rotationYawHead, 0.0F, 1.0F, 0.0F);
 
-		GlStateManager.translate(-0.5D,(-1 * entity.height) / entity.getSizeVariation(), 0.0D);
+		GlStateManager.translate(-0.5D, (-1 * entity.height) / entity.getSizeVariation(), 0.0D);
 		Tessellator tessellator = Tessellator.getInstance();
 		Minecraft minecraft = Minecraft.getMinecraft();
 

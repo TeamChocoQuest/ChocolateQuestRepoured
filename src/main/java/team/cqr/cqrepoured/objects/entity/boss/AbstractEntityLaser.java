@@ -68,16 +68,16 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.ignoreFrustumCheck = true;
 		this.noClip = true;
 	}
-	
+
 	public Vec3d getOffsetVector() {
 		return this.offsetVector;
 	}
-	
+
 	@Override
 	public BlockPos getPosition() {
 		return new BlockPos(this.getPositionVector());
 	}
-	
+
 	@Override
 	public Vec3d getPositionVector() {
 		return super.getPositionVector().add(this.getOffsetVector());
@@ -236,11 +236,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public void onEntityHit(EntityLivingBase entity) {
 		entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), this.getDamage());
 	}
-	
+
 	public boolean canBreakBlocks() {
 		return false;
 	}
-	
+
 	public int getBreakingSpeed() {
 		return 1;
 	}
@@ -275,7 +275,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		buffer.writeFloat(this.length);
 		buffer.writeFloat(this.rotationYawCQR);
 		buffer.writeFloat(this.rotationPitchCQR);
-		
+
 		buffer.writeDouble(this.offsetVector.x);
 		buffer.writeDouble(this.offsetVector.y);
 		buffer.writeDouble(this.offsetVector.z);
@@ -289,11 +289,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.rotationPitchCQR = additionalData.readFloat();
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
-		
+
 		double vx = additionalData.readDouble();
 		double vy = additionalData.readDouble();
 		double vz = additionalData.readDouble();
-		this.offsetVector = new Vec3d(vx,vy,vz);
+		this.offsetVector = new Vec3d(vx, vy, vz);
 	}
 
 	public float getColorR() {

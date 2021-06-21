@@ -43,12 +43,12 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 		if (invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			reInt = true;
 			invi = false;
-			//this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
+			// this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 		} else if (invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			disInt = true;
 			invi = false;
-			//this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
+			// this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
 		this.invisibleTime--;
@@ -58,7 +58,7 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 			invi = false;
 			this.cooldown = 100;
 		}
-		//this.entity.setInvisible(invi);
+		// this.entity.setInvisible(invi);
 		this.entity.setIsReintegrating(reInt);
 		this.entity.setIsDisintegrating(disInt);
 	}

@@ -165,8 +165,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected float damageBlockedWithShield = 0.0F;
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
-	
-	//Riding AI
+
+	// Riding AI
 	protected EntityAIRideHorse<AbstractEntityCQR> horseAI = null;
 
 	// Pathing AI stuff
@@ -364,8 +364,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		zRatio = event.getRatioZ();
 
 		// CQR: reduce knockback strength instead of having a chance to not be knocked backed
-		double knockbackResistance = this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE)
-				.getAttributeValue();
+		double knockbackResistance = this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
 		strength *= 1.0F - Math.min((float) knockbackResistance, 1.0F);
 
 		this.isAirBorne = true;
@@ -450,7 +449,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIOpenCloseDoor(this));
 
-		if(this.canMountEntity()) {
+		if (this.canMountEntity()) {
 			this.horseAI = new EntityAIRideHorse<AbstractEntityCQR>(this, 1.5);
 			this.tasks.addTask(8, this.horseAI);
 		}
@@ -464,7 +463,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(17, new EntityAIBackstab(this));
 		this.tasks.addTask(18, new EntityAIAttack(this));
 		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.MAIN_HAND));
-		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.OFF_HAND)); /* AI for secondary Item*/
+		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.OFF_HAND)); /* AI for secondary Item */
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
 		this.tasks.addTask(21, new EntityAIFireFighter(this));
@@ -546,7 +545,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", this.usedPotions);
 		compound.setFloat("sizeScaling", this.sizeScaling);
-		//compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
+		// compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
 
@@ -590,7 +589,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
 		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
-		//this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
+		// this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.setHealthScale(compound.hasKey("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
 
@@ -1398,15 +1397,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canStrafe() {
-		if(this.horseAI != null) {
+		if (this.horseAI != null) {
 			return this.getLowestRidingEntity() == null;
 		}
-		if(this.getRidingEntity() != null) {
+		if (this.getRidingEntity() != null) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public boolean canOpenDoors() {
 		return true;
 	}

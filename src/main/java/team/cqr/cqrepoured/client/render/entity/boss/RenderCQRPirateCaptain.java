@@ -10,5 +10,4 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 		super(rendermanagerIn, "boss/pirate_captain", true);
 	}
 
-
 }

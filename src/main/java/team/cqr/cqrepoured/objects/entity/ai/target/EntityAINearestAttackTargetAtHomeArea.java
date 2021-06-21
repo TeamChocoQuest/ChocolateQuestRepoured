@@ -49,8 +49,8 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		return false;
 	}
 
-	private static final Vec3i SIZE_VECTOR = new Vec3i(32,32,32);
-	
+	private static final Vec3i SIZE_VECTOR = new Vec3i(32, 32, 32);
+
 	@Override
 	public void startExecuting() {
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().add(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));

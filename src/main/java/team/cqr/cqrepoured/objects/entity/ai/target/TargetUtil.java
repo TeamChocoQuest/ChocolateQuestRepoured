@@ -49,10 +49,12 @@ public class TargetUtil {
 		if (input.isBeingRidden()) {
 			return false;
 		}
-		/*if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
-			return false;
-		}*/
-		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse /*|| input instanceof EntityPig*/;
+		/*
+		 * if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
+		 * return false;
+		 * }
+		 */
+		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse /* || input instanceof EntityPig */;
 	};
 
 	public static final Predicate<EntityTameable> PREDICATE_PETS = input -> {
@@ -186,10 +188,10 @@ public class TargetUtil {
 		}
 
 	}
-	
+
 	public static boolean areInSameParty(Entity ent1, Entity ent2) {
-		if(ent1 instanceof AbstractEntityCQR) {
-			return (ent2 instanceof AbstractEntityCQR && ((AbstractEntityCQR)ent2).getLeader() == ((AbstractEntityCQR) ent1).getLeader());
+		if (ent1 instanceof AbstractEntityCQR) {
+			return (ent2 instanceof AbstractEntityCQR && ((AbstractEntityCQR) ent2).getLeader() == ((AbstractEntityCQR) ent1).getLeader());
 		}
 		return false;
 	}

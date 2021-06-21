@@ -58,7 +58,7 @@ public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 		if (blockpos != null) {
 			this.bindTexture(RenderDragon.ENDERCRYSTAL_BEAM_TEXTURES);
 			float targetX = (float) blockpos.getX() + 0.5F;
-			float targetY = (float) blockpos.getY() /*+ 0.5F*/;
+			float targetY = (float) blockpos.getY() /* + 0.5F */;
 			float targetZ = (float) blockpos.getZ() + 0.5F;
 			double targetVectorX = (double) targetX - entity.posX;
 			double targetVectorY = (double) targetY - entity.posY;

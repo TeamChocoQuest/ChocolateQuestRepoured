@@ -35,12 +35,12 @@ public class EntityBubble extends Entity {
 					Entity entity = this.getPassengers().get(0);
 					entity.dismountRidingEntity();
 					entity.setPositionAndUpdate(this.posX, this.posY + 0.5D * (double) (this.height - entity.height), this.posZ);
-					if(entity instanceof EntityLivingBase) {
+					if (entity instanceof EntityLivingBase) {
 						if (!((EntityLivingBase) entity).canBreatheUnderwater() && !((EntityLivingBase) entity).isPotionActive(MobEffects.WATER_BREATHING)) {
-							entity.setAir(entity.getAir() -5);
+							entity.setAir(entity.getAir() - 5);
 						}
 					} else {
-						entity.setAir(entity.getAir() -5);
+						entity.setAir(entity.getAir() - 5);
 					}
 				}
 				this.setDead();

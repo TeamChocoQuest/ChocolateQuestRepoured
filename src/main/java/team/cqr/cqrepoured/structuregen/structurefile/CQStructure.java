@@ -411,7 +411,7 @@ public class CQStructure {
 			} else if (block == CQRBlocks.FORCE_FIELD_NEXUS) {
 				this.blockInfoList.add(new BlockInfoForceFieldNexus(pos));
 			} else if (block == CQRBlocks.BOSS_BLOCK && tileEntity instanceof TileEntityBoss) {
-				this.blockInfoList.add(new BlockInfoBoss(pos, (TileEntityBoss)tileEntity));
+				this.blockInfoList.add(new BlockInfoBoss(pos, (TileEntityBoss) tileEntity));
 			} else if (block == CQRBlocks.MAP_PLACEHOLDER) {
 				this.blockInfoList.add(new BlockInfoMap(pos, state.getValue(BlockHorizontal.FACING), (TileEntityMap) tileEntity));
 			} else {

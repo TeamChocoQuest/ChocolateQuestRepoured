@@ -29,31 +29,31 @@ public class ItemAlchemyBag extends ItemLore {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer playerIn, EnumHand handIn) {
 		if (!world.isRemote) {
-			if(playerIn.isSneaking()) {
+			if (playerIn.isSneaking()) {
 				playerIn.openGui(CQRMain.INSTANCE, Reference.ALCHEMY_BAG_GUI_ID, world, handIn.ordinal(), 0, 0);
 				return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 			}
 			ItemStack stack = playerIn.getHeldItem(handIn);
 			Item item = stack.getItem();
-			if(item == this) {
+			if (item == this) {
 				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				
-				for(int i = 0; i < inventory.getSlots(); i++) {
+
+				for (int i = 0; i < inventory.getSlots(); i++) {
 					ItemStack potion = inventory.extractItem(i, 1, false);
-					if(potion != null && !potion.isEmpty()) {
+					if (potion != null && !potion.isEmpty()) {
 						if (potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {
 							EntityPotion entitypotion = new EntityPotion(world, playerIn, potion);
-				            entitypotion.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
-				            world.spawnEntity(entitypotion);
-							
-							world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-							
-							return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn)); 
+							entitypotion.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
+							world.spawnEntity(entitypotion);
+
+							world.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+							return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 						}
 					}
 				}
 			}
-			
+
 		}
 		return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 	}

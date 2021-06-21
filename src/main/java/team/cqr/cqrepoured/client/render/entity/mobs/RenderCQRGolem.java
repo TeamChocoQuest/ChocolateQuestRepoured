@@ -16,9 +16,9 @@ public class RenderCQRGolem extends RenderCQREntity<EntityCQRGolem> {
 	@Override
 	public void doRender(EntityCQRGolem entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		Vec3d endPos = entity.getLookVec().normalize().scale(20);
-		endPos = endPos.add(0,entity.getEyeHeight(), 0);
-		ElectricFieldRenderUtil.renderElectricLineBetween(Vec3d.ZERO.add(0, entity.getEyeHeight(), 0), endPos, entity.getRNG(), 0.5D, x,y,z, 5);
-		
+		endPos = endPos.add(0, entity.getEyeHeight(), 0);
+		ElectricFieldRenderUtil.renderElectricLineBetween(Vec3d.ZERO.add(0, entity.getEyeHeight(), 0), endPos, entity.getRNG(), 0.5D, x, y, z, 5);
+
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 

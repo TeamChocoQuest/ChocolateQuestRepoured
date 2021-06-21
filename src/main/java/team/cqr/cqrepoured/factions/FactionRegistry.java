@@ -232,10 +232,10 @@ public class FactionRegistry {
 	}
 
 	public CQRFaction getFactionOf(@Nullable Entity entity) {
-		if(entity == null) {
+		if (entity == null) {
 			return FactionRegistry.DUMMY_FACTION;
 		}
-		
+
 		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
 			if (entity.getTeam() != null) {
 				CQRFaction teamFaction = this.factions.get(entity.getTeam().getName());

@@ -20,27 +20,10 @@ public class ModelPentagram {
 	private static void init() {
 		if (!initialized) {
 			FloatBuffer vertexByteBuffer = ByteBuffer.allocateDirect(96).order(ByteOrder.nativeOrder()).asFloatBuffer();
-			vertexByteBuffer.put(new float[] {
-					0, 0, 0,
-					0, 0, 1,
-					0, 1, 0,
-					0, 1, 1,
-					1, 0, 0,
-					1, 0, 1,
-					1, 1, 0,
-					1, 1, 1
-			});
+			vertexByteBuffer.put(new float[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1 });
 			vertexByteBuffer.rewind();
 			ByteBuffer indexByteBuffer = ByteBuffer.allocateDirect(14).order(ByteOrder.nativeOrder());
-			indexByteBuffer.put(new byte[] {
-					0, 4,
-					1, 5,
-					7, 4,
-					6, 0,
-					2, 1,
-					3, 7,
-					2, 6
-			});
+			indexByteBuffer.put(new byte[] { 0, 4, 1, 5, 7, 4, 6, 0, 2, 1, 3, 7, 2, 6 });
 			indexByteBuffer.rewind();
 
 			vertexBuffer = GL15.glGenBuffers();
@@ -81,7 +64,7 @@ public class ModelPentagram {
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(f1 * i, 0.0F, 1.0F, 0.0F);
 			GlStateManager.translate(0.0F, 0.0F, radius);
-			
+
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0.0F, 0.0F, lineWidth * 0.5F);
 			GlStateManager.rotate(90.0F + f1 * 0.5F, 0.0F, 1.0F, 0.0F);
@@ -96,7 +79,7 @@ public class ModelPentagram {
 			GlStateManager.scale(lineWidth, lineHeight, f4);
 			GL11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 14, GL11.GL_UNSIGNED_BYTE, 0);
 			GlStateManager.popMatrix();
-			
+
 			GlStateManager.popMatrix();
 		}
 

@@ -32,7 +32,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if(entity.caster == null) {
+		if (entity.caster == null) {
 			return;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
@@ -97,32 +97,32 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 		GlStateManager.enableTexture2D();
 		GlStateManager.popMatrix();
 	}
-	
+
 	protected float getPitch(T entity, float partialTicks) {
 		return this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
 	}
-	
+
 	protected float getYaw(T entity, float partialTicks) {
 		return this.interpolateRotation(entity.prevRotationYawCQR, entity.rotationYawCQR, partialTicks);
 	}
-	
+
 	protected double getLaserLength(T entity, float partialTicks) {
 		return this.getLaserLength(entity, this.getPitch(entity, partialTicks), getYaw(entity, partialTicks));
 	}
-	
+
 	protected double getLaserLength(T entity, float pitch, float yaw) {
 		Vec3d start = entity.getPositionVector();
 		Vec3d end = start.add(Vec3d.fromPitchYaw(pitch, yaw).scale(entity.length));
 		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
 		double d = result != null ? (float) result.hitVec.subtract(entity.getPositionVector()).length() : entity.length;
-		
+
 		return d;
 	}
 
 	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
 		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
-	
+
 	@Override
 	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
 	}

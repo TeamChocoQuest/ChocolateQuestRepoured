@@ -9,7 +9,7 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	public EntityEndLaser(World worldIn) {
 		super(worldIn);
 	}
-	
+
 	public EntityEndLaser(World worldIn, EntityLivingBase caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
 		super(worldIn, caster, length, deltaRotationYawPerTick, deltaRotationPitchPerTick);
 	}
@@ -38,10 +38,10 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	public int getBreakingSpeed() {
 		return 36;
 	}
-	
+
 	@Override
 	public boolean canBreakBlocks() {
 		return true;
 	}
-	
+
 }

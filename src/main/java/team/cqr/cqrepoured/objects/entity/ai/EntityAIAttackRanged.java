@@ -26,7 +26,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 		super(entity);
 		this.setMutexBits(3);
 	}
-	
+
 	protected ItemStack getEquippedWeapon() {
 		return this.entity.getHeldItemMainhand();
 	}

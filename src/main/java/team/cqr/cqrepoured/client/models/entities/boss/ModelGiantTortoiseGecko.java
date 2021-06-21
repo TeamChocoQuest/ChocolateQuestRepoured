@@ -40,10 +40,12 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 	}
 
 	private static final String BONE_IDENT_HEAD = "head";
-	/*private static final String BONE_IDENT_LEGJOINT_BR = "legJointBR";
-	private static final String BONE_IDENT_LEGJOINT_BL = "legJointBL";
-	private static final String BONE_IDENT_LEGJOINT_FR = "legJointFR";
-	private static final String BONE_IDENT_LEGJOINT_FL = "legJointFL";*/
+	/*
+	 * private static final String BONE_IDENT_LEGJOINT_BR = "legJointBR";
+	 * private static final String BONE_IDENT_LEGJOINT_BL = "legJointBL";
+	 * private static final String BONE_IDENT_LEGJOINT_FR = "legJointFR";
+	 * private static final String BONE_IDENT_LEGJOINT_FL = "legJointFL";
+	 */
 
 	/*
 	 * Bones needed for walking:
@@ -53,7 +55,7 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 	 * - legJoint BL
 	 * - head
 	 */
-	
+
 	@Override
 	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);

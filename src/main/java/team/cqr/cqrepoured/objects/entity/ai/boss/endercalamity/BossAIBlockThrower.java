@@ -86,15 +86,15 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return this.shouldExecute();
 	}
 
-	protected void execHandStateBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand ) {
+	protected void execHandStateBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		this.throwBlockOfHand(hand);
 	}
-	
+
 	protected void execHandStateThrowingWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(80, 140, this.entity.getRNG());
 	}
-	
-	protected void execHandStateNoBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand ) {
+
+	protected void execHandStateNoBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		IBlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
 		this.entity.equipBlock(hand, block);
 		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
@@ -102,7 +102,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		// DONE: SPawn some particles
 		this.spawnEquipParticlesForHand(hand);
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
@@ -137,7 +137,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		}
 
 	}
-	
+
 	protected void spawnEquipParticlesForHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		if (this.world instanceof WorldServer && CQRConfig.bosses.calamityBlockEquipParticles) {
 			WorldServer ws = (WorldServer) this.world;
@@ -201,7 +201,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			 * Actually spawn the projectile and send it flying
 			 */
 			Optional<IBlockState> handContent = this.entity.getBlockFromHand(hand);
-			if(!handContent.isPresent()) {
+			if (!handContent.isPresent()) {
 				return false;
 			}
 			Vec3d position = this.getPositionOfHand(hand);
@@ -219,7 +219,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			this.handCooldowns[hand.getIndex()] = THROWING_TIME;
 			this.entity.swingHand(hand);
 			this.entity.removeHandBlock(hand);
-			
+
 			return true;
 		}
 		return false;

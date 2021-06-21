@@ -56,12 +56,11 @@ public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
-
 	@Override
 	public boolean isMultipass() {
 		return true;
 	}
-	
+
 	@Override
 	public void renderMultipass(ProjectileEnergyOrb entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
