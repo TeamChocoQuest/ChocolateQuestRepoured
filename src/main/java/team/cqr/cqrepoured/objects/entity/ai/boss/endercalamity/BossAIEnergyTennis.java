@@ -13,7 +13,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	/*
 	 * Animation lengths:
 	 *  - Shooting: 
-	 *  - Spawning (single, it is looped): 1,56s => 32 ticks
+	 *  - Spawning (single, it is looped): 1,56s => 32 ticks (sound: 5s => 100 ticks)
 	 *  Transition length: 10 ticks (it is 0 for the shooting
 	 */
 
@@ -21,7 +21,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	protected ProjectileEnergyOrb tennisball = null;
 	private int ballTicks = 0;
 	private int remainingAttempts = 0;
-	private static final int WARMUP_DURATION = 30;
+	private static final int WARMUP_DURATION = 100;
 	private int warmupTime = WARMUP_DURATION;
 
 	public void calculateRemainingAttempts() {
