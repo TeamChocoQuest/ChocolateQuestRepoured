@@ -65,7 +65,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		
-		this.entity.playSound(CQRSounds.ENDER_CALAMITY_CHARGE_ENERGY_BALL, 6.0F, 1.0F);
+		this.entity.playSound(CQRSounds.ENDER_CALAMITY_CHARGE_ENERGY_BALL, 12.0F, 1.0F);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		}
 		if (this.warmupTime > 0) {
 			if(this.warmupTime == (WARMUP_DURATION - 16/* bang sound duration */)) {
-				this.entity.playSound(CQRSounds.ENDER_CALAMITY_READY_ENERGY_BALL, 6.0F, 1.0F);
+				this.entity.playSound(CQRSounds.ENDER_CALAMITY_READY_ENERGY_BALL, 24.0F, 1.0F);
 			}
 			this.warmupTime--;
 			return;
