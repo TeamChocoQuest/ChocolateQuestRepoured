@@ -81,6 +81,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 			return;
 		}
 		if (this.tennisball == null) {
+			//TODO: Play throw sound
 			IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL).build();
 			CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 			this.tennisball = ProjectileEnergyOrb.shootAt(this.entity.getAttackTarget(), this.entity, this.world);
