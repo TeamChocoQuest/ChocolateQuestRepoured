@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
@@ -13,7 +14,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	/*
 	 * Animation lengths:
 	 *  - Shooting: 
-	 *  - Spawning (single, it is looped): 1,56s => 32 ticks (sound: 5s => 100 ticks)
+	 *  - Spawning (single, it is looped): 1,56s => 32 ticks (sound: 5s => 100 ticks, "bang" sound: 0.8s => 16 ticks )
 	 *  Transition length: 10 ticks (it is 0 for the shooting
 	 */
 
@@ -63,6 +64,8 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		
 		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		
+		this.entity.playSound(CQRSounds.ENDER_CALAMITY_CHARGE_ENERGY_BALL, 6.0F, 1.0F);
 	}
 
 	@Override
@@ -71,6 +74,9 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
 		}
 		if (this.warmupTime > 0) {
+			if(this.warmupTime == (WARMUP_DURATION - 16/* bang sound duration */)) {
+				this.entity.playSound(CQRSounds.ENDER_CALAMITY_READY_ENERGY_BALL, 6.0F, 1.0F);
+			}
 			this.warmupTime--;
 			return;
 		}
