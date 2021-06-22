@@ -77,6 +77,10 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 			if(this.warmupTime == (16/* bang sound duration */)) {
 				this.entity.playSound(CQRSounds.ENDER_CALAMITY_READY_ENERGY_BALL, 24.0F, 1.0F);
 			}
+			if(this.warmupTime == 20) {
+				//Sound duration of summoning sound: 3s => 60 ticks
+				this.entity.playSound(CQRSounds.ENDER_CALAMITY_FIRE_ENERGY_BALL, 24.0F, 2.0F);
+			}
 			this.warmupTime--;
 			return;
 		}

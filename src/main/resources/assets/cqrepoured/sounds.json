@@ -178,5 +178,24 @@
         [
             {"name": "cqrepoured:entity/ender_calamity/ready_energy_ball"}
         ]
-    }
+    },
+	"entity.ender_calamity.fire_energy_sphere":
+    {
+        "category": "boss",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/ender_calamity/fire_energy_ball"}
+        ]
+    },
+	
+	"projectile.energy_ball.impact":
+	{
+		"category": "neutral",
+		"sounds":
+		[
+			{"name": "cqrepoured:entity/ender_calamity/energy_ball/impact_1"},
+			{"name": "cqrepoured:entity/ender_calamity/energy_ball/impact_2"},
+			{"name": "cqrepoured:entity/ender_calamity/energy_ball/impact_3"}
+		]
+	}
 }   

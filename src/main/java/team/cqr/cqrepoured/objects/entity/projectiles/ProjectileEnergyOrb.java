@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.init.CQRSounds;
 
 public class ProjectileEnergyOrb extends EntityFireball {
 
@@ -129,6 +130,8 @@ public class ProjectileEnergyOrb extends EntityFireball {
 			entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.POISON, 60, 2));
 
 			this.world.spawnEntity(entityareaeffectcloud);
+			
+			this.playSound(CQRSounds.PROJECTILE_ENERGY_SPHERE_IMPACT, 8.0F, 1.0F);
 
 			this.setDead();
 		}
