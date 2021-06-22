@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
 
@@ -42,6 +44,11 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	@Override
 	public int blockBreakThreshhold() {
 		return 6;
+	}
+	
+	@Override
+	public float onHitBlock(BlockPos pos, IBlockState state) {
+		return 4 * super.onHitBlock(pos, state);
 	}
 
 	@Override
