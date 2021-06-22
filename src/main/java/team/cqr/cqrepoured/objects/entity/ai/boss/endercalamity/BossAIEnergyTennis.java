@@ -103,6 +103,9 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		// IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.remainingAttempts--;
+		if(this.remainingAttempts <= 0) {
+			this.entity.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
+		}
 	}
 
 	@Override
