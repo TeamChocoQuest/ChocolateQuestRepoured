@@ -267,21 +267,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.newAnimation = Optional.absent();
 		}
 		if (this.currentAnimation != null) {
-			if(this.currentAnimation.equalsIgnoreCase(ANIM_NAME_SHOOT_BALL)) {
+			if (this.currentAnimation.equalsIgnoreCase(ANIM_NAME_SHOOT_BALL)) {
 				event.getController().transitionLengthTicks = 0;
-			} 
+			}
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation).addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
 
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, true));
 		}
-
-		/*
-		 * if(this.ticksExisted % 5 == 0) {
-		 * System.out.println("Animation: " + event.getController().getCurrentAnimation().animationName);
-		 * }
-		 */
 
 		return PlayState.CONTINUE;
 	}
@@ -296,7 +290,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	 * }
 	 */
 
-	private <E extends IAnimatable> void soundListenerHandsThrow(SoundKeyframeEvent<E> event) {
+	private <E extends IAnimatable> void soundListenerArms(SoundKeyframeEvent<E> event) {
 		SoundEvent sound = null;
 		float pitch = 1.0F;
 		float volume = 1.0F;
@@ -305,12 +299,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		// System.out.println("Sound: " + event.sound);
 
 		switch (event.sound.toLowerCase()) {
-		// Play throwing sound
-		case "calamity_throw":
-			sound = SoundEvents.ENTITY_SNOWBALL_THROW;
-			break;
-		default:
-			return;
+			// Play throwing sound
+			case "calamity_throw":
+				sound = SoundEvents.ENTITY_SNOWBALL_THROW;
+				break;
+			default:
+				return;
 		}
 
 		this.world.playSound(this.posX, this.posY, this.posZ, sound, this.getSoundCategory(), volume, pitch, false);
@@ -330,8 +324,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).addAnimation(ANIM_NAME_ARM_RU_IDLE, true));
 		}
 		return PlayState.CONTINUE;
-
-		// return execHandAnimationPredicate(event, ANIM_NAME_ARM_RU_IDLE, ANIM_NAME_ARM_RU_THROW, updateIndicator_Hand_RU);
 	}
 
 	private static final String ANIM_NAME_ARM_RM_IDLE = ANIM_NAME_PREFIX + "idle_armRM";
@@ -441,9 +433,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle),
 				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower) };
 
-		for (@SuppressWarnings("rawtypes")
-		AnimationController ac : handControllers) {
-			ac.registerSoundListener(this::soundListenerHandsThrow);
+		for (@SuppressWarnings("rawtypes") AnimationController ac : handControllers) {
+			ac.registerSoundListener(this::soundListenerArms);
 			data.addAnimationController(ac);
 		}
 	}
@@ -577,7 +568,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 				// TODO: Create own particle explosion that just looks nice
 				this.world.createExplosion(this, posX, posY, posZ, 3, false);
-				this.world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, getSoundCategory(), 10.0F, 1.0F, false);
+				this.playSound(SoundEvents.ENTITY_ENDERMEN_SCREAM, 10.0F, 1.0F);
 
 				return true;
 			} else {
@@ -665,7 +656,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.world.getWorldInfo().setRaining(false);
 			this.world.getWorldInfo().setThundering(false);
 
-			this.world.playSound(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, SoundEvents.ENTITY_ENDERMEN_STARE, this.getSoundCategory(), 2.5F, this.getSoundPitch(), false);
+			this.playSound(SoundEvents.ENTITY_ENDERMEN_STARE, 2.5F, this.getSoundPitch());
 		}
 
 		super.updateAITasks();
@@ -915,7 +906,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		double oldY = this.posY;
 		double oldZ = this.posZ;
 		super.teleport(x, y, z);
-		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 1.0F, 0.9F + this.rand.nextFloat() * 0.2F);
+		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 3.0F, 0.9F + this.rand.nextFloat() * 0.2F);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 	}
@@ -993,7 +984,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public boolean canEntityBeSeen(Entity entityIn) {
-		// 48 * 48 =
+		// 48 * 48 = 2304
 		return entityIn.getDistanceSq(this.getCirclingCenter()) <= 2304;
 	}
 
