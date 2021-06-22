@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.BlockFire;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -41,6 +42,7 @@ import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRDispenseBehaviors;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -176,6 +178,9 @@ public class CQRMain {
 		// Instantiating enums
 		EBannerPatternsCQ.values();
 		EBanners.values();
+		EnumCreatureAttribute.values();
+		/* DO NOT REMOVE, this fixes the neat issue */
+		String cca = CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER.name();
 
 		// Register event handling for dungeon protection system
 		// MinecraftForge.EVENT_BUS.register(ProtectedRegionManager.getInstance());
