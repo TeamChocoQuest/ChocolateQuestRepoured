@@ -67,7 +67,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
 		}
 
-		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 4.0F, -0.01F);
+		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 8.0F, -0.01F);
 		laser.rotationYawCQR = yaw;
 		laser.rotationPitchCQR = 11.25F;
 		laser.setPosition(laserPosition.x, laserPosition.y, laserPosition.z);
