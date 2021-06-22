@@ -33,10 +33,15 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	public float getColorB() {
 		return 0.98F;
 	}
-
+	
 	@Override
-	public int getBreakingSpeed() {
-		return 36;
+	public int getEntityHitRate() {
+		return 5;
+	}
+	
+	@Override
+	public int blockBreakThreshhold() {
+		return 6;
 	}
 
 	@Override
