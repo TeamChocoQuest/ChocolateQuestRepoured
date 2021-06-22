@@ -424,7 +424,9 @@ public class CQRConfig {
 					// Days are initiated with 1
 					aprilFoolsResult = calendar.get(Calendar.DAY_OF_MONTH) == 1;
 				}
-				aprilFoolsResult = false;
+				else {
+					aprilFoolsResult = false;
+				}
 			}
 			return aprilFoolsResult;
 		}
