@@ -13,12 +13,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 
 /*
  * Copied from vanilla FrostedIce block
  */
-public class BlockTemporaryWeb extends BlockWeb implements IShearable {
+public class BlockTemporaryWeb extends BlockWeb {
 
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
 
@@ -27,7 +26,7 @@ public class BlockTemporaryWeb extends BlockWeb implements IShearable {
 		this.setDefaultState(super.getDefaultState().withProperty(AGE, 0));
 		this.setTickRandomly(true);
 	}
-
+	
 	@Override
 	public int getMetaFromState(IBlockState p_176201_1_) {
 		return (Integer) p_176201_1_.getValue(AGE);
