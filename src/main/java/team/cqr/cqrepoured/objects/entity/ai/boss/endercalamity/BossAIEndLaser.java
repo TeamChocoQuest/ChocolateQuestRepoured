@@ -30,6 +30,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		if (this.entity.hasHomePositionCQR()) {
 			BlockPos home = this.entity.getHomePositionCQR();
 			this.entity.teleport(home.getX(), home.getY(), home.getZ());
+			//TODO: Remove blocks in the center
 		}
 	}
 

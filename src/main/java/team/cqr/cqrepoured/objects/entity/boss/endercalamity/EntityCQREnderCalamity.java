@@ -563,6 +563,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 */
 			if (this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
 
+				//Avoid switching to wrong phase
+				this.tennisAI.calculateRemainingAttempts();
+				
 				this.dataManager.set(SHIELD_ACTIVE, false);
 				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 

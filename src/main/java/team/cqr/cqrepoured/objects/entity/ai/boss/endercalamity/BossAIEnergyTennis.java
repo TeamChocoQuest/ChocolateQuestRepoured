@@ -107,6 +107,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		// IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.remainingAttempts--;
+		//TODO: Patch not switching to stunned phase
 		if(this.remainingAttempts <= 0) {
 			this.entity.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 		}
