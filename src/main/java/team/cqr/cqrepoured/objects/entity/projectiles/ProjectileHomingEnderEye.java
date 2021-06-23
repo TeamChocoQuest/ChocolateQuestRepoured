@@ -32,6 +32,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
+		//TODO: Remove a few end blocks around the location
 		if (!this.world.isRemote) {
 			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shooter);
