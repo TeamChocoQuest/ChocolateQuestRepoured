@@ -85,6 +85,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			return;
 		}
 		if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
+			//TODO: Add placed block to whitelist of protected region
 			this.world.setBlockState(new BlockPos(result.hitVec.x, result.hitVec.y, result.hitVec.z), this.state);
 			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 			if (this.world instanceof WorldServer) {
