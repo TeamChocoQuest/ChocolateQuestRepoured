@@ -205,7 +205,10 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	public float onHitBlock(BlockPos pos, IBlockState state) {
 		float hardness = state.getBlockHardness(this.world, pos);
-		if (hardness <= 0.0F) {
+		if (hardness < 0.0F) {
+			return 0.0F;
+		}
+		if (hardness == 0.0F) {
 			return 1.0F;
 		}
 		int ticks;
