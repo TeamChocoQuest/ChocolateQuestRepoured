@@ -43,17 +43,17 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	
 	@Override
 	public int blockBreakThreshhold() {
-		return 6;
+		return 1;
 	}
 	
 	@Override
 	public float blockBreakRevert() {
-		return 0.1F * super.blockBreakRevert();
+		return 0.025F * super.blockBreakRevert();
 	}
 	
 	@Override
 	public float onHitBlock(BlockPos pos, IBlockState state) {
-		return 8 * super.onHitBlock(pos, state);
+		return 64 * super.onHitBlock(pos, state);
 	}
 
 	@Override
