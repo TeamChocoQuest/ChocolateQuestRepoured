@@ -72,7 +72,10 @@ public class TileEntityDataManager {
 	}
 
 	public void onDataEntryChanged(DataEntry<?> entry) {
-
+		if (!this.tileEntity.hasWorld()) {
+			return;
+		}
+		this.tileEntity.markDirty();
 	}
 
 	public void checkIfDirtyAndSync() {

@@ -14,7 +14,7 @@ public abstract class DataEntry<T> {
 	private final boolean isClientModificationAllowed;
 	protected boolean isDirty = false;
 
-	public DataEntry(String name, boolean isClientModificationAllowed) {
+	protected DataEntry(String name, boolean isClientModificationAllowed) {
 		this.name = name;
 		this.isClientModificationAllowed = isClientModificationAllowed;
 	}
@@ -23,7 +23,6 @@ public abstract class DataEntry<T> {
 
 	public void read(NBTBase nbt) {
 		this.readInternal(nbt);
-		this.onValueChanged();
 	}
 
 	protected abstract void readInternal(NBTBase nbt);
@@ -58,7 +57,7 @@ public abstract class DataEntry<T> {
 
 	public void set(@Nonnull T value) {
 		if (value == null) {
-			return;
+			throw new NullPointerException();
 		}
 		if (!this.isSavedValueEqualTo(value)) {
 			this.setInternal(value);
