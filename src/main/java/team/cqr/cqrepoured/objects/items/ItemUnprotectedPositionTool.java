@@ -56,11 +56,10 @@ public class ItemUnprotectedPositionTool extends Item {
 		}
 		TileEntityExporter exporter = (TileEntityExporter) tileEntity;
 		if (!player.isSneaking()) {
-			BlockPos[] exporterPositions = exporter.getUnprotectedBlocks();
 			exporter.setUnprotectedBlocks(this.getPositions(itemstack).toArray(BlockPos[]::new));
-			Arrays.stream(exporterPositions).forEach(p -> this.addPosition(itemstack, p));
 		} else {
 			BlockPos[] exporterPositions = exporter.getUnprotectedBlocks();
+			this.clearPositions(itemstack);
 			Arrays.stream(exporterPositions).forEach(p -> this.addPosition(itemstack, p));
 		}
 		return true;

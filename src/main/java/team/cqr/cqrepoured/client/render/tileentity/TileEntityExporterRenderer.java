@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,6 +19,7 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
+		BlockPos tileEntityPos = te.getPos();
 		BlockPos pos1 = te.getMinPosRelative();
 		BlockPos pos2 = te.getMaxPosRelative();
 
@@ -29,23 +32,62 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.disableFog();
-		GlStateManager.disableLighting();
-		GlStateManager.disableTexture2D();
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		this.setLightmapDisabled(true);
 
-		this.renderBox(tessellator, bufferbuilder, x1, y1, z1, x2, y2, z2);
+		{
+			// render structure outline
+			GlStateManager.disableFog();
+			GlStateManager.disableLighting();
+			GlStateManager.disableTexture2D();
+			this.setLightmapDisabled(true);
 
-		this.setLightmapDisabled(false);
-		GlStateManager.glLineWidth(1.0F);
-		GlStateManager.enableLighting();
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableDepth();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableFog();
-		// GlStateManager.disableBlend();
+			this.renderBox(tessellator, bufferbuilder, x1, y1, z1, x2, y2, z2);
+
+			this.setLightmapDisabled(false);
+			GlStateManager.enableTexture2D();
+			GlStateManager.enableLighting();
+			GlStateManager.enableFog();
+		}
+
+		{
+			// render unprotected blocks
+			double d1 = 1.0D / 1024.0D;
+			double d2 = 1.0D + d1;
+			double d3 = 1.0D / 512.0D;
+			double d4 = 1.0D + d1;
+
+			GlStateManager.glLineWidth(2.0F);
+			GlStateManager.disableFog();
+			GlStateManager.disableLighting();
+			GlStateManager.disableTexture2D();
+			GlStateManager.depthMask(false);
+			GlStateManager.enableBlend();
+			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+			this.setLightmapDisabled(true);
+
+			GlStateManager.color(1.0F, 0.8F, 0.0F, 0.35F);
+			bufferbuilder.setTranslation(x - tileEntityPos.getX(), y - tileEntityPos.getY(), z - tileEntityPos.getZ());
+			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+			for (BlockPos pos : te.getUnprotectedBlocks()) {
+				this.renderBox(bufferbuilder, pos.getX() - d1, pos.getY() - d1, pos.getZ() - d1, pos.getX() + d2, pos.getY() + d2, pos.getZ() + d2);
+			}
+			tessellator.draw();
+			GlStateManager.color(1.0F, 0.8F, 0.0F, 1.0F);
+			bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+			for (BlockPos pos : te.getUnprotectedBlocks()) {
+				this.renderBoxOutline(bufferbuilder, pos.getX() - d3, pos.getY() - d3, pos.getZ() - d3, pos.getX() + d4, pos.getY() + d4, pos.getZ() + d4);
+			}
+			tessellator.draw();
+			bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+			this.setLightmapDisabled(false);
+			GlStateManager.disableBlend();
+			GlStateManager.depthMask(true);
+			GlStateManager.enableTexture2D();
+			GlStateManager.enableLighting();
+			GlStateManager.enableFog();
+			GlStateManager.glLineWidth(1.0F);
+		}
 	}
 
 	private void renderBox(Tessellator tessellator, BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -74,7 +116,74 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 		buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
 		buffer.pos(x2, y1, z1).color((float) cl2, (float) cl2, (float) cl2, 0.0F).endVertex();
 		tessellator.draw();
-		GlStateManager.glLineWidth(2.0F);
+		GlStateManager.glLineWidth(1.0F);
+	}
+
+	private void renderBoxOutline(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y1, z1).endVertex();
+
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+	}
+
+	private void renderBox(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
+		// down
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+
+		// south
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+
+		// north
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+
+		// up
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+
+		// west
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+
+		// east
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
 	}
 
 	@Override

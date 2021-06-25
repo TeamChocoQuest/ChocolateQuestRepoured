@@ -1,24 +1,31 @@
 package team.cqr.cqrepoured.client.event;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.models.armor.ModelCrown;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
+import team.cqr.cqrepoured.objects.items.ItemUnprotectedPositionTool;
 import team.cqr.cqrepoured.objects.items.armor.ItemCrown;
 import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
 import team.cqr.cqrepoured.objects.items.guns.ItemMusketKnife;
@@ -300,6 +308,129 @@ public class RenderEventHandler {
 				GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public static void onRenderWorldLastEvent(RenderWorldLastEvent event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		for (EnumHand hand : EnumHand.values()) {
+			ItemStack stack = mc.player.getHeldItem(hand);
+			if (!(stack.getItem() instanceof ItemUnprotectedPositionTool)) {
+				continue;
+			}
+			ItemUnprotectedPositionTool item = (ItemUnprotectedPositionTool) stack.getItem();
+
+			double x = mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * event.getPartialTicks();
+			double y = mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * event.getPartialTicks();
+			double z = mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * event.getPartialTicks();
+			double d1 = 1.0D / 1024.0D;
+			double d2 = 1.0D + d1;
+			double d3 = 1.0D / 512.0D;
+			double d4 = 1.0D + d3;
+
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder bufferbuilder = tessellator.getBuffer();
+
+			GlStateManager.glLineWidth(2.0F);
+			GlStateManager.disableTexture2D();
+			GlStateManager.depthMask(false);
+			GlStateManager.enableBlend();
+			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+			GlStateManager.disableTexture2D();
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+			GlStateManager.color(0.0F, 0.0F, 1.0F, 0.5F);
+			bufferbuilder.setTranslation(-x, -y, -z);
+			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+			item.getPositions(stack).forEach(pos -> {
+				renderBox(bufferbuilder, pos.getX() - d1, pos.getY() - d1, pos.getZ() - d1, pos.getX() + d2, pos.getY() + d2, pos.getZ() + d2);
+			});
+			tessellator.draw();
+			GlStateManager.color(0.0F, 0.0F, 1.0F, 1.0F);
+			bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+			item.getPositions(stack).forEach(pos -> {
+				renderBoxOutline(bufferbuilder, pos.getX() - d3, pos.getY() - d3, pos.getZ() - d3, pos.getX() + d4, pos.getY() + d4, pos.getZ() + d4);
+			});
+			tessellator.draw();
+			bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+			GlStateManager.enableTexture2D();
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+			GlStateManager.disableBlend();
+			GlStateManager.depthMask(true);
+			GlStateManager.enableTexture2D();
+			GlStateManager.glLineWidth(1.0F);
+		}
+	}
+
+	private static void renderBoxOutline(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y1, z1).endVertex();
+
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+	}
+
+	private static void renderBox(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
+		// down
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+
+		// south
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+
+		// north
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+
+		// up
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+
+		// west
+		buffer.pos(x1, y1, z1).endVertex();
+		buffer.pos(x1, y1, z2).endVertex();
+		buffer.pos(x1, y2, z2).endVertex();
+		buffer.pos(x1, y2, z1).endVertex();
+
+		// east
+		buffer.pos(x2, y1, z2).endVertex();
+		buffer.pos(x2, y1, z1).endVertex();
+		buffer.pos(x2, y2, z1).endVertex();
+		buffer.pos(x2, y2, z2).endVertex();
 	}
 
 }
