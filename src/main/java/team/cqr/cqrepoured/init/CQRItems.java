@@ -60,6 +60,7 @@ import team.cqr.cqrepoured.objects.items.ItemSpikedGlove;
 import team.cqr.cqrepoured.objects.items.ItemStructureSelector;
 import team.cqr.cqrepoured.objects.items.ItemSuperTool;
 import team.cqr.cqrepoured.objects.items.ItemTeleportStone;
+import team.cqr.cqrepoured.objects.items.ItemUnprotectedPositionTool;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorBull;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorHeavy;
@@ -279,6 +280,7 @@ public class CQRItems {
 	public static final Item PATH_TOOL = Null();
 	public static final Item DUMMY_SHIELD = Null();
 	public static final Item ALCHEMY_BAG = Null();
+	public static final Item UNPROTECTED_POSITIONS_TOOL = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
@@ -414,7 +416,8 @@ public class CQRItems {
 					setItemNameAndTab(new ItemBadge(), "badge", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setItemNameAndTab(new ItemPathTool(), "path_tool", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setItemNameAndTab(new ItemShieldDummy(), "dummy_shield", CQRMain.CQR_CREATIVE_TOOL_TAB),
-					setItemNameAndTab(new ItemAlchemyBag(), "alchemy_bag", CQRMain.CQR_CREATIVE_TOOL_TAB) };
+					setItemNameAndTab(new ItemAlchemyBag(), "alchemy_bag", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setItemNameAndTab(new ItemUnprotectedPositionTool(), "unprotected_positions_tool", CQRMain.CQR_CREATIVE_TOOL_TAB) };
 
 			IForgeRegistry<Item> registry = event.getRegistry();
 

@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.client.gui;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -9,8 +10,11 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.client.config.ConfigGuiType;
+import net.minecraftforge.fml.client.config.DummyConfigElement.DummyListElement;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import net.minecraftforge.fml.client.config.GuiEditArray;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.util.GuiHelper;
@@ -19,16 +23,30 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 @SideOnly(Side.CLIENT)
 public class GuiExporter extends GuiScreen {
 
-	private boolean saveStructOnExit = false;
-	private TileEntityExporter exporter;
+	private final TileEntityExporter exporter;
+	private final DummyListElement unprotectedBlocksConfig;
 
 	private GuiButtonExt btnExport;
-	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ, edtUnprotectedBlocks;
-	private GuiCheckBox chbxRelativeMode, chbxIgnoreEntities;
+	private GuiButtonExt btnUnprotectedBlocks;
+	private GuiTextField edtName;
+	private GuiTextField edtEndX;
+	private GuiTextField edtEndY;
+	private GuiTextField edtEndZ;
+	private GuiTextField edtStartX;
+	private GuiTextField edtStartY;
+	private GuiTextField edtStartZ;
+	private GuiCheckBox chbxRelativeMode;
+	private GuiCheckBox chbxIgnoreEntities;
+
+	private boolean saveStructOnExit = false;
 
 	public GuiExporter(TileEntityExporter exporter) {
 		this.mc = Minecraft.getMinecraft();
 		this.exporter = exporter;
+		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> {
+			return String.format("%d %d %d", p.getX(), p.getY(), p.getZ());
+		}).toArray(String[]::new);
+		this.unprotectedBlocksConfig = new DummyListElement("test", unprotectedBlocks, ConfigGuiType.STRING, "test");
 	}
 
 	public void sync() {
@@ -41,25 +59,10 @@ public class GuiExporter extends GuiScreen {
 		this.edtName.setText(this.exporter.getStructureName());
 		this.chbxRelativeMode.setIsChecked(this.exporter.isRelativeMode());
 		this.chbxIgnoreEntities.setIsChecked(this.exporter.isIgnoreEntities());
-		StringBuilder sb = new StringBuilder();
-		BlockPos[] arr = this.exporter.getUnprotectedBlocks();
-		if (arr.length > 0) {
-			sb.append(arr[0].getX());
-			sb.append(',');
-			sb.append(arr[0].getY());
-			sb.append(',');
-			sb.append(arr[0].getZ());
-			for (int i = 1; i < arr.length; i++) {
-				sb.append(';');
-				sb.append(' ');
-				sb.append(arr[i].getX());
-				sb.append(',');
-				sb.append(arr[i].getY());
-				sb.append(',');
-				sb.append(arr[i].getZ());
-			}
-		}
-		this.edtUnprotectedBlocks.setText(sb.toString());
+		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> {
+			return String.format("%d %d %d", p.getX(), p.getY(), p.getZ());
+		}).toArray(String[]::new);
+		this.unprotectedBlocksConfig.set(unprotectedBlocks);
 	}
 
 	@Override
@@ -86,32 +89,14 @@ public class GuiExporter extends GuiScreen {
 		this.chbxRelativeMode = new GuiCheckBox(index++, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.isRelativeMode());
 		this.chbxIgnoreEntities = new GuiCheckBox(index++, this.width / 2 - 70, this.height / 2 + 40, "Ignore Entities", this.exporter.isIgnoreEntities());
 
-		this.edtUnprotectedBlocks = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 60, 140, 20);
-		StringBuilder sb = new StringBuilder();
-		BlockPos[] arr = this.exporter.getUnprotectedBlocks();
-		if (arr.length > 0) {
-			sb.append(arr[0].getX());
-			sb.append(',');
-			sb.append(arr[0].getY());
-			sb.append(',');
-			sb.append(arr[0].getZ());
-			for (int i = 1; i < arr.length; i++) {
-				sb.append(';');
-				sb.append(' ');
-				sb.append(arr[i].getX());
-				sb.append(',');
-				sb.append(arr[i].getY());
-				sb.append(',');
-				sb.append(arr[i].getZ());
-			}
-		}
-		this.edtUnprotectedBlocks.setText(sb.toString());
-
 		this.btnExport = new GuiButtonExt(index++, this.width / 2 - 70, this.height / 2 + 90, 140, 20, "Export");
+
+		this.btnUnprotectedBlocks = new GuiButtonExt(index, this.width / 2 - 70, this.height / 2 + 60, 140, 20, "Unprotected Blocks");
 
 		this.buttonList.add(this.chbxRelativeMode);
 		this.buttonList.add(this.chbxIgnoreEntities);
 		this.buttonList.add(this.btnExport);
+		this.buttonList.add(this.btnUnprotectedBlocks);
 	}
 
 	@Override
@@ -127,19 +112,13 @@ public class GuiExporter extends GuiScreen {
 			int endX = Integer.parseInt(this.edtEndX.getText());
 			int endY = Integer.parseInt(this.edtEndY.getText());
 			int endZ = Integer.parseInt(this.edtEndZ.getText());
-			BlockPos[] unprotectedBlocks;
-			if (!this.edtUnprotectedBlocks.getText().isEmpty()) {
-				String[] arr = this.edtUnprotectedBlocks.getText().split(";");
-				unprotectedBlocks = new BlockPos[arr.length];
-				for (int i = 0; i < arr.length; i++) {
-					String[] arr1 = arr[i].split(",");
-					unprotectedBlocks[i] = new BlockPos(Integer.parseInt(arr1[0].trim()), Integer.parseInt(arr1[1].trim()), Integer.parseInt(arr1[2].trim()));
-				}
-			} else {
-				unprotectedBlocks = new BlockPos[0];
-			}
+			BlockPos[] unprotectedBlocks = Arrays.stream(this.unprotectedBlocksConfig.getDefaults()).map(obj -> {
+				String[] arr = ((String) obj).split(" ");
+				return new BlockPos(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+			}).toArray(BlockPos[]::new);
 
-			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked(), unprotectedBlocks);
+			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(),
+					this.chbxIgnoreEntities.isChecked(), unprotectedBlocks);
 
 			if (this.saveStructOnExit) {
 				this.exporter.saveStructure(this.mc.player);
@@ -154,7 +133,13 @@ public class GuiExporter extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.edtName.isFocused() || this.edtStartX.isFocused() || this.edtStartY.isFocused() || this.edtStartZ.isFocused() || this.edtEndX.isFocused() || this.edtEndY.isFocused() || this.edtEndZ.isFocused() || this.edtUnprotectedBlocks.isFocused()) {
+		if (this.edtName.isFocused()
+				|| this.edtStartX.isFocused()
+				|| this.edtStartY.isFocused()
+				|| this.edtStartZ.isFocused()
+				|| this.edtEndX.isFocused()
+				|| this.edtEndY.isFocused()
+				|| this.edtEndZ.isFocused()) {
 			if (keyCode == 1) {
 				this.edtName.setFocused(false);
 				this.edtStartX.setFocused(false);
@@ -163,7 +148,6 @@ public class GuiExporter extends GuiScreen {
 				this.edtEndX.setFocused(false);
 				this.edtEndY.setFocused(false);
 				this.edtEndZ.setFocused(false);
-				this.edtUnprotectedBlocks.setFocused(false);
 			} else {
 				this.edtName.textboxKeyTyped(typedChar, keyCode);
 				if (GuiHelper.isValidCharForNumberTextField(typedChar, keyCode, true, false)) {
@@ -174,7 +158,6 @@ public class GuiExporter extends GuiScreen {
 					this.edtEndY.textboxKeyTyped(typedChar, keyCode);
 					this.edtEndZ.textboxKeyTyped(typedChar, keyCode);
 				}
-				this.edtUnprotectedBlocks.textboxKeyTyped(typedChar, keyCode);
 			}
 		} else if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
 			this.mc.player.closeScreen();
@@ -196,8 +179,6 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartX.mouseClicked(mouseX, mouseY, mouseButton);
 		this.edtStartY.mouseClicked(mouseX, mouseY, mouseButton);
 		this.edtStartZ.mouseClicked(mouseX, mouseY, mouseButton);
-
-		this.edtUnprotectedBlocks.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
@@ -213,8 +194,6 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartX.updateCursorCounter();
 		this.edtStartY.updateCursorCounter();
 		this.edtStartZ.updateCursorCounter();
-
-		this.edtUnprotectedBlocks.updateCursorCounter();
 	}
 
 	@Override
@@ -231,8 +210,6 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartX.drawTextBox();
 		this.edtStartY.drawTextBox();
 		this.edtStartZ.drawTextBox();
-
-		this.edtUnprotectedBlocks.drawTextBox();
 
 		this.drawString(this.fontRenderer, "Structure Name", this.width / 2 - 70, this.height / 2 - 80, 0xA0A0A0);
 
@@ -263,6 +240,8 @@ public class GuiExporter extends GuiScreen {
 		if (button == this.btnExport) {
 			this.saveStructOnExit = true;
 			this.mc.player.closeScreen();
+		} else if (button == this.btnUnprotectedBlocks) {
+			this.mc.displayGuiScreen(new GuiEditArray(this, this.unprotectedBlocksConfig, 0, this.unprotectedBlocksConfig.getDefaults(), true));
 		} else {
 			super.actionPerformed(button);
 			if (button == this.chbxRelativeMode) {

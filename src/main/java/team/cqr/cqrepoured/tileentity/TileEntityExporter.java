@@ -306,6 +306,10 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		return this.relativeMode.getBoolean();
 	}
 
+	public void setUnprotectedBlocks(BlockPos[] unprotectedBlocks) {
+		this.unprotectedBlocks.set(unprotectedBlocks);
+	}
+
 	public BlockPos[] getUnprotectedBlocks() {
 		return this.unprotectedBlocks.get();
 	}
