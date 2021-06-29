@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
@@ -55,6 +56,18 @@ public class DungeonRegistry {
 
 		for (DungeonBase dungeon : this.dungeons) {
 			if (dungeon.canSpawnAtPos(world, pos, isChunkBehindWall)) {
+				dungeonsForChunk.add(dungeon, dungeon.getWeight());
+			}
+		}
+
+		return dungeonsForChunk;
+	}
+
+	public CQRWeightedRandom<DungeonBase> getDungeonsForDimBiome(int dim, Biome biome) {
+		CQRWeightedRandom<DungeonBase> dungeonsForChunk = new CQRWeightedRandom<>();
+
+		for (DungeonBase dungeon : this.dungeons) {
+			if (dungeon.canSpawnAtDimBiome(dim, biome)) {
 				dungeonsForChunk.add(dungeon, dungeon.getWeight());
 			}
 		}

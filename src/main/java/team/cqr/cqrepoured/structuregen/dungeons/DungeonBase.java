@@ -257,6 +257,25 @@ public abstract class DungeonBase {
 		return this.isValidBiome(world.getBiome(pos));
 	}
 
+	public boolean canSpawnAtDimBiome(int dim, Biome biome) {
+		if (!this.enabled) {
+			return false;
+		}
+		if (this.weight <= 0) {
+			return false;
+		}
+		if (this.chance <= 0) {
+			return false;
+		}
+		if (this.isModDependencyMissing()) {
+			return false;
+		}
+		if (!this.isValidDim(dim)) {
+			return false;
+		}
+		return this.isValidBiome(biome);
+	}
+
 	public boolean canSpawnInChunkWithLockedPosition(World world, int chunkX, int chunkZ) {
 		if (!this.enabled) {
 			return false;

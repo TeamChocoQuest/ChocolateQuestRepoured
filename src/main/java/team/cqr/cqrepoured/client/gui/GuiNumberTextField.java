@@ -27,6 +27,10 @@ public class GuiNumberTextField extends GuiTextField {
 		return Integer.parseInt(this.getText());
 	}
 
+	public long getLong() throws NumberFormatException {
+		return Long.parseLong(this.getText());
+	}
+
 	public double getDouble() throws NumberFormatException {
 		return Double.parseDouble(this.getText());
 	}
