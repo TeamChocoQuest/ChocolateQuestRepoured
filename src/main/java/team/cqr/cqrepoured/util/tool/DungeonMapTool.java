@@ -115,9 +115,9 @@ public class DungeonMapTool {
 
 			int scale = 4;
 			for (int x = -radiusC; x <= radiusC; x++) {
-				int x1 = ((x + radiusC) << 4) + 8;
+				int x1 = ((MathHelper.intFloorDiv(x, distance) * distance + radiusC) << 4) + 8;
 				for (int z = -radiusC; z <= radiusC; z++) {
-					int z1 = ((z + radiusC) << 4) + 8;
+					int z1 = ((MathHelper.intFloorDiv(z, distance) * distance + radiusC) << 4) + 8;
 					Biome biome = biomes[z1 * sizeB + x1];
 					DungeonBase dungeonAtPosOldGen = canGenerateDungeonAtOldGen(biome, x, z);
 					DungeonBase dungeonAtPosNewGen = canGenerateDungeonAtNewGen(biome, x, z);
@@ -232,7 +232,7 @@ public class DungeonMapTool {
 		if (!canSpawnStructureAtCoords(chunkX, chunkZ)) {
 			return null;
 		}
-		RAND.setSeed(getSeed(seed, chunkX, chunkZ));
+		RAND.setSeed(getSeed(seed, MathHelper.intFloorDiv(chunkX, distance) * distance, MathHelper.intFloorDiv(chunkZ, distance) * distance));
 		if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, RAND)) {
 			return null;
 		}
@@ -243,8 +243,7 @@ public class DungeonMapTool {
 			return null;
 		}
 		if (!DungeonGenUtils.percentageRandom((double) dungeon.getChance()
-				/ Math.min(1.0D,
-						rarityDivisor * (double) dungeon.getWeight() / (double) possibleDungeons.getTotalWeight())
+				/ Math.pow((double) dungeon.getWeight() / (double) possibleDungeons.getTotalWeight(), rarityDivisor)
 				/ 100.0D, RAND)) {
 			return null;
 		}
