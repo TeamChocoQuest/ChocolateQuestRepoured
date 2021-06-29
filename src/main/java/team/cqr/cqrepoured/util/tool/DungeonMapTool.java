@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.util.tool;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
@@ -143,6 +146,10 @@ public class DungeonMapTool {
 								}
 							}
 						}
+						Graphics2D graphics = imageOldGen.createGraphics();
+						graphics.setColor(Color.BLACK);
+						graphics.setFont(new Font("Arial", Font.BOLD, 24));
+						graphics.drawString(dungeonAtPosOldGen.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 					}
 					if (dungeonAtPosNewGen != null) {
 						dungeonCountMapNewGen.put(dungeonAtPosNewGen,
@@ -168,6 +175,10 @@ public class DungeonMapTool {
 								}
 							}
 						}
+						Graphics2D graphics = imageNewGen.createGraphics();
+						graphics.setColor(Color.BLACK);
+						graphics.setFont(new Font("Arial", Font.BOLD, 24));
+						graphics.drawString(dungeonAtPosNewGen.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 					}
 				}
 			}
