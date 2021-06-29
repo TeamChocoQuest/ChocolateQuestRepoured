@@ -11,6 +11,8 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.gui.GuiDungeonMapTool;
 import team.cqr.cqrepoured.structuregen.DungeonRegistry;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -25,6 +27,17 @@ public class GuiEventHandler {
 				Minecraft mc = Minecraft.getMinecraft();
 				ScaledResolution scaled = new ScaledResolution(mc);
 				event.getButtonList().add(new GuiButtonReloadDungeons(0, scaled.getScaledWidth() - 102, 2, 100, 20, "Reload Dungeons", gui, mc.world == null));
+
+				if (CQRMain.isWorkspaceEnvironment) {
+					event.getButtonList().add(new GuiButton(1, 2, 2, 100, 20, "Map Tool") {
+						@Override
+						public void mouseReleased(int mouseX, int mouseY) {
+							if (this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height) {
+								mc.displayGuiScreen(new GuiDungeonMapTool(gui));
+							}
+						}
+					});
+				}
 			}
 		}
 	}
