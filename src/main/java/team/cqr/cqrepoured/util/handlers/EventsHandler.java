@@ -8,6 +8,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -26,6 +27,7 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -313,6 +315,15 @@ public class EventsHandler {
 				continue;
 			}
 			entity.setAttackTarget(target);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingFallEvent(LivingFallEvent event) {
+		EntityLivingBase entity = event.getEntityLiving();
+		ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+		if (stack.getItem() == CQRItems.BOOTS_CLOUD) {
+			event.setDistance(0.0F);
 		}
 	}
 
