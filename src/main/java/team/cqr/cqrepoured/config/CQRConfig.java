@@ -238,6 +238,10 @@ public class CQRConfig {
 		@Config.Comment("Distance in chunks between each dungeon. Recommend to not set this a value lower than 10.")
 		@Config.RangeInt(min = 1, max = 1000)
 		public int dungeonSeparation = 20;
+		@Config.RangeInt(min = 0, max = 1000)
+		public int dungeonSpread = 0;
+		@Config.RangeDouble(min = 0.0D)
+		public double dungeonRarityFactor = 0.0D;
 		@Config.Comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.")
 		@Config.RangeInt(min = 0, max = 1000)
 		public int dungeonSpawnDistance = 25;

@@ -46,7 +46,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				false, true);
 
 		this.textFieldRadius.setText("100");
-		this.textFieldSeed.setText("0");
+		this.textFieldSeed.setText(Long.toString(this.mc.getIntegratedServer() != null ? this.mc.getIntegratedServer().getWorld(0).getSeed() : 0L));
 		this.textFieldDistance.setText("20");
 		this.textFieldSpread.setText("0");
 		this.textFieldRarityDivisor.setText("0.0");

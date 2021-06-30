@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.command;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -18,13 +17,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.integration.IntegrationInformation;
 import team.cqr.cqrepoured.structuregen.DungeonRegistry;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.VanillaStructureHelper;
 
 public class CommandLocateDungeon extends CommandBase {
 
@@ -86,16 +81,6 @@ public class CommandLocateDungeon extends CommandBase {
 			return null;
 		}
 
-		int dim = world.provider.getDimension();
-		if (dungeonToSearchFor != null && DungeonRegistry.getInstance().getDungeons().stream().noneMatch(dungeon -> dungeon.canSpawnInDim(dim) && dungeon.getDungeonName().equals(dungeonToSearchFor))) {
-			return null;
-		}
-
-		int spawnX = DungeonGenUtils.getSpawnX(world) >> 4;
-		int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4;
-		Random rand = new Random();
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			return null;
 		}
@@ -104,6 +89,13 @@ public class CommandLocateDungeon extends CommandBase {
 			return null;
 		}
 
+		int dim = world.provider.getDimension();
+		DungeonRegistry registry = DungeonRegistry.getInstance();
+		if (registry.getDungeons().stream().noneMatch(dungeon -> dungeon.canSpawnInDim(dim) && dungeon.getDungeonName().equals(dungeonToSearchFor))) {
+			return null;
+		}
+
+		WorldDungeonGenerator.setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, false);
 		for (int r = 0; r <= chunkRadius; r++) {
 			int startX = chunkX - r;
 			int endX = chunkX + r;
@@ -118,62 +110,7 @@ public class CommandLocateDungeon extends CommandBase {
 						continue;
 					}
 
-					if (DungeonGenUtils.isInWallRange(world, x, z)) {
-						continue;
-					}
-
-					int dungeonSeparation = CQRConfig.general.dungeonSeparation;
-
-					if (CQRConfig.wall.enabled && z < -CQRConfig.wall.distance && CQRConfig.general.moreDungeonsBehindWall) {
-						dungeonSeparation = MathHelper.ceil((double) dungeonSeparation / CQRConfig.general.densityBehindWallFactor);
-					}
-
-					if ((x - spawnX) % dungeonSeparation != 0 || (z - spawnZ) % dungeonSeparation != 0) {
-						continue;
-					}
-
-					if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, x, z)) {
-						continue;
-					}
-
-					if (!DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, x, z, dungeonSeparation)) {
-						continue;
-					}
-
-					boolean isChunkGenerated = world.isChunkGeneratedAt(x, z);
-
-					if (searchForGeneratedDungeon && !searchForNotGeneratedDungeon && !isChunkGenerated) {
-						continue;
-					}
-
-					if (!searchForGeneratedDungeon && searchForNotGeneratedDungeon && isChunkGenerated) {
-						continue;
-					}
-
-					mutablePos.setPos((x << 4) + 8, 64, (z << 4) + 8);
-
-					if (CQRConfig.advanced.generationRespectOtherStructures) {
-						if (VanillaStructureHelper.isStructureInRange(world, mutablePos, MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16.0D))) {
-							continue;
-						}
-
-						if (IntegrationInformation.isAW2StructureAlreadyThere(mutablePos.getX(), 64, mutablePos.getZ(), world)) {
-							continue;
-						}
-					}
-
-					rand.setSeed(WorldDungeonGenerator.getSeed(world, (x << 4) + 8, (z << 4) + 8));
-
-					if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
-						continue;
-					}
-
-					CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForPos(world, mutablePos);
-					DungeonBase dungeon = possibleDungeons.next(rand);
-
-					if (dungeon == null || !DungeonGenUtils.percentageRandom(dungeon.getChance(), rand)) {
-						continue;
-					}
+					DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(world, chunkX, chunkZ);
 
 					if (dungeonToSearchFor != null && !dungeon.getDungeonName().equals(dungeonToSearchFor)) {
 						continue;

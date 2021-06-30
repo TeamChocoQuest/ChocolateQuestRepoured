@@ -8,33 +8,31 @@ import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.init.Biomes;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameType;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.layer.IntCache;
+import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraft.world.storage.WorldInfo;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.structuregen.DungeonRegistry;
+import net.minecraftforge.common.DimensionManager;
+import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class DungeonMapTool {
 
-	private static final Random RAND = new Random();
-	private static final Random RAND1 = new Random();
 	private static final BufferedImage[] icons = IntStream.range(0, 20).mapToObj(i -> {
 		try {
 			String path = new File("").getAbsolutePath();
@@ -46,12 +44,7 @@ public class DungeonMapTool {
 		}
 	}).toArray(BufferedImage[]::new);
 
-	private static long seed;
-	private static int distance;
-	private static int spread;
-	private static double rarityDivisor;
-
-	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityDivisorIn) {
+	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityFactorIn) {
 		try {
 			hardResetIntCache();
 
@@ -68,10 +61,6 @@ public class DungeonMapTool {
 			long start = System.currentTimeMillis();
 			long t = start;
 
-			seed = seedIn;
-			distance = distanceIn;
-			spread = Math.min(spreadIn + 1, distance);
-			rarityDivisor = rarityDivisorIn;
 			int sizeC = radiusC * 2 + 1;
 			int radiusB = radiusC << 4;
 			int sizeB = sizeC << 4;
@@ -83,25 +72,28 @@ public class DungeonMapTool {
 			System.out.println(String.format("0: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
 			t = System.currentTimeMillis();
 
-			WorldSettings worldSettings = new WorldSettings(seed, GameType.CREATIVE, false, false, WorldType.DEFAULT);
-			WorldInfo worldInfo = new WorldInfo(worldSettings, "test");
-			BiomeProvider biomeProvider = new BiomeProvider(worldInfo);
-			Biome[] biomes = biomeProvider.getBiomes(null, -radiusB, -radiusB, sizeB, sizeB, false);
+			WorldSettings worldSettings = new WorldSettings(seedIn, GameType.CREATIVE, true, false, WorldType.DEFAULT);
+			DummyWorld world = new DummyWorld(worldSettings, 0, -radiusB, -radiusB, sizeB, sizeB);
 
 			System.out.println(String.format("1: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
 			t = System.currentTimeMillis();
 
-			int gridSize = distance << 4;
+			int gridSizeOldGen = 20 << 4;
+			int gridSizeNewGen = distanceIn << 4;
 			for (int x = 0; x < sizeB; x++) {
-				boolean flag = Math.floorMod(x - 8 + 1, gridSize) <= 1;
+				boolean flagOldGen = Math.floorMod(x - 8 + 1, gridSizeOldGen) <= 1;
+				boolean flagNewGen = Math.floorMod(x - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1;
 				for (int z = 0; z < sizeB; z++) {
 					int i = z * sizeB + x;
-					if (flag || Math.floorMod(z - 8 + 1, gridSize) <= 1) {
+					int biomeColor = world.getBiome(x - radiusB, z - radiusB).getGrassColorAtPos(BlockPos.ORIGIN);
+					if (flagOldGen || Math.floorMod(z - 8 + 1, gridSizeOldGen) <= 1) {
 						dataOldGen.setElem(i, 0x0F0F0F);
+					} else {
+						dataOldGen.setElem(i, biomeColor);
+					}
+					if (flagNewGen || Math.floorMod(z - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1) {
 						dataNewGen.setElem(i, 0x0F0F0F);
 					} else {
-						int biomeColor = biomes[i].getGrassColorAtPos(BlockPos.ORIGIN);
-						dataOldGen.setElem(i, biomeColor);
 						dataNewGen.setElem(i, biomeColor);
 					}
 				}
@@ -115,12 +107,11 @@ public class DungeonMapTool {
 
 			int scale = 4;
 			for (int x = -radiusC; x <= radiusC; x++) {
-				int x1 = ((MathHelper.intFloorDiv(x, distance) * distance + radiusC) << 4) + 8;
 				for (int z = -radiusC; z <= radiusC; z++) {
-					int z1 = ((MathHelper.intFloorDiv(z, distance) * distance + radiusC) << 4) + 8;
-					Biome biome = biomes[z1 * sizeB + x1];
-					DungeonBase dungeonAtPosOldGen = canGenerateDungeonAtOldGen(biome, x, z);
-					DungeonBase dungeonAtPosNewGen = canGenerateDungeonAtNewGen(biome, x, z);
+					WorldDungeonGenerator.setup(20, 0, 0.0D, false);
+					DungeonBase dungeonAtPosOldGen = WorldDungeonGenerator.getDungeonAt(world, x, z);
+					WorldDungeonGenerator.setup(distanceIn, spreadIn, rarityFactorIn, false);
+					DungeonBase dungeonAtPosNewGen = WorldDungeonGenerator.getDungeonAt(world, x, z);
 
 					if (dungeonAtPosOldGen != null) {
 						dungeonCountMapOldGen.put(dungeonAtPosOldGen,
@@ -208,91 +199,53 @@ public class DungeonMapTool {
 		}
 	}
 
-	private static DungeonBase canGenerateDungeonAtOldGen(Biome biome, int chunkX, int chunkZ) {
-		if (chunkX % distance != 0 || chunkZ % distance != 0) {
-			return null;
-		}
-		RAND.setSeed(getSeed(seed, chunkX, chunkZ));
-		if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, RAND)) {
-			return null;
-		}
-		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForDimBiome(0,
-				biome);
-		DungeonBase dungeon = possibleDungeons.next(RAND);
-		if (dungeon == null) {
-			return null;
-		}
-		if (!DungeonGenUtils.percentageRandom((double) dungeon.getChance() / 100.0D, RAND)) {
-			return null;
-		}
-		return dungeon;
-	}
-
-	private static DungeonBase canGenerateDungeonAtNewGen(Biome biome, int chunkX, int chunkZ) {
-		if (!canSpawnStructureAtCoords(chunkX, chunkZ)) {
-			return null;
-		}
-		RAND.setSeed(getSeed(seed, MathHelper.intFloorDiv(chunkX, distance) * distance, MathHelper.intFloorDiv(chunkZ, distance) * distance));
-		if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, RAND)) {
-			return null;
-		}
-		CQRWeightedRandom<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForDimBiome(0,
-				biome);
-		DungeonBase dungeon = possibleDungeons.next(RAND);
-		if (dungeon == null) {
-			return null;
-		}
-		if (!DungeonGenUtils.percentageRandom((double) dungeon.getChance()
-				/ Math.pow((double) dungeon.getWeight() / (double) possibleDungeons.getTotalWeight(), rarityDivisor)
-				/ 100.0D, RAND)) {
-			return null;
-		}
-		return dungeon;
-	}
-
-	private static long getSeed(long seed, int chunkX, int chunkZ) {
-		long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1094792450L;
-		long result = xorShift64(mix);
-
-		return seed + result;
-	}
-
-	private static long xorShift64(long x) {
-		x ^= x << 21;
-		x ^= x >>> 35;
-		x ^= x << 4;
-		return x;
-	}
-
-	public static boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
-		int cx = chunkX;
-		int cz = chunkZ;
-		if (spread <= 1) {
-			return cx % distance == 0 && cz % distance == 0;
-		}
-
-		int x = MathHelper.intFloorDiv(cx, distance);
-		int z = MathHelper.intFloorDiv(cz, distance);
-		Random random = setRandomSeed(x, z, 10387312);
-		x *= distance;
-		z *= distance;
-		x += random.nextInt(spread);
-		z += random.nextInt(spread);
-		return x == cx && z == cz;
-	}
-
-	public static Random setRandomSeed(int seedX, int seedY, int seedZ) {
-		long j2 = (long) seedX * 341873128712L + (long) seedY * 132897987541L + seed + (long) seedZ;
-		RAND1.setSeed(j2);
-		return RAND1;
-	}
-
 	private static void hardResetIntCache() {
 		new ReflectionField<Integer>(IntCache.class, "", "intCacheSize").set(null, 256);
 		new ReflectionField<List<int[]>>(IntCache.class, "", "freeSmallArrays").get(null).clear();
 		new ReflectionField<List<int[]>>(IntCache.class, "", "inUseSmallArrays").get(null).clear();
 		new ReflectionField<List<int[]>>(IntCache.class, "", "freeLargeArrays").get(null).clear();
 		new ReflectionField<List<int[]>>(IntCache.class, "", "inUseLargeArrays").get(null).clear();
+	}
+
+	public static class DummyWorld extends World {
+
+		private final Biome[] biomes;
+		private final int x;
+		private final int z;
+		private final int w;
+		private final int l;
+
+		protected DummyWorld(WorldSettings settings, int dimension, int x, int z, int w, int l) {
+			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"), DimensionManager.getProviderType(dimension).createDimension(), new Profiler(), true);
+			this.provider.setWorld(this);
+			this.biomes = this.provider.getBiomeProvider().getBiomes(null, x, z, w, l, false);
+			this.x = x;
+			this.z = z;
+			this.w = w;
+			this.l = l;
+		}
+
+		@Override
+		protected IChunkProvider createChunkProvider() {
+			return null;
+		}
+
+		@Override
+		protected boolean isChunkLoaded(int x, int z, boolean allowEmpty) {
+			return false;
+		}
+
+		@Override
+		public Biome getBiome(BlockPos pos) {
+			int i = pos.getZ() * this.l + pos.getX();
+			return i >= 0 && i < this.biomes.length ? this.biomes[i] : Biomes.PLAINS;
+		}
+
+		public Biome getBiome(int x, int z) {
+			int i = (z - this.z) * this.l + (x - this.x);
+			return i >= 0 && i < this.biomes.length ? this.biomes[i] : Biomes.PLAINS;
+		}
+
 	}
 
 }

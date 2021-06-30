@@ -17,7 +17,6 @@ import org.apache.commons.io.FileUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -229,7 +228,7 @@ public abstract class DungeonBase {
 		return this.isValidDim(dim);
 	}
 
-	public boolean canSpawnAtPos(World world, BlockPos pos, boolean behindWall) {
+	public boolean canSpawnAt(World world, Biome biome, int chunkX, int chunkZ) {
 		if (!this.enabled) {
 			return false;
 		}
@@ -251,26 +250,7 @@ public abstract class DungeonBase {
 		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
-		if (world.provider.getDimension() == 0 && this.spawnOnlyBehindWall && !behindWall) {
-			return false;
-		}
-		return this.isValidBiome(world.getBiome(pos));
-	}
-
-	public boolean canSpawnAtDimBiome(int dim, Biome biome) {
-		if (!this.enabled) {
-			return false;
-		}
-		if (this.weight <= 0) {
-			return false;
-		}
-		if (this.chance <= 0) {
-			return false;
-		}
-		if (this.isModDependencyMissing()) {
-			return false;
-		}
-		if (!this.isValidDim(dim)) {
+		if (this.spawnOnlyBehindWall && world.provider.getDimension() == 0 && CQRConfig.wall.enabled && chunkZ < -CQRConfig.wall.distance) {
 			return false;
 		}
 		return this.isValidBiome(biome);
