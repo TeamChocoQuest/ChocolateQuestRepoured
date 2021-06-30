@@ -8,6 +8,7 @@ import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -28,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraft.world.storage.SaveHandlerMP;
@@ -37,6 +39,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class DungeonMapTool {
@@ -82,27 +85,42 @@ public class DungeonMapTool {
 
 			WorldSettings worldSettings = new WorldSettings(seedIn, GameType.CREATIVE, true, false, WorldType.DEFAULT);
 			DummyWorld world = new DummyWorld(worldSettings, 0, -radiusB, -radiusB, sizeB, sizeB);
+			world.getSpawnPoint();
 
 			System.out.println(String.format("1: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
 			t = System.currentTimeMillis();
 
+			int spawnX = DungeonGenUtils.getSpawnX(world) >> 4 << 4;
+			int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4 << 4;
 			int gridSizeOldGen = 20 << 4;
 			int gridSizeNewGen = distanceIn << 4;
 			for (int x = 0; x < sizeB; x++) {
-				boolean flagOldGen = Math.floorMod(x - 8 + 1, gridSizeOldGen) <= 1;
-				boolean flagNewGen = Math.floorMod(x - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1;
+				boolean flagOldGen = Math.floorMod(x - radiusB - spawnX - 8 + 1, gridSizeOldGen) <= 1;
+				boolean flagNewGen = Math.floorMod(x - radiusB - spawnX - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1;
 				for (int z = 0; z < sizeB; z++) {
 					int i = z * sizeB + x;
 					int biomeColor = color(world, world.getBiome(x - radiusB, z - radiusB));
-					if (flagOldGen || Math.floorMod(z - 8 + 1, gridSizeOldGen) <= 1) {
+					if (flagOldGen || Math.floorMod(z - radiusB - spawnZ - 8 + 1, gridSizeOldGen) <= 1) {
 						dataOldGen.setElem(i, 0x0F0F0F);
 					} else {
 						dataOldGen.setElem(i, biomeColor);
 					}
-					if (flagNewGen || Math.floorMod(z - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1) {
+					if (flagNewGen || Math.floorMod(z - radiusB - spawnZ - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1) {
 						dataNewGen.setElem(i, 0x0F0F0F);
 					} else {
 						dataNewGen.setElem(i, biomeColor);
+					}
+				}
+			}
+
+			for (int x = 2; x < 14; x++) {
+				int ix = x + radiusB + spawnX;
+				for (int z = 2; z < 14; z++) {
+					int iz = z + radiusB + spawnZ;
+					int i = iz * sizeB + ix;
+					if (i >= 0 && i < sizeB * sizeB) {
+						dataOldGen.setElem(i, 0xFF0000);
+						dataNewGen.setElem(i, 0xFF0000);
 					}
 				}
 			}
@@ -122,8 +140,7 @@ public class DungeonMapTool {
 					DungeonBase dungeonAtPosNewGen = WorldDungeonGenerator.getDungeonAt(world, x, z);
 
 					if (dungeonAtPosOldGen != null) {
-						dungeonCountMapOldGen.put(dungeonAtPosOldGen,
-								dungeonCountMapOldGen.getInt(dungeonAtPosOldGen) + 1);
+						dungeonCountMapOldGen.put(dungeonAtPosOldGen, dungeonCountMapOldGen.getInt(dungeonAtPosOldGen) + 1);
 						BufferedImage icon = icons[dungeonAtPosOldGen.getIconID()];
 						int width = icon.getWidth();
 						int height = icon.getHeight();
@@ -151,8 +168,7 @@ public class DungeonMapTool {
 						graphics.drawString(dungeonAtPosOldGen.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 					}
 					if (dungeonAtPosNewGen != null) {
-						dungeonCountMapNewGen.put(dungeonAtPosNewGen,
-								dungeonCountMapNewGen.getInt(dungeonAtPosNewGen) + 1);
+						dungeonCountMapNewGen.put(dungeonAtPosNewGen, dungeonCountMapNewGen.getInt(dungeonAtPosNewGen) + 1);
 						BufferedImage icon = icons[dungeonAtPosNewGen.getIconID()];
 						int width = icon.getWidth();
 						int height = icon.getHeight();
@@ -292,19 +308,21 @@ public class DungeonMapTool {
 	public static class DummyWorld extends World {
 
 		private final Biome[] biomes;
-		private final int x;
-		private final int z;
-		private final int w;
-		private final int l;
+		public final int x;
+		public final int z;
+		public final int w;
+		public final int l;
 
 		protected DummyWorld(WorldSettings settings, int dimension, int x, int z, int w, int l) {
-			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"), DimensionManager.getProviderType(dimension).createDimension(), new Profiler(), true);
+			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"), DimensionManager.getProviderType(dimension).createDimension(), new Profiler(),
+					true);
 			this.provider.setWorld(this);
 			this.biomes = this.provider.getBiomeProvider().getBiomes(null, x, z, w, l, false);
 			this.x = x;
 			this.z = z;
 			this.w = w;
 			this.l = l;
+			this.createSpawnPosition(settings);
 		}
 
 		@Override
@@ -315,6 +333,53 @@ public class DungeonMapTool {
 		@Override
 		protected boolean isChunkLoaded(int x, int z, boolean allowEmpty) {
 			return false;
+		}
+
+		private void createSpawnPosition(WorldSettings settings) {
+			if (!this.provider.canRespawnHere()) {
+				this.worldInfo.setSpawn(BlockPos.ORIGIN.up(this.provider.getAverageGroundLevel()));
+			} else if (this.worldInfo.getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+				this.worldInfo.setSpawn(BlockPos.ORIGIN.up());
+			} else {
+				this.findingSpawnPoint = true;
+				BiomeProvider biomeprovider = this.provider.getBiomeProvider();
+				List<Biome> list = biomeprovider.getBiomesToSpawnIn();
+				Random random = new Random(this.getSeed());
+				BlockPos blockpos = biomeprovider.findBiomePosition(0, 0, 256, list, random);
+				int i = 8;
+				int j = this.provider.getAverageGroundLevel();
+				int k = 8;
+
+				if (blockpos != null) {
+					i = blockpos.getX();
+					k = blockpos.getZ();
+				}
+
+				int l = 0;
+
+				while (!this.canCoordinateBeSpawn(i, k)) {
+					i += random.nextInt(64) - random.nextInt(64);
+					k += random.nextInt(64) - random.nextInt(64);
+					++l;
+
+					if (l == 1000) {
+						break;
+					}
+				}
+
+				this.worldInfo.setSpawn(new BlockPos(i, j, k));
+				this.findingSpawnPoint = false;
+			}
+		}
+
+		public boolean canCoordinateBeSpawn(int x, int z) {
+			BlockPos blockpos = new BlockPos(x, 0, z);
+
+			if (this.getBiome(blockpos).ignorePlayerSpawnSuitability()) {
+				return true;
+			} else {
+				return true;
+			}
 		}
 
 		@Override
