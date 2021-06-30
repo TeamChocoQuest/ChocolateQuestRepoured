@@ -320,7 +320,9 @@ public class DungeonMapTool {
 			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"), DimensionManager.getProviderType(dimension).createDimension(), new Profiler(),
 					true);
 			this.provider.setWorld(this);
+			hardResetIntCache();
 			this.biomes = this.provider.getBiomeProvider().getBiomes(null, x, z, w, l, false);
+			hardResetIntCache();
 			this.x = x;
 			this.z = z;
 			this.w = w;
