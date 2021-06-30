@@ -237,7 +237,7 @@ public class DungeonMapTool {
 
 		@Override
 		public Biome getBiome(BlockPos pos) {
-			int i = pos.getZ() * this.l + pos.getX();
+			int i = (pos.getZ() - this.z) * this.l + (pos.getX() - this.x);
 			return i >= 0 && i < this.biomes.length ? this.biomes[i] : Biomes.PLAINS;
 		}
 
