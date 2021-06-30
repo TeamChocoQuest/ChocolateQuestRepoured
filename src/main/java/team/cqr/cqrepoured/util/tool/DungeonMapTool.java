@@ -8,13 +8,19 @@ import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameType;
@@ -26,6 +32,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
@@ -85,7 +93,7 @@ public class DungeonMapTool {
 				boolean flagNewGen = Math.floorMod(x - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1;
 				for (int z = 0; z < sizeB; z++) {
 					int i = z * sizeB + x;
-					int biomeColor = world.getBiome(x - radiusB, z - radiusB).getGrassColorAtPos(BlockPos.ORIGIN);
+					int biomeColor = color(world, world.getBiome(x - radiusB, z - radiusB));
 					if (flagOldGen || Math.floorMod(z - 8 + 1, gridSizeOldGen) <= 1) {
 						dataOldGen.setElem(i, 0x0F0F0F);
 					} else {
@@ -205,6 +213,80 @@ public class DungeonMapTool {
 		new ReflectionField<List<int[]>>(IntCache.class, "", "inUseSmallArrays").get(null).clear();
 		new ReflectionField<List<int[]>>(IntCache.class, "", "freeLargeArrays").get(null).clear();
 		new ReflectionField<List<int[]>>(IntCache.class, "", "inUseLargeArrays").get(null).clear();
+	}
+
+	private static int color(World world, Biome biome) {
+		Set<Type> types = BiomeDictionary.getTypes(biome);
+		IntList colors = new IntArrayList();
+		if (types.contains(Type.VOID)) {
+			colors.add(0x0F0F0F);
+		}
+		if (types.contains(Type.END)) {
+			colors.add(color(world, Blocks.END_STONE));
+		}
+		if (types.contains(Type.NETHER)) {
+			colors.add(color(world, Blocks.NETHERRACK));
+		}
+		if (types.contains(Type.MUSHROOM)) {
+			colors.add(color(world, Blocks.BROWN_MUSHROOM_BLOCK));
+		}
+		if (types.contains(Type.WATER)) {
+			colors.add(color(world, Blocks.WATER));
+		}
+		if (types.contains(Type.BEACH)) {
+			colors.add(color(world, Blocks.SAND));
+		}
+		if (types.contains(Type.SNOWY)) {
+			colors.add(color(world, Blocks.SNOW));
+		}
+		if (types.contains(Type.MESA)) {
+			colors.add(color(world, Blocks.RED_SANDSTONE));
+		}
+		if (types.contains(Type.SANDY)) {
+			colors.add(color(world, Blocks.SAND));
+		}
+		if (types.contains(Type.SWAMP)) {
+			colors.add(0x5F7F00);
+		}
+		if (types.contains(Type.SAVANNA)) {
+			colors.add(0xBF9F00);
+		}
+		if (types.contains(Type.CONIFEROUS)) {
+			colors.add(0x004C00);
+		}
+		if (types.contains(Type.JUNGLE)) {
+			colors.add(0x00CC00);
+		}
+		if (types.contains(Type.FOREST)) {
+			colors.add(0x007C00);
+		}
+		if (types.contains(Type.MOUNTAIN)) {
+			colors.add(color(world, Blocks.STONE));
+		}
+		if (types.contains(Type.PLAINS)) {
+			colors.add(color(world, Blocks.GRASS));
+		}
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		for (int i = 0; i < colors.size(); i++) {
+			int c = colors.getInt(i);
+			r += (c >> 16) & 0xFF;
+			g += (c >> 8) & 0xFF;
+			b += c & 0xFF;
+		}
+		r /= colors.size();
+		g /= colors.size();
+		b /= colors.size();
+		return (r << 16) | (g << 8) | b;
+	}
+
+	private static int color(World world, Block block) {
+		return color(world, block.getDefaultState());
+	}
+
+	private static int color(World world, IBlockState state) {
+		return state.getMapColor(world, BlockPos.ORIGIN).colorValue;
 	}
 
 	public static class DummyWorld extends World {
