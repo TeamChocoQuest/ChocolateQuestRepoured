@@ -78,13 +78,13 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		// Filter floorblocks
 		this.filterFloorBlocks();
 
-		this.ceilingBlocks.forEach(new Consumer<BlockPos>() {
+		/*this.ceilingBlocks.forEach(new Consumer<BlockPos>() {
 
 			@Override
 			public void accept(BlockPos t) {
 				GeneratorVegetatedCave.this.blocks.put(t, GeneratorVegetatedCave.this.dungeon.getVineLatchBlock());
 			}
-		});
+		});*/
 
 		// Filter ceiling blocks
 		if (this.dungeon.placeVines()) {
