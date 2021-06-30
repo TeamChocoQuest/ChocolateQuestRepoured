@@ -113,9 +113,9 @@ public class DungeonMapTool {
 				}
 			}
 
-			for (int x = 2; x < 14; x++) {
+			for (int x = 0; x < 16; x++) {
 				int ix = x + radiusB + spawnX;
-				for (int z = 2; z < 14; z++) {
+				for (int z = 0; z < 16; z++) {
 					int iz = z + radiusB + spawnZ;
 					int i = iz * sizeB + ix;
 					if (i >= 0 && i < sizeB * sizeB) {
