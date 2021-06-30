@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
@@ -60,9 +61,9 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		IBlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
 		this.centralCaveBlocks = blocks;
-		if (this.dungeon.placeVines()) {
-			this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blocks, this.pos, random));
-		}
+		// if (this.dungeon.placeVines()) {
+		this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blocks, this.pos, random));
+		// }
 		this.floorBlocks.addAll(this.getFloorBlocksOfBlob(blocks, this.pos, random));
 		this.storeBlockArrayInMap(blocks, this.pos);
 		Vec3d center = new Vec3d(this.pos.down(this.dungeon.getCentralCaveSize() / 2));
@@ -76,6 +77,15 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		}
 		// Filter floorblocks
 		this.filterFloorBlocks();
+
+		this.ceilingBlocks.forEach(new Consumer<BlockPos>() {
+
+			@Override
+			public void accept(BlockPos t) {
+				GeneratorVegetatedCave.this.blocks.put(t, GeneratorVegetatedCave.this.dungeon.getVineLatchBlock());
+			}
+		});
+
 		// Filter ceiling blocks
 		if (this.dungeon.placeVines()) {
 			this.filterCeilingBlocks(this.world);
@@ -236,10 +246,11 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for (int i = 0; i < initLength; i++) {
 			IBlockState[][][] blob = this.getRandomBlob(this.dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
-			if (this.dungeon.placeVines()) {
-				this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
-			}
+			// if (this.dungeon.placeVines()) {
+			this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
+			// }
 			this.floorBlocks.addAll(this.getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
+
 			this.storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
 			startPos = startPos.add(expansionDir);
@@ -310,7 +321,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	}
 
 	private IBlockState[][][] getRandomBlob(IBlockState block, int radius, Random random) {
-		return this.getRandomBlob(block, radius, radius, random);
+		return this.getRandomBlob(block, radius, (int) (radius * 0.75), random);
 	}
 
 	private IBlockState[][][] getRandomBlob(IBlockState block, int radius, int radiusY, Random random) {
