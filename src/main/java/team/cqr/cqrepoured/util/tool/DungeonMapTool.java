@@ -282,6 +282,9 @@ public class DungeonMapTool {
 		if (types.contains(Type.PLAINS)) {
 			colors.add(color(world, Blocks.GRASS));
 		}
+		if (colors.isEmpty()) {
+			return 0;
+		}
 		int r = 0;
 		int g = 0;
 		int b = 0;
