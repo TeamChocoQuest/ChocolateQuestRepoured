@@ -13,7 +13,8 @@ import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
 
 public enum CQRParticleType {
 
-	BEAM("beam", 0);
+	BEAM("beam", 0),
+	BLOCK_HIGHLIGHT("block_highlight", 1);
 
 	private static final Map<String, CQRParticleType> NAME_PARTICLE_MAP = new HashMap<>();
 	private static final Int2ObjectMap<CQRParticleType> ID_PARTICLE_MAP = new Int2ObjectOpenHashMap<>();

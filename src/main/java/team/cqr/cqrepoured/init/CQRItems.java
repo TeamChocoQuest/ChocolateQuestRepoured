@@ -48,6 +48,7 @@ import team.cqr.cqrepoured.objects.items.ItemGoldenFeather;
 import team.cqr.cqrepoured.objects.items.ItemHookshot;
 import team.cqr.cqrepoured.objects.items.ItemLongshot;
 import team.cqr.cqrepoured.objects.items.ItemLore;
+import team.cqr.cqrepoured.objects.items.ItemMagicBell;
 import team.cqr.cqrepoured.objects.items.ItemMobToSpawner;
 import team.cqr.cqrepoured.objects.items.ItemPathTool;
 import team.cqr.cqrepoured.objects.items.ItemPotionHealing;
@@ -407,6 +408,7 @@ public class CQRItems {
 					setItemName(new ItemPotionHealing(), "potion_healing"),
 					setItemName(new ItemTeleportStone(), "teleport_stone"),
 					setItemName(new ItemCursedBone(), "cursed_bone"),
+					setItemName(new ItemMagicBell(), "magic_bell"),
 
 					setItemNameAndTab(new ItemSuperTool(), "super_tool", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setItemNameAndTab(new ItemStructureSelector(), "structure_selector", CQRMain.CQR_CREATIVE_TOOL_TAB),
