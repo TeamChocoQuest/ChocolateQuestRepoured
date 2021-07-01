@@ -2,12 +2,14 @@ package team.cqr.cqrepoured.objects.entity.boss;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
@@ -23,9 +25,11 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateSumm
 import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehindEnemy;
 import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTurnInvisible;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
+	private static final ReflectionField<Boolean> POTION_BENEFICIAL = new ReflectionField<>(Potion.class, "field_188415_h", "beneficial");
 	private static final DataParameter<Boolean> IS_DISINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 
@@ -53,8 +57,14 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void addPotionEffect(PotionEffect effect) {
-		return;
+	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
+		if (!super.isPotionApplicable(potioneffectIn)) {
+			return false;
+		}
+		if (POTION_BENEFICIAL.get(potioneffectIn.getPotion())) {
+			return true;
+		}
+		return potioneffectIn.getPotion() == MobEffects.GLOWING;
 	}
 
 	@Override
