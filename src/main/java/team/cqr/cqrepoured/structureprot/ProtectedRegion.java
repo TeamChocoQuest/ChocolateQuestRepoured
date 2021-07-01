@@ -121,7 +121,7 @@ public class ProtectedRegion {
 		compound.setTag("entityDependencies", nbtTagList1);
 		NBTTagList nbtTagList2 = new NBTTagList();
 		for (BlockPos blockPos : this.blockDependencies) {
-			nbtTagList1.appendTag(NBTUtil.createPosTag(blockPos));
+			nbtTagList2.appendTag(NBTUtil.createPosTag(blockPos));
 		}
 		compound.setTag("blockDependencies", nbtTagList2);
 	}
