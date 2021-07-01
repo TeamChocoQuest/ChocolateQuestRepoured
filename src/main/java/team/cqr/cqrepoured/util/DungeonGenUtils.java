@@ -164,7 +164,7 @@ public class DungeonGenUtils {
 		return x * x + z * z >= CQRConfig.general.dungeonSpawnDistance * CQRConfig.general.dungeonSpawnDistance;
 	}
 
-	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int dungeonSeparation) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int distance) {
 		int dim = world.provider.getDimension();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getDungeons()) {
@@ -180,7 +180,7 @@ public class DungeonGenUtils {
 			for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositions()) {
 				int x = chunkX - (dungeonSpawnPos.getX(world) >> 4);
 				int z = chunkZ - (dungeonSpawnPos.getZ(world) >> 4);
-				if (x * x + z * z < dungeonSeparation * dungeonSeparation) {
+				if (x * x + z * z < distance * distance) {
 					return false;
 				}
 			}

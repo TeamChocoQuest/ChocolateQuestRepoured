@@ -8,11 +8,9 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
@@ -50,24 +48,11 @@ public class DungeonRegistry {
 		return null;
 	}
 
-	public CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, BlockPos pos) {
-		CQRWeightedRandom<DungeonBase> dungeonsForChunk = new CQRWeightedRandom<>();
-		boolean isChunkBehindWall = CQRConfig.wall.enabled && (pos.getZ() >> 4) < -CQRConfig.wall.distance;
-
-		for (DungeonBase dungeon : this.dungeons) {
-			if (dungeon.canSpawnAtPos(world, pos, isChunkBehindWall)) {
-				dungeonsForChunk.add(dungeon, dungeon.getWeight());
-			}
-		}
-
-		return dungeonsForChunk;
-	}
-
-	public CQRWeightedRandom<DungeonBase> getDungeonsForDimBiome(int dim, Biome biome) {
+	public CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, int chunkX, int chunkZ) {
 		CQRWeightedRandom<DungeonBase> dungeonsForChunk = new CQRWeightedRandom<>();
 
 		for (DungeonBase dungeon : this.dungeons) {
-			if (dungeon.canSpawnAtDimBiome(dim, biome)) {
+			if (dungeon.canSpawnAt(world, biome, chunkX, chunkZ)) {
 				dungeonsForChunk.add(dungeon, dungeon.getWeight());
 			}
 		}
