@@ -1,41 +1,26 @@
 package team.cqr.cqrepoured.client.event;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.client.shader.ShaderGroup;
-import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -43,10 +28,11 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.models.armor.ModelCrown;
-import team.cqr.cqrepoured.client.particle.ParticleBlockHighlight;
+import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
 import team.cqr.cqrepoured.objects.items.ItemUnprotectedPositionTool;
@@ -55,37 +41,10 @@ import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
 import team.cqr.cqrepoured.objects.items.guns.ItemMusketKnife;
 import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
 import team.cqr.cqrepoured.util.Reference;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 @SideOnly(Side.CLIENT)
 @EventBusSubscriber(value = Side.CLIENT)
 public class RenderEventHandler {
-
-	private static final ShaderGroup cqrOutlineShader;
-	private static final Framebuffer cqrOutlineFramebuffer;
-
-	static {
-		Minecraft mc = Minecraft.getMinecraft();
-
-		if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
-			ShaderLinkHelper.setNewStaticShaderLinkHelper();
-		}
-
-		ResourceLocation resourcelocation = new ResourceLocation("shaders/post/entity_outline.json");
-
-		ShaderGroup shader = null;
-		Framebuffer framebuffer = null;
-		try {
-			shader = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), resourcelocation);
-			shader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-			framebuffer = shader.getFramebufferRaw("final");
-		} catch (Exception e) {
-			// ignore
-		}
-
-		cqrOutlineShader = shader;
-		cqrOutlineFramebuffer = framebuffer;
-	}
 
 	@SubscribeEvent
 	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
@@ -412,61 +371,12 @@ public class RenderEventHandler {
 			GlStateManager.glLineWidth(1.0F);
 		}
 
-		ArrayDeque<Particle>[][] particles = new ReflectionField<ArrayDeque<Particle>[][]>(ParticleManager.class, "", "fxLayers").get(mc.effectRenderer);
-		List<ParticleBlockHighlight> blockHighlightParticles = Arrays.stream(particles).flatMap(arr -> Arrays.stream(arr)).flatMap(ArrayDeque::stream)
-				.filter(ParticleBlockHighlight.class::isInstance).map(ParticleBlockHighlight.class::cast).collect(Collectors.toList());
-		if (!blockHighlightParticles.isEmpty()) {
-			double x = mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * event.getPartialTicks();
-			double y = mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * event.getPartialTicks();
-			double z = mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * event.getPartialTicks();
+		MagicBellRenderer.getInstance().render(event.getPartialTicks());
+	}
 
-			cqrOutlineFramebuffer.framebufferClear();
-			cqrOutlineFramebuffer.bindFramebuffer(false);
-			GlStateManager.depthFunc(GL11.GL_ALWAYS);
-
-			for (ParticleBlockHighlight particle : blockHighlightParticles) {
-				BlockPos pos = particle.getPos();
-				IBlockState state = mc.world.getBlockState(pos);
-				TileEntity te = mc.world.getTileEntity(pos);
-
-				GlStateManager.enableColorMaterial();
-				GlStateManager.enableOutlineMode(0xFFFFFF);
-				Tessellator tessellator = Tessellator.getInstance();
-				BufferBuilder buffer = tessellator.getBuffer();
-				buffer.setTranslation(-x, -y, -z);
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-				mc.getBlockRendererDispatcher().renderBlock(state, pos, mc.world, buffer);
-				tessellator.draw();
-				buffer.setTranslation(0.0D, 0.0D, 0.0D);
-				if (te != null) {
-					TileEntityRendererDispatcher.instance.render(te, event.getPartialTicks(), -1);
-				}
-				GlStateManager.disableOutlineMode();
-				GlStateManager.disableColorMaterial();
-			}
-
-			cqrOutlineShader.render(event.getPartialTicks());
-
-			GlStateManager.depthFunc(GL11.GL_LEQUAL);
-			mc.getFramebuffer().bindFramebuffer(false);
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
-
-			cqrOutlineFramebuffer.framebufferRenderExt(mc.displayWidth, mc.displayHeight, false);
-
-			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-			GlStateManager.disableTexture2D();
-			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-			GlStateManager.enableCull();
-			GlStateManager.disableFog();
-			GlStateManager.depthFunc(GL11.GL_LEQUAL);
-			GlStateManager.depthMask(true);
-			GlStateManager.enableDepth();
-			GlStateManager.disableBlend();
-			GlStateManager.disableColorMaterial();
-			GlStateManager.disableLighting();
-			GlStateManager.enableAlpha();
-		}
+	@SubscribeEvent
+	public static void onClientTickEvent(TickEvent.ClientTickEvent event) {
+		MagicBellRenderer.getInstance().tick();
 	}
 
 	public static void renderBoxOutline(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {

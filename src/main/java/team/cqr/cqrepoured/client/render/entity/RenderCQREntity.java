@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.models.entities.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.EntityRenderManager;
+import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityCape;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityPotion;
@@ -254,6 +255,14 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.shadowOpaque = MathHelper.clamp(1.0F - ((AbstractEntityCQR) entityIn).getInvisibility(), 0.0F, 1.0F);
 		super.doRenderShadowAndFire(entityIn, x, y, z, yaw, partialTicks);
 		this.shadowSize /= ((AbstractEntityCQR) entityIn).getSizeVariation();
+	}
+
+	@Override
+	protected int getTeamColor(T entityIn) {
+		if (MagicBellRenderer.outlineColor != -1) {
+			return MagicBellRenderer.outlineColor;
+		}
+		return super.getTeamColor(entityIn);
 	}
 
 	public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
