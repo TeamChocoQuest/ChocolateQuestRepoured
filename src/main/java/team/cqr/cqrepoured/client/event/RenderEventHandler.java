@@ -29,6 +29,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.models.armor.ModelCrown;
@@ -376,7 +377,9 @@ public class RenderEventHandler {
 
 	@SubscribeEvent
 	public static void onClientTickEvent(TickEvent.ClientTickEvent event) {
-		MagicBellRenderer.getInstance().tick();
+		if (event.phase == Phase.START) {
+			MagicBellRenderer.getInstance().tick();
+		}
 	}
 
 	public static void renderBoxOutline(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
