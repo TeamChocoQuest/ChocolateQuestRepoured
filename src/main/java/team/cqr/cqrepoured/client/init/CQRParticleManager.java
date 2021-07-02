@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.particle.ParticleBeam;
-import team.cqr.cqrepoured.client.particle.ParticleBlockHighlight;
+import team.cqr.cqrepoured.client.particle.ParticleMagicBell;
 import team.cqr.cqrepoured.init.CQRParticleType;
 
 @SideOnly(Side.CLIENT)
@@ -20,7 +20,7 @@ public class CQRParticleManager {
 
 	public static void init() {
 		registerParticleFactory(CQRParticleType.BEAM, new ParticleBeam.Factory());
-		registerParticleFactory(CQRParticleType.BLOCK_HIGHLIGHT, new ParticleBlockHighlight.Factory());
+		registerParticleFactory(CQRParticleType.BLOCK_HIGHLIGHT, new ParticleMagicBell.Factory());
 	}
 
 	public static void registerParticleFactory(CQRParticleType particleType, IParticleFactory particleFactory) {
