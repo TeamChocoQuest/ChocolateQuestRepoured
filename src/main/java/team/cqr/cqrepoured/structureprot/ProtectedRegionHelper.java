@@ -165,7 +165,7 @@ public class ProtectedRegionHelper {
 
 		if (updateProtectedRegions && !isPlacingPrevented) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
-				protectedRegion.setProtectionState(pos, 1);
+				protectedRegion.setProtectionState(pos, 2);
 			}
 		}
 

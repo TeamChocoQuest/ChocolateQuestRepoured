@@ -29,6 +29,11 @@ public class ProtectedRegion {
 	private BlockPos startPos;
 	private BlockPos endPos;
 	private BlockPos size;
+	/**
+	 * 0=protected
+	 * 1=unprotected
+	 * 2=unprotected player placed block
+	 */
 	private byte[] protectionStates;
 	private boolean preventBlockBreaking = false;
 	private boolean preventBlockPlacing = false;
@@ -260,7 +265,7 @@ public class ProtectedRegion {
 		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
 		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
 		int z = pos.getZ() - this.startPos.getZ();
-		return this.protectionStates[x + y + z] == 1;
+		return this.protectionStates[x + y + z] != 0;
 	}
 
 	public int getProtectionState(BlockPos pos) {
@@ -285,6 +290,10 @@ public class ProtectedRegion {
 			this.protectionStates[x + y + z] = newState;
 			this.markDirty();
 		}
+	}
+
+	public byte[] getProtectionStates() {
+		return this.protectionStates;
 	}
 
 	public boolean isValid() {
