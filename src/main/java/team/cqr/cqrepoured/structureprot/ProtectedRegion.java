@@ -397,7 +397,7 @@ public class ProtectedRegion {
 			return;
 		}
 
-		if (this.blockDependencies.add(pos)) {
+		if (this.blockDependencies.add(pos.toImmutable())) {
 			this.markDirty();
 		}
 	}
