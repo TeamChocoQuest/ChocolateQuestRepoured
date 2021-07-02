@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Streams;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,10 +24,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
-public class ItemUnprotectedPositionTool extends Item {
+public class ItemUnprotectedPositionTool extends ItemLore {
 
 	private static final String POSITIONS_NBT_KEY = "positions";
 
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return 1;
+	}
+	
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
