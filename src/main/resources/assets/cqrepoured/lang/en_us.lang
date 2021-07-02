@@ -226,6 +226,8 @@ item.structure_selector.name=Selection Selector Helper
 item.path_tool.name=Path Tool
 item.cursed_bone.name=Cursed Bone
 item.dummy_shield.name=Dummy Shield
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
 #Axes
 item.battle_axe_bull.name=Bull Battle Axe
