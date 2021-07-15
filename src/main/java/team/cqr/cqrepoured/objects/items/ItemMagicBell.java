@@ -72,7 +72,7 @@ public class ItemMagicBell extends Item {
 				}
 			});
 
-			entityLiving.playSound(CQRSounds.BELL_USE, 1.0F, 1.0F);
+			worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, CQRSounds.BELL_USE, entityLiving.getSoundCategory(), 1.0F, 1.0F);
 			if (entityLiving instanceof EntityPlayer) {
 				if (protectedRegions.isEmpty()) {
 					((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 60);
