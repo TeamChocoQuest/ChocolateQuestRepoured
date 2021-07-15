@@ -42,6 +42,7 @@ import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
@@ -301,7 +302,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		switch (event.sound.toLowerCase()) {
 			// Play throwing sound
 			case "calamity_throw":
-				sound = SoundEvents.ENTITY_SNOWBALL_THROW;
+				sound = CQRSounds.ENDER_CALAMITY_THROW_ITEM;
+				pitch = 1.5F;
 				break;
 			default:
 				return;
