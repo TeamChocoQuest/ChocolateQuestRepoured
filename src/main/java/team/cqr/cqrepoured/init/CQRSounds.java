@@ -14,6 +14,8 @@ import team.cqr.cqrepoured.util.Reference;
 @ObjectHolder(Reference.MODID)
 public class CQRSounds {
 
+	@ObjectHolder("item.magic_bell.use")
+	public static final SoundEvent BELL_USE = Null();
 	@ObjectHolder("item.gun.shoot")
 	public static final SoundEvent GUN_SHOOT = Null();
 	@ObjectHolder("item.revolver.shoot")
@@ -74,6 +76,7 @@ public class CQRSounds {
 		@SubscribeEvent
 		public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
 			final SoundEvent[] sounds = {
+					createSoundEvent("item.magic_bell.use"),
 					createSoundEvent("item.gun.shoot"),
 					createSoundEvent("item.revolver.shoot"),
 					createSoundEvent("item.musket.shoot"),
