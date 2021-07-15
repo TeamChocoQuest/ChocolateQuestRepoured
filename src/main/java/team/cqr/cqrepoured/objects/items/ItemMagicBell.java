@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.objects.items;
 
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +14,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRParticleType;
+import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
 import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
@@ -73,7 +72,7 @@ public class ItemMagicBell extends Item {
 				}
 			});
 
-			entityLiving.playSound(SoundEvents.BLOCK_NOTE_BELL, 1.0F, 1.0F);
+			entityLiving.playSound(CQRSounds.BELL_USE, 1.0F, 1.0F);
 			if (entityLiving instanceof EntityPlayer) {
 				if (protectedRegions.isEmpty()) {
 					((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 60);
