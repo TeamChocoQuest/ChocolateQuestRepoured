@@ -171,6 +171,14 @@
         ]
     },
     
+	"entity.ender_calamity.throw_item":
+    {
+        "category": "boss",
+        "sounds":
+        [
+            {"name": "cqrepoured:entity/ender_calamity/throw_item"}
+        ]
+    },
     "entity.ender_calamity.charge_energy_sphere":
     {
         "category": "boss",

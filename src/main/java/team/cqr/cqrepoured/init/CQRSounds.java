@@ -59,6 +59,8 @@ public class CQRSounds {
 	public static final SoundEvent ENDER_CALAMITY_CHARGE_ENERGY_BALL = Null();
 	@ObjectHolder("entity.ender_calamity.ready_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_READY_ENERGY_BALL = Null();
+	@ObjectHolder("entity.ender_calamity.throw_item")
+	public static final SoundEvent ENDER_CALAMITY_THROW_ITEM = Null();
 	/* Sound taken from DungeonDefenders, credit goes to TrendyNet */
 	@ObjectHolder("entity.ender_calamity.fire_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_FIRE_ENERGY_BALL = Null();
@@ -96,6 +98,7 @@ public class CQRSounds {
 					createSoundEvent("entity.ender_calamity.charge_energy_sphere"),
 					createSoundEvent("entity.ender_calamity.ready_energy_sphere"),
 					createSoundEvent("entity.ender_calamity.fire_energy_sphere"),
+					createSoundEvent("entity.ender_calamity.throw_item"),
 					createSoundEvent("projectile.energy_ball.impact"),
 					createSoundEvent("entity.bubble.bubble") };
 
