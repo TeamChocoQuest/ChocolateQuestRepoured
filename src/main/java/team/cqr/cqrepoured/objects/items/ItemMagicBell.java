@@ -1,8 +1,9 @@
 package team.cqr.cqrepoured.objects.items;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -44,16 +45,21 @@ public class ItemMagicBell extends Item {
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(worldIn);
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(new BlockPos(entityLiving));
 
-			protectedRegions.stream().flatMap(pr -> pr.getEntityDependencies().stream()).forEach(uuid -> {
-				Entity entity = EntityUtil.getEntityByUUID(worldIn, uuid);
-				CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0,
-						0, 0, 200, 0xC00000, entity.getEntityId());
-			});
+			protectedRegions.stream()
+					.map(ProtectedRegion::getEntityDependencies)
+					.flatMap(Collection::stream)
+					.map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid))
+					.filter(Objects::nonNull)
+					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn,
+							entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000,
+							entity.getEntityId()));
 
-			protectedRegions.stream().flatMap(pr -> pr.getBlockDependencies().stream()).forEach(p -> {
-				CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0,
-						0, 0, 200, 0x4050D0, p.getX(), p.getY(), p.getZ());
-			});
+			protectedRegions.stream()
+					.map(ProtectedRegion::getBlockDependencies)
+					.flatMap(Collection::stream)
+					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn,
+							entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0,
+							pos.getX(), pos.getY(), pos.getZ()));
 
 			protectedRegions.forEach(pr -> {
 				BlockPos start = pr.getStartPos();
