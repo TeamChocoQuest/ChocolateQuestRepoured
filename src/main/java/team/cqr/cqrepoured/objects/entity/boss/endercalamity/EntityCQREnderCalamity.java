@@ -88,6 +88,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// AI stuff
 	private boolean isDowned = false;
 
+	private int attackCounter = 0;
 	private int currentPhaseTimer = 0;
 	private int currentPhaseRunningTime = 0;
 	private int noTennisCounter = 0;
@@ -304,6 +305,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			case "calamity_throw":
 				sound = CQRSounds.ENDER_CALAMITY_THROW_ITEM;
 				pitch = 1.5F;
+				volume = 10.0F;
 				break;
 			default:
 				return;
@@ -623,10 +625,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (!this.world.isRemote) {
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
-
-				if (this.getRNG().nextBoolean()) {
-					this.dataManager.set(SHIELD_ACTIVE, true);
-					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
+				this.attackCounter++;
+				if(this.attackCounter >= 2 * world.getDifficulty().getId()) {
+					if(this.getRNG().nextBoolean()) {
+						this.dataManager.set(SHIELD_ACTIVE, true);
+						this.attackCounter = 0;
+						this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
+					}
 				}
 			}
 
