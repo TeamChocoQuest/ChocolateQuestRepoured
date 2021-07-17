@@ -98,7 +98,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 	@Override
 	protected boolean usesEnderDragonDeath() {
-		return true;
+		return false;
 	}
 
 	@Override
