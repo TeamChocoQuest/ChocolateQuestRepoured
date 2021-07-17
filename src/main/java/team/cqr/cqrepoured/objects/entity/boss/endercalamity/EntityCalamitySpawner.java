@@ -70,68 +70,73 @@ public class EntityCalamitySpawner extends Entity {
 	private static ReflectionField<Integer> FW_LIFETIME_FIELD = new ReflectionField<>(EntityFireworkRocket.class, "field_92055_b", "lifetime");
 
 	private static final int FIREWORK_DURATION = 120;
-	private static final int FIREWORK_DIVISOR = 6;
+	private static final int FIREWORK_DIVISOR = 5;
 
 	@Override
 	public void onEntityUpdate() {
+		if (world.isRemote) {
+			super.onEntityUpdate();
+			return;
+		} else {
+			this.timer++;
+			int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
+			double percentage = (double) tmpTimer / (double) FIREWORK_DURATION;
 
-		this.timer++;
-		int tmpTimer = CALAMITY_SPAWN_DURATION - this.timer;
-		double percentage = (double) tmpTimer / (double) FIREWORK_DURATION;
+			if (this.timer >= 200) {
+				if (this.timer % 40 == 0) {
+					this.spawnScaryEffect((int) (Math.round(25.0D * percentage) + 5));
+					if (!(CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION + 60)) {
+						if (DungeonGenUtils.percentageRandom(0.75, this.rand)) {
+							spawnFireworks((int) (Math.round(3.0D * percentage) + 1));
+						}
+					}
+				}
+				// Keep the lightning? Idk, it looks cool but it is a bit overused :/
+				if ((this.timer - 2) % 40 == 0 && this.rand.nextBoolean()) {
+					EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+					lightning.setPosition(this.posX, this.posY, this.posZ);
+					this.world.spawnEntity(lightning);
+				}
 
-		if (this.timer >= 200) {
-			if (this.timer % 40 == 0) {
-				this.spawnScaryEffect((int) (Math.round(25.0D * percentage) + 5));
-				if (!(CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION + 60)) {
-					if (DungeonGenUtils.percentageRandom(0.75, this.rand)) {
-						spawnFireworks((int) (Math.round(3.0D * percentage) + 1));
+				if (this.timer >= CALAMITY_SPAWN_DURATION) {
+					if (this.timer == CALAMITY_SPAWN_DURATION && !this.world.isRemote) {
+						// DONE: SPawn ender calamity
+						this.spawnCalamity();
+					}
+					this.setDead();
+					return;
+				}
+
+				// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
+				if (CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION) {
+					if (tmpTimer % FIREWORK_DIVISOR == 0) {
+						// Percentage defines radius
+
+						double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
+						radius *= percentage;
+						radius += 1.5;
+						Vec3d vector = new Vec3d(radius, 0, 0);
+						final int lines = 5;
+						final int rotationDegree = 360 / lines;
+						vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
+						for (int i = 0; i < lines; i++) {
+							Vec3d particlePosition = this.getPositionVector().add(vector);
+
+							this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
+
+							vector = VectorUtil.rotateVectorAroundY(vector, rotationDegree);
+						}
 					}
 				}
 			}
-			// Keep the lightning? Idk, it looks cool but it is a bit overused :/
-			if ((this.timer - 2) % 40 == 0 && this.rand.nextBoolean()) {
-				EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
-				lightning.setPosition(this.posX, this.posY, this.posZ);
-				this.world.spawnEntity(lightning);
-			}
-
-			if (this.timer >= CALAMITY_SPAWN_DURATION) {
-				if (this.timer == CALAMITY_SPAWN_DURATION && !this.world.isRemote) {
-					// DONE: SPawn ender calamity
-					this.spawnCalamity();
-				}
-				this.setDead();
-			}
-
-			// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
-			if (CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION) {
-				if (tmpTimer % FIREWORK_DIVISOR == 0) {
-					// Percentage defines radius
-
-					double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
-					radius *= percentage;
-					radius += 1.5;
-					Vec3d vector = new Vec3d(radius, 0, 0);
-					final int lines = 5;
-					final int rotationDegree = 360 / lines;
-					vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
-					for (int i = 0; i < lines; i++) {
-						Vec3d particlePosition = this.getPositionVector().add(vector);
-
-						this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
-
-						vector = VectorUtil.rotateVectorAroundY(vector, rotationDegree);
-					}
-				}
-			}
+			super.onEntityUpdate();
 		}
-		super.onEntityUpdate();
 	}
 
 	private void spawnFirework(double x, double y, double z, ItemStack stack) {
 		EntityFireworkRocket firework = new EntityFireworkRocket(world, x, y, z, FIREWORK_PURPLE_SPARK);
 		// DONE: Modify the "lifetime" value using reflection
-		FW_LIFETIME_FIELD.set(firework, 3);
+		FW_LIFETIME_FIELD.set(firework, 1);
 
 		firework.setInvisible(true);
 		firework.setSilent(true);
