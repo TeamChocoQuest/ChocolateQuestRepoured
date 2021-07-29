@@ -31,6 +31,7 @@ public class ItemTeleportStone extends Item {
 	private String X = "x";
 	private String Y = "y";
 	private String Z = "z";
+	//private String Dimension = "dimension";
 
 	public ItemTeleportStone() {
 		this.setMaxDamage(100);
@@ -45,7 +46,7 @@ public class ItemTeleportStone extends Item {
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
+		return 40;
 	}
 
 	@Override
@@ -55,15 +56,29 @@ public class ItemTeleportStone extends Item {
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
-
+	
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if (entityLiving instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entityLiving;
-
+			
 			if (stack.hasTagCompound() && !player.isSneaking()) {
-				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z) && this.getMaxItemUseDuration(stack) - timeLeft >= 30) {
+				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
+					//int dimension = stack.getTagCompound().hasKey(this.Dimension) ? stack.getTagCompound().getInteger(this.Dimension) : 0;
 					// player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z));
+					/*if(worldIn.provider.getDimension() != dimension) {
+						
+						WorldServer worldServer = player.getServer().getWorld(dimension);
+						WorldServer worldServerOld = player.getServerWorld();
+						player.moveToBlockPosAndAngles(new BlockPos(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z)), player.rotationYaw, player.rotationPitch);
+						worldServerOld.removeEntity(player);
+						boolean flag = player.forceSpawn;
+						player.forceSpawn = true;
+						worldServer.spawnEntity(player);
+						player.forceSpawn = flag;
+						worldServer.updateEntityWithOptionalForce(player, false);
+						
+					}*/
 					player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
 					for (int i = 0; i < 30; i++) {
 						worldIn.spawnParticle(EnumParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
@@ -73,18 +88,22 @@ public class ItemTeleportStone extends Item {
 					if (!player.capabilities.isCreativeMode) {
 						stack.damageItem(1, entityLiving);
 					}
+					
+					return super.onItemUseFinish(stack, worldIn, entityLiving);
 				}
 			}
 
-			if (this.getPoint(stack) == null && this.getMaxItemUseDuration(stack) - timeLeft >= 30) {
+			if (this.getPoint(stack) == null) {
 				this.setPoint(stack, player);
 				for (int i = 0; i < 10; i++) {
 					worldIn.spawnParticle(EnumParticleTypes.FLAME, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+				
+				return super.onItemUseFinish(stack, worldIn, entityLiving);
 			}
 
-			if (player.isSneaking() && stack.hasTagCompound() && this.getMaxItemUseDuration(stack) - timeLeft >= 30) {
+			if (player.isSneaking() && stack.hasTagCompound()) {
 				stack.getTagCompound().removeTag(this.X);
 				stack.getTagCompound().removeTag(this.Y);
 				stack.getTagCompound().removeTag(this.Z);
@@ -94,6 +113,7 @@ public class ItemTeleportStone extends Item {
 				}
 			}
 		}
+		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
 	@Override
@@ -108,6 +128,7 @@ public class ItemTeleportStone extends Item {
 					tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int) stack.getTagCompound().getDouble(this.X)));
 					tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int) stack.getTagCompound().getDouble(this.Y)));
 					tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int) stack.getTagCompound().getDouble(this.Z)));
+					//tooltip.add(TextFormatting.BLUE + I18n.format("Dimension: " + (int) (stack.getTagCompound().hasKey(this.Dimension) ? stack.getTagCompound().getInteger(this.Dimension) : 0)));
 				}
 			}
 		} else {
@@ -134,6 +155,10 @@ public class ItemTeleportStone extends Item {
 		if (!stone.hasKey(this.Z)) {
 			stone.setDouble(this.Z, player.posZ);
 		}
+		
+		/*if (!stone.hasKey(this.Dimension)) {
+			stone.setInteger(this.Dimension, player.getEntityWorld().provider.getDimension());
+		}*/
 	}
 
 	@Override
