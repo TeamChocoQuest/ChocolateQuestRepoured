@@ -136,7 +136,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(), prevFloor.getExitCoordinates().getSecond());
 				}
 
-				floor.calculatePositions();
+				floor.preProcess();
 				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
 			}
 			prevFloor = floor;
@@ -178,7 +178,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 
 		// Structure gen information: stored in map with location and structure file
 		for (StrongholdFloorOpen floor : this.floors) {
-			floor.generateRooms(this.world, this.dungeonGenerator, mobType);
+			floor.generate(this.world, this.dungeonGenerator, mobType);
 		}
 
 		// build all the structures in the map
@@ -187,7 +187,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
 				try {
-					floor.buildWalls(this.world, this.dungeonGenerator, mobType);
+					floor.generatePost(this.world, this.dungeonGenerator, mobType);
 				} catch (NullPointerException ex) {
 					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(), this.pos.getZ());
 				}

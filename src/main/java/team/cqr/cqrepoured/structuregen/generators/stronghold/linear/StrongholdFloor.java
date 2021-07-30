@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
+import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -15,10 +16,9 @@ import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 
-public class StrongholdFloor {
+public class StrongholdFloor extends AbstractDungeonGenerationComponent<GeneratorStronghold>{
 
 	private final Random random;
-	private GeneratorStronghold generator;
 	private int sideLength;
 	private EStrongholdRoomType[][] roomPattern;
 	// Where do we face currently? its the direction we face after exiting the last part we were in
@@ -27,12 +27,13 @@ public class StrongholdFloor {
 	private int lastX, lastZ;
 
 	public StrongholdFloor(int size, GeneratorStronghold generator, boolean isLastFloor, Random rand) {
-		this.generator = generator;
+		super(generator);
 		this.sideLength = size;
 		this.lastFloor = isLastFloor;
 		this.roomPattern = new EStrongholdRoomType[size][size];
 		this.random = rand;
 	}
+	
 
 	public void generateRoomPattern(int gridPosX, int gridPosZ, ESkyDirection prevFloorExitDir) {
 		this.setRoomType(gridPosX, gridPosZ, EStrongholdRoomType.NONE);
@@ -232,6 +233,24 @@ public class StrongholdFloor {
 		default:
 			return null;
 		}
+	}
+
+
+	@Override
+	public void preProcess() {
+		
+	}
+
+
+	@Override
+	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+		
+	}
+
+
+	@Override
+	public void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+		
 	}
 
 }

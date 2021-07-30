@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
+import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -24,10 +25,9 @@ import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
-public class StrongholdFloorOpen {
+public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<GeneratorStrongholdOpen>{
 
 	private final Random random;
-	private GeneratorStrongholdOpen generator;
 	private BlockPos[][] roomGrid;
 	private Tuple<Integer, Integer> entranceStairBlockPosition;
 	private Tuple<Integer, Integer> entranceStairIndex;
@@ -46,7 +46,7 @@ public class StrongholdFloorOpen {
 	}
 
 	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount, int entranceStairIndexX, int entranceStairIndexZ, Random rand) {
-		this.generator = generator;
+		super(generator);
 		this.sideLength = roomCount;
 		this.roomGrid = new BlockPos[roomCount][roomCount];
 		this.random = rand;
@@ -91,7 +91,7 @@ public class StrongholdFloorOpen {
 		return this.exitStairBlockPosition;
 	}
 
-	public void calculatePositions() {
+	public void preProcess() {
 		Vec3i v = new Vec3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
@@ -118,7 +118,7 @@ public class StrongholdFloorOpen {
 		this.entranceStairBlockPosition = new Tuple<>(exitPos.getX(), exitPos.getZ());
 	}
 
-	public void generateRooms(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
 		for (int x = 0; x < this.sideLength; x++) {
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos pos = this.roomGrid[x][z];
@@ -149,7 +149,7 @@ public class StrongholdFloorOpen {
 		}
 	}
 
-	public void buildWalls(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
 		if (this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}
