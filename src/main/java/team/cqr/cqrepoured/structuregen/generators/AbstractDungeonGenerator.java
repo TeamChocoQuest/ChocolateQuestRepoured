@@ -71,5 +71,9 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 	public World getWorld() {
 		return this.world;
 	}
+	
+	public T getDungeon() {
+		return this.dungeon;
+	}
 
 }
