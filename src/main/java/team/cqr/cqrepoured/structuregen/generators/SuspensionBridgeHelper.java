@@ -15,7 +15,20 @@ public class SuspensionBridgeHelper {
 	private final BlockPos startPos, endPos;
 
 	private IBlockState pathBlock, fenceBlock, railingBlock, anchorBlock;
+	
+	public interface IBridgeDataSupplier {
+		public float getBridgeTension();
+		public int getBridgeWidth();
+		public IBlockState getBridgePathBlock();
+		public IBlockState getBridgeFenceBlock();
+		public IBlockState getBridgeRailingBlock();
+		public IBlockState getBridgeAnchorBlock();
+	}
 
+	public SuspensionBridgeHelper(IBridgeDataSupplier data, BlockPos start, BlockPos end) {
+		this(data.getBridgeTension(), data.getBridgeWidth(), start, end, data.getBridgePathBlock(), data.getBridgeFenceBlock(), data.getBridgeRailingBlock(), data.getBridgeAnchorBlock());
+	}
+	
 	/*
 	 * @param bridgePoints needs to contain at least two elements
 	 */
@@ -31,6 +44,8 @@ public class SuspensionBridgeHelper {
 		this.endPos = end;
 	}
 
+	//TODO: Return stateMap or add parameter for statemap
+	
 	public boolean generate(final DungeonGenerator dungeonGenerator) {
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		this.saggyPath(this.startPos, this.endPos, stateMap);
