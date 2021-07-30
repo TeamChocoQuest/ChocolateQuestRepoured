@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.structuregen.generators;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
@@ -44,10 +43,10 @@ public class SuspensionBridgeHelper {
 		this.endPos = end;
 	}
 
-	//TODO: Return stateMap or add parameter for statemap
+	//DONE: Return stateMap or add parameter for statemap
 	
-	public boolean generate(final DungeonGenerator dungeonGenerator) {
-		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+	public boolean generate(final DungeonGenerator dungeonGenerator, Map<BlockPos, IBlockState> stateMap) {
+		
 		this.saggyPath(this.startPos, this.endPos, stateMap);
 
 		return true;
