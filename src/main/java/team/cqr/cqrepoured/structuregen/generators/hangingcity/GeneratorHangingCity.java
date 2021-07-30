@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.structuregen.generators;
+package team.cqr.cqrepoured.structuregen.generators.hangingcity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
+import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -33,7 +34,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	private int islandCount = 1;
 	private int islandDistance = 1;
 	private Map<BlockPos, CQStructure> structureMap = new HashMap<>();
-
+	private HangingCityBuilding[][] buildingGrid;
+	
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
 	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
@@ -45,6 +47,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		this.islandCount = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuildings(), this.random);
 		this.islandDistance = DungeonGenUtils.randomBetween(this.dungeon.getMinIslandDistance(), this.dungeon.getMaxIslandDistance(), this.random);
 
+		this.buildingGrid = new HangingCityBuilding[2* islandCount + 2][2* islandCount + 2];
+		
 		// Calculates the positions and creates the island objects
 		// positions are the !!CENTERS!! of the platforms, the structures positions are calculated by the platforms themselves
 		// Radius = sqrt(((Longer side of building) / 2)^2 *2) +5
@@ -108,6 +112,13 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * angle));
 		retPos = retPos.add(0, this.dungeon.getRandomHeightVariation(this.random), 0);
 		return retPos;
+	}
+	
+	HangingCityBuilding getBuildingFromGridPos(int x, int y) {
+		x += this.islandCount;
+		y += this.islandCount;
+		
+		return this.buildingGrid[x][y];
 	}
 
 	// Constructs an Island in this shape:
@@ -187,6 +198,17 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			}
 		}
 	}
+	
+	final BlockPos getCenterPosForIsland(HangingCityBuilding building) {
+		BlockPos centerGen = this.pos;
+		int offsetX = this.islandDistance * building.getGridPosX();
+		int offsetZ = this.islandDistance * building.getGridPosY();
+		
+		int offsetY = this.dungeon.getRandomHeightVariation(this.random);
+		
+		final BlockPos pos = centerGen.add(offsetX, offsetY, offsetZ);
+		return pos;
+	}
 
 	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, IBlockState> stateMap) {
 		stateMap.put(lowerCenter, this.dungeon.getChainBlock());
@@ -202,6 +224,10 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			stateMap.put(lowerBoundL.add(0, i, 0), this.dungeon.getChainBlock());
 			stateMap.put(lowerBoundR.add(0, i, 0), this.dungeon.getChainBlock());
 		}
+	}
+
+	public BlockPos getPos() {
+		return this.pos;
 	}
 
 }

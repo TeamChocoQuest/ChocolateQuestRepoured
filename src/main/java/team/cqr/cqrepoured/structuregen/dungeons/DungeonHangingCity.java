@@ -10,14 +10,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generators.GeneratorHangingCity;
+import team.cqr.cqrepoured.structuregen.generators.SuspensionBridgeHelper.IBridgeDataSupplier;
+import team.cqr.cqrepoured.structuregen.generators.hangingcity.GeneratorHangingCity;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
-public class DungeonHangingCity extends DungeonBase {
+public class DungeonHangingCity extends DungeonBase implements IBridgeDataSupplier {
 
 	private int minBuildings = 6;
 	private int maxBuildings = 12;
@@ -26,6 +27,8 @@ public class DungeonHangingCity extends DungeonBase {
 	private int yFactorHeight = 20;
 	private int heightVariation = 10;
 	private boolean digAirCave = true;
+	private boolean constructBridges = true;
+
 	private IBlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
 	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
@@ -47,6 +50,7 @@ public class DungeonHangingCity extends DungeonBase {
 
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 		this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
+		this.constructBridges = PropertyFileHelper.getBooleanProperty(prop, "constructBridges", true);
 
 		this.structureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "floatingCity/islands");
 		this.centralStructureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centralStructureFolder", "floatingCity/centers");
@@ -154,4 +158,44 @@ public class DungeonHangingCity extends DungeonBase {
 		return 0;
 	}
 
+	public boolean isConstructBridges() {
+		return constructBridges;
+	}
+
+	@Override
+	public float getBridgeTension() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getBridgeWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public IBlockState getBridgePathBlock() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IBlockState getBridgeFenceBlock() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IBlockState getBridgeRailingBlock() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IBlockState getBridgeAnchorBlock() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }
