@@ -237,7 +237,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 
 
 	@Override
-	public void preProcess() {
+	public void preProcess(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
 		
 	}
 

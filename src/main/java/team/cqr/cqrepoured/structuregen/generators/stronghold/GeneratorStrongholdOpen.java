@@ -136,7 +136,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(), prevFloor.getExitCoordinates().getSecond());
 				}
 
-				floor.preProcess();
+				floor.preProcess(this.world, this.dungeonGenerator, null);
 				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
 			}
 			prevFloor = floor;

@@ -91,7 +91,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		return this.exitStairBlockPosition;
 	}
 
-	public void preProcess() {
+	public void preProcess(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
 		Vec3i v = new Vec3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
