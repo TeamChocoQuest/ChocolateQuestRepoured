@@ -15,7 +15,7 @@ public abstract class AbstractDungeonGenerationComponent<T extends AbstractDunge
 		this.dungeon = this.generator.dungeon;
 	}
 
-	public abstract void preProcess();
+	public abstract void preProcess(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType);
 	public abstract void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType);
 	public abstract void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType);
 	
