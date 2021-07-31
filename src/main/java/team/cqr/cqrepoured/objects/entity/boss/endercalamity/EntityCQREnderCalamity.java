@@ -522,7 +522,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
-		// super.move(type, x, y, z);
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			if(this.posY <= 1+ (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) {
+				return;
+			}
+			super.move(type, x, y, z);
+		}
 		return;
 	}
 
@@ -691,6 +696,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	protected void updateAITasks() {
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			super.updateAITasks();
+			return;
+		}
+		
 		if (this.isWet() && !this.getSummonedEntities().isEmpty()) {
 
 			this.world.getWorldInfo().setCleanWeatherTime(20000);
@@ -1055,18 +1065,26 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void onDeath(DamageSource cause) {
 		this.deathCause = cause;
+		this.dataManager.set(SHIELD_ACTIVE, false);
 		super.onDeath(cause);
 	}
 
 	// Death animation
 	// Death animation time: 1.88s => 38 ticks
+	// Transition time: 10 ticks
+	//TODO: Maybe shoot out items whilst dead?
 	@Override
 	protected void onDeathUpdate() {
-		++this.deathTime;
-		if (this.deathTime == 43 && this.isServerWorld()) {
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+		if(this.motionY < -0.1 && this.deathTime < 10) {
+			return;
 		}
-		if (this.deathTime >= 44 && this.isServerWorld()) {
+		
+		++this.deathTime;
+		if (this.deathTime == 53 && this.isServerWorld()) {
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+			this.setSizeVariation(0.0F);
+		}
+		if (this.deathTime >= 54 && this.isServerWorld()) {
 			if (this.deathCause != null) {
 				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}

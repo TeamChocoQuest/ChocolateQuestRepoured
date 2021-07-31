@@ -1282,7 +1282,7 @@
 		},
 		"animation.ender_calamity.death": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 1.88,
+			"animation_length": 5.16,
 			"bones": {
 				"root": {
 					"scale": {
@@ -1290,6 +1290,9 @@
 							"vector": [1, 1, 1]
 						},
 						"1.88": {
+							"vector": [0, 0, 0]
+						},
+						"5.16": {
 							"vector": [0, 0, 0]
 						}
 					}
