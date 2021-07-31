@@ -1109,7 +1109,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		
 		
 		++this.deathTime;
-		if(this.deathTime < 5) {
+		//Initial death animation takes 0.36s => 8 ticks
+		if(this.deathTime < 10) {
 			return;
 		}
 		if(!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
