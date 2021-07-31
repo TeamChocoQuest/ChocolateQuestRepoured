@@ -80,6 +80,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
@@ -174,7 +175,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
-		setSizeVariation(2.5F);
+		setSizeVariation(2.0F);
 	}
 
 	@Override
@@ -212,6 +213,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
 		this.dataManager.register(ROTATE_BODY_PITCH, false);
+		this.dataManager.register(IS_DEAD_AND_ON_THE_GROUND, false);
 
 		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());// of(Blocks.END_STONE.getDefaultState()));
 		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
@@ -252,7 +254,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 	public static final String ANIM_NAME_SPIN_HANDS = ANIM_NAME_PREFIX + "spin_hands";
 	public static final String ANIM_NAME_LASER_STATIONARY = ANIM_NAME_PREFIX + "laser_stationary";
-	public static final String ANIM_NAME_DEATH = ANIM_NAME_PREFIX + "death";
+	public static final String ANIM_NAME_DEATH_FALLING = ANIM_NAME_PREFIX + "death";
+	public static final String ANIM_NAME_DEATH_ON_GROUND = ANIM_NAME_PREFIX + "death_on_ground";
 
 	private String currentAnimation = null;
 
@@ -260,7 +263,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		// Death animation
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH, false));
+			if(this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
+				event.getController().transitionLengthTicks = 0;
+				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH_ON_GROUND, false));
+			}
+			else {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH_FALLING, false));
+			}
 			return PlayState.CONTINUE;
 		}
 
@@ -526,7 +535,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if(this.posY <= 1+ (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) {
 				return;
 			}
-			super.move(type, x, y, z);
+			super.move(type, x, 0.25D * y, z);
 		}
 		return;
 	}
@@ -987,12 +996,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("isDowned", isDowned);
+		compound.setBoolean("deadAndOnGround", this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND));
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		this.isDowned = compound.getBoolean("isDowned");
+		this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, compound.getBoolean("deadAndOnGround"));
 	}
 
 	public static int getArenaRadius() {
@@ -1075,16 +1086,25 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	//TODO: Maybe shoot out items whilst dead?
 	@Override
 	protected void onDeathUpdate() {
-		if(this.motionY < -0.1 && this.deathTime < 10) {
+		if(!this.isServerWorld()) {
+			return;
+		}
+		if(this.deathTime < 1 && !(this.posY <= 1+ (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) && (Math.abs(this.prevPosY - this.posY) > 0.05 )) {
 			return;
 		}
 		
+		if(!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
+			this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, true);
+		}
+		
+		System.out.println("DT: " + this.deathTime);
+		
 		++this.deathTime;
-		if (this.deathTime == 53 && this.isServerWorld()) {
+		if (this.deathTime == 53) {
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
 			this.setSizeVariation(0.0F);
 		}
-		if (this.deathTime >= 54 && this.isServerWorld()) {
+		if (this.deathTime >= 54) {
 			if (this.deathCause != null) {
 				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
