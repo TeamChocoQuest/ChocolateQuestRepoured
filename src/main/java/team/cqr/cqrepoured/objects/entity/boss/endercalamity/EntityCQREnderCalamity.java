@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -25,9 +26,11 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -92,6 +95,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private int currentPhaseTimer = 0;
 	private int currentPhaseRunningTime = 0;
 	private int noTennisCounter = 0;
+	private int blockDestructionTimer = 10;
 	private EEnderCalamityPhase currentPhase = EEnderCalamityPhase.PHASE_NO_TARGET;
 
 	public float rotationPitchCQR;
@@ -302,14 +306,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		// System.out.println("Sound: " + event.sound);
 
 		switch (event.sound.toLowerCase()) {
-			// Play throwing sound
-			case "calamity_throw":
-				sound = CQRSounds.ENDER_CALAMITY_THROW_ITEM;
-				pitch = 1.5F;
-				volume = 10.0F;
-				break;
-			default:
-				return;
+		// Play throwing sound
+		case "calamity_throw":
+			sound = CQRSounds.ENDER_CALAMITY_THROW_ITEM;
+			pitch = 1.5F;
+			volume = 10.0F;
+			break;
+		default:
+			return;
 		}
 
 		this.world.playSound(this.posX, this.posY, this.posZ, sound, this.getSoundCategory(), volume, pitch, false);
@@ -438,7 +442,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_lm", 5, this::predicateArmLeftMiddle),
 				new AnimationController<EntityCQREnderCalamity>(this, "controller_arm_ll", 5, this::predicateArmLeftLower) };
 
-		for (@SuppressWarnings("rawtypes") AnimationController ac : handControllers) {
+		for (@SuppressWarnings("rawtypes")
+		AnimationController ac : handControllers) {
 			ac.registerSoundListener(this::soundListenerArms);
 			data.addAnimationController(ac);
 		}
@@ -568,9 +573,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 */
 			if (this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
 
-				//Avoid switching to wrong phase
+				// Avoid switching to wrong phase
 				this.tennisAI.calculateRemainingAttempts();
-				
+
 				this.dataManager.set(SHIELD_ACTIVE, false);
 				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 
@@ -627,8 +632,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
 				this.attackCounter++;
-				if(this.attackCounter >= 2 * world.getDifficulty().getId()) {
-					if(this.getRNG().nextBoolean()) {
+				if (this.attackCounter >= 2 * world.getDifficulty().getId()) {
+					if (this.getRNG().nextBoolean()) {
 						this.dataManager.set(SHIELD_ACTIVE, true);
 						this.attackCounter = 0;
 						this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
@@ -668,6 +673,24 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.world.getWorldInfo().setThundering(false);
 
 			this.playSound(SoundEvents.ENTITY_ENDERMEN_STARE, 2.5F, this.getSoundPitch());
+		}
+
+		this.blockDestructionTimer--;
+		if (this.blockDestructionTimer <= 0) {
+			this.blockDestructionTimer = 10;
+			boolean flag = false;
+			Vec3i size = new Vec3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minZ, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
+			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size))) {
+				IBlockState iblockstate = this.world.getBlockState(blockpos);
+				Block block = iblockstate.getBlock();
+
+				if (!block.isAir(iblockstate, this.world, blockpos) && block.canEntityDestroy(iblockstate, world, blockpos, this) && net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
+					flag = this.world.destroyBlock(blockpos, true) || flag;
+				}
+			}
+			if (flag) {
+				this.world.playEvent((EntityPlayer) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, new BlockPos(this), 0);
+			}
 		}
 
 		super.updateAITasks();
