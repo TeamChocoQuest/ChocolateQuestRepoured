@@ -680,7 +680,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			this.blockDestructionTimer = 10;
 			boolean flag = false;
 			Vec3i size = new Vec3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minZ, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
-			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size))) {
+			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size).add(0, size.getY(), 0))) {
 				IBlockState iblockstate = this.world.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 
