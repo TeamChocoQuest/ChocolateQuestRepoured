@@ -25,6 +25,7 @@ import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class HangingCityBuilding extends AbstractDungeonGenerationComponent<GeneratorHangingCity> {
 
@@ -77,6 +78,10 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		return this.getNeighbours().length < 8;
 	}
 	
+	public boolean isConnectedToAnyBuilding() {
+		return !this.connectedIslands.isEmpty();
+	}
+	
 	public void connectTo(HangingCityBuilding building) {
 		//DONE: Build bridge (generation: postProcess())
 		BlockPos bridgePosOne = this.getConnectorPointForBridgeTo(building);
@@ -121,20 +126,101 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 
 	@Override
 	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
-		
+		this.buildPlatform(this.worldPosition, this.islandRadius, mobType, dungeonGenerator);
+		if (this.structure != null) {
+			PlacementSettings settings = new PlacementSettings();
+			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.worldPosition.up(), this.structure, settings);
+			structure.addAll(world, dungeonGenerator, p, settings, mobType);
+		}
 	}
 
+	private void buildPlatform(BlockPos center, int radius, DungeonInhabitant mobType, DungeonGenerator dungeonGenerator) {
+		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+		int decrementor = 0;
+		int rad = (int) (1.5D * radius);
+		while (decrementor < (rad / 2)) {
+			rad -= decrementor;
+
+			for (int iX = -rad; iX <= rad; iX++) {
+				for (int iZ = -rad; iZ <= rad; iZ++) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad)) {
+						stateMap.put((center.add(iX, -decrementor, iZ)), this.generator.getDungeon().getIslandBlock());
+					}
+				}
+			}
+
+			decrementor++;
+		}
+
+		if (this.generator.getDungeon().doBuildChains()) {
+			this.buildChain(center.add(radius * 0.9, -2, radius * 0.9), 0, stateMap);
+			this.buildChain(center.add(-radius * 0.9, -2, -radius * 0.9), 0, stateMap);
+			this.buildChain(center.add(-radius * 0.9, -2, radius * 0.9), 1, stateMap);
+			this.buildChain(center.add(radius * 0.9, -2, -radius * 0.9), 1, stateMap);
+		}
+
+		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+			blockInfoList.add(new BlockInfo(entry.getKey().subtract(center), entry.getValue(), null));
+		}
+		dungeonGenerator.add(new DungeonPartBlock(this.generator.getWorld(), dungeonGenerator, center, blockInfoList, new PlacementSettings(), mobType));
+	}
+
+	private void buildChain(BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
+		/*
+		 * Chain from side: # # # # # # # # # # # # # # # # # # # #
+		 */
+		int deltaYPerChainSegment = 5;
+
+		/*
+		 * int maxY = DungeonGenUtils.getYForPos(this.world, pos.getX(), pos.getZ(), true);
+		 * maxY = maxY >= 255 ? 255 : maxY;
+		 */
+		// TODO: Move this option to the config of the dungeon, that is cleaner
+		// Or: Change this to something like "world.getMaxBuildHeight()", if that exists.
+		int maxY = 255;
+		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
+		for (int i = 0; i < chainCount; i++) {
+			// Check the direction of the chain
+			int yOffset = i * deltaYPerChainSegment;
+			BlockPos startPos = pos.add(0, yOffset, 0);
+			if ((i + iOffset) % 2 > 0) {
+				this.buildChainSegment(startPos, startPos.north(), startPos.south(), startPos.north(2).up(), startPos.south(2).up(), stateMap);
+			} else {
+				this.buildChainSegment(startPos, startPos.east(), startPos.west(), startPos.east(2).up(), startPos.west(2).up(), stateMap);
+			}
+		}
+	}
+	
+	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, IBlockState> stateMap) {
+		stateMap.put(lowerCenter, this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerCenter.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
+
+		stateMap.put(lowerLeft, this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerLeft.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
+
+		stateMap.put(lowerRight, this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerRight.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
+
+		for (int i = 0; i < 5; i++) {
+			stateMap.put(lowerBoundL.add(0, i, 0), this.generator.getDungeon().getChainBlock());
+			stateMap.put(lowerBoundR.add(0, i, 0), this.generator.getDungeon().getChainBlock());
+		}
+	}
+	
 	@Override
 	public void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
-		for(SuspensionBridgeHelper bridge : this.bridges) {
-			Map<BlockPos, IBlockState> stateMap = new HashMap<>();
-			bridge.generate(dungeonGenerator, stateMap);
-			
-			List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-			for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-				blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+		if(this.generator.getDungeon().isConstructBridges()) {
+			for(SuspensionBridgeHelper bridge : this.bridges) {
+				Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+				bridge.generate(dungeonGenerator, stateMap);
+				
+				List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+				for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+					blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+				}
+				dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.generator.getPos(), blockInfoList, new PlacementSettings(), mobType));
 			}
-			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.generator.getPos(), blockInfoList, new PlacementSettings(), mobType));
 		}
 	}
 	
