@@ -2,6 +2,9 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
@@ -12,7 +15,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	private AbstractEntityLaser endlaser;
 	private int executionTime = 0;
 
-	private static final int LASER_SPAWN_TIME = 1;
+	private static final int LASER_SPAWN_TIME = 10;
 
 	public BossAIEndLaser(EntityCQREnderCalamity entity) {
 		super(entity);
@@ -32,6 +35,9 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.entity.teleport(home.getX(), home.getY(), home.getZ());
 			//TODO: Remove blocks in the center
 		}
+		
+		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_LASER_STATIONARY).build();
+		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 	}
 
 	@Override
@@ -41,7 +47,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		this.executionTime++;
 
 		// Summon laser
-		if (this.executionTime == 1) {
+		if (this.executionTime == LASER_SPAWN_TIME) {
 			this.createLaser();
 		}
 		if (this.endlaser != null) {
@@ -82,6 +88,8 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.endlaser.setDead();
 			this.endlaser = null;
 		}
+		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.setCantUpdatePhase(false);
 		this.entity.forceTeleport();
 		super.resetTask();
