@@ -252,11 +252,18 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public static final String ANIM_NAME_SHOOT_BALL = ANIM_NAME_PREFIX + "shootEnergyBall";
 	public static final String ANIM_NAME_SPIN_HANDS = ANIM_NAME_PREFIX + "spin_hands";
 	public static final String ANIM_NAME_LASER_STATIONARY = ANIM_NAME_PREFIX + "laser_stationary";
+	public static final String ANIM_NAME_DEATH = ANIM_NAME_PREFIX + "death";
 
 	private String currentAnimation = null;
 
 	@SuppressWarnings("unchecked")
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH, false));
+			return PlayState.CONTINUE;
+		}
+
 		if (this.dataManager.get(IS_HURT)) {
 			event.getController().transitionLengthTicks = 0;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, false));
@@ -320,6 +327,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean updateIndicator_Hand_RU = false;
 
 	private <E extends IAnimatable> PlayState predicateArmRightUpper(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			return PlayState.STOP;
+		}
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_IDLE, true));
 		}
@@ -336,6 +347,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private Boolean updateIndicator_Hand_RM = false;
 
 	private <E extends IAnimatable> PlayState predicateArmRightMiddle(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			return PlayState.STOP;
+		}
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_IDLE, true));
 		}
@@ -352,6 +367,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private Boolean updateIndicator_Hand_RL = false;
 
 	private <E extends IAnimatable> PlayState predicateArmRightLower(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			return PlayState.STOP;
+		}
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_IDLE, true));
 		}
@@ -368,6 +387,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private Boolean updateIndicator_Hand_LU = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftUpper(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			return PlayState.STOP;
+		}
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_IDLE, true));
 		}
@@ -384,6 +407,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private Boolean updateIndicator_Hand_LM = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftMiddle(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			return PlayState.STOP;
+		}
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_IDLE, true));
 		}
@@ -401,6 +428,10 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean dontUpdatePhase = false;
 
 	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			return PlayState.STOP;
+		}
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_IDLE, true));
 		}
@@ -1017,6 +1048,32 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public boolean canEntityBeSeen(Entity entityIn) {
 		// 48 * 48 = 2304
 		return entityIn.getDistanceSq(this.getCirclingCenter()) <= 2304;
+	}
+
+	private DamageSource deathCause = null;
+
+	@Override
+	public void onDeath(DamageSource cause) {
+		this.deathCause = cause;
+		super.onDeath(cause);
+	}
+
+	// Death animation
+	// Death animation time: 1.88s => 38 ticks
+	@Override
+	protected void onDeathUpdate() {
+		++this.deathTime;
+		if (this.deathTime == 43 && this.isServerWorld()) {
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+		}
+		if (this.deathTime >= 44 && this.isServerWorld()) {
+			if (this.deathCause != null) {
+				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+			}
+			this.setDead();
+
+			this.onFinalDeath();
+		}
 	}
 
 }

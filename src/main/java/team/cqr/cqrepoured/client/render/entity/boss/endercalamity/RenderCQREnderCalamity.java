@@ -112,5 +112,10 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	protected ResourceLocation getTextureForBone(String boneName, EntityCQREnderCalamity currentEntity) {
 		return null;
 	}
+	
+	@Override
+	protected float getDeathMaxRotation(EntityCQREnderCalamity entityLivingBaseIn) {
+		return 0;
+	}
 
 }
