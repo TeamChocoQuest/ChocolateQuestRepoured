@@ -53,6 +53,24 @@ public class PropertyFileHelper {
 
 		return s;
 	}
+	
+	public static float getFloatProperty(Properties prop, String key, float defVal) {
+		String s = prop.getProperty(key);
+		if (s == null) {
+			return defVal;
+		}
+
+		s = s.trim();
+		if (s.isEmpty()) {
+			return defVal;
+		}
+
+		try {
+			return Float.parseFloat(s);
+		} catch (NumberFormatException e) {
+			return defVal;
+		}
+	}
 
 	public static boolean getBooleanProperty(Properties prop, String key, boolean defVal) {
 		String s = prop.getProperty(key);
