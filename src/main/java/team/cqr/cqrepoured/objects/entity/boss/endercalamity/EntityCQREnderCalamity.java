@@ -106,10 +106,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return this.currentPhase;
 	}
 
-	public static enum E_CALAMITY_ANIMATION_SPECIAL {
-		SHOOT_LASER, STUNNED, SHOOT_ENERGY_BALL, DYING, LASERING
-	}
-
 	public static enum E_CALAMITY_HAND {
 		LEFT_UPPER("handLeftUpper"), LEFT_MIDDLE("handLeftMiddle"), LEFT_LOWER("handLeftLower"), RIGHT_UPPER("handRightUpper"), RIGHT_MIDDLE("handRightMiddle"), RIGHT_LOWER("handRightLower");
 
