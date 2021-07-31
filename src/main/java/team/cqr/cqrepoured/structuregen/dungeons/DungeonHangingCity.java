@@ -26,11 +26,17 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	private int maxIslandDistance = 30;
 	private int yFactorHeight = 20;
 	private int heightVariation = 10;
+	private int bridgeWidth = 3;
 	private boolean digAirCave = true;
 	private boolean constructBridges = true;
+	private float bridgeTension = 5.0F;
 
 	private IBlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
 	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
+	private IBlockState bridgeBlock = Blocks.PLANKS.getDefaultState();
+	private IBlockState bridgeFenceBlock = Blocks.OAK_FENCE.getDefaultState();
+	private IBlockState bridgeRailingBlock = Blocks.AIR.getDefaultState();
+	private IBlockState bridgeAnchorBlock = Blocks.OBSERVER.getDefaultState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
 	// private int bridgeChance = 20;
 	private boolean buildChains = true;
@@ -47,6 +53,9 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 		this.maxIslandDistance = PropertyFileHelper.getIntProperty(prop, "maxIslandDistance", 30);
 		this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
 		this.heightVariation = PropertyFileHelper.getIntProperty(prop, "islandHeightVariation", 10);
+		this.bridgeWidth = PropertyFileHelper.getIntProperty(prop, "bridgeWidth", 3);
+		
+		this.bridgeTension = PropertyFileHelper.getFloatProperty(prop, "bridgeTension", 5.0F);
 
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 		this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
@@ -57,6 +66,10 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 
 		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.getDefaultState());
 		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.getDefaultState());
+		this.bridgeAnchorBlock  = PropertyFileHelper.getBlockStateProperty(prop, "bridgeAnchorBlock", Blocks.OBSIDIAN.getDefaultState());
+		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeBlock", Blocks.PLANKS.getDefaultState());
+		this.bridgeFenceBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeFenceBlock", Blocks.OAK_FENCE.getDefaultState());
+		this.bridgeRailingBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeRailingBlock", Blocks.AIR.getDefaultState());
 	}
 
 	@Override
@@ -164,38 +177,32 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 
 	@Override
 	public float getBridgeTension() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.bridgeTension;
 	}
 
 	@Override
 	public int getBridgeWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.bridgeWidth;
 	}
 
 	@Override
 	public IBlockState getBridgePathBlock() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.bridgeBlock;
 	}
 
 	@Override
 	public IBlockState getBridgeFenceBlock() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.bridgeFenceBlock;
 	}
 
 	@Override
 	public IBlockState getBridgeRailingBlock() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.bridgeRailingBlock;
 	}
 
 	@Override
 	public IBlockState getBridgeAnchorBlock() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.bridgeAnchorBlock;
 	}
 	
 }
