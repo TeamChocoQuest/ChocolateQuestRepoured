@@ -453,6 +453,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	public boolean forceTeleport() {
+		if(!this.hasAttackTarget()) {
+			return false;
+		}
 		try {
 			this.teleportAI.forceExecution();
 			return true;
@@ -651,7 +654,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 					this.setAttackTarget((EntityLivingBase) source.getTrueSource());
 				}
 
-				this.teleportAI.forceExecution();
+				this.forceTeleport();
 
 				switch (this.getCurrentPhase()) {
 				case PHASE_DYING:
@@ -696,7 +699,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void onEntityUpdate() {
 		if (this.firstUpdate && !this.hasHomePositionCQR() && !this.world.isRemote) {
 			this.setHomePositionCQR(this.getPosition());
-			this.teleportAI.forceExecution();
+			this.forceTeleport();
 		}
 		super.onEntityUpdate();
 
