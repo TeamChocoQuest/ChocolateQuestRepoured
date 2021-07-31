@@ -531,11 +531,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
+		if(this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
+			return;
+		}
+		
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
 			if(this.posY <= 1+ (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) {
+				this.isFalling = false;
 				return;
 			}
-			super.move(type, x, 0.25D * y, z);
+			super.move(type, x, 0.125D * y, z);
 		}
 		return;
 	}
@@ -1080,6 +1085,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		super.onDeath(cause);
 	}
 
+	private boolean isFalling = false;
+	
+	@Override
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+		this.isFalling = !onGroundIn;
+		super.updateFallState(y, onGroundIn, state, pos);
+	}
+	
 	// Death animation
 	// Death animation time: 1.88s => 38 ticks
 	// Transition time: 10 ticks
@@ -1089,17 +1102,20 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if(!this.isServerWorld()) {
 			return;
 		}
-		if(this.deathTime < 1 && !(this.posY <= 1+ (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) && (Math.abs(this.prevPosY - this.posY) > 0.05 )) {
+		
+		if(/*!(this.posY <= 1+ (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) &&*/ this.isFalling ) {
 			return;
 		}
 		
-		if(!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
-			this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, true);
-		}
-		
-		System.out.println("DT: " + this.deathTime);
 		
 		++this.deathTime;
+		if(this.deathTime < 5) {
+			return;
+		}
+		if(!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
+			System.out.println("DT: " + this.deathTime);
+			this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, true);
+		}
 		if (this.deathTime == 53) {
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
 			this.setSizeVariation(0.0F);
