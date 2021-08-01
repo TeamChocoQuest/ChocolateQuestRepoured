@@ -698,6 +698,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
+		this.dropBadgeContentOnDeath();
+		this.dropEquipment(wasRecentlyHit, lootingModifier);
+	}
+	
+	protected void dropBadgeContentOnDeath() {
 		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BADGE);
 		if (badge.getItem() instanceof ItemBadge) {
 			IItemHandler capability = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -705,7 +710,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.entityDropItem(capability.getStackInSlot(i), 0.0F);
 			}
 		}
-		this.dropEquipment(wasRecentlyHit, lootingModifier);
 	}
 
 	@Override

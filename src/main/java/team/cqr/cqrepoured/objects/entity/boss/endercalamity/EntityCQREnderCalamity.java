@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -14,8 +15,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -28,6 +31,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
@@ -1116,8 +1121,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if(this.deathTime < 10) {
 			return;
 		}
+		
+		//LOOTVOLCANO
+		if(this.deathTime % 2 == 0) {
+			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+		}
+		
 		if(!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
-			System.out.println("DT: " + this.deathTime);
 			this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, true);
 		}
 		if (this.deathTime == 53) {
@@ -1126,11 +1136,39 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		if (this.deathTime >= 54) {
 			if (this.deathCause != null) {
-				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				this.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
 			this.setDead();
 
 			this.onFinalDeath();
+		}
+	}
+	
+	private void dropSingleItemFromLoottable(ResourceLocation table, boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+		if(table != null) {
+			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(table);
+			LootContext.Builder lootContextBuilder = new LootContext.Builder((WorldServer) this.world).withLootedEntity(this).withDamageSource(source);
+			if (wasRecentlyHit && this.attackingPlayer != null) {
+				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
+			}
+
+			List<ItemStack> loot = lootTable.generateLootForPools(this.rand, lootContextBuilder.build());
+			if(loot.isEmpty()) {
+				return;
+			}
+			Collections.shuffle(loot, this.getRNG());
+			
+			ItemStack rolledItem = loot.get(0);
+			EntityItem item = this.entityDropItem(rolledItem, 0.0F);
+			
+			double vy = 0.25D + 0.5D * this.getRNG().nextDouble();
+			double vx = -0.25D + 0.5D * this.getRNG().nextDouble();
+			double vz = -0.25D + 0.5D * this.getRNG().nextDouble();
+			
+			item.motionX = vx;
+			item.motionY = vy;
+			item.motionZ = vz;
+			item.velocityChanged = true;
 		}
 	}
 
