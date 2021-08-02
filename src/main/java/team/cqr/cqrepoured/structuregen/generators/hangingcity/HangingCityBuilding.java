@@ -143,6 +143,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
 		int rad = (int) (1.05D * radius);
+		rad += 2;
 		while (decrementor < (rad / 2)) {
 			rad -= decrementor;
 
