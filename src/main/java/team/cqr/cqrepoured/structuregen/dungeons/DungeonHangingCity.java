@@ -26,10 +26,10 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	private int maxIslandDistance = 30;
 	private int yFactorHeight = 20;
 	private int heightVariation = 10;
-	private int bridgeWidth = 3;
+	private int bridgeWidth = 5;
 	private boolean digAirCave = true;
 	private boolean constructBridges = true;
-	private float bridgeTension = 5.0F;
+	private float bridgeTension = 3.0F;
 
 	private IBlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
 	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
@@ -53,9 +53,9 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 		this.maxIslandDistance = PropertyFileHelper.getIntProperty(prop, "maxIslandDistance", 30);
 		this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
 		this.heightVariation = PropertyFileHelper.getIntProperty(prop, "islandHeightVariation", 10);
-		this.bridgeWidth = PropertyFileHelper.getIntProperty(prop, "bridgeWidth", 3);
+		this.bridgeWidth = PropertyFileHelper.getIntProperty(prop, "bridgeWidth", 5);
 		
-		this.bridgeTension = PropertyFileHelper.getFloatProperty(prop, "bridgeTension", 5.0F);
+		this.bridgeTension = PropertyFileHelper.getFloatProperty(prop, "bridgeTension", 3.0F);
 
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 		this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);

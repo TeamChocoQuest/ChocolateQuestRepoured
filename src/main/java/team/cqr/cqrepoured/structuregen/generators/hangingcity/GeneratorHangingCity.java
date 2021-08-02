@@ -43,6 +43,10 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		this.islandCount = DungeonGenUtils.randomBetween(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuildings(), this.random);
 		this.islandDistance = DungeonGenUtils.randomBetween(this.dungeon.getMinIslandDistance(), this.dungeon.getMaxIslandDistance(), this.random);
 
+		if(this.islandCount % 2 == 0) {
+			this.islandCount += 1;
+		}
+		
 		this.buildingGrid = new HangingCityBuilding[(2* islandCount) + 4][(2* islandCount) + 4];
 		
 		final int offsetXY = this.islandCount +2;
@@ -103,10 +107,11 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 					break;
 				}
 			}
-			lastProcessed = new HangingCityBuilding(this, coords.getFirst(), coords.getSecond(), structure);
-			lastProcessed.preProcess(world, dungeonGenerator, null);
-			this.buildings.add(lastProcessed);
-			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()] = lastProcessed;
+			 
+			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()] = new HangingCityBuilding(this, coords.getFirst(), coords.getSecond(), structure);
+			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()].preProcess(world, dungeonGenerator, null);
+			this.buildings.add(this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()]);
+			lastProcessed = this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()];
 		}
 		//Calculate bridge connections
 		//Needs to call building.connectTo on the first and markAsConnected on the second
@@ -125,6 +130,9 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 				//final int[] diagonalNeighbours = new int[] {0,6,8,2};
 				for(int in : directNeighbours) {
 					if(neighbours[in] != null) {
+						/*if(building.isConnectedToAnyBuilding() && neighbours[in].isConnectedToAnyBuilding()) {
+							continue;
+						}*/
 						if(!building.isConnectedTo(neighbours[in])) {
 							building.connectTo(neighbours[in]);
 							break;
@@ -176,8 +184,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	}*/
 	
 	HangingCityBuilding getBuildingFromGridPos(int x, int y) {
-		x += this.islandCount;
-		y += this.islandCount;
+		x += (this.islandCount +2);
+		y += (this.islandCount +2);
 		
 		return this.buildingGrid[x][y];
 	}

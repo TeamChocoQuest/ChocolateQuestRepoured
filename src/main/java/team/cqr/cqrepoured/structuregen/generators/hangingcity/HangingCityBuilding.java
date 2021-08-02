@@ -45,10 +45,11 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		super(generator);
 		this.gridPosX = posX;
 		this.gridPosY = posY;
-		this.worldPosition = this.generator.getCenterPosForIsland(this);
 		this.structure = structure;
 		
 		this.islandRadius = this.structure.getSize().getX() > this.structure.getSize().getZ() ? this.structure.getSize().getX() : this.structure.getSize().getZ();
+		
+		this.worldPosition = this.generator.getCenterPosForIsland(this);
 	}
 	
 	public HangingCityBuilding[] getNeighbours() {
@@ -75,7 +76,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 	
 	public boolean hasFreeNeighbourSpots() {
-		return this.getNeighbours().length < 8;
+		return !this.getFreeNeighbourSpots().isEmpty();
 	}
 	
 	public boolean isConnectedToAnyBuilding() {
@@ -232,9 +233,9 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		Vec3d  bridgeVector = new Vec3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
 		Vec3d horizontalVector = new Vec3d(bridgeVector.x, 0, bridgeVector.z);
 		horizontalVector = horizontalVector.normalize();
-		horizontalVector = horizontalVector.scale(this.islandRadius -2);
+		horizontalVector = horizontalVector.scale((1.5D * this.islandRadius) - 2);
 		
-		final BlockPos result = this.getWorldPosition().add(horizontalVector.x, 0, horizontalVector.z);
+		final BlockPos result = this.getWorldPosition().add(horizontalVector.x, 1, horizontalVector.z);
 		
 		return result;
 	}
