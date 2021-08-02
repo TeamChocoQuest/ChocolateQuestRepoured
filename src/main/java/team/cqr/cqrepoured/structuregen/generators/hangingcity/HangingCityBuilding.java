@@ -142,7 +142,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	private void buildPlatform(BlockPos center, int radius, DungeonInhabitant mobType, DungeonGenerator dungeonGenerator) {
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
-		int rad = (int) (1.5D * radius);
+		int rad = (int) (1.1D * radius);
 		while (decrementor < (rad / 2)) {
 			rad -= decrementor;
 
@@ -233,7 +233,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		Vec3d  bridgeVector = new Vec3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
 		Vec3d horizontalVector = new Vec3d(bridgeVector.x, 0, bridgeVector.z);
 		horizontalVector = horizontalVector.normalize();
-		horizontalVector = horizontalVector.scale((1.5D * this.islandRadius) - 2);
+		horizontalVector = horizontalVector.scale((1.1D * this.islandRadius) - 2);
 		
 		final BlockPos result = this.getWorldPosition().add(horizontalVector.x, 1, horizontalVector.z);
 		
