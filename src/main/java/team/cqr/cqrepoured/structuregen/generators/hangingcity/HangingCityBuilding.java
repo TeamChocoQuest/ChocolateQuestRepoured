@@ -54,9 +54,9 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	public HangingCityBuilding[] getNeighbours() {
 		HangingCityBuilding[] neighbours = new HangingCityBuilding[8];
 		/* Indexes
-		 * [0, 3, 6]
-		 * [1, 4, 7]
-		 * [2, 5, 8]
+		 * [0, 3, 5]
+		 * [1, -, 6]
+		 * [2, 4, 7]
 		 */
 		int i = 0;
 		for(int ix = this.gridPosX -1; ix <= this.gridPosX +1; ix++) {
@@ -80,6 +80,10 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	
 	public boolean isConnectedToAnyBuilding() {
 		return !this.connectedIslands.isEmpty();
+	}
+	
+	public boolean isConnectedTo(HangingCityBuilding building) {
+		return this.connectedIslands.contains(building);
 	}
 	
 	public void connectTo(HangingCityBuilding building) {
