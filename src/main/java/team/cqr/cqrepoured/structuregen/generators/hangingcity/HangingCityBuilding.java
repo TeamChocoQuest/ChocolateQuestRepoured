@@ -131,7 +131,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 
 	@Override
 	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
-		this.buildPlatform(this.worldPosition, this.islandRadius, mobType, dungeonGenerator);
+		this.buildPlatform(world, this.worldPosition, this.islandRadius, mobType, dungeonGenerator);
 		if (this.structure != null) {
 			PlacementSettings settings = new PlacementSettings();
 			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.worldPosition.up(), this.structure, settings);
@@ -139,10 +139,10 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		}
 	}
 
-	private void buildPlatform(BlockPos center, int radius, DungeonInhabitant mobType, DungeonGenerator dungeonGenerator) {
+	private void buildPlatform(World world, BlockPos center, int radius, DungeonInhabitant mobType, DungeonGenerator dungeonGenerator) {
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
-		int rad = (int) (1.1D * radius);
+		int rad = (int) (1.05D * radius);
 		while (decrementor < (rad / 2)) {
 			rad -= decrementor;
 
@@ -158,10 +158,10 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		}
 
 		if (this.generator.getDungeon().doBuildChains()) {
-			this.buildChain(center.add(radius * 0.9, -2, radius * 0.9), 0, stateMap);
-			this.buildChain(center.add(-radius * 0.9, -2, -radius * 0.9), 0, stateMap);
-			this.buildChain(center.add(-radius * 0.9, -2, radius * 0.9), 1, stateMap);
-			this.buildChain(center.add(radius * 0.9, -2, -radius * 0.9), 1, stateMap);
+			this.buildChain(world, center.add(radius * 0.75, -2, radius * 0.75), 0, stateMap);
+			this.buildChain(world, center.add(-radius * 0.75, -2, -radius * 0.75), 0, stateMap);
+			this.buildChain(world, center.add(-radius * 0.75, -2, radius * 0.75), 1, stateMap);
+			this.buildChain(world, center.add(radius * 0.75, -2, -radius * 0.75), 1, stateMap);
 		}
 
 		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
@@ -171,7 +171,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		dungeonGenerator.add(new DungeonPartBlock(this.generator.getWorld(), dungeonGenerator, center, blockInfoList, new PlacementSettings(), mobType));
 	}
 
-	private void buildChain(BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
+	private void buildChain(World world, BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
 		/*
 		 * Chain from side: # # # # # # # # # # # # # # # # # # # #
 		 */
@@ -181,9 +181,8 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		 * int maxY = DungeonGenUtils.getYForPos(this.world, pos.getX(), pos.getZ(), true);
 		 * maxY = maxY >= 255 ? 255 : maxY;
 		 */
-		// TODO: Move this option to the config of the dungeon, that is cleaner
 		// Or: Change this to something like "world.getMaxBuildHeight()", if that exists.
-		int maxY = 255;
+		int maxY = world.getHeight();
 		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
 		for (int i = 0; i < chainCount; i++) {
 			// Check the direction of the chain
@@ -233,7 +232,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		Vec3d  bridgeVector = new Vec3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
 		Vec3d horizontalVector = new Vec3d(bridgeVector.x, 0, bridgeVector.z);
 		horizontalVector = horizontalVector.normalize();
-		horizontalVector = horizontalVector.scale((1.1D * this.islandRadius) - 2);
+		horizontalVector = horizontalVector.scale((1.05D * this.islandRadius) - 2);
 		
 		final BlockPos result = this.getWorldPosition().add(horizontalVector.x, 1, horizontalVector.z);
 		
