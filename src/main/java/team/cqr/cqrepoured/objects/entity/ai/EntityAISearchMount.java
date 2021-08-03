@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -14,7 +13,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -33,11 +31,11 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	protected boolean belongsToPlayerEntity(@Nonnull UUID uuid) {
-		if (this.world instanceof WorldServer) {
+		/*if (this.world instanceof WorldServer) {
 			WorldServer server = (WorldServer) this.world;
 			Entity byUUID = server.getEntityFromUuid(uuid);
 			return byUUID != null && byUUID instanceof EntityPlayer;
-		}
+		}*/
 
 		return this.world.getPlayerEntityByUUID(uuid) != null;
 	}
