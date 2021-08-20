@@ -54,6 +54,13 @@ public class CQRSounds {
 	public static final SoundEvent PIRATE_HURT = Null();
 	@ObjectHolder("entity.pirate.death")
 	public static final SoundEvent PIRATE_DEATH = Null();
+	
+	@ObjectHolder("entity.ogre.ambient")
+	public static final SoundEvent OGRE_AMBIENT = Null();
+	@ObjectHolder("entity.ogre.hurt")
+	public static final SoundEvent OGRE_HURT = Null();
+	@ObjectHolder("entity.ogre.death")
+	public static final SoundEvent OGRE_DEATH = Null();
 
 	@ObjectHolder("entity.ender_calamity.charge_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_CHARGE_ENERGY_BALL = Null();

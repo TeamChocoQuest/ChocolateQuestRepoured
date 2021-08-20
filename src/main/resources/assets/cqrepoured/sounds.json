@@ -149,12 +149,41 @@
             {"name": "cqrepoured:entity/pirate/hurt_3"}
         ]
     },
+	
     "entity.pirate.death":
     {
         "category": "neutral",
         "sounds": [
             {"name": "cqrepoured:entity/pirate/death_1"},
             {"name": "cqrepoured:entity/pirate/death_2"}
+        ]
+    },
+	
+	"entity.ogre.ambient":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/ogre/ambient_1"},
+            {"name": "cqrepoured:entity/ogre/ambient_2"},
+            {"name": "cqrepoured:entity/ogre/ambient_3"}
+        ]
+    },
+    "entity.ogre.hurt":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/ogre/hurt_1"},
+            {"name": "cqrepoured:entity/ogre/hurt_2"},
+			{"name": "cqrepoured:entity/ogre/hurt_3"},
+            {"name": "cqrepoured:entity/ogre/hurt_4"}
+        ]
+    },
+    "entity.ogre.death":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/ogre/death_1"},
+            {"name": "cqrepoured:entity/ogre/death_2"}
         ]
     },
     
