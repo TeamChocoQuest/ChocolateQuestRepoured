@@ -51,9 +51,4 @@ public class EntityCQROgre extends AbstractEntityCQR {
 		return CQRSounds.OGRE_HURT;
 	}
 	
-	@Override
-	protected float getSoundVolume() {
-		return 0.5F * super.getSoundVolume();
-	}
-	
 }
