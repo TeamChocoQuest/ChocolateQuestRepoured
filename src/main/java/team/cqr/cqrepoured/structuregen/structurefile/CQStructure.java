@@ -62,6 +62,7 @@ import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
+import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
@@ -485,7 +486,7 @@ public class CQStructure {
 
 	public void addAll(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, PlacementSettings settings, DungeonInhabitant dungeonMobType) {
 		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, partPos, this.getBlockInfoList(), settings, dungeonMobType));
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, partPos, this.getSpecialBlockInfoList(), settings, dungeonMobType));
+		dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, partPos, this.getSpecialBlockInfoList(), settings, dungeonMobType));
 		dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, partPos, this.getEntityInfoList(), settings, dungeonMobType));
 		if (!this.unprotectedBlockList.isEmpty()) {
 			for (int i : this.unprotectedBlockList) {
