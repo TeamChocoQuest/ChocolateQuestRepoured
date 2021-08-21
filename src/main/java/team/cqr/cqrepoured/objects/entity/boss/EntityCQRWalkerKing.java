@@ -44,6 +44,7 @@ import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.Capes;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningCircles;
@@ -229,6 +230,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 					((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 				}
 			}
+			this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
 			if (force) {
 				this.teleport(p.x, p.y, p.z);
@@ -255,6 +257,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		// KILL IT!!!
+		this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 		int lightningCount = 6 + this.getRNG().nextInt(3);
 		double angle = 360 / lightningCount;
 		double dragonSize = dragon.width > dragon.height ? dragon.width : dragon.height;
@@ -270,6 +273,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	private void handleActivation() {
 		if (!this.world.isRemote && !this.world.getWorldInfo().isThundering()) {
+			
+			this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
+			
 			this.active = true;
 			this.activationCooldown = 80;
 			this.world.getWorldInfo().setCleanWeatherTime(0);
@@ -357,6 +363,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			// Maybe move this whole ability to the king shield itself??
 			ItemStack shieldStack = this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
 			if (amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ItemShield) {
+				this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 				if (source.getImmediateSource() instanceof EntityLivingBase /* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
 					if (DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
 						Vec3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
@@ -378,6 +385,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// Revenge Attack
 				if (this.getRNG().nextDouble() < 0.7) {
 					this.attackEntityAsMob(source.getTrueSource());
+					this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 					this.teleportBehindEntity(source.getTrueSource());
 				}
 			}
@@ -486,22 +494,27 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_WITHER_AMBIENT;
+		return CQRSounds.WALKER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_WITHER_HURT;
+		return CQRSounds.WALKER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_WITHER_DEATH;
+		return CQRSounds.WALKER_KING_DEATH_EFFECT;
 	}
 
 	@Override
 	protected SoundEvent getFinalDeathSound() {
-		return SoundEvents.ENTITY_ENDERMEN_DEATH;
+		return CQRSounds.WALKER_KING_DEATH;
+	}
+	
+	@Override
+	protected float getSoundPitch() {
+		return 0.75F * super.getSoundPitch();
 	}
 
 	@Override
