@@ -223,12 +223,20 @@ public class DungeonMapTool {
 		}
 	}
 
+	private static final ReflectionField INT_CACHE_INT_CACHE_SIZE = new ReflectionField(IntCache.class, "field_76451_a", "intCacheSize");
+	private static final ReflectionField INT_CACHE_FREE_SMALL_ARRAYS = new ReflectionField(IntCache.class, "field_76449_b", "freeSmallArrays");
+	private static final ReflectionField INT_CACHE_IN_USE_SMALL_ARRAYS = new ReflectionField(IntCache.class, "field_76450_c", "inUseSmallArrays");
+	private static final ReflectionField INT_CACHE_FREE_LARGE_ARRAYS = new ReflectionField(IntCache.class, "field_76447_d", "freeLargeArrays");
+	private static final ReflectionField INT_CACHE_IN_USE_LARGE_ARRAYS = new ReflectionField(IntCache.class, "field_76448_e", "inUseLargeArrays");
+
 	private static void hardResetIntCache() {
-		new ReflectionField(IntCache.class, "", "intCacheSize").set(null, 256);
-		new ReflectionField(IntCache.class, "", "freeSmallArrays").<List<int[]>>get(null).clear();
-		new ReflectionField(IntCache.class, "", "inUseSmallArrays").<List<int[]>>get(null).clear();
-		new ReflectionField(IntCache.class, "", "freeLargeArrays").<List<int[]>>get(null).clear();
-		new ReflectionField(IntCache.class, "", "inUseLargeArrays").<List<int[]>>get(null).clear();
+		synchronized (IntCache.class) {
+			INT_CACHE_INT_CACHE_SIZE.set(null, 256);
+			INT_CACHE_FREE_SMALL_ARRAYS.<List<int[]>>get(null).clear();
+			INT_CACHE_IN_USE_SMALL_ARRAYS.<List<int[]>>get(null).clear();
+			INT_CACHE_FREE_LARGE_ARRAYS.<List<int[]>>get(null).clear();
+			INT_CACHE_IN_USE_LARGE_ARRAYS.<List<int[]>>get(null).clear();
+		}
 	}
 
 	private static int color(World world, Biome biome) {
