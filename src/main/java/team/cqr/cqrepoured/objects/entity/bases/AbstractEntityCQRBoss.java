@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -73,7 +72,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			// DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
 			this.move(MoverType.SELF, 0, (10.0D / (double) MAX_DEATH_TICKS), 0);
 			if (this.deathTime == MAX_DEATH_TICKS && !this.world.isRemote) {
-				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
+				this.playSound(this.getFinalDeathSound(), 10.0F, 1.0F);
 				this.setDead();
 
 				if (this.doesExplodeOnDeath()) {
