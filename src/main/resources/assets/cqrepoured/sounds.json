@@ -187,6 +187,59 @@
         ]
     },
     
+	"entity.walker.ambient":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/walker/ambient_1"},
+            {"name": "cqrepoured:entity/walker/ambient_2"},
+            {"name": "cqrepoured:entity/walker/ambient_3"},
+			{"name": "cqrepoured:entity/walker/ambient_4"},
+			{"name": "cqrepoured:entity/walker/ambient_5"}
+        ]
+    },
+    "entity.walker.hurt":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/walker/hurt_1"},
+            {"name": "cqrepoured:entity/walker/hurt_2"},
+			{"name": "cqrepoured:entity/walker/hurt_3"},
+            {"name": "cqrepoured:entity/walker/hurt_4"},
+			{"name": "cqrepoured:entity/walker/hurt_5"}
+        ]
+    },
+    "entity.walker.death":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/walker/death_1"},
+            {"name": "cqrepoured:entity/walker/death_2"}
+        ]
+    },
+    "entity.walker_king.death":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/walker/walkerking/death"}
+        ]
+    },
+    "entity.walker_king.death_effect":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/walker/walkerking/death_effect"}
+        ]
+    },
+	"entity.walker_king.laugh":
+    {
+        "category": "neutral",
+        "sounds": [
+            {"name": "cqrepoured:entity/walker/walkerking/laugh_1"},
+			{"name": "cqrepoured:entity/walker/walkerking/laugh_2"}
+        ]
+    },
+	
     "entity.bubble.bubble":
     {
         "category": "neutral",

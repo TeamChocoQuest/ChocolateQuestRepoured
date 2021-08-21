@@ -61,6 +61,20 @@ public class CQRSounds {
 	public static final SoundEvent OGRE_HURT = Null();
 	@ObjectHolder("entity.ogre.death")
 	public static final SoundEvent OGRE_DEATH = Null();
+	
+	@ObjectHolder("entity.walker.ambient")
+	public static final SoundEvent WALKER_AMBIENT = Null();
+	@ObjectHolder("entity.walker.hurt")
+	public static final SoundEvent WALKER_HURT = Null();
+	@ObjectHolder("entity.walker.death")
+	public static final SoundEvent WALKER_DEATH = Null();
+	@ObjectHolder("entity.walker_king.death")
+	public static final SoundEvent WALKER_KING_DEATH = Null();
+	@ObjectHolder("entity.walker_king.death_effect")
+	public static final SoundEvent WALKER_KING_DEATH_EFFECT = Null();
+	@ObjectHolder("entity.walker_king.laugh")
+	public static final SoundEvent WALKER_KING_LAUGH = Null();
+	
 
 	@ObjectHolder("entity.ender_calamity.charge_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_CHARGE_ENERGY_BALL = Null();
@@ -105,6 +119,12 @@ public class CQRSounds {
 					createSoundEvent("entity.ogre.ambient"),
 					createSoundEvent("entity.ogre.hurt"),
 					createSoundEvent("entity.ogre.death"),
+					createSoundEvent("entity.walker.ambient"),
+					createSoundEvent("entity.walker.hurt"),
+					createSoundEvent("entity.walker.death"),
+					createSoundEvent("entity.walker_king.death"),
+					createSoundEvent("entity.walker_king.death_effect"),
+					createSoundEvent("entity.walker_king.laugh"),
 					createSoundEvent("entity.ender_calamity.charge_energy_sphere"),
 					createSoundEvent("entity.ender_calamity.ready_energy_sphere"),
 					createSoundEvent("entity.ender_calamity.fire_energy_sphere"),
