@@ -46,8 +46,8 @@ public class ClientProxy implements IProxy {
 
 	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
 
-	private static final ReflectionField<Map<Advancement, AdvancementProgress>> FIELD_ADVANCEMENT_TO_PROGRESS = new ReflectionField<>(ClientAdvancementManager.class, "field_192803_d", "advancementToProgress");
-	public static final ReflectionField<List<IResourcePack>> DEFAULT_RESOURCE_PACKS = new ReflectionField<>(Minecraft.class, "field_110449_ao", "defaultResourcePacks");
+	private static final ReflectionField FIELD_ADVANCEMENT_TO_PROGRESS = new ReflectionField(ClientAdvancementManager.class, "field_192803_d", "advancementToProgress");
+	public static final ReflectionField DEFAULT_RESOURCE_PACKS = new ReflectionField(Minecraft.class, "field_110449_ao", "defaultResourcePacks");
 
 	@Override
 	public void preInit() {
@@ -118,7 +118,7 @@ public class ClientProxy implements IProxy {
 			ClientAdvancementManager manager = ((EntityPlayerSP) player).connection.getAdvancementManager();
 			Advancement advancement = manager.getAdvancementList().getAdvancement(id);
 			if (advancement != null) {
-				return FIELD_ADVANCEMENT_TO_PROGRESS.get(manager).get(advancement).isDone();
+				return FIELD_ADVANCEMENT_TO_PROGRESS.<Map<Advancement, AdvancementProgress>>get(manager).get(advancement).isDone();
 			}
 		}
 		return false;

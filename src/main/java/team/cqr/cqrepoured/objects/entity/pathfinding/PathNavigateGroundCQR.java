@@ -37,7 +37,7 @@ import team.cqr.cqrepoured.world.ChunkCacheCQR;
  */
 public class PathNavigateGroundCQR extends PathNavigateGround {
 
-	private static final ReflectionField<EntityLiving> WALK_NODE_PROCESSOR_CURRENT_ENTITY = new ReflectionField<>(WalkNodeProcessor.class, "currentEntity", "currentEntity");
+	private static final ReflectionField WALK_NODE_PROCESSOR_CURRENT_ENTITY = new ReflectionField(WalkNodeProcessor.class, "currentEntity", "currentEntity");
 
 	private int ticksAtLastPos;
 	private Vec3d lastPosCheck = Vec3d.ZERO;

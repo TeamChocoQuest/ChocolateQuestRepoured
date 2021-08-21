@@ -37,7 +37,7 @@ public class DungeonGenerationHelper {
 		}
 	}
 
-	private static final ReflectionField<Boolean> FINDING_SPAWN_POINT = new ReflectionField<>(World.class, "field_72987_B", "findingSpawnPoint");
+	private static final ReflectionField FINDING_SPAWN_POINT = new ReflectionField(World.class, "field_72987_B", "findingSpawnPoint");
 	private static final Map<Integer, Set<TravelingPlayer>> TRAVELING_PLAYERS = new HashMap<>();
 	private static final Map<Integer, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
 	private static boolean isGeneratingDelayedChunks = false;
@@ -108,7 +108,7 @@ public class DungeonGenerationHelper {
 	}
 
 	public static boolean shouldDelayDungeonGeneration(World world) {
-		return Boolean.TRUE.equals(FINDING_SPAWN_POINT.get(world));
+		return FINDING_SPAWN_POINT.getBoolean(world);
 	}
 
 	public static void addDelayedChunk(World world, int chunkX, int chunkZ) {

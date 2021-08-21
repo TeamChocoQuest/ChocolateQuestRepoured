@@ -357,10 +357,10 @@ public class ProtectedRegionEventHandler {
 	private static final ReflectionMethod<Object> METHOD_WRITE_CHUNK_DATA = new ReflectionMethod<>(AnvilChunkLoader.class, "func_183013_b", "writeChunkData", ChunkPos.class, NBTTagCompound.class);
 
 	@Deprecated
-	private static final ReflectionField<Map<UUID, ProtectedRegionContainer>> FIELD_PROTECTED_REGIONS = new ReflectionField<>(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
+	private static final ReflectionField FIELD_PROTECTED_REGIONS = new ReflectionField(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
 
 	@Deprecated
-	private static final ReflectionField<Set<UUID>> FIELD_PROTECTED_REGION_UUIDS = new ReflectionField<>(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
+	private static final ReflectionField FIELD_PROTECTED_REGION_UUIDS = new ReflectionField(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
 
 	@Deprecated
 	private static void updateChunkCapabilityEfficiently(WorldServer world, ProtectedRegion protectedRegion) {
@@ -373,7 +373,7 @@ public class ProtectedRegionEventHandler {
 				if (chunk != null) {
 					CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 					cap.addProtectedRegionUuid(protectedRegion.getUuid());
-					FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
+					FIELD_PROTECTED_REGIONS.<Map<UUID, ProtectedRegionContainer>>get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
 				} else {
 					NBTTagCompound chunkNBT = getChunkNBT(world, x, z);
 					if (chunkNBT != null) {
@@ -384,14 +384,14 @@ public class ProtectedRegionEventHandler {
 						NBTTagCompound capabilityTag = levelTag.getCompoundTag("ForgeCaps");
 						CapabilityProtectedRegionData cap = new CapabilityProtectedRegionData(null);
 						cap.readFromNBT(capabilityTag.getCompoundTag(CapabilityProtectedRegionDataProvider.LOCATION.toString()));
-						FIELD_PROTECTED_REGION_UUIDS.get(cap).add(protectedRegion.getUuid());
+						FIELD_PROTECTED_REGION_UUIDS.<Set<UUID>>get(cap).add(protectedRegion.getUuid());
 						capabilityTag.setTag(CapabilityProtectedRegionDataProvider.LOCATION.toString(), cap.writeToNBT());
 						METHOD_WRITE_CHUNK_DATA.invoke((AnvilChunkLoader) world.getChunkProvider().chunkLoader, new ChunkPos(x, z), chunkNBT);
 					} else {
 						chunk = world.getChunk(x, z);
 						CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 						cap.addProtectedRegionUuid(protectedRegion.getUuid());
-						FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
+						FIELD_PROTECTED_REGIONS.<Map<UUID, ProtectedRegionContainer>>get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
 					}
 				}
 			}
@@ -399,7 +399,7 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static final ReflectionField<DataFixer> FIELD_FIXER = new ReflectionField<>(AnvilChunkLoader.class, "field_193416_e", "fixer");
+	private static final ReflectionField FIELD_FIXER = new ReflectionField(AnvilChunkLoader.class, "field_193416_e", "fixer");
 
 	@Deprecated
 	private static NBTTagCompound getChunkNBT(WorldServer world, int chunkX, int chunkZ) {

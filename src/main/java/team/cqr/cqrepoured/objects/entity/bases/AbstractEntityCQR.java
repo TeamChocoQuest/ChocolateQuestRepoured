@@ -17,7 +17,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.IMob;
@@ -133,8 +132,8 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
 
-	private static final ReflectionField<EntityAITasks> ENTITY_LIVING_TASKS = new ReflectionField<>(EntityLiving.class, "field_70714_bg", "tasks");
-	private static final ReflectionField<EntityAITasks> ENTITY_LIVING_TARGET_TASKS = new ReflectionField<>(EntityLiving.class, "field_70715_bh", "targetTasks");
+	private static final ReflectionField ENTITY_LIVING_TASKS = new ReflectionField(EntityLiving.class, "field_70714_bg", "tasks");
+	private static final ReflectionField ENTITY_LIVING_TARGET_TASKS = new ReflectionField(EntityLiving.class, "field_70715_bh", "targetTasks");
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");

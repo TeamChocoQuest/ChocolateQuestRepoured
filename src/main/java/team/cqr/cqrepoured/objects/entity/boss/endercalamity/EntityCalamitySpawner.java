@@ -67,7 +67,7 @@ public class EntityCalamitySpawner extends Entity {
 
 	public static ItemStack FIREWORK_PURPLE_SPARK = Items.FIREWORKS.getDefaultInstance();
 
-	private static ReflectionField<Integer> FW_LIFETIME_FIELD = new ReflectionField<>(EntityFireworkRocket.class, "field_92055_b", "lifetime");
+	private static ReflectionField FW_LIFETIME_FIELD = new ReflectionField(EntityFireworkRocket.class, "field_92055_b", "lifetime");
 
 	private static final int FIREWORK_DURATION = 120;
 	private static final int FIREWORK_DIVISOR = 5;

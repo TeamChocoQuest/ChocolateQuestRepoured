@@ -224,11 +224,11 @@ public class DungeonMapTool {
 	}
 
 	private static void hardResetIntCache() {
-		new ReflectionField<Integer>(IntCache.class, "", "intCacheSize").set(null, 256);
-		new ReflectionField<List<int[]>>(IntCache.class, "", "freeSmallArrays").get(null).clear();
-		new ReflectionField<List<int[]>>(IntCache.class, "", "inUseSmallArrays").get(null).clear();
-		new ReflectionField<List<int[]>>(IntCache.class, "", "freeLargeArrays").get(null).clear();
-		new ReflectionField<List<int[]>>(IntCache.class, "", "inUseLargeArrays").get(null).clear();
+		new ReflectionField(IntCache.class, "", "intCacheSize").set(null, 256);
+		new ReflectionField(IntCache.class, "", "freeSmallArrays").<List<int[]>>get(null).clear();
+		new ReflectionField(IntCache.class, "", "inUseSmallArrays").<List<int[]>>get(null).clear();
+		new ReflectionField(IntCache.class, "", "freeLargeArrays").<List<int[]>>get(null).clear();
+		new ReflectionField(IntCache.class, "", "inUseLargeArrays").<List<int[]>>get(null).clear();
 	}
 
 	private static int color(World world, Biome biome) {

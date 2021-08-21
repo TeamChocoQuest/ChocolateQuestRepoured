@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public class BlockPlacingHelper {
 
-	private static ReflectionField<int[]> precipitationHeightMapField = new ReflectionField<>(Chunk.class, "field_76638_b", "precipitationHeightMap");
+	private static ReflectionField precipitationHeightMapField = new ReflectionField(Chunk.class, "field_76638_b", "precipitationHeightMap");
 	@SuppressWarnings("unused")
 	private static ReflectionMethod<Object> relightBlockMethod = new ReflectionMethod<>(Chunk.class, "func_76615_h", "relightBlock", int.class, int.class, int.class);
 	@SuppressWarnings("unused")

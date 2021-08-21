@@ -13,42 +13,35 @@ import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.structure.MapGenEndCity;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
-import net.minecraft.world.gen.structure.MapGenNetherBridge;
-import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.MapGenVillage;
-import net.minecraft.world.gen.structure.StructureOceanMonument;
-import net.minecraft.world.gen.structure.WoodlandMansion;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public class VanillaStructureHelper {
 
-	private static final ReflectionField<World> FIELD_WORLD = new ReflectionField<>(MapGenBase.class, "field_75039_c", "world");
-	private static final ReflectionField<Random> FIELD_RAND = new ReflectionField<>(MapGenBase.class, "field_75038_b", "rand");
+	private static final ReflectionField FIELD_WORLD = new ReflectionField(MapGenBase.class, "field_75039_c", "world");
+	private static final ReflectionField FIELD_RAND = new ReflectionField(MapGenBase.class, "field_75038_b", "rand");
 	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	// ChunkGeneratorOverworld
-	private static final ReflectionField<ChunkGeneratorSettings> FIELD_SETTINGS = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_186000_s", "settings");
-	private static final ReflectionField<MapGenStronghold> FIELD_STRONGHOLD_GENERATOR = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_186004_w", "strongholdGenerator");
-	private static final ReflectionField<MapGenVillage> FIELD_VILLAGE_GENERATOR = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_186005_x", "villageGenerator");
-	private static final ReflectionField<MapGenMineshaft> FIELD_MINESHAFT_GENERATOR = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_186006_y", "mineshaftGenerator");
-	private static final ReflectionField<MapGenScatteredFeature> FIELD_SCATTERED_FEATURE_GENERATOR = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_186007_z", "scatteredFeatureGenerator");
-	private static final ReflectionField<StructureOceanMonument> FIELD_OCEAN_MONUMENT_GENERATOR = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_185980_B", "oceanMonumentGenerator");
-	private static final ReflectionField<WoodlandMansion> FIELD_WOODLAND_MANSION_GENERATOR = new ReflectionField<>(ChunkGeneratorOverworld.class, "field_191060_C", "woodlandMansionGenerator");
+	private static final ReflectionField FIELD_SETTINGS = new ReflectionField(ChunkGeneratorOverworld.class, "field_186000_s", "settings");
+	private static final ReflectionField FIELD_STRONGHOLD_GENERATOR = new ReflectionField(ChunkGeneratorOverworld.class, "field_186004_w", "strongholdGenerator");
+	private static final ReflectionField FIELD_VILLAGE_GENERATOR = new ReflectionField(ChunkGeneratorOverworld.class, "field_186005_x", "villageGenerator");
+	private static final ReflectionField FIELD_MINESHAFT_GENERATOR = new ReflectionField(ChunkGeneratorOverworld.class, "field_186006_y", "mineshaftGenerator");
+	private static final ReflectionField FIELD_SCATTERED_FEATURE_GENERATOR = new ReflectionField(ChunkGeneratorOverworld.class, "field_186007_z", "scatteredFeatureGenerator");
+	private static final ReflectionField FIELD_OCEAN_MONUMENT_GENERATOR = new ReflectionField(ChunkGeneratorOverworld.class, "field_185980_B", "oceanMonumentGenerator");
+	private static final ReflectionField FIELD_WOODLAND_MANSION_GENERATOR = new ReflectionField(ChunkGeneratorOverworld.class, "field_191060_C", "woodlandMansionGenerator");
 
 	// ChunkGeneratorHell
-	private static final ReflectionField<MapGenNetherBridge> FIELD_GEN_NETHER_BRIDGE = new ReflectionField<>(ChunkGeneratorHell.class, "field_73172_c", "genNetherBridge");
+	private static final ReflectionField FIELD_GEN_NETHER_BRIDGE = new ReflectionField(ChunkGeneratorHell.class, "field_73172_c", "genNetherBridge");
 
 	// ChunkGeneratorEnd
-	private static final ReflectionField<MapGenEndCity> FIELD_END_CITY_GEN = new ReflectionField<>(ChunkGeneratorEnd.class, "field_185972_n", "endCityGen");
+	private static final ReflectionField FIELD_END_CITY_GEN = new ReflectionField(ChunkGeneratorEnd.class, "field_185972_n", "endCityGen");
 
 	// ChunkGeneratorFlat
 	private static final String[] STRUCTURE_NAMES = { "Stronghold", "Village", "Mineshaft", "Temple", "Monument", "Mansion", "Fortress", "EndCity" };
-	private static final ReflectionField<Map<String, MapGenStructure>> FIELD_STRUCTURE_GENERATORS = new ReflectionField<>(ChunkGeneratorFlat.class, "field_82696_f", "structureGenerators");
+	private static final ReflectionField FIELD_STRUCTURE_GENERATORS = new ReflectionField(ChunkGeneratorFlat.class, "field_82696_f", "structureGenerators");
 
 	public static boolean isStructureInRange(World worldIn, BlockPos startPos, int radius) {
 		if (worldIn.isRemote) {

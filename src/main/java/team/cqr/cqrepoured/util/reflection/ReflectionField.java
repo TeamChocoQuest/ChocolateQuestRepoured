@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.util.reflection;
 
 import java.lang.reflect.Field;
 
-public class ReflectionField<T> {
+public class ReflectionField {
 
 	private final Field field;
 
@@ -45,18 +45,146 @@ public class ReflectionField<T> {
 		this.field = f;
 	}
 
-	public void set(Object obj, T value) {
+	public void set(Object obj, Object value) {
 		try {
 			this.field.set(obj, value);
-		} catch (IllegalAccessException e) {
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, boolean value) {
+		try {
+			this.field.setBoolean(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, byte value) {
+		try {
+			this.field.setByte(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, short value) {
+		try {
+			this.field.setShort(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, int value) {
+		try {
+			this.field.setInt(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, long value) {
+		try {
+			this.field.setLong(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, float value) {
+		try {
+			this.field.setFloat(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, double value) {
+		try {
+			this.field.setDouble(obj, value);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void set(Object obj, char value) {
+		try {
+			this.field.setChar(obj, value);
+		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public T get(Object obj) {
+	public <T> T get(Object obj) {
 		try {
 			return (T) this.field.get(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public boolean getBoolean(Object obj) {
+		try {
+			return this.field.getBoolean(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public byte getByte(Object obj) {
+		try {
+			return this.field.getByte(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public short getShort(Object obj) {
+		try {
+			return this.field.getShort(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public int getInt(Object obj) {
+		try {
+			return this.field.getInt(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public long getLong(Object obj) {
+		try {
+			return this.field.getLong(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public float getFloat(Object obj) {
+		try {
+			return this.field.getFloat(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public double getDouble(Object obj) {
+		try {
+			return this.field.getDouble(obj);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public char getChar(Object obj) {
+		try {
+			return this.field.getChar(obj);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}

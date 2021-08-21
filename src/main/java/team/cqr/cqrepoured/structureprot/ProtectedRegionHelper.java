@@ -39,7 +39,7 @@ public class ProtectedRegionHelper {
 	public static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
 	public static final Set<Material> PLACEABLE_MATERIAL_WHITELIST = new HashSet<>();
 
-	private static final ReflectionField<Entity> EXPLODER_FIELD = new ReflectionField<>(Explosion.class, "field_77283_e", "exploder");
+	private static final ReflectionField EXPLODER_FIELD = new ReflectionField(Explosion.class, "field_77283_e", "exploder");
 
 	private ProtectedRegionHelper() {
 

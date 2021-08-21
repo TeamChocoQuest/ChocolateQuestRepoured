@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class ChunkUtil {
 
-	private static final ReflectionField<Integer> FIELD_MAX_DEPTH = new ReflectionField<>(ForgeChunkManager.Ticket.class, "maxDepth", "maxDepth");
+	private static final ReflectionField FIELD_MAX_DEPTH = new ReflectionField(ForgeChunkManager.Ticket.class, "maxDepth", "maxDepth");
 
 	public static ForgeChunkManager.Ticket getTicket(World world, BlockPos pos1, BlockPos pos2) {
 		return getTicket(world, pos1.getX() >> 4, pos1.getZ() >> 4, pos2.getX() >> 4, pos2.getZ() >> 4, false);

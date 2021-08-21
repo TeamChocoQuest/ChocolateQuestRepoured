@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class BannerHelper {
 
-	private static final ReflectionField<List<BannerPattern>> PATTERN_LIST = new ReflectionField<>(TileEntityBanner.class, "field_175122_h", "patternList");
+	private static final ReflectionField PATTERN_LIST = new ReflectionField(TileEntityBanner.class, "field_175122_h", "patternList");
 
 	public static List<ItemStack> addBannersToTabs() {
 		List<ItemStack> itemList = new ArrayList<>();

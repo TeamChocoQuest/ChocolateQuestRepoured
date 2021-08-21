@@ -39,8 +39,8 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 @EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
 public class EntityRenderManager {
 
-	private static final ReflectionField<List<?>> FIELD_RENDER_INFOS = new ReflectionField<>(RenderGlobal.class, "field_72755_R", "renderInfos");
-	private static final ReflectionField<RenderChunk> FIELD_RENDER_CHUNK = new ReflectionField<>("net.minecraft.client.renderer.RenderGlobal$ContainerLocalRenderInformation", "field_178036_a", "renderChunk");
+	private static final ReflectionField FIELD_RENDER_INFOS = new ReflectionField(RenderGlobal.class, "field_72755_R", "renderInfos");
+	private static final ReflectionField FIELD_RENDER_CHUNK = new ReflectionField("net.minecraft.client.renderer.RenderGlobal$ContainerLocalRenderInformation", "field_178036_a", "renderChunk");
 
 	public static Iterable<RenderChunk> getRenderChunks() {
 		return () -> new Iterator<RenderChunk>() {

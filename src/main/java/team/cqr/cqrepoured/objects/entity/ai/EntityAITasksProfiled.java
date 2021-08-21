@@ -29,7 +29,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 		super(profilerIn);
 		this.profiler = profilerIn;
 		this.world = world;
-		this.executingTaskEntries = new ReflectionField<Set<EntityAITasks.EntityAITaskEntry>>(EntityAITasks.class, "", "executingTaskEntries").get(this);
+		this.executingTaskEntries = new ReflectionField(EntityAITasks.class, "", "executingTaskEntries").get(this);
 	}
 
 	public void onUpdateTasks() {
