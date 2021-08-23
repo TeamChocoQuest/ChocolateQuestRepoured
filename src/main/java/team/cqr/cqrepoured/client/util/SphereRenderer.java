@@ -336,7 +336,7 @@ public class SphereRenderer {
 		}
 
 		public Vertex normalize() {
-			double d = 1.0D / Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+			double d = 1.0D / this.length();
 			return new Vertex(this.x * d, this.y * d, this.z * d);
 		}
 
@@ -351,6 +351,59 @@ public class SphereRenderer {
 		public Vertex scale(double d) {
 			return new Vertex(this.x * d, this.y * d, this.z * d);
 		}
+
+		public double dot(Vertex vertex) {
+			return this.x * vertex.x + this.y * vertex.y + this.z * vertex.z;
+		}
+
+		public double length() {
+			return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		}
+
+		public Vertex cross(Vertex vertex) {
+			return new Vertex(this.y * vertex.z - this.z * vertex.y, this.z * vertex.x - this.x * vertex.z, this.x * vertex.y - this.y * vertex.x);
+		}
+
+		public Vertex negate() {
+			return new Vertex(-this.x, -this.y, -this.z);
+		}
+
+		public Vertex rotate(Vertex axis, double radian) {
+			// setup quaternion
+			double d = Math.sin(radian * 0.5D);
+			double i = d * axis.x;
+			double j = d * axis.y;
+			double k = d * axis.z;
+			double r = Math.cos(radian * 0.5D);
+
+			// setup rotation matrix
+			double d0 = 2.0D * i * i;
+			double d1 = 2.0D * j * j;
+			double d2 = 2.0D * k * k;
+			double d3 = 2.0D * i * j;
+			double d4 = 2.0D * j * k;
+			double d5 = 2.0D * i * k;
+			double d6 = 2.0D * r * i;
+			double d7 = 2.0D * r * j;
+			double d8 = 2.0D * r * k;
+
+			double d00 = 1 - (d1 + d2);
+			double d01 = (d3 - d8);
+			double d02 = (d5 + d7);
+
+			double d10 = (d3 + d8);
+			double d11 = 1 - (d2 + d0);
+			double d12 = (d4 - d6);
+
+			double d20 = (d5 - d7);
+			double d21 = (d4 + d6);
+			double d22 = 1 - (d0 + d1);
+
+			// rotate vertex
+			return new Vertex(this.x * d00 + this.y * d01 + this.z * d02, this.x * d10 + this.y * d11 + this.z * d12,
+					this.x * d20 + this.y * d21 + this.z * d22);
+		}
+
 	}
 
 	public interface Shape {
