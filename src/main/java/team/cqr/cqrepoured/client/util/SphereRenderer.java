@@ -191,57 +191,41 @@ public class SphereRenderer {
 	}
 
 	/**
-	 * Buffers lines of triangles with the specified width. Use normalize to create a sphere.<br>
+	 * Buffers lines of shape with the specified width. Use lod to create a smooth sphere.<br>
 	 * Lines are buffered as quads!
 	 */
-	public static Consumer<Triangle> triangleLineBufferer(BufferBuilder buffer, double width, int lod) {
-		if (lod <= 0) {
+	public static <T extends Shape> Consumer<T> lineBufferer(BufferBuilder buffer, double width, int lod) {
+		if (lod < 0) {
 			throw new IllegalArgumentException();
 		}
-		return triangle -> {
-			Vertex[] verts = triangle.vertices().toArray(Vertex[]::new);
-			Vertex[] dirs = fill(new Vertex[verts.length], i -> next(verts, i).subtract(verts[i]));
-			Vertex[] offs = fill(new Vertex[verts.length], i -> dirs[i].subtract(prev(dirs, i)).normalize().scale(width));
-			Vertex[] outer = fill(new Vertex[verts.length * lod],
-					i -> i % lod == 0 ? verts[i / lod] : verts[i / lod].add(dirs[i / lod].scale((double) (i % lod) / lod)).normalize());
-			Vertex[] inner = fill(new Vertex[verts.length * lod], i -> i % lod == 0 ? outer[i].add(offs[i / lod]) : outer[i].subtract(prev(offs, i / lod)));
-			for (int i = 0; i < verts.length; i++) {
-				for (int j = 0; j < lod; j++) {
-					Vertex v0 = inner[i * lod + j];
-					Vertex v1 = outer[i * lod + j];
-					Vertex v2 = next(outer, i * lod + j);
-					Vertex v3 = next(inner, i * lod + j);
-					buffer.pos(v0.x, v0.y, v0.z).endVertex();
-					buffer.pos(v1.x, v1.y, v1.z).endVertex();
-					buffer.pos(v2.x, v2.y, v2.z).endVertex();
-					buffer.pos(v3.x, v3.y, v3.z).endVertex();
+		return shape -> {
+			int lod1 = (int) Math.pow(4, lod);
+			Vertex[] outer = shape.vertices().toArray(Vertex[]::new);
+			Vertex[] outerDir = fill(new Vertex[outer.length], i -> next(outer, i).subtract(outer[i]));
+			Vertex[] inner = fill(new Vertex[outer.length], i -> {
+				Vertex v = outerDir[i].normalize().subtract(prev(outerDir, i).normalize()).normalize();
+				double d = outerDir[i].normalize().dot(v);
+				return outer[i].add(v.scale(width / Math.sqrt(1.0D - d * d))).normalize();
+			});
+			Vertex[] innerDir = fill(new Vertex[outer.length], i -> next(inner, i).subtract(inner[i]));
+			Vertex[] outer1 = fill(new Vertex[outer.length * lod1], i -> {
+				if (i % lod1 == 0) {
+					return outer[i / lod1];
 				}
-			}
-		};
-	}
-
-	/**
-	 * Buffers lines of quad with the specified width. Use normalize to create a sphere.<br>
-	 * Lines are buffered as quads!
-	 */
-	public static Consumer<Quad> quadLineBufferer(BufferBuilder buffer, double width, int lod) {
-		if (lod <= 0) {
-			throw new IllegalArgumentException();
-		}
-		return quad -> {
-			Vertex[] verts = quad.vertices().toArray(Vertex[]::new);
-			Vertex[] dirs = fill(new Vertex[verts.length], i -> next(verts, i).subtract(verts[i]));
-			Vertex[] offs = fill(new Vertex[verts.length], i -> dirs[i].subtract(prev(dirs, i)).normalize().scale(width));
-			Vertex[] outer = fill(new Vertex[verts.length * lod],
-					i -> i % lod == 0 ? verts[i / lod] : verts[i / lod].add(dirs[i / lod].scale((double) (i % lod) / lod)).normalize());
-			Vertex[] inner = fill(new Vertex[verts.length * lod],
-					i -> i % lod == 0 ? outer[i].add(offs[i / lod]) : outer[i].subtract(prev(dirs, i / lod).normalize().scale(width)));
-			for (int i = 0; i < verts.length; i++) {
-				for (int j = 0; j < lod; j++) {
-					Vertex v0 = inner[i * lod + j];
-					Vertex v1 = outer[i * lod + j];
-					Vertex v2 = next(outer, i * lod + j);
-					Vertex v3 = next(inner, i * lod + j);
+				return outer[i / lod1].add(outerDir[i / lod1].scale((double) (i % lod1) / lod1)).normalize();
+			});
+			Vertex[] inner1 = fill(new Vertex[outer.length * lod1], i -> {
+				if (i % lod1 == 0) {
+					return inner[i / lod1];
+				}
+				return inner[i / lod1].add(innerDir[i / lod1].scale((double) (i % lod1) / lod1)).normalize();
+			});
+			for (int i = 0; i < outer.length; i++) {
+				for (int j = 0; j < lod1; j++) {
+					Vertex v0 = inner1[i * lod1 + j];
+					Vertex v1 = outer1[i * lod1 + j];
+					Vertex v2 = next(outer1, i * lod1 + j);
+					Vertex v3 = next(inner1, i * lod1 + j);
 					buffer.pos(v0.x, v0.y, v0.z).endVertex();
 					buffer.pos(v1.x, v1.y, v1.z).endVertex();
 					buffer.pos(v2.x, v2.y, v2.z).endVertex();
