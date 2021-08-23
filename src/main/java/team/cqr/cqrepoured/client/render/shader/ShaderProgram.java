@@ -41,9 +41,13 @@ public class ShaderProgram {
 			glShaderSource(shader, entry.getValue().get());
 			glCompileShader(shader);
 
-			String log = glGetShaderInfoLog(shader, Integer.MAX_VALUE);
-			if (!log.isEmpty()) {
-				LOGGER.info(log);
+			StringBuilder sb = new StringBuilder();
+			int l;
+			while ((l = glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH)) > 0) {
+				sb.append(glGetShaderInfoLog(shader, Math.min(l, 256)));
+			}
+			if (sb.length() > 0) {
+				LOGGER.info(sb);
 			}
 			int compileStatus = glGetShaderi(shader, GL_COMPILE_STATUS);
 			if (compileStatus != GL11.GL_TRUE) {
@@ -56,9 +60,13 @@ public class ShaderProgram {
 		shaderList.forEach(shader -> glAttachShader(this.shaderProgram, shader));
 		glLinkProgram(this.shaderProgram);
 
-		String log = glGetProgramInfoLog(this.shaderProgram, Integer.MAX_VALUE);
-		if (!log.isEmpty()) {
-			LOGGER.info(log);
+		StringBuilder sb = new StringBuilder();
+		int l;
+		while ((l = glGetProgrami(this.shaderProgram, GL20.GL_INFO_LOG_LENGTH)) > 0) {
+			sb.append(glGetProgramInfoLog(this.shaderProgram, Math.min(l, 256)));
+		}
+		if (sb.length() > 0) {
+			LOGGER.info(sb);
 		}
 		int linkStatus = glGetProgrami(this.shaderProgram, GL_LINK_STATUS);
 		if (linkStatus != GL11.GL_TRUE) {
