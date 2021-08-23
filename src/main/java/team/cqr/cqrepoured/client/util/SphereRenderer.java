@@ -430,10 +430,10 @@ public class SphereRenderer {
 		@Override
 		public Stream<Quad> split(boolean normalize) {
 			Vertex v01 = this.v0.add(this.v1);
-			Vertex v12 = this.v0.add(this.v2);
-			Vertex v23 = this.v0.add(this.v3);
-			Vertex v30 = this.v1.add(this.v2);
-			Vertex v02 = this.v2.add(this.v3);
+			Vertex v12 = this.v1.add(this.v2);
+			Vertex v23 = this.v2.add(this.v3);
+			Vertex v30 = this.v3.add(this.v0);
+			Vertex v02 = this.v0.add(this.v2);
 			if (normalize) {
 				v01 = v01.normalize();
 				v12 = v12.normalize();
@@ -448,7 +448,7 @@ public class SphereRenderer {
 				v02 = v02.scale(0.5D);
 			}
 			return Stream.of(new Quad(v30, this.v0, v01, v02), new Quad(v01, this.v1, v12, v02), new Quad(v12, this.v2, v23, v02),
-					new Quad(v23, this.v3, v01, v02));
+					new Quad(v23, this.v3, v30, v02));
 		}
 
 		@Override
