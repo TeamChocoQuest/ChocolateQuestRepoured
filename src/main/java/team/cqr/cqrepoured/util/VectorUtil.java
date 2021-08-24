@@ -69,7 +69,7 @@ public class VectorUtil {
 		final Vec3d normaledAxis = axis.normalize();
 		final Vec3d axisCrossPoint = normaledAxis.crossProduct(toBeRotated);
 		Vec3d rotated = normaledAxis.scale(normaledAxis.dotProduct(toBeRotated));
-		rotated = rotated.add(axisCrossPoint.scale(Math.cos(alpha))).crossProduct(normaledAxis);
+		rotated = rotated.add(axisCrossPoint.scale(Math.cos(alpha)).crossProduct(normaledAxis));
 		rotated = rotated.add(axisCrossPoint.scale(Math.sin(alpha)));
 
 		return rotated;
