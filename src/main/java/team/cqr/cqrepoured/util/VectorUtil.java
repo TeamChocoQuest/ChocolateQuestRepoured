@@ -68,9 +68,10 @@ public class VectorUtil {
 		final double alpha = Math.toRadians(rotationDegrees);
 		final Vec3d normaledAxis = axis.normalize();
 		final Vec3d axisCrossPoint = normaledAxis.crossProduct(toBeRotated);
-		Vec3d rotated = normaledAxis.scale(normaledAxis.dotProduct(toBeRotated));
-		rotated = rotated.add(axisCrossPoint.scale(Math.cos(alpha)).crossProduct(normaledAxis));
-		rotated = rotated.add(axisCrossPoint.scale(Math.sin(alpha)));
+		//Used formula: https://wikimedia.org/api/rest_v1/media/math/render/svg/60ef97b864c2343bc66f8d31b51d91f226ea0125
+		Vec3d rotated = normaledAxis.scale(normaledAxis.dotProduct(toBeRotated)); //Multiply axis vector with dot-product of axis and vector
+		rotated = rotated.add(axisCrossPoint.scale(Math.cos(alpha)).crossProduct(normaledAxis)); //Mulitply cross product of axis and vector with cos(alpha), then add the cross product of that result and the axis to the rotated vector
+		rotated = rotated.add(axisCrossPoint.scale(Math.sin(alpha))); //add the cross product of axis and vector multiplied by sin(alpha) to the result
 
 		return rotated;
 	}
