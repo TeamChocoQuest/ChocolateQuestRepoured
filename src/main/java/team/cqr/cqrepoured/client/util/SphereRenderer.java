@@ -336,7 +336,11 @@ public class SphereRenderer {
 		}
 
 		public Vertex normalize() {
-			double d = 1.0D / this.length();
+			double d = this.x * this.x + this.y * this.y + this.z * this.z;
+			if (d < 1.0E-5D) {
+				return this;
+			}
+			d = 1.0D / Math.sqrt(d);
 			return new Vertex(this.x * d, this.y * d, this.z * d);
 		}
 
