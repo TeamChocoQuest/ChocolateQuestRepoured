@@ -370,6 +370,7 @@ public class SphereRenderer {
 
 		public Vertex rotate(Vertex axis, double radian) {
 			// setup quaternion
+			axis = axis.normalize();
 			double d = Math.sin(radian * 0.5D);
 			double i = d * axis.x;
 			double j = d * axis.y;
