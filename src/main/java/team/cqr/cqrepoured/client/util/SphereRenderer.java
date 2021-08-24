@@ -378,27 +378,27 @@ public class SphereRenderer {
 			double r = Math.cos(radian * 0.5D);
 
 			// setup rotation matrix
-			double d0 = 2.0D * i * i;
-			double d1 = 2.0D * j * j;
-			double d2 = 2.0D * k * k;
-			double d3 = 2.0D * i * j;
-			double d4 = 2.0D * j * k;
-			double d5 = 2.0D * i * k;
-			double d6 = 2.0D * r * i;
-			double d7 = 2.0D * r * j;
-			double d8 = 2.0D * r * k;
+			double i2 = 2.0D * i * i;
+			double j2 = 2.0D * j * j;
+			double k2 = 2.0D * k * k;
+			double ij = 2.0D * i * j;
+			double jk = 2.0D * j * k;
+			double ik = 2.0D * i * k;
+			double ir = 2.0D * i * r;
+			double jr = 2.0D * j * r;
+			double kr = 2.0D * k * r;
 
-			double d00 = 1 - (d1 + d2);
-			double d01 = (d3 - d8);
-			double d02 = (d5 + d7);
+			double d00 = 1 - (j2 + k2);
+			double d01 = (ij - kr);
+			double d02 = (ik + jr);
 
-			double d10 = (d3 + d8);
-			double d11 = 1 - (d2 + d0);
-			double d12 = (d4 - d6);
+			double d10 = (ij + kr);
+			double d11 = 1 - (i2 + k2);
+			double d12 = (jk - ir);
 
-			double d20 = (d5 - d7);
-			double d21 = (d4 + d6);
-			double d22 = 1 - (d0 + d1);
+			double d20 = (ik - jr);
+			double d21 = (jk + ir);
+			double d22 = 1 - (i2 + j2);
 
 			// rotate vertex
 			return new Vertex(this.x * d00 + this.y * d01 + this.z * d02, this.x * d10 + this.y * d11 + this.z * d12,
