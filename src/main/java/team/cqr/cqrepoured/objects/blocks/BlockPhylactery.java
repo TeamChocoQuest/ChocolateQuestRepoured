@@ -28,7 +28,7 @@ public class BlockPhylactery extends Block {
 		super(materialIn);
 		this.setHardness(0.5F);
 		this.setLightOpacity(8);
-		this.setLightLevel(1.5F);
+		this.setLightLevel(1.0F);
 		this.setSoundType(SoundType.GLASS);
 		this.setTickRandomly(true);
 	}
