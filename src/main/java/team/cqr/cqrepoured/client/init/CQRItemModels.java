@@ -13,6 +13,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
@@ -48,6 +49,8 @@ public class CQRItemModels {
 				registerItemModel(itemBlock);
 			}
 		}
+		
+		SphereRenderer.init();
 	}
 
 	private static void registerItemModel(Item item) {

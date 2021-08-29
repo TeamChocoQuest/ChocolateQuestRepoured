@@ -292,7 +292,6 @@ public class SphereRenderer {
 		}
 
 		GL20.glDisableVertexAttribArray(0);
-		buffer.reset();
 
 		postDraw();
 	}
@@ -336,11 +335,7 @@ public class SphereRenderer {
 		}
 
 		public Vertex normalize() {
-			double d = this.x * this.x + this.y * this.y + this.z * this.z;
-			if (d < 1.0E-5D) {
-				return this;
-			}
-			d = 1.0D / Math.sqrt(d);
+			double d = 1.0D / this.length();
 			return new Vertex(this.x * d, this.y * d, this.z * d);
 		}
 
@@ -496,6 +491,10 @@ public class SphereRenderer {
 		@Override
 		public Stream<Vertex> vertices() {
 			return Stream.of(this.v0, this.v1, this.v2, this.v3);
+		}
+
+		public Stream<Triangle> triangles() {
+			return Stream.of(new Triangle(this.v0, this.v1, this.v2), new Triangle(this.v2, this.v3, this.v0));
 		}
 
 	}
