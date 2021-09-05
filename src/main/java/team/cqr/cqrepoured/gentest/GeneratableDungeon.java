@@ -402,6 +402,10 @@ public class GeneratableDungeon {
 			this.partBuilders.add(world1 -> partBuilder.build(world1, placement));
 		}
 
+		public DungeonPlacement getPlacement(BlockPos partPos) {
+			return this.getPlacement(partPos, Mirror.NONE, Rotation.NONE, this.defaultInhabitant);
+		}
+
 		public DungeonPlacement getPlacement(BlockPos partPos, Mirror mirror, Rotation rotation) {
 			return this.getPlacement(partPos, mirror, rotation, this.defaultInhabitant);
 		}
