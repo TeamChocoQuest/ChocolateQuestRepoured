@@ -46,7 +46,7 @@ public class ElectricFieldRenderUtil {
 				// Apply some "noise" so it looks "electric" (it will jitter when rendering)
 				double vX = Math.sin((i + rng.nextInt()) / boltSize * Math.PI * 2.0D) * fieldRadius + (rng.nextDouble() - 0.5D) * (fieldRadius / 2);
 				double vZ = Math.cos((i + rng.nextInt()) / boltSize * Math.PI * 2.0D) * fieldRadius + (rng.nextDouble() - 0.5D) * (fieldRadius / 2);
-				double vY = Math.sin((ticksExisted + i + rng.nextInt()) / boltSize * Math.PI) * (fieldHeight) + rng.nextDouble() + fieldHeight;
+				double vY = Math.sin((ticksExisted + i + rng.nextInt()) / boltSize * Math.PI) * (fieldHeight) + rng.nextDouble() + (fieldHeight / 2);
 
 				// Finally, create the vertex
 				builder.pos(x + vX, y + vY, z + vZ).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
@@ -136,7 +136,7 @@ public class ElectricFieldRenderUtil {
 	}
 
 	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z) {
-		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 2, x, y, z, 5, 40);
+		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 4, x, y, z, 5, 40);
 	}
 
 }
