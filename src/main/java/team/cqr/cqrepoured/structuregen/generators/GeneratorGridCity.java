@@ -127,7 +127,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).add(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
 			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).add(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
 
-			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ), this.world, this.dungeonGenerator));
+			this.dungeonBuilder.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ), this.world, this.dungeonBuilder));
 
 		}
 
@@ -201,12 +201,12 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 		for (Map.Entry<BlockPos, IBlockState> entry : this.blockMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
+		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList, new PlacementSettings(), mobType));
 
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
 			PlacementSettings settings = new PlacementSettings();
 			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(entry.getKey(), entry.getValue(), settings);
-			entry.getValue().addAll(this.world, this.dungeonGenerator, p, settings, mobType);
+			entry.getValue().addAll(this.world, this.dungeonBuilder, p, settings, mobType);
 		}
 	}
 

@@ -87,7 +87,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		// Support platform
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 
 		// basic volcano shape with air inside
@@ -198,7 +198,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				}
 			}
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, blockInfoList, new PlacementSettings(), mobType));
+		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, referenceLoc, blockInfoList, new PlacementSettings(), mobType));
 
 		// Spawners and Chests
 		this.generateSpawnersAndChests(spawnerAndChestList, mobType);
@@ -208,7 +208,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		// Cover blocks
 		if (this.dungeon.isCoverBlockEnabled()) {
-			this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
+			this.dungeonBuilder.add(new DungeonPartCover(this.world, this.dungeonBuilder, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
 		}
 	}
 
@@ -278,7 +278,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				blockInfoList1.add(new BlockInfoSpawner(pos.getX(), pos.getY() + 1, pos.getZ(), entityList));
 				floor--;
 			}
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList1, new PlacementSettings(), mobType));
+			this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList1, new PlacementSettings(), mobType));
 		}
 	}
 
@@ -309,9 +309,9 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				break;
 			}
 
-			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonGenerator, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world, this.random);
+			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonBuilder, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world, this.random);
 			entranceBuilder.generate(this.pos.getX(), this.pos.getZ(), mobType);
-			this.dungeonGenerator.addAll(entranceBuilder.getStrongholdParts());
+			this.dungeonBuilder.addAll(entranceBuilder.getStrongholdParts());
 		}
 	}
 

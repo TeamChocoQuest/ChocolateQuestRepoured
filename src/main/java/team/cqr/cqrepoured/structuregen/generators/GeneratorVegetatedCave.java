@@ -104,7 +104,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		for (Map.Entry<BlockPos, IBlockState> entry : this.blocks.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
+		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
+		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
 
 		this.placeSpawners();
 		this.fillChests();
@@ -201,7 +201,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
 			blockInfoList.add(new BlockInfo(chestpos.subtract(this.pos), state, nbt));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
+		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
 	}
 
 	private static final int FLOORS = 100;
@@ -220,7 +220,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			}
 			blockInfoList.add(new BlockInfoSpawner(spawnerpos.subtract(this.pos), entityList));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
+		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList, new PlacementSettings(), this.mobtype));
 	}
 
 	public void generateCenterStructure() {
@@ -233,7 +233,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 				// DONE: Support platform -> not needed
 				PlacementSettings settings = new PlacementSettings();
 				BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), pY, this.pos.getZ()), structure, settings);
-				structure.addAll(this.world, this.dungeonGenerator, p, settings, this.mobtype);
+				structure.addAll(this.world, this.dungeonBuilder, p, settings, this.mobtype);
 			}
 		}
 	}

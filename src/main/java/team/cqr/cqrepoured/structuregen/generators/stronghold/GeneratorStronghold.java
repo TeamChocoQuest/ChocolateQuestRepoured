@@ -85,30 +85,30 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		}
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2, this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
+			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2, this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
 					/* this.pos.getY() */y + this.dungeon.getUnderGroundOffset() - 1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 		BlockPos p1 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), structureEntrance, settings);
-		structureEntrance.addAll(this.world, this.dungeonGenerator, p1, settings, mobType);
+		structureEntrance.addAll(this.world, this.dungeonBuilder, p1, settings, mobType);
 
 		if (segCount > 0) {
 			while (segCount > 0) {
 				segCount--;
 				y -= stairSeg.getSize().getY();
 				BlockPos p2 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), stairSeg, settings);
-				stairSeg.addAll(this.world, this.dungeonGenerator, p2, settings, mobType);
+				stairSeg.addAll(this.world, this.dungeonBuilder, p2, settings, mobType);
 			}
 		}
 
 		int yFloor = y;
 		yFloor -= structureStair.getSize().getY();
 		BlockPos p3 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), yFloor, this.pos.getZ()), structureStair, settings);
-		structureStair.addAll(this.world, this.dungeonGenerator, p3, settings, mobType);
+		structureStair.addAll(this.world, this.dungeonBuilder, p3, settings, mobType);
 
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
 
-			floor.generateRooms(this.pos.getX(), this.pos.getZ(), yFloor, settings, this.dungeonGenerator, this.world, mobType);
+			floor.generateRooms(this.pos.getX(), this.pos.getZ(), yFloor, settings, this.dungeonBuilder, this.world, mobType);
 			yFloor -= this.dungeon.getRoomSizeY();
 			// initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}

@@ -49,7 +49,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			BlockPos endPos = startPos.add(Template.transformedBlockPos(settings, new BlockPos(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1)));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
-			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), CQRConfig.general.supportHillWallSize));
+			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), CQRConfig.general.supportHillWallSize));
 		}
 		this.settingsMap.put(structurePos, settings);
 		this.toGenerate.put(structurePos, structure);
@@ -82,7 +82,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			CQStructure structure = entry.getValue();
 			BlockPos structurePos = entry.getKey();
 
-			structure.addAll(this.world, this.dungeonGenerator, structurePos, settings, mobType);
+			structure.addAll(this.world, this.dungeonBuilder, structurePos, settings, mobType);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 				BlockPos endPos = startPos.add(Template.transformedBlockPos(settings, new BlockPos(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1)));
 				BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 				BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
-				this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
+				this.dungeonBuilder.add(new DungeonPartCover(this.world, this.dungeonBuilder, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
 			}
 		}
 	}

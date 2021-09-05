@@ -136,7 +136,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(), prevFloor.getExitCoordinates().getSecond());
 				}
 
-				floor.preProcess(this.world, this.dungeonGenerator, null);
+				floor.preProcess(this.world, this.dungeonBuilder, null);
 				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
 			}
 			prevFloor = floor;
@@ -154,14 +154,14 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		}
 		CQStructure structure = this.loadStructureFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
+			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
 					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 		this.entranceSizeX = structure.getSize().getX();
 		this.entranceSizeZ = structure.getSize().getX();
 
 		BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.pos, structure, this.settings);
-		structure.addAll(this.world, this.dungeonGenerator, p, this.settings, mobType);
+		structure.addAll(this.world, this.dungeonBuilder, p, this.settings, mobType);
 		/*
 		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications()); BlockPos pastePosForStair =
 		 * new BlockPos(x, y - stairs.getSizeY(), z); stairs.placeBlocksInWorld(world,
@@ -178,7 +178,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 
 		// Structure gen information: stored in map with location and structure file
 		for (StrongholdFloorOpen floor : this.floors) {
-			floor.generate(this.world, this.dungeonGenerator, mobType);
+			floor.generate(this.world, this.dungeonBuilder, mobType);
 		}
 
 		// build all the structures in the map
@@ -187,7 +187,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
 				try {
-					floor.generatePost(this.world, this.dungeonGenerator, mobType);
+					floor.generatePost(this.world, this.dungeonBuilder, mobType);
 				} catch (NullPointerException ex) {
 					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(), this.pos.getZ());
 				}
