@@ -10,6 +10,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQRWasp;
 import team.cqr.cqrepoured.client.render.entity.RenderCalamityCrystal;
 import team.cqr.cqrepoured.client.render.entity.RenderChungus;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
+import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
 import team.cqr.cqrepoured.client.render.entity.RenderFlyingSkull;
 import team.cqr.cqrepoured.client.render.entity.RenderIceSpike;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
@@ -100,6 +101,7 @@ import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSeg
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.objects.entity.misc.EntityCQRWasp;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import team.cqr.cqrepoured.objects.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySpiderEgg;
@@ -213,6 +215,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiderEgg.class, RenderSpiderEgg::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCalamityCrystal.class, RenderCalamityCrystal::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileEnergyOrb.class, RenderEnergyOrb::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityElectricField.class, RenderElectricFieldEntity::new);
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}
