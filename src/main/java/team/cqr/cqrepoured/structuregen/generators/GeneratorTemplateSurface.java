@@ -58,7 +58,7 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 
 	@Override
 	protected void buildStructure() {
-		this.structure.addAll(this.dungeonBuilder, this.structurePos, Offset.NORTH_EAST, this.mirror, this.rotation);
+		this.structure.addAll(this.dungeonBuilder, this.pos, Offset.CENTER, this.mirror, this.rotation);
 	}
 
 	@Override
