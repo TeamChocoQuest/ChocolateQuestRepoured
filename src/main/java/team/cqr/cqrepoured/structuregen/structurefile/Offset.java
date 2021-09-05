@@ -74,7 +74,7 @@ public enum Offset {
 			 */
 			BlockPos size = structure.getSize();
 			BlockPos p = DungeonPlacement.transform(size.getX(), 0, size.getZ(), mirror, rotation);
-			return pos.add(p.getX() >> 1, 0, p.getZ() >> 1);
+			return pos.add(-(p.getX() >> 1), 0, -(p.getZ() >> 1));
 		}
 	};
 
