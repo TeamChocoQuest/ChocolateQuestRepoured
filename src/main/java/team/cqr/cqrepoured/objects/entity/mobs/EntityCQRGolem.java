@@ -10,9 +10,10 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
-public class EntityCQRGolem extends AbstractEntityCQR {
+public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 
 	public EntityCQRGolem(World worldIn) {
 		super(worldIn);
