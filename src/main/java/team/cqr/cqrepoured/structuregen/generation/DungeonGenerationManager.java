@@ -22,14 +22,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.structuregen.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 
 public class DungeonGenerationManager {
 
 	private static final Map<World, DungeonGenerationManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
-	private final List<DungeonGenerator> dungeonGeneratorList = Collections.synchronizedList(new ArrayList<>());
+	private final List<GeneratableDungeon> dungeonGeneratorList = Collections.synchronizedList(new ArrayList<>());
 	private final World world;
 	private final File folder;
 
@@ -79,27 +81,25 @@ public class DungeonGenerationManager {
 		}
 	}
 
-	public static void addStructure(World world, DungeonGenerator structure, @Nullable DungeonBase dungeon, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
-		if (world != null && !world.isRemote) {
-			structure.startGeneration(dungeon);
-
-			if (dungeon != null) {
-				DungeonDataManager.addDungeonEntry(world, dungeon, structure.getPos(), spawnType);
-			}
-
-			if (generateImmediately) {
-				boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
-				ForgeModContainer.logCascadingWorldGeneration = false;
-				while (!structure.isGenerated()) {
-					structure.tick();
-				}
-				ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;
-
-				CQRMain.logger.info("Generated dungeon {} at {}", structure.getDungeonName(), structure.getPos());
-			} else {
-				INSTANCES.get(world).dungeonGeneratorList.add(structure);
-			}
+	public static void generate(World world, GeneratableDungeon generatableDungeon, @Nullable DungeonBase dungeon, DungeonSpawnType spawnType) {
+		if (dungeon != null) {
+			DungeonDataManager.addDungeonEntry(world, dungeon, generatableDungeon.getPos(), spawnType);
 		}
+
+		INSTANCES.get(world).dungeonGeneratorList.add(generatableDungeon);
+	}
+
+	public static void generateNow(World world, GeneratableDungeon generatableDungeon, @Nullable DungeonBase dungeon, DungeonSpawnType spawnType) {
+		if (dungeon != null) {
+			DungeonDataManager.addDungeonEntry(world, dungeon, generatableDungeon.getPos(), spawnType);
+		}
+
+		boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
+		ForgeModContainer.logCascadingWorldGeneration = false;
+		while (!generatableDungeon.isGenerated()) {
+			generatableDungeon.tick(world);
+		}
+		ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;
 	}
 
 	private void saveData() {
@@ -107,16 +107,17 @@ public class DungeonGenerationManager {
 			if (!this.folder.exists()) {
 				this.folder.mkdirs();
 			}
-			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
+			for (File file : FileUtils.listFiles(this.folder, new String[] {
+					"nbt" }, false)) {
 				file.delete();
 			}
-			for (DungeonGenerator structure : this.dungeonGeneratorList) {
+			for (GeneratableDungeon structure : this.dungeonGeneratorList) {
 				this.createFileFromStructure(this.folder, structure);
 			}
 		}
 	}
 
-	private void createFileFromStructure(File folder, DungeonGenerator dungeonGenerator) {
+	private void createFileFromStructure(File folder, GeneratableDungeon dungeonGenerator) {
 		File file = new File(folder, dungeonGenerator.getUuid().toString() + ".nbt");
 		try {
 			if (!file.exists() && !file.createNewFile()) {
@@ -126,7 +127,7 @@ public class DungeonGenerationManager {
 				CompressedStreamTools.writeCompressed(dungeonGenerator.writeToNBT(), outputStream);
 			}
 		} catch (IOException e) {
-			CQRMain.logger.info("Failed to save structure to file: " + file.getName(), e);
+			CQRMain.logger.info("Failed to save structure to file: {}", file.getName(), e);
 		}
 	}
 
@@ -136,7 +137,8 @@ public class DungeonGenerationManager {
 				this.folder.mkdirs();
 			}
 			this.dungeonGeneratorList.clear();
-			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
+			for (File file : FileUtils.listFiles(this.folder, new String[] {
+					"nbt" }, false)) {
 				this.createStructureFromFile(file);
 			}
 		}
@@ -145,21 +147,20 @@ public class DungeonGenerationManager {
 	private void createStructureFromFile(File file) {
 		try (InputStream inputStream = new FileInputStream(file)) {
 			NBTTagCompound compound = CompressedStreamTools.readCompressed(inputStream);
-			this.dungeonGeneratorList.add(new DungeonGenerator(this.world, compound));
+			this.dungeonGeneratorList.add(new GeneratableDungeon(this.world, compound));
 		} catch (IOException e) {
-			CQRMain.logger.info("Failed to load structure from file: " + file.getName(), e);
+			CQRMain.logger.info("Failed to load structure from file: {}", file.getName(), e);
 		}
 	}
 
 	private void tick() {
 		for (int i = 0; i < this.dungeonGeneratorList.size(); i++) {
-			DungeonGenerator dungeonGenerator = this.dungeonGeneratorList.get(i);
+			GeneratableDungeon generatableDungeon = this.dungeonGeneratorList.get(i);
 
-			dungeonGenerator.tick();
+			generatableDungeon.tick(this.world);
 
-			if (dungeonGenerator.isGenerated()) {
+			if (generatableDungeon.isGenerated()) {
 				this.dungeonGeneratorList.remove(i--);
-				CQRMain.logger.info("Generated dungeon {} at {}", dungeonGenerator.getDungeonName(), dungeonGenerator.getPos());
 			}
 		}
 	}
