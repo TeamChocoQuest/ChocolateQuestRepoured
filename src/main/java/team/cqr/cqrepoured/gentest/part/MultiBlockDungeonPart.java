@@ -84,7 +84,7 @@ public class MultiBlockDungeonPart extends DungeonPart {
 			compound.setByteArray("blocks", Arrays.copyOf(buf.array(), buf.writerIndex()));
 			compound.setTag("palette", palette.writeToNBT());
 			compound.setTag("compoundList", compoundList);
-			return null;
+			return compound;
 		}
 
 		@Override
