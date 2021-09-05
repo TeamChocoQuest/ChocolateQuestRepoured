@@ -19,6 +19,7 @@ import scala.actors.threadpool.Arrays;
 public class NBTCollectors {
 
 	private static final Set<Collector.Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+	private static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
 
 	public static <T extends NBTBase> Collector<T, NBTTagList, NBTTagList> toList() {
 		return new Collector<T, NBTTagList, NBTTagList>() {
@@ -76,7 +77,7 @@ public class NBTCollectors {
 
 			@Override
 			public Set<Characteristics> characteristics() {
-				return CH_ID;
+				return CH_NOID;
 			}
 		};
 	}
