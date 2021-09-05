@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
@@ -23,9 +24,6 @@ import org.apache.commons.io.FileUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockCommandBlock;
@@ -45,98 +43,55 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.gentest.DungeonPlacement;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.part.EntityDungeonPart;
+import team.cqr.cqrepoured.gentest.part.MultiBlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBannerInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBossInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableEmptyInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableEntityInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableForceFieldNexusInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableLootChestInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableMapInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlockSpecial;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.NBTCollectors;
 
 public class CQStructure {
 
-	public static final Comparator<AbstractBlockInfo> SORT_FOR_EXPORTATION = (b1, b2) -> {
-		if (b1.getX() < b2.getX()) {
-			return -1;
-		}
-		if (b1.getX() > b2.getX()) {
-			return 1;
-		}
-		if (b1.getY() < b2.getY()) {
-			return -1;
-		}
-		if (b1.getY() > b2.getY()) {
-			return 1;
-		}
-		if (b1.getZ() < b2.getZ()) {
-			return -1;
-		}
-		if (b1.getZ() > b2.getZ()) {
-			return 1;
-		}
-		return 0;
-	};
-	public static final Comparator<AbstractBlockInfo> SORT_FOR_GENERATION = (blockInfo1, blockInfo2) -> {
-		boolean isNormalBlock1 = blockInfo1.getClass() == BlockInfo.class;
-		boolean isNormalBlock2 = blockInfo2.getClass() == BlockInfo.class;
-		if (isNormalBlock1 && isNormalBlock2) {
-			boolean hasTileEntity1 = ((BlockInfo) blockInfo1).tileentityData != null;
-			boolean hasTileEntity2 = ((BlockInfo) blockInfo2).tileentityData != null;
-			boolean hasSpecialShape1 = !((BlockInfo) blockInfo1).blockstate.isFullBlock() && !((BlockInfo) blockInfo1).blockstate.isFullCube();
-			boolean hasSpecialShape2 = !((BlockInfo) blockInfo2).blockstate.isFullBlock() && !((BlockInfo) blockInfo2).blockstate.isFullCube();
-			if (hasTileEntity1 == hasTileEntity2 && hasSpecialShape1 == hasSpecialShape2) {
-				return 0;
-			}
-			if (!hasTileEntity1 && !hasSpecialShape1 && (hasTileEntity2 || hasSpecialShape2)) {
-				return -1;
-			}
-			if ((hasTileEntity1 || hasSpecialShape1) && !hasTileEntity2 && !hasSpecialShape2) {
-				return 1;
-			}
-			if (!hasTileEntity1 && hasTileEntity2) {
-				return -1;
-			}
-			if (hasTileEntity1 && !hasTileEntity2) {
-				return 1;
-			}
-			if (!hasSpecialShape1 && hasSpecialShape2) {
-				return -1;
-			}
-			if (hasSpecialShape1 && !hasSpecialShape2) {
-				return 1;
-			}
-		} else if (isNormalBlock1 && !isNormalBlock2) {
-			return -1;
-		} else if (!isNormalBlock1 && isNormalBlock2) {
-			return 1;
-		}
-		return 0;
-	};
+	private static final Comparator<PreparablePosInfo> DEFAULT_COMPARATOR = Comparator.comparingInt(PreparablePosInfo::getX)
+			.thenComparingInt(PreparablePosInfo::getY).thenComparingInt(PreparablePosInfo::getZ);
 	private static final Map<File, CQStructure> CACHED_STRUCTURES = new HashMap<>();
 	public static final String CQR_FILE_VERSION = "1.2.0";
 	private static final Set<Block> SPECIAL_BLOCKS = new HashSet<>();
 	private static final Set<ResourceLocation> SPECIAL_ENTITIES = new HashSet<>();
-	private final List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-	private final List<AbstractBlockInfo> specialBlockInfoList = new ArrayList<>();
-	private final List<EntityInfo> entityInfoList = new ArrayList<>();
-	private final IntList unprotectedBlockList = new IntArrayList();
+	private final List<PreparablePosInfo> blockInfoList = new ArrayList<>();
+	private final List<PreparablePosInfo> specialBlockInfoList = new ArrayList<>();
+	private final List<PreparableEntityInfo> entityInfoList = new ArrayList<>();
+	private final List<BlockPos> unprotectedBlockList = new ArrayList<>();
 	private BlockPos size = BlockPos.ORIGIN;
 	private String author = "";
 
@@ -151,7 +106,8 @@ public class CQStructure {
 			return;
 		}
 
-		List<File> fileList = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true));
+		List<File> fileList = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] {
+				"nbt" }, true));
 		fileList.sort((file1, file2) -> {
 			if (file1.length() > file2.length()) {
 				return -1;
@@ -186,7 +142,8 @@ public class CQStructure {
 		return structure;
 	}
 
-	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks, String author) {
+	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities,
+			Collection<BlockPos> unprotectedBlocks, String author) {
 		CQStructure structure = new CQStructure();
 		structure.author = author;
 		structure.takeBlocksAndEntitiesFromWorld(world, startPos, endPos, ignoreBasicEntities, unprotectedBlocks);
@@ -235,45 +192,36 @@ public class CQStructure {
 		compound.setString("author", this.author);
 		compound.setTag("size", NBTUtil.createPosTag(this.size));
 
-		BlockStatePalette blockStatePalette = new BlockStatePalette();
-		NBTTagList compoundTagList = new NBTTagList();
+		BlockStatePalette palette = new BlockStatePalette();
+		NBTTagList compoundList = new NBTTagList();
 
 		// Save normal blocks
 		ByteBuf buf = Unpooled.buffer(this.blockInfoList.size() * 2);
-		for (AbstractBlockInfo blockInfo : this.blockInfoList) {
-			blockInfo.writeToByteBuf(buf, blockStatePalette, compoundTagList);
-		}
-		compound.setTag("blockInfoList", new NBTTagByteArray(Arrays.copyOf(buf.array(), buf.writerIndex())));
+		this.blockInfoList.forEach(preparable -> PreparablePosInfo.Registry.write(preparable, buf, palette, compoundList));
+		compound.setByteArray("blockInfoList", Arrays.copyOf(buf.array(), buf.writerIndex()));
 
 		// Save special blocks
 		buf.clear();
 		buf.writeInt(this.specialBlockInfoList.size());
-		for (AbstractBlockInfo blockInfo : this.specialBlockInfoList) {
-			buf.writeShort(blockInfo.getX());
-			buf.writeShort(blockInfo.getY());
-			buf.writeShort(blockInfo.getZ());
-			blockInfo.writeToByteBuf(buf, blockStatePalette, compoundTagList);
-		}
+		this.specialBlockInfoList.forEach(preparable -> {
+			buf.writeShort(preparable.getX());
+			buf.writeShort(preparable.getY());
+			buf.writeShort(preparable.getZ());
+			PreparablePosInfo.Registry.write(preparable, buf, palette, compoundList);
+		});
 		compound.setTag("specialBlockInfoList", new NBTTagByteArray(Arrays.copyOf(buf.array(), buf.writerIndex())));
 
 		// Save entities
-		NBTTagList nbtTagList3 = new NBTTagList();
-		for (EntityInfo entityInfo : this.entityInfoList) {
-			nbtTagList3.appendTag(entityInfo.getEntityData());
-		}
-		compound.setTag("entityInfoList", nbtTagList3);
+		compound.setTag("entityInfoList", this.entityInfoList.stream().map(PreparableEntityInfo::getEntityData).collect(NBTCollectors.toList()));
 
 		// Save block states
-		NBTTagList nbtTagList4 = new NBTTagList();
-		for (IBlockState state : blockStatePalette) {
-			nbtTagList4.appendTag(NBTUtil.writeBlockState(new NBTTagCompound(), state));
-		}
-		compound.setTag("palette", nbtTagList4);
+		compound.setTag("palette", palette.writeToNBT());
 
 		// Save compound tags
-		compound.setTag("compoundTagList", compoundTagList);
+		compound.setTag("compoundTagList", compoundList);
 
-		compound.setTag("unprotectedBlockList", new NBTTagIntArray(this.unprotectedBlockList.toIntArray()));
+		compound.setIntArray("unprotectedBlockList",
+				this.unprotectedBlockList.stream().flatMapToInt(pos -> IntStream.of(pos.getX(), pos.getY(), pos.getZ())).toArray());
 
 		return compound;
 	}
@@ -313,10 +261,7 @@ public class CQStructure {
 		for (int x = 0; x < this.size.getX(); x++) {
 			for (int y = 0; y < this.size.getY(); y++) {
 				for (int z = 0; z < this.size.getZ(); z++) {
-					AbstractBlockInfo blockInfo = AbstractBlockInfo.create(x, y, z, buf, blockStatePalette, compoundTagList);
-					if (blockInfo != null) {
-						this.blockInfoList.add(blockInfo);
-					}
+					this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList));
 				}
 			}
 		}
@@ -328,19 +273,22 @@ public class CQStructure {
 			int x = buf.readShort();
 			int y = buf.readShort();
 			int z = buf.readShort();
-			this.specialBlockInfoList.add(AbstractBlockInfo.create(x, y, z, buf, blockStatePalette, compoundTagList));
+			this.specialBlockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList));
 		}
 
 		// Load entities
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
-			this.entityInfoList.add(new EntityInfo((NBTTagCompound) nbt));
+			this.entityInfoList.add(new PreparableEntityInfo((NBTTagCompound) nbt));
 		}
 
 		this.unprotectedBlockList.clear();
-		this.unprotectedBlockList.addElements(0, compound.getIntArray("unprotectedBlockList"));
+		int[] intArray = compound.getIntArray("unprotectedBlockList");
+		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2]))
+				.forEach(this.unprotectedBlockList::add);
 	}
 
-	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
+	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities,
+			Collection<BlockPos> unprotectedBlocks) {
 		BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 		BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 
@@ -363,7 +311,7 @@ public class CQStructure {
 			if (pos.getX() > pos2.getX() && pos.getY() > pos2.getY() && pos.getZ() > pos2.getZ()) {
 				continue;
 			}
-			this.unprotectedBlockList.add((((pos.getX() - pos1.getX()) & 0xFFF) << 20) | (((pos.getY() - pos1.getY()) & 0xFF) << 12) | ((pos.getZ() - pos1.getZ()) & 0xFFF));
+			this.unprotectedBlockList.add(pos.subtract(pos1));
 		}
 	}
 
@@ -383,12 +331,13 @@ public class CQStructure {
 			TileEntity tileEntity = world.getTileEntity(mutablePos);
 
 			if (block == Blocks.STRUCTURE_VOID || block == CQRBlocks.NULL_BLOCK) {
-				this.blockInfoList.add(new BlockInfoEmpty(pos));
+				this.blockInfoList.add(new PreparableEmptyInfo(pos));
 			} else if (SPECIAL_BLOCKS.contains(block)) {
-				this.blockInfoList.add(new BlockInfoEmpty(pos));
-				this.specialBlockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
-			} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
-				this.blockInfoList.add(new BlockInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
+				this.blockInfoList.add(new PreparableEmptyInfo(pos));
+				this.specialBlockInfoList.add(new PreparableBlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
+			} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner
+					&& BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
+				this.blockInfoList.add(new PreparableBannerInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 			} else if (block == CQRBlocks.SPAWNER) {
 				NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
 				compound.removeTag("x");
@@ -406,21 +355,22 @@ public class CQStructure {
 						itemTagCompound.setTag("EntityIn", newEntityTag);
 					}
 				}
-				this.blockInfoList.add(new BlockInfoSpawner(pos, compound));
+				this.blockInfoList.add(new PreparableSpawnerInfo(pos, compound));
 			} else if (block instanceof BlockExporterChest) {
-				this.blockInfoList.add(new BlockInfoLootChest(pos, ((BlockExporterChest) block).getLootTable(world, mutablePos), state.getValue(BlockChest.FACING)));
+				this.blockInfoList
+						.add(new PreparableLootChestInfo(pos, ((BlockExporterChest) block).getLootTable(world, mutablePos), state.getValue(BlockChest.FACING)));
 			} else if (block == CQRBlocks.FORCE_FIELD_NEXUS) {
-				this.blockInfoList.add(new BlockInfoForceFieldNexus(pos));
+				this.blockInfoList.add(new PreparableForceFieldNexusInfo(pos));
 			} else if (block == CQRBlocks.BOSS_BLOCK && tileEntity instanceof TileEntityBoss) {
-				this.blockInfoList.add(new BlockInfoBoss(pos, (TileEntityBoss) tileEntity));
+				this.blockInfoList.add(new PreparableBossInfo(pos, (TileEntityBoss) tileEntity));
 			} else if (block == CQRBlocks.MAP_PLACEHOLDER) {
-				this.blockInfoList.add(new BlockInfoMap(pos, state.getValue(BlockHorizontal.FACING), (TileEntityMap) tileEntity));
+				this.blockInfoList.add(new PreparableMapInfo(pos, state.getValue(BlockHorizontal.FACING), (TileEntityMap) tileEntity));
 			} else {
-				this.blockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
+				this.blockInfoList.add(new PreparableBlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 			}
 		}
 
-		this.blockInfoList.sort(SORT_FOR_EXPORTATION);
+		this.blockInfoList.sort(DEFAULT_COMPARATOR);
 	}
 
 	private Entity createEntityForExporting(NBTTagCompound entityTag, World world, BlockPos pos) {
@@ -455,25 +405,25 @@ public class CQStructure {
 
 		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos1, pos2.add(1, 1, 1)), input -> !(input instanceof EntityPlayer))) {
 			if (!ignoreBasicEntities || SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
-				this.entityInfoList.add(new EntityInfo(pos1, entity));
+				this.entityInfoList.add(new PreparableEntityInfo(pos1, entity));
 			}
 		}
 	}
 
-	public List<AbstractBlockInfo> getBlockInfoList() {
+	public List<PreparablePosInfo> getBlockInfoList() {
 		return Collections.unmodifiableList(this.blockInfoList);
 	}
 
-	public List<AbstractBlockInfo> getSpecialBlockInfoList() {
+	public List<PreparablePosInfo> getSpecialBlockInfoList() {
 		return Collections.unmodifiableList(this.specialBlockInfoList);
 	}
 
-	public List<EntityInfo> getEntityInfoList() {
+	public List<PreparableEntityInfo> getEntityInfoList() {
 		return Collections.unmodifiableList(this.entityInfoList);
 	}
 
-	public IntList getUnprotectedBlockList() {
-		return IntLists.unmodifiable(this.unprotectedBlockList);
+	public List<BlockPos> getUnprotectedBlockList() {
+		return Collections.unmodifiableList(this.unprotectedBlockList);
 	}
 
 	public BlockPos getSize() {
@@ -484,16 +434,22 @@ public class CQStructure {
 		return this.author;
 	}
 
-	public void addAll(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, PlacementSettings settings, DungeonInhabitant dungeonMobType) {
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, partPos, this.getBlockInfoList(), settings, dungeonMobType));
-		dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, partPos, this.getSpecialBlockInfoList(), settings, dungeonMobType));
-		dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, partPos, this.getEntityInfoList(), settings, dungeonMobType));
-		if (!this.unprotectedBlockList.isEmpty()) {
-			for (int i : this.unprotectedBlockList) {
-				BlockPos p = new BlockPos((i >>> 20) & 0xFFF, (i >>> 12) & 0xFF, i & 0xFFF);
-				dungeonGenerator.addUnprotectedPosition(partPos.add(Template.transformedBlockPos(settings, p)));
-			}
-		}
+	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
+	}
+
+	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
+	}
+
+	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
+	}
+
+	public void addAll(GeneratableDungeon.Builder<?> builder, DungeonPlacement placement) {
+		builder.add(new BlockDungeonPart.Builder().addAll(this.blockInfoList), placement);
+		builder.add(new MultiBlockDungeonPart.Builder().addAll(this.specialBlockInfoList), placement);
+		builder.add(new EntityDungeonPart.Builder().addAll(this.entityInfoList), placement);
 	}
 
 	public static void updateSpecialBlocks() {
@@ -518,7 +474,8 @@ public class CQStructure {
 		if (!CQRConfig.advanced.checkAndUpdateDeprecatedStructureFiles) {
 			return;
 		}
-		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true);
+		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] {
+				"nbt" }, true);
 		CQRMain.logger.info("Checking {} structure files", files.size());
 		long lastTimeLogged = System.currentTimeMillis();
 		long checkedFiles = 0;
@@ -570,10 +527,7 @@ public class CQStructure {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			AbstractBlockInfo blockInfo = AbstractBlockInfo.create(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
-			if (blockInfo != null) {
-				this.blockInfoList.add(blockInfo);
-			}
+			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList));
 			if (x < this.size.getX() - 1) {
 				x++;
 			} else if (y < this.size.getY() - 1) {
@@ -585,23 +539,21 @@ public class CQStructure {
 				z++;
 			}
 		}
-		this.blockInfoList.sort(SORT_FOR_EXPORTATION);
+		this.blockInfoList.sort(DEFAULT_COMPARATOR);
 
 		// Load special blocks
 		for (NBTBase nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound tag = (NBTTagCompound) nbt;
 			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
 				NBTTagList pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
-				AbstractBlockInfo blockInfo = AbstractBlockInfo.create(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList);
-				if (blockInfo != null) {
-					this.specialBlockInfoList.add(blockInfo);
-				}
+				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2),
+						(NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
 			}
 		}
 
 		// Load entities
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
-			this.entityInfoList.add(new EntityInfo((NBTTagCompound) nbt));
+			this.entityInfoList.add(new PreparableEntityInfo((NBTTagCompound) nbt));
 		}
 	}
 
