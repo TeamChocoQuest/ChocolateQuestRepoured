@@ -25,8 +25,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
+import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.EntityCQRMountBase;
 
@@ -37,6 +41,26 @@ public class TargetUtil {
 			return false;
 		}
 		return EntitySelectors.CAN_AI_TARGET.apply(input);
+	};
+	
+	public static final Predicate<EntityLivingBase> PREDICATE_CAN_BE_ELECTROCUTED = input -> {
+		if(input == null || input.isDead) {
+			return false;
+		}
+		if(!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
+			return false;
+		}
+		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		if(input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
+			return input.isWet(); 
+		}
+		if(icapability.getRemainingTicks() >= 0) {
+			return false;
+		}
+		if(icapability.getCooldown() > 0) {
+			return false;
+		}
+		return true;
 	};
 
 	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = input -> {

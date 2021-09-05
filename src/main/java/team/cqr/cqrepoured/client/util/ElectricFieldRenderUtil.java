@@ -136,7 +136,7 @@ public class ElectricFieldRenderUtil {
 	}
 
 	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z) {
-		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width, entity.height / 2, x, y, z, 5, 80);
+		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 2, x, y, z, 5, 40);
 	}
 
 }

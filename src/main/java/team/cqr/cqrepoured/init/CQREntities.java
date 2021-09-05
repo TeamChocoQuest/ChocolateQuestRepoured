@@ -227,19 +227,22 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(EntityWalkerTornado.class, "walker_tornado", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCQRPirateParrot.class, "pirate_parrot", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityIceSpike.class, "ice_spike", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true), };
+					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true),
+
+					// ender calamity
+					createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQREnderKing.class, "ender_king", 64, 1, true, 3289650, 000000),
+					createEntityEntryWithoutEgg(EntityEndLaserTargeting.class, "end_targeting_laser", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityEndLaser.class, "end_laser", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityCalamitySpawner.class, "calamity_spawner", 64, 1, true),
+			};
 
 			event.getRegistry().registerAll(entityEntries);
 
 			if (CQRMain.isWorkspaceEnvironment) {
 				event.getRegistry().registerAll(new EntityEntry[] {
-						// ender calamity
-						createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
-						createEntityEntry(EntityCQREnderKing.class, "ender_king", 64, 1, true, 3289650, 000000),
-						createEntityEntryWithoutEgg(EntityEndLaserTargeting.class, "end_targeting_laser", 64, 1, true),
-						createEntityEntryWithoutEgg(EntityEndLaser.class, "end_laser", 64, 1, true),
-						createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
-						createEntityEntryWithoutEgg(EntityCalamitySpawner.class, "calamity_spawner", 64, 1, true),
+						
 
 						// spectre lord
 						createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),

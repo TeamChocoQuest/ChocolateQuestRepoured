@@ -13,8 +13,11 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,6 +36,7 @@ import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRParticleManager;
+import team.cqr.cqrepoured.client.render.entity.layers.LayerElectrocute;
 import team.cqr.cqrepoured.customtextures.CTResourcepack;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
@@ -64,7 +68,18 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void postInit() {
-
+		//Add electrocute layer to all entities
+		for(Render<? extends Entity> renderer : Minecraft.getMinecraft().getRenderManager().entityRenderMap.values()) {
+			try {
+				@SuppressWarnings("unchecked")
+				Render<Entity> render = (Render<Entity>) renderer;
+				if(render instanceof RenderLivingBase) {
+					((RenderLivingBase<?>) render).addLayer(new LayerElectrocute());
+				}
+			} catch(ClassCastException ccex) {
+				//Ignore
+			}
+		}
 	}
 
 	@Override
