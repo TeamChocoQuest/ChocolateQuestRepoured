@@ -44,7 +44,7 @@ public class EntityElectricField extends Entity {
 	public EntityElectricField(World worldIn, int charge) {
 		super(worldIn);
 		this.charge = charge;
-		this.setSize(1, 1);
+		this.setSize(1.125F, 1.125F);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class EntityElectricField extends Entity {
 	
 	@Override
 	public boolean canBeCollidedWith() {
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -105,17 +105,22 @@ public class EntityElectricField extends Entity {
 					this.spreadTimer = 5;
 					
 					EnumFacing face = this.facesToSpreadTo.poll();
-					if(face != null) {
-						pos = pos.offset(face);
-						if(!EXISTING_FIELDS.contains(pos)) {
-							IBlockState blockState = this.world.getBlockState(pos);
-							if(blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.IRON) {
-								int charge = this.charge - 10;
-								if(charge > 0) {
-									EntityElectricField newField = new EntityElectricField(this.world, charge);
-									newField.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-									
-									this.world.spawnEntity(newField);
+					boolean needToPlaceField = true;
+					while(needToPlaceField) {
+						if(face != null) {
+							pos = pos.offset(face);
+							if(!EXISTING_FIELDS.contains(pos)) {
+								IBlockState blockState = this.world.getBlockState(pos);
+								if(blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.IRON) {
+									int charge = this.charge - 10;
+									if(charge > 0) {
+										EntityElectricField newField = new EntityElectricField(this.world, charge);
+										newField.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+										
+										needToPlaceField = false;
+										
+										this.world.spawnEntity(newField);
+									}
 								}
 							}
 						}
