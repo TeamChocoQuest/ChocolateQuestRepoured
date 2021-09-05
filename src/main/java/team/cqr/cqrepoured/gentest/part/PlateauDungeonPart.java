@@ -41,11 +41,13 @@ public class PlateauDungeonPart extends DungeonPart {
 		this.endX = endX;
 		this.endY = endY;
 		this.endZ = endZ;
+		this.wallSize = wallSize;
 		this.supportHillBlock = supportHillBlock;
 		this.supportHillTopBlock = supportHillTopBlock;
-		this.wallSize = wallSize;
 		this.perlin1 = new Perlin3D(seed, wallSize);
 		this.perlin2 = new Perlin3D(seed, wallSize * 4);
+		this.chunkX = startX >> 4;
+		this.chunkZ = startZ >> 4;
 	}
 
 	@Override
@@ -53,11 +55,11 @@ public class PlateauDungeonPart extends DungeonPart {
 		if (this.chunkX <= this.endX >> 4) {
 			Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
 
-			for (int x = 0; x < 15; x++) {
+			for (int x = 0; x < 16; x++) {
 				if ((this.chunkX << 4) + x < this.startX || (this.chunkX << 4) + x > this.endX) {
 					continue;
 				}
-				for (int z = 0; z < 15; z++) {
+				for (int z = 0; z < 16; z++) {
 					if ((this.chunkZ << 4) + z < this.startZ || (this.chunkZ << 4) + z > this.endZ) {
 						continue;
 					}
@@ -66,7 +68,7 @@ public class PlateauDungeonPart extends DungeonPart {
 					IBlockState state1 = this.supportHillBlock;
 					IBlockState state2 = this.supportHillTopBlock;
 					if (state1 == null || state2 == null) {
-						Biome biome = world.getBiome(MUTABLE.setPos(this.chunkX, 0, this.chunkZ));
+						Biome biome = world.getBiome(MUTABLE.setPos(this.chunkX << 4, 0, this.chunkZ << 4));
 						if (state1 == null) {
 							state1 = biome.fillerBlock;
 						}
@@ -74,7 +76,7 @@ public class PlateauDungeonPart extends DungeonPart {
 							state2 = biome.topBlock;
 						}
 					}
-					this.setYtoHeight(world, MUTABLE.setPos(this.chunkX, this.endY + 1, this.chunkZ));
+					this.setYtoHeight(world, MUTABLE.setPos((this.chunkX << 4) + x, this.endY + 1, (this.chunkZ << 4) + z));
 
 					while (MUTABLE.getY() < this.endY) {
 						if (MUTABLE.getX() >= this.startX + this.wallSize
@@ -93,13 +95,13 @@ public class PlateauDungeonPart extends DungeonPart {
 					}
 
 					// TODO generate "walls" of support hills
-
-					this.chunkZ++;
-					if (this.chunkZ > this.endZ >> 4) {
-						this.chunkZ = this.startZ >> 4;
-						this.chunkX++;
-					}
 				}
+			}
+
+			this.chunkZ++;
+			if (this.chunkZ > this.endZ >> 4) {
+				this.chunkZ = this.startZ >> 4;
+				this.chunkX++;
 			}
 		}
 	}
@@ -124,7 +126,7 @@ public class PlateauDungeonPart extends DungeonPart {
 
 	@Override
 	public boolean isGenerated() {
-		return this.chunkX > this.endX;
+		return this.chunkX > this.endX >> 4;
 	}
 
 	public int getStartX() {
