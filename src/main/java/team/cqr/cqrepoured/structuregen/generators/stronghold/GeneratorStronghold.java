@@ -26,8 +26,8 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 
 	private StrongholdFloor[] floors;
 
-	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override

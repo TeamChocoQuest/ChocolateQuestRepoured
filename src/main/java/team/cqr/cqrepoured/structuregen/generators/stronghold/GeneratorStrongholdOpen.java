@@ -43,8 +43,8 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	private int entranceSizeX = 0;
 	private int entranceSizeZ = 0;
 
-	public GeneratorStrongholdOpen(World world, BlockPos pos, DungeonStrongholdOpen dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorStrongholdOpen(World world, BlockPos pos, DungeonStrongholdOpen dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 		this.structureBounds = new Tuple<>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 
 		this.settings.setMirror(Mirror.NONE);

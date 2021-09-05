@@ -51,8 +51,8 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 	private CQStructure[][] structures;
 
-	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override

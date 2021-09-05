@@ -33,8 +33,8 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	private Map<BlockPos, CQStructure> toGenerate = new HashMap<>();
 	private Map<BlockPos, PlacementSettings> settingsMap = new HashMap<>();
 
-	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	private void processStructure(CQStructure structure, BlockPos position) {

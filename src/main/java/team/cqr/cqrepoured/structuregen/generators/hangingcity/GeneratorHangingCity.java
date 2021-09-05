@@ -32,8 +32,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 		this.mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 	}
 

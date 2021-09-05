@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
@@ -22,9 +23,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
-import team.cqr.cqrepoured.structuregen.DungeonGeneratorThread;
+import team.cqr.cqrepoured.structuregen.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
+import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -80,7 +83,7 @@ public abstract class DungeonBase {
 	protected boolean preventEntitySpawning = false;
 	protected boolean ignoreNoBossOrNexus = false;
 
-	public DungeonBase(String name, Properties prop) {
+	protected DungeonBase(String name, Properties prop) {
 		this.name = name;
 		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
 		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID, 0, 19);
@@ -132,7 +135,8 @@ public abstract class DungeonBase {
 		return this.name;
 	}
 
-	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType);
+	public abstract AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z, Random rand,
+			DungeonDataManager.DungeonSpawnType spawnType);
 
 	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		this.generate(world, x, this.getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);
@@ -158,12 +162,15 @@ public abstract class DungeonBase {
 	}
 
 	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
-		AbstractDungeonGenerator<?> dungeonGenerator = this.createDungeonGenerator(world, x, y, z, rand, spawnType);
+		AbstractDungeonGenerator<?> generator = this.createDungeonGenerator(world, x, y, z, rand, spawnType);
 
-		if (!generateImmediately && CQRConfig.advanced.multithreadedDungeonPreparation) {
-			DungeonGeneratorThread.add(dungeonGenerator);
+		if (generateImmediately) {
+			DungeonGenerationManager.generateNow(world, generator.get(), this, spawnType);
+		} else if (!CQRConfig.advanced.multithreadedDungeonPreparation) {
+			DungeonGenerationManager.generate(world, generator.get(), this, spawnType);
 		} else {
-			dungeonGenerator.generate(generateImmediately);
+			CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, generator);
+			DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, this, spawnType));
 		}
 	}
 
@@ -178,19 +185,31 @@ public abstract class DungeonBase {
 	/*
 	 * private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
 	 * 
-	 * public File getStructureFileFromDirectory(File parentDir, Random rand) { List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] {
-	 * "nbt" }, true)); if (!files.isEmpty()) { File file =
-	 * files.get(rand.nextInt(files.size())); Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new
-	 * Integer(0)); if (lastUsedFileHash == 0) { lastUsedFileHash = file.hashCode(); } else if
-	 * (files.size() > 1 && file.hashCode() == lastUsedFileHash) { while (file.hashCode() == lastUsedFileHash) { file = files.get(rand.nextInt(files.size())); } }
-	 * return file; } return null; }
+	 * public File getStructureFileFromDirectory(File parentDir, Random rand) {
+	 * List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
+	 * if (!files.isEmpty()) {
+	 * File file = files.get(rand.nextInt(files.size()));
+	 * Integer lastUsedFileHash = lastUsedFilePerDirectory.computeIfAbsent(parentDir.getAbsolutePath(), key -> new
+	 * Integer(0));
+	 * if (lastUsedFileHash == 0) {
+	 * lastUsedFileHash = file.hashCode();
+	 * } else if (files.size() > 1 && file.hashCode() == lastUsedFileHash) {
+	 * while (file.hashCode() == lastUsedFileHash) {
+	 * file = files.get(rand.nextInt(files.size()));
+	 * }
+	 * }
+	 * return file;
+	 * }
+	 * return null;
+	 * }
 	 */
 
 	private Map<String, Integer> lastUsedFilePerDirectory = new ConcurrentHashMap<>();
 
 	@Nullable
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
-		Collection<File> files = FileUtils.listFiles(parentDir, new String[] { "nbt" }, true);
+		Collection<File> files = FileUtils.listFiles(parentDir, new String[] {
+				"nbt" }, true);
 		List<File> filesL = (files instanceof List ? ((List<File>) files) : new ArrayList<>(files));
 		if (filesL.isEmpty()) {
 			return null;

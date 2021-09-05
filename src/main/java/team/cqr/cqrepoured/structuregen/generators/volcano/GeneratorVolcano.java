@@ -45,8 +45,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	private final CQRWeightedRandom<IBlockState> volcanoBlocks;
 	private final CQRWeightedRandom<IBlockState> volcanoBlocksWithLava;
 
-	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 
 		this.volcanoHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight(), this.random);
 		this.steepness = dungeon.getSteepness();

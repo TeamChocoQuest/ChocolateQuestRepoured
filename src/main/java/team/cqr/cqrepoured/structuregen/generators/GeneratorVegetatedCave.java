@@ -50,8 +50,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private IBlockState[][][] centralCaveBlocks;
 	private DungeonInhabitant mobtype;
 
-	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override

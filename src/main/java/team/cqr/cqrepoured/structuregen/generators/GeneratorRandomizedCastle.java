@@ -23,8 +23,8 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 
 	private CastleRoomSelector roomHelper;
 
-	public GeneratorRandomizedCastle(World world, BlockPos pos, DungeonRandomizedCastle dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorRandomizedCastle(World world, BlockPos pos, DungeonRandomizedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override

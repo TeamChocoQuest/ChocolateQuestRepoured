@@ -25,8 +25,8 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 	private PlacementSettings settings;
 	private BlockPos structurePos;
 
-	public GeneratorTemplateSurface(World world, BlockPos pos, DungeonTemplateSurface dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorTemplateSurface(World world, BlockPos pos, DungeonTemplateSurface dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
