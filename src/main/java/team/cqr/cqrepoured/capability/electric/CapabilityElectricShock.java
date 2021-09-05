@@ -17,7 +17,7 @@ public class CapabilityElectricShock {
 	private final EntityLivingBase entity;
 	private Entity target;
 	private int remainingTicks = -1;
-	private int cooldown = 200;
+	private int cooldown = -1;
 
 	public CapabilityElectricShock(EntityLivingBase entity) {
 		this.entity = entity;
@@ -58,11 +58,12 @@ public class CapabilityElectricShock {
 	}
 	
 	public boolean reduceRemainingTicks() {
+		if(this.cooldown > 0) {
+			this.cooldown--;
+		}
 		if(this.remainingTicks < 0) {
 			this.target = null;
-			if(this.cooldown > 0) {
-				this.cooldown--;
-			}
+			
 			return false;
 		}
 		this.remainingTicks--;
