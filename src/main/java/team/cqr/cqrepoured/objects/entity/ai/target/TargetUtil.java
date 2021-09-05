@@ -54,7 +54,7 @@ public class TargetUtil {
 		if(input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
 			return input.isWet(); 
 		}
-		if(icapability.getRemainingTicks() >= 0) {
+		if(icapability.getRemainingTicks() > 0) {
 			return false;
 		}
 		if(icapability.getCooldown() > 0) {
