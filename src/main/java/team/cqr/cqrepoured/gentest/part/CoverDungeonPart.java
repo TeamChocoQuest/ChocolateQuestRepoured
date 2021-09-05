@@ -38,11 +38,11 @@ public class CoverDungeonPart extends DungeonPart {
 		if (this.chunkX <= this.endX >> 4) {
 			Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
 
-			for (int x = 0; x < 15; x++) {
+			for (int x = 0; x < 16; x++) {
 				if ((this.chunkX << 4) + x < this.startX || (this.chunkX << 4) + x > this.endX) {
 					continue;
 				}
-				for (int z = 0; z < 15; z++) {
+				for (int z = 0; z < 16; z++) {
 					if ((this.chunkZ << 4) + z < this.startZ || (this.chunkZ << 4) + z > this.endZ) {
 						continue;
 					}
