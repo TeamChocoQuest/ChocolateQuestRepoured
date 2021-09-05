@@ -105,8 +105,7 @@ public class EntityElectricField extends Entity {
 					this.spreadTimer = 5;
 					
 					EnumFacing face = this.facesToSpreadTo.poll();
-					boolean needToPlaceField = true;
-					while(needToPlaceField) {
+					while(!this.facesToSpreadTo.isEmpty()) {
 						if(face != null) {
 							pos = pos.offset(face);
 							if(!EXISTING_FIELDS.contains(pos)) {
@@ -117,12 +116,15 @@ public class EntityElectricField extends Entity {
 										EntityElectricField newField = new EntityElectricField(this.world, charge);
 										newField.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 										
-										needToPlaceField = false;
-										
 										this.world.spawnEntity(newField);
+										
+										break;
 									}
 								}
 							}
+							face = this.facesToSpreadTo.poll(); 
+						} else {
+							break;
 						}
 					}
 				}
