@@ -1,8 +1,6 @@
 package team.cqr.cqrepoured.structuregen.generators.stronghold.spiral;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.util.Tuple;
@@ -10,11 +8,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.gentest.GeneratableDungeon;
-import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -32,7 +28,6 @@ public class SpiralStrongholdBuilder {
 	private int floorCount = 0;
 	private int roomCount = 0;
 	private int floorSideLength = 0;
-	private List<IDungeonPartBuilder> strongholdParts = new ArrayList<>();
 	private boolean buildDownwards = true;
 	private boolean buildInwards = true;
 
@@ -87,7 +82,7 @@ public class SpiralStrongholdBuilder {
 			File file = this.dungeon.getRoomNBTFileForType(stairwellType, this.random);
 			if (file != null) {
 				CQStructure room = this.generator.loadStructureFromFile(file);
-				room.addAll(dungeonBuilder, strongholdEntrancePos, Offset.CENTER);
+				room.addAll(dungeonBuilder, new BlockPos(strongholdEntrancePos.getX(), y, strongholdEntrancePos.getZ()), Offset.CENTER);
 			}
 			strongholdEntrancePos = strongholdEntrancePos.add(offsetVector);
 			posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());
@@ -169,12 +164,8 @@ public class SpiralStrongholdBuilder {
 		// BlockPos currentPos = strongholdEntrancePos;
 		for (int i = 0; i < this.floorCount; i++) {
 			SpiralStrongholdFloor floor = this.floors[i];
-			this.strongholdParts.addAll(floor.buildRooms(this.dungeon, world));
+			floor.buildRooms(this.dungeon, world);
 		}
-	}
-
-	public List<IDungeonPartBuilder> getStrongholdParts() {
-		return this.strongholdParts;
 	}
 
 }

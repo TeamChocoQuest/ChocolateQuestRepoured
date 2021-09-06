@@ -1,19 +1,15 @@
 package team.cqr.cqrepoured.structuregen.generators.stronghold.spiral;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.gentest.GeneratableDungeon;
-import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 
@@ -228,8 +224,7 @@ public class SpiralStrongholdFloor {
 		return this.roomGrid;
 	}
 
-	public List<IDungeonPartBuilder> buildRooms(DungeonVolcano dungeon, World world) {
-		List<IDungeonPartBuilder> strongholdParts = new ArrayList<>();
+	public void buildRooms(DungeonVolcano dungeon, World world) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				if ((iX == 0 || iX == (this.sideLength - 1)) || (iZ == 0 || iZ == (this.sideLength - 1))) {
@@ -246,7 +241,6 @@ public class SpiralStrongholdFloor {
 				}
 			}
 		}
-		return strongholdParts;
 	}
 
 	public EStrongholdRoomType getExitRoomType() {

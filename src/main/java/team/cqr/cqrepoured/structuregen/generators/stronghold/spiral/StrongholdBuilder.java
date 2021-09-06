@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.structuregen.generators.stronghold.spiral;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockRotatedPillar;
@@ -13,13 +11,11 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
 import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.volcano.StairCaseHelper;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.util.ESkyDirection;
 
 public class StrongholdBuilder {
@@ -32,7 +28,6 @@ public class StrongholdBuilder {
 	private int blocksRemainingToWall;
 	private EnumFacing direction;
 	private World world;
-	private List<IDungeonPartBuilder> strongholdParts = new ArrayList<>();
 
 	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
 		this.generator = generator;
@@ -64,15 +59,15 @@ public class StrongholdBuilder {
 		default:
 			break;
 		}
-		// DONE: Place fire pots and "porch"
-		BlockPos pos = this.startPos;// .add(expansionV);
 
+		BlockPos pos = this.startPos;
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (int i = 0; i < (this.blocksRemainingToWall / 4) + 2; i++) {
 			this.buildSegment(pos.subtract(this.startPos), partBuilder);
 			pos = pos.add(expansionVector);
 		}
-		this.strongholdParts.add(partBuilder);
+		this.dungeonBuilder.add(partBuilder, this.startPos);
+
 		this.buildStronghold(pos.add(0, -1, 0), this.world, cX, cZ);
 	}
 
@@ -80,7 +75,6 @@ public class StrongholdBuilder {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
 		stronghold.calculateFloors(pos, world2);
 		stronghold.buildFloors(pos.add(0, -1, 0), this.world);
-		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 
 	private void buildSegment(BlockPos startPosCentered, BlockDungeonPart.Builder partBuilder) {
@@ -176,10 +170,6 @@ public class StrongholdBuilder {
 		for (BlockPos p : BlockPos.getAllInBox(start.add(0, ceilingHeight + 1, 0), endP.add(0, ceilingHeight + 1, 0))) {
 			partBuilder.add(new PreparableBlockInfo(p, CQRBlocks.GRANITE_SQUARE.getDefaultState(), null));
 		}
-	}
-
-	public List<IDungeonPartBuilder> getStrongholdParts() {
-		return this.strongholdParts;
 	}
 
 }

@@ -307,7 +307,6 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonBuilder, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world, this.random);
 			entranceBuilder.generate(this.pos.getX(), this.pos.getZ());
-			this.dungeonBuilder.addAll(entranceBuilder.getStrongholdParts());
 		}
 	}
 
