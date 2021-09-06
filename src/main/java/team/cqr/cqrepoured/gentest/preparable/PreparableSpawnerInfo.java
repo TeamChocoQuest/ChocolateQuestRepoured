@@ -77,24 +77,25 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
 		IBlockState state;
 		TileEntity tileEntity;
+		BlockPos p = pos.toImmutable();
 
 		if (this.tileEntityData.getBoolean("vanillaSpawner")) {
 			state = Blocks.MOB_SPAWNER.getDefaultState();
 			tileEntity = state.getBlock().createTileEntity(world, state);
 
 			if (tileEntity instanceof TileEntityMobSpawner) {
-				this.vanillaSpawnerReadFromNBT(world, placement, pos, (TileEntityMobSpawner) tileEntity);
+				this.vanillaSpawnerReadFromNBT(world, placement, p, (TileEntityMobSpawner) tileEntity);
 			}
 		} else {
 			state = CQRBlocks.SPAWNER.getDefaultState();
 			tileEntity = state.getBlock().createTileEntity(world, state);
 
 			if (tileEntity instanceof TileEntitySpawner) {
-				this.cqrSpawnerReadFromNBT(world, placement, pos, (TileEntitySpawner) tileEntity);
+				this.cqrSpawnerReadFromNBT(world, placement, p, (TileEntitySpawner) tileEntity);
 			}
 		}
 
-		return new GeneratableBlockInfo(pos, state, tileEntity);
+		return new GeneratableBlockInfo(p, state, tileEntity);
 	}
 
 	private void vanillaSpawnerReadFromNBT(World world, DungeonPlacement placement, BlockPos pos, TileEntityMobSpawner tileEntity) {
