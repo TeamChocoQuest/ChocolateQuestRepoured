@@ -147,7 +147,7 @@ public class BlockDungeonPart extends DungeonPart {
 			return this;
 		}
 
-		public Builder addAll(Collection<PreparablePosInfo> blocks) {
+		public Builder addAll(Collection<? extends PreparablePosInfo> blocks) {
 			this.blocks.addAll(blocks);
 			return this;
 		}
