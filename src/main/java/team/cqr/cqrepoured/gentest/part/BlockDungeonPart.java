@@ -230,6 +230,7 @@ public class BlockDungeonPart extends DungeonPart {
 					for (int y = 0; y < 16; y++) {
 						for (int z = 0; z < 16; z++) {
 							if (buf.getByte(buf.readerIndex()) == -1) {
+								buf.readByte();
 								continue;
 							}
 							blocks.add(GeneratablePosInfo.Registry.read(world, (chunkX << 4) + x, (chunkY << 4) + y, (chunkZ << 4) + z, buf, palette,
