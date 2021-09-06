@@ -223,16 +223,6 @@ public class GeneratableDungeon {
 		}
 		if (this.parts.isEmpty()) {
 			long t = System.currentTimeMillis();
-			this.chunkInfoMap.forEach(chunkInfo -> {
-				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-				chunkInfo.forEach(chunkY -> {
-					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-						return;
-					}
-					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
-				});
-			});
 			ChunkInfoMap temp = new ChunkInfoMap();
 			this.chunkInfoMap.forEach(chunkInfo -> chunkInfo.forEach(chunkY -> {
 				int r = 1;
@@ -254,6 +244,19 @@ public class GeneratableDungeon {
 					if (chunk.getBlockStorageArray()[chunkY - 1] == Chunk.NULL_BLOCK_STORAGE) {
 						chunkInfo.mark(chunkY - 1);
 					}
+				});
+			});
+			this.chunkInfoMap.forEach(chunkInfo -> {
+				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+				chunkInfo.forEach(chunkY -> {
+					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
+						return;
+					}
+					if (world.provider.hasSkyLight()) {
+						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
+					}
+					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
 				});
 			});
 			CQRMain.logger.info(System.currentTimeMillis() - t);
