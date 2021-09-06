@@ -3,11 +3,14 @@ package team.cqr.cqrepoured.gentest.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -45,6 +48,16 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 				this.tileEntityData.setInteger("y", pos.getY());
 				this.tileEntityData.setInteger("z", pos.getZ());
 				tileEntity.readFromNBT(this.tileEntityData);
+				if (tileEntity instanceof TileEntitySkull) {
+					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
+						((TileEntitySkull) tileEntity)
+								.setSkullRotation(placement.getMirror().mirrorRotation(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
+						((TileEntitySkull) tileEntity).setSkullRotation(placement.getRotation().rotate(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
+					}
+				} else {
+					tileEntity.mirror(placement.getMirror());
+					tileEntity.rotate(placement.getRotation());
+				}
 				this.tileEntityData.removeTag("x");
 				this.tileEntityData.removeTag("y");
 				this.tileEntityData.removeTag("z");
