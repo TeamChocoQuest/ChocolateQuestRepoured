@@ -434,23 +434,23 @@ public class CQStructure {
 		return this.author;
 	}
 
-	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset) {
+	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE)));
 	}
 
-	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
+	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
 	}
 
-	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
+	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
 	}
 
-	public void addAll(GeneratableDungeon.Builder<?> builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
+	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
 	}
 
-	public void addAll(GeneratableDungeon.Builder<?> builder, DungeonPlacement placement) {
+	public void addAll(GeneratableDungeon.Builder builder, DungeonPlacement placement) {
 		builder.add(new BlockDungeonPart.Builder().addAll(this.blockInfoList), placement);
 		builder.add(new MultiBlockDungeonPart.Builder().addAll(this.specialBlockInfoList), placement);
 		builder.add(new EntityDungeonPart.Builder().addAll(this.entityInfoList), placement);

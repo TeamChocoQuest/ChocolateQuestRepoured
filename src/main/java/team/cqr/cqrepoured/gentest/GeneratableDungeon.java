@@ -371,18 +371,16 @@ public class GeneratableDungeon {
 		return this.pos;
 	}
 
-	public static class Builder<T extends DungeonBase> {
+	public static class Builder {
 
-		private final World world;
-		private final T dungeonConfig;
+		private final String dungeonName;
 		private final BlockPos pos;
 		private final DungeonInhabitant defaultInhabitant;
-		private final List<Function<World, DungeonPart>> partBuilders = new ArrayList<>();
 		private final ProtectedRegion.Builder protectedRegionBuilder;
+		private final List<Function<World, DungeonPart>> partBuilders = new ArrayList<>();
 
-		public Builder(World world, T dungeonConfig, BlockPos pos) {
-			this.world = world;
-			this.dungeonConfig = dungeonConfig;
+		public Builder(World world, BlockPos pos, DungeonBase dungeonConfig) {
+			this.dungeonName = dungeonConfig.getDungeonName();
 			this.pos = pos;
 			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(dungeonConfig.getDungeonMob(), world, pos.getX(),
 					pos.getZ());
@@ -391,11 +389,27 @@ public class GeneratableDungeon {
 
 		public GeneratableDungeon build(World world) {
 			List<DungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).collect(Collectors.toList());
-			return new GeneratableDungeon(this.dungeonConfig.getDungeonName(), this.pos, parts, this.protectedRegionBuilder);
+			return new GeneratableDungeon(this.dungeonName, this.pos, parts, this.protectedRegionBuilder);
 		}
 
 		public void add(IDungeonPartBuilder partBuilder) {
 			this.add(partBuilder, this.getPlacement(this.pos, this.defaultInhabitant));
+		}
+
+		public void add(IDungeonPartBuilder partBuilder, BlockPos partPos) {
+			this.add(partBuilder, this.getPlacement(partPos));
+		}
+
+		public void add(IDungeonPartBuilder partBuilder, BlockPos partPos, Mirror mirror, Rotation rotation) {
+			this.add(partBuilder, this.getPlacement(partPos, mirror, rotation));
+		}
+
+		public void add(IDungeonPartBuilder partBuilder, BlockPos partPos, DungeonInhabitant inhabitant) {
+			this.add(partBuilder, this.getPlacement(partPos, inhabitant));
+		}
+
+		public void add(IDungeonPartBuilder partBuilder, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
+			this.add(partBuilder, this.getPlacement(partPos, mirror, rotation, inhabitant));
 		}
 
 		public void add(IDungeonPartBuilder partBuilder, DungeonPlacement placement) {
@@ -416,22 +430,6 @@ public class GeneratableDungeon {
 
 		public DungeonPlacement getPlacement(BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
 			return new DungeonPlacement(this.pos, partPos, mirror, rotation, inhabitant, this.protectedRegionBuilder);
-		}
-
-		public World getWorld() {
-			return this.world;
-		}
-
-		public T getDungeon() {
-			return this.dungeonConfig;
-		}
-
-		public BlockPos getPos() {
-			return this.pos;
-		}
-
-		public ProtectedRegion.Builder getProtectedRegionBuilder() {
-			return this.protectedRegionBuilder;
 		}
 
 	}

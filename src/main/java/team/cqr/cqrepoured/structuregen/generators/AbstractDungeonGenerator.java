@@ -19,7 +19,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements
 	protected final Random random;
 	protected final BlockPos pos;
 	protected final T dungeon;
-	protected final GeneratableDungeon.Builder<T> dungeonBuilder;
+	protected final GeneratableDungeon.Builder dungeonBuilder;
 
 	private final Map<File, CQStructure> cachedStructures = new HashMap<>();
 
@@ -28,7 +28,7 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements
 		this.pos = pos;
 		this.dungeon = dungeon;
 		this.random = random;
-		this.dungeonBuilder = new GeneratableDungeon.Builder<>(this.world, this.dungeon, this.pos);
+		this.dungeonBuilder = new GeneratableDungeon.Builder(this.world, this.pos, this.dungeon);
 	}
 
 	@Override
