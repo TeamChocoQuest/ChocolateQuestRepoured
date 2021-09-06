@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.gentest.preparable.PreparableEntityInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 
 public class BlockStateGenArray {
@@ -48,15 +49,15 @@ public class BlockStateGenArray {
 	}
 
 	private class PriorityBlockInfo {
-		private PreparableBlockInfo blockInfo;
+		private PreparablePosInfo blockInfo;
 		private EnumPriority priority;
 
-		private PriorityBlockInfo(PreparableBlockInfo blockInfo, EnumPriority priority) {
+		private PriorityBlockInfo(PreparablePosInfo blockInfo, EnumPriority priority) {
 			this.blockInfo = blockInfo;
 			this.priority = priority;
 		}
 
-		public PreparableBlockInfo getBlockInfo() {
+		public PreparablePosInfo getBlockInfo() {
 			return this.blockInfo;
 		}
 
@@ -78,14 +79,14 @@ public class BlockStateGenArray {
 		return this.random;
 	}
 
-	public Map<BlockPos, PreparableBlockInfo> getMainMap() {
-		Map<BlockPos, PreparableBlockInfo> result = new HashMap<>();
+	public Map<BlockPos, PreparablePosInfo> getMainMap() {
+		Map<BlockPos, PreparablePosInfo> result = new HashMap<>();
 		this.mainMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
 		return result;
 	}
 
-	public Map<BlockPos, PreparableBlockInfo> getPostMap() {
-		Map<BlockPos, PreparableBlockInfo> result = new HashMap<>();
+	public Map<BlockPos, PreparablePosInfo> getPostMap() {
+		Map<BlockPos, PreparablePosInfo> result = new HashMap<>();
 		this.postMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
 		return result;
 	}
@@ -132,7 +133,7 @@ public class BlockStateGenArray {
 		return this.addInternal(new PreparableEntityInfo(structurePos, entity));
 	}
 
-	public boolean addInternal(GenerationPhase phase, PreparableBlockInfo blockInfo, EnumPriority priority) {
+	public boolean addInternal(GenerationPhase phase, PreparablePosInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
 		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
 		BlockPos p = new BlockPos(blockInfo.getX(), blockInfo.getY(), blockInfo.getZ());
