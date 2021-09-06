@@ -123,7 +123,8 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		BlockPos start = this.worldPosition.add(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
 		BlockPos end = this.worldPosition.add(rad, height, rad);
 		
-		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, CQRConfig.general.supportHillWallSize, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)));
+		int wall = CQRConfig.general.supportHillWallSize;
+		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.add(-wall, -wall, -wall));
 	}
 
 	@Override
