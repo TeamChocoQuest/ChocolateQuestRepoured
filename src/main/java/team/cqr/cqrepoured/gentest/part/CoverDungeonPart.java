@@ -23,7 +23,7 @@ public class CoverDungeonPart extends DungeonPart {
 	private int chunkX;
 	private int chunkZ;
 
-	public CoverDungeonPart(int startX, int startZ, int endX, int endZ, IBlockState coverBlock) {
+	protected CoverDungeonPart(int startX, int startZ, int endX, int endZ, IBlockState coverBlock) {
 		this.coverBlock = coverBlock;
 		this.startX = startX;
 		this.startZ = startZ;
