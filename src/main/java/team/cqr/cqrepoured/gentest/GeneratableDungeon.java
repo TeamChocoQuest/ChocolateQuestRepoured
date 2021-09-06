@@ -174,11 +174,14 @@ public class GeneratableDungeon {
 	public void generateNext(World world) {
 		if (this.state == GenerationState.PRE_GENERATION) {
 			CQRMain.logger.info("Started generating dungeon {} at {}", this.dungeonName, this.pos);
-			// TODO chunkInfoMap might be unreliable -> pass start and end position in constructor?
+			// TODO chunkInfoMap is be unreliable -> pass start and end position in constructor
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
 			BlockPos start = new BlockPos(this.chunkInfoMap.getMinChunkX() << 4, this.chunkInfoMap.getMinChunkY() << 4, this.chunkInfoMap.getMinChunkZ() << 4);
 			BlockPos end = new BlockPos(this.chunkInfoMap.getMaxChunkX() << 4, this.chunkInfoMap.getMaxChunkY() << 4, this.chunkInfoMap.getMaxChunkZ() << 4);
-			protectedRegionManager.addProtectedRegion(this.protectedRegionBuilder.build(world, start, start, end));
+			ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(world, start, start, end);
+			if (protectedRegion != null) {
+				protectedRegionManager.addProtectedRegion(protectedRegion);
+			}
 			this.state = GenerationState.GENERATION;
 			return;
 		}
