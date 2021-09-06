@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.NBTCollectors;
 
 public class ChunkInfo {
@@ -71,14 +72,14 @@ public class ChunkInfo {
 		if (!this.anyMarked()) {
 			return -1;
 		}
-		return 15 - (Integer.numberOfLeadingZeros(this.marked) - 16);
+		return 15 - (Integer.numberOfLeadingZeros(this.marked & 0xFFFF) - 16);
 	}
 
 	public int bottomMarked() {
 		if (!this.anyMarked()) {
 			return -1;
 		}
-		return Integer.numberOfTrailingZeros(this.marked);
+		return Integer.numberOfTrailingZeros(this.marked & 0xFFFF);
 	}
 
 	public void forEach(IntConsumer action) {
