@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.structuregen.thewall.wallparts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -18,20 +15,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoSpawner;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 /**
@@ -45,12 +38,12 @@ public class WallPartRailingWall implements IWallPart {
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, DungeonGenerator dungeonGenerator) {
+	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, GeneratableDungeon.Builder dungeonBuilder) {
 		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 		int startY = this.getTopY();
 
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
@@ -59,29 +52,28 @@ public class WallPartRailingWall implements IWallPart {
 				for (int x = 0; x < 8; x++) {
 					if (this.isBiggerPart(x)) {
 						if (y >= 3 || z == 3 || z == 12) {
-							blockInfoList.add(new BlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
-							blockInfoList.add(new BlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+							partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
+							partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
 						}
 					} else if (y >= 4 && y <= 6 && (z == 3 || z == 12)) {
-						blockInfoList.add(new BlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
-						blockInfoList.add(new BlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+						partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
+						partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
 					}
 				}
 			}
 		}
 
 		// Spawner
-		this.placeSpawner(new BlockPos(4, 6, 7), world, blockInfoList);
+		this.placeSpawner(new BlockPos(4, 6, 7), world, partBuilder);
 
-		DungeonInhabitant dungeonMob = DungeonInhabitantManager.instance().getInhabitant("SPECTER");
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), dungeonMob));
+		dungeonBuilder.add(partBuilder, dungeonBuilder.getPlacement(new BlockPos(startX, startY, startZ)));
 	}
 
 	private boolean isBiggerPart(int xAsChunkRelativeCoord) {
 		return (xAsChunkRelativeCoord & 1) == 0;
 	}
 
-	private void placeSpawner(BlockPos spawnerPos, World world, List<AbstractBlockInfo> blockInfoList) {
+	private void placeSpawner(BlockPos spawnerPos, World world, BlockDungeonPart.Builder partBuilder) {
 		Entity spawnerEnt = EntityList.createEntityByIDFromName(new ResourceLocation(CQRConfig.wall.mob), world);
 
 		if (spawnerEnt instanceof EntityLivingBase) {
@@ -97,7 +89,7 @@ public class WallPartRailingWall implements IWallPart {
 			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
-			blockInfoList.add(new BlockInfoSpawner(spawnerPos, tileSpawner.writeToNBT(new NBTTagCompound())));
+			partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.writeToNBT(new NBTTagCompound())));
 		}
 	}
 
