@@ -37,19 +37,13 @@ public class BlockPlacingHelper {
 		}
 
 		Chunk chunk = world.getChunk(chunkX, chunkZ);
-
 		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
 		if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
 			blockStorage = new ExtendedBlockStorage(chunkY << 4, world.provider.hasSkyLight());
-			if (blockInfo.place(world, chunk, blockStorage, dungeon)) {
-				chunk.getBlockStorageArray()[chunkY] = blockStorage;
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return blockInfo.place(world, chunk, blockStorage, dungeon);
+			chunk.getBlockStorageArray()[chunkY] = blockStorage;
 		}
+
+		return blockInfo.place(world, chunk, blockStorage, dungeon);
 	}
 
 	@FunctionalInterface
