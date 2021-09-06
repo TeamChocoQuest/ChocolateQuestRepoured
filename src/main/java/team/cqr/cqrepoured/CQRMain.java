@@ -173,7 +173,7 @@ public class CQRMain {
 		// remove this line, moving it somewhere else is fine, but it must be called in
 		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(DUNGEON_GENERATOR, 100);
-		//GameRegistry.registerWorldGenerator(WALL_GENERATOR, 101);
+		GameRegistry.registerWorldGenerator(WALL_GENERATOR, 101);
 
 		// Instantiating enums
 		EBannerPatternsCQ.values();
