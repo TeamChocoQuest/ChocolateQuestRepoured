@@ -457,20 +457,39 @@ public class ProtectedRegion {
 	public static class Builder {
 
 		private final String dungeonName;
-		private final boolean protectionSystemEnabled;
-		private final boolean preventBlockBreaking;
-		private final boolean preventBlockPlacing;
-		private final boolean preventEntitySpawning;
-		private final boolean preventExplosionsOther;
-		private final boolean preventExplosionsTNT;
-		private final boolean preventFireSpreading;
-		private final boolean ignoreNoBossOrNexus;
+		private boolean protectionSystemEnabled;
+		private boolean preventBlockBreaking;
+		private boolean preventBlockPlacing;
+		private boolean preventEntitySpawning;
+		private boolean preventExplosionsOther;
+		private boolean preventExplosionsTNT;
+		private boolean preventFireSpreading;
+		private boolean ignoreNoBossOrNexus;
 		private final Set<UUID> entityDependencies = new HashSet<>();
 		private final Set<BlockPos> blockDependencies = new HashSet<>();
 		private final Set<BlockPos> unprotectedBlocks = new HashSet<>();
 
+		public Builder(String dungeonName) {
+			this.dungeonName = dungeonName;
+		}
+
 		public Builder(DungeonBase dungeonConfig) {
 			this.dungeonName = dungeonConfig.getDungeonName();
+			this.setup(dungeonConfig);
+		}
+
+		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire, boolean persistent) {
+			this.protectionSystemEnabled = enabled;
+			this.preventBlockBreaking = breaking;
+			this.preventBlockPlacing = placing;
+			this.preventEntitySpawning = spawning;
+			this.preventExplosionsOther = explosions;
+			this.preventExplosionsTNT = tnt;
+			this.preventFireSpreading = fire;
+			this.ignoreNoBossOrNexus = persistent;
+		}
+
+		public void setup(DungeonBase dungeonConfig) {
 			this.protectionSystemEnabled = dungeonConfig.isProtectionSystemEnabled();
 			this.preventBlockBreaking = dungeonConfig.preventBlockBreaking();
 			this.preventBlockPlacing = dungeonConfig.preventBlockPlacing();

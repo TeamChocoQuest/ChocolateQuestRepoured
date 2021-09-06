@@ -387,6 +387,13 @@ public class GeneratableDungeon {
 			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonConfig);
 		}
 
+		public Builder(World world, BlockPos pos, String dungeonName, String defaultnhabitant) {
+			this.dungeonName = dungeonName;
+			this.pos = pos;
+			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(defaultnhabitant, world, pos.getX(), pos.getZ());
+			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonName);
+		}
+
 		public GeneratableDungeon build(World world) {
 			List<DungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).collect(Collectors.toList());
 			return new GeneratableDungeon(this.dungeonName, this.pos, parts, this.protectedRegionBuilder);
