@@ -12,22 +12,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.part.CoverDungeonPart;
+import team.cqr.cqrepoured.gentest.part.PlateauDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableLootChestInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.objects.factories.GearedMobFactory;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartCover;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import team.cqr.cqrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoLootChest;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoSpawner;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -87,7 +82,10 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		// Support platform
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, 8);
+			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
+			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
+			this.dungeonBuilder.add(partBuilder);
 		}
 
 		// basic volcano shape with air inside
@@ -185,30 +183,28 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			this.generatePillars(new BlockPos(r, 0, r - innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), blocks, this.dungeon.getPillarBlock());
 		}
 
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
-
 		// Add block state array to dungeonGenerator
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>(blocks.length * blocks[0].length * blocks[0][0].length / 2);
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (int i = 0; i < blocks.length; i++) {
 			for (int j = 0; j < blocks[i].length; j++) {
 				for (int k = 0; k < blocks[i][j].length; k++) {
 					if (blocks[i][j][k] != null) {
-						blockInfoList.add(new BlockInfo(i, j, k, blocks[i][j][k], null));
+						partBuilder.add(new PreparableBlockInfo(i, j, k, blocks[i][j][k], null));
 					}
 				}
 			}
 		}
-		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, referenceLoc, blockInfoList, new PlacementSettings(), mobType));
+		this.dungeonBuilder.add(partBuilder, referenceLoc);
 
 		// Spawners and Chests
-		this.generateSpawnersAndChests(spawnerAndChestList, mobType);
+		this.generateSpawnersAndChests(spawnerAndChestList);
 
 		// Stronghold
-		this.generateStronghold(innerRadiusArray[0], mobType);
+		this.generateStronghold(innerRadiusArray[0]);
 
 		// Cover blocks
 		if (this.dungeon.isCoverBlockEnabled()) {
-			this.dungeonBuilder.add(new DungeonPartCover(this.world, this.dungeonBuilder, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
+			this.dungeonBuilder.add(new CoverDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
 		}
 	}
 
@@ -258,16 +254,16 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generateSpawnersAndChests(List<BlockPos> spawnerAndChestList, DungeonInhabitant mobType) {
+	private void generateSpawnersAndChests(List<BlockPos> spawnerAndChestList) {
 		if (!spawnerAndChestList.isEmpty()) {
 			ResourceLocation[] lootTables = this.dungeon.getChestIDs();
 			GearedMobFactory mobFactory = new GearedMobFactory(spawnerAndChestList.size(), this.dungeon.getRampMob(), this.random);
 			int floor = spawnerAndChestList.size();
-			List<AbstractBlockInfo> blockInfoList1 = new ArrayList<>();
+			BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 
 			for (BlockPos pos : spawnerAndChestList) {
 				if (this.random.nextBoolean()) {
-					blockInfoList1.add(new BlockInfoLootChest(pos.getX(), pos.getY(), pos.getZ(), lootTables[this.random.nextInt(lootTables.length)], EnumFacing.NORTH));
+					partBuilder.add(new PreparableLootChestInfo(pos.getX(), pos.getY(), pos.getZ(), lootTables[this.random.nextInt(lootTables.length)], EnumFacing.NORTH));
 				}
 
 				int entityCount = 2 + this.random.nextInt(3);
@@ -275,14 +271,14 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				for (int i = 0; i < entityCount; i++) {
 					entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
 				}
-				blockInfoList1.add(new BlockInfoSpawner(pos.getX(), pos.getY() + 1, pos.getZ(), entityList));
+				partBuilder.add(new PreparableSpawnerInfo(pos.getX(), pos.getY() + 1, pos.getZ(), entityList));
 				floor--;
 			}
-			this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, blockInfoList1, new PlacementSettings(), mobType));
+			this.dungeonBuilder.add(partBuilder);
 		}
 	}
 
-	private void generateStronghold(int radius, DungeonInhabitant mobType) {
+	private void generateStronghold(int radius) {
 		if (this.dungeon.doBuildStronghold()) {
 			EStairSection entranceDirection = this.startStairSection.getSuccessor();
 			int entranceDistToWall = radius / 3;
@@ -310,7 +306,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			}
 
 			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonBuilder, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world, this.random);
-			entranceBuilder.generate(this.pos.getX(), this.pos.getZ(), mobType);
+			entranceBuilder.generate(this.pos.getX(), this.pos.getZ());
 			this.dungeonBuilder.addAll(entranceBuilder.getStrongholdParts());
 		}
 	}

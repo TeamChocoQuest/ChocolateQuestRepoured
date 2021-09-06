@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generators.stronghold.open;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -14,16 +12,14 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 
 public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<GeneratorStrongholdOpen>{
 
@@ -91,7 +87,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		return this.exitStairBlockPosition;
 	}
 
-	public void preProcess(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		Vec3i v = new Vec3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
@@ -118,7 +114,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		this.entranceStairBlockPosition = new Tuple<>(exitPos.getX(), exitPos.getZ());
 	}
 
-	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		for (int x = 0; x < this.sideLength; x++) {
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos pos = this.roomGrid[x][z];
@@ -142,14 +138,13 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 
 				if (pos != null && file != null) {
 					CQStructure structure = this.generator.loadStructureFromFile(file);
-					BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(pos, structure, this.generator.getPlacementSettings());
-					structure.addAll(world, dungeonGenerator, p, this.generator.getPlacementSettings(), mobType);
+					structure.addAll(dungeonBuilder, pos, Offset.CENTER);
 				}
 			}
 		}
 	}
 
-	public void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		if (this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}
@@ -193,12 +188,12 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 				stateMap.put(pB, state);
 			}
 		}
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
-		}
 
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.generator.getPos(), blockInfoList, new PlacementSettings(), mobType));
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+		}
+		dungeonBuilder.add(partBuilder);
 	}
 
 }

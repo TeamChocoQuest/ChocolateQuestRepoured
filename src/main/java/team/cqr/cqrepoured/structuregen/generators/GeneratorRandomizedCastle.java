@@ -5,12 +5,10 @@ import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.part.EntityDungeonPart;
+import team.cqr.cqrepoured.gentest.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonRandomizedCastle;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartEntity;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.generators.castleparts.CastleRoomSelector;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -37,7 +35,10 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 				// CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.pos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
-				this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+				PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), 8);
+				partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
+				partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
+				this.dungeonBuilder.add(partBuilder);
 			}
 		}
 	}
@@ -46,12 +47,13 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 	public void buildStructure() {
 		BlockStateGenArray genArray = new BlockStateGenArray(this.random);
 		ArrayList<String> bossUuids = new ArrayList<>();
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world,
+				this.pos.getX(), this.pos.getZ());
 		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
 
-		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, genArray.getMainMap().values(), new PlacementSettings(), mobType));
-		this.dungeonBuilder.add(new DungeonPartBlock(this.world, this.dungeonBuilder, this.pos, genArray.getPostMap().values(), new PlacementSettings(), mobType));
-		this.dungeonBuilder.add(new DungeonPartEntity(this.world, this.dungeonBuilder, this.pos, genArray.getEntityMap().values(), new PlacementSettings(), mobType));
+		this.dungeonBuilder.add(new BlockDungeonPart.Builder().addAll(genArray.getMainMap().values()));
+		this.dungeonBuilder.add(new BlockDungeonPart.Builder().addAll(genArray.getPostMap().values()));
+		this.dungeonBuilder.add(new EntityDungeonPart.Builder().addAll(genArray.getEntityMap()));
 	}
 
 	@Override

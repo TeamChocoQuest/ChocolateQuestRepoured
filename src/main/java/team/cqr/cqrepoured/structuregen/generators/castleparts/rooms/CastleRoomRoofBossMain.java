@@ -14,15 +14,16 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBossInfo;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.factories.GearedMobFactory;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonRandomizedCastle;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfoBoss;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -75,7 +76,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	@Override
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		BlockPos pos = this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
-		genArray.addInternal(BlockStateGenArray.GenerationPhase.POST, new BlockInfoBoss(pos), BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addInternal(BlockStateGenArray.GenerationPhase.POST, new PreparableBossInfo(pos, (NBTTagCompound) null), BlockStateGenArray.EnumPriority.MEDIUM);
 	}
 
 	private void placeTorches(BlockPos nwCorner, BlockStateGenArray genArray) {

@@ -5,14 +5,14 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.gentest.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonStrongholdLinear;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.linear.StrongholdFloor;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 
@@ -85,25 +85,26 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		}
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2, this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
-					/* this.pos.getY() */y + this.dungeon.getUnderGroundOffset() - 1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2,
+					this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
+					y + this.dungeon.getUnderGroundOffset() - 1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2, 8);
+			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
+			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
+			this.dungeonBuilder.add(partBuilder);
 		}
-		BlockPos p1 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), structureEntrance, settings);
-		structureEntrance.addAll(this.world, this.dungeonBuilder, p1, settings, mobType);
+		structureEntrance.addAll(this.dungeonBuilder, new BlockPos(this.pos.getX(), y, this.pos.getZ()), Offset.CENTER);
 
 		if (segCount > 0) {
 			while (segCount > 0) {
 				segCount--;
 				y -= stairSeg.getSize().getY();
-				BlockPos p2 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), stairSeg, settings);
-				stairSeg.addAll(this.world, this.dungeonBuilder, p2, settings, mobType);
+				stairSeg.addAll(this.dungeonBuilder, new BlockPos(this.pos.getX(), y, this.pos.getZ()), Offset.CENTER);
 			}
 		}
 
 		int yFloor = y;
 		yFloor -= structureStair.getSize().getY();
-		BlockPos p3 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), yFloor, this.pos.getZ()), structureStair, settings);
-		structureStair.addAll(this.world, this.dungeonBuilder, p3, settings, mobType);
+		structureStair.addAll(this.dungeonBuilder, new BlockPos(this.pos.getX(), yFloor, this.pos.getZ()), Offset.CENTER);
 
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];

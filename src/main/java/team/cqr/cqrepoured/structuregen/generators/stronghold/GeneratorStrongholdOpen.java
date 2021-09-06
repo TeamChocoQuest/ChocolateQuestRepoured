@@ -14,15 +14,14 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.gentest.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonStrongholdOpen;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
 /**
@@ -149,19 +148,22 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		File building = this.dungeon.getEntranceBuilding(this.random);
 		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
-			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
+			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: {}", this.getDungeon().getDungeonName());
 			return;
 		}
 		CQStructure structure = this.loadStructureFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonBuilder.add(new DungeonPartPlateau(this.world, this.dungeonBuilder, this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
-					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structure.getSize().getX() / 2,
+					this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
+					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, 8);
+			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
+			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
+			this.dungeonBuilder.add(partBuilder);
 		}
 		this.entranceSizeX = structure.getSize().getX();
 		this.entranceSizeZ = structure.getSize().getX();
 
-		BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.pos, structure, this.settings);
-		structure.addAll(this.world, this.dungeonBuilder, p, this.settings, mobType);
+		structure.addAll(this.dungeonBuilder, this.pos, Offset.CENTER);
 		/*
 		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications()); BlockPos pastePosForStair =
 		 * new BlockPos(x, y - stairs.getSizeY(), z); stairs.placeBlocksInWorld(world,
