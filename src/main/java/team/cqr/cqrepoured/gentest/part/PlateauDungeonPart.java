@@ -37,11 +37,11 @@ public class PlateauDungeonPart extends DungeonPart {
 	protected PlateauDungeonPart(long seed, int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
 			@Nullable IBlockState supportHillTopBlock) {
 		this.seed = seed;
-		this.startX = startX;
-		this.startZ = startZ;
-		this.endX = endX;
+		this.startX = startX - wallSize;
+		this.startZ = startZ - wallSize;
+		this.endX = endX + wallSize;
 		this.endY = endY;
-		this.endZ = endZ;
+		this.endZ = endZ + wallSize;
 		this.wallSize = wallSize;
 		this.supportHillBlock = supportHillBlock;
 		this.supportHillTopBlock = supportHillTopBlock;
