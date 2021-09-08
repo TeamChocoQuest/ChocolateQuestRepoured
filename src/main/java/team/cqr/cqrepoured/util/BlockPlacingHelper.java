@@ -21,10 +21,9 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class BlockPlacingHelper {
 
-	// TODO srg names
 	private static final ReflectionField PRECIPITATION_HEIGHT_MAP = new ReflectionField(Chunk.class, "field_76638_b", "precipitationHeightMap");
-	private static final ReflectionField BLOCK_REF_COUNT = new ReflectionField(ExtendedBlockStorage.class, "", "blockRefCount");
-	private static final ReflectionField TICK_REF_COUNT = new ReflectionField(ExtendedBlockStorage.class, "", "tickRefCount");
+	private static final ReflectionField BLOCK_REF_COUNT = new ReflectionField(ExtendedBlockStorage.class, "field_76682_b", "blockRefCount");
+	private static final ReflectionField TICK_REF_COUNT = new ReflectionField(ExtendedBlockStorage.class, "field_76683_c", "tickRefCount");
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
 
 	public static boolean setBlockStates(World world, int chunkX, int chunkY, int chunkZ, GeneratableDungeon dungeon, IBlockInfo blockInfo) {
