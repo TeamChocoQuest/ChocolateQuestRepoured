@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -15,6 +16,7 @@ import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.gentest.part.DungeonPart.Registry.ISerializer;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.Perlin3D;
 
 public class PlateauDungeonPart extends DungeonPart {
@@ -33,6 +35,8 @@ public class PlateauDungeonPart extends DungeonPart {
 	private final Perlin3D perlin2;
 	private int chunkX;
 	private int chunkZ;
+	private int chunkX1;
+	private int chunkZ1;
 
 	protected PlateauDungeonPart(long seed, int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
 			@Nullable IBlockState supportHillTopBlock) {
@@ -49,6 +53,8 @@ public class PlateauDungeonPart extends DungeonPart {
 		this.perlin2 = new Perlin3D(seed, wallSize * 4);
 		this.chunkX = startX >> 4;
 		this.chunkZ = startZ >> 4;
+		this.chunkX1 = startX >> 4;
+		this.chunkZ1 = startZ >> 4;
 	}
 
 	@Override
@@ -125,6 +131,37 @@ public class PlateauDungeonPart extends DungeonPart {
 				this.chunkZ = this.startZ >> 4;
 				this.chunkX++;
 			}
+		} else if (this.chunkX1 <= this.endX >> 4) {
+			Chunk chunk = world.getChunk(this.chunkX1, this.chunkZ1);
+
+			for (int x = 0; x < 16; x++) {
+				if ((this.chunkX1 << 4) + x < this.startX || (this.chunkX1 << 4) + x > this.endX) {
+					continue;
+				}
+				for (int z = 0; z < 16; z++) {
+					if ((this.chunkZ1 << 4) + z < this.startZ || (this.chunkZ1 << 4) + z > this.endZ) {
+						continue;
+					}
+
+					MUTABLE.setPos((chunkX1 << 4) + x, this.endY, (chunkZ1 << 4) + z);
+					while (MUTABLE.getY() > 0 && chunk.getBlockState(MUTABLE).getBlock() == Blocks.AIR) {
+						MUTABLE.setY(MUTABLE.getY() - 1);
+					}
+					MUTABLE.setY(MUTABLE.getY() + 1);
+					if (chunk.getBlockState(MUTABLE).getBlock() == Blocks.AIR) {
+						Biome biome = world.getBiome(MUTABLE);
+						if (DungeonGenUtils.percentageRandom(biome.decorator.grassPerChunk / 512.0D)) {
+							biome.getRandomWorldGenForGrass(world.rand).generate(world, world.rand, MUTABLE);
+						}
+					}
+				}
+			}
+
+			this.chunkZ1++;
+			if (this.chunkZ1 > this.endZ >> 4) {
+				this.chunkZ1 = this.startZ >> 4;
+				this.chunkX1++;
+			}
 		}
 	}
 
@@ -148,7 +185,7 @@ public class PlateauDungeonPart extends DungeonPart {
 
 	@Override
 	public boolean isGenerated() {
-		return this.chunkX > this.endX >> 4;
+		return this.chunkX1 > this.endX >> 4;
 	}
 
 	public int getStartX() {
@@ -224,6 +261,8 @@ public class PlateauDungeonPart extends DungeonPart {
 			compound.setTag("supportHillTopBlock", NBTUtil.writeBlockState(new NBTTagCompound(), part.supportHillTopBlock));
 			compound.setInteger("chunkX", part.chunkX);
 			compound.setInteger("chunkZ", part.chunkZ);
+			compound.setInteger("chunkX1", part.chunkX1);
+			compound.setInteger("chunkZ1", part.chunkZ1);
 			return compound;
 		}
 
@@ -240,9 +279,13 @@ public class PlateauDungeonPart extends DungeonPart {
 			IBlockState supportHillTopBlock = NBTUtil.readBlockState(compound.getCompoundTag("supportHillTopBlock"));
 			int chunkX = compound.getInteger("chunkX");
 			int chunkZ = compound.getInteger("chunkZ");
+			int chunkX1 = compound.getInteger("chunkX1");
+			int chunkZ1 = compound.getInteger("chunkZ1");
 			PlateauDungeonPart part = new PlateauDungeonPart(seed, startX, startZ, endX, endY, endZ, wallSize, supportHillBlock, supportHillTopBlock);
 			part.chunkX = chunkX;
 			part.chunkZ = chunkZ;
+			part.chunkX1 = chunkX1;
+			part.chunkZ1 = chunkZ1;
 			return part;
 		}
 
