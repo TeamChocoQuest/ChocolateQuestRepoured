@@ -129,45 +129,90 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 	public static class Builder implements IDungeonPartBuilder {
 
 		@SuppressWarnings("unused")
-		private static final Comparator<GeneratablePosInfo> DEFAULT_COMPARATOR = ((Comparator<GeneratablePosInfo>) (g1, g2) -> {
-			if (g1.hasSpecialShape()) {
-				if (g2.hasSpecialShape()) {
-					if (g1.hasTileEntity()) {
-						return g2.hasTileEntity() ? 0 : 1;
-					} else {
-						return g2.hasTileEntity() ? -1 : 0;
-					}
+		private static final Comparator<GeneratablePosInfo> VANILLA_COMPARATOR = (g1, g2) -> {
+			if (g1.hasTileEntity()) {
+				if (g2.hasTileEntity()) {
+					// return 0;
 				} else {
-					return 1;
+					return g2.hasSpecialShape() ? -1 : 1;
 				}
 			} else {
-				if (g2.hasSpecialShape()) {
-					return -1;
+				if (g2.hasTileEntity()) {
+					return g1.hasSpecialShape() ? 1 : -1;
 				} else {
-					if (g1.hasTileEntity()) {
-						return g2.hasTileEntity() ? 0 : 1;
+					if (g1.hasSpecialShape()) {
+						// return g2.hasSpecialShape() ? 0 : 1;
+						if (!g2.hasSpecialShape())
+							return 1;
 					} else {
-						return g2.hasTileEntity() ? -1 : 0;
+						// return g2.hasSpecialShape() ? -1 : 0;
+						if (g2.hasSpecialShape())
+							return -1;
 					}
 				}
 			}
-		}).thenComparingInt(GeneratablePosInfo::getChunkY).thenComparingInt(GeneratablePosInfo::getChunkX).thenComparingInt(GeneratablePosInfo::getChunkZ);
 
-		@SuppressWarnings("unused")
-		private static final Comparator<GeneratablePosInfo> TEST_COMPARATOR = ((Comparator<GeneratablePosInfo>) (g1, g2) -> {
-			if (g1.hasSpecialShape()) {
-				return g2.hasSpecialShape() ? 0 : 1;
-			} else {
-				return g2.hasSpecialShape() ? -1 : 0;
+			if (g1.getY() < g2.getY()) {
+				return -1;
 			}
-		}).thenComparingInt(GeneratablePosInfo::getChunkY).thenComparingInt(GeneratablePosInfo::getChunkX).thenComparingInt(GeneratablePosInfo::getChunkZ)
-				.thenComparing((g1, g2) -> {
-					if (g1.hasTileEntity()) {
-						return g2.hasTileEntity() ? 0 : 1;
-					} else {
-						return g2.hasTileEntity() ? -1 : 0;
-					}
-				});
+			if (g1.getY() > g2.getY()) {
+				return 1;
+			}
+			if (g1.getX() < g2.getX()) {
+				return -1;
+			}
+			if (g1.getX() > g2.getX()) {
+				return 1;
+			}
+			if (g1.getZ() < g2.getZ()) {
+				return -1;
+			}
+			if (g1.getZ() > g2.getZ()) {
+				return 1;
+			}
+			return 0;
+		};
+
+		private static final Comparator<GeneratablePosInfo> CQR_COMPARATOR = (g1, g2) -> {
+			if (g1.getChunkY() < g2.getChunkY()) {
+				return -1;
+			}
+			if (g1.getChunkY() > g2.getChunkY()) {
+				return 1;
+			}
+			if (g1.getChunkX() < g2.getChunkX()) {
+				return -1;
+			}
+			if (g1.getChunkX() > g2.getChunkX()) {
+				return 1;
+			}
+			if (g1.getChunkZ() < g2.getChunkZ()) {
+				return -1;
+			}
+			if (g1.getChunkZ() > g2.getChunkZ()) {
+				return 1;
+			}
+
+			if (g1.getY() < g2.getY()) {
+				return -1;
+			}
+			if (g1.getY() > g2.getY()) {
+				return 1;
+			}
+			if (g1.getX() < g2.getX()) {
+				return -1;
+			}
+			if (g1.getX() > g2.getX()) {
+				return 1;
+			}
+			if (g1.getZ() < g2.getZ()) {
+				return -1;
+			}
+			if (g1.getZ() > g2.getZ()) {
+				return 1;
+			}
+			return 0;
+		};
 
 		private final List<PreparablePosInfo> blocks = new ArrayList<>();
 
@@ -185,9 +230,7 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 		public BlockDungeonPart build(World world, DungeonPlacement placement) {
 			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull)
 					.collect(Collectors.toList());
-			list.sort(Comparator.comparingInt(GeneratablePosInfo::getChunkY).thenComparingInt(GeneratablePosInfo::getChunkX)
-					.thenComparingInt(GeneratablePosInfo::getChunkZ).thenComparingInt(GeneratablePosInfo::getY).thenComparingInt(GeneratablePosInfo::getX)
-					.thenComparingInt(GeneratablePosInfo::getZ));
+			list.sort(CQR_COMPARATOR);
 			List<GeneratableChunkInfo> list1 = new ArrayList<>();
 
 			for (int i = 0; i < list.size(); i++) {
