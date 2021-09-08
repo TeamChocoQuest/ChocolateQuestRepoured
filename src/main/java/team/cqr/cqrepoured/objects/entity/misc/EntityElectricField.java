@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.objects.entity.misc;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Consumer;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -43,6 +44,7 @@ public class EntityElectricField extends Entity {
 
 	public EntityElectricField(World worldIn, int charge) {
 		super(worldIn);
+		this.noClip = true;
 		this.charge = charge;
 		this.setSize(1.125F, 1.125F);
 	}
@@ -75,9 +77,9 @@ public class EntityElectricField extends Entity {
 		if(entityIn instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) entityIn;
 			if(living.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
-				CapabilityElectricShock cap = living.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
 				
 				if(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(living)) {
+					CapabilityElectricShock cap = living.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
 					cap.setRemainingTicks(200);
 				}
 			}
@@ -99,13 +101,22 @@ public class EntityElectricField extends Entity {
 				return;
 			}
 			
+			this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED).forEach(new Consumer<EntityLivingBase>() {
+
+				@Override
+				public void accept(EntityLivingBase t) {
+					t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingTicks(200);
+				}
+				
+			});
+			
 			if(!this.facesToSpreadTo.isEmpty()) {
 				this.spreadTimer--;
 				if(this.spreadTimer == 0) {
 					this.spreadTimer = 5;
 					
-					EnumFacing face = this.facesToSpreadTo.poll();
 					while(!this.facesToSpreadTo.isEmpty()) {
+						EnumFacing face = this.facesToSpreadTo.poll(); 
 						if(face != null) {
 							pos = pos.offset(face);
 							if(!EXISTING_FIELDS.contains(pos)) {
@@ -122,7 +133,6 @@ public class EntityElectricField extends Entity {
 									}
 								}
 							}
-							face = this.facesToSpreadTo.poll(); 
 						} else {
 							break;
 						}

@@ -12,8 +12,10 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.util.Reference;
@@ -43,7 +45,12 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		EntityLivingBase entity = event.getEntityLiving();
 		
 		if(!entity.hasCapability(ELECTROCUTE_HANDLER_CQR, null)) {
-			//return;
+			return;
+		}
+		
+		if(entity.world.isRemote) {
+			//If we are on the remote end, we don't do anything
+			return;
 		}
 		
 		//First, reduce the ticks
@@ -60,10 +67,16 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		} else if(icapability.getRemainingTicks() >= 0) {
 			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1);
 		}
+		if(entity.isDead || entity.getHealth() < 1) {
+			icapability.setTarget(null);
+		}
 		//Maybe you could spread to other entities?
 		if(icapability.getRemainingTicks() > 50 && icapability.getTarget() == null) {
 			spreadElectrocute(entity, icapability);
 		}
+		
+		//TODO: Send update to client
+		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
 	}
 	
 	private static void spreadElectrocute(EntityLivingBase entity, CapabilityElectricShock icapability) {
