@@ -99,8 +99,8 @@ public class GeneratableDungeon {
 		this.pos = pos;
 		this.parts = new ArrayDeque<>(parts);
 		this.protectedRegionBuilder = protectedRegionBuilder;
-		chunkInfoMap = new ChunkInfoMap();
-		chunkInfoMapExtended = new ChunkInfoMap();
+		this.chunkInfoMap = new ChunkInfoMap();
+		this.chunkInfoMapExtended = new ChunkInfoMap();
 	}
 
 	public GeneratableDungeon(World world, NBTTagCompound compound) {
