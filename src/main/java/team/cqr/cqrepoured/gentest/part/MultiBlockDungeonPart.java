@@ -10,6 +10,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import scala.actors.threadpool.Arrays;
@@ -20,7 +21,7 @@ import team.cqr.cqrepoured.gentest.part.DungeonPart.Registry.ISerializer;
 import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 
-public class MultiBlockDungeonPart extends DungeonPart {
+public class MultiBlockDungeonPart extends DungeonPart implements IProtectable {
 
 	protected final List<GeneratablePosInfo> blocks;
 
@@ -44,6 +45,30 @@ public class MultiBlockDungeonPart extends DungeonPart {
 
 	public Collection<GeneratablePosInfo> getBlocks() {
 		return Collections.unmodifiableCollection(this.blocks);
+	}
+
+	public BlockPos minPos() {
+		int minX = Integer.MAX_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int minZ = Integer.MAX_VALUE;
+		for (GeneratablePosInfo block : this.blocks) {
+			minX = Math.min(block.getX(), minX);
+			minY = Math.min(block.getY(), minY);
+			minZ = Math.min(block.getZ(), minZ);
+		}
+		return new BlockPos(minX, minY, minZ);
+	}
+
+	public BlockPos maxPos() {
+		int maxX = Integer.MIN_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		int maxZ = Integer.MIN_VALUE;
+		for (GeneratablePosInfo block : this.blocks) {
+			maxX = Math.max(block.getX(), maxX);
+			maxY = Math.max(block.getY(), maxY);
+			maxZ = Math.max(block.getZ(), maxZ);
+		}
+		return new BlockPos(maxX, maxY, maxZ);
 	}
 
 	public static class Builder implements IDungeonPartBuilder {

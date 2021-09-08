@@ -32,6 +32,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.gentest.ChunkInfo.ChunkInfoMap;
 import team.cqr.cqrepoured.gentest.part.DungeonPart;
 import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
+import team.cqr.cqrepoured.gentest.part.IProtectable;
 import team.cqr.cqrepoured.gentest.util.BlockLightUtil;
 import team.cqr.cqrepoured.gentest.util.NeighborNotifyUtil;
 import team.cqr.cqrepoured.gentest.util.SkyLightUtil;
@@ -174,12 +175,10 @@ public class GeneratableDungeon {
 	public void generateNext(World world) {
 		if (this.state == GenerationState.PRE_GENERATION) {
 			CQRMain.logger.info("Started generating dungeon {} at {}", this.dungeonName, this.pos);
-			// TODO chunkInfoMap is be unreliable -> pass start and end position in constructor
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
-			BlockPos start = new BlockPos(this.chunkInfoMap.getMinChunkX() << 4, this.chunkInfoMap.getMinChunkY() << 4, this.chunkInfoMap.getMinChunkZ() << 4);
-			BlockPos end = new BlockPos(this.chunkInfoMap.getMaxChunkX() << 4, this.chunkInfoMap.getMaxChunkY() << 4, this.chunkInfoMap.getMaxChunkZ() << 4);
-			ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(world, start, start, end);
+			ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(world);
 			if (protectedRegion != null) {
+				protectedRegion.markDirty();
 				protectedRegionManager.addProtectedRegion(protectedRegion);
 			}
 			this.state = GenerationState.GENERATION;
@@ -347,18 +346,23 @@ public class GeneratableDungeon {
 			this.pos = pos;
 			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(dungeonConfig.getDungeonMob(), world, pos.getX(),
 					pos.getZ());
-			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonConfig);
+			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonConfig, pos);
 		}
 
 		public Builder(World world, BlockPos pos, String dungeonName, String defaultnhabitant) {
 			this.dungeonName = dungeonName;
 			this.pos = pos;
 			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(defaultnhabitant, world, pos.getX(), pos.getZ());
-			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonName);
+			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonName, pos);
 		}
 
 		public GeneratableDungeon build(World world) {
-			List<DungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).collect(Collectors.toList());
+			List<DungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).filter(part -> !part.isGenerated())
+					.collect(Collectors.toList());
+			parts.stream().filter(IProtectable.class::isInstance).map(IProtectable.class::cast).forEach(part -> {
+				this.protectedRegionBuilder.updateMin(part.minPos());
+				this.protectedRegionBuilder.updateMax(part.maxPos());
+			});
 			return new GeneratableDungeon(this.dungeonName, this.pos, parts, this.protectedRegionBuilder);
 		}
 

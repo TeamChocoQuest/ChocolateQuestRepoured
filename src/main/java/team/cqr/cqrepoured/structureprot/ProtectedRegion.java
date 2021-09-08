@@ -457,6 +457,9 @@ public class ProtectedRegion {
 	public static class Builder {
 
 		private final String dungeonName;
+		private final BlockPos dungeonPos;
+		private BlockPos min;
+		private BlockPos max;
 		private boolean protectionSystemEnabled;
 		private boolean preventBlockBreaking;
 		private boolean preventBlockPlacing;
@@ -469,12 +472,18 @@ public class ProtectedRegion {
 		private final Set<BlockPos> blockDependencies = new HashSet<>();
 		private final Set<BlockPos> unprotectedBlocks = new HashSet<>();
 
-		public Builder(String dungeonName) {
+		public Builder(String dungeonName, BlockPos dungeonPos) {
 			this.dungeonName = dungeonName;
+			this.dungeonPos = dungeonPos.toImmutable();
+			this.min = this.dungeonPos;
+			this.max = this.dungeonPos;
 		}
 
-		public Builder(DungeonBase dungeonConfig) {
+		public Builder(DungeonBase dungeonConfig, BlockPos dungeonPos) {
 			this.dungeonName = dungeonConfig.getDungeonName();
+			this.dungeonPos = dungeonPos.toImmutable();
+			this.min = this.dungeonPos;
+			this.max = this.dungeonPos;
 			this.setup(dungeonConfig);
 		}
 
@@ -502,6 +511,9 @@ public class ProtectedRegion {
 
 		public Builder(NBTTagCompound compound) {
 			this.dungeonName = compound.getString("dungeonName");
+			this.dungeonPos = NBTUtil.getPosFromTag(compound.getCompoundTag("dungeonPos"));
+			this.min = NBTUtil.getPosFromTag(compound.getCompoundTag("min"));
+			this.max = NBTUtil.getPosFromTag(compound.getCompoundTag("max"));
 			this.protectionSystemEnabled = compound.getBoolean("protectionSystemEnabled");
 			this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
 			this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
@@ -527,6 +539,9 @@ public class ProtectedRegion {
 		public NBTTagCompound writeToNBT() {
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setString("dungeonName", this.dungeonName);
+			compound.setTag("dungeonPos", NBTUtil.createPosTag(this.dungeonPos));
+			compound.setTag("min", NBTUtil.createPosTag(this.min));
+			compound.setTag("max", NBTUtil.createPosTag(this.max));
 			compound.setBoolean("protectionSystemEnabled", this.protectionSystemEnabled);
 			compound.setBoolean("preventBlockBreaking", this.preventBlockBreaking);
 			compound.setBoolean("preventBlockPlacing", this.preventBlockPlacing);
@@ -562,12 +577,20 @@ public class ProtectedRegion {
 			this.unprotectedBlocks.add(pos.toImmutable());
 		}
 
+		public void updateMin(BlockPos pos) {
+			this.min = new BlockPos(Math.min(pos.getX(), this.min.getX()), Math.min(pos.getY(), this.min.getY()), Math.min(pos.getZ(), this.min.getZ()));
+		}
+
+		public void updateMax(BlockPos pos) {
+			this.max = new BlockPos(Math.max(pos.getX(), this.max.getX()), Math.max(pos.getY(), this.max.getY()), Math.max(pos.getZ(), this.max.getZ()));
+		}
+
 		@Nullable
-		public ProtectedRegion build(World world, BlockPos pos, BlockPos start, BlockPos end) {
+		public ProtectedRegion build(World world) {
 			if (!this.protectionSystemEnabled) {
 				return null;
 			}
-			ProtectedRegion protectedRegion = new ProtectedRegion(world, this.dungeonName, pos, start, end);
+			ProtectedRegion protectedRegion = new ProtectedRegion(world, this.dungeonName, this.dungeonPos, this.min, this.max);
 			protectedRegion.preventBlockBreaking = this.preventBlockBreaking;
 			protectedRegion.preventBlockPlacing = this.preventBlockPlacing;
 			protectedRegion.preventEntitySpawning = this.preventEntitySpawning;
@@ -576,6 +599,9 @@ public class ProtectedRegion {
 			protectedRegion.preventFireSpreading = this.preventFireSpreading;
 			protectedRegion.ignoreNoBossOrNexus = this.ignoreNoBossOrNexus;
 			protectedRegion.isGenerating = false;
+			protectedRegion.blockDependencies.addAll(this.blockDependencies);
+			protectedRegion.entityDependencies.addAll(this.entityDependencies);
+			this.unprotectedBlocks.forEach(p -> protectedRegion.setProtectionState(p, 1));
 			return protectedRegion;
 		}
 
