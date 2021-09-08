@@ -260,10 +260,10 @@ public class GeneratableDungeon {
 	}
 
 	private boolean tryGenerateSkylightMap(World world) {
-		if (this.nextGenerateSkylightMapIndex >= this.chunkInfoMap.size()) {
+		if (this.nextGenerateSkylightMapIndex >= this.chunkInfoMapExtended.size()) {
 			return false;
 		}
-		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextGenerateSkylightMapIndex);
+		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextGenerateSkylightMapIndex);
 		Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 		chunk.generateSkylightMap();
 		this.nextGenerateSkylightMapIndex++;
