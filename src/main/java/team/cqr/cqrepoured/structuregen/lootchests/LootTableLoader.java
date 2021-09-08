@@ -71,39 +71,77 @@ public class LootTableLoader {
 		StringTokenizer tokenizer = new StringTokenizer(entry, ",");
 		int tokenCount = tokenizer.countTokens();
 		if (tokenCount >= 5) {
-			String item = "minecraft:stone";
-			int damage = 0;
-			int min_count = 0;
-			int max_count = 1;
-			int chance = 25;
+			String item;
+			int damage;
+			int minCount;
+			int maxCount;
+			int chance;
 			boolean enchant = false;
-			int min_lvl = 1;
-			int max_lvl = 10;
+			int minLvl = 1;
+			int maxLvl = 10;
 			boolean treasure = false;
 			int enchChance = 0;
 
 			item = ((String) tokenizer.nextElement()).trim();
-			damage = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			min_count = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			max_count = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			chance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+			if (item.isEmpty()) {
+				CQRMain.logger.error("Can't parse argument 1 (item) of:\n{}", entry);
+				return null;
+			}
+			try {
+				damage = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+			} catch (NumberFormatException e) {
+				CQRMain.logger.error("Can't parse argument 2 (item damage) of:\n{}", entry);
+				return null;
+			}
+			try {
+				minCount = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+			} catch (NumberFormatException e) {
+				CQRMain.logger.error("Can't parse argument 3 (min item count) of:\n{}", entry);
+				return null;
+			}
+			try {
+				maxCount = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+			} catch (NumberFormatException e) {
+				CQRMain.logger.error("Can't parse argument 4 (max item count) of:\n{}", entry);
+				return null;
+			}
+			try {
+				chance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+			} catch (NumberFormatException e) {
+				CQRMain.logger.error("Can't parse argument 5 (item chance) of:\n{}", entry);
+				return null;
+			}
 
 			if (tokenCount >= 6) {
 				enchant = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
-				min_lvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-				max_lvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+				try {
+					minLvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+				} catch (NumberFormatException e) {
+					CQRMain.logger.error("Can't parse argument 7 (min enchant level) of:\n{}", entry);
+					return null;
+				}
+				try {
+					maxLvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+				} catch (NumberFormatException e) {
+					CQRMain.logger.error("Can't parse argument 8 (max enchant level) of:\n{}", entry);
+					return null;
+				}
 				if (tokenCount >= 9) {
 					treasure = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
 					if (tokenCount >= 10) {
-						enchChance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+						try {
+							enchChance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+						} catch (NumberFormatException e) {
+							CQRMain.logger.error("Can't parse argument 10 (enchanting chance) of:\n{}", entry);
+							return null;
+						}
 					}
 				}
 			}
 
-			WeightedItemStack itemstack = new WeightedItemStack(item, damage, min_count, max_count, chance, enchant, min_lvl, max_lvl, treasure, enchChance);
-			return itemstack;
+			return new WeightedItemStack(item, damage, minCount, maxCount, chance, enchant, minLvl, maxLvl, treasure, enchChance);
 		} else {
-			CQRMain.logger.error("Config string (%s) is invalid! Not enough arguments!", entry);
+			CQRMain.logger.error("Config string {} is invalid! Not enough arguments!", entry);
 			return null;
 		}
 	}
