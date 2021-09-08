@@ -14,7 +14,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.NBTCollectors;
 
 public class ChunkInfo {
