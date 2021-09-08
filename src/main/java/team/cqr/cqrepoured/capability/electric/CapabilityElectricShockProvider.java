@@ -58,7 +58,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 				entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
 			}
 		} else if(icapability.getRemainingTicks() >= 0) {
-			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
+			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1);
 		}
 		//Maybe you could spread to other entities?
 		if(icapability.getRemainingTicks() > 50 && icapability.getTarget() == null) {
