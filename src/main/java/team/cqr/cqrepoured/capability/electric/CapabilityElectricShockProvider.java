@@ -75,7 +75,6 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 			spreadElectrocute(entity, icapability);
 		}
 		
-		//TODO: Send update to client
 		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
 	}
 	
