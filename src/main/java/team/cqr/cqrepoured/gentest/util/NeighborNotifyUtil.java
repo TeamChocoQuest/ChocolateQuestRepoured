@@ -25,17 +25,17 @@ public class NeighborNotifyUtil {
 		}
 
 		Chunk chunk = world.getChunk(chunkX, chunkZ);
-		Chunk chunkWest = world.getChunk(chunkX - 1, chunkZ);
-		Chunk chunkEast = world.getChunk(chunkX + 1, chunkZ);
-		Chunk chunkNorth = world.getChunk(chunkX, chunkZ - 1);
-		Chunk chunkSouth = world.getChunk(chunkX, chunkZ + 1);
+		Chunk chunkWest = world.getChunkProvider().getLoadedChunk(chunkX - 1, chunkZ);
+		Chunk chunkEast = world.getChunkProvider().getLoadedChunk(chunkX + 1, chunkZ);
+		Chunk chunkNorth = world.getChunkProvider().getLoadedChunk(chunkX, chunkZ - 1);
+		Chunk chunkSouth = world.getChunkProvider().getLoadedChunk(chunkX, chunkZ + 1);
 		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-		ExtendedBlockStorage blockStorageWest = chunkWest.getBlockStorageArray()[chunkY];
-		ExtendedBlockStorage blockStorageEast = chunkEast.getBlockStorageArray()[chunkY];
+		ExtendedBlockStorage blockStorageWest = chunkWest != null ? chunkWest.getBlockStorageArray()[chunkY] : null;
+		ExtendedBlockStorage blockStorageEast = chunkEast != null ? chunkEast.getBlockStorageArray()[chunkY] : null;
 		ExtendedBlockStorage blockStorageDown = chunkY - 1 >= 0 ? chunk.getBlockStorageArray()[chunkY - 1] : null;
 		ExtendedBlockStorage blockStorageUp = chunkY + 1 <= 15 ? chunk.getBlockStorageArray()[chunkY + 1] : null;
-		ExtendedBlockStorage blockStorageNorth = chunkNorth.getBlockStorageArray()[chunkY];
-		ExtendedBlockStorage blockStorageSouth = chunkSouth.getBlockStorageArray()[chunkY];
+		ExtendedBlockStorage blockStorageNorth = chunkNorth != null ? chunkNorth.getBlockStorageArray()[chunkY] : null;
+		ExtendedBlockStorage blockStorageSouth = chunkSouth != null ? chunkSouth.getBlockStorageArray()[chunkY] : null;
 
 		int cx = chunkX << 4;
 		int cy = chunkY << 4;
