@@ -165,11 +165,9 @@ public class GeneratableDungeon {
 			this.tickTime -= System.nanoTime() - start;
 			partsGenerated++;
 		}
-		long t = System.nanoTime();
 		while (!this.isGenerated()) {
 			this.generateNext(world);
 		}
-		CQRMain.logger.info((System.nanoTime() - t) / 1_000_000);
 	}
 
 	public void generateNext(World world) {
@@ -227,7 +225,6 @@ public class GeneratableDungeon {
 			this.parts.remove();
 		}
 		if (this.parts.isEmpty()) {
-			long t = System.currentTimeMillis();
 			this.chunkInfoMap.forEach(chunkInfo -> chunkInfo.forEach(chunkY -> {
 				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
@@ -243,7 +240,6 @@ public class GeneratableDungeon {
 					}
 				}
 			}));
-			CQRMain.logger.info(System.currentTimeMillis() - t);
 		}
 		return true;
 	}
