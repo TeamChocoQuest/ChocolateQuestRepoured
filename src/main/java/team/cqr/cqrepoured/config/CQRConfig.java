@@ -65,8 +65,8 @@ public class CQRConfig {
 		public int cachedStructureFilesMaxAmount = 256;
 
 		@Config.Comment("The amount of milliseconds each dungeon is allowed to consume per tick during generation.")
-		@Config.RangeInt(min = 1, max = 100)
-		public int generationSpeed = 20;
+		@Config.RangeInt(min = 1, max = 1024)
+		public int generationSpeed = 40;
 		@Config.Comment("When disable all light updates are delayed until the dungeon is generated which is usually a lot faster. (When Phosphor is installed this has no effect and light updates are processed immediately)")
 		public boolean instantLightUpdates = false;
 
