@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.gentest.util;
 
+import java.util.Arrays;
+
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.ints.IntPriorityQueue;
 import net.minecraft.block.state.IBlockState;
@@ -10,7 +12,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import scala.actors.threadpool.Arrays;
 import team.cqr.cqrepoured.gentest.ChunkInfo;
 
 public class BlockLightUtil {
