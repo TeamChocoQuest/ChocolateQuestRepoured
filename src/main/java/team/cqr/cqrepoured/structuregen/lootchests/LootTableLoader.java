@@ -147,7 +147,7 @@ public class LootTableLoader {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
+	public static LootTable fillLootTable(ResourceLocation name, LootTable defaultLootTable) {
 		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".json");
 		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".properties");
 
@@ -164,14 +164,15 @@ public class LootTableLoader {
 				}
 
 				que.push(LOOT_TABLE_CONTEXT.newInstance(name, true));
-				lootTable = GSON_INSTANCE.<Gson>get(null).fromJson(s, LootTable.class);
+				LootTable newLootTable = GSON_INSTANCE.<Gson>get(null).fromJson(s, LootTable.class);
 				que.pop();
 
-				if (lootTable != null) {
-					loadingLootTable = lootTable;
+				if (newLootTable != null) {
+					loadingLootTable = newLootTable;
 				}
+				return newLootTable;
 			} catch (IOException | JsonSyntaxException e) {
-				CQRMain.logger.error("Failed to read json loot table " + jsonFile.getName(), e);
+				CQRMain.logger.error("Failed to read json loot table {}", jsonFile.getName(), e);
 			}
 		} else if (propFile.exists()) {
 			// Load prop file and fill loot table
@@ -180,6 +181,7 @@ public class LootTableLoader {
 				properties.load(inputStream);
 
 				List<WeightedItemStack> items = getItemList(properties);
+				LootTable newLootTable = new LootTable(new LootPool[0]);
 
 				if (CQRConfig.general.singleLootPoolPerLootTable) {
 					LootEntry[] entries = new LootEntry[items.size()];
@@ -187,19 +189,24 @@ public class LootTableLoader {
 						entries[i] = items.get(i).getAsLootEntry(i);
 					}
 
-					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())),
-							new RandomValueRange(0), name.getPath() + "_pool"));
+					return new LootTable(new LootPool[] {
+							new LootPool(entries, new LootCondition[] {},
+									new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest),
+											Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())),
+									new RandomValueRange(0), name.getPath() + "_pool") });
 				} else {
 					for (int i = 0; i < items.size(); i++) {
-						lootTable.addPool(items.get(i).getAsSingleLootPool(i));
+						newLootTable.addPool(items.get(i).getAsSingleLootPool(i));
 					}
 				}
+
+				return newLootTable;
 			} catch (IOException e) {
-				CQRMain.logger.error("Failed to read prop loot table " + propFile.getName(), e);
+				CQRMain.logger.error("Failed to read prop loot table {}", propFile.getName(), e);
 			}
 		}
 
-		return lootTable;
+		return defaultLootTable;
 	}
 
 	public static void freezeLootTable() {

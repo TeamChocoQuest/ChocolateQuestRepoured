@@ -266,6 +266,7 @@ public class CQRConfig {
 		public boolean enableSpeechBubbles = true;
 		public boolean hookOnlyPullsSmallerEntities = true;
 		public boolean enableAprilFools = true;
+		public boolean preventOtherModLoot = true;
 
 		public String[] entityFactionRelation = {
 				"minecraft:enderman=ENDERMEN",
