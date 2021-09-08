@@ -269,8 +269,8 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 				buf.writeInt(chunkInfo.chunkZ);
 				GeneratablePosInfo[][][] arr = new GeneratablePosInfo[16][16][16];
 				chunkInfo.blocks.forEach(posInfo -> arr[posInfo.getX() & 15][posInfo.getY() & 15][posInfo.getZ() & 15] = posInfo);
-				for (int x = 0; x < 16; x++) {
-					for (int y = 0; y < 16; y++) {
+				for (int y = 0; y < 16; y++) {
+					for (int x = 0; x < 16; x++) {
 						for (int z = 0; z < 16; z++) {
 							if (arr[x][y][z] == null) {
 								buf.writeByte(-1);
@@ -293,13 +293,13 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 			BlockStatePalette palette = new BlockStatePalette(compound.getTagList("palette", Constants.NBT.TAG_COMPOUND));
 			NBTTagList compoundList = compound.getTagList("compoundList", Constants.NBT.TAG_COMPOUND);
 			List<GeneratableChunkInfo> chunks = new ArrayList<>();
-			for (int i = buf.readInt(); i >= 0; i--) {
+			for (int i = buf.readInt(); i > 0; i--) {
 				int chunkX = buf.readInt();
 				int chunkY = buf.readInt();
 				int chunkZ = buf.readInt();
 				List<GeneratablePosInfo> blocks = new ArrayList<>();
-				for (int x = 0; x < 16; x++) {
-					for (int y = 0; y < 16; y++) {
+				for (int y = 0; y < 16; y++) {
+					for (int x = 0; x < 16; x++) {
 						for (int z = 0; z < 16; z++) {
 							if (buf.getByte(buf.readerIndex()) == -1) {
 								buf.readByte();
