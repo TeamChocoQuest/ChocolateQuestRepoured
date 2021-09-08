@@ -9,7 +9,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.minecraft.block.state.IBlockState;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketChunkData;
@@ -33,6 +34,7 @@ import team.cqr.cqrepoured.gentest.part.DungeonPart;
 import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
 import team.cqr.cqrepoured.gentest.util.BlockLightUtil;
 import team.cqr.cqrepoured.gentest.util.NeighborNotifyUtil;
+import team.cqr.cqrepoured.gentest.util.SkyLightUtil;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
@@ -51,7 +53,9 @@ public class GeneratableDungeon {
 	private final BlockPos pos;
 	private final Queue<DungeonPart> parts;
 	private final ProtectedRegion.Builder protectedRegionBuilder;
-	private final ChunkInfoMap chunkInfoMap = new ChunkInfoMap();
+	private final ChunkInfoMap chunkInfoMap;
+	private final ChunkInfoMap chunkInfoMapExtended;
+	private final Queue<LightInfo> removedLights = new ArrayDeque<>();
 	private GenerationState state = GenerationState.PRE_GENERATION;
 	private int nextCheckBlockLightIndex;
 	private int nextGenerateSkylightMapIndex;
@@ -62,6 +66,25 @@ public class GeneratableDungeon {
 	private long tickTime;
 	private ForgeChunkManager.Ticket chunkTicket;
 	private boolean ticketRequested;
+
+	private static class LightInfo {
+
+		public final BlockPos pos;
+		public final int light;
+
+		public LightInfo(BlockPos pos, int light) {
+			this.pos = pos.toImmutable();
+			this.light = light;
+		}
+
+		public static void write(ByteBuf buf, LightInfo lightInfo) {
+			buf.writeInt(lightInfo.pos.getX());
+			buf.writeInt(lightInfo.pos.getY());
+			buf.writeInt(lightInfo.pos.getZ());
+			buf.writeByte(lightInfo.light);
+		}
+
+	}
 
 	public enum GenerationState {
 		PRE_GENERATION,
@@ -75,6 +98,8 @@ public class GeneratableDungeon {
 		this.pos = pos;
 		this.parts = new ArrayDeque<>(parts);
 		this.protectedRegionBuilder = protectedRegionBuilder;
+		chunkInfoMap = new ChunkInfoMap();
+		chunkInfoMapExtended = new ChunkInfoMap();
 	}
 
 	public GeneratableDungeon(World world, NBTTagCompound compound) {
@@ -85,6 +110,12 @@ public class GeneratableDungeon {
 		compound.getTagList("parts", Constants.NBT.TAG_COMPOUND).forEach(nbt -> this.parts.add(DungeonPart.Registry.read(world, (NBTTagCompound) nbt)));
 		this.protectedRegionBuilder = new ProtectedRegion.Builder(compound.getCompoundTag("protectedRegion"));
 		this.state = GenerationState.values()[compound.getInteger("state")];
+		this.chunkInfoMap = new ChunkInfoMap(compound.getCompoundTag("chunkInfoMap"));
+		this.chunkInfoMapExtended = new ChunkInfoMap(compound.getCompoundTag("chunkInfoMapExtended"));
+		ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("removedLights"));
+		while (buf.readableBytes() > 0) {
+			this.removedLights.add(new LightInfo(new BlockPos(buf.readInt(), buf.readInt(), buf.readInt()), buf.readByte()));
+		}
 		this.nextCheckBlockLightIndex = compound.getInteger("nextCheckBlockLightIndex");
 		this.nextGenerateSkylightMapIndex = compound.getInteger("nextGenerateSkylightMapIndex");
 		this.nextCheckSkyLightIndex = compound.getInteger("nextCheckSkyLightIndex");
@@ -100,6 +131,8 @@ public class GeneratableDungeon {
 		compound.setTag("parts", this.parts.stream().map(DungeonPart.Registry::write).collect(NBTCollectors.toList()));
 		compound.setTag("protectedRegionBuilder", this.protectedRegionBuilder.writeToNBT());
 		compound.setTag("chunkInfoMap", this.chunkInfoMap.writeToNBT());
+		compound.setTag("chunkInfoMapExtended", this.chunkInfoMapExtended.writeToNBT());
+		compound.setTag("removedLights", this.removedLights.stream().collect(NBTCollectors.toNBTByteArray(LightInfo::write)));
 		compound.setInteger("state", this.state.ordinal());
 		compound.setInteger("nextCheckBlockLightIndex", this.nextCheckBlockLightIndex);
 		compound.setInteger("nextGenerateSkylightMapIndex", this.nextGenerateSkylightMapIndex);
@@ -114,61 +147,28 @@ public class GeneratableDungeon {
 	}
 
 	public void markRemovedLight(int x, int y, int z, int light) {
-		for (int ix = -1; ix <= 1; ix++) {
-			int chunkX = (x >> 4) + ix;
-			int distX = 0;
-			if (ix < 0) {
-				distX = x - ((chunkX << 4) + 15);
-			}
-			if (ix > 0) {
-				distX = (chunkX << 4) - x;
-			}
-			if (distX >= light) {
-				continue;
-			}
+		this.markRemovedLight(new BlockPos(x, y, z), light);
+	}
 
-			for (int iy = -1; iy <= 1; iy++) {
-				int chunkY = (y >> 4) + iy;
-				int distY = 0;
-				if (iy < 0) {
-					distY = y - ((chunkY << 4) + 15);
-				}
-				if (iy > 0) {
-					distY = (chunkY << 4) - y;
-				}
-				if (distX + distY >= light) {
-					continue;
-				}
-
-				for (int iz = -1; iz <= 1; iz++) {
-					int chunkZ = (z >> 4) + iz;
-					int distZ = 0;
-					if (iz < 0) {
-						distZ = z - ((chunkZ << 4) + 15);
-					}
-					if (iz > 0) {
-						distZ = (chunkZ << 4) - z;
-					}
-					if (distX + distY + distZ >= light) {
-						continue;
-					}
-
-					this.chunkInfoMap.mark(chunkX, chunkY, chunkZ);
-				}
-			}
-		}
+	public void markRemovedLight(BlockPos pos, int light) {
+		this.removedLights.add(new LightInfo(pos, light));
 	}
 
 	public void tick(World world) {
 		this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1_000_000, CQRConfig.advanced.generationSpeed * 1_000_000);
 
 		int partsGenerated = 0;
-		while (!this.isGenerated() && this.tickTime > 0 && partsGenerated < CQRConfig.advanced.generationLimit) {
+		while (false && !this.isGenerated() && this.tickTime > 0 && partsGenerated < CQRConfig.advanced.generationLimit) {
 			long start = System.nanoTime();
 			this.generateNext(world);
 			this.tickTime -= System.nanoTime() - start;
 			partsGenerated++;
 		}
+		long t = System.nanoTime();
+		while (!this.isGenerated()) {
+			this.generateNext(world);
+		}
+		CQRMain.logger.info((System.nanoTime() - t) / 1_000_000);
 	}
 
 	public void generateNext(World world) {
@@ -201,6 +201,9 @@ public class GeneratableDungeon {
 		if (this.tryCheckSkyLight(world)) {
 			return;
 		}
+		if (this.tryCheckRemovedBlockLight(world)) {
+			return;
+		}
 		if (this.tryMarkBlockForUpdate(world)) {
 			return;
 		}
@@ -226,71 +229,32 @@ public class GeneratableDungeon {
 		}
 		if (this.parts.isEmpty()) {
 			long t = System.currentTimeMillis();
-			ChunkInfoMap temp = new ChunkInfoMap();
 			this.chunkInfoMap.forEach(chunkInfo -> chunkInfo.forEach(chunkY -> {
+				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+				if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
+					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
+				}
 				int r = 1;
 				for (int x = -r; x <= r; x++) {
 					for (int y = -r; y <= r; y++) {
 						for (int z = -r; z <= r; z++) {
-							temp.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
+							this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
 						}
 					}
 				}
 			}));
-			this.chunkInfoMap.markAll(temp);
-			this.chunkInfoMap.forEach(chunkInfo -> {
-				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-				chunkInfo.forEachReversed(chunkY -> {
-					if (chunkY == 0) {
-						return;
-					}
-					if (chunk.getBlockStorageArray()[chunkY - 1] == Chunk.NULL_BLOCK_STORAGE) {
-						chunkInfo.mark(chunkY - 1);
-					}
-				});
-			});
-			this.chunkInfoMap.forEach(chunkInfo -> {
-				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-				chunkInfo.forEach(chunkY -> {
-					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-						return;
-					}
-					if (world.provider.hasSkyLight()) {
-						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
-					}
-					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
-				});
-			});
 			CQRMain.logger.info(System.currentTimeMillis() - t);
 		}
 		return true;
 	}
 
 	private boolean tryCheckBlockLight(World world) {
-		if (this.nextCheckBlockLightIndex >= this.chunkInfoMap.size()) {
+		if (this.nextCheckBlockLightIndex >= this.chunkInfoMapExtended.size()) {
 			return false;
 		}
-		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextCheckBlockLightIndex);
-		Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-		chunkInfo.forEachReversed(chunkY -> {
-			ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-			if (blockStorage == Chunk.NULL_BLOCK_STORAGE || blockStorage.isEmpty()) {
-				return;
-			}
-			for (int x = 0; x < 16; x++) {
-				for (int z = 0; z < 16; z++) {
-					for (int y = 15; y >= 0; y--) {
-						MUTABLE.setPos((chunk.x << 4) + x, (chunkY << 4) + y, (chunk.z << 4) + z);
-						IBlockState state = blockStorage.get(x, y, z);
-						if (state.getLightValue(world, MUTABLE) <= 0) {
-							continue;
-						}
-						BlockLightUtil.relightBlock(world, MUTABLE);
-					}
-				}
-			}
-		});
+		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextCheckBlockLightIndex);
+		BlockLightUtil.checkBlockLight(world, chunkInfo);
 		this.nextCheckBlockLightIndex++;
 		return true;
 	}
@@ -307,47 +271,42 @@ public class GeneratableDungeon {
 	}
 
 	private boolean tryCheckSkyLight(World world) {
-		if (this.nextCheckSkyLightIndex >= this.chunkInfoMap.size()) {
+		if (this.nextCheckSkyLightIndex >= this.chunkInfoMapExtended.size()) {
 			return false;
 		}
-		if (world.provider.hasSkyLight()) {
-			ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextCheckSkyLightIndex);
-			Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-			chunkInfo.forEachReversed(chunkY -> {
-				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-				for (int x = 0; x < 16; x++) {
-					for (int z = 0; z < 16; z++) {
-						int heightmap = chunk.getHeightMap()[(z << 4) | x];
-						for (int y = 15; y >= 0; y--) {
-							if ((chunkY << 4) + y >= heightmap) {
-								continue;
-							}
-							MUTABLE.setPos((chunk.x << 4) + x, (chunkY << 4) + y, (chunk.z << 4) + z);
-							if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
-								IBlockState state = blockStorage.get(x, y, z);
-								if (state.getLightOpacity(world, MUTABLE) >= 15) {
-									continue;
-								}
-							}
-							world.checkLightFor(EnumSkyBlock.SKY, MUTABLE);
-						}
-					}
-				}
-			});
-		}
+		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextCheckSkyLightIndex);
+		SkyLightUtil.checkSkyLight(world, chunkInfo);
 		this.nextCheckSkyLightIndex++;
 		return true;
 	}
 
-	private boolean tryMarkBlockForUpdate(World world) {
-		if (this.nextMarkBlockForUpdateIndex >= this.chunkInfoMap.size()) {
+	private boolean tryCheckRemovedBlockLight(World world) {
+		if (this.removedLights.isEmpty()) {
 			return false;
 		}
-		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextMarkBlockForUpdateIndex);
-		Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-		PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-		if (entry != null) {
-			entry.sendPacket(new SPacketChunkData(chunk, chunkInfo.getMarked()));
+		LightInfo removedLight = this.removedLights.remove();
+		for (int x = -14; x <= 14; x++) {
+			for (int y = -14; y <= 14; y++) {
+				for (int z = -14; z <= 14; z++) {
+					MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
+					world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
+				}
+			}
+		}
+		return true;
+	}
+
+	private boolean tryMarkBlockForUpdate(World world) {
+		if (this.nextMarkBlockForUpdateIndex >= this.chunkInfoMapExtended.size()) {
+			return false;
+		}
+		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextMarkBlockForUpdateIndex);
+		Chunk chunk = world.getChunkProvider().getLoadedChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+		if (chunk != null) {
+			PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+			if (entry != null) {
+				entry.sendPacket(new SPacketChunkData(chunk, 0xFFFF >> (15 - chunkInfo.topMarked())));
+			}
 		}
 		this.nextMarkBlockForUpdateIndex++;
 		return true;
@@ -358,9 +317,7 @@ public class GeneratableDungeon {
 			return false;
 		}
 		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextNotifyNeighborsRespectDebugIndex);
-		chunkInfo.forEachReversed(chunkY -> {
-			NeighborNotifyUtil.notifyNeighbors(world, chunkInfo.getChunkX(), chunkY, chunkInfo.getChunkZ());
-		});
+		chunkInfo.forEachReversed(chunkY -> NeighborNotifyUtil.notifyNeighbors(world, chunkInfo.getChunkX(), chunkY, chunkInfo.getChunkZ()));
 		this.nextNotifyNeighborsRespectDebugIndex++;
 		return true;
 	}
