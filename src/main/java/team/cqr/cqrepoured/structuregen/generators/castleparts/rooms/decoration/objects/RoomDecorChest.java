@@ -48,7 +48,8 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 				decoMap.add(start);
 			}
 		} else {
-			CQRMain.logger.warn("Placed a chest but could not find a loot table for Room Type {}", room.getRoomType());
+			// CQRMain.logger.warn("Placed a chest but could not find a loot table for Room Type {}", room.getRoomType());
+			// TODO fix rooms having no chests (or is this intended?)
 		}
 	}
 }
