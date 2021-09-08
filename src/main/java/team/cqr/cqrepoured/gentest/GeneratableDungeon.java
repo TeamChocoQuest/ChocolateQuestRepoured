@@ -158,12 +158,10 @@ public class GeneratableDungeon {
 	public void tick(World world) {
 		this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1_000_000, CQRConfig.advanced.generationSpeed * 1_000_000);
 
-		int partsGenerated = 0;
-		while (!this.isGenerated() && this.tickTime > 0 && partsGenerated < CQRConfig.advanced.generationLimit) {
+		while (!this.isGenerated() && this.tickTime > 0) {
 			long start = System.nanoTime();
 			this.generateNext(world);
 			this.tickTime -= System.nanoTime() - start;
-			partsGenerated++;
 		}
 	}
 
