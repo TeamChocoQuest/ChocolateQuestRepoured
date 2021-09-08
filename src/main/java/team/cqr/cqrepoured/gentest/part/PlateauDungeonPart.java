@@ -14,6 +14,7 @@ import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.gentest.part.DungeonPart.Registry.ISerializer;
+import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.Perlin3D;
 
 public class PlateauDungeonPart extends DungeonPart {
@@ -77,24 +78,45 @@ public class PlateauDungeonPart extends DungeonPart {
 						}
 					}
 					this.setYtoHeight(world, MUTABLE.setPos((this.chunkX << 4) + x, this.endY + 1, (this.chunkZ << 4) + z));
+					int posY = MUTABLE.getY();
+					int i = Math.max((this.endY - 1) - posY, 1);
 
 					while (MUTABLE.getY() < this.endY) {
-						if (MUTABLE.getX() >= this.startX + this.wallSize
-								&& MUTABLE.getX() <= this.endX - this.wallSize
-								&& MUTABLE.getZ() >= this.startZ + this.wallSize
-								&& MUTABLE.getZ() <= this.endZ - this.wallSize) {
-							world.setBlockState(MUTABLE, state1, 16);
+						if (MUTABLE.getX() >= this.startX + this.wallSize && MUTABLE.getX() <= this.endX - this.wallSize
+								&& MUTABLE.getZ() >= this.startZ + this.wallSize && MUTABLE.getZ() <= this.endZ - this.wallSize) {
+							BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
 							dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
+						} else {
+							float noiseVar = (MUTABLE.getY() - (this.endY - 1)) / (i * 1.5F);
+
+							noiseVar += Math.max((this.wallSize - (MUTABLE.getX() - this.startX)) / 8.0F, 0.0F);
+							noiseVar += Math.max((this.wallSize - ((this.endX + 1) - MUTABLE.getX())) / 8.0F, 0.0F);
+
+							noiseVar += Math.max((this.wallSize - (MUTABLE.getZ() - this.startZ)) / 8.0F, 0.0F);
+							noiseVar += Math.max((this.wallSize - ((this.endZ + 1) - MUTABLE.getZ())) / 8.0F, 0.0F);
+
+							if (noiseVar / 3.0D + (MUTABLE.getY() - posY) / i * 0.25D >= 0.5D) {
+								break;
+							}
+
+							double value = (this.perlin1.getNoiseAt(MUTABLE.getX(), MUTABLE.getY(), MUTABLE.getZ())
+									+ this.perlin2.getNoiseAt(MUTABLE.getX(), MUTABLE.getY(), MUTABLE.getZ()) + noiseVar) / 3.0D
+									+ (MUTABLE.getY() - posY) / i * 0.25D;
+
+							if (value < 0.5D) {
+								BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
+								dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
+							} else {
+								break;
+							}
 						}
 						MUTABLE.setY(MUTABLE.getY() + 1);
 					}
 
 					if (MUTABLE.getY() <= this.endY) {
-						world.setBlockState(MUTABLE, state2, 16);
+						BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, 16, false);
 						dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 					}
-
-					// TODO generate "walls" of support hills
 				}
 			}
 
