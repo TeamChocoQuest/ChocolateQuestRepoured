@@ -87,12 +87,8 @@ public class ElectricFieldRenderUtil {
 		GlStateManager.glLineWidth(3.0F);
 
 		// Now we want to draw <boltCount> lightnings
-		Vec3d direction = endOffset.subtract(startOffset);
-		final double lineLength = direction.length();
-		direction = direction.normalize();
-
 		for (int i = 0; i < boltCount; i++) {
-			renderSingleElectricLine(builder, tess, startOffset, endOffset, direction, lineLength, rng, maxOffset);
+			renderSingleElectricLineBetween(builder, tess, startOffset, endOffset, maxOffset, rng);
 		}
 
 		// Finally re-enable tex2d and lightning and disable blending
@@ -102,37 +98,44 @@ public class ElectricFieldRenderUtil {
 
 		GlStateManager.popMatrix();
 	}
+	
+	static Vec3d generateOffsetVector(final Vec3d direction, final Vec3d directionSecondary, Random rng, final double pointVariation) {
+		Vec3d offsetVector = direction.crossProduct(directionSecondary);
+		offsetVector = offsetVector.normalize();
+		offsetVector = offsetVector.scale(rng.nextDouble() * pointVariation);
 
-	private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d end, Vec3d direction, final double lineLength, Random rng, final double maxOffset) {
+		offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, DungeonGenUtils.randomBetween(0, 360, rng));
+		
+		return offsetVector;
+	}
+
+	private static void renderSingleElectricLineBetween(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d end, final double pointVariation, Random rng) {
 		// Initialize the drawing process, our vertices consist of positions and color information
 		builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
 
-		// Put the first pos at start
-		builder.pos(start.x, start.y, start.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
-		Vec3d pos = new Vec3d(start.x, start.y, start.z);
+		final Vec3d direction = end.subtract(start).normalize();
+		final Vec3d directionSecondary = VectorUtil.rotateVectorAroundY(direction, 90);
+		
+		final double lineLength = pointVariation * 3;
+		final int steps = (int) Math.floor(end.subtract(start).length()  / lineLength) -1;
+		
+		Vec3d lastPos = start;
+		for(int i = 0; i < steps; i++) {
+			Vec3d offsetVector = generateOffsetVector(direction, directionSecondary, rng, pointVariation);
 
-		double processedLength = 0;
-		final Vec3d dirSecondary = VectorUtil.rotateVectorAroundY(direction, 90);
-		while (processedLength < lineLength) {
-			Vec3d increment = direction.normalize().scale(0.5D + rng.nextDouble());
-
-			pos = pos.add(increment);
-
-			Vec3d offsetVector = direction.crossProduct(dirSecondary);
-			offsetVector = offsetVector.normalize();
-			offsetVector = offsetVector.scale(rng.nextDouble() * maxOffset);
-
-			offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, DungeonGenUtils.randomBetween(0, 360, rng));
-
-			builder.pos(pos.x + offsetVector.x, pos.y + offsetVector.y, pos.z + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
-
-			processedLength += increment.length();
+			builder.pos(lastPos.x + offsetVector.x, lastPos.y + offsetVector.y, lastPos.z  + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
+			
+			lastPos = lastPos.add(direction.scale(rng.nextDouble() * pointVariation));
 		}
-
-		// Put the last pos at end
-		// builder.pos(end.x, end.y, end.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
-
+		Vec3d offsetVector = generateOffsetVector(direction, directionSecondary, rng, pointVariation);
+		builder.pos(end.x + offsetVector.x, end.y + offsetVector.y, end.z  + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
+		
 		tess.draw();
+	}
+	
+	private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d direction, final double lineLength, Random rng, final double pointVariation) {
+		final Vec3d end = start.add(direction.normalize().scale(lineLength));
+		renderSingleElectricLineBetween(builder, tess, start, end, pointVariation, rng);
 	}
 
 	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z) {
