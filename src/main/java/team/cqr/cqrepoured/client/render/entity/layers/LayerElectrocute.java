@@ -9,7 +9,6 @@ import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
-import team.cqr.cqrepoured.util.VectorUtil;
 
 public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 
@@ -31,14 +30,18 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				
 				double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 				double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+				y1 += entity.getEyeHeight() / 2;
 				double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
+				
 				double x2 = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
 				double y2 = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
-				y2 += target.height * 0.65D;
+				y2 += target.getEyeHeight() / 2;
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
-				Entity entity1 = Minecraft.getMinecraft().getRenderViewEntity();
+				
+				Entity entity1 = Minecraft.getMinecraft().player;
 				double x3 = entity1.lastTickPosX + (entity1.posX - entity1.lastTickPosX) * partialTicks;
 				double y3 = entity1.lastTickPosY + (entity1.posY - entity1.lastTickPosY) * partialTicks;
+				y3 += entity1.getEyeHeight() / 2;
 				double z3 = entity1.lastTickPosZ + (entity1.posZ - entity1.lastTickPosZ) * partialTicks;
 				x1 -= x3;
 				y1 -= y3;
@@ -49,16 +52,16 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				
 				final Vec3d start = new Vec3d(x1,y1,z1);
 				final Vec3d end = new Vec3d(x2,y2,z2);
-				final Vec3d dir = end.subtract(start).normalize();
 				
 				GlStateManager.pushMatrix();
 				
-				//GlStateManager.translate(x1, y1, z1);
-				GlStateManager.rotate((float) VectorUtil.getAngleBetween(new Vec3d(1,0,0), dir), 1.0F, 0.0F, 0.0F);
-				GlStateManager.rotate((float) VectorUtil.getAngleBetween(new Vec3d(0,1,0), dir), 0.0F, 1.0F, 0.0F);
-				GlStateManager.rotate((float) VectorUtil.getAngleBetween(new Vec3d(0,0,1), dir), 0.0F, 0.0F, 1.0F);
+				GlStateManager.loadIdentity();
+				
+				GlStateManager.translate(x1, y1, z1);
 				
 				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, entity.getRNG(), 0.5, 0,0,0, 5);
+				
+				GlStateManager.loadIdentity();
 				
 				GlStateManager.popMatrix();
 			}
