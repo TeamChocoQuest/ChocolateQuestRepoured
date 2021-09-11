@@ -125,7 +125,7 @@ public class ElectricFieldRenderUtil {
 
 			builder.pos(lastPos.x + offsetVector.x, lastPos.y + offsetVector.y, lastPos.z  + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
 			
-			lastPos = lastPos.add(direction.scale(rng.nextDouble() * pointVariation));
+			lastPos = lastPos.add(direction.scale(lineLength));
 		}
 		Vec3d offsetVector = generateOffsetVector(direction, directionSecondary, rng, pointVariation);
 		builder.pos(end.x + offsetVector.x, end.y + offsetVector.y, end.z  + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
@@ -139,7 +139,7 @@ public class ElectricFieldRenderUtil {
 	}
 
 	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z) {
-		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 4, x, y, z, 5, 40);
+		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 3, x, y, z, 5, 40);
 	}
 
 }
