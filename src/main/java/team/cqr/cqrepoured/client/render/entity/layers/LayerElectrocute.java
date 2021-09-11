@@ -17,12 +17,17 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 			if(cap.getRemainingTicks() < 0) {
 				return;
 			}
-			double x = 0;
-			double y = 0;
-			double z = 0;
+			double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
+			double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+			double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, x,-entity.getEyeHeight() / 2,z);
 			if(cap.getTarget() != null) {
 				Entity target = cap.getTarget();
+				
+				double xTarget = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
+				double yTarget = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
+				double zTarget = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
+				
 				Vec3d vector = target.getPositionVector().subtract(entity.getPositionVector());
 				ElectricFieldRenderUtil.renderElectricLineBetween(Vec3d.ZERO.add(0, entity.getEyeHeight(), 0), vector, entity.getRNG(), 0.5D, x,y,z, 5);
 			}
