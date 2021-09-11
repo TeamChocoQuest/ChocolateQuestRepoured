@@ -73,6 +73,11 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		//Maybe you could spread to other entities?
 		if(icapability.getRemainingTicks() > 50 && icapability.getTarget() == null) {
 			spreadElectrocute(entity, icapability);
+		} else if(icapability.getTarget() != null) {
+			CapabilityElectricShock targetCap = icapability.getTarget().getCapability(ELECTROCUTE_HANDLER_CQR, null);
+			if(targetCap != null) {
+				targetCap.setRemainingTicks(100);
+			}
 		}
 		
 		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
