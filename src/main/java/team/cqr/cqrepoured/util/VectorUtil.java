@@ -17,6 +17,13 @@ public class VectorUtil {
 		return vector.rotateYaw((float) Math.toRadians(degrees));
 	}
 
+	public static double getAngleBetween(final Vec3d axis, final Vec3d vector) {
+		double cosphi = axis.dotProduct(vector);
+		cosphi /= axis.length() * vector.length();
+		double phi = Math.acos(cosphi);
+		return Math.toDegrees(phi);
+	}
+	
 	public static Vec3i rotateVector(EAxis axis, Vec3i vector, Double degrees) {
 		double rad = Math.toRadians(degrees);
 
