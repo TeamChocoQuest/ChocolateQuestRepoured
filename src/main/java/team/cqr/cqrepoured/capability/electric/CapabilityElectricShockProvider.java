@@ -90,7 +90,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 			if(!entity.canEntityBeSeen(input)) {
 				return true;
 			}
-			return TargetUtil.isAllyCheckingLeaders(entity, input);
+			return !TargetUtil.isAllyCheckingLeaders(entity, input);
 		});
 		if(entities.isEmpty()) {
 			return;
