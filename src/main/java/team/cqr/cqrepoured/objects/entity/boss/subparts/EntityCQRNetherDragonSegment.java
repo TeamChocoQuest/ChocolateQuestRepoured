@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.objects.entity.boss.subparts;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -15,7 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
-public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
+public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements IBlacklistedFromStatues {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
@@ -152,6 +154,11 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		this.setIsSkeletal(compound.getBoolean("skeletal"));
 		this.realID = compound.getInteger("realID");
 		this.partIndex = compound.getInteger("partIndex");
+	}
+	
+	@Override
+	public boolean canbeTurnedToStone() {
+		return false;
 	}
 
 }

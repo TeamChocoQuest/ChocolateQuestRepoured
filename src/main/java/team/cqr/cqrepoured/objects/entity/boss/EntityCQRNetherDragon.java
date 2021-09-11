@@ -938,5 +938,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return this.phase > 0 ? EnumCreatureAttribute.UNDEAD : EnumCreatureAttribute.UNDEFINED;
 	}
+	
+	/*
+	 * IaF Compat
+	 */
+	@Override
+	public boolean canbeTurnedToStone() {
+		return false;
+	}
 
 }

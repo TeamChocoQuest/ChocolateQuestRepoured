@@ -149,6 +149,7 @@ public class CQRConfig {
 	}
 
 	public static class Bosses {
+		public boolean blackListBossesFromIaFGorgonHead = true;
 		public boolean antiCowardMode = true;
 		public boolean preventBlockPlacingNearBosses = false;
 		public int antiCowardRadius = 16;

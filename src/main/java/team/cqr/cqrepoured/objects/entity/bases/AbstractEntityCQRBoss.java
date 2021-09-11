@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.bases;
 
+import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
+
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,7 +11,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 
-public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
+public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements IBlacklistedFromStatues {
 
 	public static final int MAX_DEATH_TICKS = 200;
 
@@ -130,6 +132,11 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	protected float maxUncappedDamage() {
 		return CQRConfig.bossDamageCaps.maxUncappedDamage;
+	}
+	
+	@Override
+	public boolean canbeTurnedToStone() {
+		return !CQRConfig.bosses.blackListBossesFromIaFGorgonHead;
 	}
 
 }
