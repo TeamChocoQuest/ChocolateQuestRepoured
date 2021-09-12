@@ -62,6 +62,17 @@ public class TargetUtil {
 		}
 		return true;
 	};
+	
+	public static final Predicate<EntityLivingBase> PREDICATE_IS_ELECTROCUTED = input -> {
+		if(input == null || input.isDead) {
+			return false;
+		}
+		if(!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
+			return false;
+		}
+		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		return icapability.getRemainingTicks() > 0;
+	};
 
 	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = input -> {
 		if (input == null) {
