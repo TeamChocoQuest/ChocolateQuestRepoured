@@ -90,7 +90,7 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIElectrocutePanic;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIPanicElectrocute;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
@@ -480,7 +480,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(33, new EntityAIIdleSit(this));
 		
 		//Electrocution stuff
-		this.tasks.addTask(10, new EntityAIElectrocutePanic(this, 2.0D));
+		this.tasks.addTask(10, new EntityAIPanicElectrocute(this, 2.0D));
 		this.tasks.addTask(3, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, TargetUtil.PREDICATE_IS_ELECTROCUTED, 8.0F, 1.5D, 2.0D));
 		this.tasks.addTask(2, new EntityAIAvoidEntity<EntityElectricField>(this, EntityElectricField.class, 1.0F, 1.5D, 1.5D));
 
