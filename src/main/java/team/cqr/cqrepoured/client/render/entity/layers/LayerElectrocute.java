@@ -36,7 +36,7 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
 				final Vec3d start = new Vec3d(0, 0, 0);
-				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1);
+				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1).scale(1.1D);
 
 				GlStateManager.pushMatrix();
 
