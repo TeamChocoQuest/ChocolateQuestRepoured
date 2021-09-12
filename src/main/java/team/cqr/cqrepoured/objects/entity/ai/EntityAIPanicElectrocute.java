@@ -6,9 +6,9 @@ import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
 
-public class EntityAIElectrocutePanic extends EntityAIPanic {
+public class EntityAIPanicElectrocute extends EntityAIPanic {
 
-	public EntityAIElectrocutePanic(EntityCreature creature, double speedIn) {
+	public EntityAIPanicElectrocute(EntityCreature creature, double speedIn) {
 		super(creature, speedIn);
 	}
 
@@ -19,7 +19,7 @@ public class EntityAIElectrocutePanic extends EntityAIPanic {
 		}
 
 		if (this.creature.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
-			return this.creature.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).getRemainingTicks() > 0;
+			return this.creature.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).getRemainingTicks() > 0 && this.findRandomPosition();
 		}
 		return false;
 	}
