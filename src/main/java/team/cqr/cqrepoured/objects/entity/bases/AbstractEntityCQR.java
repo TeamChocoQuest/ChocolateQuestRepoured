@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -89,6 +90,7 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIElectrocutePanic;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
@@ -111,6 +113,7 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanill
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.objects.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
 import team.cqr.cqrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
@@ -465,16 +468,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.OFF_HAND)); /* AI for secondary Item */
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
-		this.tasks.addTask(21, new EntityAIFireFighter(this));
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-		this.tasks.addTask(23, new EntityAILooter(this));
-		this.tasks.addTask(24, new EntityAITameAndLeashPet(this));
-		this.tasks.addTask(25, new EntityAISearchMount(this));
+		this.tasks.addTask(22, new EntityAIFireFighter(this));
+		this.tasks.addTask(23, new EntityAITorchIgniter(this));
+		this.tasks.addTask(24, new EntityAILooter(this));
+		this.tasks.addTask(25, new EntityAITameAndLeashPet(this));
+		this.tasks.addTask(26, new EntityAISearchMount(this));
 
 		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(31, new EntityAIFollowPath(this));
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
 		this.tasks.addTask(33, new EntityAIIdleSit(this));
+		
+		//Electrocution stuff
+		this.tasks.addTask(10, new EntityAIElectrocutePanic(this, 2.0D));
+		this.tasks.addTask(3, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, TargetUtil.PREDICATE_IS_ELECTROCUTED, 8.0F, 1.5D, 2.0D));
+		this.tasks.addTask(2, new EntityAIAvoidEntity<EntityElectricField>(this, EntityElectricField.class, 4.0F, 1.5D, 1.5D));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
