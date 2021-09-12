@@ -482,7 +482,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		//Electrocution stuff
 		this.tasks.addTask(10, new EntityAIElectrocutePanic(this, 2.0D));
 		this.tasks.addTask(3, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, TargetUtil.PREDICATE_IS_ELECTROCUTED, 8.0F, 1.5D, 2.0D));
-		this.tasks.addTask(2, new EntityAIAvoidEntity<EntityElectricField>(this, EntityElectricField.class, 4.0F, 1.5D, 1.5D));
+		this.tasks.addTask(2, new EntityAIAvoidEntity<EntityElectricField>(this, EntityElectricField.class, 1.0F, 1.5D, 1.5D));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
