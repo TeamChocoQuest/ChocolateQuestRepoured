@@ -74,9 +74,14 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		if(icapability.getRemainingTicks() > 50 && icapability.getTarget() == null) {
 			spreadElectrocute(entity, icapability);
 		} else if(icapability.getTarget() != null) {
-			CapabilityElectricShock targetCap = icapability.getTarget().getCapability(ELECTROCUTE_HANDLER_CQR, null);
-			if(targetCap != null) {
-				targetCap.setRemainingTicks(100);
+			if(!entity.canEntityBeSeen(icapability.getTarget()) || entity.getDistance(icapability.getTarget()) > 16) {
+				icapability.setTarget(null);
+			}
+			else {
+				CapabilityElectricShock targetCap = icapability.getTarget().getCapability(ELECTROCUTE_HANDLER_CQR, null);
+				if(targetCap != null) {
+					targetCap.setRemainingTicks(100);
+				}
 			}
 		}
 		
@@ -87,7 +92,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		//First, get all applicable entities in range
 		List<EntityLivingBase> entities = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
 		entities.removeIf( (EntityLivingBase input) -> {
-			if(!entity.canEntityBeSeen(input)) {
+			if(!entity.canEntityBeSeen(input) || entity.getDistance(input) > 16) {
 				return true;
 			}
 			return !TargetUtil.isAllyCheckingLeaders(entity, input);
