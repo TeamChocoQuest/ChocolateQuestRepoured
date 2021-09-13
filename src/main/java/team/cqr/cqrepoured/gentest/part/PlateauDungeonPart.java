@@ -51,10 +51,10 @@ public class PlateauDungeonPart extends DungeonPart {
 		this.supportHillTopBlock = supportHillTopBlock;
 		this.perlin1 = new Perlin3D(seed, wallSize);
 		this.perlin2 = new Perlin3D(seed, wallSize * 4);
-		this.chunkX = startX >> 4;
-		this.chunkZ = startZ >> 4;
-		this.chunkX1 = startX >> 4;
-		this.chunkZ1 = startZ >> 4;
+		this.chunkX = this.startX >> 4;
+		this.chunkZ = this.startZ >> 4;
+		this.chunkX1 = this.startX >> 4;
+		this.chunkZ1 = this.startZ >> 4;
 	}
 
 	@Override
