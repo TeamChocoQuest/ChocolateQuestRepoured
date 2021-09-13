@@ -5,7 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -15,8 +19,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.NBTCollectors;
 
 public class ProtectedRegion {
 
@@ -134,7 +140,9 @@ public class ProtectedRegion {
 	public void readFromNBT(NBTTagCompound compound) {
 		String version = compound.getString("version");
 		if (logVersionWarnings && !version.equals(PROTECTED_REGION_VERSION)) {
-			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
+			CQRMain.logger.warn(
+					"Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.",
+					PROTECTED_REGION_VERSION, version);
 		}
 
 		this.uuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("uuid"));
@@ -300,7 +308,8 @@ public class ProtectedRegion {
 		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty() || this.ignoreNoBossOrNexus;
 	}
 
-	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther, boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
+	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther,
+			boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
 		if (!this.isGenerating) {
 			return;
 		}
@@ -443,6 +452,159 @@ public class ProtectedRegion {
 
 	public boolean isGenerating() {
 		return this.isGenerating;
+	}
+
+	public static class Builder {
+
+		private final String dungeonName;
+		private final BlockPos dungeonPos;
+		private BlockPos min;
+		private BlockPos max;
+		private boolean protectionSystemEnabled;
+		private boolean preventBlockBreaking;
+		private boolean preventBlockPlacing;
+		private boolean preventEntitySpawning;
+		private boolean preventExplosionsOther;
+		private boolean preventExplosionsTNT;
+		private boolean preventFireSpreading;
+		private boolean ignoreNoBossOrNexus;
+		private final Set<UUID> entityDependencies = new HashSet<>();
+		private final Set<BlockPos> blockDependencies = new HashSet<>();
+		private final Set<BlockPos> unprotectedBlocks = new HashSet<>();
+
+		public Builder(String dungeonName, BlockPos dungeonPos) {
+			this.dungeonName = dungeonName;
+			this.dungeonPos = dungeonPos.toImmutable();
+			this.min = this.dungeonPos;
+			this.max = this.dungeonPos;
+		}
+
+		public Builder(DungeonBase dungeonConfig, BlockPos dungeonPos) {
+			this.dungeonName = dungeonConfig.getDungeonName();
+			this.dungeonPos = dungeonPos.toImmutable();
+			this.min = this.dungeonPos;
+			this.max = this.dungeonPos;
+			this.setup(dungeonConfig);
+		}
+
+		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire, boolean persistent) {
+			this.protectionSystemEnabled = enabled;
+			this.preventBlockBreaking = breaking;
+			this.preventBlockPlacing = placing;
+			this.preventEntitySpawning = spawning;
+			this.preventExplosionsOther = explosions;
+			this.preventExplosionsTNT = tnt;
+			this.preventFireSpreading = fire;
+			this.ignoreNoBossOrNexus = persistent;
+		}
+
+		public void setup(DungeonBase dungeonConfig) {
+			this.protectionSystemEnabled = dungeonConfig.isProtectionSystemEnabled();
+			this.preventBlockBreaking = dungeonConfig.preventBlockBreaking();
+			this.preventBlockPlacing = dungeonConfig.preventBlockPlacing();
+			this.preventEntitySpawning = dungeonConfig.preventEntitySpawning();
+			this.preventExplosionsOther = dungeonConfig.preventExplosionsOther();
+			this.preventExplosionsTNT = dungeonConfig.preventExplosionsTNT();
+			this.preventFireSpreading = dungeonConfig.preventFireSpreading();
+			this.ignoreNoBossOrNexus = dungeonConfig.ignoreNoBossOrNexus();
+		}
+
+		public Builder(NBTTagCompound compound) {
+			this.dungeonName = compound.getString("dungeonName");
+			this.dungeonPos = NBTUtil.getPosFromTag(compound.getCompoundTag("dungeonPos"));
+			this.min = NBTUtil.getPosFromTag(compound.getCompoundTag("min"));
+			this.max = NBTUtil.getPosFromTag(compound.getCompoundTag("max"));
+			this.protectionSystemEnabled = compound.getBoolean("protectionSystemEnabled");
+			this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
+			this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
+			this.preventEntitySpawning = compound.getBoolean("preventEntitySpawning");
+			this.preventExplosionsOther = compound.getBoolean("preventExplosionsOther");
+			this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
+			this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
+			this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
+			ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies"));
+			while (buf.readerIndex() < buf.writerIndex()) {
+				this.entityDependencies.add(ByteBufUtil.readUuid(buf));
+			}
+			ByteBuf buf1 = Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies"));
+			while (buf1.readerIndex() < buf1.writerIndex()) {
+				this.blockDependencies.add(ByteBufUtil.readBlockPos(buf1));
+			}
+			ByteBuf buf2 = Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies"));
+			while (buf2.readerIndex() < buf2.writerIndex()) {
+				this.unprotectedBlocks.add(ByteBufUtil.readBlockPos(buf2));
+			}
+		}
+
+		public NBTTagCompound writeToNBT() {
+			NBTTagCompound compound = new NBTTagCompound();
+			compound.setString("dungeonName", this.dungeonName);
+			compound.setTag("dungeonPos", NBTUtil.createPosTag(this.dungeonPos));
+			compound.setTag("min", NBTUtil.createPosTag(this.min));
+			compound.setTag("max", NBTUtil.createPosTag(this.max));
+			compound.setBoolean("protectionSystemEnabled", this.protectionSystemEnabled);
+			compound.setBoolean("preventBlockBreaking", this.preventBlockBreaking);
+			compound.setBoolean("preventBlockPlacing", this.preventBlockPlacing);
+			compound.setBoolean("preventEntitySpawning", this.preventEntitySpawning);
+			compound.setBoolean("preventExplosionsOther", this.preventExplosionsOther);
+			compound.setBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
+			compound.setBoolean("preventFireSpreading", this.preventFireSpreading);
+			compound.setBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
+			compound.setTag("entityDependencies", this.entityDependencies.stream().collect(NBTCollectors.toNBTByteArray(ByteBufUtil::writeUuid)));
+			compound.setTag("blockDependencies", this.blockDependencies.stream().collect(NBTCollectors.toNBTByteArray(ByteBufUtil::writeBlockPos)));
+			compound.setTag("unprotectedBlocks", this.blockDependencies.stream().collect(NBTCollectors.toNBTByteArray(ByteBufUtil::writeBlockPos)));
+			return compound;
+		}
+
+		public void addEntity(Entity entity) {
+			if (!this.protectionSystemEnabled) {
+				return;
+			}
+			this.entityDependencies.add(entity.getPersistentID());
+		}
+
+		public void addBlock(BlockPos pos) {
+			if (!this.protectionSystemEnabled) {
+				return;
+			}
+			this.blockDependencies.add(pos.toImmutable());
+		}
+
+		public void excludePos(BlockPos pos) {
+			if (!this.protectionSystemEnabled) {
+				return;
+			}
+			this.unprotectedBlocks.add(pos.toImmutable());
+		}
+
+		public void updateMin(BlockPos pos) {
+			this.min = new BlockPos(Math.min(pos.getX(), this.min.getX()), Math.min(pos.getY(), this.min.getY()), Math.min(pos.getZ(), this.min.getZ()));
+		}
+
+		public void updateMax(BlockPos pos) {
+			this.max = new BlockPos(Math.max(pos.getX(), this.max.getX()), Math.max(pos.getY(), this.max.getY()), Math.max(pos.getZ(), this.max.getZ()));
+		}
+
+		@Nullable
+		public ProtectedRegion build(World world) {
+			if (!this.protectionSystemEnabled) {
+				return null;
+			}
+			ProtectedRegion protectedRegion = new ProtectedRegion(world, this.dungeonName, this.dungeonPos, this.min, this.max);
+			protectedRegion.preventBlockBreaking = this.preventBlockBreaking;
+			protectedRegion.preventBlockPlacing = this.preventBlockPlacing;
+			protectedRegion.preventEntitySpawning = this.preventEntitySpawning;
+			protectedRegion.preventExplosionsOther = this.preventExplosionsOther;
+			protectedRegion.preventExplosionsTNT = this.preventExplosionsTNT;
+			protectedRegion.preventFireSpreading = this.preventFireSpreading;
+			protectedRegion.ignoreNoBossOrNexus = this.ignoreNoBossOrNexus;
+			protectedRegion.isGenerating = false;
+			protectedRegion.blockDependencies.addAll(this.blockDependencies);
+			protectedRegion.entityDependencies.addAll(this.entityDependencies);
+			this.unprotectedBlocks.forEach(p -> protectedRegion.setProtectionState(p, 1));
+			return protectedRegion;
+		}
+
 	}
 
 }

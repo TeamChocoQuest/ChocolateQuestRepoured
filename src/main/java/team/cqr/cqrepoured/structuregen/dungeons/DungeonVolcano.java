@@ -23,7 +23,8 @@ import team.cqr.cqrepoured.util.data.FileIOUtil;
  */
 public class DungeonVolcano extends DungeonBase {
 
-	// For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
+	// For smoke:
+	// https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
 	private ResourceLocation rampMob = new ResourceLocation("minecraft", "zombie");
 
 	private int minHeight = 80;
@@ -42,7 +43,10 @@ public class DungeonVolcano extends DungeonBase {
 	private boolean buildStairwell = true;
 	private boolean digEntranceTunnel = true;
 	private double chestChance = 0.002D;
-	private ResourceLocation[] chestIDs = { CQRLoottables.CHESTS_FOOD, CQRLoottables.CHESTS_MATERIAL, CQRLoottables.CHESTS_EQUIPMENT };
+	private ResourceLocation[] chestIDs = {
+			CQRLoottables.CHESTS_FOOD,
+			CQRLoottables.CHESTS_MATERIAL,
+			CQRLoottables.CHESTS_EQUIPMENT };
 
 	// Stronghold
 	private boolean buildStronghold = true;
@@ -128,7 +132,7 @@ public class DungeonVolcano extends DungeonBase {
 
 	@Override
 	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand, spawnType);
+		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public File getRoomNBTFileForType(EStrongholdRoomType type, Random rand) {

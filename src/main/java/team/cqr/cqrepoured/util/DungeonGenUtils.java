@@ -29,6 +29,7 @@ import team.cqr.cqrepoured.structuregen.DungeonRegistry;
 import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -66,7 +67,8 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radX, double radY, double radZ) {
-		return isInsideSpheroid(new Vec3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(), pointInSpace.getZ() - spheroidCenter.getZ()), radX, radY, radZ);
+		return isInsideSpheroid(new Vec3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(),
+				pointInSpace.getZ() - spheroidCenter.getZ()), radX, radY, radZ);
 	}
 
 	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radWidth, double radHeight) {
@@ -247,11 +249,13 @@ public class DungeonGenUtils {
 	}
 
 	public static BlockPos getValidMinPos(BlockPos pos1, BlockPos pos2) {
-		return new BlockPos(Math.max(Math.min(pos1.getX(), pos2.getX()), -30000000), Math.max(Math.min(pos1.getY(), pos2.getY()), 0), Math.max(Math.min(pos1.getZ(), pos2.getZ()), -30000000));
+		return new BlockPos(Math.max(Math.min(pos1.getX(), pos2.getX()), -30000000), Math.max(Math.min(pos1.getY(), pos2.getY()), 0),
+				Math.max(Math.min(pos1.getZ(), pos2.getZ()), -30000000));
 	}
 
 	public static BlockPos getValidMaxPos(BlockPos pos1, BlockPos pos2) {
-		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30000000), Math.min(Math.max(pos1.getY(), pos2.getY()), 255), Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30000000));
+		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30000000), Math.min(Math.max(pos1.getY(), pos2.getY()), 255),
+				Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30000000));
 	}
 
 	public static BlockPos getTransformedStartPos(BlockPos startPos, BlockPos size, PlacementSettings settings) {
@@ -278,7 +282,8 @@ public class DungeonGenUtils {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, chunk.getTopFilledSegment() + 15, z);
 		Material material = chunk.getBlockState(mutablePos).getMaterial();
-		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
+		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS
+				|| (ignoreWater && material == Material.WATER))) {
 			mutablePos.setY(mutablePos.getY() - 1);
 			material = chunk.getBlockState(mutablePos).getMaterial();
 		}
@@ -356,8 +361,11 @@ public class DungeonGenUtils {
 	}
 
 	/**
-	 * Returns the passed position with the half of the transformed structure sizeX and sizeZ subtracted.
+	 * @deprecated Use {@link Offset} instead!
+	 * 
+	 * @return the passed position with the half of the transformed structure sizeX and sizeZ subtracted.
 	 */
+	@Deprecated
 	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
 		BlockPos transformedSize = Template.transformedBlockPos(settings, structure.getSize());
 		return pos.add(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));

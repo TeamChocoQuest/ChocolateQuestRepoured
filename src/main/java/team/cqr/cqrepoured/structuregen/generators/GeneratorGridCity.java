@@ -1,10 +1,8 @@
 package team.cqr.cqrepoured.structuregen.generators;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -14,18 +12,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonGridCity;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 
 public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity> {
 
@@ -51,8 +46,8 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 	private CQStructure[][] structures;
 
-	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	@Override
@@ -127,7 +122,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).add(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
 			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).add(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
 
-			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ), this.world, this.dungeonGenerator));
+			this.dungeonBuilder.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ)), cLower);
 
 		}
 
@@ -180,7 +175,6 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 	@Override
 	public void postProcess() {
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		Map<BlockPos, CQStructure> structureMap = new HashMap<>();
 		for (int iX = 0; iX < this.gridPositions.length && iX < this.structures.length; iX++) {
 			for (int iZ = 0; iZ < this.gridPositions[iX].length && iZ < this.structures[iX].length; iZ++) {
@@ -197,16 +191,14 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 			}
 		}
 
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>(this.blockMap.size());
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : this.blockMap.entrySet()) {
-			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
+		this.dungeonBuilder.add(partBuilder);
 
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
-			PlacementSettings settings = new PlacementSettings();
-			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(entry.getKey(), entry.getValue(), settings);
-			entry.getValue().addAll(this.world, this.dungeonGenerator, p, settings, mobType);
+			entry.getValue().addAll(this.dungeonBuilder, entry.getKey(), Offset.CENTER);
 		}
 	}
 

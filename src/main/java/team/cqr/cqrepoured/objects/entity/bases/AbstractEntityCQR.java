@@ -57,8 +57,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.ForgeHooks;
@@ -79,6 +77,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
@@ -127,7 +126,6 @@ import team.cqr.cqrepoured.objects.items.armor.ItemBackpack;
 import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
 import team.cqr.cqrepoured.objects.npc.trading.TraderOffer;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -1276,28 +1274,31 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public void onSpawnFromCQRSpawnerInDungeon(BlockPos dungeonPos, PlacementSettings placementSettings, DungeonInhabitant mobType) {
+	public void onSpawnFromCQRSpawnerInDungeon(DungeonPlacement placement) {
 		this.setHomePositionCQR(new BlockPos(this));
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 		this.setHealth(this.getMaxHealth());
-		this.setBaseHealthDependingOnPos(dungeonPos);
+		this.setBaseHealthDependingOnPos(placement.getPos());
 
 		// Recalculate path points
 		for (Path.PathNode node : this.path.getNodes()) {
-			node.setPos(Template.transformedBlockPos(placementSettings, node.getPos()));
-			node.setWaitingRotation(this.getTransformedYaw(node.getWaitingRotation(), placementSettings.getMirror(), placementSettings.getRotation()));
+			node.setPos(DungeonPlacement.transform(node.getPos().getX(), node.getPos().getY(), node.getPos().getZ(), BlockPos.ORIGIN, placement.getMirror(),
+					placement.getRotation()));
+			node.setWaitingRotation(this.getTransformedYaw(node.getWaitingRotation(), placement.getMirror(), placement.getRotation()));
 		}
 
 		// Replace shield
 		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			ItemStack stack = this.getItemStackFromSlot(slot);
 			Item item = stack.getItem();
-			if (item instanceof ItemShieldDummy && mobType != null) {
-				this.setItemStackToSlot(slot, new ItemStack(mobType.getShieldReplacement(), 1));
+			if (item instanceof ItemShieldDummy && placement.getInhabitant() != null) {
+				this.setItemStackToSlot(slot, new ItemStack(placement.getInhabitant().getShieldReplacement(), 1));
 			}
 		}
-		if (mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
-			this.setFaction(mobType.getFactionOverride());
+		if (placement.getInhabitant() != null && placement.getInhabitant().getFactionOverride() != null
+				&& !placement.getInhabitant().getFactionOverride().isEmpty()
+				&& FactionRegistry.instance().getFactionInstance(placement.getInhabitant().getFactionOverride()) != null) {
+			this.setFaction(placement.getInhabitant().getFactionOverride());
 		}
 	}
 

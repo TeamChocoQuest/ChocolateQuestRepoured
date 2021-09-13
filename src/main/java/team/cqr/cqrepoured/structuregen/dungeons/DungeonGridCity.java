@@ -59,8 +59,9 @@ public class DungeonGridCity extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonGridCity> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorGridCity(world, new BlockPos(x, y, z), this, rand, spawnType);
+	public AbstractDungeonGenerator<DungeonGridCity> createDungeonGenerator(World world, int x, int y, int z, Random rand,
+			DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorGridCity(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public int getCaveHeight() {

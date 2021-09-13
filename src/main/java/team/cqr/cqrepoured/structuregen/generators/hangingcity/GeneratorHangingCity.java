@@ -32,8 +32,8 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 		this.mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 	}
 
@@ -81,7 +81,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			}
 			 
 			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()] = new HangingCityBuilding(this, coords.getFirst(), coords.getSecond(), structure);
-			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()].preProcess(world, dungeonGenerator, null);
+			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()].preProcess(world, dungeonBuilder, null);
 			this.buildings.add(this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()]);
 			lastProcessed = this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()];
 		}
@@ -118,7 +118,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	@Override
 	public void buildStructure() {
 		for(HangingCityBuilding building : this.buildings) {
-			building.generate(this.getWorld(), this.dungeonGenerator, mobType);
+			building.generate(this.getWorld(), this.dungeonBuilder, mobType);
 		}
 	}
 
@@ -126,7 +126,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	public void postProcess() {
 		// Not needed
 		for(HangingCityBuilding building : this.buildings) {
-			building.generatePost(this.getWorld(), this.dungeonGenerator, mobType);
+			building.generatePost(this.getWorld(), this.dungeonBuilder, mobType);
 		}
 	}
 

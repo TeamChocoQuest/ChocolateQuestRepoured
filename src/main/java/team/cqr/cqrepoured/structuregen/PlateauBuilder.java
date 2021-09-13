@@ -1,24 +1,16 @@
 package team.cqr.cqrepoured.structuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.util.Perlin3D;
 
 public class PlateauBuilder {
 
 	// TODO Create custom DungeonPart class because Perlin3D is to slow to calculate immediately
-	public static DungeonPartBlock makeRandomBlob(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world, DungeonGenerator dungeonGenerator) {
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+	public static BlockDungeonPart.Builder makeRandomBlob(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 
@@ -52,16 +44,16 @@ public class PlateauBuilder {
 						}
 					}
 
-					blockInfoList.add(new BlockInfo(iX, iY, iZ, fillBlock.getDefaultState(), null));
+					partBuilder.add(new PreparableBlockInfo(iX, iY, iZ, fillBlock.getDefaultState(), null));
 				}
 			}
 		}
 
-		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT);
+		return partBuilder;
 	}
 
-	public static DungeonPartBlock makeRandomBlob2(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world, DungeonGenerator dungeonGenerator) {
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+	public static BlockDungeonPart.Builder makeRandomBlob2(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 
@@ -92,12 +84,12 @@ public class PlateauBuilder {
 						}
 					}
 
-					blockInfoList.add(new BlockInfo(iX, iY, iZ, fillBlock.getDefaultState(), null));
+					partBuilder.add(new PreparableBlockInfo(iX, iY, iZ, fillBlock.getDefaultState(), null));
 				}
 			}
 		}
 
-		return new DungeonPartBlock(world, dungeonGenerator, startPos.add(-wallSize, -wallSize, -wallSize), blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT);
+		return partBuilder;
 	}
 
 }

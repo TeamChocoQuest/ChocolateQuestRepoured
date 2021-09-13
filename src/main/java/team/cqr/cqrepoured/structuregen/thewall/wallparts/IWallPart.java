@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.structuregen.thewall.wallparts;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 /**
@@ -12,7 +12,7 @@ public interface IWallPart {
 
 	int getTopY();
 
-	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, DungeonGenerator dungeonGenerator);
+	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, GeneratableDungeon.Builder dungeonBuilder);
 
 	default int getBottomY(World world, int x1, int z1) {
 		int lowestY = this.getTopY() - 16;
