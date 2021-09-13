@@ -2,11 +2,14 @@ package team.cqr.cqrepoured.structuregen.generators.volcano;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 
 public class StairCaseHelper {
 
+	//Sky direction here: In which direction is the staircase when looked at from the volcano's center
 	public enum EStairSection {
 		/**
 		 * North: -z East: +x South: +z West: -x
@@ -25,6 +28,16 @@ public class StairCaseHelper {
 		public EStairSection getSuccessor() {
 			return EStairSection.valueOf(this.successorName);
 		}
+		
+		@Nullable
+		public EStairSection getPredeccessor() {
+			for(EStairSection section : EStairSection.values()) {
+				if(section.successorName.equalsIgnoreCase(this.name())) {
+					return section;
+				}
+			}
+			return null;
+		}
 
 		public EnumFacing getAsSkyDirection() {
 			switch (this) {
@@ -41,7 +54,7 @@ public class StairCaseHelper {
 			case WEST_SEC:
 				return EnumFacing.WEST;
 			default:
-				return null;
+				return this.getPredeccessor().getAsSkyDirection();
 			}
 		}
 	}
