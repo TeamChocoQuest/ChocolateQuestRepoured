@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.structuregen.generators.stronghold.spiral;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockTorch;
@@ -80,6 +82,8 @@ public class EntranceBuilderHelper {
 			/*
 			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) { blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null)); }
 			 */
+			List<AbstractBlockInfo> originalList = new ArrayList<>(blockInfoList);
+			
 			buildFloorAndCeiling(corner1, corner2, 5, blockInfoList);
 
 			// Left torch -> Facing side: rotate right (90.0°)
@@ -88,6 +92,23 @@ public class EntranceBuilderHelper {
 			// Right torch -> Facing side: rotate left (-90.0°)
 			buildPillar(pillar2, blockInfoList);
 			blockInfoList.add(new BlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null));
+			
+			List<AbstractBlockInfo> listWithContent = new ArrayList<>(blockInfoList);
+			listWithContent.removeAll(originalList);
+			List<BlockPos> allUsedPositions = new ArrayList<>();
+			listWithContent.forEach(new Consumer<AbstractBlockInfo>() {
+
+				@Override
+				public void accept(AbstractBlockInfo t) {
+					allUsedPositions.add(t.getPos());
+				}});
+			//Air
+			BlockPos endPos = new BlockPos(corner2.add(0, 6, 0));
+			for(BlockPos airPos : BlockPos.getAllInBox(corner1, endPos)) {
+				if(!allUsedPositions.contains(airPos)) {
+					blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null));
+				}
+			}
 		}
 	}
 
@@ -100,16 +121,16 @@ public class EntranceBuilderHelper {
 	}
 
 	private static void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, List<AbstractBlockInfo> blockInfoList) {
-		BlockPos endP = new BlockPos(end.getX(), start.getY() + ceilingHeight +1, end.getZ());
+		BlockPos endP = new BlockPos(end.getX(), start.getY(), end.getZ());
 
-		for (BlockPos p : BlockPos.getAllInBox(start, endP.add(0, ceilingHeight +1, 0))) {
-			if(p.getY() == start.getY()) {
-				blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SMALL.getDefaultState(), null));
-			} else if(p.getY() == endP.getY() ) {
-				blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SQUARE.getDefaultState(), null));
-			} else {
-				blockInfoList.add(new BlockInfo(p, Blocks.AIR.getDefaultState(), null));
-			}
+		// Floor
+		for (BlockPos p : BlockPos.getAllInBox(start, endP)) {
+			blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SMALL.getDefaultState(), null));
+		}
+
+		// Ceiling
+		for (BlockPos p : BlockPos.getAllInBox(start.add(0, ceilingHeight + 1, 0), endP.add(0, ceilingHeight + 1, 0))) {
+			blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SQUARE.getDefaultState(), null));
 		}
 	}
 	
