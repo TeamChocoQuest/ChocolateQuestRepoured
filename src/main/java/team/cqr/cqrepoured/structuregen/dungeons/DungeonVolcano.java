@@ -40,6 +40,7 @@ public class DungeonVolcano extends DungeonBase {
 	private IBlockState pillarBlock = CQRBlocks.GRANITE_LARGE.getDefaultState();
 
 	private boolean buildStairwell = true;
+	private boolean digEntranceTunnel = true;
 	private double chestChance = 0.002D;
 	private ResourceLocation[] chestIDs = { CQRLoottables.CHESTS_FOOD, CQRLoottables.CHESTS_MATERIAL, CQRLoottables.CHESTS_EQUIPMENT };
 
@@ -91,6 +92,7 @@ public class DungeonVolcano extends DungeonBase {
 		this.pillarBlock = PropertyFileHelper.getBlockStateProperty(prop, "pillarBlock", this.pillarBlock);
 
 		this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildStairwell", this.buildStairwell);
+		this.digEntranceTunnel = PropertyFileHelper.getBooleanProperty(prop, "digEntranceTunnel", this.digEntranceTunnel);
 		this.chestChance = PropertyFileHelper.getDoubleProperty(prop, "chestChance", this.chestChance);
 		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", this.chestIDs, false);
 
@@ -290,6 +292,10 @@ public class DungeonVolcano extends DungeonBase {
 
 	public int getRoomSizeZ() {
 		return this.roomSizeZ;
+	}
+
+	public boolean constructEntranceTunnel() {
+		return this.digEntranceTunnel;
 	}
 
 }
