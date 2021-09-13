@@ -76,8 +76,6 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			innerRadiusArray[iY + this.caveDepth] = this.minRadius + (int) Math.sqrt(((double) this.caveHeight - (double) iY) / (3000.0D * this.steepness));
 		}
 
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
-		
 		final int r = outerRadiusArray[0];
 		BlockPos referenceLoc = this.pos.add(-r, -this.caveDepth, -r);
 		IBlockState[][][] blocks = new IBlockState[r * 2 + 1][this.volcanoHeight + this.caveDepth + 2][r * 2 + 1];
@@ -156,7 +154,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			}
 		}
 
-		List<AbstractBlockInfo> entranceTunnelBlocks = new ArrayList<>();
+		BlockDungeonPart.Builder entranceTunnelBlocks = new BlockDungeonPart.Builder();
 		
 		// Infamous nether staircase
 		if (this.dungeon.doBuildStairs()) {
@@ -315,7 +313,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 		
 		this.dungeonBuilder.add(partBuilder, referenceLoc);
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, entranceTunnelBlocks, new PlacementSettings(), mobType));
+		this.dungeonBuilder.add(entranceTunnelBlocks, referenceLoc);
+		//this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, entranceTunnelBlocks, new PlacementSettings(), mobType));
 
 		// Spawners and Chests
 		this.generateSpawnersAndChests(spawnerAndChestList);
