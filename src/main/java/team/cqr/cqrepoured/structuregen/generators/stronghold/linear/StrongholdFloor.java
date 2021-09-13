@@ -7,13 +7,13 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.ESkyDirection;
 
 public class StrongholdFloor extends AbstractDungeonGenerationComponent<GeneratorStronghold>{
@@ -139,7 +139,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 		}
 	}
 
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, DungeonGenerator dungeonGenerator, World world, DungeonInhabitant mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, World world, DungeonInhabitant mobType) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				EStrongholdRoomType room = this.roomPattern[iX][iZ];
@@ -155,8 +155,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 					File struct = this.generator.getDungeon().getRoom(room, this.random);
 					if (struct != null) {
 						CQStructure structure = this.generator.loadStructureFromFile(struct);
-						BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(pos, structure, settings);
-						structure.addAll(world, dungeonGenerator, p, settings, mobType);
+						structure.addAll(dungeonBuilder, pos, Offset.CENTER);
 					}
 				}
 			}
@@ -237,19 +236,19 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 
 
 	@Override
-	public void preProcess(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		
 	}
 
 
 	@Override
-	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		
 	}
 
 
 	@Override
-	public void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		
 	}
 

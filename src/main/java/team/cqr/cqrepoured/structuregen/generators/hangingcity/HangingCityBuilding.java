@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generators.hangingcity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,18 +11,17 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.structuregen.generators.SuspensionBridgeHelper;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class HangingCityBuilding extends AbstractDungeonGenerationComponent<GeneratorHangingCity> {
@@ -119,27 +116,26 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 
 	@Override
-	public void preProcess(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		//Order: Air, Island, Chains, Building 
 		int rad = 2* this.getRadius();
 		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight() : this.structure.getSize().getY();
 		BlockPos start = this.worldPosition.add(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
 		BlockPos end = this.worldPosition.add(rad, height, rad);
 		
-		dungeonGenerator.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, CQRConfig.general.supportHillWallSize, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4), world, dungeonGenerator));
+		int wall = CQRConfig.general.supportHillWallSize;
+		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.add(-wall, -wall, -wall));
 	}
 
 	@Override
-	public void generate(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
-		this.buildPlatform(world, this.worldPosition, this.islandRadius, mobType, dungeonGenerator);
+	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+		this.buildPlatform(world, this.worldPosition, this.islandRadius, mobType, dungeonBuilder);
 		if (this.structure != null) {
-			PlacementSettings settings = new PlacementSettings();
-			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.worldPosition.up(), this.structure, settings);
-			structure.addAll(world, dungeonGenerator, p, settings, mobType);
+			structure.addAll(dungeonBuilder, this.worldPosition.up(), Offset.CENTER);
 		}
 	}
 
-	private void buildPlatform(World world, BlockPos center, int radius, DungeonInhabitant mobType, DungeonGenerator dungeonGenerator) {
+	private void buildPlatform(World world, BlockPos center, int radius, DungeonInhabitant mobType, GeneratableDungeon.Builder dungeonBuilder) {
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
 		int rad = (int) (1.05D * radius);
@@ -165,11 +161,11 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			this.buildChain(world, center.add(radius * 0.75, -2, -radius * 0.75), 1, stateMap);
 		}
 
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-			blockInfoList.add(new BlockInfo(entry.getKey().subtract(center), entry.getValue(), null));
+			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(center), entry.getValue(), null));
 		}
-		dungeonGenerator.add(new DungeonPartBlock(this.generator.getWorld(), dungeonGenerator, center, blockInfoList, new PlacementSettings(), mobType));
+		dungeonBuilder.add(partBuilder, center);
 	}
 
 	private void buildChain(World world, BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
@@ -214,17 +210,17 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 	
 	@Override
-	public void generatePost(World world, DungeonGenerator dungeonGenerator, DungeonInhabitant mobType) {
+	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		if(this.generator.getDungeon().isConstructBridges()) {
 			for(SuspensionBridgeHelper bridge : this.bridges) {
 				Map<BlockPos, IBlockState> stateMap = new HashMap<>();
-				bridge.generate(dungeonGenerator, stateMap);
-				
-				List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+				bridge.generate(stateMap);
+
+				BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 				for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-					blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+					partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
 				}
-				dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.generator.getPos(), blockInfoList, new PlacementSettings(), mobType));
+				dungeonBuilder.add(partBuilder, this.generator.getPos());
 			}
 		}
 	}

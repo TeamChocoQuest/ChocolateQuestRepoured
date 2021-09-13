@@ -59,7 +59,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	// Generator for the old strongholds which were basic linear dungeons
 
-	// Important: All rooms need to have the same x and z size, the height must be the same for all, except the stair rooms: They must have the double height
+	// Important: All rooms need to have the same x and z size, the height must be the same for all, except the stair rooms:
+	// They must have the double height
 	// Also all stair rooms must have exits and entries to ALL sides (N, E, S, W)
 
 	public DungeonStrongholdLinear(String name, Properties prop) {
@@ -71,7 +72,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		this.maxFloorSize = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
 
 		this.entranceStairFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
-		this.entranceStairSegmentFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairSegmentFolder", "stronghold/linear/entranceStairSegments");
+		this.entranceStairSegmentFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairSegmentFolder",
+				"stronghold/linear/entranceStairSegments");
 		this.entranceBuildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 		this.bossRoomFolder = PropertyFileHelper.getStructureFolderProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
 
@@ -100,8 +102,9 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand, spawnType);
+	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand,
+			DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public int getMinFloors() {

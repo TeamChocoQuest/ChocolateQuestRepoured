@@ -54,7 +54,7 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 		this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
 		this.heightVariation = PropertyFileHelper.getIntProperty(prop, "islandHeightVariation", 10);
 		this.bridgeWidth = PropertyFileHelper.getIntProperty(prop, "bridgeWidth", 5);
-		
+
 		this.bridgeTension = PropertyFileHelper.getFloatProperty(prop, "bridgeTension", 3.0F);
 
 		this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
@@ -66,15 +66,16 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 
 		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.getDefaultState());
 		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.getDefaultState());
-		this.bridgeAnchorBlock  = PropertyFileHelper.getBlockStateProperty(prop, "bridgeAnchorBlock", Blocks.OBSIDIAN.getDefaultState());
+		this.bridgeAnchorBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeAnchorBlock", Blocks.OBSIDIAN.getDefaultState());
 		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeBlock", Blocks.PLANKS.getDefaultState());
 		this.bridgeFenceBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeFenceBlock", Blocks.OAK_FENCE.getDefaultState());
 		this.bridgeRailingBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeRailingBlock", Blocks.AIR.getDefaultState());
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this, rand, spawnType);
+	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand,
+			DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	// Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!
@@ -90,17 +91,21 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	 * 
 	 * public WorldGenEndIsland(int r, int pt) { this.radius = r; this.platformThickness = pt; }
 	 * 
-	 * @Override public boolean generate(World world, Random random, BlockPosition startPos) { float rdmFloat = (float) (random.nextInt(3) + 4);
+	 * @Override public boolean generate(World world, Random random, BlockPosition startPos) { float rdmFloat = (float)
+	 * (random.nextInt(3) + 4);
 	 * 
-	 * for (int y = 0; rdmFloat > 0.5F; --y) { for (int x = MathHelper.d(-rdmFloat); x <= MathHelper.f(rdmFloat); ++x) { for (int z = MathHelper.d(-rdmFloat); z <=
+	 * for (int y = 0; rdmFloat > 0.5F; --y) { for (int x = MathHelper.d(-rdmFloat); x <= MathHelper.f(rdmFloat); ++x) { for
+	 * (int z = MathHelper.d(-rdmFloat); z <=
 	 * MathHelper.f(rdmFloat); ++z) { if ((float) (x * x + z * z) <= (rdmFloat + 1.0F) *
-	 * (rdmFloat + 1.0F)) { if(isAllowed(x) && isAllowed(z)) { this.a(world, startPos.a(x, y, z), Blocks.END_STONE.getBlockData()); } } } }
+	 * (rdmFloat + 1.0F)) { if(isAllowed(x) && isAllowed(z)) { this.a(world, startPos.a(x, y, z),
+	 * Blocks.END_STONE.getBlockData()); } } } }
 	 * 
 	 * rdmFloat = (float) ((double) rdmFloat - ((double) random.nextInt(2) + 0.5D)); }
 	 * 
 	 * return true; }
 	 * 
-	 * private boolean isAllowed(int distanceToCenter) { double divisionResult = ((double)distanceToCenter) / ((double)this.radius); if(divisionResult < 1.0D) {
+	 * private boolean isAllowed(int distanceToCenter) { double divisionResult = ((double)distanceToCenter) /
+	 * ((double)this.radius); if(divisionResult < 1.0D) {
 	 * return true; } return false; }
 	 */
 
@@ -123,7 +128,8 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	}
 
 	/*
-	 * public boolean doBuildBridges() { return this.buildBridges; } public int getBridgeChance() { return this.bridgeChance; }
+	 * public boolean doBuildBridges() { return this.buildBridges; } public int getBridgeChance() { return
+	 * this.bridgeChance; }
 	 */
 
 	public int getMinBuildings() {
@@ -204,5 +210,5 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	public IBlockState getBridgeAnchorBlock() {
 		return this.bridgeAnchorBlock;
 	}
-	
+
 }

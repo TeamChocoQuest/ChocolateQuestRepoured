@@ -62,8 +62,9 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this, rand, spawnType);
+	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z, Random rand,
+			DungeonDataManager.DungeonSpawnType spawnType) {
+		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this, rand);
 	}
 
 	public File getStairFolder() {

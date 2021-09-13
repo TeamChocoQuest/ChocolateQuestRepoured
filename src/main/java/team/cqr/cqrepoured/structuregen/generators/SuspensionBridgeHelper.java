@@ -4,7 +4,6 @@ import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 
 public class SuspensionBridgeHelper {
 
@@ -45,7 +44,7 @@ public class SuspensionBridgeHelper {
 
 	//DONE: Return stateMap or add parameter for statemap
 	
-	public boolean generate(final DungeonGenerator dungeonGenerator, Map<BlockPos, IBlockState> stateMap) {
+	public boolean generate(Map<BlockPos, IBlockState> stateMap) {
 		
 		this.saggyPath(this.startPos, this.endPos, stateMap);
 

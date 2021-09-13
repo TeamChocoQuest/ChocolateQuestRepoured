@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -16,18 +18,24 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparableEntityInfo;
+import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.EntityInfo;
 
 public class BlockStateGenArray {
+
 	public enum GenerationPhase {
-		MAIN, POST
+		MAIN,
+		POST
 	}
 
 	public enum EnumPriority {
-		LOWEST(0), LOW(1), MEDIUM(2), HIGH(3), HIGHEST(4);
+		LOWEST(0),
+		LOW(1),
+		MEDIUM(2),
+		HIGH(3),
+		HIGHEST(4);
 
 		private final int value;
 
@@ -41,15 +49,15 @@ public class BlockStateGenArray {
 	}
 
 	private class PriorityBlockInfo {
-		private AbstractBlockInfo blockInfo;
+		private PreparablePosInfo blockInfo;
 		private EnumPriority priority;
 
-		private PriorityBlockInfo(AbstractBlockInfo blockInfo, EnumPriority priority) {
+		private PriorityBlockInfo(PreparablePosInfo blockInfo, EnumPriority priority) {
 			this.blockInfo = blockInfo;
 			this.priority = priority;
 		}
 
-		public AbstractBlockInfo getBlockInfo() {
+		public PreparablePosInfo getBlockInfo() {
 			return this.blockInfo;
 		}
 
@@ -61,7 +69,7 @@ public class BlockStateGenArray {
 	private final Random random;
 	private Map<BlockPos, PriorityBlockInfo> mainMap = new HashMap<>();
 	private Map<BlockPos, PriorityBlockInfo> postMap = new HashMap<>();
-	private Map<BlockPos, EntityInfo> entityMap = new HashMap<>();
+	private List<PreparableEntityInfo> entityList = new ArrayList<>();
 
 	public BlockStateGenArray(Random rand) {
 		this.random = rand;
@@ -71,20 +79,20 @@ public class BlockStateGenArray {
 		return this.random;
 	}
 
-	public Map<BlockPos, AbstractBlockInfo> getMainMap() {
-		Map<BlockPos, AbstractBlockInfo> result = new HashMap<>();
+	public Map<BlockPos, PreparablePosInfo> getMainMap() {
+		Map<BlockPos, PreparablePosInfo> result = new HashMap<>();
 		this.mainMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
 		return result;
 	}
 
-	public Map<BlockPos, AbstractBlockInfo> getPostMap() {
-		Map<BlockPos, AbstractBlockInfo> result = new HashMap<>();
+	public Map<BlockPos, PreparablePosInfo> getPostMap() {
+		Map<BlockPos, PreparablePosInfo> result = new HashMap<>();
 		this.postMap.forEach((key, value) -> result.put(key, value.getBlockInfo()));
 		return result;
 	}
 
-	public Map<BlockPos, EntityInfo> getEntityMap() {
-		return this.entityMap;
+	public List<PreparableEntityInfo> getEntityMap() {
+		return this.entityList;
 	}
 
 	public boolean addChestWithLootTable(World world, BlockPos pos, EnumFacing facing, ResourceLocation lootTable, GenerationPhase phase) {
@@ -93,16 +101,8 @@ public class BlockStateGenArray {
 			IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing);
 			TileEntityChest chest = (TileEntityChest) chestBlock.createTileEntity(world, state);
 			if (chest != null) {
-				ResourceLocation resLoc = null;
-				try {
-					resLoc = lootTable;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-				if (resLoc != null) {
-					long seed = WorldDungeonGenerator.getSeed(world, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
-					chest.setLootTable(resLoc, seed);
-				}
+				long seed = WorldDungeonGenerator.getSeed(world, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
+				chest.setLootTable(lootTable, seed);
 				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
 				return this.addBlockState(pos, state, nbt, phase, EnumPriority.MEDIUM);
 			}
@@ -114,41 +114,41 @@ public class BlockStateGenArray {
 	}
 
 	public void addBlockStateMap(Map<BlockPos, IBlockState> map, GenerationPhase phase, EnumPriority priority) {
-		for (BlockPos pos : map.keySet()) {
-			this.addBlockState(pos, map.get(pos), phase, priority);
-		}
+		map.entrySet().forEach(entry -> this.addBlockState(entry.getKey(), entry.getValue(), phase, priority));
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new BlockInfo(pos, blockState, null), priority);
+		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, null), priority);
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new BlockInfo(pos, blockState, nbt), priority);
+		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 
 	public boolean addSpawner(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new BlockInfo(pos, blockState, nbt), priority);
+		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 
 	public boolean addEntity(BlockPos structurePos, Entity entity) {
-		return this.addInternal(new EntityInfo(structurePos, entity));
+		return this.addInternal(new PreparableEntityInfo(structurePos, entity));
 	}
 
-	public boolean addInternal(GenerationPhase phase, AbstractBlockInfo blockInfo, EnumPriority priority) {
+	public boolean addInternal(GenerationPhase phase, PreparablePosInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
 		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
+		BlockPos p = new BlockPos(blockInfo.getX(), blockInfo.getY(), blockInfo.getZ());
+		PriorityBlockInfo old = mapToAdd.get(p);
 
-		if ((!mapToAdd.containsKey(blockInfo.getPos())) || (priority.getValue() > mapToAdd.get(blockInfo.getPos()).getPriority().getValue())) {
-			mapToAdd.put(blockInfo.getPos(), new PriorityBlockInfo(blockInfo, priority));
+		if (old == null || (priority.getValue() > old.getPriority().getValue())) {
+			mapToAdd.put(p, new PriorityBlockInfo(blockInfo, priority));
 			added = true;
 		}
 
 		return added;
 	}
 
-	private boolean addInternal(EntityInfo entityInfo) {
-		this.entityMap.put(entityInfo.getPos(), entityInfo);
+	private boolean addInternal(PreparableEntityInfo entityInfo) {
+		this.entityList.add(entityInfo);
 		return true;
 	}
 

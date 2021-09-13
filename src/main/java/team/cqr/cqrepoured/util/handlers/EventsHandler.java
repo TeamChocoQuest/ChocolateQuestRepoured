@@ -61,17 +61,16 @@ public class EventsHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onLootTableLoadPre(LootTableLoadEvent event) {
-		if (event.getName().getNamespace().equals(Reference.MODID)) {
-			try {
-				event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
-			} catch (Exception e) {
-				CQRMain.logger.error("Unable to fill loot table {}", event.getName());
-			}
+		if (event.getName().getNamespace().equals(Reference.MODID) && !CQRConfig.general.preventOtherModLoot) {
+			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onLootTableLoadPost(LootTableLoadEvent event) {
+		if (event.getName().getNamespace().equals(Reference.MODID) && CQRConfig.general.preventOtherModLoot) {
+			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
+		}
 		LootTableLoader.freezeLootTable();
 	}
 

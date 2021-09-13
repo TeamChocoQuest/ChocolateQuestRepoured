@@ -6,16 +6,23 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ObjectIntIdentityMap;
 
 public class BlockStatePalette implements Iterable<IBlockState> {
 
 	public static final IBlockState DEFAULT_BLOCK_STATE = Blocks.AIR.getDefaultState();
-	private final ObjectIntIdentityMap<IBlockState> ids;
+	private final ObjectIntIdentityMap<IBlockState> ids = new ObjectIntIdentityMap<>(16);
 	private int lastId;
 
 	public BlockStatePalette() {
-		this.ids = new ObjectIntIdentityMap<>(16);
+
+	}
+
+	public BlockStatePalette(NBTTagList nbtList) {
+		nbtList.forEach(nbt -> this.idFor(NBTUtil.readBlockState((NBTTagCompound) nbt)));
 	}
 
 	public int idFor(IBlockState state) {
@@ -46,6 +53,12 @@ public class BlockStatePalette implements Iterable<IBlockState> {
 
 	public int size() {
 		return this.ids.size();
+	}
+
+	public NBTTagList writeToNBT() {
+		NBTTagList nbtList = new NBTTagList();
+		this.ids.forEach(state -> nbtList.appendTag(NBTUtil.writeBlockState(new NBTTagCompound(), state)));
+		return nbtList;
 	}
 
 }

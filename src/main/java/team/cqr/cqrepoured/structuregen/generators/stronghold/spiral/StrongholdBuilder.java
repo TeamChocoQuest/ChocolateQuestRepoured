@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.structuregen.generators.stronghold.spiral;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockRotatedPillar;
@@ -11,34 +9,29 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
+import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
-import team.cqr.cqrepoured.structuregen.generation.AbstractDungeonPart;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartBlock;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generators.volcano.StairCaseHelper;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.structurefile.AbstractBlockInfo;
-import team.cqr.cqrepoured.structuregen.structurefile.BlockInfo;
 import team.cqr.cqrepoured.util.ESkyDirection;
 
 public class StrongholdBuilder {
 
 	private final Random random;
 	private AbstractDungeonGenerator<DungeonVolcano> generator;
-	private DungeonGenerator dungeonGenerator;
+	private GeneratableDungeon.Builder dungeonBuilder;
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
 	private int blocksRemainingToWall;
 	private EnumFacing direction;
 	private World world;
-	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 
-	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
+	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
 		this.generator = generator;
-		this.dungeonGenerator = dungeonGenerator;
+		this.dungeonBuilder = dungeonBuilder;
 		this.startPos = start;
 		this.dungeon = dungeon;
 		this.blocksRemainingToWall = distanceToWall;
@@ -47,7 +40,7 @@ public class StrongholdBuilder {
 		this.random = rand;
 	}
 
-	public void generate(int cX, int cZ, DungeonInhabitant mobType) {
+	public void generate(int cX, int cZ) {
 
 		Vec3i expansionVector = new Vec3i(0, 0, 0);
 		switch (this.direction) {
@@ -66,27 +59,25 @@ public class StrongholdBuilder {
 		default:
 			break;
 		}
-		// DONE: Place fire pots and "porch"
-		BlockPos pos = this.startPos;// .add(expansionV);
 
-		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
-
+		BlockPos pos = this.startPos;
+		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (int i = 0; i < (this.blocksRemainingToWall / 4) + 2; i++) {
-			this.buildSegment(pos.subtract(this.startPos), blockInfoList);
+			this.buildSegment(pos.subtract(this.startPos), partBuilder);
 			pos = pos.add(expansionVector);
 		}
-		this.strongholdParts.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.startPos, blockInfoList, new PlacementSettings(), mobType));
-		this.buildStronghold(pos.add(0, -1, 0), this.world, cX, cZ, mobType);
+		this.dungeonBuilder.add(partBuilder, this.startPos);
+
+		this.buildStronghold(pos.add(0, -1, 0), this.world, cX, cZ);
 	}
 
-	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, DungeonInhabitant mobType) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
-		stronghold.calculateFloors(pos, world2, mobType);
-		stronghold.buildFloors(pos.add(0, -1, 0), this.world, mobType);
-		this.strongholdParts.addAll(stronghold.getStrongholdParts());
+	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ) {
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
+		stronghold.calculateFloors(pos, world2);
+		stronghold.buildFloors(pos.add(0, -1, 0), this.world);
 	}
 
-	private void buildSegment(BlockPos startPosCentered, List<AbstractBlockInfo> blockInfoList) {
+	private void buildSegment(BlockPos startPosCentered, BlockDungeonPart.Builder partBuilder) {
 		// COrner 2 is always the reference location for the part (!)
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2, air1, air2;
 		corner1 = null;
@@ -146,43 +137,39 @@ public class StrongholdBuilder {
 		}
 		if (corner1 != null && corner2 != null && pillar1 != null && pillar2 != null) {
 			/*
-			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) { blockInfoList.add(new BlockInfo(airPos, Blocks.AIR.getDefaultState(), null)); }
+			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) { blockInfoList.add(new PreparableBlockInfo(airPos, Blocks.AIR.getDefaultState(), null)); }
 			 */
-			this.buildFloorAndCeiling(corner1, corner2, 5, blockInfoList);
+			this.buildFloorAndCeiling(corner1, corner2, 5, partBuilder);
 
 			// Left torch -> Facing side: rotate right (90.0°)
-			this.buildPillar(pillar1, blockInfoList);
-			blockInfoList.add(new BlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.COUNTERCLOCKWISE_90)), null));
+			this.buildPillar(pillar1, partBuilder);
+			partBuilder.add(new PreparableBlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.COUNTERCLOCKWISE_90)), null));
 			// Right torch -> Facing side: rotate left (-90.0°)
-			this.buildPillar(pillar2, blockInfoList);
-			blockInfoList.add(new BlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.CLOCKWISE_90)), null));
+			this.buildPillar(pillar2, partBuilder);
+			partBuilder.add(new PreparableBlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(this.direction, Rotation.CLOCKWISE_90)), null));
 		}
 	}
 
-	private void buildPillar(BlockPos bottom, List<AbstractBlockInfo> blockInfoList) {
+	private void buildPillar(BlockPos bottom, BlockDungeonPart.Builder partBuilder) {
 		for (int iY = 1; iY <= 4; iY++) {
 			BlockPos pos = bottom.add(0, iY, 0);
-			blockInfoList.add(new BlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
+			partBuilder.add(new PreparableBlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
 		}
-		blockInfoList.add(new BlockInfo(bottom.add(0, 5, 0), CQRBlocks.GRANITE_CARVED.getDefaultState(), null));
+		partBuilder.add(new PreparableBlockInfo(bottom.add(0, 5, 0), CQRBlocks.GRANITE_CARVED.getDefaultState(), null));
 	}
 
-	private void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, List<AbstractBlockInfo> blockInfoList) {
+	private void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, BlockDungeonPart.Builder partBuilder) {
 		BlockPos endP = new BlockPos(end.getX(), start.getY(), end.getZ());
 
 		// Floor
 		for (BlockPos p : BlockPos.getAllInBox(start, endP)) {
-			blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SMALL.getDefaultState(), null));
+			partBuilder.add(new PreparableBlockInfo(p, CQRBlocks.GRANITE_SMALL.getDefaultState(), null));
 		}
 
 		// Ceiling
 		for (BlockPos p : BlockPos.getAllInBox(start.add(0, ceilingHeight + 1, 0), endP.add(0, ceilingHeight + 1, 0))) {
-			blockInfoList.add(new BlockInfo(p, CQRBlocks.GRANITE_SQUARE.getDefaultState(), null));
+			partBuilder.add(new PreparableBlockInfo(p, CQRBlocks.GRANITE_SQUARE.getDefaultState(), null));
 		}
-	}
-
-	public List<AbstractDungeonPart> getStrongholdParts() {
-		return this.strongholdParts;
 	}
 
 }

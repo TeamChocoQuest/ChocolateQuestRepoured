@@ -10,16 +10,12 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.gentest.DungeonPlacement;
+import team.cqr.cqrepoured.gentest.part.CoverDungeonPart;
+import team.cqr.cqrepoured.gentest.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonGuardedCastle;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartCover;
-import team.cqr.cqrepoured.structuregen.generation.DungeonPartPlateau;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
+import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
@@ -31,28 +27,34 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	// DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 
 	private Map<BlockPos, CQStructure> toGenerate = new HashMap<>();
-	private Map<BlockPos, PlacementSettings> settingsMap = new HashMap<>();
+	private Map<BlockPos, Mirror> mirrorMap = new HashMap<>();
+	private Map<BlockPos, Rotation> rotationMap = new HashMap<>();
 
-	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		super(world, pos, dungeon, rand, spawnType);
+	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon, Random rand) {
+		super(world, pos, dungeon, rand);
 	}
 
 	private void processStructure(CQStructure structure, BlockPos position) {
-		PlacementSettings settings = new PlacementSettings();
+		Mirror mirror = Mirror.NONE;
+		Rotation rotation = Rotation.NONE;
 		if (this.dungeon.rotateDungeon()) {
-			settings.setRotation(Rotation.values()[this.random.nextInt(Rotation.values().length)]);
-			settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
+			mirror = Mirror.values()[this.random.nextInt(Mirror.values().length)];
+			rotation = Rotation.values()[this.random.nextInt(Rotation.values().length)];
 		}
-		BlockPos structurePos = DungeonGenUtils.getCentralizedPosForStructure(position, structure, settings);
 		if (this.dungeon.doBuildSupportPlatform()) {
+			BlockPos structurePos = Offset.CENTER.apply(position, structure, mirror, rotation);
 			BlockPos startPos = structurePos.up(this.dungeon.getUnderGroundOffset()).down();
-			BlockPos endPos = startPos.add(Template.transformedBlockPos(settings, new BlockPos(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1)));
+			BlockPos endPos = startPos.add(DungeonPlacement.transform(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1, mirror, rotation));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
-			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), CQRConfig.general.supportHillWallSize));
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), 8);
+			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
+			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
+			this.dungeonBuilder.add(partBuilder);
 		}
-		this.settingsMap.put(structurePos, settings);
-		this.toGenerate.put(structurePos, structure);
+		this.toGenerate.put(position, structure);
+		this.mirrorMap.put(position, mirror);
+		this.rotationMap.put(position, rotation);
 	}
 
 	@Override
@@ -76,13 +78,11 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 	@Override
 	public void buildStructure() {
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		for (Map.Entry<BlockPos, CQStructure> entry : this.toGenerate.entrySet()) {
-			PlacementSettings settings = this.settingsMap.get(entry.getKey());
 			CQStructure structure = entry.getValue();
 			BlockPos structurePos = entry.getKey();
 
-			structure.addAll(this.world, this.dungeonGenerator, structurePos, settings, mobType);
+			structure.addAll(this.dungeonBuilder, structurePos, Offset.CENTER, this.mirrorMap.get(structurePos), this.rotationMap.get(structurePos));
 		}
 	}
 
@@ -90,15 +90,16 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	public void postProcess() {
 		if (this.dungeon.isCoverBlockEnabled()) {
 			for (Map.Entry<BlockPos, CQStructure> entry : this.toGenerate.entrySet()) {
-				PlacementSettings settings = this.settingsMap.get(entry.getKey());
 				CQStructure structure = entry.getValue();
 				BlockPos structurePos = entry.getKey();
+				Mirror mirror = this.mirrorMap.get(structurePos);
+				Rotation rotation = this.rotationMap.get(structurePos);
 
 				BlockPos startPos = structurePos;
-				BlockPos endPos = startPos.add(Template.transformedBlockPos(settings, new BlockPos(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1)));
+				BlockPos endPos = startPos.add(DungeonPlacement.transform(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1, mirror, rotation));
 				BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 				BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
-				this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
+				this.dungeonBuilder.add(new CoverDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
 			}
 		}
 	}

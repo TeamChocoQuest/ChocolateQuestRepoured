@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.structuregen.thewall;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -11,10 +12,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
+import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.structuregen.DungeonGenerationHelper;
+import team.cqr.cqrepoured.structuregen.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerator;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.IWallPart;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartRailingTower;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
@@ -45,10 +47,10 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance)) {
+			BlockPos pos = new BlockPos((chunkX << 4) + 8, world.getSeaLevel(), (chunkZ << 4) + 8);
+			GeneratableDungeon.Builder dungeonBuilder = new GeneratableDungeon.Builder(world, pos, "Wall in the North", CQRConfig.wall.mob);
 
-			DungeonGenerator dungeonGenerator = new DungeonGenerator(world, new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8), "Wall in the North");
-
-			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			Biome biome = world.getBiomeProvider().getBiome(pos);
 			if (biome instanceof BiomePlains || biome instanceof BiomeSnow) {
 				// Flag for the gate
 			}
@@ -65,13 +67,18 @@ public class WorldWallGenerator implements IWorldGenerator {
 				wallPart = new WallPartWall();
 				railingPart = new WallPartRailingWall();
 			}
+			wallPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonBuilder);
+			railingPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonBuilder);
 
-			wallPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonGenerator);
-			railingPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonGenerator);
-
-			DungeonGenerationManager.addStructure(world, dungeonGenerator, null, DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+			if (DungeonGenerationHelper.shouldGenerateDungeonImmediately(world)) {
+				DungeonGenerationManager.generateNow(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
+			} else if (!CQRConfig.advanced.multithreadedDungeonPreparation) {
+				DungeonGenerationManager.generate(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
+			} else {
+				CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, dungeonBuilder::build);
+				DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, null, DungeonSpawnType.DUNGEON_GENERATION));
+			}
 		}
-
 	}
 
 	private boolean isWallRegion(int chunkX, int chunkZ, World world) {
