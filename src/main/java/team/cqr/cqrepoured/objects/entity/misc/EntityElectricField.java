@@ -118,14 +118,14 @@ public class EntityElectricField extends Entity {
 					while(!this.facesToSpreadTo.isEmpty()) {
 						EnumFacing face = this.facesToSpreadTo.poll(); 
 						if(face != null) {
-							pos = pos.offset(face);
-							if(!EXISTING_FIELDS.contains(pos)) {
+							BlockPos currentPos = pos.offset(face);
+							if(!EXISTING_FIELDS.contains(currentPos)) {
 								IBlockState blockState = this.world.getBlockState(pos);
 								if(blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.IRON) {
 									int charge = this.charge - 10;
 									if(charge > 0) {
 										EntityElectricField newField = new EntityElectricField(this.world, charge);
-										newField.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+										newField.setPosition(currentPos.getX() + 0.5, currentPos.getY(), currentPos.getZ() + 0.5);
 										
 										this.world.spawnEntity(newField);
 										
