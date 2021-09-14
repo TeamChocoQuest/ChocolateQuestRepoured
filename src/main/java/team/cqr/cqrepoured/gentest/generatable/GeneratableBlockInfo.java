@@ -40,7 +40,7 @@ public class GeneratableBlockInfo extends GeneratablePosInfo {
 		if (!BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, this.state, this.tileEntity, 16)) {
 			return false;
 		}
-		if (oldLight > 0) {
+		if (oldLight > 0 && blockStorage.getBlockLight(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15) > 0) {
 			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), oldLight);
 		}
 		return true;
