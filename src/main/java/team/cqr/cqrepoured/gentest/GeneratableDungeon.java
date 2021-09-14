@@ -33,8 +33,8 @@ import team.cqr.cqrepoured.gentest.ChunkInfo.ChunkInfoMap;
 import team.cqr.cqrepoured.gentest.part.DungeonPart;
 import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
 import team.cqr.cqrepoured.gentest.part.IProtectable;
+import team.cqr.cqrepoured.gentest.util.BlockAddedUtil;
 import team.cqr.cqrepoured.gentest.util.BlockLightUtil;
-import team.cqr.cqrepoured.gentest.util.NeighborNotifyUtil;
 import team.cqr.cqrepoured.gentest.util.SkyLightUtil;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -67,6 +67,7 @@ public class GeneratableDungeon {
 	private long tickTime;
 	private ForgeChunkManager.Ticket chunkTicket;
 	private boolean ticketRequested;
+	private final long[] generationTimes = new long[8];
 
 	private static class LightInfo {
 
@@ -156,13 +157,21 @@ public class GeneratableDungeon {
 	}
 
 	public void tick(World world) {
-		this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1_000_000, CQRConfig.advanced.generationSpeed * 1_000_000);
+		long t = System.nanoTime();
 
 		while (!this.isGenerated()) {
-			long start = System.nanoTime();
 			this.generateNext(world);
-			this.tickTime -= System.nanoTime() - start;
 		}
+
+		this.generationTimes[0] = System.nanoTime() - t;
+		CQRMain.logger.info("Total: {} secs {} millis", this.generationTimes[0] / 1_000_000_000, this.generationTimes[0] / 1_000_000 % 1_000);
+		CQRMain.logger.info("Parts: {} secs {} millis", this.generationTimes[1] / 1_000_000_000, this.generationTimes[1] / 1_000_000 % 1_000);
+		CQRMain.logger.info("Blocklight: {} secs {} millis", this.generationTimes[2] / 1_000_000_000, this.generationTimes[2] / 1_000_000 % 1_000);
+		CQRMain.logger.info("SkylightMap: {} secs {} millis", this.generationTimes[3] / 1_000_000_000, this.generationTimes[3] / 1_000_000 % 1_000);
+		CQRMain.logger.info("Skylight: {} secs {} millis", this.generationTimes[4] / 1_000_000_000, this.generationTimes[4] / 1_000_000 % 1_000);
+		CQRMain.logger.info("RemovedBlocklight: {} secs {} millis", this.generationTimes[5] / 1_000_000_000, this.generationTimes[5] / 1_000_000 % 1_000);
+		CQRMain.logger.info("Sync: {} secs {} millis", this.generationTimes[6] / 1_000_000_000, this.generationTimes[6] / 1_000_000 % 1_000);
+		CQRMain.logger.info("Updates: {} secs {} millis", this.generationTimes[7] / 1_000_000_000, this.generationTimes[7] / 1_000_000 % 1_000);
 	}
 
 	public void generateNext(World world) {
@@ -215,6 +224,8 @@ public class GeneratableDungeon {
 		if (this.parts.isEmpty()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		this.parts.element().generate(world, this);
 		if (this.parts.element().isGenerated()) {
 			this.parts.remove();
@@ -248,6 +259,8 @@ public class GeneratableDungeon {
 				});
 			});
 		}
+
+		this.generationTimes[1] += System.nanoTime() - t;
 		return true;
 	}
 
@@ -255,8 +268,12 @@ public class GeneratableDungeon {
 		if (this.nextCheckBlockLightIndex >= this.chunkInfoMapExtended.size()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextCheckBlockLightIndex);
 		BlockLightUtil.checkBlockLight(world, chunkInfo);
+
+		this.generationTimes[2] += System.nanoTime() - t;
 		this.nextCheckBlockLightIndex++;
 		return true;
 	}
@@ -265,9 +282,13 @@ public class GeneratableDungeon {
 		if (this.nextGenerateSkylightMapIndex >= this.chunkInfoMap.size()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextGenerateSkylightMapIndex);
 		Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 		chunk.generateSkylightMap();
+
+		this.generationTimes[3] += System.nanoTime() - t;
 		this.nextGenerateSkylightMapIndex++;
 		return true;
 	}
@@ -276,8 +297,12 @@ public class GeneratableDungeon {
 		if (this.nextCheckSkyLightIndex >= this.chunkInfoMapExtended.size()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextCheckSkyLightIndex);
 		SkyLightUtil.checkSkyLight(world, chunkInfo);
+
+		this.generationTimes[4] += System.nanoTime() - t;
 		this.nextCheckSkyLightIndex++;
 		return true;
 	}
@@ -286,6 +311,8 @@ public class GeneratableDungeon {
 		if (this.removedLights.isEmpty()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		LightInfo removedLight = this.removedLights.remove();
 		MUTABLE.setPos(removedLight.pos.getX(), removedLight.pos.getY(), removedLight.pos.getZ());
 		if (world.isAreaLoaded(MUTABLE, 16)) {
@@ -298,6 +325,8 @@ public class GeneratableDungeon {
 				}
 			}
 		}
+
+		this.generationTimes[5] += System.nanoTime() - t;
 		return true;
 	}
 
@@ -305,6 +334,8 @@ public class GeneratableDungeon {
 		if (this.nextMarkBlockForUpdateIndex >= this.chunkInfoMapExtended.size()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextMarkBlockForUpdateIndex);
 		Chunk chunk = world.getChunkProvider().getLoadedChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 		if (chunk != null) {
@@ -313,6 +344,8 @@ public class GeneratableDungeon {
 				entry.sendPacket(new SPacketChunkData(chunk, 0xFFFF >> (15 - chunkInfo.topMarked())));
 			}
 		}
+
+		this.generationTimes[6] += System.nanoTime() - t;
 		this.nextMarkBlockForUpdateIndex++;
 		return true;
 	}
@@ -321,8 +354,12 @@ public class GeneratableDungeon {
 		if (this.nextNotifyNeighborsRespectDebugIndex >= this.chunkInfoMap.size()) {
 			return false;
 		}
+		long t = System.nanoTime();
+
 		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextNotifyNeighborsRespectDebugIndex);
-		chunkInfo.forEachReversed(chunkY -> NeighborNotifyUtil.notifyNeighbors(world, chunkInfo.getChunkX(), chunkY, chunkInfo.getChunkZ()));
+		BlockAddedUtil.onBlockAdded(world, chunkInfo);
+
+		this.generationTimes[7] += System.nanoTime() - t;
 		this.nextNotifyNeighborsRespectDebugIndex++;
 		return true;
 	}
