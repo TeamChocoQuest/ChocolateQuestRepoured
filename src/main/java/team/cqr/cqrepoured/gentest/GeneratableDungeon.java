@@ -158,7 +158,7 @@ public class GeneratableDungeon {
 	public void tick(World world) {
 		this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1_000_000, CQRConfig.advanced.generationSpeed * 1_000_000);
 
-		while (!this.isGenerated() && this.tickTime > 0) {
+		while (!this.isGenerated()) {
 			long start = System.nanoTime();
 			this.generateNext(world);
 			this.tickTime -= System.nanoTime() - start;
@@ -220,21 +220,33 @@ public class GeneratableDungeon {
 			this.parts.remove();
 		}
 		if (this.parts.isEmpty()) {
-			this.chunkInfoMap.forEach(chunkInfo -> chunkInfo.forEach(chunkY -> {
+			this.chunkInfoMap.forEach(chunkInfo -> {
 				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-				if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
-					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
-				}
-				int r = 1;
-				for (int x = -r; x <= r; x++) {
-					for (int y = -r; y <= r; y++) {
-						for (int z = -r; z <= r; z++) {
-							this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
+				if (world.provider.hasSkyLight()) {
+					for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
+						ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+						if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
+							 blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
+							 chunk.getBlockStorageArray()[chunkY] = blockStorage;
 						}
+						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 					}
 				}
-			}));
+				chunkInfo.forEach(chunkY -> {
+					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+					if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
+						Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
+					}
+					int r = 1;
+					for (int x = -r; x <= r; x++) {
+						for (int y = -r; y <= r; y++) {
+							for (int z = -r; z <= r; z++) {
+								this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
+							}
+						}
+					}
+				});
+			});
 		}
 		return true;
 	}
@@ -250,10 +262,10 @@ public class GeneratableDungeon {
 	}
 
 	private boolean tryGenerateSkylightMap(World world) {
-		if (this.nextGenerateSkylightMapIndex >= this.chunkInfoMapExtended.size()) {
+		if (this.nextGenerateSkylightMapIndex >= this.chunkInfoMap.size()) {
 			return false;
 		}
-		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextGenerateSkylightMapIndex);
+		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextGenerateSkylightMapIndex);
 		Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 		chunk.generateSkylightMap();
 		this.nextGenerateSkylightMapIndex++;
@@ -275,11 +287,14 @@ public class GeneratableDungeon {
 			return false;
 		}
 		LightInfo removedLight = this.removedLights.remove();
-		for (int x = -14; x <= 14; x++) {
-			for (int y = -14; y <= 14; y++) {
-				for (int z = -14; z <= 14; z++) {
-					MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
-					world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
+		MUTABLE.setPos(removedLight.pos.getX(), removedLight.pos.getY(), removedLight.pos.getZ());
+		if (world.isAreaLoaded(MUTABLE, 16)) {
+			for (int x = -14; x <= 14; x++) {
+				for (int y = -14; y <= 14; y++) {
+					for (int z = -14; z <= 14; z++) {
+						MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
+						world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
+					}
 				}
 			}
 		}
