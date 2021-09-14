@@ -17,7 +17,7 @@ public interface ISizable {
 	
 	//Getter and setter for sizeScale field
 	public float getSizeVariation();
-	float applySizeVariation(float value);
+	void applySizeVariation(float value);
 	
 	//wrapper for setSize cause interfaces don'T allow protected methods >:(
 	public void setSizeWrapper(float width, float height);

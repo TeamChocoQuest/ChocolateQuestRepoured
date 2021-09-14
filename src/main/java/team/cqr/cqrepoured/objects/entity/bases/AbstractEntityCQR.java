@@ -1762,8 +1762,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	@Override
-	public float applySizeVariation(float value) {
-		return this.sizeScaling = value;
+	public void applySizeVariation(float value) {
+		this.sizeScaling = value;
 	}
 
 }
