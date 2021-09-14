@@ -1735,26 +1735,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setSizeWrapper(float width, float height) {
 		this.setSize(width, height);
 	}
-	
-	@Override
-	public float getWidth() {
-		return this.width;
-	}
-
-	@Override
-	public float getHeight() {
-		return this.height;
-	}
-
-	@Override
-	public float getStepHeight() {
-		return this.stepHeight;
-	}
-
-	@Override
-	public void setStepHeight(float value) {
-		this.stepHeight = value;
-	}
 
 	@Override
 	public float getSizeVariation() {
