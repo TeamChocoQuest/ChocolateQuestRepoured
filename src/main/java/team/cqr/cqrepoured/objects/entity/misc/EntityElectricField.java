@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 
@@ -64,26 +63,12 @@ public class EntityElectricField extends Entity {
 	
 	@Override
 	public boolean canBeCollidedWith() {
-		return true;
+		return false;
 	}
 	
 	@Override
 	public boolean canBePushed() {
 		return false;
-	}
-	
-	@Override
-	public void applyEntityCollision(Entity entityIn) {
-		if(entityIn instanceof EntityLivingBase) {
-			EntityLivingBase living = (EntityLivingBase) entityIn;
-			if(living.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
-				
-				if(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(living)) {
-					CapabilityElectricShock cap = living.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-					cap.setRemainingTicks(200);
-				}
-			}
-		}
 	}
 	
 	@Override
