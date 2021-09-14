@@ -287,11 +287,14 @@ public class GeneratableDungeon {
 			return false;
 		}
 		LightInfo removedLight = this.removedLights.remove();
-		for (int x = -14; x <= 14; x++) {
-			for (int y = -14; y <= 14; y++) {
-				for (int z = -14; z <= 14; z++) {
-					MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
-					world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
+		MUTABLE.setPos(removedLight.pos.getX(), removedLight.pos.getY(), removedLight.pos.getZ());
+		if (world.isAreaLoaded(MUTABLE, 16)) {
+			for (int x = -14; x <= 14; x++) {
+				for (int y = -14; y <= 14; y++) {
+					for (int z = -14; z <= 14; z++) {
+						MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
+						world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
+					}
 				}
 			}
 		}
