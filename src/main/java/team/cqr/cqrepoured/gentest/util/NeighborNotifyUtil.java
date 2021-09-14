@@ -46,6 +46,13 @@ public class NeighborNotifyUtil {
 					MUTABLE.setPos(cx + x, cy + y, cz + z);
 					IBlockState state = get(blockStorage, x, y, z);
 
+					if (true) {
+						if (state.getMaterial().isLiquid()) {
+							state.getBlock().onBlockAdded(world, MUTABLE, state);
+						}
+						continue;
+					}
+
 					if (ForgeEventFactory.onNeighborNotify(world, MUTABLE, state, EnumSet.allOf(EnumFacing.class), false).isCanceled()) {
 						continue;
 					}

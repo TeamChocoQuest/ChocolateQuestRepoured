@@ -33,7 +33,7 @@ public class SkyLightUtil {
 						if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
 							IBlockState state = blockStorage.get(x, y, z);
 							if (state.getLightOpacity(world, MUTABLE) >= 15) {
-								blockStorage.setSkyLight(x, y, z, 0);
+								//blockStorage.setSkyLight(x, y, z, 0);
 								continue;
 							}
 						}
