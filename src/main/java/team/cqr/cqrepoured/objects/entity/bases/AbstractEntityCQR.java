@@ -84,6 +84,7 @@ import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.objects.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
+import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttack;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
@@ -132,7 +133,7 @@ import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.Reference;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable {
 
 	private static final ReflectionField ENTITY_LIVING_TASKS = new ReflectionField(EntityLiving.class, "field_70714_bg", "tasks");
 	private static final ReflectionField ENTITY_LIVING_TARGET_TASKS = new ReflectionField(EntityLiving.class, "field_70715_bh", "targetTasks");
@@ -240,7 +241,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
 		}
 		this.experienceValue = 5;
-		this.setSize(this.getDefaultWidth(), this.getDefaultHeight());
+		this.initializeSize();
 	}
 
 	public void enableBossBar() {
@@ -551,7 +552,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", this.usedPotions);
-		compound.setFloat("sizeScaling", this.sizeScaling);
+		//compound.setFloat("sizeScaling", this.sizeScaling);
+		this.callOnWriteToNBT(compound);
 		// compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
@@ -595,7 +597,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
-		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
+		//this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
+		this.callOnReadFromNBT(compound);
 		// this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.setHealthScale(compound.hasKey("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
@@ -970,6 +973,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
+		//buffer.writeFloat(this.getSizeVariation());
 		buffer.writeFloat(this.getSizeVariation());
 		buffer.writeDouble(this.getHealthScale());
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.HEAD));
@@ -984,6 +988,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
+		//this.setSizeVariation(additionalData.readFloat());
 		this.setSizeVariation(additionalData.readFloat());
 		this.setHealthScale(additionalData.readDouble());
 		this.setDropChance(EntityEquipmentSlot.HEAD, additionalData.readFloat());
@@ -1336,15 +1341,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public ResourceLocation getResourceLocationOfCape() {
 		return null;
-	}
-
-	public void setSizeVariation(float size) {
-		this.resize(size / this.sizeScaling, size / this.sizeScaling);
-		this.sizeScaling = size;
-	}
-
-	public float getSizeVariation() {
-		return this.sizeScaling;
 	}
 
 	public void setSitting(boolean sitting) {
@@ -1732,6 +1728,42 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public float getInvisibility() {
 		return this.dataManager.get(INVISIBILITY);
+	}
+	
+	//ISizable stuff
+	@Override
+	public void setSizeWrapper(float width, float height) {
+		this.setSize(width, height);
+	}
+	
+	@Override
+	public float getWidth() {
+		return this.width;
+	}
+
+	@Override
+	public float getHeight() {
+		return this.height;
+	}
+
+	@Override
+	public float getStepHeight() {
+		return this.stepHeight;
+	}
+
+	@Override
+	public void setStepHeight(float value) {
+		this.stepHeight = value;
+	}
+
+	@Override
+	public float getSizeVariation() {
+		return this.sizeScaling;
+	}
+
+	@Override
+	public float applySizeVariation(float value) {
+		return this.sizeScaling = value;
 	}
 
 }
