@@ -110,7 +110,7 @@ public class EntityElectricField extends Entity {
 						if(face != null) {
 							BlockPos currentPos = pos.offset(face);
 							if(!EXISTING_FIELDS.contains(currentPos)) {
-								IBlockState blockState = this.world.getBlockState(pos);
+								IBlockState blockState = this.world.getBlockState(currentPos);
 								if(blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.IRON) {
 									int charge = this.charge - 10;
 									if(charge > 0) {
