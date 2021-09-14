@@ -1,15 +1,38 @@
 package team.cqr.cqrepoured.objects.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface ISizable {
 
 	//protected void setSize(float width, float height);
 	
-	public float getWidth();
-	public float getHeight();
-	public float getStepHeight();
-	public void setStepHeight(float value);
+	public default float getWidth() {
+		if(this instanceof Entity) {
+			return ((Entity)this).width;
+		}
+		return 0F;
+	}
+	
+	public default float getHeight() {
+		if(this instanceof Entity) {
+			return ((Entity)this).height;
+		}
+		return 0F;
+	}
+	
+	public default float getStepHeight() {
+		if(this instanceof Entity) {
+			return ((Entity)this).stepHeight;
+		}
+		return 0F;
+	}
+	
+	public default void setStepHeight(float value) {
+		if(this instanceof Entity) {
+			((Entity)this).stepHeight = value;
+		}
+	}
 	
 	public float getDefaultWidth();
 
@@ -25,6 +48,11 @@ public interface ISizable {
 	public default void initializeSize() {
 		this.setSizeWrapper(this.getDefaultWidth(), this.getDefaultHeight());
 	}
+
+	public default void setSizeVariation(float size) {
+		this.resize(size / this.getSizeVariation(), size / this.getSizeVariation());
+		this.applySizeVariation(size);
+	}
 	
 	public default void resize(float widthScale, float heightSacle) {
 		this.setSizeWrapper(this.getWidth() * widthScale, this.getHeight() * heightSacle);
@@ -39,11 +67,6 @@ public interface ISizable {
 	
 	default void callOnReadFromNBT(NBTTagCompound compound) {
 		this.setSizeVariation(compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F);
-	}
-	
-	public default void setSizeVariation(float size) {
-		this.resize(size / this.getSizeVariation(), size / this.getSizeVariation());
-		this.applySizeVariation(size);
 	}
 	
 }
