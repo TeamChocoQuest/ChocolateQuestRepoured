@@ -220,21 +220,33 @@ public class GeneratableDungeon {
 			this.parts.remove();
 		}
 		if (this.parts.isEmpty()) {
-			this.chunkInfoMap.forEach(chunkInfo -> chunkInfo.forEach(chunkY -> {
+			this.chunkInfoMap.forEach(chunkInfo -> {
 				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-				if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
-					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
-				}
-				int r = 1;
-				for (int x = -r; x <= r; x++) {
-					for (int y = -r; y <= r; y++) {
-						for (int z = -r; z <= r; z++) {
-							this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
+				if (world.provider.hasSkyLight()) {
+					for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
+						ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+						if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
+							 blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
+							 chunk.getBlockStorageArray()[chunkY] = blockStorage;
 						}
+						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 					}
 				}
-			}));
+				chunkInfo.forEach(chunkY -> {
+					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+					if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
+						Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
+					}
+					int r = 1;
+					for (int x = -r; x <= r; x++) {
+						for (int y = -r; y <= r; y++) {
+							for (int z = -r; z <= r; z++) {
+								this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
+							}
+						}
+					}
+				});
+			});
 		}
 		return true;
 	}
