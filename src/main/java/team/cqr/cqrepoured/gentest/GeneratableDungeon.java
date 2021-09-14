@@ -33,8 +33,8 @@ import team.cqr.cqrepoured.gentest.ChunkInfo.ChunkInfoMap;
 import team.cqr.cqrepoured.gentest.part.DungeonPart;
 import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
 import team.cqr.cqrepoured.gentest.part.IProtectable;
+import team.cqr.cqrepoured.gentest.util.BlockAddedUtil;
 import team.cqr.cqrepoured.gentest.util.BlockLightUtil;
-import team.cqr.cqrepoured.gentest.util.NeighborNotifyUtil;
 import team.cqr.cqrepoured.gentest.util.SkyLightUtil;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
@@ -322,7 +322,7 @@ public class GeneratableDungeon {
 			return false;
 		}
 		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextNotifyNeighborsRespectDebugIndex);
-		chunkInfo.forEachReversed(chunkY -> NeighborNotifyUtil.notifyNeighbors(world, chunkInfo.getChunkX(), chunkY, chunkInfo.getChunkZ()));
+		BlockAddedUtil.onBlockAdded(world, chunkInfo);
 		this.nextNotifyNeighborsRespectDebugIndex++;
 		return true;
 	}
