@@ -87,6 +87,7 @@ public class BlockLightUtil {
 					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
 						blockStorage = new ExtendedBlockStorage(MUTABLE1.getY() >> 4 << 4, world.provider.hasSkyLight());
 						chunk.getBlockStorageArray()[MUTABLE1.getY() >> 4] = blockStorage;
+						chunk.generateSkylightMap();
 					}
 					int opacity = Math.max(blockStorage.get(MUTABLE1.getX() & 15, MUTABLE1.getY() & 15, MUTABLE1.getZ() & 15).getLightOpacity(world, MUTABLE1),
 							1);
