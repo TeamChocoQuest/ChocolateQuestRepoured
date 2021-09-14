@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.objects.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public interface ISizable {
 
@@ -43,10 +44,16 @@ public interface ISizable {
 	void applySizeVariation(float value);
 	
 	//wrapper for setSize cause interfaces don'T allow protected methods >:(
-	public void setSizeWrapper(float width, float height);
+	static final ReflectionMethod<Object> METHOD_SET_SIZE = new ReflectionMethod<>(Entity.class, "func_70105_a", "setSize", Float.TYPE, Float.TYPE);
+	
+	default void hackSize(float w, float h) {
+		if(this instanceof Entity) {
+			METHOD_SET_SIZE.invoke((Entity)this, w, h);
+		}
+	}
 	
 	public default void initializeSize() {
-		this.setSizeWrapper(this.getDefaultWidth(), this.getDefaultHeight());
+		this.hackSize(this.getDefaultWidth(), this.getDefaultHeight());
 	}
 
 	public default void setSizeVariation(float size) {
@@ -55,7 +62,7 @@ public interface ISizable {
 	}
 	
 	public default void resize(float widthScale, float heightSacle) {
-		this.setSizeWrapper(this.getWidth() * widthScale, this.getHeight() * heightSacle);
+		this.hackSize(this.getWidth() * widthScale, this.getHeight() * heightSacle);
 		if (this.getStepHeight() * heightSacle >= 1.0) {
 			this.setStepHeight(this.getStepHeight() * heightSacle);
 		}

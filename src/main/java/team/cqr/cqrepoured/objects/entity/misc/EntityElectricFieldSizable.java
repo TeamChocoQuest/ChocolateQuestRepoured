@@ -46,9 +46,4 @@ public class EntityElectricFieldSizable extends EntityElectricField implements I
 		this.sizeScaling = value;
 	}
 
-	@Override
-	public void setSizeWrapper(float width, float height) {
-		this.setSize(width, height);
-	}
-
 }
