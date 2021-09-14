@@ -158,7 +158,7 @@ public class GeneratableDungeon {
 	public void tick(World world) {
 		this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1_000_000, CQRConfig.advanced.generationSpeed * 1_000_000);
 
-		while (!this.isGenerated() && this.tickTime > 0) {
+		while (!this.isGenerated()) {
 			long start = System.nanoTime();
 			this.generateNext(world);
 			this.tickTime -= System.nanoTime() - start;
