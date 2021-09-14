@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.objects.entity.misc;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
 
@@ -71,6 +72,10 @@ public class EntityElectricField extends Entity {
 		return false;
 	}
 	
+	protected List<EntityLivingBase> getEntitiesAffectedByField() {
+		return this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
+	}
+	
 	@Override
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
@@ -86,7 +91,7 @@ public class EntityElectricField extends Entity {
 				return;
 			}
 			
-			this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED).forEach(new Consumer<EntityLivingBase>() {
+			this.getEntitiesAffectedByField().forEach(new Consumer<EntityLivingBase>() {
 
 				@Override
 				public void accept(EntityLivingBase t) {
