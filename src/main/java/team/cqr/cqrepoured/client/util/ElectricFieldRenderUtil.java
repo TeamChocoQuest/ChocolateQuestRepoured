@@ -32,24 +32,27 @@ public class ElectricFieldRenderUtil {
 
 		// Grab some random instance and set the line width
 		GlStateManager.glLineWidth(3.0F);
+		
+		//Since we're using vertex.position we need to set the color beforehand
+		GlStateManager.color(0.5F, 0.64F, 1.0F, 0.6F);
 
 		// Now we want to draw <boltCount> lightnings
 		for (int boltCount = 0; boltCount < bolts; ++boltCount) {
 			// The steps defines the "segments" of the lightning
 			int steps = rng.nextInt(26) + 5;
 			// Initialize the drawing process, our vertices consist of positions and color information
-			builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+			builder.begin(3, DefaultVertexFormats.POSITION);
 
 			// now, actually calculate the position of each "segment"
 			for (int i = 0; i <= steps; ++i) {
 
 				// Apply some "noise" so it looks "electric" (it will jitter when rendering)
-				double vX = Math.sin((i + rng.nextInt()) / boltSize * Math.PI * 2.0D) * fieldRadius + (rng.nextDouble() - 0.5D) * (fieldRadius / 2);
-				double vZ = Math.cos((i + rng.nextInt()) / boltSize * Math.PI * 2.0D) * fieldRadius + (rng.nextDouble() - 0.5D) * (fieldRadius / 2);
-				double vY = Math.sin((ticksExisted + i + rng.nextInt()) / boltSize * Math.PI) * (fieldHeight) + rng.nextDouble() + (fieldHeight / 2);
+				double vX = (rng.nextFloat() * 2 -1) * fieldRadius + (rng.nextFloat() - 0.5D) * (fieldRadius / 2);
+				double vZ = (rng.nextFloat() * 2 -1) * fieldRadius + (rng.nextFloat() - 0.5D) * (fieldRadius / 2);
+				double vY = (rng.nextFloat() * 2 -1) * (fieldHeight) + rng.nextFloat() + (fieldHeight / 2);
 
 				// Finally, create the vertex
-				builder.pos(x + vX, y + vY, z + vZ).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
+				builder.pos(x + vX, y + vY, z + vZ).endVertex();
 			}
 			// Draw the lightning
 			tess.draw();
