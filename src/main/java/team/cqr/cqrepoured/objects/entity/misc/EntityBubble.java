@@ -7,8 +7,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 
-public class EntityBubble extends Entity {
+public class EntityBubble extends Entity implements IDontRenderFire {
 
 	private static final int FLY_TIME_MAX = 160;
 

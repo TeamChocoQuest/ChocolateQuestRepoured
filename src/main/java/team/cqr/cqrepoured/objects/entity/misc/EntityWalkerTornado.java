@@ -23,10 +23,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.objects.entity.particle.ParticleWalkerTornado;
 
-public class EntityWalkerTornado extends Entity implements IEntityOwnable {
+public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDontRenderFire {
 
 	protected static final int PARTICLE_COUNT = 2;
 	protected static final int MAX_LIVING_TICKS = 200;

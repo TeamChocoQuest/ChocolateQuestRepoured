@@ -15,9 +15,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
-public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements IBlacklistedFromStatues {
+public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements IBlacklistedFromStatues, IDontRenderFire {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;

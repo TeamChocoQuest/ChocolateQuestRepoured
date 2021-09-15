@@ -17,11 +17,12 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityFlyingSkullMinion extends EntityFlying {
+public class EntityFlyingSkullMinion extends EntityFlying implements IDontRenderFire {
 
 	protected Entity summoner;
 	protected Entity target;

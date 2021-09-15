@@ -15,9 +15,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 
-public class EntityElectricField extends Entity {
+public class EntityElectricField extends Entity implements IDontRenderFire {
 	
 	private static HashSet<BlockPos> EXISTING_FIELDS = new HashSet<>();
 	private Queue<EnumFacing> facesToSpreadTo = generateFacesQueue();
@@ -63,17 +64,17 @@ public class EntityElectricField extends Entity {
 	}
 	
 	@Override
-	public boolean canBeCollidedWith() {
-		return false;
-	}
-	
-	@Override
 	public boolean canBePushed() {
 		return false;
 	}
 	
 	protected List<EntityLivingBase> getEntitiesAffectedByField() {
 		return this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
+	}
+	
+	@Override
+	public boolean isBurning() {
+		return false;
 	}
 	
 	@Override

@@ -3,8 +3,9 @@ package team.cqr.cqrepoured.objects.entity.misc;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityEvokerFangs;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 
-public class EntityIceSpike extends EntityEvokerFangs {
+public class EntityIceSpike extends EntityEvokerFangs implements IDontRenderFire {
 
 	public EntityIceSpike(World p_i47275_1_) {
 		super(p_i47275_1_);

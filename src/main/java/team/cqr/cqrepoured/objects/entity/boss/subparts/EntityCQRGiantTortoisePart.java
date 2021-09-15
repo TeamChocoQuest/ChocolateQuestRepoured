@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.boss.subparts;
 
+import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,7 +10,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
-public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
+public class EntityCQRGiantTortoisePart extends MultiPartEntityPart implements IBlacklistedFromStatues {
 
 	private boolean isHead;
 
@@ -71,6 +73,11 @@ public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
 			return false;
 		}
 		return this.getParent().processInitialInteract(player, hand);
+	}
+
+	@Override
+	public boolean canbeTurnedToStone() {
+		return false;
 	}
 
 }

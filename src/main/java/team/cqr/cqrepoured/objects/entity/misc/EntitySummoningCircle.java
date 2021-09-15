@@ -17,11 +17,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.factions.CQRFaction;
 import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.ISummoner;
 
-public class EntitySummoningCircle extends Entity implements IEntityAdditionalSpawnData {
+public class EntitySummoningCircle extends Entity implements IEntityAdditionalSpawnData, IDontRenderFire {
 
 	protected static final int BORDER_WHEN_TO_SPAWN_IN_TICKS = 60;
 
