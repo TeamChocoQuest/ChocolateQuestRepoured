@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.objects.entity.misc.EntityElectricField;
@@ -15,6 +16,11 @@ public class RenderElectricFieldEntity extends Render<EntityElectricField> {
 	@Override
 	public void doRender(EntityElectricField entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, x, y, z);
+	}
+	
+	@Override
+	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
+		//This entity is more like a effect, it doesn't render fire and does not have a shadow
 	}
 
 	@Override
