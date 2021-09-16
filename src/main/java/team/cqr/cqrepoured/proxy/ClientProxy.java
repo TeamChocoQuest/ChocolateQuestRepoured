@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.lwjgl.input.Keyboard;
 
@@ -15,6 +16,7 @@ import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
@@ -68,18 +70,26 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void postInit() {
-		//Add electrocute layer to all entities
-		for(Render<? extends Entity> renderer : Minecraft.getMinecraft().getRenderManager().entityRenderMap.values()) {
+		// Add electrocute layer to all entities
+		for (Render<? extends Entity> renderer : Minecraft.getMinecraft().getRenderManager().entityRenderMap.values()) {
 			try {
 				@SuppressWarnings("unchecked")
 				Render<Entity> render = (Render<Entity>) renderer;
-				if(render instanceof RenderLivingBase) {
+				if (render instanceof RenderLivingBase) {
 					((RenderLivingBase<?>) render).addLayer(new LayerElectrocute());
 				}
-			} catch(ClassCastException ccex) {
-				//Ignore
+			} catch (ClassCastException ccex) {
+				// Ignore
 			}
 		}
+		// Since for whatever reason the player renderer is not in the entityRenderMap we need to add it manually...
+		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(new Consumer<RenderPlayer>() {
+
+			@Override
+			public void accept(RenderPlayer t) {
+				t.addLayer(new LayerElectrocute());
+			}
+		});
 	}
 
 	@Override
