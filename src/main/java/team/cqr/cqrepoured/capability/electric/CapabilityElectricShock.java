@@ -10,6 +10,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class CapabilityElectricShock {
@@ -36,6 +38,11 @@ public class CapabilityElectricShock {
 	}
 	
 	public void setRemainingTicks(int value) {
+		
+		if(!this.entity.world.isRemote) {
+			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(this.entity), this.entity);
+		}
+		
 		this.remainingTicks = value;
 		this.cooldown = 200;
 	}

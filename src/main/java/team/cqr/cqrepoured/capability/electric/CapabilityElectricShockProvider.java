@@ -84,7 +84,6 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 				}
 			}
 		}
-		
 		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
 	}
 	
