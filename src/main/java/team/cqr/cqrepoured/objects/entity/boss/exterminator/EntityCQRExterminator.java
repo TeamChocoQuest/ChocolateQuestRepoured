@@ -94,13 +94,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	
 	public static final String ANIM_NAME_INACTIVE = ANIM_NAME_PREFIX + "inactive";
 	private <E extends IAnimatable> PlayState predicateInactive(AnimationEvent<E> event) {
-		/*if(super.isSitting()) {
+		if(super.isSitting()) {
 			if(event.getController().getCurrentAnimation() == null || event.getController().isJustStarting) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_INACTIVE, true));
 			}
 			return PlayState.CONTINUE;
 		}
-		event.getController().setAnimation(null);*/
+		event.getController().setAnimation(null);
 		return PlayState.STOP;
 	}
 
