@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.init;
 
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelLich;
@@ -14,6 +15,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
 import team.cqr.cqrepoured.client.render.entity.RenderFlyingSkull;
 import team.cqr.cqrepoured.client.render.entity.RenderIceSpike;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
+import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSpiderEgg;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
@@ -21,7 +23,6 @@ import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRExterminator;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantSpider;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
-import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRMage;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNecromancer;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNetherDragon;
@@ -98,7 +99,6 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
-import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.objects.entity.misc.EntityCQRWasp;
@@ -220,6 +220,9 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityElectricField.class, RenderElectricFieldEntity::new);
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
+		
+		//Multipart parts
+		RenderingRegistry.registerEntityRenderingHandler(MultiPartEntityPart.class, RenderMultiPartPart::new);
 	}
 
 	protected static void registerEntityRenderers() {
@@ -264,7 +267,6 @@ public class CQREntityRenderers {
 		// Giant Tortoise
 		// RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoiseGecko::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, RenderCQRGiantTortoisePart::new);
 
 		// Lich
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelLich(), "boss/lich"));

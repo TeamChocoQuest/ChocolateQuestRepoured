@@ -5,15 +5,15 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonBodyParts;
+import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.util.Reference;
 
-public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSegment> {
+public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<EntityCQRNetherDragonSegment> {
 
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon.png");
 	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon_skeletal.png");
