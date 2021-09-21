@@ -413,6 +413,8 @@ public class CQRConfig {
 		public float GiantSpider = 150F;
 		@Config.RangeDouble(min = 1, max = 1000)
 		public float EnderCalamity = 300F;
+		@Config.RangeDouble(min = 1, max = 1000)
+		public float Exterminatior = 200F;
 
 	}
 

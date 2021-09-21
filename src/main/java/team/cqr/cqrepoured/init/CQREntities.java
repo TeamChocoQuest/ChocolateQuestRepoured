@@ -29,6 +29,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCryst
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamitySpawner;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
+import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
@@ -143,6 +144,7 @@ public class CQREntities {
 	public static final EntityEntry PIRATE_CAPTAIN = Null();
 	public static final EntityEntry GIANT_SPIDER = Null();
 	public static final EntityEntry ENDER_CALAMITY = Null();
+	public static final EntityEntry EXTERMINATOR = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -253,7 +255,11 @@ public class CQREntities {
 						createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
 						createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
 						createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
-						createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true), });
+						createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true),
+						
+						//Exterminator
+						createEntityEntry(EntityCQRExterminator.class, "exterminator", 64, 1, true, 3289650, 000000)
+					});
 			}
 
 			// Spawns
