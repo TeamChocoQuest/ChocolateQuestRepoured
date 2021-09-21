@@ -60,7 +60,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		//Mechanicals can get electrocuted but don't take damage
 		if(entity instanceof IMechanical || entity.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
 			//But, if we are wet, we get damage from beign electrocuted
-			if(entity.isWet()) {
+			if(entity.isInWater()) {
 				icapability.setRemainingTicks(100);
 				entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
 			}
