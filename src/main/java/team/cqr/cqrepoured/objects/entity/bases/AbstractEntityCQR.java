@@ -665,13 +665,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
 				flag = true;
-			} else if (!this.getFaction().isEnemy(player) && !this.trades.isEmpty()) {
+			} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
 				if (!this.world.isRemote) {
 					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 				}
 				flag = true;
 			}
-		} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && !this.trades.isEmpty())) {
+		} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
 			if (!this.world.isRemote) {
 				player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
 			}
@@ -690,6 +690,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return flag;
 	}
 
+	public boolean hasTrades() {
+		return !this.trades.isEmpty();
+	}
+	
 	@Override
 	protected abstract ResourceLocation getLootTable();
 
@@ -1374,7 +1378,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@SideOnly(Side.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
-		this.currentSpeechBubbleID = this.rand.nextInt(ESpeechBubble.values().length);
+		if(this.hasTrades()) {
+			this.currentSpeechBubbleID = (ESpeechBubble.TRADE_EMERALD.ordinal() + this.rand.nextInt(ESpeechBubble.values().length - ESpeechBubble.TRADE_EMERALD.ordinal()));
+			
+			return;
+		}
+		this.currentSpeechBubbleID = this.rand.nextInt(ESpeechBubble.TRADE_EMERALD.ordinal());
 	}
 
 	@SideOnly(Side.CLIENT)

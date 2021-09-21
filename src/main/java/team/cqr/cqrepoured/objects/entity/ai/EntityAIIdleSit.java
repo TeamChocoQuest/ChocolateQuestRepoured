@@ -72,6 +72,11 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 			// Make entity sit
 			this.entity.setSitting(true);
 
+			if(this.entity.hasTrades()) {
+				this.entity.setChatting(true);
+				return;
+			}
+			
 			// search for new talking partner
 			if (++this.cooldwonForPartnerCycle > COOLDOWN_FOR_PARTNER_CYCLE_BORDER) {
 				this.cooldwonForPartnerCycle = 0;

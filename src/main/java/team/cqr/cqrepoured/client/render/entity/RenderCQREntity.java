@@ -75,11 +75,14 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.addLayer(new LayerCQREntityCape(this));
 		this.addLayer(new LayerCQREntityPotion(this));
 
-		if (model instanceof ModelCQRBiped) {
-			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
-			this.addLayer(new LayerCQRSpeechbubble(this));
-			this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
+		this.addLayer(new LayerCQRSpeechbubble(this));
+		
+		if (model instanceof ModelBiped) {
 			this.addLayer(new LayerShoulderEntity(this));
+			if(model instanceof ModelCQRBiped) {
+				this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
+				this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
+			}
 		}
 	}
 
