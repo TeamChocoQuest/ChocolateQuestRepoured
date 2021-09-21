@@ -137,9 +137,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		
 		this.backpackEntity.setPosition(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z);
 		
-		Vec3d offsetEmittersHorizontal = this.getLookVec().normalize().scale(0.4 * this.getSizeVariation());
+		Vec3d offsetEmittersHorizontal = this.getLookVec().normalize().scale(0.5 * this.getSizeVariation());
 		
-		Vec3d offsetEmitters = this.getLookVec().normalize().scale(-0.6D * this.getSizeVariation());
+		Vec3d offsetEmitters = this.getLookVec().normalize().scale(-0.4D * this.getSizeVariation());
 		offsetEmitters = offsetEmitters.add(0, 2.375D * this.getSizeVariation(), 0);
 		
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 90);
