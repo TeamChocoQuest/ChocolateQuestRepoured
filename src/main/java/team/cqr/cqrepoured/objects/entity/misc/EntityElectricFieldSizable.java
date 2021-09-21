@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.misc;
 
+import java.util.UUID;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.objects.entity.ISizable;
@@ -8,8 +10,8 @@ public class EntityElectricFieldSizable extends EntityElectricField implements I
 
 	private float sizeScaling = 1.0F;
 	
-	public EntityElectricFieldSizable(World worldIn, int charge) {
-		super(worldIn, charge);
+	public EntityElectricFieldSizable(World worldIn, int charge, UUID ownerId) {
+		super(worldIn, charge, ownerId);
 		
 		this.initializeSize();
 	}
