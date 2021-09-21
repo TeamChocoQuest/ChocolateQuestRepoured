@@ -114,6 +114,11 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		return false;
 	}
 	
+	public void destroyField() {
+		this.setDead();
+		EXISTING_FIELDS.remove(new BlockPos(this.posX, this.posY, this.posZ));
+	}
+	
 	@Override
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
@@ -124,8 +129,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 			BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
 			
 			if(this.charge < 0) {
-				this.setDead();
-				EXISTING_FIELDS.remove(pos);
+				this.destroyField();
 				return;
 			}
 			
@@ -191,7 +195,11 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	public UUID getOwnerId() {
 		return this.ownerID;
 	}
-
+	
+	public void setCharge(int charge) {
+		this.charge = charge;
+	}
+	
 	@Nullable
 	@Override
 	public Entity getOwner() {
