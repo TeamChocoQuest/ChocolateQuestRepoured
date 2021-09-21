@@ -1352,6 +1352,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean isSitting() {
+		if(this.hasTrades()) {
+			return false;
+		}
 		return this.dataManager.get(IS_SITTING);
 	}
 
