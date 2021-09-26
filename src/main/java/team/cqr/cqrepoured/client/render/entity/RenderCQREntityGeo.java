@@ -64,7 +64,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 		// Magic armor rendering, this is how you render a overlay using geckolib
-		if (entity.isMagicArmorActive()) {
+		if (entity.isMagicArmorActive() || true) {
 			GlStateManager.pushMatrix();
 
 			this.renderPass = 1;
@@ -173,6 +173,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 				builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 			}
+		}
+		if(bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
+			bone.setScaleX(bone.getScaleX() + 0.05F);
+			bone.setScaleZ(bone.getScaleZ() + 0.05F);
+			bone.setScaleY(bone.getScaleY() + 0.025F);
 		}
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
 		if (customTextureMarker) {
