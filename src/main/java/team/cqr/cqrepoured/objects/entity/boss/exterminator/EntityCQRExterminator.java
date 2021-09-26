@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +26,7 @@ import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable {
@@ -97,6 +99,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		//Spin animation for tesla coils
 		data.addAnimationController(new AnimationController<EntityCQRExterminator>(this, "controller_spin_coils", 0, this::predicateSpinCoils));
 		
+		//Punch
+		data.addAnimationController(new AnimationController<EntityCQRExterminator>(this, "controller_left_hand_punch", 0, this::predicatePunch));
+		
 		//Kick, Throw and smash animation
 		
 		//Cannon controller (raising, lowering and shooting)
@@ -139,9 +144,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		
 		// Inactive animation
 		if(super.isSitting()) {
-			if(event.getController().getCurrentAnimation() == null || event.getController().isJustStarting) {
+			//if(event.getController().getCurrentAnimation() == null || event.getController().isJustStarting) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_INACTIVE, false));
-			}
+			//}
 			return PlayState.CONTINUE;
 		}
 		event.getController().setAnimation(null);
@@ -150,6 +155,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	private <E extends IAnimatable> PlayState predicateCannonArm(AnimationEvent<E> event) {
 		return PlayState.STOP;
+	}
+	
+	public static final String ANIM_NAME_PUNCH = ANIM_NAME_PREFIX + "punch";
+	
+	private <E extends IAnimatable> PlayState predicatePunch(AnimationEvent<E> event) {
+		if(this.getSwingProgress(PartialTicksUtil.getCurrentPartialTicks()) > 0.0F) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_PUNCH, false));
+			
+		} else {
+			event.getController().setAnimation(null);
+			event.getController().clearAnimationCache();
+		}
+		return PlayState.CONTINUE;
 	}
 	
 	@Override
