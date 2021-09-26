@@ -27,6 +27,11 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 		}
 		return null;
 	}
+	
+	@Override
+	protected float getDeathMaxRotation(EntityCQRExterminator entityLivingBaseIn) {
+		return 0.0F;
+	}
 
 	@Override
 	protected IBlockState getHeldBlockForBone(String boneName, EntityCQRExterminator currentEntity) {

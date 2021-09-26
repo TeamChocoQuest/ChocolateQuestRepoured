@@ -79,7 +79,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		//Cannon controller (raising, lowering and shooting)
 		
 		//Inactive animation
-		data.addAnimationController(new AnimationController<EntityCQRExterminator>(this, "controller_sitting_animation", 30, this::predicateInactive));
+		data.addAnimationController(new AnimationController<EntityCQRExterminator>(this, "controller_main", 30, this::predicateAnimationMain));
 	}
 	
 	public static final String ANIM_NAME_PREFIX = "animation.exterminator.";
@@ -93,7 +93,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 	
 	public static final String ANIM_NAME_INACTIVE = ANIM_NAME_PREFIX + "inactive";
-	private <E extends IAnimatable> PlayState predicateInactive(AnimationEvent<E> event) {
+	public static final String ANIM_NAME_DEATH = ANIM_NAME_PREFIX + "death";
+	
+	@SuppressWarnings("unchecked")
+	private <E extends IAnimatable> PlayState predicateAnimationMain(AnimationEvent<E> event) {
+		// Death animation
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+			event.getController().transitionLengthTicks = 0.0D;
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH, false));
+			return PlayState.CONTINUE;
+		}
+		//Inactive animation
 		if(super.isSitting()) {
 			if(event.getController().getCurrentAnimation() == null || event.getController().isJustStarting) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_INACTIVE, true));
@@ -170,6 +180,35 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.world.removeEntityDangerously(this.emitterRight);
 		
 		super.setDead();
+	}
+	
+	//Death code
+	private DamageSource deathCause = null;
+
+	@Override
+	public void onDeath(DamageSource cause) {
+		this.deathCause = cause;
+		super.onDeath(cause);
+	}
+
+	@Override
+	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+		// Nope
+	}
+
+	// Death animation
+	// Death animation time: 1.44s => 29 ticks
+	@Override
+	protected void onDeathUpdate() {
+		++this.deathTime;
+		if (this.deathTime >= 70 && this.isServerWorld()) {
+			if (this.deathCause != null) {
+				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+			}
+			this.setDead();
+
+			this.onFinalDeath();
+		}
 	}
 	
 }
