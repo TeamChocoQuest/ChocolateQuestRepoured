@@ -84,5 +84,10 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPart imple
 			// Ignore
 		}
 	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
+	}
 
 }

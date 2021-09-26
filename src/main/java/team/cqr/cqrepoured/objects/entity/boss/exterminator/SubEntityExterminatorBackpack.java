@@ -38,5 +38,10 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPart implement
 	public void applySizeVariation(float value) {
 		//No, this should not be done in this entity, it happens in the parent...
 	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
+	}
 
 }
