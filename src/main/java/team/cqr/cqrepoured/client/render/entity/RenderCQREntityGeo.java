@@ -64,7 +64,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 		// Magic armor rendering, this is how you render a overlay using geckolib
-		if (entity.isMagicArmorActive() || true) {
+		if (entity.isMagicArmorActive()) {
 			GlStateManager.pushMatrix();
 
 			this.renderPass = 1;
