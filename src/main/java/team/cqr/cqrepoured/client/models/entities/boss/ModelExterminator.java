@@ -53,6 +53,10 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 	public void setLivingAnimations(EntityCQRExterminator entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 
+		if (entity.getHealth() < 0.01 || entity.isDead || !entity.isEntityAlive()) {
+			return;
+		}
+		
 		final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
 
 		if (entity.limbSwingAmount >= 0.01D) {
