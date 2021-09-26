@@ -321,7 +321,7 @@
 						"vector": [35, 0, 0]
 					}
 				},
-				"body": {
+				"bodyandwaist": {
 					"rotation": {
 						"vector": [45, 0, 0]
 					}
