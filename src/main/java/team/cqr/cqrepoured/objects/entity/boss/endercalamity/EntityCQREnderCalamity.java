@@ -1104,7 +1104,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// Death animation
 	// Death animation time: 1.88s => 38 ticks
 	// Transition time: 10 ticks
-	//TODO: Maybe shoot out items whilst dead?
+	// DONE: Maybe shoot out items whilst dead?
 	@Override
 	protected void onDeathUpdate() {
 		if(!this.isServerWorld()) {
