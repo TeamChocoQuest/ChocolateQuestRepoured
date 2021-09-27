@@ -30,7 +30,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<EntityCQRN
 		this.modelTail = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailStart();
 		this.modelTailTip = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailTip();
 	}
-
+	
 	@Override
 	public void doRender(EntityCQRNetherDragonSegment entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
@@ -95,7 +95,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<EntityCQRN
 
 	@Override
 	public boolean shouldRender(EntityCQRNetherDragonSegment livingEntity, ICamera camera, double camX, double camY, double camZ) {
-		return super.shouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
+		return superShouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
 	}
 
 	@Override
