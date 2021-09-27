@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +24,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
+import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
@@ -32,9 +33,10 @@ import team.cqr.cqrepoured.util.VectorUtil;
 public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable {
 
 	//Entity parts
-	private SubEntityExterminatorBackpack backpackEntity;
+	/*private SubEntityExterminatorBackpack backpackEntity;
 	private SubEntityExterminatorFieldEmitter emitterLeft;
-	private SubEntityExterminatorFieldEmitter emitterRight;
+	private SubEntityExterminatorFieldEmitter emitterRight;*/
+	private MultiPartEntityPart[] parts;
 	
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	
@@ -49,9 +51,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		super(worldIn);
 		this.experienceValue = 100;
 		
-		this.backpackEntity = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
+		this.parts = new MultiPartEntityPart[3];
+		/*this.backpackEntity = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
 		this.emitterLeft = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
-		this.emitterRight = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
+		this.emitterRight = new SubEntityExterminatorFieldEmitter(this, "emitter_right");*/
+		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
+		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
+		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
 	}
 	
 	@Override
@@ -190,18 +196,22 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public void onUpdate() {
 		super.onUpdate();
 		
-		this.world.updateEntityWithOptionalForce(this.backpackEntity, true);
+		/*this.world.updateEntityWithOptionalForce(this.backpackEntity, true);
 		this.world.updateEntityWithOptionalForce(this.emitterLeft, true);
-		this.world.updateEntityWithOptionalForce(this.emitterRight, true);
+		this.world.updateEntityWithOptionalForce(this.emitterRight, true);*/
+		for(MultiPartEntityPart part : this.parts) {
+			this.world.updateEntityWithOptionalForce(part, true);
+			part.onUpdate();
+		}
 		
 		this.alignParts();
 	}
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
+		/*if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
-		}
+		}*/
 
 		if (source.isFireDamage()) {
 			return false;
@@ -216,16 +226,20 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			this.playSound(this.getHurtSound(source), 1.0F, 1.0F);
 			return true;
 		}
-		//TODO: Fix not receiving damage from parts => Problem is the super class method?!
 		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
 	
 	//Multipart stuff
+	@Override
+	public Entity[] getParts() {
+		return this.parts;
+	}
+	
 	private void alignParts() {
 		Vec3d offset = this.getLookVec().normalize().scale(-0.25D * this.getSizeVariation());
 		offset = offset.add(0, 1.25D * this.getSizeVariation(), 0);
 		
-		this.backpackEntity.setPosition(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z);
+		this.parts[0].setPosition(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z);
 		
 		Vec3d offsetEmittersHorizontal = this.getLookVec().normalize().scale(0.5 * this.getSizeVariation());
 		
@@ -233,19 +247,24 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		offsetEmitters = offsetEmitters.add(0, 2.375D * this.getSizeVariation(), 0);
 		
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 90);
-		this.emitterRight.setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
+		this.parts[2].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
 		
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 180);
-		this.emitterLeft.setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
+		this.parts[1].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
 	}
 	
 	@Override
 	public void resize(float widthScale, float heightSacle) {
 		super.resize(widthScale, heightSacle);
 		
-		this.backpackEntity.resize(widthScale, heightSacle);
+		/*this.backpackEntity.resize(widthScale, heightSacle);
 		this.emitterLeft.resize(widthScale, heightSacle);
-		this.emitterRight.resize(widthScale, heightSacle);
+		this.emitterRight.resize(widthScale, heightSacle);*/
+		for(MultiPartEntityPart part : this.parts) {
+			if(part instanceof ISizable) {
+				((ISizable)part).resize(widthScale, heightSacle);
+			}
+		}
 	}
 	
 	@Override
@@ -255,9 +274,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	
 	@Override
 	public void setDead() {
-		this.world.removeEntityDangerously(this.backpackEntity);
+		/*this.world.removeEntityDangerously(this.backpackEntity);
 		this.world.removeEntityDangerously(this.emitterLeft);
-		this.world.removeEntityDangerously(this.emitterRight);
+		this.world.removeEntityDangerously(this.emitterRight);*/
+		for(MultiPartEntityPart part : this.parts) {
+			this.world.removeEntityDangerously(part);
+		}
 		
 		super.setDead();
 	}
