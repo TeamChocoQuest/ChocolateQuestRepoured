@@ -35,11 +35,6 @@ import team.cqr.cqrepoured.util.VectorUtil;
 public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable {
 
 	// Entity parts
-	/*
-	 * private SubEntityExterminatorBackpack backpackEntity;
-	 * private SubEntityExterminatorFieldEmitter emitterLeft;
-	 * private SubEntityExterminatorFieldEmitter emitterRight;
-	 */
 	// 0 => Backpack
 	// 1 => Emitter left
 	// 2 => Emitter right
@@ -60,15 +55,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.experienceValue = 100;
 
 		this.parts = new MultiPartEntityPart[5];
-		/*
-		 * this.backpackEntity = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
-		 * this.emitterLeft = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
-		 * this.emitterRight = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
-		 */
+		
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
-
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
@@ -211,11 +201,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public void onUpdate() {
 		super.onUpdate();
 
-		/*
-		 * this.world.updateEntityWithOptionalForce(this.backpackEntity, true);
-		 * this.world.updateEntityWithOptionalForce(this.emitterLeft, true);
-		 * this.world.updateEntityWithOptionalForce(this.emitterRight, true);
-		 */
 		for (MultiPartEntityPart part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
 			part.onUpdate();
@@ -286,11 +271,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public void resize(float widthScale, float heightSacle) {
 		super.resize(widthScale, heightSacle);
 
-		/*
-		 * this.backpackEntity.resize(widthScale, heightSacle);
-		 * this.emitterLeft.resize(widthScale, heightSacle);
-		 * this.emitterRight.resize(widthScale, heightSacle);
-		 */
 		for (MultiPartEntityPart part : this.parts) {
 			if (part instanceof ISizable) {
 				((ISizable) part).resize(widthScale, heightSacle);
@@ -305,11 +285,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public void setDead() {
-		/*
-		 * this.world.removeEntityDangerously(this.backpackEntity);
-		 * this.world.removeEntityDangerously(this.emitterLeft);
-		 * this.world.removeEntityDangerously(this.emitterRight);
-		 */
 		for (MultiPartEntityPart part : this.parts) {
 			this.world.removeEntityDangerously(part);
 		}
