@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -227,6 +226,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return true;
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
+	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return this.isStunned();
 	}
 	
 	//Multipart stuff
