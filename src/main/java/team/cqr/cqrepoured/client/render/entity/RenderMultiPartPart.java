@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -11,6 +12,11 @@ public class RenderMultiPartPart<T extends MultiPartEntityPart> extends Render<T
 		super(renderManager);
 	}
 
+	@Override
+	public boolean shouldRender(T livingEntity, ICamera camera, double camX, double camY, double camZ) {
+		return false;
+	}
+	
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
 		return null;
