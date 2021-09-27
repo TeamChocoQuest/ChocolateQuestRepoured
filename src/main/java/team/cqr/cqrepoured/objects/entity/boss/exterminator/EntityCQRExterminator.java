@@ -42,7 +42,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// 0 => Backpack
 	// 1 => Emitter left
 	// 2 => Emitter right
-	// 3 & 4 => Artificial hitbox (left and right)
+	// 3 & 4 => Artificial hitbox (left and right), purpose is to avoid entities punching though the boss when it is in non-stunned state
 	private MultiPartEntityPart[] parts;
 
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
