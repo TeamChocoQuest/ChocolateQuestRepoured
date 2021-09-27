@@ -22,6 +22,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.ISizable;
@@ -89,7 +90,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return null;
+		return CQRLoottables.ENTITIES_EXTERMINATOR;
 	}
 
 	@Override
