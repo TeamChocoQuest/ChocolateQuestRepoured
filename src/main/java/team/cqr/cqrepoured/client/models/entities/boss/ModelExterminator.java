@@ -37,7 +37,7 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 			return entity.getTextureOverride();
 		}
 		// Custom texture end
-		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise_" + entity.getTextureIndex() + ".png") : this.texture;
+		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/exterminator_" + entity.getTextureIndex() + ".png") : this.texture;
 	}
 
 	private static final String BONE_IDENT_LEFT_LEG = "leg_left";
@@ -57,26 +57,30 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 			return;
 		}
 		
-		final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
+		try {
+			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
 
-		if (entity.limbSwingAmount >= 0.01D) {
-			IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
+			if (entity.limbSwingAmount >= 0.01D) {
+				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
 
-			// Taken from RenderIronGolem.class
-			float f1 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks) + 6.0F;
-			float f2 = (Math.abs(f1 % 13.0F - 6.5F) - 3.25F) / 3.25F;
+				// Taken from RenderIronGolem.class
+				float f1 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks) + 6.0F;
+				float f2 = (Math.abs(f1 % 13.0F - 6.5F) - 3.25F) / 3.25F;
 
-			torsoBone.setRotationZ((float) Math.toRadians(6.5F * f2));
+				torsoBone.setRotationZ((float) Math.toRadians(6.5F * f2));
+			}
+
+			// Taken from ModelIronGolem.class
+			final float legAngle = 1.5F * this.triangleWave(entity.limbSwing, 13.0F) * entity.limbSwingAmount;
+			
+			IBone leftLeg = this.getAnimationProcessor().getBone(BONE_IDENT_LEFT_LEG);
+			IBone rightLeg = this.getAnimationProcessor().getBone(BONE_IDENT_RIGHT_LEG);
+			
+			leftLeg.setRotationX(-legAngle);
+			rightLeg.setRotationX(legAngle);
+		} catch (NullPointerException npe) {
+			//Ignore, happens when model doesn't feature those bones
 		}
-
-		// Taken from ModelIronGolem.class
-		final float legAngle = 1.5F * this.triangleWave(entity.limbSwing, 13.0F) * entity.limbSwingAmount;
-		
-		IBone leftLeg = this.getAnimationProcessor().getBone(BONE_IDENT_LEFT_LEG);
-		IBone rightLeg = this.getAnimationProcessor().getBone(BONE_IDENT_RIGHT_LEG);
-		
-		leftLeg.setRotationX(-legAngle);
-		rightLeg.setRotationX(legAngle);
 	}
 
 }
