@@ -1,13 +1,9 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
-import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
-
-import net.minecraft.entity.MultiPartEntityPart;
-import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
-import team.cqr.cqrepoured.objects.entity.ISizable;
+import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.objects.entity.misc.EntityElectricFieldSizable;
 
-public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPart implements IBlacklistedFromStatues, IDontRenderFire, ISizable {
+public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
 	private EntityElectricFieldSizable electricField = null;
 	private EntityCQRExterminator exterminator;
@@ -15,28 +11,6 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPart imple
 	public SubEntityExterminatorFieldEmitter(EntityCQRExterminator parent, String partName) {
 		super(parent, partName, 0.5F, 0.5F);
 		this.exterminator = parent;
-		this.initializeSize();
-	}
-
-	@Override
-	public boolean canbeTurnedToStone() {
-		return false;
-	}
-
-	// ISizable stuff
-	@Override
-	public float getDefaultWidth() {
-		return 0.5F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 0.5F;
-	}
-
-	@Override
-	public float getSizeVariation() {
-		return ((ISizable) this.parent).getSizeVariation();
 	}
 
 	@Override
@@ -51,7 +25,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPart imple
 
 	@Override
 	public void setSizeVariation(float size) {
-		ISizable.super.setSizeVariation(size);
+		super.setSizeVariation(size);
 		try {
 			this.electricField.setSizeVariation(size);
 		} catch (NullPointerException npe) {
@@ -61,7 +35,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPart imple
 
 	@Override
 	public void resize(float widthScale, float heightSacle) {
-		ISizable.super.resize(widthScale, heightSacle);
+		super.resize(widthScale, heightSacle);
 		try {
 			this.electricField.resize(widthScale, heightSacle);
 		} catch (NullPointerException npe) {
