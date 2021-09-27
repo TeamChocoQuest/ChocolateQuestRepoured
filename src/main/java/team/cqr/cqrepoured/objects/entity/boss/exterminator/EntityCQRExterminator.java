@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -24,6 +25,7 @@ import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.ISizable;
+import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
@@ -40,6 +42,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// 0 => Backpack
 	// 1 => Emitter left
 	// 2 => Emitter right
+	// 3 & 4 => Artificial hitbox (left and right)
 	private MultiPartEntityPart[] parts;
 
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
@@ -55,7 +58,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		super(worldIn);
 		this.experienceValue = 100;
 
-		this.parts = new MultiPartEntityPart[3];
+		this.parts = new MultiPartEntityPart[5];
 		/*
 		 * this.backpackEntity = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
 		 * this.emitterLeft = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
@@ -64,6 +67,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
+
+		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
+		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
 
 	@Override
@@ -103,7 +109,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
-		return this.attackEntityFrom(source, damage, true);
+		boolean isMainHBPart = !(part == this.parts[3] || part == this.parts[4]);
+		return this.attackEntityFrom(source, damage, isMainHBPart);
 	}
 
 	@Override
@@ -218,12 +225,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		/*
-		 * if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)
-		 * source.getTrueSource()).isCreative())) {
-		 * return super.attackEntityFrom(source, amount, sentFromPart);
-		 * }
-		 */
+
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
+			return super.attackEntityFrom(source, amount, sentFromPart);
+		}
 
 		if (source.isFireDamage()) {
 			return false;
@@ -253,6 +258,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	private void alignParts() {
+		// Artificial main hitbox
+		final Vec3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookVec().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
+		this.parts[4].setPosition(this.posX + offsetMainHitbox.x, this.posY, this.posZ + offsetMainHitbox.z);
+		this.parts[3].setPosition(this.posX - offsetMainHitbox.x, this.posY, this.posZ - offsetMainHitbox.z);
+
+		// Backpack and emitters
 		Vec3d offset = this.getLookVec().normalize().scale(-0.25D * this.getSizeVariation());
 		offset = offset.add(0, 1.25D * this.getSizeVariation(), 0);
 
