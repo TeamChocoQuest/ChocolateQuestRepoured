@@ -1,22 +1,22 @@
-package team.cqr.cqrepoured.network.server.packet.endercalamity;
+package team.cqr.cqrepoured.network.server.packet;
 
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 
-public class SPacketCalamityUpdateMainAnimation implements IMessage {
+public class SPacketUpdateAnimationOfEntity implements IMessage {
 
 	private int entityId;
 	private String animationID;
 
-	public SPacketCalamityUpdateMainAnimation() {
+	public SPacketUpdateAnimationOfEntity() {
 
 	}
 
-	SPacketCalamityUpdateMainAnimation(Builder builder) {
+	SPacketUpdateAnimationOfEntity(Builder builder) {
 		this.entityId = builder.getEntityID();
 		this.animationID = builder.getValue();
 	}
@@ -37,14 +37,14 @@ public class SPacketCalamityUpdateMainAnimation implements IMessage {
 		ByteBufUtils.writeUTF8String(buf, this.animationID);
 	}
 
-	public static Builder builder(EntityCQREnderCalamity entity) {
+	public static Builder builder(IServerAnimationReceiver entity) {
 		return new Builder(entity);
 	}
 
 	public static class Builder {
 
-		private Builder(EntityCQREnderCalamity entity) {
-			this.entityID = entity.getEntityId();
+		private Builder(IServerAnimationReceiver entity) {
+			this.entityID = entity.getEntity().getEntityId();
 		}
 
 		private int entityID;
@@ -64,9 +64,9 @@ public class SPacketCalamityUpdateMainAnimation implements IMessage {
 		}
 
 		@Nullable
-		public SPacketCalamityUpdateMainAnimation build() {
+		public SPacketUpdateAnimationOfEntity build() {
 			try {
-				return new SPacketCalamityUpdateMainAnimation(this);
+				return new SPacketUpdateAnimationOfEntity(this);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
