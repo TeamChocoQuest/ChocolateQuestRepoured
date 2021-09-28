@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
@@ -75,7 +75,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	@Override
 	public int execPrepareShoot() {
 		// 10 is the transition time of the animation controller
-		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
+		IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		// 10 is the transition time
 		// animation warmup is 1s => 20 ticks
@@ -85,7 +85,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	public int execAfterShoot() {
-		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.killProjectile();
 		// Animation cooldown time: 0.28s => 6 ticks
@@ -95,7 +95,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	public void resetTask() {
-		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 
 		this.entity.setRotateBodyPitch(false);

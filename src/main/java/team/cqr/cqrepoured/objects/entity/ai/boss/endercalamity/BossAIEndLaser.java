@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
@@ -36,7 +36,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			//TODO: Remove blocks in the center
 		}
 		
-		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_LASER_STATIONARY).build();
+		IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_LASER_STATIONARY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 	}
 
@@ -88,7 +88,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 			this.endlaser.setDead();
 			this.endlaser = null;
 		}
-		IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.setCantUpdatePhase(false);
 		this.entity.forceTeleport();

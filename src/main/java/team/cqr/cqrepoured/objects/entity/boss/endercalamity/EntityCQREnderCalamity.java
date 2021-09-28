@@ -54,6 +54,7 @@ import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 import team.cqr.cqrepoured.objects.entity.ICirclingEntity;
+import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIAreaLightnings;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAIBlockThrower;
 import team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity.BossAICalamityBuilding;
@@ -76,7 +77,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 // DONE: Move the minion & lightning handling to a AI class, it is cleaner that way
 // DONE: Create helper classes to control arm management (status, animations, etc)
-public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner, ICirclingEntity {
+public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner, ICirclingEntity, IServerAnimationReceiver {
 
 	private static final int HURT_DURATION = 24; // 1.2 * 20
 	private static final int ARENA_RADIUS = 20;
@@ -1170,6 +1171,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			item.motionZ = vz;
 			item.velocityChanged = true;
 		}
+	}
+
+	@Override
+	public EntityLivingBase getEntity() {
+		return this;
 	}
 
 }

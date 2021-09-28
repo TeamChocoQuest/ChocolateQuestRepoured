@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.init;
 import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAddOrResetProtectedRegionIndicator;
+import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAnimationUpdateOfEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerDeleteTrade;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerDungeonSync;
@@ -23,7 +24,6 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateProtectedR
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateReputation;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateTradeIndex;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCalamityHandUpdateHand;
-import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCalamityMainAnimationUpdate;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerSyncCalamityRotation;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
@@ -68,13 +68,13 @@ import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateTradeIndex;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
-import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateMainAnimation;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 
 public class CQRMessages {
@@ -101,7 +101,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTileEntity.class, SPacketSyncTileEntity.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateEntityPrevPos.class, SPacketUpdateEntityPrevPos.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncLaserRotation.class, SPacketSyncLaserRotation.class, messageID++, Side.CLIENT);
-		CQRMain.NETWORK.registerMessage(CPacketHandlerCalamityMainAnimationUpdate.class, SPacketCalamityUpdateMainAnimation.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerAnimationUpdateOfEntity.class, SPacketUpdateAnimationOfEntity.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerCalamityHandUpdateHand.class, SPacketCalamityUpdateHand.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncCalamityRotation.class, SPacketSyncCalamityRotation.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSpawnParticles.class, SPacketSpawnParticles.class, messageID++, Side.CLIENT);
