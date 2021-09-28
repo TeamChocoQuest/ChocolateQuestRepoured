@@ -60,7 +60,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.experienceValue = 100;
 
 		this.parts = new MultiPartEntityPart[5];
-		
+
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
@@ -175,30 +175,30 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public static final String ANIM_NAME_CANNON_RAISED = ANIM_NAME_PREFIX + "raised_cannon";
 	public static final String ANIM_NAME_CANNON_LOWERED = ANIM_NAME_PREFIX + "lowered_cannon";
-	
+
 	private <E extends IAnimatable> PlayState predicateCannonArmPosition(AnimationEvent<E> event) {
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
 			return PlayState.STOP;
 		}
-		
-		if(this.dataManager.get(CANNON_RAISED)) {
+
+		if (this.dataManager.get(CANNON_RAISED)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_RAISED, true));
 		} else {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_LOWERED, false));
 		}
-		
+
 		return PlayState.CONTINUE;
 	}
-	
+
 	public static final String ANIM_NAME_CANNON_SHOOT = ANIM_NAME_PREFIX + "shoot_cannon";
 	private boolean shootIndicator = false;
-	
+
 	private <E extends IAnimatable> PlayState predicateCannonArmShoot(AnimationEvent<E> event) {
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
 			return PlayState.STOP;
 		}
-		
-		if(shootIndicator) {
+
+		if (shootIndicator) {
 			event.getController().clearAnimationCache();
 			shootIndicator = false;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_SHOOT, false));
@@ -213,7 +213,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
 			return PlayState.STOP;
 		}
-		
+
 		if (this.getSwingProgress(PartialTicksUtil.getCurrentPartialTicks()) > 0.0F) {
 			boolean isKicking = this.dataManager.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
@@ -221,7 +221,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		} else {
 			this.kickInProgressClient = false;
-			
+
 			event.getController().setAnimation(null);
 			event.getController().clearAnimationCache();
 		}
@@ -283,32 +283,32 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public boolean canBeCollidedWith() {
 		return this.isStunned();
 	}
-	
-	//Kick handling
+
+	// Kick handling
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
 		boolean result = super.attackEntityAsMob(entityIn);
-		
-		if(result) {
-			if(!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
+
+		if (result) {
+			if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
 				final boolean kick = this.rand.nextBoolean();
-				
-				//Kick the entity away lol
-				if(kick) {
+
+				// Kick the entity away lol
+				if (kick) {
 					Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
 					v = v.normalize().scale(1.5D);
-					
+
 					// YEET!
 					entityIn.motionX = v.x;
 					entityIn.motionY = v.y + 0.75;
 					entityIn.motionZ = v.z;
 					entityIn.velocityChanged = true;
 				}
-				
+
 				this.dataManager.set(PUNCH_IS_KICK, kick);
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -448,25 +448,25 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public boolean isImmuneToExplosions() {
 		return true;
 	}
-	
+
 	// Arm cannon
 	public Vec3d getCannonFiringLocation() {
 		Vec3d result = this.getPositionVector();
-		
+
 		final float scale = this.getSizeVariation();
-		
+
 		result = result.add(0, 2.0 * scale, 0);
-		
+
 		final Vec3d facing = this.getLookVec().normalize();
 		result = result.add(facing.scale(0.75));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, 90).scale(1.125));
-		
+
 		return result;
 	}
 
 	@SideOnly(Side.CLIENT)
 	private boolean kickInProgressClient;
-	
+
 	@SideOnly(Side.CLIENT)
 	public boolean isUsingKickAnimation() {
 		return this.kickInProgressClient;
