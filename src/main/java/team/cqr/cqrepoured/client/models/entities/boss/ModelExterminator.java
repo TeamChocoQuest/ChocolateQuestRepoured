@@ -76,8 +76,10 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 			IBone leftLeg = this.getAnimationProcessor().getBone(BONE_IDENT_LEFT_LEG);
 			IBone rightLeg = this.getAnimationProcessor().getBone(BONE_IDENT_RIGHT_LEG);
 			
+			if(!entity.isUsingKickAnimation()) {
+				rightLeg.setRotationX(legAngle);
+			}
 			leftLeg.setRotationX(-legAngle);
-			rightLeg.setRotationX(legAngle);
 		} catch (NullPointerException npe) {
 			//Ignore, happens when model doesn't feature those bones
 		}
