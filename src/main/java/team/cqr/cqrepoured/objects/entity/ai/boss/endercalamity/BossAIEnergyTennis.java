@@ -2,10 +2,7 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.endercalamity;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
@@ -62,8 +59,9 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		this.entity.setCantUpdatePhase(true);
 		this.entity.forceTeleport();
 		
-		IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL).build();
-		CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL).build();
+		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL);
 		
 		this.entity.playSound(CQRSounds.ENDER_CALAMITY_CHARGE_ENERGY_BALL, 12.0F, 1.0F);
 	}
@@ -85,9 +83,12 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 			return;
 		}
 		if (this.tennisball == null) {
-			//TODO: Play throw sound
-			IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL).build();
-			CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+			// DONE: Play throw sound
+			// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL).build();
+			// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
+			
+			this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL);
+			
 			this.tennisball = ProjectileEnergyOrb.shootAt(this.entity.getAttackTarget(), this.entity, this.world);
 		} else {
 			this.ballTicks++;
