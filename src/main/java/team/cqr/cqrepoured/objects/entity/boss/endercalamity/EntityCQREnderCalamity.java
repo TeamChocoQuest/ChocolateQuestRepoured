@@ -1173,9 +1173,4 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 	}
 
-	@Override
-	public EntityLivingBase getEntity() {
-		return this;
-	}
-
 }

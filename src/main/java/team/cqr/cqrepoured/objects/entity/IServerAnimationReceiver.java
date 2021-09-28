@@ -7,7 +7,12 @@ import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
 public interface IServerAnimationReceiver {
 	
-	public EntityLivingBase getEntity();
+	public default EntityLivingBase getEntity() {
+		if(this instanceof EntityLivingBase) {
+			return (EntityLivingBase) this;
+		}
+		return null;
+	}
 
 	public void processAnimationUpdate(String animationID);
 	
