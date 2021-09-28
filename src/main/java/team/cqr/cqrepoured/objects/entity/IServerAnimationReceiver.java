@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.objects.entity;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
@@ -14,6 +16,7 @@ public interface IServerAnimationReceiver {
 		return null;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void processAnimationUpdate(String animationID);
 	
 	public default void sendAnimationUpdate(final String animationName) {
