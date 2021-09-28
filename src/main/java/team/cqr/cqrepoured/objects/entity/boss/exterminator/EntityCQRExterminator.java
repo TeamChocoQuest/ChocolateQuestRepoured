@@ -297,6 +297,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 				if(kick) {
 					Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
 					v = v.normalize().scale(1.5D);
+					
+					// YEET!
 					entityIn.motionX = v.x;
 					entityIn.motionY = v.y + 0.75;
 					entityIn.motionZ = v.z;
