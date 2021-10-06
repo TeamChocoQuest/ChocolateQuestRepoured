@@ -617,22 +617,24 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		return this.dataManager.get(CANNON_RAISED);
 	}
 	
-	public Vec3d getCannonFiringPointOffset() {
+	public Vec3d getCannonFiringPointOffset(boolean forLaser) {
 		Vec3d result = Vec3d.ZERO;
 
 		final float scale = this.getSizeVariation();
 
-		result = result.add(0, 2.0 * scale, 0);
+		result = result.add(0, 2.0D, 0);
 
 		final Vec3d facing = this.getLookVec().normalize();
 		result = result.add(facing.scale(0.75));
-		result = result.add(VectorUtil.rotateVectorAroundY(facing, 90).scale(1.125));
+		result = result.add(VectorUtil.rotateVectorAroundY(facing, forLaser ? 270 : 90).scale(0.65));
+		
+		result = result.scale(scale);
 		
 		return result;
 	}
 	
 	public Vec3d getCannonFiringLocation() {
-		Vec3d result = this.getCannonFiringPointOffset();
+		Vec3d result = this.getCannonFiringPointOffset(false);
 		result = result.add(this.posX, this.posY, this.posZ);
 		return result;
 	}
