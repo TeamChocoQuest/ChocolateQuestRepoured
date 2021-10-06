@@ -32,6 +32,7 @@ import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
+import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
@@ -80,6 +81,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.dataManager.register(CANNON_RAISED, false);
 		this.dataManager.register(PUNCH_IS_KICK, false);
 		this.dataManager.register(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		
+		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
 	}
 
 	public void setStunned(boolean value) {
@@ -182,18 +190,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public static final String ANIM_NAME_CANNON_LOWERED = ANIM_NAME_PREFIX + "lowered_cannon";
 
 	private <E extends IAnimatable> PlayState predicateCannonArmPosition(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive() || super.isSitting()) {
 			return PlayState.STOP;
 		}
 		
-		if(!this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
-			return PlayState.STOP;
-		}
-
 		if (this.dataManager.get(CANNON_RAISED)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_RAISED, true));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_LOWERED, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_LOWERED, true));
 		}
 
 		return PlayState.CONTINUE;
@@ -334,8 +338,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	private String currentAnimationPlaying;
 	
 	protected void updateAnimationTimersServer() {
-		if(this.cannonArmTimer != 0) {
+		if(this.cannonArmTimer > 0) {
 			this.cannonArmTimer--;
+		}
+		if(this.cannonTimeOut > 0) {
+			this.cannonTimeOut--;
+			if(this.cannonTimeOut <= 0) {
+				this.switchCannonArmState(false);
+			}
 		}
 		if(this.animationTimer > 0) {
 			this.animationTimer--;
@@ -559,6 +569,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	
 	//Returns wether or not it is switching to that state or if it is already in that state
 	public boolean switchCannonArmState(boolean raised) {
+		//First: reset the timeout
+		this.resetCannonTimeout();
+		
 		if(raised == this.dataManager.get(CANNON_RAISED)) {
 			return true;
 		}
@@ -570,6 +583,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.cannonArmTimer = CANNON_RAISE_OR_LOWER_DURATION;
 		
 		return true;
+	}
+	
+	private int cannonTimeOut = 0;
+	public void setCannonArmAutoTimeoutForLowering(int value) {
+		this.cannonTimeOut = value;
+	}
+	public void resetCannonTimeout() {
+		this.setCannonArmAutoTimeoutForLowering(0);
 	}
 	
 	public boolean startShootingAnimation(boolean fastShot) {
