@@ -30,6 +30,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamitySpawn
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityExterminatorHandLaser;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntitySpectreLordCurse;
@@ -258,7 +259,8 @@ public class CQREntities {
 						createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true),
 						
 						//Exterminator
-						createEntityEntry(EntityCQRExterminator.class, "exterminator", 64, 1, true, 3289650, 000000)
+						createEntityEntry(EntityCQRExterminator.class, "exterminator", 64, 1, true, 3289650, 000000),
+						createEntityEntryWithoutEgg(EntityExterminatorHandLaser.class, "exterminator_laser", 64, 1, true)
 					});
 			}
 
