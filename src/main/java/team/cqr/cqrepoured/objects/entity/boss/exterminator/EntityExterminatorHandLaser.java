@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityTargetingLaser;
-import team.cqr.cqrepoured.util.VectorUtil;
 
 public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 
@@ -45,7 +44,7 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 	@Override
 	public Vec3d getOffsetVector() {
 		if(this.caster instanceof EntityCQRExterminator) {
-			return VectorUtil.rotateVectorAroundY(((EntityCQRExterminator) this.caster).getCannonFiringPointOffset().subtract(0, 1.5 * ((EntityCQRExterminator) this.caster).getSizeVariation(), 0), 180);
+			return ((EntityCQRExterminator) this.caster).getCannonFiringPointOffset(true).subtract(0, 1.75 * ((EntityCQRExterminator) this.caster).getSizeVariation(), 0);
 		}
 		return super.getOffsetVector();
 	}
