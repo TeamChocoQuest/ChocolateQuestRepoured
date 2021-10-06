@@ -405,7 +405,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		if (result) {
 			if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
-				final boolean kick = this.rand.nextBoolean();
+				final boolean kick = this.rand.nextBoolean() || this.isCurrentlyPlayingAnimation();
 
 				// Kick the entity away lol
 				if (kick) {
