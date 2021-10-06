@@ -409,6 +409,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 				// Kick the entity away lol
 				if (kick) {
+					//TODO: Change this so that it affects more entities before the golem
+					//TODO: Maybe make this execute the ultimate yeeter from time to time?
 					Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
 					v = v.normalize().scale(1.5D);
 
