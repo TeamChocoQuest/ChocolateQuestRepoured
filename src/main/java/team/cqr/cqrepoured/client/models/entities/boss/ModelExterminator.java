@@ -60,7 +60,7 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 		try {
 			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
 
-			if (entity.limbSwingAmount >= 0.01D) {
+			if (entity.limbSwingAmount >= 0.01D && !entity.isCannonRaised()) {
 				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
 
 				// Taken from RenderIronGolem.class
