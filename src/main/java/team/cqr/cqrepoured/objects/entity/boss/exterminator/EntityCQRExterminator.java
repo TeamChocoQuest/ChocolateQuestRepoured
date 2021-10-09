@@ -1,8 +1,12 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,9 +37,11 @@ import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
@@ -116,6 +122,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public World getWorld() {
 		return this.getEntityWorld();
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
 	}
 
 	@Override
@@ -404,24 +415,48 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		boolean result = super.attackEntityAsMob(entityIn);
 
 		if (result) {
-			if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
-				final boolean kick = this.rand.nextBoolean() || this.isCurrentlyPlayingAnimation();
+			if(this.isCurrentlyPlayingAnimation()) {
+				if(this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
+					if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
+						Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
+						v = v.normalize().scale(1.5D);
 
-				// Kick the entity away lol
-				if (kick) {
-					//TODO: Change this so that it affects more entities before the golem
-					//TODO: Maybe make this execute the ultimate yeeter from time to time?
-					Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
-					v = v.normalize().scale(1.5D);
+						// YEET!
+						entityIn.motionX += v.x;
+						entityIn.motionY += v.y + 0.75;
+						entityIn.motionZ += v.z;
+						entityIn.velocityChanged = true;
 
-					// YEET!
-					entityIn.motionX = v.x;
-					entityIn.motionY = v.y + 0.75;
-					entityIn.motionZ = v.z;
-					entityIn.velocityChanged = true;
+						this.dataManager.set(PUNCH_IS_KICK, true);
+					}
 				}
-
-				this.dataManager.set(PUNCH_IS_KICK, kick);
+			} else {
+				this.dataManager.set(PUNCH_IS_KICK, false);
+				if(this.getRNG().nextBoolean() && !this.isCannonRaised()) {
+					//Throw animation
+					List<Entity> affectedEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
+					if(!affectedEntities.isEmpty()) {
+						Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
+						affectedEntities.forEach((Entity entity) -> {
+							if((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
+								Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
+								
+								entity.motionX += flyDirection.x;
+								entity.motionY += flyDirection.y;
+								entity.motionZ += flyDirection.z;
+								
+								entity.velocityChanged = true;
+								
+								if(entity != entityIn) {
+									super.attackEntityAsMob(entity);
+								}
+							}
+						});
+						
+						//Now, play the animation
+						this.sendAnimationUpdate(ANIM_NAME_THROW);
+					}
+				}
 			}
 		}
 
@@ -656,6 +691,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void processAnimationUpdate(String animationID) {
+		this.currentAnimationPlaying = animationID;
 		switch(animationID) {
 			// Cannon shoot animation
 			case ANIM_NAME_CANNON_SHOOT:
