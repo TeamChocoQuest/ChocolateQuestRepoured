@@ -50,7 +50,7 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 	}
 
 	@Override
-	public void setLivingAnimations(EntityCQRExterminator entity, Integer uniqueID, AnimationEvent customPredicate) {
+	public void setLivingAnimations(EntityCQRExterminator entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 
 		if (entity.getHealth() < 0.01 || entity.isDead || !entity.isEntityAlive()) {
@@ -60,7 +60,7 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 		try {
 			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
 
-			if (entity.limbSwingAmount >= 0.01D && !entity.isCannonRaised()) {
+			if (entity.limbSwingAmount >= 0.01D && !(entity.isCannonRaised() || entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW))) {
 				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
 
 				// Taken from RenderIronGolem.class
