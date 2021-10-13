@@ -217,11 +217,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public static final String ANIM_NAME_CANNON_SHOOT = ANIM_NAME_PREFIX + "shoot_cannon";
 	public static final String ANIM_NAME_THROW = ANIM_NAME_PREFIX + "throw";
 	public static final String ANIM_NAME_GROUND_SMASH = ANIM_NAME_PREFIX + "ground_slam";
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	private boolean shootIndicator = false;
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	private boolean throwIndicator = false;
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	private boolean smashIndicator = false;
 
 	private <E extends IAnimatable> PlayState predicateBigAnimations(AnimationEvent<E> event) {
@@ -679,7 +679,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	
 	
 	//Kick stuff
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	private boolean kickInProgressClient;
 
 	@SideOnly(Side.CLIENT)
