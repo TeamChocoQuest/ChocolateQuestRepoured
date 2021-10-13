@@ -27,8 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -598,7 +596,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT) WTF WHY DO YOU CRASH AT THE DECLARATION OF THE FIELD FORGE?!?!?
 	private int currentAnimationClient = 0;
 
 	// Animation controller
