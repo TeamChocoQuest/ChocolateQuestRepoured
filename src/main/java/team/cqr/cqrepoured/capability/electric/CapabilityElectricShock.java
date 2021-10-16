@@ -9,15 +9,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.util.EntityUtil;
 
-public class CapabilityElectricShock implements ICapabilitySerializable<NBTTagCompound> {
+public class CapabilityElectricShock {
 	
 	private final EntityLivingBase entity;
 	private Entity target;
@@ -87,30 +84,6 @@ public class CapabilityElectricShock implements ICapabilitySerializable<NBTTagCo
 			UUID targetID = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("targetID"));
 			this.target = EntityUtil.getEntityByUUID(this.entity.getEntityWorld(), targetID);
 		}
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
