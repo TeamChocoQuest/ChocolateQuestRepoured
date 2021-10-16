@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -38,6 +39,7 @@ import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.objects.entity.ai.target.exterminator.EntityAITargetElectrocute;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
@@ -53,6 +55,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// 2 => Emitter right
 	// 3 & 4 => Artificial hitbox (left and right), purpose is to avoid entities punching though the boss when it is in non-stunned state
 	private MultiPartEntityPart[] parts;
+
+	private EntityLivingBase electroCuteTargetA;
+	private EntityLivingBase electroCuteTargetB;
 
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
@@ -88,12 +93,59 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.dataManager.register(PUNCH_IS_KICK, false);
 		this.dataManager.register(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		
+
 		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
+
+		// Target tasks for the electro stuff
+		//TODO: Figure out how to do this with method references
+		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, new Function<Object, EntityLivingBase>() {
+
+			@Override
+			public EntityLivingBase apply(Object t) {
+				return EntityCQRExterminator.this.getElectroCuteTargetA();
+			}
+		}, new Function<EntityLivingBase, Object>() {
+
+			@Override
+			public Object apply(EntityLivingBase t) {
+				EntityCQRExterminator.this.setElectroCuteTargetA(t);
+				return null;
+			}
+		}));
+		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, new Function<Object, EntityLivingBase>() {
+
+			@Override
+			public EntityLivingBase apply(Object t) {
+				return EntityCQRExterminator.this.getElectroCuteTargetB();
+			}
+		}, new Function<EntityLivingBase, Object>() {
+
+			@Override
+			public Object apply(EntityLivingBase t) {
+				EntityCQRExterminator.this.setElectroCuteTargetB(t);
+				return null;
+			}
+		}));
+	}
+
+	public EntityLivingBase getElectroCuteTargetA() {
+		return electroCuteTargetA;
+	}
+
+	public void setElectroCuteTargetA(EntityLivingBase electroCuteTargetA) {
+		this.electroCuteTargetA = electroCuteTargetA;
+	}
+
+	public EntityLivingBase getElectroCuteTargetB() {
+		return electroCuteTargetB;
+	}
+
+	public void setElectroCuteTargetB(EntityLivingBase electroCuteTargetB) {
+		this.electroCuteTargetB = electroCuteTargetB;
 	}
 
 	public void setStunned(boolean value) {
@@ -123,7 +175,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public World getWorld() {
 		return this.getEntityWorld();
 	}
-	
+
 	@Override
 	public boolean canBePushed() {
 		return false;
@@ -204,7 +256,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive() || super.isSitting()) {
 			return PlayState.STOP;
 		}
-		
+
 		if (this.dataManager.get(CANNON_RAISED)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_RAISED, true));
 		} else {
@@ -229,19 +281,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return PlayState.STOP;
 		}
 
-		//Second condition: XOR Operator "^"
-		if(this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
+		// Second condition: XOR Operator "^"
+		if (this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
 			if (shootIndicator) {
 				event.getController().clearAnimationCache();
 				shootIndicator = false;
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_SHOOT, false));
-			}
-			else if (throwIndicator) {
+			} else if (throwIndicator) {
 				event.getController().clearAnimationCache();
 				throwIndicator = false;
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_THROW, false));
-			}
-			else if (smashIndicator) {
+			} else if (smashIndicator) {
 				event.getController().clearAnimationCache();
 				smashIndicator = false;
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_GROUND_SMASH, false));
@@ -259,8 +309,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
 			return PlayState.STOP;
 		}
-		
-		if(this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
+
+		if (this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
 			return PlayState.STOP;
 		}
 
@@ -305,78 +355,78 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		this.alignParts();
 	}
-	
+
 	@Override
 	public void onEntityUpdate() {
 		this.updateAnimationTimersServer();
 		super.onEntityUpdate();
 	}
-	
+
 	private static final int ARMS_THROW_DURATION = 14;
 	private static final int GROUND_SLAM_DURATION = 60;
-	
-	//Does nothing if the entity is currently playing an animation
-	//NEVER DIRECTLY ACCESS THIS METHOD!!
-	//TODO: Add this to the interface?
+
+	// Does nothing if the entity is currently playing an animation
+	// NEVER DIRECTLY ACCESS THIS METHOD!!
+	// TODO: Add this to the interface?
 	@Override
 	public void sendAnimationUpdate(String animationName) {
-		if(this.isCurrentlyPlayingAnimation()) {
+		if (this.isCurrentlyPlayingAnimation()) {
 			return;
 		}
-		
+
 		IServerAnimationReceiver.super.sendAnimationUpdate(animationName);
-		switch(animationName) {
-			case ANIM_NAME_CANNON_SHOOT:
-				this.animationTimer = CANNON_SHOOT_DURATION;
-				break;
-			case ANIM_NAME_THROW:
-				this.animationTimer = ARMS_THROW_DURATION;
-				break;
-			case ANIM_NAME_GROUND_SMASH:
-				this.animationTimer = GROUND_SLAM_DURATION;
-				break;
-			//All others are no normal animations
-			default:
-				this.currentAnimationPlaying = null;
-				this.animationTimer = -1;
-				return;
+		switch (animationName) {
+		case ANIM_NAME_CANNON_SHOOT:
+			this.animationTimer = CANNON_SHOOT_DURATION;
+			break;
+		case ANIM_NAME_THROW:
+			this.animationTimer = ARMS_THROW_DURATION;
+			break;
+		case ANIM_NAME_GROUND_SMASH:
+			this.animationTimer = GROUND_SLAM_DURATION;
+			break;
+		// All others are no normal animations
+		default:
+			this.currentAnimationPlaying = null;
+			this.animationTimer = -1;
+			return;
 		}
 		this.currentAnimationPlaying = animationName;
 		this.dataManager.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
 	}
-	
+
 	private int animationTimer = -1;
 	private String currentAnimationPlaying;
-	
+
 	protected void updateAnimationTimersServer() {
-		if(this.cannonArmTimer > 0) {
+		if (this.cannonArmTimer > 0) {
 			this.cannonArmTimer--;
 		}
-		if(this.cannonTimeOut > 0) {
+		if (this.cannonTimeOut > 0) {
 			this.cannonTimeOut--;
-			if(this.cannonTimeOut <= 0) {
+			if (this.cannonTimeOut <= 0) {
 				this.switchCannonArmState(false);
 			}
 		}
-		if(this.animationTimer > 0) {
+		if (this.animationTimer > 0) {
 			this.animationTimer--;
-			if(this.animationTimer <= 0) {
+			if (this.animationTimer <= 0) {
 				this.onAnimationEnd(currentAnimationPlaying);
 				this.currentAnimationPlaying = null;
 				this.dataManager.set(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
 			}
 		}
 	}
-	
+
 	public void onAnimationEnd(final String animationName) {
-		//Currently unused
+		// Currently unused
 	}
-	
+
 	@Nullable
 	public String getCurrentAnimation() {
 		return this.currentAnimationPlaying;
 	}
-	
+
 	public boolean isCurrentlyPlayingAnimation() {
 		return this.animationTimer > 0;
 	}
@@ -415,8 +465,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		boolean result = super.attackEntityAsMob(entityIn);
 
 		if (result) {
-			if(this.isCurrentlyPlayingAnimation()) {
-				if(this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
+			if (this.isCurrentlyPlayingAnimation()) {
+				if (this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
 					if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
 						Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
 						v = v.normalize().scale(1.5D);
@@ -432,28 +482,28 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 				}
 			} else {
 				this.dataManager.set(PUNCH_IS_KICK, false);
-				if(this.getRNG().nextBoolean() && !this.isCannonRaised()) {
-					//Throw animation
+				if (this.getRNG().nextBoolean() && !this.isCannonRaised()) {
+					// Throw animation
 					List<Entity> affectedEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
-					if(!affectedEntities.isEmpty()) {
+					if (!affectedEntities.isEmpty()) {
 						Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 						affectedEntities.forEach((Entity entity) -> {
-							if((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
+							if ((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
 								Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
-								
+
 								entity.motionX += flyDirection.x;
 								entity.motionY += flyDirection.y;
 								entity.motionZ += flyDirection.z;
-								
+
 								entity.velocityChanged = true;
-								
-								if(entity != entityIn) {
+
+								if (entity != entityIn) {
 									super.attackEntityAsMob(entity);
 								}
 							}
 						});
-						
-						//Now, play the animation
+
+						// Now, play the animation
 						this.sendAnimationUpdate(ANIM_NAME_THROW);
 					}
 				}
@@ -601,59 +651,61 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	// Arm cannon
 	private static final int CANNON_RAISE_OR_LOWER_DURATION = 40;
-	private static final int CANNON_SHOOT_DURATION = 12; 
+	private static final int CANNON_SHOOT_DURATION = 12;
 	private int cannonArmTimer = 0;
-	
-	//Returns wether or not it is switching to that state or if it is already in that state
+
+	// Returns wether or not it is switching to that state or if it is already in that state
 	public boolean switchCannonArmState(boolean raised) {
-		//First: reset the timeout
+		// First: reset the timeout
 		this.resetCannonTimeout();
-		
-		if(raised == this.dataManager.get(CANNON_RAISED)) {
+
+		if (raised == this.dataManager.get(CANNON_RAISED)) {
 			return true;
 		}
-		if(cannonArmTimer != 0) {
+		if (cannonArmTimer != 0) {
 			return false;
 		}
-		
+
 		this.dataManager.set(CANNON_RAISED, raised);
 		this.cannonArmTimer = CANNON_RAISE_OR_LOWER_DURATION;
-		
+
 		return true;
 	}
-	
+
 	private int cannonTimeOut = 0;
+
 	public void setCannonArmAutoTimeoutForLowering(int value) {
 		this.cannonTimeOut = value;
 	}
+
 	public void resetCannonTimeout() {
 		this.setCannonArmAutoTimeoutForLowering(0);
 	}
-	
+
 	public boolean startShootingAnimation(boolean fastShot) {
-		if(this.isCannonArmReadyToShoot()) {
-			
+		if (this.isCannonArmReadyToShoot()) {
+
 			// DONE: Send animation update to client!!!
 			this.sendAnimationUpdate(ANIM_NAME_CANNON_SHOOT);
-			
+
 			this.cannonArmTimer = CANNON_SHOOT_DURATION;
-			if(fastShot) {
+			if (fastShot) {
 				this.cannonArmTimer /= 2;
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isCannonArmPlayingAnimation() {
 		return this.cannonArmTimer != 0;
 	}
-	
+
 	public boolean isCannonRaised() {
 		return this.dataManager.get(CANNON_RAISED);
 	}
-	
+
 	public Vec3d getCannonFiringPointOffset(boolean forLaser) {
 		Vec3d result = Vec3d.ZERO;
 
@@ -664,21 +716,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		final Vec3d facing = this.getLookVec().normalize();
 		result = result.add(facing.scale(0.75));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, forLaser ? 270 : 90).scale(0.65));
-		
+
 		result = result.scale(scale);
-		
+
 		return result;
 	}
-	
+
 	public Vec3d getCannonFiringLocation() {
 		Vec3d result = this.getCannonFiringPointOffset(false);
 		result = result.add(this.posX, this.posY, this.posZ);
 		return result;
 	}
 
-	
-	
-	//Kick stuff
+	// Kick stuff
 	@SideOnly(Side.CLIENT)
 	private boolean kickInProgressClient;
 
@@ -687,25 +737,25 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		return this.kickInProgressClient;
 	}
 
-	// IServerAnimationReceiver logic 
+	// IServerAnimationReceiver logic
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void processAnimationUpdate(String animationID) {
 		this.currentAnimationPlaying = animationID;
-		switch(animationID) {
-			// Cannon shoot animation
-			case ANIM_NAME_CANNON_SHOOT:
-				this.shootIndicator = true;
+		switch (animationID) {
+		// Cannon shoot animation
+		case ANIM_NAME_CANNON_SHOOT:
+			this.shootIndicator = true;
 			break;
-			
-			// Throw animation
-			case ANIM_NAME_THROW:
-				this.throwIndicator = true;
+
+		// Throw animation
+		case ANIM_NAME_THROW:
+			this.throwIndicator = true;
 			break;
-			
-			// Hulk smash
-			case ANIM_NAME_GROUND_SMASH:
-				this.smashIndicator = true;
+
+		// Hulk smash
+		case ANIM_NAME_GROUND_SMASH:
+			this.smashIndicator = true;
 			break;
 		}
 	}
