@@ -77,11 +77,30 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		this.parts = new MultiPartEntityPart[5];
 
-		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack");
+		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", new Function<Object, Boolean>() {
+
+			@Override
+			public Boolean apply(Object t) {
+				try {
+					return EntityCQRExterminator.this.getEmitterLeft().isActive() || EntityCQRExterminator.this.getEmitterRight().isActive();
+				} catch(NullPointerException npe) {
+					return false;
+				}
+			}});
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
+	}
+
+	@Nullable
+	private SubEntityExterminatorFieldEmitter getEmitterLeft() {
+		return (SubEntityExterminatorFieldEmitter) this.parts[1];
+	}
+
+	@Nullable
+	private SubEntityExterminatorFieldEmitter getEmitterRight() {
+		return (SubEntityExterminatorFieldEmitter) this.parts[2];
 	}
 
 	@Override
@@ -101,7 +120,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
 
 		// Target tasks for the electro stuff
-		//TODO: Figure out how to do this with method references
+		// TODO: Figure out how to do this with method references
 		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, new Function<Object, EntityLivingBase>() {
 
 			@Override
@@ -138,6 +157,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public void setElectroCuteTargetA(EntityLivingBase electroCuteTargetA) {
 		this.electroCuteTargetA = electroCuteTargetA;
+		
+		this.getEmitterLeft().setTarget(electroCuteTargetA);
 	}
 
 	public EntityLivingBase getElectroCuteTargetB() {
@@ -146,6 +167,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public void setElectroCuteTargetB(EntityLivingBase electroCuteTargetB) {
 		this.electroCuteTargetB = electroCuteTargetB;
+		
+		this.getEmitterRight().setTarget(electroCuteTargetA);
 	}
 
 	public void setStunned(boolean value) {
@@ -758,6 +781,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			this.smashIndicator = true;
 			break;
 		}
+	}
+
+	public boolean areElectricCoilsActive() {
+		return !(super.isSitting() || this.isStunned());
 	}
 
 }
