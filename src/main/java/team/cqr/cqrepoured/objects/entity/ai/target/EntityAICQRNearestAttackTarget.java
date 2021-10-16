@@ -19,17 +19,25 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	public EntityAICQRNearestAttackTarget(AbstractEntityCQR entity) {
 		super(entity);
 	}
+	
+	protected void wrapperSetAttackTarget(EntityLivingBase target) {
+		this.entity.setAttackTarget(target);
+	}
+	
+	protected EntityLivingBase wrapperGetAttackTarget() {
+		return this.entity.getAttackTarget();
+	}
 
 	@Override
 	public boolean shouldExecute() {
 		if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			this.entity.setAttackTarget(null);
+			this.wrapperSetAttackTarget(null);
 			return false;
 		}
-		if (this.isStillSuitableTarget(this.entity.getAttackTarget())) {
+		if (this.isStillSuitableTarget(this.wrapperGetAttackTarget())) {
 			return false;
 		}
-		this.entity.setAttackTarget(null);
+		this.wrapperSetAttackTarget(null);
 		return this.random.nextInt(3) == 0;
 	}
 
@@ -46,13 +54,13 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		List<EntityLivingBase> possibleTargetsEnemy = new ArrayList<>();
 		this.fillLists(possibleTargets, possibleTargetsAlly, possibleTargetsEnemy);
 		if (!possibleTargetsAlly.isEmpty()) {
-			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsAlly));
+			this.wrapperSetAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsAlly));
 		} else if (!possibleTargetsEnemy.isEmpty()) {
-			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsEnemy));
+			this.wrapperSetAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsEnemy));
 		}
 	}
 
-	private void fillLists(List<EntityLivingBase> list, List<EntityLivingBase> allies, List<EntityLivingBase> enemies) {
+	protected void fillLists(List<EntityLivingBase> list, List<EntityLivingBase> allies, List<EntityLivingBase> enemies) {
 		boolean canTargetAlly = this.canTargetAlly();
 		for (EntityLivingBase possibleTarget : list) {
 			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
@@ -72,12 +80,12 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		}
 	}
 
-	private boolean canTargetAlly() {
+	protected boolean canTargetAlly() {
 		Item item = this.entity.getHeldItemMainhand().getItem();
 		return item instanceof ISupportWeapon<?> || item instanceof IFakeWeapon<?>;
 	}
 
-	private boolean isSuitableTargetAlly(EntityLivingBase possibleTarget) {
+	protected boolean isSuitableTargetAlly(EntityLivingBase possibleTarget) {
 		CQRFaction faction = this.entity.getFaction();
 		if (faction == null) {
 			return false;
@@ -94,7 +102,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		return this.entity.getEntitySenses().canSee(possibleTarget);
 	}
 
-	private boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
+	protected boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
 		if (!TargetUtil.isEnemyCheckingLeaders(this.entity, possibleTarget)) {
 			return false;
 		}
@@ -110,7 +118,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		return !possibleTarget.isSneaking() && this.entity.getDistanceSq(possibleTarget) < 12.0D * 12.0D;
 	}
 
-	private boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
+	protected boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 			return false;
 		}
