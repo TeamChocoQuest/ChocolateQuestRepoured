@@ -49,7 +49,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	@SubscribeEvent
 	public static void onStartTracking(PlayerEvent.StartTracking event) {
 		Entity entity = event.getTarget();
-		if (!(entity instanceof EntityLivingBase) || !checkCommonStuff((EntityLivingBase) entity) || !(entity instanceof EntityPlayerMP)) {
+		if (!(entity instanceof EntityLivingBase) || !checkForCapabilityAndServerSide((EntityLivingBase) entity) || !(entity instanceof EntityPlayerMP)) {
 			return;
 		}
 		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability((EntityLivingBase) entity), (EntityPlayerMP) event.getEntityPlayer());
@@ -58,7 +58,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	@SubscribeEvent
 	public static void onLogIn(PlayerLoggedInEvent event) {
 		EntityLivingBase entity = event.player;
-		if (!checkCommonStuff(entity) || !(entity instanceof EntityPlayerMP)) {
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof EntityPlayerMP)) {
 			return;
 		}
 		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
@@ -67,7 +67,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
 		EntityLivingBase entity = event.player;
-		if (!checkCommonStuff(entity) || !(entity instanceof EntityPlayerMP)) {
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof EntityPlayerMP)) {
 			return;
 		}
 		// First, reduce the ticks
@@ -81,13 +81,13 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	@SubscribeEvent
 	public static void onChangeDimension(PlayerChangedDimensionEvent event) {
 		EntityLivingBase entity = event.player;
-		if (!checkCommonStuff(entity) || !(entity instanceof EntityPlayerMP)) {
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof EntityPlayerMP)) {
 			return;
 		}
 		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
 	}
 
-	private static boolean checkCommonStuff(EntityLivingBase entity) {
+	private static boolean checkForCapabilityAndServerSide(EntityLivingBase entity) {
 		if (!entity.hasCapability(ELECTROCUTE_HANDLER_CQR, null)) {
 			return false;
 		}
@@ -102,7 +102,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	@SubscribeEvent
 	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if (!checkCommonStuff(entity)) {
+		if (!checkForCapabilityAndServerSide(entity)) {
 			return;
 		}
 
