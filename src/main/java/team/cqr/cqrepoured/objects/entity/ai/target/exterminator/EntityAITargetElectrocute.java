@@ -40,6 +40,11 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 	}
 	
 	@Override
+	protected boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
+		return super.isStillSuitableTarget(possibleTarget) && this.entity.canEntityBeSeen(possibleTarget);
+	}
+	
+	@Override
 	protected boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
 		return super.isSuitableTargetEnemy(possibleTarget) && TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(possibleTarget) && !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(possibleTarget);
 	}
