@@ -20,7 +20,6 @@ import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSpiderEgg;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
-import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRExterminator;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantSpider;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRMage;
@@ -33,6 +32,8 @@ import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKingIllusion
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
+import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
+import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderExterminatorBackpackPart;
 import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
@@ -98,6 +99,7 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCryst
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.objects.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
@@ -305,6 +307,7 @@ public class CQREntityRenderers {
 		//GeckoLib
 		//Exterminator
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRExterminator.class, RenderCQRExterminator::new);
+		RenderingRegistry.registerEntityRenderingHandler(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);
 	}
 
 }

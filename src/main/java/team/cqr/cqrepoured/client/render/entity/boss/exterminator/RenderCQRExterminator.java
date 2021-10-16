@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.boss;
+package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.entity.RenderManager;
