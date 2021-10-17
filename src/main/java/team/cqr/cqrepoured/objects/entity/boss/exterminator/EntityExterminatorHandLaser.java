@@ -38,7 +38,7 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 		Vec3d vec4 = Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
 		this.setPosition(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
 
-		this.maxRotationPerTick = 0.5F;
+		this.maxRotationPerTick = 1.25F;
 	}
 	
 	@Override

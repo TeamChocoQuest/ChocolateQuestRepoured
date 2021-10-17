@@ -9,8 +9,8 @@ import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityExterminatorHa
 
 public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQRExterminator> {
 
-	private static final int MAX_DISTANCE = 16;
-	private static final int MIN_DISTANCE = 4;
+	private static final int MAX_DISTANCE = 32;
+	private static final int MIN_DISTANCE = 8;
 
 	private AbstractEntityLaser activeLaser = null;
 	private EntityLivingBase target = null;
@@ -45,7 +45,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 
 	@Override
 	public void startExecuting() {
-		this.timer = 300;
+		this.timer = 150;
 		super.startExecuting();
 		checkAndOrStartCannonLaser();
 	}
