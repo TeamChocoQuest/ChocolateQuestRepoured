@@ -285,6 +285,18 @@
             {"name": "cqrepoured:entity/ender_calamity/fire_energy_ball"}
         ]
     },
+	
+	"entity.exterminator.electro_zap":
+	{
+		"category": "boss",
+		"sounds":
+		[
+            {"name": "cqrepoured:entity/exterminator/zap1"},
+			{"name": "cqrepoured:entity/exterminator/zap2"},
+			{"name": "cqrepoured:entity/exterminator/zap3"},
+			{"name": "cqrepoured:entity/exterminator/zap4"}
+		]
+	},
     
     "projectile.energy_ball.impact":
     {
