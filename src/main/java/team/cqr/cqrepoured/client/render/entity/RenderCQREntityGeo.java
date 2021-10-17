@@ -23,6 +23,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.MatrixStack;
+import team.cqr.cqrepoured.client.render.entity.layers.geckolib.LayerElectrocuteGecko;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.client.util.MatrixUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -50,6 +51,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this.heightScale = heightScale;
 
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
+		
+		this.addLayer(new LayerElectrocuteGecko<T>(this));
 	}
 
 	/*
