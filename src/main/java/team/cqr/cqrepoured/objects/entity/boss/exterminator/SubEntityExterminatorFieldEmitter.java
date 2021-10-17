@@ -90,9 +90,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 		if (this.isActive()) {
 			
-			if(this.ticksExisted % 10 == 0) {
+			if(this.ticksExisted % 30 == 0) {
 				//Play a sound
-				this.playSound(CQRSounds.EXTERMINATOR_ELECTRO_ZAP, 1.0F, 1.0F);
+				this.playSound(CQRSounds.EXTERMINATOR_ELECTRO_ZAP, 0.75F, 1.0F);
 			}
 			EntityLivingBase target = this.getTargetedEntity();
 			this.remainingActiveTime--;
