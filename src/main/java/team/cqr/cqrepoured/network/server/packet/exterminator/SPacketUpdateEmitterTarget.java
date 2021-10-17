@@ -28,7 +28,10 @@ public class SPacketUpdateEmitterTarget implements IMessage {
 
 	private boolean leftEmitter; //False if it is for the right one
 	private boolean targetSet; //WEther or not that emitter has a target
-	private int targetID; //ID of the target
+	private int targetID = 0; //ID of the target
+	
+	public SPacketUpdateEmitterTarget() {
+	}
 	
 	public SPacketUpdateEmitterTarget(EntityCQRExterminator entity, boolean leftOrRightEmitter) {
 		this.entityId = entity.getEntityId();
