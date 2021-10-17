@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLivingBase;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.objects.entity.misc.EntityElectricFieldSizable;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -91,6 +92,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 			
 			if(this.ticksExisted % 10 == 0) {
 				//Play a sound
+				this.playSound(CQRSounds.EXTERMINATOR_ELECTRO_ZAP, 1.0F, 1.0F);
 			}
 			EntityLivingBase target = this.getTargetedEntity();
 			this.remainingActiveTime--;
