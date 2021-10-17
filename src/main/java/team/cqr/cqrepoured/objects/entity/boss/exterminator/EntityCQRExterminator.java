@@ -29,9 +29,11 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
 import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
@@ -56,8 +58,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// 3 & 4 => Artificial hitbox (left and right), purpose is to avoid entities punching though the boss when it is in non-stunned state
 	private MultiPartEntityPart[] parts;
 
-	private EntityLivingBase electroCuteTargetA;
-	private EntityLivingBase electroCuteTargetB;
+	private EntityLivingBase electroCuteTargetEmitterLeft;
+	private EntityLivingBase electroCuteTargetEmitterRight;
 
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
@@ -67,9 +69,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 	private boolean partSoundFlag;
-
-	// Entity state handling
-	// Arm state
 
 	public EntityCQRExterminator(World worldIn) {
 		super(worldIn);
@@ -83,12 +82,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			public Boolean apply(Object t) {
 				try {
 					return EntityCQRExterminator.this.getEmitterLeft().isActive() || EntityCQRExterminator.this.getEmitterRight().isActive();
-				} catch(NullPointerException npe) {
+				} catch (NullPointerException npe) {
 					return false;
 				}
-			}});
-		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left");
-		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right");
+			}
+		});
+		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", (Object) -> {
+			return this.electroCuteTargetEmitterLeft;
+		});
+		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", (Object) -> {
+			return this.electroCuteTargetEmitterRight;
+		});
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
@@ -125,13 +129,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 			@Override
 			public EntityLivingBase apply(Object t) {
-				return EntityCQRExterminator.this.getElectroCuteTargetA();
+				return EntityCQRExterminator.this.getElectroCuteTargetLeft();
 			}
 		}, new Function<EntityLivingBase, Object>() {
 
 			@Override
 			public Object apply(EntityLivingBase t) {
-				EntityCQRExterminator.this.setElectroCuteTargetA(t);
+				EntityCQRExterminator.this.setElectroCuteTargetLeft(t);
 				return null;
 			}
 		}));
@@ -139,36 +143,40 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 			@Override
 			public EntityLivingBase apply(Object t) {
-				return EntityCQRExterminator.this.getElectroCuteTargetB();
+				return EntityCQRExterminator.this.getElectroCuteTargetRight();
 			}
 		}, new Function<EntityLivingBase, Object>() {
 
 			@Override
 			public Object apply(EntityLivingBase t) {
-				EntityCQRExterminator.this.setElectroCuteTargetB(t);
+				EntityCQRExterminator.this.setElectroCuteTargetRight(t);
 				return null;
 			}
 		}));
 	}
 
-	public EntityLivingBase getElectroCuteTargetA() {
-		return electroCuteTargetA;
+	public EntityLivingBase getElectroCuteTargetLeft() {
+		return electroCuteTargetEmitterLeft;
 	}
 
-	public void setElectroCuteTargetA(EntityLivingBase electroCuteTargetA) {
-		this.electroCuteTargetA = electroCuteTargetA;
+	public void setElectroCuteTargetLeft(EntityLivingBase electroCuteTargetA) {
+		this.electroCuteTargetEmitterLeft = electroCuteTargetA;
 		
-		this.getEmitterLeft().setTarget(electroCuteTargetA);
+		if(this.isServerWorld()) {
+			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEmitterTarget(this, true), this);
+		}
 	}
 
-	public EntityLivingBase getElectroCuteTargetB() {
-		return electroCuteTargetB;
+	public EntityLivingBase getElectroCuteTargetRight() {
+		return electroCuteTargetEmitterRight;
 	}
 
-	public void setElectroCuteTargetB(EntityLivingBase electroCuteTargetB) {
-		this.electroCuteTargetB = electroCuteTargetB;
+	public void setElectroCuteTargetRight(EntityLivingBase electroCuteTargetB) {
+		this.electroCuteTargetEmitterRight = electroCuteTargetB;
 		
-		this.getEmitterRight().setTarget(electroCuteTargetA);
+		if(this.isServerWorld()) {
+			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEmitterTarget(this, false), this);
+		}
 	}
 
 	public void setStunned(boolean value) {
@@ -783,8 +791,25 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 	}
 
-	public boolean areElectricCoilsActive() {
+	public boolean canElectricCoilsBeActive() {
 		return !(super.isSitting() || this.isStunned());
+	}
+
+	//Datasync stuff
+	public void updateEmitterTargetRightClient(Entity object) {
+		if(object != null && object instanceof EntityLivingBase) {
+			this.setElectroCuteTargetRight((EntityLivingBase) object);
+		} else {
+			this.setElectroCuteTargetRight(null);
+		}
+	}
+
+	public void updateEmitterTargetLeftClient(Entity object) {
+		if(object != null && object instanceof EntityLivingBase) {
+			this.setElectroCuteTargetLeft((EntityLivingBase) object);
+		} else {
+			this.setElectroCuteTargetLeft(null);
+		}
 	}
 
 }
