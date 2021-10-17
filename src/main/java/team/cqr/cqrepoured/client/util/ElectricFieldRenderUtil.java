@@ -47,9 +47,9 @@ public class ElectricFieldRenderUtil {
 			for (int i = 0; i <= steps; ++i) {
 
 				// Apply some "noise" so it looks "electric" (it will jitter when rendering)
-				double vX = (rng.nextFloat() * 2 -1) * fieldRadius + (rng.nextFloat() - 0.5D) * (fieldRadius / 2);
-				double vZ = (rng.nextFloat() * 2 -1) * fieldRadius + (rng.nextFloat() - 0.5D) * (fieldRadius / 2);
-				double vY = (rng.nextFloat() * 2 -1) * (fieldHeight) + rng.nextFloat() + (fieldHeight / 2);
+				double vX = (rng.nextFloat() * 2 -1) * fieldRadius /*+ (rng.nextFloat() - 0.5D) * (fieldRadius / 2)*/;
+				double vZ = (rng.nextFloat() * 2 -1) * fieldRadius /*+ (rng.nextFloat() - 0.5D) * (fieldRadius / 2)*/;
+				double vY = (rng.nextFloat() * 2 -1) * fieldHeight /*+ (rng.nextFloat() - 0.5D) * (fieldHeight / 2)*/;
 
 				// Finally, create the vertex
 				builder.pos(x + vX, y + vY, z + vZ).endVertex();
@@ -142,7 +142,7 @@ public class ElectricFieldRenderUtil {
 	}
 
 	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z) {
-		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 3, x, y, z, 5, 40);
+		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 2, x, y + entity.height / 2, z, 5, 40);
 	}
 
 }
