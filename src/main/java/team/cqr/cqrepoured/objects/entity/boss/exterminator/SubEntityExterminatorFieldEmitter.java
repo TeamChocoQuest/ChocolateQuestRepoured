@@ -14,7 +14,6 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
-	private EntityElectricFieldSizable electricField = null;
 	private EntityCQRExterminator exterminator;
 	
 	private final Function<Object, EntityLivingBase> funcGetElectrocuteTarget;
@@ -32,52 +31,6 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-	}
-
-	@Override
-	public void applySizeVariation(float value) {
-		// No, this should not be done in this entity, it happens in the parent...
-		try {
-			this.electricField.applySizeVariation(value);
-		} catch (NullPointerException npe) {
-			// Ignore
-		}
-	}
-
-	@Override
-	public void setSizeVariation(float size) {
-		super.setSizeVariation(size);
-		try {
-			this.electricField.setSizeVariation(size);
-		} catch (NullPointerException npe) {
-			// Ignore
-		}
-	}
-
-	@Override
-	public void resize(float widthScale, float heightSacle) {
-		super.resize(widthScale, heightSacle);
-		try {
-			this.electricField.resize(widthScale, heightSacle);
-		} catch (NullPointerException npe) {
-			// Ignore
-		}
-	}
-
-	public void createElectricField(int charge) {
-		if (this.electricField != null) {
-			this.electricField.setCharge(charge);
-		} else {
-			this.electricField = new EntityElectricFieldSizable(this.exterminator.getWorld(), charge, this.exterminator.getPersistentID());
-		}
-	}
-
-	public void destroyElectricField() {
-		try {
-			this.electricField.destroyField();
-		} catch (NullPointerException npe) {
-			// Ignore
-		}
 	}
 
 	public boolean isActive() {
