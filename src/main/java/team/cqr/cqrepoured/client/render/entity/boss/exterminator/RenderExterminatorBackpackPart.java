@@ -36,7 +36,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				double x2 = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
 				double y2 = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
-				// y2 += target.getEyeHeight() / 2;
+				y2 += target.getEyeHeight();
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
 				final Vec3d start = new Vec3d(0, 0, 0);
@@ -44,7 +44,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				GlStateManager.pushMatrix();
 
-				GlStateManager.scale(-1, -1, 1);
+				//GlStateManager.scale(-1, -1, 1);
 				//GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
 				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, entity.getRNG(), 0.5, x, y, z, 5);
