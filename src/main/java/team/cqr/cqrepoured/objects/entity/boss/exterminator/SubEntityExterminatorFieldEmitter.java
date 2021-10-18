@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
-import team.cqr.cqrepoured.objects.entity.misc.EntityElectricFieldSizable;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizable<EntityCQRExterminator> {
@@ -17,15 +16,25 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	private EntityCQRExterminator exterminator;
 	
 	private final Function<Object, EntityLivingBase> funcGetElectrocuteTarget;
-
+	private final Function<Object, Boolean> funcGetIsActive;
+	private final Function<Boolean, Object> funcSetIsActiveInParent;
+	
 	private int remainingActiveTime;
 	private int activeTimeNoTarget;
 	private int cooldown;
 	
-	public SubEntityExterminatorFieldEmitter(EntityCQRExterminator parent, String partName, final Function<Object, EntityLivingBase> funcGetElectrocuteTarget) {
+	public SubEntityExterminatorFieldEmitter(
+			EntityCQRExterminator parent, 
+			String partName, 
+			final Function<Object, EntityLivingBase> funcGetElectrocuteTarget,
+			final Function<Object, Boolean> funcGetIsActive,
+			final Function<Boolean, Object> funcSetIsActiveInParent
+		) {
 		super(parent, partName, 0.5F, 0.5F);
 		this.exterminator = parent;
 		this.funcGetElectrocuteTarget = funcGetElectrocuteTarget;
+		this.funcGetIsActive = funcGetIsActive;
+		this.funcSetIsActiveInParent = funcSetIsActiveInParent;
 	}
 
 	@Override
@@ -34,6 +43,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 
 	public boolean isActive() {
+		if(this.world.isRemote) {
+			return this.funcGetIsActive.apply(this);
+		}
 		return this.exterminator.canElectricCoilsBeActive() && this.remainingActiveTime > 0;
 	}
 
@@ -41,7 +53,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
 
-		if (this.isActive()) {
+		boolean active = this.isActive();
+		this.funcSetIsActiveInParent.apply(active);
+		if (active) {
 			
 			if(this.ticksExisted % 30 == 0) {
 				//Play a sound

@@ -43,7 +43,6 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminato
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.ai.target.exterminator.EntityAITargetElectrocute;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
@@ -61,10 +60,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	private EntityLivingBase electroCuteTargetEmitterLeft;
 	private EntityLivingBase electroCuteTargetEmitterRight;
 
-	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	
+	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
@@ -87,12 +89,34 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 				}
 			}
 		});
-		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", (Object) -> {
-			return this.electroCuteTargetEmitterLeft;
-		});
-		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", (Object) -> {
-			return this.electroCuteTargetEmitterRight;
-		});
+		this.parts[1] = new SubEntityExterminatorFieldEmitter(
+				this, 
+				"emitter_left", 
+				(Object) -> {
+					return this.electroCuteTargetEmitterLeft;
+				},
+				(Object) -> {
+					return this.dataManager.get(EMITTER_LEFT_ACTIVE);
+				},
+				(Boolean value) -> {
+					this.dataManager.set(EMITTER_LEFT_ACTIVE, value);
+					return null;
+				}
+		);
+		this.parts[2] = new SubEntityExterminatorFieldEmitter(
+				this,
+				"emitter_right",
+				(Object) -> {
+					return this.electroCuteTargetEmitterRight;
+				},
+				(Object) -> {
+					return this.dataManager.get(EMITTER_RIGHT_ACTIVE);
+				},
+				(Boolean value) -> {
+					this.dataManager.set(EMITTER_RIGHT_ACTIVE, value);
+					return null;
+				}
+		);
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
@@ -115,6 +139,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.dataManager.register(CANNON_RAISED, false);
 		this.dataManager.register(PUNCH_IS_KICK, false);
 		this.dataManager.register(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
+		this.dataManager.register(EMITTER_LEFT_ACTIVE, false);
+		this.dataManager.register(EMITTER_RIGHT_ACTIVE, false);
 	}
 
 	@Override
