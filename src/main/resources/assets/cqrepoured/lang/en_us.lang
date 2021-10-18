@@ -637,6 +637,7 @@ entity.cqr_pirate_captain.name=Pirate Captain
 entity.cqr_giant_spider.name=Shelob
 entity.cqr_ender_king.name=Ender King
 entity.cqr_ender_calamity.name=§4Ender Calamity
+entity.cqr_exterminator.name=Exterminator Prototype
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
@@ -686,3 +687,5 @@ advancements.cqrepoured.kill_ender_king.title=Was that everything?!
 advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
 advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
 advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
