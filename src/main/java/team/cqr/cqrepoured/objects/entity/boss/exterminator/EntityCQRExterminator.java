@@ -38,6 +38,7 @@ import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
+import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIArmCannon;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.ai.target.exterminator.EntityAITargetElectrocute;
@@ -147,6 +148,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		super.initEntityAI();
 
 		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
+		this.tasks.addTask(3, new BossAIArmCannon(this));
 
 		// Target tasks for the electro stuff
 		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
@@ -406,7 +408,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		IServerAnimationReceiver.super.sendAnimationUpdate(animationName);
 		switch (animationName) {
 		case ANIM_NAME_CANNON_SHOOT:
-			this.animationTimer = CANNON_SHOOT_DURATION;
+			this.animationTimer = this.cannonArmTimer;
 			break;
 		case ANIM_NAME_THROW:
 			this.animationTimer = ARMS_THROW_DURATION;
@@ -713,14 +715,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public boolean startShootingAnimation(boolean fastShot) {
 		if (this.isCannonArmReadyToShoot()) {
-
-			// DONE: Send animation update to client!!!
-			this.sendAnimationUpdate(ANIM_NAME_CANNON_SHOOT);
-
 			this.cannonArmTimer = CANNON_SHOOT_DURATION;
 			if (fastShot) {
 				this.cannonArmTimer /= 2;
 			}
+				
+			// DONE: Send animation update to client!!!
+			this.sendAnimationUpdate(ANIM_NAME_CANNON_SHOOT);
 
 			return true;
 		}
@@ -735,7 +736,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		return this.dataManager.get(CANNON_RAISED);
 	}
 
-	public Vec3d getCannonFiringPointOffset(boolean forLaser) {
+	public Vec3d getCannonFiringPointOffset() {
 		Vec3d result = Vec3d.ZERO;
 
 		final float scale = this.getSizeVariation();
@@ -744,7 +745,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		final Vec3d facing = this.getLookVec().normalize();
 		result = result.add(facing.scale(0.75));
-		result = result.add(VectorUtil.rotateVectorAroundY(facing, forLaser ? 270 : 90).scale(0.65));
+		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.65));
 
 		result = result.scale(scale);
 
@@ -752,7 +753,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public Vec3d getCannonFiringLocation() {
-		Vec3d result = this.getCannonFiringPointOffset(false);
+		Vec3d result = this.getCannonFiringPointOffset();
 		result = result.add(this.posX, this.posY, this.posZ);
 		return result;
 	}
