@@ -96,6 +96,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 					this.remainingShotsInSequence--;
 					if (this.remainingShotsInSequence <= 0) {
 						this.prevTimeAttacked = this.entity.ticksExisted;
+						this.resetTask();
 					}
 				}
 			} else {
