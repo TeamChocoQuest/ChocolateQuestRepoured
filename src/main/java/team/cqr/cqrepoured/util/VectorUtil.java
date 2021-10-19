@@ -13,6 +13,9 @@ public class VectorUtil {
 		AXIS_Y, AXIS_X, AXIS_Z;
 	}
 
+	/*
+	 * Important: Mathematical positive => turn left around
+	 */
 	public static Vec3d rotateVectorAroundY(Vec3d vector, double degrees) {
 		return vector.rotateYaw((float) Math.toRadians(degrees));
 	}
