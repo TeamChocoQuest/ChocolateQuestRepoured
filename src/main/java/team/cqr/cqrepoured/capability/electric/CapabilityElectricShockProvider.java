@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.objects.entity.IMechanical;
@@ -146,7 +147,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		// First, get all applicable entities in range
 		List<EntityLivingBase> entities = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
 		entities.removeIf((EntityLivingBase input) -> {
-			if (!entity.canEntityBeSeen(input) || entity.getDistance(input) > 8) {
+			if (!entity.canEntityBeSeen(input) || entity.getDistance(input) > CQRConfig.general.electricFieldEffectSpreadRange) {
 				return true;
 			}
 			return !TargetUtil.isAllyCheckingLeaders(entity, input);
