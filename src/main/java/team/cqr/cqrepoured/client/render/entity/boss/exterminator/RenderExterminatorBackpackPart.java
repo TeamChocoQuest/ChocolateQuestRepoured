@@ -40,7 +40,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
 				final Vec3d start = new Vec3d(0, 0, 0);
-				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1).scale(1.1D);
+				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1);
 
 				GlStateManager.pushMatrix();
 
