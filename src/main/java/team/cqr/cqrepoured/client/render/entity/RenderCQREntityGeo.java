@@ -68,7 +68,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			GlStateManager.pushMatrix();
 
 			this.renderPass = 1;
-			// TODO: Figure out how to properly "inflate" the model
+			// DONE: Figure out how to properly "inflate" the model => Bone.setScale()
 			// GlStateManager.scale(1.1, 1.1, 1.1);
 			// GlStateManager.translate(x * 1.1, y * 1.1, z * 1.1);
 
