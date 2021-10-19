@@ -30,11 +30,15 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute()) {
-			this.cooldown--;
-			if (this.cooldown <= 0) {
-				if (this.isFarAwayEnough()) {
-					return true;
+			if(this.cooldown > 0) {
+				this.cooldown--;
+			}
+			if (this.isFarAwayEnough()) {
+				if(this.entity.hasAttackTarget()) {
+					this.cooldown -= this.entity.getDistance(this.entity.getAttackTarget());
 				}
+				
+				return this.cooldown <= 0;
 			}
 		}
 		return false;
@@ -104,7 +108,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	@Override
 	protected float getStrafingSpeed() {
 		if(this.isCurrentSequenceFast) {
-			return 2 * super.getStrafingSpeed();
+			return 1.25F * super.getStrafingSpeed();
 		}
 		return super.getStrafingSpeed();
 	}
