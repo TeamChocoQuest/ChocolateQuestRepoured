@@ -100,6 +100,14 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 		}
 	}
+	
+	@Override
+	protected float getStrafingSpeed() {
+		if(this.isCurrentSequenceFast) {
+			return 2 * super.getStrafingSpeed();
+		}
+		return super.getStrafingSpeed();
+	}
 
 	private void spawnParticles(Vec3d armPos) {
 		if (this.world instanceof WorldServer) {

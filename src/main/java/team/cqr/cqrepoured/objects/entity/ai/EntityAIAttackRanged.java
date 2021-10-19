@@ -108,9 +108,13 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 				this.strafingBackwards = true;
 			}
 
-			float f = (float) (this.entity.isNonBoss() ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
+			float f = this.getStrafingSpeed();
 			this.entity.getMoveHelper().strafe(this.strafingBackwards ? -f : f, this.strafingClockwise ? f : -f);
 		}
+	}
+
+	protected float getStrafingSpeed() {
+		return (float) (this.entity.isNonBoss() ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
 	}
 
 	protected boolean canStrafe() {
