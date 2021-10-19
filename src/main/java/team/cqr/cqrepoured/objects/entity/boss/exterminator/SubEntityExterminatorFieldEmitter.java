@@ -1,7 +1,8 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
 import java.util.Random;
-import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -15,9 +16,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 	private EntityCQRExterminator exterminator;
 	
-	private final Function<Object, EntityLivingBase> funcGetElectrocuteTarget;
-	private final Function<Object, Boolean> funcGetIsActive;
-	private final Function<Boolean, Object> funcSetIsActiveInParent;
+	private final Supplier<EntityLivingBase> funcGetElectrocuteTarget;
+	private final Supplier<Boolean> funcGetIsActive;
+	private final Consumer<Boolean> funcSetIsActiveInParent;
 	
 	private int remainingActiveTime;
 	private int activeTimeNoTarget;
@@ -26,9 +27,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	public SubEntityExterminatorFieldEmitter(
 			EntityCQRExterminator parent, 
 			String partName, 
-			final Function<Object, EntityLivingBase> funcGetElectrocuteTarget,
-			final Function<Object, Boolean> funcGetIsActive,
-			final Function<Boolean, Object> funcSetIsActiveInParent
+			final Supplier<EntityLivingBase> funcGetElectrocuteTarget,
+			final Supplier<Boolean> funcGetIsActive,
+			final Consumer<Boolean> funcSetIsActiveInParent
 		) {
 		super(parent, partName, 0.5F, 0.5F);
 		this.exterminator = parent;
@@ -44,7 +45,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 	public boolean isActive() {
 		if(this.world.isRemote) {
-			return this.funcGetIsActive.apply(this);
+			return this.funcGetIsActive.get();
 		}
 		return this.exterminator.canElectricCoilsBeActive() && this.remainingActiveTime > 0;
 	}
@@ -54,7 +55,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 		super.onEntityUpdate();
 
 		boolean active = this.isActive();
-		this.funcSetIsActiveInParent.apply(active);
+		this.funcSetIsActiveInParent.accept(active);
 		if (active) {
 			
 			if(this.ticksExisted % 30 == 0) {
@@ -90,7 +91,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 	@Nullable
 	public EntityLivingBase getTargetedEntity() {
-		return this.funcGetElectrocuteTarget.apply(this);
+		return this.funcGetElectrocuteTarget.get();
 	}
 
 	public Random getRNG() {

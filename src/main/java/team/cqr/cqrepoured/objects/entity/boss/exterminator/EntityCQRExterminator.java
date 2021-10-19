@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -78,47 +77,31 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		this.parts = new MultiPartEntityPart[5];
 
-		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", new Function<Object, Boolean>() {
-
-			@Override
-			public Boolean apply(Object t) {
-				try {
-					return EntityCQRExterminator.this.getEmitterLeft().isActive() || EntityCQRExterminator.this.getEmitterRight().isActive();
-				} catch (NullPointerException npe) {
-					return false;
-				}
-			}
-		});
+		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(
 				this, 
 				"emitter_left", 
-				(Object) -> {
-					return this.electroCuteTargetEmitterLeft;
-				},
-				(Object) -> {
-					return this.dataManager.get(EMITTER_LEFT_ACTIVE);
-				},
-				(Boolean value) -> {
-					this.dataManager.set(EMITTER_LEFT_ACTIVE, value);
-					return null;
-				}
+				this::getElectroCuteTargetLeft,
+				this::isEmitterLeftActive,
+				this::setEmitterLeftActive
 		);
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(
 				this,
 				"emitter_right",
-				(Object) -> {
-					return this.electroCuteTargetEmitterRight;
-				},
-				(Object) -> {
-					return this.dataManager.get(EMITTER_RIGHT_ACTIVE);
-				},
-				(Boolean value) -> {
-					this.dataManager.set(EMITTER_RIGHT_ACTIVE, value);
-					return null;
-				}
+				this::getElectroCuteTargetRight,
+				this::isEmitterRightActive,
+				this::setEmitterRightActive
 		);
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
+	}
+	
+	protected boolean isAnyEmitterActive() {
+		try {
+			return EntityCQRExterminator.this.getEmitterLeft().isActive() || EntityCQRExterminator.this.getEmitterRight().isActive();
+		} catch (NullPointerException npe) {
+			return false;
+		}
 	}
 
 	@Nullable
@@ -129,6 +112,22 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Nullable
 	private SubEntityExterminatorFieldEmitter getEmitterRight() {
 		return (SubEntityExterminatorFieldEmitter) this.parts[2];
+	}
+	
+	protected boolean isEmitterLeftActive() {
+		return this.dataManager.get(EMITTER_LEFT_ACTIVE);
+	}
+	
+	protected void setEmitterLeftActive(boolean value) {
+		this.dataManager.set(EMITTER_LEFT_ACTIVE, value);
+	}
+	
+	protected boolean isEmitterRightActive() {
+		return this.dataManager.get(EMITTER_RIGHT_ACTIVE);
+	}
+	
+	protected void setEmitterRightActive(boolean value) {
+		this.dataManager.set(EMITTER_RIGHT_ACTIVE, value);
 	}
 
 	@Override
@@ -150,35 +149,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
 
 		// Target tasks for the electro stuff
-		// TODO: Figure out how to do this with method references
-		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, new Function<Object, EntityLivingBase>() {
-
-			@Override
-			public EntityLivingBase apply(Object t) {
-				return EntityCQRExterminator.this.getElectroCuteTargetLeft();
-			}
-		}, new Function<EntityLivingBase, Object>() {
-
-			@Override
-			public Object apply(EntityLivingBase t) {
-				EntityCQRExterminator.this.setElectroCuteTargetLeft(t);
-				return null;
-			}
-		}));
-		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, new Function<Object, EntityLivingBase>() {
-
-			@Override
-			public EntityLivingBase apply(Object t) {
-				return EntityCQRExterminator.this.getElectroCuteTargetRight();
-			}
-		}, new Function<EntityLivingBase, Object>() {
-
-			@Override
-			public Object apply(EntityLivingBase t) {
-				EntityCQRExterminator.this.setElectroCuteTargetRight(t);
-				return null;
-			}
-		}));
+		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
+		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
 	}
 
 	public EntityLivingBase getElectroCuteTargetLeft() {

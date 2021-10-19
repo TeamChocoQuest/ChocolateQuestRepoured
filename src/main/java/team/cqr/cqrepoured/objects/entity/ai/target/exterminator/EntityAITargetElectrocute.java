@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.ai.target.exterminator;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import net.minecraft.entity.EntityLivingBase;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -9,10 +10,10 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 
-	private Function<Object, EntityLivingBase> funcGetElectrocuteTarget;
-	private Function<EntityLivingBase, Object> funcSetElectrocuteTarget;
+	private Supplier<EntityLivingBase> funcGetElectrocuteTarget;
+	private Consumer<EntityLivingBase> funcSetElectrocuteTarget;
 	
-	public EntityAITargetElectrocute(AbstractEntityCQR entity, Function<Object, EntityLivingBase> funcGetElectrocuteTarget, Function<EntityLivingBase, Object> funcSetElectrocuteTarget) {
+	public EntityAITargetElectrocute(AbstractEntityCQR entity, Supplier<EntityLivingBase> funcGetElectrocuteTarget, Consumer<EntityLivingBase> funcSetElectrocuteTarget) {
 		super(entity);
 		
 		this.funcGetElectrocuteTarget = funcGetElectrocuteTarget;
@@ -21,12 +22,12 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 	
 	@Override
 	protected EntityLivingBase wrapperGetAttackTarget() {
-		return this.funcGetElectrocuteTarget.apply(null);
+		return this.funcGetElectrocuteTarget.get();
 	}
 	
 	@Override
 	protected void wrapperSetAttackTarget(EntityLivingBase target) {
-		this.funcSetElectrocuteTarget.apply(target);
+		this.funcSetElectrocuteTarget.accept(target);
 	}
 	
 	@Override
