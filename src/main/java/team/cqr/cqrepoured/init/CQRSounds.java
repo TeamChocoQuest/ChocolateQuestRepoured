@@ -89,6 +89,8 @@ public class CQRSounds {
 	/* Sound taken from DungeonDefenders, credit goes to TrendyNet */
 	@ObjectHolder("entity.exterminator.electro_zap")
 	public static final SoundEvent EXTERMINATOR_ELECTRO_ZAP = Null();
+	@ObjectHolder("entity.exterminator.cannon_shoot")
+	public static final SoundEvent EXTERMINATOR_CANNON_SHOOT = Null();
 	
 	/* Sound taken from DungeonDefenders, credit goes to TrendyNet */
 	@ObjectHolder("projectile.energy_ball.impact")
@@ -134,6 +136,7 @@ public class CQRSounds {
 					createSoundEvent("entity.ender_calamity.fire_energy_sphere"),
 					createSoundEvent("entity.ender_calamity.throw_item"),
 					createSoundEvent("entity.exterminator.electro_zap"),
+					createSoundEvent("entity.exterminator.cannon_shoot"),
 					createSoundEvent("projectile.energy_ball.impact"),
 					createSoundEvent("entity.bubble.bubble") };
 

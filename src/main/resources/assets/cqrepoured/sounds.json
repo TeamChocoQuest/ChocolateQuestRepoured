@@ -297,6 +297,14 @@
 			{"name": "cqrepoured:entity/exterminator/zap4"}
 		]
 	},
+	"entity.exterminator.cannon_shoot":
+	{
+		"category": "boss",
+		"sounds":
+		[
+			{"name": "cqrepoured:entity/exterminator/cannon_shoot"}		
+		]
+	},
     
     "projectile.energy_ball.impact":
     {
