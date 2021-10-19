@@ -15,14 +15,14 @@ import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
-public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR> {
+public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractCQREntityAI<T> {
 
 	protected int prevTimeAttacked;
 	private boolean strafingClockwise;
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
 
-	public EntityAIAttackRanged(AbstractEntityCQR entity) {
+	public EntityAIAttackRanged(T entity) {
 		super(entity);
 		this.setMutexBits(3);
 	}
@@ -143,13 +143,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 					double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
 					double z = attackTarget.posZ - this.entity.posZ;
 					double distance = Math.sqrt(x * x + z * z);
-					float inaccuracy = 4.0F;
-					if (this.world.getDifficulty() == EnumDifficulty.HARD) {
-						inaccuracy = 1.0F;
-					} else if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
-						inaccuracy = 2.0F;
-					}
-					arrow.shoot(x, y + distance * distance * 0.0045D, z, 2.4F, inaccuracy);
+					arrow.shoot(x, y + distance * distance * 0.0045D, z, 2.4F, this.getInaccuracy());
 					arrow.motionX += this.entity.motionX;
 					arrow.motionZ += this.entity.motionZ;
 					if (!this.entity.onGround) {
@@ -173,6 +167,16 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 				}
 			}
 		}
+	}
+	
+	protected float getInaccuracy() {
+		float inaccuracy = 4.0F;
+		if (this.world.getDifficulty() == EnumDifficulty.HARD) {
+			inaccuracy = 1.0F;
+		} else if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
+			inaccuracy = 2.0F;
+		}
+		return inaccuracy;
 	}
 
 	protected boolean isRangedWeapon(Item item) {
