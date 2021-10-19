@@ -146,7 +146,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		// First, get all applicable entities in range
 		List<EntityLivingBase> entities = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
 		entities.removeIf((EntityLivingBase input) -> {
-			if (!entity.canEntityBeSeen(input) || entity.getDistance(input) > 16) {
+			if (!entity.canEntityBeSeen(input) || entity.getDistance(input) > 8) {
 				return true;
 			}
 			return !TargetUtil.isAllyCheckingLeaders(entity, input);
