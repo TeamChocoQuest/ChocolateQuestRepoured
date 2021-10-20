@@ -11,9 +11,9 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
-version = "${mc_version}-${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_name}"
+version = '1.12.2-2.5.3B'
+group = 'team.cqr.cqrepoured'
+archivesBaseName = 'Chocolate_Quest_Repoured'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
