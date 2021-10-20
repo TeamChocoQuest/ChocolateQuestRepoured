@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -267,19 +268,22 @@ public class CQRMain {
 	}
 
 	@EventHandler
-	public static void onFMLServerStartingEvent(FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandExport());
-		event.registerServerCommand(new CommandChangeReputation());
-		event.registerServerCommand(new CommandGetProtectedRegion());
-		event.registerServerCommand(new CommandDeleteProtectedRegion());
-		event.registerServerCommand(new CommandLocateDungeon());
-
+	public static void onFMLServerStartingEvent(FMLServerAboutToStartEvent event) {
 		// Since the CTS manager could also be corrupted, let's make him reload his data...
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
 		FactionRegistry.instance().loadFactions();
 
 		CQStructure.cacheFiles();
+	}
+
+	@EventHandler
+	public static void onFMLServerStartingEvent(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandExport());
+		event.registerServerCommand(new CommandChangeReputation());
+		event.registerServerCommand(new CommandGetProtectedRegion());
+		event.registerServerCommand(new CommandDeleteProtectedRegion());
+		event.registerServerCommand(new CommandLocateDungeon());
 	}
 
 	@EventHandler
