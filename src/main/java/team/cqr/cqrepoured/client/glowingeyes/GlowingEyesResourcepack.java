@@ -33,6 +33,9 @@ public class GlowingEyesResourcepack implements IResourcePack {
 	private Set<String> DOMAIN_SET = new HashSet<>();
 	private Set<String> NON_GLOW_TEXTURES = new ConcurrentSet<>();
 	private Set<ResourceLocation> KNOWN_GLOW_TEXTURES = new HashSet<>();
+	
+	protected static final String SINGLE_NUMBER_REGEX = "[1-9]+[0-9]*";
+	protected static final String PATTERN_REGEX = SINGLE_NUMBER_REGEX + "|" + SINGLE_NUMBER_REGEX + "-" + SINGLE_NUMBER_REGEX + "|" + SINGLE_NUMBER_REGEX; 
 
 	private static InputStream getEmptyTextureStream() {
 		return null;
@@ -77,13 +80,8 @@ public class GlowingEyesResourcepack implements IResourcePack {
 				configStream.close();
 				while (reader.ready()) {
 					String line = reader.readLine();
-					if (line.startsWith("#")) {
-						continue;
-					}
-					if (line.split("-").length != 2) {
-						continue;
-					}
-					if (line.split("|").length != 3) {
+					//DONE: Create regex that can detect the pattern
+					if(!line.matches(PATTERN_REGEX)) {
 						continue;
 					}
 					String par1 = line.split("-")[0];
