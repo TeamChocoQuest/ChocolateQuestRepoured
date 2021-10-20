@@ -1,112 +1,77 @@
 buildscript {
     repositories {
-        //maven { url = 'https://files.minecraftforge.net/maven' }
-		maven {
-			url = 'https://maven.minecraftforge.net/'
-		}
-        jcenter()
-        //mavenCentral()
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-        
-apply plugin: 'net.minecraftforge.gradle.forge'
-// apply plugin: 'maven'
+apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-// apply plugin: 'eclipse'
+apply plugin: 'eclipse'
 
 version = "${mc_version}-${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_name}"
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
-minecraft {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
-    mappings = "${mappings_channel}_${mappings_version}"
-    //Below is for 2854 and up
-    //mapping_channel = "${mappings_channel}"
-    //mapping_version = "${mappings_version}"
+configurations {
+    atDependencies
+    buildDependencies
 
-    //runs {
-       // client {
-            //workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            //property 'forge.logging.console.level', 'debug'
-        //}
-
-        //server {
-
-            // Recommended logging data for a userdev environment
-            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            //property 'forge.logging.console.level', 'debug'
-        //}
-    //}
+    implementation.extendsFrom(atDependencies)
 }
 
 repositories {
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    //Geckolib
-    maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
-    maven {
-        url = "https://www.cursemaven.com"
-    }
+    // JEI
+    maven { url 'https://dvs1.progwml6.com/files/maven' }
+    maven { url 'https://modmaven.k-4u.nl' }
+
+    // GeckoLib
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
+
+    maven { url 'https://www.cursemaven.com' }
 }
 
 dependencies {
-    //minecraft "net.minecraftforge:forge:1.12.2-${forge_version}"
-    
-    // compile against the JEI API but do not include it at runtime
-    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-    
-    //Geckolib
-    deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.7')
-    
-    //AW2-Jar
-    if (project.hasProperty('buildjar')) {
-        compile 'curse.maven:AncientWarfare2-224602:3199040'
-        compile 'curse.maven:CodeChickenLib-242818:2779848'
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+
+    implementation fg.deobf('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.7')
+
+    atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.301')
+
+    buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
+    buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
+}
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+
+    def atDepFileTree = files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree()
+    accessTransformer = files(
+        'src/main/resources/META-INF/accesstransformer.cfg',
+        atDepFileTree.matching { include 'META-INF/jei_at.cfg' }
+    )
+
+    runs {
+        client {
+            taskName 'runClient CQR 1.12'
+            environment 'MC_VERSION', '1.12.2'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+        }
+
+        server {
+            taskName 'runServer CQR 1.12'
+            environment 'MC_VERSION', '1.12.2'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+        }
     }
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+compileJava {
+    classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
 }
