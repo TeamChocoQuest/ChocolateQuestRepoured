@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +39,8 @@ import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRParticleManager;
+import team.cqr.cqrepoured.client.mcmetaserializers.GlowingMetadataSection;
+import team.cqr.cqrepoured.client.mcmetaserializers.GlowingMetadataSectionSerializer;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerElectrocute;
 import team.cqr.cqrepoured.customtextures.CTResourcepack;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -55,12 +58,20 @@ public class ClientProxy implements IProxy {
 	private static final ReflectionField FIELD_ADVANCEMENT_TO_PROGRESS = new ReflectionField(ClientAdvancementManager.class, "field_192803_d", "advancementToProgress");
 	public static final ReflectionField DEFAULT_RESOURCE_PACKS = new ReflectionField(Minecraft.class, "field_110449_ao", "defaultResourcePacks");
 
+	protected static ReflectionField META_SERIALIZER_FIELD = new ReflectionField(Minecraft.class, "tbd", "metadataSerializer");
+	
 	@Override
 	public void preInit() {
 		List<IResourcePack> defaultResourcePacks = DEFAULT_RESOURCE_PACKS.get(Minecraft.getMinecraft());
 		defaultResourcePacks.add(CTResourcepack.getInstance());
 		CQREntityRenderers.registerRenderers();
 		CQRParticleManager.init();
+		
+		//Add custom metadataserializers
+		Object reflectGet = META_SERIALIZER_FIELD.get(Minecraft.getMinecraft());
+		if(reflectGet instanceof MetadataSerializer) {
+			((MetadataSerializer)reflectGet).registerMetadataSectionType(new GlowingMetadataSectionSerializer()	, GlowingMetadataSection.class);
+		}
 	}
 
 	@Override
