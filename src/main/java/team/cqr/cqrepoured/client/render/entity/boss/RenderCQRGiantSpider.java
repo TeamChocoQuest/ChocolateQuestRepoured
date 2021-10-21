@@ -14,7 +14,7 @@ public class RenderCQRGiantSpider extends RenderLiving<EntityCQRGiantSpider> {
 
 	public RenderCQRGiantSpider(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelGiantSpider(), 2.0F);
-		this.addLayer(new LayerGlowingEyes<EntityCQRGiantSpider>(this, new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_spider_eyes.png")));
+		this.addLayer(new LayerGlowingEyes<EntityCQRGiantSpider>(this, this::getEntityTexture));
 	}
 
 	@Override
