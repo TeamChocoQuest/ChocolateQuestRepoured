@@ -59,6 +59,15 @@ public class TextureSet {
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
 						// }
+						
+						//Meta file
+						File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
+						if (mf != null && mf.exists()) {
+							textures.put(texture + ".png.mcmeta", tf);
+							rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
+							texNameRLMap.put(texture + ".png.mcmeta", rs);
+							this.addTexture(resLoc, rs);
+						}
 					}
 				}
 			}
