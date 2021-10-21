@@ -10,7 +10,6 @@ import java.util.function.Function;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -233,7 +232,7 @@ public class ItemUtil {
 							player.onCriticalHit(targetEntity);
 						} else if (fakeCrit) { // CQR: Allow fake crits to happen
 							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.2F);
-							Minecraft.getMinecraft().effectRenderer.emitParticleAtEntity(targetEntity, EnumParticleTypes.CRIT_MAGIC);
+							player.onCriticalHit(targetEntity);
 						}
 
 						if (!flag2 && !fakeCrit && !flag3) {

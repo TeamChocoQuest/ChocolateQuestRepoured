@@ -114,6 +114,9 @@ public class CTResourcepack implements IResourcePack {
 	private void loadAllTexturesImpl() {
 		TextureManager tm = Minecraft.getMinecraft().getTextureManager();
 		for (Map.Entry<ResourceLocation, File> entry : this.FILES.entrySet()) {
+			if (entry.getKey().getPath().endsWith(".mcmeta")) {
+				continue;
+			}
 			ThreadDownloadImageData tex = new ThreadDownloadImageData(entry.getValue(), null, entry.getKey(), new UniversalImageBuffer());
 			try {
 				tex.setBufferedImage(ImageIO.read(entry.getValue()));
