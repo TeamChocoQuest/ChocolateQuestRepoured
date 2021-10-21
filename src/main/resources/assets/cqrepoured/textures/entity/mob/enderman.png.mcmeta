@@ -1,0 +1,12 @@
+{
+  "glowsections": {
+    "sections": [
+	  {
+	    "corners": "8|12-11|13"
+	  },
+	  {
+	    "corners": "13|12-16|13"
+	  }
+	]
+  }
+}
