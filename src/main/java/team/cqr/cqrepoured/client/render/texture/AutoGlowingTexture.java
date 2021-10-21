@@ -35,7 +35,7 @@ public class AutoGlowingTexture extends AbstractTexture {
 		ResourceLocation glowingTexture = new ResourceLocation(originalTexture.getNamespace(), path.substring(0, i) + "_glowing" + path.substring(i));
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		if (renderManager.renderEngine.getTexture(glowingTexture) == null) {
-			renderManager.renderEngine.loadTexture(glowingTexture, new InvisibilityTexture(originalTexture, glowingTexture));
+			renderManager.renderEngine.loadTexture(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
 		}
 		return glowingTexture;
 	}
