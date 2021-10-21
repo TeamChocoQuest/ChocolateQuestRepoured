@@ -83,7 +83,7 @@ dependencies {
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
     
     //Geckolib
-    deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.7')
+    deobfCompile('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.9')
     
     //AW2-Jar
     if (project.hasProperty('buildjar')) {

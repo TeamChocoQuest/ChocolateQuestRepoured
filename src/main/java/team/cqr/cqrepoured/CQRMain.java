@@ -91,6 +91,7 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_ROOT = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = null;
+	public static File CQ_GLOWING_TEXTURES_FOLDER = null;
 
 	public static boolean isWorkspaceEnvironment = true;
 	public static boolean isPhosphorInstalled;
@@ -205,7 +206,9 @@ public class CQRMain {
 				CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures"),
 				CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"),
 				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"),
-				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync") };
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync"),
+				CQ_GLOWING_TEXTURES_FOLDER = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "eyes")
+			};
 
 		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "1.0.0");
