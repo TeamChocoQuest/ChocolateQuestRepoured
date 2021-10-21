@@ -16,9 +16,6 @@ import net.minecraft.util.Tuple;
 
 public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSerializer<GlowingMetadataSection> implements JsonSerializer<GlowingMetadataSection> {
 
-	protected static final String SINGLE_NUMBER_REGEX = "[1-9]+[0-9]*";
-	protected static final String PATTERN_REGEX = SINGLE_NUMBER_REGEX + "|" + SINGLE_NUMBER_REGEX + "-" + SINGLE_NUMBER_REGEX + "|" + SINGLE_NUMBER_REGEX;
-
 	@Override
 	public String getSectionName() {
 		return "glowsections";
@@ -32,13 +29,13 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 			GlowingMetadataSection result = new GlowingMetadataSection();
 			for (int i = 0; i < jsonarray.size(); ++i) {
 				JsonElement jsonelement = jsonarray.get(i);
-				String entry = JsonUtils.getString(jsonelement, "corners");
+				String entry = JsonUtils.getString(jsonelement.getAsJsonObject(), "corners");
 
-				if (entry.matches(PATTERN_REGEX)) {
+				if (entry.split("|").length == 3 && entry.split("-").length == 2) {
 					String par1 = entry.split("-")[0];
 					String[] split = par1.split("|");
 					Tuple<Integer, Integer> pos1 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-					String par2 = entry.split("-")[2];
+					String par2 = entry.split("-")[1];
 					split = par2.split("|");
 					Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 					if (pos1.getFirst() <= pos2.getFirst() && pos1.getSecond() <= pos2.getSecond()) {
