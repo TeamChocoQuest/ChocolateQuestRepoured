@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
@@ -60,11 +61,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	private EntityLivingBase electroCuteTargetEmitterLeft;
 	private EntityLivingBase electroCuteTargetEmitterRight;
 
+	private int stunTime = 0;
+
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	
+
 	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
@@ -79,24 +82,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.parts = new MultiPartEntityPart[5];
 
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
-		this.parts[1] = new SubEntityExterminatorFieldEmitter(
-				this, 
-				"emitter_left", 
-				this::getElectroCuteTargetLeft,
-				this::isEmitterLeftActive,
-				this::setEmitterLeftActive
-		);
-		this.parts[2] = new SubEntityExterminatorFieldEmitter(
-				this,
-				"emitter_right",
-				this::getElectroCuteTargetRight,
-				this::isEmitterRightActive,
-				this::setEmitterRightActive
-		);
+		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
+		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
-	
+
 	protected boolean isAnyEmitterActive() {
 		try {
 			return EntityCQRExterminator.this.getEmitterLeft().isActive() || EntityCQRExterminator.this.getEmitterRight().isActive();
@@ -114,19 +105,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	private SubEntityExterminatorFieldEmitter getEmitterRight() {
 		return (SubEntityExterminatorFieldEmitter) this.parts[2];
 	}
-	
+
 	protected boolean isEmitterLeftActive() {
 		return this.dataManager.get(EMITTER_LEFT_ACTIVE);
 	}
-	
+
 	protected void setEmitterLeftActive(boolean value) {
 		this.dataManager.set(EMITTER_LEFT_ACTIVE, value);
 	}
-	
+
 	protected boolean isEmitterRightActive() {
 		return this.dataManager.get(EMITTER_RIGHT_ACTIVE);
 	}
-	
+
 	protected void setEmitterRightActive(boolean value) {
 		this.dataManager.set(EMITTER_RIGHT_ACTIVE, value);
 	}
@@ -161,8 +152,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public void setElectroCuteTargetLeft(EntityLivingBase electroCuteTargetA) {
 		this.electroCuteTargetEmitterLeft = electroCuteTargetA;
-		
-		if(this.isServerWorld()) {
+
+		if (this.isServerWorld()) {
 			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEmitterTarget(this, true), this);
 		}
 	}
@@ -173,14 +164,23 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public void setElectroCuteTargetRight(EntityLivingBase electroCuteTargetB) {
 		this.electroCuteTargetEmitterRight = electroCuteTargetB;
-		
-		if(this.isServerWorld()) {
+
+		if (this.isServerWorld()) {
 			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEmitterTarget(this, false), this);
 		}
 	}
 
 	public void setStunned(boolean value) {
 		this.dataManager.set(IS_STUNNED, value);
+	}
+
+	@Override
+	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+		if (this.isStunned()) {
+			this.stunTime += 50;
+		} else {
+			this.stunTime = 200;
+		}
 	}
 
 	public boolean isStunned() {
@@ -379,6 +379,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public void onUpdate() {
 		super.onUpdate();
 
+		if (this.isServerWorld()) {
+			if (this.stunTime > 0) {
+				this.stunTime--;
+			}
+			this.setStunned(this.stunTime > 0);
+		}
 		for (MultiPartEntityPart part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
 			part.onUpdate();
@@ -719,7 +725,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			if (fastShot) {
 				this.cannonArmTimer /= 2;
 			}
-				
+
 			// DONE: Send animation update to client!!!
 			this.sendAnimationUpdate(ANIM_NAME_CANNON_SHOOT);
 
@@ -794,9 +800,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		return !(super.isSitting() || this.isStunned());
 	}
 
-	//Datasync stuff
+	// Datasync stuff
 	public void updateEmitterTargetRightClient(Entity object) {
-		if(object != null && object instanceof EntityLivingBase) {
+		if (object != null && object instanceof EntityLivingBase) {
 			this.setElectroCuteTargetRight((EntityLivingBase) object);
 		} else {
 			this.setElectroCuteTargetRight(null);
@@ -804,7 +810,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public void updateEmitterTargetLeftClient(Entity object) {
-		if(object != null && object instanceof EntityLivingBase) {
+		if (object != null && object instanceof EntityLivingBase) {
 			this.setElectroCuteTargetLeft((EntityLivingBase) object);
 		} else {
 			this.setElectroCuteTargetLeft(null);
