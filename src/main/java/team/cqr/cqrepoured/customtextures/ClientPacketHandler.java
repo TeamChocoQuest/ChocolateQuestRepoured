@@ -28,11 +28,7 @@ public class ClientPacketHandler {
 					tf.getParentFile().mkdirs();
 				}
 				if (CompressionUtil.decodeBase64ToFile(tf, textureEntry.getValue())) {
-					if(path.endsWith(".mcmeta")) {
-						
-					} else {
-						fileMap.put(path, tf);
-					}
+					fileMap.put(path, tf);
 				} else {
 					CQRMain.logger.warn("Unable to decode a file using base64! Entry: {}   File: {}", textureEntry.getValue(), tf);
 				}
@@ -45,9 +41,6 @@ public class ClientPacketHandler {
 
 			for (Map.Entry<ResourceLocation, Set<ResourceLocation>> texEntry : tsEntry.getValue().entrySet()) {
 				for (ResourceLocation trs : texEntry.getValue()) {
-					if(trs.getPath().endsWith(".mcmeta")) {
-						continue;
-					}
 					File file = fileMap.getOrDefault(trs.getPath(), null);
 					if (file != null) {
 						TextureUtil.loadFileInResourcepack(file, trs);
