@@ -249,7 +249,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	
 	protected void createAttackAIs() {
 		this.attackTargetAINearby = new EntityAICQRNearestAttackTarget(this);
-		this.attackTargetAINearby = new EntityAIHurtByTarget(this);
+		this.attackTargetAIHurtBy = new EntityAIHurtByTarget(this);
 	}
 
 	public void enableBossBar() {
