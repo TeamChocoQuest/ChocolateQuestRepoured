@@ -215,7 +215,6 @@ public class ModelCQRBiped extends ModelBiped {
 		GlStateManager.pushMatrix();
 
 		if (this.isChild) {
-			float f = 2.0F;
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
 			this.bipedHead.render(scale);
