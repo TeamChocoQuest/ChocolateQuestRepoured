@@ -1,0 +1,22 @@
+{
+  "glowsections": {
+    "sections": [
+	  {
+	    "first": 30-27,
+		"second": 32-29
+	  },
+	  {
+	    "first": 34-28,
+		"second": 36-30
+	  },
+	  {
+	    "first": 37-28, 
+		"second": 39-30
+	  },
+	  {
+	    "first": 41-27,
+		"second": 32-29
+	  }
+	]
+  }
+}

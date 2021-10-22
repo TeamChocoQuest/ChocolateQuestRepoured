@@ -2,12 +2,12 @@
   "glowsections": {
     "sections": [
 	  {
-	    "first": 8-12,
+	    "first": 9-12,
 		"second": 11-13
 	  },
 	  {
 	    "first": 13-12,
-		"second": 16-13
+		"second": 15-13
 	  }
 	]
   }
