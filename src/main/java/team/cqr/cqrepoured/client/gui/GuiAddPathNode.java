@@ -55,6 +55,7 @@ public class GuiAddPathNode extends GuiScreen {
 	private final IntList blacklistedPrevNodes = new IntArrayList();
 
 	private int x;
+	@SuppressWarnings("unused")
 	private int y;
 	private int z;
 	private int pathMapX;
