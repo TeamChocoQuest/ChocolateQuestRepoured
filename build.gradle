@@ -72,6 +72,12 @@ minecraft {
     }
 }
 
+jar {
+    manifest {
+        attributes 'FMLAT': 'accesstransformer.cfg'
+    }
+}
+
 compileJava {
     classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
 }
