@@ -63,8 +63,8 @@ public class AutoGlowingTexture extends AbstractTexture {
 					GlowingMetadataSection glowInformation = (GlowingMetadataSection) iresource.getMetadata("glowsections");
 					if(glowInformation != null) {
 						for(Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> area : glowInformation.getGlowingSections()) {
-							for(int ix = area.getFirst().getFirst(); ix <= area.getSecond().getFirst(); ix++) {
-								for(int iy = area.getFirst().getSecond(); iy <= area.getSecond().getSecond(); iy++) {
+							for(int ix = area.getFirst().getFirst(); ix < area.getSecond().getFirst(); ix++) {
+								for(int iy = area.getFirst().getSecond(); iy < area.getSecond().getSecond(); iy++) {
 									glowingBI.setRGB(ix, iy, bufferedimage.getRGB(ix, iy));
 								}
 							}
