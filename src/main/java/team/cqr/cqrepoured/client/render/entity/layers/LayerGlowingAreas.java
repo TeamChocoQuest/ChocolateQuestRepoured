@@ -10,12 +10,12 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
 
-public class LayerGlowingEyes<T extends EntityLiving> implements LayerRenderer<T> {
+public class LayerGlowingAreas<T extends EntityLiving> implements LayerRenderer<T> {
 
 	protected final RenderLiving<T> renderer;
 	protected final Function<T, ResourceLocation> funcGetCurrentTexture;
 
-	public LayerGlowingEyes(RenderLiving<T> renderer,  Function<T, ResourceLocation> funcGetCurrentTexture) {
+	public LayerGlowingAreas(RenderLiving<T> renderer,  Function<T, ResourceLocation> funcGetCurrentTexture) {
 		this.renderer = renderer;
 		this.funcGetCurrentTexture = funcGetCurrentTexture;
 	}

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonHeadSkeletal;
-import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingEyes;
+import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -23,7 +23,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		this.modelNormal = (ModelNetherDragonHead) this.mainModel;
 		this.modelSkeletal = new ModelNetherDragonHeadSkeletal();
 		
-		this.addLayer(new LayerGlowingEyes<EntityCQRNetherDragon>(this, this::getEntityTexture) {
+		this.addLayer(new LayerGlowingAreas<EntityCQRNetherDragon>(this, this::getEntityTexture) {
 			@Override
 			public void doRenderLayer(EntityCQRNetherDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 				if(entitylivingbaseIn.getSkeleProgress() >= 0) {
