@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.ItemAlchemyBag;
 
-public class EntityAIPotionThrower extends EntityAIAttackRanged {
+public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQR> {
 
 	public EntityAIPotionThrower(AbstractEntityCQR entity) {
 		super(entity);
