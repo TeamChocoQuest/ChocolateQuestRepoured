@@ -65,9 +65,9 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 			JsonArray jsonarray = new JsonArray();
 
 			for (Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> entry : src.getGlowingSections()) {
-				String estring = entry.getFirst().getFirst() + "|" + entry.getFirst().getSecond() + "-" + entry.getSecond().getFirst() + "|" + entry.getSecond().getSecond();
 				JsonObject jsonobject1 = new JsonObject();
-				jsonobject1.addProperty("corners", estring);
+				jsonobject1.addProperty("first", entry.getFirst().getFirst() + "-" + entry.getFirst().getSecond());
+				jsonobject1.addProperty("second", entry.getSecond().getFirst() + "-" + entry.getSecond().getSecond());
 
 				jsonarray.add(jsonobject1);
 			}
