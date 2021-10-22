@@ -63,7 +63,7 @@ public class TextureSet {
 						//Meta file
 						File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
 						if (mf != null && mf.exists()) {
-							files.put(texture + ".png.mcmeta", tf);
+							files.put(texture + ".png.mcmeta", mf);
 							rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
 							texNameRLMap.put(texture + ".png.mcmeta", rs);
 						}
