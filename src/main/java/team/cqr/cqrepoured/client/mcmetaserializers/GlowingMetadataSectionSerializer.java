@@ -30,21 +30,14 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 			GlowingMetadataSection result = new GlowingMetadataSection();
 			for (int i = 0; i < jsonarray.size(); ++i) {
 				JsonElement jsonelement = jsonarray.get(i);
-				String entry1 = JsonUtils.getString(jsonelement.getAsJsonObject(), "first");
-				String entry2 = JsonUtils.getString(jsonelement.getAsJsonObject(), "second");
 
-				if (entry1.split("-").length != 2) {
-					continue;
-				}
+				int x1 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "x1", 0);
+				int y1 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "y1", 0);
+				int x2 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "x2", 0);
+				int y2 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "y2", 0);
 
-				if (entry2.split("-").length != 2) {
-					continue;
-				}
-
-				String[] split = entry1.split("-");
-				Tuple<Integer, Integer> pos1 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-				split = entry2.split("-");
-				Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.parseInt(split[0]) - 1, Integer.parseInt(split[1]) - 1);
+				Tuple<Integer, Integer> pos1 = new Tuple<>(Integer.valueOf(x1), Integer.valueOf(y1));
+				Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.valueOf(x2), Integer.valueOf(y2));
 				if (pos1.getFirst() <= pos2.getFirst() && pos1.getSecond() <= pos2.getSecond()) {
 					result.addSection(pos1, pos2);
 				}
@@ -66,8 +59,10 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 
 			for (Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> entry : src.getGlowingSections()) {
 				JsonObject jsonobject1 = new JsonObject();
-				jsonobject1.addProperty("first", (entry.getFirst().getFirst()) + "-" + (entry.getFirst().getSecond()));
-				jsonobject1.addProperty("second", (entry.getSecond().getFirst() + 1) + "-" + (entry.getSecond().getSecond() + 1));
+				jsonobject1.addProperty("x1", (entry.getFirst().getFirst()));
+				jsonobject1.addProperty("y1", (entry.getFirst().getSecond()));
+				jsonobject1.addProperty("x2", (entry.getSecond().getFirst()));
+				jsonobject1.addProperty("y2", (entry.getSecond().getSecond()));
 
 				jsonarray.add(jsonobject1);
 			}
