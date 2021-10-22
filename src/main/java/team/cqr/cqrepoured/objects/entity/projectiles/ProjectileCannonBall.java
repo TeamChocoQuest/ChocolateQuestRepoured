@@ -24,7 +24,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-				if (result.entityHit == this.thrower) {
+				if (result.entityHit == this.thrower || !(result.entityHit instanceof EntityLivingBase)) {
 					return;
 				}
 
@@ -33,7 +33,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 
 					entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), 10.0F);
 				}
-				this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, true);
+				this.world.createExplosion(this.thrower, posX, posY, posZ, 1.5F, false);
 				
 				this.setDead();
 			}
