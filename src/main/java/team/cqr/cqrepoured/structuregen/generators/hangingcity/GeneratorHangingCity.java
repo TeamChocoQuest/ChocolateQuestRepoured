@@ -12,7 +12,6 @@ import java.util.Set;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;

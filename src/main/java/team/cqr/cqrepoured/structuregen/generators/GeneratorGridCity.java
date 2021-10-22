@@ -17,8 +17,6 @@ import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonGridCity;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 

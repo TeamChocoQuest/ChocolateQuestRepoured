@@ -39,9 +39,6 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	private int dunX;
 	private int dunZ;
 
-	private int entranceSizeX = 0;
-	private int entranceSizeZ = 0;
-
 	public GeneratorStrongholdOpen(World world, BlockPos pos, DungeonStrongholdOpen dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
 		this.structureBounds = new Tuple<>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
@@ -160,8 +157,6 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);
 		}
-		this.entranceSizeX = structure.getSize().getX();
-		this.entranceSizeZ = structure.getSize().getX();
 
 		structure.addAll(this.dungeonBuilder, this.pos, Offset.CENTER);
 		/*
