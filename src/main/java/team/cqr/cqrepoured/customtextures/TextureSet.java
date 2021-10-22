@@ -21,7 +21,7 @@ public class TextureSet {
 	private static final Random random = new Random();
 	private String name;
 	private Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
-	private static Map<String, File> textures = new HashMap<>();
+	private static Map<String, File> files = new HashMap<>();
 	private static Map<String, ResourceLocation> texNameRLMap = new HashMap<>();
 
 	// FOR CLIENT
@@ -53,7 +53,7 @@ public class TextureSet {
 				for (String texture : texturesString.split(",")) {
 					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
 					if (tf != null && tf.exists()) {
-						textures.put(texture + ".png", tf);
+						files.put(texture + ".png", tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
 						texNameRLMap.put(texture + ".png", rs);
 						// if(TextureSetManager.loadTexture(tf, rs)) {
@@ -63,7 +63,7 @@ public class TextureSet {
 						//Meta file
 						File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
 						if (mf != null && mf.exists()) {
-							textures.put(texture + ".png.mcmeta", tf);
+							files.put(texture + ".png.mcmeta", tf);
 							rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
 							texNameRLMap.put(texture + ".png.mcmeta", rs);
 						}
@@ -117,11 +117,11 @@ public class TextureSet {
 			}
 		}
 		this.entityTextureMap.clear();
-		TextureSet.textures.clear();
+		TextureSet.files.clear();
 	}
 
-	public static Map<String, File> getLoadedTextures() {
-		return new HashMap<>(TextureSet.textures);
+	public static Map<String, File> getLoadedFiles() {
+		return new HashMap<>(TextureSet.files);
 	}
 
 	public static ResourceLocation getResLocOfTexture(String textureFilePath) {

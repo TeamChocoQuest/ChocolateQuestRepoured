@@ -86,8 +86,8 @@ public class TextureSetManager {
 
 			if (!FMLCommonHandler.instance().getSide().isServer()) {
 				// Load the textures
-				for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
-					TextureUtil.loadTextureInternal(entry.getValue(), TextureSet.getResLocOfTexture(entry.getKey()));
+				for (Map.Entry<String, File> entry : TextureSet.getLoadedFiles().entrySet()) {
+					TextureUtil.loadFileInResourcepack(entry.getValue(), TextureSet.getResLocOfTexture(entry.getKey()));
 				}
 				TextureUtil.reloadResourcepacks();
 			}
@@ -116,7 +116,7 @@ public class TextureSetManager {
 		 * 
 		 * packet.addPair(base64, path); }
 		 */
-		for (Map.Entry<String, File> entry : TextureSet.getLoadedTextures().entrySet()) {
+		for (Map.Entry<String, File> entry : TextureSet.getLoadedFiles().entrySet()) {
 			byte[] base64 = CompressionUtil.encodeFileToBase64(entry.getValue());
 			String path = entry.getKey();
 
