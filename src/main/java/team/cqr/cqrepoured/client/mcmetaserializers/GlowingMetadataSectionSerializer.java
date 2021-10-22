@@ -30,23 +30,20 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 			GlowingMetadataSection result = new GlowingMetadataSection();
 			for (int i = 0; i < jsonarray.size(); ++i) {
 				JsonElement jsonelement = jsonarray.get(i);
-				String entry = JsonUtils.getString(jsonelement.getAsJsonObject(), "corners");
+				String entry1 = JsonUtils.getString(jsonelement.getAsJsonObject(), "first");
+				String entry2 = JsonUtils.getString(jsonelement.getAsJsonObject(), "second");
 
-				if (entry.split("-").length != 2) {
-					System.out.println(entry.split("-"));
+				if (entry1.split("-").length != 2) {
 					continue;
 				}
 				
-				if (entry.split(";").length != 3) {
-					System.out.println(entry.split(";").length);
+				if (entry2.split("-").length != 2) {
 					continue;
 				}
 
-				String par1 = entry.split("-")[0];
-				String[] split = par1.split(";");
+				String[] split = entry1.split("-");
 				Tuple<Integer, Integer> pos1 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-				String par2 = entry.split("-")[1];
-				split = par2.split(";");
+				split = entry2.split("-");
 				Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 				if (pos1.getFirst() <= pos2.getFirst() && pos1.getSecond() <= pos2.getSecond()) {
 					result.addSection(pos1, pos2);
