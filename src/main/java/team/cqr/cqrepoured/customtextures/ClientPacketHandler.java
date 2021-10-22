@@ -41,6 +41,9 @@ public class ClientPacketHandler {
 
 			for (Map.Entry<ResourceLocation, Set<ResourceLocation>> texEntry : tsEntry.getValue().entrySet()) {
 				for (ResourceLocation trs : texEntry.getValue()) {
+					if(trs.getPath().endsWith(".mcmeta")) {
+						continue;
+					}
 					File file = fileMap.getOrDefault(trs.getPath(), null);
 					if (file != null) {
 						TextureUtil.loadTextureInternal(file, trs);

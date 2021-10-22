@@ -66,7 +66,6 @@ public class TextureSet {
 							textures.put(texture + ".png.mcmeta", tf);
 							rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
 							texNameRLMap.put(texture + ".png.mcmeta", rs);
-							this.addTexture(resLoc, rs);
 						}
 					}
 				}
