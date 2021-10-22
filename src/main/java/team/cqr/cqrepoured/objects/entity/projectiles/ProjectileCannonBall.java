@@ -32,8 +32,10 @@ public class ProjectileCannonBall extends ProjectileBase {
 					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
 
 					entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), 10.0F);
-					this.setDead();
 				}
+				this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, true);
+				
+				this.setDead();
 			}
 
 			super.onImpact(result);
