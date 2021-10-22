@@ -61,7 +61,7 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 	 */
 
 	@Override
-	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, AnimationEvent customPredicate) {
+	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
 		// TODO: Fix buggy rotation
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 		// IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
