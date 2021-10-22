@@ -43,6 +43,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	private Vec3d lastPosCheck = Vec3d.ZERO;
 	private Vec3d timeoutCachedNode = Vec3d.ZERO;
 	private long timeoutTimer;
+	@SuppressWarnings("unused")
 	private long lastTimeoutCheck;
 	private double timeoutLimit;
 	private long lastTimeUpdated;
