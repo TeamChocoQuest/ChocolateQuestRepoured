@@ -70,6 +70,11 @@ public class AutoGlowingTexture extends AbstractTexture {
 							}
 						}
 					}
+					
+					/*String name = this.texture.getPath().replace("/", "-");
+					File outputFile = new File(CQRMain.CQ_CONFIG_FOLDER, name);
+					ImageIO.write(glowingBI, "png", outputFile);*/
+					
 				} catch (RuntimeException runtimeexception) {
 					LOGGER.warn("Failed reading metadata of: {}", this.originalTexture, runtimeexception);
 				}

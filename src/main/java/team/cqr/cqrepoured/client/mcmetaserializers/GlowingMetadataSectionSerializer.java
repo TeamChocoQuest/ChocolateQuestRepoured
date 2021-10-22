@@ -14,7 +14,7 @@ import net.minecraft.client.resources.data.BaseMetadataSectionSerializer;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.Tuple;
 
-//TODO: Change to be completely json based, not some weird string monsters
+// TODO: Change to be completely json based, not some weird string monsters
 public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSerializer<GlowingMetadataSection> implements JsonSerializer<GlowingMetadataSection> {
 
 	@Override
@@ -30,24 +30,21 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 			GlowingMetadataSection result = new GlowingMetadataSection();
 			for (int i = 0; i < jsonarray.size(); ++i) {
 				JsonElement jsonelement = jsonarray.get(i);
-				String entry = JsonUtils.getString(jsonelement.getAsJsonObject(), "corners");
+				String entry1 = JsonUtils.getString(jsonelement.getAsJsonObject(), "first");
+				String entry2 = JsonUtils.getString(jsonelement.getAsJsonObject(), "second");
 
-				if (entry.split("-").length != 2) {
-					System.out.println(entry.split("-"));
-					continue;
-				}
-				
-				if (entry.split(";").length != 3) {
-					System.out.println(entry.split(";").length);
+				if (entry1.split("-").length != 2) {
 					continue;
 				}
 
-				String par1 = entry.split("-")[0];
-				String[] split = par1.split(";");
+				if (entry2.split("-").length != 2) {
+					continue;
+				}
+
+				String[] split = entry1.split("-");
 				Tuple<Integer, Integer> pos1 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-				String par2 = entry.split("-")[1];
-				split = par2.split(";");
-				Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+				split = entry2.split("-");
+				Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.parseInt(split[0]) - 1, Integer.parseInt(split[1]) - 1);
 				if (pos1.getFirst() <= pos2.getFirst() && pos1.getSecond() <= pos2.getSecond()) {
 					result.addSection(pos1, pos2);
 				}
@@ -68,9 +65,9 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 			JsonArray jsonarray = new JsonArray();
 
 			for (Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> entry : src.getGlowingSections()) {
-				String estring = entry.getFirst().getFirst() + "|" + entry.getFirst().getSecond() + "-" + entry.getSecond().getFirst() + "|" + entry.getSecond().getSecond();
 				JsonObject jsonobject1 = new JsonObject();
-				jsonobject1.addProperty("corners", estring);
+				jsonobject1.addProperty("first", (entry.getFirst().getFirst()) + "-" + (entry.getFirst().getSecond()));
+				jsonobject1.addProperty("second", (entry.getSecond().getFirst() + 1) + "-" + (entry.getSecond().getSecond() + 1));
 
 				jsonarray.add(jsonobject1);
 			}
