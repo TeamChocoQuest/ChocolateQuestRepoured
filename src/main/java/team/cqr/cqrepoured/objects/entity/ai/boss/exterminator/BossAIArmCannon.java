@@ -118,6 +118,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 		if (this.world instanceof WorldServer) {
 			((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, true, armPos.x, armPos.y, armPos.z, 10, 0, 0, 0, 0.05);
 			((WorldServer) this.world).spawnParticle(EnumParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
+			((WorldServer) this.world).spawnParticle(EnumParticleTypes.FLAME, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
 		}
 	}
 
