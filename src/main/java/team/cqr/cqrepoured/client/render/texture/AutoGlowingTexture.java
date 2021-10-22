@@ -53,6 +53,7 @@ public class AutoGlowingTexture extends AbstractTexture {
 
 			if (iresource.hasMetadata()) {
 				try {
+					//TODO: Fix this for the CTS!! Cts for whatever reason tries to load png as mcmeta file...
 					TextureMetadataSection texturemetadatasection = (TextureMetadataSection) iresource.getMetadata("texture");
 
 					if (texturemetadatasection != null) {
