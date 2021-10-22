@@ -16,7 +16,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -90,8 +89,6 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIPanicElectrocute;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIPanicFire;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
@@ -114,7 +111,6 @@ import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanill
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
-import team.cqr.cqrepoured.objects.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
 import team.cqr.cqrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
@@ -458,7 +454,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(9, new EntityAIHealingPotion(this));
 		this.tasks.addTask(11, this.spellHandler);
 		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
-		this.tasks.addTask(13, new EntityAIAttackRanged(this));
+		this.tasks.addTask(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
 		this.tasks.addTask(14, new EntityAIPotionThrower(this)); /* AI for secondary Item */
 		this.tasks.addTask(15, new EntityAIFireball(this)); /* AI for secondary Item */
 		this.tasks.addTask(16, new EntityAIHooker(this)); /* AI for secondary Item */
