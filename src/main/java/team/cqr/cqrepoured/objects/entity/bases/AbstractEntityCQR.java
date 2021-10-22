@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -166,6 +167,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Riding AI
 	protected EntityAIRideHorse<AbstractEntityCQR> horseAI = null;
+	
+	//Target AI's
+	protected EntityAIBase attackTargetAINearby;
+	protected EntityAIBase attackTargetAIHurtBy;
 
 	// Pathing AI stuff
 	protected Path path = new Path() {
@@ -238,6 +243,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		this.experienceValue = 5;
 		this.initializeSize();
+		
+		this.createAttackAIs();
+	}
+	
+	protected void createAttackAIs() {
+		this.attackTargetAINearby = new EntityAICQRNearestAttackTarget(this);
+		this.attackTargetAINearby = new EntityAIHurtByTarget(this);
 	}
 
 	public void enableBossBar() {
@@ -481,8 +493,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		//this.tasks.addTask(3, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, TargetUtil.PREDICATE_IS_ELECTROCUTED, 8.0F, 1.5D, 2.0D));
 		//this.tasks.addTask(2, new EntityAIAvoidEntity<EntityElectricField>(this, EntityElectricField.class, 1.0F, 1.5D, 1.5D));
 
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		this.targetTasks.addTask(0, this.attackTargetAINearby);
+		this.targetTasks.addTask(1, this.attackTargetAIHurtBy);
 	}
 
 	@Override
