@@ -136,6 +136,7 @@ public class ElectricFieldRenderUtil {
 		tess.draw();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d direction, final double lineLength, Random rng, final double pointVariation) {
 		final Vec3d end = start.add(direction.normalize().scale(lineLength));
 		renderSingleElectricLineBetween(builder, tess, start, end, pointVariation, rng);
