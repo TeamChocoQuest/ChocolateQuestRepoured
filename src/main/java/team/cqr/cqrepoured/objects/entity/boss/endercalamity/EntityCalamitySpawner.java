@@ -178,9 +178,9 @@ public class EntityCalamitySpawner extends Entity {
 
 	// Spawns a few particles which throw out a lingering potion that places a small cloud later
 	protected void spawnEnderClouds(int count, int minSize, int maxSize) {
-		for (int i = 0; i < count; i++) {
+		/*for (int i = 0; i < count; i++) {
 			Vec3d v = this.getRandomPositionAroundPosition();
-		}
+		}*/
 	}
 
 	@Override
