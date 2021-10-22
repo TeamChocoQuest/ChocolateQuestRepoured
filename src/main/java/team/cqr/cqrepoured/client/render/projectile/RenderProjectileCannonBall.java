@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.client.models.entities.ModelCannonBall;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -14,6 +13,8 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/ball_cannon.png");
 
+	private final ModelBase model = new ModelCannonBall();
+	
 	public RenderProjectileCannonBall(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -21,33 +22,23 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 	@Override
 	public void doRender(ProjectileCannonBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
-		this.bindEntityTexture(entity);
 		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(.5F, .5F, .5F);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-
+		
+		GlStateManager.scale(0.875F, 0.875F, 0.875F);
+		
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-		bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		tessellator.draw();
-
+		this.bindEntityTexture(entity);
+		this.model.render(entity, 0, 0, 0, 0, 0, 0.0625F);
+		
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
 		}
 
-		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
