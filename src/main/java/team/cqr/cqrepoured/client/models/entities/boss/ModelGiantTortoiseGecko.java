@@ -57,7 +57,7 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 	 */
 
 	@Override
-	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID, AnimationEvent customPredicate) {
+	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 		if (entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
 			IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
