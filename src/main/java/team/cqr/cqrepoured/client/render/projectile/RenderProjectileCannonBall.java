@@ -23,8 +23,9 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 	public void doRender(ProjectileCannonBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
-		
+		GlStateManager.disableCull();
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
+		GlStateManager.scale(-1, -1, -1);
 		
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
@@ -39,6 +40,7 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 			GlStateManager.disableColorMaterial();
 		}
 
+		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
