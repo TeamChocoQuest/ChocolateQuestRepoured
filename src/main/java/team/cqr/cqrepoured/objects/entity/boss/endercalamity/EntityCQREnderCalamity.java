@@ -473,6 +473,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller", 10, this::predicate));
