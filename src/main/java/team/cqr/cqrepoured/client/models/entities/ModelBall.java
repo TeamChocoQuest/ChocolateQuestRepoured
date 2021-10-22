@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelBubble extends ModelBase {
+public class ModelBall extends ModelBase {
 
 	private final ModelRenderer bone;
 	private final ModelRenderer faceTop;
@@ -15,7 +15,7 @@ public class ModelBubble extends ModelBase {
 	private final ModelRenderer faceEast;
 	private final ModelRenderer faceWest;
 
-	public ModelBubble() {
+	public ModelBall() {
 		this.textureWidth = 128;
 		this.textureHeight = 128;
 

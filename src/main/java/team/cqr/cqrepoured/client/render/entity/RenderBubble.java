@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelBubble;
+import team.cqr.cqrepoured.client.models.entities.ModelBall;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -18,7 +18,7 @@ public class RenderBubble extends Render<EntityBubble> {
 
 	public RenderBubble(RenderManager renderManager) {
 		super(renderManager);
-		this.model = new ModelBubble();
+		this.model = new ModelBall();
 	}
 
 	@Override
