@@ -374,7 +374,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public float getDefaultWidth() {
 		return 2F;
 	}
-
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -470,6 +470,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		if(source.isExplosion() && source.getTrueSource() != null && source.getTrueSource() == this) {
+			return false;
+		}
 
 		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
