@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.structureprot;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,6 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -65,7 +65,6 @@ import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager.ProtectedR
 import team.cqr.cqrepoured.util.Reference;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
-import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class ProtectedRegionEventHandler {
@@ -354,11 +353,7 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static final ReflectionMethod<Object> METHOD_WRITE_CHUNK_DATA = new ReflectionMethod<>(AnvilChunkLoader.class, "func_183013_b", "writeChunkData", ChunkPos.class, NBTTagCompound.class);
-
-	@Deprecated
 	private static final ReflectionField FIELD_PROTECTED_REGIONS = new ReflectionField(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
-
 	@Deprecated
 	private static final ReflectionField FIELD_PROTECTED_REGION_UUIDS = new ReflectionField(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
 
@@ -386,7 +381,11 @@ public class ProtectedRegionEventHandler {
 						cap.readFromNBT(capabilityTag.getCompoundTag(CapabilityProtectedRegionDataProvider.LOCATION.toString()));
 						FIELD_PROTECTED_REGION_UUIDS.<Set<UUID>>get(cap).add(protectedRegion.getUuid());
 						capabilityTag.setTag(CapabilityProtectedRegionDataProvider.LOCATION.toString(), cap.writeToNBT());
-						METHOD_WRITE_CHUNK_DATA.invoke((AnvilChunkLoader) world.getChunkProvider().chunkLoader, new ChunkPos(x, z), chunkNBT);
+						try {
+							((AnvilChunkLoader) world.getChunkProvider().chunkLoader).writeChunkData(new ChunkPos(x, z), chunkNBT);
+						} catch (IOException e) {
+							throw new RuntimeException("Failed saving chunk!", e);
+						}
 					} else {
 						chunk = world.getChunk(x, z);
 						CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
@@ -399,15 +398,11 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static final ReflectionField FIELD_FIXER = new ReflectionField(AnvilChunkLoader.class, "field_193416_e", "fixer");
-
-	@Deprecated
 	private static NBTTagCompound getChunkNBT(WorldServer world, int chunkX, int chunkZ) {
 		AnvilChunkLoader chunkLoader = (AnvilChunkLoader) world.getChunkProvider().chunkLoader;
 		try (DataInputStream datainputstream = RegionFileCache.getChunkInputStream(chunkLoader.chunkSaveLocation, chunkX, chunkZ)) {
 			if (datainputstream != null) {
-				DataFixer f = FIELD_FIXER.get(chunkLoader);
-				return f.process(FixTypes.CHUNK, CompressedStreamTools.read(datainputstream));
+				return chunkLoader.fixer.process(FixTypes.CHUNK, CompressedStreamTools.read(datainputstream));
 			}
 		} catch (Exception e) {
 			// ignore

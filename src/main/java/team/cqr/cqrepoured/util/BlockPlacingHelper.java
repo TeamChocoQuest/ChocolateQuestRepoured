@@ -21,9 +21,6 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class BlockPlacingHelper {
 
-	private static final ReflectionField PRECIPITATION_HEIGHT_MAP = new ReflectionField(Chunk.class, "field_76638_b", "precipitationHeightMap");
-	private static final ReflectionField BLOCK_REF_COUNT = new ReflectionField(ExtendedBlockStorage.class, "field_76682_b", "blockRefCount");
-	private static final ReflectionField TICK_REF_COUNT = new ReflectionField(ExtendedBlockStorage.class, "field_76683_c", "tickRefCount");
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
 
 	public static boolean setBlockStates(World world, int chunkX, int chunkY, int chunkZ, GeneratableDungeon dungeon, IBlockInfo blockInfo) {
@@ -121,9 +118,8 @@ public class BlockPlacingHelper {
 		}
 
 		int l = z << 4 | x;
-		int[] precipitationHeightMap = PRECIPITATION_HEIGHT_MAP.get(chunk);
-		if (pos.getY() >= precipitationHeightMap[l] - 1) {
-			precipitationHeightMap[l] = -999;
+		if (pos.getY() >= chunk.precipitationHeightMap[l] - 1) {
+			chunk.precipitationHeightMap[l] = -999;
 		}
 
 		Block block = state.getBlock();
@@ -175,17 +171,17 @@ public class BlockPlacingHelper {
 		Block block = state.getBlock();
 		Block oldBlock = oldState.getBlock();
 		if (oldBlock != Blocks.AIR) {
-			BLOCK_REF_COUNT.set(blockStorage, BLOCK_REF_COUNT.getInt(blockStorage) - 1);
+			blockStorage.blockRefCount -= 1;
 
 			if (oldBlock.getTickRandomly()) {
-				TICK_REF_COUNT.set(blockStorage, TICK_REF_COUNT.getInt(blockStorage) - 1);
+				blockStorage.tickRefCount -= 1;
 			}
 		}
 		if (block != Blocks.AIR) {
-			BLOCK_REF_COUNT.set(blockStorage, BLOCK_REF_COUNT.getInt(blockStorage) + 1);
+			blockStorage.blockRefCount += 1;
 
 			if (block.getTickRandomly()) {
-				TICK_REF_COUNT.set(blockStorage, TICK_REF_COUNT.getInt(blockStorage) + 1);
+				blockStorage.tickRefCount += 1;
 			}
 		}
 

@@ -39,8 +39,6 @@ public class ProtectedRegionHelper {
 	public static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
 	public static final Set<Material> PLACEABLE_MATERIAL_WHITELIST = new HashSet<>();
 
-	private static final ReflectionField EXPLODER_FIELD = new ReflectionField(Explosion.class, "field_77283_e", "exploder");
-
 	private ProtectedRegionHelper() {
 
 	}
@@ -265,8 +263,7 @@ public class ProtectedRegionHelper {
 			return;
 		}
 
-		Entity exploder = EXPLODER_FIELD.get(explosion);
-		boolean flag = exploder instanceof EntityTNTPrimed;
+		boolean flag = explosion.exploder instanceof EntityTNTPrimed;
 		boolean flag1 = (flag && CQRConfig.dungeonProtection.preventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.preventExplosionOther);
 		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;
 

@@ -3,9 +3,7 @@ package team.cqr.cqrepoured.client.render;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -13,8 +11,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.chunk.RenderChunk;
+import net.minecraft.client.renderer.RenderGlobal.ContainerLocalRenderInformation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -33,34 +30,10 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.Reference;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 @SideOnly(Side.CLIENT)
 @EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
 public class EntityRenderManager {
-
-	private static final ReflectionField FIELD_RENDER_INFOS = new ReflectionField(RenderGlobal.class, "field_72755_R", "renderInfos");
-	private static final ReflectionField FIELD_RENDER_CHUNK = new ReflectionField("net.minecraft.client.renderer.RenderGlobal$ContainerLocalRenderInformation", "field_178036_a", "renderChunk");
-
-	public static Iterable<RenderChunk> getRenderChunks() {
-		return () -> new Iterator<RenderChunk>() {
-			private List<?> renderInfos = FIELD_RENDER_INFOS.get(Minecraft.getMinecraft().renderGlobal);
-			private int index;
-
-			@Override
-			public boolean hasNext() {
-				return this.index < this.renderInfos.size();
-			}
-
-			@Override
-			public RenderChunk next() {
-				if (!this.hasNext()) {
-					throw new NoSuchElementException();
-				}
-				return FIELD_RENDER_CHUNK.get(this.renderInfos.get(this.index++));
-			}
-		};
-	}
 
 	private static boolean shouldRenderAll = false;
 	private static final Set<AbstractEntityCQR> ENTITIES_TO_RENDER = new HashSet<>();
@@ -97,8 +70,8 @@ public class EntityRenderManager {
 			return;
 		}
 		List<AbstractEntityCQR> list = new ArrayList<>();
-		for (RenderChunk renderChunk : getRenderChunks()) {
-			BlockPos pos = renderChunk.getPosition();
+		for (ContainerLocalRenderInformation renderInfo : mc.renderGlobal.renderInfos) {
+			BlockPos pos = renderInfo.renderChunk.getPosition();
 			Chunk chunk = mc.world.getChunk(pos);
 			for (Entity entity : chunk.getEntityLists()[pos.getY() >> 4]) {
 				if (!(entity instanceof AbstractEntityCQR)) {
