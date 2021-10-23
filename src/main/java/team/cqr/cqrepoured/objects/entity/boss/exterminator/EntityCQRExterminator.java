@@ -135,6 +135,18 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
+	protected void collideWithEntity(Entity entityIn) {
+		return;
+	}
+
+	@Override
+	public void applyEntityCollision(Entity entityIn) {
+		if (entityIn.width * entityIn.width * entityIn.height > this.getWidth() * this.getWidth() * this.getHeight()) {
+			super.applyEntityCollision(entityIn);
+		}
+	};
+
+	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 
@@ -374,7 +386,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public float getDefaultWidth() {
 		return 2F;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -470,7 +482,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if(source.isExplosion() && source.getTrueSource() != null && source.getTrueSource() == this) {
+		handleAttackedByLargeGroups();
+
+		if (source.isExplosion() && source.getTrueSource() != null && source.getTrueSource() == this) {
 			return false;
 		}
 
@@ -492,6 +506,15 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return true;
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
+	}
+
+	private void handleAttackedByLargeGroups() {
+		if (this.getRNG().nextBoolean() && !this.isCannonRaised()) {
+			List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
+			if (groupInFrontOfMe.size() > 4) {
+				this.tryStartThrowingAnimation(groupInFrontOfMe, null);
+			}
+		}
 	}
 
 	@Override
@@ -525,32 +548,36 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 				if (this.getRNG().nextBoolean() && !this.isCannonRaised()) {
 					// Throw animation
 					List<Entity> affectedEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
-					if (!affectedEntities.isEmpty()) {
-						Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
-						affectedEntities.forEach((Entity entity) -> {
-							if ((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
-								Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
-
-								entity.motionX += flyDirection.x;
-								entity.motionY += flyDirection.y;
-								entity.motionZ += flyDirection.z;
-
-								entity.velocityChanged = true;
-
-								if (entity != entityIn) {
-									super.attackEntityAsMob(entity);
-								}
-							}
-						});
-
-						// Now, play the animation
-						this.sendAnimationUpdate(ANIM_NAME_THROW);
-					}
+					this.tryStartThrowingAnimation(affectedEntities, entityIn);
 				}
 			}
 		}
 
 		return result;
+	}
+
+	protected void tryStartThrowingAnimation(List<Entity> affectedEntities, Entity attackingMob) {
+		if (!affectedEntities.isEmpty()) {
+			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
+			affectedEntities.forEach((Entity entity) -> {
+				if ((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
+					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
+
+					entity.motionX += flyDirection.x;
+					entity.motionY += flyDirection.y;
+					entity.motionZ += flyDirection.z;
+
+					entity.velocityChanged = true;
+
+					if (entity != attackingMob) {
+						super.attackEntityAsMob(entity);
+					}
+				}
+			});
+
+			// Now, play the animation
+			this.sendAnimationUpdate(ANIM_NAME_THROW);
+		}
 	}
 
 	// Multipart stuff
