@@ -43,6 +43,11 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 		}
 		return false;
 	}
+	
+	@Override
+	protected boolean canStrafe() {
+		return super.canStrafe() && !this.isSequenceRunning;
+	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
