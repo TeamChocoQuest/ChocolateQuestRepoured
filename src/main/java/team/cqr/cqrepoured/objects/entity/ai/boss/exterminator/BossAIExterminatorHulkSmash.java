@@ -39,7 +39,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 				return false;
 			}
 
-			if (this.entity.isSurroundedByGroupWithMinSize(5) != null) {
+			if (this.entity.isSurroundedByGroupWithMinSize(10) != null) {
 				return true;
 			}
 
