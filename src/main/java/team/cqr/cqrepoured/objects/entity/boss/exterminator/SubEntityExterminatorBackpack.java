@@ -2,16 +2,19 @@ package team.cqr.cqrepoured.objects.entity.boss.exterminator;
 
 import java.util.function.Supplier;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 
 public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
 	private Supplier<Boolean> funcGetAnyEmitterActive;
+	private EntityCQRExterminator exterminator;
 	
 	public SubEntityExterminatorBackpack(EntityCQRExterminator parent, String partName, Supplier<Boolean> funcGetAnyEmitterActive) {
 		super(parent, partName, 1.0F, 1.0F);
-		
+		this.exterminator = parent;
 		this.funcGetAnyEmitterActive = funcGetAnyEmitterActive;
 	}
 	
@@ -23,6 +26,14 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 		}
 		
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		if (this.exterminator == null || this.exterminator.isDead) {
+			return false;
+		}
+		return this.exterminator.processInitialInteract(player, hand);
 	}
 		
 }

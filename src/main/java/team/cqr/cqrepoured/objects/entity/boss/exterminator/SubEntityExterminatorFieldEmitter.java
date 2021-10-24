@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
@@ -97,6 +99,14 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 	public Random getRNG() {
 		return this.exterminator.getRNG();
+	}
+	
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		if (this.exterminator == null || this.exterminator.isDead) {
+			return false;
+		}
+		return this.exterminator.processInitialInteract(player, hand);
 	}
 
 }

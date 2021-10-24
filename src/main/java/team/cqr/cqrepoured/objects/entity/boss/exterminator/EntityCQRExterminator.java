@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -85,8 +86,24 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
-		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
-		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
+		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
+			@Override
+			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+				if (this.parent == null || ((EntityLivingBase)this.parent).isDead) {
+					return false;
+				}
+				return ((EntityLivingBase)this.parent).processInitialInteract(player, hand);
+			}
+		};
+		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
+			@Override
+			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+				if (this.parent == null || ((EntityLivingBase)this.parent).isDead) {
+					return false;
+				}
+				return ((EntityLivingBase)this.parent).processInitialInteract(player, hand);
+			}
+		};
 	}
 
 	protected boolean isAnyEmitterActive() {
