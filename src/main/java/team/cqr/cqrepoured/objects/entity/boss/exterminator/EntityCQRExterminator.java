@@ -434,6 +434,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			this.animationTimer = ARMS_THROW_DURATION;
 			break;
 		case ANIM_NAME_GROUND_SMASH:
+			this.setEmitterLeftActive(false);
+			this.setEmitterRightActive(false);
 			this.animationTimer = GROUND_SLAM_DURATION;
 			break;
 		// All others are no normal animations
@@ -659,12 +661,20 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean isExecutingThrow() {
-
+		if(this.isCurrentlyPlayingAnimation()) {
+			if(this.getCurrentAnimation() != null) {
+				return this.getCurrentAnimation().equalsIgnoreCase(ANIM_NAME_THROW);
+			}
+		}
 		return false;
 	}
 
 	public boolean isExecutingGroundSlam() {
-
+		if(this.isCurrentlyPlayingAnimation()) {
+			if(this.getCurrentAnimation() != null) {
+				return this.getCurrentAnimation().equalsIgnoreCase(ANIM_NAME_GROUND_SMASH);
+			}
+		}
 		return false;
 	}
 
@@ -845,7 +855,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean canElectricCoilsBeActive() {
-		return !(super.isSitting() || this.isStunned());
+		return !(super.isSitting() || this.isStunned() || this.isExecutingGroundSlam());
 	}
 
 	// Datasync stuff
