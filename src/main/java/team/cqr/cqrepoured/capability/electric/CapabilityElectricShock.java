@@ -20,6 +20,7 @@ public class CapabilityElectricShock {
 	private Entity target;
 	private int remainingTicks = -1;
 	private int cooldown = -1;
+	private int remainingSpreads = 16;
 
 	public CapabilityElectricShock(EntityLivingBase entity) {
 		this.entity = entity;
@@ -30,6 +31,7 @@ public class CapabilityElectricShock {
 		
 		compound.setInteger("cooldown", this.cooldown);
 		compound.setInteger("ticks", this.remainingTicks);
+		compound.setInteger("remainingSpreads", this.remainingSpreads);
 		if(this.target != null) {
 			compound.setTag("targetID", NBTUtil.createUUIDTag(this.target.getPersistentID()));
 		}
@@ -80,10 +82,23 @@ public class CapabilityElectricShock {
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.remainingTicks = nbt.getInteger("ticks");
 		this.cooldown = nbt.getInteger("cooldown");
+		this.remainingSpreads = nbt.getInteger("remainingSpreads");
 		if(nbt.hasKey("targetID", Constants.NBT.TAG_COMPOUND)) {
 			UUID targetID = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("targetID"));
 			this.target = EntityUtil.getEntityByUUID(this.entity.getEntityWorld(), targetID);
 		}
+	}
+
+	public int getRemainignSpreads() {
+		return this.remainingSpreads;
+	}
+
+	public void reduceSpreads() {
+		this.remainingSpreads--;
+	}
+
+	public void setRemainingSpreads(int remainignSpreads) {
+		this.remainingSpreads = remainignSpreads;
 	}
 
 }

@@ -138,6 +138,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 				@Override
 				public void accept(EntityLivingBase t) {
 					t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingTicks(200);
+					t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingSpreads(4);
 				}
 				
 			});

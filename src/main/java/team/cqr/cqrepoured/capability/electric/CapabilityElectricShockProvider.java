@@ -125,7 +125,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 			icapability.setTarget(null);
 		}
 		// Maybe you could spread to other entities?
-		if (icapability.getRemainingTicks() > 50 && icapability.getTarget() == null) {
+		if (icapability.getRemainingTicks() > 50 && icapability.getTarget() == null && icapability.getRemainignSpreads() > 0) {
 			spreadElectrocute(entity, icapability);
 		} else if (icapability.getTarget() != null) {
 			if (!entity.canEntityBeSeen(icapability.getTarget()) || entity.getDistance(icapability.getTarget()) > 16) {
@@ -143,14 +143,14 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		}
 	}
 
-	private static void spreadElectrocute(EntityLivingBase entity, CapabilityElectricShock icapability) {
+	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock icapability) {
 		// First, get all applicable entities in range
-		List<EntityLivingBase> entities = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
+		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
 		entities.removeIf((EntityLivingBase input) -> {
-			if (!entity.canEntityBeSeen(input) || entity.getDistance(input) > CQRConfig.general.electricFieldEffectSpreadRange) {
+			if (!spreader.canEntityBeSeen(input) || spreader.getDistance(input) > CQRConfig.general.electricFieldEffectSpreadRange) {
 				return true;
 			}
-			return !TargetUtil.isAllyCheckingLeaders(entity, input);
+			return !TargetUtil.isAllyCheckingLeaders(spreader, input);
 		});
 		if (entities.isEmpty()) {
 			return;
@@ -158,9 +158,13 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		Collections.shuffle(entities);
 		EntityLivingBase chosen = entities.get(0);
 		icapability.setTarget(chosen);
+		icapability.reduceSpreads();
 
 		CapabilityElectricShock targetCap = chosen.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 		targetCap.setRemainingTicks(100);
+		if(targetCap.getRemainignSpreads() < 0) {
+			targetCap.setRemainingSpreads(icapability.getRemainignSpreads());
+		}
 	}
 
 }
