@@ -89,7 +89,7 @@ public class ProjectileEarthQuake extends EntityThrowable {
 
 		for (Entity entity : list) {
 			if (entity instanceof EntityLivingBase && entity != this.getThrower() && !this.world.isRemote && entity.onGround) {
-				entity.motionY = 0.3D;
+				entity.motionY += this.getEntityThrowDistance();
 				entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getThrower()), 1.0F);
 			}
 		}
@@ -99,5 +99,9 @@ public class ProjectileEarthQuake extends EntityThrowable {
 				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + this.rand.nextFloat() - 0.5D, this.posY + this.rand.nextFloat() - 0.5D, this.posZ + this.rand.nextFloat() - 0.5D, this.rand.nextFloat() - 0.5F, this.rand.nextFloat(), this.rand.nextFloat() - 0.5F, Block.getStateId(iblockstate));
 			}
 		}
+	}
+	
+	public double getEntityThrowDistance() {
+		return 0.3D;
 	}
 }
