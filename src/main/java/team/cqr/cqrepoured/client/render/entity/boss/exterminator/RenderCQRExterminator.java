@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -40,7 +41,11 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
-		// Unused
+		if(boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
+			GlStateManager.translate(0, 0, -0.55);
+			GlStateManager.rotate(-45, 1, 0, 0);
+			GlStateManager.rotate(90, 0, 1, 0);
+		}
 	}
 
 	@Override
