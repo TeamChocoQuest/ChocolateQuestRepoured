@@ -81,9 +81,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 				this.remainingActiveTime = -1;
 			}
 			if (this.cooldown <= 0) {
-				this.cooldown = DungeonGenUtils.randomBetween(60, 180, this.rand);
+				this.cooldown = DungeonGenUtils.randomBetween(120, 360, this.rand);
 				// Now, re-set the active time
-				this.remainingActiveTime = DungeonGenUtils.randomBetween(200, 400, this.rand);
+				this.remainingActiveTime = DungeonGenUtils.randomBetween(100, 200, this.rand);
 				this.activeTimeNoTarget = 0;
 			}
 		}
