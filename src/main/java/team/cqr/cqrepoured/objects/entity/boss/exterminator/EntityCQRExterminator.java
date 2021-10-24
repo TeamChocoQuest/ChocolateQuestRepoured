@@ -41,6 +41,7 @@ import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIArmCannon;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
+import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHulkSmash;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.ai.target.exterminator.EntityAITargetElectrocute;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -150,6 +151,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	protected void initEntityAI() {
 		super.initEntityAI();
 
+		this.tasks.addTask(1, new BossAIExterminatorHulkSmash(this));
 		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
 		this.tasks.addTask(3, new BossAIArmCannon(this));
 
@@ -411,8 +413,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		super.onEntityUpdate();
 	}
 
-	private static final int ARMS_THROW_DURATION = 14;
-	private static final int GROUND_SLAM_DURATION = 60;
+	public static final int ARMS_THROW_DURATION = 14;
+	public static final int GROUND_SLAM_DURATION = 60;
 
 	// Does nothing if the entity is currently playing an animation
 	// NEVER DIRECTLY ACCESS THIS METHOD!!
@@ -446,6 +448,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	private int animationTimer = -1;
 	private String currentAnimationPlaying;
+
+	public int getCurrentAnimationTicks() {
+		return this.animationTimer;
+	}
 
 	protected void updateAnimationTimersServer() {
 		if (this.cannonArmTimer > 0) {
@@ -509,12 +515,24 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	private void handleAttackedByLargeGroups() {
-		if (this.getRNG().nextBoolean() && !this.isCannonRaised()) {
-			List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
-			if (groupInFrontOfMe.size() > 4) {
+		if (this.getRNG().nextBoolean() && !this.isCannonRaised() && !this.isCurrentlyPlayingAnimation()) {
+			List<Entity> groupInFrontOfMe = this.isSurroundedByGroupWithMinSize(5);
+			if (groupInFrontOfMe != null) {
 				this.tryStartThrowingAnimation(groupInFrontOfMe, null);
 			}
 		}
+	}
+
+	@Nullable
+	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
+		List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
+		groupInFrontOfMe.removeIf((Entity entity) -> {
+			return (entity instanceof MultiPartEntityPart);
+		});
+		if (groupInFrontOfMe.size() >= minSize) {
+			return groupInFrontOfMe;
+		}
+		return null;
 	}
 
 	@Override
