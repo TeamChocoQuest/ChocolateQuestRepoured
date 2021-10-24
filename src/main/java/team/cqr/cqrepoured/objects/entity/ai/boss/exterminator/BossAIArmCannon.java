@@ -30,6 +30,10 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute()) {
+			if(this.entity.isStunned()) {
+				return false;
+			}
+			
 			if(this.cooldown > 0) {
 				this.cooldown--;
 			}
@@ -51,6 +55,9 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if(this.entity.isStunned()) {
+			return false;
+		}
 		return super.shouldContinueExecuting() && (this.isFarAwayEnough() || this.isSequenceRunning);
 	}
 

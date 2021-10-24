@@ -24,6 +24,10 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	public boolean shouldExecute() {
 		if (this.entity != null && !this.entity.isDead && this.entity.hasAttackTarget()) {
 
+			if(this.entity.isStunned()) {
+				return false;
+			}
+			
 			// Exterminator specific
 			if (this.entity.isCannonRaised()) {
 				if (this.entity.isCannonArmPlayingAnimation()) {
@@ -55,6 +59,9 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if(this.entity.isStunned()) {
+			return false;
+		}
 		return this.entity.getCurrentAnimation() != null && this.entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH);
 	}
 

@@ -31,6 +31,10 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			return false;
 		}
 		if (this.entity != null && this.entity.isEntityAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
+			if(this.entity.isStunned()) {
+				return false;
+			}
+			
 			final float distance = this.entity.getDistance(this.entity.getAttackTarget());
 			this.target = this.entity.getAttackTarget();
 			return this.entity.hasAttackTarget() && distance <= MAX_DISTANCE && distance >= MIN_DISTANCE;
@@ -40,6 +44,9 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if(this.entity.isStunned()) {
+			return false;
+		}
 		return this.entity != null && this.entity.isEntityAlive() && this.target != null && this.target.isEntityAlive() && this.timer > 0;
 	}
 
