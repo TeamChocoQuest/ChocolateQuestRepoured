@@ -164,8 +164,12 @@ public class LootTableLoader {
 				}
 
 				que.push(LOOT_TABLE_CONTEXT.newInstance(name, true));
-				LootTable newLootTable = GSON_INSTANCE.<Gson>get(null).fromJson(s, LootTable.class);
-				que.pop();
+				LootTable newLootTable;
+				try {
+					newLootTable = GSON_INSTANCE.<Gson>get(null).fromJson(s, LootTable.class);
+				} finally {
+					que.pop();
+				}
 
 				if (newLootTable != null) {
 					loadingLootTable = newLootTable;

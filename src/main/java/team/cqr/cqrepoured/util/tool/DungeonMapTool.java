@@ -40,7 +40,6 @@ import net.minecraftforge.common.DimensionManager;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class DungeonMapTool {
 
@@ -223,19 +222,13 @@ public class DungeonMapTool {
 		}
 	}
 
-	private static final ReflectionField INT_CACHE_INT_CACHE_SIZE = new ReflectionField(IntCache.class, "field_76451_a", "intCacheSize");
-	private static final ReflectionField INT_CACHE_FREE_SMALL_ARRAYS = new ReflectionField(IntCache.class, "field_76449_b", "freeSmallArrays");
-	private static final ReflectionField INT_CACHE_IN_USE_SMALL_ARRAYS = new ReflectionField(IntCache.class, "field_76450_c", "inUseSmallArrays");
-	private static final ReflectionField INT_CACHE_FREE_LARGE_ARRAYS = new ReflectionField(IntCache.class, "field_76447_d", "freeLargeArrays");
-	private static final ReflectionField INT_CACHE_IN_USE_LARGE_ARRAYS = new ReflectionField(IntCache.class, "field_76448_e", "inUseLargeArrays");
-
 	private static void hardResetIntCache() {
 		synchronized (IntCache.class) {
-			INT_CACHE_INT_CACHE_SIZE.set(null, 256);
-			INT_CACHE_FREE_SMALL_ARRAYS.<List<int[]>>get(null).clear();
-			INT_CACHE_IN_USE_SMALL_ARRAYS.<List<int[]>>get(null).clear();
-			INT_CACHE_FREE_LARGE_ARRAYS.<List<int[]>>get(null).clear();
-			INT_CACHE_IN_USE_LARGE_ARRAYS.<List<int[]>>get(null).clear();
+			IntCache.intCacheSize = 256;
+			IntCache.freeSmallArrays.clear();
+			IntCache.freeLargeArrays.clear();
+			IntCache.inUseSmallArrays.clear();
+			IntCache.inUseLargeArrays.clear();
 		}
 	}
 

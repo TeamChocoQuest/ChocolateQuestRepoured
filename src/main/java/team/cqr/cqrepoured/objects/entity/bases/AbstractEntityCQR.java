@@ -12,7 +12,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -127,12 +126,8 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.Reference;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable {
-
-	private static final ReflectionField ENTITY_LIVING_TASKS = new ReflectionField(EntityLiving.class, "field_70714_bg", "tasks");
-	private static final ReflectionField ENTITY_LIVING_TARGET_TASKS = new ReflectionField(EntityLiving.class, "field_70715_bh", "targetTasks");
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
@@ -440,8 +435,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	protected void initEntityAI() {
 		if (CQRConfig.advanced.debugAI) {
-			ENTITY_LIVING_TASKS.set(this, new EntityAITasksProfiled(this.world.profiler, this.world));
-			ENTITY_LIVING_TARGET_TASKS.set(this, new EntityAITasksProfiled(this.world.profiler, this.world));
+			this.tasks = new EntityAITasksProfiled(this.world.profiler, this.world);
+			this.targetTasks = new EntityAITasksProfiled(this.world.profiler, this.world);
 		}
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new EntityAISwimming(this));

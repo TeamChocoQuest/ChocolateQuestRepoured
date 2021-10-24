@@ -29,7 +29,6 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
-	private static final ReflectionField POTION_BENEFICIAL = new ReflectionField(Potion.class, "field_188415_h", "beneficial");
 	private static final DataParameter<Boolean> IS_DISINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 
@@ -61,7 +60,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		if (!super.isPotionApplicable(potioneffectIn)) {
 			return false;
 		}
-		if (POTION_BENEFICIAL.getBoolean(potioneffectIn.getPotion())) {
+		if (potioneffectIn.getPotion().beneficial) {
 			return true;
 		}
 		return potioneffectIn.getPotion() == MobEffects.GLOWING;

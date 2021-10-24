@@ -12,7 +12,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -48,7 +47,6 @@ import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
 import team.cqr.cqrepoured.objects.items.swords.ItemCQRWeapon;
 import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.Reference;
-import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 /**
  * Copyright (c) 20.12.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
@@ -190,8 +188,6 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
 	private static class EventHandler {
 
-		private static final ReflectionMethod<Object> METHOD_SYNC_CURRENT_PLAY_ITEM = new ReflectionMethod<>(PlayerControllerMP.class, "func_78750_j", "syncCurrentPlayItem");
-
 		@SubscribeEvent
 		public static void onMouseEvent(MouseEvent event) {
 			if (event.getButton() != 0) {
@@ -251,7 +247,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 			}
 
 			if (pointedEntity != null && (mc.objectMouseOver == null || pointedEntity != mc.objectMouseOver.entityHit)) {
-				METHOD_SYNC_CURRENT_PLAY_ITEM.invoke(mc.playerController);
+				mc.playerController.syncCurrentPlayItem();
 				CQRMain.NETWORK.sendToServer(new CPacketAttackEntity(pointedEntity));
 
 				if (mc.playerController.getCurrentGameType() != GameType.SPECTATOR) {

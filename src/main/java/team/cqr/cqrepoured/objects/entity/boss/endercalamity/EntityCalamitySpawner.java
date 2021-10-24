@@ -67,8 +67,6 @@ public class EntityCalamitySpawner extends Entity {
 
 	public static ItemStack FIREWORK_PURPLE_SPARK = Items.FIREWORKS.getDefaultInstance();
 
-	private static ReflectionField FW_LIFETIME_FIELD = new ReflectionField(EntityFireworkRocket.class, "field_92055_b", "lifetime");
-
 	private static final int FIREWORK_DURATION = 120;
 	private static final int FIREWORK_DIVISOR = 5;
 
@@ -135,8 +133,7 @@ public class EntityCalamitySpawner extends Entity {
 
 	private void spawnFirework(double x, double y, double z, ItemStack stack) {
 		EntityFireworkRocket firework = new EntityFireworkRocket(world, x, y, z, FIREWORK_PURPLE_SPARK);
-		// DONE: Modify the "lifetime" value using reflection
-		FW_LIFETIME_FIELD.set(firework, 1);
+		firework.lifetime = 1;
 
 		firework.setInvisible(true);
 		firework.setSilent(true);

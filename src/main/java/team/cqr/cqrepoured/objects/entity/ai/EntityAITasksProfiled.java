@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.ai;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -10,11 +9,9 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class EntityAITasksProfiled extends EntityAITasks {
 
-	private final Set<EntityAITasks.EntityAITaskEntry> executingTaskEntries;
 	/** Instance of Profiler. */
 	private final Profiler profiler;
 	private int tickCount;
@@ -29,7 +26,6 @@ public class EntityAITasksProfiled extends EntityAITasks {
 		super(profilerIn);
 		this.profiler = profilerIn;
 		this.world = world;
-		this.executingTaskEntries = new ReflectionField(EntityAITasks.class, "", "executingTaskEntries").get(this);
 	}
 
 	public void onUpdateTasks() {
