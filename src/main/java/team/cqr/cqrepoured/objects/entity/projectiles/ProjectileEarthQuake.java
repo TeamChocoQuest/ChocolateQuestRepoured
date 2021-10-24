@@ -20,6 +20,11 @@ public class ProjectileEarthQuake extends EntityThrowable {
 	private int lifeTime = 60;
 	@SuppressWarnings("unused")
 	private EntityLivingBase thrower;
+	private double throwY = 0.3D;
+	
+	public void setThrowHeight(double amount) {
+		this.throwY = amount;
+	}
 
 	public ProjectileEarthQuake(World worldIn) {
 		super(worldIn);
@@ -102,6 +107,6 @@ public class ProjectileEarthQuake extends EntityThrowable {
 	}
 	
 	public double getEntityThrowDistance() {
-		return 0.3D;
+		return this.throwY;
 	}
 }
