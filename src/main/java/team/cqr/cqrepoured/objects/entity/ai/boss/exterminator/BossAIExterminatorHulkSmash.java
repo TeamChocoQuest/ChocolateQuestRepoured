@@ -80,7 +80,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 			for (int i = 0; i < quakeCount; i++) {
 				ProjectileEarthQuake peq = new ProjectileEarthQuake(this.world, this.entity);
 				peq.shoot(this.entity, 0, angle * i, 0.0F, 0.5F, 0.0F);
-				peq.setThrowHeight(1.2D);
+				peq.setThrowHeight(0.6D);
 				peq.setPosition(hitLocation.x, hitLocation.y, hitLocation.z);
 
 				this.world.spawnEntity(peq);
