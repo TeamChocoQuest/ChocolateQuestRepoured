@@ -47,9 +47,9 @@ If applicable, add screenshots to help explain your problem.
 
 **Other**
 Please note: log files and crash reports should be uploaded as a FILE and not as a copy paste of the text of it here. Upload the file to a site like pastebin or similar and link it here!!
- - Link to Crash report file:
- - Link to Log file:
+ - Link to Crash report file (only if the game crashes because of this bug, please use something like pastebin to upload it, then link it here):
+ - Link to Log file (only if the game crashes because of this bug, please use something like pastebin to upload it, then link it here):
  - Other mods (that are necessary to produce the bug):
- - Other mods (that are also installed):
+ - Other mods (that are also installed, at best: link a zip file that contains all the installed mods):
  - CQR config folder (link, only if you changed the configs):
- - Other mod's configs (link):
+ - Other mod's configs (link, only if any config was changed):
