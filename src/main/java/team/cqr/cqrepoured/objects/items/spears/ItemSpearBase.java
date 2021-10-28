@@ -198,6 +198,9 @@ public class ItemSpearBase extends ItemCQRWeapon {
 			}
 			Minecraft mc = Minecraft.getMinecraft();
 			Entity entity = mc.getRenderViewEntity();
+			if (entity == null) {
+				return;
+			}
 			float partialTicks = mc.getRenderPartialTicks();
 			double blockReachDistance = mc.playerController.getBlockReachDistance();
 			RayTraceResult blockMouseOver = entity.rayTrace(blockReachDistance, partialTicks);
