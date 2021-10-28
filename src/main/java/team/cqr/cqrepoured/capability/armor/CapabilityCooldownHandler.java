@@ -1,37 +1,34 @@
 package team.cqr.cqrepoured.capability.armor;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.item.Item;
 
 public class CapabilityCooldownHandler {
 
-	private final Map<Item, Integer> itemCooldownMap = new HashMap<>();
+	private final Object2IntMap<Item> itemCooldownMap = new Object2IntOpenHashMap<>();
+
+	public void tick() {
+		this.itemCooldownMap.object2IntEntrySet().forEach(e -> {
+			if (e.getIntValue() > 0) {
+				e.setValue(e.getIntValue() - 1);
+			}
+		});
+	}
 
 	public int getCooldown(Item item) {
-		if (this.itemCooldownMap.containsKey(item)) {
-			return this.itemCooldownMap.get(item);
-		}
-
-		return 0;
+		return this.itemCooldownMap.getInt(item);
 	}
 
 	public void setCooldown(Item item, int cooldown) {
 		this.itemCooldownMap.put(item, cooldown);
 	}
 
-	public void reduceCooldown(Item item) {
-		if (this.itemCooldownMap.containsKey(item)) {
-			this.itemCooldownMap.put(item, this.itemCooldownMap.get(item) - 1);
-		}
-	}
-
-	public boolean onCooldown(Item item) {
+	public boolean isOnCooldown(Item item) {
 		return this.getCooldown(item) > 0;
 	}
 
-	public Map<Item, Integer> getItemCooldownMap() {
+	public Object2IntMap<Item> getItemCooldownMap() {
 		return this.itemCooldownMap;
 	}
 

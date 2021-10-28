@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.capability.armor;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -39,17 +38,15 @@ public class CapabilityCooldownHandlerProvider extends SerializableCapabilityPro
 	@SubscribeEvent
 	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		CapabilityCooldownHandler icapability = entity.getCapability(CAPABILITY_ITEM_COOLDOWN_CQR, null);
-		for (Item item : icapability.getItemCooldownMap().keySet()) {
-			icapability.reduceCooldown(item);
-		}
+		CapabilityCooldownHandler capabilityCooldown = entity.getCapability(CAPABILITY_ITEM_COOLDOWN_CQR, null);
+		capabilityCooldown.tick();
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 		if (!event.player.world.isRemote) {
-			CapabilityCooldownHandler icapability = event.player.getCapability(CAPABILITY_ITEM_COOLDOWN_CQR, null);
-			CQRMain.NETWORK.sendTo(new SPacketArmorCooldownSync(icapability.getItemCooldownMap()), (EntityPlayerMP) event.player);
+			CapabilityCooldownHandler capabilityCooldown = event.player.getCapability(CAPABILITY_ITEM_COOLDOWN_CQR, null);
+			CQRMain.NETWORK.sendTo(new SPacketArmorCooldownSync(capabilityCooldown.getItemCooldownMap()), (EntityPlayerMP) event.player);
 		}
 	}
 
