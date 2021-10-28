@@ -28,7 +28,6 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.gentest.ChunkInfo.ChunkInfoMap;
 import team.cqr.cqrepoured.gentest.part.DungeonPart;
 import team.cqr.cqrepoured.gentest.part.IDungeonPartBuilder;
@@ -164,19 +163,19 @@ public class GeneratableDungeon {
 		}
 
 		this.generationTimes[0] = System.nanoTime() - t;
-		CQRMain.logger.info("Total: {} secs {} millis", this.generationTimes[0] / 1_000_000_000, this.generationTimes[0] / 1_000_000 % 1_000);
-		CQRMain.logger.info("Parts: {} secs {} millis", this.generationTimes[1] / 1_000_000_000, this.generationTimes[1] / 1_000_000 % 1_000);
-		CQRMain.logger.info("Blocklight: {} secs {} millis", this.generationTimes[2] / 1_000_000_000, this.generationTimes[2] / 1_000_000 % 1_000);
-		CQRMain.logger.info("SkylightMap: {} secs {} millis", this.generationTimes[3] / 1_000_000_000, this.generationTimes[3] / 1_000_000 % 1_000);
-		CQRMain.logger.info("Skylight: {} secs {} millis", this.generationTimes[4] / 1_000_000_000, this.generationTimes[4] / 1_000_000 % 1_000);
-		CQRMain.logger.info("RemovedBlocklight: {} secs {} millis", this.generationTimes[5] / 1_000_000_000, this.generationTimes[5] / 1_000_000 % 1_000);
-		CQRMain.logger.info("Sync: {} secs {} millis", this.generationTimes[6] / 1_000_000_000, this.generationTimes[6] / 1_000_000 % 1_000);
-		CQRMain.logger.info("Updates: {} secs {} millis", this.generationTimes[7] / 1_000_000_000, this.generationTimes[7] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("Total: {} secs {} millis", this.generationTimes[0] / 1_000_000_000, this.generationTimes[0] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("Parts: {} secs {} millis", this.generationTimes[1] / 1_000_000_000, this.generationTimes[1] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("Blocklight: {} secs {} millis", this.generationTimes[2] / 1_000_000_000, this.generationTimes[2] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("SkylightMap: {} secs {} millis", this.generationTimes[3] / 1_000_000_000, this.generationTimes[3] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("Skylight: {} secs {} millis", this.generationTimes[4] / 1_000_000_000, this.generationTimes[4] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("RemovedBlocklight: {} secs {} millis", this.generationTimes[5] / 1_000_000_000, this.generationTimes[5] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("Sync: {} secs {} millis", this.generationTimes[6] / 1_000_000_000, this.generationTimes[6] / 1_000_000 % 1_000);
+		CQRMain.logger.debug("Updates: {} secs {} millis", this.generationTimes[7] / 1_000_000_000, this.generationTimes[7] / 1_000_000 % 1_000);
 	}
 
 	public void generateNext(World world) {
 		if (this.state == GenerationState.PRE_GENERATION) {
-			CQRMain.logger.info("Started generating dungeon {} at {}", this.dungeonName, this.pos);
+			CQRMain.logger.info("Generating dungeon {} at {}", this.dungeonName, this.pos);
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
 			ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(world);
 			if (protectedRegion != null) {
