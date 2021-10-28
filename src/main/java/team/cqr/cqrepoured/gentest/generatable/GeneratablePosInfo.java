@@ -35,6 +35,9 @@ public abstract class GeneratablePosInfo implements IGeneratable, IBlockInfo {
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
 		Chunk chunk = world.getChunk(this.x >> 4, this.z >> 4);
+		if (this.y < 0 || this.y > 256) {
+			return;
+		}
 		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[this.y >> 4];
 		if (blockStorage == null) {
 			blockStorage = new ExtendedBlockStorage(this.y >> 4 << 4, world.provider.hasSkyLight());
