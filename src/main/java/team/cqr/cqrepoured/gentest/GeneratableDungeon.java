@@ -63,7 +63,6 @@ public class GeneratableDungeon {
 	private int nextMarkBlockForUpdateIndex;
 	private int nextNotifyNeighborsRespectDebugIndex;
 
-	private long tickTime;
 	private ForgeChunkManager.Ticket chunkTicket;
 	private boolean ticketRequested;
 	private final long[] generationTimes = new long[8];
