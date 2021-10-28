@@ -48,7 +48,7 @@ public class ReflectionField {
 	public void set(Object obj, Object value) {
 		try {
 			this.field.set(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -56,7 +56,7 @@ public class ReflectionField {
 	public void set(Object obj, boolean value) {
 		try {
 			this.field.setBoolean(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -64,7 +64,7 @@ public class ReflectionField {
 	public void set(Object obj, byte value) {
 		try {
 			this.field.setByte(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -72,7 +72,7 @@ public class ReflectionField {
 	public void set(Object obj, short value) {
 		try {
 			this.field.setShort(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -80,7 +80,7 @@ public class ReflectionField {
 	public void set(Object obj, int value) {
 		try {
 			this.field.setInt(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -88,7 +88,7 @@ public class ReflectionField {
 	public void set(Object obj, long value) {
 		try {
 			this.field.setLong(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -96,7 +96,7 @@ public class ReflectionField {
 	public void set(Object obj, float value) {
 		try {
 			this.field.setFloat(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -104,7 +104,7 @@ public class ReflectionField {
 	public void set(Object obj, double value) {
 		try {
 			this.field.setDouble(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -112,7 +112,7 @@ public class ReflectionField {
 	public void set(Object obj, char value) {
 		try {
 			this.field.setChar(obj, value);
-		} catch (ReflectiveOperationException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
