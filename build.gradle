@@ -56,7 +56,7 @@ dependencies {
 
     implementation fg.deobf('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.2')
 
-    atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.301')
+    atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
     buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
