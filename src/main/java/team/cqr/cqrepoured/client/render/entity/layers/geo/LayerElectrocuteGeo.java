@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers;
+package team.cqr.cqrepoured.client.render.entity.layers.geo;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
