@@ -54,7 +54,7 @@ dependencies {
 
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
 
-    implementation fg.deobf('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.0-beta.9')
+    implementation fg.deobf('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.2')
 
     atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.301')
 
