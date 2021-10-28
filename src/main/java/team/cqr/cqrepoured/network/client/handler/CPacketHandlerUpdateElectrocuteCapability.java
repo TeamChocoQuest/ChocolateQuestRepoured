@@ -15,23 +15,26 @@ public class CPacketHandlerUpdateElectrocuteCapability implements IMessageHandle
 
 	@Override
 	public IMessage onMessage(SPacketUpdateElectrocuteCapability message, MessageContext ctx) {
-		if(ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
+				if (entity == null) {
+					return;
+				}
 
-				if (entity != null) {
-					CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-					if(cap != null) {
-						int charge = message.getElectroCharge();
-						cap.setRemainingTicks(charge);
-						if(message.hasTarget()) {
-							Entity target = world.getEntityByID(message.getEntityIdTarget());
-							cap.setTarget(target);
-						} else {
-							cap.setTarget(null);
-						}
-					}
+				CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+				if (cap == null) {
+					return;
+				}
+
+				int charge = message.getElectroCharge();
+				cap.setRemainingTicks(charge);
+				if (message.hasTarget()) {
+					Entity target = world.getEntityByID(message.getEntityIdTarget());
+					cap.setTarget(target);
+				} else {
+					cap.setTarget(null);
 				}
 			});
 		}
