@@ -14,6 +14,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.event.ForgeEventFactory;
 
+@Deprecated
 public class NeighborNotifyUtil {
 
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
