@@ -18,6 +18,10 @@ public class CPacketHandlerUpdateElectrocuteCapability implements IMessageHandle
 		if (ctx.side.isClient()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
+				if (world == null) {
+					return;
+				}
+
 				Entity entity = world.getEntityByID(message.getEntityId());
 				if (entity == null) {
 					return;
