@@ -37,6 +37,7 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -54,16 +55,16 @@ public class DungeonMapTool {
 		}
 	}).toArray(BufferedImage[]::new);
 
-	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityFactorIn) {
+	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityFactorIn, boolean generateBiomes) {
 		try {
 			hardResetIntCache();
 
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 				System.gc();
-				Thread.sleep(500);
+				Thread.sleep(100);
 				System.gc();
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -74,40 +75,30 @@ public class DungeonMapTool {
 			int sizeC = radiusC * 2 + 1;
 			int radiusB = radiusC << 4;
 			int sizeB = sizeC << 4;
-			BufferedImage imageOldGen = new BufferedImage(sizeB, sizeB, BufferedImage.TYPE_INT_RGB);
-			BufferedImage imageNewGen = new BufferedImage(sizeB, sizeB, BufferedImage.TYPE_INT_RGB);
-			DataBuffer dataOldGen = imageOldGen.getRaster().getDataBuffer();
-			DataBuffer dataNewGen = imageNewGen.getRaster().getDataBuffer();
+			BufferedImage bufferedImage = new BufferedImage(sizeB, sizeB, BufferedImage.TYPE_INT_RGB);
+			DataBuffer dataBuffer = bufferedImage.getRaster().getDataBuffer();
 
-			System.out.println(String.format("0: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
+			CQRMain.logger.info("0: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
 			WorldSettings worldSettings = new WorldSettings(seedIn, GameType.CREATIVE, true, false, WorldType.DEFAULT);
 			DummyWorld world = new DummyWorld(worldSettings, 0, -radiusB, -radiusB, sizeB, sizeB);
 			world.getSpawnPoint();
 
-			System.out.println(String.format("1: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
+			CQRMain.logger.info("1: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
 			int spawnX = DungeonGenUtils.getSpawnX(world) >> 4 << 4;
 			int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4 << 4;
-			int gridSizeOldGen = 20 << 4;
-			int gridSizeNewGen = distanceIn << 4;
+			int gridSize = distanceIn << 4;
 			for (int x = 0; x < sizeB; x++) {
-				boolean flagOldGen = Math.floorMod(x - radiusB - spawnX - 8 + 1, gridSizeOldGen) <= 1;
-				boolean flagNewGen = Math.floorMod(x - radiusB - spawnX - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1;
+				boolean gridX = Math.floorMod(x - radiusB - spawnX - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1;
 				for (int z = 0; z < sizeB; z++) {
 					int i = z * sizeB + x;
-					int biomeColor = color(world, world.getBiome(x - radiusB, z - radiusB));
-					if (flagOldGen || Math.floorMod(z - radiusB - spawnZ - 8 + 1, gridSizeOldGen) <= 1) {
-						dataOldGen.setElem(i, 0x0F0F0F);
-					} else {
-						dataOldGen.setElem(i, biomeColor);
-					}
-					if (flagNewGen || Math.floorMod(z - radiusB - spawnZ - 8 + 1 - (spreadIn >> 1 << 4), gridSizeNewGen) <= 1) {
-						dataNewGen.setElem(i, 0x0F0F0F);
-					} else {
-						dataNewGen.setElem(i, biomeColor);
+					if (gridX || Math.floorMod(z - radiusB - spawnZ - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1) {
+						dataBuffer.setElem(i, 0x0F0F0F);
+					} else if (generateBiomes) {
+						dataBuffer.setElem(i, color(world, world.getBiome(x - radiusB, z - radiusB)));
 					}
 				}
 			}
@@ -118,29 +109,24 @@ public class DungeonMapTool {
 					int iz = z + radiusB + spawnZ;
 					int i = iz * sizeB + ix;
 					if (i >= 0 && i < sizeB * sizeB) {
-						dataOldGen.setElem(i, 0xFF0000);
-						dataNewGen.setElem(i, 0xFF0000);
+						dataBuffer.setElem(i, 0xFF0000);
 					}
 				}
 			}
 
-			System.out.println(String.format("2: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
+			CQRMain.logger.info("2: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
-			Object2IntMap<DungeonBase> dungeonCountMapOldGen = new Object2IntArrayMap<>();
-			Object2IntMap<DungeonBase> dungeonCountMapNewGen = new Object2IntArrayMap<>();
-
+			Object2IntMap<DungeonBase> dungeonCountMap = new Object2IntArrayMap<>();
 			int scale = 4;
 			for (int x = -radiusC; x <= radiusC; x++) {
 				for (int z = -radiusC; z <= radiusC; z++) {
-					WorldDungeonGenerator.setup(20, 0, 0.0D, false);
-					DungeonBase dungeonAtPosOldGen = WorldDungeonGenerator.getDungeonAt(world, x, z);
 					WorldDungeonGenerator.setup(distanceIn, spreadIn, rarityFactorIn, false);
-					DungeonBase dungeonAtPosNewGen = WorldDungeonGenerator.getDungeonAt(world, x, z);
+					DungeonBase dungeonAtPos = WorldDungeonGenerator.getDungeonAt(world, x, z);
 
-					if (dungeonAtPosOldGen != null) {
-						dungeonCountMapOldGen.put(dungeonAtPosOldGen, dungeonCountMapOldGen.getInt(dungeonAtPosOldGen) + 1);
-						BufferedImage icon = icons[dungeonAtPosOldGen.getIconID()];
+					if (dungeonAtPos != null) {
+						dungeonCountMap.put(dungeonAtPos, dungeonCountMap.getInt(dungeonAtPos) + 1);
+						BufferedImage icon = icons[dungeonAtPos.getIconID()];
 						int width = icon.getWidth();
 						int height = icon.getHeight();
 						for (int ix = -width / 2; ix < width - width / 2; ix++) {
@@ -156,66 +142,37 @@ public class DungeonMapTool {
 										if (l < 0 || l >= sizeB) {
 											continue;
 										}
-										dataOldGen.setElem(l * sizeB + k, newColor);
+										dataBuffer.setElem(l * sizeB + k, newColor);
 									}
 								}
 							}
 						}
-						Graphics2D graphics = imageOldGen.createGraphics();
+						Graphics2D graphics = bufferedImage.createGraphics();
 						graphics.setColor(Color.BLACK);
 						graphics.setFont(new Font("Arial", Font.BOLD, 24));
-						graphics.drawString(dungeonAtPosOldGen.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
-					}
-					if (dungeonAtPosNewGen != null) {
-						dungeonCountMapNewGen.put(dungeonAtPosNewGen, dungeonCountMapNewGen.getInt(dungeonAtPosNewGen) + 1);
-						BufferedImage icon = icons[dungeonAtPosNewGen.getIconID()];
-						int width = icon.getWidth();
-						int height = icon.getHeight();
-						for (int ix = -width / 2; ix < width - width / 2; ix++) {
-							for (int iy = -height / 2; iy < height - height / 2; iy++) {
-								int newColor = icon.getRGB(ix + width / 2, iy + height / 2);
-								for (int i = 0; i < scale; i++) {
-									int k = (x + radiusC << 4) + 8 + ix * scale + i;
-									if (k < 0 || k >= sizeB) {
-										continue;
-									}
-									for (int j = 0; j < scale; j++) {
-										int l = (z + radiusC << 4) + 8 + iy * scale + j;
-										if (l < 0 || l >= sizeB) {
-											continue;
-										}
-										dataNewGen.setElem(l * sizeB + k, newColor);
-									}
-								}
-							}
-						}
-						Graphics2D graphics = imageNewGen.createGraphics();
-						graphics.setColor(Color.BLACK);
-						graphics.setFont(new Font("Arial", Font.BOLD, 24));
-						graphics.drawString(dungeonAtPosNewGen.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
+						graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 					}
 				}
 			}
 
-			System.out.println(String.format("3: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
+			CQRMain.logger.info("3: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
-			ImageIO.write(imageOldGen, "png", new File("old.png"));
-			ImageIO.write(imageNewGen, "png", new File("new.png"));
+			ImageIO.write(bufferedImage, "png", new File("dungeon_map.png"));
 
-			System.out.println(String.format("4: %.1fs", (System.currentTimeMillis() - t) / 1000.0F));
-			System.out.println(String.format("Total: %.1fs", (System.currentTimeMillis() - start) / 1000.0F));
+			CQRMain.logger.info("4: {}s", (System.currentTimeMillis() - t) / 1000.0F);
+			CQRMain.logger.info("Total: {}s", (System.currentTimeMillis() - start) / 1000.0F);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			hardResetIntCache();
 
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 				System.gc();
-				Thread.sleep(500);
+				Thread.sleep(100);
 				System.gc();
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
