@@ -46,6 +46,7 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminato
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.ai.target.exterminator.EntityAITargetElectrocute;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
@@ -508,6 +509,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		handleAttackedByLargeGroups();
+		
+		if(source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
+			return super.attackEntityFrom(source, amount, sentFromPart);
+		}
 
 		if (source.isExplosion() && source.getTrueSource() != null && source.getTrueSource() == this) {
 			return false;
