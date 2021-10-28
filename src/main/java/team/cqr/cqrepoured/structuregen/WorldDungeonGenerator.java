@@ -156,12 +156,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return false;
 		}
 
-		if (isOtherStructureNearby(world, chunkX, chunkZ)) {
+		// Check if the chunk is on the grid
+		if (!canSpawnStructureAtCoords(world, chunkX, chunkZ)) {
 			return false;
 		}
 
-		// Check if the chunk is on the grid
-		return canSpawnStructureAtCoords(world, chunkX, chunkZ);
+		return !isOtherStructureNearby(world, chunkX, chunkZ);
 	}
 
 	/**
