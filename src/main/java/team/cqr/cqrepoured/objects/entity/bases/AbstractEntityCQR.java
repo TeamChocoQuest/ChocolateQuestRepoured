@@ -1404,7 +1404,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean isInReach(EntityLivingBase target, double distance) {
 		double x = target.posX - this.posX;
-		double y = MathHelper.clamp(this.posY + this.getEyeHeight(), target.posY, target.posY + target.height) - (this.posY + this.getEyeHeight());
+		double y = 0.0D;
+		if (this.posY > target.posY + target.height) {
+			y = this.posY - (target.posY + target.height);
+		} else if (this.posY + this.height < target.posY) {
+			y = target.posY - (this.posY + this.height);
+		}
 		double z = target.posZ - this.posZ;
 		return x * x + y * y + z * z <= distance * distance;
 	}
