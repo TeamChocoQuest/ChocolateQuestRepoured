@@ -109,6 +109,8 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 
 		// First, reduce the ticks
 		CapabilityElectricShock icapability = entity.getCapability(ELECTROCUTE_HANDLER_CQR, null);
+		final int beforeUpdateTicks = icapability.getRemainingTicks();
+		final boolean beforeUpdateHasTarget = icapability.getTarget() != null;
 		icapability.reduceRemainingTicks();
 
 		// Mechanicals can get electrocuted but don't take damage
@@ -137,9 +139,14 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 				}
 			}
 		}
-		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
-		if(entity instanceof EntityPlayerMP) {
-			CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
+		
+		final int afterUpdateTicks = icapability.getRemainingTicks();
+		final boolean afterUpdateHasTarget = icapability.getTarget() != null;
+		if(afterUpdateHasTarget != beforeUpdateHasTarget || (afterUpdateTicks <= 0 && beforeUpdateTicks > 0) || (afterUpdateTicks > 0 && beforeUpdateTicks <= 0)) {
+			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
+			if(entity instanceof EntityPlayerMP) {
+				CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
+			}
 		}
 	}
 
