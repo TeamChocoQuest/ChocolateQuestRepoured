@@ -45,7 +45,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 
 		if (!worldIn.isRemote) {
-			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player);
+			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player, false);
 			ball.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 0F);
 			worldIn.spawnEntity(ball);
 			stack.damageItem(1, player);
@@ -66,7 +66,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		if (!worldIn.isRemote) {
-			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, shooter);
+			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, shooter, false);
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(3.5D);
