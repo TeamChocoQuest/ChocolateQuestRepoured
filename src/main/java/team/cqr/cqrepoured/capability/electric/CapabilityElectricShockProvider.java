@@ -116,7 +116,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		// Mechanicals can get electrocuted but don't take damage
 		if (entity instanceof IMechanical || entity.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
 			// But, if we are wet, we get damage from beign electrocuted
-			if (entity.isInWater()) {
+			if (((IMechanical)entity).canReceiveElectricDamageCurrently()) {
 				icapability.setRemainingTicks(100);
 				entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
 			}
@@ -142,12 +142,12 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		
 		final int afterUpdateTicks = icapability.getRemainingTicks();
 		final boolean afterUpdateHasTarget = icapability.getTarget() != null;
-		if(afterUpdateHasTarget != beforeUpdateHasTarget || (afterUpdateTicks <= 0 && beforeUpdateTicks > 0) || (afterUpdateTicks > 0 && beforeUpdateTicks <= 0)) {
+		//if(afterUpdateHasTarget != beforeUpdateHasTarget || (afterUpdateTicks <= 0 && beforeUpdateTicks > 0) || (afterUpdateTicks > 0 && beforeUpdateTicks <= 0)) {
 			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
 			if(entity instanceof EntityPlayerMP) {
 				CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
 			}
-		}
+		//}
 	}
 
 	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock icapability) {

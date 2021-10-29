@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.objects.entity;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 
 public interface IMechanical {
@@ -10,6 +11,13 @@ public interface IMechanical {
 
 	//We're an machine, we don't live
 	public default boolean isPotionApplicable(PotionEffect potioneffectIn) {
+		return false;
+	}
+
+	public default boolean canReceiveElectricDamageCurrently() {
+		if(this instanceof EntityLivingBase) {
+			return ((EntityLivingBase)this).isInWater() || ((EntityLivingBase)this).isWet();
+		}
 		return false;
 	}
 	
