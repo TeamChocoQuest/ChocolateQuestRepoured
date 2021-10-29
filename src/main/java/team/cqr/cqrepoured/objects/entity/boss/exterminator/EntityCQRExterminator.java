@@ -549,8 +549,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		boolean overrideFlag = false;
 		
 		//We got hit by a water bottle
-		if(source == DamageSource.DROWN) {
-			return super.attackEntityFrom(source, amount * 20, sentFromPart);
+		if(source == DamageSource.DROWN && !this.isInWater()) {
+			if(this.isAnyEmitterActive()) {
+				amount *= 2.0F;
+				this.setStunned(true, 300);
+			}
 		}
 		
 		if(source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
@@ -573,7 +576,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			if(source.damageType == DamageSource.LIGHTNING_BOLT.getDamageType()) {
 				overrideFlag = true;
 			}
-			amount *= 2.0F;
+			if(sentFromPart) {
+				amount *= 2.0F;
+			}
 		}
 
 		if (!sentFromPart && !this.isStunned()) {

@@ -21,8 +21,10 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		//If at least one emitter emits electricity, we are vulnerable!!
-		if(this.funcGetAnyEmitterActive.get()) {
-			
+		if(source == DamageSource.DROWN) {
+			if(this.funcGetAnyEmitterActive.get()) {
+				this.exterminator.setStunned(true, 300);
+			}
 		}
 		
 		return super.attackEntityFrom(source, amount);
