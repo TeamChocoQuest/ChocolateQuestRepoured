@@ -31,6 +31,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
+import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -202,6 +204,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 	}
 
+	public void setStunned(boolean value, final int ticks) {
+		if(this.isServerWorld() && value && ticks >= this.stunTime) {
+			this.stunTime += ticks;
+		}
+		this.setStunned(value);
+	}
+	
 	public void setStunned(boolean value) {
 		this.dataManager.set(IS_STUNNED, value);
 	}
@@ -243,11 +252,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public boolean canBePushed() {
 		return false;
 	}
-
+	
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
-		boolean isMainHBPart = !(part == this.parts[3] || part == this.parts[4]);
-		return this.attackEntityFrom(source, damage, isMainHBPart);
+	public boolean canReceiveElectricDamageCurrently() {
+		return IMechanical.super.canReceiveElectricDamageCurrently() || this.isStunned();
 	}
 
 	@Override
@@ -420,13 +428,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		int capTicks = 0;
+		CapabilityElectricShock icapability = this.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		capTicks = icapability.getRemainingTicks();
+		this.setCustomNameTag("capability ticks: " + capTicks);
 		
-		if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater())) {
-			this.setStunned(true);
+		if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater()) && !this.isStunned()) {
+			this.setStunned(true, 10);
 		}
 		
 		if(!this.isStunned()) {
-			this.setStunned(this.isEmitterShortCircuited(this.getEmitterLeft()) || this.isEmitterShortCircuited(this.getEmitterRight()));
+			this.setStunned(this.isEmitterShortCircuited(this.getEmitterLeft()) || this.isEmitterShortCircuited(this.getEmitterRight()), 200);
 		}
 
 		if (this.isServerWorld()) {
@@ -525,8 +537,16 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
+	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
+		boolean isMainHBPart = !(part == this.parts[3] || part == this.parts[4]) || part == null;;
+		return this.attackEntityFrom(source, damage, isMainHBPart);
+	}
+	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		handleAttackedByLargeGroups();
+		
+		boolean overrideFlag = false;
 		
 		//We got hit by a water bottle
 		if(source == DamageSource.DROWN) {
@@ -550,15 +570,22 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 
 		if (this.isStunned()) {
+			if(source.damageType == DamageSource.LIGHTNING_BOLT.getDamageType()) {
+				overrideFlag = true;
+			}
 			amount *= 2.0F;
 		}
 
-		this.partSoundFlag = sentFromPart;
 		if (!sentFromPart && !this.isStunned()) {
+			this.partSoundFlag = true;
 			this.playSound(this.getHurtSound(source), 1.0F, 1.0F);
 			return true;
 		}
-		return super.attackEntityFrom(source, amount, sentFromPart);
+		this.partSoundFlag = false;
+		
+		overrideFlag |= super.attackEntityFrom(source, amount, sentFromPart);
+		
+		return overrideFlag;
 	}
 
 	private void handleAttackedByLargeGroups() {
