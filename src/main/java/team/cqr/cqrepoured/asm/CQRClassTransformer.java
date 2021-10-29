@@ -17,7 +17,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 	@Override
 	protected void registerTransformers() {
 		// @formatter:off
-		this.registerMethodTransformer("aez", "c", "(Lvp;)Z", "EntityPotion", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", methodNode -> {
+		this.registerMethodTransformer("aez", "c", "(Lvp;)Z", "net/minecraft/entity/projectile/EntityPotion", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", methodNode -> {
 			ASMUtil.LOGGER.info("Transforming method: EntityPotion#isWaterSensitiveEntity(EntityLivingBase)");
 
 			AbstractInsnNode popNode1 = new LabelNode();
