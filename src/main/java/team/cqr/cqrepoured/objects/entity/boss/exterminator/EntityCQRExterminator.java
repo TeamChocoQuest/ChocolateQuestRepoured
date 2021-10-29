@@ -407,6 +407,15 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public float getDefaultWidth() {
 		return 2F;
 	}
+	
+	protected boolean isEmitterShortCircuited(SubEntityExterminatorFieldEmitter emitter) {
+		if(emitter.isActive()) {
+			if(emitter.isInWater() || emitter.isWet()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public void onUpdate() {
@@ -414,6 +423,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		
 		if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater())) {
 			this.setStunned(true);
+		}
+		
+		if(!this.isStunned()) {
+			this.setStunned(this.isEmitterShortCircuited(this.getEmitterLeft()) || this.isEmitterShortCircuited(this.getEmitterRight()));
 		}
 
 		if (this.isServerWorld()) {
