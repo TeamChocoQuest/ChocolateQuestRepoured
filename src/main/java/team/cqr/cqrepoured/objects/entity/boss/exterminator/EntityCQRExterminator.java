@@ -309,6 +309,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return PlayState.CONTINUE;
 		}
 		event.getController().setAnimation(null);
+		event.getController().clearAnimationCache();
 		return PlayState.STOP;
 	}
 
@@ -410,6 +411,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
+		if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater())) {
+			this.setStunned(true);
+		}
 
 		if (this.isServerWorld()) {
 			if (this.stunTime > 0) {
@@ -509,6 +514,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		handleAttackedByLargeGroups();
+		
+		//We got hit by a water bottle
+		if(source == DamageSource.DROWN) {
+			return super.attackEntityFrom(source, amount * 20, sentFromPart);
+		}
 		
 		if(source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
