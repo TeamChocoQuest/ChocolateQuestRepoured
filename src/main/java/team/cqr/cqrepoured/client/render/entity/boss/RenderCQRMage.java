@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelMageHidden;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerMagicalArmor;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
 import team.cqr.cqrepoured.util.Reference;
@@ -30,7 +31,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQ
 				this.layerRenderers.remove(i--);
 			}
 		}
-
+		this.addLayer(new LayerGlowingAreas<T>(this, this::getEntityTexture));
 		this.addLayer(new LayerMagicalArmor(this, TEXTURES_ARMOR, model));
 	}
 
