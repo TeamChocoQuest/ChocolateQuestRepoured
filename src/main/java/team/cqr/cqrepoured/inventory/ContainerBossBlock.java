@@ -13,7 +13,10 @@ import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 
 public class ContainerBossBlock extends Container {
 
+	private final TileEntityBoss tileEntity;
+
 	public ContainerBossBlock(InventoryPlayer playerInv, TileEntityBoss tileentity) {
+		this.tileEntity = tileentity;
 		IItemHandler inventory = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
 		for (int i = 0; i < 3; i++) {
@@ -36,7 +39,13 @@ public class ContainerBossBlock extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return playerIn.isCreative();
+		if (!playerIn.isCreative()) {
+			return false;
+		}
+		if (playerIn.world.getTileEntity(this.tileEntity.getPos()) != this.tileEntity) {
+			return false;
+		}
+		return playerIn.getDistanceSqToCenter(this.tileEntity.getPos()) <= 64.0D;
 	}
 
 	@Override

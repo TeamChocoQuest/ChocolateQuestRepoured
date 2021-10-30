@@ -26,7 +26,10 @@ import team.cqr.cqrepoured.objects.items.guns.ItemBullet;
 
 public class ContainerCQREntity extends Container {
 
+	private final AbstractEntityCQR entity;
+
 	public ContainerCQREntity(InventoryPlayer playerInv, AbstractEntityCQR entity) {
+		this.entity = entity;
 		IItemHandler inventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		CapabilityExtraItemHandler extraInventory = entity.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 
@@ -190,7 +193,13 @@ public class ContainerCQREntity extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return true;
+		if (!playerIn.isCreative() && this.entity.getLeader() != playerIn) {
+			return false;
+		}
+		if (this.entity.isDead) {
+			return false;
+		}
+		return playerIn.getDistanceSq(this.entity) <= 64.0D;
 	}
 
 	@Override

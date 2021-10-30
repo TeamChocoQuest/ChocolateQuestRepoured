@@ -67,7 +67,7 @@ public class ContainerAlchemyBag extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return true;
+		return playerIn.getHeldItem(this.hand) == this.stack;
 	}
 
 	@Override

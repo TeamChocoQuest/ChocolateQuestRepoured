@@ -92,7 +92,10 @@ public class InventoryMerchant implements IInventory {
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return player == this.player;
+		if (this.entity.isDead) {
+			return false;
+		}
+		return player.getDistanceSq(this.entity) <= 64.0D;
 	}
 
 	@Override
