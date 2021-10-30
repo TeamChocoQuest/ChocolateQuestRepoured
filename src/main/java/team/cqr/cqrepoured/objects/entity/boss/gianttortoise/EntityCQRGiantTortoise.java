@@ -394,6 +394,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		Vec3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
 
 		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.15F : 0.5F;
+		vy *= this.getSizeVariation();
 
 		// First, position your head
 		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
