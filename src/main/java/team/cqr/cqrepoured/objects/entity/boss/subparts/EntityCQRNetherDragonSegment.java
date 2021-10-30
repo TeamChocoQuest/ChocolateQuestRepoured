@@ -9,9 +9,6 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -23,10 +20,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
-
-	private static final DataParameter<Integer> PART_INDEX = EntityDataManager.<Integer>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.VARINT);
-	private static final DataParameter<Boolean> IS_SKELETAL = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_REMOVED = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.BOOLEAN);
+	private boolean isSkeletal = false;
 
 	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
 		super((IEntityMultiPart) dragon, "dragonPart" + partID, 0.5F, 0.5F);
@@ -35,35 +29,17 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 		this.dragon = dragon;
 		this.partIndex = dragon.INITIAL_SEGMENT_COUNT - partID;
 		this.realID = partID;
-		this.dataManager.set(PART_INDEX, this.partIndex);
-		this.setIsSkeletal(skeletal);
 
 		// String partName, float width, float height
 		this.setInvisible(false);
 	}
 
 	public void onRemovedFromBody() {
-		this.dataManager.set(IS_REMOVED, true);
 	}
 
-	@Override
-	protected void entityInit() {
-		super.entityInit();
-		this.dataManager.register(PART_INDEX, this.partIndex);
-		this.dataManager.register(IS_SKELETAL, false);
-		this.dataManager.register(IS_REMOVED, false);
-	}
-
-	public int getPartIndex() {
-		return this.dataManager.get(PART_INDEX);
-	}
 
 	public boolean isSkeletal() {
-		return this.dataManager.get(IS_SKELETAL) || this.dragon == null || this.dragon.getSkeleProgress() >= this.realID;
-	}
-
-	private void setIsSkeletal(Boolean val) {
-		this.dataManager.set(IS_SKELETAL, val);
+		return this.isSkeletal || this.dragon == null || this.dragon.getSkeleProgress() >= this.realID;
 	}
 
 	@Override
@@ -86,7 +62,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 
 		++this.ticksExisted;
 
-		if (this.dataManager.get(IS_REMOVED)) {
+		if (this.dragon.getSegmentCount() < this.partIndex) {
 			// this.world.removeEntityDangerously(this);
 			this.setDead();
 		}
@@ -94,11 +70,6 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 			this.setDead();
 		}
 
-	}
-
-	@Override
-	public boolean isNonBoss() {
-		return this.dragon.isNonBoss();
 	}
 
 	// As this is a part it does not make any noises
@@ -131,8 +102,8 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 	}
 
 	public void switchToSkeletalState() {
-		this.setIsSkeletal(true);
 		if (!this.world.isRemote) {
+			this.isSkeletal = true;
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 0, false);
 		}
 	}
@@ -152,7 +123,6 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		this.setIsSkeletal(compound.getBoolean("skeletal"));
 		this.realID = compound.getInteger("realID");
 		this.partIndex = compound.getInteger("partIndex");
 	}
@@ -160,6 +130,10 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements
 	@Override
 	public boolean canbeTurnedToStone() {
 		return false;
+	}
+
+	public int getPartIndex() {
+		return this.partIndex;
 	}
 
 }

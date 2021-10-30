@@ -130,7 +130,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.initBody();
 
 		this.moveHelper = new MoveHelperDirectFlight(this);
-		this.moveParts();
 	}
 
 	public static void reloadBreakableBlocks() {
@@ -610,7 +609,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 							if (i == 0) {
 								this.dataManager.set(SKELE_COUNT, 1);
 							} else {
-								this.dataManager.set(SKELE_COUNT, i);
+								this.dataManager.set(SKELE_COUNT, i + 1);
 							}
 						}
 						break;
@@ -659,6 +658,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 			if (segment != null) {
 				this.world.updateEntityWithOptionalForce(segment, true);
+				segment.onUpdate();
 				if (this.phase == 2 && !segment.isSkeletal() && !this.world.isRemote) {
 					segment.switchToSkeletalState();
 				}
@@ -726,6 +726,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// since multiparts are not added to the world tick list which is what checks isDead
 			if (dragonPart != null) {
 				dragonPart.onRemovedFromBody();
+				this.world.removeEntityDangerously(dragonPart);
 			}
 		}
 	}

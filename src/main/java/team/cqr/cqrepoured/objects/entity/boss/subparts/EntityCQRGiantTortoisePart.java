@@ -52,11 +52,6 @@ public class EntityCQRGiantTortoisePart extends MultiPartEntityPart implements I
 		++this.ticksExisted;
 	}
 
-	@Override
-	public boolean isNonBoss() {
-		return this.getParent().isNonBoss();
-	}
-
 	// As this is a part it does not make any noises
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
