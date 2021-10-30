@@ -251,11 +251,11 @@ public class Trade {
 		}
 	}
 
-	public boolean doTransaction(@Nullable EntityPlayer player, ItemStack[] input) {
+	public boolean doTransaction(EntityPlayer player, ItemStack[] input) {
 		if (!this.isInStock()) {
 			return false;
 		}
-		if (player != null && !this.isUnlockedFor(player)) {
+		if (!this.isUnlockedFor(player)) {
 			return false;
 		}
 		if (this.isSimple) {
@@ -270,7 +270,9 @@ public class Trade {
 				}
 			}
 
-			this.decStock();
+			if (!player.world.isRemote) {
+				// TODO sync trades when opening trade gui
+				// TODO sync changed trades with trading player(-s)
 			return true;
 		} else {
 			NonNullList<TradeInput> tradeInputsMetaSorted = this.getInputItemsCompressedMetaSorted();
