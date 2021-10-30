@@ -10,6 +10,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> extends GeoLayerRenderer<T> {
 
@@ -20,6 +21,9 @@ public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> exten
 	@Override
 	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
 			float headPitch, float scale) {
+		if(entity instanceof AbstractEntityCQR && ((AbstractEntityCQR)entity).canPlayDeathAnimation()) {
+			return;
+		}
 		if (entity.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
 			CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
 			if (cap.getRemainingTicks() < 0) {

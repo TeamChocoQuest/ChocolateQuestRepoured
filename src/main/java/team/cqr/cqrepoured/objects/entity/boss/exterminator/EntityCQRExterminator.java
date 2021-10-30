@@ -344,7 +344,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@SuppressWarnings("unchecked")
 	private <E extends IAnimatable> PlayState predicateAnimationMain(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.canPlayDeathAnimation()) {
 			event.getController().transitionLengthTicks = 0.0D;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH, false));
 			return PlayState.CONTINUE;
@@ -983,7 +983,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean canElectricCoilsBeActive() {
-		return !(super.isSitting() || this.isStunned() || this.isExecutingGroundSlam());
+		return !(super.isSitting() || this.isStunned() || this.isExecutingGroundSlam() || this.canPlayDeathAnimation());
 	}
 
 	// Datasync stuff
@@ -1001,14 +1001,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		} else {
 			this.setElectroCuteTargetLeft(null);
 		}
-	}
-	
-	@Override
-	protected void updateAITasks() {
-		if(this.isStunned()) {
-			return;
-		}
-		super.updateAITasks();
 	}
 
 }

@@ -1748,5 +1748,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void applySizeVariation(float value) {
 		this.sizeScaling = value;
 	}
+	
+	public boolean canPlayDeathAnimation() {
+		return this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive();
+	}
 
 }
