@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise;
 
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 

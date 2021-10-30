@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss;
+package team.cqr.cqrepoured.objects.entity.boss.gianttortoise;
 
 import java.util.ArrayList;
 
@@ -49,7 +49,6 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSw
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatable {
@@ -93,7 +92,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			new AnimationGecko("animation.giant_tortoise.exit_shell", 31),
 			new AnimationGecko("animation.giant_tortoise.in_shell", 1) };
 
-	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
+	protected SubEntityGiantTortoisePart[] parts = new SubEntityGiantTortoisePart[5];
 
 	static int EAnimStateGlobalID = 0;
 
@@ -120,9 +119,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.stepHeight = 2.1F;
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
-			this.parts[i] = new EntityCQRGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
+			this.parts[i] = new SubEntityGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
 		}
-		this.parts[this.parts.length - 1] = new EntityCQRGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
+		this.parts[this.parts.length - 1] = new SubEntityGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
 
 		this.noClip = false;
 		this.setNoGravity(false);
@@ -336,7 +335,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.onUpdate();
 
 		this.setAir(999);
-		for (EntityCQRGiantTortoisePart part : this.parts) {
+		for (SubEntityGiantTortoisePart part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
 		}
 
@@ -424,7 +423,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public void setDead() {
 		super.setDead();
-		for (EntityCQRGiantTortoisePart part : this.parts) {
+		for (SubEntityGiantTortoisePart part : this.parts) {
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
 			this.world.removeEntityDangerously(part);

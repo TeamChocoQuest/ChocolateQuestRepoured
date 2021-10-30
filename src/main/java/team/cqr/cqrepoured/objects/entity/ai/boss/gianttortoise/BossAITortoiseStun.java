@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise;
 
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise.AnimationGecko;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise.AnimationGecko;
 
 public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 

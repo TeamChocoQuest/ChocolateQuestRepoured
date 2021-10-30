@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.util.Reference;
 
 public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTortoise> {

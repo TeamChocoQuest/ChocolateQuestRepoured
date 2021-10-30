@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss.subparts;
+package team.cqr.cqrepoured.objects.entity.boss.gianttortoise;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
@@ -8,13 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
-public class EntityCQRGiantTortoisePart extends MultiPartEntityPart implements IBlacklistedFromStatues {
+public class SubEntityGiantTortoisePart extends MultiPartEntityPart implements IBlacklistedFromStatues {
 
 	private boolean isHead;
 
-	public EntityCQRGiantTortoisePart(EntityCQRGiantTortoise parent, String partName, float width, float height, boolean isHead) {
+	public SubEntityGiantTortoisePart(EntityCQRGiantTortoise parent, String partName, float width, float height, boolean isHead) {
 		super(parent, partName, width, height);
 
 		this.isImmuneToFire = true;

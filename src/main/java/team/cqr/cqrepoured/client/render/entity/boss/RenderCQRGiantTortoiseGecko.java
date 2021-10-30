@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelGiantTortoiseGecko;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGiantTortoise> {

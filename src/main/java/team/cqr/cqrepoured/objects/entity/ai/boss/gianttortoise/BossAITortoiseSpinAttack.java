@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBubble;
 
 public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiantTortoise> {

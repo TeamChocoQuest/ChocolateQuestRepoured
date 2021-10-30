@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise;
 
 import net.minecraft.entity.ai.EntityAISwimming;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 public class BossAITortoiseSwimming extends EntityAISwimming {
 
