@@ -21,7 +21,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	public BossAIExterminatorHandLaser(EntityCQRExterminator entity) {
 		super(entity);
 
-		this.setMutexBits(2);
+		this.setMutexBits(7);
 	}
 
 	@Override
@@ -79,6 +79,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 				this.activeLaser = new EntityExterminatorHandLaser(this.entity, this.target, Vec3d.ZERO);
 				this.world.spawnEntity(this.activeLaser);
 			}
+			this.entity.switchCannonArmState(true);
 			return true;
 		}
 		return false;
