@@ -94,7 +94,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			this.entity.rotationYaw = (float) this.activeLaser.rotationYawCQR /* + 90.0F */;
 			this.entity.prevRotationYaw = (float) this.activeLaser.prevRotationYawCQR /* + 90.0F */;
 
-			this.entity.faceEntity(this.target, 90, 90);
+			this.entity.faceEntity(this.target, 180, 180);
 		} else {
 			// System.out.println("No laser :/");
 		}

@@ -257,7 +257,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 	
 	public void setStunned(boolean value) {
-		if(this.isCannonRaised()) {
+		if(this.isCannonRaised() && value) {
 			this.switchCannonArmState(false);
 		}
 		this.dataManager.set(IS_STUNNED, value);
@@ -1001,6 +1001,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		} else {
 			this.setElectroCuteTargetLeft(null);
 		}
+	}
+	
+	@Override
+	public boolean isWet() {
+		return this.isInWater();
 	}
 
 }
