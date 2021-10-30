@@ -39,6 +39,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIIdleSit;
 import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
 import team.cqr.cqrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseMoveToHome;
@@ -722,6 +723,17 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			this.setDead();
 
 			this.onFinalDeath();
+		}
+	}
+	
+	@Override
+	public void resize(float widthScale, float heightSacle) {
+		super.resize(widthScale, heightSacle);
+
+		for (MultiPartEntityPart part : this.parts) {
+			if (part instanceof ISizable) {
+				((ISizable) part).resize(widthScale, heightSacle);
+			}
 		}
 	}
 

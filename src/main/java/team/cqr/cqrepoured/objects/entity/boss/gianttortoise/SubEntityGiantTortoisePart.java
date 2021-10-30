@@ -3,13 +3,13 @@ package team.cqr.cqrepoured.objects.entity.boss.gianttortoise;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
 
-public class SubEntityGiantTortoisePart extends MultiPartEntityPart implements IBlacklistedFromStatues {
+public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<EntityCQRGiantTortoise> implements IBlacklistedFromStatues {
 
 	private boolean isHead;
 
