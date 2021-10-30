@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 
 public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
@@ -23,15 +24,15 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 		//If at least one emitter emits electricity, we are vulnerable!!
 		if(source == DamageSource.DROWN) {
 			if(this.funcGetAnyEmitterActive.get()) {
-				this.exterminator.setStunned(true, 300);
+				this.exterminator.setStunned(true, 100);
 			}
 		}
 		
 		if(source == DamageSource.LIGHTNING_BOLT) {
-			this.exterminator.setStunned(true, 100);
+			this.exterminator.setStunned(true, 50);
 		}
 		
-		if(!this.exterminator.isStunned() && this.funcGetAnyEmitterActive.get()) {
+		if(!this.exterminator.isStunned() && this.funcGetAnyEmitterActive.get() && !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this.exterminator)) {
 			return super.attackEntityFrom(DamageSource.DROWN, amount /= 2);
 		}
 		

@@ -257,6 +257,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 	
 	public void setStunned(boolean value) {
+		if(this.isCannonRaised()) {
+			this.switchCannonArmState(false);
+		}
 		this.dataManager.set(IS_STUNNED, value);
 	}
 
@@ -264,6 +267,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		if (this.isStunned()) {
 			this.stunTime += (50/3);
+		} else if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
+			return;
 		} else {
 			this.setStunned(true, 100);
 		}
@@ -615,6 +620,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		if (this.isStunned()) {
 			if(source.damageType == DamageSource.LIGHTNING_BOLT.getDamageType()) {
+				amount /= 4.0F;
 				overrideFlag = true;
 			}
 			if(sentFromPart) {
