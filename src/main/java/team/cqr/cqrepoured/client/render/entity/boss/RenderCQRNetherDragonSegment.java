@@ -10,10 +10,10 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonBodyParts;
 import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
-import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 import team.cqr.cqrepoured.util.Reference;
 
-public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<EntityCQRNetherDragonSegment> {
+public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityNetherDragonSegment> {
 
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon.png");
 	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon_skeletal.png");
@@ -32,7 +32,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<EntityCQRN
 	}
 	
 	@Override
-	public void doRender(EntityCQRNetherDragonSegment entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(SubEntityNetherDragonSegment entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 
@@ -94,12 +94,12 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<EntityCQRN
 	}
 
 	@Override
-	public boolean shouldRender(EntityCQRNetherDragonSegment livingEntity, ICamera camera, double camX, double camY, double camZ) {
+	public boolean shouldRender(SubEntityNetherDragonSegment livingEntity, ICamera camera, double camX, double camY, double camZ) {
 		return superShouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
+	protected ResourceLocation getEntityTexture(SubEntityNetherDragonSegment entity) {
 		if (!entity.isSkeletal()) {
 			// Custom texture start
 			if (entity.getParent() != null && entity.getParent().hasTextureOverride()) {

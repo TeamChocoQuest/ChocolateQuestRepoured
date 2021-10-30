@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss.subparts;
+package team.cqr.cqrepoured.objects.entity.boss.netherdragon;
 
 import javax.annotation.Nullable;
 
@@ -13,16 +13,15 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.objects.entity.IDontRenderFire;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
-public class EntityCQRNetherDragonSegment extends MultiPartEntityPart implements IBlacklistedFromStatues, IDontRenderFire {
+public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements IBlacklistedFromStatues, IDontRenderFire {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
 	private boolean isSkeletal = false;
 
-	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
+	public SubEntityNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
 		super((IEntityMultiPart) dragon, "dragonPart" + partID, 0.5F, 0.5F);
 
 		this.setSize(1.25F, 1.25F);

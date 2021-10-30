@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonHeadSkeletal;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {

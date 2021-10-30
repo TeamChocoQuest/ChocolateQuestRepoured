@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.models.entities.boss;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 /**
  * Nether Dragon - ArloTheEpic Created using Tabula 7.0.1

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.boss;
+package team.cqr.cqrepoured.objects.entity.boss.netherdragon;
 
 import java.util.ArrayList;
 
@@ -57,7 +57,6 @@ import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAINearestAttackTargetAtHomeArea;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -86,7 +85,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
 
-	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[this.INITIAL_SEGMENT_COUNT];
+	private SubEntityNetherDragonSegment[] dragonBodyParts = new SubEntityNetherDragonSegment[this.INITIAL_SEGMENT_COUNT];
 
 	// private boolean mouthOpen = false;
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
@@ -153,9 +152,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.segmentCount = this.INITIAL_SEGMENT_COUNT;
 		}
 
-		this.dragonBodyParts = new EntityCQRNetherDragonSegment[this.segmentCount];
+		this.dragonBodyParts = new SubEntityNetherDragonSegment[this.segmentCount];
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
-			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1, false);
+			this.dragonBodyParts[i] = new SubEntityNetherDragonSegment(this, i + 1, false);
 			this.world.spawnEntity(this.dragonBodyParts[i]);
 		}
 	}
@@ -243,15 +242,15 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	private void removeLastSegment() {
 		int indx = Math.max(0, this.dragonBodyParts.length - 1);
-		EntityCQRNetherDragonSegment segment = this.dragonBodyParts[indx];
+		SubEntityNetherDragonSegment segment = this.dragonBodyParts[indx];
 		if (indx > 0) {
-			EntityCQRNetherDragonSegment[] partsTmp = new EntityCQRNetherDragonSegment[this.dragonBodyParts.length - 1];
+			SubEntityNetherDragonSegment[] partsTmp = new SubEntityNetherDragonSegment[this.dragonBodyParts.length - 1];
 			for (int i = 0; i < partsTmp.length; i++) {
 				partsTmp[i] = this.dragonBodyParts[i];
 			}
 			this.dragonBodyParts = partsTmp;
 		} else {
-			this.dragonBodyParts = new EntityCQRNetherDragonSegment[0];
+			this.dragonBodyParts = new SubEntityNetherDragonSegment[0];
 		}
 		segment.die();
 		if (!this.world.isRemote) {
@@ -428,7 +427,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		super.onLivingUpdate();
 
 		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(0.5).offset(new Vec3d(this.motionX, this.motionY, this.motionZ).scale(1.5)));
-		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (segment != null) {
 				this.destroyBlocksInAABB(segment.getEntityBoundingBox());
 			}
@@ -655,7 +654,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		super.onUpdate();
 
 		// update bodySegments parts
-		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (segment != null) {
 				this.world.updateEntityWithOptionalForce(segment, true);
 				segment.onUpdate();
@@ -676,7 +675,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private void lengthSyncClient() {
 		int serverLength = this.dataManager.get(SERVER_PART_LENGTH);
 		if (serverLength > 0 && serverLength < this.dragonBodyParts.length) {
-			EntityCQRNetherDragonSegment[] partsTmp = new EntityCQRNetherDragonSegment[serverLength];
+			SubEntityNetherDragonSegment[] partsTmp = new SubEntityNetherDragonSegment[serverLength];
 			for (int i = 0; i < this.dragonBodyParts.length; i++) {
 				if (i < partsTmp.length) {
 					partsTmp[i] = this.dragonBodyParts[i];
@@ -721,7 +720,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public void setDead() {
 		super.setDead();
-		for (EntityCQRNetherDragonSegment dragonPart : this.dragonBodyParts) {
+		for (SubEntityNetherDragonSegment dragonPart : this.dragonBodyParts) {
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
 			if (dragonPart != null) {
@@ -809,7 +808,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		if (this.deathTime % 5 == 0) {
 			if (this.dragonBodyParts.length > 0) {
-				EntityCQRNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
+				SubEntityNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
 				if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
 					this.dropExperience(MathHelper.floor((float) 120), segment.posX, segment.posY, segment.posZ);
 					this.world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
@@ -874,7 +873,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected void onFinalDeath() {
-		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
 				this.dropExperience(MathHelper.floor((float) 120), segment.posX, segment.posY, segment.posZ);
 			}

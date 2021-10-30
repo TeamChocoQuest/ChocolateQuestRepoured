@@ -89,7 +89,6 @@ import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRLich;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNecromancer;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
@@ -100,8 +99,9 @@ import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
-import team.cqr.cqrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import team.cqr.cqrepoured.objects.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.objects.entity.misc.EntityCQRWasp;
 import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
@@ -264,7 +264,7 @@ public class CQREntityRenderers {
 	protected static void registerBossRenderers() {
 		// Nether Dragon
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, RenderCQRNetherDragon::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);
+		RenderingRegistry.registerEntityRenderingHandler(SubEntityNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);
 
 		// Giant Tortoise
 		// RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);

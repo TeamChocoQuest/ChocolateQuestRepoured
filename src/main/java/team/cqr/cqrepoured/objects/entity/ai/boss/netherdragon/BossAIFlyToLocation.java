@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.objects.entity.ai.boss.netherdragon;
 
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDragon> {
 

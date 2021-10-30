@@ -53,7 +53,7 @@ import team.cqr.cqrepoured.init.CQRSerializers;
 import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.objects.banners.EBannerPatternsCQ;
 import team.cqr.cqrepoured.objects.banners.EBanners;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.structuregen.DungeonRegistry;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
