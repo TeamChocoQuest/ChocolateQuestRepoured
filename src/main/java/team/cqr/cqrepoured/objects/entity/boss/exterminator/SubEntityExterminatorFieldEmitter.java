@@ -77,6 +77,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 				//Damage the target by making it electrocuted
 				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingTicks(200);
 				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingSpreads(8);
+				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setCasterID(this.exterminator.getPersistentID());
 			}
 		} else {
 			this.cooldown--;

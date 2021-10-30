@@ -17,6 +17,7 @@ import team.cqr.cqrepoured.util.EntityUtil;
 public class CapabilityElectricShock {
 	
 	private final EntityLivingBase entity;
+	private UUID originalCasterID;
 	private Entity target;
 	private int remainingTicks = -1;
 	private int cooldown = -1;
@@ -24,6 +25,7 @@ public class CapabilityElectricShock {
 
 	public CapabilityElectricShock(EntityLivingBase entity) {
 		this.entity = entity;
+		this.originalCasterID = null;
 	}
 	
 	public NBTBase writeToNBT() {
@@ -34,6 +36,9 @@ public class CapabilityElectricShock {
 		compound.setInteger("remainingSpreads", this.remainingSpreads);
 		if(this.target != null) {
 			compound.setTag("targetID", NBTUtil.createUUIDTag(this.target.getPersistentID()));
+		}
+		if(this.originalCasterID != null) {
+			compound.setTag("casterID", NBTUtil.createUUIDTag(originalCasterID));
 		}
 		
 		return compound;
@@ -47,6 +52,14 @@ public class CapabilityElectricShock {
 		
 		this.remainingTicks = value;
 		this.cooldown = 200;
+	}
+	
+	public void setCasterID(UUID casterID) {
+		this.originalCasterID = casterID;
+	}
+	@Nullable
+	public UUID getCasterID() {
+		return this.originalCasterID;
 	}
 	
 	public int getRemainingTicks() {
@@ -86,6 +99,9 @@ public class CapabilityElectricShock {
 		if(nbt.hasKey("targetID", Constants.NBT.TAG_COMPOUND)) {
 			UUID targetID = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("targetID"));
 			this.target = EntityUtil.getEntityByUUID(this.entity.getEntityWorld(), targetID);
+		}
+		if(nbt.hasKey("casterID", Constants.NBT.TAG_COMPOUND)) {
+			this.originalCasterID = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("casterID"));
 		}
 	}
 

@@ -154,6 +154,9 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		// First, get all applicable entities in range
 		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
 		entities.removeIf((EntityLivingBase input) -> {
+			if(input.getPersistentID().equals(icapability.getCasterID())) {
+				return true;
+			}
 			if (!spreader.canEntityBeSeen(input) || spreader.getDistance(input) > CQRConfig.general.electricFieldEffectSpreadRange) {
 				return true;
 			}
@@ -169,6 +172,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 
 		CapabilityElectricShock targetCap = chosen.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 		targetCap.setRemainingTicks(100);
+		targetCap.setCasterID(icapability.getCasterID());
 		if(targetCap.getRemainignSpreads() < 0) {
 			targetCap.setRemainingSpreads(icapability.getRemainignSpreads());
 		}
