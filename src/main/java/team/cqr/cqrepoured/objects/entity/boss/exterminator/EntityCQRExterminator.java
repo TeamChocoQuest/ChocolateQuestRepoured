@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -31,8 +32,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -42,11 +41,31 @@ import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttack;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowPath;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIHooker;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIIdleSit;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAILooter;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToHome;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAIPotionThrower;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAITasksProfiled;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIArmCannon;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHulkSmash;
+import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorStun;
+import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.ai.target.exterminator.EntityAITargetElectrocute;
+import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
@@ -169,13 +188,39 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	protected void initEntityAI() {
-		super.initEntityAI();
+		if (CQRConfig.advanced.debugAI) {
+			this.tasks = new EntityAITasksProfiled(this.world.profiler, this.world);
+			this.targetTasks = new EntityAITasksProfiled(this.world.profiler, this.world);
+		}
+		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(2, new EntityAIOpenCloseDoor(this));
 
-		this.tasks.addTask(1, new BossAIExterminatorHulkSmash(this));
-		this.tasks.addTask(2, new BossAIExterminatorHandLaser(this));
-		this.tasks.addTask(3, new BossAIArmCannon(this));
+		this.tasks.addTask(0, new BossAIExterminatorStun(this));
+		
+		this.tasks.addTask(2, new BossAIExterminatorHulkSmash(this));
+		this.tasks.addTask(3, new BossAIExterminatorHandLaser(this));
+		this.tasks.addTask(4, new BossAIArmCannon(this));
+		
+		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
+		this.tasks.addTask(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
+		this.tasks.addTask(14, new EntityAIPotionThrower(this)); /* AI for secondary Item */
+		this.tasks.addTask(15, new EntityAIFireball(this)); /* AI for secondary Item */
+		this.tasks.addTask(16, new EntityAIHooker(this)); /* AI for secondary Item */
+		this.tasks.addTask(17, new EntityAIBackstab(this));
+		this.tasks.addTask(18, new EntityAIAttack(this));
+		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.MAIN_HAND));
 
+		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
+		this.tasks.addTask(24, new EntityAILooter(this));
+
+		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(31, new EntityAIFollowPath(this));
+		this.tasks.addTask(32, new EntityAIMoveToHome(this));
+		this.tasks.addTask(33, new EntityAIIdleSit(this));
+		
 		// Target tasks for the electro stuff
+		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
 		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
 	}
@@ -205,8 +250,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public void setStunned(boolean value, final int ticks) {
-		if(this.isServerWorld() && value && ticks >= this.stunTime) {
-			this.stunTime += ticks;
+		if(this.isServerWorld() && value && (ticks / 3) >= this.stunTime) {
+			this.stunTime += (ticks / 3);//update is only executed every 3 ticks
 		}
 		this.setStunned(value);
 	}
@@ -218,9 +263,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		if (this.isStunned()) {
-			this.stunTime += 50;
+			this.stunTime += (50/3);
 		} else {
-			this.stunTime = 200;
+			this.setStunned(true, 100);
 		}
 	}
 
@@ -428,17 +473,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		int capTicks = 0;
-		CapabilityElectricShock icapability = this.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-		capTicks = icapability.getRemainingTicks();
-		this.setCustomNameTag("capability ticks: " + capTicks);
 		
 		if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater()) && !this.isStunned()) {
 			this.setStunned(true, 10);
 		}
 		
 		if(!this.isStunned()) {
-			this.setStunned(this.isEmitterShortCircuited(this.getEmitterLeft()) || this.isEmitterShortCircuited(this.getEmitterRight()), 200);
+			this.setStunned(this.isEmitterShortCircuited(this.getEmitterLeft()) || this.isEmitterShortCircuited(this.getEmitterRight()), 100);
 		}
 
 		if (this.isServerWorld()) {
@@ -552,7 +593,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if(source == DamageSource.DROWN && !this.isInWater()) {
 			if(this.isAnyEmitterActive()) {
 				amount *= 2.0F;
-				this.setStunned(true, 300);
+				this.setStunned(true, 150);
 			}
 		}
 		
@@ -579,6 +620,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			if(sentFromPart) {
 				amount *= 2.0F;
 			}
+		} else if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
+			this.partSoundFlag = true;
+			this.playSound(this.getHurtSound(source), 1.0F, 1.0F);
+			return true;
 		}
 
 		if (!sentFromPart && !this.isStunned()) {
@@ -950,6 +995,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		} else {
 			this.setElectroCuteTargetLeft(null);
 		}
+	}
+	
+	@Override
+	protected void updateAITasks() {
+		if(this.isStunned()) {
+			return;
+		}
+		super.updateAITasks();
 	}
 
 }
