@@ -51,10 +51,14 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 
 	@Override
 	public void onLivingUpdate() {
-		if (CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
+		if (this.canHealWhenIdlign() && CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
 			this.heal(this.getMaxHealth() * 0.005F);
 		}
 		super.onLivingUpdate();
+	}
+
+	protected boolean canHealWhenIdlign() {
+		return true;
 	}
 
 	@Override

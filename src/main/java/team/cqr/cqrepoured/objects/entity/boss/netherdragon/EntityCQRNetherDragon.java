@@ -947,5 +947,15 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public boolean canbeTurnedToStone() {
 		return false;
 	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return this.phase == 0;
+	}
+	
+	@Override
+	protected boolean canHealWhenIdlign() {
+		return this.phase == 0;
+	}
 
 }
