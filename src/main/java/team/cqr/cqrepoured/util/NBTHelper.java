@@ -20,7 +20,6 @@ public class NBTHelper {
 			if (input.readByte() != Constants.NBT.TAG_COMPOUND) {
 				return null;
 			}
-			EnchantmentProtection
 			input.readUTF();
 			byte id;
 
