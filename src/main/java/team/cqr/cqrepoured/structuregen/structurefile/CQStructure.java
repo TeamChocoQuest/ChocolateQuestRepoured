@@ -35,7 +35,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -79,6 +78,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
+import team.cqr.cqrepoured.util.NBTHelper;
 
 public class CQStructure {
 

@@ -63,7 +63,10 @@ public class ContainerBadge extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return playerIn.isCreative();
+		if (!playerIn.isCreative()) {
+			return false;
+		}
+		return playerIn.getHeldItem(this.hand) == this.stack;
 	}
 
 	@Override

@@ -13,10 +13,10 @@ import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 public class ContainerSpawner extends Container {
 
-	private final int numRows = 3;
-	private final int numColumns = 3;
+	private final TileEntitySpawner tileEntity;
 
 	public ContainerSpawner(InventoryPlayer playerInv, TileEntitySpawner tileentity) {
+		this.tileEntity = tileentity;
 		IItemHandler inventory = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
 		for (int i = 0; i < 3; i++) {
@@ -29,8 +29,8 @@ public class ContainerSpawner extends Container {
 			this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142));
 		}
 
-		for (int l = 0; l < this.numRows; l++) {
-			for (int m = 0; m < this.numColumns; m++) {
+		for (int l = 0; l < 3; l++) {
+			for (int m = 0; m < 3; m++) {
 				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
 					@Override
 					public void onSlotChanged() {
@@ -48,7 +48,13 @@ public class ContainerSpawner extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return playerIn.isCreative();
+		if (!playerIn.isCreative()) {
+			return false;
+		}
+		if (playerIn.world.getTileEntity(this.tileEntity.getPos()) != this.tileEntity) {
+			return false;
+		}
+		return playerIn.getDistanceSqToCenter(this.tileEntity.getPos()) <= 64.0D;
 	}
 
 	@Override

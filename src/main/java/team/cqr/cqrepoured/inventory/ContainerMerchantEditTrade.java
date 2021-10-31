@@ -14,12 +14,10 @@ import team.cqr.cqrepoured.objects.npc.trading.TradeInput;
 public class ContainerMerchantEditTrade extends Container {
 
 	private final AbstractEntityCQR entity;
-	private final EntityPlayer player;
 	private final IInventory tradeInventory;
 
 	public ContainerMerchantEditTrade(AbstractEntityCQR entity, EntityPlayer player, int tradeIndex) {
 		this.entity = entity;
-		this.player = player;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -50,7 +48,13 @@ public class ContainerMerchantEditTrade extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return playerIn == this.player;
+		if (!playerIn.isCreative()) {
+			return false;
+		}
+		if (this.entity.isDead) {
+			return false;
+		}
+		return playerIn.getDistanceSq(this.entity) <= 64.0D;
 	}
 
 	@Override

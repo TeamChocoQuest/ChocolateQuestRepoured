@@ -15,12 +15,10 @@ import team.cqr.cqrepoured.util.CraftingHelper;
 public class ContainerMerchant extends Container {
 
 	private final AbstractEntityCQR entity;
-	private final EntityPlayer player;
 	private final InventoryMerchant merchantInventory;
 
 	public ContainerMerchant(AbstractEntityCQR entity, EntityPlayer player) {
 		this.entity = entity;
-		this.player = player;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -52,7 +50,10 @@ public class ContainerMerchant extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return playerIn == this.player;
+		if (this.entity.isDead) {
+			return false;
+		}
+		return playerIn.getDistanceSq(this.entity) <= 64.0D;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package net.minecraft.nbt;
+package team.cqr.cqrepoured.util;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -6,6 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.zip.GZIPInputStream;
 
+import net.minecraft.enchantment.EnchantmentProtection;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants;
 
 public class NBTHelper {
@@ -15,6 +20,7 @@ public class NBTHelper {
 			if (input.readByte() != Constants.NBT.TAG_COMPOUND) {
 				return null;
 			}
+			EnchantmentProtection
 			input.readUTF();
 			byte id;
 
