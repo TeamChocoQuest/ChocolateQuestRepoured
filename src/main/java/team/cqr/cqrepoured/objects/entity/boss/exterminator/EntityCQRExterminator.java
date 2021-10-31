@@ -11,6 +11,7 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
@@ -111,19 +112,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
 			@Override
 			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-				if (this.parent == null || ((EntityLivingBase)this.parent).isDead) {
+				if (this.parent == null || ((EntityLivingBase) this.parent).isDead) {
 					return false;
 				}
-				return ((EntityLivingBase)this.parent).processInitialInteract(player, hand);
+				return ((EntityLivingBase) this.parent).processInitialInteract(player, hand);
 			}
 		};
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
 			@Override
 			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-				if (this.parent == null || ((EntityLivingBase)this.parent).isDead) {
+				if (this.parent == null || ((EntityLivingBase) this.parent).isDead) {
 					return false;
 				}
-				return ((EntityLivingBase)this.parent).processInitialInteract(player, hand);
+				return ((EntityLivingBase) this.parent).processInitialInteract(player, hand);
 			}
 		};
 	}
@@ -196,11 +197,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(2, new EntityAIOpenCloseDoor(this));
 
 		this.tasks.addTask(0, new BossAIExterminatorStun(this));
-		
+
 		this.tasks.addTask(2, new BossAIExterminatorHulkSmash(this));
 		this.tasks.addTask(3, new BossAIExterminatorHandLaser(this));
 		this.tasks.addTask(4, new BossAIArmCannon(this));
-		
+
 		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
 		this.tasks.addTask(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
 		this.tasks.addTask(14, new EntityAIPotionThrower(this)); /* AI for secondary Item */
@@ -217,7 +218,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(31, new EntityAIFollowPath(this));
 		this.tasks.addTask(32, new EntityAIMoveToHome(this));
 		this.tasks.addTask(33, new EntityAIIdleSit(this));
-		
+
 		// Target tasks for the electro stuff
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -250,14 +251,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public void setStunned(boolean value, final int ticks) {
-		if(this.isServerWorld() && value && (ticks / 3) >= this.stunTime) {
-			this.stunTime += (ticks / 3);//update is only executed every 3 ticks
+		if (this.isServerWorld() && value && (ticks / 3) >= this.stunTime) {
+			this.stunTime += (ticks / 3);// update is only executed every 3 ticks
 		}
 		this.setStunned(value);
 	}
-	
+
 	public void setStunned(boolean value) {
-		if(this.isCannonRaised() && value) {
+		if (this.isCannonRaised() && value) {
 			this.switchCannonArmState(false);
 		}
 		this.dataManager.set(IS_STUNNED, value);
@@ -266,8 +267,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		if (this.isStunned()) {
-			this.stunTime += (50/3);
-		} else if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
+			this.stunTime += (50 / 3);
+		} else if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
 			return;
 		} else {
 			this.setStunned(true, 100);
@@ -302,7 +303,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public boolean canBePushed() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean canReceiveElectricDamageCurrently() {
 		return IMechanical.super.canReceiveElectricDamageCurrently() || this.isStunned();
@@ -465,10 +466,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public float getDefaultWidth() {
 		return 2F;
 	}
-	
+
 	protected boolean isEmitterShortCircuited(SubEntityExterminatorFieldEmitter emitter) {
-		if(emitter.isActive()) {
-			if(emitter.isInWater() || emitter.isWet()) {
+		if (emitter.isActive()) {
+			if (emitter.isInWater() || emitter.isWet()) {
 				return true;
 			}
 		}
@@ -478,12 +479,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
-		if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater()) && !this.isStunned()) {
+
+		if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater()) && !this.isStunned()) {
 			this.setStunned(true, 10);
 		}
-		
-		if(!this.isStunned()) {
+
+		if (!this.isStunned()) {
 			this.setStunned(this.isEmitterShortCircuited(this.getEmitterLeft()) || this.isEmitterShortCircuited(this.getEmitterRight()), 100);
 		}
 
@@ -584,25 +585,26 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
-		boolean isMainHBPart = !(part == this.parts[3] || part == this.parts[4]) || part == null;;
+		boolean isMainHBPart = !(part == this.parts[3] || part == this.parts[4]) || part == null;
+		;
 		return this.attackEntityFrom(source, damage, isMainHBPart);
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		handleAttackedByLargeGroups();
-		
+
 		boolean overrideFlag = false;
-		
-		//We got hit by a water bottle
-		if(source == DamageSource.DROWN && !this.isInWater()) {
-			if(this.isAnyEmitterActive()) {
+
+		// We got hit by a water bottle
+		if (source == DamageSource.DROWN && !this.isInWater()) {
+			if (this.isAnyEmitterActive()) {
 				amount *= 2.0F;
 				this.setStunned(true, 150);
 			}
 		}
-		
-		if(source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
+
+		if (source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
@@ -619,14 +621,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 
 		if (this.isStunned()) {
-			if(source.damageType == DamageSource.LIGHTNING_BOLT.getDamageType()) {
+			if (source.damageType == DamageSource.LIGHTNING_BOLT.getDamageType()) {
 				amount /= 4.0F;
 				overrideFlag = true;
 			}
-			if(sentFromPart) {
+			if (sentFromPart) {
 				amount *= 2.0F;
 			}
-		} else if(TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
+		} else if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
 			this.partSoundFlag = true;
 			this.playSound(this.getHurtSound(source), 1.0F, 1.0F);
 			return true;
@@ -638,9 +640,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return true;
 		}
 		this.partSoundFlag = false;
-		
+
 		overrideFlag |= super.attackEntityFrom(source, amount, sentFromPart);
-		
+
 		return overrideFlag;
 	}
 
@@ -789,8 +791,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean isExecutingThrow() {
-		if(this.isCurrentlyPlayingAnimation()) {
-			if(this.getCurrentAnimation() != null) {
+		if (this.isCurrentlyPlayingAnimation()) {
+			if (this.getCurrentAnimation() != null) {
 				return this.getCurrentAnimation().equalsIgnoreCase(ANIM_NAME_THROW);
 			}
 		}
@@ -798,8 +800,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean isExecutingGroundSlam() {
-		if(this.isCurrentlyPlayingAnimation()) {
-			if(this.getCurrentAnimation() != null) {
+		if (this.isCurrentlyPlayingAnimation()) {
+			if (this.getCurrentAnimation() != null) {
 				return this.getCurrentAnimation().equalsIgnoreCase(ANIM_NAME_GROUND_SMASH);
 			}
 		}
@@ -839,10 +841,27 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	protected void onDeathUpdate() {
 		++this.deathTime;
+		
+		if(this.deathTime == 65) {
+			this.spawnDeathPoofParticles();
+		}
+		
 		if (this.deathTime >= 70 && this.isServerWorld()) {
 			if (this.deathCause != null) {
 				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
+
+			// Copied from EntityLivingBase
+			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
+				int i = this.getExperiencePoints(this.attackingPlayer);
+				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+				while (i > 0) {
+					int j = EntityXPOrb.getXPSplit(i);
+					i -= j;
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+				}
+			}
+
 			this.setDead();
 
 			this.onFinalDeath();
@@ -1002,7 +1021,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			this.setElectroCuteTargetLeft(null);
 		}
 	}
-	
+
 	@Override
 	public boolean isWet() {
 		return this.isInWater();

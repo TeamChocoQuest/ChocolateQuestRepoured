@@ -9,6 +9,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.config.CQRConfig;
 
 public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements IBlacklistedFromStatues {
@@ -137,6 +138,31 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	@Override
 	public boolean canbeTurnedToStone() {
 		return !CQRConfig.bosses.blackListBossesFromIaFGorgonHead;
+	}
+	
+	protected void spawnDeathPoofParticles() {
+		if(!(this.world instanceof WorldServer) ) {
+			return;
+		}
+		// Copied from EntityLivingBase
+		int hbVolume = (int) (this.width * this.height * this.width);
+		hbVolume *= 4;
+		for (int k = 0; k < hbVolume; ++k) {
+			double d2 = this.rand.nextGaussian() * 0.02D;
+			double d0 = this.rand.nextGaussian() * 0.02D;
+			double d1 = this.rand.nextGaussian() * 0.02D;
+			((WorldServer) this.world).spawnParticle(
+					EnumParticleTypes.EXPLOSION_NORMAL, 
+					this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 
+					this.posY + (double) (this.rand.nextFloat() * this.height), 
+					this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width,
+					1,
+					d2, 
+					d0,
+					d1,
+					0.05
+				);
+		}
 	}
 
 }
