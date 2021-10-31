@@ -220,17 +220,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 
 		if (this.phase == 2) {
-			this.damageTmpPhaseTwo -= damage;
-			if (this.damageTmpPhaseTwo <= 0) {
-				this.damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
-				// DONE: Remove last segment
-				damage = this.getMaxHealth() / (this.INITIAL_SEGMENT_COUNT - this.SEGMENT_COUNT_ON_DEATH);
-				this.setHealth(this.getHealth() - damage);
-				if (damage >= this.getHealth()) {
-					super.attackEntityFrom(source, damage + 1, true);
-				}
-			}
-			this.updateSegmentCount();
+			this.handleAttackedInSkeletalPhase(damage, source);
 			return super.attackEntityFrom(source, 0, true);
 		}
 		if (this.phase == 0) {
@@ -238,6 +228,20 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 
 		return super.attackEntityFrom(source, damage, true);
+	}
+	
+	private void handleAttackedInSkeletalPhase(float damage, final DamageSource source) {
+		this.damageTmpPhaseTwo -= damage;
+		if (this.damageTmpPhaseTwo <= 0) {
+			this.damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
+			// DONE: Remove last segment
+			damage = this.getMaxHealth() / (this.INITIAL_SEGMENT_COUNT - this.SEGMENT_COUNT_ON_DEATH);
+			this.setHealth(this.getHealth() - damage);
+			if (damage >= this.getHealth()) {
+				super.attackEntityFrom(source, damage + 1, true);
+			}
+		}
+		this.updateSegmentCount();
 	}
 
 	private void removeLastSegment() {
@@ -283,6 +287,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		} else if (this.phase != 0 && amount > 0) {
 			// Play blaze sound
 			this.playSound(SoundEvents.ENTITY_BLAZE_HURT, 2F, 1.5F);
+			if (this.phase == 2) {
+				this.handleAttackedInSkeletalPhase(amount / 2, source);
+				return super.attackEntityFrom(source, 0, true);
+			}
 			return false;
 		}
 
@@ -946,11 +954,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public boolean canbeTurnedToStone() {
 		return false;
-	}
-	
-	@Override
-	public boolean canBeCollidedWith() {
-		return this.phase == 0;
 	}
 	
 	@Override
