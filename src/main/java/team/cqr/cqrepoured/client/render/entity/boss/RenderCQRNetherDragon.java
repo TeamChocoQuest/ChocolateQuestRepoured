@@ -72,4 +72,9 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		return TEXTURES_SKELETAL;
 	}
 
+	@Override
+	protected float getDeathMaxRotation(EntityCQRNetherDragon entityLivingBaseIn) {
+		return 0;
+	}
+	
 }
