@@ -6,12 +6,22 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHandSide;
 
 public class LayerCQRHeldItem extends LayerHeldItem {
 
 	public LayerCQRHeldItem(RenderLivingBase<?> livingEntityRendererIn) {
 		super(livingEntityRendererIn);
+	}
+
+	@Override
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+			float netHeadYaw, float headPitch, float scale) {
+		super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+
+		// when rendering a skull it messes up the gl state
+		GlStateManager.disableCull();
 	}
 
 	@Override
