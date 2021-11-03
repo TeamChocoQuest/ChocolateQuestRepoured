@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.objects.items;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -89,11 +88,11 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 			EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, isummoner, summoner);
 			circle.setSummon(resLoc);
 			circle.setNoGravity(false);
-			circle.setPosition(pos.getX(), pos.getY() + 1, pos.getZ());
+			circle.setPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
 			worldIn.spawnEntity(circle);
 			return Optional.of(circle);
 		}
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	public boolean spawnEntity(EntityPlayer player, World worldIn, ItemStack item) {
