@@ -55,7 +55,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		
 		//layers
 		this.addLayer(new LayerElectrocuteGeo<T>(this));
-		this.addLayer(new LayerGlowingAreasGeo<>(this, this::getEntityTexture));
+		//this.addLayer(new LayerGlowingAreasGeo<>(this, this::getEntityTexture));
 	}
 
 	/*
