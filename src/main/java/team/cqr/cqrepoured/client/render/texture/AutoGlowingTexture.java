@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
@@ -45,6 +46,8 @@ public class AutoGlowingTexture extends AbstractTexture {
 		this.deleteGlTexture();
 
 		try (IResource iresource = resourceManager.getResource(this.originalTexture)) {
+			//Needed to get the GL-texture id
+			ITextureObject ito = Minecraft.getMinecraft().renderEngine.getTexture(iresource.getResourceLocation());
 			BufferedImage bufferedimage = TextureUtil.readBufferedImage(iresource.getInputStream());
 			BufferedImage glowingBI = new BufferedImage(bufferedimage.getWidth(), bufferedimage.getHeight(), bufferedimage.getType());
 
@@ -53,7 +56,7 @@ public class AutoGlowingTexture extends AbstractTexture {
 
 			if (iresource.hasMetadata()) {
 				try {
-					//TODO: Fix this for the CTS!! Cts for whatever reason tries to load png as mcmeta file...
+					//DONE: Fix this for the CTS!! Cts for whatever reason tries to load png as mcmeta file...
 					TextureMetadataSection texturemetadatasection = (TextureMetadataSection) iresource.getMetadata("texture");
 
 					if (texturemetadatasection != null) {
@@ -66,7 +69,11 @@ public class AutoGlowingTexture extends AbstractTexture {
 						for(Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> area : glowInformation.getGlowingSections()) {
 							for(int ix = area.getFirst().getFirst(); ix < area.getSecond().getFirst(); ix++) {
 								for(int iy = area.getFirst().getSecond(); iy < area.getSecond().getSecond(); iy++) {
+									final int rgbEmpty = glowingBI.getRGB(ix, iy);
 									glowingBI.setRGB(ix, iy, bufferedimage.getRGB(ix, iy));
+									
+									//Remove it from the original
+									bufferedimage.setRGB(ix, iy, rgbEmpty);
 								}
 							}
 						}
@@ -82,6 +89,9 @@ public class AutoGlowingTexture extends AbstractTexture {
 			}
 
 			TextureUtil.uploadTextureImageAllocate(this.getGlTextureId(), glowingBI, flag, flag1);
+		
+			//Also upload the changes to the original texture...
+			TextureUtil.uploadTextureImage(ito.getGlTextureId(), bufferedimage);
 		}
 	}
 
