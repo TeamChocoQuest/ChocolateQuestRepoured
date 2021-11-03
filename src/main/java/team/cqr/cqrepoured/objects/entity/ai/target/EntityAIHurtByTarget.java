@@ -20,6 +20,9 @@ import team.cqr.cqrepoured.objects.items.ISupportWeapon;
 
 public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 
+	private static final double MAX_PATH_END_TO_TARGET_DISTANCE_SQ = 2.0D;
+	private static final int MAX_PATH_LENGTH = 20;
+	private static final double MAX_PATH_COMPLEXITY = 4;
 	protected EntityLivingBase attackTarget;
 	protected int prevRevengeTimer;
 
@@ -94,7 +97,20 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 			return false;
 		}
 		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
-		return path != null && path.getCurrentPathLength() <= 20 && getPathComplexity(path) <= 4;
+		if (path == null) {
+			return false;
+		}
+		PathPoint end = path.getFinalPathPoint();
+		if (end == null) {
+			return false;
+		}
+		if (this.entity.getDistanceSq(end.x, end.y, end.z) > MAX_PATH_END_TO_TARGET_DISTANCE_SQ) {
+			return false;
+		}
+		if (path.getCurrentPathLength() > MAX_PATH_LENGTH) {
+			return false;
+		}
+		return getPathComplexity(path) <= MAX_PATH_COMPLEXITY;
 	}
 
 	protected boolean trySetAttackTarget(AbstractEntityCQR ally) {
@@ -105,7 +121,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (stack.getItem() instanceof IFakeWeapon) {
 			return false;
 		}
-		if (!isEnemyCheckingLeadersWhenAttacked((AbstractEntityCQR) ally, this.attackTarget)) {
+		if (!isEnemyCheckingLeadersWhenAttacked(ally, this.attackTarget)) {
 			return false;
 		}
 		EntityLivingBase oldAttackTarget = ally.getAttackTarget();
