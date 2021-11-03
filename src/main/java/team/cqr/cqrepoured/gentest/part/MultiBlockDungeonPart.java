@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.netty.buffer.ByteBuf;
@@ -87,7 +88,7 @@ public class MultiBlockDungeonPart extends DungeonPart implements IProtectable {
 
 		@Override
 		public MultiBlockDungeonPart build(World world, DungeonPlacement placement) {
-			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).collect(Collectors.toList());
+			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull).collect(Collectors.toList());
 			return new MultiBlockDungeonPart(list);
 		}
 
