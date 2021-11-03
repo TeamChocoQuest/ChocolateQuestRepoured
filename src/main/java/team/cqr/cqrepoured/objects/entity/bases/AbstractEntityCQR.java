@@ -1009,7 +1009,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			return;
 		}
 		if (this.leader == null) {
-			if (this.getEntityId() + this.ticksExisted % 20 != 0) {
+			if ((this.getEntityId() + this.ticksExisted) % 20 != 0) {
 				return;
 			}
 			Entity entity = EntityUtil.getEntityByUUID(this.world, this.leaderUUID);
