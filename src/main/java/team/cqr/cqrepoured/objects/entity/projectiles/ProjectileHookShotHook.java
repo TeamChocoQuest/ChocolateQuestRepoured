@@ -222,7 +222,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	public void onRemovedFromWorld() {
 		if (!this.world.isRemote) {
 			if (this.thrower instanceof EntityPlayer) {
-				((EntityPlayer) this.thrower).getCooldownTracker().removeCooldown(this.item);
+				((EntityPlayer) this.thrower).getCooldownTracker().setCooldown(this.item, 0);
 			}
 			this.setHookItemShootingTag(false);
 		}
