@@ -40,8 +40,8 @@ public class CommandLocateDungeon extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-			throw new WrongUsageException("Not enough arguments!");
 		if (args.length < 3) {
+			throw new WrongUsageException(this.getUsage(sender));
 		}
 
 		World world = sender.getEntityWorld();
