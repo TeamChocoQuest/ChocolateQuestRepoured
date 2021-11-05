@@ -24,7 +24,7 @@ import team.cqr.cqrepoured.util.IRangedWeapon;
 public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpecial {
 
 	public EntityAIAttackSpecialSpinAttack() {
-		super(true, true, ATTACK_DURATION, COOLDOWN_BASE);
+		super(false, false, ATTACK_DURATION, COOLDOWN_BASE);
 	}
 
 	protected static final int COOLDOWN_BASE = 200;
@@ -32,6 +32,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	protected static final float MAX_DISTANCE_TO_TARGET = 12;
 	
 	protected Vec3d attackDirection = Vec3d.ZERO;
+	protected short ticksCollided = 0;
 	
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
@@ -58,7 +59,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 	@Override
 	public boolean shouldContinueAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
-		return attacker.getDistance(target) <= MAX_DISTANCE_TO_TARGET;
+		return (target == null ||attacker.getDistance(target) <= MAX_DISTANCE_TO_TARGET) && !(attacker.collidedHorizontally && this.ticksCollided >= 20);
 	}
 
 	@Override
@@ -69,11 +70,17 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	@Override
 	public void startAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
 		attacker.setSpinToWin(true);
-		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.75);
+		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.5);
 	}
 
 	@Override
 	public void continueAttack(AbstractEntityCQR attacker, EntityLivingBase target, int tick) {
+		if(attacker.collidedHorizontally) {
+			this.ticksCollided++;
+		} else {
+			this.ticksCollided = 0;
+		}
+		
 		attacker.motionX = attackDirection.x;
 		attacker.motionY = attackDirection.y;
 		attacker.motionZ = attackDirection.z;
@@ -120,6 +127,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	@Override
 	public void resetAttack(AbstractEntityCQR attacker) {
 		attacker.setSpinToWin(false);
+		this.ticksCollided = 0;
 	}
 
 }
