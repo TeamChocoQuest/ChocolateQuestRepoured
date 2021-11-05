@@ -92,7 +92,7 @@ public class ModelCQRBiped extends ModelBiped {
 		if (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive()) {
 			limbSwing = 0;
 			limbSwingAmount = 0;
-			GlStateManager.rotate((int)ageInTicks << 5 /* = * 16 */, 0, 1, 0);
+			GlStateManager.rotate((int)ageInTicks << 4 /* = * 16 */, 0, 1, 0);
 		}
 		
 		if (entityIn.isSneaking()) {
