@@ -40,7 +40,7 @@ public abstract class PreparablePosInfo implements IPreparable {
 		if (world.isOutsideBuildHeight(pos)) {
 			return null;
 		}
-		return this.prepare(world, placement, pos);
+		return this.prepareDebug(world, placement, pos);
 	}
 
 	protected abstract GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos);
