@@ -710,7 +710,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (!affectedEntities.isEmpty()) {
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
-				if ((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
+				if ((entity instanceof EntityLivingBase && !(TargetUtil.areInSameParty(this, entity) || TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity))) || checkPred.test(entity)) {
 					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
 
 					entity.motionX += flyDirection.x;
