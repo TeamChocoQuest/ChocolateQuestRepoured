@@ -76,6 +76,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 	private void calcAttackDirection(AbstractEntityCQR attacker, EntityLivingBase target) {
 		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.25);
+		attackDirection = attackDirection.subtract(0, attackDirection.y, 0);
 	}
 
 	@Override
@@ -117,7 +118,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
 				
 				living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
-				final Vec3d v = living.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(1.5).add(0, 0.5, 0).scale(attacker.getSizeVariation()).add(attackDirection);
+				final Vec3d v = living.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(1.25).add(0, 0.25, 0).scale(attacker.getSizeVariation()).add(attackDirection);
 				living.motionX += v.x;
 				living.motionY += v.y;
 				living.motionZ += v.z;
