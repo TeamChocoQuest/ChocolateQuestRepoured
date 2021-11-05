@@ -91,7 +91,7 @@ public class PreparableEntityInfo implements IPreparable {
 	}
 
 	@Override
-	public IGeneratable prepareDebug(World world, DungeonPlacement placement) {
+	public GeneratableEntityInfo prepareDebug(World world, DungeonPlacement placement) {
 		return this.prepare(world, placement);
 	}
 
