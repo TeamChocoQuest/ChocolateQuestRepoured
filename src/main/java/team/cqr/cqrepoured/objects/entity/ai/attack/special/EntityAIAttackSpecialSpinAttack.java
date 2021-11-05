@@ -75,7 +75,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	}
 
 	private void calcAttackDirection(AbstractEntityCQR attacker, EntityLivingBase target) {
-		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.125);
+		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.25);
 	}
 
 	@Override
