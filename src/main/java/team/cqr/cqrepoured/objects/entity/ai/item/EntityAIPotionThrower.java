@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.item;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +14,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.ItemAlchemyBag;
 

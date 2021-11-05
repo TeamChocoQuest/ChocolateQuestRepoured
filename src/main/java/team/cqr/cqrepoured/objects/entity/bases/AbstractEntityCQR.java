@@ -83,28 +83,28 @@ import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.objects.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.ISizable;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttack;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireFighter;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowPath;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIHealingPotion;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIHooker;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIIdleSit;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAILooter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToHome;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIPotionThrower;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIRideHorse;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAISearchMount;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITasksProfiled;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITorchIgniter;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIAttack;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIAttackRanged;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIBackstab;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAIAttackSpecial;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAIHooker;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAILooter;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAICursedBoneSummoner;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAIFireball;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAIHealingPotion;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAIPotionThrower;
 import team.cqr.cqrepoured.objects.entity.ai.spells.EntityAISpellHandler;
 import team.cqr.cqrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -1682,9 +1682,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.canUseSpinToWinAttack() && this.dataManager.get(SPIN_TO_WIN);
 	}
 
-	@SideOnly(Side.SERVER)
 	public void setSpinToWin(boolean value) {
-		this.dataManager.set(SPIN_TO_WIN, value);
+		if(this.isServerWorld()) {
+			this.dataManager.set(SPIN_TO_WIN, value);
+		}
 	}
 
 	public TraderOffer getTrades() {

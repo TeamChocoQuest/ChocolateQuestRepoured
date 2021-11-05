@@ -6,7 +6,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.util.DungeonGenUtils;

@@ -1,9 +1,10 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.attack.special;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -14,6 +15,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 		// SPECIAL_ATTACKS.add(new EntityAIAttackSpecialDagger());
 		// SPECIAL_ATTACKS.add(new EntityAIAttackSpecialGreatSword());
 		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialSpear());
+		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialSpinAttack());
 	}
 	private AbstractEntityAIAttackSpecial activeSpecialAttack;
 	private int specialAttackTick;
@@ -55,10 +57,10 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 			return false;
 		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if ((this.activeSpecialAttack.needsTargetToContinue || this.activeSpecialAttack.needsSightToContinue) && attackTarget == null) {
+		if ((this.activeSpecialAttack.needsTargetToContinue() || this.activeSpecialAttack.needsSightToContinue()) && attackTarget == null) {
 			return false;
 		}
-		if (this.activeSpecialAttack.needsSightToContinue && !this.entity.getEntitySenses().canSee(attackTarget)) {
+		if (this.activeSpecialAttack.needsSightToContinue() && !this.entity.getEntitySenses().canSee(attackTarget)) {
 			return false;
 		}
 		return this.activeSpecialAttack.shouldContinueAttack(this.entity, attackTarget);

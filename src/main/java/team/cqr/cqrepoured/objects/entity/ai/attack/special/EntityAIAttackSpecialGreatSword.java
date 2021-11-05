@@ -1,26 +1,26 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.attack.special;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.items.swords.ItemDagger;
+import team.cqr.cqrepoured.objects.items.swords.ItemGreatSword;
 
-public class EntityAIAttackSpecialDagger extends AbstractEntityAIAttackSpecial {
+public class EntityAIAttackSpecialGreatSword extends AbstractEntityAIAttackSpecial {
 
-	public EntityAIAttackSpecialDagger() {
+	public EntityAIAttackSpecialGreatSword() {
 		super(true, false, 10, 100);
 	}
 
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
 		ItemStack stack = attacker.getHeldItemMainhand();
-		return stack.getItem() instanceof ItemDagger;
+		return stack.getItem() instanceof ItemGreatSword;
 	}
 
 	@Override
 	public boolean shouldContinueAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
 		ItemStack stack = attacker.getHeldItemMainhand();
-		return stack.getItem() instanceof ItemDagger;
+		return stack.getItem() instanceof ItemGreatSword;
 	}
 
 	@Override
@@ -47,4 +47,5 @@ public class EntityAIAttackSpecialDagger extends AbstractEntityAIAttackSpecial {
 	public void resetAttack(AbstractEntityCQR attacker) {
 
 	}
+
 }

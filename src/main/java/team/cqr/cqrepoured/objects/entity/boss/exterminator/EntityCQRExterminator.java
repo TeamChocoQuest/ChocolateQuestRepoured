@@ -42,26 +42,26 @@ import team.cqr.cqrepoured.objects.entity.IMechanical;
 import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.objects.entity.ISizable;
 import team.cqr.cqrepoured.objects.entity.MultiPartEntityPartSizable;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttack;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackRanged;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIAttackSpecial;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIBackstab;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAICursedBoneSummoner;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIFireball;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIFollowPath;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIHooker;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIIdleSit;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAILooter;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToHome;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIPotionThrower;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITasksProfiled;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIAttack;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIAttackRanged;
+import team.cqr.cqrepoured.objects.entity.ai.attack.EntityAIBackstab;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAIAttackSpecial;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAIHooker;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAILooter;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIArmCannon;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorHulkSmash;
 import team.cqr.cqrepoured.objects.entity.ai.boss.exterminator.BossAIExterminatorStun;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAICursedBoneSummoner;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAIFireball;
+import team.cqr.cqrepoured.objects.entity.ai.item.EntityAIPotionThrower;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
@@ -710,7 +710,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (!affectedEntities.isEmpty()) {
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
-				if ((entity instanceof EntityLivingBase && TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)) || TargetUtil.areInSameParty(this, entity) || checkPred.test(entity)) {
+				if ((entity instanceof EntityLivingBase && !(TargetUtil.areInSameParty(this, entity) || TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity))) || checkPred.test(entity)) {
 					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
 
 					entity.motionX += flyDirection.x;

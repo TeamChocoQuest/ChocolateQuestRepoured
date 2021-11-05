@@ -89,6 +89,12 @@ public class ModelCQRBiped extends ModelBiped {
 	 */
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+		if (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive()) {
+			limbSwing = 0;
+			limbSwingAmount = 0;
+			GlStateManager.rotate((int)ageInTicks << 4 /* = * 16 */, 0, 1, 0);
+		}
+		
 		if (entityIn.isSneaking()) {
 			this.bipedCape.rotationPointY = 2.0F;
 		} else {
@@ -97,7 +103,11 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
+			if(cqrEnt.isSpinToWinActive() && !this.isRiding) {
+				this.bipedLeftArm.rotateAngleZ = (float) Math.toRadians(-90F);
+				this.bipedRightArm.rotateAngleZ = (float) Math.toRadians(90F);
+			}
+			else if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
