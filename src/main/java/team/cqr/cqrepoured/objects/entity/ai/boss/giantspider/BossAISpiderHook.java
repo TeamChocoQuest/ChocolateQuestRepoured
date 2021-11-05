@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.giantspider;
 
-import team.cqr.cqrepoured.objects.entity.ai.EntityAIHooker;
+import team.cqr.cqrepoured.objects.entity.ai.attack.special.EntityAIHooker;
 import team.cqr.cqrepoured.objects.entity.boss.EntityCQRGiantSpider;
 
 public class BossAISpiderHook extends EntityAIHooker {

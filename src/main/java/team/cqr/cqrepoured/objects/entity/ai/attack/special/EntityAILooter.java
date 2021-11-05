@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.attack.special;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.armor.ItemBackpack;
 import team.cqr.cqrepoured.util.BlockPosUtil;

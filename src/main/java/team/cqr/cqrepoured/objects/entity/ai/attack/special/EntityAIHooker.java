@@ -1,9 +1,10 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.attack.special;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
