@@ -28,7 +28,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	}
 
 	protected static final int COOLDOWN_BASE = 50;
-	protected static final int ATTACK_DURATION = 400;
+	protected static final int ATTACK_DURATION = 200;
 	protected static final float MAX_DISTANCE_TO_TARGET = 12;
 	
 	protected Vec3d attackDirection = Vec3d.ZERO;
@@ -93,7 +93,6 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 		}
 		
 		attacker.motionX = attackDirection.x;
-		attacker.motionY = attackDirection.y;
 		attacker.motionZ = attackDirection.z;
 		attacker.velocityChanged = true;
 		
