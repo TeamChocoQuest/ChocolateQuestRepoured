@@ -1682,9 +1682,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.canUseSpinToWinAttack() && this.dataManager.get(SPIN_TO_WIN);
 	}
 
-	@SideOnly(Side.SERVER)
 	public void setSpinToWin(boolean value) {
-		this.dataManager.set(SPIN_TO_WIN, value);
+		if(this.isServerWorld()) {
+			this.dataManager.set(SPIN_TO_WIN, value);
+		}
 	}
 
 	public TraderOffer getTrades() {
