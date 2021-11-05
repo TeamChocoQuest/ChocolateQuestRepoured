@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.DungeonPlacement.MutableVec3d;
 import team.cqr.cqrepoured.gentest.generatable.GeneratableEntityInfo;
+import team.cqr.cqrepoured.gentest.generatable.IGeneratable;
 
 public class PreparableEntityInfo implements IPreparable {
 
@@ -87,6 +88,11 @@ public class PreparableEntityInfo implements IPreparable {
 		entity.setRenderYawOffset(transformedYaw);
 		entity.setRotationYawHead(transformedYaw);
 		return new GeneratableEntityInfo(entity);
+	}
+
+	@Override
+	public IGeneratable prepareDebug(World world, DungeonPlacement placement) {
+		return this.prepare(world, placement);
 	}
 
 	public NBTTagCompound getEntityData() {

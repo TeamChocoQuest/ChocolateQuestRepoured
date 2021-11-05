@@ -6,8 +6,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
+import team.cqr.cqrepoured.gentest.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.gentest.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 
 public class PreparableEmptyInfo extends PreparablePosInfo {
@@ -23,6 +25,11 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 	@Override
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
 		return null;
+	}
+
+	@Override
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
+		return new GeneratableBlockInfo(pos, CQRBlocks.NULL_BLOCK.getDefaultState(), null);
 	}
 
 	public static class Serializer implements ISerializer<PreparableEmptyInfo> {

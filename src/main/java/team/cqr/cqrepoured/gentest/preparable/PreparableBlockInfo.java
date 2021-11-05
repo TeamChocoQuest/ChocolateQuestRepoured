@@ -67,7 +67,42 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		return this.prepare(world, placement, pos, transformedState, tileEntity);
 	}
 
+	@Override
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
+		IBlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
+		TileEntity tileEntity = null;
+
+		if (this.tileEntityData != null) {
+			tileEntity = transformedState.getBlock().createTileEntity(world, transformedState);
+			if (tileEntity != null) {
+				this.tileEntityData.setInteger("x", pos.getX());
+				this.tileEntityData.setInteger("y", pos.getY());
+				this.tileEntityData.setInteger("z", pos.getZ());
+				tileEntity.readFromNBT(this.tileEntityData);
+				if (tileEntity instanceof TileEntitySkull) {
+					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
+						((TileEntitySkull) tileEntity)
+								.setSkullRotation(placement.getMirror().mirrorRotation(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
+						((TileEntitySkull) tileEntity).setSkullRotation(placement.getRotation().rotate(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
+					}
+				} else {
+					tileEntity.mirror(placement.getMirror());
+					tileEntity.rotate(placement.getRotation());
+				}
+				this.tileEntityData.removeTag("x");
+				this.tileEntityData.removeTag("y");
+				this.tileEntityData.removeTag("z");
+			}
+		}
+
+		return this.prepareDebug(world, placement, pos, transformedState, null);
+	}
+
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
+		return new GeneratableBlockInfo(pos, state, tileEntity);
+	}
+
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 

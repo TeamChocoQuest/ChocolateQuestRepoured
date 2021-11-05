@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.gentest.preparable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -11,9 +13,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
+import team.cqr.cqrepoured.gentest.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.gentest.generatable.GeneratableMapInfo;
 import team.cqr.cqrepoured.gentest.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 
@@ -151,6 +155,16 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		}
 
 		return new GeneratableMapInfo(pos, entity, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap, this.fillRadius);
+	}
+
+	@Override
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
+		IBlockState state = CQRBlocks.MAP_PLACEHOLDER.getDefaultState().withProperty(BlockHorizontal.FACING, this.facing);
+		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
+		TileEntityMap tileEntity = new TileEntityMap();
+		// TODO tile entity data does not get rotated/mirrored
+		tileEntity.set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
+		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
 	public EnumFacing getFacing() {

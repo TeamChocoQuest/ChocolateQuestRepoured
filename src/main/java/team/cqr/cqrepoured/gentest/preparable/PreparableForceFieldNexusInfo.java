@@ -33,6 +33,11 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
 	}
 
+	@Override
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
+		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
+	}
+
 	public static class Serializer implements ISerializer<PreparableForceFieldNexusInfo> {
 
 		@Override

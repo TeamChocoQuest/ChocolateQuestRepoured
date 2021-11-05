@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.gentest.generatable.IGeneratable;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 
 public abstract class PreparablePosInfo implements IPreparable {
@@ -34,7 +35,18 @@ public abstract class PreparablePosInfo implements IPreparable {
 		return this.prepare(world, placement, pos);
 	}
 
+	@Override
+	public IGeneratable prepareDebug(World world, DungeonPlacement placement) {
+		BlockPos pos = placement.transform(this.x, this.y, this.z);
+		if (world.isOutsideBuildHeight(pos)) {
+			return null;
+		}
+		return this.prepare(world, placement, pos);
+	}
+
 	protected abstract GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos);
+
+	protected abstract GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos);
 
 	public int getX() {
 		return this.x;

@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.gentest.preparable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -19,9 +20,13 @@ import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.gentest.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
+import team.cqr.cqrepoured.objects.blocks.BlockExporterChestCQR;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.util.Reference;
 
 public class PreparableLootChestInfo extends PreparablePosInfo {
@@ -50,6 +55,24 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 			((TileEntityChest) tileEntity).setLootTable(this.lootTable, seed);
 		}
 
+		return new GeneratableBlockInfo(pos, state, tileEntity);
+	}
+
+	@Override
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
+		BlockExporterChest block = BlockExporterChest.getExporterChests().stream()
+				.filter(BlockExporterChestCQR.class::isInstance)
+				.filter(b -> ((BlockExporterChestCQR) b).getLootTable().equals(this.lootTable))
+				.findFirst().orElse(CQRBlocks.EXPORTER_CHEST_CUSTOM);
+		IBlockState state = block.getDefaultState().withProperty(BlockHorizontal.FACING, this.facing);
+		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
+
+		if (block != CQRBlocks.EXPORTER_CHEST_CUSTOM) {
+			return new GeneratableBlockInfo(pos, state, null);
+		}
+
+		TileEntityExporterChestCustom tileEntity = new TileEntityExporterChestCustom();
+		tileEntity.setLootTable(this.lootTable);
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 

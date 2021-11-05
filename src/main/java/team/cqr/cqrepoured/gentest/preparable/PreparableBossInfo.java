@@ -18,11 +18,14 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.items.CapabilityItemHandler;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
+import team.cqr.cqrepoured.gentest.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.gentest.generatable.GeneratableBossInfo;
 import team.cqr.cqrepoured.gentest.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.gentest.preparable.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.objects.items.ItemSoulBottle;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 
@@ -70,6 +73,19 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		placement.getProtectedRegionBuilder().addEntity(entity);
 		return new GeneratableBossInfo(pos, entity);
+	}
+
+	@Override
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
+		TileEntityBoss tileEntity = new TileEntityBoss();
+		if (this.bossTag != null) {
+			ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE);
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setTag(ItemSoulBottle.ENTITY_IN_TAG, this.bossTag);
+			stack.setTagCompound(tag);
+			tileEntity.inventory.setStackInSlot(0, stack);
+		}
+		return new GeneratableBlockInfo(pos, CQRBlocks.BOSS_BLOCK.getDefaultState(), tileEntity);
 	}
 
 	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos) {

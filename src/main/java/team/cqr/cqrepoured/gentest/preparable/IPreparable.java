@@ -8,4 +8,6 @@ public interface IPreparable {
 
 	IGeneratable prepare(World world, DungeonPlacement placement);
 
+	IGeneratable prepareDebug(World world, DungeonPlacement placement);
+
 }
