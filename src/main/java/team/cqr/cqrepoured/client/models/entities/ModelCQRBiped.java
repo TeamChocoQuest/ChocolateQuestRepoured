@@ -97,7 +97,11 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
+			if(cqrEnt.isSpinToWinActive() || true && !this.isRiding) {
+				this.bipedLeftArm.rotateAngleZ = (float) Math.toRadians(-90F);
+				this.bipedRightArm.rotateAngleZ = (float) Math.toRadians(90F);
+			}
+			else if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
