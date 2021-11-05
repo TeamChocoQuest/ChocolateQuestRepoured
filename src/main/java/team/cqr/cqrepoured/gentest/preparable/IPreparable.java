@@ -1,13 +1,18 @@
 package team.cqr.cqrepoured.gentest.preparable;
 
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.generatable.IGeneratable;
 
-public interface IPreparable {
+public interface IPreparable<T extends IGeneratable> {
 
-	IGeneratable prepare(World world, DungeonPlacement placement);
+	default T prepare(World world, DungeonPlacement placement) {
+		return CQRConfig.advanced.debugMode ? this.prepareDebug(world, placement) : this.prepareNormal(world, placement);
+	}
 
-	IGeneratable prepareDebug(World world, DungeonPlacement placement);
+	T prepareNormal(World world, DungeonPlacement placement);
+
+	T prepareDebug(World world, DungeonPlacement placement);
 
 }

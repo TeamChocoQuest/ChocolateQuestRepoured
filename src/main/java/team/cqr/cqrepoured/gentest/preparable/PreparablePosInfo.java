@@ -13,7 +13,7 @@ import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 
-public abstract class PreparablePosInfo implements IPreparable {
+public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInfo> {
 
 	private final int x;
 	private final int y;
@@ -26,7 +26,7 @@ public abstract class PreparablePosInfo implements IPreparable {
 	}
 
 	@Override
-	public GeneratablePosInfo prepare(World world, DungeonPlacement placement) {
+	public GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement) {
 		BlockPos pos = placement.transform(this.x, this.y, this.z);
 		if (world.isOutsideBuildHeight(pos)) {
 			return null;

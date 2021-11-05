@@ -104,6 +104,8 @@ public class CQRConfig {
 		@Config.Comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer")
 		public boolean scaleEntitiesOnPlayerCount = false;
 		public double entityCountGrowPerPlayer = 0.25D;
+
+		public boolean debugMode = false;
 	}
 
 	public static class Materials {

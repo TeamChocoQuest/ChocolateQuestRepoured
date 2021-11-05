@@ -14,9 +14,8 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.gentest.DungeonPlacement;
 import team.cqr.cqrepoured.gentest.DungeonPlacement.MutableVec3d;
 import team.cqr.cqrepoured.gentest.generatable.GeneratableEntityInfo;
-import team.cqr.cqrepoured.gentest.generatable.IGeneratable;
 
-public class PreparableEntityInfo implements IPreparable {
+public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> {
 
 	private final NBTTagCompound entityData;
 
@@ -42,7 +41,7 @@ public class PreparableEntityInfo implements IPreparable {
 	}
 
 	@Override
-	public GeneratableEntityInfo prepare(World world, DungeonPlacement placement) {
+	public GeneratableEntityInfo prepareNormal(World world, DungeonPlacement placement) {
 		Entity entity = EntityList.createEntityFromNBT(this.entityData, world);
 		double x;
 		double y;
@@ -92,7 +91,7 @@ public class PreparableEntityInfo implements IPreparable {
 
 	@Override
 	public GeneratableEntityInfo prepareDebug(World world, DungeonPlacement placement) {
-		return this.prepare(world, placement);
+		return this.prepareNormal(world, placement);
 	}
 
 	public NBTTagCompound getEntityData() {
