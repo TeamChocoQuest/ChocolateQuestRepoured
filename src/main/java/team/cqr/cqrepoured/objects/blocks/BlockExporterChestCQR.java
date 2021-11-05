@@ -26,4 +26,8 @@ public class BlockExporterChestCQR extends BlockExporterChest {
 		return this.lootTable;
 	}
 
+	public ResourceLocation getLootTable() {
+		return this.lootTable;
+	}
+
 }
