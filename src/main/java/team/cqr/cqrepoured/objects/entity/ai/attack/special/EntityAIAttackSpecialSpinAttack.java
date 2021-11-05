@@ -35,6 +35,9 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
+		if(!attacker.canUseSpinToWinAttack()) {
+			return false;
+		}
 		ItemStack itemStackMain = attacker.getHeldItemMainhand();
 		ItemStack itemStackOff = attacker.getHeldItemOffhand();
 		
