@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.item;
 
 import java.util.HashSet;
 import java.util.Set;

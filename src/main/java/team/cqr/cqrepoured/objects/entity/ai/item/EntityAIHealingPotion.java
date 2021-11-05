@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.item;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.EntityUtil;
