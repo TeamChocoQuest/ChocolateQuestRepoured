@@ -113,11 +113,8 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				EntityLivingBase living = (EntityLivingBase) entity;
 				
 				float dmg = (float) attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-				if(attacker.getRNG().nextBoolean()) {
-					dmg += EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
-				} else {
-					dmg += EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
-				}
+				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
+				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
 				
 				living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
 				final Vec3d v = living.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(1.5).add(0, 0.5, 0).scale(attacker.getSizeVariation()).add(attackDirection);
