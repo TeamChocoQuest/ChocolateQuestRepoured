@@ -27,12 +27,13 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 		super(false, false, ATTACK_DURATION, COOLDOWN_BASE);
 	}
 
-	protected static final int COOLDOWN_BASE = 200;
+	protected static final int COOLDOWN_BASE = 50;
 	protected static final int ATTACK_DURATION = 400;
 	protected static final float MAX_DISTANCE_TO_TARGET = 12;
 	
 	protected Vec3d attackDirection = Vec3d.ZERO;
 	protected short ticksCollided = 0;
+	protected boolean targetWasNullInLastCycle = false;
 	
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
@@ -70,15 +71,25 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	@Override
 	public void startAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
 		attacker.setSpinToWin(true);
-		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.5);
+		this.calcAttackDirection(attacker, target);
+	}
+
+	private void calcAttackDirection(AbstractEntityCQR attacker, EntityLivingBase target) {
+		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.125);
 	}
 
 	@Override
 	public void continueAttack(AbstractEntityCQR attacker, EntityLivingBase target, int tick) {
+		final boolean oldTargetWasNull = this.targetWasNullInLastCycle;
+		targetWasNullInLastCycle = target == null || (target != null && target.isDead);
 		if(attacker.collidedHorizontally) {
 			this.ticksCollided++;
 		} else {
 			this.ticksCollided = 0;
+		}
+		
+		if(!targetWasNullInLastCycle && oldTargetWasNull != targetWasNullInLastCycle) {
+			this.calcAttackDirection(attacker, target);
 		}
 		
 		attacker.motionX = attackDirection.x;

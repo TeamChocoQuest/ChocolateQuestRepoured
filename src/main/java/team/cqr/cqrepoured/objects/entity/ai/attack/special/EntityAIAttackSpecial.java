@@ -57,10 +57,10 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 			return false;
 		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if ((this.activeSpecialAttack.needsTargetToContinue || this.activeSpecialAttack.needsSightToContinue) && attackTarget == null) {
+		if ((this.activeSpecialAttack.needsTargetToContinue() || this.activeSpecialAttack.needsSightToContinue()) && attackTarget == null) {
 			return false;
 		}
-		if (this.activeSpecialAttack.needsSightToContinue && !this.entity.getEntitySenses().canSee(attackTarget)) {
+		if (this.activeSpecialAttack.needsSightToContinue() && !this.entity.getEntitySenses().canSee(attackTarget)) {
 			return false;
 		}
 		return this.activeSpecialAttack.shouldContinueAttack(this.entity, attackTarget);
