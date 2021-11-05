@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.objects.entity.ai;
+package team.cqr.cqrepoured.objects.entity.ai.attack;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
