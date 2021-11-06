@@ -2,15 +2,12 @@ package team.cqr.cqrepoured.client.models.entities;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
 import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
@@ -99,31 +96,6 @@ public class ModelCQRBiped extends ModelBiped {
 			
 			float f = (entityIn.ticksExisted - 1.0F + PartialTicksUtil.getCurrentPartialTicks()) * 16.0F;
 			GlStateManager.rotate(f, 0F, 1F, 0F);
-			
-			//TODO: Spawn some sweeping particles? COuld make for a nice effect...
-			World world = entityIn.getEntityWorld();
-			if(world instanceof WorldClient) {
-				WorldClient wc = (WorldClient)world;
-				wc.spawnParticle(
-						EnumParticleTypes.CRIT, 
-						entityIn.posX + 0.125 * entityIn.getEntityWorld().rand.nextDouble(), 
-						entityIn.posY + 0.75 * entityIn.height, 
-						entityIn.posZ + 0.125 * entityIn.getEntityWorld().rand.nextDouble(),
-						0,
-						0,
-						0
-					);
-				
-				wc.spawnParticle(
-						EnumParticleTypes.CLOUD, 
-						entityIn.posX, 
-						entityIn.posY, 
-						entityIn.posZ,
-						0.125 * entityIn.getEntityWorld().rand.nextDouble(),
-						0.025,
-						0.125 * entityIn.getEntityWorld().rand.nextDouble()
-					);
-			}
 		}
 		
 		if (entityIn.isSneaking()) {
