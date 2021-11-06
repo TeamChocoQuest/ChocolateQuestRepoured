@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
+import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil2;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
@@ -15,7 +16,7 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 	@Override
 	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
 			float headPitch, float scale) {
-		if(entity instanceof AbstractEntityCQR && ((AbstractEntityCQR)entity).canPlayDeathAnimation()) {
+		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}
 		if (entity.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
@@ -23,7 +24,8 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 			if (cap.getRemainingTicks() < 0) {
 				return;
 			}
-			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0);
+			long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);
+			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0, 5, seed);
 			if (cap.getTarget() != null) {
 				Entity target = cap.getTarget();
 
@@ -47,7 +49,7 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				GlStateManager.scale(-1, -1, 1);
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
-				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, entity.getRNG(), 0.5, 0, 0, 0, 5);
+				ElectricFieldRenderUtil2.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
 
 				GlStateManager.popMatrix();
 			}

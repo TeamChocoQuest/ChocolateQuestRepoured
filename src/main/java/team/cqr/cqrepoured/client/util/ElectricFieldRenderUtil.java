@@ -1,149 +1,211 @@
 package team.cqr.cqrepoured.client.util;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class ElectricFieldRenderUtil {
 
-	public static void renderElectricField(int ticksExisted, Random rng, double fieldRadius, double fieldHeight, double x, double y, double z, int bolts, double boltSize) {
-		GlStateManager.pushMatrix();
+	@SuppressWarnings("serial")
+	private static final Random RANDOM = new Random() {
+		private static final long MULTIPLIER = 0x5DEECE66DL;
+		private static final long ADDEND = 0xBL;
+		private static final long MASK = (1L << 48) - 1;
+		private long seed = 0L;
+
+		@Override
+		public void setSeed(long seed) {
+			this.seed = (seed ^ MULTIPLIER) & MASK;
+		}
+
+		@Override
+		protected int next(int bits) {
+			this.seed = (this.seed * MULTIPLIER + ADDEND) & MASK;
+			return (int) (this.seed >>> (48 - bits));
+		}
+	};
+	private static final Tessellator TESSELATOR = Tessellator.getInstance();
+	private static final BufferBuilder VERTEX_BUFFER = TESSELATOR.getBuffer();
+	private static final IntBuffer FIRST_BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asIntBuffer();
+	private static final IntBuffer COUNT_BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asIntBuffer();
+	private static int vertexCount;
+
+	private static void startLineStripBatch(VertexFormat format) {
+		VERTEX_BUFFER.begin(GL11.GL_LINE_STRIP, format);
+	}
+
+	private static void addVertex(double x, double y, double z, boolean endLineStrip) {
+		VERTEX_BUFFER.pos(x, y, z).endVertex();
+		vertexCount++;
+
+		if (endLineStrip) {
+			FIRST_BUFFER.put(VERTEX_BUFFER.getVertexCount() - vertexCount);
+			COUNT_BUFFER.put(vertexCount);
+			vertexCount = 0;
+		}
+	}
+
+	private static void endLineStripBatch() {
+		if (vertexCount > 0) {
+			throw new IllegalStateException("Last line strip not finished!");
+		}
+
+		VERTEX_BUFFER.finishDrawing();
+		FIRST_BUFFER.flip();
+		COUNT_BUFFER.flip();
+
+		VertexFormat format = VERTEX_BUFFER.getVertexFormat();
+		IntStream.range(0, format.getElementCount())
+				.forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
+
+		GL14.glMultiDrawArrays(GL11.GL_LINE_STRIP, FIRST_BUFFER, COUNT_BUFFER);
+
+		IntStream.range(0, format.getElementCount())
+				.forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
+
+		VERTEX_BUFFER.reset();
+		FIRST_BUFFER.clear();
+		COUNT_BUFFER.clear();
+	}
+
+	public static void renderElectricField(double fieldRadius, double fieldHeight, double x, double y, double z, int bolts, long seed) {
+		RANDOM.setSeed(seed);
 
 		// First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 
-		// Grab instance of tessellator and bufferbuilder
-		Tessellator tess = Tessellator.getInstance();
-		BufferBuilder builder = tess.getBuffer();
-
 		// Since we use a blend function, enable it and apply the blend function
 		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, 1);
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 		// Grab some random instance and set the line width
 		GlStateManager.glLineWidth(3.0F);
-		
-		//Since we're using vertex.position we need to set the color beforehand
+
+		// Since we're using vertex.position we need to set the color beforehand
 		GlStateManager.color(0.5F, 0.64F, 1.0F, 0.6F);
+
+		// Initialize the drawing process, our vertices consist of positions and color information
+		startLineStripBatch(DefaultVertexFormats.POSITION);
 
 		// Now we want to draw <boltCount> lightnings
 		for (int boltCount = 0; boltCount < bolts; ++boltCount) {
 			// The steps defines the "segments" of the lightning
-			int steps = rng.nextInt(26) + 5;
-			// Initialize the drawing process, our vertices consist of positions and color information
-			builder.begin(3, DefaultVertexFormats.POSITION);
+			int steps = RANDOM.nextInt(26) + 5;
 
 			// now, actually calculate the position of each "segment"
 			for (int i = 0; i <= steps; ++i) {
 
 				// Apply some "noise" so it looks "electric" (it will jitter when rendering)
-				double vX = (rng.nextFloat() * 2 -1) * fieldRadius /*+ (rng.nextFloat() - 0.5D) * (fieldRadius / 2)*/;
-				double vZ = (rng.nextFloat() * 2 -1) * fieldRadius /*+ (rng.nextFloat() - 0.5D) * (fieldRadius / 2)*/;
-				double vY = (rng.nextFloat() * 2 -1) * fieldHeight /*+ (rng.nextFloat() - 0.5D) * (fieldHeight / 2)*/;
+				double vX = (RANDOM.nextFloat() * 2 - 1) * fieldRadius /* + (rng.nextFloat() - 0.5D) * (fieldRadius / 2) */;
+				double vZ = (RANDOM.nextFloat() * 2 - 1) * fieldRadius /* + (rng.nextFloat() - 0.5D) * (fieldRadius / 2) */;
+				double vY = (RANDOM.nextFloat() * 2 - 1) * fieldHeight /* + (rng.nextFloat() - 0.5D) * (fieldHeight / 2) */;
 
 				// Finally, create the vertex
-				builder.pos(x + vX, y + vY, z + vZ).endVertex();
+				addVertex(x + vX, y + vY, z + vZ, i == steps);
 			}
-			// Draw the lightning
-			tess.draw();
 		}
+
+		// Draw the lightning
+		endLineStripBatch();
 
 		// Finally re-enable tex2d and lightning and disable blending
 		GlStateManager.disableBlend();
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
-
-		GlStateManager.popMatrix();
 	}
 
 	/*
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
-	public static void renderElectricLineBetween(Vec3d startOffset, Vec3d endOffset, Random rng, final double maxOffset, double posX, double posY, double posZ, int boltCount) {
+	public static void renderElectricLineBetween(Vec3d startOffset, Vec3d endOffset, double maxOffset, double posX, double posY, double posZ, int boltCount,
+			long seed) {
 		startOffset = startOffset.add(posX, posY, posZ);
 		endOffset = endOffset.add(posX, posY, posZ);
-		GlStateManager.pushMatrix();
+		RANDOM.setSeed(seed);
 
 		// First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 
-		// Grab instance of tessellator and bufferbuilder
-		Tessellator tess = Tessellator.getInstance();
-		BufferBuilder builder = tess.getBuffer();
-
 		// Since we use a blend function, enable it and apply the blend function
 		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, 1);
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 		// Grab some random instance and set the line width
 		GlStateManager.glLineWidth(3.0F);
 
+		// Since we're using vertex.position we need to set the color beforehand
+		GlStateManager.color(0.5F, 0.64F, 1.0F, 0.6F);
+
+		startLineStripBatch(DefaultVertexFormats.POSITION);
+
+		Vec3d direction = endOffset.subtract(startOffset);
+		double distance = direction.length();
+		direction = direction.scale(1.0D / distance);
+		Vec3d directionOffset;
+		if (direction.x < 0.5D) {
+			directionOffset = direction.crossProduct(new Vec3d(1.0D, 0.0D, 0.0D));
+		} else {
+			directionOffset = direction.crossProduct(new Vec3d(0.0D, 0.0D, 1.0D));
+		}
+		double lineLength = maxOffset * 3.0D;
+		int steps = MathHelper.floor(distance / lineLength);
+
 		// Now we want to draw <boltCount> lightnings
 		for (int i = 0; i < boltCount; i++) {
-			renderSingleElectricLineBetween(builder, tess, startOffset, endOffset, maxOffset, rng);
+			renderSingleElectricLineBetween(startOffset, direction, directionOffset, lineLength, steps, maxOffset);
 		}
+
+		// Draw the lightning
+		endLineStripBatch();
 
 		// Finally re-enable tex2d and lightning and disable blending
 		GlStateManager.disableBlend();
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
-
-		GlStateManager.popMatrix();
-	}
-	
-	static Vec3d generateOffsetVector(final Vec3d direction, final Vec3d directionSecondary, Random rng, final double pointVariation) {
-		Vec3d offsetVector = direction.crossProduct(directionSecondary);
-		offsetVector = offsetVector.normalize();
-		offsetVector = offsetVector.scale(rng.nextDouble() * pointVariation);
-
-		offsetVector = VectorUtil.rotateAroundAnyAxis(direction, offsetVector, DungeonGenUtils.randomBetween(0, 360, rng));
-		
-		return offsetVector;
 	}
 
-	private static void renderSingleElectricLineBetween(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d end, final double pointVariation, Random rng) {
-		// Initialize the drawing process, our vertices consist of positions and color information
-		builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-
-		final Vec3d direction = end.subtract(start).normalize();
-		final Vec3d directionSecondary = VectorUtil.rotateVectorAroundY(direction, 90);
-		
-		final double lineLength = pointVariation * 3;
-		final int steps = (int) Math.floor(end.subtract(start).length()  / lineLength) -1;
-		
-		Vec3d lastPos = start;
-		for(int i = 0; i < steps; i++) {
-			Vec3d offsetVector = generateOffsetVector(direction, directionSecondary, rng, pointVariation);
-
-			builder.pos(lastPos.x + offsetVector.x, lastPos.y + offsetVector.y, lastPos.z  + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
-			
-			lastPos = lastPos.add(direction.scale(lineLength));
+	private static void renderSingleElectricLineBetween(Vec3d start, Vec3d direction, Vec3d directionOffset, double lineLength, int steps, double offset) {
+		for (int i = 0; i <= steps; i++) {
+			Vec3d offsetVector = generateOffsetVector(direction, directionOffset);
+			double offsetScale = RANDOM.nextFloat() * offset;
+			double vX = start.x + (direction.x * i * lineLength) + (offsetVector.x * offsetScale);
+			double vY = start.y + (direction.y * i * lineLength) + (offsetVector.y * offsetScale);
+			double vZ = start.z + (direction.z * i * lineLength) + (offsetVector.z * offsetScale);
+			addVertex(vX, vY, vZ, i == steps);
 		}
-		Vec3d offsetVector = generateOffsetVector(direction, directionSecondary, rng, pointVariation);
-		builder.pos(end.x + offsetVector.x, end.y + offsetVector.y, end.z  + offsetVector.z).color(0.5F, 0.64F, 1.0F, 0.6F).endVertex();
-		
-		tess.draw();
-	}
-	
-	@SuppressWarnings("unused")
-	private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d direction, final double lineLength, Random rng, final double pointVariation) {
-		final Vec3d end = start.add(direction.normalize().scale(lineLength));
-		renderSingleElectricLineBetween(builder, tess, start, end, pointVariation, rng);
 	}
 
-	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z) {
-		renderElectricField(entity.ticksExisted, entity.world.rand, entity.width / 2, entity.height / 2, x, y + entity.height / 2, z, 5, 40);
+	private static Vec3d generateOffsetVector(Vec3d direction, Vec3d directionOffset) {
+		return VectorUtil.rotateAroundAnyAxis(direction, directionOffset, RANDOM.nextFloat() * 360.0D);
+	}
+
+	/*
+	 * private static void renderSingleElectricLine(BufferBuilder builder, Tessellator tess, Vec3d start, Vec3d direction,
+	 * double lineLength, Random rng, double pointVariation) {
+	 * Vec3d end = start.add(direction.normalize().scale(lineLength));
+	 * renderSingleElectricLineBetween(builder, tess, start, end, pointVariation, rng);
+	 * }
+	 */
+
+	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z, int bolts, long seed) {
+		renderElectricField(entity.width / 2, entity.height / 2, x, y + entity.height / 2, z, bolts, seed);
 	}
 
 }
