@@ -95,7 +95,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			}
 		}
 
-		return this.prepareDebug(world, placement, pos, transformedState, null);
+		return this.prepareDebug(world, placement, pos, transformedState, tileEntity);
 	}
 
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
