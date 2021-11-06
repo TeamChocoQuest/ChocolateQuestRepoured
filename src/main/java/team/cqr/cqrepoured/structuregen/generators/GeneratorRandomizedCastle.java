@@ -5,10 +5,10 @@ import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.part.EntityDungeonPart;
-import team.cqr.cqrepoured.gentest.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonRandomizedCastle;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.part.EntityDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.structuregen.generators.castleparts.CastleRoomSelector;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;

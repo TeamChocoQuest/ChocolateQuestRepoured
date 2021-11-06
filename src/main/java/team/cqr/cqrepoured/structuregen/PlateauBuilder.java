@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.structuregen;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.util.Perlin3D;
 
 public class PlateauBuilder {

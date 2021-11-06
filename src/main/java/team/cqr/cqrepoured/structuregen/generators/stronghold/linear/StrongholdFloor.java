@@ -7,7 +7,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.structuregen.generators.stronghold.GeneratorStronghold;

@@ -8,9 +8,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generators.volcano.StairCaseHelper;
 
 public class EntranceBuilderHelper {

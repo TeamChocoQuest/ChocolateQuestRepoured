@@ -16,7 +16,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.util.BlockSnapshot;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class BlockPlacingHelper {

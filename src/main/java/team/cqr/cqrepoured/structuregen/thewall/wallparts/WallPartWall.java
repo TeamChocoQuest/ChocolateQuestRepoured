@@ -6,9 +6,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
 
 /**
  * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

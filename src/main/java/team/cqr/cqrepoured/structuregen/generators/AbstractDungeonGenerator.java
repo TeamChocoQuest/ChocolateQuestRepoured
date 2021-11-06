@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 
 public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements Supplier<GeneratableDungeon> {

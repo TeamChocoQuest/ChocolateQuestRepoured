@@ -22,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;

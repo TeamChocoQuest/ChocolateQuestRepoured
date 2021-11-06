@@ -20,10 +20,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.gentest.preparable.PreparableBossInfo;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.factories.GearedMobFactory;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonRandomizedCastle;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBossInfo;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 

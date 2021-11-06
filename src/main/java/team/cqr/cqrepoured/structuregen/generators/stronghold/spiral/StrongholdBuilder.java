@@ -6,9 +6,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonVolcano;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.util.ESkyDirection;
 

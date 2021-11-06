@@ -16,15 +16,15 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
-import team.cqr.cqrepoured.gentest.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 /**

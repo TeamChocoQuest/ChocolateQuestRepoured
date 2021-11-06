@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.structuregen.generators;
 
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 
 public abstract class AbstractDungeonGenerationComponent<T extends AbstractDungeonGenerator<?>> {

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.structuregen.structurefile;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.gentest.DungeonPlacement;
+import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 
 public enum Offset {
 

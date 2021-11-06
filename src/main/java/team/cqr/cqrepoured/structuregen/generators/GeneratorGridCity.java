@@ -12,11 +12,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.gentest.part.BlockDungeonPart;
-import team.cqr.cqrepoured.gentest.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.PlateauBuilder;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonGridCity;
+import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 

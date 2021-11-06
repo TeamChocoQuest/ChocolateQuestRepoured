@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.structuregen.thewall.wallparts;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import team.cqr.cqrepoured.gentest.GeneratableDungeon;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 /**
