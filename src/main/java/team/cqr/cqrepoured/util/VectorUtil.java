@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.util;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
@@ -73,17 +74,44 @@ public class VectorUtil {
 	}
 
 	public static Vec3d rotateAroundAnyAxis(Vec3d axis, Vec3d toBeRotated, double rotationDegrees) {
-		// Mathematical theory => Rotation matrices
-		// https://de.wikipedia.org/wiki/Drehmatrix
-		final double alpha = Math.toRadians(rotationDegrees);
-		final Vec3d normaledAxis = axis.normalize();
-		final Vec3d axisCrossPoint = normaledAxis.crossProduct(toBeRotated);
-		//Used formula: https://wikimedia.org/api/rest_v1/media/math/render/svg/60ef97b864c2343bc66f8d31b51d91f226ea0125
-		Vec3d rotated = normaledAxis.scale(normaledAxis.dotProduct(toBeRotated)); //Multiply axis vector with dot-product of axis and vector
-		rotated = rotated.add(axisCrossPoint.scale(Math.cos(alpha)).crossProduct(normaledAxis)); //Mulitply cross product of axis and vector with cos(alpha), then add the cross product of that result and the axis to the rotated vector
-		rotated = rotated.add(axisCrossPoint.scale(Math.sin(alpha))); //add the cross product of axis and vector multiplied by sin(alpha) to the result
+		return rotate(axis, toBeRotated, Math.toRadians(rotationDegrees));
+	}
 
-		return rotated;
+	public static Vec3d rotate(Vec3d axis, Vec3d vec, double radian) {
+		// setup quaternion
+		double d = MathHelper.sin((float) (radian * 0.5D));
+		double i = d * axis.x;
+		double j = d * axis.y;
+		double k = d * axis.z;
+		double r = MathHelper.cos((float) (radian * 0.5D));
+
+		// setup rotation matrix
+		double i2 = 2.0D * i * i;
+		double j2 = 2.0D * j * j;
+		double k2 = 2.0D * k * k;
+		double ij = 2.0D * i * j;
+		double jk = 2.0D * j * k;
+		double ik = 2.0D * i * k;
+		double ir = 2.0D * i * r;
+		double jr = 2.0D * j * r;
+		double kr = 2.0D * k * r;
+
+		double d00 = 1 - (j2 + k2);
+		double d01 = (ij - kr);
+		double d02 = (ik + jr);
+
+		double d10 = (ij + kr);
+		double d11 = 1 - (i2 + k2);
+		double d12 = (jk - ir);
+
+		double d20 = (ik - jr);
+		double d21 = (jk + ir);
+		double d22 = 1 - (i2 + j2);
+
+		// rotate vertex
+		return new Vec3d(vec.x * d00 + vec.y * d01 + vec.z * d02,
+				vec.x * d10 + vec.y * d11 + vec.z * d12,
+				vec.x * d20 + vec.y * d21 + vec.z * d22);
 	}
 
 }
