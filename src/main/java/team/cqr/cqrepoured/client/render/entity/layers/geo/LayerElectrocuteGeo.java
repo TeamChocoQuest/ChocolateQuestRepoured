@@ -29,7 +29,8 @@ public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> exten
 			if (cap.getRemainingTicks() < 0) {
 				return;
 			}
-			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0);
+			long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);
+			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0, 5, seed);
 			if (cap.getTarget() != null) {
 				Entity target = cap.getTarget();
 
@@ -53,7 +54,7 @@ public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> exten
 				GlStateManager.scale(-1, -1, 1);
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
-				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, entity.getRNG(), 0.5, 0, 0, 0, 5);
+				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
 
 				GlStateManager.popMatrix();
 			}

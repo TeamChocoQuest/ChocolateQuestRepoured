@@ -23,7 +23,8 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		if (entity.isActive()) {
-			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, x, y, z);
+			long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);
+			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, x, y, z, 5, seed);
 			if (entity.getTargetedEntity() != null) {
 				Entity target = entity.getTargetedEntity();
 
@@ -42,7 +43,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				GlStateManager.pushMatrix();
 
-				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, entity.getRNG(), 0.5, x, y, z, 5);
+				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, x, y, z, 5, seed);
 
 				GlStateManager.popMatrix();
 			}

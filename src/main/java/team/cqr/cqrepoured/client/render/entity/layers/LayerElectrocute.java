@@ -8,7 +8,6 @@ import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
-import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil2;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
@@ -49,7 +48,7 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				GlStateManager.scale(-1, -1, 1);
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
-				ElectricFieldRenderUtil2.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
+				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
 
 				GlStateManager.popMatrix();
 			}

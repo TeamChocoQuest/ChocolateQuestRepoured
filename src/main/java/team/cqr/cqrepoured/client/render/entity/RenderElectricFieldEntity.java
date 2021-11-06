@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil2;
+import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.objects.entity.misc.EntityElectricField;
 
 public class RenderElectricFieldEntity extends Render<EntityElectricField> {
@@ -16,7 +16,7 @@ public class RenderElectricFieldEntity extends Render<EntityElectricField> {
 	@Override
 	public void doRender(EntityElectricField entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);
-		ElectricFieldRenderUtil2.renderElectricFieldWithSizeOfEntityAt(entity, x, y, z, 5, seed);
+		ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, x, y, z, 5, seed);
 	}
 
 	@Override
