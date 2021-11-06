@@ -73,10 +73,16 @@ public class VectorUtil {
 		return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
 	}
 
+	/**
+	 * @param axis Needs to be normalized!
+	 */
 	public static Vec3d rotateAroundAnyAxis(Vec3d axis, Vec3d toBeRotated, double rotationDegrees) {
 		return rotate(axis, toBeRotated, Math.toRadians(rotationDegrees));
 	}
 
+	/**
+	 * @param axis Needs to be normalized!
+	 */
 	public static Vec3d rotate(Vec3d axis, Vec3d vec, double radian) {
 		// setup quaternion
 		double d = MathHelper.sin((float) (radian * 0.5D));
