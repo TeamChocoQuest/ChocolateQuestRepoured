@@ -20,7 +20,7 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 		}
 		if (entity.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
 			CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-			if (cap.getRemainingTicks() < 0) {
+			if (!cap.isElectrocutionActive()) {
 				return;
 			}
 			long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);

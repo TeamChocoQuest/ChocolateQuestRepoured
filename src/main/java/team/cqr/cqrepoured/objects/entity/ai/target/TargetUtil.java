@@ -54,7 +54,7 @@ public class TargetUtil {
 		if(input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
 			return input.isWet(); 
 		}
-		if(icapability.getRemainingTicks() > 0) {
+		if(icapability.isElectrocutionActive()) {
 			return false;
 		}
 		if(icapability.getCooldown() > 0) {
@@ -71,7 +71,7 @@ public class TargetUtil {
 			return false;
 		}
 		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-		return icapability.getRemainingTicks() > 0;
+		return icapability.isElectrocutionActive();
 	};
 
 	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = input -> {

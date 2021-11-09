@@ -62,8 +62,8 @@ public class CapabilityElectricShock {
 		return this.originalCasterID;
 	}
 	
-	public int getRemainingTicks() {
-		return this.remainingTicks;
+	public boolean isElectrocutionActive() {
+		return this.remainingTicks > 0;
 	}
 	
 	@Nullable
@@ -115,6 +115,10 @@ public class CapabilityElectricShock {
 
 	public void setRemainingSpreads(int remainignSpreads) {
 		this.remainingSpreads = remainignSpreads;
+	}
+
+	public boolean canSpread() {
+		return this.remainingTicks >= 50;
 	}
 
 }

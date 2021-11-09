@@ -109,8 +109,8 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 
 		// First, reduce the ticks
 		CapabilityElectricShock icapability = entity.getCapability(ELECTROCUTE_HANDLER_CQR, null);
-		final int beforeUpdateTicks = icapability.getRemainingTicks();
-		final boolean beforeUpdateHasTarget = icapability.getTarget() != null;
+		//final int beforeUpdateTicks = icapability.getRemainingTicks();
+		//final boolean beforeUpdateHasTarget = icapability.getTarget() != null;
 		icapability.reduceRemainingTicks();
 
 		// Mechanicals can get electrocuted but don't take damage
@@ -120,14 +120,14 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 				icapability.setRemainingTicks(100);
 				entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
 			}
-		} else if (icapability.getRemainingTicks() >= 0) {
+		} else if (icapability.isElectrocutionActive()) {
 			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1);
 		}
 		if (entity.isDead || entity.getHealth() < 1) {
 			icapability.setTarget(null);
 		}
 		// Maybe you could spread to other entities?
-		if (icapability.getRemainingTicks() > 50 && icapability.getTarget() == null && icapability.getRemainignSpreads() > 0) {
+		if (icapability.canSpread() && icapability.getTarget() == null && icapability.getRemainignSpreads() > 0) {
 			spreadElectrocute(entity, icapability);
 		} else if (icapability.getTarget() != null) {
 			if (!entity.canEntityBeSeen(icapability.getTarget()) || entity.getDistance(icapability.getTarget()) > 16) {
@@ -140,7 +140,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 			}
 		}
 		
-		final int afterUpdateTicks = icapability.getRemainingTicks();
+		//final int afterUpdateTicks = icapability.getRemainingTicks();
 		final boolean afterUpdateHasTarget = icapability.getTarget() != null;
 		//if(afterUpdateHasTarget != beforeUpdateHasTarget || (afterUpdateTicks <= 0 && beforeUpdateTicks > 0) || (afterUpdateTicks > 0 && beforeUpdateTicks <= 0)) {
 			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
