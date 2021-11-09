@@ -22,7 +22,7 @@ public class SPacketUpdateElectrocuteCapability implements IMessage {
 		if(cap != null) {
 			//this.electroCharge = cap.getRemainingTicks();
 			this.electroCuted = cap.isElectrocutionActive();
-			this.hasTarget = cap.getTarget() != null;
+			this.hasTarget = cap.getTarget() != null && cap.getTarget().isEntityAlive();
 			if(this.hasTarget) {
 				this.entityIdTarget = cap.getTarget().getEntityId();
 			}
