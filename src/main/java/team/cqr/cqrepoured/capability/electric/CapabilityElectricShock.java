@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -45,13 +46,21 @@ public class CapabilityElectricShock {
 	}
 	
 	public void setRemainingTicks(int value) {
-		
-		if(!this.entity.world.isRemote) {
-			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(this.entity), this.entity);
-		}
+		final boolean preUpdateActivity = this.isElectrocutionActive();
 		
 		this.remainingTicks = value;
 		this.cooldown = 200;
+		
+		if(!this.entity.world.isRemote && preUpdateActivity != this.isElectrocutionActive()) {
+			this.sendUpdate();
+		}
+	}
+	
+	protected void sendUpdate() {
+		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(this.entity), this.entity);
+		if(this.entity instanceof EntityPlayerMP) {
+			CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(this.entity), (EntityPlayerMP) this.entity);
+		}
 	}
 	
 	public void setCasterID(UUID casterID) {
@@ -72,7 +81,13 @@ public class CapabilityElectricShock {
 	}
 	
 	public void setTarget(Entity entity) {
+		final Entity preUpdateTarget = this.target;
+		
 		this.target = entity;
+		
+		if(!this.entity.world.isRemote && preUpdateTarget != this.getTarget()) {
+			this.sendUpdate();
+		}
 	}
 	
 	public int getCooldown() {
@@ -80,6 +95,8 @@ public class CapabilityElectricShock {
 	}
 	
 	public boolean reduceRemainingTicks() {
+		final boolean preUpdateActivity = this.isElectrocutionActive();
+		
 		if(this.cooldown > 0) {
 			this.cooldown--;
 		}
@@ -89,6 +106,11 @@ public class CapabilityElectricShock {
 			return false;
 		}
 		this.remainingTicks--;
+		
+		if(!this.entity.world.isRemote && preUpdateActivity != this.isElectrocutionActive()) {
+			this.sendUpdate();
+		}
+		
 		return this.remainingTicks >= 0;
 	}
 

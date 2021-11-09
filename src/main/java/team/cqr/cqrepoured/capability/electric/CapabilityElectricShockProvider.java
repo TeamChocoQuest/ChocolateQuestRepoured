@@ -139,15 +139,6 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 				}
 			}
 		}
-		
-		//final int afterUpdateTicks = icapability.getRemainingTicks();
-		final boolean afterUpdateHasTarget = icapability.getTarget() != null;
-		//if(afterUpdateHasTarget != beforeUpdateHasTarget || (afterUpdateTicks <= 0 && beforeUpdateTicks > 0) || (afterUpdateTicks > 0 && beforeUpdateTicks <= 0)) {
-			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(entity), entity);
-			if(entity instanceof EntityPlayerMP) {
-				CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
-			}
-		//}
 	}
 
 	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock icapability) {
