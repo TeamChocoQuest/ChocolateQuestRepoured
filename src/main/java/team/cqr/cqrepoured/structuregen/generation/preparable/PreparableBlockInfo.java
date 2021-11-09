@@ -50,9 +50,9 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 				tileEntity.readFromNBT(this.tileEntityData);
 				if (tileEntity instanceof TileEntitySkull) {
 					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
-						((TileEntitySkull) tileEntity)
-								.setSkullRotation(placement.getMirror().mirrorRotation(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
-						((TileEntitySkull) tileEntity).setSkullRotation(placement.getRotation().rotate(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
+						TileEntitySkull skull = (TileEntitySkull) tileEntity;
+						skull.setSkullRotation(placement.getMirror().mirrorRotation(skull.skullRotation, 16));
+						skull.setSkullRotation(placement.getRotation().rotate(skull.skullRotation, 16));
 					}
 				} else {
 					tileEntity.mirror(placement.getMirror());
@@ -81,9 +81,9 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 				tileEntity.readFromNBT(this.tileEntityData);
 				if (tileEntity instanceof TileEntitySkull) {
 					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
-						((TileEntitySkull) tileEntity)
-								.setSkullRotation(placement.getMirror().mirrorRotation(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
-						((TileEntitySkull) tileEntity).setSkullRotation(placement.getRotation().rotate(((TileEntitySkull) tileEntity).getSkullRotation(), 16));
+						TileEntitySkull skull = (TileEntitySkull) tileEntity;
+						skull.setSkullRotation(placement.getMirror().mirrorRotation(skull.skullRotation, 16));
+						skull.setSkullRotation(placement.getRotation().rotate(skull.skullRotation, 16));
 					}
 				} else {
 					tileEntity.mirror(placement.getMirror());
