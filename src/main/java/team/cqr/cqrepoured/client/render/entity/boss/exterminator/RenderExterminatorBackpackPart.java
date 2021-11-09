@@ -31,6 +31,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 				double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+				y1 += entity.getHeight() * 0.5;
 				double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 
 				double x2 = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
@@ -38,7 +39,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				y2 += target.getEyeHeight();
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
-				final Vec3d start = new Vec3d(0, 0, 0);
+				final Vec3d start = new Vec3d(0, entity.getHeight() * 0.5, 0);
 				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1);
 
 				GlStateManager.pushMatrix();
