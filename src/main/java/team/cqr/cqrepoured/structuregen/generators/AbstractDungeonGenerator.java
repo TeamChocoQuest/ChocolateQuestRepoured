@@ -37,11 +37,12 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements
 			this.preProcess();
 			this.buildStructure();
 			this.postProcess();
-		} catch (Exception e) {
+			return dungeonBuilder.build(world);
+		} catch (Throwable e) {
 			// TODO handle this elsewhere, DungeonPreparationHelper maybe?
 			CQRMain.logger.error("Failed to prepare dungeon {} for generation at {}", this.dungeon, this.pos, e);
+			throw new RuntimeException(e);
 		}
-		return dungeonBuilder.build(world);
 	}
 
 	// Actually having 3 methods here is useless as they are just called one after another
