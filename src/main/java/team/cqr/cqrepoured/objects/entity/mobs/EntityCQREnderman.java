@@ -18,6 +18,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
@@ -26,6 +27,13 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		super(worldIn);
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		
+		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderman>(this));
 	}
 
 	@Override
@@ -69,6 +77,11 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		}
 
 		return flag;
+	}
+	
+	@Override
+	public void teleport(double x, double y, double z) {
+		this.teleportTo(x, y, z);
 	}
 
 	@Override

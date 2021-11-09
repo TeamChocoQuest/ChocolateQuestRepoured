@@ -30,6 +30,7 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
+import team.cqr.cqrepoured.objects.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
@@ -56,6 +57,13 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		super.updateAITasks();
 	}
 
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		
+		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderKing>(this));
+	}
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		amount /= 2;
@@ -196,6 +204,11 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	@Override
 	public float getDefaultHeight() {
 		return 2.9F;
+	}
+	
+	@Override
+	public void teleport(double x, double y, double z) {
+		this.teleportTo(x, y, z);
 	}
 
 	@Override
