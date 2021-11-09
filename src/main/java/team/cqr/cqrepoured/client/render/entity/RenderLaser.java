@@ -12,6 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.client.models.entities.ModelLaser;
+import team.cqr.cqrepoured.client.util.EmissiveUtil;
 import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -32,6 +33,8 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		EmissiveUtil.preEmissiveTextureRendering();
+		
 		if (entity.caster == null) {
 			return;
 		}
@@ -96,6 +99,8 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
 		GlStateManager.popMatrix();
+		
+		EmissiveUtil.postEmissiveTextureRendering();
 	}
 
 	protected float getPitch(T entity, float partialTicks) {
