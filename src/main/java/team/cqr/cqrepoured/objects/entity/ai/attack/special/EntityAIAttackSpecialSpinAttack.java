@@ -13,7 +13,6 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -121,12 +120,16 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
 				
-				living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
+				/*living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
 				final Vec3d v = living.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(1.25).add(0, 0.25, 0).scale(attacker.getSizeVariation()).add(attackDirection);
 				living.motionX += v.x;
 				living.motionY += v.y;
 				living.motionZ += v.z;
-				living.velocityChanged = true;
+				living.velocityChanged = true;*/
+				
+				final float knockbackStrength = 1.25F * attacker.getSizeVariation();
+				
+				living.knockBack(entity, dmg, knockbackStrength, knockbackStrength);
 			}
 		});
 	}
