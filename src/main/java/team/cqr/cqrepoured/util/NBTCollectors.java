@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
@@ -14,7 +15,6 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagList;
-import scala.actors.threadpool.Arrays;
 
 public class NBTCollectors {
 
