@@ -239,7 +239,7 @@ public class CQRConfig {
 		@Config.RangeInt(min = 1, max = 1000)
 		public int dungeonSeparation = 20;
 		@Config.RangeInt(min = 0, max = 1000)
-		public int dungeonSpread = 0;
+		public int dungeonSpread = 25;
 		@Config.RangeDouble(min = 0.0D)
 		public double dungeonRarityFactor = 0.0D;
 		@Config.Comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.")
