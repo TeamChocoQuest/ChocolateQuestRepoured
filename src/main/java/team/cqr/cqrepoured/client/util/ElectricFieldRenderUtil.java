@@ -160,12 +160,12 @@ public class ElectricFieldRenderUtil {
 		direction = direction.scale(1.0D / distance);
 		Vec3d directionOffset;
 		if (direction.x < 0.5D) {
-			directionOffset = direction.crossProduct(new Vec3d(1.0D, 0.0D, 0.0D));
+			directionOffset = direction.crossProduct(new Vec3d(1.0D, 0.0D, 0.0D)).normalize();
 		} else {
-			directionOffset = direction.crossProduct(new Vec3d(0.0D, 0.0D, 1.0D));
+			directionOffset = direction.crossProduct(new Vec3d(0.0D, 0.0D, 1.0D)).normalize();
 		}
-		double lineLength = maxOffset * 3.0D;
-		int steps = MathHelper.floor(distance / lineLength);
+		int steps = Math.max(MathHelper.floor(distance / (maxOffset * 2.0D)), 4);
+		double lineLength = distance / steps;
 
 		// Now we want to draw <boltCount> lightnings
 		for (int i = 0; i < boltCount; i++) {
@@ -182,14 +182,16 @@ public class ElectricFieldRenderUtil {
 	}
 
 	private static void renderSingleElectricLineBetween(Vec3d start, Vec3d direction, Vec3d directionOffset, double lineLength, int steps, double offset) {
-		for (int i = 0; i <= steps; i++) {
+		addVertex(start.x, start.y, start.z, false);
+		for (int i = 1; i < steps; i++) {
 			Vec3d offsetVector = generateOffsetVector(direction, directionOffset);
 			double offsetScale = RANDOM.nextFloat() * offset;
 			double vX = start.x + (direction.x * i * lineLength) + (offsetVector.x * offsetScale);
 			double vY = start.y + (direction.y * i * lineLength) + (offsetVector.y * offsetScale);
 			double vZ = start.z + (direction.z * i * lineLength) + (offsetVector.z * offsetScale);
-			addVertex(vX, vY, vZ, i == steps);
+			addVertex(vX, vY, vZ, false);
 		}
+		addVertex(start.x + direction.x * steps * lineLength, start.y + direction.y * steps * lineLength, start.z + direction.z * steps * lineLength, true);
 	}
 
 	private static Vec3d generateOffsetVector(Vec3d direction, Vec3d directionOffset) {

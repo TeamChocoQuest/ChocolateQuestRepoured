@@ -24,7 +24,6 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				return;
 			}
 			long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);
-			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0, 5, seed);
 			if (cap.getTarget() != null) {
 				Entity target = cap.getTarget();
 
@@ -32,19 +31,18 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 
 				double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 				double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
-				// y1 += entity.getEyeHeight() / 2;
 				double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 
 				double x2 = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
 				double y2 = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
-				// y2 += target.getEyeHeight() / 2;
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
-				final Vec3d start = new Vec3d(0, 0, 0);
-				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1).scale(1.1D);
+				final Vec3d start = new Vec3d(0, entity.height * 0.5, 0);
+				final Vec3d end = new Vec3d(x2 - x1, target.height * 0.5 + y2 - y1, z2 - z1);
 
 				GlStateManager.pushMatrix();
 
+				GlStateManager.translate(0, 1.501, 0);
 				GlStateManager.scale(-1, -1, 1);
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
