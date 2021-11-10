@@ -152,6 +152,8 @@ public class DungeonMapTool {
 						graphics.setFont(new Font("Arial", Font.BOLD, 24));
 						graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 					}
+					//Now, reset to default
+					WorldDungeonGenerator.setup(null, null, null, true);
 				}
 			}
 

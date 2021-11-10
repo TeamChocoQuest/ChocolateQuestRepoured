@@ -80,6 +80,7 @@ public class CQRMain {
 	public static Logger logger = null;
 
 	public static File CQ_CONFIG_FOLDER = null;
+	public static File CQ_DUNGEON_GRID_FOLDER = null;
 	public static File CQ_DUNGEON_FOLDER = null;
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_EXPORT_FILES_FOLDER = null;
@@ -207,10 +208,12 @@ public class CQRMain {
 				CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"),
 				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"),
 				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync"),
-				CQ_GLOWING_TEXTURES_FOLDER = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "eyes")
+				CQ_GLOWING_TEXTURES_FOLDER = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "eyes"),
+				CQ_DUNGEON_GRID_FOLDER = new File(CQ_CONFIG_FOLDER, "grids")
 			};
 
-		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.1.0");
+		ConfigBackupHandler.registerConfig(CQ_DUNGEON_GRID_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.0.1");
 		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "1.0.0");

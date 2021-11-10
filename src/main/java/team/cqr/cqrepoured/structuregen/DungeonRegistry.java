@@ -9,10 +9,9 @@ import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
+import team.cqr.cqrepoured.structuregen.grid.GridRegistry;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 /**
@@ -48,18 +47,6 @@ public class DungeonRegistry {
 		return null;
 	}
 
-	public CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, int chunkX, int chunkZ) {
-		CQRWeightedRandom<DungeonBase> dungeonsForChunk = new CQRWeightedRandom<>();
-
-		for (DungeonBase dungeon : this.dungeons) {
-			if (dungeon.canSpawnAt(world, biome, chunkX, chunkZ)) {
-				dungeonsForChunk.add(dungeon, dungeon.getWeight());
-			}
-		}
-
-		return dungeonsForChunk;
-	}
-
 	public List<DungeonBase> getLocationSpecificDungeonsForChunk(World world, int chunkX, int chunkZ) {
 		List<DungeonBase> dungeonsForChunk = new ArrayList<>();
 
@@ -73,6 +60,9 @@ public class DungeonRegistry {
 	}
 
 	public void loadDungeonFiles() {
+		//First: Load the grids!
+		GridRegistry.loadGridFiles();
+		
 		this.dungeons.clear();
 
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
