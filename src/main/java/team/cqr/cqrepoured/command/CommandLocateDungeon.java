@@ -95,7 +95,7 @@ public class CommandLocateDungeon extends CommandBase {
 			return null;
 		}
 
-		//WorldDungeonGenerator.setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, false);
+		WorldDungeonGenerator.setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, false);
 		for (int r = 0; r <= chunkRadius; r++) {
 			int startX = chunkX - r;
 			int endX = chunkX + r;
@@ -120,6 +120,8 @@ public class CommandLocateDungeon extends CommandBase {
 				}
 			}
 		}
+		//Now, reset to default
+		WorldDungeonGenerator.setup(null, null, null, true);
 
 		return null;
 	}
