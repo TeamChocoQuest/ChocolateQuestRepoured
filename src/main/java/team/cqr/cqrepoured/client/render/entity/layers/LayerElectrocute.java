@@ -24,6 +24,7 @@ public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 				return;
 			}
 			long seed = (entity.getEntityId() * 255L) ^ (entity.ticksExisted >> 1 << 1);
+			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0, 5, seed);
 			if (cap.getTarget() != null) {
 				Entity target = cap.getTarget();
 
