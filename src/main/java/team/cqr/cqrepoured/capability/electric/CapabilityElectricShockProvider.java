@@ -109,32 +109,30 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		}
 
 		// First, reduce the ticks
-		CapabilityElectricShock icapability = entity.getCapability(ELECTROCUTE_HANDLER_CQR, null);
-		//final int beforeUpdateTicks = icapability.getRemainingTicks();
-		//final boolean beforeUpdateHasTarget = icapability.getTarget() != null;
-		icapability.reduceRemainingTicks();
+		CapabilityElectricShock currentCap = entity.getCapability(ELECTROCUTE_HANDLER_CQR, null);
+		currentCap.reduceRemainingTicks();
 
 		// Mechanicals can get electrocuted but don't take damage
 		if (entity instanceof IMechanical || entity.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
 			// But, if we are wet, we get damage from beign electrocuted
 			if (((IMechanical)entity).canReceiveElectricDamageCurrently()) {
-				icapability.setRemainingTicks(100);
+				currentCap.setRemainingTicks(100);
 				entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
 			}
-		} else if (icapability.isElectrocutionActive()) {
+		} else if (currentCap.isElectrocutionActive()) {
 			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1);
 		}
 		if (entity.isDead || entity.getHealth() < 1) {
-			icapability.setTarget(null);
+			currentCap.setTarget(null);
 		}
 		// Maybe you could spread to other entities?
-		if (icapability.canSpread() && icapability.getTarget() == null && icapability.getRemainignSpreads() > 0) {
-			spreadElectrocute(entity, icapability);
-		} else if (icapability.getTarget() != null) {
-			if (!entity.canEntityBeSeen(icapability.getTarget()) || entity.getDistance(icapability.getTarget()) > 16) {
-				icapability.setTarget(null);
+		if (currentCap.canSpread() && currentCap.getTarget() == null && currentCap.getRemainignSpreads() > 0) {
+			spreadElectrocute(entity, currentCap);
+		} else if (currentCap.getTarget() != null) {
+			if (!entity.canEntityBeSeen(currentCap.getTarget()) || entity.getDistance(currentCap.getTarget()) > 16) {
+				currentCap.setTarget(null);
 			} else {
-				CapabilityElectricShock targetCap = icapability.getTarget().getCapability(ELECTROCUTE_HANDLER_CQR, null);
+				CapabilityElectricShock targetCap = currentCap.getTarget().getCapability(ELECTROCUTE_HANDLER_CQR, null);
 				if (targetCap != null) {
 					targetCap.setRemainingTicks(100);
 				}
