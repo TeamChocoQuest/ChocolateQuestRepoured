@@ -154,13 +154,6 @@ public class DungeonGrid {
 		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), s);
 	}
 
-	public double getRarityFactor() {
-		if(WorldDungeonGenerator.rfObj != null) {
-			return WorldDungeonGenerator.rfObj;
-		}
-		return this.rarityFactor;
-	}
-
 	public void addDungeonEntry(DungeonBase dungeonBase) {
 		this.dungeons.add(dungeonBase);
 	}
@@ -186,17 +179,24 @@ public class DungeonGrid {
 	}
 
 	public int getDistance() {
-		if(WorldDungeonGenerator.distObj != null) {
+		if(WorldDungeonGenerator.distObj != null && this == GridRegistry.DEFAULT_GRID) {
 			return WorldDungeonGenerator.spreadObj;
 		}
 		return this.distance;
 	}
 
 	public int getSpread() {
-		if(WorldDungeonGenerator.spreadObj != null) {
+		if(WorldDungeonGenerator.spreadObj != null && this == GridRegistry.DEFAULT_GRID) {
 			return WorldDungeonGenerator.spreadObj;
 		}
 		return this.spread;
+	}
+	
+	public double getRarityFactor() {
+		if(WorldDungeonGenerator.rfObj != null && this == GridRegistry.DEFAULT_GRID) {
+			return WorldDungeonGenerator.rfObj;
+		}
+		return this.rarityFactor;
 	}
 
 	public static boolean isLogFailReasons() {
