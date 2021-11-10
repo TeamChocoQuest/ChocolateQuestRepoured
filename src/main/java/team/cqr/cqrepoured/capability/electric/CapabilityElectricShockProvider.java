@@ -1,7 +1,8 @@
 package team.cqr.cqrepoured.capability.electric;
 
-import java.util.Collections;
 import java.util.List;
+
+import com.google.common.base.Predicates;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -143,21 +144,23 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 
 	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock icapability) {
 		// First, get all applicable entities in range
-		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12), TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED);
-		entities.removeIf((EntityLivingBase input) -> {
-			if(input.getPersistentID().equals(icapability.getCasterID())) {
-				return true;
-			}
-			if (!spreader.canEntityBeSeen(input) || spreader.getDistance(input) > CQRConfig.general.electricFieldEffectSpreadRange) {
-				return true;
-			}
-			return !TargetUtil.isAllyCheckingLeaders(spreader, input);
-		});
+		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12),
+				Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
+					if (entityLiving.getPersistentID().equals(icapability.getCasterID())) {
+						return false;
+					}
+					if (!spreader.canEntityBeSeen(entityLiving)) {
+						return false;
+					}
+					if (spreader.getDistance(entityLiving) > CQRConfig.general.electricFieldEffectSpreadRange) {
+						return false;
+					}
+					return !TargetUtil.isAllyCheckingLeaders(spreader, entityLiving);
+				}));
 		if (entities.isEmpty()) {
 			return;
 		}
-		Collections.shuffle(entities);
-		EntityLivingBase chosen = entities.get(0);
+		EntityLivingBase chosen = entities.get(spreader.world.rand.nextInt(entities.size()));
 		icapability.setTarget(chosen);
 		icapability.reduceSpreads();
 
