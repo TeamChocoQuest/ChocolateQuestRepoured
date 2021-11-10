@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.objects.items.staves;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -29,9 +30,11 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.util.IRangedWeapon;
 
 public class ItemStaffFire extends Item implements IRangedWeapon {
@@ -82,50 +85,42 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	public void shootFromEntity(EntityLivingBase shooter) {
 		World world = shooter.world;
 
-		float x = (float) -Math.sin(Math.toRadians(shooter.rotationYaw));
-		float z = (float) Math.cos(Math.toRadians(shooter.rotationYaw));
-		float y = (float) -Math.sin(Math.toRadians(shooter.rotationPitch));
-		x *= 1.0F - Math.abs(y);
-		z *= 1.0F - Math.abs(y);
-
-		if (world.isRemote) {
-			for (int i = 0; i < 50; i++) {
-				double flameRandomMotion = itemRand.nextDouble() + 0.2D;
-				float height = shooter.height;
-				world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ, (x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
-			}
-		}
-
 		if (!world.isRemote) {
-			int dist = 15;
-			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(shooter, shooter.getEntityBoundingBox().grow(shooter.getLookVec().x * dist, shooter.getLookVec().y * dist, shooter.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
-
-			for (Entity e : list) {
-				if (e instanceof EntityLivingBase) {
-					double rotDiff = Math.abs(this.getAngleBetweenEntities(shooter, e));
-					double rot = rotDiff - Math.abs(MathHelper.wrapDegrees(shooter.rotationYaw));
-					rot = Math.abs(rot);
-
-					if (rot < 10.0D) {
-						if (shooter.canEntityBeSeen(e)) {
-							e.setFire(6);
-							e.attackEntityFrom(DamageSource.IN_FIRE, 4.0F);
-						}
-					}
-				}
+			Random r = shooter.getRNG();
+			for (int i = 0; i < 20; i++) {
+				// TODO don't send 20 packets
+				Vec3d v = shooter.getLookVec();
+				v = v.add((r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D);
+				((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y,
+						v.z, r.nextFloat() + 0.2D);
 			}
+
+			world.getEntitiesWithinAABB(EntityLivingBase.class, shooter.getEntityBoundingBox().grow(8.0D), entity -> {
+				if (TargetUtil.isAllyCheckingLeaders(shooter, entity)) {
+					return false;
+				}
+
+				double x = MathHelper.clamp(shooter.posX, entity.posX - entity.width * 0.5D, entity.posX + entity.width * 0.5D) - shooter.posX;
+				double y = MathHelper.clamp(shooter.posY + shooter.getEyeHeight(), entity.posY, entity.posY + entity.height)
+						- (shooter.posY + shooter.getEyeHeight());
+				double z = MathHelper.clamp(shooter.posZ, entity.posZ - entity.width * 0.5D, entity.posZ + entity.width * 0.5D) - shooter.posZ;
+				if (x * x + y * y + z * z > 8.0D * 8.0D) {
+					return false;
+				}
+
+				Vec3d a = shooter.getLookVec();
+				Vec3d b = new Vec3d(x, y, z);
+				if (Math.toDegrees(Math.acos(a.dotProduct(b) / (a.length() * b.length()))) > 40.0D) {
+					return false;
+				}
+
+				return shooter.canEntityBeSeen(entity);
+			}).forEach(target -> {
+				if (target.attackEntityFrom(DamageSource.causeMobDamage(shooter).setFireDamage(), 3.0F)) {
+					target.setFire(5);
+				}
+			});
 		}
-	}
-
-	public double getAngleBetweenEntities(Entity attacker, Entity target) {
-		double d = attacker.posX - target.posX;
-		double d2 = attacker.posZ - target.posZ;
-		double angle = Math.atan2(d, d2);
-		angle = angle * 180.0D / 3.141592D;
-
-		angle = -MathHelper.wrapDegrees(angle - 180.0D);
-
-		return angle;
 	}
 
 	@Override
@@ -150,7 +145,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 
 	@Override
 	public double getRange() {
-		return 14.0D;
+		return 7.5D;
 	}
 
 	@Override
