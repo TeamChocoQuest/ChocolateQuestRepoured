@@ -76,8 +76,8 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		CapabilityElectricShock icapability = entity.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 
 		icapability.setRemainingTicks(-1);
-
-		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
+		//We don't need to send the update ourselves, the capability handles it itself in the setter
+		//CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
 	}
 
 	@SubscribeEvent
@@ -142,7 +142,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		}
 	}
 
-	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock icapability) {
+	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock sourceCap) {
 		// First, get all applicable entities in range
 		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12),
 				Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
@@ -161,14 +161,14 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 			return;
 		}
 		EntityLivingBase chosen = entities.get(spreader.world.rand.nextInt(entities.size()));
-		icapability.setTarget(chosen);
-		icapability.reduceSpreads();
+		sourceCap.setTarget(chosen);
+		sourceCap.reduceSpreads();
 
 		CapabilityElectricShock targetCap = chosen.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 		targetCap.setRemainingTicks(100);
-		targetCap.setCasterID(icapability.getCasterID());
-		if(targetCap.getRemainignSpreads() < 0) {
-			targetCap.setRemainingSpreads(icapability.getRemainignSpreads());
+		targetCap.setCasterID(sourceCap.getCasterID());
+		if(targetCap.getRemainignSpreads() < 0 || targetCap.getRemainingSpreads() >= sourceCap.getRemainignSpreads()) {
+			targetCap.setRemainingSpreads(sourceCap.getRemainignSpreads() -1);
 		}
 	}
 
