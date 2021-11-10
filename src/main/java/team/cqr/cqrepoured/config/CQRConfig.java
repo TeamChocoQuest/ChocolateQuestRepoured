@@ -128,21 +128,21 @@ public class CQRConfig {
 	}
 
 	public static class ToolMaterials {
-		public ToolConfig bull = new ToolConfig(4.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig monking = new ToolConfig(4.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig moonlight = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig ninja = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig spider = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig sunshine = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig turtle = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig walker = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig bull = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
+		public ToolConfig monking = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
+		public ToolConfig moonlight = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig ninja = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig spider = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig sunshine = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig turtle = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig walker = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
 
 		public double daggerAttackDamageBonus = -1.0D;
 		public double daggerAttackSpeedBonus = 0.4D;
 		public double daggerMovementSpeedBonus = 0.05D;
-		public double greatSwordAttackDamageBonus = 2.0D;
-		public double greatSwordAttackSpeedBonus = -0.45D;
-		public double spearAttackDamageBonus = 0.0D;
+		public double greatSwordAttackDamageBonus = 3.0D;
+		public double greatSwordAttackSpeedBonus = -0.4D;
+		public double spearAttackDamageBonus = 1.0D;
 		public double spearAttackSpeedBonus = -0.1D;
 		public double spearReachDistanceBonus = 1.0D;
 	}
