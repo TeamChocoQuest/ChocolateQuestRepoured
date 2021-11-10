@@ -21,12 +21,12 @@ public class SPacketSyncProtectionConfig implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		this.protectionConfig = new CQRConfig.DungeonProtection();
 		this.protectionConfig.protectionSystemEnabled = buf.readBoolean();
-		this.protectionConfig.preventBlockBreaking = buf.readBoolean();
-		this.protectionConfig.preventBlockPlacing = buf.readBoolean();
-		this.protectionConfig.preventEntitySpawning = buf.readBoolean();
-		this.protectionConfig.preventExplosionOther = buf.readBoolean();
-		this.protectionConfig.preventExplosionTNT = buf.readBoolean();
-		this.protectionConfig.preventFireSpreading = buf.readBoolean();
+		this.protectionConfig.enablePreventBlockBreaking = buf.readBoolean();
+		this.protectionConfig.enablePreventBlockPlacing = buf.readBoolean();
+		this.protectionConfig.enablePreventEntitySpawning = buf.readBoolean();
+		this.protectionConfig.enablePreventExplosionOther = buf.readBoolean();
+		this.protectionConfig.enablePreventExplosionTNT = buf.readBoolean();
+		this.protectionConfig.enablePreventFireSpreading = buf.readBoolean();
 		this.protectionConfig.protectionSystemBreakableBlockWhitelist = new String[buf.readInt()];
 		for (int i = 0; i < this.protectionConfig.protectionSystemBreakableBlockWhitelist.length; i++) {
 			this.protectionConfig.protectionSystemBreakableBlockWhitelist[i] = ByteBufUtils.readUTF8String(buf);
@@ -48,12 +48,12 @@ public class SPacketSyncProtectionConfig implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(this.protectionConfig.protectionSystemEnabled);
-		buf.writeBoolean(this.protectionConfig.preventBlockBreaking);
-		buf.writeBoolean(this.protectionConfig.preventBlockPlacing);
-		buf.writeBoolean(this.protectionConfig.preventEntitySpawning);
-		buf.writeBoolean(this.protectionConfig.preventExplosionOther);
-		buf.writeBoolean(this.protectionConfig.preventExplosionTNT);
-		buf.writeBoolean(this.protectionConfig.preventFireSpreading);
+		buf.writeBoolean(this.protectionConfig.enablePreventBlockBreaking);
+		buf.writeBoolean(this.protectionConfig.enablePreventBlockPlacing);
+		buf.writeBoolean(this.protectionConfig.enablePreventEntitySpawning);
+		buf.writeBoolean(this.protectionConfig.enablePreventExplosionOther);
+		buf.writeBoolean(this.protectionConfig.enablePreventExplosionTNT);
+		buf.writeBoolean(this.protectionConfig.enablePreventFireSpreading);
 		buf.writeInt(this.protectionConfig.protectionSystemBreakableBlockWhitelist.length);
 		for (String s : this.protectionConfig.protectionSystemBreakableBlockWhitelist) {
 			ByteBufUtils.writeUTF8String(buf, s);

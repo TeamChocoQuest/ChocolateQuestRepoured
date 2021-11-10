@@ -128,21 +128,21 @@ public class CQRConfig {
 	}
 
 	public static class ToolMaterials {
-		public ToolConfig bull = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig monking = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig moonlight = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig ninja = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig spider = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig sunshine = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig turtle = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig walker = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig bull = new ToolConfig(4.0F, 0.0F, 10, 0, 1561);
+		public ToolConfig monking = new ToolConfig(4.0F, 0.0F, 10, 0, 1561);
+		public ToolConfig moonlight = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig ninja = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig spider = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig sunshine = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig turtle = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
+		public ToolConfig walker = new ToolConfig(4.0F, 0.0F, 10, 0, 2048);
 
 		public double daggerAttackDamageBonus = -1.0D;
 		public double daggerAttackSpeedBonus = 0.4D;
 		public double daggerMovementSpeedBonus = 0.05D;
-		public double greatSwordAttackDamageBonus = 3.0D;
-		public double greatSwordAttackSpeedBonus = -0.4D;
-		public double spearAttackDamageBonus = 1.0D;
+		public double greatSwordAttackDamageBonus = 2.0D;
+		public double greatSwordAttackSpeedBonus = -0.45D;
+		public double spearAttackDamageBonus = 0.0D;
 		public double spearAttackSpeedBonus = -0.1D;
 		public double spearReachDistanceBonus = 1.0D;
 	}
@@ -212,12 +212,19 @@ public class CQRConfig {
 	}
 
 	public static class DungeonProtection {
-		public boolean preventBlockBreaking = true;
-		public boolean preventBlockPlacing = false;
-		public boolean preventEntitySpawning = true;
-		public boolean preventExplosionOther = true;
-		public boolean preventExplosionTNT = true;
-		public boolean preventFireSpreading = true;
+		static final String NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS = "This is a global toggle for the options in the individual dungeon configs, enabling this here does not enable it in all dungeons! Please adjust the individual dungeon configs!";
+		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
+		public boolean enablePreventBlockBreaking = true;
+		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
+		public boolean enablePreventBlockPlacing = false;
+		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
+		public boolean enablePreventEntitySpawning = true;
+		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
+		public boolean enablePreventExplosionOther = true;
+		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
+		public boolean enablePreventExplosionTNT = true;
+		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
+		public boolean enablePreventFireSpreading = true;
 		@Config.Comment("This enables the protection system. Set to false to disable it globally. Disabling this does not delete Protected Regions and instead just does not prevent the player from for example placing blocks.")
 		public boolean protectionSystemEnabled = true;
 
