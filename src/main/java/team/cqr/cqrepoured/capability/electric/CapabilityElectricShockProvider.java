@@ -144,7 +144,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		// First, get all applicable entities in range
 		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12),
 				Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
-					if (entityLiving.getPersistentID().equals(icapability.getCasterID())) {
+					if (entityLiving.getPersistentID().equals(sourceCap.getCasterID())) {
 						return false;
 					}
 					if (!spreader.canEntityBeSeen(entityLiving)) {
@@ -165,7 +165,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		CapabilityElectricShock targetCap = chosen.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 		targetCap.setRemainingTicks(100);
 		targetCap.setCasterID(sourceCap.getCasterID());
-		if(targetCap.getRemainignSpreads() < 0 || targetCap.getRemainingSpreads() >= sourceCap.getRemainignSpreads()) {
+		if(targetCap.getRemainignSpreads() < 0 || targetCap.getRemainignSpreads() >= sourceCap.getRemainignSpreads()) {
 			targetCap.setRemainingSpreads(sourceCap.getRemainignSpreads() -1);
 		}
 	}
