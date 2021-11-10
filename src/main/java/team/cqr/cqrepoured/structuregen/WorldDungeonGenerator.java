@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.structuregen;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -19,15 +18,12 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.structuregen.grid.DungeonGrid;
 import team.cqr.cqrepoured.structuregen.grid.GridRegistry;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -73,6 +69,14 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	 */
 	@Nullable
 	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
+		return getDungeonAt(world, chunkX, chunkZ, g -> true, d -> true);
+	}
+
+	/**
+	 * @return the dungeon that will be generated in this chunk
+	 */
+	@Nullable
+	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ, Predicate<DungeonGrid> gridPredicate, Predicate<DungeonBase> dungeonPredicate) {
 		if (!canSpawnDungeonsInWorld(world)) {
 			return null;
 		}
@@ -81,53 +85,11 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		if (locationSpecificDungeon != null) {
 			return locationSpecificDungeon;
 		}
-		Biome lastBiome = null;
-		boolean percentageFailed = false;
-		
-		List<DungeonGrid> grids = new ArrayList<>(GridRegistry.grids());
-		Random random = getRandomForCoords(world, chunkX, chunkZ);
-		//Shuffle to make it distributed and not one grid dominate
-		//Alternatively: Make the grids use the old getDungeonForPos() method and check if the selected dungeon actually uses the grid here, if no, skip to the next grid 
-		Collections.shuffle(grids, random);
-		
-		for(DungeonGrid grid : grids) {
-			if (!grid.canSpawnDungeonAtCoords(world, chunkX, chunkZ)) {
-				continue;
-			}
 
-			percentageFailed = false;
-			
-			if (!DungeonGenUtils.percentageRandom(CQRConfig.general.overallDungeonChance, random)) {
-				percentageFailed = true;
-				continue;
-			}
-
-			Biome biome = getBiomeForChunk(world, chunkX, chunkZ);
-			CQRWeightedRandom<DungeonBase> possibleDungeons = grid.getDungeonsForPos(world, biome, chunkX, chunkZ);
-			DungeonBase dungeon = possibleDungeons.next(random);
-			if (dungeon == null) {
-				lastBiome = biome;
-				continue;
-			}
-
-			int weight = dungeon.getWeight();
-			int totalWeight = possibleDungeons.getTotalWeight();
-			double chanceModifier = 1.0D / Math.pow((double) weight / (double) totalWeight, grid.getRarityFactor());
-			if (!DungeonGenUtils.percentageRandom((double) dungeon.getChance() / 100.0D * chanceModifier, random)) {
-				log(world, chunkX, chunkZ, "Specific dungeon generation chance check failed for dungeon: %s", dungeon);
-				continue;
-			}
-
-			return dungeon;
-		}
-		if(percentageFailed) {
-			log(world, chunkX, chunkZ, "Global dungeon generation chance check failed");
-			return null;
-		}
-		if(lastBiome != null) {
-			log(world, chunkX, chunkZ, "Could not find any dungeon for biome: %s (%s)", lastBiome, BiomeDictionary.getTypes(lastBiome));
-		}
-		return null;
+		return GridRegistry.grids().stream()
+				.filter(gridPredicate)
+				.map(grid -> grid.getDungeonAt(world, chunkX, chunkZ, dungeonPredicate))
+				.findFirst().orElse(null);
 	}
 
 	/**
