@@ -11,6 +11,8 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicates;
+
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -69,7 +71,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	 */
 	@Nullable
 	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
-		return getDungeonAt(world, chunkX, chunkZ, g -> true, d -> true);
+		return getDungeonAt(world, chunkX, chunkZ, Predicates.alwaysTrue(), Predicates.alwaysTrue());
 	}
 
 	/**
