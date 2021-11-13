@@ -199,7 +199,7 @@ public class DungeonGrid {
 		// DONE make range a grid property?
 		for (int x = -this.checkRadiusInChunks; x <= this.checkRadiusInChunks; x++) {
 			for (int z = -this.checkRadiusInChunks; z <= this.checkRadiusInChunks; z++) {
-				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.id < this.id, Predicates.alwaysTrue()) != null) {
+				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority, Predicates.alwaysTrue()) != null) {
 					return true;
 				}
 			}
