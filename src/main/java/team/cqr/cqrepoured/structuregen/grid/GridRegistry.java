@@ -1,10 +1,14 @@
 package team.cqr.cqrepoured.structuregen.grid;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
 
@@ -15,6 +19,7 @@ public class GridRegistry {
 	
 	private static GridRegistry instance;
 	Map<String, DungeonGrid> ENTRIES = new HashMap<>();
+	List<DungeonGrid> grids = new ArrayList<>();
 	DungeonGrid DEFAULT_GRID;
 	
 	public static GridRegistry getInstance() {
@@ -43,6 +48,10 @@ public class GridRegistry {
 		}
 		
 		DEFAULT_GRID = ENTRIES.get("default");
+
+		grids.addAll(ENTRIES.values());
+		grids.sort(Comparator.comparingInt(DungeonGrid::getPriority));
+		IntStream.range(0, this.grids.size()).forEach(i -> this.grids.get(i).setId(i));
 	}
 	
 	public DungeonGrid getByIdOrDefault(final String id) {

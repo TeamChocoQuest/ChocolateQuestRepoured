@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -242,6 +243,16 @@ public class DungeonGrid {
 	
 	public double getRarityFactor() {
 		return this.rarityFactor;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+		ThreadLocalRandom.current().setSeed(id);
+		this.seed = ThreadLocalRandom.current().nextInt();
 	}
 
 }
