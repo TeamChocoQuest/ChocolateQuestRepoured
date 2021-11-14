@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.structuregen;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -70,6 +71,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		return GridRegistry.getInstance().getGrids().stream()
 				.filter(gridPredicate)
 				.map(grid -> grid.getDungeonAt(world, chunkX, chunkZ, dungeonPredicate))
+				.filter(Objects::nonNull)
 				.findFirst().orElse(null);
 	}
 
