@@ -136,8 +136,8 @@ public class DungeonGrid {
 			return cx % dungeonSeparation == 0 && cz % dungeonSeparation == 0;
 		}
 
-		int x = MathHelper.intFloorDiv(cx, dungeonSeparation);
-		int z = MathHelper.intFloorDiv(cz, dungeonSeparation);
+		int x = Math.floorDiv(cx, dungeonSeparation);
+		int z = Math.floorDiv(cz, dungeonSeparation);
 		Random random = world.setRandomSeed(x, z, this.seed);
 		x *= dungeonSeparation;
 		z *= dungeonSeparation;
