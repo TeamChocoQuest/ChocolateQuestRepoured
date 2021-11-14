@@ -1,23 +1,15 @@
 package team.cqr.cqrepoured.structuregen;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.init.Biomes;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -132,18 +124,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		x ^= x >>> 35;
 		x ^= x << 4;
 		return x;
-	}
-
-	public static Biome getBiomeForChunk(World world, int chunkX, int chunkZ) {
-		MutableBlockPos mutablePos = new MutableBlockPos();
-		Optional<Biome> biome = IntStream.range(0, 256).mapToObj(i -> {
-			int x = i >> 4;
-			int z = i & 15;
-			mutablePos.setPos((chunkX << 4) + x, 0, (chunkZ << 4) + z);
-			return world.getBiome(mutablePos);
-		}).collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue())
-				.map(Map.Entry::getKey);
-		return biome.orElseGet(() -> Biomes.PLAINS);
 	}
 
 }

@@ -103,7 +103,7 @@ public class DungeonGrid {
 			return null;
 		}
 
-		Biome biome = WorldDungeonGenerator.getBiomeForChunk(world, chunkX, chunkZ);
+		Biome biome = world.getBiome(new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8));
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, chunkX, chunkZ);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
