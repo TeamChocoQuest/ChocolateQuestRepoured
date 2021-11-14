@@ -94,7 +94,7 @@ public class DungeonGrid {
 	
 	@Nullable
 	public DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
-		return this.getDungeonAt(world, chunkX, chunkZ, d -> true);
+		return this.getDungeonAt(world, chunkX, chunkZ, Predicates.alwaysTrue());
 	}
 
 	@Nullable
