@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,7 @@ import team.cqr.cqrepoured.util.VanillaStructureHelper;
 
 public class DungeonGrid {
 
+	private static final Random RANDOM = new Random();
 	private final String name;
 	private final List<DungeonBase> dungeons;
 	private int distance;
@@ -274,8 +274,8 @@ public class DungeonGrid {
 
 	public void setId(int id) {
 		this.id = id;
-		ThreadLocalRandom.current().setSeed(id);
-		this.seed = ThreadLocalRandom.current().nextInt();
+		RANDOM.setSeed(id);
+		this.seed = RANDOM.nextInt();
 	}
 
 	public int getSeed() {
