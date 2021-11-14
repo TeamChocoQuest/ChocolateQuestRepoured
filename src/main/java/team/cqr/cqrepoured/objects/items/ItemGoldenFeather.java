@@ -15,8 +15,8 @@ public class ItemGoldenFeather extends ItemLore {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		// mainhand
-		if (!isSelected) {
+		// mainhand or offhand
+		if (!isSelected && itemSlot != 0) {
 			return;
 		}
 		if (entityIn.fallDistance <= 0.0F) {
