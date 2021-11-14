@@ -1,12 +1,17 @@
 package team.cqr.cqrepoured.structuregen.grid;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -19,6 +24,7 @@ import net.minecraft.world.biome.Biome;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.integration.IntegrationInformation;
+import team.cqr.cqrepoured.structuregen.DungeonRegistry;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
@@ -33,7 +39,7 @@ public class DungeonGrid {
 	
 	private static boolean logFailReasons = true;
 	
-	private List<DungeonBase> dungeons = new ArrayList<>();
+	private final List<DungeonBase> dungeons;
 	private int distance;
 	private int spread;
 	private double rarityFactor;
@@ -53,22 +59,19 @@ public class DungeonGrid {
 		return this.name;
 	}
 	
-	@Nullable
-	public static DungeonGrid create(final String name, Properties properties) {
-		if(USED_IDENTS.contains(name)) {
-			return null;
-		}
-		final int distance = PropertyFileHelper.getIntProperty(properties, "distance", CQRConfig.general.dungeonSeparation);
-		final int spread = PropertyFileHelper.getIntProperty(properties, "spread", CQRConfig.general.dungeonSpread);
-		final double rarityFactor = PropertyFileHelper.getDoubleProperty(properties, "rarityFactor", CQRConfig.general.dungeonRarityFactor);
-		final double chance = PropertyFileHelper.getDoubleProperty(properties, "chance", CQRConfig.general.overallDungeonChance);
-		final int priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
-		final int checkRadius = PropertyFileHelper.getIntProperty(properties, "checkRadius", 4);
-		
-		return new DungeonGrid(name, distance, spread, rarityFactor, priority, chance, checkRadius);
+	public DungeonGrid(final String name, Properties properties) {
+		this.name = name;
+		this.distance = PropertyFileHelper.getIntProperty(properties, "distance", CQRConfig.general.dungeonSeparation);
+		this.spread = PropertyFileHelper.getIntProperty(properties, "spread", CQRConfig.general.dungeonSpread);
+		this.rarityFactor = PropertyFileHelper.getDoubleProperty(properties, "rarityFactor", CQRConfig.general.dungeonRarityFactor);
+		this.chance = PropertyFileHelper.getDoubleProperty(properties, "chance", CQRConfig.general.overallDungeonChance);
+		this.priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
+		this.checkRadiusInChunks = PropertyFileHelper.getIntProperty(properties, "checkRadius", 4);
+		this.dungeons = Arrays.stream(PropertyFileHelper.getStringArrayProperty(properties, "dungeons", new String[0], true))
+				.map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 	
-	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final double chance, final int checkRadius) {
+	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final double chance, final int checkRadius, Collection<DungeonBase> dungeons) {
 		this.name = name;
 		this.distance = dist;
 		this.spread = spread;
@@ -76,6 +79,7 @@ public class DungeonGrid {
 		this.priority = prio;
 		this.chance = chance;
 		this.checkRadiusInChunks = checkRadius;
+		this.dungeons = new ArrayList<>(dungeons);
 		
 		USED_IDENTS.add(name);
 	}
@@ -85,7 +89,7 @@ public class DungeonGrid {
 	}
 	
 	static DungeonGrid getDefaultGrid() {
-		return new DungeonGrid("default", CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, 10, CQRConfig.general.overallDungeonChance, 4);
+		return new DungeonGrid("default", CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, 10, CQRConfig.general.overallDungeonChance, 4, Collections.emptyList());
 	}
 	
 	@Nullable
@@ -215,10 +219,6 @@ public class DungeonGrid {
 		}
 		String s = String.format(message, params);
 		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), s);
-	}
-
-	public void addDungeonEntry(DungeonBase dungeonBase) {
-		this.dungeons.add(dungeonBase);
 	}
 	
 	public CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, int chunkX, int chunkZ) {

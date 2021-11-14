@@ -29,7 +29,6 @@ import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
 import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
 import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.generators.AbstractDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.grid.GridRegistry;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
@@ -129,10 +128,6 @@ public abstract class DungeonBase {
 		this.preventFireSpreading = PropertyFileHelper.getBooleanProperty(prop, "preventFireSpreading", false);
 		this.preventEntitySpawning = PropertyFileHelper.getBooleanProperty(prop, "preventEntitySpawning", false);
 		this.ignoreNoBossOrNexus = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
-		
-		//And finally, the grid stuff!
-		String gridName = PropertyFileHelper.getStringProperty(prop, "dungeongrid", "default");
-		GridRegistry.getInstance().getByIdOrDefault(gridName).addDungeonEntry(this);
 	}
 
 	@Override

@@ -60,9 +60,6 @@ public class DungeonRegistry {
 	}
 
 	public void loadDungeonFiles() {
-		//First: Load the grids!
-		GridRegistry.getInstance().loadGridFiles();
-		
 		this.dungeons.clear();
 
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
@@ -89,6 +86,8 @@ public class DungeonRegistry {
 				}
 			}
 		}
+
+		GridRegistry.getInstance().loadGridFiles();
 	}
 
 	private DungeonBase createDungeonFromFile(File file) {

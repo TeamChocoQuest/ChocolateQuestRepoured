@@ -57,7 +57,7 @@ public class GridRegistry {
 		}
 
 		String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
-		return DungeonGrid.create(name, prop);
+		return new DungeonGrid(name, prop);
 	}
 
 	public Collection<DungeonGrid> grids() {
