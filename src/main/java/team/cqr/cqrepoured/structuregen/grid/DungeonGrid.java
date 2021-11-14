@@ -41,7 +41,7 @@ public class DungeonGrid {
 	private int checkRadiusInChunks;
 
 	// chance to generate a dungeon at a grid position
-	private double chance;
+	private int chance;
 	// TODO used to determine which grid comes first
 	private int priority;
 	// TODO the index of all grids which is used to calculate the seed
@@ -59,14 +59,14 @@ public class DungeonGrid {
 		this.distance = PropertyFileHelper.getIntProperty(properties, "distance", CQRConfig.general.dungeonSeparation);
 		this.spread = PropertyFileHelper.getIntProperty(properties, "spread", CQRConfig.general.dungeonSpread);
 		this.rarityFactor = PropertyFileHelper.getDoubleProperty(properties, "rarityFactor", CQRConfig.general.dungeonRarityFactor);
-		this.chance = PropertyFileHelper.getDoubleProperty(properties, "chance", CQRConfig.general.overallDungeonChance);
+		this.chance = PropertyFileHelper.getIntProperty(properties, "chance", CQRConfig.general.overallDungeonChance);
 		this.priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
 		this.checkRadiusInChunks = PropertyFileHelper.getIntProperty(properties, "checkRadius", 4);
 		this.dungeons = Arrays.stream(PropertyFileHelper.getStringArrayProperty(properties, "dungeons", new String[0], true))
 				.map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 	
-	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final double chance, final int checkRadius, Collection<DungeonBase> dungeons) {
+	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final int chance, final int checkRadius, Collection<DungeonBase> dungeons) {
 		this.name = name;
 		this.distance = dist;
 		this.spread = spread;
