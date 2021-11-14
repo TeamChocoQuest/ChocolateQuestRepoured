@@ -227,7 +227,8 @@ public class GuiDungeonMapTool extends GuiScreen {
 							GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
 						}
 					}).start();
-				} finally {
+				} catch (Throwable e) {
+					e.printStackTrace();
 					GuiDungeonMapTool.this.canExit = true;
 					GuiDungeonMapTool.this.buttonCancel.enabled = true;
 					GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
