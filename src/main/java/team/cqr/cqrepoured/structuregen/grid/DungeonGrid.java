@@ -75,6 +75,7 @@ public class DungeonGrid {
 		this.rarityFactor = rf;
 		this.priority = prio;
 		this.chance = chance;
+		this.checkRadiusInChunks = checkRadius;
 		
 		USED_IDENTS.add(name);
 	}
