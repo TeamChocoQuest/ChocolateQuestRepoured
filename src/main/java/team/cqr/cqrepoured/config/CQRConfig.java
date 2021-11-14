@@ -290,8 +290,7 @@ public class CQRConfig {
 				"minecraft:ender_dragon=DRAGONS",
 				"iceandfire:dragonegg=DRAGONS",
 				"iceandfire:firedragon=DRAGONS",
-				"iceandfire:icedragon=DRAGONS",
-				"net.minecraft.entity.passive.EntityVillager=VILLAGERS" };
+				"iceandfire:icedragon=DRAGONS" };
 
 		@Config.Comment("Each entry represents one set of mobtypes per \"ring\"")
 		public String[] defaultInhabitantConfig = { "SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR" };
