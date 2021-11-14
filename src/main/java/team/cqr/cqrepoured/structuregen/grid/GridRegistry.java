@@ -18,42 +18,37 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 public class GridRegistry {
-	
+
 	private static GridRegistry instance;
-	Map<String, DungeonGrid> ENTRIES = new HashMap<>();
-	List<DungeonGrid> grids = new ArrayList<>();
-	
+	private final Map<String, DungeonGrid> name2grid = new HashMap<>();
+	private final List<DungeonGrid> grids = new ArrayList<>();
+
 	public static GridRegistry getInstance() {
 		if (instance == null) {
 			instance = new GridRegistry();
 		}
 		return instance;
 	}
-	
+
 	public void loadGridFiles() {
-		ENTRIES.clear();
+		this.name2grid.clear();
 
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_GRID_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
 		CQRMain.logger.info("Loading {} grid configuration files...", files.size());
 
 		for (File file : files) {
-			DungeonGrid grid = createGridFromFile(file);
+			DungeonGrid grid = this.createGridFromFile(file);
 
 			if (grid != null) {
-				ENTRIES.computeIfAbsent(grid.getName(), k -> grid);
+				this.name2grid.computeIfAbsent(grid.getName(), k -> grid);
 			}
 		}
 
-		grids.addAll(ENTRIES.values());
-		grids.sort(Comparator.comparingInt(DungeonGrid::getPriority));
+		this.grids.addAll(this.name2grid.values());
+		this.grids.sort(Comparator.comparingInt(DungeonGrid::getPriority));
 		IntStream.range(0, this.grids.size()).forEach(i -> this.grids.get(i).setId(i));
 	}
-	
-	@Nullable
-	public DungeonGrid getById(final String id) {
-		return ENTRIES.get(id);
-	}
-	
+
 	private DungeonGrid createGridFromFile(File file) {
 		Properties prop = PropertyFileHelper.readPropFile(file);
 		if (prop == null) {
@@ -64,8 +59,13 @@ public class GridRegistry {
 		return new DungeonGrid(name, prop);
 	}
 
-	public Collection<DungeonGrid> grids() {
-		return ENTRIES.values();
+	@Nullable
+	public DungeonGrid getGrid(final String name) {
+		return this.name2grid.get(name);
 	}
-	
+
+	public Collection<DungeonGrid> getGrids() {
+		return this.name2grid.values();
+	}
+
 }
