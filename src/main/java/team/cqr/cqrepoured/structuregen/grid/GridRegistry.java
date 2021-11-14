@@ -32,6 +32,7 @@ public class GridRegistry {
 
 	public void loadGridFiles() {
 		this.name2grid.clear();
+		this.grids.clear();
 
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_GRID_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
 		CQRMain.logger.info("Loading {} grid configuration files...", files.size());
