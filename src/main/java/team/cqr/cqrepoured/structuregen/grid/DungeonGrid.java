@@ -179,10 +179,10 @@ public class DungeonGrid {
 		// DONE make range a grid property?
 		for (int x = -this.checkRadiusInChunks; x <= this.checkRadiusInChunks; x++) {
 			for (int z = -this.checkRadiusInChunks; z <= this.checkRadiusInChunks; z++) {
+				if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
+					continue;
+				}
 				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority, Predicates.alwaysTrue()) != null) {
-					if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
-						continue;
-					}
 					log(world, chunkX, chunkZ, "Nearby cqrepoured structure was found");
 					return true;
 				}
