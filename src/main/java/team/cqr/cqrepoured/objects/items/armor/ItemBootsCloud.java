@@ -51,10 +51,9 @@ public class ItemBootsCloud extends ItemArmor {
 		player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 0, 4, false, false));
 
 		player.jumpMovementFactor += 0.04F;
-		if (player.fallDistance > 0.0F) {
-			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.25F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.25F) / 2.0F);
-		} else if (player.isSprinting()) {
-			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F), -0.5D, (itemRand.nextFloat() - 0.5F));
+		if (player.fallDistance > 0.0F || player.isSprinting()) {
+			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D,
+					(itemRand.nextFloat() - 0.5F) / 2.0F);
 		}
 	}
 
