@@ -241,23 +241,14 @@ public class DungeonGrid {
 	}
 
 	public int getDistance() {
-		if(WorldDungeonGenerator.distObj != null && this == GridRegistry.DEFAULT_GRID) {
-			return WorldDungeonGenerator.spreadObj;
-		}
 		return this.distance;
 	}
 
 	public int getSpread() {
-		if(WorldDungeonGenerator.spreadObj != null && this == GridRegistry.DEFAULT_GRID) {
-			return WorldDungeonGenerator.spreadObj;
-		}
 		return this.spread;
 	}
 	
 	public double getRarityFactor() {
-		if(WorldDungeonGenerator.rfObj != null && this == GridRegistry.DEFAULT_GRID) {
-			return WorldDungeonGenerator.rfObj;
-		}
 		return this.rarityFactor;
 	}
 

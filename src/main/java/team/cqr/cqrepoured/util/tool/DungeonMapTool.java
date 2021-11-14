@@ -121,7 +121,8 @@ public class DungeonMapTool {
 			int scale = 4;
 			for (int x = -radiusC; x <= radiusC; x++) {
 				for (int z = -radiusC; z <= radiusC; z++) {
-					WorldDungeonGenerator.setup(distanceIn, spreadIn, rarityFactorIn, false);
+					// TODO adjust gui to allow modification of all grids
+					//WorldDungeonGenerator.setup(distanceIn, spreadIn, rarityFactorIn, false);
 					DungeonBase dungeonAtPos = WorldDungeonGenerator.getDungeonAt(world, x, z);
 
 					if (dungeonAtPos != null) {
@@ -153,7 +154,7 @@ public class DungeonMapTool {
 						graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 					}
 					//Now, reset to default
-					WorldDungeonGenerator.setup(null, null, null, true);
+					//WorldDungeonGenerator.setup(null, null, null, true);
 				}
 			}
 

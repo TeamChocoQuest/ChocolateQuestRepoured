@@ -34,19 +34,6 @@ import team.cqr.cqrepoured.structuregen.grid.GridRegistry;
  */
 public class WorldDungeonGenerator implements IWorldGenerator {
 
-	private static boolean logFailReasons;
-
-	public static Integer distObj = null;
-	public static Integer spreadObj = null;
-	public static Double rfObj = null;
-	
-	public static void setup(Integer distance, Integer spread, Double rarityFactor, boolean logFailReasons) {
-		WorldDungeonGenerator.distObj = distance;
-		WorldDungeonGenerator.spreadObj = spread;
-		WorldDungeonGenerator.rfObj = rarityFactor;
-		WorldDungeonGenerator.logFailReasons = logFailReasons;
-	}
-
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
