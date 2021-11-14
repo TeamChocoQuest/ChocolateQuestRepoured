@@ -118,6 +118,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.textFieldDistance.setText(Integer.toString(lastDistance));
+		this.textFieldDistance.setEnabled(false);
 		this.textFieldSpread = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 120, 150, 20, false, false) {
 			@Override
 			public boolean textboxKeyTyped(char typedChar, int keyCode) {
@@ -142,6 +143,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.textFieldSpread.setText(Integer.toString(lastSpread));
+		this.textFieldSpread.setEnabled(false);
 		this.textFieldRarityDivisor = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 150, 150, 20, false, true) {
 			@Override
 			public boolean textboxKeyTyped(char typedChar, int keyCode) {
@@ -166,6 +168,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.textFieldRarityDivisor.setText(Double.toString(lastRarityDivisor));
+		this.textFieldRarityDivisor.setEnabled(false);
 
 		this.buttonRandSeed = new GuiButton(id++, this.width / 2 + 140, 60, 20, 20, "R") {
 			@Override
@@ -301,11 +304,11 @@ public class GuiDungeonMapTool extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.textFieldList.forEach(GuiTextField::drawTextBox);
 		int i = 0;
-		GuiHelper.drawString(this.fontRenderer, "Radius", this.width / 2 - 60, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Seed", this.width / 2 - 60, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Distance", this.width / 2 - 60, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Spread", this.width / 2 - 60, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Rarity Divisor", this.width / 2 - 60, ++i * 30 + 6, 0xF0F0F0, true, false);
+		GuiHelper.drawString(this.fontRenderer, "Radius", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
+		GuiHelper.drawString(this.fontRenderer, "Seed", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
+		GuiHelper.drawString(this.fontRenderer, "Distance (WIP)", this.width / 2 - 70, ++i * 30 + 6, 0xF0F0F0, true, false);
+		GuiHelper.drawString(this.fontRenderer, "Spread (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
+		GuiHelper.drawString(this.fontRenderer, "Rarity Divisor (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
 	}
 
 }
