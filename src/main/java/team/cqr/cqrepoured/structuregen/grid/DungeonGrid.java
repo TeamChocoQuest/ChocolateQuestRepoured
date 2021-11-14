@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.structuregen.grid;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -70,24 +67,8 @@ public class DungeonGrid {
 				.map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 	
-	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final int chance, final int checkRadius, int offset, Collection<DungeonBase> dungeons) {
-		this.name = name;
-		this.distance = dist;
-		this.spread = spread;
-		this.rarityFactor = rf;
-		this.priority = prio;
-		this.chance = chance;
-		this.checkRadiusInChunks = checkRadius;
-		this.offset = offset;
-		this.dungeons = new ArrayList<>(dungeons);
-	}
-	
 	public List<DungeonBase> getDungeons() {
 		return this.dungeons;
-	}
-	
-	static DungeonGrid getDefaultGrid() {
-		return new DungeonGrid("default", CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, 10, CQRConfig.general.overallDungeonChance, 4, 0, Collections.emptyList());
 	}
 	
 	@Nullable

@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.IntStream;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.io.FileUtils;
 
 import team.cqr.cqrepoured.CQRMain;
@@ -20,7 +22,6 @@ public class GridRegistry {
 	private static GridRegistry instance;
 	Map<String, DungeonGrid> ENTRIES = new HashMap<>();
 	List<DungeonGrid> grids = new ArrayList<>();
-	DungeonGrid DEFAULT_GRID;
 	
 	public static GridRegistry getInstance() {
 		if (instance == null) {
@@ -42,20 +43,15 @@ public class GridRegistry {
 				ENTRIES.computeIfAbsent(grid.getName(), k -> grid);
 			}
 		}
-		
-		if(!ENTRIES.containsKey("default")) {
-			ENTRIES.put("default", DungeonGrid.getDefaultGrid());
-		}
-		
-		DEFAULT_GRID = ENTRIES.get("default");
 
 		grids.addAll(ENTRIES.values());
 		grids.sort(Comparator.comparingInt(DungeonGrid::getPriority));
 		IntStream.range(0, this.grids.size()).forEach(i -> this.grids.get(i).setId(i));
 	}
 	
-	public DungeonGrid getByIdOrDefault(final String id) {
-		return ENTRIES.getOrDefault(id, DEFAULT_GRID);
+	@Nullable
+	public DungeonGrid getById(final String id) {
+		return ENTRIES.get(id);
 	}
 	
 	private DungeonGrid createGridFromFile(File file) {
