@@ -112,9 +112,9 @@ public class CommandLocateDungeon extends CommandBase {
 							continue;
 						}
 	
-						DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(world, chunkX, chunkZ);
+						DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(world, x, z);
 	
-						if (dungeon == null || (dungeonToSearchFor != null && !dungeon.getDungeonName().equals(dungeonToSearchFor))) {
+						if (dungeon == null || (dungeonToSearchFor != null && !dungeon.getDungeonName().equalsIgnoreCase(dungeonToSearchFor))) {
 							continue;
 						}
 	
