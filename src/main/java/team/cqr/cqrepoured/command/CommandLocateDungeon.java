@@ -97,31 +97,34 @@ public class CommandLocateDungeon extends CommandBase {
 
 		boolean temp = CQRConfig.advanced.debugDungeonGen;
 		CQRConfig.advanced.debugDungeonGen = false;
-		for (int r = 0; r <= chunkRadius; r++) {
-			int startX = chunkX - r;
-			int endX = chunkX + r;
-			int startZ = chunkZ - r;
-			int endZ = chunkZ + r;
-
-			for (int x = startX; x <= endX; x++) {
-				boolean flag = x != startX && x != endX;
-
-				for (int z = startZ; z <= endZ; z++) {
-					if (flag && z != startZ && z != endZ) {
-						continue;
+		try {
+			for (int r = 0; r <= chunkRadius; r++) {
+				int startX = chunkX - r;
+				int endX = chunkX + r;
+				int startZ = chunkZ - r;
+				int endZ = chunkZ + r;
+	
+				for (int x = startX; x <= endX; x++) {
+					boolean flag = x != startX && x != endX;
+	
+					for (int z = startZ; z <= endZ; z++) {
+						if (flag && z != startZ && z != endZ) {
+							continue;
+						}
+	
+						DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(world, chunkX, chunkZ);
+	
+						if (dungeonToSearchFor != null && !dungeon.getDungeonName().equals(dungeonToSearchFor)) {
+							continue;
+						}
+	
+						return new DungeonGenInfo(dungeon.getDungeonName(), x, z);
 					}
-
-					DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(world, chunkX, chunkZ);
-
-					if (dungeonToSearchFor != null && !dungeon.getDungeonName().equals(dungeonToSearchFor)) {
-						continue;
-					}
-
-					return new DungeonGenInfo(dungeon.getDungeonName(), x, z);
 				}
 			}
+		} finally {
+			CQRConfig.advanced.debugDungeonGen = temp;
 		}
-		CQRConfig.advanced.debugDungeonGen = temp;
 
 		return null;
 	}
