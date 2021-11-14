@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -11,14 +12,14 @@ import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 
 public class SPacketDungeonSync implements IMessage {
 
-	private List<DungeonBase> dungeons;
+	private Collection<DungeonBase> dungeons;
 	private List<ClientDungeon> fakeDungeonSet;
 
 	public SPacketDungeonSync() {
 
 	}
 
-	public SPacketDungeonSync(List<DungeonBase> dungeons) {
+	public SPacketDungeonSync(Collection<DungeonBase> dungeons) {
 		this.dungeons = dungeons;
 	}
 

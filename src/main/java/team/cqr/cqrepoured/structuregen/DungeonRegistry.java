@@ -3,8 +3,12 @@ package team.cqr.cqrepoured.structuregen;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
@@ -23,7 +27,7 @@ public class DungeonRegistry {
 
 	private static final DungeonRegistry INSTANCE = new DungeonRegistry();
 
-	private final List<DungeonBase> dungeons = new ArrayList<>();
+	private final Map<String, DungeonBase> dungeons = new HashMap<>();
 
 	// TODO: Initialize this on world load
 	/*
@@ -34,23 +38,19 @@ public class DungeonRegistry {
 		return DungeonRegistry.INSTANCE;
 	}
 
-	public List<DungeonBase> getDungeons() {
-		return this.dungeons;
+	public Collection<DungeonBase> getDungeons() {
+		return this.dungeons.values();
 	}
 
+	@Nullable
 	public DungeonBase getDungeon(String name) {
-		for (DungeonBase dungeon : this.dungeons) {
-			if (dungeon.getDungeonName().equals(name)) {
-				return dungeon;
-			}
-		}
-		return null;
+		return this.dungeons.get(name);
 	}
 
 	public List<DungeonBase> getLocationSpecificDungeonsForChunk(World world, int chunkX, int chunkZ) {
 		List<DungeonBase> dungeonsForChunk = new ArrayList<>();
 
-		for (DungeonBase dungeon : this.dungeons) {
+		for (DungeonBase dungeon : this.dungeons.values()) {
 			if (dungeon.canSpawnInChunkWithLockedPosition(world, chunkX, chunkZ)) {
 				dungeonsForChunk.add(dungeon);
 			}
@@ -71,8 +71,8 @@ public class DungeonRegistry {
 		for (File file : files) {
 			DungeonBase dungeon = this.createDungeonFromFile(file);
 
-			if (dungeon != null) {
-				this.dungeons.add(dungeon);
+			if (dungeon != null && !this.dungeons.containsKey(dungeon.getDungeonName())) {
+				this.dungeons.put(dungeon.getDungeonName(), dungeon);
 
 				if (dungeon.isModDependencyMissing()) {
 					CQRMain.logger.warn("{}: Dungeon is missing one or more mod dependencies!", file.getName());
