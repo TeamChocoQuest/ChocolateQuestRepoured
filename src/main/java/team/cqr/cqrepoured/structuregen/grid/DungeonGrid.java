@@ -205,6 +205,9 @@ public class DungeonGrid {
 		for (int x = -this.checkRadiusInChunks; x <= this.checkRadiusInChunks; x++) {
 			for (int z = -this.checkRadiusInChunks; z <= this.checkRadiusInChunks; z++) {
 				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority, Predicates.alwaysTrue()) != null) {
+					if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
+						continue;
+					}
 					return true;
 				}
 			}
