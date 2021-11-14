@@ -25,7 +25,6 @@ public class GridRegistry {
 	}
 	
 	public void loadGridFiles() {
-		DungeonGrid.clearIdents();
 		ENTRIES.clear();
 
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_GRID_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
@@ -35,7 +34,7 @@ public class GridRegistry {
 			DungeonGrid grid = createGridFromFile(file);
 
 			if (grid != null) {
-				ENTRIES.put(grid.getName(), grid);
+				ENTRIES.computeIfAbsent(grid.getName(), k -> grid);
 			}
 		}
 		
