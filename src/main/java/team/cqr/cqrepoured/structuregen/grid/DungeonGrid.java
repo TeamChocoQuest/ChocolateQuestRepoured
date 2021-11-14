@@ -112,6 +112,9 @@ public class DungeonGrid {
 		if (dungeon == null) {
 			return null;
 		}
+		if (!dungeonPredicate.test(dungeon)) {
+			return null;
+		}
 
 		int weight = dungeon.getWeight();
 		int totalWeight = possibleDungeons.getTotalWeight();
