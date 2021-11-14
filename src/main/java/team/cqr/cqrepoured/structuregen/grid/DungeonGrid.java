@@ -29,7 +29,7 @@ import team.cqr.cqrepoured.util.VanillaStructureHelper;
 public class DungeonGrid {
 
 	static Set<String> USED_IDENTS = new HashSet<>();
-	private final String identifier;
+	private final String name;
 	
 	private static boolean logFailReasons = true;
 	
@@ -49,8 +49,8 @@ public class DungeonGrid {
 	private int seed = new Random(id).nextInt();
 	// TODO Maybe also include grid offset based on id?
 	
-	public String getIdentifier() {
-		return this.identifier;
+	public String getName() {
+		return this.name;
 	}
 	
 	@Nullable
@@ -69,7 +69,7 @@ public class DungeonGrid {
 	}
 	
 	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final double chance, final int checkRadius) {
-		this.identifier = name;
+		this.name = name;
 		this.distance = dist;
 		this.spread = spread;
 		this.rarityFactor = rf;

@@ -35,7 +35,7 @@ public class GridRegistry {
 			DungeonGrid grid = createGridFromFile(file);
 
 			if (grid != null) {
-				ENTRIES.put(grid.getIdentifier(), grid);
+				ENTRIES.put(grid.getName(), grid);
 			}
 		}
 		
