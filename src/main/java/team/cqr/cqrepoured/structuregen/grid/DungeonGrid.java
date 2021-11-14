@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.integration.IntegrationInformation;
@@ -97,11 +98,7 @@ public class DungeonGrid {
 	@Nullable
 	public DungeonBase getDungeonAt(World world, int chunkX, int chunkZ, Predicate<DungeonBase> dungeonPredicate) {
 		Random random = WorldDungeonGenerator.getRandomForCoords(world, chunkX, chunkZ);
-		if (!DungeonGenUtils.percentageRandom(this.chance, random)) {
-			return null;
-		}
-
-		if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ)) {
+		if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ, random)) {
 			return null;
 		}
 
@@ -109,6 +106,7 @@ public class DungeonGrid {
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, chunkX, chunkZ);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
+			log(world, chunkX, chunkZ, "Could not find any dungeon for biome: %s (%s)", biome, BiomeDictionary.getTypes(biome));
 			return null;
 		}
 		if (!dungeonPredicate.test(dungeon)) {
@@ -119,6 +117,7 @@ public class DungeonGrid {
 		int totalWeight = possibleDungeons.getTotalWeight();
 		double chanceModifier = 1.0D / Math.pow((double) weight / (double) totalWeight, rarityFactor);
 		if (!DungeonGenUtils.percentageRandom((double) dungeon.getChance() / 100.0D * chanceModifier, random)) {
+			log(world, chunkX, chunkZ, "Specific dungeon generation chance check failed for dungeon: %s", dungeon);
 			return null;
 		}
 
@@ -154,19 +153,26 @@ public class DungeonGrid {
 	
 	/**
 	 * Checks if<br>
+	 * - the chunk coords are on the dungeon grid<br>
 	 * - this chunk is far away enough from the spawn<br>
-	 * - other structures are far away enough<br>
-	 * - the chunk coords are on the dungeon grid
+	 * - grid chance is fulfilled<br>
+	 * - other structures are far away enough
 	 * 
 	 * @return true when dungeon can be spawned in this chunk
 	 */
-	public boolean canSpawnDungeonAtCoords(World world, int chunkX, int chunkZ) {
-		if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
+	public boolean canSpawnDungeonAtCoords(World world, int chunkX, int chunkZ, Random random) {
+		// Check if the chunk is on the grid
+		if (!canSpawnStructureAtCoords(world, chunkX, chunkZ)) {
 			return false;
 		}
 
-		// Check if the chunk is on the grid
-		if (!canSpawnStructureAtCoords(world, chunkX, chunkZ)) {
+		if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
+			log(world, chunkX, chunkZ, "Too near to spawn point");
+			return false;
+		}
+
+		if (!DungeonGenUtils.percentageRandom(this.chance, random)) {
+			log(world, chunkX, chunkZ, "Grid dungeon generation chance check failed");
 			return false;
 		}
 
@@ -179,10 +185,12 @@ public class DungeonGrid {
 	public boolean isOtherStructureNearby(World world, int chunkX, int chunkZ) {
 		// Checks if this chunk is in the "wall zone", if yes, abort
 		if (DungeonGenUtils.isInWallRange(world, chunkX, chunkZ)) {
+			log(world, chunkX, chunkZ, "Nearby wall in the north structure was found");
 			return true;
 		}
 
 		if (!DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, 4)) {
+			log(world, chunkX, chunkZ, "Nearby location specific structure was found");
 			return true;
 		}
 
@@ -208,6 +216,7 @@ public class DungeonGrid {
 					if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
 						continue;
 					}
+					log(world, chunkX, chunkZ, "Nearby cqrepoured structure was found");
 					return true;
 				}
 			}
