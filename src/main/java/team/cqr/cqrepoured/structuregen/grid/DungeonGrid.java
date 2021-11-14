@@ -49,6 +49,7 @@ public class DungeonGrid {
 	// different seed for each grid (used to calculate dungeon spread)
 	private int seed = new Random(id).nextInt();
 	// TODO Maybe also include grid offset based on id?
+	private int offset;
 	
 	public String getName() {
 		return this.name;
@@ -62,11 +63,12 @@ public class DungeonGrid {
 		this.chance = PropertyFileHelper.getIntProperty(properties, "chance", CQRConfig.general.overallDungeonChance);
 		this.priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
 		this.checkRadiusInChunks = PropertyFileHelper.getIntProperty(properties, "checkRadius", 4);
+		this.offset = PropertyFileHelper.getIntProperty(properties, "offset", 0);
 		this.dungeons = Arrays.stream(PropertyFileHelper.getStringArrayProperty(properties, "dungeons", new String[0], true))
 				.map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 	
-	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final int chance, final int checkRadius, Collection<DungeonBase> dungeons) {
+	private DungeonGrid(final String name, final int dist, final int spread, final double rf, final int prio, final int chance, final int checkRadius, int offset, Collection<DungeonBase> dungeons) {
 		this.name = name;
 		this.distance = dist;
 		this.spread = spread;
@@ -74,6 +76,7 @@ public class DungeonGrid {
 		this.priority = prio;
 		this.chance = chance;
 		this.checkRadiusInChunks = checkRadius;
+		this.offset = offset;
 		this.dungeons = new ArrayList<>(dungeons);
 	}
 	
@@ -82,7 +85,7 @@ public class DungeonGrid {
 	}
 	
 	static DungeonGrid getDefaultGrid() {
-		return new DungeonGrid("default", CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, 10, CQRConfig.general.overallDungeonChance, 4, Collections.emptyList());
+		return new DungeonGrid("default", CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, 10, CQRConfig.general.overallDungeonChance, 4, 0, Collections.emptyList());
 	}
 	
 	@Nullable
@@ -132,8 +135,8 @@ public class DungeonGrid {
 		}
 		int dungeonSpread = Math.min(this.getSpread() + 1, dungeonSeparation);
 
-		int cx = chunkX - (DungeonGenUtils.getSpawnX(world) >> 4);
-		int cz = chunkZ - (DungeonGenUtils.getSpawnZ(world) >> 4);
+		int cx = chunkX + offset - (DungeonGenUtils.getSpawnX(world) >> 4);
+		int cz = chunkZ + offset - (DungeonGenUtils.getSpawnZ(world) >> 4);
 		if (dungeonSpread <= 1) {
 			return cx % dungeonSeparation == 0 && cz % dungeonSeparation == 0;
 		}
