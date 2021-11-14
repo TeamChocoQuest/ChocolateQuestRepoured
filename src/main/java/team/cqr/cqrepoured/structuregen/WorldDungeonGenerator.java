@@ -159,12 +159,4 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		return biome.orElseGet(() -> Biomes.PLAINS);
 	}
 
-	private static void log(World world, int chunkX, int chunkZ, String message, Object... params) {
-		if (!logFailReasons) {
-			return;
-		}
-		String s = String.format(message, params);
-		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), s);
-	}
-
 }
