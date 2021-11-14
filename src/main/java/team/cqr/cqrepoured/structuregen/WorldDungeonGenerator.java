@@ -67,7 +67,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return locationSpecificDungeon;
 		}
 
-		return GridRegistry.grids().stream()
+		return GridRegistry.getInstance().grids().stream()
 				.filter(gridPredicate)
 				.map(grid -> grid.getDungeonAt(world, chunkX, chunkZ, dungeonPredicate))
 				.findFirst().orElse(null);

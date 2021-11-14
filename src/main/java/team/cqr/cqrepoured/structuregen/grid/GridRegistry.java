@@ -13,10 +13,18 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 public class GridRegistry {
 	
-	static Map<String, DungeonGrid> ENTRIES = new HashMap<>();
-	static DungeonGrid DEFAULT_GRID;
+	private static GridRegistry instance;
+	Map<String, DungeonGrid> ENTRIES = new HashMap<>();
+	DungeonGrid DEFAULT_GRID;
 	
-	public static void loadGridFiles() {
+	public static GridRegistry getInstance() {
+		if (instance == null) {
+			instance = new GridRegistry();
+		}
+		return instance;
+	}
+	
+	public void loadGridFiles() {
 		DungeonGrid.clearIdents();
 		ENTRIES.clear();
 
@@ -38,11 +46,11 @@ public class GridRegistry {
 		DEFAULT_GRID = ENTRIES.get("default");
 	}
 	
-	public static DungeonGrid getByIdOrDefault(final String id) {
+	public DungeonGrid getByIdOrDefault(final String id) {
 		return ENTRIES.getOrDefault(id, DEFAULT_GRID);
 	}
 	
-	private static DungeonGrid createGridFromFile(File file) {
+	private DungeonGrid createGridFromFile(File file) {
 		Properties prop = PropertyFileHelper.readPropFile(file);
 		if (prop == null) {
 			return null;
@@ -52,7 +60,7 @@ public class GridRegistry {
 		return DungeonGrid.create(name, prop);
 	}
 
-	public static Collection<DungeonGrid> grids() {
+	public Collection<DungeonGrid> grids() {
 		return ENTRIES.values();
 	}
 	

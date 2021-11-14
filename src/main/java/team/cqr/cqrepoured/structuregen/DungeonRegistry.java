@@ -61,7 +61,7 @@ public class DungeonRegistry {
 
 	public void loadDungeonFiles() {
 		//First: Load the grids!
-		GridRegistry.loadGridFiles();
+		GridRegistry.getInstance().loadGridFiles();
 		
 		this.dungeons.clear();
 

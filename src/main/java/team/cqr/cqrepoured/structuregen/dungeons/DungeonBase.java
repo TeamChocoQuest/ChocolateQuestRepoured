@@ -132,7 +132,7 @@ public abstract class DungeonBase {
 		
 		//And finally, the grid stuff!
 		String gridName = PropertyFileHelper.getStringProperty(prop, "dungeongrid", "default");
-		GridRegistry.getByIdOrDefault(gridName).addDungeonEntry(this);
+		GridRegistry.getInstance().getByIdOrDefault(gridName).addDungeonEntry(this);
 	}
 
 	@Override
