@@ -320,8 +320,13 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onLivingFallEvent(LivingFallEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-		if (stack.getItem() == CQRItems.BOOTS_CLOUD) {
+		ItemStack feet = entity.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+		ItemStack mainhand = entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+
+		if (feet.getItem() == CQRItems.BOOTS_CLOUD) {
+			event.setDistance(0.0F);
+		} else if (mainhand.getItem() == CQRItems.FEATHER_GOLDEN) {
+			mainhand.damageItem((int) event.getDistance(), entity);
 			event.setDistance(0.0F);
 		}
 	}
