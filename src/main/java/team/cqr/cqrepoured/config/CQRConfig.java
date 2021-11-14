@@ -30,6 +30,9 @@ public class CQRConfig {
 	public static BaseHealths baseHealths = new BaseHealths();
 
 	public static class Advanced {
+
+		public boolean debugDungeonGen = false;
+
 		public boolean debugAI = false;
 
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")

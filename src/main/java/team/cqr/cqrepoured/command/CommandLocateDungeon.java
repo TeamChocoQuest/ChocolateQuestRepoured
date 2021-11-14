@@ -95,8 +95,8 @@ public class CommandLocateDungeon extends CommandBase {
 			return null;
 		}
 
-		// TODO add config option to control logging
-		//WorldDungeonGenerator.setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, false);
+		boolean temp = CQRConfig.advanced.debugDungeonGen;
+		CQRConfig.advanced.debugDungeonGen = false;
 		for (int r = 0; r <= chunkRadius; r++) {
 			int startX = chunkX - r;
 			int endX = chunkX + r;
@@ -121,8 +121,7 @@ public class CommandLocateDungeon extends CommandBase {
 				}
 			}
 		}
-		//Now, reset to default
-		//WorldDungeonGenerator.setup(null, null, null, true);
+		CQRConfig.advanced.debugDungeonGen = temp;
 
 		return null;
 	}

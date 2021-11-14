@@ -37,8 +37,6 @@ public class DungeonGrid {
 	static Set<String> USED_IDENTS = new HashSet<>();
 	private final String name;
 	
-	private static boolean logFailReasons = true;
-	
 	private final List<DungeonBase> dungeons;
 	private int distance;
 	private int spread;
@@ -214,11 +212,11 @@ public class DungeonGrid {
 	}
 	
 	private static void log(World world, int chunkX, int chunkZ, String message, Object... params) {
-		if (!logFailReasons) {
+		if (!CQRConfig.advanced.debugDungeonGen) {
 			return;
 		}
-		String s = String.format(message, params);
-		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), s);
+		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(),
+				String.format(message, params));
 	}
 	
 	public CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, int chunkX, int chunkZ) {
@@ -251,10 +249,6 @@ public class DungeonGrid {
 	
 	public double getRarityFactor() {
 		return this.rarityFactor;
-	}
-
-	public static boolean isLogFailReasons() {
-		return logFailReasons;
 	}
 
 }
