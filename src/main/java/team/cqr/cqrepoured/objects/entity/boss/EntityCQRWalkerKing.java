@@ -13,6 +13,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Enchantments;
@@ -327,7 +328,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				super.attackEntityFrom(source, amount, sentFromPart);
 				return true;
 			}
-			if (source.getImmediateSource() instanceof EntityThrowable && !this.world.isRemote) {
+			if ((source.getImmediateSource() instanceof EntityThrowable || source.getImmediateSource() instanceof EntityArrow) && !this.world.isRemote) {
 				// STAB HIM IN THE BACK!!
 				this.backStabAttacker(source);
 				return false;
