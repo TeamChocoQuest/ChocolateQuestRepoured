@@ -318,7 +318,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		 * }
 		 * }
 		 */
-		if (/* !spectralFlag && */!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && (CQRConfig.bosses.harderWalkerKing && !CQRConfig.bosses.armorForTheWalkerKing)) {
+		if (/* !spectralFlag && */!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && !CQRConfig.bosses.armorForTheWalkerKing) {
 			amount *= 0.5F;
 		}
 
@@ -358,7 +358,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 
-		if (CQRConfig.bosses.harderWalkerKing && !this.world.isRemote) {
+		if (!this.world.isRemote) {
 
 			// How about killing the one who tries with the axe?
 			// Maybe move this whole ability to the king shield itself??
@@ -396,9 +396,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
-		if (!CQRConfig.bosses.harderWalkerKing) {
-			return super.canBlockDamageSource(damageSourceIn);
-		}
 		if (super.canBlockDamageSource(damageSourceIn)) {
 			if (this.getRNG().nextDouble() < 0.3) {
 				return true;
