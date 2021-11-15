@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +39,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemTeleportStone extends Item {
+public class ItemTeleportStone extends Item implements INonEnchantable {
 	private String X = "x";
 	private String Y = "y";
 	private String Z = "z";
@@ -66,66 +67,66 @@ public class ItemTeleportStone extends Item {
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
-	
+
 	/**
-     * Taken from CoFHCore's EntityHelper (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
-     */
-    private static void transferPlayerToDimension(EntityPlayerMP player, int dimension, PlayerList manager) {
-        int oldDim = player.dimension;
-        WorldServer oldWorld = manager.getServerInstance().getWorld(player.dimension);
-        player.dimension = dimension;
-        WorldServer newWorld = manager.getServerInstance().getWorld(player.dimension);
-        player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
-        oldWorld.removeEntityDangerously(player);
-        if (player.isBeingRidden()) {
-            player.removePassengers();
-        }
-        if (player.isRiding()) {
-            player.dismountRidingEntity();
-        }
-        player.isDead = false;
-        transferEntityToWorld(player, oldWorld, newWorld);
-        manager.preparePlayer(player, oldWorld);
-        player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-        player.interactionManager.setWorld(newWorld);
-        manager.updateTimeAndWeatherForPlayer(player, newWorld);
-        manager.syncPlayerInventory(player);
+	 * Taken from CoFHCore's EntityHelper (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
+	 */
+	private static void transferPlayerToDimension(EntityPlayerMP player, int dimension, PlayerList manager) {
+		int oldDim = player.dimension;
+		WorldServer oldWorld = manager.getServerInstance().getWorld(player.dimension);
+		player.dimension = dimension;
+		WorldServer newWorld = manager.getServerInstance().getWorld(player.dimension);
+		player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+		oldWorld.removeEntityDangerously(player);
+		if (player.isBeingRidden()) {
+			player.removePassengers();
+		}
+		if (player.isRiding()) {
+			player.dismountRidingEntity();
+		}
+		player.isDead = false;
+		transferEntityToWorld(player, oldWorld, newWorld);
+		manager.preparePlayer(player, oldWorld);
+		player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+		player.interactionManager.setWorld(newWorld);
+		manager.updateTimeAndWeatherForPlayer(player, newWorld);
+		manager.syncPlayerInventory(player);
 
-        for (PotionEffect potioneffect : player.getActivePotionEffects()) {
-            player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
-        }
-        FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
-    }
+		for (PotionEffect potioneffect : player.getActivePotionEffects()) {
+			player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
+		}
+		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
+	}
 
-    /**
-     * Taken from CoFHCore's EntityHelper (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
-     */
-    private static void transferEntityToWorld(Entity entity, WorldServer oldWorld, WorldServer newWorld) {
-        WorldProvider oldWorldProvider = oldWorld.provider;
-        WorldProvider newWorldProvider = newWorld.provider;
-        double moveFactor = oldWorldProvider.getMovementFactor() / newWorldProvider.getMovementFactor();
-        double x = entity.posX * moveFactor;
-        double z = entity.posZ * moveFactor;
+	/**
+	 * Taken from CoFHCore's EntityHelper (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
+	 */
+	private static void transferEntityToWorld(Entity entity, WorldServer oldWorld, WorldServer newWorld) {
+		WorldProvider oldWorldProvider = oldWorld.provider;
+		WorldProvider newWorldProvider = newWorld.provider;
+		double moveFactor = oldWorldProvider.getMovementFactor() / newWorldProvider.getMovementFactor();
+		double x = entity.posX * moveFactor;
+		double z = entity.posZ * moveFactor;
 
-        oldWorld.profiler.startSection("placing");
-        x = MathHelper.clamp(x, -29999872, 29999872);
-        z = MathHelper.clamp(z, -29999872, 29999872);
-        if (entity.isEntityAlive()) {
-            entity.setLocationAndAngles(x, entity.posY, z, entity.rotationYaw, entity.rotationPitch);
-            newWorld.spawnEntity(entity);
-            newWorld.updateEntityWithOptionalForce(entity, false);
-        }
-        oldWorld.profiler.endSection();
+		oldWorld.profiler.startSection("placing");
+		x = MathHelper.clamp(x, -29999872, 29999872);
+		z = MathHelper.clamp(z, -29999872, 29999872);
+		if (entity.isEntityAlive()) {
+			entity.setLocationAndAngles(x, entity.posY, z, entity.rotationYaw, entity.rotationPitch);
+			newWorld.spawnEntity(entity);
+			newWorld.updateEntityWithOptionalForce(entity, false);
+		}
+		oldWorld.profiler.endSection();
 
-        entity.setWorld(newWorld);
-    }
-	
+		entity.setWorld(newWorld);
+	}
+
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if (entityLiving instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entityLiving;
 			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
-			
+
 			if (player.isSneaking() && stack.hasTagCompound()) {
 				stack.getTagCompound().removeTag(this.X);
 				stack.getTagCompound().removeTag(this.Y);
@@ -135,51 +136,55 @@ public class ItemTeleportStone extends Item {
 					worldIn.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
 			}
-			
+
 			else if (this.getPoint(stack) == null || !stack.hasTagCompound()) {
 				this.setPoint(stack, player);
 				for (int i = 0; i < 10; i++) {
 					worldIn.spawnParticle(EnumParticleTypes.FLAME, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-				
+
 				return super.onItemUseFinish(stack, worldIn, entityLiving);
 			}
-			
+
 			else if (stack.hasTagCompound() && !player.isSneaking()) {
 				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
 					int dimension = stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension) : 0;
 					BlockPos pos = this.getPoint(stack);
-					
+
 					if (player.isBeingRidden()) {
-		                player.removePassengers();
-		            }
-		            if (player.isRiding()) {
-		                player.dismountRidingEntity();
-		            }
-					
-					if(dimension != player.getEntityWorld().provider.getDimension()) {
+						player.removePassengers();
+					}
+					if (player.isRiding()) {
+						player.dismountRidingEntity();
+					}
+
+					if (dimension != player.getEntityWorld().provider.getDimension()) {
 						MinecraftServer server = player.world.getMinecraftServer();
-			            if (server != null) {
-			                transferPlayerToDimension((EntityPlayerMP) player, dimension, server.getPlayerList());
-			            }
+						if (server != null) {
+							transferPlayerToDimension((EntityPlayerMP) player, dimension, server.getPlayerList());
+						}
 					}
 					player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 					// player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z));
-					/*if(worldIn.provider.getDimension() != dimension) {
-						
-						WorldServer worldServer = player.getServer().getWorld(dimension);
-						WorldServer worldServerOld = player.getServerWorld();
-						player.moveToBlockPosAndAngles(new BlockPos(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z)), player.rotationYaw, player.rotationPitch);
-						worldServerOld.removeEntity(player);
-						boolean flag = player.forceSpawn;
-						player.forceSpawn = true;
-						worldServer.spawnEntity(player);
-						player.forceSpawn = flag;
-						worldServer.updateEntityWithOptionalForce(player, false);
-						
-					}*/
-					//player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
+					/*
+					 * if(worldIn.provider.getDimension() != dimension) {
+					 * 
+					 * WorldServer worldServer = player.getServer().getWorld(dimension);
+					 * WorldServer worldServerOld = player.getServerWorld();
+					 * player.moveToBlockPosAndAngles(new BlockPos(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
+					 * stack.getTagCompound().getDouble(this.Z)), player.rotationYaw, player.rotationPitch);
+					 * worldServerOld.removeEntity(player);
+					 * boolean flag = player.forceSpawn;
+					 * player.forceSpawn = true;
+					 * worldServer.spawnEntity(player);
+					 * player.forceSpawn = flag;
+					 * worldServer.updateEntityWithOptionalForce(player, false);
+					 * 
+					 * }
+					 */
+					// player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
+					// stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
 					for (int i = 0; i < 30; i++) {
 						worldIn.spawnParticle(EnumParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 					}
@@ -188,7 +193,7 @@ public class ItemTeleportStone extends Item {
 					if (!player.capabilities.isCreativeMode) {
 						stack.damageItem(1, entityLiving);
 					}
-					
+
 					return super.onItemUseFinish(stack, worldIn, entityLiving);
 				}
 			}
@@ -236,11 +241,11 @@ public class ItemTeleportStone extends Item {
 		if (!stone.hasKey(this.Z)) {
 			stone.setDouble(this.Z, player.posZ);
 		}
-		
-		//Don't re-enable this check, if it is enabled it will never trigger correctly for whatever reason
-		//if (!stone.hasKey(this.Dimension)) {
-			stone.setInteger(this.Dimension, player.dimension);
-		//}
+
+		// Don't re-enable this check, if it is enabled it will never trigger correctly for whatever reason
+		// if (!stone.hasKey(this.Dimension)) {
+		stone.setInteger(this.Dimension, player.dimension);
+		// }
 	}
 
 	@Override
@@ -262,5 +267,21 @@ public class ItemTeleportStone extends Item {
 			}
 		}
 		return null;
+	}
+
+	// INonEnchantable stuff
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return INonEnchantable.super.canApplyAtEnchantingTable(stack, enchantment);
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return INonEnchantable.super.isEnchantable(stack);
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return INonEnchantable.super.isBookEnchantable(stack, book);
 	}
 }

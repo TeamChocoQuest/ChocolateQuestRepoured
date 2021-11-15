@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +24,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -51,6 +53,7 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
+import team.cqr.cqrepoured.objects.items.INonEnchantable;
 import team.cqr.cqrepoured.objects.items.ISupportWeapon;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.lootchests.LootTableLoader;
@@ -59,6 +62,14 @@ import team.cqr.cqrepoured.util.Reference;
 @EventBusSubscriber
 public class EventsHandler {
 
+	//proper handling for INonEnchatable interface
+	@SubscribeEvent
+	public static void onAnvilEnchant(AnvilUpdateEvent aue) {
+		if((aue.getLeft().getItem() instanceof ItemEnchantedBook && aue.getRight().getItem() instanceof INonEnchantable) || (aue.getRight().getItem() instanceof ItemEnchantedBook && aue.getLeft().getItem() instanceof INonEnchantable)) {
+			aue.setCanceled(true);
+		}
+	}
+	
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onLootTableLoadPre(LootTableLoadEvent event) {
 		if (event.getName().getNamespace().equals(Reference.MODID) && !CQRConfig.general.preventOtherModLoot) {

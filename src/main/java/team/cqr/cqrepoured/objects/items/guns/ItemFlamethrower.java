@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -108,6 +109,22 @@ public class ItemFlamethrower extends Item implements INonEnchantable {
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
+	}
+
+	// INonEnchantable stuff
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return INonEnchantable.super.canApplyAtEnchantingTable(stack, enchantment);
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return INonEnchantable.super.isEnchantable(stack);
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return INonEnchantable.super.isBookEnchantable(stack, book);
 	}
 
 }

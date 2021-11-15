@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -21,7 +21,7 @@ import team.cqr.cqrepoured.structureprot.ProtectedRegion;
 import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
 import team.cqr.cqrepoured.util.EntityUtil;
 
-public class ItemMagicBell extends Item {
+public class ItemMagicBell extends ItemLore implements INonEnchantable {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
@@ -45,21 +45,11 @@ public class ItemMagicBell extends Item {
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(worldIn);
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(new BlockPos(entityLiving));
 
-			protectedRegions.stream()
-					.map(ProtectedRegion::getEntityDependencies)
-					.flatMap(Collection::stream)
-					.map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid))
-					.filter(Objects::nonNull)
-					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn,
-							entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000,
-							entity.getEntityId()));
+			protectedRegions.stream().map(ProtectedRegion::getEntityDependencies).flatMap(Collection::stream).map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid)).filter(Objects::nonNull)
+					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000, entity.getEntityId()));
 
-			protectedRegions.stream()
-					.map(ProtectedRegion::getBlockDependencies)
-					.flatMap(Collection::stream)
-					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn,
-							entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0,
-							pos.getX(), pos.getY(), pos.getZ()));
+			protectedRegions.stream().map(ProtectedRegion::getBlockDependencies).flatMap(Collection::stream)
+					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0, pos.getX(), pos.getY(), pos.getZ()));
 
 			protectedRegions.forEach(pr -> {
 				BlockPos start = pr.getStartPos();
@@ -72,8 +62,7 @@ public class ItemMagicBell extends Item {
 						int x = i / size.getZ() / size.getY();
 						int y = i / size.getZ() % size.getY();
 						int z = i % size.getZ();
-						CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0,
-								0, 0, 200, color, start.getX() + x, start.getY() + y, start.getZ() + z);
+						CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, color, start.getX() + x, start.getY() + y, start.getZ() + z);
 					}
 				}
 			});
@@ -89,6 +78,22 @@ public class ItemMagicBell extends Item {
 		}
 
 		return stack;
+	}
+
+	// INonEnchantable stuff
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return INonEnchantable.super.canApplyAtEnchantingTable(stack, enchantment);
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return INonEnchantable.super.isEnchantable(stack);
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return INonEnchantable.super.isBookEnchantable(stack, book);
 	}
 
 }

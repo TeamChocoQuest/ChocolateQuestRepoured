@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.objects.items.guns;
 
 import java.util.Random;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -125,6 +126,22 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon, INonEnc
 	@Override
 	public int getChargeTicks() {
 		return 0;
+	}
+
+	// INonEnchantable stuff
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return INonEnchantable.super.canApplyAtEnchantingTable(stack, enchantment);
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return INonEnchantable.super.isEnchantable(stack);
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return INonEnchantable.super.isBookEnchantable(stack, book);
 	}
 
 }
