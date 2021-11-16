@@ -18,14 +18,30 @@ public class EntityAISneakUnderSmallObstacle<T extends AbstractEntityCQR> extend
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.collidedHorizontally && this.entity.hasPath() && !this.entity.isSneaking();
+		if(this.entity.isSneaking()) {
+			return false;
+		}
+		return areBlocksAtHeadLevelNotAir();
+	}
+	
+	private boolean areBlocksAtHeadLevelNotAir() {
+		final BlockPos pos = this.entity.getPosition().up((int) Math.ceil(this.entity.height) -1);
+		final BlockPos posBeforeMe = new BlockPos(this.entity.getLookVec().normalize().scale(0.25).add(pos.getX(), pos.getY(), pos.getZ()));
+		
+		return isNotAir(pos) || (this.entity.hasPath() && isNotAir(posBeforeMe));
+	}
+	
+	private boolean isNotAir(final BlockPos pos) {
+		final IBlockState blockstate = this.world.getBlockState(pos);
+		if (!(Blocks.AIR.isAir(blockstate, this.world, pos) || blockstate.getBlock() instanceof BlockAir)) {
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		final BlockPos pos = this.entity.getPosition().up();
-		final IBlockState blockstate = this.world.getBlockState(pos);
-		boolean preResult = this.entity.hasPath() && !(Blocks.AIR.isAir(blockstate, this.world, pos) || blockstate.getBlock() instanceof BlockAir);
+		boolean preResult = areBlocksAtHeadLevelNotAir();
 		if(!preResult) {
 			this.crouchTimerCooldown--;
 			return this.crouchTimerCooldown > 0;
