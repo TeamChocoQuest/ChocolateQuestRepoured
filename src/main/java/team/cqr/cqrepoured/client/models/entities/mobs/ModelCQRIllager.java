@@ -1,10 +1,7 @@
 package team.cqr.cqrepoured.client.models.entities.mobs;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.client.models.entities.ModelCQRBiped;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRIllager;
-import team.cqr.cqrepoured.objects.items.ItemPotionHealing;
 
 public class ModelCQRIllager extends ModelCQRBiped {
 
