@@ -34,15 +34,19 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 public class GeneratableMapInfo extends GeneratablePosInfo {
 
 	private final EntityItemFrame entity;
+	private final int mapOriginX;
+	private final int mapOriginZ;
 	private final int mapX;
 	private final int mapZ;
 	private final byte scale;
 	private final boolean fillMap;
 	private final int fillRadius;
 
-	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
+	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
 		super(x, y, z);
 		this.entity = entity;
+		this.mapOriginX = mapOriginX;
+		this.mapOriginZ = mapOriginZ;
 		this.mapX = mapX;
 		this.mapZ = mapZ;
 		this.scale = scale;
@@ -50,8 +54,8 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		this.fillRadius = fillRadius;
 	}
 
-	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
-		this(pos.getX(), pos.getY(), pos.getZ(), entity, mapX, mapZ, scale, fillMap, fillRadius);
+	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
+		this(pos.getX(), pos.getY(), pos.getZ(), entity, mapOriginX, mapOriginZ, mapX, mapZ, scale, fillMap, fillRadius);
 	}
 
 	@Override
@@ -64,7 +68,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16);
 		ItemStack stack = ItemMap.setupNewMap(world, this.mapX, this.mapZ, this.scale, true, true);
 		if (this.fillMap) {
-			updateMapData(world, pos.getX(), pos.getZ(), this.fillRadius, ((ItemMap) stack.getItem()).getMapData(stack, world));
+			updateMapData(world, this.mapOriginX, this.mapOriginZ, this.fillRadius, ((ItemMap) stack.getItem()).getMapData(stack, world));
 		}
 		this.entity.setDisplayedItem(stack);
 		world.spawnEntity(this.entity);
@@ -236,6 +240,8 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 			NBTTagCompound compound = new NBTTagCompound();
 			generatable.entity.writeToNBTAtomically(compound);
 			nbtList.appendTag(compound);
+			ByteBufUtils.writeVarInt(buf, generatable.mapOriginX, 5);
+			ByteBufUtils.writeVarInt(buf, generatable.mapOriginZ, 5);
 			ByteBufUtils.writeVarInt(buf, generatable.mapX, 5);
 			ByteBufUtils.writeVarInt(buf, generatable.mapZ, 5);
 			buf.writeByte(generatable.scale);
@@ -247,12 +253,14 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		public GeneratableMapInfo read(World world, int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			NBTTagCompound compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			Entity entity = EntityList.createEntityFromNBT(compound, world);
+			int mapOriginX = ByteBufUtils.readVarInt(buf, 5);
+			int mapOriginZ = ByteBufUtils.readVarInt(buf, 5);
 			int mapX = ByteBufUtils.readVarInt(buf, 5);
 			int mapZ = ByteBufUtils.readVarInt(buf, 5);
 			byte scale = buf.readByte();
 			boolean fillMap = buf.readBoolean();
 			int fillRadius = ByteBufUtils.readVarInt(buf, 5);
-			return new GeneratableMapInfo(x, y, z, (EntityItemFrame) entity, mapX, mapZ, scale, fillMap, fillRadius);
+			return new GeneratableMapInfo(x, y, z, (EntityItemFrame) entity, mapOriginX, mapOriginZ, mapX, mapZ, scale, fillMap, fillRadius);
 		}
 
 	}

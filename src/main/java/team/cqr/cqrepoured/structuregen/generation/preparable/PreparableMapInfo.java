@@ -154,7 +154,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			break;
 		}
 
-		return new GeneratableMapInfo(pos, entity, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap, this.fillRadius);
+		return new GeneratableMapInfo(pos, entity, pos.getX() + x2, pos.getZ() + z2, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap, this.fillRadius);
 	}
 
 	@Override
