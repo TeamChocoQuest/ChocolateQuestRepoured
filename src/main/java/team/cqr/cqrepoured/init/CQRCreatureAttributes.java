@@ -5,9 +5,8 @@ import net.minecraftforge.common.util.EnumHelper;
 
 public class CQRCreatureAttributes {
 
-	public static final EnumCreatureAttribute CREATURE_TYPE_ENDERMAN = EnumHelper.addCreatureAttribute("CREATURE_TYPE_ENDERMAN");
-	public static final EnumCreatureAttribute CREATURE_TYPE_ABYSS_WALKER = EnumHelper.addCreatureAttribute("CREATURE_TYPE_ABYSS_WALKER");
-	public static final EnumCreatureAttribute CREATURE_TYPE_WATER = EnumHelper.addCreatureAttribute("CREATURE_TYPE_WATER");
-	public static final EnumCreatureAttribute CREATURE_TYPE_MECHANICAL = EnumHelper.addCreatureAttribute("CREATURE_TYPE_MECHANICAL");
+	public static final EnumCreatureAttribute VOID = EnumHelper.addCreatureAttribute("VOID");
+	public static final EnumCreatureAttribute WATER = EnumHelper.addCreatureAttribute("WATER");
+	public static final EnumCreatureAttribute MECHANICAL = EnumHelper.addCreatureAttribute("MECHANICAL");
 
 }

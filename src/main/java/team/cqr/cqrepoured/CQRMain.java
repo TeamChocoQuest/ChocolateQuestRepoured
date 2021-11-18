@@ -183,7 +183,7 @@ public class CQRMain {
 		EBanners.values();
 		EnumCreatureAttribute.values();
 		/* DO NOT REMOVE, this fixes the neat issue */
-		String cca = CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER.name();
+		CQRCreatureAttributes.VOID.name();
 
 		// Register event handling for dungeon protection system
 		// MinecraftForge.EVENT_BUS.register(ProtectedRegionManager.getInstance());

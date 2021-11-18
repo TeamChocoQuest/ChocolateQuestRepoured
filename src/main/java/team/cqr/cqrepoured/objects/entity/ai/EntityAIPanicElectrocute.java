@@ -14,7 +14,7 @@ public class EntityAIPanicElectrocute extends EntityAIPanic {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.creature instanceof IMechanical || this.creature.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
+		if (this.creature instanceof IMechanical || this.creature.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
 			return false;
 		}
 

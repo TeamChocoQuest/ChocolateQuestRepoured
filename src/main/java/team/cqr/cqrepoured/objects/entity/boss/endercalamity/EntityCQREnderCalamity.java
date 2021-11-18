@@ -1061,7 +1061,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
+		return CQRCreatureAttributes.VOID;
 	}
 
 	private Optional<String> newAnimation = Optional.absent();

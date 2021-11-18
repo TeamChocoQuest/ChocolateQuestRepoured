@@ -51,7 +51,7 @@ public class TargetUtil {
 			return false;
 		}
 		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-		if(input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
+		if(input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
 			return input.isWet(); 
 		}
 		if(icapability.isElectrocutionActive()) {

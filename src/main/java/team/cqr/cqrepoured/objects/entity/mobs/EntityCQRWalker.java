@@ -67,12 +67,12 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-		this.heal(new Float(this.getMaxHealth() * 0.025));
+		this.heal(this.getMaxHealth() * 0.025F);
 	}
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
+		return CQRCreatureAttributes.VOID;
 	}
 
 }

@@ -64,7 +64,7 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL;
+		return CQRCreatureAttributes.MECHANICAL;
 	}
 
 }

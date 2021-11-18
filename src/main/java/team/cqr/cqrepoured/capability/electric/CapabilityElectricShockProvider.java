@@ -113,7 +113,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		currentCap.reduceRemainingTicks();
 
 		// Mechanicals can get electrocuted but don't take damage
-		if (entity instanceof IMechanical || entity.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_MECHANICAL) {
+		if (entity instanceof IMechanical || entity.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
 			// But, if we are wet, we get damage from beign electrocuted
 			if (((IMechanical)entity).canReceiveElectricDamageCurrently()) {
 				currentCap.setRemainingTicks(100);

@@ -275,7 +275,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
+		return CQRCreatureAttributes.VOID;
 	}
 
 	@Override

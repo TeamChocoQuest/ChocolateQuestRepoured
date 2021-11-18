@@ -159,6 +159,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN;
+		return CQRCreatureAttributes.VOID;
 	}
 }

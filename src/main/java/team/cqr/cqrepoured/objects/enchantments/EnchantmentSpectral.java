@@ -1,34 +1,21 @@
 package team.cqr.cqrepoured.objects.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentDamage;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.util.Reference;
 
-public class EnchantmentSpectral extends Enchantment {
+public class EnchantmentSpectral extends EnchantmentDamage {
 
 	public EnchantmentSpectral() {
-		this(Rarity.VERY_RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND });
-	}
-
-	private EnchantmentSpectral(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
-		super(rarityIn, typeIn, slots);
+		super(Rarity.VERY_RARE, 0, EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND);
 		this.setName("spectral");
 		this.setRegistryName(Reference.MODID, "spectral");
-	}
-
-	@Override
-	public int getMaxLevel() {
-		return 5;
 	}
 
 	@Override
@@ -38,31 +25,24 @@ public class EnchantmentSpectral extends Enchantment {
 
 	@Override
 	public float calcDamageByCreature(int level, EnumCreatureAttribute creatureType) {
-		if (creatureType == CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER) {
-			return (float) level * 2.5F;
-		}
-		if (creatureType == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN) {
+		// TODO make this effective against vanilla endermen
+		if (creatureType == CQRCreatureAttributes.VOID) {
 			return (float) level * 1.5F;
 		}
 		return 0;
 	}
 
-	public boolean canApplyTogether(Enchantment ench) {
-		return !(ench instanceof EnchantmentDamage || ench instanceof EnchantmentSpectral);
-	}
-
-	public boolean canApply(ItemStack stack) {
-		return stack.getItem() instanceof ItemAxe ? true : super.canApply(stack);
-	}
-
+	@Override
 	public void onEntityDamaged(EntityLivingBase user, Entity target, int level) {
-		if (target instanceof EntityLivingBase) {
-			EntityLivingBase livingTarget = (EntityLivingBase) target;
-			if (livingTarget.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER || livingTarget.getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN) {
-				int i = 20 + user.getRNG().nextInt(10 * level);
-				livingTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, i, 2));
-			}
+		if (!(target instanceof EntityLivingBase)) {
+			return;
 		}
+		EntityLivingBase livingTarget = (EntityLivingBase) target;
+		if (livingTarget.getCreatureAttribute() != CQRCreatureAttributes.VOID) {
+			return;
+		}
+		int i = 20 + user.getRNG().nextInt(10 * level);
+		livingTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, i, 2));
 	}
 
 }

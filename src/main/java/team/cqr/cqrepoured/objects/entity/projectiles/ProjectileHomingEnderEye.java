@@ -13,6 +13,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 
 public class ProjectileHomingEnderEye extends ProjectileBase {
 
@@ -63,7 +64,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if (entityIn == this.shooter) {
 			return;
 		}
-		if (entityIn instanceof ProjectileBase || entityIn instanceof EntityEnderman || (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).getCreatureAttribute() == CQRCreatureAttributes.CREATURE_TYPE_ENDERMAN)) {
+		if (entityIn instanceof ProjectileBase || entityIn instanceof EntityEnderman || entityIn instanceof EntityCQREnderman) {
 			return;
 		}
 		boolean hitTarget = this.target != null && entityIn != this.shooter;

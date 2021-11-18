@@ -617,7 +617,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return CQRCreatureAttributes.CREATURE_TYPE_ABYSS_WALKER;
+		return CQRCreatureAttributes.VOID;
 	}
 
 }
