@@ -332,8 +332,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			if (source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer) && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
 				this.lastTickShieldDisabled = this.ticksExisted;
 			} else {
-				this.damageBlockedWithShield = this.damageBlockedWithShield + amount * 0.0625F;
-				if (this.damageBlockedWithShield >= 1.0F) {
+				this.damageBlockedWithShield += amount;
+				if (this.damageBlockedWithShield >= CQRConfig.general.damageBlockedByShield) {
 					this.damageBlockedWithShield = 0.0F;
 					this.lastTickShieldDisabled = this.ticksExisted;
 				}

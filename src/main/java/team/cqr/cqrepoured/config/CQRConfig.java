@@ -294,6 +294,7 @@ public class CQRConfig {
 		@Config.Comment("Each entry represents one set of mobtypes per \"ring\"")
 		public String[] defaultInhabitantConfig = { "SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR" };
 		public float electricFieldEffectSpreadRange = 4;
+		public double damageBlockedByShield = 12.0D;
 	}
 
 	public static class Mobs {
