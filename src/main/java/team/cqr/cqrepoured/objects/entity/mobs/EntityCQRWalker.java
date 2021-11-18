@@ -53,7 +53,6 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		amount /= 2;
 		if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
 		}
