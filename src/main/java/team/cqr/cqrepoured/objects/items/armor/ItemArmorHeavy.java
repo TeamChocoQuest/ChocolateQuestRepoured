@@ -27,8 +27,8 @@ public class ItemArmorHeavy extends ItemArmor {
 	public ItemArmorHeavy(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 
-		this.movementSpeed = new AttributeModifier("HeavySpeedModifier", -0.06D, 2);
-		this.knockbackResistance = new AttributeModifier("HeavyKnockbackModifier", 0.25D, 0);
+		this.movementSpeed = new AttributeModifier("HeavySpeedModifier", -0.05D, 2);
+		this.knockbackResistance = new AttributeModifier("HeavyKnockbackModifier", 0.1D, 0);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ItemArmorHeavy extends ItemArmor {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		player.jumpMovementFactor *= 0.94F;
+		player.jumpMovementFactor *= 0.95F;
 	}
 
 	@Override
