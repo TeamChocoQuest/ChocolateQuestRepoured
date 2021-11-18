@@ -8,10 +8,8 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
@@ -77,22 +75,6 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon, INonEncha
 
 				if (itemstack.isEmpty()) {
 					player.inventory.deleteStack(itemstack);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityIn;
-
-			if (player.getHeldItemMainhand() == stack && !player.getHeldItemOffhand().isEmpty()) {
-				ItemStack stack1 = player.getHeldItemOffhand();
-				player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
-
-				if (!player.inventory.addItemStackToInventory(stack1)) {
-					player.entityDropItem(stack1, 0.0F);
 				}
 			}
 		}

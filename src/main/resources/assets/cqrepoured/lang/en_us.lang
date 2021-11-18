@@ -690,3 +690,6 @@ advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
 advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
 advancements.cqrepoured.kill_exterminator.title=Electrician
 advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
+
+effect.cqrepoured.twohanded=Twohanded
+

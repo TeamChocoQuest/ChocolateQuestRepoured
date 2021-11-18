@@ -9,12 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -29,6 +31,7 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
@@ -50,11 +53,15 @@ import team.cqr.cqrepoured.crafting.RecipesArmorDyes;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.factions.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.objects.items.IFakeWeapon;
 import team.cqr.cqrepoured.objects.items.INonEnchantable;
 import team.cqr.cqrepoured.objects.items.ISupportWeapon;
+import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
+import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
+import team.cqr.cqrepoured.objects.items.swords.ItemGreatSword;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.lootchests.LootTableLoader;
 import team.cqr.cqrepoured.util.Reference;
@@ -344,6 +351,25 @@ public class EventsHandler {
 			offhand.damageItem((int) event.getDistance(), entity);
 			event.setDistance(0.0F);
 		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingEquipmentChangeEvent(LivingUpdateEvent event) {
+		EntityLivingBase entity = event.getEntityLiving();
+		if (entity.world.isRemote) {
+			return;
+		}
+		ItemStack mainhand = entity.getHeldItemMainhand();
+		ItemStack offhand = entity.getHeldItemOffhand();
+		if ((isTwoHanded(mainhand) && !offhand.isEmpty())
+				|| (isTwoHanded(offhand) && !mainhand.isEmpty())) {
+			entity.addPotionEffect(new PotionEffect(CQRPotions.TWOHANDED, 30, 1));
+		}
+	}
+
+	private static boolean isTwoHanded(ItemStack stack) {
+		Item item = stack.getItem();
+		return item instanceof ItemGreatSword || item instanceof ItemSpearBase || item instanceof ItemMusket;
 	}
 
 }

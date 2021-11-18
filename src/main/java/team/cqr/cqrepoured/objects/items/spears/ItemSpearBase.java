@@ -168,23 +168,6 @@ public class ItemSpearBase extends ItemCQRWeapon {
 		}
 	}
 
-	// Unequip off hand weapons
-	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityIn;
-
-			if (player.getHeldItemMainhand() == stack && !player.getHeldItemOffhand().isEmpty()) {
-				ItemStack stack1 = player.getHeldItemOffhand();
-				player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
-
-				if (!player.inventory.addItemStackToInventory(stack1)) {
-					player.entityDropItem(stack1, 0.0F);
-				}
-			}
-		}
-	}
-
 	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
 	private static class EventHandler {
 
