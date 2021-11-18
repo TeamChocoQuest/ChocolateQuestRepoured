@@ -108,7 +108,7 @@ public class CQRConfig {
 		public boolean scaleEntitiesOnPlayerCount = false;
 		public double entityCountGrowPerPlayer = 0.25D;
 
-		public boolean debugMode = false;
+		public boolean structureImportMode = false;
 	}
 
 	public static class Materials {

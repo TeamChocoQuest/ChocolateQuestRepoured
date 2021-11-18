@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.structuregen.generation.generatable.IGeneratable;
 public interface IPreparable<T extends IGeneratable> {
 
 	default T prepare(World world, DungeonPlacement placement) {
-		return CQRConfig.advanced.debugMode ? this.prepareDebug(world, placement) : this.prepareNormal(world, placement);
+		return CQRConfig.advanced.structureImportMode ? this.prepareDebug(world, placement) : this.prepareNormal(world, placement);
 	}
 
 	T prepareNormal(World world, DungeonPlacement placement);
