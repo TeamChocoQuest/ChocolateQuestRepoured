@@ -53,18 +53,9 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
+		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
 		}
-		// Now handled by enchantment
-		/*
-		 * if (source.getTrueSource() instanceof EntityLivingBase) {
-		 * if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 ||
-		 * EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) {
-		 * amount *= 2;
-		 * }
-		 * }
-		 */
 		return super.attackEntityFrom(source, amount);
 	}
 
