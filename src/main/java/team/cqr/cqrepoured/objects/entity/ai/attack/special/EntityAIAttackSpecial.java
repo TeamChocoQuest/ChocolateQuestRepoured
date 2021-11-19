@@ -14,7 +14,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 	static {
 		// SPECIAL_ATTACKS.add(new EntityAIAttackSpecialDagger());
 		// SPECIAL_ATTACKS.add(new EntityAIAttackSpecialGreatSword());
-		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialSpear());
+		// SPECIAL_ATTACKS.add(new EntityAIAttackSpecialSpear());
 		SPECIAL_ATTACKS.add(new EntityAIAttackSpecialSpinAttack());
 	}
 	private AbstractEntityAIAttackSpecial activeSpecialAttack;
