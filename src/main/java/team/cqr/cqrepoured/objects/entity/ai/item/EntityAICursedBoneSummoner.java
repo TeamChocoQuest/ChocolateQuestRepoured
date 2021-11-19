@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.objects.entity.ai.item;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -24,50 +24,47 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 
 	private List<Entity> summonedEntities = new ArrayList<>();
 
-	private static final int MAX_COOLDOWN = 90;
-	private static final int MIN_COOLDOWN = 20;
+	private static final int SUMMONS_PER_CAST = 2;
+	private static final int MAX_COOLDOWN = 300;
+	private static final int MIN_COOLDOWN = 200;
 
+	private int prevTimeUsed;
 	private int cooldown = 20;
 	private int chargingTicks = 20;
 
-	private final EnumHand boneHand;
-
-	public EntityAICursedBoneSummoner(AbstractEntityCQR entity, EnumHand boneHand) {
+	public EntityAICursedBoneSummoner(AbstractEntityCQR entity) {
 		super(entity);
-		this.boneHand = boneHand;
 		this.setMutexBits(0);
 	}
 
 	private boolean hasCursedBone() {
-		return (this.entity.getHeldItem(this.boneHand).getItem() instanceof ItemCursedBone);
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemCursedBone
+				|| this.entity.getHeldItemOffhand().getItem() instanceof ItemCursedBone;
 	}
 
 	@Override
 	public boolean shouldExecute() {
+		this.filterSummons();
+		if (!this.hasCursedBone()) {
+			return false;
+		}
 		if (!this.entity.hasAttackTarget()) {
 			return false;
 		}
-		if (hasCursedBone()) {
-			if (this.cooldown > 0) {
-				this.cooldown--;
-
-				return false;
-			}
-			this.filterSummons();
-
-			return this.summonedEntities.size() < this.getMaxSummonedEntities();
+		if (this.entity.ticksExisted - this.prevTimeUsed < this.cooldown) {
+			return false;
 		}
-		return false;
+		return this.summonedEntities.size() < this.getMaxSummonedEntities();
 	}
 
 	private int getMaxSummonedEntities() {
 		switch (this.world.getDifficulty()) {
 		case HARD:
-			return 12;
-		case NORMAL:
-			return 9;
-		default:
 			return 6;
+		case NORMAL:
+			return 5;
+		default:
+			return 4;
 		}
 	}
 
@@ -75,17 +72,14 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		if (this.summonedEntities.isEmpty()) {
 			return;
 		}
-		this.summonedEntities.removeIf(new Predicate<Entity>() {
-
-			@Override
-			public boolean test(Entity t) {
-				return t == null || (t != null && (t.isDead || !t.isEntityAlive()));
-			}
-		});
+		this.summonedEntities.removeIf(e -> !e.isEntityAlive());
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if (!this.hasCursedBone()) {
+			return false;
+		}
 		return this.chargingTicks >= 0;
 	}
 
@@ -95,27 +89,32 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		this.chargingTicks--;
 		super.updateTask();
 
-		this.entity.swingArm(this.boneHand);
+		ItemStack stack = this.entity.getHeldItemMainhand();
+		if (!(stack.getItem() instanceof ItemCursedBone)) {
+			stack = this.entity.getHeldItemOffhand();
+			if (!(stack.getItem() instanceof ItemCursedBone)) {
+				return;
+			} else {
+				this.entity.swingArm(EnumHand.OFF_HAND);
+			}
+		} else {
+			this.entity.swingArm(EnumHand.MAIN_HAND);
+		}
 
 		if (this.chargingTicks < 0) {
-			int mobCount = (int) Math.ceil(this.getMaxSummonedEntities() / 2D);
 			int remainingEntitySlots = this.getMaxSummonedEntities() - this.summonedEntities.size();
-
-			mobCount = Math.min(mobCount, remainingEntitySlots);
+			int mobCount = Math.min(SUMMONS_PER_CAST, remainingEntitySlots);
 
 			if (mobCount > 0) {
 				Vec3d vector = this.entity.getLookVec().normalize().scale(3);
-				Item cbTmp = this.entity.getHeldItem(this.boneHand).getItem();
-				if (cbTmp != null && cbTmp instanceof ItemCursedBone) {
-					ItemCursedBone cursedBone = (ItemCursedBone) cbTmp;
-					for (int i = 0; i < mobCount; i++) {
-						Vec3d posV = this.entity.getPositionVector().add(vector);
-						BlockPos pos = new BlockPos(posV.x, posV.y, posV.z);
-						Optional<Entity> circle = cursedBone.spawnEntity(pos, this.world, this.entity.getHeldItem(this.boneHand), this.entity, this);
-						if (circle.isPresent()) {
-							this.summonedEntities.add(circle.get());
-							vector = VectorUtil.rotateVectorAroundY(vector, 360 / mobCount);
-						}
+				ItemCursedBone cursedBone = (ItemCursedBone) stack.getItem();
+				for (int i = 0; i < mobCount; i++) {
+					Vec3d posV = this.entity.getPositionVector().add(vector);
+					BlockPos pos = new BlockPos(posV.x, posV.y, posV.z);
+					Optional<Entity> circle = cursedBone.spawnEntity(pos, this.world, stack, this.entity, this);
+					if (circle.isPresent()) {
+						this.summonedEntities.add(circle.get());
+						vector = VectorUtil.rotateVectorAroundY(vector, 360 / mobCount);
 					}
 				}
 			}
@@ -126,6 +125,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	public void resetTask() {
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		this.chargingTicks = 20;
+		this.prevTimeUsed = this.entity.ticksExisted;
 		super.resetTask();
 	}
 
@@ -144,10 +144,50 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		return this.entity;
 	}
 
-	// TODO: Integrate with looter, so when he summons something, he will equip the entity with gear from his backpack
+	// TODO: Integrate with looter, so when he summons something, he will equip the
+	// entity with gear from his backpack
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedEntities.add(summoned);
+		if (summoned instanceof EntityLivingBase) {
+			EntityLivingBase living = (EntityLivingBase) summoned;
+
+			int material = world.rand.nextInt(3); // wood, stone, iron
+			int weapon = world.rand.nextInt(4); // sword, pickaxe, axe, shovel
+			ItemStack stack = ItemStack.EMPTY;
+			if (material == 0) {
+				if (weapon == 0) {
+					stack = new ItemStack(Items.WOODEN_SWORD);
+				} else if (weapon == 1) {
+					stack = new ItemStack(Items.WOODEN_PICKAXE);
+				} else if (weapon == 2) {
+					stack = new ItemStack(Items.WOODEN_AXE);
+				} else if (weapon == 3) {
+					stack = new ItemStack(Items.WOODEN_SHOVEL);
+				}
+			} else if (material == 1) {
+				if (weapon == 0) {
+					stack = new ItemStack(Items.STONE_SWORD);
+				} else if (weapon == 1) {
+					stack = new ItemStack(Items.STONE_PICKAXE);
+				} else if (weapon == 2) {
+					stack = new ItemStack(Items.STONE_AXE);
+				} else if (weapon == 3) {
+					stack = new ItemStack(Items.STONE_SHOVEL);
+				}
+			} else if (material == 2) {
+				if (weapon == 0) {
+					stack = new ItemStack(Items.IRON_SWORD);
+				} else if (weapon == 1) {
+					stack = new ItemStack(Items.IRON_PICKAXE);
+				} else if (weapon == 2) {
+					stack = new ItemStack(Items.IRON_AXE);
+				} else if (weapon == 3) {
+					stack = new ItemStack(Items.IRON_SHOVEL);
+				}
+			}
+			living.setHeldItem(EnumHand.MAIN_HAND, stack);
+		}
 	}
 
 }

@@ -209,7 +209,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(16, new EntityAIHooker(this)); /* AI for secondary Item */
 		this.tasks.addTask(17, new EntityAIBackstab(this));
 		this.tasks.addTask(18, new EntityAIAttack(this));
-		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this, EnumHand.MAIN_HAND));
+		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this));
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
 		this.tasks.addTask(24, new EntityAILooter(this));
