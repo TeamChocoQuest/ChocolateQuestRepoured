@@ -106,31 +106,31 @@ public class DungeonMapTool {
 			t = System.currentTimeMillis();
 
 			if (!exportDungeonCounts) {
-			int spawnX = DungeonGenUtils.getSpawnX(world) >> 4 << 4;
-			int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4 << 4;
-			int gridSize = distanceIn << 4;
-			for (int x = 0; x < sizeB; x++) {
-				boolean gridX = Math.floorMod(x - radiusB - spawnX - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1;
-				for (int z = 0; z < sizeB; z++) {
-					int i = z * sizeB + x;
-					if (gridX || Math.floorMod(z - radiusB - spawnZ - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1) {
-						dataBuffer.setElem(i, 0x0F0F0F);
-					} else if (generateBiomes) {
-						dataBuffer.setElem(i, color(world, world.getBiome(x - radiusB, z - radiusB)));
+				int spawnX = DungeonGenUtils.getSpawnX(world) >> 4 << 4;
+				int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4 << 4;
+				int gridSize = distanceIn << 4;
+				for (int x = 0; x < sizeB; x++) {
+					boolean gridX = Math.floorMod(x - radiusB - spawnX - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1;
+					for (int z = 0; z < sizeB; z++) {
+						int i = z * sizeB + x;
+						if (gridX || Math.floorMod(z - radiusB - spawnZ - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1) {
+							dataBuffer.setElem(i, 0x0F0F0F);
+						} else if (generateBiomes) {
+							dataBuffer.setElem(i, color(world, world.getBiome(x - radiusB, z - radiusB)));
+						}
 					}
 				}
-			}
-
-			for (int x = 0; x < 16; x++) {
-				int ix = x + radiusB + spawnX;
-				for (int z = 0; z < 16; z++) {
-					int iz = z + radiusB + spawnZ;
-					int i = iz * sizeB + ix;
-					if (i >= 0 && i < sizeB * sizeB) {
-						dataBuffer.setElem(i, 0xFF0000);
+	
+				for (int x = 0; x < 16; x++) {
+					int ix = x + radiusB + spawnX;
+					for (int z = 0; z < 16; z++) {
+						int iz = z + radiusB + spawnZ;
+						int i = iz * sizeB + ix;
+						if (i >= 0 && i < sizeB * sizeB) {
+							dataBuffer.setElem(i, 0xFF0000);
+						}
 					}
 				}
-			}
 			}
 
 			CQRMain.logger.info("2: {}s", (System.currentTimeMillis() - t) / 1000.0F);
@@ -147,31 +147,31 @@ public class DungeonMapTool {
 					if (dungeonAtPos != null) {
 						dungeonCountMap.put(dungeonAtPos, dungeonCountMap.getInt(dungeonAtPos) + 1);
 						if (!exportDungeonCounts) {
-						BufferedImage icon = icons[dungeonAtPos.getIconID()];
-						int width = icon.getWidth();
-						int height = icon.getHeight();
-						for (int ix = -width / 2; ix < width - width / 2; ix++) {
-							for (int iy = -height / 2; iy < height - height / 2; iy++) {
-								int newColor = icon.getRGB(ix + width / 2, iy + height / 2);
-								for (int i = 0; i < scale; i++) {
-									int k = (x + radiusC << 4) + 8 + ix * scale + i;
-									if (k < 0 || k >= sizeB) {
-										continue;
-									}
-									for (int j = 0; j < scale; j++) {
-										int l = (z + radiusC << 4) + 8 + iy * scale + j;
-										if (l < 0 || l >= sizeB) {
+							BufferedImage icon = icons[dungeonAtPos.getIconID()];
+							int width = icon.getWidth();
+							int height = icon.getHeight();
+							for (int ix = -width / 2; ix < width - width / 2; ix++) {
+								for (int iy = -height / 2; iy < height - height / 2; iy++) {
+									int newColor = icon.getRGB(ix + width / 2, iy + height / 2);
+									for (int i = 0; i < scale; i++) {
+										int k = (x + radiusC << 4) + 8 + ix * scale + i;
+										if (k < 0 || k >= sizeB) {
 											continue;
 										}
-										dataBuffer.setElem(l * sizeB + k, newColor);
+										for (int j = 0; j < scale; j++) {
+											int l = (z + radiusC << 4) + 8 + iy * scale + j;
+											if (l < 0 || l >= sizeB) {
+												continue;
+											}
+											dataBuffer.setElem(l * sizeB + k, newColor);
+										}
 									}
 								}
 							}
-						}
-						Graphics2D graphics = bufferedImage.createGraphics();
-						graphics.setColor(Color.BLACK);
-						graphics.setFont(new Font("Arial", Font.BOLD, 24));
-						graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
+							Graphics2D graphics = bufferedImage.createGraphics();
+							graphics.setColor(Color.BLACK);
+							graphics.setFont(new Font("Arial", Font.BOLD, 24));
+							graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 						}
 					}
 					//Now, reset to default
@@ -232,72 +232,74 @@ public class DungeonMapTool {
 	}
 
 	private static int color(World world, Biome biome) {
-		Set<Type> types = BiomeDictionary.getTypes(biome);
-		IntList colors = new IntArrayList();
-		if (types.contains(Type.VOID)) {
-			colors.add(0x0F0F0F);
-		}
-		if (types.contains(Type.END)) {
-			colors.add(color(world, Blocks.END_STONE));
-		}
-		if (types.contains(Type.NETHER)) {
-			colors.add(color(world, Blocks.NETHERRACK));
-		}
-		if (types.contains(Type.MUSHROOM)) {
-			colors.add(color(world, Blocks.BROWN_MUSHROOM_BLOCK));
-		}
-		if (types.contains(Type.WATER)) {
-			colors.add(color(world, Blocks.WATER));
-		}
-		if (types.contains(Type.BEACH)) {
-			colors.add(color(world, Blocks.SAND));
-		}
-		if (types.contains(Type.SNOWY)) {
-			colors.add(color(world, Blocks.SNOW));
-		}
-		if (types.contains(Type.MESA)) {
-			colors.add(color(world, Blocks.RED_SANDSTONE));
-		}
-		if (types.contains(Type.SANDY)) {
-			colors.add(color(world, Blocks.SAND));
-		}
-		if (types.contains(Type.SWAMP)) {
-			colors.add(0x5F7F00);
-		}
-		if (types.contains(Type.SAVANNA)) {
-			colors.add(0xBF9F00);
-		}
-		if (types.contains(Type.CONIFEROUS)) {
-			colors.add(0x004C00);
-		}
-		if (types.contains(Type.JUNGLE)) {
-			colors.add(0x00CC00);
-		}
-		if (types.contains(Type.FOREST)) {
-			colors.add(0x007C00);
-		}
-		if (types.contains(Type.MOUNTAIN)) {
-			colors.add(color(world, Blocks.STONE));
-		}
-		if (types.contains(Type.PLAINS)) {
-			colors.add(color(world, Blocks.GRASS));
-		}
-		if (colors.isEmpty()) {
-			return 0;
-		}
-		int r = 0;
-		int g = 0;
-		int b = 0;
-		for (int i = 0; i < colors.size(); i++) {
-			int c = colors.getInt(i);
-			r += (c >> 16) & 0xFF;
-			g += (c >> 8) & 0xFF;
-			b += c & 0xFF;
-		}
-		r /= colors.size();
-		g /= colors.size();
-		b /= colors.size();
-		return (r << 16) | (g << 8) | b;
+		return biomeColorCache.computeIfAbsent(biome, k -> {
+			Set<Type> types = BiomeDictionary.getTypes(k);
+			IntList colors = new IntArrayList();
+			if (types.contains(Type.VOID)) {
+				colors.add(0x0F0F0F);
+			}
+			if (types.contains(Type.END)) {
+				colors.add(color(world, Blocks.END_STONE));
+			}
+			if (types.contains(Type.NETHER)) {
+				colors.add(color(world, Blocks.NETHERRACK));
+			}
+			if (types.contains(Type.MUSHROOM)) {
+				colors.add(color(world, Blocks.BROWN_MUSHROOM_BLOCK));
+			}
+			if (types.contains(Type.WATER)) {
+				colors.add(color(world, Blocks.WATER));
+			}
+			if (types.contains(Type.BEACH)) {
+				colors.add(color(world, Blocks.SAND));
+			}
+			if (types.contains(Type.SNOWY)) {
+				colors.add(color(world, Blocks.SNOW));
+			}
+			if (types.contains(Type.MESA)) {
+				colors.add(color(world, Blocks.RED_SANDSTONE));
+			}
+			if (types.contains(Type.SANDY)) {
+				colors.add(color(world, Blocks.SAND));
+			}
+			if (types.contains(Type.SWAMP)) {
+				colors.add(0x5F7F00);
+			}
+			if (types.contains(Type.SAVANNA)) {
+				colors.add(0xBF9F00);
+			}
+			if (types.contains(Type.CONIFEROUS)) {
+				colors.add(0x004C00);
+			}
+			if (types.contains(Type.JUNGLE)) {
+				colors.add(0x00CC00);
+			}
+			if (types.contains(Type.FOREST)) {
+				colors.add(0x007C00);
+			}
+			if (types.contains(Type.MOUNTAIN)) {
+				colors.add(color(world, Blocks.STONE));
+			}
+			if (types.contains(Type.PLAINS)) {
+				colors.add(color(world, Blocks.GRASS));
+			}
+			if (colors.isEmpty()) {
+				return 0;
+			}
+			int r = 0;
+			int g = 0;
+			int b = 0;
+			for (int i = 0; i < colors.size(); i++) {
+				int c = colors.getInt(i);
+				r += (c >> 16) & 0xFF;
+				g += (c >> 8) & 0xFF;
+				b += c & 0xFF;
+			}
+			r /= colors.size();
+			g /= colors.size();
+			b /= colors.size();
+			return (r << 16) | (g << 8) | b;
+		});
 	}
 
 	private static int color(World world, Block block) {
