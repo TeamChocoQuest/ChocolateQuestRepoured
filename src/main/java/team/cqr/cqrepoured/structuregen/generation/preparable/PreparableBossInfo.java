@@ -7,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -127,26 +129,31 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		entity.setCustomNameTag("Temporary Boss");
 
 		if (entity instanceof EntityLiving) {
-			((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(pos), null);
-			((EntityLiving) entity).enablePersistence();
+			EntityLiving living = (EntityLiving) entity;
+
+			living.onInitialSpawn(world.getDifficultyForLocation(pos), null);
+			living.enablePersistence();
 
 			if (entity instanceof AbstractEntityCQR) {
-				((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
-				((AbstractEntityCQR) entity).setSizeVariation(1.1F);
-				((AbstractEntityCQR) entity).enableBossBar();
+				AbstractEntityCQR entityCQR = (AbstractEntityCQR) entity;
+				entityCQR.onSpawnFromCQRSpawnerInDungeon(placement);
+				entityCQR.enableBossBar();
+				entityCQR.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(entityCQR.getBaseHealth() * 5.0D);
+			} else {
+				living.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
 			}
 
-			((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
-			((EntityLiving) entity).setHealth(((EntityLiving) entity).getMaxHealth());
+			living.setHealth(living.getMaxHealth());
+			living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).applyModifier(new AttributeModifier("temp_boss_speed_buff", 0.35D, 2));
 
 			// Some gear
-			((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND));
-			((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(placement.getInhabitant().getShieldReplacement()));
+			living.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+			living.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.CURSED_BONE));
 
-			((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND));
-			((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND));
-			((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND));
-			((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND));
+			living.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND));
+			living.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND));
+			living.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND));
+			living.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND));
 		}
 
 		return entity;
