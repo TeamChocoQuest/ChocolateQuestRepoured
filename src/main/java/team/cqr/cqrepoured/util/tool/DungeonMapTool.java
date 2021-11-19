@@ -5,9 +5,16 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -18,6 +25,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
@@ -41,9 +49,11 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 public class DungeonMapTool {
 
+	private static final Object2IntMap<Biome> biomeColorCache = new Object2IntOpenHashMap<>();
 	private static final BufferedImage[] icons = IntStream.range(0, 20).mapToObj(i -> {
 		try {
 			String path = new File("").getAbsolutePath();
@@ -57,14 +67,17 @@ public class DungeonMapTool {
 
 	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityFactorIn, boolean generateBiomes) {
 		try {
+			// TODO move these elsewhere
+			boolean exportDungeonCounts = false;
+			boolean overrideOldDungeonCounts = false;
 			hardResetIntCache();
 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(10);
 				System.gc();
-				Thread.sleep(100);
+				Thread.sleep(10);
 				System.gc();
-				Thread.sleep(100);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -75,8 +88,12 @@ public class DungeonMapTool {
 			int sizeC = radiusC * 2 + 1;
 			int radiusB = radiusC << 4;
 			int sizeB = sizeC << 4;
-			BufferedImage bufferedImage = new BufferedImage(sizeB, sizeB, BufferedImage.TYPE_INT_RGB);
-			DataBuffer dataBuffer = bufferedImage.getRaster().getDataBuffer();
+			BufferedImage bufferedImage = null;
+			DataBuffer dataBuffer = null;
+			if (!exportDungeonCounts) {
+				bufferedImage = new BufferedImage(sizeB, sizeB, BufferedImage.TYPE_INT_RGB);
+				dataBuffer = bufferedImage.getRaster().getDataBuffer();
+			}
 
 			CQRMain.logger.info("0: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
@@ -88,6 +105,7 @@ public class DungeonMapTool {
 			CQRMain.logger.info("1: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
+			if (!exportDungeonCounts) {
 			int spawnX = DungeonGenUtils.getSpawnX(world) >> 4 << 4;
 			int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4 << 4;
 			int gridSize = distanceIn << 4;
@@ -113,6 +131,7 @@ public class DungeonMapTool {
 					}
 				}
 			}
+			}
 
 			CQRMain.logger.info("2: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
@@ -127,6 +146,7 @@ public class DungeonMapTool {
 
 					if (dungeonAtPos != null) {
 						dungeonCountMap.put(dungeonAtPos, dungeonCountMap.getInt(dungeonAtPos) + 1);
+						if (!exportDungeonCounts) {
 						BufferedImage icon = icons[dungeonAtPos.getIconID()];
 						int width = icon.getWidth();
 						int height = icon.getHeight();
@@ -152,6 +172,7 @@ public class DungeonMapTool {
 						graphics.setColor(Color.BLACK);
 						graphics.setFont(new Font("Arial", Font.BOLD, 24));
 						graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
+						}
 					}
 					//Now, reset to default
 					//WorldDungeonGenerator.setup(null, null, null, true);
@@ -161,7 +182,25 @@ public class DungeonMapTool {
 			CQRMain.logger.info("3: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
-			ImageIO.write(bufferedImage, "png", new File("dungeon_map.png"));
+			if (!exportDungeonCounts) {
+				ImageIO.write(bufferedImage, "png", new File("dungeon_map.png"));
+			} else {
+				File file = new File("dungeon_count.prop");
+				if (!file.exists()) file.createNewFile();
+				Properties prop = new Properties();
+				if (overrideOldDungeonCounts) {
+					try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+						prop.load(in);
+					}
+				}
+				dungeonCountMap.object2IntEntrySet().forEach(e -> {
+					String k = e.getKey().getDungeonName();
+					prop.setProperty(k, Integer.toString(PropertyFileHelper.getIntProperty(prop, k, 0) + e.getIntValue()));
+				});
+				try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+					prop.store(out, null);
+				}
+			}
 
 			CQRMain.logger.info("4: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			CQRMain.logger.info("Total: {}s", (System.currentTimeMillis() - start) / 1000.0F);
@@ -171,11 +210,11 @@ public class DungeonMapTool {
 			hardResetIntCache();
 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(10);
 				System.gc();
-				Thread.sleep(100);
+				Thread.sleep(10);
 				System.gc();
-				Thread.sleep(100);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
