@@ -36,6 +36,7 @@ import team.cqr.cqrepoured.command.CommandChangeReputation;
 import team.cqr.cqrepoured.command.CommandDeleteProtectedRegion;
 import team.cqr.cqrepoured.command.CommandExport;
 import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
+import team.cqr.cqrepoured.command.CommandImport;
 import team.cqr.cqrepoured.command.CommandLocateDungeon;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.crafting.smelting.SmeltingHandler;
@@ -290,6 +291,7 @@ public class CQRMain {
 		event.registerServerCommand(new CommandGetProtectedRegion());
 		event.registerServerCommand(new CommandDeleteProtectedRegion());
 		event.registerServerCommand(new CommandLocateDungeon());
+		event.registerServerCommand(new CommandImport());
 	}
 
 	@EventHandler
