@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -24,7 +24,6 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.MatrixStack;
 import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerElectrocuteGeo;
-import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.client.util.MatrixUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -162,7 +161,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				if (boneItem != null) {
 					preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 
-					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, ItemCameraTransforms.TransformType.NONE);
+					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, this.getCameraTransformForItemAtBone(boneItem, bone.getName()));
 
 					postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 				}
@@ -219,6 +218,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	 */
 	@Nullable
 	protected abstract ItemStack getHeldItemForBone(String boneName, T currentEntity);
+	protected abstract TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName);
 
 	/*
 	 * Return null if there is no held block
