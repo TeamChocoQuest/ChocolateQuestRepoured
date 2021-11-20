@@ -70,6 +70,7 @@ public class GuiExporter extends GuiScreen {
 		int index = 0;
 
 		this.edtName = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
+		this.edtName.setMaxStringLength(1024);
 		this.edtName.setText(this.exporter.getStructureName());
 
 		this.edtEndX = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 10, 40, 20);
