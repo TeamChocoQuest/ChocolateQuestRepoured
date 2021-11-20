@@ -24,8 +24,8 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 	private int cooldown = 100;
 
-	private static final int MIN_COOLDOWN = 100;
-	private static final int MAX_COOLDOWN = 200;
+	private static final int MIN_COOLDOWN = 200;
+	private static final int MAX_COOLDOWN = 400;
 
 	@Override
 	public boolean shouldExecute() {
