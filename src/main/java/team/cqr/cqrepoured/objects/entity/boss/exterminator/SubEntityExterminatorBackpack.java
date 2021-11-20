@@ -29,14 +29,14 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 		}
 		
 		if(source == DamageSource.LIGHTNING_BOLT) {
-			this.exterminator.setStunned(true, 50);
+			this.exterminator.setStunned(true, 75);
 		}
 		
 		if(!this.exterminator.isStunned() && this.funcGetAnyEmitterActive.get() && !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this.exterminator)) {
 			return super.attackEntityFrom(DamageSource.DROWN, amount /= 2);
 		}
 		
-		return super.attackEntityFrom(source, amount);
+		return super.attackEntityFrom(source, amount * 2);
 	}
 	
 	@Override

@@ -597,7 +597,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
 		boolean isMainHBPart = !(part == this.parts[3] || part == this.parts[4]) || part == null;
-		;
 		return this.attackEntityFrom(source, damage, isMainHBPart);
 	}
 
