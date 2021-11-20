@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
@@ -154,6 +155,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	@Override
 	protected float getDeathMaxRotation(EntityCQREnderCalamity entityLivingBaseIn) {
 		return 0;
+	}
+	
+
+	@Override
+	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		return TransformType.NONE;
 	}
 
 }

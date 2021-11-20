@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -67,6 +68,14 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	protected ResourceLocation getTextureForBone(String boneName, EntityCQRExterminator currentEntity) {
 		// Unused
 		return null;
+	}
+
+	@Override
+	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		if(boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
+			return TransformType.THIRD_PERSON_LEFT_HAND;
+		}
+		return TransformType.NONE;
 	}
 
 }

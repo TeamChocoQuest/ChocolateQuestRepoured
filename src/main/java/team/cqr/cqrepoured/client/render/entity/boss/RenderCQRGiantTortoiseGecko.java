@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.client.render.entity.boss;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -58,6 +59,11 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	@Override
 	protected float getDeathMaxRotation(EntityCQRGiantTortoise entityLivingBaseIn) {
 		return 0;
+	}
+
+	@Override
+	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		return TransformType.NONE;
 	}
 
 }
