@@ -187,8 +187,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2.0D * CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EntityEquipmentSlot.CHEST));
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(2.0D * CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EntityEquipmentSlot.CHEST));
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
 	}
 
 	@Override
