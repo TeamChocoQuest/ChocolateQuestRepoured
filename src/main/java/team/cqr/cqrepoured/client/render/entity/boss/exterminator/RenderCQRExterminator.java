@@ -43,7 +43,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		if(boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			GlStateManager.translate(0, 0.5, -0.55);
+			GlStateManager.translate(0, 0.35, -0.55);
 			
 			GlStateManager.rotate(180, 0, 0, 1);
 		}

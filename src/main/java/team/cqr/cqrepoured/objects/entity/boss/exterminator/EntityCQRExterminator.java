@@ -16,6 +16,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -24,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,6 +39,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.factions.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRMaterials;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
@@ -1035,6 +1038,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public boolean isWet() {
 		return this.isInWater();
+	}
+	
+	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+		super.setEquipmentBasedOnDifficulty(difficulty);
+
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL));
 	}
 
 }
