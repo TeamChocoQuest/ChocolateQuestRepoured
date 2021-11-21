@@ -91,7 +91,6 @@ import team.cqr.cqrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAIRideHorse;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAISearchMount;
-import team.cqr.cqrepoured.objects.entity.ai.EntityAISneakUnderSmallObstacle;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITasksProfiled;
 import team.cqr.cqrepoured.objects.entity.ai.EntityAITorchIgniter;
@@ -444,7 +443,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIOpenCloseDoor(this));
-		this.tasks.addTask(2, new EntityAISneakUnderSmallObstacle<AbstractEntityCQR>(this));
+		// TODO disabled for now as it doesn't work properly
+		// this.tasks.addTask(2, new EntityAISneakUnderSmallObstacle<AbstractEntityCQR>(this));
 
 		if (this.canMountEntity()) {
 			this.horseAI = new EntityAIRideHorse<AbstractEntityCQR>(this, 1.5);
