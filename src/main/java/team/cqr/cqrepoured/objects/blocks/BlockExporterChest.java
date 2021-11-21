@@ -49,6 +49,8 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 
 	public BlockExporterChest(ResourceLocation overlayTexture) {
 		super(Material.WOOD);
+		this.setBlockUnbreakable();
+		this.setResistance(Float.MAX_VALUE);
 		this.overlayTexture = overlayTexture;
 		EXPORTER_CHESTS.add(this);
 	}

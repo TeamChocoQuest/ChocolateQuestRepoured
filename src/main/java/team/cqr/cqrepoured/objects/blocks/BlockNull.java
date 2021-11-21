@@ -27,8 +27,8 @@ public class BlockNull extends Block {
 		super(Material.GLASS);
 
 		this.setSoundType(SoundType.GLASS);
-		this.setHardness(2.0F);
-		this.setResistance(30.0F);
+		this.setBlockUnbreakable();
+		this.setResistance(Float.MAX_VALUE);
 		this.setHarvestLevel("hand", 0);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(PASSABLE, false));
 		this.ignoreSimilarity = ignoreSimilarityIn;
