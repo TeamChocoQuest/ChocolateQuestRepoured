@@ -12,7 +12,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
 
 public class ProjectileHomingEnderEye extends ProjectileBase {
@@ -33,7 +32,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		//TODO: Remove a few end blocks around the location
+		// TODO: Remove a few end blocks around the location
 		if (!this.world.isRemote) {
 			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shooter);
@@ -42,15 +41,18 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			entityareaeffectcloud.setDuration(200);
 			entityareaeffectcloud.setRadiusOnUse(-0.25F);
 			entityareaeffectcloud.setWaitTime(10);
-			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
+			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
 			entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 20, 1));
 
 			this.world.spawnEntity(entityareaeffectcloud);
 
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-				world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
+				this.world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 				this.setDead();
-			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY
+					&& result.entityHit != null
+					&& result.entityHit != this.shooter
+					&& !(result.entityHit instanceof MultiPartEntityPart)) {
 				this.applyEntityCollisionEye(result.entityHit);
 			}
 		}
@@ -69,7 +71,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		}
 		boolean hitTarget = this.target != null && entityIn != this.shooter;
 		if (hitTarget) {
-			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
+			this.world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 			this.setDead();
 		}
 		if (this.shooter != null) {
@@ -80,12 +82,12 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (this.ticksExisted > 400 && !world.isRemote) {
-			world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
+		if (this.ticksExisted > 400 && !this.world.isRemote) {
+			this.world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 			this.setDead();
 			return;
 		}
-		if (!world.isRemote && this.target != null) {
+		if (!this.world.isRemote && this.target != null) {
 			Vec3d v = this.target.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.4);

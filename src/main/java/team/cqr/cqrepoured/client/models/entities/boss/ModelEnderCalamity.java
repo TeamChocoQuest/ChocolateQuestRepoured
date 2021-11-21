@@ -38,7 +38,8 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 			return entity.getTextureOverride();
 		}
 		// Custom texture end
-		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/ender_calamity_" + entity.getTextureIndex() + ".png") : this.texture;
+		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/ender_calamity_" + entity.getTextureIndex() + ".png")
+				: this.texture;
 	}
 
 	private static final String BONE_IDENT_ROOT = "root";
@@ -70,7 +71,8 @@ public class ModelEnderCalamity extends AnimatedGeoModel<EntityCQREnderCalamity>
 		// rootBone.setRotationY(-entity.rotationYaw);
 
 		// headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
-		// headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* - rootBone.getRotationY()*/);
+		// headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* -
+		// rootBone.getRotationY()*/);
 		IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
 		IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
 		float correctPitch = bodyBone.getRotationX();

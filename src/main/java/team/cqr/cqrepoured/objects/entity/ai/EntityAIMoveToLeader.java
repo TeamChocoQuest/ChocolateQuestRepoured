@@ -56,7 +56,7 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 				for (int l = 0; l <= 4; ++l) {
 					for (int i1 = 0; i1 <= 4; ++i1) {
 						if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isTeleportFriendlyBlock(i, j, k, l, i1)) {
-							this.entity.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.entity.rotationYaw, this.entity.rotationPitch);
+							this.entity.setLocationAndAngles(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.rotationYaw, this.entity.rotationPitch);
 							this.entity.getNavigator().clearPath();
 							return;
 						}
@@ -80,7 +80,10 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 	protected boolean isTeleportFriendlyBlock(int x, int z, int y, int xOffset, int zOffset) {
 		BlockPos blockpos = new BlockPos(x + xOffset, y - 1, z + zOffset);
 		IBlockState iblockstate = this.world.getBlockState(blockpos);
-		return iblockstate.getBlockFaceShape(this.world, blockpos, EnumFacing.DOWN) == BlockFaceShape.SOLID && iblockstate.canEntitySpawn(this.entity) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
+		return iblockstate.getBlockFaceShape(this.world, blockpos, EnumFacing.DOWN) == BlockFaceShape.SOLID
+				&& iblockstate.canEntitySpawn(this.entity)
+				&& this.world.isAirBlock(blockpos.up())
+				&& this.world.isAirBlock(blockpos.up(2));
 	}
 
 }

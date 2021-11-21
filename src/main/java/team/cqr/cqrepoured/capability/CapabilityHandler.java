@@ -26,9 +26,10 @@ public class CapabilityHandler {
 		if (event.getObject() instanceof AbstractEntityCQR) {
 			event.addCapability(CapabilityExtraItemHandlerProvider.REGISTRY_NAME, CapabilityExtraItemHandlerProvider.createProvider(3));
 		}
-		
+
 		if (event.getObject() instanceof EntityLivingBase) {
-			event.addCapability(CapabilityElectricShockProvider.REGISTRY_NAME, CapabilityElectricShockProvider.createProvider((EntityLivingBase) event.getObject()));
+			event.addCapability(CapabilityElectricShockProvider.REGISTRY_NAME,
+					CapabilityElectricShockProvider.createProvider((EntityLivingBase) event.getObject()));
 		}
 	}
 

@@ -68,9 +68,11 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		super.startCastingSpell();
 		this.lastHealth = this.entity.getHealth() / this.entity.getMaxHealth();
 
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D, this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D,
+				this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
 		CQRFaction faction = this.entity.getFaction();
-		List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
+		List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
+				e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
 		list.sort((e1, e2) -> {
 			if (faction != null) {
 				boolean flag1 = faction.isEnemy(e1);
@@ -119,9 +121,11 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		if (this.tick == this.chargingTicks + this.castingTicks - 1) {
 			this.entity.addPotionEffect(new PotionEffect(MobEffects.SPEED, 200, 1, false, true));
 			this.entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 200, 1, false, true));
-			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D, this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
+			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D,
+					this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
 			CQRFaction faction = this.entity.getFaction();
-			for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
+			for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
+					e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 				e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);
 				e.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1, false, true));
 			}

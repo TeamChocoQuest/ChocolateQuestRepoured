@@ -75,9 +75,9 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 
 		this.leaper.faceEntity(this.leapTarget, 100F, 100F);
 
-		if ((double) f >= 1.0E-4D) {
-			this.leaper.motionX += d0 / (double) f * 0.5D * 8.4F + this.leaper.motionX * 8.4F;
-			this.leaper.motionZ += d1 / (double) f * 0.5D * 8.4F + this.leaper.motionZ * 8.4F;
+		if (f >= 1.0E-4D) {
+			this.leaper.motionX += d0 / f * 0.5D * 8.4F + this.leaper.motionX * 8.4F;
+			this.leaper.motionZ += d1 / f * 0.5D * 8.4F + this.leaper.motionZ * 8.4F;
 		}
 
 		this.leaper.motionY = (this.leapTarget.posY - this.leaper.posY) * 0.5;

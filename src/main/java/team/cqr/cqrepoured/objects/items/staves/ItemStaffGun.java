@@ -42,7 +42,8 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 	}
 
 	public void shootStaff(World worldIn, EntityPlayer player, ItemStack stack, EnumHand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F,
+				(1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 
 		if (!worldIn.isRemote) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player, false);

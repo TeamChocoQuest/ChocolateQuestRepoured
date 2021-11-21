@@ -9,7 +9,7 @@ public class RenderCQRWalker extends RenderCQREntity<EntityCQRWalker> {
 
 	public RenderCQRWalker(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, "mob/walker", true);
-		this.addLayer(new LayerGlowingAreas<EntityCQRWalker>(this, this::getEntityTexture));
+		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 	}
 
 }

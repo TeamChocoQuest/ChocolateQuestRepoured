@@ -27,11 +27,12 @@ public class PathNavigateDirectLine extends PathNavigate {
 		float f = this.entity.width * this.entity.width;
 		// int i = 6;
 
-		if (vec3d.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < (double) f) {
+		if (vec3d.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < f) {
 			this.currentPath.incrementPathIndex();
 		}
 
-		for (int j = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); j > this.currentPath.getCurrentPathIndex(); --j) {
+		for (int j = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); j > this.currentPath
+				.getCurrentPathIndex(); --j) {
 			Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, j);
 
 			if (vec3d1.squareDistanceTo(vec3d) <= 36.0D && this.isDirectPathBetweenPoints(vec3d, vec3d1, 0, 0, 0)) {
@@ -44,7 +45,7 @@ public class PathNavigateDirectLine extends PathNavigate {
 
 	@Override
 	protected Vec3d getEntityPosition() {
-		return new Vec3d(this.entity.posX, this.entity.posY + (double) this.entity.height * 0.5D, this.entity.posZ);
+		return new Vec3d(this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ);
 	}
 
 	@Override

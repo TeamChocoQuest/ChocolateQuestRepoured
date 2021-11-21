@@ -8,48 +8,48 @@ import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminato
 
 public class SPacketUpdateEmitterTarget implements IMessage {
 
-	private int entityId; //ID of the exterminator
-	
+	private int entityId; // ID of the exterminator
+
 	public int getEntityId() {
-		return entityId;
+		return this.entityId;
 	}
 
 	public boolean isLeftEmitter() {
-		return leftEmitter;
+		return this.leftEmitter;
 	}
 
 	public boolean isTargetSet() {
-		return targetSet;
+		return this.targetSet;
 	}
 
 	public int getTargetID() {
-		return targetID;
+		return this.targetID;
 	}
 
-	private boolean leftEmitter; //False if it is for the right one
-	private boolean targetSet; //WEther or not that emitter has a target
-	private int targetID = 0; //ID of the target
-	
+	private boolean leftEmitter; // False if it is for the right one
+	private boolean targetSet; // WEther or not that emitter has a target
+	private int targetID = 0; // ID of the target
+
 	public SPacketUpdateEmitterTarget() {
 	}
-	
+
 	public SPacketUpdateEmitterTarget(EntityCQRExterminator entity, boolean leftOrRightEmitter) {
 		this.entityId = entity.getEntityId();
 		this.leftEmitter = leftOrRightEmitter;
 		Entity target = this.leftEmitter ? (EntityLivingBase) entity.getElectroCuteTargetLeft() : (EntityLivingBase) entity.getElectroCuteTargetRight();
 		this.targetSet = target != null;
-		if(this.targetSet) {
+		if (this.targetSet) {
 			this.targetID = target.getEntityId();
 		}
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		
+
 		this.leftEmitter = buf.readBoolean();
 		this.targetSet = buf.readBoolean();
-		if(this.targetSet) {
+		if (this.targetSet) {
 			this.targetID = buf.readInt();
 		}
 	}
@@ -57,10 +57,10 @@ public class SPacketUpdateEmitterTarget implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		
+
 		buf.writeBoolean(this.leftEmitter);
 		buf.writeBoolean(this.targetSet);
-		if(this.targetSet) {
+		if (this.targetSet) {
 			buf.writeInt(this.targetID);
 		}
 	}

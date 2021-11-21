@@ -41,10 +41,7 @@ public class ChunkInfo {
 	}
 
 	public NBTTagIntArray writeToNBT() {
-		return new NBTTagIntArray(new int[] {
-				this.chunkX,
-				this.chunkZ,
-				this.marked });
+		return new NBTTagIntArray(new int[] { this.chunkX, this.chunkZ, this.marked });
 	}
 
 	public void markAll(ChunkInfo other) {

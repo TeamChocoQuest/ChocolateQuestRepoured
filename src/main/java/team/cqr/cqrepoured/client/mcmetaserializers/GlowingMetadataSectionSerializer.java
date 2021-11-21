@@ -36,8 +36,8 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 				int x2 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "x2", 0);
 				int y2 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "y2", 0);
 
-				Tuple<Integer, Integer> pos1 = new Tuple<>(Integer.valueOf(x1), Integer.valueOf(y1));
-				Tuple<Integer, Integer> pos2 = new Tuple<>(Integer.valueOf(x2), Integer.valueOf(y2));
+				Tuple<Integer, Integer> pos1 = new Tuple<>(x1, y1);
+				Tuple<Integer, Integer> pos2 = new Tuple<>(x2, y2);
 				if (pos1.getFirst() <= pos2.getFirst() && pos1.getSecond() <= pos2.getSecond()) {
 					result.addSection(pos1, pos2);
 				}

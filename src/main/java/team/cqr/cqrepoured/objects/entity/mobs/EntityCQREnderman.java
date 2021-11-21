@@ -28,12 +28,12 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		
-		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderman>(this));
+
+		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<>(this));
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	protected boolean teleportRandomly() {
 		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-		double d1 = this.posY + (double) (this.rand.nextInt(64) - 32);
+		double d1 = this.posY + (this.rand.nextInt(64) - 32);
 		double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
 		return this.teleportTo(d0, d1, d2);
 	}
@@ -71,13 +71,14 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 
 		if (flag) {
-			this.world.playSound((EntityPlayer) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+			this.world.playSound((EntityPlayer) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT,
+					this.getSoundCategory(), 1.0F, 1.0F);
 			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 		}
 
 		return flag;
 	}
-	
+
 	@Override
 	public void teleport(double x, double y, double z) {
 		this.teleportTo(x, y, z);
@@ -150,8 +151,9 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D,
-						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width,
+						this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width,
+						(this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 		super.onLivingUpdate();

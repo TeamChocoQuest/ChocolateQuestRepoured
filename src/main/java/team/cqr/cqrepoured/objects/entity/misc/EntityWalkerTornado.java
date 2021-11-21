@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MoverType;
@@ -73,7 +72,8 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			}
 
 			/*
-			 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase && this.getOwnerID().equals(entity.getPersistentID()) &&
+			 * for (Entity entity : this.world.loadedEntityList) { if (entity instanceof EntityLivingBase &&
+			 * this.getOwnerID().equals(entity.getPersistentID()) &&
 			 * entity.isEntityAlive()) { this.owner = entity; } }
 			 */
 		}
@@ -90,8 +90,9 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			final double d2 = (float) this.posY + this.height + 0.125f;
 			final double d3 = (float) this.posZ + this.rand.nextFloat() * 0.25f;
 			final float f = this.rand.nextFloat() * 360.0f;
-			final EntityParticle particle = new ParticleWalkerTornado(this.world, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect((Particle) particle);
+			final EntityParticle particle = new ParticleWalkerTornado(this.world, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25,
+					Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 			this.particles.add(particle);
 			particle.setRBGColorF(((color >> 16) & 0xFF) / 255.0f, ((color >> 8) & 0xFF) / 255.0f, (color & 0xFF) / 255.0f);
 			particle.setPosition(this.posX, this.posY, this.posZ);
@@ -128,7 +129,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	private void handleNearbyEntities() {
 		double r = 0.75D;
 		AxisAlignedBB aabb = new AxisAlignedBB(this.posX - r, this.posY, this.posZ - r, this.posX + r, this.posY + 2 * r, this.posZ + r);
-		final List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity) this, aabb);
+		final List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, aabb);
 		for (Entity ent : list) {
 			this.collideWithEntity(ent);
 		}

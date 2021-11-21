@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
@@ -25,7 +24,6 @@ import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateSumm
 import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehindEnemy;
 import team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTurnInvisible;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
@@ -156,6 +154,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		return this.dataManager.get(IS_REINTEGRATING);
 	}
 
+	@Override
 	public float getInvisibility() {
 		return this.dataManager.get(INVISIBILITY);
 	}

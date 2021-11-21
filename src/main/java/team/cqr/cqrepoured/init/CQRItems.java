@@ -372,7 +372,8 @@ public class CQRItems {
 					setItemName(new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.FEET), "boots_spider"),
 
 					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.HEAD), "helmet_inquisition"),
-					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.CHEST), "chestplate_inquisition"),
+					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.CHEST),
+							"chestplate_inquisition"),
 					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.LEGS), "leggings_inquisition"),
 					setItemName(new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.FEET), "boots_inquisition"),
 

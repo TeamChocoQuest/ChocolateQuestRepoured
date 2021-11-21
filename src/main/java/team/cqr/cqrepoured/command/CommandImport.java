@@ -76,7 +76,7 @@ public class CommandImport extends CommandBase {
 						x = 0;
 					}
 					CQStructure structure = CQStructure.createFromFile(f);
-					
+
 					// place structure
 					BlockPos pos1 = pos.add(x, 0, z);
 					Builder builder = new Builder(world, pos1.add(2, 0, 2), "Import-" + f.getName(),
@@ -93,7 +93,7 @@ public class CommandImport extends CommandBase {
 					String s3 = s2.substring(s1.length() + 1, s2.lastIndexOf('.'));
 					BlockPos[] unprot = structure.getUnprotectedBlockList().toArray(new BlockPos[0]);
 					exporter.setValues(s3, new BlockPos(2, 0, 2), new BlockPos(1, -1, 1).add(structure.getSize()), true, true, unprot);
-					
+
 					maxSizeZ = Math.max(structure.getSize().getZ(), maxSizeZ);
 					x += structure.getSize().getX() + 10;
 				}

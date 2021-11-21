@@ -76,7 +76,8 @@ public class ItemDungeonPlacer extends Item {
 	}
 
 	/**
-	 * Overriding this instead of {@link Item#getEquipmentSlot(ItemStack)} to prevent this item being placed into the head slot when shift-clicked.
+	 * Overriding this instead of {@link Item#getEquipmentSlot(ItemStack)} to prevent this item being placed into the head
+	 * slot when shift-clicked.
 	 */
 	@Override
 	public boolean isValidArmor(ItemStack stack, EntityEquipmentSlot armorType, Entity entity) {
@@ -126,10 +127,11 @@ public class ItemDungeonPlacer extends Item {
 
 					if (result != null) {
 						BlockPos pos = result.getBlockPos().offset(result.sideHit);
-						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ(), new Random(), DungeonDataManager.DungeonSpawnType.DUNGEON_PLACER_ITEM, false);
+						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ(), new Random(),
+								DungeonDataManager.DungeonSpawnType.DUNGEON_PLACER_ITEM, false);
 
 						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
-						if (!(playerIn.isCreative() || playerIn.isSpectator())) {
+						if ((!playerIn.isCreative() && !playerIn.isSpectator())) {
 							stack.shrink(1);
 						}
 					}

@@ -69,14 +69,15 @@ import team.cqr.cqrepoured.util.Reference;
 @EventBusSubscriber
 public class EventsHandler {
 
-	//proper handling for INonEnchatable interface
+	// proper handling for INonEnchatable interface
 	@SubscribeEvent
 	public static void onAnvilEnchant(AnvilUpdateEvent aue) {
-		if((aue.getLeft().getItem() instanceof ItemEnchantedBook && aue.getRight().getItem() instanceof INonEnchantable) || (aue.getRight().getItem() instanceof ItemEnchantedBook && aue.getLeft().getItem() instanceof INonEnchantable)) {
+		if ((aue.getLeft().getItem() instanceof ItemEnchantedBook && aue.getRight().getItem() instanceof INonEnchantable)
+				|| (aue.getRight().getItem() instanceof ItemEnchantedBook && aue.getLeft().getItem() instanceof INonEnchantable)) {
 			aue.setCanceled(true);
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onLootTableLoadPre(LootTableLoadEvent event) {
 		if (event.getName().getNamespace().equals(Reference.MODID) && !CQRConfig.general.preventOtherModLoot) {
@@ -103,7 +104,10 @@ public class EventsHandler {
 			float amount = event.getAmount();
 			World world = player.world;
 
-			if (player.getActiveItemStack().getItem() != CQRItems.SHIELD_WALKER_KING || player.getHeldItemMainhand().getItem() != CQRItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
+			if (player.getActiveItemStack().getItem() != CQRItems.SHIELD_WALKER_KING
+					|| player.getHeldItemMainhand().getItem() != CQRItems.SWORD_WALKER
+					|| player.getRidingEntity() != null
+					|| attacker == null) {
 				return;
 			}
 
@@ -125,13 +129,17 @@ public class EventsHandler {
 			BlockPos ep = new BlockPos(i, j, k);
 			BlockPos ep1 = new BlockPos(i, j + 1, k);
 
-			if (world.getCollisionBoxes(player, player.getEntityBoundingBox()).size() == 0 && !world.containsAnyLiquid(attacker.getEntityBoundingBox()) && player.isActiveItemStackBlocking() && player.getDistanceSq(attacker) >= 25.0D) {
+			if (world.getCollisionBoxes(player, player.getEntityBoundingBox()).size() == 0
+					&& !world.containsAnyLiquid(attacker.getEntityBoundingBox())
+					&& player.isActiveItemStackBlocking()
+					&& player.getDistanceSq(attacker) >= 25.0D) {
 				if (world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
 					tep = true;
 				} else {
 					tep = false;
 					if (!world.isRemote) {
-						((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+						((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX, player.posY + player.height * 0.5D, player.posZ, 12,
+								0.25D, 0.25D, 0.25D, 0.0D);
 					}
 				}
 			}
@@ -143,7 +151,8 @@ public class EventsHandler {
 
 						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
 						if (!world.isRemote) {
-							((WorldServer) world).spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+							((WorldServer) world).spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY + player.height * 0.5D, player.posZ, 12,
+									0.25D, 0.25D, 0.25D, 0.0D);
 						}
 						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
 					}
@@ -173,7 +182,8 @@ public class EventsHandler {
 
 				if (stack != null) {
 					if (!entity.world.isRemote) {
-						entity.world.spawnEntity(new EntityItem(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
+						entity.world.spawnEntity(
+								new EntityItem(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
 					}
 				}
 			}
@@ -244,7 +254,9 @@ public class EventsHandler {
 			if (!world.isRemote && event.getTarget() instanceof AbstractEntityCQR) {
 				AbstractEntityCQR targetCQR = (AbstractEntityCQR) event.getTarget();
 
-				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) >= 0.9F) {
+				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player))
+						&& player.getHeldItemMainhand().getItem() instanceof ItemAxe
+						&& player.getCooledAttackStrength(0) >= 0.9F) {
 					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
 				}
 			}
@@ -263,7 +275,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
-		if (CQRConfig.bosses.preventBlockPlacingNearBosses && !(event.getEntity() instanceof EntityPlayer && ((EntityPlayer) event.getEntity()).isCreative())) {
+		if (CQRConfig.bosses.preventBlockPlacingNearBosses && (!(event.getEntity() instanceof EntityPlayer) || !((EntityPlayer) event.getEntity()).isCreative())) {
 			BlockPos pos = new BlockPos(event.getEntity());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
@@ -289,9 +301,7 @@ public class EventsHandler {
 		double z = player.posZ;
 		double r = 8.0D;
 		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
-		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> {
-			return e.getLeader() == player;
-		})) {
+		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> (e.getLeader() == player))) {
 			ItemStack stack = entity.getHeldItemMainhand();
 			if (stack.getItem() instanceof ISupportWeapon) {
 				continue;
@@ -321,9 +331,7 @@ public class EventsHandler {
 		double z = player.posZ;
 		double r = 8.0D;
 		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
-		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> {
-			return e.getLeader() == player;
-		})) {
+		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> (e.getLeader() == player))) {
 			ItemStack stack = entity.getHeldItemMainhand();
 			if (stack.getItem() instanceof ISupportWeapon) {
 				continue;
@@ -361,8 +369,7 @@ public class EventsHandler {
 		}
 		ItemStack mainhand = entity.getHeldItemMainhand();
 		ItemStack offhand = entity.getHeldItemOffhand();
-		if ((isTwoHanded(mainhand) && !offhand.isEmpty())
-				|| (isTwoHanded(offhand) && !mainhand.isEmpty())) {
+		if ((isTwoHanded(mainhand) && !offhand.isEmpty()) || (isTwoHanded(offhand) && !mainhand.isEmpty())) {
 			entity.addPotionEffect(new PotionEffect(CQRPotions.TWOHANDED, 30, 1));
 		}
 	}

@@ -59,7 +59,11 @@ public class ItemMusketKnife extends ItemMusket {
 			return 15.0F;
 		} else {
 			Material material1 = state.getMaterial();
-			return material1 != Material.PLANTS && material1 != Material.VINE && material1 != Material.CORAL && material1 != Material.LEAVES && material1 != Material.GOURD ? 1.0F : 1.5F;
+			return material1 != Material.PLANTS
+					&& material1 != Material.VINE
+					&& material1 != Material.CORAL
+					&& material1 != Material.LEAVES
+					&& material1 != Material.GOURD ? 1.0F : 1.5F;
 		}
 	}
 
@@ -73,7 +77,7 @@ public class ItemMusketKnife extends ItemMusket {
 	/** Copied from {@link ItemSword#onBlockDestroyed(ItemStack, World, IBlockState, BlockPos, EntityLivingBase)} */
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-		if ((double) state.getBlockHardness(worldIn, pos) != 0.0D) {
+		if (state.getBlockHardness(worldIn, pos) != 0.0D) {
 			stack.damageItem(2, entityLiving);
 		}
 
@@ -109,8 +113,10 @@ public class ItemMusketKnife extends ItemMusket {
 		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
 
 		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.attackDamage, 0));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+					new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.attackDamage, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+					new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
 		}
 
 		return multimap;

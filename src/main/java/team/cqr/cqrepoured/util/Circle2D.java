@@ -15,7 +15,9 @@ public class Circle2D {
 	public int radius;
 
 	public enum CircleRegion {
-		OUTSIDE, EDGE, INSIDE
+		OUTSIDE,
+		EDGE,
+		INSIDE
 	}
 
 	public class Coord {

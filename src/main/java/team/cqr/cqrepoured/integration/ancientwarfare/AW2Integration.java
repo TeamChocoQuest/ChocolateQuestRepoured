@@ -17,7 +17,8 @@ public class AW2Integration {
 	public static boolean isAW2StructureInChunk(World world, BlockPos pos) {
 		try {
 			StructureMap data = AWGameData.INSTANCE.getPerWorldData(world, StructureMap.class);
-			Collection<StructureEntry> iterator = data.getEntriesNear(world, pos.getX(), pos.getZ(), MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16), true, new ArrayList<StructureEntry>());
+			Collection<StructureEntry> iterator = data.getEntriesNear(world, pos.getX(), pos.getZ(),
+					MathHelper.ceil(CQRConfig.advanced.generationMinDistanceToOtherStructure / 16), true, new ArrayList<StructureEntry>());
 			return !iterator.isEmpty();
 		} catch (Exception ex) {
 			CQRMain.logger.warn("Unable to process AW2-Dependency! Error: ", ex);

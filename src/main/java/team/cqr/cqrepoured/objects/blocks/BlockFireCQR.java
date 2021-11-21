@@ -37,9 +37,9 @@ public class BlockFireCQR extends BlockFire {
 			Block block = worldIn.getBlockState(pos.down()).getBlock();
 			boolean flag = block.isFireSource(worldIn, pos.down(), EnumFacing.UP);
 
-			int i = ((Integer) state.getValue(AGE));
+			int i = (state.getValue(AGE));
 
-			if (!flag && worldIn.isRaining() && this.canDie(worldIn, pos) && rand.nextFloat() < 0.2F + (float) i * 0.03F) {
+			if (!flag && worldIn.isRaining() && this.canDie(worldIn, pos) && rand.nextFloat() < 0.2F + i * 0.03F) {
 				worldIn.setBlockToAir(pos);
 			} else {
 				if (i < 15) {
@@ -162,7 +162,9 @@ public class BlockFireCQR extends BlockFire {
 			int i = 0;
 
 			for (EnumFacing enumfacing : EnumFacing.values()) {
-				i = Math.max(worldIn.getBlockState(pos.offset(enumfacing)).getBlock().getFireSpreadSpeed(worldIn, pos.offset(enumfacing), enumfacing.getOpposite()), i);
+				i = Math.max(
+						worldIn.getBlockState(pos.offset(enumfacing)).getBlock().getFireSpreadSpeed(worldIn, pos.offset(enumfacing), enumfacing.getOpposite()),
+						i);
 			}
 
 			return i;

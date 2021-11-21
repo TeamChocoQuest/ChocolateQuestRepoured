@@ -23,7 +23,7 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 
 	@Override
 	public boolean shouldExecute() {
-		if (super.shouldExecute() && checkHome()) {
+		if (super.shouldExecute() && this.checkHome()) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -37,7 +37,7 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		this.cooldown = MAX_COOLDOWN;
+		this.cooldown = this.MAX_COOLDOWN;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 			return;
 		}
 		double x = home.getX() + vec.x;
-		double y = home.getY() + HOVER_DISTANCE + vec.y;
+		double y = home.getY() + this.HOVER_DISTANCE + vec.y;
 		double z = home.getZ() + vec.z;
 
 		this.entity.teleport(x, y, z);

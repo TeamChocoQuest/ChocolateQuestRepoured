@@ -54,7 +54,9 @@ public class DungeonDataManager {
 	}
 
 	public enum DungeonSpawnType {
-		DUNGEON_GENERATION, LOCKED_COORDINATE, DUNGEON_PLACER_ITEM;
+		DUNGEON_GENERATION,
+		LOCKED_COORDINATE,
+		DUNGEON_PLACER_ITEM;
 	}
 
 	private static final Map<World, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());

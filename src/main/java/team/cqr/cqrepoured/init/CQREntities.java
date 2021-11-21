@@ -242,39 +242,39 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(EntityEndLaser.class, "end_laser", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCalamityCrystal.class, "calamity_crystal", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityCalamitySpawner.class, "calamity_spawner", 64, 1, true),
-					
-					//Exterminator
+
+					// Exterminator
 					createEntityEntry(EntityCQRExterminator.class, "exterminator", 64, 1, true, 3289650, 000000),
-					createEntityEntryWithoutEgg(EntityExterminatorHandLaser.class, "exterminator_laser", 64, 1, true)
-			};
+					createEntityEntryWithoutEgg(EntityExterminatorHandLaser.class, "exterminator_laser", 64, 1, true) };
 
 			event.getRegistry().registerAll(entityEntries);
 
 			if (CQRMain.isWorkspaceEnvironment) {
-				event.getRegistry().registerAll(new EntityEntry[] {
-						
-
-						// spectre lord
+				event.getRegistry().registerAll(// spectre lord
 						createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 3289650, 000000),
 						createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true),
 						createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
 						createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
 						createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
-						createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true)
-					});
+						createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true));
 			}
 
 			// Spawns
-			// EntityRegistry.addSpawn(EntityCQRWasp.class, 24, 3, 9, EnumCreatureType.CREATURE, Biomes.SWAMPLAND, Biomes.MUTATED_SWAMPLAND, Biomes.JUNGLE,
+			// EntityRegistry.addSpawn(EntityCQRWasp.class, 24, 3, 9, EnumCreatureType.CREATURE, Biomes.SWAMPLAND,
+			// Biomes.MUTATED_SWAMPLAND, Biomes.JUNGLE,
 			// Biomes.MUTATED_JUNGLE);
 		}
 
-		private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1, int eggColor2) {
-			return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+		private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency,
+				boolean sendVelocityUpdates, int eggColor1, int eggColor2) {
+			return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name)
+					.egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 		}
 
-		private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates) {
-			return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+		private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange,
+				int trackerUpdateFrequency, boolean sendVelocityUpdates) {
+			return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name)
+					.tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 		}
 
 	}

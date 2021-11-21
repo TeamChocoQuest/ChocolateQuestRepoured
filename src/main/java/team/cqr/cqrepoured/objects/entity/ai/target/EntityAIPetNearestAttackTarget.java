@@ -46,7 +46,8 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 			return false;
 		} else if (faction != null)/* if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) */
 		{
-			List<T> list = this.taskOwner.world.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), TargetUtil.createPredicateNonAlly(faction));
+			List<T> list = this.taskOwner.world.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()),
+					TargetUtil.createPredicateNonAlly(faction));
 
 			if (list.isEmpty()) {
 				return false;
@@ -59,15 +60,19 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 			return false;
 		}
 		/*
-		 * else { this.targetEntity = (T)this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY +
+		 * else { this.targetEntity = (T)this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX,
+		 * this.taskOwner.posY +
 		 * (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new
 		 * Function<EntityPlayer, Double>() {
 		 * 
-		 * @Nullable public Double apply(@Nullable EntityPlayer p_apply_1_) { ItemStack itemstack = p_apply_1_.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+		 * @Nullable public Double apply(@Nullable EntityPlayer p_apply_1_) { ItemStack itemstack =
+		 * p_apply_1_.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 		 * 
-		 * if (itemstack.getItem() == Items.SKULL) { int i = itemstack.getItemDamage(); boolean flag = EntityAIPetNearestAttackTarget.this.taskOwner instanceof
+		 * if (itemstack.getItem() == Items.SKULL) { int i = itemstack.getItemDamage(); boolean flag =
+		 * EntityAIPetNearestAttackTarget.this.taskOwner instanceof
 		 * EntitySkeleton && i == 0; boolean flag1 = EntityAIPetNearestAttackTarget.this.taskOwner
-		 * instanceof EntityZombie && i == 2; boolean flag2 = EntityAIPetNearestAttackTarget.this.taskOwner instanceof EntityCreeper && i == 4;
+		 * instanceof EntityZombie && i == 2; boolean flag2 = EntityAIPetNearestAttackTarget.this.taskOwner instanceof
+		 * EntityCreeper && i == 4;
 		 * 
 		 * if (flag || flag1 || flag2) { return 0.5D; } }
 		 * 

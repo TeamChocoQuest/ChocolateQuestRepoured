@@ -43,10 +43,7 @@ public class DungeonVolcano extends DungeonBase {
 	private boolean buildStairwell = true;
 	private boolean digEntranceTunnel = true;
 	private double chestChance = 0.002D;
-	private ResourceLocation[] chestIDs = {
-			CQRLoottables.CHESTS_FOOD,
-			CQRLoottables.CHESTS_MATERIAL,
-			CQRLoottables.CHESTS_EQUIPMENT };
+	private ResourceLocation[] chestIDs = { CQRLoottables.CHESTS_FOOD, CQRLoottables.CHESTS_MATERIAL, CQRLoottables.CHESTS_EQUIPMENT };
 
 	// Stronghold
 	private boolean buildStronghold = true;

@@ -17,7 +17,8 @@ import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public class VanillaStructureHelper {
 
-	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
+	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a",
+			"canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	// ChunkGeneratorFlat
 	private static final String[] STRUCTURE_NAMES = { "Stronghold", "Village", "Mineshaft", "Temple", "Monument", "Mansion", "Fortress", "EndCity" };
@@ -105,7 +106,7 @@ public class VanillaStructureHelper {
 						int z2 = z + z1;
 
 						if (structureType instanceof MapGenMineshaft) {
-							random.setSeed((long) (x2 ^ z2) ^ worldIn.getSeed());
+							random.setSeed(x2 ^ z2 ^ worldIn.getSeed());
 							random.nextInt();
 						}
 

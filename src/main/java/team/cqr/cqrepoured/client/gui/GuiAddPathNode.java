@@ -85,15 +85,24 @@ public class GuiAddPathNode extends GuiScreen {
 		int xOffset = -43;
 		int yOffset = 10 * 16 / 2 * -1; // elementCount * elementOffset / 2 * -1
 		int i = 0;
-		this.textFieldX = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true, false);
-		this.textFieldY = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true, false);
-		this.textFieldZ = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true, false);
-		this.textFieldWaitingTimeMin = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldWaitingTimeMax = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldWaitingRotation = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldWeight = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldTimeMin = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldTimeMax = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
+		this.textFieldX = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true,
+				false);
+		this.textFieldY = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true,
+				false);
+		this.textFieldZ = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true,
+				false);
+		this.textFieldWaitingTimeMin = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16,
+				40, 12, false, false);
+		this.textFieldWaitingTimeMax = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16,
+				40, 12, false, false);
+		this.textFieldWaitingRotation = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16,
+				40, 12, false, false);
+		this.textFieldWeight = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12,
+				false, false);
+		this.textFieldTimeMin = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12,
+				false, false);
+		this.textFieldTimeMax = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12,
+				false, false);
 		this.checkBoxBidirectional = new GuiCheckBox(id++, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, "Bidirectional", true);
 
 		this.buttonConfirm = new GuiButtonExt(id++, this.width / 2 - 102, this.height - 36, 100, 16, "Confirm");
@@ -204,7 +213,10 @@ public class GuiAddPathNode extends GuiScreen {
 			int i = new ScaledResolution(this.mc).getScaleFactor();
 			int mouseX = Mouse.getX() / i;
 			int mouseY = this.height - Mouse.getY() / i;
-			if (mouseX >= this.textFieldX.x && mouseX <= this.textFieldX.x + this.textFieldX.width && mouseY >= this.textFieldX.y && mouseY <= this.textFieldX.y + this.textFieldX.height) {
+			if (mouseX >= this.textFieldX.x
+					&& mouseX <= this.textFieldX.x + this.textFieldX.width
+					&& mouseY >= this.textFieldX.y
+					&& mouseY <= this.textFieldX.y + this.textFieldX.height) {
 				try {
 					int number = Integer.parseInt(this.textFieldX.getText()) + scrollAmount;
 					this.textFieldX.setText(String.valueOf(number));
@@ -213,7 +225,10 @@ public class GuiAddPathNode extends GuiScreen {
 					// ignore
 				}
 			}
-			if (mouseX >= this.textFieldY.x && mouseX <= this.textFieldY.x + this.textFieldY.width && mouseY >= this.textFieldY.y && mouseY <= this.textFieldY.y + this.textFieldY.height) {
+			if (mouseX >= this.textFieldY.x
+					&& mouseX <= this.textFieldY.x + this.textFieldY.width
+					&& mouseY >= this.textFieldY.y
+					&& mouseY <= this.textFieldY.y + this.textFieldY.height) {
 				try {
 					int number = Integer.parseInt(this.textFieldY.getText()) + scrollAmount;
 					this.textFieldY.setText(String.valueOf(number));
@@ -222,7 +237,10 @@ public class GuiAddPathNode extends GuiScreen {
 					// ignore
 				}
 			}
-			if (mouseX >= this.textFieldZ.x && mouseX <= this.textFieldZ.x + this.textFieldZ.width && mouseY >= this.textFieldZ.y && mouseY <= this.textFieldZ.y + this.textFieldZ.height) {
+			if (mouseX >= this.textFieldZ.x
+					&& mouseX <= this.textFieldZ.x + this.textFieldZ.width
+					&& mouseY >= this.textFieldZ.y
+					&& mouseY <= this.textFieldZ.y + this.textFieldZ.height) {
 				try {
 					int number = Integer.parseInt(this.textFieldZ.getText()) + scrollAmount;
 					this.textFieldZ.setText(String.valueOf(number));
@@ -297,7 +315,8 @@ public class GuiAddPathNode extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, "Add Path Node (Index: " + ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand)).getSize() + ")", this.width / 2, 20, 16777215);
+		this.drawCenteredString(this.fontRenderer, "Add Path Node (Index: " + ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand)).getSize() + ")",
+				this.width / 2, 20, 16777215);
 
 		for (GuiTextField textField : this.textFieldList) {
 			textField.drawTextBox();
@@ -326,10 +345,14 @@ public class GuiAddPathNode extends GuiScreen {
 			this.drawHoveringText(String.format("Index: %d, %s", selectedNode.getIndex(), selectedNode.getPos()), mouseX, mouseY);
 		}
 
-		if (mouseX >= this.pathMapX && mouseX <= this.pathMapX + this.fontRenderer.getStringWidth("Help?") && mouseY >= this.pathMapY + this.pathMapHeight + 4 && mouseY <= this.pathMapY + this.pathMapHeight + 12) {
+		if (mouseX >= this.pathMapX
+				&& mouseX <= this.pathMapX + this.fontRenderer.getStringWidth("Help?")
+				&& mouseY >= this.pathMapY + this.pathMapHeight + 4
+				&& mouseY <= this.pathMapY + this.pathMapHeight + 12) {
 			List<String> tooltip = new ArrayList<>();
 			tooltip.add("The path map shows the current path from above and visualizes the 'new node'.");
-			tooltip.add("Also it allows you to select 'blacklisted previous nodes' for the 'new node'. That means when an entity is at one of the nodes connected with the 'new node' and comes from a 'blacklisted previous node' it won't go to the 'new node'.");
+			tooltip.add(
+					"Also it allows you to select 'blacklisted previous nodes' for the 'new node'. That means when an entity is at one of the nodes connected with the 'new node' and comes from a 'blacklisted previous node' it won't go to the 'new node'.");
 			tooltip.add("");
 			tooltip.add("Blue Node: New Node");
 			tooltip.add("Black Node: Selected Node");
@@ -339,22 +362,31 @@ public class GuiAddPathNode extends GuiScreen {
 		}
 
 		if (this.textFieldWaitingTimeMin.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("When reaching this node this defines how long the entity waits at least before walking to the next node. (min: 0, max: 24000 ticks)", mouseX, mouseY);
+			this.drawHoveringText(
+					"When reaching this node this defines how long the entity waits at least before walking to the next node. (min: 0, max: 24000 ticks)",
+					mouseX, mouseY);
 		}
 		if (this.textFieldWaitingTimeMax.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("When reaching this node this defines how long the entity waits at most before walking to the next node. (min: 0, max: 24000 ticks)", mouseX, mouseY);
+			this.drawHoveringText(
+					"When reaching this node this defines how long the entity waits at most before walking to the next node. (min: 0, max: 24000 ticks)",
+					mouseX, mouseY);
 		}
 		if (this.textFieldWaitingRotation.isMouseOver(mouseX, mouseY)) {
 			this.drawHoveringText("When waiting at this node this defines where the entity should look. (min: 0, max: 360 degree)", mouseX, mouseY);
 		}
 		if (this.textFieldWeight.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("The weight that this node is selected as the next node when there are multiple options. (min: 1, max: 10000)", mouseX, mouseY);
+			this.drawHoveringText("The weight that this node is selected as the next node when there are multiple options. (min: 1, max: 10000)", mouseX,
+					mouseY);
 		}
 		if (this.textFieldTimeMin.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)", mouseX, mouseY);
+			this.drawHoveringText(
+					"The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)",
+					mouseX, mouseY);
 		}
 		if (this.textFieldTimeMax.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)", mouseX, mouseY);
+			this.drawHoveringText(
+					"The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)",
+					mouseX, mouseY);
 		}
 	}
 
@@ -377,7 +409,8 @@ public class GuiAddPathNode extends GuiScreen {
 				int timeMin = this.textFieldTimeMin.getInt();
 				int timeMax = this.textFieldTimeMax.getInt();
 				boolean bidirectional = this.checkBoxBidirectional.isChecked();
-				CQRMain.NETWORK.sendToServer(new CPacketAddPathNode(this.hand, this.rootNodeIndex, new BlockPos(posX, posY, posZ), waitingTimeMin, waitingTimeMax, waitingRotation, weight, timeMin, timeMax, bidirectional, this.blacklistedPrevNodes));
+				CQRMain.NETWORK.sendToServer(new CPacketAddPathNode(this.hand, this.rootNodeIndex, new BlockPos(posX, posY, posZ), waitingTimeMin,
+						waitingTimeMax, waitingRotation, weight, timeMin, timeMax, bidirectional, this.blacklistedPrevNodes));
 			} catch (NumberFormatException e) {
 				this.mc.player.sendMessage(new TextComponentString("Invalid path node arguments!"));
 			}

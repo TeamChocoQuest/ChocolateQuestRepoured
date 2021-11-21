@@ -26,17 +26,14 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public EntityAIIdleSit(AbstractEntityCQR entity) {
 		super(entity);
 		this.setMutexBits(2);
-		this.predicate = new Predicate<AbstractEntityCQR>() {
-			@Override
-			public boolean apply(AbstractEntityCQR input) {
-				if (input == null) {
-					return false;
-				}
-				if (!EntitySelectors.IS_ALIVE.apply(input)) {
-					return false;
-				}
-				return EntityAIIdleSit.this.isEntityAlly(input);
+		this.predicate = input -> {
+			if (input == null) {
+				return false;
 			}
+			if (!EntitySelectors.IS_ALIVE.apply(input)) {
+				return false;
+			}
+			return EntityAIIdleSit.this.isEntityAlly(input);
 		};
 	}
 
@@ -72,11 +69,11 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 			// Make entity sit
 			this.entity.setSitting(true);
 
-			if(this.entity.hasTrades()) {
+			if (this.entity.hasTrades()) {
 				this.entity.setChatting(true);
 				return;
 			}
-			
+
 			// search for new talking partner
 			if (++this.cooldwonForPartnerCycle > COOLDOWN_FOR_PARTNER_CYCLE_BORDER) {
 				this.cooldwonForPartnerCycle = 0;
@@ -113,7 +110,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
+		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(this.entity);
 		EntityLivingBase targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
 		if (!(leader instanceof EntityPlayer) && targetLeader instanceof EntityPlayer) {
 			return false;

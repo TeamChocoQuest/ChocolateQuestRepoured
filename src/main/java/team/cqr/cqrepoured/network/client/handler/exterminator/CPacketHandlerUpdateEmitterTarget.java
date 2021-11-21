@@ -14,15 +14,15 @@ public class CPacketHandlerUpdateEmitterTarget implements IMessageHandler<SPacke
 
 	@Override
 	public IMessage onMessage(SPacketUpdateEmitterTarget message, MessageContext ctx) {
-		if(ctx.side.isClient()) {
+		if (ctx.side.isClient()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
 
 				if (entity != null && entity instanceof EntityCQRExterminator) {
 					EntityCQRExterminator exterminator = (EntityCQRExterminator) entity;
-					
-					if(message.isLeftEmitter()) {
+
+					if (message.isLeftEmitter()) {
 						exterminator.updateEmitterTargetLeftClient(message.isTargetSet() ? world.getEntityByID(message.getTargetID()) : null);
 					} else {
 						exterminator.updateEmitterTargetRightClient(message.isTargetSet() ? world.getEntityByID(message.getTargetID()) : null);

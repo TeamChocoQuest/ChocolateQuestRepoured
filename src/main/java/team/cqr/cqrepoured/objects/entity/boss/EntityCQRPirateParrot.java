@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -91,13 +89,9 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	}
 
 	private EntityLivingBase getOwnerInRange(UUID uuid) {
-		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20), new Predicate<Entity>() {
-
-			@Override
-			public boolean apply(Entity input) {
-				return input instanceof EntityLivingBase && input.getPersistentID().equals(uuid);
-			}
-		});
+		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this,
+				new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20),
+				input -> input instanceof EntityLivingBase && input.getPersistentID().equals(uuid));
 		return ents.isEmpty() ? null : (EntityLivingBase) ents.get(0);
 	}
 

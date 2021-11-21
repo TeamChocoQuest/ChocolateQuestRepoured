@@ -13,10 +13,10 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager.DungeonSpawnType;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
-import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.DungeonGenerationHelper;
 import team.cqr.cqrepoured.structuregen.DungeonPreparationExecutor;
+import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
+import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.IWallPart;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartRailingTower;
 import team.cqr.cqrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
@@ -43,7 +43,8 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		// Check if it is the wall region
 		if (this.isWallRegion(chunkX, chunkZ, world)) {
-			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn here?
+			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn
+			// here?
 		}
 		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance)) {
@@ -76,7 +77,8 @@ public class WorldWallGenerator implements IWorldGenerator {
 				DungeonGenerationManager.generate(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
 			} else {
 				CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, dungeonBuilder::build);
-				DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, null, DungeonSpawnType.DUNGEON_GENERATION));
+				DungeonPreparationExecutor.thenAcceptAsync(world, future,
+						generatable -> DungeonGenerationManager.generate(world, generatable, null, DungeonSpawnType.DUNGEON_GENERATION));
 			}
 		}
 	}

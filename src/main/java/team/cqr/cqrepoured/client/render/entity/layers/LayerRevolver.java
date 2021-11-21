@@ -20,7 +20,8 @@ public class LayerRevolver implements LayerRenderer<EntityLivingBase> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+			float netHeadYaw, float headPitch, float scale) {
 		if (!(this.livingEntityRenderer.getMainModel() instanceof ModelBiped)) {
 			return;
 		}
@@ -39,7 +40,7 @@ public class LayerRevolver implements LayerRenderer<EntityLivingBase> {
 		}
 		if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
-			if (!(entitylivingbaseIn.getPrimaryHand() == EnumHandSide.LEFT)) {
+			if ((entitylivingbaseIn.getPrimaryHand() != EnumHandSide.LEFT)) {
 				((ModelBiped) this.livingEntityRenderer.getMainModel()).bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				((ModelBiped) this.livingEntityRenderer.getMainModel()).bipedLeftArm.postRender(1F);
 			} else {

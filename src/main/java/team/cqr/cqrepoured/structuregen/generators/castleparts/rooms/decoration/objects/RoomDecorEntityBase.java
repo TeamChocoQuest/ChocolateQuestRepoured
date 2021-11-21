@@ -36,7 +36,8 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 	}
 
 	@Override
-	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side,
+			HashSet<BlockPos> decoMap) {
 		ArrayList<Vec3i> rotated = this.alignFootprint(this.footprint, side);
 
 		for (Vec3i placement : rotated) {

@@ -53,8 +53,8 @@ public class MagicBellRenderer {
 			// ignore
 		}
 
-		cqrOutlineShader = shader;
-		cqrOutlineFramebuffer = framebuffer;
+		this.cqrOutlineShader = shader;
+		this.cqrOutlineFramebuffer = framebuffer;
 	}
 
 	public abstract static class HighlightInfo {
@@ -182,8 +182,8 @@ public class MagicBellRenderer {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
-		cqrOutlineFramebuffer.framebufferClear();
-		cqrOutlineFramebuffer.bindFramebuffer(false);
+		this.cqrOutlineFramebuffer.framebufferClear();
+		this.cqrOutlineFramebuffer.bindFramebuffer(false);
 		GlStateManager.depthFunc(GL11.GL_ALWAYS);
 
 		buffer.setTranslation(-x, -y, -z);
@@ -229,14 +229,14 @@ public class MagicBellRenderer {
 		});
 		mc.getRenderManager().setRenderOutlines(false);
 
-		cqrOutlineShader.render(partialTicks);
+		this.cqrOutlineShader.render(partialTicks);
 
 		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		mc.getFramebuffer().bindFramebuffer(false);
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
 
-		cqrOutlineFramebuffer.framebufferRenderExt(mc.displayWidth, mc.displayHeight, false);
+		this.cqrOutlineFramebuffer.framebufferRenderExt(mc.displayWidth, mc.displayHeight, false);
 
 		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GlStateManager.disableTexture2D();

@@ -15,21 +15,21 @@ import team.cqr.cqrepoured.util.Reference;
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/exterminator.png");
-	
+
 	public RenderCQRExterminator(RenderManager renderManager) {
 		super(renderManager, new ModelExterminator(TEXTURE), "boss/exterminator");
 	}
 
 	public static final String HAND_IDENT_LEFT = "item_left_hand";
-	
+
 	@Override
 	protected ItemStack getHeldItemForBone(String boneName, EntityCQRExterminator currentEntity) {
-		if(boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
+		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
 			return currentEntity.getHeldItem(EnumHand.MAIN_HAND);
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected float getDeathMaxRotation(EntityCQRExterminator entityLivingBaseIn) {
 		return 0.0F;
@@ -42,9 +42,9 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
-		if(boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
+		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
 			GlStateManager.translate(0, 0.35, -0.55);
-			
+
 			GlStateManager.rotate(180, 0, 0, 1);
 		}
 	}
@@ -72,7 +72,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
-		if(boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
+		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
 			return TransformType.THIRD_PERSON_LEFT_HAND;
 		}
 		return TransformType.NONE;

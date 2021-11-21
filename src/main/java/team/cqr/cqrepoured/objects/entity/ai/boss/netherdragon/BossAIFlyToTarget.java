@@ -22,7 +22,11 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	@Override
 	public boolean shouldExecute() {
 		this.aiCooldown--;
-		return super.shouldExecute() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead && this.aiCooldown <= 0 && !this.entity.isFlyingUp();
+		return super.shouldExecute()
+				&& this.entity.getAttackTarget() != null
+				&& !this.entity.getAttackTarget().isDead
+				&& this.aiCooldown <= 0
+				&& !this.entity.isFlyingUp();
 	}
 
 	@Override
@@ -44,8 +48,8 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 				this.entity.attackEntityWithRangedAttack(this.entity.getAttackTarget(), this.entity.getDistance(this.entity.getAttackTarget()));
 			}
 		} else {
-			((EntityCQRNetherDragon) this.entity).breatheFire();
-			((EntityCQRNetherDragon) this.entity).setBreathingFireFlag(true);
+			this.entity.breatheFire();
+			this.entity.setBreathingFireFlag(true);
 		}
 	}
 
@@ -61,10 +65,11 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 		super.resetTask();
 		this.aiCooldown = 40;
 		if (this.breathFire) {
-			((EntityCQRNetherDragon) this.entity).setBreathingFireFlag(false);
+			this.entity.setBreathingFireFlag(false);
 		}
 		this.breathFire = false;
-		this.entity.setTargetLocation(new Vec3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
+		this.entity.setTargetLocation(
+				new Vec3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
 	}
 
 	@Override

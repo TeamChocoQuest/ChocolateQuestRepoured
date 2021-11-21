@@ -147,6 +147,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 		return super.attackEntityFrom(source, amount);
 	}
 
+	@Override
 	public float getInvisibility() {
 		return this.dataManager.get(INVISIBILITY);
 	}

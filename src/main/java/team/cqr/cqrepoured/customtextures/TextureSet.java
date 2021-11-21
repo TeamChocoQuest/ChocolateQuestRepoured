@@ -59,8 +59,8 @@ public class TextureSet {
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
 						// }
-						
-						//Meta file
+
+						// Meta file
 						File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
 						if (mf != null && mf.exists()) {
 							files.put(texture + ".png.mcmeta", mf);

@@ -27,14 +27,12 @@ public class ItemCQRWeapon extends ItemSword {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 		if (slot == EntityEquipmentSlot.MAINHAND) {
 			if (this.attackDamageBonus != 0.0D) {
-				ItemUtil.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, oldValue -> {
-					return oldValue + this.attackDamageBonus;
-				});
+				ItemUtil.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER,
+						oldValue -> (oldValue + this.attackDamageBonus));
 			}
 			if (this.attackSpeedBonus != 0.0D) {
-				ItemUtil.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, oldValue -> {
-					return oldValue + this.attackSpeedBonus;
-				});
+				ItemUtil.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER,
+						oldValue -> (oldValue + this.attackSpeedBonus));
 			}
 		}
 		return modifiers;

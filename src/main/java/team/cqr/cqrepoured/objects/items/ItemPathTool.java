@@ -56,8 +56,10 @@ public class ItemPathTool extends ItemLore {
 		if (!player.world.isRemote && entity instanceof AbstractEntityCQR) {
 			if (player.isSneaking()) {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
-				((AbstractEntityCQR) entity).getPath().copyFrom(getPath(stack), pos != null ? new BlockPos(-pos.getX(), -pos.getY(), -pos.getZ()) : BlockPos.ORIGIN);
-				((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+				((AbstractEntityCQR) entity).getPath().copyFrom(getPath(stack),
+						pos != null ? new BlockPos(-pos.getX(), -pos.getY(), -pos.getZ()) : BlockPos.ORIGIN);
+				((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D,
+						entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 				player.sendMessage(new TextComponentString("Applied path!"));
 			} else {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
@@ -82,7 +84,8 @@ public class ItemPathTool extends ItemLore {
 
 		if (world.isRemote) {
 			if (node == null) {
-				CQRMain.proxy.openGui(Reference.ADD_PATH_NODE_GUI_ID, player, world, hand.ordinal(), selectedNode != null ? selectedNode.getIndex() : -1, position.getX(), position.getY(), position.getZ());
+				CQRMain.proxy.openGui(Reference.ADD_PATH_NODE_GUI_ID, player, world, hand.ordinal(), selectedNode != null ? selectedNode.getIndex() : -1,
+						position.getX(), position.getY(), position.getZ());
 			}
 		} else if (node != null) {
 			if (selectedNode != null && player.isSneaking()) {
@@ -127,7 +130,9 @@ public class ItemPathTool extends ItemLore {
 				Vec3d vec = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
 				// Draw start point
-				((WorldServer) worldIn).spawnParticle((EntityPlayerMP) entityIn, node != selectedNode ? EnumParticleTypes.VILLAGER_HAPPY : EnumParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
+				((WorldServer) worldIn).spawnParticle((EntityPlayerMP) entityIn,
+						node != selectedNode ? EnumParticleTypes.VILLAGER_HAPPY : EnumParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D,
+						1.0D);
 
 				// Draw connection lines
 				for (int index : node.getConnectedNodes()) {
@@ -138,7 +143,8 @@ public class ItemPathTool extends ItemLore {
 					vec1 = vec1.normalize();
 
 					for (double d = 0.25D; d < dist; d += 0.5D) {
-						((WorldServer) worldIn).spawnParticle((EntityPlayerMP) entityIn, EnumParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
+						((WorldServer) worldIn).spawnParticle((EntityPlayerMP) entityIn, EnumParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x,
+								vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
 					}
 				}
 			}

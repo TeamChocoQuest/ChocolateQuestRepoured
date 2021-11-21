@@ -41,16 +41,16 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 
 		if (this.entity.getDistanceSq(entitylivingbase) < 9.0D) {
 			for (int i = 0; i < 5; ++i) {
-				float f1 = entityAngle + (float) i * (float) Math.PI * 0.4F;
-				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f1) * 1.5D, this.entity.posZ + (double) MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+				float f1 = entityAngle + i * (float) Math.PI * 0.4F;
+				this.spawnFangs(this.entity.posX + MathHelper.cos(f1) * 1.5D, this.entity.posZ + MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
 			}
 
 			for (int k = 0; k < 8; ++k) {
-				float f2 = entityAngle + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
-				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f2) * 2.5D, this.entity.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
+				float f2 = entityAngle + k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
+				this.spawnFangs(this.entity.posX + MathHelper.cos(f2) * 2.5D, this.entity.posZ + MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {
-			Vec3d v = new Vec3d((double) MathHelper.cos(entityAngle), 0, (double) MathHelper.sin(entityAngle));
+			Vec3d v = new Vec3d(MathHelper.cos(entityAngle), 0, MathHelper.sin(entityAngle));
 			v = v.normalize().scale(1.25D);
 			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRNG());
 			double angle = rows > 0 ? 120 / rows : 0;
@@ -59,7 +59,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 			}
 			for (int rowCount = 0; rowCount < rows; rowCount++) {
 				for (int fangcount = 0; fangcount < 24; ++fangcount) {
-					double d2 = 1.25D * (double) (fangcount + 1);
+					double d2 = 1.25D * (fangcount + 1);
 					v = v.normalize();
 					v = v.scale(d2);
 					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, entityAngle, fangcount);
@@ -100,7 +100,8 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		}
 
 		if (flag) {
-			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, (double) blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
+			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks,
+					this.entity);
 			this.entity.world.spawnEntity(entityevokerfangs);
 		}
 	}

@@ -14,12 +14,13 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 	public RenderCQRWalkerKing(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, "boss/walker_king", true);
 
-		this.addLayer(new LayerGlowingAreas<EntityCQRWalkerKing>(this, this::getEntityTexture));
+		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 		this.addLayer(new LayerBossDeath(191, 0, 255));
 	}
 
 	@Override
-	protected void renderModel(EntityCQRWalkerKing entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(EntityCQRWalkerKing entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+			float headPitch, float scaleFactor) {
 		if (entitylivingbaseIn.deathTime > 0) {
 			float f = (float) entitylivingbaseIn.deathTime / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
 

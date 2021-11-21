@@ -46,7 +46,7 @@ public class DataEntryByte extends DataEntry<Byte> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.byteValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryByte extends DataEntry<Byte> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.byteValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryByte extends DataEntry<Byte> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Byte value) {
-		return this.isSavedValueEqualTo(value.byteValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryByte extends DataEntry<Byte> {
 	@Deprecated
 	@Override
 	public Byte get() {
-		return Byte.valueOf(this.getByte());
+		return this.getByte();
 	}
 
 	public void set(byte value) {

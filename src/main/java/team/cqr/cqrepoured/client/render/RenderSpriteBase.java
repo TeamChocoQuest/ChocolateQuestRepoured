@@ -15,7 +15,7 @@ public class RenderSpriteBase<T extends Entity> extends Render<T> {
 		super(renderManager);
 		this.TEXTURE = sprite;
 	}
-	
+
 	protected final ResourceLocation TEXTURE;
 
 	@Override
@@ -56,5 +56,5 @@ public class RenderSpriteBase<T extends Entity> extends Render<T> {
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.TEXTURE;
 	}
-	
+
 }

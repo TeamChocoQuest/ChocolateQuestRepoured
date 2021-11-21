@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockDoor.EnumDoorHalf;
 import net.minecraft.block.BlockLever;
@@ -107,7 +108,10 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		double dz = this.doorPos.getZ() + 0.5D - this.entity.posZ;
 		double d = this.entityPositionX * dx + this.entityPositionZ * dz;
 
-		if (d < 0.0D && (MathHelper.floor(this.entity.posX) != this.doorPos.getX() || MathHelper.floor(this.entity.posY) != this.doorPos.getY() || MathHelper.floor(this.entity.posZ) != this.doorPos.getZ())) {
+		if (d < 0.0D
+				&& (MathHelper.floor(this.entity.posX) != this.doorPos.getX()
+						|| MathHelper.floor(this.entity.posY) != this.doorPos.getY()
+						|| MathHelper.floor(this.entity.posZ) != this.doorPos.getZ())) {
 			this.hasStoppedDoorInteraction = true;
 		}
 	}
@@ -134,16 +138,20 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			if (this.isPressurePlate(mutablePos.setPos(pos).move(this.doorEnterFacing))) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()).move(EnumFacing.UP), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(
+					mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()).move(EnumFacing.UP), this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()).move(EnumFacing.UP), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(
+					mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()).move(EnumFacing.UP), this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()),
+					this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()),
+					this.doorEnterFacing)) {
 				return true;
 			}
 		}
@@ -160,7 +168,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	private boolean activateButtonOrLeverWithOrientation(BlockPos pos, EnumFacing facing) {
 		IBlockState state = this.world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block instanceof BlockButton && state.getValue(BlockButton.FACING) == facing) {
+		if (block instanceof BlockButton && state.getValue(BlockDirectional.FACING) == facing) {
 			block.onBlockActivated(this.world, pos, state, null, EnumHand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
@@ -196,7 +204,9 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			if (ally.getDistanceSq(this.entity) >= r * r) {
 				continue;
 			}
-			if (MathHelper.floor(ally.posX) == this.doorPos.getX() && MathHelper.floor(ally.posY) == this.doorPos.getY() && MathHelper.floor(ally.posZ) == this.doorPos.getZ()) {
+			if (MathHelper.floor(ally.posX) == this.doorPos.getX()
+					&& MathHelper.floor(ally.posY) == this.doorPos.getY()
+					&& MathHelper.floor(ally.posZ) == this.doorPos.getZ()) {
 				shouldCloseDoor = false;
 				break;
 			}
@@ -272,7 +282,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof BlockButton) {
-			return state.getValue(BlockButton.FACING) == facing;
+			return state.getValue(BlockDirectional.FACING) == facing;
 		}
 		if (block instanceof BlockLever) {
 			return state.getValue(BlockLever.FACING).getFacing() == facing;

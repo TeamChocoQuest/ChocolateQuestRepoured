@@ -21,13 +21,14 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
 	 */
 	@Override
 	public boolean shouldExecute() {
-		EntityLivingBase entitylivingbase = (EntityLivingBase) this.entity.getOwner();
+		EntityLivingBase entitylivingbase = this.entity.getOwner();
 		boolean flag = entitylivingbase != null && !entitylivingbase.isInWater();
 		return !this.entity.isSitting() && flag && this.entity.canSitOnShoulder();
 	}
 
 	/**
-	 * Determine if this AI Task is interruptible by a higher (= lower value) priority task. All vanilla AITask have this value set to true.
+	 * Determine if this AI Task is interruptible by a higher (= lower value) priority task. All vanilla AITask have this
+	 * value set to true.
 	 */
 	@Override
 	public boolean isInterruptible() {
@@ -39,7 +40,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
 	 */
 	@Override
 	public void startExecuting() {
-		this.owner = (EntityLivingBase) this.entity.getOwner();
+		this.owner = this.entity.getOwner();
 		this.isSittingOnShoulder = false;
 	}
 

@@ -19,7 +19,8 @@ import team.cqr.cqrepoured.util.BlockStateGenArray;
 
 public class CastleMainStructWall {
 	public enum WallOrientation {
-		HORIZONTAL, VERTICAL
+		HORIZONTAL,
+		VERTICAL
 	}
 
 	private final int length;
@@ -425,7 +426,8 @@ public class CastleMainStructWall {
 					}
 					EnumFacing facing = (this.orientation == WallOrientation.HORIZONTAL) ? EnumFacing.NORTH : EnumFacing.WEST;
 
-					blockToBuild = dungeon.getDoorBlockState().withProperty(BlockDoor.HALF, half).withProperty(BlockDoor.FACING, facing).withProperty(BlockDoor.HINGE, hinge);
+					blockToBuild = dungeon.getDoorBlockState().withProperty(BlockDoor.HALF, half).withProperty(BlockDoor.FACING, facing)
+							.withProperty(BlockDoor.HINGE, hinge);
 				} else if (y == 3) {
 					blockToBuild = dungeon.getPlankBlockState();
 				}
@@ -561,7 +563,8 @@ public class CastleMainStructWall {
 	}
 
 	/*
-	 * Whether to build a door or window is usually determined by how far along the wall we are. This function gets the relevant length along the wall based on if
+	 * Whether to build a door or window is usually determined by how far along the wall we are. This function gets the
+	 * relevant length along the wall based on if
 	 * we are a horizontal wall or a vertical wall.
 	 */
 	protected int getLengthPoint(BlockPos pos) {

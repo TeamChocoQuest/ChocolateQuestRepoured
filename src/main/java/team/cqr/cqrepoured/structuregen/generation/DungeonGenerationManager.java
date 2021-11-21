@@ -106,8 +106,7 @@ public class DungeonGenerationManager {
 			if (!this.folder.exists()) {
 				this.folder.mkdirs();
 			}
-			for (File file : FileUtils.listFiles(this.folder, new String[] {
-					"nbt" }, false)) {
+			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
 				file.delete();
 			}
 			for (GeneratableDungeon structure : this.dungeonGeneratorList) {
@@ -136,8 +135,7 @@ public class DungeonGenerationManager {
 				this.folder.mkdirs();
 			}
 			this.dungeonGeneratorList.clear();
-			for (File file : FileUtils.listFiles(this.folder, new String[] {
-					"nbt" }, false)) {
+			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
 				this.createStructureFromFile(file);
 			}
 		}

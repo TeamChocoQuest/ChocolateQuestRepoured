@@ -15,7 +15,8 @@ import team.cqr.cqrepoured.util.BlockStateGenArray;
 
 public class CastleRoomHallway extends CastleRoomGenericBase {
 	public enum Alignment {
-		VERTICAL, HORIZONTAL;
+		VERTICAL,
+		HORIZONTAL;
 
 		private boolean canHaveInteriorWall(EnumFacing side) {
 			if (this == VERTICAL) {

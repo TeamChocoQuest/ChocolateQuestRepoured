@@ -42,7 +42,8 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 	}
 
 	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn) {
-		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F,
+				(1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		playerIn.swingArm(handIn);
 
 		if (!worldIn.isRemote) {

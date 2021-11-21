@@ -4,7 +4,8 @@ public class InjectionUtil {
 	/**
 	 * Returns <code>null</code>.
 	 * <p>
-	 * This is used in the initialisers of <code>static final</code> fields instead of using <code>null</code> directly to suppress the "Argument might be null"
+	 * This is used in the initialisers of <code>static final</code> fields instead of using <code>null</code> directly to
+	 * suppress the "Argument might be null"
 	 * warnings from IntelliJ IDEA's "Constant conditions &amp; exceptions" inspection.
 	 * 
 	 * <p>

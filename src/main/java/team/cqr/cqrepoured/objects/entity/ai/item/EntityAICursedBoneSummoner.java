@@ -38,8 +38,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	private boolean hasCursedBone() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemCursedBone
-				|| this.entity.getHeldItemOffhand().getItem() instanceof ItemCursedBone;
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemCursedBone || this.entity.getHeldItemOffhand().getItem() instanceof ItemCursedBone;
 	}
 
 	@Override
@@ -152,8 +151,8 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		if (summoned instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) summoned;
 
-			int material = world.rand.nextInt(3); // wood, stone, iron
-			int weapon = world.rand.nextInt(4); // sword, pickaxe, axe, shovel
+			int material = this.world.rand.nextInt(3); // wood, stone, iron
+			int weapon = this.world.rand.nextInt(4); // sword, pickaxe, axe, shovel
 			ItemStack stack = ItemStack.EMPTY;
 			if (material == 0) {
 				if (weapon == 0) {

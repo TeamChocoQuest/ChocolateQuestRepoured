@@ -5,15 +5,15 @@ import net.minecraft.item.ItemStack;
 
 public interface INonEnchantable {
 
-	public default boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+	default boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
 		return false;
 	}
 
-	public default boolean isEnchantable(ItemStack stack) {
+	default boolean isEnchantable(ItemStack stack) {
 		return false;
 	}
 
-	public default boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+	default boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
 	}
 

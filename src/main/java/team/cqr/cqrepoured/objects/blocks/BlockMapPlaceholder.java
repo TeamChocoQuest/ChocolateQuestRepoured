@@ -55,7 +55,8 @@ public class BlockMapPlaceholder extends BlockHorizontal {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
+			float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			playerIn.openGui(CQRMain.INSTANCE, Reference.MAP_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
@@ -118,7 +119,8 @@ public class BlockMapPlaceholder extends BlockHorizontal {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
+			EntityLivingBase placer, EnumHand hand) {
 		if (facing.getAxis().isHorizontal() && this.canAttachTo(worldIn, pos.offset(facing.getOpposite()), facing)) {
 			return this.getDefaultState().withProperty(FACING, facing);
 		} else {

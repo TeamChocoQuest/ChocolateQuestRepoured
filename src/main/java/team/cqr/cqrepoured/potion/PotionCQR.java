@@ -28,7 +28,7 @@ public class PotionCQR extends Potion {
 	@SideOnly(Side.CLIENT)
 	public void renderInventoryEffect(PotionEffect effect, Gui gui, int x, int y, float z) {
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.renderEngine.bindTexture(texture);
+		mc.renderEngine.bindTexture(this.texture);
 		GuiHelper.drawTexture(x + 6, y + 7, 0.0D, 0.0D, 18.0D, 18.0D, 1.0D, 1.0D);
 	}
 
@@ -36,7 +36,7 @@ public class PotionCQR extends Potion {
 	@SideOnly(Side.CLIENT)
 	public void renderHUDEffect(PotionEffect effect, Gui gui, int x, int y, float z, float alpha) {
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.renderEngine.bindTexture(texture);
+		mc.renderEngine.bindTexture(this.texture);
 		GuiHelper.drawTexture(x + 3, y + 3, 0.0D, 0.0D, 18.0D, 18.0D, 1.0D, 1.0D);
 	}
 

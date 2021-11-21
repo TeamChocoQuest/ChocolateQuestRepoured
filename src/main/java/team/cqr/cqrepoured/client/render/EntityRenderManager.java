@@ -137,7 +137,9 @@ public class EntityRenderManager {
 				IBlockState iblockstate = world.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 
-				if (iblockstate.isOpaqueCube() && iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB && block.canCollideCheck(iblockstate, stopOnLiquid)) {
+				if (iblockstate.isOpaqueCube()
+						&& iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB
+						&& block.canCollideCheck(iblockstate, stopOnLiquid)) {
 					RayTraceResult raytraceresult = iblockstate.collisionRayTrace(world, blockpos, vec31, vec32);
 
 					if (raytraceresult != null) {
@@ -167,25 +169,25 @@ public class EntityRenderManager {
 					double d2 = 999.0D;
 
 					if (i > l) {
-						d0 = (double) l + 1.0D;
+						d0 = l + 1.0D;
 					} else if (i < l) {
-						d0 = (double) l + 0.0D;
+						d0 = l + 0.0D;
 					} else {
 						flag2 = false;
 					}
 
 					if (j > i1) {
-						d1 = (double) i1 + 1.0D;
+						d1 = i1 + 1.0D;
 					} else if (j < i1) {
-						d1 = (double) i1 + 0.0D;
+						d1 = i1 + 0.0D;
 					} else {
 						flag = false;
 					}
 
 					if (k > j1) {
-						d2 = (double) j1 + 1.0D;
+						d2 = j1 + 1.0D;
 					} else if (k < j1) {
-						d2 = (double) j1 + 0.0D;
+						d2 = j1 + 0.0D;
 					} else {
 						flag1 = false;
 					}
@@ -247,7 +249,9 @@ public class EntityRenderManager {
 					iblockstate = world.getBlockState(blockpos);
 					block = iblockstate.getBlock();
 
-					if (iblockstate.isOpaqueCube() && iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB && block.canCollideCheck(iblockstate, stopOnLiquid)) {
+					if (iblockstate.isOpaqueCube()
+							&& iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB
+							&& block.canCollideCheck(iblockstate, stopOnLiquid)) {
 						RayTraceResult raytraceresult1 = iblockstate.collisionRayTrace(world, blockpos, new Vec3d(x, y, z), vec32);
 
 						if (raytraceresult1 != null) {

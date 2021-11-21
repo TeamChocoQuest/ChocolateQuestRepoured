@@ -50,20 +50,20 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 		switch (this.world.getDifficulty()) {
 		case EASY:
 		case PEACEFUL:
-			borderLightning += 30;
+			this.borderLightning += 30;
 			break;
 		case HARD:
-			borderLightning -= 5;
+			this.borderLightning -= 5;
 			break;
 		case NORMAL:
-			borderLightning += 5;
+			this.borderLightning += 5;
 			break;
 		}
 		// AI only executes every 3 ticks!
-		borderLightning /= 3;
-		int x = -LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * LIGHTNING_AREA_RADIUS) + 1);
-		int z = -LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * LIGHTNING_AREA_RADIUS) + 1);
-		int y = (-LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * LIGHTNING_AREA_RADIUS) + 1)) / 2;
+		this.borderLightning /= 3;
+		int x = -this.LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1);
+		int z = -this.LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1);
+		int y = (-this.LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1)) / 2;
 
 		BlockPos cp;
 		if (this.entity.hasHomePositionCQR()) {

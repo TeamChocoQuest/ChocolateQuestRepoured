@@ -72,7 +72,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 				return true;
 			}
 		});
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 15, 10, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 25, 5, new Vec3d(0, 0, 0)) {
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 15, 10, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true,
+				25, 5, new Vec3d(0, 0, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;

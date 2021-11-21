@@ -36,7 +36,8 @@ public class ModelGiantTortoiseGecko extends AnimatedGeoModel<EntityCQRGiantTort
 			return entity.getTextureOverride();
 		}
 		// Custom texture end
-		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise_" + entity.getTextureIndex() + ".png") : this.texture;
+		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise_" + entity.getTextureIndex() + ".png")
+				: this.texture;
 	}
 
 	private static final String BONE_IDENT_HEAD = "head";

@@ -24,7 +24,8 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 
 	}
 
-	public CPacketCloseMapPlaceholderGuiSimple(BlockPos pos, EnumFacing facing, int scale, EnumFacing orientation, boolean lockOrientation, int sizeUp, int sizeDown, int sizeRight, int sizeLeft, boolean fillMap, int fillRadius) {
+	public CPacketCloseMapPlaceholderGuiSimple(BlockPos pos, EnumFacing facing, int scale, EnumFacing orientation, boolean lockOrientation, int sizeUp,
+			int sizeDown, int sizeRight, int sizeLeft, boolean fillMap, int fillRadius) {
 		this.pos = pos;
 		this.facing = facing;
 		this.scale = scale;
@@ -69,47 +70,47 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 	}
 
 	public BlockPos getPos() {
-		return pos;
+		return this.pos;
 	}
 
 	public EnumFacing getFacing() {
-		return facing;
+		return this.facing;
 	}
 
 	public int getScale() {
-		return scale;
+		return this.scale;
 	}
 
 	public EnumFacing getOrientation() {
-		return orientation;
+		return this.orientation;
 	}
 
 	public boolean isLockOrientation() {
-		return lockOrientation;
+		return this.lockOrientation;
 	}
 
 	public int getSizeUp() {
-		return sizeUp;
+		return this.sizeUp;
 	}
 
 	public int getSizeDown() {
-		return sizeDown;
+		return this.sizeDown;
 	}
 
 	public int getSizeRight() {
-		return sizeRight;
+		return this.sizeRight;
 	}
 
 	public int getSizeLeft() {
-		return sizeLeft;
+		return this.sizeLeft;
 	}
 
 	public boolean isFillMap() {
-		return fillMap;
+		return this.fillMap;
 	}
 
 	public int getFillRadius() {
-		return fillRadius;
+		return this.fillRadius;
 	}
 
 }

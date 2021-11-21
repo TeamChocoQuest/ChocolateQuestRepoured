@@ -52,8 +52,12 @@ public class RenderEventHandler {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
 
-		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife
-				|| itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
+		if (itemMain instanceof ItemRevolver
+				|| itemOff instanceof ItemRevolver
+				|| itemOff instanceof ItemMusketKnife
+				|| itemMain instanceof ItemMusketKnife
+				|| itemMain instanceof ItemHookshotBase
+				|| itemOff instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
 		}
 
@@ -71,13 +75,13 @@ public class RenderEventHandler {
 			}
 		}
 		if (itemOff instanceof ItemMusket || itemOff instanceof ItemMusketKnife) {
-			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			} else {
 				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 			} else {
 				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
@@ -89,7 +93,7 @@ public class RenderEventHandler {
 	public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
-		if (itemMain instanceof ItemRevolver && !(itemMain instanceof ItemMusket || itemMain instanceof ItemMusketKnife)) {
+		if (itemMain instanceof ItemRevolver && (!(itemMain instanceof ItemMusket) && !(itemMain instanceof ItemMusketKnife))) {
 			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
@@ -98,7 +102,7 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -106,8 +110,8 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
 			}
 		}
-		if (itemOff instanceof ItemRevolver && !(itemOff instanceof ItemMusket || itemOff instanceof ItemMusketKnife)) {
-			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
+		if (itemOff instanceof ItemRevolver && (!(itemOff instanceof ItemMusket) && !(itemOff instanceof ItemMusketKnife))) {
+			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -115,7 +119,7 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -124,8 +128,12 @@ public class RenderEventHandler {
 			}
 		}
 
-		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife
-				|| itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
+		if (itemMain instanceof ItemRevolver
+				|| itemOff instanceof ItemRevolver
+				|| itemOff instanceof ItemMusketKnife
+				|| itemMain instanceof ItemMusketKnife
+				|| itemMain instanceof ItemHookshotBase
+				|| itemOff instanceof ItemHookshotBase) {
 			GlStateManager.popMatrix();
 		}
 	}
@@ -180,11 +188,12 @@ public class RenderEventHandler {
 						f2 = f1 - f;
 					}
 					GlStateManager.translate(x, y, z);
-					float f8 = (float) entity.ticksExisted + partialTicks;
+					float f8 = entity.ticksExisted + partialTicks;
 					applyRotations(entity, f8, f, partialTicks);
 					renderer.prepareScale(entity, partialTicks);
 					GlStateManager.enableAlpha();
-					if (renderer instanceof RenderCQREntity && model.isRiding
+					if (renderer instanceof RenderCQREntity
+							&& model.isRiding
 							&& entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemCrown) {
 						GlStateManager.translate(0.0F, 0.6F, 0.0F);
 					}
@@ -234,7 +243,7 @@ public class RenderEventHandler {
 
 					float f7 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
 					GlStateManager.translate(x, y, z);
-					float f8 = (float) entity.ticksExisted + partialTicks;
+					float f8 = entity.ticksExisted + partialTicks;
 					applyRotations(entity, f8, f, partialTicks);
 					float f4 = renderer.prepareScale(entity, partialTicks);
 					float f5 = 0.0F;
@@ -298,7 +307,7 @@ public class RenderEventHandler {
 		GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
 
 		if (entityLiving.deathTime > 0) {
-			float f = ((float) entityLiving.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;
+			float f = (entityLiving.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;
 			f = MathHelper.sqrt(f);
 
 			if (f > 1.0F) {
@@ -309,7 +318,8 @@ public class RenderEventHandler {
 		} else {
 			String s = TextFormatting.getTextWithoutFormattingCodes(entityLiving.getName());
 
-			if (s != null && ("Dinnerbone".equals(s) || "Grumm".equals(s))
+			if (s != null
+					&& ("Dinnerbone".equals(s) || "Grumm".equals(s))
 					&& (!(entityLiving instanceof EntityPlayer) || ((EntityPlayer) entityLiving).isWearing(EnumPlayerModelParts.CAPE))) {
 				GlStateManager.translate(0.0F, entityLiving.height + 0.1F, 0.0F);
 				GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);

@@ -42,7 +42,8 @@ public class ItemStaffPoison extends Item implements IRangedWeapon {
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player, EnumHand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.MASTER, 4.0F,
+				(1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		player.swingArm(handIn);
 
 		if (!worldIn.isRemote) {

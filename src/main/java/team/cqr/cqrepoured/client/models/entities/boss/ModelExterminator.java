@@ -37,7 +37,8 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 			return entity.getTextureOverride();
 		}
 		// Custom texture end
-		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/exterminator_" + entity.getTextureIndex() + ".png") : this.texture;
+		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/boss/exterminator_" + entity.getTextureIndex() + ".png")
+				: this.texture;
 	}
 
 	private static final String BONE_IDENT_LEFT_LEG = "leg_left";
@@ -56,11 +57,12 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 		if (entity.getHealth() < 0.01 || entity.isDead || !entity.isEntityAlive()) {
 			return;
 		}
-		
+
 		try {
 			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
 
-			if (entity.limbSwingAmount >= 0.01D && !(entity.isCannonRaised() || (entity.getCurrentAnimation() != null && entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW)))) {
+			if (entity.limbSwingAmount >= 0.01D
+					&& (!entity.isCannonRaised() && ((entity.getCurrentAnimation() == null) || !entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW)))) {
 				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
 
 				// Taken from RenderIronGolem.class
@@ -72,16 +74,16 @@ public class ModelExterminator extends AnimatedGeoModel<EntityCQRExterminator> {
 
 			// Taken from ModelIronGolem.class
 			final float legAngle = 1.5F * this.triangleWave(entity.limbSwing, 13.0F) * entity.limbSwingAmount;
-			
+
 			IBone leftLeg = this.getAnimationProcessor().getBone(BONE_IDENT_LEFT_LEG);
 			IBone rightLeg = this.getAnimationProcessor().getBone(BONE_IDENT_RIGHT_LEG);
-			
-			if(!entity.isUsingKickAnimation()) {
+
+			if (!entity.isUsingKickAnimation()) {
 				rightLeg.setRotationX(legAngle);
 			}
 			leftLeg.setRotationX(-legAngle);
 		} catch (NullPointerException npe) {
-			//Ignore, happens when model doesn't feature those bones
+			// Ignore, happens when model doesn't feature those bones
 		}
 	}
 

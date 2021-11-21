@@ -49,7 +49,7 @@ public class CQRItemModels {
 				registerItemModel(itemBlock);
 			}
 		}
-		
+
 		SphereRenderer.init();
 	}
 

@@ -85,7 +85,7 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 	}
 
 	private void throwPotion(EntityCQRPirateParrot thrower, EntityLivingBase target) {
-		double d0 = target.posY + (double) target.getEyeHeight() - 1.100000023841858D;
+		double d0 = target.posY + target.getEyeHeight() - 1.100000023841858D;
 		double d1 = target.posX + target.motionX - thrower.posX;
 		double d2 = d0 - thrower.posY;
 		double d3 = target.posZ + target.motionZ - thrower.posZ;
@@ -93,8 +93,9 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		ItemStack potionItem = thrower.getHeldItemMainhand();
 		EntityPotion potion = new EntityPotion(thrower.getEntityWorld(), thrower, potionItem);
 		potion.rotationPitch += 20F;
-		potion.shoot(d1, d2 + (double) (f * 0.2F), d3, 0.75F, 8.0F);
-		thrower.world.playSound((EntityPlayer) null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundCategory(), 1.0F, 0.8F + thrower.getRNG().nextFloat() * 0.4F);
+		potion.shoot(d1, d2 + f * 0.2F, d3, 0.75F, 8.0F);
+		thrower.world.playSound((EntityPlayer) null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundCategory(), 1.0F,
+				0.8F + thrower.getRNG().nextFloat() * 0.4F);
 		thrower.world.spawnEntity(potion);
 
 		this.entity.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);

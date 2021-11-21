@@ -60,10 +60,8 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 
 	@Override
 	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		BlockExporterChest block = BlockExporterChest.getExporterChests().stream()
-				.filter(BlockExporterChestCQR.class::isInstance)
-				.filter(b -> ((BlockExporterChestCQR) b).getLootTable().equals(this.lootTable))
-				.findFirst().orElse(CQRBlocks.EXPORTER_CHEST_CUSTOM);
+		BlockExporterChest block = BlockExporterChest.getExporterChests().stream().filter(BlockExporterChestCQR.class::isInstance)
+				.filter(b -> ((BlockExporterChestCQR) b).getLootTable().equals(this.lootTable)).findFirst().orElse(CQRBlocks.EXPORTER_CHEST_CUSTOM);
 		IBlockState state = block.getDefaultState().withProperty(BlockHorizontal.FACING, this.facing);
 		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 

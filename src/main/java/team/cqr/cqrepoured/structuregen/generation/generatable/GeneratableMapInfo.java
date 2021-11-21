@@ -42,7 +42,8 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 	private final boolean fillMap;
 	private final int fillRadius;
 
-	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
+	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap,
+			int fillRadius) {
 		super(x, y, z);
 		this.entity = entity;
 		this.mapOriginX = mapOriginX;
@@ -54,7 +55,8 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		this.fillRadius = fillRadius;
 	}
 
-	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
+	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap,
+			int fillRadius) {
 		this(pos.getX(), pos.getY(), pos.getZ(), entity, mapOriginX, mapOriginZ, mapX, mapZ, scale, fillMap, fillRadius);
 	}
 

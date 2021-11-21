@@ -46,7 +46,7 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.booleanValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.booleanValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Boolean value) {
-		return this.isSavedValueEqualTo(value.booleanValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 	@Deprecated
 	@Override
 	public Boolean get() {
-		return Boolean.valueOf(this.getBoolean());
+		return this.getBoolean();
 	}
 
 	public void set(boolean value) {

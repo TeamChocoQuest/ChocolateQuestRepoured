@@ -24,10 +24,10 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	public boolean shouldExecute() {
 		if (this.entity != null && !this.entity.isDead && this.entity.hasAttackTarget()) {
 
-			if(this.entity.isStunned()) {
+			if (this.entity.isStunned()) {
 				return false;
 			}
-			
+
 			// Exterminator specific
 			if (this.entity.isCannonRaised()) {
 				if (this.entity.isCannonArmPlayingAnimation()) {
@@ -59,7 +59,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if(this.entity.isStunned()) {
+		if (this.entity.isStunned()) {
 			return false;
 		}
 		return this.entity.getCurrentAnimation() != null && this.entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH);
@@ -74,7 +74,9 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 		}
 
 		// Time when animation "hits" the ground => 1.6 seconds => 32 ticks
-		if (this.entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH) && this.entity.getCurrentAnimationTicks() <= (EntityCQRExterminator.GROUND_SLAM_DURATION - 32) && !shockwaveWasSpawnedInCurrentCycle) {
+		if (this.entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH)
+				&& this.entity.getCurrentAnimationTicks() <= (EntityCQRExterminator.GROUND_SLAM_DURATION - 32)
+				&& !this.shockwaveWasSpawnedInCurrentCycle) {
 			this.shockwaveWasSpawnedInCurrentCycle = true;
 
 			// Now, spawn a explosion and create the shockwave entities

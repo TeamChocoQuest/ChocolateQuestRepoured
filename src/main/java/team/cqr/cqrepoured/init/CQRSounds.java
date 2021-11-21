@@ -54,14 +54,14 @@ public class CQRSounds {
 	public static final SoundEvent PIRATE_HURT = Null();
 	@ObjectHolder("entity.pirate.death")
 	public static final SoundEvent PIRATE_DEATH = Null();
-	
+
 	@ObjectHolder("entity.ogre.ambient")
 	public static final SoundEvent OGRE_AMBIENT = Null();
 	@ObjectHolder("entity.ogre.hurt")
 	public static final SoundEvent OGRE_HURT = Null();
 	@ObjectHolder("entity.ogre.death")
 	public static final SoundEvent OGRE_DEATH = Null();
-	
+
 	@ObjectHolder("entity.walker.ambient")
 	public static final SoundEvent WALKER_AMBIENT = Null();
 	@ObjectHolder("entity.walker.hurt")
@@ -74,7 +74,6 @@ public class CQRSounds {
 	public static final SoundEvent WALKER_KING_DEATH_EFFECT = Null();
 	@ObjectHolder("entity.walker_king.laugh")
 	public static final SoundEvent WALKER_KING_LAUGH = Null();
-	
 
 	@ObjectHolder("entity.ender_calamity.charge_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_CHARGE_ENERGY_BALL = Null();
@@ -85,13 +84,13 @@ public class CQRSounds {
 	/* Sound taken from DungeonDefenders, credit goes to TrendyNet */
 	@ObjectHolder("entity.ender_calamity.fire_energy_sphere")
 	public static final SoundEvent ENDER_CALAMITY_FIRE_ENERGY_BALL = Null();
-	
+
 	/* Sound taken from DungeonDefenders, credit goes to TrendyNet */
 	@ObjectHolder("entity.exterminator.electro_zap")
 	public static final SoundEvent EXTERMINATOR_ELECTRO_ZAP = Null();
 	@ObjectHolder("entity.exterminator.cannon_shoot")
 	public static final SoundEvent EXTERMINATOR_CANNON_SHOOT = Null();
-	
+
 	/* Sound taken from DungeonDefenders, credit goes to TrendyNet */
 	@ObjectHolder("projectile.energy_ball.impact")
 	public static final SoundEvent PROJECTILE_ENERGY_SPHERE_IMPACT = Null();

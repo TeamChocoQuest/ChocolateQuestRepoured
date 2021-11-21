@@ -33,7 +33,7 @@ public class SPacketUpdateAnimationOfEntity implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(entityId);
+		buf.writeInt(this.entityId);
 		ByteBufUtils.writeUTF8String(buf, this.animationID);
 	}
 

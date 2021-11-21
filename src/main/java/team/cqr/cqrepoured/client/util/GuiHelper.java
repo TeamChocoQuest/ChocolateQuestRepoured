@@ -48,7 +48,15 @@ public class GuiHelper {
 	}
 
 	public static boolean isValidCharForNumberTextField(char typedChar, int keyCode, boolean allowNegative, boolean allowDouble) {
-		return Character.isDigit(typedChar) || (allowNegative && typedChar == '-') || (allowDouble && typedChar == '.') || keyCode == 14 || keyCode == 211 || keyCode == 203 || keyCode == 205 || keyCode == 199 || keyCode == 207;
+		return Character.isDigit(typedChar)
+				|| (allowNegative && typedChar == '-')
+				|| (allowDouble && typedChar == '.')
+				|| keyCode == 14
+				|| keyCode == 211
+				|| keyCode == 203
+				|| keyCode == 205
+				|| keyCode == 199
+				|| keyCode == 207;
 	}
 
 }

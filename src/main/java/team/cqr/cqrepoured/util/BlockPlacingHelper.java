@@ -17,7 +17,6 @@ import net.minecraftforge.common.util.BlockSnapshot;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class BlockPlacingHelper {
 
@@ -51,7 +50,7 @@ public class BlockPlacingHelper {
 	@FunctionalInterface
 	public interface IBlockInfo {
 
-		public boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, GeneratableDungeon dungeon);
+		boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, GeneratableDungeon dungeon);
 
 	}
 

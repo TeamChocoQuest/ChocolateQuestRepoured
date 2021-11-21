@@ -10,8 +10,8 @@ public class RenderCQRSkeleton extends RenderCQREntity<EntityCQRSkeleton> {
 
 	public RenderCQRSkeleton(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRSkeleton(), 0.5F, "mob/skeleton", 1.0D, 1.0D);
-		
-		this.addLayer(new LayerGlowingAreas<EntityCQRSkeleton>(this, this::getEntityTexture));
+
+		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 	}
 
 }

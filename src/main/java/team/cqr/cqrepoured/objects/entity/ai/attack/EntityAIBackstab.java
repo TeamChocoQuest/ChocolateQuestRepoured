@@ -37,7 +37,9 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 		if (attackTarget instanceof AbstractEntityCQR) {
 			AbstractEntityCQR target = (AbstractEntityCQR) attackTarget;
-			boolean flag = this.entity.getDistanceSq(target) < 20.0D * 20.0D && target.getEntitySenses().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
+			boolean flag = this.entity.getDistanceSq(target) < 20.0D * 20.0D
+					&& target.getEntitySenses().canSee(this.entity)
+					&& !target.isEntityInFieldOfView(this.entity);
 			this.entity.setSneaking(flag);
 		}
 	}
@@ -51,7 +53,7 @@ public class EntityAIBackstab extends EntityAIAttack {
 		PathNavigate navigator = this.entity.getNavigator();
 		Path path = null;
 		for (int i = 4; path == null && i >= 0; i--) {
-			double d = distance * (double) i / 4.0D;
+			double d = distance * i / 4.0D;
 			path = navigator.getPathToXYZ(target.posX + sin * d, target.posY, target.posZ - cos * d);
 		}
 		navigator.setPath(path, 1.0D);

@@ -30,108 +30,114 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	private final int gridPosY;
 
 	private int islandRadius;
-	
+
 	/* Marks the center of the island */
 	private final BlockPos worldPosition;
 	private Set<HangingCityBuilding> connectedIslands = new HashSet<>();
 	private final CQStructure structure;
-	
+
 	private Set<SuspensionBridgeHelper> bridges = new HashSet<>();
-	
+
 	public HangingCityBuilding(GeneratorHangingCity generator, final int posX, final int posY, final CQStructure structure) {
 		super(generator);
 		this.gridPosX = posX;
 		this.gridPosY = posY;
 		this.structure = structure;
-		
-		this.islandRadius = this.structure.getSize().getX() > this.structure.getSize().getZ() ? this.structure.getSize().getX() : this.structure.getSize().getZ();
-		
+
+		this.islandRadius = this.structure.getSize().getX() > this.structure.getSize().getZ() ? this.structure.getSize().getX()
+				: this.structure.getSize().getZ();
+
 		this.worldPosition = this.generator.getCenterPosForIsland(this);
 	}
-	
+
 	public HangingCityBuilding[] getNeighbours() {
 		HangingCityBuilding[] neighbours = new HangingCityBuilding[8];
-		/* Indexes
+		/*
+		 * Indexes
 		 * [0, 3, 5]
 		 * [1, -, 6]
 		 * [2, 4, 7]
 		 */
 		int i = 0;
-		for(int ix = this.gridPosX -1; ix <= this.gridPosX +1; ix++) {
-			for(int iy = this.gridPosY -1; iy <= this.gridPosY +1; iy++) {
-				//Avoid adding ourselves to the neighbours list, we are not our own neighbour...
-				if(ix == this.gridPosX && iy == this.gridPosY) {
+		for (int ix = this.gridPosX - 1; ix <= this.gridPosX + 1; ix++) {
+			for (int iy = this.gridPosY - 1; iy <= this.gridPosY + 1; iy++) {
+				// Avoid adding ourselves to the neighbours list, we are not our own neighbour...
+				if (ix == this.gridPosX && iy == this.gridPosY) {
 					continue;
 				}
-				neighbours[i] = this.generator.getBuildingFromGridPos(ix, iy); 
-				
+				neighbours[i] = this.generator.getBuildingFromGridPos(ix, iy);
+
 				i++;
 			}
 		}
-		
+
 		return neighbours;
 	}
-	
+
 	public boolean hasFreeNeighbourSpots() {
 		return !this.getFreeNeighbourSpots().isEmpty();
 	}
-	
+
 	public boolean isConnectedToAnyBuilding() {
 		return !this.connectedIslands.isEmpty();
 	}
-	
+
 	public boolean isConnectedTo(HangingCityBuilding building) {
 		return this.connectedIslands.contains(building);
 	}
-	
+
 	public void connectTo(HangingCityBuilding building) {
-		//DONE: Build bridge (generation: postProcess())
+		// DONE: Build bridge (generation: postProcess())
 		BlockPos bridgePosOne = this.getConnectorPointForBridgeTo(building);
 		BlockPos bridgePosTwo = building.getConnectorPointForBridgeTo(this);
-		
-		this.bridges.add(new SuspensionBridgeHelper(this.generator.getDungeon(), bridgePosOne, bridgePosTwo)); 
-		
+
+		this.bridges.add(new SuspensionBridgeHelper(this.generator.getDungeon(), bridgePosOne, bridgePosTwo));
+
 		this.connectedIslands.add(building);
 		building.markAsConnected(this);
 	}
-	
+
 	public Set<Tuple<Integer, Integer>> getFreeNeighbourSpots() {
 		Set<Tuple<Integer, Integer>> result = new HashSet<>();
-		for(int ix = this.gridPosX -1; ix <= this.gridPosX +1; ix++) {
-			for(int iy = this.gridPosY -1; iy <= this.gridPosY +1; iy++) {
-				//Avoid adding ourselves to the neighbours list, we are not our own neighbour...
-				if(ix == this.gridPosX && iy == this.gridPosY) {
+		for (int ix = this.gridPosX - 1; ix <= this.gridPosX + 1; ix++) {
+			for (int iy = this.gridPosY - 1; iy <= this.gridPosY + 1; iy++) {
+				// Avoid adding ourselves to the neighbours list, we are not our own neighbour...
+				if (ix == this.gridPosX && iy == this.gridPosY) {
 					continue;
 				}
-				if(this.generator.getBuildingFromGridPos(ix, iy) == null) {
+				if (this.generator.getBuildingFromGridPos(ix, iy) == null) {
 					result.add(new Tuple<>(ix, iy));
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	public void markAsConnected(HangingCityBuilding connectionInitializer) {
 		this.connectedIslands.add(connectionInitializer);
 	}
 
 	@Override
 	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		//Order: Air, Island, Chains, Building 
-		int rad = 2* this.getRadius();
-		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight() : this.structure.getSize().getY();
+		// Order: Air, Island, Chains, Building
+		int rad = 2 * this.getRadius();
+		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight()
+				: this.structure.getSize().getY();
 		BlockPos start = this.worldPosition.add(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
 		BlockPos end = this.worldPosition.add(rad, height, rad);
-		
+
 		int wall = CQRConfig.general.supportHillWallSize;
-		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.add(-wall, -wall, -wall));
+		dungeonBuilder.add(
+				PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall,
+						WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)),
+				start.add(-wall, -wall, -wall));
 	}
 
 	@Override
 	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		this.buildPlatform(world, this.worldPosition, this.islandRadius, mobType, dungeonBuilder);
 		if (this.structure != null) {
-			structure.addAll(dungeonBuilder, this.worldPosition.up(), Offset.CENTER);
+			this.structure.addAll(dungeonBuilder, this.worldPosition.up(), Offset.CENTER);
 		}
 	}
 
@@ -192,8 +198,9 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			}
 		}
 	}
-	
-	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, IBlockState> stateMap) {
+
+	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR,
+			Map<BlockPos, IBlockState> stateMap) {
 		stateMap.put(lowerCenter, this.generator.getDungeon().getChainBlock());
 		stateMap.put(lowerCenter.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
 
@@ -208,11 +215,11 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			stateMap.put(lowerBoundR.add(0, i, 0), this.generator.getDungeon().getChainBlock());
 		}
 	}
-	
+
 	@Override
 	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		if(this.generator.getDungeon().isConstructBridges()) {
-			for(SuspensionBridgeHelper bridge : this.bridges) {
+		if (this.generator.getDungeon().isConstructBridges()) {
+			for (SuspensionBridgeHelper bridge : this.bridges) {
 				Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 				bridge.generate(stateMap);
 
@@ -224,32 +231,32 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			}
 		}
 	}
-	
+
 	BlockPos getConnectorPointForBridgeTo(final HangingCityBuilding bridgeTarget) {
-		Vec3d  bridgeVector = new Vec3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
+		Vec3d bridgeVector = new Vec3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
 		Vec3d horizontalVector = new Vec3d(bridgeVector.x, 0, bridgeVector.z);
 		horizontalVector = horizontalVector.normalize();
 		horizontalVector = horizontalVector.scale((1.05D * this.islandRadius) - 2);
-		
+
 		final BlockPos result = this.getWorldPosition().add(horizontalVector.x, 1, horizontalVector.z);
-		
+
 		return result;
 	}
 
 	int getGridPosX() {
 		return this.gridPosX;
 	}
-	
+
 	int getGridPosY() {
 		return this.gridPosY;
 	}
-	
+
 	BlockPos getWorldPosition() {
 		return this.worldPosition;
 	}
-	
+
 	int getRadius() {
 		return this.islandRadius;
 	}
-	
+
 }

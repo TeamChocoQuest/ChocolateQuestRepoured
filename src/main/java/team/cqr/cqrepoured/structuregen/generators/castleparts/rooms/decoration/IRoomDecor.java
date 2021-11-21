@@ -12,5 +12,6 @@ import team.cqr.cqrepoured.util.BlockStateGenArray;
 public interface IRoomDecor {
 	boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap, CastleRoomBase room);
 
-	void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap);
+	void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side,
+			HashSet<BlockPos> decoMap);
 }

@@ -178,7 +178,7 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	}
 
 	public boolean isConstructBridges() {
-		return constructBridges;
+		return this.constructBridges;
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public class GearedMobFactory {
 		switch (weaponType) {
 		case BOW:
 			mainHand = new ItemStack(Items.BOW);
-			if (entity instanceof AbstractEntityCQR && this.random.nextDouble() < 0.1D + 0.2D * (double) floor / (double) this.floorCount) {
+			if (entity instanceof AbstractEntityCQR && this.random.nextDouble() < 0.1D + 0.2D * floor / this.floorCount) {
 				ItemStack arrow = DEBUFF_ARROW_LIST.get(this.random.nextInt(DEBUFF_ARROW_LIST.size())).copy();
 				((AbstractEntityCQR) entity).setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, arrow);
 			}
@@ -217,7 +217,7 @@ public class GearedMobFactory {
 	}
 
 	private boolean enchantGear(int floor) {
-		double chance = 0.1D + 0.2D * (double) floor / (double) this.floorCount;
+		double chance = 0.1D + 0.2D * floor / this.floorCount;
 		return this.random.nextDouble() <= chance;
 	}
 
@@ -246,7 +246,10 @@ public class GearedMobFactory {
 	}
 
 	public enum EWeaponType {
-		MELEE(40), MAGIC_STAFF(10), HEALING_STAFF(10), BOW(10);
+		MELEE(40),
+		MAGIC_STAFF(10),
+		HEALING_STAFF(10),
+		BOW(10);
 
 		private int weight;
 
@@ -256,7 +259,11 @@ public class GearedMobFactory {
 	}
 
 	public enum EArmorType {
-		LEATHER, GOLD, CHAIN, IRON, DIAMOND;
+		LEATHER,
+		GOLD,
+		CHAIN,
+		IRON,
+		DIAMOND;
 	}
 
 }

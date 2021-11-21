@@ -25,7 +25,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
-		double angle = 180D / (double) projectiles;
+		double angle = 180D / projectiles;
 		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
 		Vec3d[] velocities = new Vec3d[projectiles];
 		for (int i = 0; i < projectiles; i++) {

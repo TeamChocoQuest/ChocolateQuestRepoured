@@ -50,7 +50,7 @@ public class ItemSpawnEggCQR extends Item {
 				entity.onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
 				BlockPos blockpos = pos.offset(facing);
 				double d0 = this.getYOffset(worldIn, blockpos);
-				entity.setPosition((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + d0, (double) blockpos.getZ() + 0.5D);
+				entity.setPosition(blockpos.getX() + 0.5D, blockpos.getY() + d0, blockpos.getZ() + 0.5D);
 				this.setEquipment(entity);
 				worldIn.spawnEntity(entity);
 			}
@@ -74,13 +74,14 @@ public class ItemSpawnEggCQR extends Item {
 				d0 = Math.max(aabb1.maxY, d0);
 			}
 
-			return d0 - (double) blockpos.getY();
+			return d0 - blockpos.getY();
 		}
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.translateToLocal("entity.cqr_" + this.entityName + ".name").trim() + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.name() + ")";
+		return I18n.translateToLocal("entity.cqr_" + this.entityName + ".name").trim() + " (" + this.mainhand.getDisplayName() + ", "
+				+ this.offhand.getDisplayName() + ", " + this.armor.name() + ")";
 	}
 
 	private void setEquipment(AbstractEntityCQR entity) {

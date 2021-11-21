@@ -32,14 +32,17 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.CHEST);
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+			float netHeadYaw, float headPitch, float scale) {
+		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale,
+				EntityEquipmentSlot.CHEST);
 		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.LEGS);
 		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.FEET);
 		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.HEAD);
 	}
 
-	private void renderArmorLayer(EntityLivingBase entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slotIn) {
+	private void renderArmorLayer(EntityLivingBase entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+			float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slotIn) {
 		ItemStack itemstack = entityLivingBaseIn.getItemStackFromSlot(slotIn);
 
 		if (itemstack.getItem() instanceof ItemArmor) {
@@ -57,12 +60,13 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 					if (itemarmor.hasOverlay(itemstack)) // Allow this for anything, not only cloth
 					{
 						int i = itemarmor.getColor(itemstack);
-						float f = (float) (i >> 16 & 255) / 255.0F;
-						float f1 = (float) (i >> 8 & 255) / 255.0F;
-						float f2 = (float) (i & 255) / 255.0F;
+						float f = (i >> 16 & 255) / 255.0F;
+						float f1 = (i >> 8 & 255) / 255.0F;
+						float f2 = (i & 255) / 255.0F;
 						GlStateManager.color(this.colorR * f, this.colorG * f1, this.colorB * f2, this.alpha);
 						if (model instanceof ModelCustomArmorBase && this.renderer.getMainModel() instanceof ModelBiped) {
-							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, (ModelBiped) this.renderer.getMainModel(), slotIn);
+							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer,
+									(ModelBiped) this.renderer.getMainModel(), slotIn);
 						} else {
 							model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						}
@@ -71,13 +75,15 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 					{ // Non-colored
 						GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
 						if (model instanceof ModelCustomArmorBase && this.renderer.getMainModel() instanceof ModelBiped) {
-							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, (ModelBiped) this.renderer.getMainModel(), slotIn);
+							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer,
+									(ModelBiped) this.renderer.getMainModel(), slotIn);
 						} else {
 							model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						}
 					} // Default
 					if (!this.skipRenderGlint && itemstack.hasEffect()) {
-						renderEnchantedGlint(this.renderer, entityLivingBaseIn, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+						renderEnchantedGlint(this.renderer, entityLivingBaseIn, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw,
+								headPitch, scale);
 					}
 				}
 			}

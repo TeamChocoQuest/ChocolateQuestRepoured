@@ -90,7 +90,8 @@ public class ItemBullBattleAxe extends ItemSword {
 
 	@Override
 	public float getDestroySpeed(ItemStack stack, IBlockState state) {
-		return (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE) ? 7.0F : super.getDestroySpeed(stack, state);
+		return (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE) ? 7.0F
+				: super.getDestroySpeed(stack, state);
 	}
 
 }

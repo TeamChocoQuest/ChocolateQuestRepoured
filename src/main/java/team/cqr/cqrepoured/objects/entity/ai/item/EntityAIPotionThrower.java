@@ -44,7 +44,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 			if (item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion) {
 				EntityPotion proj = new EntityPotion(this.world, this.entity, stack.copy());
 				double x = attackTarget.posX - this.entity.posX;
-				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
+				double y = attackTarget.posY + attackTarget.height * 0.5D - proj.posY;
 				double z = attackTarget.posZ - this.entity.posZ;
 				double distance = Math.sqrt(x * x + z * z);
 				proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
@@ -81,7 +81,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 					if (potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {
 						EntityPotion proj = new EntityPotion(this.world, this.entity, potion);
 						double x = attackTarget.posX - this.entity.posX;
-						double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
+						double y = attackTarget.posY + attackTarget.height * 0.5D - proj.posY;
 						double z = attackTarget.posZ - this.entity.posZ;
 						double distance = Math.sqrt(x * x + z * z);
 						proj.shoot(x, y + distance * 0.08D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);

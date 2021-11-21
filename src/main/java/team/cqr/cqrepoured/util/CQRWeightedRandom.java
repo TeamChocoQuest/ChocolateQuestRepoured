@@ -88,7 +88,7 @@ public class CQRWeightedRandom<T> {
 	}
 
 	public int getTotalWeight() {
-		return totalWeight;
+		return this.totalWeight;
 	}
 
 	public CQRWeightedRandom<T> copy() {

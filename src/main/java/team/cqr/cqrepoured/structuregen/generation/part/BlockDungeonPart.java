@@ -51,6 +51,7 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 		return Collections.unmodifiableCollection(this.chunks);
 	}
 
+	@Override
 	public BlockPos minPos() {
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
@@ -65,6 +66,7 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 		return new BlockPos(minX, minY, minZ);
 	}
 
+	@Override
 	public BlockPos maxPos() {
 		int maxX = Integer.MIN_VALUE;
 		int maxY = Integer.MIN_VALUE;
@@ -142,12 +144,14 @@ public class BlockDungeonPart extends DungeonPart implements IProtectable {
 				} else {
 					if (g1.hasSpecialShape()) {
 						// return g2.hasSpecialShape() ? 0 : 1;
-						if (!g2.hasSpecialShape())
+						if (!g2.hasSpecialShape()) {
 							return 1;
+						}
 					} else {
 						// return g2.hasSpecialShape() ? -1 : 0;
-						if (g2.hasSpecialShape())
+						if (g2.hasSpecialShape()) {
 							return -1;
+						}
 					}
 				}
 			}

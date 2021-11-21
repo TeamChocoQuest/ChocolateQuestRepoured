@@ -46,7 +46,7 @@ public class DataEntryDouble extends DataEntry<Double> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.doubleValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryDouble extends DataEntry<Double> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.doubleValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryDouble extends DataEntry<Double> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Double value) {
-		return this.isSavedValueEqualTo(value.doubleValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryDouble extends DataEntry<Double> {
 	@Deprecated
 	@Override
 	public Double get() {
-		return Double.valueOf(this.getDouble());
+		return this.getDouble();
 	}
 
 	public void set(double value) {

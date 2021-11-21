@@ -1,11 +1,9 @@
 package team.cqr.cqrepoured.objects.entity.misc;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -132,15 +130,14 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 			if (this.parent == null && this.parentUUID != null) {
 				if (this.searchTicksForParent > 0) {
 					if (!this.world.isRemote) {
-						this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(-10, -10, -10), this.getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
-
-							@Override
-							public void accept(Entity t) {
-								if (t.getPersistentID().equals(EntityWalkerKingIllusion.this.parentUUID)) {
-									EntityWalkerKingIllusion.this.parent = (EntityCQRWalkerKing) t;
-								}
-							}
-						});
+						this.world
+								.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(-10, -10, -10), this.getPosition().add(10, 10, 10)),
+										Predicates.instanceOf(EntityCQRWalkerKing.class))
+								.forEach(t -> {
+									if (t.getPersistentID().equals(EntityWalkerKingIllusion.this.parentUUID)) {
+										EntityWalkerKingIllusion.this.parent = (EntityCQRWalkerKing) t;
+									}
+								});
 
 						this.searchTicksForParent--;
 					}

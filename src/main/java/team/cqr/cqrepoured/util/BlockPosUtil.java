@@ -24,11 +24,14 @@ public class BlockPosUtil {
 		boolean test(BlockPos.MutableBlockPos mutablePos, IBlockState state);
 	}
 
-	public static void forEach(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
-		forEach(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, action);
+	public static void forEach(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks,
+			BlockInfoConsumer action) {
+		forEach(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius,
+				skipUnloadedChunks, skipAirBlocks, action);
 	}
 
-	public static void forEach(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
+	public static void forEach(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks,
+			BlockInfoConsumer action) {
 		if (world.getWorldType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
 			return;
 		}
@@ -93,11 +96,14 @@ public class BlockPosUtil {
 		}
 	}
 
-	public static List<BlockPos> getAll(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
-		return getAll(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, toCheck, predicate);
+	public static List<BlockPos> getAll(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks,
+			boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+		return getAll(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius,
+				z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, toCheck, predicate);
 	}
 
-	public static List<BlockPos> getAll(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+	public static List<BlockPos> getAll(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks,
+			@Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		List<BlockPos> list = new ArrayList<>();
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
 			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
@@ -107,11 +113,14 @@ public class BlockPosUtil {
 		return list;
 	}
 
-	public static BlockPos getNearest(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
-		return getNearest(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, new BlockPos(x1, y1, z1), toCheck, predicate);
+	public static BlockPos getNearest(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks,
+			boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+		return getNearest(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius,
+				z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, new BlockPos(x1, y1, z1), toCheck, predicate);
 	}
 
-	public static BlockPos getNearest(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockPos pos, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+	public static BlockPos getNearest(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks,
+			BlockPos pos, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		BlockPosDistInfo blockPosDistInfo = new BlockPosDistInfo();
 		blockPosDistInfo.d = Integer.MAX_VALUE;
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {

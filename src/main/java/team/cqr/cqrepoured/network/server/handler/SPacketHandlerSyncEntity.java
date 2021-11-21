@@ -22,14 +22,14 @@ public class SPacketHandlerSyncEntity implements IMessageHandler<CPacketSyncEnti
 					Entity entity = world.getEntityByID(message.getEntityId());
 					if (entity instanceof AbstractEntityCQR) {
 						AbstractEntityCQR cqrentity = (AbstractEntityCQR) entity;
-						cqrentity.setHealthScale((double) message.getHealthScaling() / 100.0D);
-						cqrentity.setDropChance(EntityEquipmentSlot.HEAD, (float) message.getDropChanceHelm() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.CHEST, (float) message.getDropChanceChest() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.LEGS, (float) message.getDropChanceLegs() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.FEET, (float) message.getDropChanceFeet() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) message.getDropChanceMainhand() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) message.getDropChanceOffhand() / 100.0F);
-						cqrentity.setSizeVariation((float) message.getSizeScaling() / 100.0F);
+						cqrentity.setHealthScale(message.getHealthScaling() / 100.0D);
+						cqrentity.setDropChance(EntityEquipmentSlot.HEAD, message.getDropChanceHelm() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.CHEST, message.getDropChanceChest() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.LEGS, message.getDropChanceLegs() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.FEET, message.getDropChanceFeet() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, message.getDropChanceMainhand() / 100.0F);
+						cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, message.getDropChanceOffhand() / 100.0F);
+						cqrentity.setSizeVariation(message.getSizeScaling() / 100.0F);
 					}
 				}
 			});

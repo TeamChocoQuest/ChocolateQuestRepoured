@@ -35,7 +35,7 @@ public class EntityBubble extends Entity implements IDontRenderFire {
 				if (this.isBeingRidden()) {
 					Entity entity = this.getPassengers().get(0);
 					entity.dismountRidingEntity();
-					entity.setPositionAndUpdate(this.posX, this.posY + 0.5D * (double) (this.height - entity.height), this.posZ);
+					entity.setPositionAndUpdate(this.posX, this.posY + 0.5D * (this.height - entity.height), this.posZ);
 					if (entity instanceof EntityLivingBase) {
 						if (!((EntityLivingBase) entity).canBreatheUnderwater() && !((EntityLivingBase) entity).isPotionActive(MobEffects.WATER_BREATHING)) {
 							entity.setAir(entity.getAir() - 5);
@@ -79,7 +79,7 @@ public class EntityBubble extends Entity implements IDontRenderFire {
 	public double getMountedYOffset() {
 		if (this.isBeingRidden()) {
 			Entity entity = this.getPassengers().get(0);
-			return 0.5D * (double) (this.height - entity.height) - entity.getYOffset();
+			return 0.5D * (this.height - entity.height) - entity.getYOffset();
 		}
 		return 0.0D;
 	}

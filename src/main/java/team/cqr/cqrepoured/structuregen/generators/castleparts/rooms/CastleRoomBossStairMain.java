@@ -105,7 +105,8 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN,
+							BlockStateGenArray.EnumPriority.MEDIUM);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
 						this.usedDecoPositions.add(this.roomOrigin.add(offset));
@@ -133,17 +134,21 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 			}
 		} else if ((x >= this.mainLandingXStartIdx && x <= this.mainLandingXEndIdx) && (z >= this.mainLandingZStartIdx)) {
 			blockToBuild = this.getMainLandingBlock(x, y, z);
-		} else if ((x >= this.upperStairXStartIdx && x <= this.upperStairXEndIdx) && ((z >= TOP_LANDING_BUFFER_Z) && (z <= TOP_LANDING_BUFFER_Z + this.topStairLength - 1))) {
+		} else if ((x >= this.upperStairXStartIdx && x <= this.upperStairXEndIdx)
+				&& ((z >= TOP_LANDING_BUFFER_Z) && (z <= TOP_LANDING_BUFFER_Z + this.topStairLength - 1))) {
 			blockToBuild = this.getUpperStairBlock(x, y, z);
-		} else if ((x >= this.lowerLanding1XStartIdx && x <= this.lowerLanding1XEndIdx) || (x >= this.lowerLanding2XStartIdx && x <= this.lowerLanding2XEndIdx)) {
+		} else if ((x >= this.lowerLanding1XStartIdx && x <= this.lowerLanding1XEndIdx)
+				|| (x >= this.lowerLanding2XStartIdx && x <= this.lowerLanding2XEndIdx)) {
 			if (z == this.midStairsZStartIdx || z == this.midStairsZStartIdx + 1) {
 				blockToBuild = this.getMidStairBlock(x, y, z);
 			} else if (z == this.lowerLandingZStartIdx || z == this.lowerLandingZStartIdx + 1) {
 				blockToBuild = this.getLowerLandingBlock(x, y, z);
 			}
-		} else if ((x >= this.lowerStair1XStartIdx && x <= this.lowerStair1XEndIdx) && (z == this.lowerLandingZStartIdx || z == this.lowerLandingZStartIdx + 1)) {
+		} else if ((x >= this.lowerStair1XStartIdx && x <= this.lowerStair1XEndIdx)
+				&& (z == this.lowerLandingZStartIdx || z == this.lowerLandingZStartIdx + 1)) {
 			blockToBuild = this.getLowerStair1Block(x, y, z);
-		} else if ((x >= this.lowerStair2XStartIdx && x <= this.lowerStair2XEndIdx) && (z == this.lowerLandingZStartIdx || z == this.lowerLandingZStartIdx + 1)) {
+		} else if ((x >= this.lowerStair2XStartIdx && x <= this.lowerStair2XEndIdx)
+				&& (z == this.lowerLandingZStartIdx || z == this.lowerLandingZStartIdx + 1)) {
 			blockToBuild = this.getLowerStair2Block(x, y, z);
 		}
 

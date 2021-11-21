@@ -16,7 +16,7 @@ public class RenderCQREnderKing extends RenderCQREntity<EntityCQREnderKing> {
 
 	public RenderCQREnderKing(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelEnderman(0.0F), 0.5F, "mob/enderman", 1.0D, 1.0D);
-		this.addLayer(new LayerGlowingAreas<EntityCQREnderKing>(this, this::getEntityTexture));
+		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 	}
 
 	@Override

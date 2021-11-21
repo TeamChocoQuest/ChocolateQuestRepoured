@@ -65,8 +65,7 @@ public class DungeonMapTool {
 		}
 	}).toArray(BufferedImage[]::new);
 
-	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityFactorIn,
-			boolean generateBiomes) {
+	public static void run(int radiusC, long seedIn, int distanceIn, int spreadIn, double rarityFactorIn, boolean generateBiomes) {
 		try {
 			// TODO move these elsewhere
 			boolean exportDungeonCounts = false;
@@ -172,8 +171,7 @@ public class DungeonMapTool {
 							Graphics2D graphics = bufferedImage.createGraphics();
 							graphics.setColor(Color.BLACK);
 							graphics.setFont(new Font("Arial", Font.BOLD, 24));
-							graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale,
-									(z + radiusC << 4) + 8 - 10 * scale);
+							graphics.drawString(dungeonAtPos.getDungeonName(), (x + radiusC << 4) + 8 - 9 * scale, (z + radiusC << 4) + 8 - 10 * scale);
 						}
 					}
 					// Now, reset to default
@@ -188,8 +186,9 @@ public class DungeonMapTool {
 				ImageIO.write(bufferedImage, "png", new File("dungeon_map.png"));
 			} else {
 				File file = new File("dungeon_count.prop");
-				if (!file.exists())
+				if (!file.exists()) {
 					file.createNewFile();
+				}
 				Properties prop = new Properties();
 				if (overrideOldDungeonCounts) {
 					try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
@@ -198,8 +197,7 @@ public class DungeonMapTool {
 				}
 				dungeonCountMap.object2IntEntrySet().forEach(e -> {
 					String k = e.getKey().getDungeonName();
-					prop.setProperty(k,
-							Integer.toString(PropertyFileHelper.getIntProperty(prop, k, 0) + e.getIntValue()));
+					prop.setProperty(k, Integer.toString(PropertyFileHelper.getIntProperty(prop, k, 0) + e.getIntValue()));
 				});
 				try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
 					prop.store(out, null);
@@ -323,8 +321,8 @@ public class DungeonMapTool {
 		public final int l;
 
 		protected DummyWorld(WorldSettings settings, int dimension, int x, int z, int w, int l) {
-			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"),
-					DimensionManager.getProviderType(dimension).createDimension(), new Profiler(), true);
+			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"), DimensionManager.getProviderType(dimension).createDimension(), new Profiler(),
+					true);
 			this.provider.setWorld(this);
 			hardResetIntCache();
 			this.biomes = this.provider.getBiomeProvider().getBiomes(null, x, z, w, l, false);

@@ -12,7 +12,8 @@ public class RoomDecorUnlitTorch extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockRotating(0, 0, 0, CQRBlocks.UNLIT_TORCH.getDefaultState(), BlockTorch.FACING, EnumFacing.SOUTH, BlockStateGenArray.GenerationPhase.POST));
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, CQRBlocks.UNLIT_TORCH.getDefaultState(), BlockTorch.FACING, EnumFacing.SOUTH,
+				BlockStateGenArray.GenerationPhase.POST));
 
 	}
 }

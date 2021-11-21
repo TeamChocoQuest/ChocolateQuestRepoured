@@ -50,14 +50,14 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 			// this.entity.rotationPitch = ((AbstractEntityLaser)this.projectile).rotationPitchCQR;
 			// DONE: Fix buggy rotation
 			AbstractEntityLaser laser = (AbstractEntityLaser) this.projectile;
-			this.entity.rotationYaw = (float) laser.rotationYawCQR /* + 90.0F */;
-			this.entity.prevRotationYaw = (float) laser.prevRotationYawCQR /* + 90.0F */;
+			this.entity.rotationYaw = laser.rotationYawCQR /* + 90.0F */;
+			this.entity.prevRotationYaw = laser.prevRotationYawCQR /* + 90.0F */;
 
-			this.entity.rotationPitchCQR = (float) laser.rotationPitchCQR;
-			this.entity.prevRotationPitchCQR = (float) laser.prevRotationPitchCQR;
+			this.entity.rotationPitchCQR = laser.rotationPitchCQR;
+			this.entity.prevRotationPitchCQR = laser.prevRotationPitchCQR;
 
-			//System.out.println("Laser pitch: " + laser.rotationPitchCQR);
-			//System.out.println("Entity pitch: " + entity.rotationPitchCQR);
+			// System.out.println("Laser pitch: " + laser.rotationPitchCQR);
+			// System.out.println("Entity pitch: " + entity.rotationPitchCQR);
 
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
@@ -72,7 +72,8 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	@Override
 	public int execPrepareShoot() {
 		// 10 is the transition time of the animation controller
-		// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
+		// IMessage message =
+		// SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_LASER);
 		// 10 is the transition time
@@ -83,10 +84,11 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	public int execAfterShoot() {
-		// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		// IMessage message =
+		// SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY);
-		
+
 		this.killProjectile();
 		// Animation cooldown time: 0.28s => 6 ticks
 		// Transition time: 10 ticks
@@ -95,7 +97,8 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	public void resetTask() {
-		// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		// IMessage message =
+		// SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY);
 

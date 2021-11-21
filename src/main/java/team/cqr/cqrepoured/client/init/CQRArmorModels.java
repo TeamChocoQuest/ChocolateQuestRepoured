@@ -22,7 +22,8 @@ public class CQRArmorModels {
 	public static ModelArmorBull bullArmor = new ModelArmorBull(1.0F);
 	public static ModelArmorBull bullArmorLegs = new ModelArmorBull(0.5F);
 
-	// This is supposed! Reason: If future version have a separate model for the heavy diamond armor, adaption isnt really needed
+	// This is supposed! Reason: If future version have a separate model for the heavy diamond armor, adaption isnt really
+	// needed
 	public static ModelArmorHeavy heavyIronArmor = new ModelArmorHeavy(1.0F);
 	public static ModelArmorHeavy heavyIronArmorLegs = new ModelArmorHeavy(0.5F);
 

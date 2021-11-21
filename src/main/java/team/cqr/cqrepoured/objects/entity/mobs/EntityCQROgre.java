@@ -40,15 +40,15 @@ public class EntityCQROgre extends AbstractEntityCQR {
 	protected SoundEvent getDeathSound() {
 		return CQRSounds.OGRE_DEATH;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return CQRSounds.OGRE_AMBIENT;
-	};
-	
+	}
+
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return CQRSounds.OGRE_HURT;
 	}
-	
+
 }

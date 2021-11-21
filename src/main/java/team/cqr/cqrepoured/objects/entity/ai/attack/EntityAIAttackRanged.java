@@ -77,7 +77,8 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		double distanceSq = this.entity.getDistanceSq(attackTarget);
 		double attackRangeSq = this.getAttackRange() * this.getAttackRange();
 
-		if (this.entity.getEntitySenses().canSee(attackTarget) && (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.hasPath()))) {
+		if (this.entity.getEntitySenses().canSee(attackTarget)
+				&& (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.hasPath()))) {
 			// this.entity.faceEntity(attackTarget, 30.0F, 30.0F);
 			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 			this.checkAndPerformAttack(attackTarget);
@@ -145,7 +146,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					// arrowItem.shrink(1);
 
 					double x = attackTarget.posX - this.entity.posX;
-					double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
+					double y = attackTarget.posY + attackTarget.height * 0.5D - arrow.posY;
 					double z = attackTarget.posZ - this.entity.posZ;
 					double distance = Math.sqrt(x * x + z * z);
 					arrow.shoot(x, y + distance * distance * 0.0045D, z, 2.4F, this.getInaccuracy());
@@ -173,7 +174,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 			}
 		}
 	}
-	
+
 	protected float getInaccuracy() {
 		float inaccuracy = 4.0F;
 		if (this.world.getDifficulty() == EnumDifficulty.HARD) {

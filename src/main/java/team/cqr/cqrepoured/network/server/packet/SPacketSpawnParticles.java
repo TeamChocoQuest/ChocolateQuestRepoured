@@ -23,7 +23,8 @@ public class SPacketSpawnParticles implements IMessage {
 
 	}
 
-	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... optionalArguments) {
+	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,
+			int... optionalArguments) {
 		this.particleId = particleId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
@@ -35,7 +36,8 @@ public class SPacketSpawnParticles implements IMessage {
 		this.optionalArguments = optionalArguments;
 	}
 
-	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
+	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count,
+			double xOffset, double yOffset, double zOffset, int... optionalArguments) {
 		this.particleId = particleId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
@@ -93,51 +95,51 @@ public class SPacketSpawnParticles implements IMessage {
 	}
 
 	public int getParticleId() {
-		return particleId;
+		return this.particleId;
 	}
 
 	public double getxCoord() {
-		return xCoord;
+		return this.xCoord;
 	}
 
 	public double getyCoord() {
-		return yCoord;
+		return this.yCoord;
 	}
 
 	public double getzCoord() {
-		return zCoord;
+		return this.zCoord;
 	}
 
 	public double getxSpeed() {
-		return xSpeed;
+		return this.xSpeed;
 	}
 
 	public double getySpeed() {
-		return ySpeed;
+		return this.ySpeed;
 	}
 
 	public double getzSpeed() {
-		return zSpeed;
+		return this.zSpeed;
 	}
 
 	public int getCount() {
-		return count;
+		return this.count;
 	}
 
 	public double getxOffset() {
-		return xOffset;
+		return this.xOffset;
 	}
 
 	public double getyOffset() {
-		return yOffset;
+		return this.yOffset;
 	}
 
 	public double getzOffset() {
-		return zOffset;
+		return this.zOffset;
 	}
 
 	public int[] getOptionalArguments() {
-		return optionalArguments;
+		return this.optionalArguments;
 	}
 
 }

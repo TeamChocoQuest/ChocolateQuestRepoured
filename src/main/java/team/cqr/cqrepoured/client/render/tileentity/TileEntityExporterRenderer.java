@@ -97,7 +97,7 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 
 		GlStateManager.glLineWidth(2.0F);
 		buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(x1, y1, z1).color((float) cl2, (float) cl2, (float) cl2, 0.0F).endVertex();
+		buffer.pos(x1, y1, z1).color(cl2, cl2, cl2, 0.0F).endVertex();
 		buffer.pos(x1, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
 		buffer.pos(x2, y1, z1).color(cl2, cl3, cl3, cl1).endVertex();
 		buffer.pos(x2, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
@@ -114,7 +114,7 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 		buffer.pos(x2, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
 		buffer.pos(x2, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
 		buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y1, z1).color((float) cl2, (float) cl2, (float) cl2, 0.0F).endVertex();
+		buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, 0.0F).endVertex();
 		tessellator.draw();
 		GlStateManager.glLineWidth(1.0F);
 	}

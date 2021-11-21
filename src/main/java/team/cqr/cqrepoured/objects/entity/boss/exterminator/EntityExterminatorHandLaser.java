@@ -40,11 +40,12 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 
 		this.maxRotationPerTick = 1.25F;
 	}
-	
+
 	@Override
 	public Vec3d getOffsetVector() {
-		if(this.caster instanceof EntityCQRExterminator) {
-			return ((EntityCQRExterminator) this.caster).getCannonFiringPointOffset().subtract(0, 1.75 * ((EntityCQRExterminator) this.caster).getSizeVariation(), 0);
+		if (this.caster instanceof EntityCQRExterminator) {
+			return ((EntityCQRExterminator) this.caster).getCannonFiringPointOffset().subtract(0,
+					1.75 * ((EntityCQRExterminator) this.caster).getSizeVariation(), 0);
 		}
 		return super.getOffsetVector();
 	}

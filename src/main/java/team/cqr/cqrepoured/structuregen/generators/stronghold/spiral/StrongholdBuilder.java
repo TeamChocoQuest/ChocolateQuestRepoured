@@ -23,7 +23,8 @@ public class StrongholdBuilder {
 	private EnumFacing direction;
 	private World world;
 
-	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
+	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall,
+			DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.startPos = start;
@@ -58,10 +59,10 @@ public class StrongholdBuilder {
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (int i = 0; i < (this.blocksRemainingToWall / 4) + 2; i++) {
 
-			//this.buildSegment(pos.subtract(this.startPos), blockInfoList);
+			// this.buildSegment(pos.subtract(this.startPos), blockInfoList);
 			// Old way: EntranceBuilderHelper.buildEntranceSegment(pos.subtract(this.startPos), blockInfoList, this.direction);
-			//new way:
-			//this.buildSegment(pos.subtract(this.startPos), partBuilder);
+			// new way:
+			// this.buildSegment(pos.subtract(this.startPos), partBuilder);
 			EntranceBuilderHelper.buildEntranceSegment(pos.subtract(this.startPos), partBuilder, this.direction);
 
 			pos = pos.add(expansionVector);
@@ -72,7 +73,8 @@ public class StrongholdBuilder {
 	}
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonBuilder, ESkyDirection.fromFacing(this.direction),
+				this.dungeon, this.random);
 		stronghold.calculateFloors(pos, world2);
 		stronghold.buildFloors(pos.add(0, -1, 0), this.world);
 	}

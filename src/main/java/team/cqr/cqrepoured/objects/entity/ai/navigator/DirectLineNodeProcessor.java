@@ -15,7 +15,8 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 
 	@Override
 	public PathPoint getStart() {
-		return this.openPoint(MathHelper.floor(this.entity.getEntityBoundingBox().minX), MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getEntityBoundingBox().minZ));
+		return this.openPoint(MathHelper.floor(this.entity.getEntityBoundingBox().minX), MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D),
+				MathHelper.floor(this.entity.getEntityBoundingBox().minZ));
 	}
 
 	@Override
@@ -28,7 +29,8 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 		int i = 0;
 
 		for (EnumFacing enumfacing : EnumFacing.values()) {
-			PathPoint pathpoint = this.openPoint(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(), currentPoint.z + enumfacing.getZOffset());
+			PathPoint pathpoint = this.openPoint(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(),
+					currentPoint.z + enumfacing.getZOffset());
 
 			if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
 				pathOptions[i++] = pathpoint;
@@ -39,7 +41,8 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 	}
 
 	@Override
-	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize,
+			boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
 		return PathNodeType.OPEN;
 	}
 

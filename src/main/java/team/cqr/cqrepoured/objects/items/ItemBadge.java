@@ -45,7 +45,8 @@ public class ItemBadge extends Item {
 			if (!player.world.isRemote) {
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, stack.copy());
-					((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+					((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D,
+							entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 				} else {
 					IItemHandler capability = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 					NBTTagList itemList = new NBTTagList();
@@ -58,7 +59,8 @@ public class ItemBadge extends Item {
 					}
 					if (!itemList.isEmpty()) {
 						entity.getEntityData().setTag("Items", itemList);
-						((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+						((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX,
+								entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 					}
 				}
 			}

@@ -239,7 +239,8 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 		if (!this.world.isRemote) {
 			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName());
+			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(),
+					Arrays.asList(this.unprotectedBlocks.get()), author.getName());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
 					author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName.get()));
@@ -253,11 +254,14 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 	}
 
-	public void setValues(String structName, BlockPos startPos, BlockPos endPos, boolean useRelativeMode, boolean ignoreEntities, BlockPos[] unprotectedBlocks) {
-		this.setValues(structName, startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), useRelativeMode, ignoreEntities, unprotectedBlocks);
+	public void setValues(String structName, BlockPos startPos, BlockPos endPos, boolean useRelativeMode, boolean ignoreEntities,
+			BlockPos[] unprotectedBlocks) {
+		this.setValues(structName, startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), useRelativeMode,
+				ignoreEntities, unprotectedBlocks);
 	}
 
-	public void setValues(String structName, int sX, int sY, int sZ, int eX, int eY, int eZ, boolean useRelativeMode, boolean ignoreEntities, BlockPos[] unprotectedBlocks) {
+	public void setValues(String structName, int sX, int sY, int sZ, int eX, int eY, int eZ, boolean useRelativeMode, boolean ignoreEntities,
+			BlockPos[] unprotectedBlocks) {
 		this.structureName.set(structName);
 		this.startX.set(sX);
 		this.startY.set(sY);

@@ -26,10 +26,10 @@ public class BlockTemporaryWeb extends BlockWeb {
 		this.setDefaultState(super.getDefaultState().withProperty(AGE, 0));
 		this.setTickRandomly(true);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState p_176201_1_) {
-		return (Integer) p_176201_1_.getValue(AGE);
+		return p_176201_1_.getValue(AGE);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class BlockTemporaryWeb extends BlockWeb {
 	}
 
 	protected void slightlyDecay(World world, BlockPos pos, IBlockState blockstate, Random random, boolean updateNeighbors) {
-		int age = (Integer) blockstate.getValue(AGE);
+		int age = blockstate.getValue(AGE);
 		if (age < 3) {
 			world.setBlockState(pos, blockstate.withProperty(AGE, age + 1), 2);
 			world.scheduleUpdate(pos, this, MathHelper.getInt(random, 20, 40));

@@ -36,10 +36,30 @@ public class CQRConfig {
 		public boolean debugAI = false;
 
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
-		public String[] specialBlocks = { "minecraft:bed", "minecraft:wooden_door", "minecraft:spruce_door", "minecraft:birch_door", "minecraft:jungle_door", "minecraft:acacia_door", "minecraft:dark_oak_door", "minecraft:iron_door", "minecraft:piston", "minecraft:sticky_piston", "minecraft:piston_head" };
+		public String[] specialBlocks = {
+				"minecraft:bed",
+				"minecraft:wooden_door",
+				"minecraft:spruce_door",
+				"minecraft:birch_door",
+				"minecraft:jungle_door",
+				"minecraft:acacia_door",
+				"minecraft:dark_oak_door",
+				"minecraft:iron_door",
+				"minecraft:piston",
+				"minecraft:sticky_piston",
+				"minecraft:piston_head" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
-		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand", "minecraft:minecart", "minecraft:chest_minecart", "minecraft:furnace_minecart", "minecraft:tnt_minecart", "minecraft:hopper_minecart", "minecraft:boat" };
+		public String[] specialEntities = {
+				"minecraft:painting",
+				"minecraft:item_frame",
+				"minecraft:armor_stand",
+				"minecraft:minecart",
+				"minecraft:chest_minecart",
+				"minecraft:furnace_minecart",
+				"minecraft:tnt_minecart",
+				"minecraft:hopper_minecart",
+				"minecraft:boat" };
 
 		@Config.Comment("When enabled cqr mobs only take 50% damage from IceAndFire mobs and deal 200% damage against IceAndFire mobs.")
 		public boolean enableSpecialFeatures = true;
@@ -85,7 +105,8 @@ public class CQRConfig {
 		@Config.RangeInt(min = 0, max = 1024)
 		public double generationMinDistanceToOtherStructure = 64;
 		/*
-		 * @Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures") public boolean
+		 * @Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures") public
+		 * boolean
 		 * generationRespectUnexploredStructures = true;
 		 */
 
@@ -231,7 +252,14 @@ public class CQRConfig {
 		public boolean protectionSystemEnabled = true;
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus", "gravestone:gravestone", "openblocks:grave" };
+		public String[] protectionSystemBreakableBlockWhitelist = {
+				"minecraft:mob_spawner",
+				"minecraft:torch",
+				"cqrepoured:unlit_torch",
+				"cqrepoured:phylactery",
+				"cqrepoured:force_field_nexus",
+				"gravestone:gravestone",
+				"openblocks:grave" };
 
 		@Config.Comment("Blocks with a whitelisted material will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableMaterialWhitelist = { "WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB" };
@@ -431,8 +459,7 @@ public class CQRConfig {
 				if (calendar.get(Calendar.MONTH) == Calendar.APRIL) {
 					// Days are initiated with 1
 					aprilFoolsResult = calendar.get(Calendar.DAY_OF_MONTH) == 1;
-				}
-				else {
+				} else {
 					aprilFoolsResult = false;
 				}
 			}

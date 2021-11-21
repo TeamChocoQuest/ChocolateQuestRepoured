@@ -42,32 +42,32 @@ public class TargetUtil {
 		}
 		return EntitySelectors.CAN_AI_TARGET.apply(input);
 	};
-	
+
 	public static final Predicate<EntityLivingBase> PREDICATE_CAN_BE_ELECTROCUTED = input -> {
-		if(input == null || input.isDead) {
+		if (input == null || input.isDead) {
 			return false;
 		}
-		if(!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
+		if (!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
 			return false;
 		}
 		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-		if(input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
-			return input.isWet(); 
+		if (input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
+			return input.isWet();
 		}
-		if(icapability.isElectrocutionActive()) {
+		if (icapability.isElectrocutionActive()) {
 			return false;
 		}
-		if(icapability.getCooldown() > 0) {
+		if (icapability.getCooldown() > 0) {
 			return false;
 		}
 		return true;
 	};
-	
+
 	public static final Predicate<EntityLivingBase> PREDICATE_IS_ELECTROCUTED = input -> {
-		if(input == null || input.isDead) {
+		if (input == null || input.isDead) {
 			return false;
 		}
-		if(!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
+		if (!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
 			return false;
 		}
 		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);

@@ -24,7 +24,8 @@ import team.cqr.cqrepoured.util.VectorUtil;
  */
 public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonGuardedCastle> {
 
-	// DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
+	// DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it
+	// should atm...
 
 	private Map<BlockPos, CQStructure> toGenerate = new HashMap<>();
 	private Map<BlockPos, Mirror> mirrorMap = new HashMap<>();

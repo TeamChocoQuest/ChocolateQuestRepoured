@@ -56,7 +56,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 					this.buildPlatform(x, z, genArray, dungeon);
 				} else if (((x < this.upperStairWidth) || (x >= this.centerStairWidth + this.upperStairWidth)) && z < this.upperStairLength + PLATFORM_LENGTH) {
 					this.buildUpperStair(x, z, genArray, dungeon);
-				} else if (((x >= this.upperStairWidth) || (x < this.centerStairWidth + this.upperStairWidth)) && z <= this.centerStairLength + PLATFORM_LENGTH) {
+				} else if (((x >= this.upperStairWidth) || (x < this.centerStairWidth + this.upperStairWidth))
+						&& z <= this.centerStairLength + PLATFORM_LENGTH) {
 					this.buildLowerStair(x, z, genArray, dungeon);
 				}
 			}
@@ -100,7 +101,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN,
+					BlockStateGenArray.EnumPriority.MEDIUM);
 		}
 	}
 
@@ -116,7 +118,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN,
+					BlockStateGenArray.EnumPriority.MEDIUM);
 		}
 	}
 
@@ -130,7 +133,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+			genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN,
+					BlockStateGenArray.EnumPriority.MEDIUM);
 		}
 	}
 

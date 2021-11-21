@@ -9,7 +9,7 @@ import net.minecraft.util.Rotation;
 
 public class StairCaseHelper {
 
-	//Sky direction here: In which direction is the staircase when looked at from the volcano's center
+	// Sky direction here: In which direction is the staircase when looked at from the volcano's center
 	public enum EStairSection {
 		/**
 		 * North: -z East: +x South: +z West: -x
@@ -39,11 +39,11 @@ public class StairCaseHelper {
 		public EStairSection getSuccessor() {
 			return EStairSection.valueOf(this.successorName);
 		}
-		
+
 		@Nullable
 		public EStairSection getPredeccessor() {
-			for(EStairSection section : EStairSection.values()) {
-				if(section.successorName.equalsIgnoreCase(this.name())) {
+			for (EStairSection section : EStairSection.values()) {
+				if (section.successorName.equalsIgnoreCase(this.name())) {
 					return section;
 				}
 			}

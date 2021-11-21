@@ -38,7 +38,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 
 					entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), 10.0F);
 				}
-				this.world.createExplosion(this.thrower, posX, posY, posZ, 1.5F, false);
+				this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 
 				this.setDead();
 			}
@@ -68,6 +68,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 		this.isFast = compound.getBoolean("isFast");
 	}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (this.isEntityInvulnerable(source) || this.isFast) {
 			return false;

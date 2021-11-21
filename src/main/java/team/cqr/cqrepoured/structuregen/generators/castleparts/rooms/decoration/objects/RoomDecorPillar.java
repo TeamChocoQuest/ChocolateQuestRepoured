@@ -26,7 +26,8 @@ public class RoomDecorPillar extends RoomDecorBlocksBase {
 	}
 
 	@Override
-	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side,
+			HashSet<BlockPos> decoMap) {
 		this.schematic = this.getSizedSchematic(room);
 		super.build(world, genArray, room, dungeon, start, side, decoMap);
 	}

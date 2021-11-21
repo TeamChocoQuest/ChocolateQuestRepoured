@@ -32,7 +32,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 	public int getItemStackLimit(ItemStack stack) {
 		return 1;
 	}
-	
+
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);

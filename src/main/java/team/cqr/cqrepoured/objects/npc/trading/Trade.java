@@ -42,7 +42,8 @@ public class Trade {
 	private int inStock = 10;
 	private int maxStock = 20;
 
-	public Trade(TraderOffer holder, int requiredMinReputation, @Nullable ResourceLocation requiredAdvancement, boolean hasLimitedStock, int restockRate, int inStock, int maxStock, ItemStack output, TradeInput... inputs) {
+	public Trade(TraderOffer holder, int requiredMinReputation, @Nullable ResourceLocation requiredAdvancement, boolean hasLimitedStock, int restockRate,
+			int inStock, int maxStock, ItemStack output, TradeInput... inputs) {
 		this.holder = holder;
 
 		this.requiredReputation = requiredMinReputation;
@@ -86,7 +87,8 @@ public class Trade {
 		this.isSimple = nbt.getBoolean("isSimple");
 
 		this.requiredReputation = nbt.getInteger("requiredReputation");
-		this.requiredAdvancement = nbt.hasKey("requiredAdvancement", Constants.NBT.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement")) : null;
+		this.requiredAdvancement = nbt.hasKey("requiredAdvancement", Constants.NBT.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement"))
+				: null;
 
 		this.hasLimitedStock = nbt.getBoolean("hasLimitedStock");
 		this.restockRate = nbt.getInteger("restockRate");
@@ -373,7 +375,8 @@ public class Trade {
 	}
 
 	public boolean isUnlockedFor(EntityPlayer player) {
-		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
+		if (this.requiredReputation != Integer.MIN_VALUE
+				&& FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
 			return false;
 		}
 

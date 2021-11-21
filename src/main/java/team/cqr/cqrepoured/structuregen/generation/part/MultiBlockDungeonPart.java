@@ -48,6 +48,7 @@ public class MultiBlockDungeonPart extends DungeonPart implements IProtectable {
 		return Collections.unmodifiableCollection(this.blocks);
 	}
 
+	@Override
 	public BlockPos minPos() {
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
@@ -60,6 +61,7 @@ public class MultiBlockDungeonPart extends DungeonPart implements IProtectable {
 		return new BlockPos(minX, minY, minZ);
 	}
 
+	@Override
 	public BlockPos maxPos() {
 		int maxX = Integer.MIN_VALUE;
 		int maxY = Integer.MIN_VALUE;
@@ -88,7 +90,8 @@ public class MultiBlockDungeonPart extends DungeonPart implements IProtectable {
 
 		@Override
 		public MultiBlockDungeonPart build(World world, DungeonPlacement placement) {
-			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull)
+					.collect(Collectors.toList());
 			return new MultiBlockDungeonPart(list);
 		}
 

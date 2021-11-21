@@ -69,14 +69,16 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 	}
 
 	/**
-	 * Taken from CoFHCore's EntityHelper (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
+	 * Taken from CoFHCore's EntityHelper
+	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
 	 */
 	private static void transferPlayerToDimension(EntityPlayerMP player, int dimension, PlayerList manager) {
 		int oldDim = player.dimension;
 		WorldServer oldWorld = manager.getServerInstance().getWorld(player.dimension);
 		player.dimension = dimension;
 		WorldServer newWorld = manager.getServerInstance().getWorld(player.dimension);
-		player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+		player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(),
+				player.interactionManager.getGameType()));
 		oldWorld.removeEntityDangerously(player);
 		if (player.isBeingRidden()) {
 			player.removePassengers();
@@ -99,7 +101,8 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 	}
 
 	/**
-	 * Taken from CoFHCore's EntityHelper (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
+	 * Taken from CoFHCore's EntityHelper
+	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
 	 */
 	private static void transferEntityToWorld(Entity entity, WorldServer oldWorld, WorldServer newWorld) {
 		WorldProvider oldWorldProvider = oldWorld.provider;
@@ -133,14 +136,16 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 				stack.getTagCompound().removeTag(this.Z);
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 				for (int i = 0; i < 10; i++) {
-					worldIn.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+					worldIn.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D,
+							player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
 			}
 
 			else if (this.getPoint(stack) == null || !stack.hasTagCompound()) {
 				this.setPoint(stack, player);
 				for (int i = 0; i < 10; i++) {
-					worldIn.spawnParticle(EnumParticleTypes.FLAME, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+					worldIn.spawnParticle(EnumParticleTypes.FLAME, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D,
+							player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 
@@ -149,7 +154,8 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 
 			else if (stack.hasTagCompound() && !player.isSneaking()) {
 				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
-					int dimension = stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension) : 0;
+					int dimension = stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension)
+							: 0;
 					BlockPos pos = this.getPoint(stack);
 
 					if (player.isBeingRidden()) {
@@ -162,17 +168,19 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 					if (dimension != player.getEntityWorld().provider.getDimension()) {
 						MinecraftServer server = player.world.getMinecraftServer();
 						if (server != null) {
-							transferPlayerToDimension((EntityPlayerMP) player, dimension, server.getPlayerList());
+							transferPlayerToDimension(player, dimension, server.getPlayerList());
 						}
 					}
 					player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-					// player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y), stack.getTagCompound().getDouble(this.Z));
+					// player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
+					// stack.getTagCompound().getDouble(this.Z));
 					/*
 					 * if(worldIn.provider.getDimension() != dimension) {
 					 * 
 					 * WorldServer worldServer = player.getServer().getWorld(dimension);
 					 * WorldServer worldServerOld = player.getServerWorld();
-					 * player.moveToBlockPosAndAngles(new BlockPos(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
+					 * player.moveToBlockPosAndAngles(new BlockPos(stack.getTagCompound().getDouble(this.X),
+					 * stack.getTagCompound().getDouble(this.Y),
 					 * stack.getTagCompound().getDouble(this.Z)), player.rotationYaw, player.rotationPitch);
 					 * worldServerOld.removeEntity(player);
 					 * boolean flag = player.forceSpawn;
@@ -183,10 +191,12 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 					 * 
 					 * }
 					 */
-					// player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
+					// player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X),
+					// stack.getTagCompound().getDouble(this.Y),
 					// stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
 					for (int i = 0; i < 30; i++) {
-						worldIn.spawnParticle(EnumParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+						worldIn.spawnParticle(EnumParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D,
+								player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
 					}
 					worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 
@@ -214,7 +224,8 @@ public class ItemTeleportStone extends Item implements INonEnchantable {
 					tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int) stack.getTagCompound().getDouble(this.X)));
 					tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int) stack.getTagCompound().getDouble(this.Y)));
 					tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int) stack.getTagCompound().getDouble(this.Z)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Dimension: " + (int) (stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension) : 0)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("Dimension: "
+							+ (stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension) : 0)));
 				}
 			}
 		} else {

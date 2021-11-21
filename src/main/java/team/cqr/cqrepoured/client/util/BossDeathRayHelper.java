@@ -33,7 +33,7 @@ public class BossDeathRayHelper {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		RenderHelper.disableStandardItemLighting();
-		float f = ((float) ticks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
+		float f = (ticks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
 		float f1 = 0.0F;
 
 		if (f > 0.8F) {
@@ -55,8 +55,8 @@ public class BossDeathRayHelper {
 		// GlStateManager.translate(0.0F, -entitylivingbaseIn.height / 2, 0.0F);
 
 		float rays = (f + f * f) / 2.0F * 60.0F;
-		rays = Math.min(maxRays, rays);
-		for (int i = 0; (float) i < rays; ++i) {
+		rays = Math.min(this.maxRays, rays);
+		for (int i = 0; i < rays; ++i) {
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
@@ -66,11 +66,11 @@ public class BossDeathRayHelper {
 			float f2 = random.nextFloat() * this.raySize + (this.raySize / 4) + f1 * (this.raySize / 2F);
 			float f3 = random.nextFloat() * (this.raySize / 10F) + 1.0F + f1 * (this.raySize / 10F);
 			bufferbuilder.begin(6, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.pos(0.0D, 0.0D, 0.0D).color(this.red, this.green, this.blue, (int) (raySize * (1.0F - f1))).endVertex();
-			bufferbuilder.pos(-0.866D * (double) f3, (double) f2, (double) (-0.5F * f3)).color(this.red, this.green, this.blue, 0).endVertex();
-			bufferbuilder.pos(0.866D * (double) f3, (double) f2, (double) (-0.5F * f3)).color(this.red, this.green, this.blue, 0).endVertex();
-			bufferbuilder.pos(0.0D, (double) f2, (double) (1.0F * f3)).color(this.red, this.green, this.blue, 0).endVertex();
-			bufferbuilder.pos(-0.866D * (double) f3, (double) f2, (double) (-0.5F * f3)).color(this.red, this.green, this.blue, 0).endVertex();
+			bufferbuilder.pos(0.0D, 0.0D, 0.0D).color(this.red, this.green, this.blue, (int) (this.raySize * (1.0F - f1))).endVertex();
+			bufferbuilder.pos(-0.866D * f3, f2, -0.5F * f3).color(this.red, this.green, this.blue, 0).endVertex();
+			bufferbuilder.pos(0.866D * f3, f2, -0.5F * f3).color(this.red, this.green, this.blue, 0).endVertex();
+			bufferbuilder.pos(0.0D, f2, 1.0F * f3).color(this.red, this.green, this.blue, 0).endVertex();
+			bufferbuilder.pos(-0.866D * f3, f2, -0.5F * f3).color(this.red, this.green, this.blue, 0).endVertex();
 			tessellator.draw();
 		}
 

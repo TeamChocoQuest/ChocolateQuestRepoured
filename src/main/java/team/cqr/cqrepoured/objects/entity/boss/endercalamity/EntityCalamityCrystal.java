@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.objects.entity.boss.endercalamity;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +39,8 @@ public class EntityCalamityCrystal extends Entity {
 
 	private float absorbedHealth = 0F;
 
-	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.<Optional<BlockPos>>createKey(EntityCalamityCrystal.class, DataSerializers.OPTIONAL_BLOCK_POS);
+	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.<Optional<BlockPos>>createKey(EntityCalamityCrystal.class,
+			DataSerializers.OPTIONAL_BLOCK_POS);
 	private static final DataParameter<Boolean> ABSORBING = EntityDataManager.<Boolean>createKey(EntityCalamityCrystal.class, DataSerializers.BOOLEAN);
 
 	private static final int EXPLOSION_EFFECT_RADIUS = 16;
@@ -157,7 +157,9 @@ public class EntityCalamityCrystal extends Entity {
 
 	private void checkCurrentTarget() {
 		if (this.currentTarget != null) {
-			if (this.currentTarget.isDead || !this.currentTarget.isEntityAlive() || (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
+			if (this.currentTarget.isDead
+					|| !this.currentTarget.isEntityAlive()
+					|| (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
 				// Target is dead or remove or has too few hp=> search a different one!
 				this.currentTarget = null;
 				this.setBeamTarget(null);
@@ -172,7 +174,7 @@ public class EntityCalamityCrystal extends Entity {
 			Vec3d p1 = this.getPositionVector().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			Vec3d p2 = this.getPositionVector().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> this.doesEntityFitForAbsorbing(input));
+			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this::doesEntityFitForAbsorbing);
 			if (!affectedEntities.isEmpty()) {
 				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() - 1, this.rand));
 			}
@@ -185,6 +187,7 @@ public class EntityCalamityCrystal extends Entity {
 		super.onKillCommand();
 	}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (this.isEntityInvulnerable(source)) {
 			return false;
@@ -219,14 +222,7 @@ public class EntityCalamityCrystal extends Entity {
 			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb);
 			if (!affectedEntities.isEmpty()) {
 				final float healingAmount = 4 * (this.absorbedHealth / affectedEntities.size());
-				affectedEntities.forEach(new Consumer<EntityLiving>() {
-
-					@Override
-					public void accept(EntityLiving arg0) {
-						arg0.heal(healingAmount);
-
-					}
-				});
+				affectedEntities.forEach(arg0 -> arg0.heal(healingAmount));
 			}
 		}
 		// TODO: Play some fancy effects and sounds
@@ -238,7 +234,7 @@ public class EntityCalamityCrystal extends Entity {
 
 	@Nullable
 	public BlockPos getBeamTarget() {
-		return (BlockPos) ((Optional<BlockPos>) this.getDataManager().get(BEAM_TARGET)).orNull();
+		return this.getDataManager().get(BEAM_TARGET).orNull();
 	}
 
 	@Override

@@ -9,6 +9,6 @@ public class RenderCQRWalkerKingIllusion extends RenderCQREntity<EntityWalkerKin
 
 	public RenderCQRWalkerKingIllusion(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, "boss/walker_king", true);
-		this.addLayer(new LayerGlowingAreas<EntityWalkerKingIllusion>(this, this::getEntityTexture));
+		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 	}
 }

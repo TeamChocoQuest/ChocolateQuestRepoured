@@ -148,7 +148,7 @@ public class ContainerMerchant extends Container {
 	private void fillSlot(int slotIndex, TradeInput input) {
 		if (!input.getStack().isEmpty()) {
 			for (int i = 0; i < 36; i++) {
-				ItemStack stack1 = ((Slot) this.inventorySlots.get(i)).getStack();
+				ItemStack stack1 = this.inventorySlots.get(i).getStack();
 				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(input.getStack(), stack1, input.ignoreMeta(), input.ignoreNBT())) {
 					ItemStack stack2 = this.merchantInventory.getStackInSlot(slotIndex);
 					int j = stack2.isEmpty() ? 0 : stack2.getCount();

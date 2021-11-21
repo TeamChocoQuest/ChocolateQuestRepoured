@@ -59,6 +59,7 @@ public class RenderProjectileSpiderHook extends RenderProjectileHookShotHook {
 		GlStateManager.popMatrix();
 	}
 
+	@Override
 	protected void renderChain(ProjectileHookShotHook entity, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.disableTexture2D();

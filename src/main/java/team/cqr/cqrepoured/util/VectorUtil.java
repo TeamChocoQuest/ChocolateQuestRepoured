@@ -11,7 +11,9 @@ import net.minecraft.util.math.Vec3i;
 public class VectorUtil {
 
 	public enum EAxis {
-		AXIS_Y, AXIS_X, AXIS_Z;
+		AXIS_Y,
+		AXIS_X,
+		AXIS_Z;
 	}
 
 	/*
@@ -27,7 +29,7 @@ public class VectorUtil {
 		double phi = Math.acos(cosphi);
 		return Math.toDegrees(phi);
 	}
-	
+
 	public static Vec3i rotateVector(EAxis axis, Vec3i vector, Double degrees) {
 		double rad = Math.toRadians(degrees);
 
@@ -115,9 +117,7 @@ public class VectorUtil {
 		double d22 = 1 - (i2 + j2);
 
 		// rotate vertex
-		return new Vec3d(vec.x * d00 + vec.y * d01 + vec.z * d02,
-				vec.x * d10 + vec.y * d11 + vec.z * d12,
-				vec.x * d20 + vec.y * d21 + vec.z * d22);
+		return new Vec3d(vec.x * d00 + vec.y * d01 + vec.z * d02, vec.x * d10 + vec.y * d11 + vec.z * d12, vec.x * d20 + vec.y * d21 + vec.z * d22);
 	}
 
 }

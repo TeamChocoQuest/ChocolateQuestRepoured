@@ -50,8 +50,10 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		if (faction == null) {
 			this.target = this.entity.getAttackTarget();
 		} else {
-			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 16.0D, this.entity.posY - 2.0D, this.entity.posZ - 16.0D, this.entity.posX + 16.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 16.0D);
-			List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && faction.isEnemy(e));
+			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 16.0D, this.entity.posY - 2.0D, this.entity.posZ - 16.0D, this.entity.posX + 16.0D,
+					this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 16.0D);
+			List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
+					e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && faction.isEnemy(e));
 			if (list.isEmpty()) {
 				this.target = this.entity.getAttackTarget();
 			} else {
@@ -88,7 +90,8 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 
 			this.entity.playSound(SoundEvents.EVOCATION_ILLAGER_PREPARE_WOLOLO, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
 			((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.entity.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+			((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ,
+					4, 0.2D, 0.2D, 0.2D, 0.0D);
 		} else if (this.tick > this.chargingTicks + 20 - 1) {
 			this.entity.rotationYaw = this.yawDegree;
 
@@ -118,7 +121,8 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		if (!noClip) {
 			Vec3d start = new Vec3d(this.entity.posX, this.entity.posY + this.entity.getEyeHeight(), this.entity.posZ);
 			Vec3d end = start.add(this.targetDirection);
-			if (this.world.rayTraceBlocks(start, end, false, true, false) == null && !this.world.collidesWithAnyBlock(this.entity.getEntityBoundingBox().offset(this.targetDirection))) {
+			if (this.world.rayTraceBlocks(start, end, false, true, false) == null
+					&& !this.world.collidesWithAnyBlock(this.entity.getEntityBoundingBox().offset(this.targetDirection))) {
 				this.entity.noClip = true;
 			}
 		}
