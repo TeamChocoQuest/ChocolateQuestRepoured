@@ -30,7 +30,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.client.structureprot.ProtectedRegionClientEventHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class ProtectedRegionHelper {
 
@@ -76,11 +75,13 @@ public class ProtectedRegionHelper {
 		}
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions,
+			boolean addOrResetProtectedRegionIndicator) {
 		return isBlockBreakingPrevented(world, pos, entity, updateProtectedRegions, addOrResetProtectedRegionIndicator, null);
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable EnumFacing clickedFace) {
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions,
+			boolean addOrResetProtectedRegionIndicator, @Nullable EnumFacing clickedFace) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -106,11 +107,16 @@ public class ProtectedRegionHelper {
 
 		boolean isBreakingPrevented = false;
 
-		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency
+				&& CQRConfig.dungeonProtection.protectionSystemEnabled
+				&& CQRConfig.dungeonProtection.enablePreventBlockBreaking
+				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
+				&& !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+						ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(),
+								protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
 					}
 					isBreakingPrevented = true;
 					break;
@@ -134,7 +140,8 @@ public class ProtectedRegionHelper {
 		return BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, IBlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, IBlockState state, boolean updateProtectedRegions,
+			boolean addOrResetProtectedRegionIndicator) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -149,11 +156,15 @@ public class ProtectedRegionHelper {
 
 		boolean isPlacingPrevented = false;
 
-		if (CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockPlacing && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
+		if (CQRConfig.dungeonProtection.protectionSystemEnabled
+				&& CQRConfig.dungeonProtection.enablePreventBlockPlacing
+				&& (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())
+				&& !isBlockPlacingWhitelisted(state)) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+						ProtectedRegionClientEventHandler.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(),
+								protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
 					}
 					isPlacingPrevented = true;
 					break;
@@ -177,7 +188,8 @@ public class ProtectedRegionHelper {
 		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static IBlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing, @Nullable Vec3d hitVec, EntityLivingBase placer, EnumHand hand) {
+	public static IBlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing, @Nullable Vec3d hitVec, EntityLivingBase placer,
+			EnumHand hand) {
 		if (stack.isEmpty()) {
 			return null;
 		}

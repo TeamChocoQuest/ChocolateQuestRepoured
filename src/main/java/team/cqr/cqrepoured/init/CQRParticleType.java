@@ -49,18 +49,19 @@ public enum CQRParticleType {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public int getArgumentCount() {
-		return argumentCount;
+		return this.argumentCount;
 	}
 
-	public static void spawnParticles(int particleId, World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
+	public static void spawnParticles(int particleId, World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,
+			int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
 		CQRParticleType particleType = ID_PARTICLE_MAP.get(particleId);
 		if (particleType == null) {
 			return;
@@ -68,9 +69,11 @@ public enum CQRParticleType {
 		spawnParticles(particleType, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
 	}
 
-	public static void spawnParticles(CQRParticleType particleType, World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
+	public static void spawnParticles(CQRParticleType particleType, World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed,
+			double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
 		if (world.isRemote) {
-			CQRParticleManager.spawnParticlesClient(particleType, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
+			CQRParticleManager.spawnParticlesClient(particleType, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset,
+					optionalArguments);
 		} else {
 			if (count == 1) {
 				double x = xCoord;
@@ -85,9 +88,11 @@ public enum CQRParticleType {
 				if (zOffset != 0.0D) {
 					y += (Math.random() - Math.random()) * zOffset;
 				}
-				CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments), new TargetPoint(world.provider.getDimension(), x, y, z, 0.0D));
+				CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments),
+						new TargetPoint(world.provider.getDimension(), x, y, z, 0.0D));
 			} else {
-				CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments), new TargetPoint(world.provider.getDimension(), xCoord, yCoord, zCoord, 0.0D));
+				CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset,
+						yOffset, zOffset, optionalArguments), new TargetPoint(world.provider.getDimension(), xCoord, yCoord, zCoord, 0.0D));
 			}
 		}
 	}

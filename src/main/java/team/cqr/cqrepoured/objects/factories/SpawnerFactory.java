@@ -40,7 +40,8 @@ public abstract class SpawnerFactory {
 	 */
 
 	/**
-	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically based upon the requested capabilities.
+	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically
+	 * based upon the requested capabilities.
 	 * 
 	 * @param entities                 Entities for spawner to spawn
 	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
@@ -61,7 +62,8 @@ public abstract class SpawnerFactory {
 	}
 
 	/**
-	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically based upon the requested capabilities.
+	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically
+	 * based upon the requested capabilities.
 	 * 
 	 * @param entities                 Entities as NBT Tag (From Entity.writeToNBTOptional(COMPOUND) for spawner to spawn
 	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
@@ -69,7 +71,8 @@ public abstract class SpawnerFactory {
 	 * @param world                    World in which to place spawner
 	 * @param pos                      Position at which to place spawner
 	 */
-	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
+	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world,
+			BlockPos pos) {
 		world.setBlockState(pos, multiUseSpawner ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tileEntity = world.getTileEntity(pos);
@@ -82,7 +85,8 @@ public abstract class SpawnerFactory {
 			for (int i = 0; i < entities.length; i++) {
 				if (entities[i] != null) {
 					{
-						// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
+						// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an
+						// entity
 						entities[i].removeTag("UUIDLeast");
 						entities[i].removeTag("UUIDMost");
 
@@ -131,7 +135,8 @@ public abstract class SpawnerFactory {
 	}
 
 	/**
-	 * Places a vanilla spawner in the provided world at the provided position using the provided ResourceLocation for the entity that it should spawn.
+	 * Places a vanilla spawner in the provided world at the provided position using the provided ResourceLocation for the
+	 * entity that it should spawn.
 	 */
 	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
 		world.setBlockState(pos, Blocks.MOB_SPAWNER.getDefaultState());
@@ -150,7 +155,8 @@ public abstract class SpawnerFactory {
 	}
 
 	/**
-	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a resource location in its parameter
+	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a resource
+	 * location in its parameter
 	 */
 	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, Entity entity) {
 		createSimpleMultiUseSpawner(world, pos, EntityList.getKey(entity));
@@ -208,7 +214,8 @@ public abstract class SpawnerFactory {
 			TileEntityMobSpawner spawnerMultiUseTile = (TileEntityMobSpawner) tile;
 
 			List<WeightedSpawnerEntity> spawnerEntries = new ArrayList<>();
-			spawnerEntries = ObfuscationReflectionHelper.getPrivateValue(MobSpawnerBaseLogic.class, spawnerMultiUseTile.getSpawnerBaseLogic(), 1 /* It is an array index of getDeclaredFields() */);
+			spawnerEntries = ObfuscationReflectionHelper.getPrivateValue(MobSpawnerBaseLogic.class, spawnerMultiUseTile.getSpawnerBaseLogic(),
+					1 /* It is an array index of getDeclaredFields() */);
 			if (spawnerEntries != null && !spawnerEntries.isEmpty()) {
 				Iterator<WeightedSpawnerEntity> iterator = spawnerEntries.iterator();
 
@@ -218,7 +225,8 @@ public abstract class SpawnerFactory {
 				int entriesRead = 0;
 				while (entriesRead < 9 && iterator.hasNext()) {
 					/*
-					 * Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world); entities[entriesRead] = entity;
+					 * Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world); entities[entriesRead] =
+					 * entity;
 					 */
 					entityCompound[entriesRead] = iterator.next().getNbt();
 					entriesRead++;
@@ -246,7 +254,7 @@ public abstract class SpawnerFactory {
 	}
 
 	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity) {
-		return createSpawnerNBTFromEntity(entity, !(entity instanceof AbstractEntityCQRBoss || !entity.isNonBoss()));
+		return createSpawnerNBTFromEntity(entity, (!(entity instanceof AbstractEntityCQRBoss) && entity.isNonBoss()));
 	}
 
 	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity, boolean removeUUID) {

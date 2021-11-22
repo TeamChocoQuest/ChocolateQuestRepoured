@@ -208,8 +208,7 @@ public abstract class DungeonBase {
 
 	@Nullable
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
-		Collection<File> files = FileUtils.listFiles(parentDir, new String[] {
-				"nbt" }, true);
+		Collection<File> files = FileUtils.listFiles(parentDir, new String[] { "nbt" }, true);
 		List<File> filesL = (files instanceof List ? ((List<File>) files) : new ArrayList<>(files));
 		if (filesL.isEmpty()) {
 			return null;

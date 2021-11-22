@@ -51,7 +51,11 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 
 	@Override
 	public void onLivingUpdate() {
-		if (this.canHealWhenIdlign() && CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
+		if (this.canHealWhenIdlign()
+				&& CQRConfig.bosses.enableHealthRegen
+				&& !this.hasAttackTarget()
+				&& this.lastTickWithAttackTarget + 100 < this.ticksExisted
+				&& this.ticksExisted % 5 == 0) {
 			this.heal(this.getMaxHealth() * 0.005F);
 		}
 		super.onLivingUpdate();
@@ -73,11 +77,11 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 				float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
 				float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
 				float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-				this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 			}
 			this.setNoGravity(true);
 			// DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
-			this.move(MoverType.SELF, 0, (10.0D / (double) MAX_DEATH_TICKS), 0);
+			this.move(MoverType.SELF, 0, (10.0D / MAX_DEATH_TICKS), 0);
 			if (this.deathTime == MAX_DEATH_TICKS && !this.world.isRemote) {
 				this.playSound(this.getFinalDeathSound(), 10.0F, 1.0F);
 				this.setDead();
@@ -138,14 +142,14 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	protected float maxUncappedDamage() {
 		return CQRConfig.bossDamageCaps.maxUncappedDamage;
 	}
-	
+
 	@Override
 	public boolean canbeTurnedToStone() {
 		return !CQRConfig.bosses.blackListBossesFromIaFGorgonHead;
 	}
-	
+
 	protected void spawnDeathPoofParticles() {
-		if(!(this.world instanceof WorldServer) ) {
+		if (!(this.world instanceof WorldServer)) {
 			return;
 		}
 		// Copied from EntityLivingBase
@@ -155,17 +159,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 			double d2 = this.rand.nextGaussian() * 0.02D;
 			double d0 = this.rand.nextGaussian() * 0.02D;
 			double d1 = this.rand.nextGaussian() * 0.02D;
-			((WorldServer) this.world).spawnParticle(
-					EnumParticleTypes.EXPLOSION_NORMAL, 
-					this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 
-					this.posY + (double) (this.rand.nextFloat() * this.height), 
-					this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width,
-					1,
-					d2, 
-					d0,
-					d1,
-					0.05
-				);
+			((WorldServer) this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width,
+					this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, 1, d2, d0, d1, 0.05);
 		}
 	}
 

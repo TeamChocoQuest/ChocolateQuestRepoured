@@ -487,7 +487,8 @@ public class ProtectedRegion {
 			this.setup(dungeonConfig);
 		}
 
-		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire, boolean persistent) {
+		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire,
+				boolean persistent) {
 			this.protectionSystemEnabled = enabled;
 			this.preventBlockBreaking = breaking;
 			this.preventBlockPlacing = placing;

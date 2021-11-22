@@ -10,9 +10,9 @@ import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
 public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	/*
 	 * Animation lengths:
-	 *  - Shooting: 
-	 *  - Spawning (single, it is looped): 1,56s => 32 ticks (sound: 5s => 100 ticks, "bang" sound: 0.8s => 16 ticks )
-	 *  Transition length: 10 ticks (it is 0 for the shooting
+	 * - Shooting:
+	 * - Spawning (single, it is looped): 1,56s => 32 ticks (sound: 5s => 100 ticks, "bang" sound: 0.8s => 16 ticks )
+	 * Transition length: 10 ticks (it is 0 for the shooting
 	 */
 
 	@Nullable
@@ -23,7 +23,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	private int warmupTime = WARMUP_DURATION;
 
 	public void calculateRemainingAttempts() {
-		switch(this.world.getDifficulty()) {
+		switch (this.world.getDifficulty()) {
 		case HARD:
 			this.remainingAttempts = 3;
 			break;
@@ -35,7 +35,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 			break;
 		}
 	}
-	
+
 	// TODO: Play sound
 
 	public BossAIEnergyTennis(EntityCQREnderCalamity entity) {
@@ -58,11 +58,12 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		super.startExecuting();
 		this.entity.setCantUpdatePhase(true);
 		this.entity.forceTeleport();
-		
-		// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL).build();
+
+		// IMessage message =
+		// SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_CHARGE_ENERGY_BALL);
-		
+
 		this.entity.playSound(CQRSounds.ENDER_CALAMITY_CHARGE_ENERGY_BALL, 12.0F, 1.0F);
 	}
 
@@ -72,11 +73,11 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
 		}
 		if (this.warmupTime > 0) {
-			if(this.warmupTime == (16/* bang sound duration */)) {
+			if (this.warmupTime == (16/* bang sound duration */)) {
 				this.entity.playSound(CQRSounds.ENDER_CALAMITY_READY_ENERGY_BALL, 24.0F, 1.0F);
 			}
-			if(this.warmupTime == 20) {
-				//Sound duration of summoning sound: 3s => 60 ticks
+			if (this.warmupTime == 20) {
+				// Sound duration of summoning sound: 3s => 60 ticks
 				this.entity.playSound(CQRSounds.ENDER_CALAMITY_FIRE_ENERGY_BALL, 24.0F, 2.0F);
 			}
 			this.warmupTime--;
@@ -84,11 +85,12 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		}
 		if (this.tennisball == null) {
 			// DONE: Play throw sound
-			// IMessage message = SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL).build();
+			// IMessage message =
+			// SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL).build();
 			// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
-			
+
 			this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL);
-			
+
 			this.tennisball = ProjectileEnergyOrb.shootAt(this.entity.getAttackTarget(), this.entity, this.world);
 		} else {
 			this.ballTicks++;
@@ -105,11 +107,12 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 		this.warmupTime = WARMUP_DURATION;
 		this.ballTicks = 0;
 		this.entity.setCantUpdatePhase(false);
-		// IMessage message = SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
+		// IMessage message =
+		// SPacketCalamityUpdateMainAnimation.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.remainingAttempts--;
-		//TODO: Patch not switching to stunned phase
-		if(this.remainingAttempts <= 0) {
+		// TODO: Patch not switching to stunned phase
+		if (this.remainingAttempts <= 0) {
 			this.entity.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 		}
 	}

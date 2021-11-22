@@ -9,7 +9,8 @@ public class EntityParticle extends Particle {
 		super(worldIn, posXIn, posYIn, posZIn);
 	}
 
-	public EntityParticle(final World worldIn, final double xCoordIn, final double yCoordIn, final double zCoordIn, final double xSpeedIn, final double ySpeedIn, final double zSpeedIn) {
+	public EntityParticle(final World worldIn, final double xCoordIn, final double yCoordIn, final double zCoordIn, final double xSpeedIn,
+			final double ySpeedIn, final double zSpeedIn) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
 	}
 

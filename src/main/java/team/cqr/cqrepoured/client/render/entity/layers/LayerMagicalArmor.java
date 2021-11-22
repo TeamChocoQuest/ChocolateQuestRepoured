@@ -22,14 +22,15 @@ public class LayerMagicalArmor extends AbstractLayerCQR {
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+			float netHeadYaw, float headPitch, float scale) {
 
 		if (entitylivingbaseIn.isMagicArmorActive()) {
 			GlStateManager.depthMask(!entitylivingbaseIn.isInvisible());
 			this.RENDERER.bindTexture(this.ARMOR_TEXTURE);
 			GlStateManager.matrixMode(5890);
 			GlStateManager.loadIdentity();
-			float f = (float) entitylivingbaseIn.ticksExisted + partialTicks;
+			float f = entitylivingbaseIn.ticksExisted + partialTicks;
 			float f1 = MathHelper.cos(f * 0.02F) * 3.0F;
 			float f2 = f * 0.01F;
 			GlStateManager.translate(f1, f2, 0.0F);

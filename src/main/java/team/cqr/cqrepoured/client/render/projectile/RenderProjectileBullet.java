@@ -17,11 +17,10 @@ public class RenderProjectileBullet extends RenderSpriteBase<ProjectileBullet> {
 		super(renderManager, IRON);
 	}
 
-
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileBullet entity) {
 
-		switch(entity.getType()) {
+		switch (entity.getType()) {
 		case 2:
 			return GOLD;
 		case 3:

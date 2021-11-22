@@ -43,7 +43,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this(renderManager, modelProvider, entityName, 1D, 1D, 0);
 	}
 
-	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, String entityName, double widthScale, double heightScale, float shadowSize) {
+	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, String entityName, double widthScale, double heightScale,
+			float shadowSize) {
 		super(renderManager, modelProvider);
 		this.shadowSize = shadowSize;
 		this.entityName = entityName;
@@ -51,10 +52,10 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this.heightScale = heightScale;
 
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
-		
-		//layers
-		this.addLayer(new LayerElectrocuteGeo<T>(this));
-		//this.addLayer(new LayerGlowingAreasGeo<>(this, this::getEntityTexture));
+
+		// layers
+		this.addLayer(new LayerElectrocuteGeo<>(this));
+		// this.addLayer(new LayerGlowingAreasGeo<>(this, this::getEntityTexture));
 	}
 
 	/*
@@ -80,7 +81,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			GlStateManager.depthMask(!entity.isInvisible());
 			GlStateManager.matrixMode(5890);
 			GlStateManager.loadIdentity();
-			float f = (float) entity.ticksExisted + partialTicks;
+			float f = entity.ticksExisted + partialTicks;
 			float f1 = MathHelper.cos(f * 0.02F) * 3.0F;
 			float f2 = f * 0.01F;
 			GlStateManager.translate(f1, f2, 0.0F);
@@ -130,7 +131,9 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			return entity.getTextureOverride();
 		}
 		// Custom texture end
-		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png") : this.texture;
+		return entity.getTextureCount() > 1
+				? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
+				: this.texture;
 	}
 
 	private T currentEntityBeingRendered;
@@ -159,18 +162,19 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				multiplyMatrix(IGeoRenderer.MATRIX_STACK, bone);
 
 				if (boneItem != null) {
-					preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+					this.preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 
-					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, this.getCameraTransformForItemAtBone(boneItem, bone.getName()));
+					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem,
+							this.getCameraTransformForItemAtBone(boneItem, bone.getName()));
 
-					postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
+					this.postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 				}
 				if (boneBlock != null) {
-					preRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
+					this.preRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
 
-					renderBlock(boneBlock, this.currentEntityBeingRendered);
+					this.renderBlock(boneBlock, this.currentEntityBeingRendered);
 
-					postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
+					this.postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
 				}
 
 				GlStateManager.popMatrix();
@@ -179,7 +183,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 			}
 		}
-		if(bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
+		if (bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
 			bone.setScaleX(bone.getScaleX() + 0.05F);
 			bone.setScaleZ(bone.getScaleZ() + 0.05F);
 			bone.setScaleY(bone.getScaleY() + 0.025F);
@@ -218,6 +222,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	 */
 	@Nullable
 	protected abstract ItemStack getHeldItemForBone(String boneName, T currentEntity);
+
 	protected abstract TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName);
 
 	/*

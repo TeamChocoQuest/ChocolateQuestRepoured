@@ -31,8 +31,8 @@ public class SPacketCalamityUpdateHand implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(entityId);
-		buf.writeBytes(handStates);
+		buf.writeInt(this.entityId);
+		buf.writeBytes(this.handStates);
 	}
 
 	public byte[] getHandStates() {

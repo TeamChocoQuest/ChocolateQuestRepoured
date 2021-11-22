@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.proxy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.lwjgl.input.Keyboard;
 
@@ -14,12 +13,10 @@ import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +46,7 @@ public class ClientProxy implements IProxy {
 	static final String KEY_CATEGORY_MAIN = "Chocolate Quest Repoured";
 
 	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
-	
+
 	@Override
 	public void preInit() {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -57,8 +54,8 @@ public class ClientProxy implements IProxy {
 		mc.defaultResourcePacks.add(CTResourcepack.getInstance());
 		CQREntityRenderers.registerRenderers();
 		CQRParticleManager.init();
-		
-		//Add custom metadataserializers
+
+		// Add custom metadataserializers
 		mc.metadataSerializer.registerMetadataSectionType(new GlowingMetadataSectionSerializer(), GlowingMetadataSection.class);
 	}
 
@@ -82,13 +79,7 @@ public class ClientProxy implements IProxy {
 			}
 		}
 		// Since for whatever reason the player renderer is not in the entityRenderMap we need to add it manually...
-		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(new Consumer<RenderPlayer>() {
-
-			@Override
-			public void accept(RenderPlayer t) {
-				t.addLayer(new LayerElectrocute());
-			}
-		});
+		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(t -> t.addLayer(new LayerElectrocute()));
 	}
 
 	@Override
@@ -118,13 +109,9 @@ public class ClientProxy implements IProxy {
 			}
 		}
 
-		event.getItemColors().registerItemColorHandler(new IItemColor() {
-
-			@Override
-			public int colorMultiplier(ItemStack stack, int tintIndex) {
-				return tintIndex > 0 ? -1 : ((ItemArmorDyable) stack.getItem()).getColor(stack);
-			}
-		}, dyables.toArray(new Item[dyables.size()]));
+		event.getItemColors().registerItemColorHandler(
+				(IItemColor) (stack, tintIndex) -> tintIndex > 0 ? -1 : ((ItemArmorDyable) stack.getItem()).getColor(stack),
+				dyables.toArray(new Item[dyables.size()]));
 	}
 
 	@Override

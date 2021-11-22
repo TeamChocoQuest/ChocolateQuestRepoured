@@ -17,7 +17,10 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity != null && this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5 && this.entity.getAttackTarget() != null && !this.entity.isDead) {
+		if (this.entity != null
+				&& this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5
+				&& this.entity.getAttackTarget() != null
+				&& !this.entity.isDead) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -39,11 +42,11 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	public void updateTask() {
 		boolean disInt = false;
 		boolean reInt = false;
-		if (invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+		if (this.invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			reInt = true;
 			// this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
-		} else if (invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+		} else if (this.invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			disInt = true;
 			// this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));

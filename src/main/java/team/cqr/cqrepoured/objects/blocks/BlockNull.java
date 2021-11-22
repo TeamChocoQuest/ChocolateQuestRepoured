@@ -27,8 +27,8 @@ public class BlockNull extends Block {
 		super(Material.GLASS);
 
 		this.setSoundType(SoundType.GLASS);
-		this.setHardness(2.0F);
-		this.setResistance(30.0F);
+		this.setBlockUnbreakable();
+		this.setResistance(Float.MAX_VALUE);
 		this.setHarvestLevel("hand", 0);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(PASSABLE, false));
 		this.ignoreSimilarity = ignoreSimilarityIn;
@@ -45,7 +45,8 @@ public class BlockNull extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
+			float hitY, float hitZ) {
 		if (playerIn.capabilities.isCreativeMode && playerIn.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
 			if (state.getValue(PASSABLE)) {
 				worldIn.setBlockState(pos, state.withProperty(PASSABLE, false), 3);

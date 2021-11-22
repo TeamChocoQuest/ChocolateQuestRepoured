@@ -58,17 +58,19 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 			Vec3d vec = this.entity.getPositionEyes(1.0F);
 			int horizontalRadius = CQRConfig.mobs.looterAIChestSearchRange;
 			int verticalRadius = horizontalRadius >> 1;
-			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
-				if (this.visitedChests.contains(mutablePos)) {
-					return false;
-				}
-				TileEntity te = this.world.getTileEntity(mutablePos);
-				if (!(te instanceof TileEntityChest) || ((TileEntityChest) te).isEmpty()) {
-					return false;
-				}
-				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
-				return result == null || result.getBlockPos().equals(mutablePos);
-			});
+			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(),
+					horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
+						if (this.visitedChests.contains(mutablePos)) {
+							return false;
+						}
+						TileEntity te = this.world.getTileEntity(mutablePos);
+						if (!(te instanceof TileEntityChest) || ((TileEntityChest) te).isEmpty()) {
+							return false;
+						}
+						RayTraceResult result = this.world.rayTraceBlocks(vec,
+								new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+						return result == null || result.getBlockPos().equals(mutablePos);
+					});
 		}
 
 		return this.currentTarget != null;

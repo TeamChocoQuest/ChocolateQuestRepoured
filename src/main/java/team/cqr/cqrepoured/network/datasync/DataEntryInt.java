@@ -46,7 +46,7 @@ public class DataEntryInt extends DataEntry<Integer> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.intValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryInt extends DataEntry<Integer> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.intValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryInt extends DataEntry<Integer> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Integer value) {
-		return this.isSavedValueEqualTo(value.intValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryInt extends DataEntry<Integer> {
 	@Deprecated
 	@Override
 	public Integer get() {
-		return Integer.valueOf(this.getInt());
+		return this.getInt();
 	}
 
 	public void set(int value) {

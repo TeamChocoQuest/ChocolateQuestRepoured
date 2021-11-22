@@ -46,7 +46,7 @@ public class DataEntryFloat extends DataEntry<Float> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.floatValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryFloat extends DataEntry<Float> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.floatValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryFloat extends DataEntry<Float> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Float value) {
-		return this.isSavedValueEqualTo(value.floatValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryFloat extends DataEntry<Float> {
 	@Deprecated
 	@Override
 	public Float get() {
-		return Float.valueOf(this.getFloat());
+		return this.getFloat();
 	}
 
 	public void set(float value) {

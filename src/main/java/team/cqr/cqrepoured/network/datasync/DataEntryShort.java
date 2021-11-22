@@ -46,7 +46,7 @@ public class DataEntryShort extends DataEntry<Short> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.shortValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryShort extends DataEntry<Short> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.shortValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryShort extends DataEntry<Short> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Short value) {
-		return this.isSavedValueEqualTo(value.shortValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryShort extends DataEntry<Short> {
 	@Deprecated
 	@Override
 	public Short get() {
-		return Short.valueOf(this.getShort());
+		return this.getShort();
 	}
 
 	public void set(short value) {

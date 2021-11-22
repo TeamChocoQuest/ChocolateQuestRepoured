@@ -27,7 +27,8 @@ public class CQRParticleManager {
 		ID_PARTICLE_FACTORY_MAP.put(particleType.getId(), particleFactory);
 	}
 
-	public static void spawnParticlesClient(CQRParticleType particleType, World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
+	public static void spawnParticlesClient(CQRParticleType particleType, World world, double xCoord, double yCoord, double zCoord, double xSpeed,
+			double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
 		if (optionalArguments.length < particleType.getArgumentCount()) {
 			CQRMain.logger.warn("Not enough arguments to spawn particle! {}", particleType);
 			return;
@@ -51,7 +52,8 @@ public class CQRParticleManager {
 				z += (Math.random() - Math.random()) * zOffset;
 			}
 			Particle particle = factory.createParticle(particleType.getId(), world, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments);
-			// Can be replaced with a custom particle render manager too improve performance because particles with a custom texture are not batched.
+			// Can be replaced with a custom particle render manager too improve performance because particles with a custom texture
+			// are not batched.
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 	}

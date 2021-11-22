@@ -14,7 +14,7 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/ball_cannon.png");
 
 	private final ModelBase model = new ModelCannonBall();
-	
+
 	public RenderProjectileCannonBall(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -26,7 +26,7 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 		GlStateManager.disableCull();
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
 		GlStateManager.scale(-1, -1, -1);
-		
+
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
@@ -34,7 +34,7 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 
 		this.bindEntityTexture(entity);
 		this.model.render(entity, 0, 0, 0, 0, 0, 0.0625F);
-		
+
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();

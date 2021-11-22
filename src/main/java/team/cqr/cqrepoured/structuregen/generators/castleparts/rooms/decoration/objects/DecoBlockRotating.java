@@ -12,13 +12,15 @@ public class DecoBlockRotating extends DecoBlockBase {
 	protected final EnumFacing DEFAULT_SIDE = EnumFacing.NORTH;
 	protected EnumFacing initialFacing;
 
-	protected DecoBlockRotating(int x, int y, int z, IBlockState initialState, PropertyDirection directionProperty, EnumFacing initialFacing, BlockStateGenArray.GenerationPhase generationPhase) {
+	protected DecoBlockRotating(int x, int y, int z, IBlockState initialState, PropertyDirection directionProperty, EnumFacing initialFacing,
+			BlockStateGenArray.GenerationPhase generationPhase) {
 		super(x, y, z, initialState, generationPhase);
 		this.directionProperty = directionProperty;
 		this.initialFacing = initialFacing;
 	}
 
-	protected DecoBlockRotating(Vec3i offset, IBlockState initialState, PropertyDirection directionProperty, EnumFacing initialFacing, BlockStateGenArray.GenerationPhase generationPhase) {
+	protected DecoBlockRotating(Vec3i offset, IBlockState initialState, PropertyDirection directionProperty, EnumFacing initialFacing,
+			BlockStateGenArray.GenerationPhase generationPhase) {
 		super(offset, initialState, generationPhase);
 		this.directionProperty = directionProperty;
 		this.initialFacing = initialFacing;

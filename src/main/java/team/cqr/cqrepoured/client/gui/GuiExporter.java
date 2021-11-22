@@ -43,9 +43,8 @@ public class GuiExporter extends GuiScreen {
 	public GuiExporter(TileEntityExporter exporter) {
 		this.mc = Minecraft.getMinecraft();
 		this.exporter = exporter;
-		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> {
-			return String.format("%d %d %d", p.getX(), p.getY(), p.getZ());
-		}).toArray(String[]::new);
+		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> String.format("%d %d %d", p.getX(), p.getY(), p.getZ()))
+				.toArray(String[]::new);
 		this.unprotectedBlocksConfig = new DummyListElement("test", unprotectedBlocks, ConfigGuiType.STRING, "test");
 	}
 
@@ -59,9 +58,8 @@ public class GuiExporter extends GuiScreen {
 		this.edtName.setText(this.exporter.getStructureName());
 		this.chbxRelativeMode.setIsChecked(this.exporter.isRelativeMode());
 		this.chbxIgnoreEntities.setIsChecked(this.exporter.isIgnoreEntities());
-		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> {
-			return String.format("%d %d %d", p.getX(), p.getY(), p.getZ());
-		}).toArray(String[]::new);
+		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> String.format("%d %d %d", p.getX(), p.getY(), p.getZ()))
+				.toArray(String[]::new);
 		this.unprotectedBlocksConfig.set(unprotectedBlocks);
 	}
 

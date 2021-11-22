@@ -17,7 +17,8 @@ public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 	}
 
 	@Override
-	protected void renderModel(EntityCQRMandril entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(EntityCQRMandril entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
+			float scaleFactor) {
 		if (entitylivingbaseIn.isSitting()) {
 			GL11.glTranslatef(0, 0, 0.25F);
 		} else {

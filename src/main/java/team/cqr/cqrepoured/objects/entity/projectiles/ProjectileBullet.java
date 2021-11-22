@@ -52,8 +52,8 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 						damage += 5.0F;
 					} else if (this.type == 4) {
 						damage += 5.0F;
-						
-						if(entity.attackEntityFrom(new EntityDamageSourceIndirect("onFire", this, this.thrower).setFireDamage(), damage / 2)) {
+
+						if (entity.attackEntityFrom(new EntityDamageSourceIndirect("onFire", this, this.thrower).setFireDamage(), damage / 2)) {
 							entity.setFire(3);
 						}
 					}

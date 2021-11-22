@@ -33,7 +33,7 @@ public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 
 	@Override
 	public void doRender(EntityCalamityCrystal entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		float f = (float) entity.innerRotation + partialTicks;
+		float f = entity.innerRotation + partialTicks;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		this.bindTexture(ENDER_CRYSTAL_TEXTURES);
@@ -57,14 +57,15 @@ public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 
 		if (blockpos != null) {
 			this.bindTexture(RenderDragon.ENDERCRYSTAL_BEAM_TEXTURES);
-			float targetX = (float) blockpos.getX() + 0.5F;
-			float targetY = (float) blockpos.getY() /* + 0.5F */;
-			float targetZ = (float) blockpos.getZ() + 0.5F;
-			double targetVectorX = (double) targetX - entity.posX;
-			double targetVectorY = (double) targetY - entity.posY;
-			double targetVectorZ = (double) targetZ - entity.posZ;
+			float targetX = blockpos.getX() + 0.5F;
+			float targetY = blockpos.getY() /* + 0.5F */;
+			float targetZ = blockpos.getZ() + 0.5F;
+			double targetVectorX = targetX - entity.posX;
+			double targetVectorY = targetY - entity.posY;
+			double targetVectorZ = targetZ - entity.posZ;
 			GlStateManager.pushAttrib();
-			RenderDragon.renderCrystalBeams(x + targetVectorX, y - 0.3D + (double) (f1 * 0.4F) + targetVectorY, z + targetVectorZ, partialTicks, (double) targetX, (double) targetY, (double) targetZ, entity.innerRotation, entity.posX, entity.posY, entity.posZ);
+			RenderDragon.renderCrystalBeams(x + targetVectorX, y - 0.3D + f1 * 0.4F + targetVectorY, z + targetVectorZ, partialTicks, targetX, targetY, targetZ,
+					entity.innerRotation, entity.posX, entity.posY, entity.posZ);
 			GlStateManager.popAttrib();
 		}
 

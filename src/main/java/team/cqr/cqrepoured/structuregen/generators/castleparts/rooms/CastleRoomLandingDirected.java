@@ -43,9 +43,11 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 					if (y == 0) {
 						if (z > this.stairZ) {
 							blockToBuild = dungeon.getFloorBlockState();
-						} else if (x < this.openingWidth || ((x >= this.openingSeparation + this.openingWidth) && (x < this.openingSeparation + this.openingWidth * 2))) {
+						} else if (x < this.openingWidth
+								|| ((x >= this.openingSeparation + this.openingWidth) && (x < this.openingSeparation + this.openingWidth * 2))) {
 							if (z == this.stairZ) {
-								EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.stairStartSide));
+								EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH,
+										DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.stairStartSide));
 								blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 							}
 						} else {
@@ -53,7 +55,8 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 						}
 					}
 
-					genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.stairStartSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.stairStartSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN,
+							BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 			}
 		}

@@ -60,11 +60,13 @@ public class ItemFlamethrower extends Item implements INonEnchantable {
 
 		if (world.isRemote) {
 			for (int i = 0; i < 8; i++) {
-				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (x + itemRand.nextFloat() - 0.5D) / 3.0D, (y + itemRand.nextFloat() - 0.5D) / 8.0D, (z + itemRand.nextFloat() - 0.5D) / 3.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (x + itemRand.nextFloat() - 0.5D) / 3.0D,
+						(y + itemRand.nextFloat() - 0.5D) / 8.0D, (z + itemRand.nextFloat() - 0.5D) / 3.0D);
 			}
 		} else {
 			int dist = 10;
-			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(entity.getLookVec().x * dist, entity.getLookVec().y * dist, entity.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox()
+					.grow(entity.getLookVec().x * dist, entity.getLookVec().y * dist, entity.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
 
 			for (Entity e : list) {
 				if (e instanceof EntityLivingBase && !e.isWet() && !e.isBeingRidden()) {

@@ -22,7 +22,8 @@ public class GuiButtonTextured extends GuiButton {
 		this(buttonId, x, y, width, height, buttonText, texture, icon, 0.0D, 0.0D, 1.0D, 1.0D / 3.0D);
 	}
 
-	public GuiButtonTextured(int buttonId, int x, int y, int width, int height, String buttonText, String texture, @Nullable String icon, double u, double v, double texWidth, double texHeight) {
+	public GuiButtonTextured(int buttonId, int x, int y, int width, int height, String buttonText, String texture, @Nullable String icon, double u, double v,
+			double texWidth, double texHeight) {
 		super(buttonId, x, y, width, height, buttonText);
 		this.texture = new ResourceLocation(Reference.MODID, "textures/gui/" + texture + ".png");
 		this.icon = icon != null && !icon.isEmpty() ? new ResourceLocation(Reference.MODID, "textures/gui/" + icon + ".png") : null;
@@ -40,7 +41,8 @@ public class GuiButtonTextured extends GuiButton {
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			int i = this.getHoverState(this.hovered);
 			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+					GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GuiHelper.drawTexture(this.x, this.y, this.u, this.v + i * this.texHeight, this.width, this.height, this.texWidth, this.texHeight);
 			if (this.icon != null) {

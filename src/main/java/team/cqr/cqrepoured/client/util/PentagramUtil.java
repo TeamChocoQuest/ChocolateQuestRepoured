@@ -24,7 +24,8 @@ public class PentagramUtil {
 		GlStateManager.disableCull();
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	}
 
 	public static void postRenderPentagram() {

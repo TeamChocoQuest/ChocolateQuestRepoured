@@ -5,16 +5,17 @@ import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 
-public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> extends MultiPartEntityPart implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
+public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> extends MultiPartEntityPart
+		implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
 
 	private final float dw, dh;
-	
+
 	public MultiPartEntityPartSizable(T parent, String partName, float width, float height) {
 		super(parent, partName, width, height);
-		
+
 		this.dw = width;
 		this.dh = height;
-		
+
 		this.initializeSize();
 	}
 
@@ -30,12 +31,12 @@ public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> e
 
 	@Override
 	public float getSizeVariation() {
-		return ((ISizable)this.parent).getSizeVariation();
+		return ((ISizable) this.parent).getSizeVariation();
 	}
 
 	@Override
 	public void applySizeVariation(float value) {
-		//No, this should not be done in this entity, it happens in the parent...
+		// No, this should not be done in this entity, it happens in the parent...
 	}
 
 	@Override

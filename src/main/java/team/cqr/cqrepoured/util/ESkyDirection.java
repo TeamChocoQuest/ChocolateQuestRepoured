@@ -7,7 +7,10 @@ import net.minecraft.util.EnumFacing;
  */
 public enum ESkyDirection {
 
-	NORTH, EAST, SOUTH, WEST;
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST;
 
 	public ESkyDirection getOpposite() {
 		switch (this) {

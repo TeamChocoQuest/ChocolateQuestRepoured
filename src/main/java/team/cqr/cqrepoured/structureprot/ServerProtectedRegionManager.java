@@ -60,7 +60,8 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 						}
 						if (chunk != null) {
 							this.chunkSet.add(chunk);
-							CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+							CapabilityProtectedRegionData capProtectedRegionData = chunk
+									.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 							capProtectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid());
 						}
 					}
@@ -176,7 +177,8 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	@Override
 	public Iterable<ProtectedRegion> getProtectedRegions() {
 		return () -> new Iterator<ProtectedRegion>() {
-			private final Iterator<ProtectedRegionContainer> iterator = Collections.unmodifiableCollection(ServerProtectedRegionManager.this.protectedRegions.values()).iterator();
+			private final Iterator<ProtectedRegionContainer> iterator = Collections
+					.unmodifiableCollection(ServerProtectedRegionManager.this.protectedRegions.values()).iterator();
 
 			@Override
 			public boolean hasNext() {

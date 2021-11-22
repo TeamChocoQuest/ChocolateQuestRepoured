@@ -49,7 +49,10 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
 public abstract class ItemHookshotBase extends Item /* implements IRangedWeapon */ implements INonEnchantable {
 
 	private enum BlockGroup {
-		BASE_SOLID("BASE_SOLID"), BASE_WOOD("BASE_WOOD"), BASE_STONE("BASE_STONE"), BASE_DIRT("BASE_DIRT");
+		BASE_SOLID("BASE_SOLID"),
+		BASE_WOOD("BASE_WOOD"),
+		BASE_STONE("BASE_STONE"),
+		BASE_DIRT("BASE_DIRT");
 
 		private final String configName;
 

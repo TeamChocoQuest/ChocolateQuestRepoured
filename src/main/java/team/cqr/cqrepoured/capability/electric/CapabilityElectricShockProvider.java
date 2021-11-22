@@ -76,8 +76,8 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		CapabilityElectricShock icapability = entity.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 
 		icapability.setRemainingTicks(-1);
-		//We don't need to send the update ourselves, the capability handles it itself in the setter
-		//CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
+		// We don't need to send the update ourselves, the capability handles it itself in the setter
+		// CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
 	}
 
 	@SubscribeEvent
@@ -115,7 +115,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		// Mechanicals can get electrocuted but don't take damage
 		if (entity instanceof IMechanical || entity.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
 			// But, if we are wet, we get damage from beign electrocuted
-			if (((IMechanical)entity).canReceiveElectricDamageCurrently()) {
+			if (((IMechanical) entity).canReceiveElectricDamageCurrently()) {
 				currentCap.setRemainingTicks(100);
 				entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 2);
 			}
@@ -165,8 +165,8 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		CapabilityElectricShock targetCap = chosen.getCapability(ELECTROCUTE_HANDLER_CQR, null);
 		targetCap.setRemainingTicks(100);
 		targetCap.setCasterID(sourceCap.getCasterID());
-		if(targetCap.getRemainignSpreads() < 0 || targetCap.getRemainignSpreads() >= sourceCap.getRemainignSpreads()) {
-			targetCap.setRemainingSpreads(sourceCap.getRemainignSpreads() -1);
+		if (targetCap.getRemainignSpreads() < 0 || targetCap.getRemainignSpreads() >= sourceCap.getRemainignSpreads()) {
+			targetCap.setRemainingSpreads(sourceCap.getRemainignSpreads() - 1);
 		}
 	}
 

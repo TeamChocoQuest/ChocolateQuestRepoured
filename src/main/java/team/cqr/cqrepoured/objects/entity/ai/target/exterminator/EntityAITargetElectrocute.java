@@ -14,7 +14,8 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 	private Supplier<EntityLivingBase> funcGetElectrocuteTarget;
 	private Consumer<EntityLivingBase> funcSetElectrocuteTarget;
 
-	public EntityAITargetElectrocute(AbstractEntityCQR entity, Supplier<EntityLivingBase> funcGetElectrocuteTarget, Consumer<EntityLivingBase> funcSetElectrocuteTarget) {
+	public EntityAITargetElectrocute(AbstractEntityCQR entity, Supplier<EntityLivingBase> funcGetElectrocuteTarget,
+			Consumer<EntityLivingBase> funcSetElectrocuteTarget) {
 		super(entity);
 
 		this.funcGetElectrocuteTarget = funcGetElectrocuteTarget;
@@ -43,12 +44,19 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 
 	@Override
 	protected boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
-		return possibleTarget != null && this.entity.getDistance(possibleTarget) <= (this.entity.getWidth() + 4 * CQRConfig.general.electricFieldEffectSpreadRange) && super.isStillSuitableTarget(possibleTarget) && this.entity.canEntityBeSeen(possibleTarget);
+		return possibleTarget != null
+				&& this.entity.getDistance(possibleTarget) <= (this.entity.getWidth() + 4 * CQRConfig.general.electricFieldEffectSpreadRange)
+				&& super.isStillSuitableTarget(possibleTarget)
+				&& this.entity.canEntityBeSeen(possibleTarget);
 	}
 
 	@Override
 	protected boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
-		return possibleTarget != null && this.entity.getDistance(possibleTarget) <= (this.entity.getWidth() + CQRConfig.general.electricFieldEffectSpreadRange * 2) && super.isSuitableTargetEnemy(possibleTarget) && TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(possibleTarget) && !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(possibleTarget);
+		return possibleTarget != null
+				&& this.entity.getDistance(possibleTarget) <= (this.entity.getWidth() + CQRConfig.general.electricFieldEffectSpreadRange * 2)
+				&& super.isSuitableTargetEnemy(possibleTarget)
+				&& TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(possibleTarget)
+				&& !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(possibleTarget);
 	}
 
 }

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.objects.entity.misc;
 
-import com.google.common.base.Predicate;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
@@ -37,13 +35,11 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 		this.tasks.addTask(4, new EntityAIPanic(this, 1.25D));
 		this.tasks.addTask(5, new EntityAIWanderAvoidWaterFlying(this, 1D));
 
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 100, true, true, new Predicate<EntityLivingBase>() {
-
-			@Override
-			public boolean apply(EntityLivingBase input) {
-				return (input instanceof EntityPlayer || input.getCreatureAttribute() == EnumCreatureAttribute.ILLAGER || input.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD);
-			}
-		}));
+		this.targetTasks.addTask(0,
+				new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 100, true, true,
+						input -> (input instanceof EntityPlayer
+								|| input.getCreatureAttribute() == EnumCreatureAttribute.ILLAGER
+								|| input.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD)));
 	}
 
 	@Override
@@ -101,7 +97,10 @@ public class EntityCQRWasp extends EntityCreature implements net.minecraft.entit
 		int k = MathHelper.floor(this.posZ);
 		BlockPos blockpos = new BlockPos(i, j, k);
 		Block block = this.world.getBlockState(blockpos.down()).getBlock();
-		return block instanceof BlockLeaves || block == Blocks.GRASS || block instanceof BlockLog || block == Blocks.AIR && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
+		return block instanceof BlockLeaves
+				|| block == Blocks.GRASS
+				|| block instanceof BlockLog
+				|| block == Blocks.AIR && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
 	}
 
 }

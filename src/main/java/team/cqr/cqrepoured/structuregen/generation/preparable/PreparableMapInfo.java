@@ -154,7 +154,8 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			break;
 		}
 
-		return new GeneratableMapInfo(pos, entity, pos.getX() + x2, pos.getZ() + z2, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap, this.fillRadius);
+		return new GeneratableMapInfo(pos, entity, pos.getX() + x2, pos.getZ() + z2, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap,
+				this.fillRadius);
 	}
 
 	@Override
@@ -163,7 +164,8 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntityMap tileEntity = new TileEntityMap();
 		// TODO tile entity data does not get rotated/mirrored
-		tileEntity.set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
+		tileEntity.set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap,
+				this.fillRadius);
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 

@@ -78,7 +78,8 @@ public class ModelCrown extends ModelCustomArmorBase {
 		} else if (entityIn.isSneaking()) {
 			GlStateManager.translate(0.0F, 0.2F, 0.0F);
 		}
-		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1, -this.bipedHead.rotationPointZ * 0.0625F * f1);
+		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1,
+				-this.bipedHead.rotationPointZ * 0.0625F * f1);
 		GlStateManager.scale(f, f, f);
 		this.bipedHead.render(scale);
 
@@ -106,7 +107,8 @@ public class ModelCrown extends ModelCustomArmorBase {
 		if (renderer instanceof RenderCQREntity) {
 			((RenderCQREntity<?>) renderer).setupHeadOffsets(this.bipedHead, EntityEquipmentSlot.HEAD);
 		}
-		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1, -this.bipedHead.rotationPointZ * 0.0625F * f1);
+		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1,
+				-this.bipedHead.rotationPointZ * 0.0625F * f1);
 		GlStateManager.scale(f, f, f);
 		this.bipedHead.render(scale);
 

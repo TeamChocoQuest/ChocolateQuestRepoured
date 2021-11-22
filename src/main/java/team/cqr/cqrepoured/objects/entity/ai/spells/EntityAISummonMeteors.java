@@ -29,7 +29,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 		int ballCount = DungeonGenUtils.randomBetween(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRNG());
 
 		if (ballCount > 0) {
-			double angle = 360D / (double) ballCount;
+			double angle = 360D / ballCount;
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
 			BlockPos centeredPos = this.entity.getAttackTarget().getPosition();

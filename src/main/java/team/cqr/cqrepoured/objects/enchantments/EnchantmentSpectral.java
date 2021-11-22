@@ -27,7 +27,7 @@ public class EnchantmentSpectral extends EnchantmentDamage {
 	public float calcDamageByCreature(int level, EnumCreatureAttribute creatureType) {
 		// TODO make this effective against vanilla endermen
 		if (creatureType == CQRCreatureAttributes.VOID) {
-			return (float) level * 1.5F;
+			return level * 1.5F;
 		}
 		return 0;
 	}

@@ -84,20 +84,22 @@ public class ModelCQRBiped extends ModelBiped {
 	}
 
 	/**
-	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and legs, where par1 represents the time(so
+	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and
+	 * legs, where par1 represents the time(so
 	 * that arms and legs swing back and forth) and par2 represents how "far" arms and legs
 	 * can swing at most.
 	 */
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor,
+			Entity entityIn) {
 		if (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive()) {
 			limbSwing = 0;
 			limbSwingAmount = 0;
-			
+
 			float f = (entityIn.ticksExisted - 1.0F + PartialTicksUtil.getCurrentPartialTicks()) * 16.0F;
 			GlStateManager.rotate(f, 0F, 1F, 0F);
 		}
-		
+
 		if (entityIn.isSneaking()) {
 			this.bipedCape.rotationPointY = 2.0F;
 		} else {
@@ -106,22 +108,26 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if(cqrEnt.isSpinToWinActive() && !this.isRiding) {
+			if (cqrEnt.isSpinToWinActive() && !this.isRiding) {
 				this.bipedLeftArm.rotateAngleZ = (float) Math.toRadians(-90F);
 				this.bipedRightArm.rotateAngleZ = (float) Math.toRadians(90F);
-			}
-			else if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
+			} else if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
-				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget()
+						&& (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver
+								|| cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase)
+						&& !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					}
 				}
-				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget()
+						&& (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase)
+						&& !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {

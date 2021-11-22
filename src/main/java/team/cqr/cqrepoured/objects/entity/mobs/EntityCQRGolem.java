@@ -69,11 +69,11 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.MECHANICAL;
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		
+
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDamageReductionAmount(EntityEquipmentSlot.CHEST));
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
 	}

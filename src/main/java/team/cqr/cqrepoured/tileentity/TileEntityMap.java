@@ -70,7 +70,8 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 		this.dataManager.read(pkt.getNbtCompound());
 	}
 
-	public void set(int scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int xOffset, int zOffset, boolean fillMap, int fillRadius) {
+	public void set(int scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int xOffset, int zOffset, boolean fillMap,
+			int fillRadius) {
 		this.scale.set(MathHelper.clamp(scale, 0, 4));
 		if (orientation.getAxis() != EnumFacing.Axis.Y) {
 			this.orientation.set(orientation);

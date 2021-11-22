@@ -97,17 +97,23 @@ public class ItemUtil {
 	 * @param stack
 	 * @param player
 	 * @param targetEntity
-	 * @param fakeCrit                     If set to true and no real crit occurred it will spawn spell crit particles (vanilla: false)
-	 * @param damageBonus                  A flat damage bonus which affects the main attack and enchantments like sweeping edge (vanilla: 0.0F)
-	 * @param damageMultiplier             A damage multiplier which affects the main attack and enchantments like sweeping edge (vanilla: 1.0F)
-	 * @param sweepingEnabled              If set to false the player won't be able to make a sweeping attack with this item (vanilla: true)
+	 * @param fakeCrit                     If set to true and no real crit occurred it will spawn spell crit particles
+	 *                                     (vanilla: false)
+	 * @param damageBonus                  A flat damage bonus which affects the main attack and enchantments like sweeping
+	 *                                     edge (vanilla: 0.0F)
+	 * @param damageMultiplier             A damage multiplier which affects the main attack and enchantments like sweeping
+	 *                                     edge (vanilla: 1.0F)
+	 * @param sweepingEnabled              If set to false the player won't be able to make a sweeping attack with this item
+	 *                                     (vanilla: true)
 	 * @param sweepingDamage               The base amount of damage which the sweeping attack deals (vanilla: 1.0F)
-	 * @param sweepingDamageMultiplicative A damage bonus for sweeping attacks based on the main attack damage (vanilla: 0.0F)
+	 * @param sweepingDamageMultiplicative A damage bonus for sweeping attacks based on the main attack damage (vanilla:
+	 *                                     0.0F)
 	 * @param sweepingRangeHorizontal      (vanilla: 1.0D)
 	 * @param sweepingRangeVertical        (vanilla: 0.25D)
 	 * @param sweepingKnockback            (vanilla: 0.4F)
 	 */
-	public static void attackTarget(ItemStack stack, EntityPlayer player, Entity targetEntity, boolean fakeCrit, float damageBonus, float damageMultiplier, boolean sweepingEnabled, float sweepingDamage, float sweepingDamageMultiplicative, double sweepingRangeHorizontal, double sweepingRangeVertical,
+	public static void attackTarget(ItemStack stack, EntityPlayer player, Entity targetEntity, boolean fakeCrit, float damageBonus, float damageMultiplier,
+			boolean sweepingEnabled, float sweepingDamage, float sweepingDamageMultiplicative, double sweepingRangeHorizontal, double sweepingRangeVertical,
 			float sweepingKnockback) {
 		// CQR: Replacement for ForgeHooks.onPlayerAttackTarget to prevent infinity loop
 		if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player, targetEntity))) {
@@ -138,12 +144,20 @@ public class ItemUtil {
 					i = i + EnchantmentHelper.getKnockbackModifier(player);
 
 					if (player.isSprinting() && flag) {
-						player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F, 1.0F);
+						player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK,
+								player.getSoundCategory(), 1.0F, 1.0F);
 						++i;
 						flag1 = true;
 					}
 
-					boolean flag2 = flag && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding() && targetEntity instanceof EntityLivingBase;
+					boolean flag2 = flag
+							&& player.fallDistance > 0.0F
+							&& !player.onGround
+							&& !player.isOnLadder()
+							&& !player.isInWater()
+							&& !player.isPotionActive(MobEffects.BLINDNESS)
+							&& !player.isRiding()
+							&& targetEntity instanceof EntityLivingBase;
 					flag2 = flag2 && !player.isSprinting();
 
 					CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(player, targetEntity, flag2, flag2 ? 1.5F : 1.0F);
@@ -156,10 +170,10 @@ public class ItemUtil {
 					// CQR: Add damage bonus multiplier
 					f = f * damageMultiplier;
 					boolean flag3 = false;
-					double d0 = (double) (player.distanceWalkedModified - player.prevDistanceWalkedModified);
+					double d0 = player.distanceWalkedModified - player.prevDistanceWalkedModified;
 
 					// CQR: Disable sweep attack when sweepingEnabled is false
-					if (sweepingEnabled && flag && !flag2 && !flag1 && player.onGround && d0 < (double) player.getAIMoveSpeed()) {
+					if (sweepingEnabled && flag && !flag2 && !flag1 && player.onGround && d0 < player.getAIMoveSpeed()) {
 						ItemStack itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
 
 						if (itemstack.getItem() instanceof ItemSword) {
@@ -188,9 +202,11 @@ public class ItemUtil {
 					if (flag5) {
 						if (i > 0) {
 							if (targetEntity instanceof EntityLivingBase) {
-								((EntityLivingBase) targetEntity).knockBack(player, (float) i * 0.5F, (double) MathHelper.sin(player.rotationYaw * 0.017453292F), (double) (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
+								((EntityLivingBase) targetEntity).knockBack(player, i * 0.5F, MathHelper.sin(player.rotationYaw * 0.017453292F),
+										(-MathHelper.cos(player.rotationYaw * 0.017453292F)));
 							} else {
-								targetEntity.addVelocity((double) (-MathHelper.sin(player.rotationYaw * 0.017453292F) * (float) i * 0.5F), 0.1D, (double) (MathHelper.cos(player.rotationYaw * 0.017453292F) * (float) i * 0.5F));
+								targetEntity.addVelocity(-MathHelper.sin(player.rotationYaw * 0.017453292F) * i * 0.5F, 0.1D,
+										MathHelper.cos(player.rotationYaw * 0.017453292F) * i * 0.5F);
 							}
 
 							player.motionX *= 0.6D;
@@ -205,17 +221,23 @@ public class ItemUtil {
 
 							double entityReachDistanceSqr = getEntityReachDistanceSqr(player);
 							// CQR: Allow modification of sweeping hitbox
-							AxisAlignedBB aabb = targetEntity.getEntityBoundingBox().grow(sweepingRangeHorizontal, sweepingRangeVertical, sweepingRangeHorizontal);
+							AxisAlignedBB aabb = targetEntity.getEntityBoundingBox().grow(sweepingRangeHorizontal, sweepingRangeVertical,
+									sweepingRangeHorizontal);
 							for (EntityLivingBase entitylivingbase : player.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb)) {
 								// CQR: Increase sweeping range when players reach distance is higher
-								if (entitylivingbase != player && entitylivingbase != targetEntity && !player.isOnSameTeam(entitylivingbase) && player.getDistanceSq(entitylivingbase) < entityReachDistanceSqr) {
+								if (entitylivingbase != player
+										&& entitylivingbase != targetEntity
+										&& !player.isOnSameTeam(entitylivingbase)
+										&& player.getDistanceSq(entitylivingbase) < entityReachDistanceSqr) {
 									// CQR: Allow modification of sweeping knockback strength
-									entitylivingbase.knockBack(player, sweepingKnockback, (double) MathHelper.sin(player.rotationYaw * 0.017453292F), (double) (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
+									entitylivingbase.knockBack(player, sweepingKnockback, MathHelper.sin(player.rotationYaw * 0.017453292F),
+											(-MathHelper.cos(player.rotationYaw * 0.017453292F)));
 									entitylivingbase.attackEntityFrom(DamageSource.causePlayerDamage(player), f3);
 								}
 							}
 
-							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
+									player.getSoundCategory(), 1.0F, 1.0F);
 							player.spawnSweepParticles();
 						}
 
@@ -228,18 +250,22 @@ public class ItemUtil {
 						}
 
 						if (flag2) {
-							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
+							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
+									player.getSoundCategory(), 1.0F, 1.0F);
 							player.onCriticalHit(targetEntity);
 						} else if (fakeCrit) { // CQR: Allow fake crits to happen
-							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.2F);
+							player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
+									player.getSoundCategory(), 1.0F, 1.2F);
 							player.onCriticalHit(targetEntity);
 						}
 
 						if (!flag2 && !fakeCrit && !flag3) {
 							if (flag) {
-								player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
+								player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG,
+										player.getSoundCategory(), 1.0F, 1.0F);
 							} else {
-								player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
+								player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK,
+										player.getSoundCategory(), 1.0F, 1.0F);
 							}
 						}
 
@@ -284,14 +310,16 @@ public class ItemUtil {
 							}
 
 							if (player.world instanceof WorldServer && f5 > 2.0F) {
-								int k = (int) ((double) f5 * 0.5D);
-								((WorldServer) player.world).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, targetEntity.posX, targetEntity.posY + (double) (targetEntity.height * 0.5F), targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
+								int k = (int) (f5 * 0.5D);
+								((WorldServer) player.world).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, targetEntity.posX,
+										targetEntity.posY + targetEntity.height * 0.5F, targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
 							}
 						}
 
 						player.addExhaustion(0.1F);
 					} else {
-						player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0F, 1.0F);
+						player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE,
+								player.getSoundCategory(), 1.0F, 1.0F);
 
 						if (flag4) {
 							targetEntity.extinguish();

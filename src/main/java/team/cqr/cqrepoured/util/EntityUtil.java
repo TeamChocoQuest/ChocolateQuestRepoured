@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.util;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -86,7 +85,8 @@ public class EntityUtil {
 				if (!entity.getEntityWorld().isBlockLoaded(mutablePos)) {
 					continue;
 				}
-				while (mutablePos.getY() > 0 && entity.getEntityWorld().getBlockState(mutablePos).getCollisionBoundingBox(entity.getEntityWorld(), mutablePos) == Block.NULL_AABB) {
+				while (mutablePos.getY() > 0
+						&& entity.getEntityWorld().getBlockState(mutablePos).getCollisionBoundingBox(entity.getEntityWorld(), mutablePos) == Block.NULL_AABB) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
 				y += mutablePos.getY() + 1;
@@ -131,7 +131,7 @@ public class EntityUtil {
 			attribute.removeModifier(oldModifier);
 		}
 		attribute.applyModifier(new AttributeModifier(uuid, name, amount, 2));
-		entity.setHealth((float) ((double) oldHealth / (1.0D + oldAmount) * (1.0D + amount) + 1e-7D));
+		entity.setHealth((float) (oldHealth / (1.0D + oldAmount) * (1.0D + amount) + 1e-7D));
 	}
 
 	public static boolean addEntityToAllRegionsAt(BlockPos position, Entity entity) {
@@ -145,13 +145,9 @@ public class EntityUtil {
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
 			if (regions != null && !regions.isEmpty()) {
 				if (!regions.isEmpty()) {
-					regions.forEach(new Consumer<ProtectedRegion>() {
-
-						@Override
-						public void accept(ProtectedRegion t) {
-							if (!t.isEntityDependency(entity.getPersistentID())) {
-								t.addEntityDependency(entity.getPersistentID());
-							}
+					regions.forEach(t -> {
+						if (!t.isEntityDependency(entity.getPersistentID())) {
+							t.addEntityDependency(entity.getPersistentID());
 						}
 					});
 					return true;
@@ -174,13 +170,7 @@ public class EntityUtil {
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
 			if (regions != null && !regions.isEmpty()) {
 				if (!regions.isEmpty()) {
-					regions.forEach(new Consumer<ProtectedRegion>() {
-
-						@Override
-						public void accept(ProtectedRegion t) {
-							t.removeEntityDependency(entity.getPersistentID());
-						}
-					});
+					regions.forEach(t -> t.removeEntityDependency(entity.getPersistentID()));
 					return true;
 				}
 			}

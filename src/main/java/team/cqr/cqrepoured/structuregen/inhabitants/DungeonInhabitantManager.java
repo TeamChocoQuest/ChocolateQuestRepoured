@@ -102,7 +102,7 @@ public class DungeonInhabitantManager {
 
 		int x1 = blockX - DungeonGenUtils.getSpawnX(world);
 		int z1 = blockZ - DungeonGenUtils.getSpawnZ(world);
-		int distToSpawn = (int) Math.sqrt((double) (x1 * x1 + z1 * z1));
+		int distToSpawn = (int) Math.sqrt(x1 * x1 + z1 * z1);
 		int index = distToSpawn / CQRConfig.mobs.mobTypeChangeDistance;
 
 		if (index >= this.distantMapping.size()) {

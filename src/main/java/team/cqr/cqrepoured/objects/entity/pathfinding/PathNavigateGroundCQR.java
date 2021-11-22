@@ -56,7 +56,8 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		this.nodeProcessor = new WalkNodeProcessor() {
 
 			@Override
-			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
+			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn,
+					boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
 				for (int i = 0; i < xSize; ++i) {
 					for (int j = 0; j < ySize; ++j) {
 						for (int k = 0; k < zSize; ++k) {
@@ -70,8 +71,12 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 							}
 
 							// TODO better method for calculating the facing from which the door will be entered
-							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
-									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
+							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED
+									&& canOpenDoorsIn
+									&& canEnterDoorsIn
+									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing
+											.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(),
+											true)) {
 								pathnodetype = PathNodeType.WALKABLE;
 							}
 
@@ -79,7 +84,9 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 								pathnodetype = PathNodeType.BLOCKED;
 							}
 
-							if (pathnodetype == PathNodeType.RAIL && !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof BlockRailBase) && !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof BlockRailBase)) {
+							if (pathnodetype == PathNodeType.RAIL
+									&& !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof BlockRailBase)
+									&& !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof BlockRailBase)) {
 								pathnodetype = PathNodeType.FENCE;
 							}
 
@@ -95,6 +102,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				return p_193577_11_;
 			}
 
+			@Override
 			protected PathNodeType getPathNodeTypeRaw(IBlockAccess p_189553_1_, int p_189553_2_, int p_189553_3_, int p_189553_4_) {
 				BlockPos blockpos = new BlockPos(p_189553_2_, p_189553_3_, p_189553_4_);
 				IBlockState iblockstate = p_189553_1_.getBlockState(blockpos);
@@ -113,15 +121,21 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 						return PathNodeType.DAMAGE_FIRE;
 					} else if (block == Blocks.CACTUS) {
 						return PathNodeType.DAMAGE_CACTUS;
-					} else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof BlockDoor
+							&& material == Material.WOOD
+							&& !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
 						return PathNodeType.DOOR_WOOD_CLOSED;
-					} else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof BlockDoor
+							&& material == Material.IRON
+							&& !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
 						return PathNodeType.DOOR_IRON_CLOSED;
 					} else if (block instanceof BlockDoor && iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
 						return PathNodeType.DOOR_OPEN;
 					} else if (block instanceof BlockRailBase) {
 						return PathNodeType.RAIL;
-					} else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockstate.getValue(BlockFenceGate.OPEN)).booleanValue())) {
+					} else if (!(block instanceof BlockFence)
+							&& !(block instanceof BlockWall)
+							&& (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
 						if (material == Material.WATER) {
 							return PathNodeType.WATER;
 						} else if (material == Material.LAVA) {
@@ -168,13 +182,13 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	@Override
 	public void onUpdateNavigation() {
 		super.onUpdateNavigation();
-		if (!noPath() && this.hasMount()) {
-			getMount().getNavigator().onUpdateNavigation();
+		if (!this.noPath() && this.hasMount()) {
+			this.getMount().getNavigator().onUpdateNavigation();
 		}
 	}
 
 	private boolean hasMount() {
-		return entity.getRidingEntity() instanceof EntityLiving;
+		return this.entity.getRidingEntity() instanceof EntityLiving;
 	}
 
 	@Override
@@ -202,7 +216,8 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		} else {
 			BlockPos blockpos1;
 
-			for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
+			for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight()
+					&& this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
 
 			}
 
@@ -275,7 +290,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	@Override
 	protected void checkForStuck(Vec3d positionVec3) {
 		if (this.totalTicks - this.ticksAtLastPos >= 100) {
-			double aiMoveSpeed = (double) (this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed());
+			double aiMoveSpeed = this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed();
 			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
 			if (positionVec3.distanceTo(this.lastPosCheck) / 100.0D < aiMoveSpeed * 0.5D) {
 				this.clearPath();
@@ -291,7 +306,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
 				this.timeoutTimer = this.totalTicks;
-				double aiMoveSpeedOrig = (double) (this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed());
+				double aiMoveSpeedOrig = this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed();
 				double aiMoveSpeed = aiMoveSpeedOrig;
 				if (aiMoveSpeed > 0.0F) {
 					aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
@@ -302,7 +317,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				}
 			}
 
-			if (this.timeoutLimit > 0.0D && (double) (this.totalTicks - this.timeoutTimer) > this.timeoutLimit * 2.0D) {
+			if (this.timeoutLimit > 0.0D && this.totalTicks - this.timeoutTimer > this.timeoutLimit * 2.0D) {
 				this.timeoutCachedNode = Vec3d.ZERO;
 				this.timeoutTimer = 0L;
 				this.timeoutLimit = 0.0D;
@@ -314,7 +329,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	@Nullable
 	private EntityLiving getMount() {
 		try {
-			return (EntityLiving) entity.getRidingEntity();
+			return (EntityLiving) this.entity.getRidingEntity();
 		} catch (NullPointerException npe) {
 			return null;
 		}
@@ -323,7 +338,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	@Override
 	public void clearPath() {
 		if (this.hasMount()) {
-			getMount().getNavigator().clearPath();
+			this.getMount().getNavigator().clearPath();
 		}
 		this.currentPath = null;
 		this.targetPos = null;

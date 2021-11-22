@@ -66,9 +66,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks
 	 * 
-	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up Then begin spiraling up to your "strafing y", there you
+	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up Then begin
+	 * spiraling up to your "strafing y", there you
 	 * fly 0.5 - 3 rounds on your circle and attack again While you are circling, you may
-	 * change to a higher, thinner circler, about 10 blocks above the normal. You fly up to it by spiraling up or down, whilst charging at the player you may spit
+	 * change to a higher, thinner circler, about 10 blocks above the normal. You fly up to it by spiraling up or down,
+	 * whilst charging at the player you may spit
 	 * fire or shoot fireballs
 	 */
 
@@ -101,10 +103,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private static ArrayList<ResourceLocation> breakableBlocks = new ArrayList<>();
 
 	/*
-	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts
+	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also
+	 * the parts are meant to move like the parts
 	 * from Twilight Forests Naga
 	 * 
-	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them
+	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through
+	 * are leaves or burnable, it will set them
 	 * on fire It will also break obsidian blocks, but not command blocks or structure blocks
 	 * or bedrock
 	 */
@@ -229,7 +233,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		return super.attackEntityFrom(source, damage, true);
 	}
-	
+
 	private void handleAttackedInSkeletalPhase(float damage, final DamageSource source) {
 		this.damageTmpPhaseTwo -= damage;
 		if (this.damageTmpPhaseTwo <= 0) {
@@ -304,7 +308,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.tasks.addTask(10, new BossAISpiralUpToCirclingCenter(this));
 		this.tasks.addTask(12, new BossAICircleAroundLocation(this));
 
-		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea<EntityCQRNetherDragon>(this));
+		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea<>(this));
 		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
@@ -400,7 +404,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 			float angle = (((leader.rotationYaw + 180) * new Float(Math.PI)) / 180F);
 
-			double straightDegree = 0.05D + (1.0 / (float) (i + 1)) * 0.5D;
+			double straightDegree = 0.05D + (1.0 / (i + 1)) * 0.5D;
 
 			double calculatedRotatedX = -MathHelper.sin(angle) * straightDegree;
 			double calculatedRotatedZ = MathHelper.cos(angle) * straightDegree;
@@ -424,9 +428,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// Set rotated position
 			this.dragonBodyParts[i].setPosition(targetX, targetY, targetZ);
 
-			double distance = (double) MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
+			double distance = MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
 			// Finally apply the new rotation -> Rotate the block
-			this.dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
+			this.dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F,
+					-(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
 		}
 	}
 
@@ -483,7 +488,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			}
 
 			v = v.normalize();
-			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
+			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, this.dragonBodyParts[indx].posX + v.x,
+					this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
 			v = v.scale(1.5);
 			proj.motionX = v.x;
 			proj.motionY = v.y;
@@ -539,7 +545,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 				// DEBUG TO SEE THE "ZONE"
 				/*
-				 * for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX, (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY, (int)aabb.maxZ)){
+				 * for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX, (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY,
+				 * (int)aabb.maxZ)){
 				 * world.setBlockState(p, Blocks.GLASS.getDefaultState()); }
 				 */
 
@@ -550,7 +557,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (!CQRConfig.bosses.netherDragonDestroysBlocks || this.isDead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
+		if (!CQRConfig.bosses.netherDragonDestroysBlocks
+				|| this.isDead
+				|| (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing"))
+				|| this.world.isRemote) {
 			return false;
 		}
 
@@ -575,11 +585,26 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
 							cancelled = true;
 						}
-						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
+						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the
+						// protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
-							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
-									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != CQRBlocks.PHYLACTERY && block != CQRBlocks.FORCE_FIELD_NEXUS && block != CQRBlocks.EXPORTER) {
+							boolean container = block.hasTileEntity(iblockstate)
+									&& block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+											EnumFacing.UP);
+							if (breakableBlocks.contains(block.getRegistryName())
+									&& !container
+									&& block.isCollidable()
+									&& block != Blocks.BEDROCK
+									&& block != Blocks.STRUCTURE_BLOCK
+									&& block != Blocks.COMMAND_BLOCK
+									&& block != Blocks.REPEATING_COMMAND_BLOCK
+									&& block != Blocks.CHAIN_COMMAND_BLOCK
+									&& block != Blocks.END_GATEWAY
+									&& block != Blocks.END_PORTAL
+									&& block != Blocks.PORTAL
+									&& block != CQRBlocks.PHYLACTERY
+									&& block != CQRBlocks.FORCE_FIELD_NEXUS
+									&& block != CQRBlocks.EXPORTER) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
 								cancelled = true;
@@ -593,9 +618,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 
 		if (blockDestroyed) {
-			double x = aabb.minX + (aabb.maxX - aabb.minX) * (double) this.rand.nextFloat();
-			double y = aabb.minY + (aabb.maxY - aabb.minY) * (double) this.rand.nextFloat();
-			double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * (double) this.rand.nextFloat();
+			double x = aabb.minX + (aabb.maxX - aabb.minX) * this.rand.nextFloat();
+			double y = aabb.minY + (aabb.maxY - aabb.minY) * this.rand.nextFloat();
+			double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * this.rand.nextFloat();
 
 			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 0.0D, 0.0D, 0.0D);
 		}
@@ -818,7 +843,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			if (this.dragonBodyParts.length > 0) {
 				SubEntityNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
 				if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
-					this.dropExperience(MathHelper.floor((float) 120), segment.posX, segment.posY, segment.posZ);
+					this.dropExperience(MathHelper.floor(120), segment.posX, segment.posY, segment.posZ);
 					this.world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
 					this.removeLastSegment();
 				}
@@ -883,13 +908,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	protected void onFinalDeath() {
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
-				this.dropExperience(MathHelper.floor((float) 120), segment.posX, segment.posY, segment.posZ);
+				this.dropExperience(MathHelper.floor(120), segment.posX, segment.posY, segment.posZ);
 			}
 			this.world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
 			this.world.removeEntityDangerously(segment);
 		}
 		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
-			this.dropExperience(MathHelper.floor((float) 800), this.posX, this.posY, this.posZ);
+			this.dropExperience(MathHelper.floor(800), this.posX, this.posY, this.posZ);
 		}
 		this.world.createExplosion(this, this.posX, this.posY, this.posZ, 1, false);
 	}
@@ -899,6 +924,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return EnumParticleTypes.LAVA;
 	}
 
+	@Override
 	public BlockPos getCirclingCenter() {
 		if (this.getHomePositionCQR() == null) {
 			this.setHomePositionCQR(this.getPosition());
@@ -926,7 +952,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	/**
-	 * Returns true if this entity should move as if it were on a ladder (either because it's actually on a ladder, or for AI reasons)
+	 * Returns true if this entity should move as if it were on a ladder (either because it's actually on a ladder, or for
+	 * AI reasons)
 	 */
 	@Override
 	public boolean isOnLadder() {
@@ -947,7 +974,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return this.phase > 0 ? EnumCreatureAttribute.UNDEAD : EnumCreatureAttribute.UNDEFINED;
 	}
-	
+
 	/*
 	 * IaF Compat
 	 */
@@ -955,7 +982,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public boolean canbeTurnedToStone() {
 		return false;
 	}
-	
+
 	@Override
 	protected boolean canHealWhenIdlign() {
 		return this.phase == 0;

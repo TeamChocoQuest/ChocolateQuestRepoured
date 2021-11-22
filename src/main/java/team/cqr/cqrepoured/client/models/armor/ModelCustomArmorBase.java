@@ -21,7 +21,8 @@ public class ModelCustomArmorBase extends ModelBiped {
 	}
 
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor,
+			Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
 		if (entityIn instanceof EntityArmorStand) {
@@ -59,7 +60,8 @@ public class ModelCustomArmorBase extends ModelBiped {
 
 	private Deque<Float> rotations = new LinkedList<>();
 
-	// TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations of the armor bones => interface that
+	// TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations
+	// of the armor bones => interface that
 	// has to be implemented by the model!
 	// TODO: Move the "setupXOffsets" methods to an interface that needs to be implemented by the renderer
 	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EntityEquipmentSlot slot) {

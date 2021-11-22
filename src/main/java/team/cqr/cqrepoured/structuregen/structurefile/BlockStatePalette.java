@@ -57,7 +57,7 @@ public class BlockStatePalette implements Iterable<IBlockState> {
 
 	public NBTTagList writeToNBT() {
 		NBTTagList nbtList = new NBTTagList();
-		this.ids.forEach(state -> nbtList.appendTag(NBTUtil.writeBlockState(new NBTTagCompound(), (IBlockState)state)));
+		this.ids.forEach(state -> nbtList.appendTag(NBTUtil.writeBlockState(new NBTTagCompound(), state)));
 		return nbtList;
 	}
 

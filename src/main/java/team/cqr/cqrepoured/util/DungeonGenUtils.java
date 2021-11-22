@@ -56,13 +56,13 @@ public class DungeonGenUtils {
 	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radX, double radY, double radZ) {
 		double axisX = pointOnSphere.getX();
 		axisX *= axisX;
-		axisX /= ((double) radX * radX);
+		axisX /= (radX * radX);
 		double axisY = pointOnSphere.getY();
 		axisY *= axisY;
-		axisY /= ((double) radY * radY);
+		axisY /= (radY * radY);
 		double axisZ = pointOnSphere.getZ();
 		axisZ *= axisZ;
-		axisZ /= ((double) radZ * radZ);
+		axisZ /= (radZ * radZ);
 		return axisX + axisY + axisZ == 1.0D;
 	}
 
@@ -282,8 +282,12 @@ public class DungeonGenUtils {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, chunk.getTopFilledSegment() + 15, z);
 		Material material = chunk.getBlockState(mutablePos).getMaterial();
-		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS
-				|| (ignoreWater && material == Material.WATER))) {
+		while (mutablePos.getY() > 0
+				&& (material == Material.AIR
+						|| material == Material.WOOD
+						|| material == Material.LEAVES
+						|| material == Material.PLANTS
+						|| (ignoreWater && material == Material.WATER))) {
 			mutablePos.setY(mutablePos.getY() - 1);
 			material = chunk.getBlockState(mutablePos).getMaterial();
 		}

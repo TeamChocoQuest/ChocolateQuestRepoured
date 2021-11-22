@@ -46,7 +46,7 @@ public class DataEntryLong extends DataEntry<Long> {
 		if (value == null) {
 			return;
 		}
-		this.set(value.longValue());
+		this.set(value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DataEntryLong extends DataEntry<Long> {
 		if (value == null) {
 			return;
 		}
-		this.setInternal(value.longValue());
+		this.setInternal(value);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataEntryLong extends DataEntry<Long> {
 	@Deprecated
 	@Override
 	public boolean isSavedValueEqualTo(Long value) {
-		return this.isSavedValueEqualTo(value.longValue());
+		return this.isSavedValueEqualTo(value);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class DataEntryLong extends DataEntry<Long> {
 	@Deprecated
 	@Override
 	public Long get() {
-		return Long.valueOf(this.getLong());
+		return this.getLong();
 	}
 
 	public void set(long value) {

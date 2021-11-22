@@ -27,7 +27,11 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.entity.world.isRemote && this.entity != null && !this.entity.isDead && this.entity.getAttackTarget() != null && this.lightningCount < MAX_LIGHTNINGS) {
+		if (!this.entity.world.isRemote
+				&& this.entity != null
+				&& !this.entity.isDead
+				&& this.entity.getAttackTarget() != null
+				&& this.lightningCount < MAX_LIGHTNINGS) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -62,7 +66,8 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	private void spawnLightning() {
 		Vec3d v = new Vec3d(this.r, 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, this.angle);
-		EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.world, this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+		EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.world, this.entity.posX + v.x, this.entity.posY + v.y,
+				this.entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 		lightning.setPosition(this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z);
 		this.entity.world.spawnEntity(lightning);
 		this.r += RADIUS_INCREMENT;

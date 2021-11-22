@@ -106,8 +106,7 @@ public class CQStructure {
 			return;
 		}
 
-		List<File> fileList = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] {
-				"nbt" }, true));
+		List<File> fileList = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true));
 		fileList.sort((file1, file2) -> {
 			if (file1.length() > file2.length()) {
 				return -1;
@@ -335,7 +334,8 @@ public class CQStructure {
 			} else if (SPECIAL_BLOCKS.contains(block)) {
 				this.blockInfoList.add(new PreparableEmptyInfo(pos));
 				this.specialBlockInfoList.add(new PreparableBlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
-			} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner
+			} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER)
+					&& tileEntity instanceof TileEntityBanner
 					&& BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
 				this.blockInfoList.add(new PreparableBannerInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 			} else if (block == CQRBlocks.SPAWNER) {
@@ -478,8 +478,7 @@ public class CQStructure {
 		if (!CQRConfig.advanced.checkAndUpdateDeprecatedStructureFiles) {
 			return;
 		}
-		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] {
-				"nbt" }, true);
+		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true);
 		CQRMain.logger.info("Checking {} structure files", files.size());
 		long lastTimeLogged = System.currentTimeMillis();
 		long checkedFiles = 0;

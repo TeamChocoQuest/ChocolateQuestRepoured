@@ -31,7 +31,8 @@ public abstract class AbstractSpellCastingItem extends Item {
 
 	abstract int getSpellSlotCount();
 
-	// TODO: Add capabilities or AttributeModifiers for items, than iterate through the entity's equipment which is not this item and multiply them together
+	// TODO: Add capabilities or AttributeModifiers for items, than iterate through the entity's equipment which is not this
+	// item and multiply them together
 	public float getManaCostModifier(EntityLivingBase caster) {
 		return 1;
 	}
@@ -71,9 +72,11 @@ public abstract class AbstractSpellCastingItem extends Item {
 				if (result != null) {
 					pos = result.getBlockPos();
 				}
-				if (this.getCurrentSpell(stack).castSpell(caster, worldIn, pos, this, stack, 1 * this.getSpellPowerModifier() * this.getSpellPowerModifier(caster))) {
+				if (this.getCurrentSpell(stack).castSpell(caster, worldIn, pos, this, stack,
+						1 * this.getSpellPowerModifier() * this.getSpellPowerModifier(caster))) {
 					if (caster instanceof EntityPlayer) {
-						((EntityPlayer) caster).getCooldownTracker().setCooldown(this, Math.round(this.getCurrentSpell(stack).getSpellCooldown() * this.getSpellCooldownModifier() * this.getSpellCooldownModifier(caster)));
+						((EntityPlayer) caster).getCooldownTracker().setCooldown(this, Math.round(
+								this.getCurrentSpell(stack).getSpellCooldown() * this.getSpellCooldownModifier() * this.getSpellCooldownModifier(caster)));
 					} else {
 						// TODO: Add capability for cooldown to non-players
 					}

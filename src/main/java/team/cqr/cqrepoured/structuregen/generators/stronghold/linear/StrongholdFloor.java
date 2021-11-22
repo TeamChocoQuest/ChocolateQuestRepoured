@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.util.ESkyDirection;
 
-public class StrongholdFloor extends AbstractDungeonGenerationComponent<GeneratorStronghold>{
+public class StrongholdFloor extends AbstractDungeonGenerationComponent<GeneratorStronghold> {
 
 	private final Random random;
 	private int sideLength;
@@ -33,7 +33,6 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 		this.roomPattern = new EStrongholdRoomType[size][size];
 		this.random = rand;
 	}
-	
 
 	public void generateRoomPattern(int gridPosX, int gridPosZ, ESkyDirection prevFloorExitDir) {
 		this.setRoomType(gridPosX, gridPosZ, EStrongholdRoomType.NONE);
@@ -58,7 +57,8 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 		// System.out.println("Beginning gen...");
 		while (roomCount > 0) {
 			roomCoord = this.getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), this.currentDirection);
-			// System.out.println("X: " + roomCoord.getFirst() + " Z: " + roomCoord.getSecond() + " Room: " + ((this.sideLength * this.sideLength) - roomCount));
+			// System.out.println("X: " + roomCoord.getFirst() + " Z: " + roomCoord.getSecond() + " Room: " + ((this.sideLength *
+			// this.sideLength) - roomCount));
 			roomCount--;
 			slCounter--;
 			// System.out.println("sl: " + slCounter);
@@ -74,7 +74,12 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 				}
 				break;
 			}
-			if (slCounter <= 0 || (!reversed && slCounter > 1 && this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) || (reversed && slCounter > 1 && slCounter < ((sideLengthTemp * 4) - 4 - 2) && this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))) {
+			if (slCounter <= 0
+					|| (!reversed && slCounter > 1 && this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))
+					|| (reversed
+							&& slCounter > 1
+							&& slCounter < ((sideLengthTemp * 4) - 4 - 2)
+							&& this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))) {
 				if (slCounter <= 0) {
 					sideLengthTemp += reversed ? -2 : 2;
 					slCounter = (sideLengthTemp * 4) - 4;
@@ -139,7 +144,8 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 		}
 	}
 
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, World world, DungeonInhabitant mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, World world,
+			DungeonInhabitant mobType) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				EStrongholdRoomType room = this.roomPattern[iX][iZ];
@@ -234,22 +240,19 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 		}
 	}
 
-
 	@Override
 	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		
-	}
 
+	}
 
 	@Override
 	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		
-	}
 
+	}
 
 	@Override
 	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		
+
 	}
 
 }

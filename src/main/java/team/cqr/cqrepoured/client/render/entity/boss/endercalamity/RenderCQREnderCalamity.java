@@ -156,7 +156,6 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	protected float getDeathMaxRotation(EntityCQREnderCalamity entityLivingBaseIn) {
 		return 0;
 	}
-	
 
 	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {

@@ -3,7 +3,8 @@ package team.cqr.cqrepoured.util.data;
 import java.util.ArrayList;
 
 /**
- * A set of static utility methods to facilitate the manipulation of byte arrays and the conversion between object format and primitive format
+ * A set of static utility methods to facilitate the manipulation of byte arrays and the conversion between object
+ * format and primitive format
  *
  * @author jdawg3636 GitHub: https://github.com/jdawg3636
  *

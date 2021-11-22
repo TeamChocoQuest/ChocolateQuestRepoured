@@ -15,7 +15,8 @@ public class RenderCQRSpectreLord extends RenderCQREntity<EntityCQRSpectreLord> 
 	}
 
 	@Override
-	protected void renderModel(EntityCQRSpectreLord entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(EntityCQRSpectreLord entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+			float headPitch, float scaleFactor) {
 		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
 		if (flag) {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());

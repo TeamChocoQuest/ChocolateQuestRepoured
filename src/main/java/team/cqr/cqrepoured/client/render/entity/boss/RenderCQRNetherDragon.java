@@ -22,11 +22,12 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		super(manager, new ModelNetherDragonHead(), 0.5F);
 		this.modelNormal = (ModelNetherDragonHead) this.mainModel;
 		this.modelSkeletal = new ModelNetherDragonHeadSkeletal();
-		
+
 		this.addLayer(new LayerGlowingAreas<EntityCQRNetherDragon>(this, this::getEntityTexture) {
 			@Override
-			public void doRenderLayer(EntityCQRNetherDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-				if(entitylivingbaseIn.getSkeleProgress() >= 0) {
+			public void doRenderLayer(EntityCQRNetherDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+					float netHeadYaw, float headPitch, float scale) {
+				if (entitylivingbaseIn.getSkeleProgress() >= 0) {
 					return;
 				}
 				super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
@@ -44,14 +45,16 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		}
 
 		/*
-		 * if(entity.deathTicks > 0 ) { GlStateManager.pushMatrix(); GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0,
+		 * if(entity.deathTicks > 0 ) { GlStateManager.pushMatrix(); GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75
+		 * * entity.ticksExisted) + 0.5)),0,0,
 		 * 1F); }
 		 */
 		if (entity.deathTime > 0 && entity.deathTime % 5 == 0) {
 			float f = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
 			float f1 = (entity.getRNG().nextFloat() - 0.5F) * 4.0F;
 			float f2 = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
-			Minecraft.getMinecraft().world.spawnParticle(entity.getDeathAnimParticles(), entity.posX + (double) f, entity.posY + 2.0D + (double) f1, entity.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().world.spawnParticle(entity.getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D,
+					0.0D);
 		}
 		super.doRender(entity, x, y, z, entity.rotationYawHead, partialTicks);
 		/*
@@ -76,5 +79,5 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 	protected float getDeathMaxRotation(EntityCQRNetherDragon entityLivingBaseIn) {
 		return 0;
 	}
-	
+
 }

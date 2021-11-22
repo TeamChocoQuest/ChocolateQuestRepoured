@@ -21,7 +21,7 @@ public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> exten
 	@Override
 	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
 			float headPitch, float scale) {
-		if(entity instanceof AbstractEntityCQR && ((AbstractEntityCQR)entity).canPlayDeathAnimation()) {
+		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}
 		if (entity.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {

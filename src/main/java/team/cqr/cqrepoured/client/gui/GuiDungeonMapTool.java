@@ -59,6 +59,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				}
 				return true;
 			}
+
 			@Override
 			public void setText(String textIn) {
 				super.setText(textIn);
@@ -83,6 +84,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				}
 				return true;
 			}
+
 			@Override
 			public void setText(String textIn) {
 				super.setText(textIn);
@@ -107,6 +109,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				}
 				return true;
 			}
+
 			@Override
 			public void setText(String textIn) {
 				super.setText(textIn);
@@ -132,6 +135,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				}
 				return true;
 			}
+
 			@Override
 			public void setText(String textIn) {
 				super.setText(textIn);
@@ -157,6 +161,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				}
 				return true;
 			}
+
 			@Override
 			public void setText(String textIn) {
 				super.setText(textIn);
@@ -249,6 +254,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				GuiDungeonMapTool.lastGenerateBiomes = this.isChecked();
 				return true;
 			}
+
 			@Override
 			public void setIsChecked(boolean isChecked) {
 				super.setIsChecked(isChecked);

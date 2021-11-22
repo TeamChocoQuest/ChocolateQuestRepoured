@@ -52,7 +52,8 @@ public class ItemDagger extends ItemCQRWeapon {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, 2));
+			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(),
+					new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, 2));
 		}
 
 		return multimap;

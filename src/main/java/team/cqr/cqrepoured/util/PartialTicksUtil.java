@@ -7,5 +7,5 @@ public class PartialTicksUtil {
 	public static float getCurrentPartialTicks() {
 		return Minecraft.getMinecraft().getRenderPartialTicks();
 	}
-	
+
 }

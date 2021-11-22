@@ -70,7 +70,8 @@ import team.cqr.cqrepoured.util.reflection.ReflectionField;
 public class ProtectedRegionEventHandler {
 
 	/*
-	 * Possible other events to use (do not delete): PlayerInteractEvent.LeftClickBlock PlayerInteractEvent.RightClickBlock PlayerEvent.BreakSpeed
+	 * Possible other events to use (do not delete): PlayerInteractEvent.LeftClickBlock PlayerInteractEvent.RightClickBlock
+	 * PlayerEvent.BreakSpeed
 	 */
 
 	private ProtectedRegionEventHandler() {
@@ -216,7 +217,8 @@ public class ProtectedRegionEventHandler {
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null || !fluidStack.getFluid().canBePlacedInWorld()) {
 			IBlockState state = world.getBlockState(pos.offset(result.sideHit));
-			if (state.getMaterial().isLiquid() && ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
+			if (state.getMaterial().isLiquid()
+					&& ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
 				event.setCanceled(true);
 			}
 		} else {
@@ -353,9 +355,11 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static final ReflectionField FIELD_PROTECTED_REGIONS = new ReflectionField(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
+	private static final ReflectionField FIELD_PROTECTED_REGIONS = new ReflectionField(ServerProtectedRegionManager.class, "protectedRegions",
+			"protectedRegions");
 	@Deprecated
-	private static final ReflectionField FIELD_PROTECTED_REGION_UUIDS = new ReflectionField(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
+	private static final ReflectionField FIELD_PROTECTED_REGION_UUIDS = new ReflectionField(CapabilityProtectedRegionData.class, "protectedRegionUuids",
+			"protectedRegionUuids");
 
 	@Deprecated
 	private static void updateChunkCapabilityEfficiently(WorldServer world, ProtectedRegion protectedRegion) {
@@ -368,7 +372,8 @@ public class ProtectedRegionEventHandler {
 				if (chunk != null) {
 					CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 					cap.addProtectedRegionUuid(protectedRegion.getUuid());
-					FIELD_PROTECTED_REGIONS.<Map<UUID, ProtectedRegionContainer>>get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
+					FIELD_PROTECTED_REGIONS.<Map<UUID, ProtectedRegionContainer>>get(manager).put(protectedRegion.getUuid(),
+							new ProtectedRegionContainer(protectedRegion, false));
 				} else {
 					NBTTagCompound chunkNBT = getChunkNBT(world, x, z);
 					if (chunkNBT != null) {
@@ -390,7 +395,8 @@ public class ProtectedRegionEventHandler {
 						chunk = world.getChunk(x, z);
 						CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
 						cap.addProtectedRegionUuid(protectedRegion.getUuid());
-						FIELD_PROTECTED_REGIONS.<Map<UUID, ProtectedRegionContainer>>get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
+						FIELD_PROTECTED_REGIONS.<Map<UUID, ProtectedRegionContainer>>get(manager).put(protectedRegion.getUuid(),
+								new ProtectedRegionContainer(protectedRegion, false));
 					}
 				}
 			}

@@ -55,7 +55,8 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 	/*
 	 * TODO implement nexus and determine if this is necessary
 	 * 
-	 * @Override public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) { super.onBlockHarvested(worldIn, pos, state,
+	 * @Override public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+	 * super.onBlockHarvested(worldIn, pos, state,
 	 * player); TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus)
 	 * worldIn.getTileEntity(pos); if (nexus.hasData()) { nexus.getRegion().setEnabled(false); } }
 	 */

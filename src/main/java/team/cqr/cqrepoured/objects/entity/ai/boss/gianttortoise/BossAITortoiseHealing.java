@@ -19,15 +19,19 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	}
 
 	private EntityCQRGiantTortoise getBoss() {
-		return (EntityCQRGiantTortoise) this.entity;
+		return this.entity;
 	}
 
 	@Override
 	public boolean shouldExecute() {
 		this.healingActive = false;
-		if (!this.getBoss().isSpinning() && !this.getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
-			((EntityCQRGiantTortoise) this.entity).setHealing(true);
-			if (((EntityCQRGiantTortoise) this.entity).isInShell() || this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
+		if (!this.getBoss().isSpinning()
+				&& !this.getBoss().isStunned()
+				&& (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F)
+				&& this.currHealTicks < this.getHealingAmount()
+				&& this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
+			this.entity.setHealing(true);
+			if (this.entity.isInShell() || this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 				this.entity.setInShell(true);
 				this.healingActive = true;
 				return true;
@@ -59,7 +63,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	public boolean shouldContinueExecuting() {
 		this.healingActive = false;
 		if (!this.entity.isDead && this.currHealTicks <= this.getHealingAmount()) {
-			if (((EntityCQRGiantTortoise) this.entity).isInShell()) {
+			if (this.entity.isInShell()) {
 				this.healingActive = true;
 			}
 			return this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL;
@@ -69,20 +73,21 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 
 	@Override
 	public void updateTask() {
-		((EntityCQRGiantTortoise) this.entity).setHealing(true);
+		this.entity.setHealing(true);
 		if (this.entity.getCurrentAnimationId() != EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 			return;
 		}
 		if (this.healingActive) {
-			((EntityCQRGiantTortoise) this.entity).setInShell(true);
+			this.entity.setInShell(true);
 			if (this.currHealTicks >= this.getHealingAmount() || (this.entity.getHealth() / this.entity.getMaxHealth() >= 0.8F)) {
 				// Cancel
 				this.healingActive = false;
-				((EntityCQRGiantTortoise) this.entity).setTimesHealed(((EntityCQRGiantTortoise) this.entity).getTimesHealed() + 1);
+				this.entity.setTimesHealed(this.entity.getTimesHealed() + 1);
 				this.getBoss().setCanBeStunned(true);
 			} else {
-				((WorldServer) this.entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, this.entity.posX, this.entity.posY, this.entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
+				((WorldServer) this.entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, this.entity.posX, this.entity.posY, this.entity.posZ, 5,
+						0.5D, 1.0D, 0.5D, 0D);
 				this.getBoss().heal(1F);
 				this.getBoss().setCanBeStunned(false);
 				this.getBoss().setStunned(false);
@@ -92,10 +97,10 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	}
 
 	public int getHealingAmount() {
-		if (((EntityCQRGiantTortoise) this.entity).getTimesHealed() <= 0) {
+		if (this.entity.getTimesHealed() <= 0) {
 			return 0;
 		}
-		return this.healingDuration / ((EntityCQRGiantTortoise) this.entity).getTimesHealed();
+		return this.healingDuration / this.entity.getTimesHealed();
 	}
 
 	@Override

@@ -49,7 +49,8 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 			Vec3d velo = VectorUtil.rotateVectorAroundY(v, i * angle);
 			velo = velo.add(0, 0.1, 0);
 
-			ProjectileBase web = this.entity.getRNG().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.world, this.entity) : new ProjectileWeb(this.entity.world, this.entity);
+			ProjectileBase web = this.entity.getRNG().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.world, this.entity)
+					: new ProjectileWeb(this.entity.world, this.entity);
 			web.motionX = velo.x * SPEED_MULTIPLIER;
 			web.motionY = velo.y * SPEED_MULTIPLIER;
 			web.motionZ = velo.z * SPEED_MULTIPLIER;

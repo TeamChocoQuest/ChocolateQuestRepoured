@@ -21,7 +21,8 @@ public class CPacketEditTrade implements IMessage {
 
 	}
 
-	public CPacketEditTrade(int entityId, int tradeIndex, boolean[] ignoreMeta, boolean[] ignoreNBT, String reputation, String advancement, boolean stock, int restock, int inStock, int maxStock) {
+	public CPacketEditTrade(int entityId, int tradeIndex, boolean[] ignoreMeta, boolean[] ignoreNBT, String reputation, String advancement, boolean stock,
+			int restock, int inStock, int maxStock) {
 		this.entityId = entityId;
 		this.tradeIndex = tradeIndex;
 		this.ignoreMeta = ignoreMeta;

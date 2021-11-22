@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.objects.entity.ai.boss.piratecaptain;
 
-import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -47,7 +46,8 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	}
 
 	private boolean hasNearbyAllies() {
-		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
+		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius,
+				CQRConfig.bosses.pirateCaptainFleeCheckRadius);
 		Vec3d v1 = this.entity.getPositionVector().add(vec);
 		Vec3d v2 = this.entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
@@ -68,21 +68,17 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	public void castSpell() {
 		super.castSpell();
 
-		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
+		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius,
+				CQRConfig.bosses.pirateCaptainFleeCheckRadius);
 		Vec3d v1 = this.entity.getPositionVector().add(vec);
 		Vec3d v2 = this.entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
 		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
-		allies.sort(new Comparator<EntityLiving>() {
-
-			@Override
-			public int compare(EntityLiving o1, EntityLiving o2) {
-				int entCount1 = BossAIPirateFleeSpell.this.getNearbyAllies(o1);
-				int entCount2 = BossAIPirateFleeSpell.this.getNearbyAllies(o2);
-				return entCount2 - entCount1;
-			}
-
+		allies.sort((o1, o2) -> {
+			int entCount1 = BossAIPirateFleeSpell.this.getNearbyAllies(o1);
+			int entCount2 = BossAIPirateFleeSpell.this.getNearbyAllies(o2);
+			return entCount2 - entCount1;
 		});
 		Vec3d p = allies.get(0).getPositionVector();
 		this.entity.attemptTeleport(p.x, p.y, p.z);

@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,7 +21,7 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 	private boolean isSkeletal = false;
 
 	public SubEntityNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
-		super((IEntityMultiPart) dragon, "dragonPart" + partID, 0.5F, 0.5F);
+		super(dragon, "dragonPart" + partID, 0.5F, 0.5F);
 
 		this.setSize(1.25F, 1.25F);
 		this.dragon = dragon;
@@ -35,7 +34,6 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 
 	public void onRemovedFromBody() {
 	}
-
 
 	public boolean isSkeletal() {
 		return this.isSkeletal || this.dragon == null || this.dragon.getSkeleProgress() >= this.realID;
@@ -125,7 +123,7 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 		this.realID = compound.getInteger("realID");
 		this.partIndex = compound.getInteger("partIndex");
 	}
-	
+
 	@Override
 	public boolean canbeTurnedToStone() {
 		return false;

@@ -61,11 +61,11 @@ public class ProjectileEnergyOrb extends EntityFireball {
 	public static ProjectileEnergyOrb shootAt(Entity target, EntityLivingBase shooter, World world) {
 		Vec3d vec3d = shooter.getLook(1.0F);
 		double vx = target.posX - (shooter.posX + vec3d.x * shooter.width);
-		double vy = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (0.5D + shooter.posY + (double) (shooter.height / 2.0F));
+		double vy = target.getEntityBoundingBox().minY + target.height / 2.0F - (0.5D + shooter.posY + shooter.height / 2.0F);
 		double vz = target.posZ - (shooter.posZ + vec3d.z * shooter.width);
 		ProjectileEnergyOrb orb = new ProjectileEnergyOrb(world, shooter, vx, vy, vz);
 		orb.posX = shooter.posX + vec3d.x * shooter.width;
-		orb.posY = shooter.posY + (double) (shooter.height / 2.0F) + 0.5D;
+		orb.posY = shooter.posY + shooter.height / 2.0F + 0.5D;
 		orb.posZ = shooter.posZ + vec3d.z * shooter.width;
 		world.spawnEntity(orb);
 
@@ -76,10 +76,10 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		this.shootingEntity = shooter;
 		Vec3d vec3d = shooter.getLook(1.0F);
 		double accelX = target.posX - (shooter.posX + vec3d.x * shooter.width);
-		double accelY = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (0.5D + shooter.posY + (double) (shooter.height / 2.0F));
+		double accelY = target.getEntityBoundingBox().minY + target.height / 2.0F - (0.5D + shooter.posY + shooter.height / 2.0F);
 		double accelZ = target.posZ - (shooter.posZ + vec3d.z * shooter.width);
 		this.posX = shooter.posX + vec3d.x * shooter.width;
-		this.posY = shooter.posY + (double) (shooter.height / 2.0F) + 0.5D;
+		this.posY = shooter.posY + shooter.height / 2.0F + 0.5D;
 		this.posZ = shooter.posZ + vec3d.z * shooter.width;
 
 		this.motionX = 0.0D;
@@ -88,7 +88,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		accelX = accelX + this.rand.nextGaussian() * 0.4D;
 		accelY = accelY + this.rand.nextGaussian() * 0.4D;
 		accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
-		double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
 		this.accelerationX = accelX / d0 * 0.1D;
 		this.accelerationY = accelY / d0 * 0.1D;
 		this.accelerationZ = accelZ / d0 * 0.1D;
@@ -104,7 +104,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setInteger("deflections", deflectionsByPlayer);
+		compound.setInteger("deflections", this.deflectionsByPlayer);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 				}
 				this.applyEnchantments(this.shootingEntity, result.entityHit);
 			}
-			this.world.createExplosion(this.shootingEntity, posX, posY, posZ, 0.0F, false);
+			this.world.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 0.0F, false);
 			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shootingEntity);
 			entityareaeffectcloud.setParticle(EnumParticleTypes.SPELL_MOB);
@@ -126,11 +126,11 @@ public class ProjectileEnergyOrb extends EntityFireball {
 			entityareaeffectcloud.setDuration(400);
 			entityareaeffectcloud.setRadiusOnUse(-0.125F);
 			entityareaeffectcloud.setWaitTime(20);
-			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
+			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
 			entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.POISON, 60, 2));
 
 			this.world.spawnEntity(entityareaeffectcloud);
-			
+
 			this.playSound(CQRSounds.PROJECTILE_ENERGY_SPHERE_IMPACT, 8.0F, 1.0F);
 
 			this.setDead();

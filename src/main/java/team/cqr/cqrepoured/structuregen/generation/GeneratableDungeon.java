@@ -235,8 +235,8 @@ public class GeneratableDungeon {
 					for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
 						ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
 						if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-							 blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
-							 chunk.getBlockStorageArray()[chunkY] = blockStorage;
+							blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
+							chunk.getBlockStorageArray()[chunkY] = blockStorage;
 						}
 						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 					}

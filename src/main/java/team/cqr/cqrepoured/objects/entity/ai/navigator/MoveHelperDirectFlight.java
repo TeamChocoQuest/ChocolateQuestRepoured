@@ -36,7 +36,7 @@ public class MoveHelperDirectFlight extends EntityMoveHelper {
 			}
 
 			this.entity.setAIMoveSpeed(f1);
-			double d4 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+			double d4 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 			float f2 = (float) (-(MathHelper.atan2(d1, d4) * (180D / Math.PI)));
 			this.entity.rotationPitch = f2;// this.limitAngle(this.entity.rotationPitch, f2, 10.0F);
 			this.entity.setMoveVertical(d1 > 0.0D ? f1 : -f1);

@@ -27,7 +27,8 @@ public class BlockUnlitTorch extends BlockTorch {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
+			float hitY, float hitZ) {
 		ItemStack stack = playerIn.getHeldItem(hand);
 		Block block = Block.getBlockFromItem(stack.getItem());
 
@@ -52,7 +53,8 @@ public class BlockUnlitTorch extends BlockTorch {
 		if (!world.isRemote) {
 			world.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, facing), 3);
 			world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F + world.rand.nextFloat());
-			((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D, 0.00125);
+			((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D,
+					0.00125);
 		}
 	}
 

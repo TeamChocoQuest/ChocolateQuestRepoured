@@ -26,19 +26,19 @@ public class PlateauBuilder {
 			for (int iY = 0; iY < sizeY; ++iY) {
 				for (int iZ = 0; iZ < sizeZ; ++iZ) {
 
-					float noise = Math.max(0.0F, 2.0F - (float) (sizeY - iY) / 4.0F);
-					noise += Math.max(0.0F, (float) wallSize - (float) iX / 2.0F);
-					noise += Math.max(0.0F, (float) wallSize - (float) (sizeX - iX) / 2.0F);
-					noise += Math.max(0.0F, (float) wallSize - (float) iZ / 2.0F);
-					noise += Math.max(0.0F, (float) wallSize - (float) (sizeZ - iZ) / 2.0F);
+					float noise = Math.max(0.0F, 2.0F - (sizeY - iY) / 4.0F);
+					noise += Math.max(0.0F, wallSize - iX / 2.0F);
+					noise += Math.max(0.0F, wallSize - (sizeX - iX) / 2.0F);
+					noise += Math.max(0.0F, wallSize - iZ / 2.0F);
+					noise += Math.max(0.0F, wallSize - (sizeZ - iZ) / 2.0F);
 
 					if (noise >= 0.5F) {
 						double perlin1 = perlinNoise1.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
 
-						if (perlin1 * (double) noise >= 0.5D) {
+						if (perlin1 * noise >= 0.5D) {
 							double perlin2 = perlinNoise2.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
 
-							if (perlin1 * perlin2 * (double) noise >= 0.5D) {
+							if (perlin1 * perlin2 * noise >= 0.5D) {
 								continue;
 							}
 						}
@@ -65,20 +65,20 @@ public class PlateauBuilder {
 			for (int iY = 0; iY < sizeY; ++iY) {
 				for (int iZ = 0; iZ < sizeZ; ++iZ) {
 
-					float noise = Math.max(0.0F, (float) wallSize - (float) iY * 0.5F);
-					noise += Math.max(0.0F, (float) wallSize - (float) (sizeY - iY) * 0.5F);
-					noise += Math.max(0.0F, (float) wallSize - (float) iX * 0.5F);
-					noise += Math.max(0.0F, (float) wallSize - (float) (sizeX - iX) * 0.5F);
-					noise += Math.max(0.0F, (float) wallSize - (float) iZ * 0.5F);
-					noise += Math.max(0.0F, (float) wallSize - (float) (sizeZ - iZ) * 0.5F);
+					float noise = Math.max(0.0F, wallSize - iY * 0.5F);
+					noise += Math.max(0.0F, wallSize - (sizeY - iY) * 0.5F);
+					noise += Math.max(0.0F, wallSize - iX * 0.5F);
+					noise += Math.max(0.0F, wallSize - (sizeX - iX) * 0.5F);
+					noise += Math.max(0.0F, wallSize - iZ * 0.5F);
+					noise += Math.max(0.0F, wallSize - (sizeZ - iZ) * 0.5F);
 
 					if (noise >= 0.5F) {
 						double perlin1 = perlinNoise1.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
 
-						if (perlin1 * (double) noise >= 0.5D) {
+						if (perlin1 * noise >= 0.5D) {
 							double perlin2 = perlinNoise2.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
 
-							if (perlin1 * perlin2 * (double) noise >= 0.5D) {
+							if (perlin1 * perlin2 * noise >= 0.5D) {
 								continue;
 							}
 						}

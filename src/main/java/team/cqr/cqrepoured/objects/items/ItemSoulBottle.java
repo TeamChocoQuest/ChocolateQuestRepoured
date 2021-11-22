@@ -108,7 +108,8 @@ public class ItemSoulBottle extends Item {
 	public Entity createEntityFromNBT(NBTTagCompound tag, World worldIn, double x, double y, double z) {
 		if (!worldIn.isRemote) {
 			{
-				// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
+				// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an
+				// entity
 				tag.removeTag("UUIDLeast");
 				tag.removeTag("UUIDMost");
 				tag.removeTag("Pos");

@@ -74,7 +74,8 @@ public class GuiMapPlaceholderSimple extends GuiScreen {
 		boolean fillMap = this.fillMap.isChecked();
 		int fillRadius = this.parseInt(this.fillRadius.getText(), 0, 1024, 64, "Invalid argument: fillRadius");
 
-		CQRMain.NETWORK.sendToServer(new CPacketCloseMapPlaceholderGuiSimple(this.pos, this.facing, scale, orientation, lockOrientation, sizeUp, sizeDown, sizeRight, sizeLeft, fillMap, fillRadius));
+		CQRMain.NETWORK.sendToServer(new CPacketCloseMapPlaceholderGuiSimple(this.pos, this.facing, scale, orientation, lockOrientation, sizeUp, sizeDown,
+				sizeRight, sizeLeft, fillMap, fillRadius));
 		super.onGuiClosed();
 	}
 
@@ -89,7 +90,12 @@ public class GuiMapPlaceholderSimple extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.scale.isFocused() || this.sizeUp.isFocused() || this.sizeDown.isFocused() || this.sizeRight.isFocused() || this.sizeLeft.isFocused() || this.fillRadius.isFocused()) {
+		if (this.scale.isFocused()
+				|| this.sizeUp.isFocused()
+				|| this.sizeDown.isFocused()
+				|| this.sizeRight.isFocused()
+				|| this.sizeLeft.isFocused()
+				|| this.fillRadius.isFocused()) {
 			if (keyCode == 1) {
 				this.scale.setFocused(false);
 				this.sizeUp.setFocused(false);

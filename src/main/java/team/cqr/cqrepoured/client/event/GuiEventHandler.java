@@ -32,7 +32,12 @@ public class GuiEventHandler {
 					event.getButtonList().add(new GuiButton(1, 2, 2, 100, 20, "Map Tool") {
 						@Override
 						public void mouseReleased(int mouseX, int mouseY) {
-							if (this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height) {
+							if (this.enabled
+									&& this.visible
+									&& mouseX >= this.x
+									&& mouseY >= this.y
+									&& mouseX < this.x + this.width
+									&& mouseY < this.y + this.height) {
 								mc.displayGuiScreen(new GuiDungeonMapTool(gui));
 							}
 						}
@@ -63,7 +68,8 @@ public class GuiEventHandler {
 		public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
 			super.drawButton(mc, mouseX, mouseY, partialTicks);
 			if (this.isMouseOver()) {
-				this.gui.drawToolTip(Arrays.asList("Reloads all dungeon files located in config/CQR/dungeons.", "Only works while in the main menu."), mouseX, mouseY);
+				this.gui.drawToolTip(Arrays.asList("Reloads all dungeon files located in config/CQR/dungeons.", "Only works while in the main menu."), mouseX,
+						mouseY);
 			}
 		}
 

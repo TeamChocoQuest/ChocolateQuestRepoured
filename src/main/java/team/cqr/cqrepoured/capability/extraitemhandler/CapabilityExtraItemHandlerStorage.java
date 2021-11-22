@@ -32,7 +32,7 @@ public class CapabilityExtraItemHandlerStorage implements IStorage<CapabilityExt
 		if (!(instance instanceof IItemHandlerModifiable)) {
 			throw new RuntimeException("IItemHandler instance does not implement IItemHandlerModifiable");
 		}
-		IItemHandlerModifiable itemHandlerModifiable = (IItemHandlerModifiable) instance;
+		IItemHandlerModifiable itemHandlerModifiable = instance;
 		NBTTagList tagList = (NBTTagList) base;
 		for (int i = 0; i < tagList.tagCount(); i++) {
 			NBTTagCompound itemTags = tagList.getCompoundTagAt(i);

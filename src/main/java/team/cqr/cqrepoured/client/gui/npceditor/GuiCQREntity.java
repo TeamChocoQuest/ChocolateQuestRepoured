@@ -48,12 +48,18 @@ public class GuiCQREntity extends GuiContainer {
 		super.initGui();
 		// W := 107 -> steps are 10% steps
 		this.sliderHealthScaling = new GuiSlider(0, 5, 5, 107, 16, "Health Scale ", " %", 10, 1000, this.entity.getHealthScale() * 100.0D, false, true);
-		this.sliderDropChanceHelm = new GuiSlider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.HEAD) * 100.0D, false, true);
-		this.sliderDropChanceChest = new GuiSlider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.CHEST) * 100.0D, false, true);
-		this.sliderDropChanceLegs = new GuiSlider(3, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.LEGS) * 100.0D, false, true);
-		this.sliderDropChanceFeet = new GuiSlider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.FEET) * 100.0D, false, true);
-		this.sliderDropChanceMainhand = new GuiSlider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.MAINHAND) * 100.0D, false, true);
-		this.sliderDropChanceOffhand = new GuiSlider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.OFFHAND) * 100.0D, false, true);
+		this.sliderDropChanceHelm = new GuiSlider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.HEAD) * 100.0D,
+				false, true);
+		this.sliderDropChanceChest = new GuiSlider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100,
+				this.entity.getDropChance(EntityEquipmentSlot.CHEST) * 100.0D, false, true);
+		this.sliderDropChanceLegs = new GuiSlider(3, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.LEGS) * 100.0D,
+				false, true);
+		this.sliderDropChanceFeet = new GuiSlider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.FEET) * 100.0D,
+				false, true);
+		this.sliderDropChanceMainhand = new GuiSlider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100,
+				this.entity.getDropChance(EntityEquipmentSlot.MAINHAND) * 100.0D, false, true);
+		this.sliderDropChanceOffhand = new GuiSlider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100,
+				this.entity.getDropChance(EntityEquipmentSlot.OFFHAND) * 100.0D, false, true);
 		this.sliderSizeScaling = new GuiSlider(7, 5, 145, 107, 16, "Size Scale ", " %", 5, 500, this.entity.getSizeVariation() * 100.0D, false, true);
 		this.openTradeGUIButton = new GuiButtonExt(8, 5 + this.sliderHealthScaling.width + 40, 25, 54, 16, "Trades");
 		this.buttonList.add(this.sliderHealthScaling);
@@ -108,7 +114,7 @@ public class GuiCQREntity extends GuiContainer {
 	}
 
 	protected void drawEntity(int x, int y, int scale, float mouseX, float mouseY) {
-		GuiInventory.drawEntityOnScreen(x, y, scale, (float) x - mouseX, (float) y - (float) scale * this.entity.getEyeHeight() - mouseY, this.entity);
+		GuiInventory.drawEntityOnScreen(x, y, scale, x - mouseX, y - scale * this.entity.getEyeHeight() - mouseY, this.entity);
 	}
 
 	@Override
@@ -123,16 +129,17 @@ public class GuiCQREntity extends GuiContainer {
 		int dropChanceOffhand = this.sliderDropChanceOffhand.getValueInt();
 		int sizeScaling = this.sliderSizeScaling.getValueInt();
 
-		this.entity.setHealthScale((double) healthScaling / 100.0D);
-		this.entity.setDropChance(EntityEquipmentSlot.HEAD, (float) dropChanceHelm / 100.0F);
-		this.entity.setDropChance(EntityEquipmentSlot.CHEST, (float) dropChanceChest / 100.0F);
-		this.entity.setDropChance(EntityEquipmentSlot.LEGS, (float) dropChanceLegs / 100.0F);
-		this.entity.setDropChance(EntityEquipmentSlot.FEET, (float) dropChanceFeet / 100.0F);
-		this.entity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) dropChanceMainhand / 100.0F);
-		this.entity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) dropChanceOffhand / 100.0F);
-		this.entity.setSizeVariation((float) sizeScaling / 100.0F);
+		this.entity.setHealthScale(healthScaling / 100.0D);
+		this.entity.setDropChance(EntityEquipmentSlot.HEAD, dropChanceHelm / 100.0F);
+		this.entity.setDropChance(EntityEquipmentSlot.CHEST, dropChanceChest / 100.0F);
+		this.entity.setDropChance(EntityEquipmentSlot.LEGS, dropChanceLegs / 100.0F);
+		this.entity.setDropChance(EntityEquipmentSlot.FEET, dropChanceFeet / 100.0F);
+		this.entity.setDropChance(EntityEquipmentSlot.MAINHAND, dropChanceMainhand / 100.0F);
+		this.entity.setDropChance(EntityEquipmentSlot.OFFHAND, dropChanceOffhand / 100.0F);
+		this.entity.setSizeVariation(sizeScaling / 100.0F);
 
-		CQRMain.NETWORK.sendToServer(new CPacketSyncEntity(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
+		CQRMain.NETWORK.sendToServer(new CPacketSyncEntity(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs,
+				dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
 	}
 
 	@Override
@@ -144,7 +151,9 @@ public class GuiCQREntity extends GuiContainer {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		if (button == this.openTradeGUIButton && (player.isCreative() || (this.entity.getTrades() != null && !this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
+		if (button == this.openTradeGUIButton
+				&& (player.isCreative()
+						|| (this.entity.getTrades() != null && !this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
 			player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.entity.world, this.entity.getEntityId(), 0, 0);
 		}
 	}

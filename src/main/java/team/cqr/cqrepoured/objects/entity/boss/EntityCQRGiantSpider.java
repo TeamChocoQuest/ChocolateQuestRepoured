@@ -152,7 +152,9 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	@Override
 	public void addPotionEffect(PotionEffect potioneffectIn) {
-		if (potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
+		if (potioneffectIn.getPotion() == MobEffects.POISON
+				|| potioneffectIn.getPotion() == MobEffects.WEAKNESS
+				|| potioneffectIn.getPotion() == MobEffects.WITHER) {
 			return;
 		}
 		super.addPotionEffect(potioneffectIn);
@@ -167,17 +169,19 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	/**
-	 * Returns true if the WatchableObject (Byte) is 0x01 otherwise returns false. The WatchableObject is updated using setBesideClimableBlock.
+	 * Returns true if the WatchableObject (Byte) is 0x01 otherwise returns false. The WatchableObject is updated using
+	 * setBesideClimableBlock.
 	 */
 	public boolean isBesideClimbableBlock() {
-		return (((Byte) this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
+		return (this.dataManager.get(CLIMBING).byteValue() & 1) != 0;
 	}
 
 	/**
-	 * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is false.
+	 * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is
+	 * false.
 	 */
 	public void setBesideClimbableBlock(boolean climbing) {
-		byte b0 = ((Byte) this.dataManager.get(CLIMBING));
+		byte b0 = (this.dataManager.get(CLIMBING));
 
 		if (climbing) {
 			b0 = (byte) (b0 | 1);
@@ -257,7 +261,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
 		if (potioneffectIn.getPotion() == MobEffects.POISON) {
-			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
+			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(
+					this, potioneffectIn);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
 			return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
 		}

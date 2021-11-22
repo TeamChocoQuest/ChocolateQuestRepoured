@@ -29,20 +29,20 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	protected static final int COOLDOWN_BASE = 50;
 	protected static final int ATTACK_DURATION = 200;
 	protected static final float MAX_DISTANCE_TO_TARGET = 12;
-	
+
 	protected Vec3d attackDirection = Vec3d.ZERO;
 	protected short ticksCollided = 0;
 	protected boolean targetWasNullInLastCycle = false;
-	
+
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
-		if(!attacker.canUseSpinToWinAttack()) {
+		if (!attacker.canUseSpinToWinAttack()) {
 			return false;
 		}
 		ItemStack itemStackMain = attacker.getHeldItemMainhand();
 		ItemStack itemStackOff = attacker.getHeldItemOffhand();
-		
-		return doesItemStackFitForSpinAttack(itemStackMain) && doesItemStackFitForSpinAttack(itemStackOff);
+
+		return this.doesItemStackFitForSpinAttack(itemStackMain) && this.doesItemStackFitForSpinAttack(itemStackOff);
 	}
 
 	protected boolean doesItemStackFitForSpinAttack(final ItemStack stack) {
@@ -59,7 +59,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 	@Override
 	public boolean shouldContinueAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
-		return (target == null ||attacker.getDistance(target) <= MAX_DISTANCE_TO_TARGET) && !(attacker.collidedHorizontally && this.ticksCollided >= 20);
+		return (target == null || attacker.getDistance(target) <= MAX_DISTANCE_TO_TARGET) && (!attacker.collidedHorizontally || (this.ticksCollided < 20));
 	}
 
 	@Override
@@ -74,61 +74,61 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	}
 
 	private void calcAttackDirection(AbstractEntityCQR attacker, EntityLivingBase target) {
-		attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.25);
-		attackDirection = attackDirection.subtract(0, attackDirection.y, 0);
+		this.attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.25);
+		this.attackDirection = this.attackDirection.subtract(0, this.attackDirection.y, 0);
 	}
 
 	@Override
 	public void continueAttack(AbstractEntityCQR attacker, EntityLivingBase target, int tick) {
 		final boolean oldTargetWasNull = this.targetWasNullInLastCycle;
-		targetWasNullInLastCycle = target == null || (target != null && target.isDead);
-		if(attacker.collidedHorizontally) {
+		this.targetWasNullInLastCycle = target == null || (target != null && target.isDead);
+		if (attacker.collidedHorizontally) {
 			this.ticksCollided++;
 		} else {
 			this.ticksCollided = 0;
 		}
-		
-		if(!targetWasNullInLastCycle && oldTargetWasNull != targetWasNullInLastCycle) {
+
+		if (!this.targetWasNullInLastCycle && oldTargetWasNull != this.targetWasNullInLastCycle) {
 			this.calcAttackDirection(attacker, target);
 		}
-		
-		attacker.motionX = attackDirection.x;
-		attacker.motionZ = attackDirection.z;
+
+		attacker.motionX = this.attackDirection.x;
+		attacker.motionZ = this.attackDirection.z;
 		attacker.velocityChanged = true;
-		
-		//First: Damage all entities around us
+
+		// First: Damage all entities around us
 		final double radius = 1.5 * attacker.getSizeVariation();
-		List<Entity> affectedEntities = attacker.getEntityWorld().getEntitiesInAABBexcluding(
-				attacker, 
-				attacker.getEntityBoundingBox().grow(radius), 
-				TargetUtil.createPredicateNonAlly(attacker.getFaction())
-			);
+		List<Entity> affectedEntities = attacker.getEntityWorld().getEntitiesInAABBexcluding(attacker, attacker.getEntityBoundingBox().grow(radius),
+				TargetUtil.createPredicateNonAlly(attacker.getFaction()));
 		affectedEntities.forEach((Entity entity) -> {
-			if(entity == null) {
+			if (entity == null) {
 				return;
 			}
-			if(entity instanceof MultiPartEntityPart) {
+			if (entity instanceof MultiPartEntityPart) {
 				return;
 			}
-			if(attacker.getDistance(entity) > radius) {
+			if (attacker.getDistance(entity) > radius) {
 				return;
 			}
-			if(entity instanceof EntityLivingBase) {
+			if (entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
-				
+
 				float dmg = (float) attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
-				
-				/*living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
-				final Vec3d v = living.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(1.25).add(0, 0.25, 0).scale(attacker.getSizeVariation()).add(attackDirection);
-				living.motionX += v.x;
-				living.motionY += v.y;
-				living.motionZ += v.z;
-				living.velocityChanged = true;*/
-				
+
+				/*
+				 * living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
+				 * final Vec3d v = living.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(1.25).add(0,
+				 * 0.25, 0).scale(attacker.getSizeVariation()).add(attackDirection);
+				 * living.motionX += v.x;
+				 * living.motionY += v.y;
+				 * living.motionZ += v.z;
+				 * living.velocityChanged = true;
+				 */
+
 				final float knockbackStrength = 1.25F * attacker.getSizeVariation();
-				
+
 				living.knockBack(entity, dmg, knockbackStrength, knockbackStrength);
 			}
 		});

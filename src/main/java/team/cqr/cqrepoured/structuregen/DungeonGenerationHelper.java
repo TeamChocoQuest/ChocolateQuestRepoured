@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.Reference;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class DungeonGenerationHelper {
@@ -83,7 +82,8 @@ public class DungeonGenerationHelper {
 					int chunkX = MathHelper.floor(player.posX) >> 4;
 					int chunkZ = MathHelper.floor(player.posZ) >> 4;
 					int radius = 4;
-					ForgeChunkManager.Ticket ticket = ChunkUtil.getTicket(world, chunkX - radius, chunkZ - radius, chunkX + radius + 1, chunkZ + radius + 1, true);
+					ForgeChunkManager.Ticket ticket = ChunkUtil.getTicket(world, chunkX - radius, chunkZ - radius, chunkX + radius + 1, chunkZ + radius + 1,
+							true);
 
 					for (int x = -radius; x <= radius + 1; x++) {
 						for (int z = -radius; z <= radius + 1; z++) {
@@ -141,8 +141,10 @@ public class DungeonGenerationHelper {
 			long chunkSeed = (xSeed * chunkPos.x + zSeed * chunkPos.z) ^ worldSeed;
 			fmlRandom.setSeed(chunkSeed);
 			isGeneratingDelayedChunks = true;
-			CQRMain.DUNGEON_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator, world.getChunkProvider());
-			CQRMain.WALL_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator, world.getChunkProvider());
+			CQRMain.DUNGEON_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator,
+					world.getChunkProvider());
+			CQRMain.WALL_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator,
+					world.getChunkProvider());
 			isGeneratingDelayedChunks = false;
 		}
 		DELAYED_CHUNKS.remove(dim);

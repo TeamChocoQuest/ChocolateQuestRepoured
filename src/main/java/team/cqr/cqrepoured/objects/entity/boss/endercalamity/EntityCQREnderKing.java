@@ -60,10 +60,10 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		
-		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderKing>(this));
+
+		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<>(this));
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		amount /= 2;
@@ -112,15 +112,15 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	@Override
 	public void onDeath(DamageSource cause) {
 		// DONE: SPawn the true boss, BEFORE super.onDeath (that one creates the living death event)
-		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
 		if (manager instanceof ServerProtectedRegionManager) {
 
-			EntityCalamitySpawner cs = new EntityCalamitySpawner(world);
+			EntityCalamitySpawner cs = new EntityCalamitySpawner(this.world);
 			BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition();
 			cs.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			cs.setFaction(this.getFaction().getName());
 
-			world.spawnEntity(cs);
+			this.world.spawnEntity(cs);
 
 			EntityUtil.addEntityToAllRegionsAt(pos, cs);
 		}
@@ -129,7 +129,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 	protected boolean teleportRandomly() {
 		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-		double d1 = this.posY + (double) (this.rand.nextInt(64) - 32);
+		double d1 = this.posY + (this.rand.nextInt(64) - 32);
 		double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
 		return this.teleportTo(d0, d1, d2);
 	}
@@ -142,7 +142,8 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 
 		if (flag) {
-			this.world.playSound((EntityPlayer) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+			this.world.playSound((EntityPlayer) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT,
+					this.getSoundCategory(), 1.0F, 1.0F);
 			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 		}
 
@@ -205,7 +206,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	public float getDefaultHeight() {
 		return 2.9F;
 	}
-	
+
 	@Override
 	public void teleport(double x, double y, double z) {
 		this.teleportTo(x, y, z);
@@ -216,8 +217,9 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D,
-						-this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width,
+						this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width,
+						(this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 		super.onLivingUpdate();
@@ -281,7 +283,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setBoolean("wide_enderman", isWide());
+		compound.setBoolean("wide_enderman", this.isWide());
 	}
 
 	@Override

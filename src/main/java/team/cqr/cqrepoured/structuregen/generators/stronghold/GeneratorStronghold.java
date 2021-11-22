@@ -56,11 +56,13 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 	@Override
 	public void buildStructure() {
 		// places the structures
-		// CQStructure entranceStair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
+		// CQStructure entranceStair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, dunX, dunZ,
+		// dungeon.isProtectedFromModifications());
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
 
 		int y = this.pos.getY();
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world,
+				this.pos.getX(), this.pos.getZ());
 		PlacementSettings settings = new PlacementSettings();
 		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom(this.random));
 		CQStructure structureEntrance = this.loadStructureFromFile(this.dungeon.getEntranceBuilding(this.random));
@@ -128,6 +130,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		return this.dunZ;
 	}
 
+	@Override
 	public DungeonStrongholdLinear getDungeon() {
 		return this.dungeon;
 	}

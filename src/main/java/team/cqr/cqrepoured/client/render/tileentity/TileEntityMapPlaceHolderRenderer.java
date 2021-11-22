@@ -16,7 +16,8 @@ import team.cqr.cqrepoured.util.Reference;
 public class TileEntityMapPlaceHolderRenderer extends FastTESR<TileEntityMap> {
 
 	@Override
-	public void renderTileEntityFast(TileEntityMap te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
+	public void renderTileEntityFast(TileEntityMap te, double x, double y, double z, float partialTicks, int destroyStage, float partial,
+			BufferBuilder buffer) {
 		if (!te.hasWorld()) {
 			return;
 		}

@@ -117,7 +117,8 @@ public class ItemArmorTurtle extends ItemArmor {
 					((WorldServer) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
 				}
 
-				if (!CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_TURTLE) && entity.getHealth() < Math.max(5.0F, entity.getMaxHealth() * 0.2F)) {
+				if (!CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_TURTLE)
+						&& entity.getHealth() < Math.max(5.0F, entity.getMaxHealth() * 0.2F)) {
 					if (!entity.world.isRemote) {
 						entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 2, false, true));
 						double x = entity.posX;
@@ -142,8 +143,8 @@ public class ItemArmorTurtle extends ItemArmor {
 				double z = entity.posZ - hitVec.z;
 				double yaw = Math.toDegrees(Math.atan2(-x, z));
 
-				if (ItemUtil.compareRotations((double) entity.renderYawOffset, yaw, 45.0D)) {
-					double y = (entity.posY + (double) entity.height * 0.5D) - hitVec.y;
+				if (ItemUtil.compareRotations(entity.renderYawOffset, yaw, 45.0D)) {
+					double y = (entity.posY + entity.height * 0.5D) - hitVec.y;
 					double pitch = -Math.toDegrees(Math.asin(y));
 
 					if (ItemUtil.compareRotations(0.0D, pitch, 60.0D)) {

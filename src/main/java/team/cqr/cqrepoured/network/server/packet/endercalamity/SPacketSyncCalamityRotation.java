@@ -30,11 +30,11 @@ public class SPacketSyncCalamityRotation implements IMessage {
 	}
 
 	public int getEntityId() {
-		return entityId;
+		return this.entityId;
 	}
 
 	public float getPitch() {
-		return pitch;
+		return this.pitch;
 	}
 
 }

@@ -47,7 +47,8 @@ public abstract class CastleRoomBase {
 	protected HashSet<BlockPos> possibleDecoPositions; // set of possible decoration positions
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
 	protected HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
-	// protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
+	// protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of
+	// possible)
 
 	public CastleRoomBase(int sideLength, int height, int floor, Random rand) {
 		this.sideLength = sideLength;
@@ -88,7 +89,8 @@ public abstract class CastleRoomBase {
 		// Default is no decoration
 	}
 
-	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
+	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation,
+			ArrayList<String> bossUuids) {
 		// Default is no boss
 	}
 
@@ -119,7 +121,8 @@ public abstract class CastleRoomBase {
 	protected void generateDefaultCeiling(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(),
+						BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
@@ -129,7 +132,8 @@ public abstract class CastleRoomBase {
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+				genArray.addBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN,
+						BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
@@ -201,7 +205,8 @@ public abstract class CastleRoomBase {
 									decoPos = southStart.add(x, y, 0);
 								}
 								this.usedDecoPositions.add(decoPos);
-								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
+										BlockStateGenArray.EnumPriority.MEDIUM);
 							}
 						}
 					}
@@ -217,7 +222,8 @@ public abstract class CastleRoomBase {
 									decoPos = eastStart.add(0, y, z);
 								}
 								this.usedDecoPositions.add(decoPos);
-								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
+										BlockStateGenArray.EnumPriority.MEDIUM);
 							}
 						}
 					}
@@ -228,7 +234,8 @@ public abstract class CastleRoomBase {
 	}
 
 	/*
-	 * Get a list of blocks that make up the decoratable edge of the room. Decoratable edge positions are adjacent to a wall but not in front of a door.
+	 * Get a list of blocks that make up the decoratable edge of the room. Decoratable edge positions are adjacent to a wall
+	 * but not in front of a door.
 	 */
 	protected ArrayList<BlockPos> getDecorationEdge(EnumFacing side) {
 		// First get all blocks that are not occupied by walls
@@ -285,7 +292,8 @@ public abstract class CastleRoomBase {
 	}
 
 	/*
-	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In other words, the layer just above the
+	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In
+	 * other words, the layer just above the
 	 * floor that is not already occupied by walls.
 	 */
 	protected ArrayList<BlockPos> getDecorationLayer(int layer) {

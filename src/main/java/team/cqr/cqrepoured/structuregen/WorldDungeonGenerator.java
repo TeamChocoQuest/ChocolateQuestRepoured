@@ -34,7 +34,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return;
 		}
 
-		//setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor, true);
+		// setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor,
+		// true);
 		DungeonBase dungeon = getDungeonAt(world, chunkX, chunkZ);
 		if (dungeon == null) {
 			return;
@@ -68,11 +69,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return locationSpecificDungeon;
 		}
 
-		return GridRegistry.getInstance().getGrids().stream()
-				.filter(gridPredicate)
-				.map(grid -> grid.getDungeonAt(world, chunkX, chunkZ, dungeonPredicate))
-				.filter(Objects::nonNull)
-				.findFirst().orElse(null);
+		return GridRegistry.getInstance().getGrids().stream().filter(gridPredicate).map(grid -> grid.getDungeonAt(world, chunkX, chunkZ, dungeonPredicate))
+				.filter(Objects::nonNull).findFirst().orElse(null);
 	}
 
 	/**

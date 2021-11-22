@@ -39,16 +39,16 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 			// REnder ring 1
 			float ticks = 0.25F * entity.ticksExisted;
 			float colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks)));
-			renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, laserDirection, colorMultiplier);
+			this.renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, laserDirection, colorMultiplier);
 			if (entity.length >= 4) {
 				Vec3d increment = Vec3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
 				worldPos = worldPos.add(increment);
 				colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks + (Math.PI / 2))));
-				renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, laserDirection, colorMultiplier);
+				this.renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, laserDirection, colorMultiplier);
 				if (entity.length >= 8) {
 					worldPos = worldPos.add(increment);
 					colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks + Math.PI)));
-					renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, laserDirection, colorMultiplier);
+					this.renderRing(9, worldPos, entity, pitch, yaw, 2D, partialTicks, laserDirection, colorMultiplier);
 				}
 			}
 		}
@@ -61,7 +61,8 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 
 	}
 
-	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection, float colorMultiplier) {
+	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection,
+			float colorMultiplier) {
 		GlStateManager.pushMatrix();
 
 		// View coordinates
@@ -79,7 +80,8 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-pitch - 90.0F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0D, -1.0D, 1.0D);
-		PentagramUtil.renderPentagram(entity.ticksExisted, entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier, entity.getColorB() * colorMultiplier, corners);
+		PentagramUtil.renderPentagram(entity.ticksExisted, entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier,
+				entity.getColorB() * colorMultiplier, corners);
 		PentagramUtil.postRenderPentagram();
 		GlStateManager.popMatrix();
 	}

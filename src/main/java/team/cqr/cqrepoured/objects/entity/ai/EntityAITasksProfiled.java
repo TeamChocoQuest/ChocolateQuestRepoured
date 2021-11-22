@@ -28,6 +28,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 		this.world = world;
 	}
 
+	@Override
 	public void onUpdateTasks() {
 		this.profiler.startSection("goalSetup");
 

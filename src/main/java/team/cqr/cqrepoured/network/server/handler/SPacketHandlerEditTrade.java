@@ -37,8 +37,10 @@ public class SPacketHandlerEditTrade implements IMessageHandler<CPacketEditTrade
 					int reputation = this.getRequriedReputation(message.getReputation());
 					ResourceLocation advancement = this.getRequiredRequiredAdvancement((WorldServer) world, message.getAdvancement());
 					ItemStack output = ((ContainerMerchantEditTrade) player.openContainer).getOutput();
-					TradeInput[] input = this.getTradeInput(((ContainerMerchantEditTrade) player.openContainer).getInput(), message.getIgnoreMeta(), message.getIgnoreNBT());
-					Trade trade = new Trade(trades, reputation, advancement, message.isStock(), message.getRestock(), message.getInStock(), message.getMaxStock(), output, input);
+					TradeInput[] input = this.getTradeInput(((ContainerMerchantEditTrade) player.openContainer).getInput(), message.getIgnoreMeta(),
+							message.getIgnoreNBT());
+					Trade trade = new Trade(trades, reputation, advancement, message.isStock(), message.getRestock(), message.getInStock(),
+							message.getMaxStock(), output, input);
 
 					if (trades.editTrade(message.getTradeIndex(), trade)) {
 						CQRMain.NETWORK.sendToAllTracking(new SPacketEditTrade(entity.getEntityId(), message.getTradeIndex(), trade.writeToNBT()), entity);

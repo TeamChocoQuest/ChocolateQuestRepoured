@@ -38,7 +38,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	@Override
 	public boolean shouldContinueExecuting() {
 		if (this.shouldExecute()) {
-			if (this.entity.getHealth() <= (borderHPForMinions * this.entity.getMaxHealth())) {
+			if (this.entity.getHealth() <= (this.borderHPForMinions * this.entity.getMaxHealth())) {
 				return true;// (this.minionSpawnTick > this.borderMinion);
 			}
 		}
@@ -73,7 +73,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			this.entity.setSummonedEntityFaction(minion);
 			minion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(minion)), null);
 			this.entity.addSummonedEntityToList(minion);
-			world.spawnEntity(minion);
+			this.world.spawnEntity(minion);
 		}
 	}
 

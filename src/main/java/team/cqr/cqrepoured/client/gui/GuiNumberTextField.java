@@ -9,7 +9,8 @@ public class GuiNumberTextField extends GuiTextField {
 	private final boolean allowNegative;
 	private final boolean allowDouble;
 
-	public GuiNumberTextField(int componentId, FontRenderer fontrendererIn, int x, int y, int widthIn, int heightIn, boolean allowNegative, boolean allowDouble) {
+	public GuiNumberTextField(int componentId, FontRenderer fontrendererIn, int x, int y, int widthIn, int heightIn, boolean allowNegative,
+			boolean allowDouble) {
 		super(componentId, fontrendererIn, x, y, widthIn, heightIn);
 		this.allowNegative = allowNegative;
 		this.allowDouble = allowDouble;

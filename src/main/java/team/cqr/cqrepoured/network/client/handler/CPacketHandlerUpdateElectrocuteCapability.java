@@ -32,7 +32,7 @@ public class CPacketHandlerUpdateElectrocuteCapability implements IMessageHandle
 					return;
 				}
 
-				//int charge = message.getElectroCharge();
+				// int charge = message.getElectroCharge();
 				int charge = message.getIsElectrocutionActive() ? 20 : 0;
 				cap.setRemainingTicks(charge);
 				if (message.hasTarget()) {

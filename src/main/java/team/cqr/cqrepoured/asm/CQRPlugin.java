@@ -10,8 +10,7 @@ public class CQRPlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] {
-				CQRClassTransformer.class.getName() };
+		return new String[] { CQRClassTransformer.class.getName() };
 	}
 
 	@Override

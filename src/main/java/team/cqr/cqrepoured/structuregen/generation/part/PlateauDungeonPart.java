@@ -88,8 +88,10 @@ public class PlateauDungeonPart extends DungeonPart {
 					int i = Math.max((this.endY - 1) - posY, 1);
 
 					while (MUTABLE.getY() < this.endY) {
-						if (MUTABLE.getX() >= this.startX + this.wallSize && MUTABLE.getX() <= this.endX - this.wallSize
-								&& MUTABLE.getZ() >= this.startZ + this.wallSize && MUTABLE.getZ() <= this.endZ - this.wallSize) {
+						if (MUTABLE.getX() >= this.startX + this.wallSize
+								&& MUTABLE.getX() <= this.endX - this.wallSize
+								&& MUTABLE.getZ() >= this.startZ + this.wallSize
+								&& MUTABLE.getZ() <= this.endZ - this.wallSize) {
 							BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
 							dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 						} else {
@@ -143,7 +145,7 @@ public class PlateauDungeonPart extends DungeonPart {
 						continue;
 					}
 
-					MUTABLE.setPos((chunkX1 << 4) + x, this.endY, (chunkZ1 << 4) + z);
+					MUTABLE.setPos((this.chunkX1 << 4) + x, this.endY, (this.chunkZ1 << 4) + z);
 					while (MUTABLE.getY() > 0 && chunk.getBlockState(MUTABLE).getBlock() == Blocks.AIR) {
 						MUTABLE.setY(MUTABLE.getY() - 1);
 					}

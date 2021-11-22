@@ -19,11 +19,11 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	public EntityAICQRNearestAttackTarget(AbstractEntityCQR entity) {
 		super(entity);
 	}
-	
+
 	protected void wrapperSetAttackTarget(EntityLivingBase target) {
 		this.entity.setAttackTarget(target);
 	}
-	
+
 	protected EntityLivingBase wrapperGetAttackTarget() {
 		return this.entity.getAttackTarget();
 	}

@@ -15,12 +15,12 @@ public class RenderMultiPartPart<T extends MultiPartEntityPart> extends Render<T
 	protected boolean superShouldRender(T livingEntity, ICamera camera, double camX, double camY, double camZ) {
 		return super.shouldRender(livingEntity, camera, camX, camY, camZ);
 	}
-	
+
 	@Override
 	public boolean shouldRender(T livingEntity, ICamera camera, double camX, double camY, double camZ) {
 		return false;
 	}
-	
+
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
 		return null;

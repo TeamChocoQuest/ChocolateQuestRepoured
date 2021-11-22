@@ -17,7 +17,8 @@ import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
 public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
-	private static final DataParameter<Boolean> IDENTITY_HIDDEN = EntityDataManager.<Boolean>createKey(AbstractEntityCQRMageBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IDENTITY_HIDDEN = EntityDataManager.<Boolean>createKey(AbstractEntityCQRMageBase.class,
+			DataSerializers.BOOLEAN);
 
 	public AbstractEntityCQRMageBase(World worldIn) {
 		super(worldIn);

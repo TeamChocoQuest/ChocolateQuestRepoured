@@ -121,13 +121,15 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 			return false;
 		}
 		/*
-		 * if (!this.entity.isInSightRange(possibleTarget)) { return false; } return this.entity.getEntitySenses().canSee(possibleTarget);
+		 * if (!this.entity.isInSightRange(possibleTarget)) { return false; } return
+		 * this.entity.getEntitySenses().canSee(possibleTarget);
 		 */
 		return this.isInHomeZone(possibleTarget);
 	}
 
 	private boolean isInHomeZone(EntityLivingBase possibleTarget) {
-		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(),
+				this.entity.getCirclingCenter().getZ());
 		return Math.abs(distance) <= 48 + 8 * (this.world.getDifficulty().ordinal());
 	}
 

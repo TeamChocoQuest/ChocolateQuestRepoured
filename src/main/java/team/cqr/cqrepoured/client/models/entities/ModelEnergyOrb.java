@@ -18,6 +18,7 @@ public class ModelEnergyOrb extends ModelBase {
 	/**
 	 * Sets the models various rotation angles then renders the model.
 	 */
+	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();

@@ -30,7 +30,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityN
 		this.modelTail = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailStart();
 		this.modelTailTip = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailTip();
 	}
-	
+
 	@Override
 	public void doRender(SubEntityNetherDragonSegment entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
@@ -74,17 +74,20 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityN
 		this.bindTexture(this.getEntityTexture(entity));
 
 		/*
-		 * if(entity.getParent() != null) { if(entity.getParent().deathTicks > 600) { GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted)
+		 * if(entity.getParent() != null) { if(entity.getParent().deathTicks > 600) { GlStateManager.color(new Float(0.3F *
+		 * (0.25 * Math.sin(0.75 * entity.ticksExisted)
 		 * + 0.5)),0,0, 1F); } }
 		 */
 		/*
-		 * if(entity.isSkeletal() && entity.getHealthPercentage() > 0) { GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F); }
+		 * if(entity.isSkeletal() && entity.getHealthPercentage() > 0) { GlStateManager.color(entity.getHealthPercentage(), 0F,
+		 * 0F, 0.5F); }
 		 */
 		if (entity.getParent() != null && entity.getParent().deathTime > 0 && entity.getParent().deathTime % 5 == 0) {
 			float f = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
 			float f1 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 4.0F;
 			float f2 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
-			Minecraft.getMinecraft().world.spawnParticle(entity.getParent().getDeathAnimParticles(), entity.posX + (double) f, entity.posY + 2.0D + (double) f1, entity.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().world.spawnParticle(entity.getParent().getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2,
+					0.0D, 0.0D, 0.0D);
 		}
 
 		if (!entity.isInvisible()) {
@@ -95,7 +98,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityN
 
 	@Override
 	public boolean shouldRender(SubEntityNetherDragonSegment livingEntity, ICamera camera, double camX, double camY, double camZ) {
-		return superShouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
+		return this.superShouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
 	}
 
 	@Override

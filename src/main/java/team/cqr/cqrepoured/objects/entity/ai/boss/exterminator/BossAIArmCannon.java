@@ -30,24 +30,24 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute()) {
-			if(this.entity.isStunned()) {
+			if (this.entity.isStunned()) {
 				return false;
 			}
-			
-			if(this.cooldown > 0) {
+
+			if (this.cooldown > 0) {
 				this.cooldown--;
 			}
 			if (this.isFarAwayEnough()) {
-				if(this.entity.hasAttackTarget()) {
+				if (this.entity.hasAttackTarget()) {
 					this.cooldown -= this.entity.getDistance(this.entity.getAttackTarget());
 				}
-				
+
 				return this.cooldown <= 0;
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected boolean canStrafe() {
 		return super.canStrafe() && !this.isSequenceRunning && !this.entity.isStunned();
@@ -55,7 +55,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if(this.entity.isStunned()) {
+		if (this.entity.isStunned()) {
 			return false;
 		}
 		return super.shouldContinueExecuting() && (this.isFarAwayEnough() || this.isSequenceRunning);
@@ -92,7 +92,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 					cannonBall.setPosition(armPos.x, armPos.y, armPos.z);
 
 					double vx = attackTarget.posX - this.entity.posX + this.entity.motionX;
-					double vy = attackTarget.posY + (double) attackTarget.height * 0.5D - armPos.y + this.entity.motionY;
+					double vy = attackTarget.posY + attackTarget.height * 0.5D - armPos.y + this.entity.motionY;
 					double vz = attackTarget.posZ - this.entity.posZ + this.entity.motionZ;
 
 					float inaccuracy = this.getInaccuracy();
@@ -117,10 +117,10 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 		}
 	}
-	
+
 	@Override
 	protected float getStrafingSpeed() {
-		if(this.isCurrentSequenceFast) {
+		if (this.isCurrentSequenceFast) {
 			return 1.25F * super.getStrafingSpeed();
 		}
 		return super.getStrafingSpeed();

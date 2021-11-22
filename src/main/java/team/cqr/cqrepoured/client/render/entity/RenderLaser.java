@@ -34,7 +34,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		EmissiveUtil.preEmissiveTextureRendering();
-		
+
 		if (entity.caster == null) {
 			return;
 		}
@@ -99,7 +99,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
 		GlStateManager.popMatrix();
-		
+
 		EmissiveUtil.postEmissiveTextureRendering();
 	}
 
@@ -112,7 +112,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
 	}
 
 	protected double getLaserLength(T entity, float partialTicks) {
-		return this.getLaserLength(entity, this.getPitch(entity, partialTicks), getYaw(entity, partialTicks));
+		return this.getLaserLength(entity, this.getPitch(entity, partialTicks), this.getYaw(entity, partialTicks));
 	}
 
 	protected double getLaserLength(T entity, float pitch, float yaw) {

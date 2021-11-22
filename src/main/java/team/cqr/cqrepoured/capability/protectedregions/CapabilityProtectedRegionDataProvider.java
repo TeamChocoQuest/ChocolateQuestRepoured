@@ -20,7 +20,8 @@ public class CapabilityProtectedRegionDataProvider extends SerializableCapabilit
 	}
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(CapabilityProtectedRegionData.class, new CapabilityProtectedRegionDataStorage(), () -> new CapabilityProtectedRegionData(null));
+		CapabilityManager.INSTANCE.register(CapabilityProtectedRegionData.class, new CapabilityProtectedRegionDataStorage(),
+				() -> new CapabilityProtectedRegionData(null));
 	}
 
 	public static CapabilityProtectedRegionDataProvider createProvider(Chunk chunk) {

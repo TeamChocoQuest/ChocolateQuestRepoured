@@ -6,25 +6,25 @@ import javax.annotation.Nullable;
 
 public interface IEnderCalamityPhase {
 
-	public boolean canRandomTeleportDuringPhase();
+	boolean canRandomTeleportDuringPhase();
 
-	public boolean canSummonAlliesDuringPhase();
+	boolean canSummonAlliesDuringPhase();
 
-	public boolean canPickUpBlocksDuringPhase();
+	boolean canPickUpBlocksDuringPhase();
 
-	public boolean canThrowBlocksDuringPhase();
+	boolean canThrowBlocksDuringPhase();
 
-	public boolean isPhaseTimed();
+	boolean isPhaseTimed();
 
 	// Implement this for all timed phases
-	public default Optional<Integer> getRandomExecutionTime() {
+	default Optional<Integer> getRandomExecutionTime() {
 		return Optional.empty();
 	}
 
 	@Nullable
 	IEnderCalamityPhase[] getPossibleSuccessors();
 
-	public default Optional<IEnderCalamityPhase> getNextPhase(EntityCQREnderCalamity boss) {
+	default Optional<IEnderCalamityPhase> getNextPhase(EntityCQREnderCalamity boss) {
 		IEnderCalamityPhase[] successors = this.getPossibleSuccessors();
 		if (successors != null && successors.length > 0) {
 			return Optional.of(successors[boss.getRNG().nextInt(successors.length)]);

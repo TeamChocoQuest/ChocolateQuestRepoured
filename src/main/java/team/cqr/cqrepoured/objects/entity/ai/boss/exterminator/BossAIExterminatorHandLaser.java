@@ -30,11 +30,15 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			this.timeOut--;
 			return false;
 		}
-		if (this.entity != null && this.entity.isEntityAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
-			if(this.entity.isStunned()) {
+		if (this.entity != null
+				&& this.entity.isEntityAlive()
+				&& this.entity.hasAttackTarget()
+				&& !this.entity.isCurrentlyPlayingAnimation()
+				&& (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
+			if (this.entity.isStunned()) {
 				return false;
 			}
-			
+
 			final float distance = this.entity.getDistance(this.entity.getAttackTarget());
 			this.target = this.entity.getAttackTarget();
 			return this.entity.hasAttackTarget() && distance <= MAX_DISTANCE && distance >= MIN_DISTANCE;
@@ -44,7 +48,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if(this.entity.isStunned()) {
+		if (this.entity.isStunned()) {
 			return false;
 		}
 		return this.entity != null && this.entity.isEntityAlive() && this.target != null && this.target.isEntityAlive() && this.timer > 0;
@@ -54,7 +58,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	public void startExecuting() {
 		this.timer = 150;
 		super.startExecuting();
-		checkAndOrStartCannonLaser();
+		this.checkAndOrStartCannonLaser();
 	}
 
 	private boolean checkAndOrStartCannonLaser() {
@@ -62,7 +66,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		if (this.activeLaser != null) {
 			return true;
 		}
-		if (!(this.entity.isCannonArmReadyToShoot() && this.entity.isCannonRaised())) {
+		if ((!this.entity.isCannonArmReadyToShoot() || !this.entity.isCannonRaised())) {
 			// System.out.println("cannon not ready, can we raise it?");
 			if (!this.entity.isCannonRaised()) {
 				// System.out.println("cannon is not raised, telling it to raise...");
@@ -92,8 +96,8 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		// System.out.println("Executing...");
 		if (this.checkAndOrStartCannonLaser()) {
 			// System.out.println("we have a laser, let's position it...");
-			this.entity.rotationYaw = (float) this.activeLaser.rotationYawCQR /* + 90.0F */;
-			this.entity.prevRotationYaw = (float) this.activeLaser.prevRotationYawCQR /* + 90.0F */;
+			this.entity.rotationYaw = this.activeLaser.rotationYawCQR /* + 90.0F */;
+			this.entity.prevRotationYaw = this.activeLaser.prevRotationYawCQR /* + 90.0F */;
 
 			this.entity.faceEntity(this.target, 180, 180);
 		} else {

@@ -170,18 +170,18 @@ public class ItemCursedBone extends Item implements INonEnchantable {
 		}
 		return super.onLeftClickEntity(stack, player, clickedEntity);
 	}
-	
-	//INonEnchantable stuff
+
+	// INonEnchantable stuff
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
 		return INonEnchantable.super.canApplyAtEnchantingTable(stack, enchantment);
 	}
-	
+
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
 		return INonEnchantable.super.isEnchantable(stack);
 	}
-	
+
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return INonEnchantable.super.isBookEnchantable(stack, book);

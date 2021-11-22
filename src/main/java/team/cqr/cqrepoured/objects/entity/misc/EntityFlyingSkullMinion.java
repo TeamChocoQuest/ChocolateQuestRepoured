@@ -146,12 +146,17 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 	private void explode(float strengthMultiplier) {
 		if (this.world != null) {
 			if (this.summoner != null && !this.summoner.isDead && !this.isDead) {
-				this.world.newExplosion(this.summoner, this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), 2 * strengthMultiplier, false, false);
+				this.world.newExplosion(this.summoner, this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), 2 * strengthMultiplier,
+						false, false);
 			}
-			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
-			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
-			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
-			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F,
+					0.0F, 0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F,
+					0.0F, -0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F,
+					0.0F, -0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F,
+					0.0F, 0.5F, 1);
 		}
 	}
 
@@ -207,7 +212,8 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 		if (compound.hasKey("targetID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("targetID"));
 			if (this.world != null) {
-				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+				for (Entity ent : this.world.getEntitiesInAABBexcluding(this,
+						new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if (ent.getPersistentID().equals(id)) {
 						this.target = ent;
 					}
@@ -217,7 +223,8 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 		if (compound.hasKey("summonerID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("summonerID"));
 			if (this.world != null) {
-				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+				for (Entity ent : this.world.getEntitiesInAABBexcluding(this,
+						new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if (ent.getPersistentID().equals(id)) {
 						this.summoner = ent;
 					}

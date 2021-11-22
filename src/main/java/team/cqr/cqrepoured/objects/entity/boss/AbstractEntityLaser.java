@@ -54,13 +54,17 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.length = length;
 
 		/*
-		 * Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ); Vec3d vec2 = new Vec3d(this.target.posX,
+		 * Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ); Vec3d vec2
+		 * = new Vec3d(this.target.posX,
 		 * this.target.posY + this.target.height * 0.6D, this.target.posZ); Vec3d vec3 =
-		 * vec2.subtract(vec1).normalize(); double d = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z); float yaw = (float) Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
+		 * vec2.subtract(vec1).normalize(); double d = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z); float yaw = (float)
+		 * Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
 		 * float pitch = (float) Math.toDegrees(Math.atan2(-vec3.y, d)); this.posX = vec1.x;
-		 * this.posY = vec1.y; this.posZ = vec1.z; this.prevPosX = vec1.x; this.prevPosY = vec1.y; this.prevPosZ = vec1.z; this.lastTickPosX = vec1.x; this.lastTickPosY
+		 * this.posY = vec1.y; this.posZ = vec1.z; this.prevPosX = vec1.x; this.prevPosY = vec1.y; this.prevPosZ = vec1.z;
+		 * this.lastTickPosX = vec1.x; this.lastTickPosY
 		 * = vec1.y; this.lastTickPosZ = vec1.z; //this.rotationYawCQR = yaw;
-		 * //this.rotationPitchCQR = pitch; this.setRotationYawCQR(yaw); this.setRotationPitchCQR(pitch); this.prevRotationYawCQR = yaw; this.prevRotationPitchCQR =
+		 * //this.rotationPitchCQR = pitch; this.setRotationYawCQR(yaw); this.setRotationPitchCQR(pitch);
+		 * this.prevRotationYawCQR = yaw; this.prevRotationPitchCQR =
 		 * pitch;
 		 */
 
@@ -187,8 +191,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 				}
 			}
 
-			Vec3d vec1 = new Vec3d(-laserEffectRadius(), -laserEffectRadius(), 0.0D);
-			Vec3d vec2 = new Vec3d(laserEffectRadius(), laserEffectRadius(), d);
+			Vec3d vec1 = new Vec3d(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
+			Vec3d vec2 = new Vec3d(this.laserEffectRadius(), this.laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
 			for (EntityLivingBase entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, EntityLivingBase.class, bb)) {
 				if (this.canHitEntity(entity) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
@@ -217,7 +221,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		} else {
 			ticks = MathHelper.ceil(20.0F * (8.0F * hardness) / (hardness + 2.0F));
 		}
-		return 1.0F / (float) ticks + 1.0E-7F;
+		return 1.0F / ticks + 1.0E-7F;
 	}
 
 	public int blockBreakThreshhold() {

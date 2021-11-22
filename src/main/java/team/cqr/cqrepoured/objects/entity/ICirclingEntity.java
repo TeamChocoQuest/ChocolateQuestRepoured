@@ -4,6 +4,6 @@ import net.minecraft.util.math.BlockPos;
 
 public interface ICirclingEntity {
 
-	public BlockPos getCirclingCenter();
+	BlockPos getCirclingCenter();
 
 }

@@ -11,7 +11,7 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 	}
 
 	private EntityCQRGiantTortoise getBoss() {
-		return (EntityCQRGiantTortoise) this.entity;
+		return this.entity;
 	}
 
 	public AnimationGecko getAnimation() {

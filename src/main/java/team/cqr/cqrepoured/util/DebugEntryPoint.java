@@ -1,7 +1,8 @@
 package team.cqr.cqrepoured.util;
 
 /**
- * Alternative entry point for debugging algorithms Does not launch the game or perform any actions not explicitly defined in this file For debugging only
+ * Alternative entry point for debugging algorithms Does not launch the game or perform any actions not explicitly
+ * defined in this file For debugging only
  *
  * @author jdawg3636 GitHub: https://github.com/jdawg3636
  *
@@ -14,10 +15,13 @@ public class DebugEntryPoint {
 
 		/*
 		 * HashMap<String, byte[]> unzipped = ArchiveManipulationUtil.unzip(FileIOUtil.
-		 * loadFromFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\Forge Mapping Files for CQR.zip"));
+		 * loadFromFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\Forge Mapping Files for CQR.zip"
+		 * ));
 		 * 
 		 * for(String fileName : unzipped.keySet()) {
-		 * FileIOUtil.saveToFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\mappings\\" + fileName,
+		 * FileIOUtil.
+		 * saveToFile("S:\\Libraries\\Documents\\_Project Odin\\newmodworkspace\\_extern\\ChocolateQuestRepoured\\mappings\\" +
+		 * fileName,
 		 * unzipped.get(fileName)); }
 		 */
 

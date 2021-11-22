@@ -20,7 +20,8 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
+			float headPitch, float scale) {
 		if (CQRConfig.general.enableSpeechBubbles && entity.isChatting()) {
 			Tessellator tessellator = Tessellator.getInstance();
 			Minecraft minecraft = Minecraft.getMinecraft();
@@ -33,7 +34,7 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 				GlStateManager.scale(1.0D / this.entityRenderer.widthScale, 1.0D / this.entityRenderer.heightScale, 1.0D / this.entityRenderer.widthScale);
 				GlStateManager.translate(0.0D, -1.5D, 0.0D);
 			}
-			GlStateManager.translate(-0.5D, (-1.0D * (double) entity.height) / entity.getSizeVariation(), 0.0D);
+			GlStateManager.translate(-0.5D, (-1.0D * entity.height) / entity.getSizeVariation(), 0.0D);
 
 			minecraft.getTextureManager().bindTexture(entity.getCurrentSpeechBubble().getResourceLocation());
 

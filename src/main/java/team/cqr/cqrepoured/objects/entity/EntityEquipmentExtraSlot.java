@@ -2,7 +2,9 @@ package team.cqr.cqrepoured.objects.entity;
 
 public enum EntityEquipmentExtraSlot {
 
-	POTION(0), BADGE(1), ARROW(2);
+	POTION(0),
+	BADGE(1),
+	ARROW(2);
 
 	private final int index;
 

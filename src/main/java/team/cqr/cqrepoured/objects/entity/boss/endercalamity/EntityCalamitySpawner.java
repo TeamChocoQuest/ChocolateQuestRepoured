@@ -15,7 +15,6 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
-import team.cqr.cqrepoured.util.reflection.ReflectionField;
 
 public class EntityCalamitySpawner extends Entity {
 
@@ -72,7 +71,7 @@ public class EntityCalamitySpawner extends Entity {
 
 	@Override
 	public void onEntityUpdate() {
-		if (world.isRemote) {
+		if (this.world.isRemote) {
 			super.onEntityUpdate();
 			return;
 		} else {
@@ -83,15 +82,16 @@ public class EntityCalamitySpawner extends Entity {
 			if (this.timer >= 200) {
 				if (this.timer % 40 == 0) {
 					this.spawnScaryEffect((int) (Math.round(25.0D * percentage) + 5));
-					if (!(CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION + 60)) {
+					if ((CALAMITY_SPAWN_DURATION - this.timer > FIREWORK_DURATION + 60)) {
 						if (DungeonGenUtils.percentageRandom(0.75, this.rand)) {
-							spawnFireworks((int) (Math.round(3.0D * percentage) + 1));
+							this.spawnFireworks((int) (Math.round(3.0D * percentage) + 1));
 						}
 					}
 				}
 				// Keep the lightning? Idk, it looks cool but it is a bit overused :/
 				if ((this.timer - 2) % 40 == 0 && this.rand.nextBoolean()) {
-					EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+					EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F,
+							0.08F, 0.43F, 0.4F);
 					lightning.setPosition(this.posX, this.posY, this.posZ);
 					this.world.spawnEntity(lightning);
 				}
@@ -105,7 +105,8 @@ public class EntityCalamitySpawner extends Entity {
 					return;
 				}
 
-				// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5 degrees every tick
+				// DONE: When it is about 40 ticks until it spawns, spawn particles leading to the center every 5 ticks and rotate by 5
+				// degrees every tick
 				if (CALAMITY_SPAWN_DURATION - this.timer <= FIREWORK_DURATION) {
 					if (tmpTimer % FIREWORK_DIVISOR == 0) {
 						// Percentage defines radius
@@ -132,7 +133,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	private void spawnFirework(double x, double y, double z, ItemStack stack) {
-		EntityFireworkRocket firework = new EntityFireworkRocket(world, x, y, z, FIREWORK_PURPLE_SPARK);
+		EntityFireworkRocket firework = new EntityFireworkRocket(this.world, x, y, z, FIREWORK_PURPLE_SPARK);
 		firework.lifetime = 1;
 
 		firework.setInvisible(true);
@@ -149,12 +150,12 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	private void spawnCalamity() {
-		EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(world);
+		EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(this.world);
 		calamity.setFaction(this.faction, false);
 		calamity.setHomePositionCQR(this.getPosition());
 		calamity.setPosition(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
 
-		world.spawnEntity(calamity);
+		this.world.spawnEntity(calamity);
 
 		EntityUtil.addEntityToAllRegionsAt(this.getPosition(), calamity);
 		EntityUtil.removeEntityFromAllRegionsAt(this.getPosition(), this);
@@ -175,9 +176,11 @@ public class EntityCalamitySpawner extends Entity {
 
 	// Spawns a few particles which throw out a lingering potion that places a small cloud later
 	protected void spawnEnderClouds(int count, int minSize, int maxSize) {
-		/*for (int i = 0; i < count; i++) {
-			Vec3d v = this.getRandomPositionAroundPosition();
-		}*/
+		/*
+		 * for (int i = 0; i < count; i++) {
+		 * Vec3d v = this.getRandomPositionAroundPosition();
+		 * }
+		 */
 	}
 
 	@Override
@@ -193,7 +196,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	public String getFaction() {
-		return faction;
+		return this.faction;
 	}
 
 	public void setFaction(String faction) {

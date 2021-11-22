@@ -419,9 +419,11 @@ public class RoomGrid {
 	}
 
 	/*
-	 * Returns a list (from largest area to smallest area) of contiguous 2d grid areas that are on a given floor and satisfy a given condition.
+	 * Returns a list (from largest area to smallest area) of contiguous 2d grid areas that are on a given floor and satisfy
+	 * a given condition.
 	 *
-	 * Note: Areas 2x2 or larger will always evaluate as larger than anything 1xN or Nx1. This is done on purpose because 2x2+ areas are more useful for building.
+	 * Note: Areas 2x2 or larger will always evaluate as larger than anything 1xN or Nx1. This is done on purpose because
+	 * 2x2+ areas are more useful for building.
 	 */
 	public ArrayList<Area2D> getAllGridAreasWhere(int floor, Predicate<RoomGridCell> condition, int minDimension1, int minDimension2) {
 		ArrayList<RoomGridPosition> floorPositions = new ArrayList<>();
@@ -691,7 +693,13 @@ public class RoomGrid {
 	public boolean cellIsValidForRoof(RoomGridCell cell) {
 		RoomGridCell below = this.getAdjacentCell(cell, EnumFacing.DOWN);
 
-		return (below != null && !cell.isSelectedForBuilding() && below.isPopulated() && !(below.getFloor() == this.bossArea.start.getFloor())); // Don't want to build roofs over the boss floor rooms
+		return (below != null && !cell.isSelectedForBuilding() && below.isPopulated() && (below.getFloor() != this.bossArea.start.getFloor())); // Don't want
+																																					// to build
+																																					// roofs
+																																					// over the
+																																					// boss
+																																					// floor
+																																					// rooms
 	}
 
 	public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction) {
@@ -774,7 +782,7 @@ public class RoomGrid {
 	public boolean canAttachTower(RoomGridCell cell, EnumFacing side) {
 		RoomGridCell adjacent = this.getAdjacentCell(cell, side);
 
-		return (!cell.getRoom().isTower() && adjacent != null && !(adjacent.isPopulated() && !cell.getRoom().isStairsOrLanding()));
+		return (!cell.getRoom().isTower() && adjacent != null && (!adjacent.isPopulated() || cell.getRoom().isStairsOrLanding()));
 	}
 
 	public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2) {

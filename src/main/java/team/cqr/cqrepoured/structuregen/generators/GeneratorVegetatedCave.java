@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
@@ -54,7 +53,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 
 	@Override
 	public void preProcess() {
-		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
+		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(),
+				this.pos.getZ());
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		IBlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
 		this.centralCaveBlocks = blocks;
@@ -75,13 +75,15 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		// Filter floorblocks
 		this.filterFloorBlocks();
 
-		/*this.ceilingBlocks.forEach(new Consumer<BlockPos>() {
-
-			@Override
-			public void accept(BlockPos t) {
-				GeneratorVegetatedCave.this.blocks.put(t, GeneratorVegetatedCave.this.dungeon.getVineLatchBlock());
-			}
-		});*/
+		/*
+		 * this.ceilingBlocks.forEach(new Consumer<BlockPos>() {
+		 * 
+		 * @Override
+		 * public void accept(BlockPos t) {
+		 * GeneratorVegetatedCave.this.blocks.put(t, GeneratorVegetatedCave.this.dungeon.getVineLatchBlock());
+		 * }
+		 * });
+		 */
 
 		// Filter ceiling blocks
 		if (this.dungeon.placeVines()) {
@@ -159,7 +161,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 
 			if (random.nextInt(3) == 0) {
 				// Spawner
-				BlockPos spawner = new BlockPos(mushroompos.getX() + (random.nextBoolean() ? -1 : 1), mushroompos.getY() + 1, mushroompos.getZ() + (random.nextBoolean() ? -1 : 1));
+				BlockPos spawner = new BlockPos(mushroompos.getX() + (random.nextBoolean() ? -1 : 1), mushroompos.getY() + 1,
+						mushroompos.getZ() + (random.nextBoolean() ? -1 : 1));
 				this.spawners.add(spawner);
 				if (random.nextInt(3) >= 1) {
 					// Chest
@@ -191,7 +194,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			if (chest != null) {
 				ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
 				if (resLoc != null) {
-					long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX() + chestpos.getX() + chestpos.getY(), this.pos.getZ() + chestpos.getZ() + chestpos.getY());
+					long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX() + chestpos.getX() + chestpos.getY(),
+							this.pos.getZ() + chestpos.getZ() + chestpos.getY());
 					chest.setLootTable(resLoc, seed);
 				}
 			}
@@ -253,8 +257,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		int szTmp = startSize;
 		startSize -= 2;
 		if (startSize > 3) {
-			this.createTunnel(startPos, initAngle + angle * initLength - 90, new Integer(startSize), (int) (initLength * (szTmp / startSize)), random);
-			this.createTunnel(startPos, initAngle + angle * initLength, new Integer(startSize), (int) (initLength * (szTmp / startSize)), random);
+			this.createTunnel(startPos, initAngle + angle * initLength - 90, new Integer(startSize), initLength * (szTmp / startSize), random);
+			this.createTunnel(startPos, initAngle + angle * initLength, new Integer(startSize), initLength * (szTmp / startSize), random);
 		}
 	}
 
@@ -370,37 +374,28 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	}
 
 	private void filterFloorBlocks() {
-		this.floorBlocks.removeIf(new Predicate<BlockPos>() {
-
-			@Override
-			public boolean test(BlockPos floorPos) {
-				BlockPos lower = floorPos.down();
-				if (GeneratorVegetatedCave.this.blocks.containsKey(lower)) {
-					GeneratorVegetatedCave.this.blocks.put(floorPos, GeneratorVegetatedCave.this.dungeon.getAirBlock());
-					return true;
-				}
-				return false;
+		this.floorBlocks.removeIf(floorPos -> {
+			BlockPos lower = floorPos.down();
+			if (GeneratorVegetatedCave.this.blocks.containsKey(lower)) {
+				GeneratorVegetatedCave.this.blocks.put(floorPos, GeneratorVegetatedCave.this.dungeon.getAirBlock());
+				return true;
 			}
+			return false;
 		});
 	}
 
 	private void filterCeilingBlocks(World world) {
-		this.ceilingBlocks.removeIf(new Predicate<BlockPos>() {
-
-			@Override
-			public boolean test(BlockPos arg0) {
-				BlockPos upper = arg0.up();
-				if (GeneratorVegetatedCave.this.blocks.containsKey(upper)) {
-					GeneratorVegetatedCave.this.blocks.put(arg0, GeneratorVegetatedCave.this.dungeon.getAirBlock());
-					GeneratorVegetatedCave.this.heightMap.remove(arg0);
-					return true;
-				}
-				if (!GeneratorVegetatedCave.this.dungeon.skipCeilingFiltering()) {
-					return world.getHeight(arg0.getX(), arg0.getZ()) <= arg0.getY() || world.getHeight(arg0).getY() <= arg0.getY() || world.canBlockSeeSky(arg0);
-				}
-				return false;
+		this.ceilingBlocks.removeIf(arg0 -> {
+			BlockPos upper = arg0.up();
+			if (GeneratorVegetatedCave.this.blocks.containsKey(upper)) {
+				GeneratorVegetatedCave.this.blocks.put(arg0, GeneratorVegetatedCave.this.dungeon.getAirBlock());
+				GeneratorVegetatedCave.this.heightMap.remove(arg0);
+				return true;
 			}
-
+			if (!GeneratorVegetatedCave.this.dungeon.skipCeilingFiltering()) {
+				return world.getHeight(arg0.getX(), arg0.getZ()) <= arg0.getY() || world.getHeight(arg0).getY() <= arg0.getY() || world.canBlockSeeSky(arg0);
+			}
+			return false;
 		});
 	}
 
@@ -473,7 +468,10 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 						vE = vE.down();
 						vS = vS.down();
 						vW = vW.down();
-						if (this.blocks.getOrDefault(vN, airState) != airState || this.blocks.getOrDefault(vE, airState) != airState || this.blocks.getOrDefault(vS, airState) != airState || this.blocks.getOrDefault(vW, airState) != airState) {
+						if (this.blocks.getOrDefault(vN, airState) != airState
+								|| this.blocks.getOrDefault(vE, airState) != airState
+								|| this.blocks.getOrDefault(vS, airState) != airState
+								|| this.blocks.getOrDefault(vW, airState) != airState) {
 							break;
 						}
 					} else {
@@ -583,7 +581,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 							// IBlockState state = worldIn.getBlockState(blockpos);
 
 							// PUT IN MAP
-							// this.setBlockAndNotifyAdequately(worldIn, blockpos, block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, blockhugemushroom$enumtype));
+							// this.setBlockAndNotifyAdequately(worldIn, blockpos, block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT,
+							// blockhugemushroom$enumtype));
 							stateMap.put(blockpos, block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, blockhugemushroom$enumtype));
 						}
 					}
@@ -593,7 +592,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			for (int i3 = 0; i3 < i; ++i3) {
 				// IBlockState iblockstate = worldIn.getBlockState(position.up(i3));
 				// PUT IN MAP
-				// this.setBlockAndNotifyAdequately(worldIn, position.up(i3), block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumType.STEM));
+				// this.setBlockAndNotifyAdequately(worldIn, position.up(i3),
+				// block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumType.STEM));
 				stateMap.put(position.up(i3), block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumType.STEM));
 			}
 

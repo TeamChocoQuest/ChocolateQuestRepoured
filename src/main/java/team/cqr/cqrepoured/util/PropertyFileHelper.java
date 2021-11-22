@@ -53,7 +53,7 @@ public class PropertyFileHelper {
 
 		return s;
 	}
-	
+
 	public static float getFloatProperty(Properties prop, String key, float defVal) {
 		String s = prop.getProperty(key);
 		if (s == null) {
@@ -480,7 +480,8 @@ public class PropertyFileHelper {
 		return retArr;
 	}
 
-	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal, boolean allowEmpty) {
+	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal,
+			boolean allowEmpty) {
 		String s = prop.getProperty(key);
 		if (s == null) {
 			return defVal;

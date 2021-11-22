@@ -30,7 +30,8 @@ public class WeightedItemStack {
 	private int maxLvl;
 	private int enchantChance;
 
-	public WeightedItemStack(String itemName, int damage, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel, boolean isTreasure, int enchantChance) {
+	public WeightedItemStack(String itemName, int damage, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel,
+			boolean isTreasure, int enchantChance) {
 		this.itemName = itemName;
 		this.damage = damage;
 		this.minCount = minItems;
@@ -74,7 +75,8 @@ public class WeightedItemStack {
 			functions.add(new SetMetadata(null, new RandomValueRange(this.damage)));
 		}
 
-		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionC, "entry_" + indx + this.itemName);
+		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionC,
+				"entry_" + indx + this.itemName);
 		// LootEntry entryEmpty = new LootEntryEmpty(100 - this.weight, 0, conditionB, "entry_empty");
 
 		LootEntry[] entryA = new LootEntry[] { entry/* , entryEmpty */ };
@@ -104,7 +106,8 @@ public class WeightedItemStack {
 			functions.add(new SetMetadata(null, new RandomValueRange(this.damage)));
 		}
 
-		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + this.itemName);
+		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA,
+				"entry_" + indx + this.itemName);
 		return entry;
 	}
 

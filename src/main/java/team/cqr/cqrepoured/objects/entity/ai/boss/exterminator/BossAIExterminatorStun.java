@@ -4,7 +4,7 @@ import team.cqr.cqrepoured.objects.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
 
-public class BossAIExterminatorStun extends AbstractCQREntityAI<EntityCQRExterminator>  {
+public class BossAIExterminatorStun extends AbstractCQREntityAI<EntityCQRExterminator> {
 
 	public BossAIExterminatorStun(EntityCQRExterminator entity) {
 		super(entity);
@@ -20,5 +20,5 @@ public class BossAIExterminatorStun extends AbstractCQREntityAI<EntityCQRExtermi
 	public boolean isInterruptible() {
 		return false;
 	}
-	
+
 }

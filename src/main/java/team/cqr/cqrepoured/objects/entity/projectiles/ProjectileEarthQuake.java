@@ -21,7 +21,7 @@ public class ProjectileEarthQuake extends EntityThrowable {
 	@SuppressWarnings("unused")
 	private EntityLivingBase thrower;
 	private double throwY = 0.3D;
-	
+
 	public void setThrowHeight(double amount) {
 		this.throwY = amount;
 	}
@@ -101,11 +101,13 @@ public class ProjectileEarthQuake extends EntityThrowable {
 
 		if (this.world.isRemote) {
 			for (int i = 0; i < 10; i++) {
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + this.rand.nextFloat() - 0.5D, this.posY + this.rand.nextFloat() - 0.5D, this.posZ + this.rand.nextFloat() - 0.5D, this.rand.nextFloat() - 0.5F, this.rand.nextFloat(), this.rand.nextFloat() - 0.5F, Block.getStateId(iblockstate));
+				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + this.rand.nextFloat() - 0.5D, this.posY + this.rand.nextFloat() - 0.5D,
+						this.posZ + this.rand.nextFloat() - 0.5D, this.rand.nextFloat() - 0.5F, this.rand.nextFloat(), this.rand.nextFloat() - 0.5F,
+						Block.getStateId(iblockstate));
 			}
 		}
 	}
-	
+
 	public double getEntityThrowDistance() {
 		return this.throwY;
 	}

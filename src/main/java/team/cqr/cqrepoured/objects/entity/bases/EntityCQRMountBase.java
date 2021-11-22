@@ -75,7 +75,8 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 	@Override
 	public void travel(float strafe, float vertical, float forward) {
 		if (this.isBeingRidden() && this.canBeSteered()) {
-			EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null : (Entity)this.getPassengers().get(0);
+			EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null :
+																						// (Entity)this.getPassengers().get(0);
 			this.rotationYaw = entity.rotationYaw;
 			this.prevRotationYaw = this.rotationYaw;
 			this.rotationPitch = entity.rotationPitch * 0.5F;

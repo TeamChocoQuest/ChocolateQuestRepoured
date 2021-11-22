@@ -29,6 +29,7 @@ public class ParticleMagicBell extends Particle {
 
 	@SideOnly(Side.CLIENT)
 	public static class Factory implements IParticleFactory {
+		@Override
 		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn,
 				double zSpeedIn, int... optionalArguments) {
 			int lifetime = optionalArguments.length >= 1 ? optionalArguments[0] : 20;

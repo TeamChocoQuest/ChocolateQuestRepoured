@@ -46,8 +46,8 @@ public enum ESpeechBubble {
 	ITEM_PIZZA,
 	ITEM_POTION,
 	ITEM_SWORD,
-	
-	//Traders only!!
+
+	// Traders only!!
 	TRADE_EMERALD("trader/trade_0"),
 	TRADE_BAG("trader/trade_1"),
 	TRADE_HAND("trader/trade_2");
@@ -56,9 +56,9 @@ public enum ESpeechBubble {
 	static final String folderPath = "textures/misc/speechbubbles/";
 
 	private ESpeechBubble() {
-		this.resLoc = new ResourceLocation(Reference.MODID, folderPath +  "bubble_" + this.name().toLowerCase() + ".png");
+		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + "bubble_" + this.name().toLowerCase() + ".png");
 	}
-	
+
 	private ESpeechBubble(String filename) {
 		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + filename + ".png");
 	}

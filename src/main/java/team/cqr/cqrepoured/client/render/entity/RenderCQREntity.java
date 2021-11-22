@@ -76,10 +76,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.addLayer(new LayerCQREntityPotion(this));
 
 		this.addLayer(new LayerCQRSpeechbubble(this));
-		
+
 		if (model instanceof ModelBiped) {
 			this.addLayer(new LayerShoulderEntity(this));
-			if(model instanceof ModelCQRBiped) {
+			if (model instanceof ModelCQRBiped) {
 				this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
 				this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
 			}
@@ -217,7 +217,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	@Override
-	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
+			float scaleFactor) {
 		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
 		if (flag) {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());
@@ -249,7 +250,9 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			return entity.getTextureOverride();
 		}
 		// Custom texture end
-		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png") : this.texture;
+		return entity.getTextureCount() > 1
+				? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
+				: this.texture;
 	}
 
 	@Override

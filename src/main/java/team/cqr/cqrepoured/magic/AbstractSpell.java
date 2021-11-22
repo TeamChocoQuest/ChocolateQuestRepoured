@@ -29,6 +29,7 @@ public abstract class AbstractSpell {
 	public abstract DamageSource getDamageSourceToUse();
 
 	// ONly gets called server side
-	public abstract boolean castSpell(EntityLivingBase caster, World world, BlockPos clickedPos, AbstractSpellCastingItem castingItem, ItemStack castingItemStack, float power);
+	public abstract boolean castSpell(EntityLivingBase caster, World world, BlockPos clickedPos, AbstractSpellCastingItem castingItem,
+			ItemStack castingItemStack, float power);
 
 }

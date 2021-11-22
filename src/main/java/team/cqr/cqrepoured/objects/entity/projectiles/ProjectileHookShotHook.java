@@ -28,7 +28,12 @@ import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
 public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdditionalSpawnData {
 
 	private enum EnumHookState {
-		SHOOT(0), RETRACT(1), PULL_ENTITY_TO_SHOOTER(2), PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK(3), PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY(4), STOPPED(5);
+		SHOOT(0),
+		RETRACT(1),
+		PULL_ENTITY_TO_SHOOTER(2),
+		PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK(3),
+		PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY(4),
+		STOPPED(5);
 
 		private final int index;
 
@@ -116,8 +121,8 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		buffer.writeFloat((float) this.startLocation.x);
 		buffer.writeFloat((float) this.startLocation.y);
 		buffer.writeFloat((float) this.startLocation.z);
-		buffer.writeFloat((float) this.rotationYaw);
-		buffer.writeFloat((float) this.rotationPitch);
+		buffer.writeFloat(this.rotationYaw);
+		buffer.writeFloat(this.rotationPitch);
 	}
 
 	@Override
