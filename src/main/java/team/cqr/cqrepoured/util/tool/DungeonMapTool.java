@@ -13,9 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -28,23 +26,14 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.profiler.Profiler;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.layer.IntCache;
-import net.minecraft.world.storage.SaveHandlerMP;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.DimensionManager;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
@@ -98,9 +87,7 @@ public class DungeonMapTool {
 			CQRMain.logger.info("0: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
 
-			WorldSettings worldSettings = new WorldSettings(seedIn, GameType.CREATIVE, true, false, WorldType.DEFAULT);
-			DummyWorld world = new DummyWorld(worldSettings, 0, -radiusB, -radiusB, sizeB, sizeB);
-			world.getSpawnPoint();
+			DummyWorld world = DummyWorld.create(seedIn, WorldType.DEFAULT.getName(), 0);
 
 			CQRMain.logger.info("1: {}s", (System.currentTimeMillis() - t) / 1000.0F);
 			t = System.currentTimeMillis();
@@ -313,98 +300,6 @@ public class DungeonMapTool {
 
 	private static int color(World world, IBlockState state) {
 		return state.getMapColor(world, BlockPos.ORIGIN).colorValue;
-	}
-
-	public static class DummyWorld extends World {
-
-		private final Biome[] biomes;
-		public final int x;
-		public final int z;
-		public final int w;
-		public final int l;
-
-		protected DummyWorld(WorldSettings settings, int dimension, int x, int z, int w, int l) {
-			super(new SaveHandlerMP(), new WorldInfo(settings, "MpServer"), DimensionManager.getProviderType(dimension).createDimension(), new Profiler(),
-					true);
-			this.provider.setWorld(this);
-			hardResetIntCache();
-			this.biomes = this.provider.getBiomeProvider().getBiomes(null, x, z, w, l, false);
-			hardResetIntCache();
-			this.x = x;
-			this.z = z;
-			this.w = w;
-			this.l = l;
-			this.createSpawnPosition(settings);
-		}
-
-		@Override
-		protected IChunkProvider createChunkProvider() {
-			return null;
-		}
-
-		@Override
-		protected boolean isChunkLoaded(int x, int z, boolean allowEmpty) {
-			return false;
-		}
-
-		private void createSpawnPosition(WorldSettings settings) {
-			if (!this.provider.canRespawnHere()) {
-				this.worldInfo.setSpawn(BlockPos.ORIGIN.up(this.provider.getAverageGroundLevel()));
-			} else if (this.worldInfo.getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
-				this.worldInfo.setSpawn(BlockPos.ORIGIN.up());
-			} else {
-				this.findingSpawnPoint = true;
-				BiomeProvider biomeprovider = this.provider.getBiomeProvider();
-				List<Biome> list = biomeprovider.getBiomesToSpawnIn();
-				Random random = new Random(this.getSeed());
-				BlockPos blockpos = biomeprovider.findBiomePosition(0, 0, 256, list, random);
-				int i = 8;
-				int j = this.provider.getAverageGroundLevel();
-				int k = 8;
-
-				if (blockpos != null) {
-					i = blockpos.getX();
-					k = blockpos.getZ();
-				}
-
-				int l = 0;
-
-				while (!this.canCoordinateBeSpawn(i, k)) {
-					i += random.nextInt(64) - random.nextInt(64);
-					k += random.nextInt(64) - random.nextInt(64);
-					++l;
-
-					if (l == 1000) {
-						break;
-					}
-				}
-
-				this.worldInfo.setSpawn(new BlockPos(i, j, k));
-				this.findingSpawnPoint = false;
-			}
-		}
-
-		public boolean canCoordinateBeSpawn(int x, int z) {
-			BlockPos blockpos = new BlockPos(x, 0, z);
-
-			if (this.getBiome(blockpos).ignorePlayerSpawnSuitability()) {
-				return true;
-			} else {
-				return true;
-			}
-		}
-
-		@Override
-		public Biome getBiome(BlockPos pos) {
-			int i = (pos.getZ() - this.z) * this.l + (pos.getX() - this.x);
-			return i >= 0 && i < this.biomes.length ? this.biomes[i] : Biomes.PLAINS;
-		}
-
-		public Biome getBiome(int x, int z) {
-			int i = (z - this.z) * this.l + (x - this.x);
-			return i >= 0 && i < this.biomes.length ? this.biomes[i] : Biomes.PLAINS;
-		}
-
 	}
 
 }
