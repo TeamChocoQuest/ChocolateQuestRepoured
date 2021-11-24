@@ -13,6 +13,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.objects.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -128,8 +129,8 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				 */
 
 				final float knockbackStrength = 0.6125F * attacker.getSizeVariation();
-
-				living.knockBack(entity, dmg, knockbackStrength, knockbackStrength);
+				living.attackEntityFrom(DamageSource.causeMobDamage(attacker), dmg);
+				living.knockBack(entity, knockbackStrength, 1, 1);
 			}
 		});
 	}
