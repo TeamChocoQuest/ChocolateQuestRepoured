@@ -5,11 +5,15 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.objects.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.objects.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
@@ -87,6 +91,8 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 		return Math.round(absoluteMax * hpPercentage);
 	}
+	
+	private static final ItemStack BADGE_WITH_HEALING_POTION;
 
 	private AbstractEntityCQR getNewMinion(int seed, World world) {
 		AbstractEntityCQR entity = new EntityCQREnderman(world);
@@ -116,6 +122,10 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			break;
 		}
 
+		if(DungeonGenUtils.percentageRandom(0.33, world.rand)) {
+			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, BADGE_WITH_HEALING_POTION);
+		}
+		
 		return entity;
 	}
 
@@ -124,4 +134,11 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		return currentPhase.getPhaseObject().canSummonAlliesDuringPhase();
 	}
 
+	static {
+		BADGE_WITH_HEALING_POTION = new ItemStack(CQRItems.BADGE, 1);
+		
+		IItemHandler inventory = BADGE_WITH_HEALING_POTION.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		inventory.insertItem(0, new ItemStack(CQRItems.POTION_HEALING, 1), false);
+	}
+	
 }
