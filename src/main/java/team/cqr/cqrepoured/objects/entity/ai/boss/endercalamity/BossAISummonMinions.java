@@ -73,6 +73,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			this.entity.setSummonedEntityFaction(minion);
 			minion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(minion)), null);
 			this.entity.addSummonedEntityToList(minion);
+			this.entity.tryEquipSummon(minion, this.world.rand);
 			this.world.spawnEntity(minion);
 		}
 	}

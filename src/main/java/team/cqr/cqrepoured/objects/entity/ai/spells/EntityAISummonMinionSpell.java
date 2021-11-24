@@ -148,6 +148,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 						this.entity.world.spawnEntity(summoned);
 						if (this.summoner != null && !this.summoner.getSummoner().isDead) {
 							this.summoner.setSummonedEntityFaction(summoned);
+							this.summoner.tryEquipSummon(summoned, this.world.rand);
 							this.summoner.addSummonedEntityToList(summoned);
 						}
 

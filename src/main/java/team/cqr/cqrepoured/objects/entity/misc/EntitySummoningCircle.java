@@ -99,6 +99,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 
 					if (this.summoner != null && !this.summoner.getSummoner().isDead) {
 						this.summoner.setSummonedEntityFaction(summon);
+						this.summoner.tryEquipSummon(summon, this.world.rand);
 						this.summoner.addSummonedEntityToList(summon);
 					}
 				}

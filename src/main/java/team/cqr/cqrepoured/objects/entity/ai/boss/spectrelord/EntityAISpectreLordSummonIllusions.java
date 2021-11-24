@@ -76,6 +76,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 
 			EntitySpectreLordIllusion illusion = new EntitySpectreLordIllusion(this.world, this.entity, this.lifeTime, i == 0, i == 2);
 			illusion.setPosition(x, y, z);
+			this.entity.tryEquipSummon(illusion, this.world.rand);
 			illusion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(illusion)), null);
 			this.entity.addSummonedEntityToList(illusion);
 			this.world.spawnEntity(illusion);
