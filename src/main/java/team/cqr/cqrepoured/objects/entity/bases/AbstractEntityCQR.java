@@ -1712,6 +1712,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canUseSpinToWinAttack() {
+		if(this.canMountEntity() && this.getRidingEntity() != null) {
+			return false;
+		}
 		return true;
 	}
 
