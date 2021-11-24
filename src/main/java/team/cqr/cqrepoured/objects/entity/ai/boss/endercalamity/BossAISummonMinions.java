@@ -92,8 +92,6 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		return Math.round(absoluteMax * hpPercentage);
 	}
 	
-	private static final ItemStack BADGE_WITH_HEALING_POTION;
-
 	private AbstractEntityCQR getNewMinion(int seed, World world) {
 		AbstractEntityCQR entity = new EntityCQREnderman(world);
 		switch (seed) {
@@ -123,7 +121,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		}
 
 		if(DungeonGenUtils.percentageRandom(0.33, world.rand)) {
-			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, BADGE_WITH_HEALING_POTION);
+			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, generateBadgeWithPotion());
 		}
 		
 		return entity;
@@ -134,11 +132,13 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		return currentPhase.getPhaseObject().canSummonAlliesDuringPhase();
 	}
 
-	static {
-		BADGE_WITH_HEALING_POTION = new ItemStack(CQRItems.BADGE, 1);
+	private ItemStack generateBadgeWithPotion() {
+		ItemStack stack = new ItemStack(CQRItems.BADGE, 1);
 		
-		IItemHandler inventory = BADGE_WITH_HEALING_POTION.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		inventory.insertItem(0, new ItemStack(CQRItems.POTION_HEALING, 1), false);
+		
+		return stack;
 	}
 	
 }
