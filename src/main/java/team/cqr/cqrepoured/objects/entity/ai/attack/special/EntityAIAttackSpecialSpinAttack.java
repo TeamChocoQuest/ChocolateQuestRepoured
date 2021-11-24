@@ -127,7 +127,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				 * living.velocityChanged = true;
 				 */
 
-				final float knockbackStrength = 1.25F * attacker.getSizeVariation();
+				final float knockbackStrength = 0.6125F * attacker.getSizeVariation();
 
 				living.knockBack(entity, dmg, knockbackStrength, knockbackStrength);
 			}
