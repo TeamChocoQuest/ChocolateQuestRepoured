@@ -123,12 +123,15 @@ public class DungeonMapTool {
 
 				for (int x = 0; x < 16; x++) {
 					int ix = x + radiusB + spawnX;
+					if (ix < 0 || ix > sizeB) {
+						continue;
+					}
 					for (int z = 0; z < 16; z++) {
 						int iz = z + radiusB + spawnZ;
-						int i = iz * sizeB + ix;
-						if (i >= 0 && i < sizeB * sizeB) {
-							dataBuffer.setElem(i, 0xFF0000);
+						if (iz < 0 || iz > sizeB) {
+							continue;
 						}
+						dataBuffer.setElem(iz * sizeB + ix, 0xFF0000);
 					}
 				}
 			}
