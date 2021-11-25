@@ -19,7 +19,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraft.world.storage.WorldInfo;
-import net.minecraftforge.event.ForgeEventFactory;
 
 public class DummyWorld extends WorldServer {
 
@@ -47,10 +46,6 @@ public class DummyWorld extends WorldServer {
 		if (!this.provider.canRespawnHere()) {
 			this.worldInfo.setSpawn(BlockPos.ORIGIN.up(this.provider.getAverageGroundLevel()));
 		} else {
-			if (ForgeEventFactory.onCreateWorldSpawn(this, settings)) {
-				return;
-			}
-
 			this.findingSpawnPoint = true;
 			BiomeProvider biomeprovider = this.provider.getBiomeProvider();
 			List<Biome> list = biomeprovider.getBiomesToSpawnIn();

@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -13,6 +16,8 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.util.tool.DungeonMapTool;
+import team.cqr.cqrepoured.util.tool.Progress;
+import team.cqr.cqrepoured.util.tool.Tuple;
 
 public class GuiDungeonMapTool extends GuiScreen {
 
@@ -36,6 +41,8 @@ public class GuiDungeonMapTool extends GuiScreen {
 	private GuiButton buttonCancel;
 	private GuiButton buttonCreateMap;
 	private boolean canExit = true;
+	@Nullable
+	private Progress progress;
 
 	public GuiDungeonMapTool(GuiScreen parent) {
 		this.parent = parent;
@@ -221,20 +228,18 @@ public class GuiDungeonMapTool extends GuiScreen {
 				try {
 					int radius = GuiDungeonMapTool.this.textFieldRadius.getInt();
 					long seed = GuiDungeonMapTool.this.textFieldSeed.getLong();
-					int distance = GuiDungeonMapTool.this.textFieldDistance.getInt();
-					int spread = GuiDungeonMapTool.this.textFieldSpread.getInt();
-					double rarityDivisor = GuiDungeonMapTool.this.textFieldRarityDivisor.getDouble();
 					boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.isChecked();
 
-					new Thread(() -> {
-						try {
-							DungeonMapTool.run(radius, seed, distance, spread, rarityDivisor, generateBiomes);
-						} finally {
-							GuiDungeonMapTool.this.canExit = true;
-							GuiDungeonMapTool.this.buttonCancel.enabled = true;
-							GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
+					Tuple<CompletableFuture<Void>, Progress> result = DungeonMapTool.run(radius, seed, generateBiomes);
+					progress = result.getSecond();
+					result.getFirst().whenCompleteAsync((v, t) -> {
+						if (t != null) {
+							t.printStackTrace();
 						}
-					}).start();
+						canExit = true;
+						buttonCancel.enabled = true;
+						buttonCreateMap.enabled = true;
+					});
 				} catch (Throwable e) {
 					e.printStackTrace();
 					GuiDungeonMapTool.this.canExit = true;
@@ -315,6 +320,11 @@ public class GuiDungeonMapTool extends GuiScreen {
 		GuiHelper.drawString(this.fontRenderer, "Distance (WIP)", this.width / 2 - 70, ++i * 30 + 6, 0xF0F0F0, true, false);
 		GuiHelper.drawString(this.fontRenderer, "Spread (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
 		GuiHelper.drawString(this.fontRenderer, "Rarity Divisor (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
+
+		Progress progress1 = this.progress;
+		if (progress1 != null) {
+			GuiHelper.drawString(this.fontRenderer, progress1.toString(), this.width / 2 + 120, this.height - 18, 0xF0F0F0, false, false);
+		}
 	}
 
 }
