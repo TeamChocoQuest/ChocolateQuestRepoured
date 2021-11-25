@@ -1,0 +1,31 @@
+{
+	"parent": "cqrepoured:cqr/bosses/kill_lich",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.kill_exterminator.title"
+		},
+		"icon": {
+			"item": "minecraft:iron_ingot"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.kill_exterminator.description"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"boss": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:exterminator"
+				}
+			}
+		}
+	},
+	"requirements": [
+		["boss"]
+	]
+}
