@@ -19,6 +19,11 @@ public class EnchantmentSpectral extends EnchantmentDamage {
 	}
 
 	@Override
+	public String getName() {
+		return "enchantment." + this.name;
+	}
+
+	@Override
 	public boolean isTreasureEnchantment() {
 		return true;
 	}
