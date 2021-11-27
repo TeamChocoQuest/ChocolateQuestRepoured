@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
@@ -13,11 +12,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.crash.CrashReport;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.client.util.GuiHelper;
-import team.cqr.cqrepoured.util.tool.DungeonMapTool;
-import team.cqr.cqrepoured.util.tool.Progress;
-import team.cqr.cqrepoured.util.tool.Tuple;
+import team.cqr.cqrepoured.util.tool.DungeonMapTask;
 
 public class GuiDungeonMapTool extends GuiScreen {
 
@@ -42,7 +40,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 	private GuiButton buttonCreateMap;
 	private boolean canExit = true;
 	@Nullable
-	private Progress progress;
+	private DungeonMapTask task;
 
 	public GuiDungeonMapTool(GuiScreen parent) {
 		this.parent = parent;
@@ -209,43 +207,39 @@ public class GuiDungeonMapTool extends GuiScreen {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
 					return false;
 				}
-				if (!GuiDungeonMapTool.this.canExit) {
-					return false;
+				DungeonMapTask task1 = GuiDungeonMapTool.this.task;
+				if (task1 != null) {
+					task1.cancel();
 				}
-				GuiDungeonMapTool.this.mc.displayGuiScreen(GuiDungeonMapTool.this.parent);
 				return true;
 			}
 		};
+		this.buttonCancel.enabled = false;
 		this.buttonCreateMap = new GuiButton(id++, this.width / 2 + 2, this.height - 24, 100, 20, "Create Map") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
 					return false;
 				}
-				GuiDungeonMapTool.this.canExit = false;
-				GuiDungeonMapTool.this.buttonCancel.enabled = false;
-				GuiDungeonMapTool.this.buttonCreateMap.enabled = false;
-				try {
-					int radius = GuiDungeonMapTool.this.textFieldRadius.getInt();
-					long seed = GuiDungeonMapTool.this.textFieldSeed.getLong();
-					boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.isChecked();
+				int radius = GuiDungeonMapTool.this.textFieldRadius.getInt();
+				long seed = GuiDungeonMapTool.this.textFieldSeed.getLong();
+				boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.isChecked();
 
-					Tuple<CompletableFuture<Void>, Progress> result = DungeonMapTool.run(radius, seed, generateBiomes);
-					progress = result.getSecond();
-					result.getFirst().whenCompleteAsync((v, t) -> {
-						if (t != null) {
-							t.printStackTrace();
-						}
-						canExit = true;
-						buttonCancel.enabled = true;
-						buttonCreateMap.enabled = true;
-					});
-				} catch (Throwable e) {
-					e.printStackTrace();
+				GuiDungeonMapTool.this.task = new DungeonMapTask(radius, seed, generateBiomes);
+				GuiDungeonMapTool.this.canExit = false;
+				GuiDungeonMapTool.this.buttonCancel.enabled = true;
+				GuiDungeonMapTool.this.buttonCreateMap.enabled = false;
+
+				GuiDungeonMapTool.this.task.run().handleAsync((v, t) -> {
 					GuiDungeonMapTool.this.canExit = true;
-					GuiDungeonMapTool.this.buttonCancel.enabled = true;
+					GuiDungeonMapTool.this.buttonCancel.enabled = false;
 					GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
-				}
+					if (t != null && !(t instanceof Exception)) {
+						mc.crashed(new CrashReport("Failed generating dungeon map", t));
+					}
+					return null;
+				});
+
 				return true;
 			}
 		};
@@ -321,9 +315,9 @@ public class GuiDungeonMapTool extends GuiScreen {
 		GuiHelper.drawString(this.fontRenderer, "Spread (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
 		GuiHelper.drawString(this.fontRenderer, "Rarity Divisor (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
 
-		Progress progress1 = this.progress;
-		if (progress1 != null) {
-			GuiHelper.drawString(this.fontRenderer, progress1.toString(), this.width / 2 + 120, this.height - 18, 0xF0F0F0, false, false);
+		DungeonMapTask task1 = this.task;
+		if (task1 != null) {
+			GuiHelper.drawString(this.fontRenderer, this.task.getProgress().toString(), this.width / 2 + 120, this.height - 18, 0xF0F0F0, false, false);
 		}
 	}
 

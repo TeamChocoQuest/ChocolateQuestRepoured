@@ -8,6 +8,8 @@ public class Progress {
 	private final int stages;
 	private int stage;
 	private double progress;
+	private boolean errored;
+	private boolean cancelled;
 
 	public Progress(int maxStage) {
 		this.stages = maxStage;
@@ -25,6 +27,14 @@ public class Progress {
 		this.progress = Math.max(progress, this.progress);
 	}
 
+	public void setErrored() {
+		this.errored = true;
+	}
+
+	public void setCancelled() {
+		this.cancelled = true;
+	}
+
 	public int getStages() {
 		return stages;
 	}
@@ -37,10 +47,24 @@ public class Progress {
 		return progress;
 	}
 
+	public boolean isError() {
+		return errored;
+	}
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
 	@Override
 	public String toString() {
 		if (stage == stages) {
 			return "FINISHED";
+		}
+		if (errored) {
+			return "ERROR";
+		}
+		if (cancelled) {
+			return "CANCELLED";
 		}
 		return stage + "/" + stages + ": " + FORMAT.format(progress * 100) + "%";
 	}
