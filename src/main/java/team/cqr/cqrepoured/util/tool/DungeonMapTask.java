@@ -22,7 +22,14 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.crash.CrashReport;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -35,18 +42,19 @@ import net.minecraftforge.common.DimensionManager;
 import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.Reference;
 
 public class DungeonMapTask {
 
 	private static final Object2IntMap<Biome> biomeColorCache = new Object2IntOpenHashMap<>();
 	private static final BufferedImage[] icons = IntStream.range(0, 20).mapToObj(i -> {
-		try {
-			String path = new File("").getAbsolutePath();
-			path = new File(path).getParent();
-			return ImageIO.read(new File(path + "/dungeonMapTool/d" + i + ".png"));
+		Minecraft mc = Minecraft.getMinecraft();
+		IResourceManager resourceManager = mc.getResourceManager();
+		try (IResource resource = resourceManager.getResource(new ResourceLocation(Reference.MODID, "textures/gui/map/d" + i + ".png"))) {
+			return TextureUtil.readBufferedImage(resource.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
-			return new BufferedImage(18, 18, BufferedImage.TYPE_INT_RGB);
+			CrashReport crash = new CrashReport("Failed loading dungeon icons", e);
+			throw new ReportedException(crash);
 		}
 	}).toArray(BufferedImage[]::new);
 
@@ -76,7 +84,7 @@ public class DungeonMapTask {
 		return CompletableFuture.runAsync(this::exportBiomes).thenRunAsync(this::exportGrid).thenRunAsync(this::exportDungeons).thenRunAsync(this::exportImage)
 				.handleAsync((v, t) -> {
 					if (t != null) {
-						progress.setErrored();
+						this.progress.setErrored();
 					}
 					WorldServer world = DimensionManager.getWorld(0);
 					if (world != null) {
@@ -93,7 +101,7 @@ public class DungeonMapTask {
 		}
 
 		if (this.generateBiomes) {
-			DataBuffer dataBuffer = image.getRaster().getDataBuffer();
+			DataBuffer dataBuffer = this.image.getRaster().getDataBuffer();
 
 			for (int x = 0; x < this.sizeBlocks; x++) {
 				if (this.cancelled) {
@@ -101,15 +109,15 @@ public class DungeonMapTask {
 				}
 				for (int z = 0; z < this.sizeBlocks; z++) {
 					int i = z * this.sizeBlocks + x;
-					Biome biome = world.getBiome(x - this.radiusBlocks, z - this.radiusBlocks);
-					int color = color(world, biome);
+					Biome biome = this.world.getBiome(x - this.radiusBlocks, z - this.radiusBlocks);
+					int color = color(this.world, biome);
 					dataBuffer.setElem(i, color);
 				}
-				progress.setProgress((double) x / (this.sizeBlocks - 1));
+				this.progress.setProgress((double) x / (this.sizeBlocks - 1));
 			}
 		}
 
-		progress.finishStage();
+		this.progress.finishStage();
 	}
 
 	private void exportGrid() {
@@ -117,40 +125,40 @@ public class DungeonMapTask {
 			return;
 		}
 
-		DataBuffer dataBuffer = image.getRaster().getDataBuffer();
-		int spawnX = DungeonGenUtils.getSpawnX(world) >> 4 << 4;
-		int spawnZ = DungeonGenUtils.getSpawnZ(world) >> 4 << 4;
+		DataBuffer dataBuffer = this.image.getRaster().getDataBuffer();
+		int spawnX = DungeonGenUtils.getSpawnX(this.world) >> 4 << 4;
+		int spawnZ = DungeonGenUtils.getSpawnZ(this.world) >> 4 << 4;
 		int gridSize = 20 << 4;
 
 		for (int x = 0; x < this.sizeBlocks; x++) {
 			if (this.cancelled) {
 				return;
 			}
-			boolean gridX = Math.floorMod(x - radiusBlocks - spawnX - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1;
+			boolean gridX = Math.floorMod(x - this.radiusBlocks - spawnX - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1;
 			for (int z = 0; z < this.sizeBlocks; z++) {
 				int i = z * this.sizeBlocks + x;
-				if (gridX || Math.floorMod(z - radiusBlocks - spawnZ - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1) {
+				if (gridX || Math.floorMod(z - this.radiusBlocks - spawnZ - 8 + 1 - (40 >> 1 << 4), gridSize) <= 1) {
 					dataBuffer.setElem(i, 0x0F0F0F);
 				}
 			}
-			progress.setProgress((double) x / (sizeBlocks - 1));
+			this.progress.setProgress((double) x / (this.sizeBlocks - 1));
 		}
 
 		for (int x = 0; x < 16; x++) {
-			int ix = x + sizeBlocks + spawnX;
-			if (ix < 0 || ix > sizeBlocks) {
+			int ix = x + this.sizeBlocks + spawnX;
+			if (ix < 0 || ix > this.sizeBlocks) {
 				continue;
 			}
 			for (int z = 0; z < 16; z++) {
-				int iz = z + sizeBlocks + spawnZ;
-				if (iz < 0 || iz > sizeBlocks) {
+				int iz = z + this.sizeBlocks + spawnZ;
+				if (iz < 0 || iz > this.sizeBlocks) {
 					continue;
 				}
-				dataBuffer.setElem(iz * sizeBlocks + ix, 0xFF0000);
+				dataBuffer.setElem(iz * this.sizeBlocks + ix, 0xFF0000);
 			}
 		}
 
-		progress.finishStage();
+		this.progress.finishStage();
 	}
 
 	private void exportDungeons() {
@@ -158,16 +166,16 @@ public class DungeonMapTask {
 			return;
 		}
 
-		DataBuffer dataBuffer = image.getRaster().getDataBuffer();
+		DataBuffer dataBuffer = this.image.getRaster().getDataBuffer();
 		int scale = 4;
 
-		for (int x = -radiusChunks; x <= radiusChunks; x++) {
+		for (int x = -this.radiusChunks; x <= this.radiusChunks; x++) {
 			if (this.cancelled) {
 				return;
 			}
-			for (int z = -radiusChunks; z <= radiusChunks; z++) {
+			for (int z = -this.radiusChunks; z <= this.radiusChunks; z++) {
 				// TODO adjust gui to allow modification of all grids
-				DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(world, x, z);
+				DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(this.world, x, z);
 
 				if (dungeon == null) {
 					continue;
@@ -180,30 +188,30 @@ public class DungeonMapTask {
 					for (int iy = -height / 2; iy < height - height / 2; iy++) {
 						int newColor = icon.getRGB(ix + width / 2, iy + height / 2);
 						for (int i = 0; i < scale; i++) {
-							int k = (x + radiusChunks << 4) + 8 + ix * scale + i;
-							if (k < 0 || k >= sizeBlocks) {
+							int k = (x + this.radiusChunks << 4) + 8 + ix * scale + i;
+							if (k < 0 || k >= this.sizeBlocks) {
 								continue;
 							}
 							for (int j = 0; j < scale; j++) {
-								int l = (z + radiusChunks << 4) + 8 + iy * scale + j;
-								if (l < 0 || l >= sizeBlocks) {
+								int l = (z + this.radiusChunks << 4) + 8 + iy * scale + j;
+								if (l < 0 || l >= this.sizeBlocks) {
 									continue;
 								}
-								dataBuffer.setElem(l * sizeBlocks + k, newColor);
+								dataBuffer.setElem(l * this.sizeBlocks + k, newColor);
 							}
 						}
 					}
 
-					Graphics2D graphics = image.createGraphics();
+					Graphics2D graphics = this.image.createGraphics();
 					graphics.setColor(Color.BLACK);
 					graphics.setFont(new Font("Arial", Font.BOLD, 24));
-					graphics.drawString(dungeon.getDungeonName(), (x + radiusChunks << 4) + 8 - 9 * scale, (z + radiusChunks << 4) + 8 - 10 * scale);
+					graphics.drawString(dungeon.getDungeonName(), (x + this.radiusChunks << 4) + 8 - 9 * scale, (z + this.radiusChunks << 4) + 8 - 10 * scale);
 				}
 			}
-			progress.setProgress((double) (x + radiusChunks) / sizeChunks);
+			this.progress.setProgress((double) (x + this.radiusChunks) / this.sizeChunks);
 		}
 
-		progress.finishStage();
+		this.progress.finishStage();
 	}
 
 	private void exportImage() {
@@ -211,31 +219,31 @@ public class DungeonMapTask {
 			return;
 		}
 
-		double d = image.getWidth() * image.getHeight() * 0.045D;
+		double d = this.image.getWidth() * this.image.getHeight() * 0.045D;
 
 		try (ImageOutputStream out = new FileImageOutputStream(new File("dungeon_map.png")) {
 			@Override
 			public void write(int b) throws IOException {
 				super.write(b);
-				progress.setProgress(streamPos / d);
+				DungeonMapTask.this.progress.setProgress(this.streamPos / d);
 			}
 
 			@Override
 			public void write(byte b[], int off, int len) throws IOException {
 				super.write(b, off, len);
-				progress.setProgress(streamPos / d);
+				DungeonMapTask.this.progress.setProgress(this.streamPos / d);
 			}
 		}) {
-			ImageIO.write(image, "png", out);
+			ImageIO.write(this.image, "png", out);
 		} catch (IOException e) {
 			throw new CancellationException("Failed exporting dungeon map!");
 		}
 
-		progress.finishStage();
+		this.progress.finishStage();
 	}
 
 	public Progress getProgress() {
-		return progress;
+		return this.progress;
 	}
 
 	public void cancel() {

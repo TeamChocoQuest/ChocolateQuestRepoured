@@ -11,7 +11,6 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiDungeonMapTool;
 import team.cqr.cqrepoured.structuregen.DungeonRegistry;
 import team.cqr.cqrepoured.util.Reference;
@@ -21,58 +20,51 @@ public class GuiEventHandler {
 
 	@SubscribeEvent
 	public static void onInitGuiEvent(GuiScreenEvent.InitGuiEvent event) {
-		if (event.getGui() instanceof GuiConfig) {
-			GuiConfig gui = (GuiConfig) event.getGui();
-			if (gui.modID.equals(Reference.MODID) && gui.parentScreen instanceof GuiModList) {
-				Minecraft mc = Minecraft.getMinecraft();
-				ScaledResolution scaled = new ScaledResolution(mc);
-				event.getButtonList().add(new GuiButtonReloadDungeons(0, scaled.getScaledWidth() - 102, 2, 100, 20, "Reload Dungeons", gui, mc.world == null));
+		if (!(event.getGui() instanceof GuiConfig)) {
+			return;
+		}
 
-				if (CQRMain.isWorkspaceEnvironment) {
-					event.getButtonList().add(new GuiButton(1, 2, 2, 100, 20, "Map Tool") {
-						@Override
-						public void mouseReleased(int mouseX, int mouseY) {
-							if (this.enabled
-									&& this.visible
-									&& mouseX >= this.x
-									&& mouseY >= this.y
-									&& mouseX < this.x + this.width
-									&& mouseY < this.y + this.height) {
-								mc.displayGuiScreen(new GuiDungeonMapTool(gui));
-							}
-						}
-					});
+		GuiConfig gui = (GuiConfig) event.getGui();
+		if (!gui.modID.equals(Reference.MODID) || !(gui.parentScreen instanceof GuiModList)) {
+			return;
+		}
+
+		Minecraft mc = Minecraft.getMinecraft();
+		ScaledResolution scaled = new ScaledResolution(mc);
+
+		GuiButton buttonReloadDungeons = new GuiButton(0, scaled.getScaledWidth() - 102, 2, 100, 20, "Reload Dungeons") {
+			@Override
+			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+				if (!super.mousePressed(mc, mouseX, mouseY)) {
+					return false;
+				}
+				DungeonRegistry.getInstance().loadDungeonFiles();
+				return true;
+			}
+
+			@Override
+			public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+				super.drawButton(mc, mouseX, mouseY, partialTicks);
+				if (this.isMouseOver()) {
+					gui.drawToolTip(Arrays.asList("Reloads all dungeon files located in config/CQR/dungeons."), mouseX, mouseY);
 				}
 			}
-		}
-	}
+		};
+		buttonReloadDungeons.enabled = mc.world == null || mc.isGamePaused();
+		event.getButtonList().add(buttonReloadDungeons);
 
-	@SubscribeEvent
-	public static void onActionPerformedEvent(GuiScreenEvent.ActionPerformedEvent.Post event) {
-		if (event.getButton() instanceof GuiButtonReloadDungeons && Minecraft.getMinecraft().world == null) {
-			DungeonRegistry.getInstance().loadDungeonFiles();
-		}
-	}
-
-	private static class GuiButtonReloadDungeons extends GuiButton {
-
-		private GuiConfig gui;
-
-		public GuiButtonReloadDungeons(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, GuiConfig gui, boolean enabled) {
-			super(buttonId, x, y, widthIn, heightIn, buttonText);
-			this.gui = gui;
-			this.enabled = enabled;
-		}
-
-		@Override
-		public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-			super.drawButton(mc, mouseX, mouseY, partialTicks);
-			if (this.isMouseOver()) {
-				this.gui.drawToolTip(Arrays.asList("Reloads all dungeon files located in config/CQR/dungeons.", "Only works while in the main menu."), mouseX,
-						mouseY);
+		GuiButton buttonMapTool = new GuiButton(1, 2, 2, 100, 20, "Map Tool") {
+			@Override
+			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+				if (!super.mousePressed(mc, mouseX, mouseY)) {
+					return false;
+				}
+				mc.displayGuiScreen(new GuiDungeonMapTool(gui));
+				return true;
 			}
-		}
-
+		};
+		buttonMapTool.enabled = mc.world == null || mc.isGamePaused();
+		event.getButtonList().add(buttonMapTool);
 	}
 
 }
