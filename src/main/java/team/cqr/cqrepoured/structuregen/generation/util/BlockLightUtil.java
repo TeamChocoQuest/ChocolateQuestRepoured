@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -16,15 +17,16 @@ import team.cqr.cqrepoured.structuregen.generation.ChunkInfo;
 
 public class BlockLightUtil {
 
+	private static final int MAX_LIGHT_LEVEL = 15;
 	/**
-	 * 4 bit for light level<br>
-	 * 6 bit for x (relative to position that gets update +14)<br>
-	 * 6 bit for y (relative to position that gets update +14)<br>
-	 * 6 bit for z (relative to position that gets update +14)<br>
+	 * 8 bit for light level<br>
+	 * 8 bit for x (relative to position that gets update +MAX_LIGHT_LEVEL-1)<br>
+	 * 8 bit for y (relative to position that gets update +MAX_LIGHT_LEVEL-1)<br>
+	 * 8 bit for z (relative to position that gets update +MAX_LIGHT_LEVEL-1)<br>
 	 * LLLLXXXXXXYYYYYYZZZZZZ
 	 */
 	private static final IntPriorityQueue QUEUE = new IntArrayFIFOQueue();
-	private static final boolean[] USED = new boolean[29 * 29 * 29];
+	private static final boolean[] USED = new boolean[(MAX_LIGHT_LEVEL * 2 - 1) * (MAX_LIGHT_LEVEL * 2 - 1) * (MAX_LIGHT_LEVEL * 2 - 1)];
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
 	private static final MutableBlockPos MUTABLE1 = new MutableBlockPos();
 
@@ -53,6 +55,42 @@ public class BlockLightUtil {
 		});
 	}
 
+	private static int encode(int light, int x, int y, int z) {
+		light = MathHelper.clamp(light, 0, MAX_LIGHT_LEVEL);
+		x += MAX_LIGHT_LEVEL - 1;
+		y += MAX_LIGHT_LEVEL - 1;
+		z += MAX_LIGHT_LEVEL - 1;
+		return (light << 24) | (x << 16) | (y << 8) | z;
+	}
+
+	private static int decodeLight(int lxyz) {
+		return MathHelper.clamp(lxyz >>> 24, 0, MAX_LIGHT_LEVEL);
+	}
+
+	private static int decodeX(int lxyz) {
+		return ((lxyz >>> 16) & 0xFF) - (MAX_LIGHT_LEVEL - 1);
+	}
+
+	private static int decodeY(int lxyz) {
+		return ((lxyz >>> 8) & 0xFF) - (MAX_LIGHT_LEVEL - 1);
+	}
+
+	private static int decodeZ(int lxyz) {
+		return (lxyz & 0xFF) - (MAX_LIGHT_LEVEL - 1);
+	}
+
+	private static boolean getAndSetUsed(int x, int y, int z) {
+		x += MAX_LIGHT_LEVEL - 1;
+		y += MAX_LIGHT_LEVEL - 1;
+		z += MAX_LIGHT_LEVEL - 1;
+		int i = (x * (MAX_LIGHT_LEVEL * 2 - 1) + y) * (MAX_LIGHT_LEVEL * 2 - 1) + z;
+		if (USED[i]) {
+			return true;
+		}
+		USED[i] = true;
+		return false;
+	}
+
 	/**
 	 * Only works for light emitting blocks!
 	 */
@@ -61,24 +99,23 @@ public class BlockLightUtil {
 		if (world.getLightFor(EnumSkyBlock.BLOCK, pos) < initialLight) {
 			world.setLightFor(EnumSkyBlock.BLOCK, pos, initialLight);
 		}
-		QUEUE.enqueue((initialLight << 18) | (14 << 12) | (14 << 6) | 14);
+		QUEUE.enqueue(encode(initialLight, 0, 0, 0));
+		getAndSetUsed(0, 0, 0);
 
 		while (!QUEUE.isEmpty()) {
 			int lxyz = QUEUE.dequeueInt();
-			int light = lxyz >> 18;
-			int x = (lxyz >> 12) & 31;
-			int y = (lxyz >> 6) & 31;
-			int z = lxyz & 31;
-			MUTABLE1.setPos(pos.getX() + x - 14, pos.getY() + y - 14, pos.getZ() + z - 14);
+			int light = decodeLight(lxyz);
+			int x = decodeX(lxyz);
+			int y = decodeY(lxyz);
+			int z = decodeZ(lxyz);
+			MUTABLE1.setPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
 
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				try {
 					MUTABLE1.move(facing);
-					int index = ((x + facing.getXOffset()) * 29 + (y + facing.getYOffset())) * 29 + (z + facing.getZOffset());
-					if (USED[index]) {
+					if (getAndSetUsed(x + facing.getXOffset(), y + facing.getYOffset(), z + facing.getZOffset())) {
 						continue;
 					}
-					USED[index] = true;
 					if (world.isOutsideBuildHeight(MUTABLE1)) {
 						continue;
 					}
@@ -100,8 +137,7 @@ public class BlockLightUtil {
 					if (newLight <= 1) {
 						continue;
 					}
-					int newPos = ((x + facing.getXOffset()) << 12) | ((y + facing.getYOffset()) << 6) | (z + facing.getZOffset());
-					QUEUE.enqueue((newLight << 18) | newPos);
+					QUEUE.enqueue(encode(newLight, x + facing.getXOffset(), y + facing.getYOffset(), z + facing.getZOffset()));
 				} finally {
 					MUTABLE1.move(facing.getOpposite());
 				}
