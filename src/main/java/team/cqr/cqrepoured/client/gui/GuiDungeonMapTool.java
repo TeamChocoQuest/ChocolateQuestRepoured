@@ -251,8 +251,12 @@ public class GuiDungeonMapTool extends GuiScreen {
 					GuiDungeonMapTool.this.buttonExit.enabled = true;
 					GuiDungeonMapTool.this.buttonCancel.enabled = false;
 					GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
-					if (t != null && !(t instanceof Exception)) {
-						mc.crashed(new CrashReport("Failed generating dungeon map", t));
+					if (t != null) {
+						if (t instanceof Exception) {
+							CQRMain.logger.error("Failed creating dungeon map", t);
+						} else {
+							mc.crashed(new CrashReport("Failed generating dungeon map", t));
+						}
 					}
 					return null;
 				});
