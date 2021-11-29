@@ -221,7 +221,7 @@ public class DungeonMapTask {
 
 		double d = this.image.getWidth() * this.image.getHeight() * 0.045D;
 
-		try (ImageOutputStream out = new FileImageOutputStream(new File("dungeon_map.png")) {
+		try (ImageOutputStream out = new FileImageOutputStream(new File("CQR-MapTool/dungeon_map.png")) {
 			@Override
 			public void write(int b) throws IOException {
 				super.write(b);
