@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.crash.CrashReport;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.util.tool.DungeonMapTask;
 
@@ -36,6 +37,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 	private GuiNumberTextField textFieldSpread;
 	private GuiNumberTextField textFieldRarityDivisor;
 	private GuiCheckBox checkBoxGenerateBiomes;
+	private GuiButton buttonExit;
 	private GuiButton buttonCancel;
 	private GuiButton buttonCreateMap;
 	private boolean canExit = true;
@@ -201,6 +203,19 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.buttonWorldSeed.enabled = this.mc.isIntegratedServerRunning();
+		this.buttonExit = new GuiButton(id++, 5, 5, 20, 20, "X") {
+			@Override
+			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+				if (!super.mousePressed(mc, mouseX, mouseY)) {
+					return false;
+				}
+				if (!GuiDungeonMapTool.this.canExit) {
+					return false;
+				}
+				GuiDungeonMapTool.this.mc.displayGuiScreen(GuiDungeonMapTool.this.parent);
+				return true;
+			}
+		};
 		this.buttonCancel = new GuiButton(id++, this.width / 2 - 102, this.height - 24, 100, 20, "Cancel") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
@@ -227,11 +242,13 @@ public class GuiDungeonMapTool extends GuiScreen {
 
 				GuiDungeonMapTool.this.task = new DungeonMapTask(radius, seed, generateBiomes);
 				GuiDungeonMapTool.this.canExit = false;
+				GuiDungeonMapTool.this.buttonExit.enabled = false;
 				GuiDungeonMapTool.this.buttonCancel.enabled = true;
 				GuiDungeonMapTool.this.buttonCreateMap.enabled = false;
 
 				GuiDungeonMapTool.this.task.run().handleAsync((v, t) -> {
 					GuiDungeonMapTool.this.canExit = true;
+					GuiDungeonMapTool.this.buttonExit.enabled = true;
 					GuiDungeonMapTool.this.buttonCancel.enabled = false;
 					GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
 					if (t != null && !(t instanceof Exception)) {
@@ -269,6 +286,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 		this.textFieldList.add(this.textFieldSpread);
 		this.textFieldList.add(this.textFieldRarityDivisor);
 		this.buttonList.add(this.checkBoxGenerateBiomes);
+		this.buttonList.add(this.buttonExit);
 		this.buttonList.add(this.buttonCancel);
 		this.buttonList.add(this.buttonCreateMap);
 	}
