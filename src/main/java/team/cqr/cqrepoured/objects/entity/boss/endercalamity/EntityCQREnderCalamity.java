@@ -1196,6 +1196,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			item.motionY = vy;
 			item.motionZ = vz;
 			item.velocityChanged = true;
+			
+			item.setEntityInvulnerable(true);
 		}
 	}
 
