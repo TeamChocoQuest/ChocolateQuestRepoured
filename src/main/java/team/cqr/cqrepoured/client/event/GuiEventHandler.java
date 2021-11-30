@@ -63,7 +63,7 @@ public class GuiEventHandler {
 				return true;
 			}
 		};
-		buttonMapTool.enabled = mc.world == null || mc.isGamePaused();
+		buttonMapTool.enabled = mc.world == null;
 		event.getButtonList().add(buttonMapTool);
 	}
 
