@@ -226,6 +226,7 @@ public class CQRConfig {
 		public boolean calamityBlockEquipParticles = true;
 		public int netherDragonLength = 28;
 		public int enderCalamityHealingCrystalAbsorbAmount = 40;
+		public boolean enableWalkerKingFog = true;
 	}
 
 	public static class BossDamageCaps {

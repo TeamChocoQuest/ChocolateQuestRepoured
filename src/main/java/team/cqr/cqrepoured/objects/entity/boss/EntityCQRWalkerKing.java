@@ -82,8 +82,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setColor(Color.PURPLE);
-			this.bossInfoServer.setCreateFog(true);
-			this.bossInfoServer.setDarkenSky(true);
+			this.bossInfoServer.setCreateFog(CQRConfig.bosses.enableWalkerKingFog);
+			this.bossInfoServer.setDarkenSky(CQRConfig.bosses.enableWalkerKingFog);
 			this.bossInfoServer.setPlayEndBossMusic(true);
 		}
 	}
