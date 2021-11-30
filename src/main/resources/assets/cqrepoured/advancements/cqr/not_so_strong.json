@@ -71,6 +71,30 @@
 					"type": "cqrepoured:giant_spider"
 				}
 			}
+		},
+		"ender_king": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:ender_king"
+				}
+			}
+		},
+		"ender_calamity": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:ender_calamity"
+				}
+			}
+		},
+		"exterminator": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:exterminator"
+				}
+			}
 		}
 	},
 	"requirements": [
@@ -81,7 +105,10 @@
 			"necromancer",
 			"walker_king",
 			"pirate_captain",
-			"giant_spider"
+			"giant_spider",
+			"ender_king",
+			"ender_calamity",
+			"exterminator"
 		]
 	]
 }
