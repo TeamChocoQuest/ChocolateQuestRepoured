@@ -193,7 +193,8 @@ public class ItemSpearBase extends ItemCQRWeapon {
 
 			Vec3d eyeVec = entity.getPositionEyes(partialTicks);
 			double entityReachDistance = blockReachDistance - 1.5D;
-			if (blockMouseOver.typeOfHit != Type.MISS) {
+			//According to issue #303 this is nullable (or typeOfHit), however, this is just a workaround until i can look at it in an ide
+			if (blockMouseOver != null && blockMouseOver.typeOfHit != Type.MISS) {
 				entityReachDistance = Math.min(eyeVec.distanceTo(blockMouseOver.hitVec), entityReachDistance);
 			}
 
