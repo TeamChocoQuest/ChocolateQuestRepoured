@@ -34,6 +34,7 @@ import team.cqr.cqrepoured.objects.blocks.BlockNull;
 import team.cqr.cqrepoured.objects.blocks.BlockPhylactery;
 import team.cqr.cqrepoured.objects.blocks.BlockPillarDungeonBrick;
 import team.cqr.cqrepoured.objects.blocks.BlockSpawner;
+import team.cqr.cqrepoured.objects.blocks.BlockTNTCQR;
 import team.cqr.cqrepoured.objects.blocks.BlockTable;
 import team.cqr.cqrepoured.objects.blocks.BlockTemporaryWeb;
 import team.cqr.cqrepoured.objects.blocks.BlockUnlitTorch;
@@ -132,6 +133,7 @@ public class CQRBlocks {
 	public static final BlockBossBlock BOSS_BLOCK = Null();
 	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
 	public static final BlockMapPlaceholder MAP_PLACEHOLDER = Null();
+	public static final BlockTNTCQR TNT = Null();
 
 	// Loot Chests
 	// CQR
@@ -245,6 +247,7 @@ public class CQRBlocks {
 					setBlockNameAndTab(new BlockBossBlock(), "boss_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockForceFieldNexus(Material.IRON), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockMapPlaceholder(), "map_placeholder", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockTNTCQR(), "tnt", CQRMain.CQR_CREATIVE_TOOL_TAB),
 
 					setBlockNameAndTab(new BlockExporterChestCQR(CQRLoottables.CHESTS_TREASURE, "textures/items/diamond.png"), "exporter_chest_valuable",
 							CQRMain.CQR_EXPORTER_CHEST_TAB),

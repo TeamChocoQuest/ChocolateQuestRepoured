@@ -1,0 +1,8 @@
+{
+   "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "cqrepoured:blocks/tnt_bottom",
+        "top": "cqrepoured:blocks/tnt_top",
+        "side": "cqrepoured:blocks/tnt_side"
+    }
+}

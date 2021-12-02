@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.client.structureprot.ProtectedRegionClientEventHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.objects.entity.misc.EntityTNTPrimedCQR;
 
 public class ProtectedRegionHelper {
 
@@ -275,6 +276,11 @@ public class ProtectedRegionHelper {
 			return;
 		}
 
+		//If the exploder is our own custom tnt => let it blow!
+		if(explosion.exploder instanceof EntityTNTPrimedCQR) {
+			return;
+		}
+		
 		boolean flag = explosion.exploder instanceof EntityTNTPrimed;
 		boolean flag1 = (flag && CQRConfig.dungeonProtection.enablePreventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.enablePreventExplosionOther);
 		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;

@@ -44,6 +44,7 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySpiderEgg;
 import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
+import team.cqr.cqrepoured.objects.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.objects.entity.misc.EntityWalkerTornado;
 import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRBoarman;
@@ -159,6 +160,7 @@ public class CQREntities {
 	public static final EntityEntry ICE_SPIKE = Null();
 	public static final EntityEntry CALAMITY_CRYSTAL = Null();
 	public static final EntityEntry ELECTRIC_FIELD_ENTITY = Null();
+	public static final EntityEntry TNT = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EntityRegistrationHandler {
@@ -234,6 +236,7 @@ public class CQREntities {
 					createEntityEntryWithoutEgg(EntityIceSpike.class, "ice_spike", 64, 1, true),
 					createEntityEntryWithoutEgg(EntitySpiderEgg.class, "spider_egg", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityElectricField.class, "electric_field_entity", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityTNTPrimedCQR.class, "PrimedTnt", 64, 1, true),
 
 					// ender calamity
 					createEntityEntry(EntityCQREnderCalamity.class, "ender_calamity", 64, 1, true, 3289650, 000000),
