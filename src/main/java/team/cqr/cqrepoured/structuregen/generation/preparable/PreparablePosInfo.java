@@ -1,14 +1,32 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockBanner;
+import net.minecraft.block.BlockStructureVoid;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.objects.blocks.BlockBossBlock;
+import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
+import team.cqr.cqrepoured.objects.blocks.BlockForceFieldNexus;
+import team.cqr.cqrepoured.objects.blocks.BlockMapPlaceholder;
+import team.cqr.cqrepoured.objects.blocks.BlockNull;
+import team.cqr.cqrepoured.objects.blocks.BlockSpawner;
+import team.cqr.cqrepoured.objects.blocks.BlockTNTCQR;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
@@ -73,6 +91,32 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 	public static class Registry {
 
+		@FunctionalInterface
+		public interface IExporter<P extends PreparablePosInfo, T extends TileEntity> {
+
+			default boolean canTake(World world, IBlockState state, @Nullable T tileEntity, int x, int y, int z) {
+				return true;
+			}
+
+			default P take(World world, IBlockState state, @Nullable T tileEntity, int x, int y, int z) {
+				return take(world, state, writeTileEntityToNBT(tileEntity), x, y, z);
+			}
+
+			P take(World world, IBlockState state, @Nullable NBTTagCompound tileEntity, int x, int y, int z);
+
+			static NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
+				if (tileEntity == null) {
+					return null;
+				}
+				NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
+				compound.removeTag("x");
+				compound.removeTag("y");
+				compound.removeTag("z");
+				return compound;
+			}
+
+		}
+
 		public interface ISerializer<T extends PreparablePosInfo> {
 
 			void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
@@ -84,11 +128,24 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 		}
 
+		private static final Map<Class<? extends Block>, IExporter<?, ?>> BLOCK_CLASS_2_EXPORTER = new HashMap<>();
 		private static byte nextId = 0;
 		private static final Object2ByteMap<Class<? extends PreparablePosInfo>> CLASS_2_ID = new Object2ByteOpenHashMap<>();
 		private static final Byte2ObjectMap<ISerializer<?>> ID_2_SERIALIZER = new Byte2ObjectOpenHashMap<>();
 
 		static {
+			// TODO
+			register(Block.class, null);
+			register(BlockNull.class, null);
+			register(BlockStructureVoid.class, null);
+			register(BlockBanner.class, null);
+			register(BlockSpawner.class, null);
+			register(BlockExporterChest.class, null);
+			register(BlockForceFieldNexus.class, null);
+			register(BlockBossBlock.class, null);
+			register(BlockMapPlaceholder.class, null);
+			register(BlockTNTCQR.class, null);
+
 			register(PreparableEmptyInfo.class, new PreparableEmptyInfo.Serializer());
 			register(PreparableBlockInfo.class, new PreparableBlockInfo.Serializer());
 			register(PreparableBannerInfo.class, new PreparableBannerInfo.Serializer());
@@ -97,6 +154,13 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			register(PreparableLootChestInfo.class, new PreparableLootChestInfo.Serializer());
 			register(PreparableSpawnerInfo.class, new PreparableSpawnerInfo.Serializer());
 			register(PreparableMapInfo.class, new PreparableMapInfo.Serializer());
+		}
+
+		private static <B extends Block, P extends PreparablePosInfo, T extends TileEntity> void register(Class<B> blockClass, IExporter<P, T> func) {
+			if (BLOCK_CLASS_2_EXPORTER.containsKey(blockClass)) {
+				throw new IllegalArgumentException("Duplicate entry for class: " + blockClass.getSimpleName());
+			}
+			BLOCK_CLASS_2_EXPORTER.put(blockClass, func);
 		}
 
 		private static <T extends PreparablePosInfo> void register(Class<T> clazz, ISerializer<T> serializer) {
