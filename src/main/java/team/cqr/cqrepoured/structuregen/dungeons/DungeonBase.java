@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
@@ -18,10 +20,12 @@ import org.apache.commons.io.FileUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.structuregen.DungeonDataManager;
 import team.cqr.cqrepoured.structuregen.DungeonPreparationExecutor;
@@ -145,14 +149,17 @@ public abstract class DungeonBase {
 	public int getYForPos(World world, int x, int z, Random rand) {
 		int y = 0;
 		if (!this.fixedY) {
-			int chunkStartX = x >> 4 << 4;
-			int chunkStartZ = z >> 4 << 4;
-			for (int ix = 0; ix < 16; ix++) {
-				for (int iz = 0; iz < 16; iz++) {
-					y += DungeonGenUtils.getYForPos(world, chunkStartX + ix, chunkStartZ + iz, this.treatWaterAsAir);
+			int r = 32;
+			int[] arr = new int[(r * 2 + 1) * (r * 2 + 1)];
+			for (int ix = -r; ix <= r; ix++) {
+				for (int iz = -r; iz <= r; iz++) {
+					arr[(ix + r) * (r * 2 + 1) + (iz + r)] = DungeonGenUtils.getYForPos(world, x + ix, z + iz, this.treatWaterAsAir);
 				}
 			}
-			y >>= 8;
+			Arrays.sort(arr);
+
+			CQRMain.logger.info("{} {}", arr[arr.length / 2], Math.round(Arrays.stream(arr).average().getAsDouble()));
+			y = arr[arr.length / 2];
 			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		} else {
 			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
