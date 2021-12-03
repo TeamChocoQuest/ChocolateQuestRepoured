@@ -1,13 +1,6 @@
-#version 130
-
-in vec3 a_pos;
-
-out vec3 v_tex;
-
-uniform mat4 projection;
-uniform mat4 modelView;
+#version 110
 
 void main() {
-  gl_Position = projection * modelView * vec4(a_pos, 1);
-  v_tex = a_pos;
+  gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+  gl_TexCoord[0].stp = gl_Vertex.xyz;
 }

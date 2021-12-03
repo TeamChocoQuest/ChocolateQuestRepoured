@@ -131,8 +131,6 @@ public class SphereRenderer {
 	}
 	private static final FloatBuffer BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asFloatBuffer();
 	private static ShaderProgram shader;
-	private static int uniformProjectionMatrix;
-	private static int uniformModelViewMatrix;
 	private static int uniformColor;
 	private static int uniformTexture;
 	private static int prevProgram;
@@ -143,8 +141,6 @@ public class SphereRenderer {
 				.addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(Reference.MODID, "shaders/sphere/vertex.glsl")))
 				.addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(Reference.MODID, "shaders/sphere/fragment.glsl"))).build();
 		GL20.glUseProgram(shader.getShaderProgram());
-		uniformProjectionMatrix = GL20.glGetUniformLocation(shader.getShaderProgram(), "projection");
-		uniformModelViewMatrix = GL20.glGetUniformLocation(shader.getShaderProgram(), "modelView");
 		uniformColor = GL20.glGetUniformLocation(shader.getShaderProgram(), "color");
 		uniformTexture = GL20.glGetUniformLocation(shader.getShaderProgram(), "useTexture");
 		GL20.glUseProgram(0);
@@ -300,10 +296,6 @@ public class SphereRenderer {
 		prevProgram = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 		GL20.glUseProgram(shader.getShaderProgram());
 
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, BUFFER);
-		GL20.glUniformMatrix4(uniformProjectionMatrix, false, BUFFER);
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, BUFFER);
-		GL20.glUniformMatrix4(uniformModelViewMatrix, false, BUFFER);
 		GL11.glGetFloat(GL11.GL_CURRENT_COLOR, BUFFER);
 		GL20.glUniform4f(uniformColor, BUFFER.get(0), BUFFER.get(1), BUFFER.get(2), BUFFER.get(3));
 

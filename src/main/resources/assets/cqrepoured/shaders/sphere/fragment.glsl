@@ -1,8 +1,4 @@
-#version 130
-
-in vec3 v_tex;
-
-out vec4 f_color;
+#version 110
 
 uniform samplerCube cubemap;
 uniform vec4 color;
@@ -10,8 +6,8 @@ uniform bool useTexture;
 
 void main() {
   if (useTexture) {
-    f_color = texture(cubemap, v_tex) * color;
+    gl_FragColor = textureCube(cubemap, gl_TexCoord[0].stp) * color;
   } else {
-    f_color = color;
+    gl_FragColor = color;
   }
 }
