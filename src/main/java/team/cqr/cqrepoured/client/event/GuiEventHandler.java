@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.util.Reference;
 public class GuiEventHandler {
 
 	@SubscribeEvent
-	public static void onInitGuiEvent(GuiScreenEvent.InitGuiEvent event) {
+	public static void onInitGuiEvent(GuiScreenEvent.InitGuiEvent.Post event) {
 		if (!(event.getGui() instanceof GuiConfig)) {
 			return;
 		}
