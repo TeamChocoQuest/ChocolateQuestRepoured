@@ -4,6 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCQR;
 
 public class BlockExporterChestCQR extends BlockExporterChest {
 
@@ -24,14 +25,7 @@ public class BlockExporterChestCQR extends BlockExporterChest {
 
 	@Override
 	public TileEntityExporterChest createTileEntity(World world, IBlockState state) {
-		return new TileEntityExporterChest() {
-
-			@Override
-			public ResourceLocation getLootTable() {
-				return lootTable;
-			}
-
-		};
+		return new TileEntityExporterChestCQR();
 	}
 
 	public ResourceLocation getLootTable() {

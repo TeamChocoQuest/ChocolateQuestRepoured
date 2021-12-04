@@ -41,6 +41,7 @@ import team.cqr.cqrepoured.objects.blocks.BlockUnlitTorch;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCQR;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
@@ -339,7 +340,7 @@ public class CQRBlocks {
 			GameRegistry.registerTileEntity(TileEntityTable.class, new ResourceLocation(Reference.MODID, "TileEntityTable"));
 			GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(Reference.MODID, "TileEntitySpawner"));
 			GameRegistry.registerTileEntity(TileEntityForceFieldNexus.class, new ResourceLocation(Reference.MODID, "TileEntityForceFieldNexus"));
-			GameRegistry.registerTileEntity(TileEntityExporterChest.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChest"));
+			GameRegistry.registerTileEntity(TileEntityExporterChestCQR.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChestCQR"));
 			GameRegistry.registerTileEntity(TileEntityExporterChestCustom.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChestCustom"));
 			GameRegistry.registerTileEntity(TileEntityBoss.class, new ResourceLocation(Reference.MODID, "TileEntityBoss"));
 			GameRegistry.registerTileEntity(TileEntityMap.class, new ResourceLocation(Reference.MODID, "TileEntityMapPlaceholder"));
