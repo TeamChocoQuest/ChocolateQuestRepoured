@@ -377,13 +377,17 @@ public class CQStructure {
 		return compound;
 	}
 
-	private void takeEntitiesFromWorld(World world, BlockPos pos1, BlockPos pos2, boolean ignoreBasicEntities) {
+	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
 		this.entityInfoList.clear();
+		AxisAlignedBB aabb = new AxisAlignedBB(minPos, maxPos.add(1, 1, 1));
 
-		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos1, pos2.add(1, 1, 1)), input -> !(input instanceof EntityPlayer))) {
-			if (!ignoreBasicEntities || SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
-				this.entityInfoList.add(new PreparableEntityInfo(pos1, entity));
+		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, aabb, input -> !(input instanceof EntityPlayer))) {
+			if (ignoreBasicEntities && !SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
+				CQRMain.logger.info("Skipping entity: {}", entity);
+				continue;
 			}
+
+			this.entityInfoList.add(new PreparableEntityInfo(minPos, entity));
 		}
 	}
 
