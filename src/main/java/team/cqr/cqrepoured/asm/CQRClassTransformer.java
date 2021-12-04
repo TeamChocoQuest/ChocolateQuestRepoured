@@ -41,7 +41,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 		//Change creature attribute of Shulkers to void
 		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityShulker", "VOID");
 		//Change creature attribute of Endermites to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEndermite", "VOID");
+		//this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEndermite", "VOID");
 		// @formatter:on
 	}
 
