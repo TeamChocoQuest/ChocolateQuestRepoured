@@ -12,9 +12,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 import meldexun.asmutil.ASMUtil;
 import meldexun.asmutil.transformer.clazz.AbstractClassTransformer;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.launchwrapper.IClassTransformer;
-import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class CQRClassTransformer extends AbstractClassTransformer implements IClassTransformer {
 
@@ -37,22 +35,22 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			));
 		});
 		//Change creature attribute of Enderman to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEnderman", CQRCreatureAttributes.VOID);
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEnderman", "VOID");
 		//Change creature attribute of Enderdragon to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/boss/EntityDragon", CQRCreatureAttributes.VOID);
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/boss/EntityDragon", "VOID");
 		//Change creature attribute of Shulkers to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityShulker", CQRCreatureAttributes.VOID);
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityShulker", "VOID");
 		//Change creature attribute of Endermites to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEndermite", CQRCreatureAttributes.VOID);
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEndermite", "VOID");
 		// @formatter:on
 	}
 
-	protected void changeCreatureAttributeOfEntity(final String obfuscatedClassName, final String entityClassPath, final EnumCreatureAttribute newCA) {
+	protected void changeCreatureAttributeOfEntity(final String obfuscatedClassName, final String entityClassPath, final String newCA) {
 		// @formatter:off
 		this.registerClassTransformer(obfuscatedClassName, entityClassPath, classNode -> {
 			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
 			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
-				new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", newCA.name(), "Lnet/minecraft/entity/EnumCreatureAttribute;"),
+				new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", newCA, "Lnet/minecraft/entity/EnumCreatureAttribute;"),
 				new InsnNode(Opcodes.ARETURN)
 			));
 			classNode.methods.add(methodGetCreatureAttribute);
