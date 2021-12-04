@@ -1,6 +1,9 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.function.Supplier;
+
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
@@ -10,8 +13,10 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
+import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
 public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
@@ -36,6 +41,15 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	@Override
 	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
 		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
+	}
+
+	public static class Factory implements IFactory<TileEntityForceFieldNexus> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityForceFieldNexus> tileEntitySupplier) {
+			return new PreparableForceFieldNexusInfo(x, y, z);
+		}
+
 	}
 
 	public static class Serializer implements ISerializer<PreparableForceFieldNexusInfo> {

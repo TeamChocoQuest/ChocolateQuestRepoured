@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.function.Supplier;
+
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
@@ -18,6 +20,7 @@ import team.cqr.cqrepoured.objects.blocks.BlockTNTCQR;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 
@@ -33,7 +36,6 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	public PreparableBlockInfo(int x, int y, int z, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		super(x, y, z);
-		
 		this.state = state;
 		this.tileEntityData = tileEntityData;
 	}
@@ -120,6 +122,15 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	@Nullable
 	public NBTTagCompound getTileEntityData() {
 		return this.tileEntityData;
+	}
+
+	public static class Factory implements IFactory<TileEntity> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
+			return new PreparableBlockInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+		}
+
 	}
 
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {

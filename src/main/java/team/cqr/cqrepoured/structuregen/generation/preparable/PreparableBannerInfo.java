@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.function.Supplier;
+
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
@@ -12,9 +14,11 @@ import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
+import team.cqr.cqrepoured.objects.banners.BannerHelper;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 
@@ -35,6 +39,19 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		}
 
 		return new GeneratableBlockInfo(pos, state, tileEntity);
+	}
+
+	public static class Factory implements IFactory<TileEntityBanner> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityBanner> tileEntitySupplier) {
+			TileEntityBanner tileEntity = tileEntitySupplier.get();
+			if (BannerHelper.isCQBanner(tileEntity)) {
+				return new PreparableBannerInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntity));
+			}
+			return new PreparableBlockInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+		}
+
 	}
 
 	public static class Serializer implements ISerializer<PreparableBannerInfo> {

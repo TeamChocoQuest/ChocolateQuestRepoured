@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.structuregen.generation.preparable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -91,18 +92,14 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 	public static class Registry {
 
-		@FunctionalInterface
-		public interface IExporter<P extends PreparablePosInfo, T extends TileEntity> {
+		public interface IFactory<T extends TileEntity> {
 
-			default boolean canTake(World world, IBlockState state, @Nullable T tileEntity, int x, int y, int z) {
-				return true;
+			@SuppressWarnings("unchecked")
+			default PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, IBlockState state) {
+				return create(world, x, y, z, state, () -> state.getBlock().hasTileEntity(state) ? (T) world.getTileEntity(pos) : null);
 			}
 
-			default P take(World world, IBlockState state, @Nullable T tileEntity, int x, int y, int z) {
-				return take(world, state, writeTileEntityToNBT(tileEntity), x, y, z);
-			}
-
-			P take(World world, IBlockState state, @Nullable NBTTagCompound tileEntity, int x, int y, int z);
+			PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<T> tileEntitySupplier);
 
 			static NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
 				if (tileEntity == null) {
@@ -128,23 +125,21 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 		}
 
-		private static final Map<Class<? extends Block>, IExporter<?, ?>> BLOCK_CLASS_2_EXPORTER = new HashMap<>();
+		private static final Map<Class<? extends Block>, IFactory<?>> BLOCK_CLASS_2_EXPORTER = new HashMap<>();
 		private static byte nextId = 0;
 		private static final Object2ByteMap<Class<? extends PreparablePosInfo>> CLASS_2_ID = new Object2ByteOpenHashMap<>();
 		private static final Byte2ObjectMap<ISerializer<?>> ID_2_SERIALIZER = new Byte2ObjectOpenHashMap<>();
 
 		static {
-			// TODO
-			register(Block.class, null);
-			register(BlockNull.class, null);
-			register(BlockStructureVoid.class, null);
-			register(BlockBanner.class, null);
-			register(BlockSpawner.class, null);
-			register(BlockExporterChest.class, null);
-			register(BlockForceFieldNexus.class, null);
-			register(BlockBossBlock.class, null);
-			register(BlockMapPlaceholder.class, null);
-			register(BlockTNTCQR.class, null);
+			register(BlockNull.class, new PreparableEmptyInfo.Factory());
+			register(BlockStructureVoid.class, new PreparableEmptyInfo.Factory());
+			register(Block.class, new PreparableBlockInfo.Factory());
+			register(BlockBanner.class, new PreparableBannerInfo.Factory());
+			register(BlockBossBlock.class, new PreparableBossInfo.Factory());
+			register(BlockForceFieldNexus.class, new PreparableForceFieldNexusInfo.Factory());
+			register(BlockExporterChest.class, new PreparableLootChestInfo.Factory());
+			register(BlockSpawner.class, new PreparableSpawnerInfo.Factory());
+			register(BlockMapPlaceholder.class, new PreparableMapInfo.Factory());
 
 			register(PreparableEmptyInfo.class, new PreparableEmptyInfo.Serializer());
 			register(PreparableBlockInfo.class, new PreparableBlockInfo.Serializer());
@@ -156,11 +151,30 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			register(PreparableMapInfo.class, new PreparableMapInfo.Serializer());
 		}
 
-		private static <B extends Block, P extends PreparablePosInfo, T extends TileEntity> void register(Class<B> blockClass, IExporter<P, T> func) {
+		private static void register(Class<? extends Block> blockClass, IFactory<?> func) {
 			if (BLOCK_CLASS_2_EXPORTER.containsKey(blockClass)) {
 				throw new IllegalArgumentException("Duplicate entry for class: " + blockClass.getSimpleName());
 			}
 			BLOCK_CLASS_2_EXPORTER.put(blockClass, func);
+		}
+
+		@SuppressWarnings("unchecked")
+		public static <T extends TileEntity> IFactory<T> getFactory(Class<? extends Block> blockClass) {
+			IFactory<T> factory = (IFactory<T>) BLOCK_CLASS_2_EXPORTER.get(blockClass);
+			if (factory == null && blockClass != Block.class) {
+				factory = getFactory((Class<? extends Block>) blockClass.getSuperclass());
+				BLOCK_CLASS_2_EXPORTER.put(blockClass, factory);
+			}
+			if (factory == null) {
+				throw new NullPointerException();
+			}
+			return factory;
+		}
+
+		public static <T extends TileEntity> PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, IBlockState state) {
+			Class<? extends Block> blockClass = state.getBlock().getClass();
+			IFactory<T> factory = getFactory(blockClass);
+			return factory.create(world, pos, x, y, z, state);
 		}
 
 		private static <T extends PreparablePosInfo> void register(Class<T> clazz, ISerializer<T> serializer) {

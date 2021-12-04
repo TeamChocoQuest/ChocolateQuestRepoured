@@ -1,8 +1,11 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.function.Supplier;
+
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -27,6 +30,7 @@ import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBossInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
@@ -37,7 +41,11 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	private final NBTTagCompound bossTag;
 
 	public PreparableBossInfo(BlockPos pos, TileEntityBoss tileEntityBoss) {
-		this(pos, getBossTag(tileEntityBoss));
+		this(pos.getX(), pos.getY(), pos.getZ(), tileEntityBoss);
+	}
+
+	public PreparableBossInfo(int x, int y, int z, TileEntityBoss tileEntityBoss) {
+		this(x, y, z, getBossTag(tileEntityBoss));
 	}
 
 	public PreparableBossInfo(BlockPos pos, @Nullable NBTTagCompound bossTag) {
@@ -164,6 +172,15 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		return this.bossTag;
 	}
 
+	public static class Factory implements IFactory<TileEntityBoss> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityBoss> tileEntitySupplier) {
+			return new PreparableBossInfo(x, y, z, tileEntitySupplier.get());
+		}
+
+	}
+
 	public static class Serializer implements ISerializer<PreparableBossInfo> {
 
 		@Override
@@ -187,7 +204,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		@Override
 		@Deprecated
 		public PreparableBossInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableBossInfo(x, y, z, null);
+			return new PreparableBossInfo(x, y, z, (NBTTagCompound) null);
 		}
 
 	}

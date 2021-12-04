@@ -18,61 +18,39 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import javax.annotation.Nullable;
-
 import org.apache.commons.io.FileUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.objects.banners.BannerHelper;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.structuregen.generation.part.BlockDungeonPart;
 import team.cqr.cqrepoured.structuregen.generation.part.EntityDungeonPart;
-import team.cqr.cqrepoured.structuregen.generation.part.MultiBlockDungeonPart;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBannerInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBossInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableEmptyInfo;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableEntityInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableForceFieldNexusInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableLootChestInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableMapInfo;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.tileentity.TileEntityBoss;
-import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
@@ -295,86 +273,23 @@ public class CQStructure {
 		}
 	}
 
-	private void takeBlocksFromWorld(World world, BlockPos pos1, BlockPos pos2) {
+	private void takeBlocksFromWorld(World world, BlockPos minPos, BlockPos maxPos) {
 		this.blockInfoList.clear();
 
-		for (BlockPos.MutableBlockPos mutablePos : BlockPos.getAllInBoxMutable(pos1, pos2)) {
-			IBlockState state = world.getBlockState(mutablePos);
-			Block block = state.getBlock();
+		for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
+			IBlockState state = world.getBlockState(pos);
 
-			if (state.getBlockHardness(world, mutablePos) < 0.0F) {
-				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, mutablePos);
+			if (state.getBlockHardness(world, pos) < 0.0F) {
+				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, pos);
 			}
 
-			BlockPos pos = mutablePos.subtract(pos1);
-			TileEntity tileEntity = world.getTileEntity(mutablePos);
-
-			if (block == Blocks.STRUCTURE_VOID || block == CQRBlocks.NULL_BLOCK) {
-				this.blockInfoList.add(new PreparableEmptyInfo(pos));
-			} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER)
-					&& tileEntity instanceof TileEntityBanner
-					&& BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
-				this.blockInfoList.add(new PreparableBannerInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
-			} else if (block == CQRBlocks.SPAWNER) {
-				NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
-				compound.removeTag("x");
-				compound.removeTag("y");
-				compound.removeTag("z");
-				NBTTagList items = compound.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
-				for (int i = 0; i < items.tagCount(); i++) {
-					NBTTagCompound itemTag = items.getCompoundTagAt(i);
-					NBTTagCompound itemTagCompound = itemTag.getCompoundTag("tag");
-					NBTTagCompound entityTag = itemTagCompound.getCompoundTag("EntityIn");
-					Entity entity = this.createEntityForExporting(entityTag, world, mutablePos);
-					if (entity != null) {
-						NBTTagCompound newEntityTag = new NBTTagCompound();
-						entity.writeToNBTAtomically(newEntityTag);
-						itemTagCompound.setTag("EntityIn", newEntityTag);
-					}
-				}
-				this.blockInfoList.add(new PreparableSpawnerInfo(pos, compound));
-			} else if (block instanceof BlockExporterChest) {
-				this.blockInfoList
-						.add(new PreparableLootChestInfo(pos, ((BlockExporterChest) block).getLootTable(world, mutablePos), state.getValue(BlockChest.FACING)));
-			} else if (block == CQRBlocks.FORCE_FIELD_NEXUS) {
-				this.blockInfoList.add(new PreparableForceFieldNexusInfo(pos));
-			} else if (block == CQRBlocks.BOSS_BLOCK && tileEntity instanceof TileEntityBoss) {
-				this.blockInfoList.add(new PreparableBossInfo(pos, (TileEntityBoss) tileEntity));
-			} else if (block == CQRBlocks.MAP_PLACEHOLDER) {
-				this.blockInfoList.add(new PreparableMapInfo(pos, state.getValue(BlockHorizontal.FACING), (TileEntityMap) tileEntity));
-			} else {
-				this.blockInfoList.add(new PreparableBlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
-			}
+			int x = pos.getX() - minPos.getX();
+			int y = pos.getY() - minPos.getY();
+			int z = pos.getZ() - minPos.getZ();
+			this.blockInfoList.add(PreparablePosInfo.Registry.create(world, pos, x, y, z, state));
 		}
 
 		this.blockInfoList.sort(DEFAULT_COMPARATOR);
-	}
-
-	private Entity createEntityForExporting(NBTTagCompound entityTag, World world, BlockPos pos) {
-		Entity entity = EntityList.createEntityFromNBT(entityTag, world);
-		if (entity != null) {
-			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
-			if (entity instanceof AbstractEntityCQR) {
-				((AbstractEntityCQR) entity).onExportFromWorld();
-			}
-			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
-			for (NBTBase passengerNBT : passengers) {
-				Entity passenger = this.createEntityForExporting((NBTTagCompound) passengerNBT, world, pos);
-				passenger.startRiding(entity);
-			}
-		}
-		return entity;
-	}
-
-	private NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
-		if (tileEntity == null) {
-			return null;
-		}
-		NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
-		compound.removeTag("x");
-		compound.removeTag("y");
-		compound.removeTag("z");
-		return compound;
 	}
 
 	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {

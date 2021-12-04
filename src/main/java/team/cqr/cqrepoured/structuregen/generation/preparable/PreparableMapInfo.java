@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.function.Supplier;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -17,6 +19,7 @@ import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableMapInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
@@ -35,7 +38,11 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	private final int fillRadius;
 
 	public PreparableMapInfo(BlockPos pos, EnumFacing facing, TileEntityMap tileEntityMap) {
-		this(pos, facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(),
+		this(pos.getX(), pos.getY(), pos.getZ(), facing, tileEntityMap);
+	}
+
+	public PreparableMapInfo(int x, int y, int z, EnumFacing facing, TileEntityMap tileEntityMap) {
+		this(x, y, z, facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(),
 				tileEntityMap.getOriginZ(), tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
 	}
 
@@ -207,6 +214,15 @@ public class PreparableMapInfo extends PreparablePosInfo {
 
 	public int getFillRadius() {
 		return this.fillRadius;
+	}
+
+	public static class Factory implements IFactory<TileEntityMap> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityMap> tileEntitySupplier) {
+			return new PreparableMapInfo(x, y, z, state.getValue(BlockHorizontal.FACING), tileEntitySupplier.get());
+		}
+
 	}
 
 	public static class Serializer implements ISerializer<PreparableMapInfo> {

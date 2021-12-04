@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
+import java.util.function.Supplier;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockHorizontal;
@@ -24,8 +26,10 @@ import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -80,6 +84,15 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 
 	public EnumFacing getFacing() {
 		return this.facing;
+	}
+
+	public static class Factory implements IFactory<TileEntityExporterChest> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityExporterChest> tileEntitySupplier) {
+			return new PreparableLootChestInfo(x, y, z, tileEntitySupplier.get().getLootTable(), state.getValue(BlockHorizontal.FACING));
+		}
+
 	}
 
 	public static class Serializer implements ISerializer<PreparableLootChestInfo> {

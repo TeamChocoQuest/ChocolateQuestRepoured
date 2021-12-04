@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.structuregen.generation.preparable;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
@@ -29,6 +30,7 @@ import team.cqr.cqrepoured.objects.factories.SpawnerFactory;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.structuregen.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
@@ -232,6 +234,52 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 
 	public NBTTagCompound getTileEntityData() {
 		return this.tileEntityData;
+	}
+
+	public static class Factory implements IFactory<TileEntitySpawner> {
+
+		@Override
+		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntitySpawner> tileEntitySupplier) {
+			TileEntitySpawner tileEntity = tileEntitySupplier.get();
+			return new PreparableSpawnerInfo(x, y, z, getNBTFromTileEntity(world, tileEntity.getPos(), tileEntity));
+		}
+
+		private static NBTTagCompound getNBTFromTileEntity(World world, BlockPos pos, TileEntitySpawner tileEntity) {
+			NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
+			compound.removeTag("x");
+			compound.removeTag("y");
+			compound.removeTag("z");
+			NBTTagList items = compound.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
+			for (int i = 0; i < items.tagCount(); i++) {
+				NBTTagCompound itemTag = items.getCompoundTagAt(i);
+				NBTTagCompound itemTagCompound = itemTag.getCompoundTag("tag");
+				NBTTagCompound entityTag = itemTagCompound.getCompoundTag("EntityIn");
+				Entity entity = createEntityForExporting(entityTag, world, pos);
+				if (entity != null) {
+					NBTTagCompound newEntityTag = new NBTTagCompound();
+					entity.writeToNBTAtomically(newEntityTag);
+					itemTagCompound.setTag("EntityIn", newEntityTag);
+				}
+			}
+			return compound;
+		}
+
+		private static Entity createEntityForExporting(NBTTagCompound entityTag, World world, BlockPos pos) {
+			Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+			if (entity != null) {
+				entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
+				if (entity instanceof AbstractEntityCQR) {
+					((AbstractEntityCQR) entity).onExportFromWorld();
+				}
+				NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+				for (NBTBase passengerNBT : passengers) {
+					Entity passenger = createEntityForExporting((NBTTagCompound) passengerNBT, world, pos);
+					passenger.startRiding(entity);
+				}
+			}
+			return entity;
+		}
+
 	}
 
 	public static class Serializer implements ISerializer<PreparableSpawnerInfo> {
