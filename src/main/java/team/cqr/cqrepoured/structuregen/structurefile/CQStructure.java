@@ -26,7 +26,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -303,8 +302,8 @@ public class CQStructure {
 			IBlockState state = world.getBlockState(mutablePos);
 			Block block = state.getBlock();
 
-			if (block == Blocks.BARRIER || block instanceof BlockCommandBlock || block == Blocks.STRUCTURE_BLOCK || block == CQRBlocks.EXPORTER) {
-				CQRMain.logger.warn("Exporting unexpected block: {} from {}", block, mutablePos);
+			if (state.getBlockHardness(world, mutablePos) < 0.0F) {
+				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, mutablePos);
 			}
 
 			BlockPos pos = mutablePos.subtract(pos1);
