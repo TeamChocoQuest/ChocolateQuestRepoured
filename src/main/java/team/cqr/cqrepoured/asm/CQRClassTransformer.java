@@ -19,6 +19,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 	@Override
 	protected void registerTransformers() {
 		// @formatter:off
+		//Potion hook 
 		this.registerMethodTransformer("aez", "c", "(Lvp;)Z", "net/minecraft/entity/projectile/EntityPotion", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", methodNode -> {
 			ASMUtil.LOGGER.info("Transforming method: EntityPotion#isWaterSensitiveEntity(EntityLivingBase)");
 
@@ -33,6 +34,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 				popNode1
 			));
 		});
+		//Change creature attribute of Enderman to void
 		this.registerClassTransformer("", "net/minecraft/entity/monster/EntityEnderman", classNode -> {
 			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
 			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
@@ -41,6 +43,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			));
 			classNode.methods.add(methodGetCreatureAttribute);
 		});
+		//Change creature attribute of Enderdragon to void
 		this.registerClassTransformer("", "net/minecraft/entity/boss/EntityDragon", classNode -> {
 			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
 			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
@@ -49,6 +52,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			));
 			classNode.methods.add(methodGetCreatureAttribute);
 		});
+		//Change creature attribute of Shulkers to void
 		this.registerClassTransformer("", "net/minecraft/entity/monster/EntityShulker", classNode -> {
 			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
 			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
@@ -57,6 +61,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			));
 			classNode.methods.add(methodGetCreatureAttribute);
 		});
+		
 		// @formatter:on
 	}
 
