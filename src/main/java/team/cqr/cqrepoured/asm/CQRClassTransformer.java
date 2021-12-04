@@ -48,6 +48,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 	}
 
 	protected void changeCreatureAttributeOfEntity(final String obfuscatedClassName, final String entityClassPath, final EnumCreatureAttribute newCA) {
+		// @formatter:off
 		this.registerClassTransformer(obfuscatedClassName, entityClassPath, classNode -> {
 			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
 			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
@@ -56,6 +57,7 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			));
 			classNode.methods.add(methodGetCreatureAttribute);
 		});
+		// @formatter:on
 	}
 	
 }
