@@ -140,6 +140,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			register(BlockExporterChest.class, new PreparableLootChestInfo.Factory());
 			register(BlockSpawner.class, new PreparableSpawnerInfo.Factory());
 			register(BlockMapPlaceholder.class, new PreparableMapInfo.Factory());
+			register(BlockTNTCQR.class, new PreparableTNTCQRInfo.Factory());
 
 			register(PreparableEmptyInfo.class, new PreparableEmptyInfo.Serializer());
 			register(PreparableBlockInfo.class, new PreparableBlockInfo.Serializer());
@@ -149,6 +150,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			register(PreparableLootChestInfo.class, new PreparableLootChestInfo.Serializer());
 			register(PreparableSpawnerInfo.class, new PreparableSpawnerInfo.Serializer());
 			register(PreparableMapInfo.class, new PreparableMapInfo.Serializer());
+			register(PreparableTNTCQRInfo.class, new PreparableTNTCQRInfo.Serializer());
 		}
 
 		private static void register(Class<? extends Block> blockClass, IFactory<?> func) {

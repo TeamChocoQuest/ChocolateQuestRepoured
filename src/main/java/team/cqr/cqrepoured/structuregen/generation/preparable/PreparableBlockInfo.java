@@ -16,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import team.cqr.cqrepoured.objects.blocks.BlockTNTCQR;
 import team.cqr.cqrepoured.structuregen.generation.DungeonPlacement;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratableBlockInfo;
 import team.cqr.cqrepoured.structuregen.generation.generatable.GeneratablePosInfo;
@@ -43,11 +42,6 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	@Override
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
 		IBlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
-		//Special case for cqr tnt: it is hidden in dungeons
-		if(transformedState.getBlock() instanceof BlockTNTCQR) {
-			transformedState = transformedState.withProperty(BlockTNTCQR.HIDDEN, true);
-		}
-		
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
