@@ -12,7 +12,9 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 import meldexun.asmutil.ASMUtil;
 import meldexun.asmutil.transformer.clazz.AbstractClassTransformer;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.launchwrapper.IClassTransformer;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class CQRClassTransformer extends AbstractClassTransformer implements IClassTransformer {
 
@@ -35,34 +37,23 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			));
 		});
 		//Change creature attribute of Enderman to void
-		this.registerClassTransformer("", "net/minecraft/entity/monster/EntityEnderman", classNode -> {
-			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
-			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
-				new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", "VOID", "Lnet/minecraft/entity/EnumCreatureAttribute;"),
-				new InsnNode(Opcodes.ARETURN)
-			));
-			classNode.methods.add(methodGetCreatureAttribute);
-		});
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEnderman", CQRCreatureAttributes.VOID);
 		//Change creature attribute of Enderdragon to void
-		this.registerClassTransformer("", "net/minecraft/entity/boss/EntityDragon", classNode -> {
-			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
-			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
-				new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", "VOID", "Lnet/minecraft/entity/EnumCreatureAttribute;"),
-				new InsnNode(Opcodes.ARETURN)
-			));
-			classNode.methods.add(methodGetCreatureAttribute);
-		});
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/boss/EntityDragon", CQRCreatureAttributes.VOID);
 		//Change creature attribute of Shulkers to void
-		this.registerClassTransformer("", "net/minecraft/entity/monster/EntityShulker", classNode -> {
-			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
-			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
-				new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", "VOID", "Lnet/minecraft/entity/EnumCreatureAttribute;"),
-				new InsnNode(Opcodes.ARETURN)
-			));
-			classNode.methods.add(methodGetCreatureAttribute);
-		});
-		
+		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityShulker", CQRCreatureAttributes.VOID);
 		// @formatter:on
 	}
 
+	protected void changeCreatureAttributeOfEntity(final String obfuscatedClassName, final String entityClassPath, final EnumCreatureAttribute newCA) {
+		this.registerClassTransformer(obfuscatedClassName, entityClassPath, classNode -> {
+			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
+			methodGetCreatureAttribute.instructions.insert(ASMUtil.listOf(
+				new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", newCA.name(), "Lnet/minecraft/entity/EnumCreatureAttribute;"),
+				new InsnNode(Opcodes.ARETURN)
+			));
+			classNode.methods.add(methodGetCreatureAttribute);
+		});
+	}
+	
 }
