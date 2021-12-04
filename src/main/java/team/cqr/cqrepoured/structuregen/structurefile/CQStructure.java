@@ -48,7 +48,6 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
@@ -75,7 +74,6 @@ import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableSpawnerI
 import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
-import team.cqr.cqrepoured.util.ChunkUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
@@ -293,14 +291,8 @@ public class CQStructure {
 
 		this.size = pos2.subtract(pos1).add(1, 1, 1);
 
-		ForgeChunkManager.Ticket chunkTicket = ChunkUtil.getTicket(world, pos1, pos2, true);
-
 		this.takeBlocksFromWorld(world, pos1, pos2);
 		this.takeEntitiesFromWorld(world, pos1, pos2, ignoreBasicEntities);
-
-		if (chunkTicket != null) {
-			ForgeChunkManager.releaseTicket(chunkTicket);
-		}
 
 		this.unprotectedBlockList.clear();
 		for (BlockPos pos : unprotectedBlocks) {
