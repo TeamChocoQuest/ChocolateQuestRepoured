@@ -20,7 +20,7 @@ import team.cqr.cqrepoured.objects.entity.misc.EntityTNTPrimedCQR;
 
 public class BlockTNTCQR extends BlockTNT {
 
-	// TODO Idea: better visuals
+	// DONE Idea: better visuals
 	/*
 	 * To distinguish it from normal tnt, it has a boolean field that gets set to false. This field indicates wether or not it will show a special tnt texture, it
 	 * gets set to false upon dungeon generation
