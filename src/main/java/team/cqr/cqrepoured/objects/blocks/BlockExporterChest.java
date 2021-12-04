@@ -12,7 +12,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -58,8 +57,6 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 	public static Set<BlockExporterChest> getExporterChests() {
 		return Collections.unmodifiableSet(EXPORTER_CHESTS);
 	}
-
-	public abstract ResourceLocation getLootTable(World world, BlockPos pos);
 
 	public ResourceLocation getOverlayTexture() {
 		return this.overlayTexture;
@@ -199,9 +196,7 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntityExporterChest();
-	}
+	public abstract TileEntityExporterChest createTileEntity(World world, IBlockState state);
 
 	@Override
 	public boolean hasTileEntity(IBlockState state) {

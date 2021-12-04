@@ -67,6 +67,7 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 		this.lootTable.set(lootTable);
 	}
 
+	@Override
 	public ResourceLocation getLootTable() {
 		return this.lootTable.get();
 	}

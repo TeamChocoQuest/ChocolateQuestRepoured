@@ -1,8 +1,9 @@
 package team.cqr.cqrepoured.objects.blocks;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 
 public class BlockExporterChestCQR extends BlockExporterChest {
 
@@ -22,8 +23,15 @@ public class BlockExporterChestCQR extends BlockExporterChest {
 	}
 
 	@Override
-	public ResourceLocation getLootTable(World world, BlockPos pos) {
-		return this.lootTable;
+	public TileEntityExporterChest createTileEntity(World world, IBlockState state) {
+		return new TileEntityExporterChest() {
+
+			@Override
+			public ResourceLocation getLootTable() {
+				return lootTable;
+			}
+
+		};
 	}
 
 	public ResourceLocation getLootTable() {

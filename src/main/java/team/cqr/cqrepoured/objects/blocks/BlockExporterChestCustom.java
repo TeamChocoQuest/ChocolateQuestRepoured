@@ -2,14 +2,13 @@ package team.cqr.cqrepoured.objects.blocks;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.util.Reference;
 
@@ -28,13 +27,7 @@ public class BlockExporterChestCustom extends BlockExporterChest {
 	}
 
 	@Override
-	public ResourceLocation getLootTable(World world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
-		return tileEntity instanceof TileEntityExporterChestCustom ? ((TileEntityExporterChestCustom) tileEntity).getLootTable() : LootTableList.EMPTY;
-	}
-
-	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntityExporterChest createTileEntity(World world, IBlockState state) {
 		return new TileEntityExporterChestCustom();
 	}
 
