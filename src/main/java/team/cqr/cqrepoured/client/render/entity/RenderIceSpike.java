@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelIceSpike;
-import team.cqr.cqrepoured.objects.entity.misc.EntityIceSpike;
+import team.cqr.cqrepoured.client.model.entity.ModelIceSpike;
+import team.cqr.cqrepoured.entity.misc.EntityIceSpike;
 
 public class RenderIceSpike extends Render<EntityIceSpike> {
 

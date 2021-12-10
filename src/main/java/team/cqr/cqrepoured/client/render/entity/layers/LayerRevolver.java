@@ -7,8 +7,8 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHandSide;
-import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
-import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
+import team.cqr.cqrepoured.item.ItemHookshotBase;
+import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 public class LayerRevolver implements LayerRenderer<EntityLivingBase> {
 

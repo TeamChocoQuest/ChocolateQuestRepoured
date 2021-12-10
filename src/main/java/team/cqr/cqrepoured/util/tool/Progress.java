@@ -36,37 +36,37 @@ public class Progress {
 	}
 
 	public int getStages() {
-		return stages;
+		return this.stages;
 	}
 
 	public int getStage() {
-		return stage;
+		return this.stage;
 	}
 
 	public double getProgress() {
-		return progress;
+		return this.progress;
 	}
 
 	public boolean isError() {
-		return errored;
+		return this.errored;
 	}
 
 	public boolean isCancelled() {
-		return cancelled;
+		return this.cancelled;
 	}
 
 	@Override
 	public String toString() {
-		if (stage == stages) {
+		if (this.stage == this.stages) {
 			return "FINISHED";
 		}
-		if (errored) {
+		if (this.errored) {
 			return "ERROR";
 		}
-		if (cancelled) {
+		if (this.cancelled) {
 			return "CANCELLED";
 		}
-		return stage + "/" + stages + ": " + FORMAT.format(progress * 100) + "%";
+		return this.stage + "/" + this.stages + ": " + FORMAT.format(this.progress * 100) + "%";
 	}
 
 }

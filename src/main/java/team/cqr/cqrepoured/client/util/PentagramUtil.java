@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.util;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import team.cqr.cqrepoured.client.models.entities.ModelPentagram;
+import team.cqr.cqrepoured.client.model.entity.ModelPentagram;
 
 public class PentagramUtil {
 

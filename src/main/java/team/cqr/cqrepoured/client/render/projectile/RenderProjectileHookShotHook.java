@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.client.models.ModelChain;
-import team.cqr.cqrepoured.client.models.ModelHook;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.ModelChain;
+import team.cqr.cqrepoured.client.model.ModelHook;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 
 public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/hook.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/hook.png");
 	private final ModelBase model = new ModelHook();
 	private final ModelBase chainModel = new ModelChain();
 

@@ -30,11 +30,11 @@ public enum CQRParticleType {
 	private final int id;
 	private final int argumentCount;
 
-	private CQRParticleType(String name, int id) {
+	CQRParticleType(String name, int id) {
 		this(name, id, 0);
 	}
 
-	private CQRParticleType(String name, int id, int argumentCount) {
+	CQRParticleType(String name, int id, int argumentCount) {
 		this.name = name;
 		this.id = id;
 		this.argumentCount = argumentCount;

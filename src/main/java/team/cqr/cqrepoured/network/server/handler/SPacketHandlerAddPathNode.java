@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
-import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
-import team.cqr.cqrepoured.objects.items.ItemPathTool;
 
 public class SPacketHandlerAddPathNode implements IMessageHandler<CPacketAddPathNode, IMessage> {
 

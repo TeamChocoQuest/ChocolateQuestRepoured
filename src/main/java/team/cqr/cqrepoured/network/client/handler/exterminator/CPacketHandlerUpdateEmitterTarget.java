@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
-import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
 
 public class CPacketHandlerUpdateEmitterTarget implements IMessageHandler<SPacketUpdateEmitterTarget, IMessage> {
 

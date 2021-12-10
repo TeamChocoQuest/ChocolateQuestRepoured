@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHotFireball;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHotFireball;
 
 public class RenderProjectileHotFireball extends Render<ProjectileHotFireball> {
 

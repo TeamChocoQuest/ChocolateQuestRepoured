@@ -8,9 +8,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
-import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
-import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
 public class CPacketHandlerSyncProtectedRegions implements IMessageHandler<SPacketSyncProtectedRegions, IMessage> {
 

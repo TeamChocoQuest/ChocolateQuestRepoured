@@ -27,10 +27,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
+import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
-import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
-import team.cqr.cqrepoured.objects.items.ItemPathTool;
-import team.cqr.cqrepoured.util.Reference;
 
 @SideOnly(Side.CLIENT)
 public class GuiAddPathNode extends GuiScreen {
@@ -316,7 +315,7 @@ public class GuiAddPathNode extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(this.fontRenderer, "Add Path Node (Index: " + ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand)).getSize() + ")",
-				this.width / 2, 20, 16777215);
+				this.width / 2, 20, 0xFFFFFF);
 
 		for (GuiTextField textField : this.textFieldList) {
 			textField.drawTextBox();
@@ -543,7 +542,7 @@ public class GuiAddPathNode extends GuiScreen {
 
 		// draw nodes
 		GL11.glColor4d(1.0D, 1.0D, 1.0D, 1.0D);
-		this.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID, "textures/gui/path_map.png"));
+		this.mc.getTextureManager().bindTexture(new ResourceLocation(CQRMain.MODID, "textures/gui/path_map.png"));
 		GL11.glBegin(GL11.GL_QUADS);
 		for (Path.PathNode node : path.getNodes()) {
 			int offsetX = node.getPos().getX() - centerX;

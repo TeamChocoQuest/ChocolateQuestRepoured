@@ -29,7 +29,7 @@ public class DummyWorld extends WorldServer {
 				new WorldInfo(settings, "dummy-world"), dimension, DummyProfiler.INSTANCE);
 		this.provider.setWorld(this);
 		this.provider.setDimension(dimension);
-		this.createSpawnPosition(settings);
+		this.createSpawnPositionCQR(settings);
 		this.worldInfo.setServerInitialized(true);
 	}
 
@@ -42,7 +42,7 @@ public class DummyWorld extends WorldServer {
 		return new File("CQR-MapTool");
 	}
 
-	private void createSpawnPosition(WorldSettings settings) {
+	private void createSpawnPositionCQR(WorldSettings settings) {
 		if (!this.provider.canRespawnHere()) {
 			this.worldInfo.setSpawn(BlockPos.ORIGIN.up(this.provider.getAverageGroundLevel()));
 		} else {

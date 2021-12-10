@@ -15,13 +15,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
-import team.cqr.cqrepoured.factions.FactionRegistry;
-import team.cqr.cqrepoured.objects.npc.trading.Trade;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.trade.Trade;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class GuiButtonTrade extends GuiButton {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_button_trade.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_button_trade.png");
 	private int index;
 	private Trade trade;
 

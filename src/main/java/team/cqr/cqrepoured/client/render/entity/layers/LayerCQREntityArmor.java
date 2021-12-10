@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import team.cqr.cqrepoured.client.models.armor.ModelCustomArmorBase;
+import team.cqr.cqrepoured.client.model.armor.ModelCustomArmorBase;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
 public class LayerCQREntityArmor extends LayerBipedArmor {

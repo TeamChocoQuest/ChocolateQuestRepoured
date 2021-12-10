@@ -5,12 +5,12 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
-import team.cqr.cqrepoured.util.Reference;
 
 public class CapabilityProtectedRegionDataProvider extends SerializableCapabilityProvider<CapabilityProtectedRegionData> {
 
-	public static final ResourceLocation LOCATION = new ResourceLocation(Reference.MODID, "protected_region_data");
+	public static final ResourceLocation LOCATION = new ResourceLocation(CQRMain.MODID, "protected_region_data");
 
 	@CapabilityInject(CapabilityProtectedRegionData.class)
 	public static final Capability<CapabilityProtectedRegionData> PROTECTED_REGION_DATA = null;

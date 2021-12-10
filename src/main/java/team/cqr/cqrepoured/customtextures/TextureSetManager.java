@@ -62,27 +62,22 @@ public class TextureSetManager {
 			List<File> files = new ArrayList<>(FileUtils.listFiles(folder, new String[] { "cfg", "prop", "properties" }, true));
 			int loadedSets = 0;
 			for (File f : files) {
-				boolean flag = true;
 				Properties prop = new Properties();
 				try (InputStream inputStream = new FileInputStream(f)) {
 					prop.load(inputStream);
-					flag = true;
 				} catch (IOException e) {
-					CQRMain.logger.error("Failed to load file" + f.getName(), e);
-					flag = false;
+					CQRMain.logger.error("Failed to load file {}", f.getName(), e);
 					continue;
 				}
-				if (flag) {
-					try {
-						new TextureSet(prop, f.getName().substring(0, f.getName().lastIndexOf('.')));
-						CQRMain.logger.info("Successfully loaded texture set: " + f.getName().substring(0, f.getName().lastIndexOf('.')) + "!");
-						loadedSets++;
-					} catch (Exception e) {
-						// TODO: WARNN
-					}
+				try {
+					new TextureSet(prop, f.getName().substring(0, f.getName().lastIndexOf('.')));
+					CQRMain.logger.info("Successfully loaded texture set: {}!", f.getName().substring(0, f.getName().lastIndexOf('.')));
+					loadedSets++;
+				} catch (Exception e) {
+					CQRMain.logger.info("Failed loading texture set", e);
 				}
 			}
-			CQRMain.logger.info("Loaded " + loadedSets + " texture Sets!");
+			CQRMain.logger.info("Loaded {} texture Sets!", loadedSets);
 
 			if (!FMLCommonHandler.instance().getSide().isServer()) {
 				// Load the textures

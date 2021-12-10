@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.render.entity.layers;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 
 public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 

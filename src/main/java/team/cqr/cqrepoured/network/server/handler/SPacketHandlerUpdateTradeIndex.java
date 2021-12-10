@@ -7,10 +7,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.network.client.packet.CPacketUpdateTradeIndex;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateTradeIndex;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.npc.trading.TraderOffer;
 
 public class SPacketHandlerUpdateTradeIndex implements IMessageHandler<CPacketUpdateTradeIndex, IMessage> {
 

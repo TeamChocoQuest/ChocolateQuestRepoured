@@ -57,5 +57,5 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 		});
 		// @formatter:on
 	}
-	
+
 }

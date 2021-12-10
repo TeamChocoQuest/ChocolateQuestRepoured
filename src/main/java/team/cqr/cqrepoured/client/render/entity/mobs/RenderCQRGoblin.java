@@ -4,9 +4,9 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import team.cqr.cqrepoured.client.models.entities.mobs.ModelCQRGoblin;
+import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRGoblin;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRGoblin;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGoblin;
 
 public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 

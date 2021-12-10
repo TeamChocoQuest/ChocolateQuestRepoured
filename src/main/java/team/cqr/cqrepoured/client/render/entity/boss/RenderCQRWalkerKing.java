@@ -6,8 +6,8 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerBossDeath;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRWalkerKing;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 
 public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 

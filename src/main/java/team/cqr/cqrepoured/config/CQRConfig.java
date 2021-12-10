@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.config;
 
-import java.util.Calendar;
+import java.time.Month;
+import java.time.MonthDay;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
@@ -10,13 +11,13 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import team.cqr.cqrepoured.objects.entity.boss.gianttortoise.EntityCQRGiantTortoise;
-import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
-import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
+import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
-@Config(modid = Reference.MODID, name = "CQR/" + Reference.MODID)
+@Config(modid = CQRMain.MODID, name = "CQR/" + CQRMain.MODID)
 public class CQRConfig {
 
 	public static Advanced advanced = new Advanced();
@@ -35,20 +36,6 @@ public class CQRConfig {
 
 		public boolean debugAI = false;
 
-		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
-		public String[] specialBlocks = {
-				"minecraft:bed",
-				"minecraft:wooden_door",
-				"minecraft:spruce_door",
-				"minecraft:birch_door",
-				"minecraft:jungle_door",
-				"minecraft:acacia_door",
-				"minecraft:dark_oak_door",
-				"minecraft:iron_door",
-				"minecraft:piston",
-				"minecraft:sticky_piston",
-				"minecraft:piston_head" };
-
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = {
 				"minecraft:painting",
@@ -64,16 +51,11 @@ public class CQRConfig {
 		@Config.Comment("When enabled cqr mobs only take 50% damage from IceAndFire mobs and deal 200% damage against IceAndFire mobs.")
 		public boolean enableSpecialFeatures = true;
 
-		@Config.Comment("Only render the nearest 'limitEntityRenderingCount' amount of CQR entities. Bosses will be rendered normally.")
-		public boolean limitEntityRendering = false;
-		@Config.Comment("The maximum amount of entities that get rendered.")
-		@Config.RangeInt(min = 8, max = 256)
-		public int limitEntityRenderingCount = 64;
 		@Config.Comment("Skip rendering of entities that are behind blocks/not visible. Bosses will be rendered normally. This might cause issues where a mob is partly behind a block and thus does not get rendered but it's usually not really noticable. This setting has no effect when Entity Culling is installed.")
 		public boolean skipHiddenEntityRendering = true;
 		@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the positions that were hit and only renders the entity when no block was hit or the distance between both points is lower than this setting. This setting has no effect when Entity Culling is installed.")
-		@Config.RangeInt(min = 0, max = 256)
-		public int skipHiddenEntityRenderingDiff = 16;
+		@Config.RangeDouble(min = 0.0D, max = 256.0D)
+		public double skipHiddenEntityRenderingDiff = 1.0D;
 
 		@Config.RequiresWorldRestart
 		@Config.Comment("Enable/Disable loading and caching of structure files during startup.")
@@ -87,9 +69,6 @@ public class CQRConfig {
 		@Config.RangeInt(min = 1, max = 16384)
 		public int cachedStructureFilesMaxAmount = 256;
 
-		@Config.Comment("The amount of milliseconds each dungeon is allowed to consume per tick during generation.")
-		@Config.RangeInt(min = 1, max = 1024)
-		public int generationSpeed = 40;
 		@Config.Comment("When disable all light updates are delayed until the dungeon is generated which is usually a lot faster. (When Phosphor is installed this has no effect and light updates are processed immediately)")
 		public boolean instantLightUpdates = false;
 
@@ -98,17 +77,10 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
 
-		public boolean enableMaxDamageCaps = true;
-
 		@Config.Comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon.")
 		public boolean generationRespectOtherStructures = true;
 		@Config.RangeInt(min = 0, max = 1024)
 		public double generationMinDistanceToOtherStructure = 64;
-		/*
-		 * @Config.Comment("If the dungeon generation process should also respect non explored (vanilla) structures") public
-		 * boolean
-		 * generationRespectUnexploredStructures = true;
-		 */
 
 		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
 		public boolean multithreadedDungeonPreparation = true;
@@ -116,28 +88,26 @@ public class CQRConfig {
 		@Config.Comment("When enabled when starting the game it checks all structure files and tries to update the deprecated ones.")
 		public boolean checkAndUpdateDeprecatedStructureFiles = false;
 
-		@Config.Comment("If activated, it will try to avoid generating the same structure of a dungeon type again and again.")
-		public boolean tryPreventingDuplicateDungeons = true;
-
 		@Config.Comment("If enabled, a faction will consider you as ally when you are on a team with the same name as the faction.")
 		public boolean enableOldFactionMemberTeams = false;
-
-		@Config.Comment("When enabled overwrites the amount of chunks a ticket can keep loaded when generating/exporting dungeons.")
-		public boolean overwriteForgeChunkLoadingLimit = true;
 
 		@Config.Comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer")
 		public boolean scaleEntitiesOnPlayerCount = false;
 		public double entityCountGrowPerPlayer = 0.25D;
 
 		public boolean structureImportMode = false;
+
 	}
 
 	public static class Materials {
+
 		public ArmorMaterials armorMaterials = new ArmorMaterials();
 		public ToolMaterials toolMaterials = new ToolMaterials();
+
 	}
 
 	public static class ArmorMaterials {
+
 		public ArmorConfig backpack = new ArmorConfig(67, 5, new int[] { 1, 3, 4, 1 }, 0);
 		public ArmorConfig bull = new ArmorConfig(38, 10, new int[] { 2, 5, 7, 2 }, 1);
 		public ArmorConfig cloud = new ArmorConfig(20, 10, new int[] { 4, 7, 9, 4 }, 1);
@@ -149,9 +119,11 @@ public class CQRConfig {
 		public ArmorConfig slime = new ArmorConfig(38, 10, new int[] { 1, 4, 6, 1 }, 1);
 		public ArmorConfig spider = new ArmorConfig(38, 10, new int[] { 2, 5, 7, 2 }, 1);
 		public ArmorConfig turtle = new ArmorConfig(38, 10, new int[] { 3, 6, 8, 3 }, 1);
+
 	}
 
 	public static class ToolMaterials {
+
 		public ToolConfig bull = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
 		public ToolConfig monking = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
 		public ToolConfig moonlight = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
@@ -169,9 +141,11 @@ public class CQRConfig {
 		public double spearAttackDamageBonus = 1.0D;
 		public double spearAttackSpeedBonus = -0.1D;
 		public double spearReachDistanceBonus = 1.0D;
+
 	}
 
 	public static class Bosses {
+
 		public boolean blackListBossesFromIaFGorgonHead = true;
 		public boolean antiCowardMode = true;
 		public boolean preventBlockPlacingNearBosses = true;
@@ -227,16 +201,20 @@ public class CQRConfig {
 		public int netherDragonLength = 28;
 		public int enderCalamityHealingCrystalAbsorbAmount = 40;
 		public boolean enableWalkerKingFog = true;
+
 	}
 
 	public static class BossDamageCaps {
+
 		public boolean enableDamageCapForBosses = true;
 		public float maxUncappedDamage = 30F;
 		public float maxDamageInPercentOfMaxHP = 0.1F;
+
 	}
 
 	public static class DungeonProtection {
-		static final String NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS = "This is a global toggle for the options in the individual dungeon configs, enabling this here does not enable it in all dungeons! Please adjust the individual dungeon configs!";
+
+		private static final String NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS = "This is a global toggle for the options in the individual dungeon configs, enabling this here does not enable it in all dungeons! Please adjust the individual dungeon configs!";
 		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
 		public boolean enablePreventBlockBreaking = true;
 		@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
@@ -270,9 +248,11 @@ public class CQRConfig {
 
 		@Config.Comment("Blocks with a whitelisted material will be placeable at positions protected by the protection system.")
 		public String[] protectionSystemPlaceableMaterialWhitelist = {};
+
 	}
 
 	public static class General {
+
 		@Config.Comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.")
 		@Config.RangeInt(min = 0, max = 1000)
 		public int dungeonSpawnDistance = 25;
@@ -284,10 +264,9 @@ public class CQRConfig {
 		public int minItemsPerLootChest = 2;
 		@Config.RangeInt(min = 1, max = 27)
 		public int maxItemsPerLootChest = 8;
-		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;
-		@Config.RangeInt(min = 0, max = 100)
+		@Config.RangeInt(min = 0, max = 256)
 		public int spawnerActivationDistance = 48;
 		@Config.RangeInt(min = 0, max = 32)
 		public int supportHillWallSize = 8;
@@ -324,6 +303,7 @@ public class CQRConfig {
 		public String[] defaultInhabitantConfig = { "SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR" };
 		public float electricFieldEffectSpreadRange = 4;
 		public double damageBlockedByShield = 12.0D;
+
 	}
 
 	public static class Mobs {
@@ -332,10 +312,10 @@ public class CQRConfig {
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
 		public boolean enableHealthChangeOnDistance = true;
-		@Config.RangeInt(min = 1, max = 100000)
+		@Config.RangeInt(min = 1, max = 100_000)
 		@Config.Comment("Every X blocks the mobs HP goes up by 10% of it's base health")
 		public int distanceDivisor = 1000;
-		@Config.RangeInt(min = 1, max = 100000)
+		@Config.RangeInt(min = 1, max = 100_000)
 		public int mobTypeChangeDistance = 1500;
 		@Config.RangeInt(min = 0, max = 128)
 		public int factionUpdateRadius = 100;
@@ -368,9 +348,11 @@ public class CQRConfig {
 		public float maxUncappedDamageForNonBossMobs = 50F;
 		public float maxUncappedDamageInMaxHPPercent = 1F;
 		public boolean disableFirePanicAI = false;
+
 	}
 
 	public static class Wall {
+
 		@Config.RangeInt(min = 0, max = 1000)
 		public int distance = 500;
 		public boolean enabled = true;
@@ -380,9 +362,11 @@ public class CQRConfig {
 		public int topY = 140;
 		@Config.RangeInt(min = 0, max = 10)
 		public int towerDistance = 3;
+
 	}
 
 	public static class BaseHealths {
+
 		@Config.RangeDouble(min = 1, max = 1000)
 		public float Dummy = 1F;
 		@Config.RangeDouble(min = 1, max = 1000)
@@ -454,12 +438,12 @@ public class CQRConfig {
 	public static boolean isAprilFoolsEnabled() {
 		if (general.enableAprilFools) {
 			if (aprilFoolsResult == null) {
-				Calendar calendar = Calendar.getInstance();
+				MonthDay monthDay = MonthDay.now();
 				// Counting begins at 0, not one!! Read the documentation properly...
 				// Or just use constants...
-				if (calendar.get(Calendar.MONTH) == Calendar.APRIL) {
+				if (monthDay.getMonth() == Month.APRIL) {
 					// Days are initiated with 1
-					aprilFoolsResult = calendar.get(Calendar.DAY_OF_MONTH) == 1;
+					aprilFoolsResult = monthDay.getDayOfMonth() == 1;
 				} else {
 					aprilFoolsResult = false;
 				}
@@ -469,14 +453,13 @@ public class CQRConfig {
 		return false;
 	}
 
-	@EventBusSubscriber(modid = Reference.MODID, value = Side.CLIENT)
+	@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
 	private static class EventHandler {
 
 		@SubscribeEvent
 		public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-			if (event.getModID().equals(Reference.MODID)) {
-				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
-				CQStructure.updateSpecialBlocks();
+			if (event.getModID().equals(CQRMain.MODID)) {
+				ConfigManager.sync(CQRMain.MODID, Config.Type.INSTANCE);
 				CQStructure.updateSpecialEntities();
 				if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().isIntegratedServerRunning()) {
 					ProtectedRegionHelper.updateWhitelists();

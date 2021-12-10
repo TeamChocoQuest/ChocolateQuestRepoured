@@ -16,7 +16,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.data.TextureMetadataSection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
-import team.cqr.cqrepoured.client.mcmetaserializers.GlowingMetadataSection;
+import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
 
 public class AutoGlowingTexture extends AbstractTexture {
 

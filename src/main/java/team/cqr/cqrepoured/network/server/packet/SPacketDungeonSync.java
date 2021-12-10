@@ -7,8 +7,8 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.items.ItemDungeonPlacer.ClientDungeon;
-import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.item.ItemDungeonPlacer.ClientDungeon;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class SPacketDungeonSync implements IMessage {
 

@@ -7,8 +7,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
-import team.cqr.cqrepoured.util.Reference;
 
 public class PotionCQR extends Potion {
 
@@ -16,12 +16,12 @@ public class PotionCQR extends Potion {
 
 	public PotionCQR(String name, boolean bad, int color) {
 		super(bad, color);
-		this.setRegistryName(Reference.MODID, name);
-		this.setPotionName("effect." + Reference.MODID + "." + name);
+		this.setRegistryName(CQRMain.MODID, name);
+		this.setPotionName("effect." + CQRMain.MODID + "." + name);
 		if (!bad) {
 			this.setBeneficial();
 		}
-		this.texture = new ResourceLocation(Reference.MODID, "textures/mob_effect/" + name + ".png");
+		this.texture = new ResourceLocation(CQRMain.MODID, "textures/mob_effect/" + name + ".png");
 	}
 
 	@Override

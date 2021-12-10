@@ -5,9 +5,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
-import team.cqr.cqrepoured.objects.entity.misc.EntitySummoningCircle;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 
 public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
@@ -15,11 +15,11 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 	// TODO: Render the letters on the corners
 
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/zombie.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/skeleton.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_skull.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_sword.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/meteor.png") };
+			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/zombie.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/skeleton.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/flying_skull.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/flying_sword.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/meteor.png") };
 
 	public RenderSummoningCircle(RenderManager renderManager) {
 		super(renderManager);

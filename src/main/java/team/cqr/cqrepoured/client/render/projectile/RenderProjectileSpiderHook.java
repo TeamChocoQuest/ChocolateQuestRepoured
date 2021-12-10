@@ -14,7 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHookShotHook;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 
 public class RenderProjectileSpiderHook extends RenderProjectileHookShotHook {
 

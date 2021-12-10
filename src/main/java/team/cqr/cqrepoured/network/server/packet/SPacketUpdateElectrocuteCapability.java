@@ -65,7 +65,7 @@ public class SPacketUpdateElectrocuteCapability implements IMessage {
 	 * return electroCharge;
 	 * }
 	 */
-	public boolean getIsElectrocutionActive() {
+	public boolean isElectrocutionActive() {
 		return this.electroCuted;
 	}
 

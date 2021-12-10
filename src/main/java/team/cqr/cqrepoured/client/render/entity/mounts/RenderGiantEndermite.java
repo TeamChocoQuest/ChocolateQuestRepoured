@@ -6,12 +6,12 @@ import net.minecraft.client.model.ModelEnderMite;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.objects.mounts.EntityGiantEndermite;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
 
 public class RenderGiantEndermite extends RenderLiving<EntityGiantEndermite> {
 
-	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/mounts/giant_endermite.png");
+	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/mounts/giant_endermite.png");
 
 	public RenderGiantEndermite(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelEnderMite(), 1.5F);

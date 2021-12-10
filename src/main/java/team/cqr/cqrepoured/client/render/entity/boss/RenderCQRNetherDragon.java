@@ -4,16 +4,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonHead;
-import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonHeadSkeletal;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.boss.ModelNetherDragonHead;
+import team.cqr.cqrepoured.client.model.entity.boss.ModelNetherDragonHeadSkeletal;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
-import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 
-	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon.png");
-	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon_skeletal_head.png");
+	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/nether_dragon.png");
+	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/nether_dragon_skeletal_head.png");
 
 	private final ModelNetherDragonHead modelNormal;
 	private final ModelNetherDragonHeadSkeletal modelSkeletal;

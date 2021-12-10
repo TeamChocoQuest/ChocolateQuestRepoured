@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
 public class SPacketUpdateEmitterTarget implements IMessage {
 

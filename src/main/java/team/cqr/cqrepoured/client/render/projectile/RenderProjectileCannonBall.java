@@ -5,13 +5,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelCannonBall;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileCannonBall;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelCannonBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 
 public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 
-	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/ball_cannon.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/ball_cannon.png");
 
 	private final ModelBase model = new ModelCannonBall();
 

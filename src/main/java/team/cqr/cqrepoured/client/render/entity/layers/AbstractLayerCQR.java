@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.client.render.entity.layers;
 
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public abstract class AbstractLayerCQR implements LayerRenderer<AbstractEntityCQR> {
 
 	protected final RenderCQREntity<?> entityRenderer;
 
-	public AbstractLayerCQR(RenderCQREntity<?> livingEntityRendererIn) {
+	protected AbstractLayerCQR(RenderCQREntity<?> livingEntityRendererIn) {
 		this.entityRenderer = livingEntityRendererIn;
 	}
 

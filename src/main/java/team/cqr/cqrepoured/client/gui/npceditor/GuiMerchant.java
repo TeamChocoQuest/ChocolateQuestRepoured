@@ -16,21 +16,20 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.util.GuiHelper;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.trade.Trade;
+import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketDeleteTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenEditTradeGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncSelectedTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketUpdateTradeIndex;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.npc.trading.Trade;
-import team.cqr.cqrepoured.objects.npc.trading.TraderOffer;
-import team.cqr.cqrepoured.util.Reference;
 
 @SideOnly(Side.CLIENT)
 public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant.png");
-	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant_creative.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant.png");
+	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_creative.png");
 
 	private final AbstractEntityCQR entity;
 	private final TraderOffer trades;

@@ -8,16 +8,16 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.potion.PotionTwohanded;
-import team.cqr.cqrepoured.util.Reference;
 
-@ObjectHolder(Reference.MODID)
+@ObjectHolder(CQRMain.MODID)
 public class CQRPotions {
 
 	public static final Potion TWOHANDED = Null();
 
-	@EventBusSubscriber(modid = Reference.MODID)
-	public static class RegistrationHandler {
+	@EventBusSubscriber(modid = CQRMain.MODID)
+	public static class EventHandler {
 
 		@SubscribeEvent
 		public static void onEvent(final RegistryEvent.Register<Potion> event) {

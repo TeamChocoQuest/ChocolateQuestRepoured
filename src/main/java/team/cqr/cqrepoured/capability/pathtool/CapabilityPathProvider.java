@@ -5,13 +5,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.BasicCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.util.Reference;
 
 public class CapabilityPathProvider extends BasicCapabilityProvider<CapabilityPath> {
 
-	public static final ResourceLocation LOCATION = new ResourceLocation(Reference.MODID, "path");
+	public static final ResourceLocation LOCATION = new ResourceLocation(CQRMain.MODID, "path");
 
 	@CapabilityInject(CapabilityPath.class)
 	public static final Capability<CapabilityPath> PATH = null;

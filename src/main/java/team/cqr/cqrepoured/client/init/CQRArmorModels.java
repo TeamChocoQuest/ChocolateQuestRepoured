@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client.init;
 
-import team.cqr.cqrepoured.client.models.armor.ModelArmorBull;
-import team.cqr.cqrepoured.client.models.armor.ModelArmorHeavy;
-import team.cqr.cqrepoured.client.models.armor.ModelArmorInquisition;
-import team.cqr.cqrepoured.client.models.armor.ModelArmorSpider;
-import team.cqr.cqrepoured.client.models.armor.ModelArmorTransparent;
-import team.cqr.cqrepoured.client.models.armor.ModelArmorTurtle;
-import team.cqr.cqrepoured.client.models.armor.ModelBackpack;
-import team.cqr.cqrepoured.client.models.armor.ModelCrown;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorBull;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorHeavy;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorInquisition;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorSpider;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorTransparent;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorTurtle;
+import team.cqr.cqrepoured.client.model.armor.ModelBackpack;
+import team.cqr.cqrepoured.client.model.armor.ModelCrown;
 
 public class CQRArmorModels {
 

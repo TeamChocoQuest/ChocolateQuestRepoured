@@ -11,7 +11,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItem;
-import team.cqr.cqrepoured.objects.items.armor.ItemBackpack;
+import team.cqr.cqrepoured.item.armor.ItemBackpack;
 
 public class ContainerBackpack extends Container {
 

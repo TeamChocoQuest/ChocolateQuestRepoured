@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
 
 public class ParticleBeam extends Particle {
 
@@ -62,7 +62,7 @@ public class ParticleBeam extends Particle {
 		}
 
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MODID, "textures/particles/beam.png"));
+		mc.getTextureManager().bindTexture(new ResourceLocation(CQRMain.MODID, "textures/particles/beam.png"));
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		buffer.pos(f5 + avec3d[0].x, f6 + avec3d[0].y, f7 + avec3d[0].z).tex(f1, f3)
 				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();

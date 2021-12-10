@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -13,9 +12,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -32,6 +28,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import software.bernie.geckolib3.GeckoLib;
+import team.cqr.cqrepoured.block.banner.BannerHelper;
+import team.cqr.cqrepoured.block.banner.EBannerPatternsCQ;
+import team.cqr.cqrepoured.block.banner.EBanners;
 import team.cqr.cqrepoured.command.CommandChangeReputation;
 import team.cqr.cqrepoured.command.CommandDeleteProtectedRegion;
 import team.cqr.cqrepoured.command.CommandExport;
@@ -39,9 +38,9 @@ import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
 import team.cqr.cqrepoured.command.CommandImport;
 import team.cqr.cqrepoured.command.CommandLocateDungeon;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.crafting.smelting.SmeltingHandler;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
-import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
@@ -50,32 +49,31 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRMaterials;
 import team.cqr.cqrepoured.init.CQRMessages;
-import team.cqr.cqrepoured.init.CQRSerializers;
-import team.cqr.cqrepoured.objects.banners.BannerHelper;
-import team.cqr.cqrepoured.objects.banners.EBannerPatternsCQ;
-import team.cqr.cqrepoured.objects.banners.EBanners;
-import team.cqr.cqrepoured.objects.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.item.crafting.smelting.SmeltingHandler;
 import team.cqr.cqrepoured.proxy.IProxy;
-import team.cqr.cqrepoured.structuregen.DungeonRegistry;
-import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.structuregen.thewall.WorldWallGenerator;
-import team.cqr.cqrepoured.structureprot.ProtectedRegionHelper;
 import team.cqr.cqrepoured.util.ConfigBackupHandler;
 import team.cqr.cqrepoured.util.CopyHelper;
-import team.cqr.cqrepoured.util.Reference;
-import team.cqr.cqrepoured.util.handlers.GuiHandler;
+import team.cqr.cqrepoured.util.GuiHandler;
+import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
+import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+import team.cqr.cqrepoured.world.structure.generation.thewall.WorldWallGenerator;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
-@Mod(modid = Reference.MODID, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS)
+@Mod(modid = CQRMain.MODID, version = CQRMain.VERSION, acceptedMinecraftVersions = CQRMain.ACCEPTED_MINECRAFT_VERSIONS)
 public class CQRMain {
+
+	public static final String MODID = "cqrepoured";
+	public static final String VERSION = "2.6.2B";
+	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 
 	@Instance
 	public static CQRMain INSTANCE;
 
-	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
+	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(CQRMain.MODID);
 
-	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
+	@SidedProxy(clientSide = "team.cqr.cqrepoured.proxy.ClientProxy", serverSide = "team.cqr.cqrepoured.proxy.ServerProxy")
 	public static IProxy proxy;
 
 	public static Logger logger = null;
@@ -98,26 +96,27 @@ public class CQRMain {
 	public static boolean isWorkspaceEnvironment = true;
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
+	public static boolean isCubicChunksInstalled;
 
-	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(Reference.MODID + "_items") {
+	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(CQRMain.MODID + "_items") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRItems.BOOTS_CLOUD);
 		}
 	};
-	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs(Reference.MODID + "_blocks") {
+	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs(CQRMain.MODID + "_blocks") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.TABLE_OAK);
 		}
 	};
-	public static final CreativeTabs CQR_CREATIVE_TOOL_TAB = new CreativeTabs(Reference.MODID + "_creative_tools") {
+	public static final CreativeTabs CQR_CREATIVE_TOOL_TAB = new CreativeTabs(CQRMain.MODID + "_creative_tools") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER);
 		}
 	};
-	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs(Reference.MODID + "_banners") {
+	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs(CQRMain.MODID + "_banners") {
 		@Override
 		public ItemStack createIcon() {
 			return EBanners.WALKER_ORDO.getBanner();
@@ -132,19 +131,19 @@ public class CQRMain {
 			}
 		}
 	};
-	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs(Reference.MODID + "_dungeon_placers") {
+	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs(CQRMain.MODID + "_dungeon_placers") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Reference.MODID, "dungeon_placer_d5")));
+			return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
 		}
 	};
-	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs(Reference.MODID + "_exporter_chests") {
+	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs(CQRMain.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
 		}
 	};
-	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs(Reference.MODID + "_spawn_eggs") {
+	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs(CQRMain.MODID + "_spawn_eggs") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(Items.SPAWN_EGG);
@@ -185,10 +184,6 @@ public class CQRMain {
 		EnumCreatureAttribute.values();
 		/* DO NOT REMOVE, this fixes the neat issue */
 		CQRCreatureAttributes.VOID.name();
-
-		// Register event handling for dungeon protection system
-		// MinecraftForge.EVENT_BUS.register(ProtectedRegionManager.getInstance());
-		MinecraftForge.EVENT_BUS.register(CQRSerializers.class);
 
 		CQRMessages.registerMessages();
 		CQRCapabilities.registerCapabilities();
@@ -244,33 +239,22 @@ public class CQRMain {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
 
 		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
 		isEntityCullingInstalled = Loader.isModLoaded("entity_culling");
+		isCubicChunksInstalled = Loader.isModLoaded("cubicchunks");
 
 		DungeonRegistry.getInstance().loadDungeonFiles();
 		CQStructure.checkAndUpdateStructureFiles();
-		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();
 		ProtectedRegionHelper.updateWhitelists();
 		CQRDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
 		DungeonInhabitantManager.instance().loadDungeonInhabitants();
-
-		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, new ForgeChunkManager.OrderedLoadingCallback() {
-			@Override
-			public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
-
-			}
-
-			@Override
-			public List<ForgeChunkManager.Ticket> ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world, int maxTicketCount) {
-				return Collections.emptyList();
-			}
-		});
 	}
 
 	@EventHandler

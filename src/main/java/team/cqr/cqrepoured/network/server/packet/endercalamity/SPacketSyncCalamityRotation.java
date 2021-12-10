@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.server.packet.endercalamity;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 
 public class SPacketSyncCalamityRotation implements IMessage {
 

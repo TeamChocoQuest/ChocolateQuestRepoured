@@ -6,18 +6,18 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelSpiderEgg;
-import team.cqr.cqrepoured.objects.entity.misc.EntitySpiderEgg;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelSpiderEgg;
+import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
 
 public class RenderSpiderEgg extends Render<EntitySpiderEgg> {
 
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
-			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/0.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/1.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/2.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/3.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/spider_egg/4.png"), };
+			new ResourceLocation(CQRMain.MODID, "textures/entity/spider_egg/0.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/spider_egg/1.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/spider_egg/2.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/spider_egg/3.png"),
+			new ResourceLocation(CQRMain.MODID, "textures/entity/spider_egg/4.png"), };
 
 	private final ModelBase model;
 

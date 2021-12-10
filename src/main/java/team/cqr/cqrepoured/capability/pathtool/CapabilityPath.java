@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.capability.pathtool;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.objects.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.Path;
 
 public class CapabilityPath {
 

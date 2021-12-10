@@ -16,14 +16,14 @@ import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.util.GuiHandler;
 
 @SideOnly(Side.CLIENT)
 public class GuiCQREntity extends GuiContainer {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_cqr_entity.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_cqr_entity.png");
 
 	private AbstractEntityCQR entity;
 
@@ -106,7 +106,7 @@ public class GuiCQREntity extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		this.drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
+		this.drawGradientRect(0, 0, this.width, this.height, 0xC010_1010, 0xD010_1010);
 		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(BG_TEXTURE);
 		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
@@ -154,7 +154,7 @@ public class GuiCQREntity extends GuiContainer {
 		if (button == this.openTradeGUIButton
 				&& (player.isCreative()
 						|| (this.entity.getTrades() != null && !this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
-			player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, this.entity.world, this.entity.getEntityId(), 0, 0);
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.entity.world, this.entity.getEntityId(), 0, 0);
 		}
 	}
 

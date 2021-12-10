@@ -7,14 +7,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import team.cqr.cqrepoured.client.models.entities.ModelEnergyOrb;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelEnergyOrb;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileEnergyOrb;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 
 public class RenderEnergyOrb extends Render<ProjectileEnergyOrb> {
 
-	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/energy_orb.png");
+	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/energy_orb.png");
 	private final ModelBase modelEnderCrystal = new ModelEnergyOrb(0.0F);
 	private final BossDeathRayHelper rayHelper;
 

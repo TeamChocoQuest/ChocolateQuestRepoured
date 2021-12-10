@@ -22,14 +22,14 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.structuregen.DungeonDataManager.DungeonSpawnType;
-import team.cqr.cqrepoured.structuregen.generation.DungeonGenerationManager;
-import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.structuregen.generation.GeneratableDungeon.Builder;
-import team.cqr.cqrepoured.structuregen.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.structuregen.structurefile.Offset;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
+import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
+import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 public class CommandImport extends CommandBase {
 

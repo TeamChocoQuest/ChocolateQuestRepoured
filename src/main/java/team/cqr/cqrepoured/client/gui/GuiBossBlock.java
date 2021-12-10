@@ -7,13 +7,13 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
-import team.cqr.cqrepoured.util.Reference;
 
 @SideOnly(Side.CLIENT)
 public class GuiBossBlock extends GuiContainer {
 
-	private static final ResourceLocation GUI_BOSS_BLOCK = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_boss_block.png");
+	private static final ResourceLocation GUI_BOSS_BLOCK = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_boss_block.png");
 
 	public GuiBossBlock(Container inventorySlotsIn) {
 		super(inventorySlotsIn);

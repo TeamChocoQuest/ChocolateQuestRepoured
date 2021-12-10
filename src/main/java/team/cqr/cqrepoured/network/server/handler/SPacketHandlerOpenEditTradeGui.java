@@ -8,9 +8,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenEditTradeGui;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.util.GuiHandler;
 
 public class SPacketHandlerOpenEditTradeGui implements IMessageHandler<CPacketOpenEditTradeGui, IMessage> {
 
@@ -25,7 +25,7 @@ public class SPacketHandlerOpenEditTradeGui implements IMessageHandler<CPacketOp
 				if (entity instanceof AbstractEntityCQR
 						&& message.getTradeIndex() >= 0
 						&& message.getTradeIndex() <= ((AbstractEntityCQR) entity).getTrades().size()) {
-					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_EDIT_TRADE_GUI_ID, world, message.getEntityId(), message.getTradeIndex(), 0);
+					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, world, message.getEntityId(), message.getTradeIndex(), 0);
 				}
 			});
 		}

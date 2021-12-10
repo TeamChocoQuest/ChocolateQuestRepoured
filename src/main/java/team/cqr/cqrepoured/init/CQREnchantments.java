@@ -6,18 +6,18 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
-import team.cqr.cqrepoured.objects.enchantments.EnchantmentLightningProtection;
-import team.cqr.cqrepoured.objects.enchantments.EnchantmentSpectral;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.enchantment.EnchantmentLightningProtection;
+import team.cqr.cqrepoured.enchantment.EnchantmentSpectral;
 
-@ObjectHolder(Reference.MODID)
+@ObjectHolder(CQRMain.MODID)
 public class CQREnchantments {
 
 	public static final Enchantment LIGHTNING_PROTECTION = new EnchantmentLightningProtection();
 	public static final Enchantment SPECTRAL = new EnchantmentSpectral();
 
-	@EventBusSubscriber(modid = Reference.MODID)
-	public static class RegistrationHandler {
+	@EventBusSubscriber(modid = CQRMain.MODID)
+	public static class EventHandler {
 
 		@SubscribeEvent
 		public static void onEvent(final RegistryEvent.Register<Enchantment> event) {
@@ -26,6 +26,7 @@ public class CQREnchantments {
 			registry.register(LIGHTNING_PROTECTION);
 			registry.register(SPECTRAL);
 		}
+
 	}
 
 }

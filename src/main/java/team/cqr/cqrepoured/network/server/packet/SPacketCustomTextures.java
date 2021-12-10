@@ -77,13 +77,13 @@ public class SPacketCustomTextures implements IMessage {
 			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = entry.getValue();
 			buf.writeInt(entityTextureMap.size());
 
-			for (ResourceLocation key : entityTextureMap.keySet()) {
-				ByteBufUtils.writeUTF8String(buf, key.toString());
-				buf.writeInt(entityTextureMap.get(key).size());
-				for (ResourceLocation val : entityTextureMap.get(key)) {
+			entityTextureMap.forEach((k, v) -> {
+				ByteBufUtils.writeUTF8String(buf, k.toString());
+				buf.writeInt(v.size());
+				for (ResourceLocation val : v) {
 					ByteBufUtils.writeUTF8String(buf, val.toString());
 				}
-			}
+			});
 		}
 
 	}

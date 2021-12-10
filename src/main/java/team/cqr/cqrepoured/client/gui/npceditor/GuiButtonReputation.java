@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
-import team.cqr.cqrepoured.factions.EReputationState;
+import team.cqr.cqrepoured.faction.EReputationState;
 
 public class GuiButtonReputation extends GuiButtonTextured {
 

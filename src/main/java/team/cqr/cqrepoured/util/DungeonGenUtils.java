@@ -22,14 +22,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
+import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.objects.banners.BannerHelper;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
-import team.cqr.cqrepoured.structuregen.DungeonRegistry;
-import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
-import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
-import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
-import team.cqr.cqrepoured.structuregen.structurefile.Offset;
+import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
+import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -249,13 +249,13 @@ public class DungeonGenUtils {
 	}
 
 	public static BlockPos getValidMinPos(BlockPos pos1, BlockPos pos2) {
-		return new BlockPos(Math.max(Math.min(pos1.getX(), pos2.getX()), -30000000), Math.max(Math.min(pos1.getY(), pos2.getY()), 0),
-				Math.max(Math.min(pos1.getZ(), pos2.getZ()), -30000000));
+		return new BlockPos(Math.max(Math.min(pos1.getX(), pos2.getX()), -30_000_000), Math.max(Math.min(pos1.getY(), pos2.getY()), 0),
+				Math.max(Math.min(pos1.getZ(), pos2.getZ()), -30_000_000));
 	}
 
 	public static BlockPos getValidMaxPos(BlockPos pos1, BlockPos pos2) {
-		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30000000), Math.min(Math.max(pos1.getY(), pos2.getY()), 255),
-				Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30000000));
+		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30_000_000), Math.min(Math.max(pos1.getY(), pos2.getY()), 255),
+				Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30_000_000));
 	}
 
 	public static BlockPos getTransformedStartPos(BlockPos startPos, BlockPos size, PlacementSettings settings) {

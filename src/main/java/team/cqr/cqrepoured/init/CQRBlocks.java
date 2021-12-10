@@ -21,35 +21,33 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.objects.blocks.BlockBossBlock;
-import team.cqr.cqrepoured.objects.blocks.BlockDungeonBrick;
-import team.cqr.cqrepoured.objects.blocks.BlockExporter;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChestCQR;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChestCustom;
-import team.cqr.cqrepoured.objects.blocks.BlockFireCQR;
-import team.cqr.cqrepoured.objects.blocks.BlockForceFieldNexus;
-import team.cqr.cqrepoured.objects.blocks.BlockMapPlaceholder;
-import team.cqr.cqrepoured.objects.blocks.BlockNull;
-import team.cqr.cqrepoured.objects.blocks.BlockPhylactery;
-import team.cqr.cqrepoured.objects.blocks.BlockPillarDungeonBrick;
-import team.cqr.cqrepoured.objects.blocks.BlockSpawner;
-import team.cqr.cqrepoured.objects.blocks.BlockTNTCQR;
-import team.cqr.cqrepoured.objects.blocks.BlockTable;
-import team.cqr.cqrepoured.objects.blocks.BlockTemporaryWeb;
-import team.cqr.cqrepoured.objects.blocks.BlockUnlitTorch;
+import team.cqr.cqrepoured.block.BlockBossBlock;
+import team.cqr.cqrepoured.block.BlockDungeonBrick;
+import team.cqr.cqrepoured.block.BlockExporter;
+import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.block.BlockExporterChestCQR;
+import team.cqr.cqrepoured.block.BlockExporterChestCustom;
+import team.cqr.cqrepoured.block.BlockFireCQR;
+import team.cqr.cqrepoured.block.BlockForceFieldNexus;
+import team.cqr.cqrepoured.block.BlockMapPlaceholder;
+import team.cqr.cqrepoured.block.BlockNull;
+import team.cqr.cqrepoured.block.BlockPhylactery;
+import team.cqr.cqrepoured.block.BlockPillarDungeonBrick;
+import team.cqr.cqrepoured.block.BlockSpawner;
+import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.block.BlockTable;
+import team.cqr.cqrepoured.block.BlockTemporaryWeb;
+import team.cqr.cqrepoured.block.BlockUnlitTorch;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
-import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCQR;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
-import team.cqr.cqrepoured.util.Reference;
 
-@ObjectHolder(Reference.MODID)
+@ObjectHolder(CQRMain.MODID)
 public class CQRBlocks {
 
 	// Dungeon Blocks
@@ -167,8 +165,8 @@ public class CQRBlocks {
 	public static final BlockPhylactery PHYLACTERY = Null();
 	public static final BlockTemporaryWeb TEMPORARY_WEB = Null();
 
-	@EventBusSubscriber(modid = Reference.MODID)
-	public static class BlockRegistrationHandler {
+	@EventBusSubscriber(modid = CQRMain.MODID)
+	public static class EventHandler {
 
 		public static final List<Block> BLOCKS = new ArrayList<>();
 		public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<>();
@@ -243,7 +241,7 @@ public class CQRBlocks {
 					setBlockName(new BlockUnlitTorch(), "unlit_torch"),
 
 					setBlockNameAndTab(new BlockExporter(), "exporter", CQRMain.CQR_CREATIVE_TOOL_TAB),
-					setBlockNameAndTab(new BlockNull(true), "null_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockNull(), "null_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockSpawner(), "spawner", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockBossBlock(), "boss_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockForceFieldNexus(Material.IRON), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
@@ -264,59 +262,59 @@ public class CQRBlocks {
 					setBlockNameAndTab(new BlockExporterChestCustom("textures/items/blaze_rod.png"), "exporter_chest_custom", CQRMain.CQR_EXPORTER_CHEST_TAB),
 
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_VILLAGE_BLACKSMITH, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_VILLAGE_BLACKSMITH, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_blacksmith.png"),
 							"exporter_chest_vanilla_blacksmith", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_SPAWN_BONUS_CHEST, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_SPAWN_BONUS_CHEST, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_bonus.png"),
 							"exporter_chest_vanilla_bonus", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_SIMPLE_DUNGEON, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_SIMPLE_DUNGEON, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_dungeon.png"),
 							"exporter_chest_vanilla_dungeon", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_END_CITY_TREASURE, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_END_CITY_TREASURE, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_end_city.png"),
 							"exporter_chest_vanilla_end_city", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_IGLOO_CHEST, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_IGLOO_CHEST, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_igloo.png"),
 							"exporter_chest_vanilla_igloo", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_JUNGLE_TEMPLE, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_JUNGLE_TEMPLE, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_jungle.png"),
 							"exporter_chest_vanilla_jungle", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_JUNGLE_TEMPLE_DISPENSER, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_JUNGLE_TEMPLE_DISPENSER, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_jungle_dispenser.png"),
 							"exporter_chest_vanilla_jungle_dispenser", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_WOODLAND_MANSION, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_WOODLAND_MANSION, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_mansion.png"),
 							"exporter_chest_vanilla_mansion", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_ABANDONED_MINESHAFT, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_ABANDONED_MINESHAFT, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_mineshaft.png"),
 							"exporter_chest_vanilla_mineshaft", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_NETHER_BRIDGE, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_NETHER_BRIDGE, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_nether.png"),
 							"exporter_chest_vanilla_nether", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_DESERT_PYRAMID, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_DESERT_PYRAMID, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_pyramid.png"),
 							"exporter_chest_vanilla_pyramid", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_CORRIDOR, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_CORRIDOR, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_stronghold.png"),
 							"exporter_chest_vanilla_stronghold", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_LIBRARY, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_LIBRARY, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_stronghold_library.png"),
 							"exporter_chest_vanilla_stronghold_library", CQRMain.CQR_EXPORTER_CHEST_TAB),
 					setBlockNameAndTab(
-							new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_CROSSING, Reference.MODID,
+							new BlockExporterChestCQR(LootTableList.CHESTS_STRONGHOLD_CROSSING, CQRMain.MODID,
 									"textures/blocks/exporter_chest_overlays/vanilla_stronghold_storeroom.png"),
 							"exporter_chest_vanilla_stronghold_storeroom", CQRMain.CQR_EXPORTER_CHEST_TAB),
 
@@ -336,14 +334,14 @@ public class CQRBlocks {
 		}
 
 		private static void registerTileEntities() {
-			GameRegistry.registerTileEntity(TileEntityExporter.class, new ResourceLocation(Reference.MODID, "TileEntityExporter"));
-			GameRegistry.registerTileEntity(TileEntityTable.class, new ResourceLocation(Reference.MODID, "TileEntityTable"));
-			GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(Reference.MODID, "TileEntitySpawner"));
-			GameRegistry.registerTileEntity(TileEntityForceFieldNexus.class, new ResourceLocation(Reference.MODID, "TileEntityForceFieldNexus"));
-			GameRegistry.registerTileEntity(TileEntityExporterChestCQR.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChestCQR"));
-			GameRegistry.registerTileEntity(TileEntityExporterChestCustom.class, new ResourceLocation(Reference.MODID, "TileEntityExporterChestCustom"));
-			GameRegistry.registerTileEntity(TileEntityBoss.class, new ResourceLocation(Reference.MODID, "TileEntityBoss"));
-			GameRegistry.registerTileEntity(TileEntityMap.class, new ResourceLocation(Reference.MODID, "TileEntityMapPlaceholder"));
+			GameRegistry.registerTileEntity(TileEntityExporter.class, new ResourceLocation(CQRMain.MODID, "TileEntityExporter"));
+			GameRegistry.registerTileEntity(TileEntityTable.class, new ResourceLocation(CQRMain.MODID, "TileEntityTable"));
+			GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(CQRMain.MODID, "TileEntitySpawner"));
+			GameRegistry.registerTileEntity(TileEntityForceFieldNexus.class, new ResourceLocation(CQRMain.MODID, "TileEntityForceFieldNexus"));
+			GameRegistry.registerTileEntity(TileEntityExporterChestCQR.class, new ResourceLocation(CQRMain.MODID, "TileEntityExporterChestCQR"));
+			GameRegistry.registerTileEntity(TileEntityExporterChestCustom.class, new ResourceLocation(CQRMain.MODID, "TileEntityExporterChestCustom"));
+			GameRegistry.registerTileEntity(TileEntityBoss.class, new ResourceLocation(CQRMain.MODID, "TileEntityBoss"));
+			GameRegistry.registerTileEntity(TileEntityMap.class, new ResourceLocation(CQRMain.MODID, "TileEntityMapPlaceholder"));
 		}
 
 		private static Block setBlockName(Block block, String name) {
@@ -351,7 +349,7 @@ public class CQRBlocks {
 		}
 
 		private static Block setBlockNameAndTab(Block block, String name, @Nullable CreativeTabs tab) {
-			return block.setTranslationKey(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
+			return block.setTranslationKey(name).setRegistryName(CQRMain.MODID, name).setCreativeTab(tab);
 		}
 
 		@SubscribeEvent

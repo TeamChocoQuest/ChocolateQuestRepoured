@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
-import team.cqr.cqrepoured.objects.entity.misc.EntityElectricField;
+import team.cqr.cqrepoured.entity.misc.EntityElectricField;
 
 public class RenderElectricFieldEntity extends Render<EntityElectricField> {
 

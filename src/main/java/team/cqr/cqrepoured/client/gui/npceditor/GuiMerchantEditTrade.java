@@ -17,17 +17,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.trade.Trade;
+import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.network.client.packet.CPacketEditTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.npc.trading.Trade;
-import team.cqr.cqrepoured.objects.npc.trading.TradeInput;
-import team.cqr.cqrepoured.util.Reference;
 
 @SideOnly(Side.CLIENT)
 public class GuiMerchantEditTrade extends GuiContainer {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
 
 	private final AbstractEntityCQR entity;
 	private final int tradeIndex;

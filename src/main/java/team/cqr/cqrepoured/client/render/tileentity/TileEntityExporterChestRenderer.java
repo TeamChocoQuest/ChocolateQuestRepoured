@@ -11,13 +11,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.client.models.ModelChestLeft;
-import team.cqr.cqrepoured.client.models.ModelChestNormal;
-import team.cqr.cqrepoured.client.models.ModelChestRight;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChest;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChestCustom;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.block.BlockExporterChestCustom;
+import team.cqr.cqrepoured.client.model.ModelChestLeft;
+import team.cqr.cqrepoured.client.model.ModelChestNormal;
+import team.cqr.cqrepoured.client.model.ModelChestRight;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
-import team.cqr.cqrepoured.util.Reference;
 
 public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<TileEntityExporterChest> {
 
@@ -33,7 +33,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 
 		EnumFacing facing = EnumFacing.SOUTH;
 		ModelChestNormal model = this.chestNormal;
-		ResourceLocation texture = new ResourceLocation(Reference.MODID, "textures/entity/chest/exporter_chest.png");
+		ResourceLocation texture = new ResourceLocation(CQRMain.MODID, "textures/entity/chest/exporter_chest.png");
 		ResourceLocation overlayTexture = new ResourceLocation("textures/items/stick.png");
 
 		if (world != null) {
@@ -42,10 +42,10 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 			if (this.isDoubleChest(world, pos)) {
 				if (this.isChest(world.getBlockState(pos.offset(facing.rotateY())).getBlock())) {
 					model = this.chestRight;
-					texture = new ResourceLocation(Reference.MODID, "textures/entity/chest/exporter_chest_right.png");
+					texture = new ResourceLocation(CQRMain.MODID, "textures/entity/chest/exporter_chest_right.png");
 				} else {
 					model = this.chestLeft;
-					texture = new ResourceLocation(Reference.MODID, "textures/entity/chest/exporter_chest_left.png");
+					texture = new ResourceLocation(CQRMain.MODID, "textures/entity/chest/exporter_chest_left.png");
 				}
 			}
 		}

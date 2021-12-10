@@ -18,8 +18,8 @@ public class GuiBackpack extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		this.fontRenderer.drawString("Backpack", 8, 6, 4210752);
-		this.fontRenderer.drawString("Inventory", 8, 74, 4210752);
+		this.fontRenderer.drawString("Backpack", 8, 6, 0x404040);
+		this.fontRenderer.drawString("Inventory", 8, 74, 0x404040);
 	}
 
 	@Override

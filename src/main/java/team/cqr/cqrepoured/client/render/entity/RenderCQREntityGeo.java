@@ -23,18 +23,18 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.MatrixStack;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.client.util.MatrixUtil;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatable> extends GeoEntityRenderer<T> {
 
 	private String entityName;
 	private ResourceLocation texture;
 
-	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(Reference.MODID, "textures/entity/magic_armor/mages.png");
+	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
 	protected double widthScale;
 	protected double heightScale;
@@ -51,7 +51,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this.widthScale = widthScale;
 		this.heightScale = heightScale;
 
-		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
+		this.texture = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + ".png");
 
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<>(this));
@@ -132,7 +132,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		}
 		// Custom texture end
 		return entity.getTextureCount() > 1
-				? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
+				? new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
 				: this.texture;
 	}
 

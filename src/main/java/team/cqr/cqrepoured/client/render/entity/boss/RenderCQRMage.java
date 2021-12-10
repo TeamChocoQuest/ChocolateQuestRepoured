@@ -5,17 +5,17 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.boss.ModelMageHidden;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.boss.ModelMageHidden;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerMagicalArmor;
-import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.boss.AbstractEntityCQRMageBase;
 
 public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQREntity<T> {
 
-	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation(Reference.MODID, "textures/entity/boss/mage_hidden.png");
-	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(Reference.MODID, "textures/entity/magic_armor/mages.png");
+	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/mage_hidden.png");
+	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
 	private final ModelBiped modelHidden;
 	private final ModelBiped modelRevealed;

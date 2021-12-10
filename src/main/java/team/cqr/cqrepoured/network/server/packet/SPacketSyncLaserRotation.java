@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
 public class SPacketSyncLaserRotation implements IMessage {
 

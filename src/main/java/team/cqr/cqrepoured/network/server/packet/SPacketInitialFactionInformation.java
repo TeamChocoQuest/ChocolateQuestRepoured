@@ -8,9 +8,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.factions.CQRFaction;
-import team.cqr.cqrepoured.factions.EReputationState;
-import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.EReputationState;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class SPacketInitialFactionInformation implements IMessage {

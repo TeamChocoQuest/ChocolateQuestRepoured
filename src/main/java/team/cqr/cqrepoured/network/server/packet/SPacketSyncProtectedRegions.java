@@ -5,7 +5,7 @@ import java.util.Collection;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
 public class SPacketSyncProtectedRegions implements IMessage {
 

@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.MinecraftForgeClient;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
-import team.cqr.cqrepoured.objects.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
 public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T> {
 

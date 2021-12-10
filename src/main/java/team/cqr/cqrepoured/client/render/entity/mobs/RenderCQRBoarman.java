@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
 import net.minecraft.client.renderer.entity.RenderManager;
-import team.cqr.cqrepoured.client.models.entities.mobs.ModelCQRBoarman;
+import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRBoarman;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRBoarman;
 
 public class RenderCQRBoarman extends RenderCQREntity<EntityCQRBoarman> {
 

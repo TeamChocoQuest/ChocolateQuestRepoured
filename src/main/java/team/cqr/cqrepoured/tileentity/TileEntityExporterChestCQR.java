@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.tileentity;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
-import team.cqr.cqrepoured.objects.blocks.BlockExporterChestCQR;
+import team.cqr.cqrepoured.block.BlockExporterChestCQR;
 
 public class TileEntityExporterChestCQR extends TileEntityExporterChest {
 

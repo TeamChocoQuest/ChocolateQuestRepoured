@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.asm.hook;
 
 import net.minecraft.entity.EntityLivingBase;
-import team.cqr.cqrepoured.objects.entity.IMechanical;
+import team.cqr.cqrepoured.entity.IMechanical;
 
 public class EntityPotionHook {
 

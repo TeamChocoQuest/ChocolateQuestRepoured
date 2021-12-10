@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
-import team.cqr.cqrepoured.objects.entity.boss.spectrelord.EntityCQRSpectreLord;
+import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 
 public class RenderCQRSpectreLord extends RenderCQREntity<EntityCQRSpectreLord> {
 

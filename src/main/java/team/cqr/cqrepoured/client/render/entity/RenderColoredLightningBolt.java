@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 
 public class RenderColoredLightningBolt extends Render<EntityColoredLightningBolt> {
 

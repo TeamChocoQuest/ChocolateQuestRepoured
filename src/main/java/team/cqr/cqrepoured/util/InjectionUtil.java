@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.util;
 
 public class InjectionUtil {
+
 	/**
 	 * Returns <code>null</code>.
 	 * <p>
@@ -19,4 +20,5 @@ public class InjectionUtil {
 	public static <T> T Null() {
 		return null;
 	}
+
 }

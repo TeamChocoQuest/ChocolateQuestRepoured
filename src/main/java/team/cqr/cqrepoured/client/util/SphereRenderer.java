@@ -24,16 +24,16 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.shader.ResourceSupplier;
 import team.cqr.cqrepoured.client.render.shader.ShaderProgram;
 import team.cqr.cqrepoured.client.render.texture.CubemapTexture;
-import team.cqr.cqrepoured.util.Reference;
 
 public class SphereRenderer {
 
 	private static final List<Quad> CUBE;
 	static {
-		ArrayList<Quad> list = new ArrayList<>();
+		List<Quad> list = new ArrayList<>();
 		double d = Math.sqrt(1.0D / 3.0D);
 		Vertex v0 = new Vertex(-d, -d, -d);
 		Vertex v1 = new Vertex(-d, -d, d);
@@ -57,12 +57,12 @@ public class SphereRenderer {
 		// back
 		list.add(new Quad(v4, v0, v2, v6));
 
-		list.trimToSize();
+		((ArrayList<Quad>) list).trimToSize();
 		CUBE = Collections.unmodifiableList(list);
 	}
 	private static final List<Triangle> ICOSAHEDRON;
 	static {
-		ArrayList<Triangle> list = new ArrayList<>();
+		List<Triangle> list = new ArrayList<>();
 		double goldenRatio = (1.0D + Math.sqrt(5.0D)) * 0.5D;
 		double d1 = Math.sqrt(1.0D / (goldenRatio * goldenRatio + 1.0D));
 		double d2 = goldenRatio * d1;
@@ -103,12 +103,12 @@ public class SphereRenderer {
 		list.add(new Triangle(v8, v6, v7));
 		list.add(new Triangle(v9, v8, v1));
 
-		list.trimToSize();
+		((ArrayList<Triangle>) list).trimToSize();
 		ICOSAHEDRON = Collections.unmodifiableList(list);
 	}
 	private static final List<Triangle> OCTAHEDRON;
 	static {
-		ArrayList<Triangle> list = new ArrayList<>();
+		List<Triangle> list = new ArrayList<>();
 		Vertex v0 = new Vertex(-1, 0, 0);
 		Vertex v1 = new Vertex(1, 0, 0);
 		Vertex v2 = new Vertex(0, -1, 0);
@@ -126,7 +126,7 @@ public class SphereRenderer {
 		list.add(new Triangle(v4, v0, v3));
 		list.add(new Triangle(v0, v5, v3));
 
-		list.trimToSize();
+		((ArrayList<Triangle>) list).trimToSize();
 		OCTAHEDRON = Collections.unmodifiableList(list);
 	}
 	private static final FloatBuffer BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -138,8 +138,8 @@ public class SphereRenderer {
 	public static void init() {
 		delete();
 		shader = new ShaderProgram.Builder()
-				.addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(Reference.MODID, "shaders/sphere/vertex.glsl")))
-				.addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(Reference.MODID, "shaders/sphere/fragment.glsl"))).build();
+				.addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl")))
+				.addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl"))).build();
 		GL20.glUseProgram(shader.getShaderProgram());
 		uniformColor = GL20.glGetUniformLocation(shader.getShaderProgram(), "color");
 		uniformTexture = GL20.glGetUniformLocation(shader.getShaderProgram(), "useTexture");

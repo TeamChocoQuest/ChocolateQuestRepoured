@@ -19,8 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import team.cqr.cqrepoured.client.models.entities.ModelCQRBiped;
-import team.cqr.cqrepoured.client.render.EntityRenderManager;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.event.EntityRenderManager;
+import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQREntityCape;
@@ -30,12 +31,11 @@ import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerShoulderEntity;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
-import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
-import team.cqr.cqrepoured.objects.items.guns.ItemMusketKnife;
-import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.item.ItemHookshotBase;
+import team.cqr.cqrepoured.item.gun.ItemMusket;
+import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
+import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
 
@@ -64,7 +64,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.entityName = textureName;
-		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
+		this.texture = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + ".png");
 		this.widthScale = widthScale;
 		this.heightScale = heightScale;
 		this.addLayer(new LayerCQREntityArmor(this));
@@ -251,7 +251,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 		// Custom texture end
 		return entity.getTextureCount() > 1
-				? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
+				? new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
 				: this.texture;
 	}
 

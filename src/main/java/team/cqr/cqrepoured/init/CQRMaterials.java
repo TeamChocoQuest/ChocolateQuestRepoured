@@ -8,10 +8,10 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.ArmorConfig;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.config.IToolConfig;
-import team.cqr.cqrepoured.util.Reference;
 
 public class CQRMaterials {
 
@@ -45,7 +45,7 @@ public class CQRMaterials {
 
 		private static ArmorMaterial createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip,
 				float toughness) {
-			return EnumHelper.addArmorMaterial(Reference.MODID + ":" + name, Reference.MODID + ":" + name, durability, reductionAmounts, enchantability,
+			return EnumHelper.addArmorMaterial(CQRMain.MODID + ":" + name, CQRMain.MODID + ":" + name, durability, reductionAmounts, enchantability,
 					soundOnEquip, toughness);
 		}
 	}
@@ -66,7 +66,7 @@ public class CQRMaterials {
 		}
 
 		private static ToolMaterial createToolMaterial(String name, int harvestLevel, int maxUses, float efficiency, float damage, int enchantability) {
-			return EnumHelper.addToolMaterial(Reference.MODID + ":" + name, harvestLevel, maxUses, efficiency, damage, enchantability);
+			return EnumHelper.addToolMaterial(CQRMain.MODID + ":" + name, harvestLevel, maxUses, efficiency, damage, enchantability);
 		}
 	}
 

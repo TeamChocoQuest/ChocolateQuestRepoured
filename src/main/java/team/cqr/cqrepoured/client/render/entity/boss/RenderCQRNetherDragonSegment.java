@@ -8,15 +8,15 @@ import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.boss.ModelNetherDragonBodyParts;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.boss.ModelNetherDragonBodyParts;
 import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
-import team.cqr.cqrepoured.objects.entity.boss.netherdragon.SubEntityNetherDragonSegment;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 
 public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityNetherDragonSegment> {
 
-	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon.png");
-	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon_skeletal.png");
+	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/nether_dragon.png");
+	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/nether_dragon_skeletal.png");
 
 	private final ModelBase modelNormal;
 	private final ModelBase modelSkeletal;

@@ -8,9 +8,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.util.GuiHandler;
 
 public class SPacketHandlerOpenMerchantGui implements IMessageHandler<CPacketOpenMerchantGui, IMessage> {
 
@@ -23,7 +23,7 @@ public class SPacketHandlerOpenMerchantGui implements IMessageHandler<CPacketOpe
 				Entity entity = world.getEntityByID(message.getEntityId());
 
 				if (entity instanceof AbstractEntityCQR) {
-					player.openGui(CQRMain.INSTANCE, Reference.MERCHANT_GUI_ID, world, message.getEntityId(), 0, 0);
+					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, world, message.getEntityId(), 0, 0);
 				}
 			});
 		}

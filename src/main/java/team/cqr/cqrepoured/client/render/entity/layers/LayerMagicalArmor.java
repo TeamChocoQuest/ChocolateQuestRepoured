@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class LayerMagicalArmor extends AbstractLayerCQR {
 

@@ -9,8 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.animation.FastTESR;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
-import team.cqr.cqrepoured.util.Reference;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityMapPlaceHolderRenderer extends FastTESR<TileEntityMap> {
@@ -33,7 +33,7 @@ public class TileEntityMapPlaceHolderRenderer extends FastTESR<TileEntityMap> {
 		int blockLight = lightmapCoords & 0xFFFF;
 		EnumFacing orientation = te.getOrientation();
 
-		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Reference.MODID, "textures/blocks/map.png"));
+		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(CQRMain.MODID, "textures/blocks/map.png"));
 		buffer.setTranslation(x, y, z);
 		float f = 4.0F / 128.0F;
 		float f1 = 124.0F / 128.0F;

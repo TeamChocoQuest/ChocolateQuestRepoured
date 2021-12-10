@@ -23,7 +23,7 @@ public class ElectricFieldRenderUtil {
 
 	@SuppressWarnings("serial")
 	private static final Random RANDOM = new Random() {
-		private static final long MULTIPLIER = 0x5DEECE66DL;
+		private static final long MULTIPLIER = 0x5_DEEC_E66DL;
 		private static final long ADDEND = 0xBL;
 		private static final long MASK = (1L << 48) - 1;
 		private long seed = 0L;

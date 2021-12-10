@@ -10,9 +10,9 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
-import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
 public class CommandDeleteProtectedRegion extends CommandBase {
 

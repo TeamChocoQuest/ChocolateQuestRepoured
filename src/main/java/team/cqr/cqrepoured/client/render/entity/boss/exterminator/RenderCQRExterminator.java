@@ -7,14 +7,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.boss.ModelExterminator;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.objects.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/exterminator.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/exterminator.png");
 
 	public RenderCQRExterminator(RenderManager renderManager) {
 		super(renderManager, new ModelExterminator(TEXTURE), "boss/exterminator");

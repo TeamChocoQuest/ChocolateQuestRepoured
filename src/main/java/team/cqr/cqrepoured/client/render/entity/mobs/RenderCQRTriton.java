@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.client.render.entity.mobs;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import team.cqr.cqrepoured.client.models.entities.mobs.ModelCQRTriton;
+import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRTriton;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRTriton;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRTriton;
 
 public class RenderCQRTriton extends RenderCQREntity<EntityCQRTriton> {
 

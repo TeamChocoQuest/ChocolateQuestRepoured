@@ -1,0 +1,89 @@
+package team.cqr.cqrepoured.item.armor;
+
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.input.Keyboard;
+
+import com.google.common.collect.Multimap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerHelper;
+import team.cqr.cqrepoured.client.init.CQRArmorModels;
+import team.cqr.cqrepoured.init.CQRItems;
+
+public class ItemArmorTurtle extends ItemArmor {
+
+	private AttributeModifier health;
+
+	public ItemArmorTurtle(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+		super(materialIn, renderIndexIn, equipmentSlotIn);
+
+		this.health = new AttributeModifier("TurtleHealthModifier", 2.0D, 0);
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+
+		if (slot == EntityLiving.getSlotForItemStack(stack)) {
+			multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), this.health);
+		}
+
+		return multimap;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		if (player != null) {
+			int cooldown = CapabilityCooldownHandlerHelper.getCooldown(player, CQRItems.CHESTPLATE_TURTLE);
+			if (cooldown > 0) {
+				tooltip.add(TextFormatting.RED + I18n.format("description.turtle_armor_charging.name") + this.convertCooldown(cooldown));
+			}
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.turtle_armor.name"));
+		} else {
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
+		}
+	}
+
+	private String convertCooldown(int cd) {
+		int i = cd / 20;
+		int minutes = i / 60;
+		int seconds = i % 60;
+
+		if (seconds < 10) {
+			return minutes + ":" + "0" + seconds;
+		}
+
+		return minutes + ":" + seconds;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.turtleArmorLegs : CQRArmorModels.turtleArmor;
+	}
+
+}

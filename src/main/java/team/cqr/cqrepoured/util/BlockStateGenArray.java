@@ -18,10 +18,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableBlockInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparableEntityInfo;
-import team.cqr.cqrepoured.structuregen.generation.preparable.PreparablePosInfo;
+import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 
 public class BlockStateGenArray {
 

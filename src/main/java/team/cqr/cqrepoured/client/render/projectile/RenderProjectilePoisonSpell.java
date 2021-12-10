@@ -2,14 +2,14 @@ package team.cqr.cqrepoured.client.render.projectile;
 
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.RenderSpriteBase;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.projectiles.ProjectilePoisonSpell;
 
 public class RenderProjectilePoisonSpell extends RenderSpriteBase<ProjectilePoisonSpell> {
 
 	public RenderProjectilePoisonSpell(RenderManager renderManager) {
-		super(renderManager, new ResourceLocation(Reference.MODID, "textures/entity/poison_spell.png"));
+		super(renderManager, new ResourceLocation(CQRMain.MODID, "textures/entity/poison_spell.png"));
 	}
 
 }

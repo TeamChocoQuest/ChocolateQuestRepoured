@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
-import team.cqr.cqrepoured.util.Reference;
 
 /*
  * 06.01.2020
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.util.Reference;
 public class TileEntityForceFieldNexusRenderer extends TileEntitySpecialRenderer<TileEntityForceFieldNexus> {
 
 	private final ModelBase crystal = new ModelNexusCrystal();
-	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/nexus_crystal.png");
+	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/nexus_crystal.png");
 
 	@Override
 	public void render(TileEntityForceFieldNexus te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

@@ -4,9 +4,9 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import team.cqr.cqrepoured.client.models.entities.mobs.ModelCQRIllager;
+import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRIllager;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRIllager;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRIllager;
 
 public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 

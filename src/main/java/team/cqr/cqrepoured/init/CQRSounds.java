@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
 
-@ObjectHolder(Reference.MODID)
+@ObjectHolder(CQRMain.MODID)
 public class CQRSounds {
 
 	@ObjectHolder("item.magic_bell.use")
@@ -98,8 +98,8 @@ public class CQRSounds {
 	@ObjectHolder("entity.bubble.bubble")
 	public static final SoundEvent BUBBLE_BUBBLE = Null();
 
-	@EventBusSubscriber(modid = Reference.MODID)
-	public static class SoundRegistrationHandler {
+	@EventBusSubscriber(modid = CQRMain.MODID)
+	public static class EventHandler {
 
 		@SubscribeEvent
 		public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
@@ -147,7 +147,7 @@ public class CQRSounds {
 		}
 
 		private static SoundEvent createSoundEvent(String name) {
-			ResourceLocation location = new ResourceLocation(Reference.MODID, name);
+			ResourceLocation location = new ResourceLocation(CQRMain.MODID, name);
 			return new SoundEvent(location).setRegistryName(location);
 		}
 

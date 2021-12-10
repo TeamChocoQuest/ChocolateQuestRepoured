@@ -33,7 +33,7 @@ public class CPacketExtendedReachAttack implements IMessage {
 		return this.entityId;
 	}
 
-	public boolean getIsExtended() {
+	public boolean isExtended() {
 		return this.isExtended;
 	}
 

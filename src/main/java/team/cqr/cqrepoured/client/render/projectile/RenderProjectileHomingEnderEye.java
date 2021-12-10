@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.render.RenderSpriteBase;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileHomingEnderEye;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
 
 public class RenderProjectileHomingEnderEye extends RenderSpriteBase<ProjectileHomingEnderEye> {
 

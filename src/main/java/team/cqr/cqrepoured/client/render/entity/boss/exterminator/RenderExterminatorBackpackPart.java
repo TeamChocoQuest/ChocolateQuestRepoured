@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
-import team.cqr.cqrepoured.objects.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
+import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 
 public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends RenderMultiPartPart<T> {
 

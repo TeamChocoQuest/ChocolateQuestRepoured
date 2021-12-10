@@ -53,6 +53,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
 
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
+    includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     implementation fg.deobf('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.11')
 
@@ -60,6 +61,7 @@ dependencies {
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
     buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
+    buildDependencies 'curse.maven:CubicChunks-292243:3186888'
 }
 
 minecraft {

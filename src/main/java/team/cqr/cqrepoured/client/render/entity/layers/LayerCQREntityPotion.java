@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
 
 @SideOnly(Side.CLIENT)
 public class LayerCQREntityPotion extends AbstractLayerCQR {

@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 
 public class SPacketCalamityUpdateHand implements IMessage {
 

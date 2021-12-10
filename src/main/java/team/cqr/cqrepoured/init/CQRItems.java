@@ -19,92 +19,91 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRBoarman;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRDummy;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRDwarf;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQREnderman;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRGolem;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRGremlin;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRIllager;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRMandril;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRMinotaur;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRMummy;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRNPC;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQROgre;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQROrc;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRPirate;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRSkeleton;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRSpectre;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRTriton;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRWalker;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRZombie;
-import team.cqr.cqrepoured.objects.items.ItemAlchemyBag;
-import team.cqr.cqrepoured.objects.items.ItemBadge;
-import team.cqr.cqrepoured.objects.items.ItemBullBattleAxe;
-import team.cqr.cqrepoured.objects.items.ItemCursedBone;
-import team.cqr.cqrepoured.objects.items.ItemDungeonPlacer;
-import team.cqr.cqrepoured.objects.items.ItemGoldenFeather;
-import team.cqr.cqrepoured.objects.items.ItemHookshot;
-import team.cqr.cqrepoured.objects.items.ItemLongshot;
-import team.cqr.cqrepoured.objects.items.ItemLore;
-import team.cqr.cqrepoured.objects.items.ItemMagicBell;
-import team.cqr.cqrepoured.objects.items.ItemMobToSpawner;
-import team.cqr.cqrepoured.objects.items.ItemPathTool;
-import team.cqr.cqrepoured.objects.items.ItemPotionHealing;
-import team.cqr.cqrepoured.objects.items.ItemShieldDummy;
-import team.cqr.cqrepoured.objects.items.ItemSoulBottle;
-import team.cqr.cqrepoured.objects.items.ItemSpawnEggCQR;
-import team.cqr.cqrepoured.objects.items.ItemSpawnerConverter;
-import team.cqr.cqrepoured.objects.items.ItemSpiderHook;
-import team.cqr.cqrepoured.objects.items.ItemSpikedGlove;
-import team.cqr.cqrepoured.objects.items.ItemStructureSelector;
-import team.cqr.cqrepoured.objects.items.ItemSuperTool;
-import team.cqr.cqrepoured.objects.items.ItemTeleportStone;
-import team.cqr.cqrepoured.objects.items.ItemUnprotectedPositionTool;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorBull;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorDyable;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorHeavy;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorInquisition;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorSlime;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorSpider;
-import team.cqr.cqrepoured.objects.items.armor.ItemArmorTurtle;
-import team.cqr.cqrepoured.objects.items.armor.ItemBackpack;
-import team.cqr.cqrepoured.objects.items.armor.ItemBootsCloud;
-import team.cqr.cqrepoured.objects.items.armor.ItemCrown;
-import team.cqr.cqrepoured.objects.items.armor.ItemHelmetDragon;
-import team.cqr.cqrepoured.objects.items.guns.ItemBubblePistol;
-import team.cqr.cqrepoured.objects.items.guns.ItemBubbleRifle;
-import team.cqr.cqrepoured.objects.items.guns.ItemBullet;
-import team.cqr.cqrepoured.objects.items.guns.ItemCannonBall;
-import team.cqr.cqrepoured.objects.items.guns.ItemFlamethrower;
-import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
-import team.cqr.cqrepoured.objects.items.guns.ItemMusketKnife;
-import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
-import team.cqr.cqrepoured.objects.items.shields.ItemShieldCQR;
-import team.cqr.cqrepoured.objects.items.shields.ItemShieldWalkerKing;
-import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaff;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffFire;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffGun;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffHealing;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffPoison;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffSpider;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffThunder;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffVampiric;
-import team.cqr.cqrepoured.objects.items.staves.ItemStaffWind;
-import team.cqr.cqrepoured.objects.items.swords.ItemDagger;
-import team.cqr.cqrepoured.objects.items.swords.ItemDaggerNinja;
-import team.cqr.cqrepoured.objects.items.swords.ItemFakeSwordHealingStaff;
-import team.cqr.cqrepoured.objects.items.swords.ItemGreatSword;
-import team.cqr.cqrepoured.objects.items.swords.ItemSwordMoonlight;
-import team.cqr.cqrepoured.objects.items.swords.ItemSwordSpider;
-import team.cqr.cqrepoured.objects.items.swords.ItemSwordSunshine;
-import team.cqr.cqrepoured.objects.items.swords.ItemSwordTurtle;
-import team.cqr.cqrepoured.objects.items.swords.ItemSwordWalker;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRBoarman;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRDummy;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRDwarf;
+import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGolem;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGremlin;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRIllager;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMinotaur;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMummy;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRNPC;
+import team.cqr.cqrepoured.entity.mobs.EntityCQROgre;
+import team.cqr.cqrepoured.entity.mobs.EntityCQROrc;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRPirate;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRSkeleton;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRTriton;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRZombie;
+import team.cqr.cqrepoured.item.ItemAlchemyBag;
+import team.cqr.cqrepoured.item.ItemBadge;
+import team.cqr.cqrepoured.item.ItemBullBattleAxe;
+import team.cqr.cqrepoured.item.ItemCursedBone;
+import team.cqr.cqrepoured.item.ItemDungeonPlacer;
+import team.cqr.cqrepoured.item.ItemGoldenFeather;
+import team.cqr.cqrepoured.item.ItemHookshot;
+import team.cqr.cqrepoured.item.ItemLongshot;
+import team.cqr.cqrepoured.item.ItemLore;
+import team.cqr.cqrepoured.item.ItemMagicBell;
+import team.cqr.cqrepoured.item.ItemMobToSpawner;
+import team.cqr.cqrepoured.item.ItemPathTool;
+import team.cqr.cqrepoured.item.ItemPotionHealing;
+import team.cqr.cqrepoured.item.ItemShieldDummy;
+import team.cqr.cqrepoured.item.ItemSoulBottle;
+import team.cqr.cqrepoured.item.ItemSpawnEggCQR;
+import team.cqr.cqrepoured.item.ItemSpawnerConverter;
+import team.cqr.cqrepoured.item.ItemSpiderHook;
+import team.cqr.cqrepoured.item.ItemSpikedGlove;
+import team.cqr.cqrepoured.item.ItemStructureSelector;
+import team.cqr.cqrepoured.item.ItemSuperTool;
+import team.cqr.cqrepoured.item.ItemTeleportStone;
+import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
+import team.cqr.cqrepoured.item.armor.ItemArmorBull;
+import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
+import team.cqr.cqrepoured.item.armor.ItemArmorHeavy;
+import team.cqr.cqrepoured.item.armor.ItemArmorInquisition;
+import team.cqr.cqrepoured.item.armor.ItemArmorSlime;
+import team.cqr.cqrepoured.item.armor.ItemArmorSpider;
+import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
+import team.cqr.cqrepoured.item.armor.ItemBackpack;
+import team.cqr.cqrepoured.item.armor.ItemBootsCloud;
+import team.cqr.cqrepoured.item.armor.ItemCrown;
+import team.cqr.cqrepoured.item.armor.ItemHelmetDragon;
+import team.cqr.cqrepoured.item.gun.ItemBubblePistol;
+import team.cqr.cqrepoured.item.gun.ItemBubbleRifle;
+import team.cqr.cqrepoured.item.gun.ItemBullet;
+import team.cqr.cqrepoured.item.gun.ItemCannonBall;
+import team.cqr.cqrepoured.item.gun.ItemFlamethrower;
+import team.cqr.cqrepoured.item.gun.ItemMusket;
+import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
+import team.cqr.cqrepoured.item.gun.ItemRevolver;
+import team.cqr.cqrepoured.item.shield.ItemShieldCQR;
+import team.cqr.cqrepoured.item.shield.ItemShieldWalkerKing;
+import team.cqr.cqrepoured.item.spear.ItemSpearBase;
+import team.cqr.cqrepoured.item.staff.ItemStaff;
+import team.cqr.cqrepoured.item.staff.ItemStaffFire;
+import team.cqr.cqrepoured.item.staff.ItemStaffGun;
+import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
+import team.cqr.cqrepoured.item.staff.ItemStaffPoison;
+import team.cqr.cqrepoured.item.staff.ItemStaffSpider;
+import team.cqr.cqrepoured.item.staff.ItemStaffThunder;
+import team.cqr.cqrepoured.item.staff.ItemStaffVampiric;
+import team.cqr.cqrepoured.item.staff.ItemStaffWind;
+import team.cqr.cqrepoured.item.sword.ItemDagger;
+import team.cqr.cqrepoured.item.sword.ItemDaggerNinja;
+import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
+import team.cqr.cqrepoured.item.sword.ItemGreatSword;
+import team.cqr.cqrepoured.item.sword.ItemSwordMoonlight;
+import team.cqr.cqrepoured.item.sword.ItemSwordSpider;
+import team.cqr.cqrepoured.item.sword.ItemSwordSunshine;
+import team.cqr.cqrepoured.item.sword.ItemSwordTurtle;
+import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
 
-@ObjectHolder(Reference.MODID)
+@ObjectHolder(CQRMain.MODID)
 public class CQRItems {
 
 	// Daggers
@@ -283,8 +282,8 @@ public class CQRItems {
 	public static final Item ALCHEMY_BAG = Null();
 	public static final Item UNPROTECTED_POSITIONS_TOOL = Null();
 
-	@EventBusSubscriber(modid = Reference.MODID)
-	public static class ItemRegistrationHandler {
+	@EventBusSubscriber(modid = CQRMain.MODID)
+	public static class EventHandler {
 
 		public static final List<Item> ITEMS = new ArrayList<>();
 		public static final List<Item> SPAWN_EGGS = new ArrayList<>();
@@ -477,8 +476,9 @@ public class CQRItems {
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {
-			return item.setRegistryName(Reference.MODID, name).setTranslationKey(name).setCreativeTab(tab);
+			return item.setRegistryName(CQRMain.MODID, name).setTranslationKey(name).setCreativeTab(tab);
 		}
+
 	}
 
 }

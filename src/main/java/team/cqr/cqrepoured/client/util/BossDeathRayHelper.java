@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 
 public class BossDeathRayHelper {
 

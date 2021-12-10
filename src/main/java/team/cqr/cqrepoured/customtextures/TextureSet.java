@@ -14,7 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.Reference;
 
 public class TextureSet {
 
@@ -48,13 +47,13 @@ public class TextureSet {
 				if (texturesString.isEmpty()) {
 					continue;
 				}
-				texturesString.replaceAll(" ", "");
+				texturesString = texturesString.replaceAll(" ", "");
 				// This strings represent the FILE PATHS, not the actual resource locations
 				for (String texture : texturesString.split(",")) {
 					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
 					if (tf != null && tf.exists()) {
 						files.put(texture + ".png", tf);
-						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png");
+						ResourceLocation rs = new ResourceLocation(CQRMain.MODID + "_ctts_" + this.name, texture + ".png");
 						texNameRLMap.put(texture + ".png", rs);
 						// if(TextureSetManager.loadTexture(tf, rs)) {
 						this.addTexture(resLoc, rs);
@@ -64,7 +63,7 @@ public class TextureSet {
 						File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
 						if (mf != null && mf.exists()) {
 							files.put(texture + ".png.mcmeta", mf);
-							rs = new ResourceLocation(Reference.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
+							rs = new ResourceLocation(CQRMain.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
 							texNameRLMap.put(texture + ".png.mcmeta", rs);
 						}
 					}
@@ -82,7 +81,7 @@ public class TextureSet {
 	public ResourceLocation getRandomTextureFor(Entity ent) {
 		ResourceLocation ers = EntityList.getKey(ent);
 		// System.out.println("Searching texture for " + ers.toString() + " in texture set: " + name);
-		if (this.entityTextureMap.containsKey(ers) && this.entityTextureMap.get(ers).size() > 0) {
+		if (this.entityTextureMap.containsKey(ers) && this.entityTextureMap.get(ers).isEmpty()) {
 			Object[] textures = this.entityTextureMap.get(ers).toArray();
 			int indx = random.nextInt(textures.length);
 			// System.out.println("Returning: " + ((ResourceLocation) textures[indx]).toString());

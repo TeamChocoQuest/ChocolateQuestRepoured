@@ -23,7 +23,7 @@ import net.minecraft.util.ResourceLocation;
 public class CTResourcepack implements IResourcePack {
 
 	private Set<ResourceLocation> VALID_TEXTURES = new HashSet<>();
-	private HashMap<ResourceLocation, File> FILES = new HashMap<>();
+	private Map<ResourceLocation, File> FILES = new HashMap<>();
 	private Set<String> DOMAIN_SET = new HashSet<>();
 
 	private static CTResourcepack INSTANCE;

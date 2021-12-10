@@ -14,10 +14,10 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import team.cqr.cqrepoured.structureprot.IProtectedRegionManager;
-import team.cqr.cqrepoured.structureprot.ProtectedRegion;
-import team.cqr.cqrepoured.structureprot.ProtectedRegionManager;
-import team.cqr.cqrepoured.structureprot.ServerProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
 
 public class EntityUtil {
 

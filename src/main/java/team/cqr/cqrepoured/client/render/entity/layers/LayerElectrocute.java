@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 

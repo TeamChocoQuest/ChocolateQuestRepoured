@@ -19,8 +19,8 @@ public class GuiAlchemyBag extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String s = "Alchemy Bag";
-		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		this.fontRenderer.drawString("Inventory", 8, 41, 4210752);
+		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 0x404040);
+		this.fontRenderer.drawString("Inventory", 8, 41, 0x404040);
 	}
 
 	@Override

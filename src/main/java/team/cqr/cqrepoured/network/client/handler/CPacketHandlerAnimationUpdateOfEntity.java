@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
-import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
 
 public class CPacketHandlerAnimationUpdateOfEntity implements IMessageHandler<SPacketUpdateAnimationOfEntity, IMessage> {
 

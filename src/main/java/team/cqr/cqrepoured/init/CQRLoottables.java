@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
 
 public class CQRLoottables {
 
@@ -85,7 +85,7 @@ public class CQRLoottables {
 	}
 
 	public static ResourceLocation createLootTable(String name) {
-		ResourceLocation lootTable = new ResourceLocation(Reference.MODID, name);
+		ResourceLocation lootTable = new ResourceLocation(CQRMain.MODID, name);
 		LOOT_TABLES.add(lootTable);
 		return lootTable;
 	}

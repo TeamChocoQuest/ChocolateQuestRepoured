@@ -51,7 +51,7 @@ public enum EnumMCWoodType {
 	@Nullable
 	public static EnumMCWoodType getTypeFromString(String str) {
 		for (EnumMCWoodType type : EnumMCWoodType.values()) {
-			if (type.toString().toLowerCase().equals(str.toLowerCase())) {
+			if (type.toString().equalsIgnoreCase(str)) {
 				return type;
 			}
 		}

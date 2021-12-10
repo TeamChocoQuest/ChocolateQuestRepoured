@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class SpiralStaircaseBuilder {
+
 	private static final int STAIR_WIDTH = 2;
 
 	private BlockPos start;
@@ -112,4 +113,5 @@ public class SpiralStaircaseBuilder {
 			return (diff <= 0 && diff >= distance);
 		}
 	}
+
 }

@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderKing;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;
 
 @SideOnly(Side.CLIENT)
 public class RenderCQREnderKing extends RenderCQREntity<EntityCQREnderKing> {

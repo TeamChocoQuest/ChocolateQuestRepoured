@@ -33,14 +33,14 @@ public class GuiButtonCustom extends GuiButton {
 			this.drawTexturedModalRect(this.x, this.y + height1, 0, 46 + i * 20 + 20 - height1, width1, height2);
 			this.drawTexturedModalRect(this.x + width1, this.y + height1, 200 - width2, 46 + i * 20 + 20 - height1, width2, height2);
 			this.mouseDragged(mc, mouseX, mouseY);
-			int j = 14737632;
+			int j = 0xE0E0E0;
 
 			if (this.packedFGColour != 0) {
 				j = this.packedFGColour;
 			} else if (!this.enabled) {
-				j = 10526880;
+				j = 0xA0A0A0;
 			} else if (this.hovered) {
-				j = 16777120;
+				j = 0xFFFFA0;
 			}
 
 			this.drawCenteredString(fontrenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, j);

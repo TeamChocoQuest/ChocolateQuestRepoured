@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 
 @EventBusSubscriber
 public class AntiPortlyGentleman {
@@ -17,11 +17,11 @@ public class AntiPortlyGentleman {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void blockPortlyRelocatorOnBosses(PlayerInteractEvent.EntityInteract event) {
 		ItemStack tool = event.getItemStack();
-		if (tool == null || tool.getItem() == null || tool.isEmpty() || !tool.hasTagCompound() || !event.getEntityPlayer().isSneaking()) {
+		if (tool.isEmpty() || !tool.hasTagCompound() || !event.getEntityPlayer().isSneaking()) {
 			return;
 		}
 
-		if (event.getEntityLiving() != null && event.getEntityLiving() instanceof AbstractEntityCQRBoss) {
+		if (event.getEntityLiving() instanceof AbstractEntityCQRBoss) {
 			NBTTagCompound itemNBT = tool.getTagCompound();
 			if (itemNBT.hasKey("Traits", Constants.NBT.TAG_STRING)) {
 				NBTTagList tagList = itemNBT.getTagList("Traits", Constants.NBT.TAG_STRING);

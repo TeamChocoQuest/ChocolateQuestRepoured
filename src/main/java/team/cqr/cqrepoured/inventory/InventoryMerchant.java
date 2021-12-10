@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.npc.trading.Trade;
-import team.cqr.cqrepoured.objects.npc.trading.TraderOffer;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.trade.Trade;
+import team.cqr.cqrepoured.entity.trade.TraderOffer;
 
 public class InventoryMerchant implements IInventory {
 

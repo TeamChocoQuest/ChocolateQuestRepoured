@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
 import net.minecraft.client.renderer.entity.RenderManager;
-import team.cqr.cqrepoured.client.models.entities.mobs.ModelCQRGolem;
+import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRGolem;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRGolem;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGolem;
 
 public class RenderCQRGolem extends RenderCQREntity<EntityCQRGolem> {
 

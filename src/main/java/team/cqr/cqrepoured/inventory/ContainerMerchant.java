@@ -7,9 +7,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.npc.trading.Trade;
-import team.cqr.cqrepoured.objects.npc.trading.TradeInput;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.trade.Trade;
+import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.util.CraftingHelper;
 
 public class ContainerMerchant extends Container {

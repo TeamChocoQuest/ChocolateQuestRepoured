@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
 import net.minecraft.client.renderer.entity.RenderManager;
-import team.cqr.cqrepoured.client.models.entities.mobs.ModelCQRMinotaur;
+import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRMinotaur;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRMinotaur;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMinotaur;
 
 public class RenderCQRMinotaur extends RenderCQREntity<EntityCQRMinotaur> {
 

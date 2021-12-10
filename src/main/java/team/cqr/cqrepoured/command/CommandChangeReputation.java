@@ -12,8 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
-import team.cqr.cqrepoured.factions.CQRFaction;
-import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class CommandChangeReputation extends CommandBase {
 

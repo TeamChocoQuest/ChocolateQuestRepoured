@@ -17,9 +17,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.structuregen.DungeonRegistry;
-import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
+import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class CommandLocateDungeon extends CommandBase {
 

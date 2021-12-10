@@ -4,8 +4,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.factions.CQRFaction;
-import team.cqr.cqrepoured.factions.FactionRegistry;
+import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 
 public class CPacketHandlerUpdateReputation implements IMessageHandler<SPacketUpdatePlayerReputation, IMessage> {

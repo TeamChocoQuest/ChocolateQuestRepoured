@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.util;
 
 import java.util.Random;
 
+import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -13,7 +14,6 @@ import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenStructure;
-import team.cqr.cqrepoured.util.reflection.ReflectionMethod;
 
 public class VanillaStructureHelper {
 

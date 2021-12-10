@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.init;
 import java.util.Random;
 
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
 
 public enum ESpeechBubble {
 
@@ -55,12 +55,12 @@ public enum ESpeechBubble {
 	private final ResourceLocation resLoc;
 	static final String folderPath = "textures/misc/speechbubbles/";
 
-	private ESpeechBubble() {
-		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + "bubble_" + this.name().toLowerCase() + ".png");
+	ESpeechBubble() {
+		this.resLoc = new ResourceLocation(CQRMain.MODID, folderPath + "bubble_" + this.name().toLowerCase() + ".png");
 	}
 
-	private ESpeechBubble(String filename) {
-		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + filename + ".png");
+	ESpeechBubble(String filename) {
+		this.resLoc = new ResourceLocation(CQRMain.MODID, folderPath + filename + ".png");
 	}
 
 	public ResourceLocation getResourceLocation() {

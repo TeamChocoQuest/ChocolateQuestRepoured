@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.client.render.entity.layers;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelBoneShield;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelBoneShield;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.entity.boss.EntityCQRNecromancer;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 
 public class LayerCQRNecromancerBoneShield extends AbstractLayerCQR {
 
@@ -15,7 +15,7 @@ public class LayerCQRNecromancerBoneShield extends AbstractLayerCQR {
 	protected final ModelBase ring2;
 
 	protected final RenderCQREntity<? extends EntityCQRNecromancer> RENDERER;
-	protected final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/bone_shield.png");
+	protected final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/bone_shield.png");
 
 	public LayerCQRNecromancerBoneShield(RenderCQREntity<? extends EntityCQRNecromancer> livingEntityRendererIn) {
 		super(livingEntityRendererIn);

@@ -10,15 +10,15 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class RenderChungus<T extends AbstractEntityCQR> extends Render<T> {
 
 	public double widthScale = 1;
 	public double heightScale = 1;
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/chungus.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/chungus.png");
 
 	public RenderChungus(RenderManager rendermanagerIn) {
 		super(rendermanagerIn);

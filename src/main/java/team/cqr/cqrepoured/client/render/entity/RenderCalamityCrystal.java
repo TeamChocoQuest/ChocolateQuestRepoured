@@ -9,13 +9,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import team.cqr.cqrepoured.client.models.entities.ModelCalamityCrystal;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCalamityCrystal;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelCalamityCrystal;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 
 public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 
-	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/calamity_crystal.png");
+	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/calamity_crystal.png");
 	private final ModelBase modelEnderCrystal = new ModelCalamityCrystal(0.0F);
 
 	public RenderCalamityCrystal(RenderManager renderManager) {

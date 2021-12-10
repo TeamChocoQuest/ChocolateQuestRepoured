@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.init;
 import java.util.Random;
 
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.BlockTNT;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
@@ -16,16 +17,14 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.objects.blocks.BlockTNTCQR;
-import team.cqr.cqrepoured.objects.entity.misc.EntityTNTPrimedCQR;
-import team.cqr.cqrepoured.objects.entity.projectiles.ProjectileBubble;
-import team.cqr.cqrepoured.objects.items.ItemSoulBottle;
-import team.cqr.cqrepoured.objects.items.guns.ItemBubblePistol;
+import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.item.ItemSoulBottle;
+import team.cqr.cqrepoured.item.gun.ItemBubblePistol;
 
 public class CQRDispenseBehaviors {
 
@@ -77,7 +76,8 @@ public class CQRDispenseBehaviors {
 			ItemBubblePistol pistol = (ItemBubblePistol) item;
 			acc = pistol.getInaccurary();
 		}
-		Vec3d v = new Vec3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
+		Vec3d v = new Vec3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()),
+				-acc + velocity.z + (2 * acc * rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 
@@ -88,7 +88,8 @@ public class CQRDispenseBehaviors {
 		bubble.velocityChanged = true;
 		source.getWorld().spawnEntity(bubble);
 
-		source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), CQRSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1, 0.75F + (0.5F * rng.nextFloat()), false);
+		source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), CQRSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1,
+				0.75F + (0.5F * rng.nextFloat()), false);
 
 		// DONE: FIgure out how to make the stack damaged
 		stack.attemptDamageItem(1, source.getWorld().rand, null);
@@ -146,40 +147,37 @@ public class CQRDispenseBehaviors {
 
 	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_TNT_CQR = (source, stack) -> {
 		World world = source.getWorld();
-		BlockPos blockpos = source.getBlockPos().offset((EnumFacing) source.getBlockState().getValue(BlockDispenser.FACING));
-		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, (double) blockpos.getX() + 0.5D, (double) blockpos.getY(), (double) blockpos.getZ() + 0.5D, (EntityLivingBase) null);
+		BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
+		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, blockpos.getX() + 0.5D, blockpos.getY(), blockpos.getZ() + 0.5D,
+				(EntityLivingBase) null);
 		world.spawnEntity(entitytntprimed);
-		world.playSound((EntityPlayer) null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		world.playSound((EntityPlayer) null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED,
+				SoundCategory.BLOCKS, 1.0F, 1.0F);
 		stack.shrink(1);
 		return stack;
 	};
-	
-	public static final BehaviorDispenseOptional DISPENSE_BEHAVIOR_IGNITE_TNT_CQR =new BehaviorDispenseOptional() {
+
+	public static final BehaviorDispenseOptional DISPENSE_BEHAVIOR_IGNITE_TNT_CQR = new BehaviorDispenseOptional() {
+		@Override
 		protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
 			World world = source.getWorld();
-	        this.successful = true;
-	        BlockPos blockpos = source.getBlockPos().offset((EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING));
+			this.successful = true;
+			BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
 
-	        if (world.isAirBlock(blockpos))
-	        {
-	            world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
+			if (world.isAirBlock(blockpos)) {
+				world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
 
-	            if (stack.attemptDamageItem(1, world.rand, (EntityPlayerMP)null))
-	            {
-	                stack.setCount(0);
-	            }
-	        }
-	        else if (world.getBlockState(blockpos).getBlock() == CQRBlocks.TNT)
-	        {
-	        	CQRBlocks.TNT.onPlayerDestroy(world, blockpos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNTCQR.EXPLODE, Boolean.valueOf(true)));
-	            world.setBlockToAir(blockpos);
-	        }
-	        else
-	        {
-	            this.successful = false;
-	        }
+				if (stack.attemptDamageItem(1, world.rand, (EntityPlayerMP) null)) {
+					stack.setCount(0);
+				}
+			} else if (world.getBlockState(blockpos).getBlock() == CQRBlocks.TNT) {
+				CQRBlocks.TNT.onPlayerDestroy(world, blockpos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNT.EXPLODE, true));
+				world.setBlockToAir(blockpos);
+			} else {
+				this.successful = false;
+			}
 
-	        return stack;
+			return stack;
 		}
 	};
 

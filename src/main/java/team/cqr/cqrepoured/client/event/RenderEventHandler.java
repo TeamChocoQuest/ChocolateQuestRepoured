@@ -32,16 +32,16 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import team.cqr.cqrepoured.client.models.armor.ModelCrown;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.armor.ModelCrown;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.items.ItemHookshotBase;
-import team.cqr.cqrepoured.objects.items.ItemUnprotectedPositionTool;
-import team.cqr.cqrepoured.objects.items.armor.ItemCrown;
-import team.cqr.cqrepoured.objects.items.guns.ItemMusket;
-import team.cqr.cqrepoured.objects.items.guns.ItemMusketKnife;
-import team.cqr.cqrepoured.objects.items.guns.ItemRevolver;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.item.ItemHookshotBase;
+import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
+import team.cqr.cqrepoured.item.armor.ItemCrown;
+import team.cqr.cqrepoured.item.gun.ItemMusket;
+import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
+import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 @SideOnly(Side.CLIENT)
 @EventBusSubscriber(value = Side.CLIENT)
@@ -199,7 +199,7 @@ public class RenderEventHandler {
 					}
 					GlStateManager.depthMask(true);
 
-					ResourceLocation rs = new ResourceLocation(Reference.MODID, "textures/models/armor/king_crown_layer_1.png");
+					ResourceLocation rs = new ResourceLocation(CQRMain.MODID, "textures/models/armor/king_crown_layer_1.png");
 					Minecraft.getMinecraft().getTextureManager().bindTexture(rs);
 					((ModelCrown) model).render(entity, 0.0625F, renderer, (ModelBiped) entityModel);
 
@@ -268,7 +268,7 @@ public class RenderEventHandler {
 					model.setModelAttributes(entityModel);
 					model.setLivingAnimations(entity, f6, f5, partialTicks);
 
-					ResourceLocation rs = new ResourceLocation(Reference.MODID, "textures/models/armor/king_crown_layer_1.png");
+					ResourceLocation rs = new ResourceLocation(CQRMain.MODID, "textures/models/armor/king_crown_layer_1.png");
 					Minecraft.getMinecraft().getTextureManager().bindTexture(rs);
 					model.render(entity, f6, f5, f8, f2, f7, f4);
 

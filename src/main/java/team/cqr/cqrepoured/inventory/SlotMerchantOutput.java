@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import team.cqr.cqrepoured.objects.npc.trading.Trade;
+import team.cqr.cqrepoured.entity.trade.Trade;
 
 public class SlotMerchantOutput extends Slot {
 

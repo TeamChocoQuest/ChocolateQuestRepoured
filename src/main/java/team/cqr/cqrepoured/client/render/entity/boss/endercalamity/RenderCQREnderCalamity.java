@@ -19,15 +19,15 @@ import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import team.cqr.cqrepoured.client.models.entities.boss.ModelEnderCalamity;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.client.util.SphereRenderer.Triangle;
 import team.cqr.cqrepoured.client.util.SphereRenderer.Vertex;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.objects.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.util.ArrayUtil;
-import team.cqr.cqrepoured.util.Reference;
 
 public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCalamity> {
 
@@ -73,7 +73,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		buffer.reset();
 	}
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/ender_calamity.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
 
 	public RenderCQREnderCalamity(RenderManager renderManager) {
 		super(renderManager, new ModelEnderCalamity(TEXTURE), "boss/ender_calamity");

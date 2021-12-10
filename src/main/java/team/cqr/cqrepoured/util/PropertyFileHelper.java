@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.structuregen.DungeonSpawnPos;
+import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -33,7 +33,7 @@ public class PropertyFileHelper {
 				prop.load(inputStream);
 				return prop;
 			} catch (IOException e) {
-				CQRMain.logger.error("Failed to load file " + file.getName(), e);
+				CQRMain.logger.error("Failed to load file {}", file.getName(), e);
 				return null;
 			}
 		}

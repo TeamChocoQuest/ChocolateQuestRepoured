@@ -22,8 +22,8 @@ import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.DataEntryObject;
 import team.cqr.cqrepoured.network.datasync.DataEntryString;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
-import team.cqr.cqrepoured.structuregen.structurefile.CQStructure;
 import team.cqr.cqrepoured.util.ByteBufUtil;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 public class TileEntityExporter extends TileEntity implements ITileEntitySyncable {
 

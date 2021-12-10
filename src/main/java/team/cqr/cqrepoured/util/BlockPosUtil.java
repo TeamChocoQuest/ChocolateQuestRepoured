@@ -36,12 +36,12 @@ public class BlockPosUtil {
 			return;
 		}
 
-		x1 = Math.max(x1, -30000000);
+		x1 = Math.max(x1, -30_000_000);
 		y1 = Math.max(y1, 0);
-		z1 = Math.max(z1, -30000000);
-		x2 = Math.min(x2, 30000000);
+		z1 = Math.max(z1, -30_000_000);
+		x2 = Math.min(x2, 30_000_000);
 		y2 = Math.min(y2, 255);
-		z2 = Math.min(z2, 30000000);
+		z2 = Math.min(z2, 30_000_000);
 		if (x1 > x2 || y1 > y2 || z1 > z2) {
 			return;
 		}
@@ -122,13 +122,13 @@ public class BlockPosUtil {
 	public static BlockPos getNearest(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks,
 			BlockPos pos, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		BlockPosDistInfo blockPosDistInfo = new BlockPosDistInfo();
-		blockPosDistInfo.d = Integer.MAX_VALUE;
+		blockPosDistInfo.dist = Integer.MAX_VALUE;
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
 			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
 				double dist = pos.distanceSq(mutablePos);
-				if (dist < blockPosDistInfo.d) {
+				if (dist < blockPosDistInfo.dist) {
 					blockPosDistInfo.mutablePos.setPos(mutablePos);
-					blockPosDistInfo.d = dist;
+					blockPosDistInfo.dist = dist;
 					blockPosDistInfo.empty = false;
 				}
 			}
@@ -137,9 +137,11 @@ public class BlockPosUtil {
 	}
 
 	private static class BlockPosDistInfo {
-		public final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-		public double d;
-		public boolean empty = true;
+
+		private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		private double dist;
+		private boolean empty = true;
+
 	}
 
 }

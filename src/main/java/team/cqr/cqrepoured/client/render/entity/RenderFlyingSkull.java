@@ -4,13 +4,13 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.models.entities.ModelFlyingSkull;
-import team.cqr.cqrepoured.objects.entity.misc.EntityFlyingSkullMinion;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelFlyingSkull;
+import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 
 public class RenderFlyingSkull extends RenderLiving<EntityFlyingSkullMinion> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/flying_skull.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/flying_skull.png");
 
 	public RenderFlyingSkull(RenderManager renderManager) {
 		super(renderManager, new ModelFlyingSkull(0F), 0F);

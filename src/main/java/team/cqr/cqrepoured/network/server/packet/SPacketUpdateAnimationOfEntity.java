@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.objects.entity.IServerAnimationReceiver;
+import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
 
 public class SPacketUpdateAnimationOfEntity implements IMessage {
 

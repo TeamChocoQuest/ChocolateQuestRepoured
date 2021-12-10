@@ -8,8 +8,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.network.client.packet.CPacketExtendedReachAttack;
-import team.cqr.cqrepoured.objects.items.spears.ItemSpearBase;
 
 public class SPacketHandlerExtendedReachAttack implements IMessageHandler<CPacketExtendedReachAttack, IMessage> {
 	@Override

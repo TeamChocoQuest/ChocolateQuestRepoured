@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.render.entity.mobs;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.objects.entity.mobs.EntityCQRSpectre;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
 
 public class RenderCQRSpectre extends RenderCQREntity<EntityCQRSpectre> {
 

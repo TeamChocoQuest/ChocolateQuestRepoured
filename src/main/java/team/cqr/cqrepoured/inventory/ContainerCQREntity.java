@@ -19,10 +19,10 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
-import team.cqr.cqrepoured.objects.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.objects.items.ItemBadge;
-import team.cqr.cqrepoured.objects.items.ItemPotionHealing;
-import team.cqr.cqrepoured.objects.items.guns.ItemBullet;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.item.ItemBadge;
+import team.cqr.cqrepoured.item.ItemPotionHealing;
+import team.cqr.cqrepoured.item.gun.ItemBullet;
 
 public class ContainerCQREntity extends Container {
 

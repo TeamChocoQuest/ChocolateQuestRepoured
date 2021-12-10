@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
-import team.cqr.cqrepoured.util.Reference;
 
 public class GuiButtonTextured extends GuiButton {
 
@@ -25,8 +25,8 @@ public class GuiButtonTextured extends GuiButton {
 	public GuiButtonTextured(int buttonId, int x, int y, int width, int height, String buttonText, String texture, @Nullable String icon, double u, double v,
 			double texWidth, double texHeight) {
 		super(buttonId, x, y, width, height, buttonText);
-		this.texture = new ResourceLocation(Reference.MODID, "textures/gui/" + texture + ".png");
-		this.icon = icon != null && !icon.isEmpty() ? new ResourceLocation(Reference.MODID, "textures/gui/" + icon + ".png") : null;
+		this.texture = new ResourceLocation(CQRMain.MODID, "textures/gui/" + texture + ".png");
+		this.icon = icon != null && !icon.isEmpty() ? new ResourceLocation(CQRMain.MODID, "textures/gui/" + icon + ".png") : null;
 		this.u = u;
 		this.v = v;
 		this.texWidth = texWidth;
@@ -50,14 +50,14 @@ public class GuiButtonTextured extends GuiButton {
 				GuiHelper.drawTexture(this.x, this.y, 0.0D, 0.0D, this.width, this.height, 1.0D, 1.0D);
 			}
 			this.mouseDragged(mc, mouseX, mouseY);
-			int j = 14737632;
+			int j = 0xE0E0E0;
 
 			if (this.packedFGColour != 0) {
 				j = this.packedFGColour;
 			} else if (!this.enabled) {
-				j = 10526880;
+				j = 0xA0A0A0;
 			} else if (this.hovered) {
-				j = 16777120;
+				j = 0xFFFFA0;
 			}
 
 			this.drawCenteredString(mc.fontRenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, j);

@@ -8,14 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.CQRMain;
 
 @SideOnly(Side.CLIENT)
 public class GuiReputation extends GuiScreen {
 
 	// Textures
-	protected static final ResourceLocation TEXTURE_BG = new ResourceLocation(Reference.MODID, "textures/gui/repu/gui_reputation.png");
-	protected static final ResourceLocation TEXTURE_REPU_BAR = new ResourceLocation(Reference.MODID, "textures/gui/repu/repubar.png");
+	protected static final ResourceLocation TEXTURE_BG = new ResourceLocation(CQRMain.MODID, "textures/gui/repu/gui_reputation.png");
+	protected static final ResourceLocation TEXTURE_REPU_BAR = new ResourceLocation(CQRMain.MODID, "textures/gui/repu/repubar.png");
 	protected ResourceLocation imgPlayerHead;
 
 	// GUI Elements

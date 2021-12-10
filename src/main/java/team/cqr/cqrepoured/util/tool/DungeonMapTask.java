@@ -39,10 +39,10 @@ import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
-import team.cqr.cqrepoured.structuregen.WorldDungeonGenerator;
-import team.cqr.cqrepoured.structuregen.dungeons.DungeonBase;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.Reference;
+import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class DungeonMapTask {
 
@@ -50,7 +50,7 @@ public class DungeonMapTask {
 	private static final BufferedImage[] icons = IntStream.range(0, 20).mapToObj(i -> {
 		Minecraft mc = Minecraft.getMinecraft();
 		IResourceManager resourceManager = mc.getResourceManager();
-		try (IResource resource = resourceManager.getResource(new ResourceLocation(Reference.MODID, "textures/gui/map/d" + i + ".png"))) {
+		try (IResource resource = resourceManager.getResource(new ResourceLocation(CQRMain.MODID, "textures/gui/map/d" + i + ".png"))) {
 			return TextureUtil.readBufferedImage(resource.getInputStream());
 		} catch (IOException e) {
 			CrashReport crash = new CrashReport("Failed loading dungeon icons", e);
