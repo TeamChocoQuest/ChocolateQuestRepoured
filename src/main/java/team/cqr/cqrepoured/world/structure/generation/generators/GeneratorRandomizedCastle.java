@@ -51,7 +51,8 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 				// CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.structurePos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
-				PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), CQRConfig.general.supportHillWallSize);
+				PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(),
+						CQRConfig.general.supportHillWallSize);
 				partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 				partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 				this.dungeonBuilder.add(partBuilder);
