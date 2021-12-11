@@ -144,7 +144,8 @@ public abstract class DungeonBase {
 	public int getYForPos(World world, int x, int z, Random rand) {
 		int y = 0;
 		if (!this.fixedY) {
-			int r = 32;
+			// TODO make this a dungeon config option?
+			int r = 16;
 			int[] arr = new int[(r * 2 + 1) * (r * 2 + 1)];
 			for (int ix = -r; ix <= r; ix++) {
 				for (int iz = -r; iz <= r; iz++) {
