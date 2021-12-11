@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -25,6 +26,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
+import team.cqr.cqrepoured.util.StructureHelper;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
@@ -55,6 +57,7 @@ public abstract class DungeonBase {
 	protected boolean spawnOnlyBehindWall = false;
 	protected String[] modDependencies = new String[0];
 	protected String[] dungeonDependencies = new String[0];
+	protected String[] structures = new String[0];
 
 	protected boolean treatWaterAsAir = false;
 	protected int underGroundOffset = 0;
@@ -206,7 +209,7 @@ public abstract class DungeonBase {
 		return this.isValidDim(dim);
 	}
 
-	public boolean canSpawnAt(World world, Biome biome, int chunkX, int chunkZ) {
+	public boolean canSpawnAt(World world, Biome biome, BlockPos pos) {
 		if (!this.enabled) {
 			return false;
 		}
@@ -228,10 +231,13 @@ public abstract class DungeonBase {
 		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
-		if (this.spawnOnlyBehindWall && world.provider.getDimension() == 0 && CQRConfig.wall.enabled && chunkZ < -CQRConfig.wall.distance) {
+		if (this.spawnOnlyBehindWall && world.provider.getDimension() == 0 && CQRConfig.wall.enabled && pos.getZ() >> 4 < -CQRConfig.wall.distance) {
 			return false;
 		}
-		return this.isValidBiome(biome);
+		if (!this.isValidBiome(biome)) {
+			return false;
+		}
+		return !this.isStructureNearby(world, pos);
 	}
 
 	public boolean canSpawnInChunkWithLockedPosition(World world, int chunkX, int chunkZ) {
@@ -319,6 +325,15 @@ public abstract class DungeonBase {
 		}
 
 		return flag;
+	}
+
+	public boolean isStructureNearby(World world, BlockPos pos) {
+		for (String structure : this.structures) {
+			if (StructureHelper.isStructureInRange(world, pos, 0, structure)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isLockedPositionInChunk(World world, int chunkX, int chunkZ) {

@@ -97,6 +97,7 @@ public class CQRMain {
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
 	public static boolean isCubicChunksInstalled;
+	public static boolean isAW2Installed;
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(CQRMain.MODID + "_items") {
 		@Override
@@ -247,6 +248,7 @@ public class CQRMain {
 		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
 		isEntityCullingInstalled = Loader.isModLoaded("entity_culling");
 		isCubicChunksInstalled = Loader.isModLoaded("cubicchunks");
+		isAW2Installed = Loader.isModLoaded("ancientwarfare");
 
 		DungeonRegistry.getInstance().loadDungeonFiles();
 		CQStructure.checkAndUpdateStructureFiles();
