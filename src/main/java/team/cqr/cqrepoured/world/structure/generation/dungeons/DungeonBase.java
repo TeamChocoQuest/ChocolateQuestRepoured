@@ -153,7 +153,7 @@ public abstract class DungeonBase {
 			}
 			Arrays.sort(arr);
 
-			y = arr[arr.length / 2];
+			y = arr[(int) (arr.length * 0.6)];
 			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		} else {
 			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
