@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -154,7 +153,6 @@ public abstract class DungeonBase {
 			}
 			Arrays.sort(arr);
 
-			CQRMain.logger.info("{} {}", arr[arr.length / 2], Math.round(Arrays.stream(arr).average().getAsDouble()));
 			y = arr[arr.length / 2];
 			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		} else {
