@@ -77,7 +77,7 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
 
-		@Config.Comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon.")
+		@Config.Comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon. In the dungeon configs you can define which structures will prevent a dungeon from generating.")
 		public boolean generationRespectOtherStructures = true;
 
 		@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")

@@ -331,6 +331,9 @@ public abstract class DungeonBase {
 	}
 
 	public boolean isStructureNearby(World world, BlockPos pos) {
+		if (!CQRConfig.advanced.generationRespectOtherStructures) {
+			return false;
+		}
 		for (String structure : this.structuresPreventingGeneration) {
 			if (StructureHelper.isStructureInRange(world, pos, this.structureCheckRadius, structure)) {
 				return true;
