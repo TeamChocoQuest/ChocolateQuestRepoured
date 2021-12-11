@@ -2,18 +2,16 @@ package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.Perlin3D;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
@@ -37,15 +35,16 @@ public class PlateauDungeonPart implements IDungeonPart {
 	private int chunkZ;
 	private int chunkX1;
 	private int chunkZ1;
+	private boolean generated;
 
 	protected PlateauDungeonPart(long seed, int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
 			@Nullable IBlockState supportHillTopBlock) {
 		this.seed = seed;
-		this.startX = startX - wallSize;
-		this.startZ = startZ - wallSize;
-		this.endX = endX + wallSize;
+		this.startX = startX;
+		this.startZ = startZ;
+		this.endX = endX;
 		this.endY = endY;
-		this.endZ = endZ + wallSize;
+		this.endZ = endZ;
 		this.wallSize = wallSize;
 		this.supportHillBlock = supportHillBlock;
 		this.supportHillTopBlock = supportHillTopBlock;
@@ -59,135 +58,71 @@ public class PlateauDungeonPart implements IDungeonPart {
 
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
-		if (this.chunkX <= this.endX >> 4) {
-			Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
-
-			for (int x = 0; x < 16; x++) {
-				if ((this.chunkX << 4) + x < this.startX || (this.chunkX << 4) + x > this.endX) {
-					continue;
-				}
-				for (int z = 0; z < 16; z++) {
-					if ((this.chunkZ << 4) + z < this.startZ || (this.chunkZ << 4) + z > this.endZ) {
-						continue;
+		for (int x = this.startX - this.wallSize; x <= this.endX + this.wallSize; x++) {
+			for (int z = this.startZ - this.wallSize; z <= this.endZ + this.wallSize; z++) {
+				MUTABLE.setPos(x, 0, z);
+				IBlockState state1 = this.supportHillBlock;
+				IBlockState state2 = this.supportHillTopBlock;
+				if (state1 == null || state2 == null) {
+					Biome biome = world.getBiome(MUTABLE);
+					if (state1 == null) {
+						state1 = biome.fillerBlock;
 					}
-
-					MUTABLE.setPos((this.chunkX << 4) + x, chunk.getTopFilledSegment() + 15, (this.chunkZ << 4) + z);
-					IBlockState state1 = this.supportHillBlock;
-					IBlockState state2 = this.supportHillTopBlock;
-					if (state1 == null || state2 == null) {
-						Biome biome = world.getBiome(MUTABLE.setPos(this.chunkX << 4, 0, this.chunkZ << 4));
-						if (state1 == null) {
-							state1 = biome.fillerBlock;
-						}
-						if (state2 == null) {
-							state2 = biome.topBlock;
-						}
-					}
-					this.setYtoHeight(world, MUTABLE.setPos((this.chunkX << 4) + x, this.endY + 1, (this.chunkZ << 4) + z));
-					int posY = MUTABLE.getY();
-					int i = Math.max((this.endY - 1) - posY, 1);
-
-					while (MUTABLE.getY() < this.endY) {
-						if (MUTABLE.getX() >= this.startX + this.wallSize
-								&& MUTABLE.getX() <= this.endX - this.wallSize
-								&& MUTABLE.getZ() >= this.startZ + this.wallSize
-								&& MUTABLE.getZ() <= this.endZ - this.wallSize) {
-							BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
-							dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
-						} else {
-							float noiseVar = (MUTABLE.getY() - (this.endY - 1)) / (i * 1.5F);
-
-							noiseVar += Math.max((this.wallSize - (MUTABLE.getX() - this.startX)) / 8.0F, 0.0F);
-							noiseVar += Math.max((this.wallSize - ((this.endX + 1) - MUTABLE.getX())) / 8.0F, 0.0F);
-
-							noiseVar += Math.max((this.wallSize - (MUTABLE.getZ() - this.startZ)) / 8.0F, 0.0F);
-							noiseVar += Math.max((this.wallSize - ((this.endZ + 1) - MUTABLE.getZ())) / 8.0F, 0.0F);
-
-							if (noiseVar / 3.0D + (MUTABLE.getY() - posY) / i * 0.25D >= 0.5D) {
-								break;
-							}
-
-							double value = (this.perlin1.getNoiseAt(MUTABLE.getX(), MUTABLE.getY(), MUTABLE.getZ())
-									+ this.perlin2.getNoiseAt(MUTABLE.getX(), MUTABLE.getY(), MUTABLE.getZ()) + noiseVar) / 3.0D
-									+ (MUTABLE.getY() - posY) / i * 0.25D;
-
-							if (value < 0.5D) {
-								BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
-								dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
-							} else {
-								break;
-							}
-						}
-						MUTABLE.setY(MUTABLE.getY() + 1);
-					}
-
-					if (MUTABLE.getY() <= this.endY) {
-						BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, 16, false);
-						dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
+					if (state2 == null) {
+						state2 = biome.topBlock;
 					}
 				}
-			}
 
-			this.chunkZ++;
-			if (this.chunkZ > this.endZ >> 4) {
-				this.chunkZ = this.startZ >> 4;
-				this.chunkX++;
-			}
-		} else if (this.chunkX1 <= this.endX >> 4) {
-			Chunk chunk = world.getChunk(this.chunkX1, this.chunkZ1);
+				int y = getHeight(world, x, this.endY + 1, z);
+				int dx = x < this.startX ? (this.startX - x) : (x > this.endX ? x - this.endX : 0);
+				int dz = z < this.startZ ? (this.startZ - z) : (z > this.endZ ? z - this.endZ : 0);
+				int end = (int) Math.round(y + (this.endY + 1 - y) * (1 - Math.sqrt(dx * dx + dz * dz) / this.wallSize));
 
-			for (int x = 0; x < 16; x++) {
-				if ((this.chunkX1 << 4) + x < this.startX || (this.chunkX1 << 4) + x > this.endX) {
-					continue;
-				}
-				for (int z = 0; z < 16; z++) {
-					if ((this.chunkZ1 << 4) + z < this.startZ || (this.chunkZ1 << 4) + z > this.endZ) {
-						continue;
-					}
-
-					MUTABLE.setPos((this.chunkX1 << 4) + x, this.endY, (this.chunkZ1 << 4) + z);
-					while (MUTABLE.getY() > 0 && chunk.getBlockState(MUTABLE).getBlock() == Blocks.AIR) {
-						MUTABLE.setY(MUTABLE.getY() - 1);
-					}
+				MUTABLE.setY(y);
+				while (MUTABLE.getY() < end - 1) {
+					BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
+					dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 					MUTABLE.setY(MUTABLE.getY() + 1);
-					if (chunk.getBlockState(MUTABLE).getBlock() == Blocks.AIR) {
-						Biome biome = world.getBiome(MUTABLE);
-						if (DungeonGenUtils.percentageRandom(biome.decorator.grassPerChunk / 512.0D)) {
-							biome.getRandomWorldGenForGrass(world.rand).generate(world, world.rand, MUTABLE);
-						}
-					}
 				}
-			}
-
-			this.chunkZ1++;
-			if (this.chunkZ1 > this.endZ >> 4) {
-				this.chunkZ1 = this.startZ >> 4;
-				this.chunkX1++;
+				if (MUTABLE.getY() < end) {
+					BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, 16, false);
+					dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
+				}
 			}
 		}
+		this.generated = true;
 	}
 
-	private void setYtoHeight(World world, MutableBlockPos pos) {
-		Chunk chunk = world.getChunk(pos);
+	private static boolean isGround(World world, Chunk chunk, BlockPos pos) {
+		IBlockState state = chunk.getBlockState(pos);
+		Material material = state.getMaterial();
+		return material.blocksMovement() && material != Material.WOOD && material != Material.LEAVES && material != Material.PLANTS;
+	}
 
-		while (pos.getY() >= 0) {
-			IBlockState state = chunk.getBlockState(pos);
-			Material material = state.getMaterial();
-			Block block = state.getBlock();
+	private static int getHeight(World world, int x, int y, int z) {
+		Chunk chunk = world.getChunk(x >> 4, z >> 4);
+		MUTABLE.setPos(x, y, z);
+		boolean upwards = isGround(world, chunk, MUTABLE);
 
-			if (material.blocksMovement() && !block.isLeaves(state, world, pos) && !block.isFoliage(world, pos)) {
-				break;
+		while (true) {
+			boolean isGround = isGround(world, chunk, MUTABLE);
+			if (upwards) {
+				if (!isGround) {
+					return MUTABLE.getY();
+				}
+				MUTABLE.setY(MUTABLE.getY() + 1);
+			} else {
+				if (isGround) {
+					return MUTABLE.getY() + 1;
+				}
+				MUTABLE.setY(MUTABLE.getY() - 1);
 			}
-
-			pos.setY(pos.getY() - 1);
 		}
-
-		pos.setY(pos.getY() + 1);
 	}
 
 	@Override
 	public boolean isGenerated() {
-		return this.chunkX1 > this.endX >> 4;
+		return this.generated;
 	}
 
 	public int getStartX() {
