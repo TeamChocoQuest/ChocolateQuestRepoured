@@ -6,6 +6,7 @@ import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
@@ -50,7 +51,7 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 				// CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
 				BlockPos p1 = this.structurePos.add(area.getNwCorner());
 				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
-				PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), 8);
+				PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), CQRConfig.general.supportHillWallSize);
 				partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 				partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 				this.dungeonBuilder.add(partBuilder);

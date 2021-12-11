@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
@@ -89,7 +90,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2,
 					this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
-					y + this.dungeon.getUnderGroundOffset() - 1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2, 8);
+					y + this.dungeon.getUnderGroundOffset() - 1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2, CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);

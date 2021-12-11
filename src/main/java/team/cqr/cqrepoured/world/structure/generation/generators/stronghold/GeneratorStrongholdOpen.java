@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
@@ -157,7 +158,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structure.getSize().getX() / 2,
 					this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
-					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, 8);
+					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);

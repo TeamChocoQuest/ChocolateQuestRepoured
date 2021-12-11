@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
@@ -84,7 +85,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// Support platform
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r,
-					this.pos.getY() - this.caveDepth, this.pos.getZ() + r, 8);
+					this.pos.getY() - this.caveDepth, this.pos.getZ() + r, CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);
