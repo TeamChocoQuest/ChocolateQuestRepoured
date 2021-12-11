@@ -57,7 +57,8 @@ public abstract class DungeonBase {
 	protected boolean spawnOnlyBehindWall = false;
 	protected String[] modDependencies = new String[0];
 	protected String[] dungeonDependencies = new String[0];
-	protected String[] structures = new String[0];
+	protected String[] structuresPreventingGeneration = new String[0];
+	protected int structureCheckRadius = 0;
 
 	protected boolean treatWaterAsAir = false;
 	protected int underGroundOffset = 0;
@@ -104,6 +105,8 @@ public abstract class DungeonBase {
 		this.spawnOnlyBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", this.spawnOnlyBehindWall);
 		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "modDependencies", this.modDependencies, true);
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dungeonDependencies", this.dungeonDependencies, true);
+		this.structuresPreventingGeneration = PropertyFileHelper.getStringArrayProperty(prop, "structuresPreventingGeneration", this.structuresPreventingGeneration, true);
+		this.structureCheckRadius = PropertyFileHelper.getIntProperty(prop, "structureCheckRadius", this.structureCheckRadius, 0, 128);
 
 		this.treatWaterAsAir = PropertyFileHelper.getBooleanProperty(prop, "treatWaterAsAir", this.treatWaterAsAir);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", this.underGroundOffset, 0, Integer.MAX_VALUE);
@@ -328,8 +331,8 @@ public abstract class DungeonBase {
 	}
 
 	public boolean isStructureNearby(World world, BlockPos pos) {
-		for (String structure : this.structures) {
-			if (StructureHelper.isStructureInRange(world, pos, 0, structure)) {
+		for (String structure : this.structuresPreventingGeneration) {
+			if (StructureHelper.isStructureInRange(world, pos, this.structureCheckRadius, structure)) {
 				return true;
 			}
 		}
