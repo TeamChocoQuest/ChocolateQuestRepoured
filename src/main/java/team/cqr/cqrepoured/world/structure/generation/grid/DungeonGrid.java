@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Predicates;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -59,11 +56,6 @@ public class DungeonGrid {
 
 	@Nullable
 	public DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
-		return this.getDungeonAt(world, chunkX, chunkZ, Predicates.alwaysTrue());
-	}
-
-	@Nullable
-	public DungeonBase getDungeonAt(World world, int chunkX, int chunkZ, Predicate<DungeonBase> dungeonPredicate) {
 		Random random = WorldDungeonGenerator.getRandomForCoords(world, chunkX, chunkZ);
 		if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ, random)) {
 			return null;
@@ -74,9 +66,6 @@ public class DungeonGrid {
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
 			log(world, chunkX, chunkZ, "Could not find any dungeon for biome: %s (%s)", biome, BiomeDictionary.getTypes(biome));
-			return null;
-		}
-		if (!dungeonPredicate.test(dungeon)) {
 			return null;
 		}
 
@@ -182,7 +171,7 @@ public class DungeonGrid {
 				if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
 					continue;
 				}
-				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority, Predicates.alwaysTrue()) != null) {
+				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority) != null) {
 					log(world, chunkX, chunkZ, "Nearby cqrepoured structure was found");
 					return true;
 				}

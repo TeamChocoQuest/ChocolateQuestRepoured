@@ -53,14 +53,14 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	 */
 	@Nullable
 	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
-		return getDungeonAt(world, chunkX, chunkZ, Predicates.alwaysTrue(), Predicates.alwaysTrue());
+		return getDungeonAt(world, chunkX, chunkZ, Predicates.alwaysTrue());
 	}
 
 	/**
 	 * @return the dungeon that will be generated in this chunk
 	 */
 	@Nullable
-	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ, Predicate<DungeonGrid> gridPredicate, Predicate<DungeonBase> dungeonPredicate) {
+	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ, Predicate<DungeonGrid> gridPredicate) {
 		if (!canSpawnDungeonsInWorld(world)) {
 			return null;
 		}
@@ -70,7 +70,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return locationSpecificDungeon;
 		}
 
-		return GridRegistry.getInstance().getGrids().stream().filter(gridPredicate).map(grid -> grid.getDungeonAt(world, chunkX, chunkZ, dungeonPredicate))
+		return GridRegistry.getInstance().getGrids().stream().filter(gridPredicate).map(grid -> grid.getDungeonAt(world, chunkX, chunkZ))
 				.filter(Objects::nonNull).findFirst().orElse(null);
 	}
 
