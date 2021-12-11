@@ -145,12 +145,12 @@ public class DungeonMapTask {
 		}
 
 		for (int x = 0; x < 16; x++) {
-			int ix = x + this.sizeBlocks + spawnX;
+			int ix = x + this.radiusBlocks + spawnX;
 			if (ix < 0 || ix > this.sizeBlocks) {
 				continue;
 			}
 			for (int z = 0; z < 16; z++) {
-				int iz = z + this.sizeBlocks + spawnZ;
+				int iz = z + this.radiusBlocks + spawnZ;
 				if (iz < 0 || iz > this.sizeBlocks) {
 					continue;
 				}
