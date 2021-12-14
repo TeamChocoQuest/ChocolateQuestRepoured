@@ -31,6 +31,8 @@ import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerShoulderEntity;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
+import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
+import team.cqr.cqrepoured.entity.ITextureVariants;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
@@ -242,17 +244,30 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 		super.renderLivingAt(entityLivingBaseIn, x, y, z);
 	}
+	
+	protected ResourceLocation[] textureVariantCache = null;
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		// Custom texture start
-		if (entity.hasTextureOverride()) {
-			return entity.getTextureOverride();
-		}
-		// Custom texture end
-		return entity.getTextureCount() > 1
-				? new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
-				: this.texture;
+		if(entity instanceof IHasTextureOverride)
+			// Custom texture start
+			if (((IHasTextureOverride)entity).hasTextureOverride()) {
+				return ((IHasTextureOverride)entity).getTextureOverride();
+			}
+			// Custom texture end
+			if(entity instanceof ITextureVariants) {
+				if(((ITextureVariants)entity).getTextureCount() > 1) {
+					if(this.textureVariantCache == null) {
+						this.textureVariantCache = new ResourceLocation[((ITextureVariants)entity).getTextureCount()];
+					}
+					final int index = ((ITextureVariants)entity).getTextureIndex();
+					if(this.textureVariantCache[index] == null) {
+						this.textureVariantCache[index] = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + index + ".png");
+					}
+					return this.textureVariantCache[index];
+				}
+			}
+			return this.texture;
 	}
 
 	@Override

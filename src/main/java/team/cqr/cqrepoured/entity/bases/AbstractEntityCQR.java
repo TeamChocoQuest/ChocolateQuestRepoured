@@ -72,9 +72,11 @@ import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandle
 import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ISizable;
+import team.cqr.cqrepoured.entity.ITextureVariants;
 import team.cqr.cqrepoured.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowPath;
@@ -127,7 +129,7 @@ import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants {
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
@@ -250,7 +252,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(HAS_TARGET, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
-		this.dataManager.register(TEXTURE_INDEX, this.getTextureVariant());
+		this.dataManager.register(TEXTURE_INDEX, this.getTextureVariant(this.getRNG()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
 		this.dataManager.register(SPIN_TO_WIN, false);
@@ -269,10 +271,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	protected boolean canDespawn() {
 		return false;
-	}
-
-	protected int getTextureVariant() {
-		return this.getRNG().nextInt(this.getTextureCount());
 	}
 
 	@Override
@@ -1209,6 +1207,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
+	@Override
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
 		// System.out.println("Applying texture to dataManager");
 		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
@@ -1378,10 +1377,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@SideOnly(Side.CLIENT)
 	public int getTextureIndex() {
 		return this.dataManager.get(TEXTURE_INDEX);
-	}
-
-	public int getTextureCount() {
-		return 1;
 	}
 
 	public double getAttackReach(EntityLivingBase target) {
@@ -1697,10 +1692,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	// Custom textures
+	@Override
 	public boolean hasTextureOverride() {
 		return this.dataManager.get(TEXTURE_OVERRIDE) != null && !this.dataManager.get(TEXTURE_OVERRIDE).isEmpty();
 	}
 
+	@Override
 	public ResourceLocation getTextureOverride() {
 		if (this.textureOverride == null || !this.textureOverride.toString().equals(this.dataManager.get(TEXTURE_OVERRIDE))) {
 			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
