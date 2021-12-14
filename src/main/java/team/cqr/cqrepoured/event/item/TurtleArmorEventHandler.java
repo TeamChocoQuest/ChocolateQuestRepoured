@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -43,6 +44,9 @@ public class TurtleArmorEventHandler {
 	public static void onLivingDamageEvent(LivingDamageEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (!ItemUtil.hasFullSet(entity, ItemArmorTurtle.class)) {
+			return;
+		}
+		if (CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_TURTLE)) {
 			return;
 		}
 		if (entity.getHealth() - event.getAmount() > entity.getMaxHealth() * 0.2F) {
