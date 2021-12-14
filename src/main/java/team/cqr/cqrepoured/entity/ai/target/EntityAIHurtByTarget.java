@@ -14,7 +14,7 @@ import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 
@@ -45,7 +45,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (!revengeTarget.isEntityAlive()) {
 			return false;
 		}
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if (faction == null) {
 			return false;
 		}
@@ -68,7 +68,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	public void startExecuting() {
 		this.prevRevengeTimer = this.entity.getRevengeTimer();
 		this.trySetAttackTarget(this.entity);
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if (faction != null && faction.isEnemy(this.attackTarget) && !(this.entity.getLeader() instanceof EntityPlayer)) {
 			this.callForHelp();
 		}

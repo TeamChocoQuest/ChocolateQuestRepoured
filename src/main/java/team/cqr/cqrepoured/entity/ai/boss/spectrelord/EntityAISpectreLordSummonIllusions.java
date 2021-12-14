@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordIllusion;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 
 public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<EntityCQRSpectreLord> implements IEntityAISpellAnimatedVanilla {
 
@@ -98,7 +98,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 8.0D, this.entity.posY - 0.5D, this.entity.posZ - 8.0D, this.entity.posX + 8.0D,
 				this.entity.posY + this.entity.height + 0.5D, this.entity.posZ + 8.0D);
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
 				e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 			heal += 0.05F;

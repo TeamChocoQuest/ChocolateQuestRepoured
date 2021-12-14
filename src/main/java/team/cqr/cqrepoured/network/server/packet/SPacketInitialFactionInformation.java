@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -33,7 +33,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		this.repuCanChange = new boolean[arrSize];
 		this.defaultRepu = new String[arrSize];
 		for (int i = 0; i < this.factions.length; i++) {
-			CQRFaction fac = FactionRegistry.instance().getLoadedFactions().get(i);
+			Faction fac = FactionRegistry.instance().getLoadedFactions().get(i);
 			this.factions[i] = fac.getName();
 			int score = FactionRegistry.instance().getExactReputationOf(playerID, fac);
 			this.repuCanChange[i] = fac.canRepuChange();
@@ -42,21 +42,21 @@ public class SPacketInitialFactionInformation implements IMessage {
 		}
 	}
 
-	public List<CQRFaction> getFactions() {
-		List<CQRFaction> result = new ArrayList<>();
+	public List<Faction> getFactions() {
+		List<Faction> result = new ArrayList<>();
 
 		for (int i = 0; i < this.factions.length; i++) {
-			result.add(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.repuCanChange[i]));
+			result.add(new Faction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.repuCanChange[i]));
 		}
 
 		return result;
 	}
 
-	public List<Tuple<CQRFaction, Integer>> getReputations() {
-		List<Tuple<CQRFaction, Integer>> data = new ArrayList<>();
+	public List<Tuple<Faction, Integer>> getReputations() {
+		List<Tuple<Faction, Integer>> data = new ArrayList<>();
 
 		for (int i = 0; i < this.reputations.length; i++) {
-			data.add(new Tuple<>(new CQRFaction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.repuCanChange[i]), this.reputations[i]));
+			data.add(new Tuple<>(new Faction(this.factions[i], EReputationState.valueOf(this.defaultRepu[i]), this.repuCanChange[i]), this.reputations[i]));
 		}
 
 		return data;

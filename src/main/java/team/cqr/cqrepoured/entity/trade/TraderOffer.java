@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 
 public class TraderOffer {
 
@@ -36,7 +36,7 @@ public class TraderOffer {
 		return nbt;
 	}
 
-	public CQRFaction getTraderFaction() {
+	public Faction getTraderFaction() {
 		return this.entity.getFaction();
 	}
 

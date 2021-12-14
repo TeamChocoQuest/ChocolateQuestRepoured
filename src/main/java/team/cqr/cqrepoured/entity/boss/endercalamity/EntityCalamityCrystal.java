@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -244,7 +244,7 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Nullable
-	private CQRFaction getFaction() {
+	private Faction getFaction() {
 		if (this.world.isRemote) {
 			return null;
 		}

@@ -50,7 +50,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.entity.misc.EntityIceSpike;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
@@ -357,7 +357,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 				// End IceAndFire compatibility
 
-				CQRFaction fac = FactionRegistry.instance().getFactionOf(source.getTrueSource());
+				Faction fac = FactionRegistry.instance().getFactionOf(source.getTrueSource());
 				boolean dragonFactionFlag = fac != null && (fac.getName().equalsIgnoreCase("DRAGON") || fac.getName().equalsIgnoreCase("DRAGONS"));
 
 				// If we are attacked by a dragon: KILL IT

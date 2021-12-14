@@ -4,7 +4,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 
@@ -19,7 +19,7 @@ public class CPacketHandlerUpdateReputation implements IMessageHandler<SPacketUp
 				// System.out.println("Faction: " + message.getFaction() + " Reputation: " + message.getScore());
 				FactionRegistry FAC_REG = FactionRegistry.instance();
 				try {
-					CQRFaction faction = FAC_REG.getFactionInstance(message.getFaction());
+					Faction faction = FAC_REG.getFactionInstance(message.getFaction());
 					if (faction != null) {
 						FAC_REG.setReputation(message.getPlayerId(), message.getScore(), faction);
 					}

@@ -5,7 +5,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 
@@ -17,10 +17,10 @@ public class CPacketHandlerInitialFactionInformation implements IMessageHandler<
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				// System.out.println("Received packet");
 				FactionRegistry FAC_REG = FactionRegistry.instance();
-				for (CQRFaction faction : message.getFactions()) {
+				for (Faction faction : message.getFactions()) {
 					FAC_REG.addFaction(faction);
 				}
-				for (Tuple<CQRFaction, Integer> rd : message.getReputations()) {
+				for (Tuple<Faction, Integer> rd : message.getReputations()) {
 					FAC_REG.setReputation(message.getPlayerId(), rd.getSecond(), rd.getFirst());
 				}
 			});

@@ -9,11 +9,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 
 public interface ISummoner {
 
-	CQRFaction getSummonerFaction();
+	Faction getSummonerFaction();
 
 	List<Entity> getSummonedEntities();
 

@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordIllusion;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 
 public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<EntitySpectreLordIllusion> implements IEntityAISpellAnimatedVanilla {
 
@@ -26,7 +26,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D,
 				this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		List<EntityLivingBase> alliesToHeal = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;
@@ -53,7 +53,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		super.startChargingSpell();
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D,
 				this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		List<EntityLivingBase> alliesToHeal = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;

@@ -27,7 +27,7 @@ import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordSwordSh
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
 
@@ -180,7 +180,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public CQRFaction getSummonerFaction() {
+	public Faction getSummonerFaction() {
 		return this.getFaction();
 	}
 

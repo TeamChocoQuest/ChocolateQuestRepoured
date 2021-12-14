@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusionExplosion;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusionHeal;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -37,7 +37,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 		super(worldIn);
 		if (caster != null) {
 			this.caster = caster;
-			CQRFaction faction = FactionRegistry.instance().getFactionOf(caster);
+			Faction faction = FactionRegistry.instance().getFactionOf(caster);
 			if (faction != null) {
 				this.setFaction(faction.getName(), true);
 			}

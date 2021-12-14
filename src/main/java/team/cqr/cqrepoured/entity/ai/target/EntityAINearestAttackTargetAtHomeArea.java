@@ -12,7 +12,7 @@ import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR & ICirclingEntity> extends AbstractCQREntityAI<T> {
@@ -64,7 +64,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
@@ -103,7 +103,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;

@@ -27,13 +27,13 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
-public class CQRFaction {
+public class Faction {
 
 	private boolean savedGlobally = true;
 	private boolean repuMayChange = true;
 	private String name;
-	private List<CQRFaction> allies = Collections.synchronizedList(new ArrayList<CQRFaction>());
-	private List<CQRFaction> enemies = Collections.synchronizedList(new ArrayList<CQRFaction>());
+	private List<Faction> allies = Collections.synchronizedList(new ArrayList<Faction>());
+	private List<Faction> enemies = Collections.synchronizedList(new ArrayList<Faction>());
 	private EReputationState defaultRelation;
 	private TextureSet textureSet = null;
 
@@ -41,16 +41,16 @@ public class CQRFaction {
 	private int repuChangeOnAllyKill = 2;
 	private int repuChangeOnEnemyKill = 1;
 
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange) {
+	public Faction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange) {
 		this(name, defaultReputationState, canRepuChange, Optional.empty(), Optional.empty(), Optional.empty());
 	}
 
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill,
+	public Faction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill,
 			Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
 
-	public CQRFaction(@Nonnull String name, TextureSet ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange,
+	public Faction(@Nonnull String name, TextureSet ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange,
 			Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this.savedGlobally = saveGlobally;
 		this.name = name;
@@ -86,21 +86,21 @@ public class CQRFaction {
 		return this.defaultRelation;
 	}
 
-	public List<CQRFaction> getEnemies() {
+	public List<Faction> getEnemies() {
 		return this.enemies;
 	}
 
-	public List<CQRFaction> getAllies() {
+	public List<Faction> getAllies() {
 		return this.allies;
 	}
 
-	public void addAlly(CQRFaction ally) {
+	public void addAlly(Faction ally) {
 		if (ally != null) {
 			this.allies.add(ally);
 		}
 	}
 
-	public void addEnemy(CQRFaction enemy) {
+	public void addEnemy(Faction enemy) {
 		if (enemy != null) {
 			this.enemies.add(enemy);
 		}
@@ -140,7 +140,7 @@ public class CQRFaction {
 		return this.isEnemy(ent.getFaction());
 	}
 
-	public boolean isEnemy(CQRFaction faction) {
+	public boolean isEnemy(Faction faction) {
 		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
 		}
@@ -148,7 +148,7 @@ public class CQRFaction {
 			return true;
 		}
 		if (faction != null) {
-			for (CQRFaction str : this.enemies) {
+			for (Faction str : this.enemies) {
 				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
 					return true;
 				}
@@ -175,12 +175,12 @@ public class CQRFaction {
 		return this.isAlly(ent.getFaction());
 	}
 
-	public boolean isAlly(CQRFaction faction) {
+	public boolean isAlly(Faction faction) {
 		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return true;
 		}
 		if (faction != null) {
-			for (CQRFaction str : this.allies) {
+			for (Faction str : this.allies) {
 				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
 					return true;
 				}
@@ -209,7 +209,7 @@ public class CQRFaction {
 		if (this.savedGlobally) {
 			// DONE: SAVE DATA
 			Thread t = new Thread(() -> {
-				File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), CQRFaction.this.getName() + ".properties");
+				File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), Faction.this.getName() + ".properties");
 				Properties prop = new Properties();
 				try (InputStream inputStream = new FileInputStream(file)) {
 					prop.load(inputStream);
@@ -217,14 +217,14 @@ public class CQRFaction {
 					CQRMain.logger.error("Failed to read file {}", file.getName(), e);
 					return;
 				}
-				prop.setProperty(ConfigKeys.FACTION_NAME_KEY, CQRFaction.this.name);
-				prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(!CQRFaction.this.canRepuChange()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, CQRFaction.this.getDefaultReputation().toString());
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(CQRFaction.this.getRepuAllyKill()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(CQRFaction.this.getRepuMemberKill()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(CQRFaction.this.getRepuEnemyKill()));
+				prop.setProperty(ConfigKeys.FACTION_NAME_KEY, Faction.this.name);
+				prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(!Faction.this.canRepuChange()));
+				prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, Faction.this.getDefaultReputation().toString());
+				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(Faction.this.getRepuAllyKill()));
+				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(Faction.this.getRepuMemberKill()));
+				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(Faction.this.getRepuEnemyKill()));
 				String allies = "";
-				for (CQRFaction af : CQRFaction.this.allies) {
+				for (Faction af : Faction.this.allies) {
 					if (!allies.isEmpty()) {
 						allies += ", ";
 					}
@@ -232,7 +232,7 @@ public class CQRFaction {
 				}
 				prop.setProperty(ConfigKeys.FACTION_ALLIES_KEY, allies);
 				String enemies = "";
-				for (CQRFaction ef : CQRFaction.this.enemies) {
+				for (Faction ef : Faction.this.enemies) {
 					if (!enemies.isEmpty()) {
 						enemies += ", ";
 					}
@@ -262,7 +262,7 @@ public class CQRFaction {
 		if (o == null || this.getClass() != o.getClass()) {
 			return false;
 		}
-		CQRFaction that = (CQRFaction) o;
+		Faction that = (Faction) o;
 		return this.name.equals(that.name);
 	}
 

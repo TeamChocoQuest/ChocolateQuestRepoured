@@ -10,7 +10,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 
@@ -86,7 +86,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	protected boolean isSuitableTargetAlly(EntityLivingBase possibleTarget) {
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if (faction == null) {
 			return false;
 		}

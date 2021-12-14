@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -197,7 +197,7 @@ public class CastleRoomSelector {
 	}
 
 	private DungeonInhabitant selectJailInhabitant(World world, DungeonInhabitant mainInhabitant) {
-		CQRFaction inhaFaction;
+		Faction inhaFaction;
 		DungeonInhabitant jailed = null;
 
 		String factionOverride = mainInhabitant.getFactionOverride();
@@ -210,11 +210,11 @@ public class CastleRoomSelector {
 			inhaFaction = FactionRegistry.instance().getFactionOf(entity);
 
 		}
-		List<CQRFaction> enemies = inhaFaction.getEnemies();
+		List<Faction> enemies = inhaFaction.getEnemies();
 		Collections.shuffle(enemies, this.random);
 
 		// Keep trying until we find a faction with potential enemies
-		for (CQRFaction enemyFaction : enemies) {
+		for (Faction enemyFaction : enemies) {
 			List<DungeonInhabitant> possibleJailed = DungeonInhabitantManager.instance().getListOfFactionInhabitants(enemyFaction, world);
 			if (!possibleJailed.isEmpty()) {
 				jailed = possibleJailed.get(this.random.nextInt(possibleJailed.size()));

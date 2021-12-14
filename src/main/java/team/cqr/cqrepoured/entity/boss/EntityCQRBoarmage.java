@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAIExplosionRay;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonFireWall;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMeteors;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
 
@@ -111,7 +111,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public CQRFaction getSummonerFaction() {
+	public Faction getSummonerFaction() {
 		return this.getFaction();
 	}
 

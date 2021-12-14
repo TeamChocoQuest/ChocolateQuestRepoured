@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordCurse;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 
 public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<EntityCQRSpectreLord> implements IEntityAISpellAnimatedVanilla {
 
@@ -70,7 +70,7 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D,
 				this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
 				e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
 		list.sort((e1, e2) -> {
@@ -123,7 +123,7 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 			this.entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 200, 1, false, true));
 			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D,
 					this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
-			CQRFaction faction = this.entity.getFaction();
+			Faction faction = this.entity.getFaction();
 			for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
 					e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 				e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);

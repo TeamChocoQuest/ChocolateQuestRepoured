@@ -18,7 +18,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -120,7 +120,7 @@ public class DungeonInhabitantManager {
 		return this.getInhabitantByDistance(world, blockX, blockZ);
 	}
 
-	public List<DungeonInhabitant> getListOfFactionInhabitants(CQRFaction faction, World world) {
+	public List<DungeonInhabitant> getListOfFactionInhabitants(Faction faction, World world) {
 		List<DungeonInhabitant> result = new ArrayList<>();
 
 		for (DungeonInhabitant inha : this.inhabitantMapping.values()) {

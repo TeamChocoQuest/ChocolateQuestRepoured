@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.EntityUtil;
 
@@ -99,7 +99,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		if (input instanceof IEntityOwnable) {
 			return !((IEntityOwnable) input).getOwnerId().equals(this.ownerID);
 		}
-		CQRFaction ownerFaction = FactionRegistry.instance().getFactionOf(this.getOwner());
+		Faction ownerFaction = FactionRegistry.instance().getFactionOf(this.getOwner());
 		if (ownerFaction != null) {
 			return TargetUtil.createPredicateNonAlly(ownerFaction).apply(input);
 		}

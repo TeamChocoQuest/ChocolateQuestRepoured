@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
@@ -23,7 +23,7 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 			return false;
 		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if ((faction != null && faction.isAlly(attackTarget)) || this.entity.getLeader() == attackTarget) {
 			return false;
 		}

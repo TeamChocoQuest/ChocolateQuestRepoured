@@ -21,7 +21,7 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMinionSpell;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -125,7 +125,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public CQRFaction getSummonerFaction() {
+	public Faction getSummonerFaction() {
 		return this.getFaction();
 	}
 

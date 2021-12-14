@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMinionSpell;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
 
@@ -169,7 +169,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public CQRFaction getSummonerFaction() {
+	public Faction getSummonerFaction() {
 		return this.getFaction();
 	}
 

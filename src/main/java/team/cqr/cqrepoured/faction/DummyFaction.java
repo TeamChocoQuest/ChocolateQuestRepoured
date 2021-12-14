@@ -5,7 +5,7 @@ import java.util.Optional;
 import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class DummyFaction extends CQRFaction {
+public class DummyFaction extends Faction {
 
 	public static final String NAME = "DUMMY";
 
@@ -14,12 +14,12 @@ public class DummyFaction extends CQRFaction {
 	}
 
 	@Override
-	public void addAlly(CQRFaction ally) {
+	public void addAlly(Faction ally) {
 
 	}
 
 	@Override
-	public void addEnemy(CQRFaction enemy) {
+	public void addEnemy(Faction enemy) {
 
 	}
 
@@ -34,7 +34,7 @@ public class DummyFaction extends CQRFaction {
 	}
 
 	@Override
-	public boolean isEnemy(CQRFaction faction) {
+	public boolean isEnemy(Faction faction) {
 		return false;
 	}
 
@@ -49,7 +49,7 @@ public class DummyFaction extends CQRFaction {
 	}
 
 	@Override
-	public boolean isAlly(CQRFaction faction) {
+	public boolean isAlly(Faction faction) {
 		return false;
 	}
 

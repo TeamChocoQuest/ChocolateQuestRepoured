@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.entity.particle.ParticleWalkerTornado;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDontRenderFire {
@@ -154,7 +154,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			if (ent.getPersistentID().equals(this.getOwnerId())) {
 				return false;
 			}
-			CQRFaction faction = FactionRegistry.instance().getFactionOf(this.owner);
+			Faction faction = FactionRegistry.instance().getFactionOf(this.owner);
 			if (faction != null) {
 				return !faction.isAlly(ent);
 			}

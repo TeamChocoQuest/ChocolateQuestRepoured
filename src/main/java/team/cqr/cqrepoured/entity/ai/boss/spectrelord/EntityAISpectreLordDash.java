@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.util.math.BoundingBox;
 
@@ -46,7 +46,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 	@Override
 	public void startChargingSpell() {
 		super.startChargingSpell();
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		if (faction == null) {
 			this.target = this.entity.getAttackTarget();
 		} else {
@@ -134,7 +134,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		Vec3d vec4 = new Vec3d(this.dashWidth, this.entity.height, vec2.subtract(vec1).length());
 		BoundingBox bb = new BoundingBox(vec3, vec4, this.yawRadian, 0.0D, vec1);
 		List<EntityLivingBase> list = BoundingBox.getEntitiesInsideBB(this.world, this.entity, EntityLivingBase.class, bb);
-		CQRFaction faction = this.entity.getFaction();
+		Faction faction = this.entity.getFaction();
 		for (EntityLivingBase entity : list) {
 			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(entity)) {
 				continue;

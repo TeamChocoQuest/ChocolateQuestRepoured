@@ -107,7 +107,7 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.pathfinding.Path;
 import team.cqr.cqrepoured.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -166,8 +166,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected EntityAISpellHandler spellHandler;
 	private int invisibilityTick;
 
-	private CQRFaction factionInstance;
-	private CQRFaction defaultFactionInstance;
+	private Faction factionInstance;
+	private Faction defaultFactionInstance;
 	private String factionName;
 
 	protected int lastTickShieldDisabled = Integer.MIN_VALUE;
@@ -1149,7 +1149,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	protected abstract EDefaultFaction getDefaultFaction();
 
-	protected CQRFaction getDefaultFactionInstance() {
+	protected Faction getDefaultFactionInstance() {
 		if (this.defaultFactionInstance == null) {
 			this.defaultFactionInstance = FactionRegistry.instance().getFactionInstance(this.getDefaultFaction().name());
 		}
@@ -1157,7 +1157,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	@Nullable
-	public CQRFaction getFaction() {
+	public Faction getFaction() {
 		if (!this.world.isRemote) {
 			// Leader faction is set when assigning the leader
 			/*
@@ -1191,7 +1191,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// System.out.println("Setting faction...");
 		// System.out.println("Fac: " + newFac + " ignoreCTS: " + ignoreCTS);
 		if (!this.world.isRemote) {
-			CQRFaction faction = FactionRegistry.instance().getFactionInstance(newFac);
+			Faction faction = FactionRegistry.instance().getFactionInstance(newFac);
 			if (faction != null) {
 				this.factionInstance = null;
 				this.factionName = newFac;
@@ -1229,13 +1229,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			double z2 = player.posZ + range;
 			AxisAlignedBB aabb = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 
-			List<CQRFaction> checkedFactions = new ArrayList<>();
+			List<Faction> checkedFactions = new ArrayList<>();
 			// boolean setRepu = false;
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (cqrentity.hasFaction()
 						&& !checkedFactions.contains(cqrentity.getFaction())
 						&& (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
-					CQRFaction faction = cqrentity.getFaction();
+					Faction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
 						// DONE decrement the players repu on this entity's faction
 						faction.decrementReputation(player, faction.getRepuMemberKill());

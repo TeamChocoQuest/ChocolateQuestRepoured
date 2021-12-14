@@ -12,7 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class CommandChangeReputation extends CommandBase {
@@ -46,7 +46,7 @@ public class CommandChangeReputation extends CommandBase {
 			sender.sendMessage(new TextComponentString("The entered reputation (" + args[1] + ") is not a number!"));
 			return;
 		}
-		CQRFaction faction = FactionRegistry.instance().getFactionInstance(args[0]);
+		Faction faction = FactionRegistry.instance().getFactionInstance(args[0]);
 		if (faction != null) {
 			FactionRegistry.instance().changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
 			sender.sendMessage(new TextComponentString(

@@ -30,7 +30,7 @@ import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.EntityCQRMountBase;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
@@ -115,11 +115,11 @@ public class TargetUtil {
 		return input instanceof EntityLivingBase;
 	};
 
-	public static final Predicate<Entity> createPredicateAlly(CQRFaction faction) {
+	public static final Predicate<Entity> createPredicateAlly(Faction faction) {
 		return input -> faction.isAlly(input);
 	}
 
-	public static final Predicate<Entity> createPredicateNonAlly(CQRFaction faction) {
+	public static final Predicate<Entity> createPredicateNonAlly(Faction faction) {
 		return input -> !faction.isAlly(input);
 	}
 
@@ -256,7 +256,7 @@ public class TargetUtil {
 			}
 		}
 
-		CQRFaction faction = FactionRegistry.instance().getFactionOf(entity);
+		Faction faction = FactionRegistry.instance().getFactionOf(entity);
 		if (faction.isAlly(target)) {
 			return true;
 		}
@@ -289,7 +289,7 @@ public class TargetUtil {
 			}
 		}
 
-		CQRFaction faction = FactionRegistry.instance().getFactionOf(entity);
+		Faction faction = FactionRegistry.instance().getFactionOf(entity);
 		if (target instanceof EntityPlayer && faction == FactionRegistry.DUMMY_FACTION) {
 			if (!(entity instanceof EntityMob)) {
 				return false;

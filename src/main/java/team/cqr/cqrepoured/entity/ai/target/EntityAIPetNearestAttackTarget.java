@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.util.math.AxisAlignedBB;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends EntityAITarget {
@@ -41,7 +41,7 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 	 */
 	@Override
 	public boolean shouldExecute() {
-		CQRFaction faction = FactionRegistry.instance().getFactionOf(this.taskOwner);
+		Faction faction = FactionRegistry.instance().getFactionOf(this.taskOwner);
 		if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
 			return false;
 		} else if (faction != null)/* if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) */

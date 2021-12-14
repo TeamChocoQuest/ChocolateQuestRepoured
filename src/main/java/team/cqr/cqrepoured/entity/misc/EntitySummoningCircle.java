@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
-import team.cqr.cqrepoured.faction.CQRFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class EntitySummoningCircle extends Entity implements IEntityAdditionalSpawnData, IDontRenderFire {
@@ -91,7 +91,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 
 					if (this.summonerLiving != null && summon instanceof AbstractEntityCQR) {
 						((AbstractEntityCQR) summon).setLeader(this.summonerLiving);
-						CQRFaction faction = FactionRegistry.instance().getFactionOf(this.summonerLiving);
+						Faction faction = FactionRegistry.instance().getFactionOf(this.summonerLiving);
 						if (faction != null) {
 							((AbstractEntityCQR) summon).setFaction(faction.getName());
 						}
@@ -114,7 +114,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 				}
 
 				if (!this.world.isRemote) {
-					CQRFaction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
+					Faction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
 					for (Entity ent : this.world.getEntitiesInAABBexcluding(this,
 							new AxisAlignedBB(this.getPosition().add(this.width / 2, 0, this.width / 2),
 									this.getPosition().add(-this.width / 2, 3, -this.width / 2)),

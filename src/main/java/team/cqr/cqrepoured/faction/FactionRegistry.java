@@ -45,10 +45,10 @@ public class FactionRegistry {
 
 	private static FactionRegistry instance;
 
-	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
+	private Map<String, Faction> factions = new ConcurrentHashMap<>();
 	private List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
-	private Map<Class<? extends Entity>, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
+	private Map<Class<? extends Entity>, Faction> entityFactionMap = new ConcurrentHashMap<>();
 
 	public static final DummyFaction DUMMY_FACTION = new DummyFaction();
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
@@ -82,12 +82,12 @@ public class FactionRegistry {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public synchronized void addFaction(CQRFaction faction) {
+	public synchronized void addFaction(Faction faction) {
 		this.factions.put(faction.getName(), faction);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public synchronized void setReputation(UUID player, int reputation, CQRFaction faction) {
+	public synchronized void setReputation(UUID player, int reputation, Faction faction) {
 		if (faction.canRepuChange()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new ConcurrentHashMap<>());
 			factionsOfPlayer.put(faction.getName(), reputation);
@@ -96,7 +96,7 @@ public class FactionRegistry {
 	}
 
 	// Variant on the server, used by the command
-	public void changeReputationTo(@Nonnull EntityPlayerMP player, int reputation, @Nonnull CQRFaction faction) {
+	public void changeReputationTo(@Nonnull EntityPlayerMP player, int reputation, @Nonnull Faction faction) {
 		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new ConcurrentHashMap<>());
 		factionsOfPlayer.put(faction.getName(), reputation);
 
@@ -120,7 +120,7 @@ public class FactionRegistry {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity already has an assigned faction!", s);
 				continue;
 			}
-			CQRFaction faction = this.factions.get(s.substring(i + 1).trim());
+			Faction faction = this.factions.get(s.substring(i + 1).trim());
 			if (faction == null) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Faction does not exists!", s);
 				continue;
@@ -182,13 +182,13 @@ public class FactionRegistry {
 					TextureSet ts = TextureSetManager.getInstance().getTextureSet(textureSetName);
 					// Custom textures end
 
-					CQRFaction f = new CQRFaction(fName, ts, defRepu, true, !staticRepu, optionMember, optionAlly, optionEnemy);
+					Faction f = new Faction(fName, ts, defRepu, true, !staticRepu, optionMember, optionAlly, optionEnemy);
 					this.factions.put(fName, f);
 				}
 			}
 			for (int i = 0; i < fIDs.size(); i++) {
 				String name = fIDs.get(i);
-				CQRFaction fac = this.factions.get(name);
+				Faction fac = this.factions.get(name);
 				for (String s : allyTmp.get(i)) {
 					fac.addAlly(this.factions.getOrDefault(s, null));
 				}
@@ -216,13 +216,13 @@ public class FactionRegistry {
 			Optional<Integer> optionAlly = Optional.empty();
 			Optional<Integer> optionEnemy = Optional.empty();
 
-			CQRFaction fac = new CQRFaction(edf.name(), null, edf.getDefaultReputation(), false, edf.canRepuChange(), optionMember, optionAlly, optionEnemy);
+			Faction fac = new Faction(edf.name(), null, edf.getDefaultReputation(), false, edf.canRepuChange(), optionMember, optionAlly, optionEnemy);
 			this.factions.put(edf.name(), fac);
 		}
 
 		for (int i : indices) {
 			String name = EDefaultFaction.values()[i].name();
-			CQRFaction fac = this.factions.get(name);
+			Faction fac = this.factions.get(name);
 			for (int j = 0; j < allies[i].length; j++) {
 				fac.addAlly(this.factions.get(allies[i][j]));
 			}
@@ -234,14 +234,14 @@ public class FactionRegistry {
 		CQRMain.logger.info("Default factions loaded and initialized!");
 	}
 
-	public CQRFaction getFactionOf(@Nullable Entity entity) {
+	public Faction getFactionOf(@Nullable Entity entity) {
 		if (entity == null) {
 			return FactionRegistry.DUMMY_FACTION;
 		}
 
 		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
 			if (entity.getTeam() != null) {
-				CQRFaction teamFaction = this.factions.get(entity.getTeam().getName());
+				Faction teamFaction = this.factions.get(entity.getTeam().getName());
 				if (teamFaction != null) {
 					return teamFaction;
 				}
@@ -260,8 +260,8 @@ public class FactionRegistry {
 	}
 
 	@SuppressWarnings("unchecked")
-	private CQRFaction getFactionOf(Class<? extends Entity> entityClass) {
-		CQRFaction faction = this.entityFactionMap.get(entityClass);
+	private Faction getFactionOf(Class<? extends Entity> entityClass) {
+		Faction faction = this.entityFactionMap.get(entityClass);
 		if (faction == null && entityClass != Entity.class) {
 			faction = this.getFactionOf((Class<? extends Entity>) entityClass.getSuperclass());
 			this.entityFactionMap.put(entityClass, faction);
@@ -270,15 +270,15 @@ public class FactionRegistry {
 	}
 
 	@Nullable
-	public CQRFaction getFactionInstance(String factionName) {
+	public Faction getFactionInstance(String factionName) {
 		return this.factions.get(factionName);
 	}
 
-	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
+	public EReputationStateRough getReputationOf(UUID playerID, Faction faction) {
 		return EReputationStateRough.getByRepuScore(this.getExactReputationOf(playerID, faction));
 	}
 
-	public int getExactReputationOf(UUID playerID, CQRFaction faction) {
+	public int getExactReputationOf(UUID playerID, Faction faction) {
 		if (!faction.canRepuChange()) {
 			return faction.getDefaultReputation().getValue();
 		}
@@ -479,7 +479,7 @@ public class FactionRegistry {
 		return true;
 	}
 
-	public List<CQRFaction> getLoadedFactions() {
+	public List<Faction> getLoadedFactions() {
 		return new ArrayList<>(this.factions.values());
 	}
 
