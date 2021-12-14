@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import java.util.function.Function;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
@@ -31,27 +33,28 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatable> extends GeoEntityRenderer<T> {
 
-	private String entityName;
-	private ResourceLocation texture;
-
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
 	protected double widthScale;
 	protected double heightScale;
-
-	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, String entityName) {
-		this(renderManager, modelProvider, entityName, 1D, 1D, 0);
+	
+	protected final Function<T, ResourceLocation> TEXTURE_GETTER;
+	protected final Function<T, ResourceLocation> MODEL_ID_GETTER;
+	
+	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider) {
+		this(renderManager, modelProvider, 1D, 1D, 0);
 	}
 
-	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, String entityName, double widthScale, double heightScale,
+	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, double widthScale, double heightScale,
 			float shadowSize) {
 		super(renderManager, modelProvider);
+		
+		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
+		this.TEXTURE_GETTER = modelProvider::getTextureLocation;
+		
 		this.shadowSize = shadowSize;
-		this.entityName = entityName;
 		this.widthScale = widthScale;
 		this.heightScale = heightScale;
-
-		this.texture = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + ".png");
 
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<>(this));
@@ -126,14 +129,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			return TEXTURES_ARMOR;
 		}
 
-		// Custom texture start
-		if (entity.hasTextureOverride()) {
-			return entity.getTextureOverride();
-		}
-		// Custom texture end
-		return entity.getTextureCount() > 1
-				? new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png")
-				: this.texture;
+		return this.TEXTURE_GETTER.apply(entity);
 	}
 
 	private T currentEntityBeingRendered;
