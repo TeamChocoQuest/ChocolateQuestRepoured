@@ -81,7 +81,7 @@ public class TextureSet {
 	public ResourceLocation getRandomTextureFor(Entity ent) {
 		ResourceLocation ers = EntityList.getKey(ent);
 		// System.out.println("Searching texture for " + ers.toString() + " in texture set: " + name);
-		if (this.entityTextureMap.containsKey(ers) && this.entityTextureMap.get(ers).isEmpty()) {
+		if (this.entityTextureMap.containsKey(ers) && !this.entityTextureMap.get(ers).isEmpty()) {
 			Object[] textures = this.entityTextureMap.get(ers).toArray();
 			int indx = random.nextInt(textures.length);
 			// System.out.println("Returning: " + ((ResourceLocation) textures[indx]).toString());
