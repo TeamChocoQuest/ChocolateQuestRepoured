@@ -28,8 +28,7 @@ public class WallPartRailingTower implements IWallPart {
 		int startY = this.getTopY();
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE)
-				.withProperty(BlockStoneSlab.SEAMLESS, true);
+		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 		IBlockState stateAir = Blocks.AIR.getDefaultState();
 
 		int[] xValues = new int[] { 0, 1, 6, 7 };

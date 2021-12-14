@@ -20,8 +20,7 @@ public class LayerRevolver implements LayerRenderer<EntityLivingBase> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-			float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (!(this.livingEntityRenderer.getMainModel() instanceof ModelBiped)) {
 			return;
 		}

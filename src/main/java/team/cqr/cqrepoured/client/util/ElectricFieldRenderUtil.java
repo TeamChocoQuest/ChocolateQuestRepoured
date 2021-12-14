@@ -70,13 +70,11 @@ public class ElectricFieldRenderUtil {
 		COUNT_BUFFER.flip();
 
 		VertexFormat format = VERTEX_BUFFER.getVertexFormat();
-		IntStream.range(0, format.getElementCount())
-				.forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
+		IntStream.range(0, format.getElementCount()).forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
 
 		GL14.glMultiDrawArrays(GL11.GL_LINE_STRIP, FIRST_BUFFER, COUNT_BUFFER);
 
-		IntStream.range(0, format.getElementCount())
-				.forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
+		IntStream.range(0, format.getElementCount()).forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
 
 		VERTEX_BUFFER.reset();
 		FIRST_BUFFER.clear();
@@ -133,8 +131,7 @@ public class ElectricFieldRenderUtil {
 	/*
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
-	public static void renderElectricLineBetween(Vec3d startOffset, Vec3d endOffset, double maxOffset, double posX, double posY, double posZ, int boltCount,
-			long seed) {
+	public static void renderElectricLineBetween(Vec3d startOffset, Vec3d endOffset, double maxOffset, double posX, double posY, double posZ, int boltCount, long seed) {
 		startOffset = startOffset.add(posX, posY, posZ);
 		endOffset = endOffset.add(posX, posY, posZ);
 		RANDOM.setSeed(seed);

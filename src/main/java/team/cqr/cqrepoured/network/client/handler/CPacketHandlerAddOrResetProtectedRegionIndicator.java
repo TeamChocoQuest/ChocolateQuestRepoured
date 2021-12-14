@@ -16,8 +16,7 @@ public class CPacketHandlerAddOrResetProtectedRegionIndicator implements IMessag
 		if (ctx.side.isClient()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
-				ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, message.getUuid(), message.getStart(), message.getEnd(), message.getPos(),
-						null);
+				ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, message.getUuid(), message.getStart(), message.getEnd(), message.getPos(), null);
 			});
 		}
 		return null;

@@ -34,11 +34,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	protected Vec3d velForSummon = null;
 
 	public enum ECircleTexture {
-		ZOMBIE(),
-		SKELETON(),
-		FLYING_SKULL(),
-		FLYING_SWORD(),
-		METEOR();
+		ZOMBIE(), SKELETON(), FLYING_SKULL(), FLYING_SWORD(), METEOR();
 
 		static {
 			values();
@@ -53,8 +49,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 		this(worldIn, entityToSpawn, timeMultiplier, texture, summoner, null);
 	}
 
-	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture texture, ISummoner isummoner,
-			EntityLivingBase summoner) {
+	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture texture, ISummoner isummoner, EntityLivingBase summoner) {
 		super(worldIn);
 		this.setSize(2.0F, 0.005F);
 		this.entityToSpawn = entityToSpawn;
@@ -109,16 +104,12 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 		} else {
 			if (this.ticksExisted >= EntitySummoningCircle.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon * 0.8F) {
 				for (int i = 0; i < 4; i++) {
-					this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, this.rand.nextDouble(),
-							this.rand.nextDouble(), this.rand.nextDouble());
+					this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble());
 				}
 
 				if (!this.world.isRemote) {
 					Faction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
-					for (Entity ent : this.world.getEntitiesInAABBexcluding(this,
-							new AxisAlignedBB(this.getPosition().add(this.width / 2, 0, this.width / 2),
-									this.getPosition().add(-this.width / 2, 3, -this.width / 2)),
-							faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
+					for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(this.width / 2, 0, this.width / 2), this.getPosition().add(-this.width / 2, 3, -this.width / 2)), faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
 						if (ent != null && ent.isEntityAlive() && ent instanceof EntityLivingBase) {
 							((EntityLivingBase) ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 80, 0));
 						}

@@ -51,8 +51,7 @@ public class BoundingBox {
 	}
 
 	public BoundingBox(Vec3d[] vertices) {
-		this(vertices, new int[][] { { 0, 1 }, { 1, 3 }, { 3, 2 }, { 2, 0 }, { 0, 4 }, { 1, 5 }, { 3, 7 }, { 2, 6 }, { 4, 5 }, { 5, 7 }, { 7, 6 }, { 6, 4 } },
-				new int[][] { { 2, 3, 0, 1 }, { 0, 1, 4, 5 }, { 1, 3, 5, 7 }, { 3, 2, 7, 6 }, { 2, 0, 6, 4 }, { 4, 5, 6, 7 } });
+		this(vertices, new int[][] { { 0, 1 }, { 1, 3 }, { 3, 2 }, { 2, 0 }, { 0, 4 }, { 1, 5 }, { 3, 7 }, { 2, 6 }, { 4, 5 }, { 5, 7 }, { 7, 6 }, { 6, 4 } }, new int[][] { { 2, 3, 0, 1 }, { 0, 1, 4, 5 }, { 1, 3, 5, 7 }, { 3, 2, 7, 6 }, { 2, 0, 6, 4 }, { 4, 5, 6, 7 } });
 	}
 
 	/**
@@ -154,22 +153,15 @@ public class BoundingBox {
 					continue;
 				}
 
-				Vec3d vec = lineDirectionNormalized
-						.scale((planeNormal.dotProduct(plane.vec1) - planeNormal.dotProduct(edge.vec1)) / planeNormal.dotProduct(lineDirectionNormalized));
-				if (vec.x < 0 != lineDirection.x < 0
-						|| vec.y < 0 != lineDirection.y < 0
-						|| vec.z < 0 != lineDirection.z < 0
-						|| vec.lengthSquared() > lineDirection.lengthSquared()) {
+				Vec3d vec = lineDirectionNormalized.scale((planeNormal.dotProduct(plane.vec1) - planeNormal.dotProduct(edge.vec1)) / planeNormal.dotProduct(lineDirectionNormalized));
+				if (vec.x < 0 != lineDirection.x < 0 || vec.y < 0 != lineDirection.y < 0 || vec.z < 0 != lineDirection.z < 0 || vec.lengthSquared() > lineDirection.lengthSquared()) {
 					continue;
 				}
 
 				Vec3d intersectionPoint = edge.vec1.add(vec);
-				int i1 = (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec1, plane.vec2))
-						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec2, plane.vec4))
-						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec4, plane.vec3))
+				int i1 = (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec1, plane.vec2)) + (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec2, plane.vec4)) + (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec4, plane.vec3))
 						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec3, plane.vec1));
-				int i2 = (int) (1000 * getAreaOfTriangle(plane.vec1, plane.vec2, plane.vec3))
-						+ (int) (1000 * getAreaOfTriangle(plane.vec2, plane.vec3, plane.vec4));
+				int i2 = (int) (1000 * getAreaOfTriangle(plane.vec1, plane.vec2, plane.vec3)) + (int) (1000 * getAreaOfTriangle(plane.vec2, plane.vec3, plane.vec4));
 				if (i1 <= i2 + 100) {
 					return true;
 				}

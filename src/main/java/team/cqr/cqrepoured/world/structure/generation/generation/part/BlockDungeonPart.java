@@ -232,8 +232,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 
 		@Override
 		public BlockDungeonPart build(World world, DungeonPlacement placement) {
-			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull)
-					.collect(Collectors.toList());
+			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull).collect(Collectors.toList());
 			list.sort(CQR_COMPARATOR);
 			List<GeneratableChunkInfo> list1 = new ArrayList<>();
 
@@ -309,8 +308,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 								buf.readByte();
 								continue;
 							}
-							blocks.add(GeneratablePosInfo.Registry.read(world, (chunkX << 4) + x, (chunkY << 4) + y, (chunkZ << 4) + z, buf, palette,
-									compoundList));
+							blocks.add(GeneratablePosInfo.Registry.read(world, (chunkX << 4) + x, (chunkY << 4) + y, (chunkZ << 4) + z, buf, palette, compoundList));
 						}
 					}
 				}

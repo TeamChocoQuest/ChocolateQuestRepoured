@@ -126,8 +126,7 @@ public class BlockLightUtil {
 						chunk.getBlockStorageArray()[MUTABLE1.getY() >> 4] = blockStorage;
 						chunk.generateSkylightMap();
 					}
-					int opacity = Math.max(blockStorage.get(MUTABLE1.getX() & 15, MUTABLE1.getY() & 15, MUTABLE1.getZ() & 15).getLightOpacity(world, MUTABLE1),
-							1);
+					int opacity = Math.max(blockStorage.get(MUTABLE1.getX() & 15, MUTABLE1.getY() & 15, MUTABLE1.getZ() & 15).getLightOpacity(world, MUTABLE1), 1);
 					int newLight = light - opacity;
 					if (blockStorage.getBlockLight(MUTABLE1.getX() & 15, MUTABLE1.getY() & 15, MUTABLE1.getZ() & 15) >= newLight) {
 						continue;

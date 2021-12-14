@@ -360,10 +360,7 @@ public class FactionRegistry {
 	}
 
 	private boolean canRepuChange(EntityPlayer player) {
-		return (player.getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL
-				&& !player.isCreative()
-				&& !player.isSpectator()
-				&& !this.uuidsBeingLoaded.contains(player.getPersistentID()));
+		return (player.getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && !player.isCreative() && !player.isSpectator() && !this.uuidsBeingLoaded.contains(player.getPersistentID()));
 	}
 
 	public void handlePlayerLogin(EntityPlayerMP player) {
@@ -381,8 +378,7 @@ public class FactionRegistry {
 					}
 					FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 					try {
-						Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(),
-								key1 -> new ConcurrentHashMap<>());
+						Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key1 -> new ConcurrentHashMap<>());
 						/*
 						 * repuDataList.forEach(new Consumer<NBTBase>() {
 						 * 

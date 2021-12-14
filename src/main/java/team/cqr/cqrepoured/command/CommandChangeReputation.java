@@ -29,10 +29,7 @@ public class CommandChangeReputation extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (sender.getCommandSenderEntity() == null
-				|| !(sender.getCommandSenderEntity() instanceof EntityPlayerMP)
-				|| sender.getEntityWorld() == null
-				|| sender.getEntityWorld().isRemote) {
+		if (sender.getCommandSenderEntity() == null || !(sender.getCommandSenderEntity() instanceof EntityPlayerMP) || sender.getEntityWorld() == null || sender.getEntityWorld().isRemote) {
 			return;
 		}
 		if (args.length < 2) {
@@ -49,8 +46,7 @@ public class CommandChangeReputation extends CommandBase {
 		Faction faction = FactionRegistry.instance().getFactionInstance(args[0]);
 		if (faction != null) {
 			FactionRegistry.instance().changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
-			sender.sendMessage(new TextComponentString(
-					"Changed " + sender.getDisplayName().getFormattedText() + "'s reputation towards faction " + faction.getName() + " to " + score));
+			sender.sendMessage(new TextComponentString("Changed " + sender.getDisplayName().getFormattedText() + "'s reputation towards faction " + faction.getName() + " to " + score));
 		} else {
 			sender.sendMessage(new TextComponentString(args[0] + " is not a valid faction! Try something else"));
 		}

@@ -88,21 +88,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class,
-			DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 
-	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_UPPER = EntityDataManager
-			.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager
-			.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_LOWER = EntityDataManager
-			.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_UPPER = EntityDataManager
-			.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager
-			.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_LOWER = EntityDataManager
-			.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 
 	// AI stuff
 	private boolean isDowned = false;
@@ -123,12 +116,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	public enum E_CALAMITY_HAND {
-		LEFT_UPPER("handLeftUpper"),
-		LEFT_MIDDLE("handLeftMiddle"),
-		LEFT_LOWER("handLeftLower"),
-		RIGHT_UPPER("handRightUpper"),
-		RIGHT_MIDDLE("handRightMiddle"),
-		RIGHT_LOWER("handRightLower");
+		LEFT_UPPER("handLeftUpper"), LEFT_MIDDLE("handLeftMiddle"), LEFT_LOWER("handLeftLower"), RIGHT_UPPER("handRightUpper"), RIGHT_MIDDLE("handRightMiddle"), RIGHT_LOWER("handRightLower");
 
 		private String boneName;
 		private boolean isLeft;
@@ -755,16 +743,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (this.blockDestructionTimer <= 0) {
 			this.blockDestructionTimer = 10;
 			boolean flag = false;
-			Vec3i size = new Vec3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX,
-					this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
+			Vec3i size = new Vec3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
 			size = new Vec3i(size.getX() * 0.5, size.getY() * 0.5, size.getZ() * 0.5);
 			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size).add(0, size.getY(), 0))) {
 				IBlockState iblockstate = this.world.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 
-				if (!block.isAir(iblockstate, this.world, blockpos)
-						&& block.canEntityDestroy(iblockstate, this.world, blockpos, this)
-						&& net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
+				if (!block.isAir(iblockstate, this.world, blockpos) && block.canEntityDestroy(iblockstate, this.world, blockpos, this) && net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 					flag = this.world.destroyBlock(blockpos, true) || flag;
 				}
 			}
@@ -781,9 +766,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width,
-						this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width,
-						(this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
+						(this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		} else {
 			// SErver
@@ -823,10 +807,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		if (timedPhaseChange) {
 			this.switchToNextPhaseOf(phase);
-			if (this.currentPhase == EEnderCalamityPhase.PHASE_BUILDING
-					|| this.currentPhase == EEnderCalamityPhase.PHASE_LASERING
-					|| this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER
-					|| this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
+			if (this.currentPhase == EEnderCalamityPhase.PHASE_BUILDING || this.currentPhase == EEnderCalamityPhase.PHASE_LASERING || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER || this.currentPhase == EEnderCalamityPhase.PHASE_TELEPORT_LASER) {
 				if (this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
 					this.tennisAI.calculateRemainingAttempts();
 					this.noTennisCounter++;
@@ -1149,8 +1130,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		// LOOTVOLCANO
 		if (this.deathTime % 2 == 0) {
-			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.recentlyHit > 0,
-					net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 		}
 
 		if (!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
@@ -1162,8 +1142,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 		if (this.deathTime >= 54) {
 			if (this.deathCause != null) {
-				this.dropLoot(this.recentlyHit > 0,
-						net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				this.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
 			this.setDead();
 

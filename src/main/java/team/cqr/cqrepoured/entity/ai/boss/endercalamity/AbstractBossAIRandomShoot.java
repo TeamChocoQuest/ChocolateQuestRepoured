@@ -13,10 +13,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 	protected Entity projectile;
 
 	private enum E_PHASE {
-		TELEPORT,
-		SHOOTING,
-		PREPARING_TO_SHOOT,
-		PREPARING_TO_TELEPORT
+		TELEPORT, SHOOTING, PREPARING_TO_SHOOT, PREPARING_TO_TELEPORT
 	}
 
 	protected AbstractBossAIRandomShoot(EntityCQREnderCalamity entity) {

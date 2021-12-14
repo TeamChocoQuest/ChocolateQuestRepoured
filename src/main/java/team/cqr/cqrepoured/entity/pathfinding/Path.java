@@ -48,8 +48,7 @@ public class Path {
 		this.onPathChanged();
 	}
 
-	public boolean addNode(PathNode rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax,
-			boolean bidirectional) {
+	public boolean addNode(PathNode rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, boolean bidirectional) {
 		if (this.nodes.isEmpty()) {
 			PathNode node = new PathNode(this, pos, waitingTimeMin, waitingTimeMax, waitingRotation, weight, timeMin, timeMax, this.nodes.size());
 			this.nodes.add(node);
@@ -158,8 +157,7 @@ public class Path {
 		private final IntList connectedNodes = new IntArrayList();
 		private final IntList blacklistedPrevNodes = new IntArrayList();
 
-		private PathNode(Path path, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax,
-				int index) {
+		private PathNode(Path path, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, int index) {
 			this.path = path;
 			this.pos = pos.toImmutable();
 			this.waitingTimeMin = MathHelper.clamp(Math.min(waitingTimeMin, waitingTimeMax), 0, 24000);
@@ -418,8 +416,7 @@ public class Path {
 		}
 
 		private PathNode copy(Path path, BlockPos offset) {
-			PathNode copy = new PathNode(path, this.pos.add(offset), this.waitingTimeMin, this.waitingTimeMax, this.waitingRotation, this.weight, this.timeMin,
-					this.timeMax, this.index);
+			PathNode copy = new PathNode(path, this.pos.add(offset), this.waitingTimeMin, this.waitingTimeMax, this.waitingRotation, this.weight, this.timeMin, this.timeMax, this.index);
 			copy.connectedNodes.addAll(this.connectedNodes);
 			return copy;
 		}

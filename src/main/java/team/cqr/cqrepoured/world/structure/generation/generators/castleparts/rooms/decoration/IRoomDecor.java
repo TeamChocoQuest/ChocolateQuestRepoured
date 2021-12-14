@@ -12,6 +12,5 @@ import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.roo
 public interface IRoomDecor {
 	boolean wouldFit(BlockPos start, EnumFacing side, Set<BlockPos> decoArea, Set<BlockPos> decoMap, CastleRoomBase room);
 
-	void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side,
-			Set<BlockPos> decoMap);
+	void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side, Set<BlockPos> decoMap);
 }

@@ -10,8 +10,7 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomized
 
 public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 	private enum ShelfPattern {
-		LONG_VERTICAL,
-		LONG_HORIZONTAL
+		LONG_VERTICAL, LONG_HORIZONTAL
 	}
 
 	private ShelfPattern pattern;
@@ -85,8 +84,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 				for (int z = 0; z < this.shelfZLen; z++) {
 					if ((x % 2 == 0) && (z != (this.shelfZLen / 2))) {
 						BlockPos pos = this.shelfStart.add(x, y, z);
-						genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
-								BlockStateGenArray.EnumPriority.MEDIUM);
+						genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 						this.usedDecoPositions.add(pos);
 					}
 				}
@@ -100,8 +98,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 				for (int z = 0; z < this.shelfZLen; z++) {
 					if ((z % 2 == 0) && (x != (this.shelfXLen / 2))) {
 						BlockPos pos = this.shelfStart.add(x, y, z);
-						genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
-								BlockStateGenArray.EnumPriority.MEDIUM);
+						genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 						this.usedDecoPositions.add(pos);
 					}
 				}

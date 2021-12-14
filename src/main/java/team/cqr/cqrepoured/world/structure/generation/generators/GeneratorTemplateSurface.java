@@ -44,12 +44,10 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 
 		if (this.dungeon.doBuildSupportPlatform()) {
 			BlockPos startPos = this.structurePos.up(this.dungeon.getUnderGroundOffset()).down();
-			BlockPos endPos = startPos
-					.add(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
+			BlockPos endPos = startPos.add(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(),
-					CQRConfig.general.supportHillWallSize);
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);
@@ -65,8 +63,7 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 	protected void postProcess() {
 		if (this.dungeon.isCoverBlockEnabled()) {
 			BlockPos startPos = this.structurePos;
-			BlockPos endPos = startPos
-					.add(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
+			BlockPos endPos = startPos.add(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			this.dungeonBuilder.add(new CoverDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));

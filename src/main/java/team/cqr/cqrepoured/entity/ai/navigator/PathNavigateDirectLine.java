@@ -31,8 +31,7 @@ public class PathNavigateDirectLine extends PathNavigate {
 			this.currentPath.incrementPathIndex();
 		}
 
-		for (int j = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); j > this.currentPath
-				.getCurrentPathIndex(); --j) {
+		for (int j = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); j > this.currentPath.getCurrentPathIndex(); --j) {
 			Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, j);
 
 			if (vec3d1.squareDistanceTo(vec3d) <= 36.0D && this.isDirectPathBetweenPoints(vec3d, vec3d1, 0, 0, 0)) {

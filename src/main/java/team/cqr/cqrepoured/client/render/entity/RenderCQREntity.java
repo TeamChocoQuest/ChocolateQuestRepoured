@@ -219,8 +219,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	@Override
-	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
-			float scaleFactor) {
+	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
 		if (flag) {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());
@@ -244,30 +243,31 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 		super.renderLivingAt(entityLivingBaseIn, x, y, z);
 	}
-	
+
 	protected ResourceLocation[] textureVariantCache = null;
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		if(entity instanceof IHasTextureOverride)
+		if (entity instanceof IHasTextureOverride) {
 			// Custom texture start
-			if (((IHasTextureOverride)entity).hasTextureOverride()) {
-				return ((IHasTextureOverride)entity).getTextureOverride();
+			if (((IHasTextureOverride) entity).hasTextureOverride()) {
+				return ((IHasTextureOverride) entity).getTextureOverride();
 			}
-			// Custom texture end
-			if(entity instanceof ITextureVariants) {
-				if(((ITextureVariants)entity).getTextureCount() > 1) {
-					if(this.textureVariantCache == null) {
-						this.textureVariantCache = new ResourceLocation[((ITextureVariants)entity).getTextureCount()];
-					}
-					final int index = ((ITextureVariants)entity).getTextureIndex();
-					if(this.textureVariantCache[index] == null) {
-						this.textureVariantCache[index] = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + index + ".png");
-					}
-					return this.textureVariantCache[index];
+		}
+		// Custom texture end
+		if (entity instanceof ITextureVariants) {
+			if (((ITextureVariants) entity).getTextureCount() > 1) {
+				if (this.textureVariantCache == null) {
+					this.textureVariantCache = new ResourceLocation[((ITextureVariants) entity).getTextureCount()];
 				}
+				final int index = ((ITextureVariants) entity).getTextureIndex();
+				if (this.textureVariantCache[index] == null) {
+					this.textureVariantCache[index] = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + index + ".png");
+				}
+				return this.textureVariantCache[index];
 			}
-			return this.texture;
+		}
+		return this.texture;
 	}
 
 	@Override

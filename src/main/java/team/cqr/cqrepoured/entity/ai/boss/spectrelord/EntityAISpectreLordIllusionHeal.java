@@ -24,8 +24,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		if (!super.shouldExecute()) {
 			return false;
 		}
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D,
-				this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
 		Faction faction = this.entity.getFaction();
 		List<EntityLivingBase> alliesToHeal = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> {
 			if (e == this.entity) {
@@ -51,8 +50,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 	@Override
 	public void startChargingSpell() {
 		super.startChargingSpell();
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D,
-				this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
 		Faction faction = this.entity.getFaction();
 		List<EntityLivingBase> alliesToHeal = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> {
 			if (e == this.entity) {

@@ -57,8 +57,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 			}
 
 			if (result.entityHit instanceof EntityLivingBase) {
-				if (((EntityLivingBase) result.entityHit).isActiveItemStackBlocking()
-						&& ((EntityLivingBase) result.entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
+				if (((EntityLivingBase) result.entityHit).isActiveItemStackBlocking() && ((EntityLivingBase) result.entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
 					this.motionX = -this.motionX;
 					this.motionY = -this.motionY;
 					this.motionZ = -this.motionZ;

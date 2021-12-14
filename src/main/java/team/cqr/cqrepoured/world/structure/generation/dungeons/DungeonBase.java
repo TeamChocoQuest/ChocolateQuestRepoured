@@ -140,8 +140,7 @@ public abstract class DungeonBase {
 		return this.name;
 	}
 
-	public abstract AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z, Random rand,
-			DungeonDataManager.DungeonSpawnType spawnType);
+	public abstract AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType);
 
 	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
 		this.generate(world, x, this.getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);

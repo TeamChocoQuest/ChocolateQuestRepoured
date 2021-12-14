@@ -43,8 +43,7 @@ public class GuiExporter extends GuiScreen {
 	public GuiExporter(TileEntityExporter exporter) {
 		this.mc = Minecraft.getMinecraft();
 		this.exporter = exporter;
-		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> String.format("%d %d %d", p.getX(), p.getY(), p.getZ()))
-				.toArray(String[]::new);
+		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> String.format("%d %d %d", p.getX(), p.getY(), p.getZ())).toArray(String[]::new);
 		this.unprotectedBlocksConfig = new DummyListElement("test", unprotectedBlocks, ConfigGuiType.STRING, "test");
 	}
 
@@ -58,8 +57,7 @@ public class GuiExporter extends GuiScreen {
 		this.edtName.setText(this.exporter.getStructureName());
 		this.chbxRelativeMode.setIsChecked(this.exporter.isRelativeMode());
 		this.chbxIgnoreEntities.setIsChecked(this.exporter.isIgnoreEntities());
-		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> String.format("%d %d %d", p.getX(), p.getY(), p.getZ()))
-				.toArray(String[]::new);
+		String[] unprotectedBlocks = Arrays.stream(this.exporter.getUnprotectedBlocks()).map(p -> String.format("%d %d %d", p.getX(), p.getY(), p.getZ())).toArray(String[]::new);
 		this.unprotectedBlocksConfig.set(unprotectedBlocks);
 	}
 
@@ -116,8 +114,7 @@ public class GuiExporter extends GuiScreen {
 				return new BlockPos(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
 			}).toArray(BlockPos[]::new);
 
-			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(),
-					this.chbxIgnoreEntities.isChecked(), unprotectedBlocks);
+			this.exporter.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked(), unprotectedBlocks);
 
 			if (this.saveStructOnExit) {
 				this.exporter.saveStructure(this.mc.player);
@@ -132,13 +129,7 @@ public class GuiExporter extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.edtName.isFocused()
-				|| this.edtStartX.isFocused()
-				|| this.edtStartY.isFocused()
-				|| this.edtStartZ.isFocused()
-				|| this.edtEndX.isFocused()
-				|| this.edtEndY.isFocused()
-				|| this.edtEndZ.isFocused()) {
+		if (this.edtName.isFocused() || this.edtStartX.isFocused() || this.edtStartY.isFocused() || this.edtStartZ.isFocused() || this.edtEndX.isFocused() || this.edtEndY.isFocused() || this.edtEndZ.isFocused()) {
 			if (keyCode == 1) {
 				this.edtName.setFocused(false);
 				this.edtStartX.setFocused(false);

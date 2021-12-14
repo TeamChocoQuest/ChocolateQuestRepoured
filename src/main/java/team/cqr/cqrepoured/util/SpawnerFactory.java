@@ -68,8 +68,7 @@ public final class SpawnerFactory {
 	 * @param world                    World in which to place spawner
 	 * @param pos                      Position at which to place spawner
 	 */
-	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world,
-			BlockPos pos) {
+	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
 		world.setBlockState(pos, multiUseSpawner ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tileEntity = world.getTileEntity(pos);

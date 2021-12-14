@@ -13,8 +13,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-			float headPitch, float scale) {
+	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}

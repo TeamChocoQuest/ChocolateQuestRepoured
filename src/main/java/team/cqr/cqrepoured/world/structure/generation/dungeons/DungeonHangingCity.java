@@ -73,8 +73,7 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand,
-			DungeonDataManager.DungeonSpawnType spawnType) {
+	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this, rand);
 	}
 

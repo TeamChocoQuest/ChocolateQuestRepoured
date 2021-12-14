@@ -111,15 +111,13 @@ public class ItemSpearBase extends ItemCQRWeapon {
 					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), (1.0F + this.getAttackDamage()) * charge);
 				}
 
-				Vec3d vec3 = vec1.add(new Vec3d(0.0D, -0.5D, 0.0D).rotatePitch((float) Math.toRadians(-player.rotationPitch)))
-						.add(new Vec3d(-0.4D, 0.0D, 0.0D).rotateYaw((float) Math.toRadians(-player.rotationYaw)));
+				Vec3d vec3 = vec1.add(new Vec3d(0.0D, -0.5D, 0.0D).rotatePitch((float) Math.toRadians(-player.rotationPitch))).add(new Vec3d(-0.4D, 0.0D, 0.0D).rotateYaw((float) Math.toRadians(-player.rotationYaw)));
 				for (double d = reachDistance; d >= 0.0D; d--) {
 					Vec3d vec4 = vec3.add(vec2.scale(d));
 					((WorldServer) worldIn).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 				}
 
-				player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F,
-						1.0F);
+				player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F, 1.0F);
 				player.getCooldownTracker().setCooldown(stack.getItem(), 200);
 			} else {
 				player.swingArm(EnumHand.MAIN_HAND);
@@ -127,8 +125,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 		}
 	}
 
-	private <T extends Entity> List<T> getEntities(World world, Class<T> entityClass, @Nullable T toIgnore, Vec3d vec1, Vec3d vec2, double range,
-			@Nullable Predicate<T> predicate) {
+	private <T extends Entity> List<T> getEntities(World world, Class<T> entityClass, @Nullable T toIgnore, Vec3d vec1, Vec3d vec2, double range, @Nullable Predicate<T> predicate) {
 		List<T> list = new ArrayList<>();
 		Vec3d vec3 = vec1.add(vec2.normalize().scale(range));
 		RayTraceResult rayTraceResult1 = world.rayTraceBlocks(vec1, vec3, false, true, false);

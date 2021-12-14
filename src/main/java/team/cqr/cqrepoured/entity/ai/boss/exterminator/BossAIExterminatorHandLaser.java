@@ -30,11 +30,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			this.timeOut--;
 			return false;
 		}
-		if (this.entity != null
-				&& this.entity.isEntityAlive()
-				&& this.entity.hasAttackTarget()
-				&& !this.entity.isCurrentlyPlayingAnimation()
-				&& (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
+		if (this.entity != null && this.entity.isEntityAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
 			if (this.entity.isStunned()) {
 				return false;
 			}

@@ -90,8 +90,7 @@ public class MultiBlockDungeonPart implements IDungeonPart, IProtectable {
 
 		@Override
 		public MultiBlockDungeonPart build(World world, DungeonPlacement placement) {
-			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull)
-					.collect(Collectors.toList());
+			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull).collect(Collectors.toList());
 			return new MultiBlockDungeonPart(list);
 		}
 

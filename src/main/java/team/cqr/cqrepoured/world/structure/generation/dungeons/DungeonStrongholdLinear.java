@@ -72,8 +72,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		this.maxFloorSize = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
 
 		this.entranceStairFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
-		this.entranceStairSegmentFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairSegmentFolder",
-				"stronghold/linear/entranceStairSegments");
+		this.entranceStairSegmentFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceStairSegmentFolder", "stronghold/linear/entranceStairSegments");
 		this.entranceBuildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 		this.bossRoomFolder = PropertyFileHelper.getStructureFolderProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
 
@@ -102,8 +101,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand,
-			DungeonDataManager.DungeonSpawnType spawnType) {
+	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand);
 	}
 

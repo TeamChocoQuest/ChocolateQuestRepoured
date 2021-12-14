@@ -78,8 +78,7 @@ public class ChunkCacheCQR extends ChunkCache {
 		}
 	}
 
-	private static boolean isChunkCornerInRangeToLine(double lineStartX, double lineStartZ, double lineDirectionX, double lineDirectionZ, int x, int z,
-			double range) {
+	private static boolean isChunkCornerInRangeToLine(double lineStartX, double lineStartZ, double lineDirectionX, double lineDirectionZ, int x, int z, double range) {
 		if (getDistanceFromPointToLine2D(lineStartX, lineStartZ, lineDirectionX, lineDirectionZ, x, z) <= range) {
 			return true;
 		}

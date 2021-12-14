@@ -74,12 +74,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 				}
 				break;
 			}
-			if (slCounter <= 0
-					|| (!reversed && slCounter > 1 && this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))
-					|| (reversed
-							&& slCounter > 1
-							&& slCounter < ((sideLengthTemp * 4) - 4 - 2)
-							&& this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))) {
+			if (slCounter <= 0 || (!reversed && slCounter > 1 && this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) || (reversed && slCounter > 1 && slCounter < ((sideLengthTemp * 4) - 4 - 2) && this.isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))) {
 				if (slCounter <= 0) {
 					sideLengthTemp += reversed ? -2 : 2;
 					slCounter = (sideLengthTemp * 4) - 4;
@@ -144,8 +139,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<Generato
 		}
 	}
 
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, World world,
-			DungeonInhabitant mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, World world, DungeonInhabitant mobType) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				EStrongholdRoomType room = this.roomPattern[iX][iZ];

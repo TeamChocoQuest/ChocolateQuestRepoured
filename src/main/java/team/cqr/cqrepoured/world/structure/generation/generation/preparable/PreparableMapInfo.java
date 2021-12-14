@@ -42,17 +42,14 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	public PreparableMapInfo(int x, int y, int z, EnumFacing facing, TileEntityMap tileEntityMap) {
-		this(x, y, z, facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(),
-				tileEntityMap.getOriginZ(), tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
+		this(x, y, z, facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(), tileEntityMap.getOriginZ(), tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
 	}
 
-	public PreparableMapInfo(BlockPos pos, EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ,
-			int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
+	public PreparableMapInfo(BlockPos pos, EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
 		this(pos.getX(), pos.getY(), pos.getZ(), facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 	}
 
-	public PreparableMapInfo(int x, int y, int z, EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ,
-			int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
+	public PreparableMapInfo(int x, int y, int z, EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
 		super(x, y, z);
 		this.facing = facing;
 		this.scale = scale;
@@ -161,8 +158,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			break;
 		}
 
-		return new GeneratableMapInfo(pos, entity, pos.getX() + x2, pos.getZ() + z2, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap,
-				this.fillRadius);
+		return new GeneratableMapInfo(pos, entity, pos.getX() + x2, pos.getZ() + z2, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap, this.fillRadius);
 	}
 
 	@Override
@@ -171,8 +167,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntityMap tileEntity = new TileEntityMap();
 		// TODO tile entity data does not get rotated/mirrored
-		tileEntity.set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap,
-				this.fillRadius);
+		tileEntity.set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap, this.fillRadius);
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 

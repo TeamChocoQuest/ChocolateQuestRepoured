@@ -100,8 +100,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			if (isFirst) {
 				floor = new StrongholdFloorOpen(this, rgd, rgd / 2, rgd / 2, this.random);
 			} else {
-				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getFirst(), prevFloor.getExitStairIndexes().getSecond(),
-						this.random);
+				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getFirst(), prevFloor.getExitStairIndexes().getSecond(), this.random);
 			}
 			File stair = null;
 			if (isFirst) {
@@ -133,8 +132,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				if (isFirst) {
 					floor.setEntranceStairPosition(stair, initPos.getX(), initPos.getY(), initPos.getZ());
 				} else {
-					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(),
-							prevFloor.getExitCoordinates().getSecond());
+					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(), prevFloor.getExitCoordinates().getSecond());
 				}
 
 				floor.preProcess(this.world, this.dungeonBuilder, null);
@@ -148,17 +146,15 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	@Override
 	public void buildStructure() {
 		File building = this.dungeon.getEntranceBuilding(this.random);
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world,
-				this.pos.getX(), this.pos.getZ());
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: {}", this.getDungeon().getDungeonName());
 			return;
 		}
 		CQStructure structure = this.loadStructureFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structure.getSize().getX() / 2,
-					this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(),
-					this.pos.getZ() - 4 - structure.getSize().getZ() / 2, CQRConfig.general.supportHillWallSize);
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(), this.pos.getZ() - 4 - structure.getSize().getZ() / 2,
+					CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);
@@ -194,8 +190,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				try {
 					floor.generatePost(this.world, this.dungeonBuilder, mobType);
 				} catch (NullPointerException ex) {
-					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(),
-							this.pos.getZ());
+					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(), this.pos.getZ());
 				}
 			}
 		}

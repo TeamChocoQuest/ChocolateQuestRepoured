@@ -36,8 +36,7 @@ public class GuiSpawner extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		this.vanillaSpawnerCheckBox = this
-				.addButton(new GuiCheckBox(0, this.width / 2 + 90, this.height / 2 - 80, "Vanilla Spawner", this.tileEntity.isVanillaSpawner()));
+		this.vanillaSpawnerCheckBox = this.addButton(new GuiCheckBox(0, this.width / 2 + 90, this.height / 2 - 80, "Vanilla Spawner", this.tileEntity.isVanillaSpawner()));
 		this.minSpawnDelayTextField = new GuiTextField(1, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 66, 32, 10);
 		this.maxSpawnDelayTextField = new GuiTextField(2, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 52, 32, 10);
 		this.spawnCountTextField = new GuiTextField(3, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 38, 32, 10);
@@ -195,12 +194,7 @@ public class GuiSpawner extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.minSpawnDelayTextField.isFocused()
-				|| this.maxSpawnDelayTextField.isFocused()
-				|| this.spawnCountTextField.isFocused()
-				|| this.maxNearbyEntitiesTextField.isFocused()
-				|| this.activatingRangeFromPlayerTextField.isFocused()
-				|| this.spawnRangeTextField.isFocused()) {
+		if (this.minSpawnDelayTextField.isFocused() || this.maxSpawnDelayTextField.isFocused() || this.spawnCountTextField.isFocused() || this.maxNearbyEntitiesTextField.isFocused() || this.activatingRangeFromPlayerTextField.isFocused() || this.spawnRangeTextField.isFocused()) {
 			if (keyCode == 1) {
 				this.minSpawnDelayTextField.setFocused(false);
 				this.maxSpawnDelayTextField.setFocused(false);

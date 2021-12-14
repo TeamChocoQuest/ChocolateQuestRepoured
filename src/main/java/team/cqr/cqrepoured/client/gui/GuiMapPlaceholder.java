@@ -49,8 +49,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 	public void initGui() {
 		this.scale = new GuiTextField(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
 		this.orientation = new GuiButtonOrientation(1, this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, this.tileEntity.getOrientation());
-		this.lockOrientation = new GuiCheckBox(2, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, "Lock Orientation",
-				this.tileEntity.lockOrientation());
+		this.lockOrientation = new GuiCheckBox(2, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, "Lock Orientation", this.tileEntity.lockOrientation());
 		this.originX = new GuiTextField(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
 		this.originZ = new GuiTextField(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
 		this.offsetX = new GuiTextField(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
@@ -88,12 +87,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.scale.isFocused()
-				|| this.originX.isFocused()
-				|| this.originZ.isFocused()
-				|| this.offsetX.isFocused()
-				|| this.offsetZ.isFocused()
-				|| this.fillRadius.isFocused()) {
+		if (this.scale.isFocused() || this.originX.isFocused() || this.originZ.isFocused() || this.offsetX.isFocused() || this.offsetZ.isFocused() || this.fillRadius.isFocused()) {
 			if (keyCode == 1) {
 				this.scale.setFocused(false);
 				this.originX.setFocused(false);

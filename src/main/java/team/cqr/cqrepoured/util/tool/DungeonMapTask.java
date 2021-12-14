@@ -81,18 +81,17 @@ public class DungeonMapTask {
 	public CompletableFuture<Void> run() {
 		this.world = DummyWorld.create(this.seed, WorldType.DEFAULT.getName(), 0);
 		this.image = new BufferedImage(this.sizeBlocks, this.sizeBlocks, BufferedImage.TYPE_INT_RGB);
-		return CompletableFuture.runAsync(this::exportBiomes).thenRunAsync(this::exportGrid).thenRunAsync(this::exportDungeons).thenRunAsync(this::exportImage)
-				.handleAsync((v, t) -> {
-					if (t != null) {
-						this.progress.setErrored();
-					}
-					WorldServer world = DimensionManager.getWorld(0);
-					if (world != null) {
-						DimensionManager.setWorld(0, null, world.getMinecraftServer());
-					}
-					hardResetIntCache();
-					return null;
-				});
+		return CompletableFuture.runAsync(this::exportBiomes).thenRunAsync(this::exportGrid).thenRunAsync(this::exportDungeons).thenRunAsync(this::exportImage).handleAsync((v, t) -> {
+			if (t != null) {
+				this.progress.setErrored();
+			}
+			WorldServer world = DimensionManager.getWorld(0);
+			if (world != null) {
+				DimensionManager.setWorld(0, null, world.getMinecraftServer());
+			}
+			hardResetIntCache();
+			return null;
+		});
 	}
 
 	private void exportBiomes() {

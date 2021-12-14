@@ -55,8 +55,7 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 
 public class CQStructure {
 
-	private static final Comparator<PreparablePosInfo> DEFAULT_COMPARATOR = Comparator.comparingInt(PreparablePosInfo::getX)
-			.thenComparingInt(PreparablePosInfo::getY).thenComparingInt(PreparablePosInfo::getZ);
+	private static final Comparator<PreparablePosInfo> DEFAULT_COMPARATOR = Comparator.comparingInt(PreparablePosInfo::getX).thenComparingInt(PreparablePosInfo::getY).thenComparingInt(PreparablePosInfo::getZ);
 	private static final Map<File, CQStructure> CACHED_STRUCTURES = new HashMap<>();
 	public static final String CQR_FILE_VERSION = "1.2.0";
 	private static final Set<ResourceLocation> SPECIAL_ENTITIES = new HashSet<>();
@@ -112,8 +111,7 @@ public class CQStructure {
 		return structure;
 	}
 
-	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities,
-			Collection<BlockPos> unprotectedBlocks, String author) {
+	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks, String author) {
 		CQStructure structure = new CQStructure();
 		structure.author = author;
 		structure.takeBlocksAndEntitiesFromWorld(world, startPos, endPos, ignoreBasicEntities, unprotectedBlocks);
@@ -179,8 +177,7 @@ public class CQStructure {
 		// Save compound tags
 		compound.setTag("compoundTagList", compoundList);
 
-		compound.setIntArray("unprotectedBlockList",
-				this.unprotectedBlockList.stream().flatMapToInt(pos -> IntStream.of(pos.getX(), pos.getY(), pos.getZ())).toArray());
+		compound.setIntArray("unprotectedBlockList", this.unprotectedBlockList.stream().flatMapToInt(pos -> IntStream.of(pos.getX(), pos.getY(), pos.getZ())).toArray());
 
 		return compound;
 	}
@@ -244,12 +241,10 @@ public class CQStructure {
 
 		this.unprotectedBlockList.clear();
 		int[] intArray = compound.getIntArray("unprotectedBlockList");
-		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2]))
-				.forEach(this.unprotectedBlockList::add);
+		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2])).forEach(this.unprotectedBlockList::add);
 	}
 
-	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities,
-			Collection<BlockPos> unprotectedBlocks) {
+	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
 		BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 		BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 
@@ -426,8 +421,7 @@ public class CQStructure {
 			NBTTagCompound tag = (NBTTagCompound) nbt;
 			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
 				NBTTagList pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
-				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2),
-						(NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
+				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
 			}
 		}
 

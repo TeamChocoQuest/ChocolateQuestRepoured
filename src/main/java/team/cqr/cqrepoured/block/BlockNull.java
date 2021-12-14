@@ -44,8 +44,7 @@ public class BlockNull extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (playerIn.capabilities.isCreativeMode && playerIn.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
 			if (state.getValue(PASSABLE)) {
 				worldIn.setBlockState(pos, state.withProperty(PASSABLE, false), 3);

@@ -23,15 +23,13 @@ public class ParticleMagicBell extends Particle {
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY,
-			float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static class Factory implements IParticleFactory {
 		@Override
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn,
-				double zSpeedIn, int... optionalArguments) {
+		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int... optionalArguments) {
 			int lifetime = optionalArguments.length >= 1 ? optionalArguments[0] : 20;
 			int color = optionalArguments.length >= 2 ? optionalArguments[1] : 0xFFFFFF;
 			if (optionalArguments.length >= 5) {

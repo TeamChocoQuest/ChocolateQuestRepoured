@@ -22,8 +22,7 @@ import team.cqr.cqrepoured.integration.ancientwarfare.AW2Integration;
 
 public class StructureHelper {
 
-	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a",
-			"canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
+	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	public static boolean isStructureInRange(World world, BlockPos pos, int radius, String name) {
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
@@ -41,11 +40,7 @@ public class StructureHelper {
 
 		IChunkGenerator chunkGenerator = ((WorldServer) world).getChunkProvider().chunkGenerator;
 
-		if (chunkGenerator instanceof ChunkGeneratorOverworld
-				|| chunkGenerator instanceof ChunkGeneratorHell
-				|| chunkGenerator instanceof ChunkGeneratorEnd
-				|| chunkGenerator instanceof ChunkGeneratorFlat
-				|| chunkGenerator instanceof ChunkGeneratorDebug) {
+		if (chunkGenerator instanceof ChunkGeneratorOverworld || chunkGenerator instanceof ChunkGeneratorHell || chunkGenerator instanceof ChunkGeneratorEnd || chunkGenerator instanceof ChunkGeneratorFlat || chunkGenerator instanceof ChunkGeneratorDebug) {
 			// vanilla chunk generator
 			MapGenStructure structureGenerator = getStructureGenerator(world, name);
 

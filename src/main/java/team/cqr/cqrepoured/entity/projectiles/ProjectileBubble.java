@@ -35,11 +35,7 @@ public class ProjectileBubble extends ProjectileBase {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if (!this.world.isRemote
-				&& result.typeOfHit == RayTraceResult.Type.ENTITY
-				&& result.entityHit != null
-				&& result.entityHit != this.shooter
-				&& !(result.entityHit instanceof MultiPartEntityPart)) {
+		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
 			this.applyEntityCollision(result.entityHit);
 		}
 

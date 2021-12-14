@@ -19,9 +19,7 @@ public class BossAISpiderHook extends EntityAIHooker {
 				this.cooldown--;
 				return false;
 			}
-			return this.entity.hasAttackTarget()
-					&& this.entity.getDistanceSq(this.entity.getAttackTarget()) >= this.MIN_RANGE
-					&& this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return this.entity.hasAttackTarget() && this.entity.getDistanceSq(this.entity.getAttackTarget()) >= this.MIN_RANGE && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		return false;

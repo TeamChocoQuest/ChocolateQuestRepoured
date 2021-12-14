@@ -34,8 +34,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 		super.updateTask();
 		if (this.cooldown <= 0) {
 			this.cooldown = 10;
-			this.entity.getNavigator().tryMoveToXYZ(this.getTargetLocation().x, this.getTargetLocation().y, this.getTargetLocation().z,
-					this.getMovementSpeed());
+			this.entity.getNavigator().tryMoveToXYZ(this.getTargetLocation().x, this.getTargetLocation().y, this.getTargetLocation().z, this.getMovementSpeed());
 		}
 		this.cooldown--;
 	}

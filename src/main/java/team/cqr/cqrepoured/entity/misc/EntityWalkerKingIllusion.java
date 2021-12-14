@@ -130,14 +130,11 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 			if (this.parent == null && this.parentUUID != null) {
 				if (this.searchTicksForParent > 0) {
 					if (!this.world.isRemote) {
-						this.world
-								.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(-10, -10, -10), this.getPosition().add(10, 10, 10)),
-										Predicates.instanceOf(EntityCQRWalkerKing.class))
-								.forEach(t -> {
-									if (t.getPersistentID().equals(EntityWalkerKingIllusion.this.parentUUID)) {
-										EntityWalkerKingIllusion.this.parent = (EntityCQRWalkerKing) t;
-									}
-								});
+						this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(-10, -10, -10), this.getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(t -> {
+							if (t.getPersistentID().equals(EntityWalkerKingIllusion.this.parentUUID)) {
+								EntityWalkerKingIllusion.this.parent = (EntityCQRWalkerKing) t;
+							}
+						});
 
 						this.searchTicksForParent--;
 					}

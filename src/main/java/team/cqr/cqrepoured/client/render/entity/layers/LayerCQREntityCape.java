@@ -19,15 +19,12 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-			float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (!(this.entityRenderer.getMainModel() instanceof ModelCQRBiped)) {
 			return;
 		}
 
-		if (/* entitylivingbaseIn.hasPlayerInfo() && */ !entitylivingbaseIn.isInvisible()
-				&& entitylivingbaseIn.hasCape()
-				&& entitylivingbaseIn.getResourceLocationOfCape() != null) {
+		if (/* entitylivingbaseIn.hasPlayerInfo() && */ !entitylivingbaseIn.isInvisible() && entitylivingbaseIn.hasCape() && entitylivingbaseIn.getResourceLocationOfCape() != null) {
 			ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
 			if (itemstack.getItem() != Items.ELYTRA) {
@@ -35,12 +32,9 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0.0F, 0.0F, 0.125F);
 				// ChasingPos: Positions of the cape
-				double d0 = entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * partialTicks
-						- (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * partialTicks);
-				double d1 = entitylivingbaseIn.prevPosY + (entitylivingbaseIn.posY - entitylivingbaseIn.prevPosY) * partialTicks
-						- (entitylivingbaseIn.prevPosY + (entitylivingbaseIn.posY - entitylivingbaseIn.prevPosY) * partialTicks);
-				double d2 = entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * partialTicks
-						- (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * partialTicks);
+				double d0 = entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * partialTicks - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * partialTicks);
+				double d1 = entitylivingbaseIn.prevPosY + (entitylivingbaseIn.posY - entitylivingbaseIn.prevPosY) * partialTicks - (entitylivingbaseIn.prevPosY + (entitylivingbaseIn.posY - entitylivingbaseIn.prevPosY) * partialTicks);
+				double d2 = entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * partialTicks - (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * partialTicks);
 				float f = entitylivingbaseIn.prevRenderYawOffset + (entitylivingbaseIn.renderYawOffset - entitylivingbaseIn.prevRenderYawOffset) * partialTicks;
 				double d3 = MathHelper.sin(f * 0.017453292F);
 				double d4 = (-MathHelper.cos(f * 0.017453292F));
@@ -54,10 +48,7 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 				}
 
 				float f4 = entitylivingbaseIn.prevRotationYaw + (entitylivingbaseIn.rotationYaw - entitylivingbaseIn.prevRotationPitch) * partialTicks;
-				f1 = f1 + MathHelper
-						.sin((entitylivingbaseIn.prevDistanceWalkedModified
-								+ (entitylivingbaseIn.distanceWalkedModified - entitylivingbaseIn.prevDistanceWalkedModified) * partialTicks) * 6.0F)
-						* 32.0F * f4;
+				f1 = f1 + MathHelper.sin((entitylivingbaseIn.prevDistanceWalkedModified + (entitylivingbaseIn.distanceWalkedModified - entitylivingbaseIn.prevDistanceWalkedModified) * partialTicks) * 6.0F) * 32.0F * f4;
 
 				if (entitylivingbaseIn.isSneaking()) {
 					f1 += 25.0F;
@@ -75,8 +66,7 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 		}
 	}
 
-	private void renderModel(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-			float netHeadYaw, float headPitch, float scale) {
+	private void renderModel(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
 		if (flag) {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());

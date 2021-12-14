@@ -38,8 +38,7 @@ public class BlockAddedUtil {
 					IBlockState stateDown = y == 0 ? get(blockStorageDown, x, 15, z) : get(blockStorage, x, y - 1, z);
 					if (stateDown.getBlock() == Blocks.GRASS && state.getLightOpacity(world, MUTABLE) >= 12) {
 						MUTABLE.setY(MUTABLE.getY() - 1);
-						BlockPlacingHelper.setBlockState(world, chunk, y == 0 ? blockStorageDown : blockStorage, MUTABLE, Blocks.DIRT.getDefaultState(), null,
-								2);
+						BlockPlacingHelper.setBlockState(world, chunk, y == 0 ? blockStorageDown : blockStorage, MUTABLE, Blocks.DIRT.getDefaultState(), null, 2);
 					}
 				}
 			});

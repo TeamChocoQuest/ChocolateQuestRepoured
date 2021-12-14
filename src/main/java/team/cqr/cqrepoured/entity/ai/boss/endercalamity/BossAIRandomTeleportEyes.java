@@ -13,8 +13,7 @@ public class BossAIRandomTeleportEyes extends AbstractBossAIRandomShoot {
 
 	@Override
 	protected int execRandomShoot() {
-		Vec3d v = this.entity.hasAttackTarget() ? this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector())
-				: this.entity.getLookVec();
+		Vec3d v = this.entity.hasAttackTarget() ? this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector()) : this.entity.getLookVec();
 		v = v.normalize();
 		ProjectileHomingEnderEye eye = new ProjectileHomingEnderEye(this.entity.world, this.entity, this.entity.getAttackTarget());
 		eye.motionX = v.x / 10;

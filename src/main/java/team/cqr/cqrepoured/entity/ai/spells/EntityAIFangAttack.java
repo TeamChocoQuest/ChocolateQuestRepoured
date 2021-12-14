@@ -100,8 +100,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		}
 
 		if (flag) {
-			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks,
-					this.entity);
+			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
 			this.entity.world.spawnEntity(entityevokerfangs);
 		}
 	}

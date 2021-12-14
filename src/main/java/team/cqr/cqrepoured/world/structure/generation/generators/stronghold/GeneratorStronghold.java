@@ -62,8 +62,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
 
 		int y = this.pos.getY();
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world,
-				this.pos.getX(), this.pos.getZ());
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		PlacementSettings settings = new PlacementSettings();
 		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom(this.random));
 		CQStructure structureEntrance = this.loadStructureFromFile(this.dungeon.getEntranceBuilding(this.random));
@@ -88,10 +87,8 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		}
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2,
-					this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
-					y + this.dungeon.getUnderGroundOffset() - 1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2,
-					CQRConfig.general.supportHillWallSize);
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2, this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2, y + this.dungeon.getUnderGroundOffset() - 1,
+					this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2, CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
 			this.dungeonBuilder.add(partBuilder);

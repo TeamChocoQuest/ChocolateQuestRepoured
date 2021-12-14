@@ -38,8 +38,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 		}
 	}
 
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture,
-			boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
 		this(entity, cooldown, chargeUpTicks);
 		this.summonViaCircle = useCircle;
 		this.minionOverride = minion;
@@ -126,8 +125,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 					if (this.summonViaCircle) {
 						EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
 						circle.setSummon(summon);
-						circle.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.1 + this.positionOffsetForSummons.y,
-								p.getZ() + this.positionOffsetForSummons.z);
+						circle.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.1 + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
 						this.entity.world.spawnEntity(circle);
 						this.summoner.addSummonedEntityToList(circle);
@@ -136,8 +134,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.world);
 
 						summoned.setUniqueId(MathHelper.getRandomUUID());
-						summoned.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y,
-								p.getZ() + this.positionOffsetForSummons.z);
+						summoned.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
 						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
 						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);

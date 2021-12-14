@@ -39,8 +39,7 @@ public class EntityCalamityCrystal extends Entity {
 
 	private float absorbedHealth = 0F;
 
-	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.<Optional<BlockPos>>createKey(EntityCalamityCrystal.class,
-			DataSerializers.OPTIONAL_BLOCK_POS);
+	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.<Optional<BlockPos>>createKey(EntityCalamityCrystal.class, DataSerializers.OPTIONAL_BLOCK_POS);
 	private static final DataParameter<Boolean> ABSORBING = EntityDataManager.<Boolean>createKey(EntityCalamityCrystal.class, DataSerializers.BOOLEAN);
 
 	private static final int EXPLOSION_EFFECT_RADIUS = 16;
@@ -157,9 +156,7 @@ public class EntityCalamityCrystal extends Entity {
 
 	private void checkCurrentTarget() {
 		if (this.currentTarget != null) {
-			if (this.currentTarget.isDead
-					|| !this.currentTarget.isEntityAlive()
-					|| (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
+			if (this.currentTarget.isDead || !this.currentTarget.isEntityAlive() || (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
 				// Target is dead or remove or has too few hp=> search a different one!
 				this.currentTarget = null;
 				this.setBeamTarget(null);

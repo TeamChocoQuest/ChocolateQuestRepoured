@@ -162,9 +162,7 @@ public class BlockFireCQR extends BlockFire {
 			int i = 0;
 
 			for (EnumFacing enumfacing : EnumFacing.values()) {
-				i = Math.max(
-						worldIn.getBlockState(pos.offset(enumfacing)).getBlock().getFireSpreadSpeed(worldIn, pos.offset(enumfacing), enumfacing.getOpposite()),
-						i);
+				i = Math.max(worldIn.getBlockState(pos.offset(enumfacing)).getBlock().getFireSpreadSpeed(worldIn, pos.offset(enumfacing), enumfacing.getOpposite()), i);
 			}
 
 			return i;

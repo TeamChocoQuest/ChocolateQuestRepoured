@@ -25,8 +25,7 @@ public class CPacketAddPathNode implements IMessage {
 
 	}
 
-	public CPacketAddPathNode(EnumHand hand, int rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin,
-			int timeMax, boolean bidirectional, IntCollection blacklistedPrevNodes) {
+	public CPacketAddPathNode(EnumHand hand, int rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, boolean bidirectional, IntCollection blacklistedPrevNodes) {
 		this.hand = hand;
 		this.rootNode = rootNode;
 		this.pos = pos;

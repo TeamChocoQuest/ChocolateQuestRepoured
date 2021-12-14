@@ -3,9 +3,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 public class RandomCastleConfigOptions {
 
 	public enum RoofType {
-		TWO_SIDED(0),
-		FOUR_SIDED(1),
-		SPIRE(2);
+		TWO_SIDED(0), FOUR_SIDED(1), SPIRE(2);
 
 		public final int value;
 
@@ -15,9 +13,6 @@ public class RandomCastleConfigOptions {
 	}
 
 	public enum WindowType {
-		BASIC_GLASS,
-		CROSS_GLASS,
-		SQUARE_BARS,
-		OPEN_SLIT;
+		BASIC_GLASS, CROSS_GLASS, SQUARE_BARS, OPEN_SLIT;
 	}
 }

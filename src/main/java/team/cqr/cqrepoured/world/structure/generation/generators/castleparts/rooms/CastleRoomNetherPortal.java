@@ -16,8 +16,7 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomized
 
 public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 	private enum Alignment {
-		HORIZONTAL,
-		VERTICAL
+		HORIZONTAL, VERTICAL
 	}
 
 	private Alignment portalAlignment;
@@ -53,8 +52,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 		Predicate<Vec3i> portalSides = (v -> (v.getY() > 0) && (v.getY() < 4) && (v.getZ() == halfZ) && ((v.getX() == xStart + 1) || (v.getX() == xEnd - 1)));
 		Predicate<Vec3i> portalMid = (v -> (v.getY() > 0) && (v.getY() < 4) && (v.getZ() == halfZ) && ((v.getX() > xStart + 1) && (v.getX() < xEnd - 1)));
 		Predicate<Vec3i> portal = portalBot.or(portalTop).or(portalSides);
-		Predicate<Vec3i> platform = portal.negate()
-				.and(firstLayer.and(v -> (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1) && (v.getZ() >= zStart + 1) && (v.getZ() <= zEnd - 1)));
+		Predicate<Vec3i> platform = portal.negate().and(firstLayer.and(v -> (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1) && (v.getZ() >= zStart + 1) && (v.getZ() <= zEnd - 1)));
 
 		GenerationTemplate portalRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		portalRoomTemplate.addRule(northEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));

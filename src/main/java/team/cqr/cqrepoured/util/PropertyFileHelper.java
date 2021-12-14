@@ -480,8 +480,7 @@ public class PropertyFileHelper {
 		return retArr;
 	}
 
-	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal,
-			boolean allowEmpty) {
+	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal, boolean allowEmpty) {
 		String s = prop.getProperty(key);
 		if (s == null) {
 			return defVal;

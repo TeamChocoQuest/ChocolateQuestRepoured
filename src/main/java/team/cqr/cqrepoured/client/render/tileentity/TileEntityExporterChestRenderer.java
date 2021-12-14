@@ -54,9 +54,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 			overlayTexture = ((BlockExporterChest) block).getOverlayTexture();
 		}
 
-		if (block instanceof BlockExporterChestCustom
-				&& this.rendererDispatcher.cameraHitResult != null
-				&& te.getPos().equals(this.rendererDispatcher.cameraHitResult.getBlockPos())) {
+		if (block instanceof BlockExporterChestCustom && this.rendererDispatcher.cameraHitResult != null && te.getPos().equals(this.rendererDispatcher.cameraHitResult.getBlockPos())) {
 			this.drawNameplate(te, te.getDisplayName().getFormattedText(), x, y, z, 16);
 		}
 

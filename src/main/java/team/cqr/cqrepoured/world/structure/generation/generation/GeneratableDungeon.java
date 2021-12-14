@@ -85,9 +85,7 @@ public class GeneratableDungeon {
 	}
 
 	public enum GenerationState {
-		PRE_GENERATION,
-		GENERATION,
-		POST_GENERATION;
+		PRE_GENERATION, GENERATION, POST_GENERATION;
 	}
 
 	protected GeneratableDungeon(String dungeonName, BlockPos pos, Collection<IDungeonPart> parts, ProtectedRegion.Builder protectedRegionBuilder) {
@@ -384,8 +382,7 @@ public class GeneratableDungeon {
 		public Builder(World world, BlockPos pos, DungeonBase dungeonConfig) {
 			this.dungeonName = dungeonConfig.getDungeonName();
 			this.pos = pos;
-			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(dungeonConfig.getDungeonMob(), world, pos.getX(),
-					pos.getZ());
+			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(dungeonConfig.getDungeonMob(), world, pos.getX(), pos.getZ());
 			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonConfig, pos);
 		}
 
@@ -397,8 +394,7 @@ public class GeneratableDungeon {
 		}
 
 		public GeneratableDungeon build(World world) {
-			List<IDungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).filter(part -> !part.isGenerated())
-					.collect(Collectors.toList());
+			List<IDungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).filter(part -> !part.isGenerated()).collect(Collectors.toList());
 			parts.stream().filter(IProtectable.class::isInstance).map(IProtectable.class::cast).forEach(part -> {
 				this.protectedRegionBuilder.updateMin(part.minPos());
 				this.protectedRegionBuilder.updateMax(part.maxPos());

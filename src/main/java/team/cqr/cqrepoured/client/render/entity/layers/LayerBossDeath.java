@@ -25,8 +25,7 @@ public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-			float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		int ticks = this.getAnimationTick(entitylivingbaseIn);
 		if (ticks > 0) {
 			this.rayHelper.renderRays(ticks, partialTicks);

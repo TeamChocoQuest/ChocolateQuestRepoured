@@ -326,9 +326,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		amount = this.handleDamageCap(source, amount);
 
 		if (!this.world.isRemote && amount > 0.0F && this.canBlockDamageSource(source)) {
-			if (source.getImmediateSource() instanceof EntityLivingBase
-					&& !(source.getImmediateSource() instanceof EntityPlayer)
-					&& ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+			if (source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer) && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
 				this.lastTickShieldDisabled = this.ticksExisted;
 			} else {
 				this.damageBlockedWithShield += amount;
@@ -521,11 +519,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				}
 			}
 
-			if (backpackflag
-					|| (!itemstack.isEmpty()
-							&& !EnchantmentHelper.hasVanishingCurse(itemstack)
-							&& (wasRecentlyHit || flag)
-							&& this.rand.nextFloat() - lootingModifier * 0.01F < d0)) {
+			if (backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && this.rand.nextFloat() - lootingModifier * 0.01F < d0)) {
 				if (!flag && itemstack.isItemStackDamageable() && !backpackflag) {
 					double durability = modalValue + MathHelper.clamp(this.rand.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
 					itemstack.setItemDamage((int) (itemstack.getMaxDamage() * (1.0D - durability)));
@@ -812,10 +806,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				float f = this.renderYawOffset * 0.017453292F + MathHelper.cos(this.ticksExisted * 0.6662F) * 0.25F;
 				float f1 = MathHelper.cos(f);
 				float f2 = MathHelper.sin(f);
-				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + this.height,
-						this.posZ + (double) f2 * (double) this.width, red, green, blue);
-				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + this.height,
-						this.posZ - (double) f2 * (double) this.width, red, green, blue);
+				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
+				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + this.height, this.posZ - (double) f2 * (double) this.width, red, green, blue);
 			}
 			if (this.isChatting() && this.ticksExisted % LayerCQRSpeechbubble.CHANGE_BUBBLE_INTERVAL == 0) {
 				this.chooseNewRandomSpeechBubble();
@@ -905,10 +897,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				if (!this.world.isRemote) {
 					((EntityLivingBase) entityIn).heal(ItemStaffHealing.HEAL_AMOUNT_ENTITIES);
 					entityIn.setFire(0);
-					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, 4,
-							0.25D, 0.25D, 0.25D, 0.0D);
-					this.world.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, CQRSounds.MAGIC, SoundCategory.MASTER,
-							0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
+					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+					this.world.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
 				}
 				return true;
 			}
@@ -933,8 +923,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (flag) {
 			if (i > 0 && entityIn instanceof EntityLivingBase) {
-				((EntityLivingBase) entityIn).knockBack(this, i * 0.5F, MathHelper.sin(this.rotationYaw * 0.017453292F),
-						(-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+				((EntityLivingBase) entityIn).knockBack(this, i * 0.5F, MathHelper.sin(this.rotationYaw * 0.017453292F), (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
 				this.motionX *= 0.6D;
 				this.motionZ *= 0.6D;
 			}
@@ -950,10 +939,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				ItemStack itemstack = this.getHeldItemMainhand();
 				ItemStack itemstack1 = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY;
 
-				if (!itemstack.isEmpty()
-						&& !itemstack1.isEmpty()
-						&& itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this)
-						&& itemstack1.getItem().isShield(itemstack1, entityplayer)) {
+				if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this) && itemstack1.getItem().isShield(itemstack1, entityplayer)) {
 					float f1 = 0.25F + EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
 
 					if (this.rand.nextFloat() < f1) {
@@ -1209,7 +1195,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
-		// System.out.println("Applying texture to dataManager");
+		System.out.println("Applying texture to dataManager");
 		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
 	}
 
@@ -1232,9 +1218,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			List<Faction> checkedFactions = new ArrayList<>();
 			// boolean setRepu = false;
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
-				if (cqrentity.hasFaction()
-						&& !checkedFactions.contains(cqrentity.getFaction())
-						&& (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
+				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
 					Faction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
 						// DONE decrement the players repu on this entity's faction
@@ -1274,8 +1258,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		// Recalculate path points
 		for (Path.PathNode node : this.path.getNodes()) {
-			node.setPos(DungeonPlacement.transform(node.getPos().getX(), node.getPos().getY(), node.getPos().getZ(), BlockPos.ORIGIN, placement.getMirror(),
-					placement.getRotation()));
+			node.setPos(DungeonPlacement.transform(node.getPos().getX(), node.getPos().getY(), node.getPos().getZ(), BlockPos.ORIGIN, placement.getMirror(), placement.getRotation()));
 			node.setWaitingRotation(getTransformedYaw(node.getWaitingRotation(), placement.getMirror(), placement.getRotation()));
 		}
 
@@ -1287,10 +1270,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.setItemStackToSlot(slot, new ItemStack(placement.getInhabitant().getShieldReplacement(), 1));
 			}
 		}
-		if (placement.getInhabitant() != null
-				&& placement.getInhabitant().getFactionOverride() != null
-				&& !placement.getInhabitant().getFactionOverride().isEmpty()
-				&& FactionRegistry.instance().getFactionInstance(placement.getInhabitant().getFactionOverride()) != null) {
+		if (placement.getInhabitant() != null && placement.getInhabitant().getFactionOverride() != null && !placement.getInhabitant().getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(placement.getInhabitant().getFactionOverride()) != null) {
 			this.setFaction(placement.getInhabitant().getFactionOverride());
 		}
 	}
@@ -1366,8 +1346,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@SideOnly(Side.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
 		if (this.hasTrades()) {
-			this.currentSpeechBubbleID = (ESpeechBubble.TRADE_EMERALD.ordinal()
-					+ this.rand.nextInt(ESpeechBubble.values().length - ESpeechBubble.TRADE_EMERALD.ordinal()));
+			this.currentSpeechBubbleID = (ESpeechBubble.TRADE_EMERALD.ordinal() + this.rand.nextInt(ESpeechBubble.values().length - ESpeechBubble.TRADE_EMERALD.ordinal()));
 
 			return;
 		}

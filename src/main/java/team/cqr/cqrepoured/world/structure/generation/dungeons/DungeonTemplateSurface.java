@@ -28,8 +28,7 @@ public class DungeonTemplateSurface extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonTemplateSurface> createDungeonGenerator(World world, int x, int y, int z, Random rand,
-			DungeonDataManager.DungeonSpawnType spawnType) {
+	public AbstractDungeonGenerator<DungeonTemplateSurface> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorTemplateSurface(world, new BlockPos(x, y, z), this, rand);
 	}
 

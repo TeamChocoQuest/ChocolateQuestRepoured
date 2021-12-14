@@ -22,8 +22,7 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-			float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity.getHealingPotions() > 0 && this.entityRenderer.getMainModel() instanceof ModelBiped) {
 			ModelBiped model = (ModelBiped) this.entityRenderer.getMainModel();
 			ModelRenderer body = model.bipedBody;
@@ -38,8 +37,7 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 					if (entity.isSneaking()) {
 						GlStateManager.translate(0.0F, 0.2F, 0.0F);
 					}
-					GlStateManager.translate(body.offsetX + body.rotationPointX * 0.0625F, body.offsetY + body.rotationPointY * 0.0625F,
-							body.offsetZ + body.rotationPointZ * 0.0625F);
+					GlStateManager.translate(body.offsetX + body.rotationPointX * 0.0625F, body.offsetY + body.rotationPointY * 0.0625F, body.offsetZ + body.rotationPointZ * 0.0625F);
 					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleX), 1.0F, 0.0F, 0.0F);
 					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleY), 0.0F, 1.0F, 0.0F);
 					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleZ), 0.0F, 0.0F, 1.0F);

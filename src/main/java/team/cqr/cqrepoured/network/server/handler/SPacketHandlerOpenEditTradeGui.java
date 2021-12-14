@@ -22,9 +22,7 @@ public class SPacketHandlerOpenEditTradeGui implements IMessageHandler<CPacketOp
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
 
-				if (entity instanceof AbstractEntityCQR
-						&& message.getTradeIndex() >= 0
-						&& message.getTradeIndex() <= ((AbstractEntityCQR) entity).getTrades().size()) {
+				if (entity instanceof AbstractEntityCQR && message.getTradeIndex() >= 0 && message.getTradeIndex() <= ((AbstractEntityCQR) entity).getTrades().size()) {
 					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, world, message.getEntityId(), message.getTradeIndex(), 0);
 				}
 			});

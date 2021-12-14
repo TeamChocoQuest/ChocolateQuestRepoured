@@ -271,16 +271,13 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoiseGecko::new);
 
 		// Lich
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class,
-				renderManager -> new RenderCQRMage<>(renderManager, new ModelLich(), "boss/lich"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelLich(), "boss/lich"));
 
 		// Boar Mage
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class,
-				renderManager -> new RenderCQRMage<>(renderManager, new ModelPigMage(), "boss/pig_mage"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelPigMage(), "boss/pig_mage"));
 
 		// Necromancer
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class,
-				renderManager -> new RenderCQRNecromancer(renderManager, new ModelNecromancer(), "boss/necromancer"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRNecromancer(renderManager, new ModelNecromancer(), "boss/necromancer"));
 
 		// Walker King
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, RenderCQRWalkerKing::new);

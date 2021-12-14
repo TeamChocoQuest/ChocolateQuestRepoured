@@ -91,8 +91,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 				// TODO don't send 20 packets
 				Vec3d v = shooter.getLookVec();
 				v = v.add((r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D);
-				((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y,
-						v.z, r.nextFloat() + 0.2D);
+				((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
 			}
 
 			world.getEntitiesWithinAABB(EntityLivingBase.class, shooter.getEntityBoundingBox().grow(8.0D), entity -> {
@@ -101,8 +100,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 				}
 
 				double x = MathHelper.clamp(shooter.posX, entity.posX - entity.width * 0.5D, entity.posX + entity.width * 0.5D) - shooter.posX;
-				double y = MathHelper.clamp(shooter.posY + shooter.getEyeHeight(), entity.posY, entity.posY + entity.height)
-						- (shooter.posY + shooter.getEyeHeight());
+				double y = MathHelper.clamp(shooter.posY + shooter.getEyeHeight(), entity.posY, entity.posY + entity.height) - (shooter.posY + shooter.getEyeHeight());
 				double z = MathHelper.clamp(shooter.posZ, entity.posZ - entity.width * 0.5D, entity.posZ + entity.width * 0.5D) - shooter.posZ;
 				if (x * x + y * y + z * z > 8.0D * 8.0D) {
 					return false;

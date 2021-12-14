@@ -19,8 +19,7 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 	}
 
 	@Override
-	protected void renderModel(EntityCQRWalkerKing entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-			float headPitch, float scaleFactor) {
+	protected void renderModel(EntityCQRWalkerKing entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		if (entitylivingbaseIn.deathTime > 0) {
 			float f = (float) entitylivingbaseIn.deathTime / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
 

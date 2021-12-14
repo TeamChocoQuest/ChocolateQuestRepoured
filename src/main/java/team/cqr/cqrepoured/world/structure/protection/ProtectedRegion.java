@@ -140,9 +140,7 @@ public class ProtectedRegion {
 	public void readFromNBT(NBTTagCompound compound) {
 		String version = compound.getString("version");
 		if (logVersionWarnings && !version.equals(PROTECTED_REGION_VERSION)) {
-			CQRMain.logger.warn(
-					"Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.",
-					PROTECTED_REGION_VERSION, version);
+			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
 		}
 
 		this.uuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("uuid"));
@@ -308,8 +306,7 @@ public class ProtectedRegion {
 		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty() || this.ignoreNoBossOrNexus;
 	}
 
-	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther,
-			boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
+	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther, boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
 		if (!this.isGenerating) {
 			return;
 		}
@@ -487,8 +484,7 @@ public class ProtectedRegion {
 			this.setup(dungeonConfig);
 		}
 
-		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire,
-				boolean persistent) {
+		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire, boolean persistent) {
 			this.protectionSystemEnabled = enabled;
 			this.preventBlockBreaking = breaking;
 			this.preventBlockPlacing = placing;

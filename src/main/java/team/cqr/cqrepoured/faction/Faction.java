@@ -45,13 +45,11 @@ public class Faction {
 		this(name, defaultReputationState, canRepuChange, Optional.empty(), Optional.empty(), Optional.empty());
 	}
 
-	public Faction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill,
-			Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+	public Faction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
 
-	public Faction(@Nonnull String name, TextureSet ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange,
-			Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+	public Faction(@Nonnull String name, TextureSet ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this.savedGlobally = saveGlobally;
 		this.name = name;
 		this.textureSet = ctSet;

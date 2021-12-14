@@ -11,9 +11,7 @@ import net.minecraft.util.math.Vec3i;
 public class VectorUtil {
 
 	public enum EAxis {
-		AXIS_Y,
-		AXIS_X,
-		AXIS_Z;
+		AXIS_Y, AXIS_X, AXIS_Z;
 	}
 
 	/*

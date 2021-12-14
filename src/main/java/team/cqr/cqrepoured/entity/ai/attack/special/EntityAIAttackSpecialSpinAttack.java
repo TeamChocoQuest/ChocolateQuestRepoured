@@ -99,8 +99,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 		// First: Damage all entities around us
 		final double radius = 1.5 * attacker.getSizeVariation();
-		List<Entity> affectedEntities = attacker.getEntityWorld().getEntitiesInAABBexcluding(attacker, attacker.getEntityBoundingBox().grow(radius),
-				TargetUtil.createPredicateNonAlly(attacker.getFaction()));
+		List<Entity> affectedEntities = attacker.getEntityWorld().getEntitiesInAABBexcluding(attacker, attacker.getEntityBoundingBox().grow(radius), TargetUtil.createPredicateNonAlly(attacker.getFaction()));
 		affectedEntities.forEach((Entity entity) -> {
 			if (entity == null) {
 				return;

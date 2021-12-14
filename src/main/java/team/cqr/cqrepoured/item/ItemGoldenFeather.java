@@ -23,8 +23,7 @@ public class ItemGoldenFeather extends ItemLore {
 		if (entityIn.fallDistance <= 0.0F) {
 			return;
 		}
-		worldIn.spawnParticle(EnumParticleTypes.CLOUD, entityIn.posX, entityIn.posY, entityIn.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D,
-				(itemRand.nextFloat() - 0.5F) / 2.0F);
+		worldIn.spawnParticle(EnumParticleTypes.CLOUD, entityIn.posX, entityIn.posY, entityIn.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.5F) / 2.0F);
 	}
 
 	@Override

@@ -25,8 +25,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 
 		this.addLayer(new LayerGlowingAreas<EntityCQRNetherDragon>(this, this::getEntityTexture) {
 			@Override
-			public void doRenderLayer(EntityCQRNetherDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-					float netHeadYaw, float headPitch, float scale) {
+			public void doRenderLayer(EntityCQRNetherDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 				if (entitylivingbaseIn.getSkeleProgress() >= 0) {
 					return;
 				}
@@ -53,8 +52,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 			float f = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
 			float f1 = (entity.getRNG().nextFloat() - 0.5F) * 4.0F;
 			float f2 = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
-			Minecraft.getMinecraft().world.spawnParticle(entity.getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D,
-					0.0D);
+			Minecraft.getMinecraft().world.spawnParticle(entity.getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
 		}
 		super.doRender(entity, x, y, z, entity.rotationYawHead, partialTicks);
 		/*

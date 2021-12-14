@@ -23,8 +23,7 @@ public class SPacketSpawnParticles implements IMessage {
 
 	}
 
-	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,
-			int... optionalArguments) {
+	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... optionalArguments) {
 		this.particleId = particleId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
@@ -36,8 +35,7 @@ public class SPacketSpawnParticles implements IMessage {
 		this.optionalArguments = optionalArguments;
 	}
 
-	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count,
-			double xOffset, double yOffset, double zOffset, int... optionalArguments) {
+	public SPacketSpawnParticles(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
 		this.particleId = particleId;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;

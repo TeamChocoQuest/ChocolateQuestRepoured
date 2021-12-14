@@ -120,8 +120,7 @@ public class ItemDungeonPlacer extends Item {
 
 					if (result != null) {
 						BlockPos pos = result.getBlockPos().offset(result.sideHit);
-						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ(), new Random(),
-								DungeonDataManager.DungeonSpawnType.DUNGEON_PLACER_ITEM, false);
+						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ(), new Random(), DungeonDataManager.DungeonSpawnType.DUNGEON_PLACER_ITEM, false);
 
 						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 						if ((!playerIn.isCreative() && !playerIn.isSpectator())) {

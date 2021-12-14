@@ -37,9 +37,7 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 		if (attackTarget instanceof AbstractEntityCQR) {
 			AbstractEntityCQR target = (AbstractEntityCQR) attackTarget;
-			boolean flag = this.entity.getDistanceSq(target) < 20.0D * 20.0D
-					&& target.getEntitySenses().canSee(this.entity)
-					&& !target.isEntityInFieldOfView(this.entity);
+			boolean flag = this.entity.getDistanceSq(target) < 20.0D * 20.0D && target.getEntitySenses().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
 			this.entity.setSneaking(flag);
 		}
 	}

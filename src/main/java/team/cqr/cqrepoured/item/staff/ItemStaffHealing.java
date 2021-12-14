@@ -44,10 +44,8 @@ public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwo
 		if (!player.world.isRemote && entity instanceof EntityLivingBase && !player.getCooldownTracker().hasCooldown(stack.getItem())) {
 			((EntityLivingBase) entity).heal(HEAL_AMOUNT_ENTITIES);
 			entity.setFire(0);
-			((WorldServer) player.world).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, 4, 0.25D, 0.25D,
-					0.25D, 0.0D);
-			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F,
-					0.6F + itemRand.nextFloat() * 0.2F);
+			((WorldServer) player.world).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + itemRand.nextFloat() * 0.2F);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 		}

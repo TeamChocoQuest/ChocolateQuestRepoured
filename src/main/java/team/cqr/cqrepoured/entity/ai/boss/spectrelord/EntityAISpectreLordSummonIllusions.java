@@ -80,8 +80,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			illusion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(illusion)), null);
 			this.entity.addSummonedEntityToList(illusion);
 			this.world.spawnEntity(illusion);
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.SPELL, illusion.posX, illusion.posY + 0.5D * illusion.height, illusion.posZ, 8, 0.25D,
-					0.25D, 0.25D, 0.5D);
+			((WorldServer) this.world).spawnParticle(EnumParticleTypes.SPELL, illusion.posX, illusion.posY + 0.5D * illusion.height, illusion.posZ, 8, 0.25D, 0.25D, 0.25D, 0.5D);
 		}
 	}
 
@@ -92,15 +91,12 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			if (e.getDistanceSq(this.entity) <= 32.0D * 32.0D) {
 				heal += 0.05F;
 				e.setDead();
-				((WorldServer) this.world).spawnParticle(EnumParticleTypes.SPELL_INSTANT, e.posX, e.posY + e.height * 0.5D, e.posZ, 4, 0.25D, 0.25D, 0.25D,
-						0.5D);
+				((WorldServer) this.world).spawnParticle(EnumParticleTypes.SPELL_INSTANT, e.posX, e.posY + e.height * 0.5D, e.posZ, 4, 0.25D, 0.25D, 0.25D, 0.5D);
 			}
 		}
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 8.0D, this.entity.posY - 0.5D, this.entity.posZ - 8.0D, this.entity.posX + 8.0D,
-				this.entity.posY + this.entity.height + 0.5D, this.entity.posZ + 8.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 8.0D, this.entity.posY - 0.5D, this.entity.posZ - 8.0D, this.entity.posX + 8.0D, this.entity.posY + this.entity.height + 0.5D, this.entity.posZ + 8.0D);
 		Faction faction = this.entity.getFaction();
-		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
-				e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
+		for (EntityLivingBase e : this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 			heal += 0.05F;
 			e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);
 			e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1, false, false));

@@ -33,8 +33,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
-		this.mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(),
-				this.pos.getZ());
+		this.mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 	}
 
 	@Override
@@ -80,8 +79,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 				}
 			}
 
-			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()] = new HangingCityBuilding(this, coords.getFirst(),
-					coords.getSecond(), structure);
+			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()] = new HangingCityBuilding(this, coords.getFirst(), coords.getSecond(), structure);
 			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()].preProcess(this.world, this.dungeonBuilder, null);
 			this.buildings.add(this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()]);
 			lastProcessed = this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()];

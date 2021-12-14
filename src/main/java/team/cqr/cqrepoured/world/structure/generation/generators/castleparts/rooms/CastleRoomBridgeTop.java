@@ -14,8 +14,7 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 	protected Alignment alignment;
 
 	public enum Alignment {
-		VERTICAL,
-		HORIZONTAL;
+		VERTICAL, HORIZONTAL;
 
 		static Alignment fromFacing(EnumFacing facing) {
 			return facing.getAxis() == EnumFacing.Axis.X ? HORIZONTAL : VERTICAL;

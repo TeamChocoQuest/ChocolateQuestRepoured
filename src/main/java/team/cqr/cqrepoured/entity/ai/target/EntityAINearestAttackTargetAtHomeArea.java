@@ -128,8 +128,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	}
 
 	private boolean isInHomeZone(EntityLivingBase possibleTarget) {
-		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(),
-				this.entity.getCirclingCenter().getZ());
+		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		return Math.abs(distance) <= 48 + 8 * (this.world.getDifficulty().ordinal());
 	}
 

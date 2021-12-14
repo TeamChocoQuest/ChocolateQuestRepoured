@@ -28,8 +28,7 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQ
 		}
 
 		for (BlockPos p : positions) {
-			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRNG().nextBoolean(),
-					CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
+			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
 		}
 	}
 

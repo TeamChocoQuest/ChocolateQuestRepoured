@@ -77,8 +77,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 				DungeonGenerationManager.generate(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
 			} else {
 				CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, dungeonBuilder::build);
-				DungeonPreparationExecutor.thenAcceptAsync(world, future,
-						generatable -> DungeonGenerationManager.generate(world, generatable, null, DungeonSpawnType.DUNGEON_GENERATION));
+				DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, null, DungeonSpawnType.DUNGEON_GENERATION));
 			}
 		}
 	}

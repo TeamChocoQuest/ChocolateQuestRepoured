@@ -79,8 +79,7 @@ public class CommandImport extends CommandBase {
 
 					// place structure
 					BlockPos pos1 = pos.add(x, 0, z);
-					Builder builder = new Builder(world, pos1.add(2, 0, 2), "Import-" + f.getName(),
-							DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName());
+					Builder builder = new Builder(world, pos1.add(2, 0, 2), "Import-" + f.getName(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName());
 					structure.addAll(builder, pos1.add(2, 0, 2), Offset.NORTH_EAST);
 					GeneratableDungeon dungeon = builder.build(world);
 					DungeonGenerationManager.generateNow(world, dungeon, null, DungeonSpawnType.DUNGEON_PLACER_ITEM);

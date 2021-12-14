@@ -70,8 +70,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		// Head distance with scale = 100%: 0.75 blocks
 		float yaw = this.entity.rotationYaw;
 		if (this.entity.hasAttackTarget()) {
-			yaw = (float) Math
-					.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
+			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
 		}
 
 		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 8.0F, -0.01F);

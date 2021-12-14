@@ -124,9 +124,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
 				teleportPos = new BlockPos(this.getAttackTarget().getPositionVector().subtract(v));
-				if (this.world.isBlockFullCube(teleportPos)
-						|| this.world.isBlockFullCube(teleportPos.offset(EnumFacing.UP))
-						|| this.world.isAirBlock(teleportPos.offset(EnumFacing.DOWN))) {
+				if (this.world.isBlockFullCube(teleportPos) || this.world.isBlockFullCube(teleportPos.offset(EnumFacing.UP)) || this.world.isAirBlock(teleportPos.offset(EnumFacing.DOWN))) {
 					teleportPos = this.getAttackTarget().getPosition();
 				}
 			} else if (this.getHomePositionCQR() != null && !this.world.isRemote) {
@@ -136,8 +134,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// spawn cloud
 				for (int ix = -1; ix <= 1; ix++) {
 					for (int iz = -1; iz <= 1; iz++) {
-						((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0,
-								0.25, 0, 0, 0);
+						((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 					}
 				}
 				this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
@@ -168,8 +165,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				int z = -20 + this.getRNG().nextInt(41);
 				int y = -10 + this.getRNG().nextInt(21);
 
-				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, this.posX + x, this.posY + y, this.posZ + z, true, false,
-						0.34F, 0.08F, 0.43F, 0.4F);
+				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, this.posX + x, this.posY + y, this.posZ + z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 				this.world.spawnEntity(entitybolt);
 			}
 
@@ -232,8 +228,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if (this.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
 				for (int iz = -1; iz <= 1; iz++) {
-					((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0,
-							0, 0);
+					((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 				}
 			}
 			this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
@@ -272,8 +267,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		for (int i = 0; i < lightningCount; i++) {
 			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
 			int dY = -3 + this.getRNG().nextInt(7);
-			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(this.world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, false, false,
-					1F, 0.00F, 0.0F, 0.4F);
+			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(this.world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, false, false, 1F, 0.00F, 0.0F, 0.4F);
 			this.world.spawnEntity(clb);
 		}
 		dragon.attackEntityFrom(DamageSource.MAGIC, 10F);
@@ -327,8 +321,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		 * }
 		 * }
 		 */
-		if (/* !spectralFlag && */((source.getImmediateSource() == null) || !(source.getImmediateSource() instanceof EntitySpectralArrow))
-				&& !CQRConfig.bosses.armorForTheWalkerKing) {
+		if (/* !spectralFlag && */((source.getImmediateSource() == null) || !(source.getImmediateSource() instanceof EntitySpectralArrow)) && !CQRConfig.bosses.armorForTheWalkerKing) {
 			amount *= 0.5F;
 		}
 
@@ -361,12 +354,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				boolean dragonFactionFlag = fac != null && (fac.getName().equalsIgnoreCase("DRAGON") || fac.getName().equalsIgnoreCase("DRAGONS"));
 
 				// If we are attacked by a dragon: KILL IT
-				if (this.dragonAttackCooldown <= 0
-						&& (dragonFactionFlag
-								|| resLoc.getPath().contains("dragon")
-								|| resLoc.getPath().contains("wyrm")
-								|| resLoc.getPath().contains("wyvern")
-								|| flag)) {
+				if (this.dragonAttackCooldown <= 0 && (dragonFactionFlag || resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {
 					this.dragonAttackCooldown = 80;
 					this.handleAttackedByDragon(source.getTrueSource());
 				}
@@ -378,15 +366,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			// How about killing the one who tries with the axe?
 			// Maybe move this whole ability to the king shield itself??
 			ItemStack shieldStack = this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
-			if (amount > 0F
-					&& this.canBlockDamageSource(source)
-					&& shieldStack != null
-					&& !shieldStack.isEmpty()
-					&& shieldStack.getItem() instanceof ItemShield) {
+			if (amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ItemShield) {
 				this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
-				if (source.getImmediateSource() instanceof EntityLivingBase
-						/* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand()
-								.getItem() instanceof ItemAxe) {
+				if (source.getImmediateSource() instanceof EntityLivingBase/* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
 					if (DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
 						Vec3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
 						v = v.add(0, 0.75, 0);

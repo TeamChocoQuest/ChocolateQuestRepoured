@@ -52,12 +52,7 @@ public class RenderEventHandler {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
 
-		if (itemMain instanceof ItemRevolver
-				|| itemOff instanceof ItemRevolver
-				|| itemOff instanceof ItemMusketKnife
-				|| itemMain instanceof ItemMusketKnife
-				|| itemMain instanceof ItemHookshotBase
-				|| itemOff instanceof ItemHookshotBase) {
+		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
 		}
 
@@ -128,12 +123,7 @@ public class RenderEventHandler {
 			}
 		}
 
-		if (itemMain instanceof ItemRevolver
-				|| itemOff instanceof ItemRevolver
-				|| itemOff instanceof ItemMusketKnife
-				|| itemMain instanceof ItemMusketKnife
-				|| itemMain instanceof ItemHookshotBase
-				|| itemOff instanceof ItemHookshotBase) {
+		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.popMatrix();
 		}
 	}
@@ -192,9 +182,7 @@ public class RenderEventHandler {
 					applyRotations(entity, f8, f, partialTicks);
 					renderer.prepareScale(entity, partialTicks);
 					GlStateManager.enableAlpha();
-					if (renderer instanceof RenderCQREntity
-							&& model.isRiding
-							&& entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemCrown) {
+					if (renderer instanceof RenderCQREntity && model.isRiding && entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemCrown) {
 						GlStateManager.translate(0.0F, 0.6F, 0.0F);
 					}
 					GlStateManager.depthMask(true);
@@ -318,9 +306,7 @@ public class RenderEventHandler {
 		} else {
 			String s = TextFormatting.getTextWithoutFormattingCodes(entityLiving.getName());
 
-			if (s != null
-					&& ("Dinnerbone".equals(s) || "Grumm".equals(s))
-					&& (!(entityLiving instanceof EntityPlayer) || ((EntityPlayer) entityLiving).isWearing(EnumPlayerModelParts.CAPE))) {
+			if (s != null && ("Dinnerbone".equals(s) || "Grumm".equals(s)) && (!(entityLiving instanceof EntityPlayer) || ((EntityPlayer) entityLiving).isWearing(EnumPlayerModelParts.CAPE))) {
 				GlStateManager.translate(0.0F, entityLiving.height + 0.1F, 0.0F);
 				GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 			}

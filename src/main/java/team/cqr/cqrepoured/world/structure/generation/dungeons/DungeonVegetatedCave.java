@@ -50,10 +50,8 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.crossVine = (this.vineBlock.getBlock() instanceof BlockVine);
 		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airBlock", Blocks.AIR.getDefaultState());
 		this.pumpkinBlock = PropertyFileHelper.getBlockStateProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN.getDefaultState());
-		this.flowerBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "flowerBlocks",
-				new IBlockState[] { Blocks.RED_FLOWER.getDefaultState(), Blocks.YELLOW_FLOWER.getDefaultState() }, false);
-		this.mushrooms = PropertyFileHelper.getBlockStateArrayProperty(prop, "mushroomBlocks",
-				new IBlockState[] { Blocks.BROWN_MUSHROOM.getDefaultState(), Blocks.RED_MUSHROOM.getDefaultState() }, false);
+		this.flowerBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "flowerBlocks", new IBlockState[] { Blocks.RED_FLOWER.getDefaultState(), Blocks.YELLOW_FLOWER.getDefaultState() }, false);
+		this.mushrooms = PropertyFileHelper.getBlockStateArrayProperty(prop, "mushroomBlocks", new IBlockState[] { Blocks.BROWN_MUSHROOM.getDefaultState(), Blocks.RED_MUSHROOM.getDefaultState() }, false);
 		this.floorBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "floorBlocks", new IBlockState[] { Blocks.GRASS.getDefaultState() }, false);
 		this.grassBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "grassBlocks", new IBlockState[] { Blocks.AIR.getDefaultState() }, false);
 		this.vineLengthModifier = Math.max(1, PropertyFileHelper.getDoubleProperty(prop, "vineLengthModifier", 2));
@@ -68,14 +66,12 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
 		this.vineLatchBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE.getDefaultState());
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs",
-				new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD }, false);
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD }, false);
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z, Random rand,
-			DungeonDataManager.DungeonSpawnType spawnType) {
+	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this, rand);
 	}
 

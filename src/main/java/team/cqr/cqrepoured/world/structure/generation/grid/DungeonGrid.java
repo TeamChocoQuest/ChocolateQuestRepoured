@@ -48,8 +48,7 @@ public class DungeonGrid {
 		this.chance = PropertyFileHelper.getIntProperty(properties, "chance", 100);
 		this.priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
 		this.offset = PropertyFileHelper.getIntProperty(properties, "offset", 0);
-		this.dungeons = Arrays.stream(PropertyFileHelper.getStringArrayProperty(properties, "dungeons", new String[0], true))
-				.map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
+		this.dungeons = Arrays.stream(PropertyFileHelper.getStringArrayProperty(properties, "dungeons", new String[0], true)).map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
 	@Nullable
@@ -169,8 +168,7 @@ public class DungeonGrid {
 		if (!CQRConfig.advanced.debugDungeonGen) {
 			return;
 		}
-		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(),
-				String.format(message, params));
+		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), String.format(message, params));
 	}
 
 	private CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, BlockPos pos) {

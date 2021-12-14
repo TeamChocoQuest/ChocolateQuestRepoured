@@ -221,8 +221,7 @@ public class ProtectedRegionEventHandler {
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null || !fluidStack.getFluid().canBePlacedInWorld()) {
 			IBlockState state = world.getBlockState(pos.offset(result.sideHit));
-			if (state.getMaterial().isLiquid()
-					&& ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
+			if (state.getMaterial().isLiquid() && ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
 				event.setCanceled(true);
 			}
 		} else {
@@ -359,11 +358,9 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static final ReflectionField<Map<UUID, ProtectedRegionContainer>> FIELD_PROTECTED_REGIONS = new ReflectionField<>(
-			ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
+	private static final ReflectionField<Map<UUID, ProtectedRegionContainer>> FIELD_PROTECTED_REGIONS = new ReflectionField<>(ServerProtectedRegionManager.class, "protectedRegions", "protectedRegions");
 	@Deprecated
-	private static final ReflectionField<Set<UUID>> FIELD_PROTECTED_REGION_UUIDS = new ReflectionField<>(CapabilityProtectedRegionData.class,
-			"protectedRegionUuids", "protectedRegionUuids");
+	private static final ReflectionField<Set<UUID>> FIELD_PROTECTED_REGION_UUIDS = new ReflectionField<>(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
 
 	@Deprecated
 	private static void updateChunkCapabilityEfficiently(WorldServer world, ProtectedRegion protectedRegion) {

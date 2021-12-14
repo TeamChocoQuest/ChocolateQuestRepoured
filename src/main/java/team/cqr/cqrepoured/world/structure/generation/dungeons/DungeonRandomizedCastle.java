@@ -130,8 +130,7 @@ public class DungeonRandomizedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand,
-			DungeonDataManager.DungeonSpawnType spawnType) {
+	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this, rand);
 	}
 

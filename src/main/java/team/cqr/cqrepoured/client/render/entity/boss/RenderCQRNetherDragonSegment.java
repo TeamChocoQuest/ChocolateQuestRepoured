@@ -86,8 +86,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityN
 			float f = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
 			float f1 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 4.0F;
 			float f2 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
-			Minecraft.getMinecraft().world.spawnParticle(entity.getParent().getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2,
-					0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().world.spawnParticle(entity.getParent().getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
 		}
 
 		if (!entity.isInvisible()) {

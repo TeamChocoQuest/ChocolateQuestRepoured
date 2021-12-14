@@ -40,8 +40,7 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 	}
 
 	@Override
-	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side,
-			Set<BlockPos> decoMap) {
+	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side, Set<BlockPos> decoMap) {
 		List<DecoBlockBase> rotated = this.alignSchematic(side);
 
 		for (DecoBlockBase placement : rotated) {

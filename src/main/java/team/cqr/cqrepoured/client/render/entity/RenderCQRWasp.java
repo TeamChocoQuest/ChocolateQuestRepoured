@@ -22,8 +22,7 @@ public class RenderCQRWasp extends RenderLiving<EntityCQRWasp> {
 	}
 
 	@Override
-	protected void renderModel(EntityCQRWasp entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
-			float scaleFactor) {
+	protected void renderModel(EntityCQRWasp entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableAlpha();
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);

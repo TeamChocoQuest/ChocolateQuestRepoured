@@ -72,8 +72,7 @@ public class BlockBossBlock extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote && playerIn.isCreative()) {
 			playerIn.openGui(CQRMain.INSTANCE, GuiHandler.BOSS_BLOCK_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}

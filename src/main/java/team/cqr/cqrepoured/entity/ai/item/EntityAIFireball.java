@@ -40,8 +40,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 		this.cooldown = 140;
 		this.entity.getHeldItemOffhand().shrink(1);
 		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
-		EntityFireball fireball = this.entity.getRNG().nextDouble() > 0.7 ? new EntityLargeFireball(this.entity.world, this.entity, v.x, v.y, v.z)
-				: new EntitySmallFireball(this.entity.world, this.entity, v.x, v.y, v.z);
+		EntityFireball fireball = this.entity.getRNG().nextDouble() > 0.7 ? new EntityLargeFireball(this.entity.world, this.entity, v.x, v.y, v.z) : new EntitySmallFireball(this.entity.world, this.entity, v.x, v.y, v.z);
 		this.entity.world.spawnEntity(fireball);
 	}
 

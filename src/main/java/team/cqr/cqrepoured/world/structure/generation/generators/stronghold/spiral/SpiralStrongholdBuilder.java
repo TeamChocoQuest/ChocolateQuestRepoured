@@ -31,8 +31,7 @@ public class SpiralStrongholdBuilder {
 	private boolean buildDownwards = true;
 	private boolean buildInwards = true;
 
-	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder,
-			ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rand) {
+	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rand) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.allowedDirection = expansionDirection;
@@ -130,8 +129,7 @@ public class SpiralStrongholdBuilder {
 				floorRoomCount = roomCounter;
 				roomCounter = 0;
 			}
-			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonBuilder, posTuple, entranceX, entranceZ,
-					roomCounter <= 0 || i == (this.floors.length - 1), this.floorSideLength, floorRoomCount, this.random);
+			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonBuilder, posTuple, entranceX, entranceZ, roomCounter <= 0 || i == (this.floors.length - 1), this.floorSideLength, floorRoomCount, this.random);
 			floor.calculateRoomGrid(entranceType, (i + 1) % 2 == 0);
 			floor.calculateCoordinates(y, this.dungeon.getRoomSizeX(), this.dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();

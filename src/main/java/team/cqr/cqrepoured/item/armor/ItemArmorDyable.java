@@ -30,9 +30,7 @@ public class ItemArmorDyable extends ItemArmor {
 	public boolean hasColor(ItemStack stack) {
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
-			return nbttagcompound != null && nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND)
-					? nbttagcompound.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT)
-					: false;
+			return nbttagcompound != null && nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND) ? nbttagcompound.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT) : false;
 		} else {
 			return super.hasColor(stack);
 		}
@@ -57,8 +55,7 @@ public class ItemArmorDyable extends ItemArmor {
 							float j = 1530.0F / (color >> 16 & 255);
 							float s = (color >> 8 & 255) / 255.0F;
 							float b = (color & 255) / 255.0F;
-							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b) & 0x00FFFFFF
-									| (color & 0xFF000000);
+							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
 						} else if ((color >> 24 & 15) > 0) {
 							float f = 0.5F + 0.5F * MathHelper.sin((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) / 15.0F * (color >> 25 & 15));
 							int r = Math.round((color >> 16 & 255) * f);
@@ -135,12 +132,10 @@ public class ItemArmorDyable extends ItemArmor {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		if (this.getArmorMaterial() == ArmorMaterial.IRON) {
-			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "")
-					+ ".png";
+			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND) {
-			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2)
-					+ (type != null ? "_" + type : "") + ".png";
+			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}

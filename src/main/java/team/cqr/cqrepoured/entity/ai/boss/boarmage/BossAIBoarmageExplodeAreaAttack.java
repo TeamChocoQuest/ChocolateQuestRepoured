@@ -74,8 +74,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 			// EXPLOSION!!!!
 
 			for (BlockPos p : this.explosions) {
-				this.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 3, this.entity.getRNG().nextBoolean(),
-						CQRConfig.bosses.boarmageExplosionAreaDestroysTerrain);
+				this.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 3, this.entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionAreaDestroysTerrain);
 			}
 
 			this.resetTask();

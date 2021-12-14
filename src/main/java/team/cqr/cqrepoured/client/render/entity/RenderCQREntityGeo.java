@@ -37,21 +37,20 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	protected double widthScale;
 	protected double heightScale;
-	
+
 	protected final Function<T, ResourceLocation> TEXTURE_GETTER;
 	protected final Function<T, ResourceLocation> MODEL_ID_GETTER;
-	
+
 	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1D, 1D, 0);
 	}
 
-	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, double widthScale, double heightScale,
-			float shadowSize) {
+	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, double widthScale, double heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
-		
+
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
 		this.TEXTURE_GETTER = modelProvider::getTextureLocation;
-		
+
 		this.shadowSize = shadowSize;
 		this.widthScale = widthScale;
 		this.heightScale = heightScale;
@@ -160,8 +159,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				if (boneItem != null) {
 					this.preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 
-					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem,
-							this.getCameraTransformForItemAtBone(boneItem, bone.getName()));
+					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, this.getCameraTransformForItemAtBone(boneItem, bone.getName()));
 
 					this.postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 				}

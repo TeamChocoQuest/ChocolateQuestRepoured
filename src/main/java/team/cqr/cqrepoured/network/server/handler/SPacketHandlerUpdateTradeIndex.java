@@ -25,8 +25,7 @@ public class SPacketHandlerUpdateTradeIndex implements IMessageHandler<CPacketUp
 					TraderOffer trades = ((AbstractEntityCQR) entity).getTrades();
 
 					if (trades.updateTradeIndex(message.getTradeIndex(), message.getNewTradeIndex())) {
-						CQRMain.NETWORK.sendToAllTracking(
-								new SPacketUpdateTradeIndex(message.getEntityId(), message.getTradeIndex(), message.getNewTradeIndex()), entity);
+						CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateTradeIndex(message.getEntityId(), message.getTradeIndex(), message.getNewTradeIndex()), entity);
 					}
 				}
 			});

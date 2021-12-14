@@ -51,11 +51,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 
 	@Override
 	public void onLivingUpdate() {
-		if (this.canHealWhenIdling()
-				&& CQRConfig.bosses.enableHealthRegen
-				&& !this.hasAttackTarget()
-				&& this.lastTickWithAttackTarget + 100 < this.ticksExisted
-				&& this.ticksExisted % 5 == 0) {
+		if (this.canHealWhenIdling() && CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
 			this.heal(this.getMaxHealth() * 0.005F);
 		}
 		super.onLivingUpdate();
@@ -159,8 +155,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 			double d2 = this.rand.nextGaussian() * 0.02D;
 			double d0 = this.rand.nextGaussian() * 0.02D;
 			double d1 = this.rand.nextGaussian() * 0.02D;
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width,
-					this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, 1, d2, d0, d1, 0.05);
+			((WorldServer) this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, 1, d2, d0, d1, 0.05);
 		}
 	}
 

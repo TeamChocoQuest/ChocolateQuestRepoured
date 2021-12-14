@@ -76,8 +76,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 
-	private static final DataParameter<Integer> CURRENT_ANIMATION_ID = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class,
-			DataSerializers.VARINT);
+	private static final DataParameter<Integer> CURRENT_ANIMATION_ID = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
 	private int nextAnimationId = ANIMATION_ID_IN_SHELL;
 	private int currentAnimationTick = 0;
 	public static final int ANIMATION_ID_IN_SHELL = 5;
@@ -164,16 +163,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
-				if (super.shouldExecute()
-						&& ((EntityCQRGiantTortoise) this.entity).isInShell()
-						&& !EntityCQRGiantTortoise.this.isHealing
-						&& !EntityCQRGiantTortoise.this.isStunned()
-						&& !EntityCQRGiantTortoise.this.isSpinning()) {
+				if (super.shouldExecute() && ((EntityCQRGiantTortoise) this.entity).isInShell() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
 					return true;
-				} else if (super.shouldExecute()
-						&& !EntityCQRGiantTortoise.this.isHealing
-						&& !EntityCQRGiantTortoise.this.isStunned()
-						&& !EntityCQRGiantTortoise.this.isSpinning()) {
+				} else if (super.shouldExecute() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
 					if (EntityCQRGiantTortoise.this.getCurrentAnimationId() != ANIMATION_ID_IN_SHELL) {
 						if (EntityCQRGiantTortoise.this.getCurrentAnimationId() == ANIMATION_ID_WALK) {
 							EntityCQRGiantTortoise.this.setNextAnimation(ANIMATION_ID_ENTER_SHELL);
@@ -241,9 +233,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative()
-				|| source == DamageSource.OUT_OF_WORLD
-				|| (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
@@ -382,11 +372,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	private void breakBlocksInWay() {
-		for (BlockPos pos : BlockPos.getAllInBoxMutable(this.getPosition().add(this.width + 1, this.height, this.width + 1),
-				this.getPosition().add(-this.width - 1, -1, -this.width - 1))) {
+		for (BlockPos pos : BlockPos.getAllInBoxMutable(this.getPosition().add(this.width + 1, this.height, this.width + 1), this.getPosition().add(-this.width - 1, -1, -this.width - 1))) {
 			Block block = this.world.getBlockState(pos).getBlock();
-			if ((!block.isCollidable() || block.isPassable(this.world, pos))
-					&& ((((block != Blocks.FLOWING_WATER) && (block != Blocks.WATER)) && (block != Blocks.FLOWING_LAVA)) && (block != Blocks.LAVA))) {
+			if ((!block.isCollidable() || block.isPassable(this.world, pos)) && ((((block != Blocks.FLOWING_WATER) && (block != Blocks.WATER)) && (block != Blocks.FLOWING_LAVA)) && (block != Blocks.LAVA))) {
 				this.world.setBlockToAir(pos);
 			}
 		}
@@ -720,10 +708,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double f1 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
 			double f2 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
 			for (int i = 0; i < 20; i++) {
-				this.world.spawnParticle(EnumParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2,
-						0.0D, 0.0D, 0.0D);
-				this.world.spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1,
-						this.posZ + f2, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(EnumParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 			}
 		}
 		if (this.deathTime == 34 && this.isServerWorld()) {
@@ -731,8 +717,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 		if (this.deathTime >= 35 && this.isServerWorld()) {
 			if (this.deathCause != null) {
-				super.dropLoot(this.recentlyHit > 0,
-						net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
 			this.setDead();
 

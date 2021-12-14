@@ -25,8 +25,7 @@ public class Matrix4f {
 
 	}
 
-	public Matrix4f(float f00, float f01, float f02, float f03, float f10, float f11, float f12, float f13, float f20, float f21, float f22, float f23,
-			float f30, float f31, float f32, float f33) {
+	public Matrix4f(float f00, float f01, float f02, float f03, float f10, float f11, float f12, float f13, float f20, float f21, float f22, float f23, float f30, float f31, float f32, float f33) {
 		this.f00 = f00;
 		this.f01 = f01;
 		this.f02 = f02;
@@ -54,22 +53,8 @@ public class Matrix4f {
 			return false;
 		}
 		Matrix4f other = (Matrix4f) obj;
-		return this.f00 == other.f00
-				&& this.f01 == other.f01
-				&& this.f02 == other.f02
-				&& this.f03 == other.f03
-				&& this.f10 == other.f10
-				&& this.f11 == other.f11
-				&& this.f12 == other.f12
-				&& this.f13 == other.f13
-				&& this.f20 == other.f20
-				&& this.f21 == other.f21
-				&& this.f22 == other.f22
-				&& this.f23 == other.f23
-				&& this.f30 == other.f30
-				&& this.f31 == other.f31
-				&& this.f32 == other.f32
-				&& this.f33 == other.f33;
+		return this.f00 == other.f00 && this.f01 == other.f01 && this.f02 == other.f02 && this.f03 == other.f03 && this.f10 == other.f10 && this.f11 == other.f11 && this.f12 == other.f12 && this.f13 == other.f13 && this.f20 == other.f20 && this.f21 == other.f21 && this.f22 == other.f22 && this.f23 == other.f23
+				&& this.f30 == other.f30 && this.f31 == other.f31 && this.f32 == other.f32 && this.f33 == other.f33;
 	}
 
 	@Override
@@ -333,8 +318,7 @@ public class Matrix4f {
 	}
 
 	public Matrix4f copy() {
-		return new Matrix4f(this.f00, this.f01, this.f02, this.f03, this.f10, this.f11, this.f12, this.f13, this.f20, this.f21, this.f22, this.f23, this.f30,
-				this.f31, this.f32, this.f33);
+		return new Matrix4f(this.f00, this.f01, this.f02, this.f03, this.f10, this.f11, this.f12, this.f13, this.f20, this.f21, this.f22, this.f23, this.f30, this.f31, this.f32, this.f33);
 	}
 
 }

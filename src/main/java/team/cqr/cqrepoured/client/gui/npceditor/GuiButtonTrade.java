@@ -49,8 +49,7 @@ public class GuiButtonTrade extends GuiButton {
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			int i = this.getHoverState(this.hovered);
 			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-					GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GuiHelper.drawTexture(this.x, this.y, 0.0D, i / 4.0D, this.width, this.height, 0.90625D, 0.25D);
 			this.mouseDragged(mc, mouseX, mouseY);
@@ -110,11 +109,9 @@ public class GuiButtonTrade extends GuiButton {
 			if (!isUnlocked) {
 				tooltip.add(I18n.format("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					TextFormatting formatting = CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN
-							: TextFormatting.RED;
+					TextFormatting formatting = CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
 					Advancement advancement = CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
-					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText()
-							: this.trade.getRequiredAdvancement().toString();
+					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
 					tooltip.add(formatting + advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
@@ -128,8 +125,7 @@ public class GuiButtonTrade extends GuiButton {
 				tooltip.add(I18n.format("description.gui_button_trade.unlocked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
 					Advancement advancement = CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
-					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText()
-							: this.trade.getRequiredAdvancement().toString();
+					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
 					tooltip.add(TextFormatting.GREEN + advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {

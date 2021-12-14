@@ -12,8 +12,7 @@ import net.minecraft.world.World;
 
 public class EntityCamoShulker extends EntityShulker {
 
-	protected static final DataParameter<Optional<IBlockState>> CAMO_BLOCK = EntityDataManager.<Optional<IBlockState>>createKey(EntityCamoShulker.class,
-			DataSerializers.OPTIONAL_BLOCK_STATE);
+	protected static final DataParameter<Optional<IBlockState>> CAMO_BLOCK = EntityDataManager.<Optional<IBlockState>>createKey(EntityCamoShulker.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 
 	public EntityCamoShulker(World worldIn) {
 		super(worldIn);

@@ -46,8 +46,7 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 			return false;
 		} else if (faction != null)/* if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) */
 		{
-			List<T> list = this.taskOwner.world.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()),
-					TargetUtil.createPredicateNonAlly(faction));
+			List<T> list = this.taskOwner.world.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), TargetUtil.createPredicateNonAlly(faction));
 
 			if (list.isEmpty()) {
 				return false;

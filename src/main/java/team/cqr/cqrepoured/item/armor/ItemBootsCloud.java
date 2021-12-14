@@ -52,8 +52,7 @@ public class ItemBootsCloud extends ItemArmor {
 
 		player.jumpMovementFactor += 0.04F;
 		if (player.fallDistance > 0.0F || player.isSprinting()) {
-			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D,
-					(itemRand.nextFloat() - 0.5F) / 2.0F);
+			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.5F) / 2.0F);
 		}
 	}
 

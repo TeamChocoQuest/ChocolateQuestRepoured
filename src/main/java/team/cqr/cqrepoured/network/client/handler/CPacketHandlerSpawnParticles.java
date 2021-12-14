@@ -29,8 +29,7 @@ public class CPacketHandlerSpawnParticles implements IMessageHandler<SPacketSpaw
 				double yOffset = message.getyOffset();
 				double zOffset = message.getzOffset();
 				int[] optionalArguments = message.getOptionalArguments();
-				CQRParticleType.spawnParticles(particleId, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset,
-						optionalArguments);
+				CQRParticleType.spawnParticles(particleId, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
 			});
 		}
 		return null;

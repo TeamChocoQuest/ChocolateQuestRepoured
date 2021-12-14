@@ -16,37 +16,24 @@ import team.cqr.cqrepoured.config.IToolConfig;
 public class CQRMaterials {
 
 	public static class ArmorMaterials {
-		public static final ArmorMaterial ARMOR_BACKPACK = createArmorMaterial("backpack", CQRConfig.materials.armorMaterials.backpack,
-				SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA);
-		public static final ArmorMaterial ARMOR_BULL = createArmorMaterial("bull", CQRConfig.materials.armorMaterials.bull,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_CLOUD = createArmorMaterial("cloud", CQRConfig.materials.armorMaterials.cloud,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_DRAGON = createArmorMaterial("dragon", CQRConfig.materials.armorMaterials.dragon,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_HEAVY_DIAMOND = createArmorMaterial("heavy_diamond", CQRConfig.materials.armorMaterials.heavyDiamond,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_HEAVY_IRON = createArmorMaterial("heavy_iron", CQRConfig.materials.armorMaterials.heavyIron,
-				SoundEvents.ITEM_ARMOR_EQUIP_IRON);
-		public static final ArmorMaterial ARMOR_INQUISITION = createArmorMaterial("inquisition", CQRConfig.materials.armorMaterials.inquisition,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_CROWN = createArmorMaterial("king_crown", CQRConfig.materials.armorMaterials.kingCrown,
-				SoundEvents.ITEM_ARMOR_EQUIP_GOLD);
-		public static final ArmorMaterial ARMOR_SLIME = createArmorMaterial("slime", CQRConfig.materials.armorMaterials.slime,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_SPIDER = createArmorMaterial("spider", CQRConfig.materials.armorMaterials.spider,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
-		public static final ArmorMaterial ARMOR_TURTLE = createArmorMaterial("turtle", CQRConfig.materials.armorMaterials.turtle,
-				SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_BACKPACK = createArmorMaterial("backpack", CQRConfig.materials.armorMaterials.backpack, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA);
+		public static final ArmorMaterial ARMOR_BULL = createArmorMaterial("bull", CQRConfig.materials.armorMaterials.bull, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_CLOUD = createArmorMaterial("cloud", CQRConfig.materials.armorMaterials.cloud, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_DRAGON = createArmorMaterial("dragon", CQRConfig.materials.armorMaterials.dragon, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_HEAVY_DIAMOND = createArmorMaterial("heavy_diamond", CQRConfig.materials.armorMaterials.heavyDiamond, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_HEAVY_IRON = createArmorMaterial("heavy_iron", CQRConfig.materials.armorMaterials.heavyIron, SoundEvents.ITEM_ARMOR_EQUIP_IRON);
+		public static final ArmorMaterial ARMOR_INQUISITION = createArmorMaterial("inquisition", CQRConfig.materials.armorMaterials.inquisition, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_CROWN = createArmorMaterial("king_crown", CQRConfig.materials.armorMaterials.kingCrown, SoundEvents.ITEM_ARMOR_EQUIP_GOLD);
+		public static final ArmorMaterial ARMOR_SLIME = createArmorMaterial("slime", CQRConfig.materials.armorMaterials.slime, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_SPIDER = createArmorMaterial("spider", CQRConfig.materials.armorMaterials.spider, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		public static final ArmorMaterial ARMOR_TURTLE = createArmorMaterial("turtle", CQRConfig.materials.armorMaterials.turtle, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
 
 		private static ArmorMaterial createArmorMaterial(String name, ArmorConfig config, SoundEvent soundOnEquip) {
 			return createArmorMaterial(name, config.durability, config.reductionAmounts, config.enchantability, soundOnEquip, config.toughness);
 		}
 
-		private static ArmorMaterial createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip,
-				float toughness) {
-			return EnumHelper.addArmorMaterial(CQRMain.MODID + ":" + name, CQRMain.MODID + ":" + name, durability, reductionAmounts, enchantability,
-					soundOnEquip, toughness);
+		private static ArmorMaterial createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {
+			return EnumHelper.addArmorMaterial(CQRMain.MODID + ":" + name, CQRMain.MODID + ":" + name, durability, reductionAmounts, enchantability, soundOnEquip, toughness);
 		}
 	}
 
@@ -61,8 +48,7 @@ public class CQRMaterials {
 		public static final ToolMaterial TOOL_WALKER = createToolMaterial("walker", CQRConfig.materials.toolMaterials.walker);
 
 		private static ToolMaterial createToolMaterial(String name, IToolConfig config) {
-			return createToolMaterial(name, config.getHarvestLevel(), config.getMaxUses(), config.getEfficiency(), config.getDamage(),
-					config.getEnchantability());
+			return createToolMaterial(name, config.getHarvestLevel(), config.getMaxUses(), config.getEfficiency(), config.getDamage(), config.getEnchantability());
 		}
 
 		private static ToolMaterial createToolMaterial(String name, int harvestLevel, int maxUses, float efficiency, float damage, int enchantability) {

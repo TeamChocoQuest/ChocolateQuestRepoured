@@ -134,10 +134,8 @@ public class DungeonGenerationHelper {
 			long chunkSeed = (xSeed * chunkPos.x + zSeed * chunkPos.z) ^ worldSeed;
 			fmlRandom.setSeed(chunkSeed);
 			isGeneratingDelayedChunks = true;
-			CQRMain.DUNGEON_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator,
-					world.getChunkProvider());
-			CQRMain.WALL_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator,
-					world.getChunkProvider());
+			CQRMain.DUNGEON_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator, world.getChunkProvider());
+			CQRMain.WALL_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator, world.getChunkProvider());
 			isGeneratingDelayedChunks = false;
 		}
 		DELAYED_CHUNKS.remove(dim);

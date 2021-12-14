@@ -28,12 +28,7 @@ import team.cqr.cqrepoured.item.ItemHookshotBase;
 public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdditionalSpawnData {
 
 	private enum EnumHookState {
-		SHOOT(0),
-		RETRACT(1),
-		PULL_ENTITY_TO_SHOOTER(2),
-		PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK(3),
-		PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY(4),
-		STOPPED(5);
+		SHOOT(0), RETRACT(1), PULL_ENTITY_TO_SHOOTER(2), PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK(3), PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY(4), STOPPED(5);
 
 		private final int index;
 

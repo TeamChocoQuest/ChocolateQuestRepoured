@@ -99,8 +99,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 							++attempts;
 						}
 						if (attempts >= MAX_DECO_ATTEMPTS) {
-							genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
-									BlockStateGenArray.EnumPriority.MEDIUM);
+							genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 							this.usedDecoPositions.add(pos);
 							this.possibleChestLocs.put(pos, side);
 						}
@@ -180,14 +179,12 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
 					switch (this.random.nextInt(2)) {
 					case 0:
-						if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this))
-								&& (DungeonGenUtils.percentageRandom(torchPercent, this.random))) {
+						if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions, this)) && (DungeonGenUtils.percentageRandom(torchPercent, this.random))) {
 							RoomDecorTypes.TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
 						}
 						break;
 					case 1:
-						if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions))
-								&& (DungeonGenUtils.percentageRandom(dungeon.getPaintingChance(), this.random))) {
+						if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) && (DungeonGenUtils.percentageRandom(dungeon.getPaintingChance(), this.random))) {
 							RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
 						}
 						break;

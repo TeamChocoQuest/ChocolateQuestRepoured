@@ -21,10 +21,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	protected STATE state = STATE.PREPARING;
 
 	public enum STATE {
-		PREPARING,
-		PREPARING_LAUNCH,
-		HOOK_FLYING,
-		HOOK_RETURNED
+		PREPARING, PREPARING_LAUNCH, HOOK_FLYING, HOOK_RETURNED
 	}
 
 	public EntityAIHooker(AbstractEntityCQR entity) {
@@ -118,11 +115,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting()
-				&& this.entity.hasAttackTarget()
-				&& this.entity.getEntitySenses().canSee(this.entity.getAttackTarget())
-				&& this.hasHookShoot(this.entity)
-				&& this.cooldown <= 0;
+		return super.shouldContinueExecuting() && this.entity.hasAttackTarget() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
 	}
 
 	@Override

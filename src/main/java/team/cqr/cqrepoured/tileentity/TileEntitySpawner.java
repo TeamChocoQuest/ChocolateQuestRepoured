@@ -120,9 +120,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 
 	@Override
 	public void update() {
-		if (!this.world.isRemote
-				&& this.world.getDifficulty() != EnumDifficulty.PEACEFUL
-				&& this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
+		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
 			this.turnBackIntoEntity();
 		} else {
 			this.getDataManager().checkIfDirtyAndSync();

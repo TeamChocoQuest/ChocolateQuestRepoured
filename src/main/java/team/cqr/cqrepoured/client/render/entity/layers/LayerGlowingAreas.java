@@ -20,8 +20,7 @@ public class LayerGlowingAreas<T extends EntityLiving> implements LayerRenderer<
 	}
 
 	@Override
-	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-			float headPitch, float scale) {
+	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		EmissiveUtil.preEmissiveTextureRendering();
 
 		this.renderer.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));

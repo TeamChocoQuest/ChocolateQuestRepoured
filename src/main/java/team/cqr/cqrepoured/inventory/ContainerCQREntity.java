@@ -245,8 +245,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	private boolean isHelmet(ItemStack stack) {
-		return (stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.HEAD)
-				|| stack.getItem().getEquipmentSlot(stack) == EntityEquipmentSlot.HEAD;
+		return (stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.HEAD) || stack.getItem().getEquipmentSlot(stack) == EntityEquipmentSlot.HEAD;
 	}
 
 }

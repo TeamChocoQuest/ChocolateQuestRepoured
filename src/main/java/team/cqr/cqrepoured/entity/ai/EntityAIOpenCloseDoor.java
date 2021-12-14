@@ -108,10 +108,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		double dz = this.doorPos.getZ() + 0.5D - this.entity.posZ;
 		double d = this.entityPositionX * dx + this.entityPositionZ * dz;
 
-		if (d < 0.0D
-				&& (MathHelper.floor(this.entity.posX) != this.doorPos.getX()
-						|| MathHelper.floor(this.entity.posY) != this.doorPos.getY()
-						|| MathHelper.floor(this.entity.posZ) != this.doorPos.getZ())) {
+		if (d < 0.0D && (MathHelper.floor(this.entity.posX) != this.doorPos.getX() || MathHelper.floor(this.entity.posY) != this.doorPos.getY() || MathHelper.floor(this.entity.posZ) != this.doorPos.getZ())) {
 			this.hasStoppedDoorInteraction = true;
 		}
 	}
@@ -138,20 +135,16 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			if (this.isPressurePlate(mutablePos.setPos(pos).move(this.doorEnterFacing))) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(
-					mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()).move(EnumFacing.UP), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()).move(EnumFacing.UP), this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(
-					mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()).move(EnumFacing.UP), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()).move(EnumFacing.UP), this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()),
-					this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()), this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()),
-					this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()), this.doorEnterFacing)) {
 				return true;
 			}
 		}
@@ -204,9 +197,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			if (ally.getDistanceSq(this.entity) >= r * r) {
 				continue;
 			}
-			if (MathHelper.floor(ally.posX) == this.doorPos.getX()
-					&& MathHelper.floor(ally.posY) == this.doorPos.getY()
-					&& MathHelper.floor(ally.posZ) == this.doorPos.getZ()) {
+			if (MathHelper.floor(ally.posX) == this.doorPos.getX() && MathHelper.floor(ally.posY) == this.doorPos.getY() && MathHelper.floor(ally.posZ) == this.doorPos.getZ()) {
 				shouldCloseDoor = false;
 				break;
 			}

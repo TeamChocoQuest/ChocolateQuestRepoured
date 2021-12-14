@@ -115,8 +115,7 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 
 	@Deprecated
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
-			EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
@@ -138,8 +137,7 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 			if (facing != otherFacing || facing == connectedChestDirection || facing.getOpposite() == connectedChestDirection) {
 				if (facing.rotateYCCW() == connectedChestDirection || facing.rotateY() == connectedChestDirection) {
 					worldIn.setBlockState(pos.offset(connectedChestDirection), connectedChestState.withProperty(FACING, facing), 3);
-				} else if (otherFacing.rotateYCCW() == connectedChestDirection.getOpposite()
-						|| otherFacing.rotateY() == connectedChestDirection.getOpposite()) {
+				} else if (otherFacing.rotateYCCW() == connectedChestDirection.getOpposite() || otherFacing.rotateY() == connectedChestDirection.getOpposite()) {
 					worldIn.setBlockState(pos, state.withProperty(FACING, otherFacing), 3);
 				} else {
 					worldIn.setBlockState(pos.offset(connectedChestDirection), state.withProperty(FACING, facing.rotateY()), 3);

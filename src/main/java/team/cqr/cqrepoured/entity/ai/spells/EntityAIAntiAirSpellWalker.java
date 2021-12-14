@@ -40,8 +40,7 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 	public void startCastingSpell() {
 		super.startCastingSpell();
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		EntityColoredLightningBolt coloredLightningBolt = new EntityColoredLightningBolt(this.world, attackTarget.posX, attackTarget.posY, attackTarget.posZ,
-				true, false, 0.8F, 0.35F, 0.1F, 0.3F);
+		EntityColoredLightningBolt coloredLightningBolt = new EntityColoredLightningBolt(this.world, attackTarget.posX, attackTarget.posY, attackTarget.posZ, true, false, 0.8F, 0.35F, 0.1F, 0.3F);
 		this.world.spawnEntity(coloredLightningBolt);
 	}
 

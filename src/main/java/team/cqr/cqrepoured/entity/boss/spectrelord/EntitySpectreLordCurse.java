@@ -43,9 +43,7 @@ public class EntitySpectreLordCurse extends Entity {
 
 		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
-		if (!this.world.isRemote
-				&& this.ticksExisted - this.lastTimeHit >= 10
-				&& this.getEntityBoundingBox().grow(0.25D).intersects(this.target.getEntityBoundingBox())) {
+		if (!this.world.isRemote && this.ticksExisted - this.lastTimeHit >= 10 && this.getEntityBoundingBox().grow(0.25D).intersects(this.target.getEntityBoundingBox())) {
 			this.target.attackEntityFrom(new DamageSource("curse").setDamageBypassesArmor(), 4.0F);
 			this.lastTimeHit = this.ticksExisted;
 		}

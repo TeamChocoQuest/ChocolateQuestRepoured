@@ -80,8 +80,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRExterminator extends AbstractEntityCQRBoss
-		implements IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable, IServerAnimationReceiver {
+public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable, IServerAnimationReceiver {
 
 	// Entity parts
 	// 0 => Backpack
@@ -97,15 +96,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 	private int stunTime = 0;
 
 	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class,
-			DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
-	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class,
-			DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class,
-			DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
@@ -118,10 +114,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 		this.parts = new MultiPartEntityPart[5];
 
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
-		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive,
-				this::setEmitterLeftActive);
-		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive,
-				this::setEmitterRightActive);
+		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
+		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
 			@Override
 			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
@@ -197,8 +191,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR)
-				.setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EntityEquipmentSlot.CHEST));
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EntityEquipmentSlot.CHEST));
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
 	}
 
@@ -343,8 +336,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 		data.addAnimationController(new AnimationController<>(this, "controller_long_animations", 0, this::predicateBigAnimations));
 
 		// Cannon controller (raising and lowering)
-		data.addAnimationController(
-				new AnimationController<>(this, "controller_cannon_arm_state", CANNON_RAISE_OR_LOWER_DURATION, this::predicateCannonArmPosition));
+		data.addAnimationController(new AnimationController<>(this, "controller_cannon_arm_state", CANNON_RAISE_OR_LOWER_DURATION, this::predicateCannonArmPosition));
 
 		// Main animations (Stun, inactive, death)
 		data.addAnimationController(new AnimationController<>(this, "controller_main", 30, this::predicateAnimationMain));
@@ -634,9 +626,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 			return false;
 		}
 
-		if (source.canHarmInCreative()
-				|| source == DamageSource.OUT_OF_WORLD
-				|| (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
@@ -681,8 +671,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
-		List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this,
-				this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
+		List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
 		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof MultiPartEntityPart));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
@@ -720,8 +709,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 				this.dataManager.set(PUNCH_IS_KICK, false);
 				if (this.getRNG().nextBoolean() && !this.isCannonRaised()) {
 					// Throw animation
-					List<Entity> affectedEntities = this.world.getEntitiesWithinAABBExcludingEntity(this,
-							this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
+					List<Entity> affectedEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
 					this.tryStartThrowingAnimation(affectedEntities, entityIn);
 				}
 			}
@@ -734,11 +722,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 		if (!affectedEntities.isEmpty()) {
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
-				if ((entity instanceof EntityLivingBase
-						&& (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity)))
-						|| checkPred.test(entity)) {
-					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0,
-							this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
+				if ((entity instanceof EntityLivingBase && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity))) || checkPred.test(entity)) {
+					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
 
 					entity.motionX += flyDirection.x;
 					entity.motionY += flyDirection.y;
@@ -765,8 +750,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 
 	private void alignParts() {
 		// Artificial main hitbox
-		final Vec3d offsetMainHitbox = VectorUtil
-				.rotateVectorAroundY(this.getLookVec().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
+		final Vec3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookVec().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
 		this.parts[4].setPosition(this.posX + offsetMainHitbox.x, this.posY, this.posZ + offsetMainHitbox.z);
 		this.parts[3].setPosition(this.posX - offsetMainHitbox.x, this.posY, this.posZ - offsetMainHitbox.z);
 
@@ -782,12 +766,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 		offsetEmitters = offsetEmitters.add(0, 2.375D * this.getSizeVariation(), 0);
 
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 90);
-		this.parts[2].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y,
-				this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
+		this.parts[2].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
 
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 180);
-		this.parts[1].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y,
-				this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
+		this.parts[1].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
 	}
 
 	@Override
@@ -878,8 +860,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss
 
 		if (this.deathTime >= 70 && this.isServerWorld()) {
 			if (this.deathCause != null) {
-				super.dropLoot(this.recentlyHit > 0,
-						net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
 
 			// Copied from EntityLivingBase

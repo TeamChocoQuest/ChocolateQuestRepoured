@@ -94,8 +94,7 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		EntityPotion potion = new EntityPotion(thrower.getEntityWorld(), thrower, potionItem);
 		potion.rotationPitch += 20F;
 		potion.shoot(d1, d2 + f * 0.2F, d3, 0.75F, 8.0F);
-		thrower.world.playSound((EntityPlayer) null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundCategory(), 1.0F,
-				0.8F + thrower.getRNG().nextFloat() * 0.4F);
+		thrower.world.playSound((EntityPlayer) null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundCategory(), 1.0F, 0.8F + thrower.getRNG().nextFloat() * 0.4F);
 		thrower.world.spawnEntity(potion);
 
 		this.entity.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);

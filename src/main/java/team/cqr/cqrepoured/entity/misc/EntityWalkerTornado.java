@@ -90,8 +90,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			final double d2 = (float) this.posY + this.height + 0.125f;
 			final double d3 = (float) this.posZ + this.rand.nextFloat() * 0.25f;
 			final float f = this.rand.nextFloat() * 360.0f;
-			final EntityParticle particle = new ParticleWalkerTornado(this.world, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25,
-					Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
+			final EntityParticle particle = new ParticleWalkerTornado(this.world, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 			this.particles.add(particle);
 			particle.setRBGColorF(((color >> 16) & 0xFF) / 255.0f, ((color >> 8) & 0xFF) / 255.0f, (color & 0xFF) / 255.0f);

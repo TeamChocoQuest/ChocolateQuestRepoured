@@ -28,9 +28,7 @@ public class SpiralStaircaseBuilder {
 	// returns true if a position is within this staircase, meaning that it is within
 	// the 3x3 grid of the spiral and at or above the starting Y
 	public boolean isPartOfStairs(BlockPos position) {
-		return ((Math.abs(position.getX() - this.start.getX()) <= STAIR_WIDTH)
-				&& (Math.abs(position.getZ() - this.start.getZ()) <= STAIR_WIDTH)
-				&& (position.getY() >= this.start.getY()));
+		return ((Math.abs(position.getX() - this.start.getX()) <= STAIR_WIDTH) && (Math.abs(position.getZ() - this.start.getZ()) <= STAIR_WIDTH) && (position.getY() >= this.start.getY()));
 	}
 
 	public IBlockState getBlock(BlockPos position) {

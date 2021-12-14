@@ -152,9 +152,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	@Override
 	public void addPotionEffect(PotionEffect potioneffectIn) {
-		if (potioneffectIn.getPotion() == MobEffects.POISON
-				|| potioneffectIn.getPotion() == MobEffects.WEAKNESS
-				|| potioneffectIn.getPotion() == MobEffects.WITHER) {
+		if (potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
 			return;
 		}
 		super.addPotionEffect(potioneffectIn);
@@ -261,8 +259,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
 		if (potioneffectIn.getPotion() == MobEffects.POISON) {
-			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(
-					this, potioneffectIn);
+			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
 			return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
 		}

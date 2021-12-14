@@ -85,8 +85,7 @@ public class EntityUtil {
 				if (!entity.getEntityWorld().isBlockLoaded(mutablePos)) {
 					continue;
 				}
-				while (mutablePos.getY() > 0
-						&& entity.getEntityWorld().getBlockState(mutablePos).getCollisionBoundingBox(entity.getEntityWorld(), mutablePos) == Block.NULL_AABB) {
+				while (mutablePos.getY() > 0 && entity.getEntityWorld().getBlockState(mutablePos).getCollisionBoundingBox(entity.getEntityWorld(), mutablePos) == Block.NULL_AABB) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
 				y += mutablePos.getY() + 1;

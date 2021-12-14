@@ -12,7 +12,6 @@ public class RoomDecorFurnace extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.FURNACE.getDefaultState(), BlockFurnace.FACING, EnumFacing.SOUTH,
-				BlockStateGenArray.GenerationPhase.MAIN));
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.FURNACE.getDefaultState(), BlockFurnace.FACING, EnumFacing.SOUTH, BlockStateGenArray.GenerationPhase.MAIN));
 	}
 }

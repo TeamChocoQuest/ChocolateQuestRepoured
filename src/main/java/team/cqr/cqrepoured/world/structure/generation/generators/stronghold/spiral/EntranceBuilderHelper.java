@@ -74,20 +74,17 @@ public class EntranceBuilderHelper {
 
 			// Left torch -> Facing side: rotate right (90.0°)
 			buildPillar(pillar1, partBuilder);
-			partBuilder.add(new PreparableBlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING,
-					StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)), null));
+			partBuilder.add(new PreparableBlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)), null));
 			// Right torch -> Facing side: rotate left (-90.0°)
 			buildPillar(pillar2, partBuilder);
-			partBuilder.add(new PreparableBlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING,
-					StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null));
+			partBuilder.add(new PreparableBlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null));
 		}
 	}
 
 	private static void buildPillar(BlockPos bottom, BlockDungeonPart.Builder partBuilder) {
 		for (int iY = 1; iY <= 4; iY++) {
 			BlockPos pos = bottom.add(0, iY, 0);
-			partBuilder.add(
-					new PreparableBlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
+			partBuilder.add(new PreparableBlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
 		}
 		partBuilder.add(new PreparableBlockInfo(bottom.add(0, 5, 0), CQRBlocks.GRANITE_CARVED.getDefaultState(), null));
 	}

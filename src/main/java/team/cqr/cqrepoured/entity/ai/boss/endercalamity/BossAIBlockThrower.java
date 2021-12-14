@@ -19,9 +19,7 @@ import team.cqr.cqrepoured.util.VectorUtil;
 public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 
 	enum E_HAND_STATE {
-		NO_BLOCK,
-		BLOCK,
-		THROWING;
+		NO_BLOCK, BLOCK, THROWING;
 
 		public E_HAND_STATE getNextState() {
 			switch (this) {
@@ -38,13 +36,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 
 	protected static final int THROWING_TIME = 40; // Animation length is 1 second => 20 ticks
 
-	private E_HAND_STATE[] handstates = new E_HAND_STATE[] {
-			E_HAND_STATE.NO_BLOCK,
-			E_HAND_STATE.NO_BLOCK,
-			E_HAND_STATE.NO_BLOCK,
-			E_HAND_STATE.NO_BLOCK,
-			E_HAND_STATE.NO_BLOCK,
-			E_HAND_STATE.NO_BLOCK };
+	private E_HAND_STATE[] handstates = new E_HAND_STATE[] { E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK, E_HAND_STATE.NO_BLOCK };
 	private int[] handCooldowns = new int[] { 100, 100, 100, 100, 100, 100 };
 	protected static final int MAX_EQUIPPED_BLOCKS = 3;
 

@@ -45,8 +45,7 @@ public class DungeonPlacement {
 	private final DungeonInhabitant inhabitant;
 	private final ProtectedRegion.Builder protectedRegionBuilder;
 
-	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant,
-			ProtectedRegion.Builder protectedRegionBuilder) {
+	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder) {
 		this.pos = pos;
 		this.partPos = partPos;
 		this.mirror = mirror;

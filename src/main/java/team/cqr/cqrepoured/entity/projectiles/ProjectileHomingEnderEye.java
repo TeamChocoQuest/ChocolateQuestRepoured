@@ -49,10 +49,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 				this.world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 				this.setDead();
-			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY
-					&& result.entityHit != null
-					&& result.entityHit != this.shooter
-					&& !(result.entityHit instanceof MultiPartEntityPart)) {
+			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
 				this.applyEntityCollisionEye(result.entityHit);
 			}
 		}

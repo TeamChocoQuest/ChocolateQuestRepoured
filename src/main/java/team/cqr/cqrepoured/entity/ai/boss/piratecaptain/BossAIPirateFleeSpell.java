@@ -46,8 +46,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	}
 
 	private boolean hasNearbyAllies() {
-		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius,
-				CQRConfig.bosses.pirateCaptainFleeCheckRadius);
+		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
 		Vec3d v1 = this.entity.getPositionVector().add(vec);
 		Vec3d v2 = this.entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
@@ -68,8 +67,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	public void castSpell() {
 		super.castSpell();
 
-		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius,
-				CQRConfig.bosses.pirateCaptainFleeCheckRadius);
+		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
 		Vec3d v1 = this.entity.getPositionVector().add(vec);
 		Vec3d v2 = this.entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);

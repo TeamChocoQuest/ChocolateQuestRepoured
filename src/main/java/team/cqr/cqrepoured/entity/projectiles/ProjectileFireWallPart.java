@@ -57,8 +57,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 
 			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
 				if (this.world.isRemote) {
-					this.world.newExplosion(this.thrower, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true,
-							false);
+					this.world.newExplosion(this.thrower, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, false);
 				}
 				this.setDead();
 			}

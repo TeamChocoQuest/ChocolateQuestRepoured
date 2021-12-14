@@ -38,9 +38,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 			this.cooldown--;
 			return false;
 		}
-		return this.entity.hasAttackTarget()
-				&& (this.entity.getDistance(this.entity.getAttackTarget()) <= MIN_DISTANCE
-						|| this.entity.getDistance(this.entity.getAttackTarget()) >= MAX_DISTANCE);
+		return this.entity.hasAttackTarget() && (this.entity.getDistance(this.entity.getAttackTarget()) <= MIN_DISTANCE || this.entity.getDistance(this.entity.getAttackTarget()) >= MAX_DISTANCE);
 	}
 
 	@Override
@@ -48,8 +46,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 		super.startExecuting();
 		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRNG());
 		this.wallCounter = 0;
-		this.world.newExplosion(this.entity, this.entity.posX, this.entity.posY, this.entity.posZ, 2, false,
-				CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
+		this.world.newExplosion(this.entity, this.entity.posX, this.entity.posY, this.entity.posZ, 2, false, CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
 		Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector());
 		v = v.normalize().scale(5);
 		Vec3d p = this.entity.getAttackTarget().getPositionVector().subtract(v);

@@ -61,19 +61,16 @@ public class GuiMerchantEditTrade extends GuiContainer {
 
 		List<TradeInput> tradeInputs = this.trade != null ? this.trade.getInputItems() : Collections.emptyList();
 		for (int i = 0; i < this.ignoreMetaCheckBoxes.length; i++) {
-			this.ignoreMetaCheckBoxes[i] = this.addButton(
-					new GuiCheckBox(i * 2 + 2, this.guiLeft + i * 26 + 76, this.guiTop + 31, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreMeta()));
+			this.ignoreMetaCheckBoxes[i] = this.addButton(new GuiCheckBox(i * 2 + 2, this.guiLeft + i * 26 + 76, this.guiTop + 31, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreMeta()));
 			this.ignoreMetaCheckBoxes[i].width = 11;
-			this.ignoreNBTCheckBoxes[i] = this.addButton(
-					new GuiCheckBox(i * 2 + 3, this.guiLeft + i * 26 + 76, this.guiTop + 44, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreNBT()));
+			this.ignoreNBTCheckBoxes[i] = this.addButton(new GuiCheckBox(i * 2 + 3, this.guiLeft + i * 26 + 76, this.guiTop + 44, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreNBT()));
 			this.ignoreNBTCheckBoxes[i].width = 11;
 		}
 
 		this.reputationButton = this.addButton(new GuiButtonReputation(30, this.guiLeft + 7, this.guiTop + 72));
 		this.reputationButton.setReputationIndex(this.trade != null ? this.trade.getRequiredReputation() : Integer.MIN_VALUE);
 		this.advancementTextField = new GuiTextField(40, this.fontRenderer, this.guiLeft + 8, this.guiTop + 103, 58, 10);
-		this.advancementTextField
-				.setText(this.trade != null && this.trade.getRequiredAdvancement() != null ? this.trade.getRequiredAdvancement().toString() : "");
+		this.advancementTextField.setText(this.trade != null && this.trade.getRequiredAdvancement() != null ? this.trade.getRequiredAdvancement().toString() : "");
 
 		this.stockCheckBox = this.addButton(new GuiCheckBox(20, this.guiLeft + 237, this.guiTop + 17, "", this.trade != null && this.trade.hasLimitedStock()));
 		this.stockCheckBox.width = 11;
@@ -219,8 +216,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 				// ignore
 			}
 
-			CQRMain.NETWORK.sendToServer(new CPacketEditTrade(this.entity.getEntityId(), this.tradeIndex, ignoreMeta, ignoreNBT, reputation, advancement, stock,
-					restock, inStock, maxStock));
+			CQRMain.NETWORK.sendToServer(new CPacketEditTrade(this.entity.getEntityId(), this.tradeIndex, ignoreMeta, ignoreNBT, reputation, advancement, stock, restock, inStock, maxStock));
 			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getEntityId()));
 		} else if (button == this.stockCheckBox) {
 			this.restockTextField.setEnabled(this.stockCheckBox.isChecked());
@@ -236,9 +232,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.advancementTextField.isFocused()
-				|| (this.stockCheckBox.isChecked()
-						&& (this.restockTextField.isFocused() || this.inStockTextField.isFocused() || this.maxStockTextField.isFocused()))) {
+		if (this.advancementTextField.isFocused() || (this.stockCheckBox.isChecked() && (this.restockTextField.isFocused() || this.inStockTextField.isFocused() || this.maxStockTextField.isFocused()))) {
 			if (keyCode == 1) {
 				this.advancementTextField.setFocused(false);
 				this.restockTextField.setFocused(false);

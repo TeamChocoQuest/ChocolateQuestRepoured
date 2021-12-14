@@ -5,8 +5,7 @@ import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 
-public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> extends MultiPartEntityPart
-		implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
+public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> extends MultiPartEntityPart implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
 
 	private final float dw, dh;
 

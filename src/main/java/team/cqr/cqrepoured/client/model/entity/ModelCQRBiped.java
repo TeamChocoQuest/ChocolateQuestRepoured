@@ -90,8 +90,7 @@ public class ModelCQRBiped extends ModelBiped {
 	 * can swing at most.
 	 */
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor,
-			Entity entityIn) {
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		if (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive()) {
 			limbSwing = 0;
 			limbSwingAmount = 0;
@@ -115,19 +114,14 @@ public class ModelCQRBiped extends ModelBiped {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
-				if (cqrEnt.hasAttackTarget()
-						&& (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver
-								|| cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase)
-						&& !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					}
 				}
-				if (cqrEnt.hasAttackTarget()
-						&& (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase)
-						&& !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {

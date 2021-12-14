@@ -2,15 +2,7 @@ package team.cqr.cqrepoured.faction;
 
 public enum EReputationState {
 
-	ARCH_ENEMY(-1000),
-	ENEMY(-500),
-	HATED(-250),
-	AVOIDED(-125),
-	NEUTRAL(0),
-	ACCEPTED(125),
-	FRIEND(250),
-	ALLY(500),
-	MEMBER(1000);
+	ARCH_ENEMY(-1000), ENEMY(-500), HATED(-250), AVOIDED(-125), NEUTRAL(0), ACCEPTED(125), FRIEND(250), ALLY(500), MEMBER(1000);
 
 	private int value = 0;
 
@@ -45,9 +37,7 @@ public enum EReputationState {
 	}
 
 	public enum EReputationStateRough {
-		NEUTRAL(250, -249),
-		ENEMY(-250, -10000),
-		ALLY(10000, 251);
+		NEUTRAL(250, -249), ENEMY(-250, -10000), ALLY(10000, 251);
 
 		private final int high;
 		private final int low;

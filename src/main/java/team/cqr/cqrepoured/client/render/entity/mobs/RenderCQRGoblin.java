@@ -15,8 +15,7 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	protected void renderModel(EntityCQRGoblin entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
-			float scaleFactor) {
+	protected void renderModel(EntityCQRGoblin entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		if (entitylivingbaseIn.isSitting()) {
 			GlStateManager.translate(0, -0.25, 0);
 		}

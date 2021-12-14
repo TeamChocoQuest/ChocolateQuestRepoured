@@ -20,8 +20,7 @@ import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.roo
 
 public class CastleMainStructWall {
 	public enum WallOrientation {
-		HORIZONTAL,
-		VERTICAL
+		HORIZONTAL, VERTICAL
 	}
 
 	private final int length;
@@ -427,8 +426,7 @@ public class CastleMainStructWall {
 					}
 					EnumFacing facing = (this.orientation == WallOrientation.HORIZONTAL) ? EnumFacing.NORTH : EnumFacing.WEST;
 
-					blockToBuild = dungeon.getDoorBlockState().withProperty(BlockDoor.HALF, half).withProperty(BlockDoor.FACING, facing)
-							.withProperty(BlockDoor.HINGE, hinge);
+					blockToBuild = dungeon.getDoorBlockState().withProperty(BlockDoor.HALF, half).withProperty(BlockDoor.FACING, facing).withProperty(BlockDoor.HINGE, hinge);
 				} else if (y == 3) {
 					blockToBuild = dungeon.getPlankBlockState();
 				}

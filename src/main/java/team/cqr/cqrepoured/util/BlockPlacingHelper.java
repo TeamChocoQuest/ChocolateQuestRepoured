@@ -88,8 +88,7 @@ public class BlockPlacingHelper {
 		return setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags);
 	}
 
-	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state,
-			@Nullable TileEntity tileEntity, int flags) {
+	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags) {
 		IBlockState oldState = setBlockState(world, chunk, blockStorage, pos, state, tileEntity);
 
 		if (oldState == null) {
@@ -106,8 +105,7 @@ public class BlockPlacingHelper {
 	}
 
 	@Nullable
-	private static IBlockState setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state,
-			@Nullable TileEntity tileEntity) {
+	private static IBlockState setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
 		int x = pos.getX() & 15;
 		int y = pos.getY() & 15;
 		int z = pos.getZ() & 15;

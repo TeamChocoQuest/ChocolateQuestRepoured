@@ -92,8 +92,7 @@ public abstract class CastleRoomBase {
 		// Default is no decoration
 	}
 
-	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation,
-			List<String> bossUuids) {
+	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, List<String> bossUuids) {
 		// Default is no boss
 	}
 
@@ -124,8 +123,7 @@ public abstract class CastleRoomBase {
 	protected void generateDefaultCeiling(BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(),
-						BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
@@ -135,8 +133,7 @@ public abstract class CastleRoomBase {
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN,
-						BlockStateGenArray.EnumPriority.MEDIUM);
+				genArray.addBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
@@ -208,8 +205,7 @@ public abstract class CastleRoomBase {
 									decoPos = southStart.add(x, y, 0);
 								}
 								this.usedDecoPositions.add(decoPos);
-								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
-										BlockStateGenArray.EnumPriority.MEDIUM);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 							}
 						}
 					}
@@ -225,8 +221,7 @@ public abstract class CastleRoomBase {
 									decoPos = eastStart.add(0, y, z);
 								}
 								this.usedDecoPositions.add(decoPos);
-								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN,
-										BlockStateGenArray.EnumPriority.MEDIUM);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 							}
 						}
 					}

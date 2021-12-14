@@ -61,8 +61,7 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 
 	}
 
-	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection,
-			float colorMultiplier) {
+	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection, float colorMultiplier) {
 		GlStateManager.pushMatrix();
 
 		// View coordinates
@@ -80,8 +79,7 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-pitch - 90.0F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0D, -1.0D, 1.0D);
-		PentagramUtil.renderPentagram(entity.ticksExisted, entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier,
-				entity.getColorB() * colorMultiplier, corners);
+		PentagramUtil.renderPentagram(entity.ticksExisted, entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier, entity.getColorB() * colorMultiplier, corners);
 		PentagramUtil.postRenderPentagram();
 		GlStateManager.popMatrix();
 	}

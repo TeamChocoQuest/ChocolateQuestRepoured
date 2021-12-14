@@ -45,8 +45,7 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 	/**
 	 * Vanilla color is: 0.45F, 0.45F, 0.5F, 0.3F
 	 */
-	public EntityColoredLightningBolt(World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue,
-			float alpha) {
+	public EntityColoredLightningBolt(World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue, float alpha) {
 		super(worldIn, x, y, z, true);
 		this.isImmuneToFire = true;
 		this.lightningState = 2;
@@ -59,11 +58,7 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 		this.alpha = alpha;
 		BlockPos blockpos = new BlockPos(this);
 
-		if (spreadFire
-				&& !worldIn.isRemote
-				&& worldIn.getGameRules().getBoolean("doFireTick")
-				&& (worldIn.getDifficulty() == EnumDifficulty.NORMAL || worldIn.getDifficulty() == EnumDifficulty.HARD)
-				&& worldIn.isAreaLoaded(blockpos, 10)) {
+		if (spreadFire && !worldIn.isRemote && worldIn.getGameRules().getBoolean("doFireTick") && (worldIn.getDifficulty() == EnumDifficulty.NORMAL || worldIn.getDifficulty() == EnumDifficulty.HARD) && worldIn.isAreaLoaded(blockpos, 10)) {
 			if (worldIn.getBlockState(blockpos).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(worldIn, blockpos)) {
 				worldIn.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
 			}
@@ -92,10 +87,8 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 		this.onEntityUpdate();
 
 		if (this.lightningState == 2) {
-			this.world.playSound((EntityPlayer) null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F,
-					0.8F + this.rand.nextFloat() * 0.2F);
-			this.world.playSound((EntityPlayer) null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.WEATHER, 2.0F,
-					0.5F + this.rand.nextFloat() * 0.2F);
+			this.world.playSound((EntityPlayer) null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+			this.world.playSound((EntityPlayer) null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.rand.nextFloat() * 0.2F);
 		}
 
 		--this.lightningState;
@@ -111,10 +104,7 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 					this.boltVertex = this.rand.nextLong();
 					BlockPos blockpos = new BlockPos(this);
 
-					if (this.world.getGameRules().getBoolean("doFireTick")
-							&& this.world.isAreaLoaded(blockpos, 10)
-							&& this.world.getBlockState(blockpos).getMaterial() == Material.AIR
-							&& Blocks.FIRE.canPlaceBlockAt(this.world, blockpos)) {
+					if (this.world.getGameRules().getBoolean("doFireTick") && this.world.isAreaLoaded(blockpos, 10) && this.world.getBlockState(blockpos).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(this.world, blockpos)) {
 						this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
 					}
 				}
@@ -125,14 +115,12 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 			if (this.world.isRemote) {
 				this.world.setLastLightningBolt(2);
 			} else if (this.hitEntities) {
-				AxisAlignedBB aabb = new AxisAlignedBB(this.posX - 3.0D, this.posY - 3.0D, this.posZ - 3.0D, this.posX + 3.0D, this.posY + 6.0D + 3.0D,
-						this.posZ + 3.0D);
+				AxisAlignedBB aabb = new AxisAlignedBB(this.posX - 3.0D, this.posY - 3.0D, this.posZ - 3.0D, this.posX + 3.0D, this.posY + 6.0D + 3.0D, this.posZ + 3.0D);
 				List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, aabb);
 
 				for (Entity entity : list) {
 					if (!ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
-						if (CQRConfig.advanced.flyingCowardPenaltyEnabled
-								&& (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getLowestRidingEntity()))) {
+						if (CQRConfig.advanced.flyingCowardPenaltyEnabled && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getLowestRidingEntity()))) {
 							entity.attackEntityFrom(DamageSource.MAGIC, (float) CQRConfig.advanced.flyingCowardPenaltyDamage);
 						}
 						entity.onStruckByLightning(this);

@@ -72,8 +72,7 @@ public class ModelCQRPollo extends ModelChicken {
 	 * can swing at most.
 	 */
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor,
-			Entity entityIn) {
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		this.head.rotateAngleX = headPitch * 0.017453292F + new Float(Math.PI);
 		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 		this.rightLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 0.7F * limbSwingAmount;

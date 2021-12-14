@@ -16,7 +16,7 @@ public class ModelEnderCalamity extends ModelGeoCQRBase<EntityCQREnderCalamity> 
 	}
 
 	private static final ResourceLocation ANIMATION_RESLOC = new ResourceLocation(CQRMain.MODID, "animations/ender_calamity.animation.json");
-	
+
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQREnderCalamity animatable) {
 		return ANIMATION_RESLOC;

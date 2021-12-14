@@ -24,8 +24,7 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 
 	}
 
-	public CPacketCloseMapPlaceholderGuiSimple(BlockPos pos, EnumFacing facing, int scale, EnumFacing orientation, boolean lockOrientation, int sizeUp,
-			int sizeDown, int sizeRight, int sizeLeft, boolean fillMap, int fillRadius) {
+	public CPacketCloseMapPlaceholderGuiSimple(BlockPos pos, EnumFacing facing, int scale, EnumFacing orientation, boolean lockOrientation, int sizeUp, int sizeDown, int sizeRight, int sizeLeft, boolean fillMap, int fillRadius) {
 		this.pos = pos;
 		this.facing = facing;
 		this.scale = scale;

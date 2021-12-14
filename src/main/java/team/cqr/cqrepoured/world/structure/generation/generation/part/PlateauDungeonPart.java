@@ -37,8 +37,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 	private int chunkZ1;
 	private boolean generated;
 
-	protected PlateauDungeonPart(long seed, int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
-			@Nullable IBlockState supportHillTopBlock) {
+	protected PlateauDungeonPart(long seed, int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock, @Nullable IBlockState supportHillTopBlock) {
 		this.seed = seed;
 		this.startX = startX;
 		this.startZ = startZ;
@@ -177,8 +176,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 
 		@Override
 		public PlateauDungeonPart build(World world, DungeonPlacement placement) {
-			return new PlateauDungeonPart(world.getSeed(), this.startX, this.startZ, this.endX, this.endY, this.endZ, this.wallSize, this.supportHillBlock,
-					this.supportHillTopBlock);
+			return new PlateauDungeonPart(world.getSeed(), this.startX, this.startZ, this.endX, this.endY, this.endZ, this.wallSize, this.supportHillBlock, this.supportHillTopBlock);
 		}
 
 	}

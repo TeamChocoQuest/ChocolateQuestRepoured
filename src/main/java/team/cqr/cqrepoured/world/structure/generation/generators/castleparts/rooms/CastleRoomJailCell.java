@@ -88,37 +88,25 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getZ() == 1) && (v.getX() == half + 1)));
 			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getZ() == 0) && ((v.getX() == half - 1) || (v.getX() == half + 2))));
 
-			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
-			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
-			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
-			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.SOUTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.NORTH));
 		} else if (this.doorSide == EnumFacing.SOUTH) {
 			int half = this.getDecorationLengthX() / 2;
-			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0)
-					&& (v.getY() <= 2)
-					&& (v.getZ() == endZ - 1)
-					&& (v.getX() >= half - 1)
-					&& (v.getX() <= half + 2)));
+			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == endZ - 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
 			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half)));
 			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
 			Predicate<Vec3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getZ() == endZ - 1) && (v.getX() == half)));
 			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
 			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getZ() == endZ) && ((v.getX() == half - 1) || (v.getX() == half + 2))));
 
-			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
-			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
-			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
-			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.SOUTH));
 		} else if (this.doorSide == EnumFacing.WEST) {
@@ -130,37 +118,25 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getX() == 1) && (v.getZ() == half + 1)));
 			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getX() == 0) && ((v.getZ() == half - 1) || (v.getZ() == half + 2))));
 
-			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
-			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
-			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
-			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.EAST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.WEST));
 		} else if (this.doorSide == EnumFacing.EAST) {
 			int half = this.getDecorationLengthZ() / 2;
-			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0)
-					&& (v.getY() <= 2)
-					&& (v.getX() == endX - 1)
-					&& (v.getZ() >= half - 1)
-					&& (v.getZ() <= half + 2)));
+			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == endX - 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
 			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half)));
 			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
 			Predicate<Vec3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getX() == endX - 1) && (v.getZ() == half)));
 			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
 			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getX() == endX) && ((v.getZ() == half - 1) || (v.getZ() == half + 2))));
 
-			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
-			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
-			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
-			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST)
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
+			template.addRule(doorUpper1, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.RIGHT));
+			template.addRule(doorUpper2, Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.WEST).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(BlockDoor.HINGE, BlockDoor.EnumHingePosition.LEFT));
 			template.addRule(doorFrame, Blocks.IRON_BLOCK.getDefaultState());
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.EAST));
 		}

@@ -41,10 +41,7 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 		try {
 			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
 
-			if (entity.limbSwingAmount >= 0.01D
-					&& (!entity.isCannonRaised()
-							&& ((entity.getCurrentAnimation() == null)
-									|| !entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW)))) {
+			if (entity.limbSwingAmount >= 0.01D && (!entity.isCannonRaised() && ((entity.getCurrentAnimation() == null) || !entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW)))) {
 				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
 
 				// Taken from RenderIronGolem.class

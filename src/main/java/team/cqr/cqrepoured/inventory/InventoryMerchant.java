@@ -108,10 +108,7 @@ public class InventoryMerchant implements IInventory {
 		if (traderOffer != null && !traderOffer.isEmpty()) {
 			this.currentTrade = traderOffer.get(this.currentTradeIndex);
 			ItemStack[] input = new ItemStack[] { this.getStackInSlot(0), this.getStackInSlot(1), this.getStackInSlot(2), this.getStackInSlot(3) };
-			if (this.currentTrade != null
-					&& this.currentTrade.isUnlockedFor(this.player)
-					&& this.currentTrade.isInStock()
-					&& this.currentTrade.doItemsMatch(input)) {
+			if (this.currentTrade != null && this.currentTrade.isUnlockedFor(this.player) && this.currentTrade.isInStock() && this.currentTrade.doItemsMatch(input)) {
 				this.slots.set(4, this.currentTrade.getOutput());
 			} else {
 				this.slots.set(4, ItemStack.EMPTY);

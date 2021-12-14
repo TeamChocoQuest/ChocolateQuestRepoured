@@ -179,12 +179,8 @@ public class CQREntities {
 
 		if (CQRMain.isWorkspaceEnvironment) {
 			event.getRegistry().registerAll(// spectre lord
-					createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 0x323232, 0x0),
-					createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
-					createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true));
+					createEntityEntry(EntityCQRSpectreLord.class, "spectre_lord", 64, 1, true, 0x323232, 0x0), createEntityEntryWithoutEgg(EntitySpectreLordIllusion.class, "spectre_lord_illusion", 64, 1, true), createEntityEntryWithoutEgg(EntitySpectreLordCurse.class, "spectre_lord_curse", 64, 1, true),
+					createEntityEntryWithoutEgg(EntitySpectreLordExplosion.class, "spectre_lord_explosion", 64, 1, true), createEntityEntryWithoutEgg(EntityRotatingLaser.class, "rotating_laser", 64, 1, true), createEntityEntryWithoutEgg(EntityTargetingLaser.class, "targeting_laser", 64, 1, true));
 		}
 
 		// Spawns
@@ -193,16 +189,12 @@ public class CQREntities {
 		// Biomes.MUTATED_JUNGLE);
 	}
 
-	private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency,
-			boolean sendVelocityUpdates, int eggColor1, int eggColor2) {
-		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRMain.MODID, name), entityID++).name("cqr_" + name)
-				.egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+	private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1, int eggColor2) {
+		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRMain.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 	}
 
-	private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange,
-			int trackerUpdateFrequency, boolean sendVelocityUpdates) {
-		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRMain.MODID, name), entityID++).name("cqr_" + name)
-				.tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+	private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates) {
+		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRMain.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 	}
 
 }

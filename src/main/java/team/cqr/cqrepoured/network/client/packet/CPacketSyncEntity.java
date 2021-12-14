@@ -19,8 +19,7 @@ public class CPacketSyncEntity implements IMessage {
 
 	}
 
-	public CPacketSyncEntity(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet,
-			int dropChanceMainhand, int dropChanceOffhand, int sizeScaling) {
+	public CPacketSyncEntity(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand, int sizeScaling) {
 		this.entityId = entityId;
 		this.healthScaling = healthScaling;
 		this.dropChanceHelm = dropChanceHelm;

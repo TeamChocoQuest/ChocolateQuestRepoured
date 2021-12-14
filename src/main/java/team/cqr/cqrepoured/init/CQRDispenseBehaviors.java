@@ -76,8 +76,7 @@ public class CQRDispenseBehaviors {
 			ItemBubblePistol pistol = (ItemBubblePistol) item;
 			acc = pistol.getInaccurary();
 		}
-		Vec3d v = new Vec3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()),
-				-acc + velocity.z + (2 * acc * rng.nextDouble()));
+		Vec3d v = new Vec3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 
@@ -88,8 +87,7 @@ public class CQRDispenseBehaviors {
 		bubble.velocityChanged = true;
 		source.getWorld().spawnEntity(bubble);
 
-		source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), CQRSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1,
-				0.75F + (0.5F * rng.nextFloat()), false);
+		source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), CQRSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1, 0.75F + (0.5F * rng.nextFloat()), false);
 
 		// DONE: FIgure out how to make the stack damaged
 		stack.attemptDamageItem(1, source.getWorld().rand, null);
@@ -148,11 +146,9 @@ public class CQRDispenseBehaviors {
 	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_TNT_CQR = (source, stack) -> {
 		World world = source.getWorld();
 		BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
-		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, blockpos.getX() + 0.5D, blockpos.getY(), blockpos.getZ() + 0.5D,
-				(EntityLivingBase) null);
+		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, blockpos.getX() + 0.5D, blockpos.getY(), blockpos.getZ() + 0.5D, (EntityLivingBase) null);
 		world.spawnEntity(entitytntprimed);
-		world.playSound((EntityPlayer) null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED,
-				SoundCategory.BLOCKS, 1.0F, 1.0F);
+		world.playSound((EntityPlayer) null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		stack.shrink(1);
 		return stack;
 	};

@@ -431,8 +431,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 			double distance = MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
 			// Finally apply the new rotation -> Rotate the block
-			this.dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F,
-					-(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
+			this.dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
 		}
 	}
 
@@ -489,8 +488,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			}
 
 			v = v.normalize();
-			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, this.dragonBodyParts[indx].posX + v.x,
-					this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
+			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
 			v = v.scale(1.5);
 			proj.motionX = v.x;
 			proj.motionY = v.y;
@@ -558,10 +556,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (!CQRConfig.bosses.netherDragonDestroysBlocks
-				|| this.isDead
-				|| (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing"))
-				|| this.world.isRemote) {
+		if (!CQRConfig.bosses.netherDragonDestroysBlocks || this.isDead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
 			return false;
 		}
 
@@ -589,23 +584,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the
 						// protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
-							boolean container = block.hasTileEntity(iblockstate)
-									&& block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-											EnumFacing.UP);
-							if (breakableBlocks.contains(block.getRegistryName())
-									&& !container
-									&& block.isCollidable()
-									&& block != Blocks.BEDROCK
-									&& block != Blocks.STRUCTURE_BLOCK
-									&& block != Blocks.COMMAND_BLOCK
-									&& block != Blocks.REPEATING_COMMAND_BLOCK
-									&& block != Blocks.CHAIN_COMMAND_BLOCK
-									&& block != Blocks.END_GATEWAY
-									&& block != Blocks.END_PORTAL
-									&& block != Blocks.PORTAL
-									&& block != CQRBlocks.PHYLACTERY
-									&& block != CQRBlocks.FORCE_FIELD_NEXUS
-									&& block != CQRBlocks.EXPORTER) {
+							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
+									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != CQRBlocks.PHYLACTERY && block != CQRBlocks.FORCE_FIELD_NEXUS && block != CQRBlocks.EXPORTER) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
 								cancelled = true;

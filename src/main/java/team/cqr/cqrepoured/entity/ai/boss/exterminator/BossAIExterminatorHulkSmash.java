@@ -74,9 +74,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 		}
 
 		// Time when animation "hits" the ground => 1.6 seconds => 32 ticks
-		if (this.entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH)
-				&& this.entity.getCurrentAnimationTicks() <= (EntityCQRExterminator.GROUND_SLAM_DURATION - 32)
-				&& !this.shockwaveWasSpawnedInCurrentCycle) {
+		if (this.entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH) && this.entity.getCurrentAnimationTicks() <= (EntityCQRExterminator.GROUND_SLAM_DURATION - 32) && !this.shockwaveWasSpawnedInCurrentCycle) {
 			this.shockwaveWasSpawnedInCurrentCycle = true;
 
 			// Now, spawn a explosion and create the shockwave entities

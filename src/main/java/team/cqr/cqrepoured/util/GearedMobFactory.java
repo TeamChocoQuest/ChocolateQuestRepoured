@@ -246,10 +246,7 @@ public class GearedMobFactory {
 	}
 
 	public enum EWeaponType {
-		MELEE(40),
-		MAGIC_STAFF(10),
-		HEALING_STAFF(10),
-		BOW(10);
+		MELEE(40), MAGIC_STAFF(10), HEALING_STAFF(10), BOW(10);
 
 		private int weight;
 
@@ -259,11 +256,7 @@ public class GearedMobFactory {
 	}
 
 	public enum EArmorType {
-		LEATHER,
-		GOLD,
-		CHAIN,
-		IRON,
-		DIAMOND;
+		LEATHER, GOLD, CHAIN, IRON, DIAMOND;
 	}
 
 }

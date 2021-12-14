@@ -64,8 +64,7 @@ public class RenderCalamityCrystal extends Render<EntityCalamityCrystal> {
 			double targetVectorY = targetY - entity.posY;
 			double targetVectorZ = targetZ - entity.posZ;
 			GlStateManager.pushAttrib();
-			RenderDragon.renderCrystalBeams(x + targetVectorX, y - 0.3D + f1 * 0.4F + targetVectorY, z + targetVectorZ, partialTicks, targetX, targetY, targetZ,
-					entity.innerRotation, entity.posX, entity.posY, entity.posZ);
+			RenderDragon.renderCrystalBeams(x + targetVectorX, y - 0.3D + f1 * 0.4F + targetVectorY, z + targetVectorZ, partialTicks, targetX, targetY, targetZ, entity.innerRotation, entity.posX, entity.posY, entity.posZ);
 			GlStateManager.popAttrib();
 		}
 

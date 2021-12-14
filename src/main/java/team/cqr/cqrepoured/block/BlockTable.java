@@ -100,10 +100,8 @@ public class BlockTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer,
-			EnumHand hand) {
-		boolean flag = (world.getBlockState(pos.west()).getBlock() == this && world.getBlockState(pos.east()).getBlock() == this)
-				|| (world.getBlockState(pos.north()).getBlock() == this && world.getBlockState(pos.south()).getBlock() == this);
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		boolean flag = (world.getBlockState(pos.west()).getBlock() == this && world.getBlockState(pos.east()).getBlock() == this) || (world.getBlockState(pos.north()).getBlock() == this && world.getBlockState(pos.south()).getBlock() == this);
 		return this.getDefaultState().withProperty(TOP, flag);
 	}
 
@@ -111,13 +109,11 @@ public class BlockTable extends Block implements ITileEntityProvider {
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (Boolean.TRUE.equals(state.getValue(TOP))) {
-			if ((worldIn.getBlockState(pos.west()).getBlock() != this || worldIn.getBlockState(pos.east()).getBlock() != this)
-					&& (worldIn.getBlockState(pos.north()).getBlock() != this || worldIn.getBlockState(pos.south()).getBlock() != this)) {
+			if ((worldIn.getBlockState(pos.west()).getBlock() != this || worldIn.getBlockState(pos.east()).getBlock() != this) && (worldIn.getBlockState(pos.north()).getBlock() != this || worldIn.getBlockState(pos.south()).getBlock() != this)) {
 				worldIn.setBlockState(pos, this.getDefaultState().withProperty(TOP, false));
 			}
 		} else {
-			if ((worldIn.getBlockState(pos.west()).getBlock() == this && worldIn.getBlockState(pos.east()).getBlock() == this)
-					|| (worldIn.getBlockState(pos.north()).getBlock() == this && worldIn.getBlockState(pos.south()).getBlock() == this)) {
+			if ((worldIn.getBlockState(pos.west()).getBlock() == this && worldIn.getBlockState(pos.east()).getBlock() == this) || (worldIn.getBlockState(pos.north()).getBlock() == this && worldIn.getBlockState(pos.south()).getBlock() == this)) {
 				worldIn.setBlockState(pos, this.getDefaultState().withProperty(TOP, true));
 			}
 		}
@@ -125,8 +121,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 	@Deprecated
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntityTable tile = this.getTileEntity(worldIn, pos);
 		ItemStack helditem = playerIn.getHeldItem(hand);
 		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
@@ -141,8 +136,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 				playerIn.setHeldItem(hand, itemHandler.insertItem(0, helditem, false));
 				tile.setRotation(Math.round(playerIn.rotationYaw / 22.5F) % 16);
 			} else {
-				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F,
-						worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}
 		} else if (!playerIn.isSneaking()) {
 			if (!worldIn.isRemote) {
@@ -152,15 +146,13 @@ public class BlockTable extends Block implements ITileEntityProvider {
 					worldIn.spawnEntity(item);
 				}
 			} else {
-				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F,
-						worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}
 		} else {
 			if (!worldIn.isRemote) {
 				tile.setRotation(tile.getRotation() + 1);
 			} else {
-				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F,
-						worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			}
 		}
 

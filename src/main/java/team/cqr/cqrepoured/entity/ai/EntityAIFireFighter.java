@@ -34,17 +34,15 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
 			Vec3d vec = this.entity.getPositionEyes(1.0F);
-			this.nearestFire = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(),
-					SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, Blocks.FIRE, (mutablePos, state) -> {
-						mutablePos.setY(mutablePos.getY() - 1);
-						if (this.world.getBlockState(mutablePos).getBlock().isFireSource(this.world, mutablePos, EnumFacing.UP)) {
-							return false;
-						}
-						mutablePos.setY(mutablePos.getY() + 1);
-						RayTraceResult result = this.world.rayTraceBlocks(vec,
-								new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
-						return result == null || result.getBlockPos().equals(mutablePos);
-					});
+			this.nearestFire = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, Blocks.FIRE, (mutablePos, state) -> {
+				mutablePos.setY(mutablePos.getY() - 1);
+				if (this.world.getBlockState(mutablePos).getBlock().isFireSource(this.world, mutablePos, EnumFacing.UP)) {
+					return false;
+				}
+				mutablePos.setY(mutablePos.getY() + 1);
+				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+				return result == null || result.getBlockPos().equals(mutablePos);
+			});
 		}
 
 		return this.nearestFire != null;
@@ -80,10 +78,8 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.entity.getDistanceSqToCenter(this.nearestFire) <= REACH_DISTANCE_SQ) {
 			if (this.entity.world.getBlockState(this.nearestFire).getBlock() == Blocks.FIRE) {
 				this.entity.world.setBlockToAir(this.nearestFire);
-				((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.nearestFire.getX() + 0.5D, this.nearestFire.getY() + 0.5D,
-						this.nearestFire.getZ() + 0.5D, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-				this.entity.world.playSound(null, this.nearestFire.getX() + 0.5D, this.nearestFire.getY() + 0.5D, this.nearestFire.getZ() + 0.5D,
-						SoundEvents.BLOCK_FIRE_EXTINGUISH, this.entity.getSoundCategory(), 1.0F, 0.9F + this.entity.getRNG().nextFloat() * 0.2F);
+				((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.nearestFire.getX() + 0.5D, this.nearestFire.getY() + 0.5D, this.nearestFire.getZ() + 0.5D, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+				this.entity.world.playSound(null, this.nearestFire.getX() + 0.5D, this.nearestFire.getY() + 0.5D, this.nearestFire.getZ() + 0.5D, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.entity.getSoundCategory(), 1.0F, 0.9F + this.entity.getRNG().nextFloat() * 0.2F);
 			}
 			this.nearestFire = null;
 		}

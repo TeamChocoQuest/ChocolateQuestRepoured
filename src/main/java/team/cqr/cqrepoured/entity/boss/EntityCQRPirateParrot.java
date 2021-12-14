@@ -89,9 +89,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	}
 
 	private EntityLivingBase getOwnerInRange(UUID uuid) {
-		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this,
-				new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20),
-				input -> input instanceof EntityLivingBase && input.getPersistentID().equals(uuid));
+		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20), input -> input instanceof EntityLivingBase && input.getPersistentID().equals(uuid));
 		return ents.isEmpty() ? null : (EntityLivingBase) ents.get(0);
 	}
 

@@ -35,8 +35,7 @@ public class BlockTNTCQR extends BlockTNT {
 	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
 		// Copied from vanilla
 		if (!worldIn.isRemote) {
-			EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(worldIn, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F,
-					explosionIn.getExplosivePlacedBy());
+			EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(worldIn, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, explosionIn.getExplosivePlacedBy());
 			entitytntprimed.setFuse((short) (worldIn.rand.nextInt(entitytntprimed.getFuse() / 4) + entitytntprimed.getFuse() / 8));
 			worldIn.spawnEntity(entitytntprimed);
 		}
@@ -52,8 +51,7 @@ public class BlockTNTCQR extends BlockTNT {
 		}
 		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, igniter);
 		worldIn.spawnEntity(entitytntprimed);
-		worldIn.playSound(null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F,
-				1.0F);
+		worldIn.playSound(null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	}
 
 	@Override

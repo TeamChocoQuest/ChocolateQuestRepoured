@@ -44,8 +44,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 		int x = (chunkX << 4) + 8;
 		int z = (chunkZ << 4) + 8;
-		dungeon.generate(world, x, z, getRandomForCoords(world, x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION,
-				DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+		dungeon.generate(world, x, z, getRandomForCoords(world, x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 	}
 
 	/**
@@ -70,8 +69,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return locationSpecificDungeon;
 		}
 
-		return GridRegistry.getInstance().getGrids().stream().filter(gridPredicate).map(grid -> grid.getDungeonAt(world, chunkX, chunkZ))
-				.filter(Objects::nonNull).findFirst().orElse(null);
+		return GridRegistry.getInstance().getGrids().stream().filter(gridPredicate).map(grid -> grid.getDungeonAt(world, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
 	}
 
 	/**

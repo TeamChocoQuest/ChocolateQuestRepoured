@@ -42,8 +42,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 	private final boolean fillMap;
 	private final int fillRadius;
 
-	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap,
-			int fillRadius) {
+	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
 		super(x, y, z);
 		this.entity = entity;
 		this.mapOriginX = mapOriginX;
@@ -55,8 +54,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		this.fillRadius = fillRadius;
 	}
 
-	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap,
-			int fillRadius) {
+	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
 		this(pos.getX(), pos.getY(), pos.getZ(), entity, mapOriginX, mapOriginZ, mapX, mapZ, scale, fillMap, fillRadius);
 	}
 
@@ -126,8 +124,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 			if ((l3 >> 20 & 1) == 0) {
 				multiset.add(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT).getMapColor(world, BlockPos.ORIGIN), 10);
 			} else {
-				multiset.add(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.STONE).getMapColor(world, BlockPos.ORIGIN),
-						100);
+				multiset.add(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.STONE).getMapColor(world, BlockPos.ORIGIN), 100);
 			}
 
 			d1 = 100.0D;

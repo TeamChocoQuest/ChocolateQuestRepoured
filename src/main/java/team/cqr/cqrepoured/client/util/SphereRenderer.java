@@ -137,9 +137,7 @@ public class SphereRenderer {
 
 	public static void init() {
 		delete();
-		shader = new ShaderProgram.Builder()
-				.addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl")))
-				.addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl"))).build();
+		shader = new ShaderProgram.Builder().addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl"))).addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl"))).build();
 		GL20.glUseProgram(shader.getShaderProgram());
 		uniformColor = GL20.glGetUniformLocation(shader.getShaderProgram(), "color");
 		uniformTexture = GL20.glGetUniformLocation(shader.getShaderProgram(), "useTexture");
@@ -392,8 +390,7 @@ public class SphereRenderer {
 			double d22 = 1 - (i2 + j2);
 
 			// rotate vertex
-			return new Vertex(this.x * d00 + this.y * d01 + this.z * d02, this.x * d10 + this.y * d11 + this.z * d12,
-					this.x * d20 + this.y * d21 + this.z * d22);
+			return new Vertex(this.x * d00 + this.y * d01 + this.z * d02, this.x * d10 + this.y * d11 + this.z * d12, this.x * d20 + this.y * d21 + this.z * d22);
 		}
 
 	}
@@ -476,8 +473,7 @@ public class SphereRenderer {
 				v30 = v30.scale(0.5D);
 				v02 = v02.scale(0.5D);
 			}
-			return Stream.of(new Quad(v30, this.v0, v01, v02), new Quad(v01, this.v1, v12, v02), new Quad(v12, this.v2, v23, v02),
-					new Quad(v23, this.v3, v30, v02));
+			return Stream.of(new Quad(v30, this.v0, v01, v02), new Quad(v01, this.v1, v12, v02), new Quad(v12, this.v2, v23, v02), new Quad(v23, this.v3, v30, v02));
 		}
 
 		@Override

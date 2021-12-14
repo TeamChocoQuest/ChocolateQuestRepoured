@@ -121,19 +121,18 @@ public class ElectricEventHandler {
 
 	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock sourceCap) {
 		// First, get all applicable entities in range
-		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12),
-				Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
-					if (entityLiving.getPersistentID().equals(sourceCap.getCasterID())) {
-						return false;
-					}
-					if (!spreader.canEntityBeSeen(entityLiving)) {
-						return false;
-					}
-					if (spreader.getDistance(entityLiving) > CQRConfig.general.electricFieldEffectSpreadRange) {
-						return false;
-					}
-					return !TargetUtil.isAllyCheckingLeaders(spreader, entityLiving);
-				}));
+		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12), Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
+			if (entityLiving.getPersistentID().equals(sourceCap.getCasterID())) {
+				return false;
+			}
+			if (!spreader.canEntityBeSeen(entityLiving)) {
+				return false;
+			}
+			if (spreader.getDistance(entityLiving) > CQRConfig.general.electricFieldEffectSpreadRange) {
+				return false;
+			}
+			return !TargetUtil.isAllyCheckingLeaders(spreader, entityLiving);
+		}));
 		if (entities.isEmpty()) {
 			return;
 		}

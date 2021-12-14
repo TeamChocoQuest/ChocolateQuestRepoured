@@ -64,8 +64,7 @@ public class CommandLocateDungeon extends CommandBase {
 
 		// TODO send warning if aw2 integration is enabled
 
-		DungeonGenInfo dungeonGenInfo = getNearestDungeon(world, x >> 4, z >> 4, chunkRadius, dungeonToSearchFor, searchForGeneratedDungeon,
-				searchForNotGeneratedDungeon);
+		DungeonGenInfo dungeonGenInfo = getNearestDungeon(world, x >> 4, z >> 4, chunkRadius, dungeonToSearchFor, searchForGeneratedDungeon, searchForNotGeneratedDungeon);
 		if (dungeonGenInfo != null) {
 			int dungeonX = (dungeonGenInfo.chunkX << 4) + 8;
 			int dungeonZ = (dungeonGenInfo.chunkZ << 4) + 8;
@@ -77,8 +76,7 @@ public class CommandLocateDungeon extends CommandBase {
 	}
 
 	@Nullable
-	public static DungeonGenInfo getNearestDungeon(World world, int chunkX, int chunkZ, int chunkRadius, @Nullable String dungeonToSearchFor,
-			boolean searchForGeneratedDungeon, boolean searchForNotGeneratedDungeon) {
+	public static DungeonGenInfo getNearestDungeon(World world, int chunkX, int chunkZ, int chunkRadius, @Nullable String dungeonToSearchFor, boolean searchForGeneratedDungeon, boolean searchForNotGeneratedDungeon) {
 		if (!searchForGeneratedDungeon && !searchForNotGeneratedDungeon) {
 			return null;
 		}
@@ -144,8 +142,7 @@ public class CommandLocateDungeon extends CommandBase {
 		} else if (args.length == 6) {
 			DungeonRegistry dungeonRegistry = DungeonRegistry.getInstance();
 			int dim = sender.getEntityWorld().provider.getDimension();
-			return getListOfStringsMatchingLastWord(args, dungeonRegistry.getDungeons().stream().filter(dungeon -> dungeon.canSpawnInDim(dim))
-					.map(DungeonBase::getDungeonName).toArray(String[]::new));
+			return getListOfStringsMatchingLastWord(args, dungeonRegistry.getDungeons().stream().filter(dungeon -> dungeon.canSpawnInDim(dim)).map(DungeonBase::getDungeonName).toArray(String[]::new));
 		} else {
 			return Collections.emptyList();
 		}

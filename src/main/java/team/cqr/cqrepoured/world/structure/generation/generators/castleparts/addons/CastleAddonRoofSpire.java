@@ -43,13 +43,11 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 			if (underLenX > 0 && underLenZ > 0) {
 				for (int i = 0; i < underLenX; i++) {
 					genArray.addBlockState(new BlockPos(x + i, y, z), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
-					genArray.addBlockState(new BlockPos(x + i, y, z + underLenZ - 1), state, BlockStateGenArray.GenerationPhase.MAIN,
-							BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(new BlockPos(x + i, y, z + underLenZ - 1), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 				for (int j = 0; j < underLenZ; j++) {
 					genArray.addBlockState(new BlockPos(x, y, z + j), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
-					genArray.addBlockState(new BlockPos(x + underLenX - 1, y, z + j), state, BlockStateGenArray.GenerationPhase.MAIN,
-							BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(new BlockPos(x + underLenX - 1, y, z + j), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 			}
 
@@ -79,8 +77,7 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 						}
 					}
 
-					genArray.addBlockState(new BlockPos(roofX + i, y, roofZ), blockState, BlockStateGenArray.GenerationPhase.MAIN,
-							BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(new BlockPos(roofX + i, y, roofZ), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 				// add the south row
 				for (int i = 0; i < roofLenX; i++) {
@@ -102,19 +99,16 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 						}
 					}
 
-					genArray.addBlockState(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), blockState, BlockStateGenArray.GenerationPhase.MAIN,
-							BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 
 				for (int i = 0; i < roofLenZ; i++) {
 					IBlockState blockState = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
-					genArray.addBlockState(new BlockPos(roofX, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN,
-							BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(new BlockPos(roofX, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 
 					blockState = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
 
-					genArray.addBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN,
-							BlockStateGenArray.EnumPriority.MEDIUM);
+					genArray.addBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 			}
 

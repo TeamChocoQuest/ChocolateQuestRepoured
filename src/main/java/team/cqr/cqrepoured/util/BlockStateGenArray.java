@@ -26,16 +26,11 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 public class BlockStateGenArray {
 
 	public enum GenerationPhase {
-		MAIN,
-		POST
+		MAIN, POST
 	}
 
 	public enum EnumPriority {
-		LOWEST(0),
-		LOW(1),
-		MEDIUM(2),
-		HIGH(3),
-		HIGHEST(4);
+		LOWEST(0), LOW(1), MEDIUM(2), HIGH(3), HIGHEST(4);
 
 		private final int value;
 

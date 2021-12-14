@@ -53,8 +53,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 
 	@Override
 	public void preProcess() {
-		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(),
-				this.pos.getZ());
+		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		IBlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
 		this.centralCaveBlocks = blocks;
@@ -161,8 +160,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 
 			if (random.nextInt(3) == 0) {
 				// Spawner
-				BlockPos spawner = new BlockPos(mushroompos.getX() + (random.nextBoolean() ? -1 : 1), mushroompos.getY() + 1,
-						mushroompos.getZ() + (random.nextBoolean() ? -1 : 1));
+				BlockPos spawner = new BlockPos(mushroompos.getX() + (random.nextBoolean() ? -1 : 1), mushroompos.getY() + 1, mushroompos.getZ() + (random.nextBoolean() ? -1 : 1));
 				this.spawners.add(spawner);
 				if (random.nextInt(3) >= 1) {
 					// Chest
@@ -194,8 +192,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			if (chest != null) {
 				ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
 				if (resLoc != null) {
-					long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX() + chestpos.getX() + chestpos.getY(),
-							this.pos.getZ() + chestpos.getZ() + chestpos.getY());
+					long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX() + chestpos.getX() + chestpos.getY(), this.pos.getZ() + chestpos.getZ() + chestpos.getY());
 					chest.setLootTable(resLoc, seed);
 				}
 			}
@@ -468,10 +465,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 						vE = vE.down();
 						vS = vS.down();
 						vW = vW.down();
-						if (this.blocks.getOrDefault(vN, airState) != airState
-								|| this.blocks.getOrDefault(vE, airState) != airState
-								|| this.blocks.getOrDefault(vS, airState) != airState
-								|| this.blocks.getOrDefault(vW, airState) != airState) {
+						if (this.blocks.getOrDefault(vN, airState) != airState || this.blocks.getOrDefault(vE, airState) != airState || this.blocks.getOrDefault(vS, airState) != airState || this.blocks.getOrDefault(vW, airState) != airState) {
 							break;
 						}
 					} else {

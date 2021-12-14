@@ -44,8 +44,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		this.gridPosY = posY;
 		this.structure = structure;
 
-		this.islandRadius = this.structure.getSize().getX() > this.structure.getSize().getZ() ? this.structure.getSize().getX()
-				: this.structure.getSize().getZ();
+		this.islandRadius = this.structure.getSize().getX() > this.structure.getSize().getZ() ? this.structure.getSize().getX() : this.structure.getSize().getZ();
 
 		this.worldPosition = this.generator.getCenterPosForIsland(this);
 	}
@@ -121,16 +120,12 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		// Order: Air, Island, Chains, Building
 		int rad = 2 * this.getRadius();
-		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight()
-				: this.structure.getSize().getY();
+		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight() : this.structure.getSize().getY();
 		BlockPos start = this.worldPosition.add(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
 		BlockPos end = this.worldPosition.add(rad, height, rad);
 
 		int wall = CQRConfig.general.supportHillWallSize;
-		dungeonBuilder.add(
-				PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall,
-						WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)),
-				start.add(-wall, -wall, -wall));
+		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.add(-wall, -wall, -wall));
 	}
 
 	@Override
@@ -199,8 +194,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		}
 	}
 
-	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR,
-			Map<BlockPos, IBlockState> stateMap) {
+	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, IBlockState> stateMap) {
 		stateMap.put(lowerCenter, this.generator.getDungeon().getChainBlock());
 		stateMap.put(lowerCenter.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
 

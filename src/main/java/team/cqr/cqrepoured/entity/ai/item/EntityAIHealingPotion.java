@@ -68,8 +68,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 			Vec3d vec1 = this.entity.getPositionVector().add(alertRadius, alertRadius * 0.5D, alertRadius);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<Entity> possibleEnts = this.entity.world.getEntitiesInAABBexcluding(this.entity, aabb,
-					TargetUtil.createPredicateAlly(this.entity.getFaction()));
+			List<Entity> possibleEnts = this.entity.world.getEntitiesInAABBexcluding(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 
 			if (!possibleEnts.isEmpty()) {
 				Entity e1 = null;
@@ -98,8 +97,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				this.updateRotation(attackTarget, 2.5F, 2.5F);
 
 				if (canMoveBackwards) {
-					EntityUtil.move2D(this.entity, 0.0D, -0.2D,
-							this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
+					EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
 				}
 			}
 

@@ -25,11 +25,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	@Override
 	public boolean shouldExecute() {
 		this.healingActive = false;
-		if (!this.getBoss().isSpinning()
-				&& !this.getBoss().isStunned()
-				&& (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F)
-				&& this.currHealTicks < this.getHealingAmount()
-				&& this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
+		if (!this.getBoss().isSpinning() && !this.getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
 			this.entity.setHealing(true);
 			if (this.entity.isInShell() || this.entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 				this.entity.setInShell(true);
@@ -86,8 +82,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 				this.entity.setTimesHealed(this.entity.getTimesHealed() + 1);
 				this.getBoss().setCanBeStunned(true);
 			} else {
-				((WorldServer) this.entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, this.entity.posX, this.entity.posY, this.entity.posZ, 5,
-						0.5D, 1.0D, 0.5D, 0D);
+				((WorldServer) this.entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, this.entity.posX, this.entity.posY, this.entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
 				this.getBoss().heal(1F);
 				this.getBoss().setCanBeStunned(false);
 				this.getBoss().setStunned(false);

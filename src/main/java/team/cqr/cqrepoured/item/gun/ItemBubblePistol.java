@@ -63,9 +63,7 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (entityIn instanceof EntityLivingBase
-				&& ((EntityLivingBase) entityIn).isHandActive()
-				&& ((EntityLivingBase) entityIn).getActiveItemStack() == stack) {
+		if (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isHandActive() && ((EntityLivingBase) entityIn).getActiveItemStack() == stack) {
 			this.shootBubbles((EntityLivingBase) entityIn);
 		}
 	}
@@ -84,9 +82,7 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 	}
 
 	private void shootBubbles(Vec3d velocity, EntityLivingBase shooter) {
-		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()),
-				-this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()),
-				-this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
+		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 

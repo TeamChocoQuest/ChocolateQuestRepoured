@@ -312,8 +312,7 @@ public class RoomGridCell {
 	}
 
 	public void copyRoomPropertiesToConnectedCells() {
-		List<CastleRoomBase> connectedRooms = this.connectedCells.stream().filter(RoomGridCell::isPopulated).map(RoomGridCell::getRoom)
-				.collect(Collectors.toList());
+		List<CastleRoomBase> connectedRooms = this.connectedCells.stream().filter(RoomGridCell::isPopulated).map(RoomGridCell::getRoom).collect(Collectors.toList());
 		for (CastleRoomBase connectedRoom : connectedRooms) {
 			connectedRoom.copyPropertiesOf(this.room);
 		}

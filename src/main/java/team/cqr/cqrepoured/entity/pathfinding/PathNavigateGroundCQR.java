@@ -56,8 +56,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		this.nodeProcessor = new WalkNodeProcessor() {
 
 			@Override
-			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn,
-					boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
+			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
 				for (int i = 0; i < xSize; ++i) {
 					for (int j = 0; j < ySize; ++j) {
 						for (int k = 0; k < zSize; ++k) {
@@ -71,12 +70,8 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 							}
 
 							// TODO better method for calculating the facing from which the door will be entered
-							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED
-									&& canOpenDoorsIn
-									&& canEnterDoorsIn
-									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing
-											.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(),
-											true)) {
+							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
+									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
 								pathnodetype = PathNodeType.WALKABLE;
 							}
 
@@ -84,9 +79,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 								pathnodetype = PathNodeType.BLOCKED;
 							}
 
-							if (pathnodetype == PathNodeType.RAIL
-									&& !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof BlockRailBase)
-									&& !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof BlockRailBase)) {
+							if (pathnodetype == PathNodeType.RAIL && !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof BlockRailBase) && !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof BlockRailBase)) {
 								pathnodetype = PathNodeType.FENCE;
 							}
 
@@ -121,21 +114,15 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 						return PathNodeType.DAMAGE_FIRE;
 					} else if (block == Blocks.CACTUS) {
 						return PathNodeType.DAMAGE_CACTUS;
-					} else if (block instanceof BlockDoor
-							&& material == Material.WOOD
-							&& !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
 						return PathNodeType.DOOR_WOOD_CLOSED;
-					} else if (block instanceof BlockDoor
-							&& material == Material.IRON
-							&& !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
 						return PathNodeType.DOOR_IRON_CLOSED;
 					} else if (block instanceof BlockDoor && iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
 						return PathNodeType.DOOR_OPEN;
 					} else if (block instanceof BlockRailBase) {
 						return PathNodeType.RAIL;
-					} else if (!(block instanceof BlockFence)
-							&& !(block instanceof BlockWall)
-							&& (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
+					} else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
 						if (material == Material.WATER) {
 							return PathNodeType.WATER;
 						} else if (material == Material.LAVA) {
@@ -216,8 +203,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		} else {
 			BlockPos blockpos1;
 
-			for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight()
-					&& this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
+			for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
 
 			}
 

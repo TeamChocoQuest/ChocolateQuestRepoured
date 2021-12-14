@@ -25,8 +25,7 @@ public class DummyWorld extends WorldServer {
 	private final Long2ObjectMap<Biome[]> chunkBiomeArrays = new Long2ObjectOpenHashMap<>();
 
 	public DummyWorld(WorldSettings settings, int dimension) {
-		super(new IntegratedServer(Minecraft.getMinecraft(), "dummy-world", "dummy-world", settings, null, null, null, null), new SaveHandlerMP(),
-				new WorldInfo(settings, "dummy-world"), dimension, DummyProfiler.INSTANCE);
+		super(new IntegratedServer(Minecraft.getMinecraft(), "dummy-world", "dummy-world", settings, null, null, null, null), new SaveHandlerMP(), new WorldInfo(settings, "dummy-world"), dimension, DummyProfiler.INSTANCE);
 		this.provider.setWorld(this);
 		this.provider.setDimension(dimension);
 		this.createSpawnPositionCQR(settings);
@@ -93,8 +92,7 @@ public class DummyWorld extends WorldServer {
 	public Biome getBiome(int x, int z) {
 		int size = 8;
 		long key = ChunkPos.asLong(x >> size, z >> size);
-		Biome[] chunkBiomeArray = this.chunkBiomeArrays.computeIfAbsent(key,
-				k -> this.provider.getBiomeProvider().getBiomes(null, x >> size << size, z >> size << size, 1 << size, 1 << size, false));
+		Biome[] chunkBiomeArray = this.chunkBiomeArrays.computeIfAbsent(key, k -> this.provider.getBiomeProvider().getBiomes(null, x >> size << size, z >> size << size, 1 << size, 1 << size, false));
 		int x1 = x & ((1 << size) - 1);
 		int z1 = z & ((1 << size) - 1);
 		return chunkBiomeArray[z1 << size | x1];
