@@ -15,11 +15,17 @@ public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends 
 
 	protected final GeoEntityRenderer<T> renderer;
 	protected final Function<T, ResourceLocation> funcGetCurrentTexture;
+	protected final Function<T, ResourceLocation> funcGetCurrentModel;
 
-	public LayerGlowingAreasGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture) {
+	public LayerGlowingAreasGeo(
+			GeoEntityRenderer<T> renderer, 
+			Function<T, ResourceLocation> funcGetCurrentTexture,
+			Function<T, ResourceLocation> funcGetCurrentModel
+		) {
 		super(renderer);
 		this.renderer = renderer;
 		this.funcGetCurrentTexture = funcGetCurrentTexture;
+		this.funcGetCurrentModel = funcGetCurrentModel;
 	}
 
 	@Override
@@ -31,7 +37,7 @@ public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends 
 
 		Color renderColor = this.renderer.getRenderColor(entitylivingbaseIn, partialTicks);
 
-		this.renderer.render(this.getEntityModel().getModel(this.getEntityModel().getModelLocation(entitylivingbaseIn)), entitylivingbaseIn, partialTicks,
+		this.renderer.render(this.getEntityModel().getModel(this.funcGetCurrentModel.apply(entitylivingbaseIn)), entitylivingbaseIn, partialTicks,
 				renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), renderColor.getAlpha());
 
 		EmissiveUtil.postEmissiveTextureRendering();

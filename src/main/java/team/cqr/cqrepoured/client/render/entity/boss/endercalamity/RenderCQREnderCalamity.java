@@ -74,9 +74,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
+    private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/ender_calamity.geo.json");
 
 	public RenderCQREnderCalamity(RenderManager renderManager) {
-		super(renderManager, new ModelEnderCalamity(TEXTURE), "boss/ender_calamity");
+		super(renderManager, new ModelEnderCalamity(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
+		
+		//this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	@Override
