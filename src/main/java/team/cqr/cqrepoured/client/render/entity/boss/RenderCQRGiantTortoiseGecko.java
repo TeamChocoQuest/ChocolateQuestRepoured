@@ -14,9 +14,10 @@ import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/giant_tortoise.geo.json");
 
 	public RenderCQRGiantTortoiseGecko(RenderManager renderManager) {
-		super(renderManager, new ModelGiantTortoiseGecko(TEXTURE), "boss/giant_tortoise");
+		super(renderManager, new ModelGiantTortoiseGecko(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
 	}
 
 	// we do not hold items, so we can ignore this

@@ -15,9 +15,10 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/exterminator.png");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/exterminator.geo.json");
 
 	public RenderCQRExterminator(RenderManager renderManager) {
-		super(renderManager, new ModelExterminator(TEXTURE), "boss/exterminator");
+		super(renderManager, new ModelExterminator(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
 	}
 
 	public static final String HAND_IDENT_LEFT = "item_left_hand";
