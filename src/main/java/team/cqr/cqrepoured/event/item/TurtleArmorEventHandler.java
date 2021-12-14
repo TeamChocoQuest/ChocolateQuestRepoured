@@ -42,22 +42,26 @@ public class TurtleArmorEventHandler {
 	@SubscribeEvent
 	public static void onLivingDamageEvent(LivingDamageEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if (entity.getHealth() - event.getAmount() < entity.getMaxHealth() * 0.2F) {
-			event.setAmount(Math.min(event.getAmount(), entity.getHealth() - 1.0F));
-			entity.heal(entity.getMaxHealth() * 0.2F);
-			entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 0, false, true));
-			entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 4, false, true));
-			entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, 1, false, true));
-
-			double x = entity.posX;
-			double y = entity.posY + entity.getEyeHeight();
-			double z = entity.posZ;
-			((WorldServer) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
-
-			entity.world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
-
-			CapabilityCooldownHandlerHelper.setCooldown(entity, CQRItems.CHESTPLATE_TURTLE, 12000);
+		if (!ItemUtil.hasFullSet(entity, ItemArmorTurtle.class)) {
+			return;
 		}
+		if (entity.getHealth() - event.getAmount() > entity.getMaxHealth() * 0.2F) {
+			return;
+		}
+		event.setAmount(Math.min(event.getAmount(), entity.getHealth() - 1.0F));
+		entity.heal(entity.getMaxHealth() * 0.2F);
+		entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 0, false, true));
+		entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 4, false, true));
+		entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, 1, false, true));
+
+		double x = entity.posX;
+		double y = entity.posY + entity.getEyeHeight();
+		double z = entity.posZ;
+		((WorldServer) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
+
+		entity.world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
+
+		CapabilityCooldownHandlerHelper.setCooldown(entity, CQRItems.CHESTPLATE_TURTLE, 12000);
 	}
 
 	@SubscribeEvent
