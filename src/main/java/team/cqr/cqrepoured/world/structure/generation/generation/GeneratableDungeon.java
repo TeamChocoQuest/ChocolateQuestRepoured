@@ -4,8 +4,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -300,18 +302,26 @@ public class GeneratableDungeon {
 		}
 		long t = System.nanoTime();
 
-		LightInfo removedLight = this.removedLights.remove();
-		MUTABLE.setPos(removedLight.pos.getX(), removedLight.pos.getY(), removedLight.pos.getZ());
-		if (world.isAreaLoaded(MUTABLE, 16)) {
-			for (int x = -14; x <= 14; x++) {
-				for (int y = -14; y <= 14; y++) {
-					for (int z = -14; z <= 14; z++) {
-						MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
-						world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
+		// TODO this could be improved further
+		Set<BlockPos> updated = new HashSet<>();
+		for (LightInfo removedLight : this.removedLights) {
+			int r = removedLight.light - 1;
+			for (int y = -r; y <= r; y++) {
+				if (world.isOutsideBuildHeight(MUTABLE.setPos(0, removedLight.pos.getY() + y, 0))) {
+					continue;
+				}
+				for (int x = -r; x <= r; x++) {
+					for (int z = -r; z <= r; z++) {
+						BlockPos p = new BlockPos(removedLight.pos.add(x, y, z));
+						if (!updated.add(p)) {
+							continue;
+						}
+						world.checkLightFor(EnumSkyBlock.BLOCK, p);
 					}
 				}
 			}
 		}
+		this.removedLights.clear();
 
 		this.generationTimes[5] += System.nanoTime() - t;
 		return true;
