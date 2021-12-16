@@ -22,10 +22,12 @@ import org.apache.commons.io.FileUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,7 +43,9 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
@@ -270,8 +274,15 @@ public class CQStructure {
 
 		for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
 			IBlockState state = world.getBlockState(pos);
+			Block block = state.getBlock();
 
-			if (state.getBlockHardness(world, pos) < 0.0F) {
+			if (block != CQRBlocks.NULL_BLOCK
+					&& block != Blocks.STRUCTURE_VOID
+					&& block != CQRBlocks.BOSS_BLOCK
+					&& !(block instanceof BlockExporterChest)
+					&& block != CQRBlocks.SPAWNER
+					&& block != CQRBlocks.MAP_PLACEHOLDER
+					&& state.getBlockHardness(world, pos) < 0.0F) {
 				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, pos);
 			}
 
