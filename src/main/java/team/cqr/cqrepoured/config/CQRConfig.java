@@ -172,7 +172,7 @@ public class CQRConfig {
 				"minecraft:glowstone",
 				"cqrepoured:phylactery" };
 
-		public double pirateCaptainFleeCheckRadius = 32;
+		public double pirateCaptainFleeCheckRadius = 16;
 
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
