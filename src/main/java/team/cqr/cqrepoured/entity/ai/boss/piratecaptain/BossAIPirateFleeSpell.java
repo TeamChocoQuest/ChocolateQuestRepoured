@@ -115,7 +115,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 			return false;
 		}
 		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
-		return path != null && path.getCurrentPathLength() <= 20;
+		return path != null && path.getCurrentPathLength() <= 10;
 	}
 
 }
