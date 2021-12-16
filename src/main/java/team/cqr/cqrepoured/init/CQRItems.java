@@ -185,7 +185,7 @@ public class CQRItems {
 	public static final Item BULLET_DIAMOND = Null();
 	public static final Item BULLET_FIRE = Null();
 	public static final Item CANNON_BALL = Null();
-	public static final Item FLAMETHROWER = Null(); // #TODO TEXTURES
+	//public static final Item FLAMETHROWER = Null(); // #TODO TEXTURES
 	public static final Item BUBBLE_PISTOL = Null();
 	public static final Item BUBBLE_RIFLE = Null();
 
@@ -336,7 +336,7 @@ public class CQRItems {
 					setItemName(new ItemBullet(), "bullet_diamond"),
 					setItemName(new ItemBullet(), "bullet_fire"),
 					setItemName(new ItemCannonBall(), "cannon_ball"),
-					setItemName(new ItemFlamethrower(), "flamethrower"),
+					//setItemName(new ItemFlamethrower(), "flamethrower"),
 					setItemName(new ItemBubblePistol(), "bubble_pistol"),
 					setItemName(new ItemBubbleRifle(), "bubble_rifle"),
 
