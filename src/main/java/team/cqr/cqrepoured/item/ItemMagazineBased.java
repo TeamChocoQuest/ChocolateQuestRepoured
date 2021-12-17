@@ -5,13 +5,12 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class ItemMagazineBased extends Item {
+public abstract class ItemMagazineBased extends ItemLore {
 
 	public static final String CONSTANT_AMMO_NBT_KEY = "cqr_magazine_item_ammo";
 
