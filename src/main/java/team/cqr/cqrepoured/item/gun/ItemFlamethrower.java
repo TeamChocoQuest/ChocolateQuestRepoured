@@ -105,13 +105,17 @@ public class ItemFlamethrower extends ItemFuelUsing {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (entityIn instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityIn;
-			if (player.isHandActive() && player.getActiveItemStack() == stack) {
-				this.shootFlames((EntityLivingBase) entityIn);
-				this.removeFuel(stack, 1);
+			if (player.getActiveItemStack() == stack) {
+				if (player.isHandActive()) {
+					this.shootFlames((EntityLivingBase) entityIn);
+					this.removeFuel(stack, 1);
+				}
+			} else if((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getFuelInItem(stack) < this.getMaxFuel()) {
+				this.refuelFromInventory(player.inventory, stack, !player.isCreative());
 			}
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -140,6 +144,16 @@ public class ItemFlamethrower extends ItemFuelUsing {
 	@Override
 	public int getMaxFuel() {
 		return 2000;
+	}
+
+	@Override
+	protected int getFuelForSingleItem(ItemStack fuelItem) {
+		return 20;
+	}
+
+	@Override
+	protected int getMaxProcessedItemsPerRefuelCycle() {
+		return 1;
 	}
 
 }
