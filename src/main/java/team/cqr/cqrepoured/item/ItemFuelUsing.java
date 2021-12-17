@@ -113,8 +113,10 @@ public abstract class ItemFuelUsing extends Item {
 	protected abstract int getMaxProcessedItemsPerRefuelCycle();
 
 	protected void refuelFromInventory(InventoryPlayer playerInventory, ItemStack stack, boolean removeItems) {
-		System.out.println("REFUELING");
-		List<ItemStack> fuelItems = this.getFuelItemsInInventory(playerInventory);
+		this.refuelFromInventory(playerInventory, this.getFuelItemsInInventory(playerInventory), stack, removeItems);
+	}
+	
+	protected void refuelFromInventory(InventoryPlayer playerInventory, List<ItemStack> fuelItems, ItemStack stack, boolean removeItems) {
 		if (fuelItems.isEmpty()) {
 			return;
 		}
