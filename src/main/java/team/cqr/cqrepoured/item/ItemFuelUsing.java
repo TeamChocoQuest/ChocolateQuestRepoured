@@ -109,4 +109,9 @@ public abstract class ItemFuelUsing extends Item {
 		return this.predicateValidFuel.test(item);
 	}
 	
+	@Override
+	public boolean canContinueUsing(ItemStack oldStack, ItemStack newStack) {
+		return this.getFuelInItem(newStack) > 0;
+	}
+	
 }
