@@ -26,9 +26,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import team.cqr.cqrepoured.item.ItemFuelUsing;
+import team.cqr.cqrepoured.item.ItemMagazineBased;
 
-public class ItemFlamethrower extends ItemFuelUsing {
+public class ItemFlamethrower extends ItemMagazineBased {
 
 	public ItemFlamethrower() {
 		super(new Predicate<ItemStack>() {
@@ -42,7 +42,7 @@ public class ItemFlamethrower extends ItemFuelUsing {
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		return this.getFuelInItem(stack);
+		return this.getAmmoInItem(stack);
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class ItemFlamethrower extends ItemFuelUsing {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (this.getFuelInItem(playerIn.getHeldItem(handIn)) <= 0) {
+		if (this.getAmmoInItem(playerIn.getHeldItem(handIn)) <= 0) {
 			return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 		}
 		playerIn.setActiveHand(handIn);
@@ -108,10 +108,10 @@ public class ItemFlamethrower extends ItemFuelUsing {
 			if (player.getActiveItemStack() == stack) {
 				if (player.isHandActive()) {
 					this.shootFlames((EntityLivingBase) entityIn);
-					this.removeFuel(stack, 1);
+					this.removeAmmoFromItem(stack, 1);
 				}
-			} else if((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getFuelInItem(stack) < this.getMaxFuel()) {
-				this.refuelFromInventory(player.inventory, stack, !player.isCreative());
+			} else if((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
+				this.reloadFromInventory(player.inventory, stack, !player.isCreative());
 			}
 		}
 	}
@@ -142,17 +142,17 @@ public class ItemFlamethrower extends ItemFuelUsing {
 	}
 
 	@Override
-	public int getMaxFuel() {
+	public int getMaxAmmo() {
 		return 2000;
 	}
 
 	@Override
-	protected int getFuelForSingleItem(ItemStack fuelItem) {
+	protected int getAmmoForSingleAmmoItem(ItemStack fuelItem) {
 		return 20;
 	}
 
 	@Override
-	protected int getMaxProcessedItemsPerRefuelCycle() {
+	protected int getMaxProcessedItemsPerReloadCycle() {
 		return 1;
 	}
 
