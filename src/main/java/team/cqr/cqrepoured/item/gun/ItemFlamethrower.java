@@ -3,12 +3,6 @@ package team.cqr.cqrepoured.item.gun;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
-
-import org.lwjgl.input.Keyboard;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,10 +16,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.item.ItemMagazineBased;
 
 public class ItemFlamethrower extends ItemMagazineBased {
@@ -113,16 +104,6 @@ public class ItemFlamethrower extends ItemMagazineBased {
 			} else if((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
 				this.reloadFromInventory(player.inventory, stack, !player.isCreative());
 			}
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.flamethrower.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 
