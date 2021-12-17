@@ -13,12 +13,22 @@ import net.minecraftforge.common.util.Constants;
 
 public abstract class ItemMagazineBased extends Item {
 
+	public static final String CONSTANT_AMMO_NBT_KEY = "cqr_magazine_item_ammo";
+
+	protected final Predicate<ItemStack> predicateAmmo;
+
 	public ItemMagazineBased(Predicate<ItemStack> fuelPredicate) {
 		super();
 
 		this.predicateAmmo = fuelPredicate;
 		this.setMaxStackSize(1);
 	}
+
+	public abstract int getMaxAmmo();
+
+	protected abstract int getMaxProcessedItemsPerReloadCycle();
+
+	protected abstract int getAmmoForSingleAmmoItem(ItemStack ammoItem);
 
 	@Override
 	public boolean isRepairable() {
@@ -34,12 +44,6 @@ public abstract class ItemMagazineBased extends Item {
 		}
 		return stack.hasTagCompound() && stack.getTagCompound().hasKey(CONSTANT_AMMO_NBT_KEY, Constants.NBT.TAG_INT);
 	}
-
-	public static final String CONSTANT_AMMO_NBT_KEY = "cqr_magazine_item_ammo";
-	
-	protected final Predicate<ItemStack> predicateAmmo;
-
-	public abstract int getMaxAmmo();
 
 	public void removeAmmoFromItem(ItemStack stack, int amount) {
 		this.setAmmo(stack, this.getAmmoInItem(stack) - amount);
@@ -112,12 +116,10 @@ public abstract class ItemMagazineBased extends Item {
 		return def;
 	}
 
-	protected abstract int getMaxProcessedItemsPerReloadCycle();
-
 	protected void reloadFromInventory(InventoryPlayer playerInventory, ItemStack stack, boolean removeItems) {
 		this.reloadFromAmmoItems(playerInventory, this.getAmmoItemsInInventory(playerInventory), stack, removeItems);
 	}
-	
+
 	protected void reloadFromAmmoItems(InventoryPlayer playerInventory, List<ItemStack> fuelItems, ItemStack stack, boolean removeItems) {
 		if (fuelItems.isEmpty()) {
 			return;
@@ -156,8 +158,6 @@ public abstract class ItemMagazineBased extends Item {
 
 		this.addAmmoToItem(stack, refueled);
 	}
-
-	protected abstract int getAmmoForSingleAmmoItem(ItemStack ammoItem);
 
 	public boolean isValidAmmo(ItemStack item) {
 		return this.predicateAmmo.test(item);
