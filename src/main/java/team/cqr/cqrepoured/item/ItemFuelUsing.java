@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 public abstract class ItemFuelUsing extends Item {
@@ -30,6 +28,9 @@ public abstract class ItemFuelUsing extends Item {
 	public boolean hasFuelTag(ItemStack stack) {
 		if(stack == null) {
 			return false;
+		}
+		if(!stack.hasTagCompound()) {
+			stack.setTagCompound(new NBTTagCompound());
 		}
 		return stack.hasTagCompound() && stack.getTagCompound().hasKey("cqr_fuel_item_fuel", Constants.NBT.TAG_INT);
 	}
@@ -55,6 +56,9 @@ public abstract class ItemFuelUsing extends Item {
 	
 	public void setFuel(ItemStack stack, int amount) {
 		amount = amount < 0 ? 0 : amount;
+		if(!stack.hasTagCompound()) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
 		stack.getTagCompound().setInteger("cqr_fuel_item_fuel", amount);
 	}
 	
@@ -104,14 +108,6 @@ public abstract class ItemFuelUsing extends Item {
 		this.setFuel(def, this.getMaxFuel());
 		
 		return def;
-		
-	}
-	
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
-		
-		entityLiving.stopActiveHand();
 	}
 	
 	public boolean isValidFuel(ItemStack item) {
