@@ -23,6 +23,7 @@ import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRParticleManager;
+import team.cqr.cqrepoured.client.render.entity.layers.LayerCrownRenderer;
 import team.cqr.cqrepoured.client.render.entity.layers.LayerElectrocute;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSectionSerializer;
@@ -61,13 +62,18 @@ public class ClientProxy implements IProxy {
 				Render<Entity> render = (Render<Entity>) renderer;
 				if (render instanceof RenderLivingBase) {
 					((RenderLivingBase<?>) render).addLayer(new LayerElectrocute());
+					((RenderLivingBase<?>) render).addLayer(new LayerCrownRenderer((RenderLivingBase<?>) render));
 				}
 			} catch (ClassCastException ccex) {
 				// Ignore
 			}
 		}
 		// Since for whatever reason the player renderer is not in the entityRenderMap we need to add it manually...
-		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(t -> t.addLayer(new LayerElectrocute()));
+		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(t -> {
+			t.addLayer(new LayerElectrocute());
+			t.addLayer(new LayerCrownRenderer(t));
+			}
+		);
 	}
 
 	@Override
