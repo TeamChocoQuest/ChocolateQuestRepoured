@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.item.gun;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -12,8 +13,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -25,16 +26,23 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.item.ItemFuelUsing;
 
-public class ItemFlamethrower extends Item {
+public class ItemFlamethrower extends ItemFuelUsing {
 
 	public ItemFlamethrower() {
-		this.setMaxStackSize(1);
+		super(new Predicate<ItemStack>() {
+
+			@Override
+			public boolean test(ItemStack t) {
+				return t != null && t.getItem() == Items.SLIME_BALL;
+			}
+		});
 	}
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
+		return this.getFuelInItem(stack);
 	}
 
 	@Override
@@ -85,21 +93,25 @@ public class ItemFlamethrower extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if (this.getFuelInItem(playerIn.getHeldItem(handIn)) <= 0) {
+			return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		}
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (entityIn instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityIn;
-
 			if (player.isHandActive() && player.getActiveItemStack() == stack) {
 				this.shootFlames((EntityLivingBase) entityIn);
+				this.removeFuel(stack, 1);
 			}
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -123,6 +135,11 @@ public class ItemFlamethrower extends Item {
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
+	}
+
+	@Override
+	public int getMaxFuel() {
+		return 2000;
 	}
 
 }
