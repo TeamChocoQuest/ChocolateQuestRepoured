@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -109,6 +110,27 @@ public abstract class ItemFuelUsing extends Item {
 		
 		return def;
 	}
+	
+	protected void refuelFromInventory(InventoryPlayer inventory, ItemStack stack) {
+		List<ItemStack> fuelItems = this.getFuelItemsInInventory(inventory);
+		int freeFuel = this.getMaxFuel() - this.getFuelInItem(stack);
+		int refueled = 0;
+		for(ItemStack fuel : fuelItems) {
+			for(int i = 0; i < fuel.getCount(); i++) {
+				int fc = this.getFuelForSingleItem(fuel);
+				if(fc > freeFuel) {
+					continue;
+				} else {
+					freeFuel -= fc;
+					refueled += fc;
+				}
+			}
+		}
+		
+		this.addFuel(stack, refueled);
+	}
+	
+	protected abstract int getFuelForSingleItem(ItemStack fuelItem);
 	
 	public boolean isValidFuel(ItemStack item) {
 		return this.predicateValidFuel.test(item);
