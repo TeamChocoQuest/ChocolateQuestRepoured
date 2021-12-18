@@ -153,7 +153,12 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		}
 		CQStructure structure = this.loadStructureFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(), this.pos.getZ() - 4 - structure.getSize().getZ() / 2,
+			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(
+					this.pos.getX() + 4 + structure.getSize().getX() / 2, 
+					this.pos.getZ() + 4 + structure.getSize().getZ() / 2, 
+					this.pos.getX() - 4 - structure.getSize().getX() / 2, 
+					this.pos.getY(), 
+					this.pos.getZ() - 4 - structure.getSize().getZ() / 2,
 					CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
