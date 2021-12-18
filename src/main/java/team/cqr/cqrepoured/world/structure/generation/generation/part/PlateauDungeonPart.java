@@ -190,7 +190,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 			this.endY = endY;
 			this.endZ = Math.max(startZ, endZ);
 			this.wallSize = wallSize;
-			this.ground = new int[endX - startX + 1][endZ - startZ + 1];
+			this.ground = new int[this.endX - this.startX + 1][this.endZ - this.startZ + 1];
 			for (int i = 0; i < this.ground.length; i++) {
 				for (int j = 0; j < this.ground[i].length; j++) {
 					this.ground[i][j] = endY;
