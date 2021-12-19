@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
-import team.cqr.cqrepoured.util.Perlin3D;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart.Registry.ISerializer;
@@ -34,8 +33,6 @@ public class PlateauDungeonPart implements IDungeonPart {
 	private final int wallSize;
 	private final IBlockState supportHillBlock;
 	private final IBlockState supportHillTopBlock;
-	private final Perlin3D perlin1;
-	private final Perlin3D perlin2;
 	private int chunkX;
 	private int chunkZ;
 	private int chunkX1;
@@ -54,8 +51,6 @@ public class PlateauDungeonPart implements IDungeonPart {
 		this.wallSize = wallSize;
 		this.supportHillBlock = supportHillBlock;
 		this.supportHillTopBlock = supportHillTopBlock;
-		this.perlin1 = new Perlin3D(seed, wallSize);
-		this.perlin2 = new Perlin3D(seed, wallSize * 4);
 		this.chunkX = this.startX >> 4;
 		this.chunkZ = this.startZ >> 4;
 		this.chunkX1 = this.startX >> 4;
