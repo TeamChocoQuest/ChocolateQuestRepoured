@@ -69,10 +69,15 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 		double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
 		double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
-		double x2 = entity.getThrower().lastTickPosX + (entity.getThrower().posX - entity.getThrower().lastTickPosX) * partialTicks;
-		double y2 = entity.getThrower().lastTickPosY + (entity.getThrower().posY - entity.getThrower().lastTickPosY) * partialTicks;
-		y2 += entity.getThrower().height * 0.65D;
-		double z2 = entity.getThrower().lastTickPosZ + (entity.getThrower().posZ - entity.getThrower().lastTickPosZ) * partialTicks;
+		double x2 = x1;
+		double y2 = y1;
+		double z2 = z1;
+		if(entity.getThrower() != null) {
+			x2 = entity.getThrower().lastTickPosX + (entity.getThrower().posX - entity.getThrower().lastTickPosX) * partialTicks;
+			y2 = entity.getThrower().lastTickPosY + (entity.getThrower().posY - entity.getThrower().lastTickPosY) * partialTicks;
+			y2 += entity.getThrower().height * 0.65D;
+			z2 = entity.getThrower().lastTickPosZ + (entity.getThrower().posZ - entity.getThrower().lastTickPosZ) * partialTicks;
+		}
 		Entity entity1 = Minecraft.getMinecraft().getRenderViewEntity();
 		double x3 = entity1.lastTickPosX + (entity1.posX - entity1.lastTickPosX) * partialTicks;
 		double y3 = entity1.lastTickPosY + (entity1.posY - entity1.lastTickPosY) * partialTicks;
