@@ -262,7 +262,7 @@ public class FactionRegistry {
 	@SuppressWarnings("unchecked")
 	private Faction getFactionOf(Class<? extends Entity> entityClass) {
 		if(entityClass == null) {
-			CQRMain.logger.error("Class of entity is null! This should never happen!)
+			CQRMain.logger.error("Class of entity is null! This should never happen!");
 			return null;
 		}
 		
