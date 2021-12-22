@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.client.render.entity.layers.geo;
 import java.awt.Color;
 import java.util.function.Function;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.client.util.EmissiveUtil;
@@ -28,10 +28,10 @@ public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends 
 
 		EmissiveUtil.preEmissiveTextureRendering();
 
-		Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));
+		this.entityRenderer.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));
 
 		this.entityRenderer.render(
-			this.entityRenderer.getGeoModelProvider().getModel(this.funcGetCurrentModel.apply(entitylivingbaseIn)), 
+			this.getEntityModel().getModel(this.funcGetCurrentModel.apply(entitylivingbaseIn)), 
 			entitylivingbaseIn, 
 			partialTicks, 
 			(float) renderColor.getRed() / 255f, 
