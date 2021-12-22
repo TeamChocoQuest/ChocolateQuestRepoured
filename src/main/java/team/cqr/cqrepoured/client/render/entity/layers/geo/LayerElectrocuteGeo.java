@@ -1,27 +1,28 @@
 package team.cqr.cqrepoured.client.render.entity.layers.geo;
 
 import java.awt.Color;
+import java.util.function.Function;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> extends GeoLayerRenderer<T> {
+public class LayerElectrocuteGeo<T extends EntityLiving & IAnimatable> extends AbstractCQRLayerGeo<T> {
 
-	public LayerElectrocuteGeo(IGeoRenderer<T> entityRendererIn) {
-		super(entityRendererIn);
+	public LayerElectrocuteGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
+		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}
@@ -60,11 +61,6 @@ public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> exten
 				GlStateManager.popMatrix();
 			}
 		}
-	}
-
-	@Override
-	public boolean shouldCombineTextures() {
-		return false;
 	}
 
 	@Override
