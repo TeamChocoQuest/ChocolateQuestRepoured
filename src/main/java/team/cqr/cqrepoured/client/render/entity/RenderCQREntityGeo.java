@@ -21,12 +21,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.MatrixStack;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerElectrocuteGeo;
+import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.client.util.MatrixUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -38,8 +40,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	protected double widthScale;
 	protected double heightScale;
 
-	protected final Function<T, ResourceLocation> TEXTURE_GETTER;
-	protected final Function<T, ResourceLocation> MODEL_ID_GETTER;
+	public final Function<T, ResourceLocation> TEXTURE_GETTER;
+	public final Function<T, ResourceLocation> MODEL_ID_GETTER;
 
 	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1D, 1D, 0);
@@ -56,7 +58,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this.heightScale = heightScale;
 
 		// layers
-		this.addLayer(new LayerElectrocuteGeo<>(this));
+		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addLayer(new LayerMagicArmorGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		// this.addLayer(new LayerGlowingAreasGeo<>(this, this::getEntityTexture));
 	}
 
@@ -70,41 +73,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		this.renderPass = 0;
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-
-		// Magic armor rendering, this is how you render a overlay using geckolib
-		if (entity.isMagicArmorActive()) {
-			GlStateManager.pushMatrix();
-
-			this.renderPass = 1;
-			// DONE: Figure out how to properly "inflate" the model => Bone.setScale()
-			// GlStateManager.scale(1.1, 1.1, 1.1);
-			// GlStateManager.translate(x * 1.1, y * 1.1, z * 1.1);
-
-			GlStateManager.depthMask(!entity.isInvisible());
-			GlStateManager.matrixMode(5890);
-			GlStateManager.loadIdentity();
-			float f = entity.ticksExisted + partialTicks;
-			float f1 = MathHelper.cos(f * 0.02F) * 3.0F;
-			float f2 = f * 0.01F;
-			GlStateManager.translate(f1, f2, 0.0F);
-			GlStateManager.matrixMode(5888);
-			GlStateManager.enableBlend();
-			GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
-			GlStateManager.disableLighting();
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-
-			super.doRender(entity, x, y, z, entityYaw, partialTicks);
-
-			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
-			GlStateManager.matrixMode(5890);
-			GlStateManager.loadIdentity();
-			GlStateManager.matrixMode(5888);
-			GlStateManager.enableLighting();
-			GlStateManager.disableBlend();
-
-			GlStateManager.popMatrix();
-		}
+	}
+	
+	@Override
+	public void render(GeoModel model, T animatable, float partialTicks, float red, float green, float blue, float alpha) {
+		super.render(model, animatable, partialTicks, red, green, blue, alpha);
+		this.renderPass++;
 	}
 
 	protected double getWidthScale(T entity) {
@@ -117,17 +91,15 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderEarly(T animatable, float ticks, float red, float green, float blue, float partialTicks) {
-		double width = this.getWidthScale(animatable);
-		double height = this.getHeightScale(animatable);
-		GlStateManager.scale(width, height, width);
+		if(this.renderPass == 0 /* Pre-Layers*/) {
+			double width = this.getWidthScale(animatable);
+			double height = this.getHeightScale(animatable);
+			GlStateManager.scale(width, height, width);
+		}
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
-		if (this.renderPass != 0) {
-			return TEXTURES_ARMOR;
-		}
-
 		return this.TEXTURE_GETTER.apply(entity);
 	}
 
