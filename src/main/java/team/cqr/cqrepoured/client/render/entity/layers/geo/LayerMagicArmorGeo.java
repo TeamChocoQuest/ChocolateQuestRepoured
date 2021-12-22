@@ -20,7 +20,8 @@ public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> exten
 
 	@Override
 	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
-		if(entity.isMagicArmorActive() || true) {
+		if(entity.isMagicArmorActive()) {
+			//TODO: Fix weird bug where the entity inflates when it is being looked at and the game gets paused!
 			this.geoRendererInstance.bindTexture(RenderCQREntityGeo.TEXTURES_ARMOR);
 			
 			GlStateManager.pushMatrix();
