@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers;
+package team.cqr.cqrepoured.client.render.entity.layers.special;
 
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelParrot;

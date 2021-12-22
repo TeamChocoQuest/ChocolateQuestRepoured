@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers;
+package team.cqr.cqrepoured.client.render.entity.layers.equipment;
 
 import org.lwjgl.opengl.GL11;
 
@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import team.cqr.cqrepoured.client.render.entity.layers.AbstractLayerCQR;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
