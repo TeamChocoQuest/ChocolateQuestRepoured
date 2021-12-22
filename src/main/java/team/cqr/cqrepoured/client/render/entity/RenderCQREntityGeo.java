@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -60,7 +59,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		this.addLayer(new LayerMagicArmorGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
-		// this.addLayer(new LayerGlowingAreasGeo<>(this, this::getEntityTexture));
 	}
 
 	/*
@@ -113,7 +111,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
-		boolean customTextureMarker = this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered) != null;
+		boolean customTextureMarker = this.renderPass == 0 && this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered) != null;
 		if (customTextureMarker) {
 			this.bindTexture(this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered));
 		}
@@ -149,11 +147,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 			}
 		}
-		if (bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
+		//TODO: ONly reimplement for the armor layer!!
+		/*if (bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
 			bone.setScaleX(bone.getScaleX() + 0.05F);
 			bone.setScaleZ(bone.getScaleZ() + 0.05F);
 			bone.setScaleY(bone.getScaleY() + 0.025F);
-		}
+		}*/
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
 		if (customTextureMarker) {
 			this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
