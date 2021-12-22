@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerGlowingAreasGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {

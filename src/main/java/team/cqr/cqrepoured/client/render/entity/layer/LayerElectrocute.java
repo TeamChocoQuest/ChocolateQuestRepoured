@@ -1,28 +1,19 @@
-package team.cqr.cqrepoured.client.render.entity.layers.geo;
-
-import java.awt.Color;
-import java.util.function.Function;
+package team.cqr.cqrepoured.client.render.entity.layer;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerElectrocuteGeo<T extends EntityLiving & IAnimatable> extends AbstractCQRLayerGeo<T> {
-
-	public LayerElectrocuteGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
-		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
-	}
+public class LayerElectrocute implements LayerRenderer<EntityLivingBase> {
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}
@@ -40,19 +31,18 @@ public class LayerElectrocuteGeo<T extends EntityLiving & IAnimatable> extends A
 
 				double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 				double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
-				// y1 += entity.getEyeHeight() / 2;
 				double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 
 				double x2 = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
 				double y2 = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
-				// y2 += target.getEyeHeight() / 2;
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
-				final Vec3d start = new Vec3d(0, 0, 0);
-				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1).scale(1.1D);
+				final Vec3d start = new Vec3d(0, entity.height * 0.5, 0);
+				final Vec3d end = new Vec3d(x2 - x1, target.height * 0.5 + y2 - y1, z2 - z1);
 
 				GlStateManager.pushMatrix();
 
+				GlStateManager.translate(0, 1.501, 0);
 				GlStateManager.scale(-1, -1, 1);
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
@@ -64,8 +54,8 @@ public class LayerElectrocuteGeo<T extends EntityLiving & IAnimatable> extends A
 	}
 
 	@Override
-	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
-		this.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, headPitch);
+	public boolean shouldCombineTextures() {
+		return false;
 	}
 
 }

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers.special;
+package team.cqr.cqrepoured.client.render.entity.layer.special;
 
 import org.lwjgl.opengl.GL11;
 
@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layers.AbstractLayerCQR;
+import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 

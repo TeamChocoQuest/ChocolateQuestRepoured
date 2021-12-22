@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers.geo;
+package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
 import java.awt.Color;
 import java.util.function.Function;

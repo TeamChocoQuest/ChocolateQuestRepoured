@@ -22,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerGlowingAreasGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.client.util.SphereRenderer.Triangle;
 import team.cqr.cqrepoured.client.util.SphereRenderer.Vertex;

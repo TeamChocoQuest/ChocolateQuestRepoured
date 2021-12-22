@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers.special;
+package team.cqr.cqrepoured.client.render.entity.layer.special;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layers.AbstractLayerCQR;
+import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class LayerCQRLeaderFeather extends AbstractLayerCQR {

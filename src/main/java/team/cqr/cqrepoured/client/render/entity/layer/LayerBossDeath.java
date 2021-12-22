@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers;
+package team.cqr.cqrepoured.client.render.entity.layer;
 
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;

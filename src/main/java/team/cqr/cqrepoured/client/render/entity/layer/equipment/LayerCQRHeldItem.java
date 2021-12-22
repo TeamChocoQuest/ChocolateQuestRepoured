@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers.equipment;
+package team.cqr.cqrepoured.client.render.entity.layer.equipment;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;

@@ -8,8 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelMageHidden;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layers.LayerGlowingAreas;
-import team.cqr.cqrepoured.client.render.entity.layers.LayerMagicalArmor;
+import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
+import team.cqr.cqrepoured.client.render.entity.layer.LayerMagicalArmor;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityCQRMageBase;
 
 public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQREntity<T> {

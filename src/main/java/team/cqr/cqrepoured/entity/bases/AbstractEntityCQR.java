@@ -70,7 +70,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.client.init.ESpeechBubble;
-import team.cqr.cqrepoured.client.render.entity.layers.special.LayerCQRSpeechbubble;
+import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.ECQREntityArmPoses;

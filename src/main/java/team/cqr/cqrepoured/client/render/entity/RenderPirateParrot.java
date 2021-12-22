@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderParrot;
 import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.render.entity.layers.special.LayerCQRPirateParrotHeldItem;
+import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRPirateParrotHeldItem;
 
 public class RenderPirateParrot extends RenderParrot {
 

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.layers.special;
+package team.cqr.cqrepoured.client.render.entity.layer.special;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelBoneShield;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layers.AbstractLayerCQR;
+import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 
