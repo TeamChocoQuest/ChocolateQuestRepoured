@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.layers.geo;
 
+import java.awt.Color;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -66,8 +68,8 @@ public class LayerElectrocuteGeo<T extends EntityLivingBase & IAnimatable> exten
 	}
 
 	@Override
-	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.render(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
+		this.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, headPitch);
 	}
 
 }

@@ -6,9 +6,8 @@ import java.util.function.Function;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.client.util.EmissiveUtil;
 
@@ -17,8 +16,11 @@ public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends 
 	protected final Function<T, ResourceLocation> funcGetCurrentTexture;
 	protected final Function<T, ResourceLocation> funcGetCurrentModel;
 
+	protected GeoEntityRenderer<T> geoRendererInstance;
+	
 	public LayerGlowingAreasGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
 		super(renderer);
+		this.geoRendererInstance = renderer;
 		this.funcGetCurrentTexture = funcGetCurrentTexture;
 		this.funcGetCurrentModel = funcGetCurrentModel;
 	}
@@ -28,7 +30,7 @@ public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends 
 
 		EmissiveUtil.preEmissiveTextureRendering();
 
-		this.entityRenderer.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));
+		this.geoRendererInstance.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));
 
 		this.entityRenderer.render(
 			this.getEntityModel().getModel(this.funcGetCurrentModel.apply(entitylivingbaseIn)), 
