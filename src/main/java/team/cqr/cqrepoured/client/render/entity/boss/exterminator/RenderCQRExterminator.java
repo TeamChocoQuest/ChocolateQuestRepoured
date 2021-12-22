@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
+import team.cqr.cqrepoured.client.render.entity.layers.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
@@ -19,6 +20,8 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	public RenderCQRExterminator(RenderManager renderManager) {
 		super(renderManager, new ModelExterminator(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
+		
+		this.addLayer(new LayerGlowingAreasGeo<EntityCQRExterminator>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	public static final String HAND_IDENT_LEFT = "item_left_hand";
