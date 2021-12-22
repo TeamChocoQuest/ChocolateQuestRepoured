@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
@@ -78,12 +77,10 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/ender_calamity.geo.json");
 
-	protected static AnimatedGeoModel<EntityCQREnderCalamity> ENDER_CALAMITY_MODEL = new ModelEnderCalamity(MODEL_RESLOC, TEXTURE, "boss/ender_calamity");
-	
 	public RenderCQREnderCalamity(RenderManager renderManager) {
-		super(renderManager, ENDER_CALAMITY_MODEL);
+		super(renderManager, new ModelEnderCalamity(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
 
-		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, ENDER_CALAMITY_MODEL::getTextureLocation, ENDER_CALAMITY_MODEL::getModelLocation));
+		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	@Override
