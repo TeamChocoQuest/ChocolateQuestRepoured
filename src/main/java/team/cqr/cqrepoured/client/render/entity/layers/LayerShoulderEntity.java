@@ -26,7 +26,6 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
 	private ResourceLocation leftResource;
 	private UUID leftUniqueId;
 	private Class<?> leftEntityClass;
-	protected RenderLivingBase<? extends EntityLivingBase> rightRenderer;
 
 	public LayerShoulderEntity(RenderCQREntity<?> livingEntityRendererIn) {
 		super(livingEntityRendererIn);
