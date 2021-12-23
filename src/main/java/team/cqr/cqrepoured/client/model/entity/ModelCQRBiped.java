@@ -91,7 +91,8 @@ public class ModelCQRBiped extends ModelBiped {
 	 */
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		if (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive()) {
+		final boolean isSpinToWinActive = (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive() && !this.isRiding);
+		if (isSpinToWinActive) {
 			limbSwing = 0;
 			limbSwingAmount = 0;
 
@@ -107,7 +108,7 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (cqrEnt.isSpinToWinActive() && !this.isRiding) {
+			if (isSpinToWinActive) {
 				this.bipedLeftArm.rotateAngleZ = (float) Math.toRadians(-90F);
 				this.bipedRightArm.rotateAngleZ = (float) Math.toRadians(90F);
 			} else if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
