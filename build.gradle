@@ -56,8 +56,8 @@ dependencies {
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     implementation fg.deobf('software.bernie.geckolib:forge-1.12.2-geckolib:3.0.13')
-    implementation 'curse.maven:ReachFix-556777:3564457'
 
+    atDependencies 'curse.maven:ReachFix-556777:3564457'
     atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
@@ -71,7 +71,8 @@ minecraft {
     def atDepFileTree = files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree()
     accessTransformer = files(
         'src/main/resources/META-INF/accesstransformer.cfg',
-        atDepFileTree.matching { include 'META-INF/jei_at.cfg' }
+        atDepFileTree.matching { include 'META-INF/jei_at.cfg' },
+        atDepFileTree.matching { include 'META-INF/accesstransformer.cfg' }
     )
 
     runs {
@@ -80,7 +81,7 @@ minecraft {
             environment 'MC_VERSION', '1.12.2'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
-            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin'
+            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin,meldexun.reachfix.asm.ReachFixPlugin'
         }
 
         server {
@@ -88,7 +89,7 @@ minecraft {
             environment 'MC_VERSION', '1.12.2'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
-            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin'
+            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin,meldexun.reachfix.asm.ReachFixPlugin'
         }
     }
 }
