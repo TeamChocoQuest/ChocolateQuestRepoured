@@ -232,7 +232,7 @@ public class LootTableLoader {
 			}
 
 			LootTable table = new LootTable(new LootPool[0]);
-			ForgeEventFactory.loadLootTable(name, table, lootTableManager);
+			table = ForgeEventFactory.loadLootTable(name, table, lootTableManager);
 			registeredLootTables.put(name, table);
 		}
 	}
