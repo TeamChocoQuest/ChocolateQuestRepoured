@@ -133,63 +133,10 @@ public class ModelCQRBiped extends ModelBiped {
 
 		ItemStack stack = ((AbstractEntityCQR) entityIn).getHeldItemMainhand();
 		if (stack.getItem() instanceof ItemSpearBase) {
-			float f = (float) Math.toRadians(40.0F);
-			this.bipedBody.rotateAngleX = 0.0F;
-			this.bipedBody.rotateAngleY = f;
-			this.bipedBody.rotateAngleZ = 0.0F;
-
-			Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
-			this.bipedRightArm.rotationPointX = (float) v.x;
-			this.bipedRightArm.rotationPointZ = (float) v.z;
-			this.bipedRightArm.rotateAngleX = 0.0F;
-			this.bipedRightArm.rotateAngleY = f;
-			this.bipedRightArm.rotateAngleZ = 0.0F;
-
-			Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
-			this.bipedLeftArm.rotationPointX = (float) v1.x;
-			this.bipedLeftArm.rotationPointZ = (float) v1.z;
-			this.bipedLeftArm.rotateAngleX = 0.0F;
-			this.bipedLeftArm.rotateAngleY = f;
-			this.bipedLeftArm.rotateAngleZ = 0.0F;
-
-			float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
-			this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-10.0F - 20.0F * f1);
-			this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-45.0F);
-			this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-45.0F - 25.0F * f1);
-			this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(30.0F - 10.0F * f1);
+			this.renderSpearHoldingAnimation();
 		}
 		if (true && stack.getItem() instanceof ItemGreatSword) {
-			// swingProgress = ageInTicks % 60F / 60F;
-			float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI * 2.0F);
-			float f = (float) Math.toRadians(20.0F + 30.0F * f3);
-			this.bipedBody.rotateAngleX = 0.0F;
-			this.bipedBody.rotateAngleY = f;
-			this.bipedBody.rotateAngleZ = 0.0F;
-
-			if (this.swingProgress > 0.0F) {
-
-			}
-			Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
-			this.bipedRightArm.rotationPointX = (float) v.x;
-			this.bipedRightArm.rotationPointZ = (float) v.z;
-			this.bipedRightArm.rotateAngleX = 0.0F;
-			this.bipedRightArm.rotateAngleY = f;
-			this.bipedRightArm.rotateAngleZ = 0.0F;
-
-			Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
-			this.bipedLeftArm.rotationPointX = (float) v1.x;
-			this.bipedLeftArm.rotationPointZ = (float) v1.z;
-			this.bipedLeftArm.rotateAngleX = 0.0F;
-			this.bipedLeftArm.rotateAngleY = f;
-			this.bipedLeftArm.rotateAngleZ = 0.0F;
-
-			float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
-			this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-40.0F - 60.0F * f1);
-			this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-40.0F);
-			this.bipedRightArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
-			this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-35.0F - 60.0F * f1);
-			this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(50.0F);
-			this.bipedLeftArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
+			this.renderGreatSwordHoldingAnimation();
 		}
 
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
@@ -197,6 +144,67 @@ public class ModelCQRBiped extends ModelBiped {
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
 		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
+	}
+
+	protected void renderSpearHoldingAnimation() {
+		float f = (float) Math.toRadians(40.0F);
+		this.bipedBody.rotateAngleX = 0.0F;
+		this.bipedBody.rotateAngleY = f;
+		this.bipedBody.rotateAngleZ = 0.0F;
+
+		Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
+		this.bipedRightArm.rotationPointX = (float) v.x;
+		this.bipedRightArm.rotationPointZ = (float) v.z;
+		this.bipedRightArm.rotateAngleX = 0.0F;
+		this.bipedRightArm.rotateAngleY = f;
+		this.bipedRightArm.rotateAngleZ = 0.0F;
+
+		Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
+		this.bipedLeftArm.rotationPointX = (float) v1.x;
+		this.bipedLeftArm.rotationPointZ = (float) v1.z;
+		this.bipedLeftArm.rotateAngleX = 0.0F;
+		this.bipedLeftArm.rotateAngleY = f;
+		this.bipedLeftArm.rotateAngleZ = 0.0F;
+
+		float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
+		this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-10.0F - 20.0F * f1);
+		this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-45.0F);
+		this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-45.0F - 25.0F * f1);
+		this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(30.0F - 10.0F * f1);
+	}
+
+	protected void renderGreatSwordHoldingAnimation() {
+		// swingProgress = ageInTicks % 60F / 60F;
+		float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI * 2.0F);
+		float f = (float) Math.toRadians(20.0F + 30.0F * f3);
+		this.bipedBody.rotateAngleX = 0.0F;
+		this.bipedBody.rotateAngleY = f;
+		this.bipedBody.rotateAngleZ = 0.0F;
+
+		if (this.swingProgress > 0.0F) {
+
+		}
+		Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
+		this.bipedRightArm.rotationPointX = (float) v.x;
+		this.bipedRightArm.rotationPointZ = (float) v.z;
+		this.bipedRightArm.rotateAngleX = 0.0F;
+		this.bipedRightArm.rotateAngleY = f;
+		this.bipedRightArm.rotateAngleZ = 0.0F;
+
+		Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
+		this.bipedLeftArm.rotationPointX = (float) v1.x;
+		this.bipedLeftArm.rotationPointZ = (float) v1.z;
+		this.bipedLeftArm.rotateAngleX = 0.0F;
+		this.bipedLeftArm.rotateAngleY = f;
+		this.bipedLeftArm.rotateAngleZ = 0.0F;
+
+		float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
+		this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-40.0F - 60.0F * f1);
+		this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-40.0F);
+		this.bipedRightArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
+		this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-35.0F - 60.0F * f1);
+		this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(50.0F);
+		this.bipedLeftArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
 	}
 
 	protected void renderSpellAnimation(AbstractEntityCQR entity, float ageInTicks) {
@@ -261,29 +269,31 @@ public class ModelCQRBiped extends ModelBiped {
 		if (this.hasExtraLayers) {
 			this.bipedLeftLegwear.render(scale);
 			this.bipedRightLegwear.render(scale);
-			// this.bipedLeftArmwear.render(scale);
-			// this.bipedRightArmwear.render(scale);
+			this.bipedLeftArmwear.render(scale);
+			this.bipedRightArmwear.render(scale);
 			this.bipedBodyWear.render(scale);
-		}
-		if (entityIn instanceof AbstractEntityCQR) {
-			AbstractEntityCQR entCQR = ((AbstractEntityCQR) entityIn);
-			if (entCQR.hasCape()) {
-				this.bipedCape.render(scale);
-			}
 		}
 
 		GlStateManager.popMatrix();
 	}
 
 	protected void setClothingLayerVisible(boolean visible) {
-		this.bipedLeftArmwear.showModel = visible;
-		this.bipedRightArmwear.showModel = visible;
-		this.bipedLeftLegwear.showModel = visible;
-		this.bipedRightLegwear.showModel = visible;
-		this.bipedBodyWear.showModel = visible;
+		try {
+			this.bipedLeftArmwear.showModel = visible;
+			this.bipedRightArmwear.showModel = visible;
+			this.bipedLeftLegwear.showModel = visible;
+			this.bipedRightLegwear.showModel = visible;
+			this.bipedBodyWear.showModel = visible;
+		} catch (NullPointerException npe) {
+			// Can occur cause by default these fields are null
+			// However this can be ignored
+		}
 	}
 
 	public static void copyModelRotationPoint(ModelRenderer source, ModelRenderer target) {
+		if (source == null || target == null) {
+			return;
+		}
 		target.rotationPointX = source.rotationPointX;
 		target.rotationPointY = source.rotationPointY;
 		target.rotationPointZ = source.rotationPointZ;
