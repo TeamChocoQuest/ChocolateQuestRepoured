@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.client.model.armor;
 
-import java.util.Deque;
-import java.util.LinkedList;
-
+import it.unimi.dsi.fastutil.floats.FloatArrayFIFOQueue;
+import it.unimi.dsi.fastutil.floats.FloatPriorityQueue;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,6 +14,8 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
 @SideOnly(Side.CLIENT)
 public class ModelCustomArmorBase extends ModelBiped {
+
+	private final FloatPriorityQueue rotations = new FloatArrayFIFOQueue();
 
 	public ModelCustomArmorBase(float scale, int textureWidth, int textureHeight) {
 		super(scale, 0.0F, textureWidth, textureHeight);
@@ -56,8 +57,6 @@ public class ModelCustomArmorBase extends ModelBiped {
 		modelRenderer.rotateAngleY = y;
 		modelRenderer.rotateAngleZ = z;
 	}
-
-	private Deque<Float> rotations = new LinkedList<>();
 
 	// TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations
 	// of the armor bones => interface that
@@ -168,15 +167,15 @@ public class ModelCustomArmorBase extends ModelBiped {
 	}
 
 	public void applyRotations(ModelRenderer target, ModelRenderer source) {
-		this.rotations.addLast(target.offsetX);
-		this.rotations.addLast(target.offsetY);
-		this.rotations.addLast(target.offsetZ);
-		this.rotations.addLast(target.rotateAngleX);
-		this.rotations.addLast(target.rotateAngleY);
-		this.rotations.addLast(target.rotateAngleZ);
-		this.rotations.addLast(target.rotationPointX);
-		this.rotations.addLast(target.rotationPointY);
-		this.rotations.addLast(target.rotationPointZ);
+		this.rotations.enqueue(target.offsetX);
+		this.rotations.enqueue(target.offsetY);
+		this.rotations.enqueue(target.offsetZ);
+		this.rotations.enqueue(target.rotateAngleX);
+		this.rotations.enqueue(target.rotateAngleY);
+		this.rotations.enqueue(target.rotateAngleZ);
+		this.rotations.enqueue(target.rotationPointX);
+		this.rotations.enqueue(target.rotationPointY);
+		this.rotations.enqueue(target.rotationPointZ);
 
 		target.offsetX = source.offsetX;
 		target.offsetY = source.offsetY;
@@ -200,15 +199,15 @@ public class ModelCustomArmorBase extends ModelBiped {
 	}
 
 	public void resetRotations(ModelRenderer target) {
-		target.offsetX = this.rotations.removeFirst();
-		target.offsetY = this.rotations.removeFirst();
-		target.offsetZ = this.rotations.removeFirst();
-		target.rotateAngleX = this.rotations.removeFirst();
-		target.rotateAngleY = this.rotations.removeFirst();
-		target.rotateAngleZ = this.rotations.removeFirst();
-		target.rotationPointX = this.rotations.removeFirst();
-		target.rotationPointY = this.rotations.removeFirst();
-		target.rotationPointZ = this.rotations.removeFirst();
+		target.offsetX = this.rotations.dequeue();
+		target.offsetY = this.rotations.dequeue();
+		target.offsetZ = this.rotations.dequeue();
+		target.rotateAngleX = this.rotations.dequeue();
+		target.rotateAngleY = this.rotations.dequeue();
+		target.rotateAngleZ = this.rotations.dequeue();
+		target.rotationPointX = this.rotations.dequeue();
+		target.rotationPointY = this.rotations.dequeue();
+		target.rotationPointZ = this.rotations.dequeue();
 	}
 
 }
