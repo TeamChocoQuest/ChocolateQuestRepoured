@@ -65,18 +65,20 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	 * 0 => Normal model
 	 * 1 => Magical armor overlay
 	 */
-	private int renderPass = 0;
+	private int currentModelRenderCycle = 0;
 
+	// Entrypoint for rendering, calls everything else
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		this.renderPass = 0;
+		this.currentModelRenderCycle = 0;
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-	
+
+	// Rendercall to render the model itself
 	@Override
 	public void render(GeoModel model, T animatable, float partialTicks, float red, float green, float blue, float alpha) {
 		super.render(model, animatable, partialTicks, red, green, blue, alpha);
-		this.renderPass++;
+		this.currentModelRenderCycle++;
 	}
 
 	protected double getWidthScale(T entity) {
@@ -89,7 +91,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderEarly(T animatable, float ticks, float red, float green, float blue, float partialTicks) {
-		if(this.renderPass == 0 /* Pre-Layers*/) {
+		if (this.currentModelRenderCycle == 0 /* Pre-Layers */) {
 			double width = this.getWidthScale(animatable);
 			double height = this.getHeightScale(animatable);
 			GlStateManager.scale(width, height, width);
@@ -111,12 +113,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	@Override
 	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
-		boolean customTextureMarker = this.renderPass == 0 && this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered) != null;
+		boolean customTextureMarker = this.currentModelRenderCycle == 0 && this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered) != null;
 		if (customTextureMarker) {
 			this.bindTexture(this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered));
 		}
 
-		if (this.renderPass == 0) {
+		if (this.currentModelRenderCycle == 0) {
 			ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 			IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
 			if (boneItem != null || boneBlock != null) {
@@ -147,12 +149,14 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 			}
 		}
-		//TODO: ONly reimplement for the armor layer!!
-		/*if (bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
-			bone.setScaleX(bone.getScaleX() + 0.05F);
-			bone.setScaleZ(bone.getScaleZ() + 0.05F);
-			bone.setScaleY(bone.getScaleY() + 0.025F);
-		}*/
+		// TODO: ONly reimplement for the armor layer!!
+		/*
+		 * if (bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
+		 * bone.setScaleX(bone.getScaleX() + 0.05F);
+		 * bone.setScaleZ(bone.getScaleZ() + 0.05F);
+		 * bone.setScaleY(bone.getScaleY() + 0.025F);
+		 * }
+		 */
 		super.renderRecursively(builder, bone, red, green, blue, alpha);
 		if (customTextureMarker) {
 			this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
