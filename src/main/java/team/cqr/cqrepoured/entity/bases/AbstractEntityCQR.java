@@ -107,8 +107,8 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.pathfinding.Path;
 import team.cqr.cqrepoured.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -227,12 +227,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Client only
 	@SideOnly(Side.CLIENT)
-	protected int currentSpeechBubbleID;
+	protected ESpeechBubble currentSpeechBubbleID;
 
 	protected AbstractEntityCQR(World worldIn) {
 		super(worldIn);
 		if (worldIn.isRemote) {
-			this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
+			this.chooseNewRandomSpeechBubble();
 		}
 		this.experienceValue = 5;
 		this.initializeSize();
@@ -1339,17 +1339,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@SideOnly(Side.CLIENT)
 	public ESpeechBubble getCurrentSpeechBubble() {
-		return ESpeechBubble.values()[this.currentSpeechBubbleID];
+		return this.currentSpeechBubbleID;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
 		if (this.hasTrades()) {
-			this.currentSpeechBubbleID = (ESpeechBubble.TRADE_EMERALD.ordinal() + this.rand.nextInt(ESpeechBubble.values().length - ESpeechBubble.TRADE_EMERALD.ordinal()));
-
-			return;
+			this.currentSpeechBubbleID = ESpeechBubble.getRandTraderBubble(this.rand);
+		} else {
+			this.currentSpeechBubbleID = ESpeechBubble.getRandNormalBubble(this.rand);
 		}
-		this.currentSpeechBubbleID = this.rand.nextInt(ESpeechBubble.TRADE_EMERALD.ordinal());
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.init;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import net.minecraft.util.ResourceLocation;
@@ -48,27 +49,44 @@ public enum ESpeechBubble {
 	ITEM_SWORD,
 
 	// Traders only!!
-	TRADE_EMERALD("trader/trade_0"),
-	TRADE_BAG("trader/trade_1"),
-	TRADE_HAND("trader/trade_2");
+	TRADE_EMERALD(true, "trader/trade_0"),
+	TRADE_BAG(true, "trader/trade_1"),
+	TRADE_HAND(true, "trader/trade_2");
 
+	private static final ESpeechBubble[] NORMAL = Arrays.stream(ESpeechBubble.values()).filter(ESpeechBubble::isNormalBubble).toArray(ESpeechBubble[]::new);
+	private static final ESpeechBubble[] TRADE = Arrays.stream(ESpeechBubble.values()).filter(ESpeechBubble::isTraderBubble).toArray(ESpeechBubble[]::new);
+	private static final String folderPath = "textures/misc/speechbubbles/";
+	private final boolean isTraderBubble;
 	private final ResourceLocation resLoc;
-	static final String folderPath = "textures/misc/speechbubbles/";
 
 	ESpeechBubble() {
+		this.isTraderBubble = false;
 		this.resLoc = new ResourceLocation(CQRMain.MODID, folderPath + "bubble_" + this.name().toLowerCase() + ".png");
 	}
 
-	ESpeechBubble(String filename) {
+	ESpeechBubble(boolean isTraderBubble, String filename) {
+		this.isTraderBubble = isTraderBubble;
 		this.resLoc = new ResourceLocation(CQRMain.MODID, folderPath + filename + ".png");
+	}
+
+	public boolean isNormalBubble() {
+		return !this.isTraderBubble;
+	}
+
+	public boolean isTraderBubble() {
+		return this.isTraderBubble;
 	}
 
 	public ResourceLocation getResourceLocation() {
 		return this.resLoc;
 	}
 
-	public static ESpeechBubble getRandom(Random rdm) {
-		return values()[rdm.nextInt(values().length)];
+	public static ESpeechBubble getRandNormalBubble(Random rand) {
+		return NORMAL[rand.nextInt(NORMAL.length)];
+	}
+
+	public static ESpeechBubble getRandTraderBubble(Random rand) {
+		return TRADE[rand.nextInt(TRADE.length)];
 	}
 
 }
