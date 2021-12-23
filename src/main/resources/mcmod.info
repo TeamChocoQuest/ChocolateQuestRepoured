@@ -11,8 +11,8 @@
   "credits": "Everyone who made textures, dungeons and other content, developers and ArloTheEpic and DerToaster (main developer). Also huge thanks to McHorse#0420, who helped a lot in getting geckolib and other rendering related stuff to work",
   "logoFile": "assets/cqrepoured/logo.png",
   "screenshots": [],
-  "requiredMods": ["forge@[14.23.5.2817,)", "geckolib3@[3.0.11,)"],
   "dependencies": ["phosphor-lighting", "jei", "entity_culling"],
+  "requiredMods": ["forge@[14.23.5.2817,)", "geckolib3@[3.0.13,)"],
   "useDependencyInformation": true
 }
 ]
