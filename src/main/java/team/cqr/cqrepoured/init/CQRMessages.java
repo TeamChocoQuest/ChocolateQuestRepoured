@@ -17,6 +17,7 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectedReg
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectionConfig;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTextureSets;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
+import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTrades;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateEntityPrevPos;
@@ -68,6 +69,7 @@ import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
@@ -109,6 +111,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSpawnParticles.class, SPacketSpawnParticles.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateElectrocuteCapability.class, SPacketUpdateElectrocuteCapability.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateEmitterTarget.class, SPacketUpdateEmitterTarget.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTrades.class, SPacketSyncTrades.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerStructureSelector.class, CPacketStructureSelector.class, messageID++, Side.SERVER);

@@ -387,6 +387,7 @@ public class Trade {
 	public void incStock() {
 		if (this.inStock < this.maxStock) {
 			this.inStock++;
+			this.holder.onTradesUpdated();
 		}
 	}
 
@@ -394,6 +395,7 @@ public class Trade {
 		if (this.inStock > 0) {
 			this.inStock--;
 			this.holder.get(rdm.nextInt(this.holder.getTrades().size())).incStock();
+			this.holder.onTradesUpdated();
 		}
 	}
 

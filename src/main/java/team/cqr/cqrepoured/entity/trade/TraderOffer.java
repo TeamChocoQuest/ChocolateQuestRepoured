@@ -1,14 +1,17 @@
 package team.cqr.cqrepoured.entity.trade;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
 
 public class TraderOffer {
 
@@ -52,11 +55,17 @@ public class TraderOffer {
 	}
 
 	public List<Trade> getTrades() {
-		return this.trades;
+		return Collections.unmodifiableList(this.trades);
 	}
 
 	public int size() {
 		return this.trades.size();
+	}
+
+	public void onTradesUpdated() {
+		if (!this.entity.world.isRemote) {
+			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncTrades(this.entity), this.entity);
+		}
 	}
 
 	public boolean updateTradeIndex(int index, int newIndex) {
@@ -66,6 +75,7 @@ public class TraderOffer {
 		Trade trade1 = this.trades.get(index);
 		this.trades.set(index, this.get(newIndex));
 		this.trades.set(newIndex, trade1);
+		this.onTradesUpdated();
 		return true;
 	}
 
@@ -74,6 +84,7 @@ public class TraderOffer {
 			return false;
 		}
 		this.trades.remove(index);
+		this.onTradesUpdated();
 		return true;
 	}
 
@@ -86,6 +97,7 @@ public class TraderOffer {
 		} else {
 			this.trades.set(index, trade);
 		}
+		this.onTradesUpdated();
 		return true;
 	}
 
