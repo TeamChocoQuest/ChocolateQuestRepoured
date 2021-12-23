@@ -215,9 +215,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int prevPathTargetPoint = -1;
 	protected int currentPathTargetPoint = -1;
 
-	// Trading
-	@Nullable
-	protected EntityPlayer currentCustomer = null;
 	private TraderOffer trades = new TraderOffer(this);
 
 	// Texture syncing
@@ -656,15 +653,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		boolean flag = false;
 
-		if ((this.getCustomer() == null || this.getCustomer() == player) && !this.world.isRemote && (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades()))) {
-			if (this.getLeader() == player || player.isCreative()) {
-				player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+		if (!player.isSneaking()) {
+			if (player.isCreative() || this.getLeader() == player) {
+				if (!this.world.isRemote) {
+					player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				}
 				flag = true;
-			} else {
-				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
-				this.setCustomer(player);
+			} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
+				if (!this.world.isRemote) {
+					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				}
 				flag = true;
 			}
+		} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
+			if (!this.world.isRemote) {
+				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+			}
+			flag = true;
 		}
 
 		if (flag && !this.getLookHelper().getIsLooking() && !this.hasPath()) {
@@ -677,15 +682,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		return flag;
-	}
-
-	public void setCustomer(@Nullable EntityPlayer newCustomer) {
-		this.currentCustomer = newCustomer;
-	}
-	
-	@Nullable
-	public EntityPlayer getCustomer() {
-		return this.currentCustomer;
 	}
 
 	public boolean hasTrades() {
