@@ -271,8 +271,6 @@ public class Trade {
 			}
 
 			if (!player.world.isRemote) {
-				// TODO sync trades when opening trade gui
-				// TODO sync changed trades with trading player(-s)
 				this.decStock();
 			}
 
