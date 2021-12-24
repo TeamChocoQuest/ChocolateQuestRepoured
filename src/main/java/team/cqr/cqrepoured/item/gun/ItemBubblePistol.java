@@ -108,7 +108,6 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		// TODO: return bubble sound
 		return SoundEvents.ENTITY_BOBBER_THROW;
 	}
 
