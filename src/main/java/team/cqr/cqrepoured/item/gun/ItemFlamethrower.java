@@ -17,6 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.item.ItemMagazineBased;
 
 public class ItemFlamethrower extends ItemMagazineBased {
@@ -45,20 +46,23 @@ public class ItemFlamethrower extends ItemMagazineBased {
 		World world = entity.world;
 		float rotationYaw = MathHelper.wrapDegrees(entity.rotationYawHead);
 		double armDist = 1.0D;
+		if(entity instanceof ISizable) {
+			armDist *= ((ISizable)entity).getSizeVariation();
+		}
 		double offY = entity.height * 0.75D;
 		double posX = entity.posX - Math.sin(Math.toRadians(rotationYaw)) * armDist;
 		double posY = entity.posY + offY;
 		double posZ = entity.posZ + Math.cos(Math.toRadians(rotationYaw)) * armDist;
 
-		float x = (float) -Math.sin(Math.toRadians(rotationYaw));
-		float z = (float) Math.cos(Math.toRadians(rotationYaw));
-		double y = -Math.sin(Math.toRadians(entity.rotationPitch));
-		x = (float) (x * (1.0D - Math.abs(y)));
-		z = (float) (z * (1.0D - Math.abs(y)));
+		float vx = (float) -Math.sin(Math.toRadians(rotationYaw));
+		float vz = (float) Math.cos(Math.toRadians(rotationYaw));
+		double vy = -Math.sin(Math.toRadians(entity.rotationPitch));
+		vx = (float) (vx * (1.0D - Math.abs(vy)));
+		vz = (float) (vz * (1.0D - Math.abs(vy)));
 
 		if (world.isRemote) {
 			for (int i = 0; i < 8; i++) {
-				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (x + itemRand.nextFloat() - 0.5D) / 3.0D, (y + itemRand.nextFloat() - 0.5D) / 8.0D, (z + itemRand.nextFloat() - 0.5D) / 3.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (vx + itemRand.nextFloat() - 0.5D) / 3.0D, (vy + itemRand.nextFloat() - 0.5D) / 8.0D, (vz + itemRand.nextFloat() - 0.5D) / 3.0D);
 			}
 		} else {
 			int dist = 10;
