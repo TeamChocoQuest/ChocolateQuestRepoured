@@ -17,29 +17,27 @@ import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.event.EntityRenderManager;
+import team.cqr.cqrepoured.client.model.IHideable;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
+import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
 import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerCQREntityArmor;
-import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerCQREntityCape;
 import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerCQREntityPotion;
 import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerCQRHeldItem;
 import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerShoulderEntity;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRLeaderFeather;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
+import team.cqr.cqrepoured.client.render.texture.EntityTexture;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
-import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
-import team.cqr.cqrepoured.entity.ITextureVariants;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
-import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
-import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
 
@@ -66,20 +64,18 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.heightScale = heightScale;
 		this.addLayer(new LayerCQREntityArmor(this));
 		this.addLayer(new LayerCQRHeldItem(this));
-		// this.addLayer(new LayerRevolver(this));
 		this.addLayer(new LayerArrow(this));
 		this.addLayer(new LayerElytra(this));
-		this.addLayer(new LayerCQREntityCape(this));
-		this.addLayer(new LayerCQREntityPotion(this));
-
-		this.addLayer(new LayerCQRSpeechbubble(this));
+		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
+		// TODO fix capes
+		// this.addLayer(new LayerCQREntityCape<>(this));
+		this.addLayer(new LayerCQREntityPotion<>(this));
+		this.addLayer(new LayerCQRSpeechbubble<>(this));
+		this.addLayer(new LayerShoulderEntity<>(this));
 
 		if (model instanceof ModelBiped) {
-			this.addLayer(new LayerShoulderEntity(this));
-			if (model instanceof ModelCQRBiped) {
-				this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
-				this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
-			}
+			this.addLayer(new LayerCQRLeaderFeather<>(this, ((ModelBiped) model).bipedHead));
+			this.addLayer(new LayerCustomHead(((ModelBiped) model).bipedHead));
 		}
 	}
 
@@ -167,18 +163,30 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	@Override
-	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-		boolean flag = entitylivingbaseIn.getInvisibility() > 0.0F;
-		if (flag) {
+	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
+			float scaleFactor) {
+		EntityTexture texture = EntityTexture.get(this.getEntityTexture(entitylivingbaseIn));
+		if (this.mainModel instanceof IHideable) {
+			((IHideable) this.mainModel).setupVisibility(texture.getPartsToRender());
+		}
+
+		boolean isInvisible = entitylivingbaseIn.getInvisibility() > 0.0F;
+		if (isInvisible) {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, entitylivingbaseIn.getInvisibility());
-			this.bindTexture(InvisibilityTexture.get(this.getEntityTexture(entitylivingbaseIn)));
+			this.bindTexture(InvisibilityTexture.get(texture.getTextureLocation()));
 			this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.depthFunc(GL11.GL_EQUAL);
 		}
+
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-		if (flag) {
+
+		if (isInvisible) {
 			GlStateManager.depthFunc(GL11.GL_LEQUAL);
+		}
+
+		if (this.mainModel instanceof IHideable) {
+			((IHideable) this.mainModel).resetVisibility();
 		}
 	}
 

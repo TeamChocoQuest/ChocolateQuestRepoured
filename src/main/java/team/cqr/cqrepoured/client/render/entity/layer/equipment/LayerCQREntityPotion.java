@@ -16,16 +16,16 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
 
 @SideOnly(Side.CLIENT)
-public class LayerCQREntityPotion<T extends AbstractEntityCQR> extends AbstractLayerCQR<T> {
+public class LayerCQREntityPotion<R extends RenderCQREntity<E>, E extends AbstractEntityCQR> extends AbstractLayerCQR<R, E> {
 
 	private static final ItemStack STACK = new ItemStack(CQRItems.POTION_HEALING);
 
-	public LayerCQREntityPotion(RenderCQREntity<T> renderer) {
+	public LayerCQREntityPotion(R renderer) {
 		super(renderer);
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+	public void doRenderLayer(E entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
 			float scale) {
 		if (entity.getHealingPotions() <= 0) {
 			return;

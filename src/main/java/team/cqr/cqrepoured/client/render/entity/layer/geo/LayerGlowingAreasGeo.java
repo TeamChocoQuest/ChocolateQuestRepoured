@@ -12,17 +12,18 @@ import team.cqr.cqrepoured.client.util.EmissiveUtil;
 
 public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends AbstractCQRLayerGeo<T> {
 
-	public LayerGlowingAreasGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
+	public LayerGlowingAreasGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture,
+			Function<T, ResourceLocation> funcGetCurrentModel) {
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
 	}
 
 	@Override
-	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
-
+	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+			Color renderColor) {
 		EmissiveUtil.preEmissiveTextureRendering();
 
-		this.geoRendererInstance.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));
-
+		AutoGlowingTexture texture = AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn));
+		this.geoRendererInstance.bindTexture(texture.getTextureLocation());
 		this.reRenderCurrentModelInRenderer(entitylivingbaseIn, partialTicks, renderColor);
 
 		EmissiveUtil.postEmissiveTextureRendering();

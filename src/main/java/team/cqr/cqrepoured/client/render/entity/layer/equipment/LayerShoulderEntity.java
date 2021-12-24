@@ -20,7 +20,7 @@ import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
 
-public class LayerShoulderEntity<T extends AbstractEntityCQR> extends AbstractLayerCQR<T> {
+public class LayerShoulderEntity<R extends RenderCQREntity<E>, E extends AbstractEntityCQR> extends AbstractLayerCQR<R, E> {
 
 	protected RenderLivingBase<? extends EntityLivingBase> leftRenderer;
 	private ModelBase leftModel;
@@ -28,12 +28,12 @@ public class LayerShoulderEntity<T extends AbstractEntityCQR> extends AbstractLa
 	private UUID leftUniqueId;
 	private Class<?> leftEntityClass;
 
-	public LayerShoulderEntity(RenderCQREntity<T> renderer) {
+	public LayerShoulderEntity(R renderer) {
 		super(renderer);
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+	public void doRenderLayer(E entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
 			float scale) {
 		NBTTagCompound shoulderEntityNBT = entity.getLeftShoulderEntity();
 

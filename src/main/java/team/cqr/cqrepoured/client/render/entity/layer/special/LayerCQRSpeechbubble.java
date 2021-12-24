@@ -12,16 +12,16 @@ import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerCQRSpeechbubble<T extends AbstractEntityCQR> extends AbstractLayerCQR<T> {
+public class LayerCQRSpeechbubble<R extends RenderCQREntity<E>, E extends AbstractEntityCQR> extends AbstractLayerCQR<R, E> {
 
 	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
-	public LayerCQRSpeechbubble(RenderCQREntity<T> renderer) {
+	public LayerCQRSpeechbubble(R renderer) {
 		super(renderer);
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+	public void doRenderLayer(E entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
 			float scale) {
 		if (!CQRConfig.general.enableSpeechBubbles) {
 			return;

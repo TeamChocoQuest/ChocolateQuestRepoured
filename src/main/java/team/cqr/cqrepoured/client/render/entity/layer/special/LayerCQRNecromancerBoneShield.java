@@ -9,19 +9,19 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 
-public class LayerCQRNecromancerBoneShield<T extends EntityCQRNecromancer> extends AbstractLayerCQR<T> {
+public class LayerCQRNecromancerBoneShield<R extends RenderCQREntity<E>, E extends EntityCQRNecromancer> extends AbstractLayerCQR<R, E> {
 
 	protected static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/bone_shield.png");
 
 	protected final ModelBase ring1 = new ModelBoneShield();
 	protected final ModelBase ring2 = new ModelBoneShield();
 
-	public LayerCQRNecromancerBoneShield(RenderCQREntity<T> renderer) {
+	public LayerCQRNecromancerBoneShield(R renderer) {
 		super(renderer);
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+	public void doRenderLayer(E entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
 			float scale) {
 		if (!entity.isBoneShieldActive()) {
 			return;

@@ -8,19 +8,19 @@ import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerMagicalArmor<T extends AbstractEntityCQR> extends AbstractLayerCQR<T> {
+public class LayerMagicalArmor<R extends RenderCQREntity<E>, E extends AbstractEntityCQR> extends AbstractLayerCQR<R, E> {
 
 	protected final ModelBase model;
 	protected final ResourceLocation texture;
 
-	public LayerMagicalArmor(RenderCQREntity<T> renderer, ModelBase model, ResourceLocation texture) {
+	public LayerMagicalArmor(R renderer, ModelBase model, ResourceLocation texture) {
 		super(renderer);
 		this.model = model;
 		this.texture = texture;
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+	public void doRenderLayer(E entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
 			float scale) {
 		if (!entity.isMagicArmorActive()) {
 			return;

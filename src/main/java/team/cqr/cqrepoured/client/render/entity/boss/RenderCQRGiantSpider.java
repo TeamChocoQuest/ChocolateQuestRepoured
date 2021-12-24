@@ -1,30 +1,14 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelGiantSpider;
-import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
+import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 
-public class RenderCQRGiantSpider extends RenderLiving<EntityCQRGiantSpider> {
-
-	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_spider.png");
+public class RenderCQRGiantSpider extends RenderCQREntity<EntityCQRGiantSpider> {
 
 	public RenderCQRGiantSpider(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelGiantSpider(), 2.0F);
-		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(EntityCQRGiantSpider entity) {
-		// Custom texture start
-		if (entity.hasTextureOverride()) {
-			return entity.getTextureOverride();
-		}
-		// Custom texture end
-		return TEXTURE;
+		super(rendermanagerIn, new ModelGiantSpider(), 2.0F, "boss/giant_spider", 1.0D, 1.0D);
 	}
 
 	@Override

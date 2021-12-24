@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +22,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		this.modelNormal = (ModelNetherDragonHead) this.mainModel;
 		this.modelSkeletal = new ModelNetherDragonHeadSkeletal();
 
-		this.addLayer(new LayerGlowingAreas<EntityCQRNetherDragon>(this, this::getEntityTexture) {
+		this.addLayer(new LayerGlowingAreas<RenderCQRNetherDragon, EntityCQRNetherDragon>(this, this::getEntityTexture) {
 			@Override
 			public void doRenderLayer(EntityCQRNetherDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 				if (entitylivingbaseIn.getSkeleProgress() >= 0) {
@@ -44,19 +43,29 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		}
 
 		/*
-		 * if(entity.deathTicks > 0 ) { GlStateManager.pushMatrix(); GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75
-		 * * entity.ticksExisted) + 0.5)),0,0,
-		 * 1F); }
+		 * if(entity.deathTicks > 0 ) {
+		 * GlStateManager.pushMatrix();
+		 * GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)), 0, 0, 1F);
+		 * }
 		 */
-		if (entity.deathTime > 0 && entity.deathTime % 5 == 0) {
-			float f = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
-			float f1 = (entity.getRNG().nextFloat() - 0.5F) * 4.0F;
-			float f2 = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
-			Minecraft.getMinecraft().world.spawnParticle(entity.getDeathAnimParticles(), entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
-		}
-		super.doRender(entity, x, y, z, entity.rotationYawHead, partialTicks);
+
+		// TODO do NOT spawn particles during rendering
 		/*
-		 * if(entity.deathTicks > 0 ) { GlStateManager.popMatrix(); }
+		 * if (entity.deathTime > 0 && entity.deathTime % 5 == 0) {
+		 * float x = entity.posX + (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
+		 * float y = entity.posY + (entity.getRNG().nextFloat() - 0.5F) * 4.0F + 2.0D;
+		 * float z = entity.posZ + (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
+		 * World world = Minecraft.getMinecraft().world;
+		 * world.spawnParticle(entity.getDeathAnimParticles(), x, y, z, 0.0D, 0.0D, 0.0D);
+		 * }
+		 */
+
+		super.doRender(entity, x, y, z, entity.rotationYawHead, partialTicks);
+
+		/*
+		 * if(entity.deathTicks > 0 ) {
+		 * GlStateManager.popMatrix();
+		 * }
 		 */
 	}
 

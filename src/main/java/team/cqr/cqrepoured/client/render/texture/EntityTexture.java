@@ -11,50 +11,59 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection.Section;
+import team.cqr.cqrepoured.client.resources.data.PartMetadataSection;
 
-public class AutoGlowingTexture extends AbstractTextureCQR {
+public class EntityTexture extends AbstractTextureCQR {
 
 	private final Set<String> partsToRender = new HashSet<>();
 
-	public AutoGlowingTexture(ResourceLocation originalTextureLocation, ResourceLocation textureLocation) {
-		super(originalTextureLocation, textureLocation);
+	public EntityTexture(ResourceLocation textureLocation) {
+		super(textureLocation, textureLocation);
 	}
 
-	public static AutoGlowingTexture get(ResourceLocation originalTextureLocation) {
-		ResourceLocation textureLocation = appendBeforeEnding(originalTextureLocation, "_glowing");
+	public static EntityTexture get(ResourceLocation textureLocation) {
 		TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 		ITextureObject texture = textureManager.getTexture(textureLocation);
 
-		if (!(texture instanceof AutoGlowingTexture)) {
-			texture = new AutoGlowingTexture(originalTextureLocation, textureLocation);
+		if (!(texture instanceof EntityTexture)) {
+			texture = new EntityTexture(textureLocation);
 			textureManager.loadTexture(textureLocation, texture);
 		}
 
-		return (AutoGlowingTexture) texture;
+		return (EntityTexture) texture;
+	}
+
+	@Override
+	protected boolean onLoadTexture(IResourceManager resourceManager, boolean reload) throws IOException {
+		this.partsToRender.clear();
+		return true;
 	}
 
 	@Override
 	protected BufferedImage onLoadMetadata(BufferedImage image, IResource resource) throws IOException {
-		BufferedImage image1 = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-
 		GlowingMetadataSection glowingSections = resource.getMetadata("glowsections");
 
 		if (glowingSections != null) {
 			for (Section section : glowingSections.getGlowingSections()) {
 				for (int x = section.getMinX(); x < section.getMaxX(); x++) {
 					for (int y = section.getMinY(); y < section.getMaxY(); y++) {
-						image1.setRGB(x, y, image.getRGB(x, y));
+						image.setRGB(x, y, 0);
 					}
 				}
 			}
-
-			this.partsToRender.addAll(glowingSections.getGlowingParts());
 		}
 
-		return image1;
+		PartMetadataSection partmetadatasection = resource.getMetadata("parts");
+
+		if (partmetadatasection != null) {
+			this.partsToRender.addAll(partmetadatasection.getParts());
+		}
+
+		return image;
 	}
 
 	public Collection<String> getPartsToRender() {

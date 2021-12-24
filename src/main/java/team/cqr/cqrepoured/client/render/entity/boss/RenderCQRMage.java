@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelMageHidden;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerMagicalArmor;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityCQRMageBase;
 
@@ -31,7 +30,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQ
 				this.layerRenderers.remove(i--);
 			}
 		}
-		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
+
 		this.addLayer(new LayerMagicalArmor<>(this, model, TEXTURES_ARMOR));
 	}
 
@@ -46,7 +45,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQ
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(T entity) {
+	public ResourceLocation getEntityTexture(T entity) {
 		return entity.isIdentityHidden() ? TEXTURES_HIDDEN : super.getEntityTexture(entity);
 	}
 
