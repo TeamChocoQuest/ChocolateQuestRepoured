@@ -11,21 +11,17 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-public class CubemapTexture extends AbstractTexture {
+public class CubemapTexture extends AbstractTextureCQR {
 
-	protected final ResourceLocation originalTexture;
-	protected final ResourceLocation texture;
-
-	public CubemapTexture(ResourceLocation originalTexture, ResourceLocation texture) {
-		this.originalTexture = originalTexture;
-		this.texture = texture;
+	public CubemapTexture(ResourceLocation originalTextureLocation, ResourceLocation textureLocation) {
+		super(originalTextureLocation, textureLocation);
 	}
 
 	/**
@@ -48,23 +44,21 @@ public class CubemapTexture extends AbstractTexture {
 	 * 
 	 * @return The new {@code ResourceLocation} with "_cubemap" inserted before the last dot.
 	 */
-	public static ResourceLocation get(ResourceLocation originalTexture) {
-		ResourceLocation texture = appendBeforeEnding(originalTexture, "_cubemap");
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		if (renderManager.renderEngine.getTexture(texture) == null) {
-			renderManager.renderEngine.loadTexture(texture, new CubemapTexture(originalTexture, texture));
-		}
-		return texture;
-	}
+	public static ResourceLocation get(ResourceLocation originalTextureLocation) {
+		ResourceLocation textureLocation = appendBeforeEnding(originalTextureLocation, "_cubemap");
+		TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
+		ITextureObject texture = textureManager.getTexture(textureLocation);
 
-	private static ResourceLocation appendBeforeEnding(ResourceLocation location, String suffix) {
-		String path = location.getPath();
-		int i = path.lastIndexOf('.');
-		return new ResourceLocation(location.getNamespace(), path.substring(0, i) + suffix + path.substring(i));
+		if (!(texture instanceof CubemapTexture)) {
+			texture = new CubemapTexture(originalTextureLocation, textureLocation);
+			textureManager.loadTexture(textureLocation, texture);
+		}
+
+		return textureLocation;
 	}
 
 	@Override
-	public void loadTexture(IResourceManager resourceManager) throws IOException {
+	protected boolean onLoadTexture(IResourceManager resourceManager, boolean reload) throws IOException {
 		this.deleteGlTexture();
 
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, this.getGlTextureId());
@@ -75,12 +69,13 @@ public class CubemapTexture extends AbstractTexture {
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_BASE_LEVEL, 0);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_MAX_LEVEL, 0);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_right"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_left"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_top"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_bottom"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_front"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_back"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+		this.load(resourceManager, appendBeforeEnding(this.originalTextureLocation, "_right"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X);
+		this.load(resourceManager, appendBeforeEnding(this.originalTextureLocation, "_left"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
+		this.load(resourceManager, appendBeforeEnding(this.originalTextureLocation, "_top"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
+		this.load(resourceManager, appendBeforeEnding(this.originalTextureLocation, "_bottom"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
+		this.load(resourceManager, appendBeforeEnding(this.originalTextureLocation, "_front"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
+		this.load(resourceManager, appendBeforeEnding(this.originalTextureLocation, "_back"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+		return false;
 	}
 
 	private void load(IResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
