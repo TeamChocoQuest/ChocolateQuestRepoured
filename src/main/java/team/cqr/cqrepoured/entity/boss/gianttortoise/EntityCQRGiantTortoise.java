@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -53,7 +54,7 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatable {
+public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatable, IAnimationTickable {
 
 	public static class AnimationGecko {
 		private final String animationName;
@@ -734,6 +735,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				((ISizable) part).resize(widthScale, heightSacle);
 			}
 		}
+	}
+
+	@Override
+	public void tick() {
+		
+	}
+
+	@Override
+	public int tickTimer() {
+		return this.ticksExisted;
 	}
 
 }
