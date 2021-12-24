@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
@@ -41,9 +43,10 @@ import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
 
-	public ResourceLocation texture;
+	protected final Int2ObjectMap<ResourceLocation> textureVariantCache = new Int2ObjectArrayMap<>();
 
-	private final String entityName;
+	protected ResourceLocation textureLocation;
+	protected final String entityName;
 	protected double widthScale;
 	protected double heightScale;
 
@@ -58,7 +61,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.entityName = textureName;
-		this.texture = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + ".png");
+		this.textureLocation = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + ".png");
 		this.widthScale = widthScale;
 		this.heightScale = heightScale;
 		this.addLayer(new LayerCQREntityArmor(this));
@@ -108,106 +111,59 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 
 		if (this.mainModel instanceof ModelBiped) {
-			GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 			ModelBiped model = (ModelBiped) this.mainModel;
+			EnumHand rightHand;
+			EnumHand leftHand;
 
-			ItemStack itemMainHand = entity.getHeldItemMainhand();
-			ItemStack itemOffHand = entity.getHeldItemOffhand();
-
-			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
-			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
-
-			boolean dontRenderOffItem = false;
-			boolean dontRenderMainItem = false;
-
-			boolean flagMain = false;
-			boolean flagOff = false;
-
-			// Main arm
-			if (!itemMainHand.isEmpty()) {
-				if (itemMainHand.getItem() instanceof ItemMusket || itemMainHand.getItem() instanceof ItemMusketKnife) {
-					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
-					dontRenderOffItem = true;
-				} else if (itemMainHand.getItem() instanceof ItemRevolver || itemMainHand.getItem() instanceof ItemHookshotBase) {
-					flagMain = true;
-				} else if (entity.getItemInUseCount() > 0) {
-					EnumAction action = itemMainHand.getItemUseAction();
-					switch (action) {
-					case DRINK:
-					case EAT:
-						armPoseMain = ModelBiped.ArmPose.ITEM;
-						break;
-					case BOW:
-						armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
-						dontRenderOffItem = true;
-						break;
-					case BLOCK:
-						armPoseMain = ModelBiped.ArmPose.BLOCK;
-						break;
-					default:
-						// armPoseMain = ModelBiped.ArmPose.EMPTY;
-						break;
-					}
-				}
-			}
-			// Off arm
-			if (!itemOffHand.isEmpty()) {
-				// if(itemOffHand.getItem() instanceof ItemShield) {
-
-				if (itemOffHand.getItem() instanceof ItemMusket || itemOffHand.getItem() instanceof ItemMusketKnife) {
-					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
-					dontRenderMainItem = true;
-				} else if (itemMainHand.getItem() instanceof ItemRevolver || itemOffHand.getItem() instanceof ItemHookshotBase) {
-					flagOff = true;
-				} else if (entity.getItemInUseCount() > 0) {
-					EnumAction action = itemOffHand.getItemUseAction();
-					switch (action) {
-					case DRINK:
-					case EAT:
-						armPoseOff = ModelBiped.ArmPose.ITEM;
-						break;
-					case BOW:
-						armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
-						dontRenderMainItem = true;
-						break;
-					case BLOCK:
-						armPoseOff = ModelBiped.ArmPose.BLOCK;
-						break;
-					default:
-						break;
-
-					}
-				}
-
+			if (entity.isLeftHanded()) {
+				rightHand = EnumHand.OFF_HAND;
+				leftHand = EnumHand.MAIN_HAND;
+			} else {
+				rightHand = EnumHand.MAIN_HAND;
+				leftHand = EnumHand.OFF_HAND;
 			}
 
-			if (entity.getPrimaryHand() == EnumHandSide.LEFT) {
-				ArmPose tmp = armPoseMain;
-				armPoseMain = armPoseOff;
-				armPoseOff = tmp;
-				boolean tmp2 = dontRenderMainItem;
-				dontRenderMainItem = dontRenderOffItem;
-				dontRenderOffItem = tmp2;
-			}
-			if (!flagMain) {
-				model.rightArmPose = armPoseMain;
-			}
-			if (!flagOff) {
-				model.leftArmPose = armPoseOff;
-			}
-			if (dontRenderMainItem) {
-				model.rightArmPose = ArmPose.EMPTY;
-			}
-			if (dontRenderOffItem) {
-				model.leftArmPose = ArmPose.EMPTY;
-			}
+			model.rightArmPose = this.getArmPose(entity, rightHand);
+			model.rightArmPose = this.getArmPose(entity, leftHand);
 		}
+
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
-		if (this.mainModel instanceof ModelBiped) {
-			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
+		GlStateManager.disableBlend();
+	}
+
+	private ArmPose getArmPose(T entity, EnumHand hand) {
+		ItemStack stack = entity.getHeldItem(hand);
+
+		if (stack.isEmpty()) {
+			return ArmPose.EMPTY;
 		}
+
+		Item item = stack.getItem();
+
+		if (item instanceof ItemMusket) {
+			return ArmPose.BOW_AND_ARROW;
+		}
+
+		if (entity.getItemInUseCount() > 0) {
+			EnumAction action = item.getItemUseAction(stack);
+			switch (action) {
+			case DRINK:
+			case EAT:
+				return ArmPose.ITEM;
+			case BOW:
+				return ArmPose.BOW_AND_ARROW;
+			case BLOCK:
+				return ArmPose.BLOCK;
+			default:
+				break;
+			}
+		}
+
+		return ArmPose.ITEM;
 	}
 
 	@Override
@@ -236,30 +192,20 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		super.renderLivingAt(entityLivingBaseIn, x, y, z);
 	}
 
-	protected ResourceLocation[] textureVariantCache = null;
-
 	@Override
-	protected ResourceLocation getEntityTexture(T entity) {
-		if (entity instanceof IHasTextureOverride) {
-			// Custom texture start
-			if (((IHasTextureOverride) entity).hasTextureOverride()) {
-				return ((IHasTextureOverride) entity).getTextureOverride();
-			}
+	public ResourceLocation getEntityTexture(T entity) {
+		if (entity.hasTextureOverride()) {
+			return entity.getTextureOverride();
 		}
-		// Custom texture end
-		if (entity instanceof ITextureVariants) {
-			if (((ITextureVariants) entity).getTextureCount() > 1) {
-				if (this.textureVariantCache == null) {
-					this.textureVariantCache = new ResourceLocation[((ITextureVariants) entity).getTextureCount()];
-				}
-				final int index = ((ITextureVariants) entity).getTextureIndex();
-				if (this.textureVariantCache[index] == null) {
-					this.textureVariantCache[index] = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + "_" + index + ".png");
-				}
-				return this.textureVariantCache[index];
-			}
+
+		if (entity.getTextureCount() > 1) {
+			return this.textureVariantCache.computeIfAbsent(entity.getTextureIndex(), k -> {
+				String s = String.format("textures/entity/%s_%d.png", this.entityName, k);
+				return new ResourceLocation(CQRMain.MODID, s);
+			});
 		}
-		return this.texture;
+
+		return this.textureLocation;
 	}
 
 	@Override
