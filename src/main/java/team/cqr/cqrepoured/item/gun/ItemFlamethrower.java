@@ -94,15 +94,17 @@ public class ItemFlamethrower extends ItemMagazineBased {
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		if (entityIn instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityIn;
-			if (player.getActiveItemStack() == stack) {
-				if (player.isHandActive()) {
+		if (entityIn instanceof EntityLivingBase) {
+			EntityLivingBase user = (EntityLivingBase) entityIn;
+			if (user.getActiveItemStack() == stack) {
+				if (user.isHandActive()) {
 					this.shootFlames((EntityLivingBase) entityIn);
 					this.removeAmmoFromItem(stack, 1);
 				}
-			} else if((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
-				this.reloadFromInventory(player.inventory, stack, !player.isCreative());
+			} else if ((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
+				if (entityIn instanceof EntityPlayer) {
+					this.reloadFromInventory(((EntityPlayer) user).inventory, stack, !((EntityPlayer) user).isCreative());
+				}
 			}
 		}
 	}
