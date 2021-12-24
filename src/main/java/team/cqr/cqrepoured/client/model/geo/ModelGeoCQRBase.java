@@ -1,55 +1,46 @@
 package team.cqr.cqrepoured.client.model.geo;
 
-import net.minecraft.entity.EntityLivingBase;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
-import team.cqr.cqrepoured.entity.ITextureVariants;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public abstract class ModelGeoCQRBase<T extends EntityLivingBase & IAnimatable> extends AnimatedGeoModel<T> {
+public abstract class ModelGeoCQRBase<T extends AbstractEntityCQR & IAnimatable> extends AnimatedGeoModel<T> {
 
-	protected final ResourceLocation MODEL_RESLOC;
-	protected final ResourceLocation TEXTURE_DEFAULT;
-	protected final String ENTITY_REGISTRY_PATH_NAME;
+	protected final Int2ObjectMap<ResourceLocation> textureVariantCache = new Int2ObjectArrayMap<>();
 
-	protected ResourceLocation[] textureVariantCache = null;
+	protected final ResourceLocation modelLocation;
+	protected final ResourceLocation textureLocation;
+	protected final String entityName;
 
-	public ModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
-		super();
-		this.MODEL_RESLOC = model;
-		this.TEXTURE_DEFAULT = textureDefault;
-		this.ENTITY_REGISTRY_PATH_NAME = entityName;
+	protected ModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
+		this.modelLocation = model;
+		this.textureLocation = textureDefault;
+		this.entityName = entityName;
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
-		if (entity instanceof IHasTextureOverride) {
-			// Custom texture start
-			if (((IHasTextureOverride) entity).hasTextureOverride()) {
-				return ((IHasTextureOverride) entity).getTextureOverride();
-			}
+		if (entity.hasTextureOverride()) {
+			return entity.getTextureOverride();
 		}
-		// Custom texture end
-		if (entity instanceof ITextureVariants) {
-			if (((ITextureVariants) entity).getTextureCount() > 1) {
-				if (this.textureVariantCache == null) {
-					this.textureVariantCache = new ResourceLocation[((ITextureVariants) entity).getTextureCount()];
-				}
-				final int index = ((ITextureVariants) entity).getTextureIndex();
-				if (this.textureVariantCache[index] == null) {
-					this.textureVariantCache[index] = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.ENTITY_REGISTRY_PATH_NAME + "_" + index + ".png");
-				}
-				return this.textureVariantCache[index];
-			}
+
+		if (entity.getTextureCount() > 1) {
+			return this.textureVariantCache.computeIfAbsent(entity.getTextureIndex(), k -> {
+				String s = String.format("textures/entity/%s_%d.png", this.entityName, k);
+				return new ResourceLocation(CQRMain.MODID, s);
+			});
 		}
-		return this.TEXTURE_DEFAULT;
+
+		return this.textureLocation;
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(T object) {
-		return this.MODEL_RESLOC;
+	public ResourceLocation getModelLocation(T entity) {
+		return this.modelLocation;
 	}
 
 }
