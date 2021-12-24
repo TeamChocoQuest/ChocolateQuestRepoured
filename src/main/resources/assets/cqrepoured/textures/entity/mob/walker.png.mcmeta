@@ -25,6 +25,25 @@
 		"x2": 47,
 		"y2": 13
 	  }
+	],
+	"parts": [
+	  "bipedHead",
+	  "bipedHeadwear"
 	]
+  },
+  "parts": {
+    "parts": [
+      "bipedHead",
+      "bipedBody",
+      "bipedRightArm",
+      "bipedLeftArm",
+      "bipedRightLeg",
+      "bipedLeftLeg",
+      "bipedBodywear",
+      "bipedRightArmwear",
+      "bipedLeftArmwear",
+      "bipedRightLegwear",
+      "bipedLeftLegwear"
+    ]
   }
 }
