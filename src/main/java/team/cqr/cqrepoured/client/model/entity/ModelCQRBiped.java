@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.client.model.entity;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -8,6 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import team.cqr.cqrepoured.client.model.entity.mobs.animation.FirearmAnimation;
+import team.cqr.cqrepoured.client.model.entity.mobs.animation.GreatswordAnimation;
+import team.cqr.cqrepoured.client.model.entity.mobs.animation.IModelBipedAnimation;
+import team.cqr.cqrepoured.client.model.entity.mobs.animation.SpearAnimation;
+import team.cqr.cqrepoured.client.model.entity.mobs.animation.SpinToWinAnimation;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
@@ -17,6 +26,10 @@ import team.cqr.cqrepoured.item.sword.ItemGreatSword;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 public class ModelCQRBiped extends ModelBiped {
+
+	private static final Set<IModelBipedAnimation> ANIMATIONS = Stream
+			.of(new SpinToWinAnimation(), new SpearAnimation(), new FirearmAnimation(), new SpearAnimation(), new GreatswordAnimation())
+			.collect(Collectors.toSet());
 
 	public ModelRenderer bipedLeftArmwear = null;
 	public ModelRenderer bipedRightArmwear = null;
@@ -90,136 +103,11 @@ public class ModelCQRBiped extends ModelBiped {
 	 * can swing at most.
 	 */
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		final boolean isSpinToWinActive = (entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR) entityIn).isSpinToWinActive() && !this.isRiding);
-		if (isSpinToWinActive) {
-			limbSwing = 0;
-			limbSwingAmount = 0;
-
-			float f = (entityIn.ticksExisted - 1.0F + PartialTicksUtil.getCurrentPartialTicks()) * 16.0F;
-			GlStateManager.rotate(f, 0F, 1F, 0F);
-		}
-
-		if (entityIn.isSneaking()) {
-			this.bipedCape.rotationPointY = 2.0F;
-		} else {
-			this.bipedCape.rotationPointY = 0.0F;
-		}
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor,
+			Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-		if (entityIn instanceof AbstractEntityCQR) {
-			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (isSpinToWinActive) {
-				this.bipedLeftArm.rotateAngleZ = (float) Math.toRadians(-90F);
-				this.bipedRightArm.rotateAngleZ = (float) Math.toRadians(90F);
-			} else if (cqrEnt.isSpellCharging() && cqrEnt.isSpellAnimated()) {
-				this.renderSpellAnimation(cqrEnt, ageInTicks);
-			} else {
-				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
-				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
-					if (flagSide) {
-						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
-					} else {
-						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
-					}
-				}
-				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
-					if (flagSide) {
-						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
-					} else {
-						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
-					}
-				}
-			}
-		}
 
-		ItemStack stack = ((AbstractEntityCQR) entityIn).getHeldItemMainhand();
-		if (stack.getItem() instanceof ItemSpearBase) {
-			this.renderSpearHoldingAnimation();
-		}
-		if (true && stack.getItem() instanceof ItemGreatSword) {
-			this.renderGreatSwordHoldingAnimation();
-		}
 
-		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
-		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
-		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
-		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
-		copyModelAngles(this.bipedBody, this.bipedBodyWear);
-	}
-
-	protected void renderSpearHoldingAnimation() {
-		float f = (float) Math.toRadians(40.0F);
-		this.bipedBody.rotateAngleX = 0.0F;
-		this.bipedBody.rotateAngleY = f;
-		this.bipedBody.rotateAngleZ = 0.0F;
-
-		Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
-		this.bipedRightArm.rotationPointX = (float) v.x;
-		this.bipedRightArm.rotationPointZ = (float) v.z;
-		this.bipedRightArm.rotateAngleX = 0.0F;
-		this.bipedRightArm.rotateAngleY = f;
-		this.bipedRightArm.rotateAngleZ = 0.0F;
-
-		Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
-		this.bipedLeftArm.rotationPointX = (float) v1.x;
-		this.bipedLeftArm.rotationPointZ = (float) v1.z;
-		this.bipedLeftArm.rotateAngleX = 0.0F;
-		this.bipedLeftArm.rotateAngleY = f;
-		this.bipedLeftArm.rotateAngleZ = 0.0F;
-
-		float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
-		this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-10.0F - 20.0F * f1);
-		this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-45.0F);
-		this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-45.0F - 25.0F * f1);
-		this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(30.0F - 10.0F * f1);
-	}
-
-	protected void renderGreatSwordHoldingAnimation() {
-		// swingProgress = ageInTicks % 60F / 60F;
-		float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI * 2.0F);
-		float f = (float) Math.toRadians(20.0F + 30.0F * f3);
-		this.bipedBody.rotateAngleX = 0.0F;
-		this.bipedBody.rotateAngleY = f;
-		this.bipedBody.rotateAngleZ = 0.0F;
-
-		if (this.swingProgress > 0.0F) {
-
-		}
-		Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
-		this.bipedRightArm.rotationPointX = (float) v.x;
-		this.bipedRightArm.rotationPointZ = (float) v.z;
-		this.bipedRightArm.rotateAngleX = 0.0F;
-		this.bipedRightArm.rotateAngleY = f;
-		this.bipedRightArm.rotateAngleZ = 0.0F;
-
-		Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
-		this.bipedLeftArm.rotationPointX = (float) v1.x;
-		this.bipedLeftArm.rotationPointZ = (float) v1.z;
-		this.bipedLeftArm.rotateAngleX = 0.0F;
-		this.bipedLeftArm.rotateAngleY = f;
-		this.bipedLeftArm.rotateAngleZ = 0.0F;
-
-		float f1 = MathHelper.sin(this.swingProgress * (float) Math.PI);
-		this.bipedRightArm.rotateAngleX += (float) Math.toRadians(-40.0F - 60.0F * f1);
-		this.bipedRightArm.rotateAngleY += (float) Math.toRadians(-40.0F);
-		this.bipedRightArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
-		this.bipedLeftArm.rotateAngleX += (float) Math.toRadians(-35.0F - 60.0F * f1);
-		this.bipedLeftArm.rotateAngleY += (float) Math.toRadians(50.0F);
-		this.bipedLeftArm.rotateAngleZ += (float) Math.toRadians(0.0F * f1);
-	}
-
-	protected void renderSpellAnimation(AbstractEntityCQR entity, float ageInTicks) {
-		this.bipedRightArm.rotationPointZ = 0.0F;
-		this.bipedRightArm.rotationPointX = -5.0F;
-		this.bipedLeftArm.rotationPointZ = 0.0F;
-		this.bipedLeftArm.rotationPointX = 5.0F;
-		this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		this.bipedRightArm.rotateAngleZ = 2.3561945F;
-		this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-		this.bipedRightArm.rotateAngleY = 0.0F;
-		this.bipedLeftArm.rotateAngleY = 0.0F;
-	}
 
 	@Override
 	public void setVisible(boolean visible) {
@@ -229,6 +117,8 @@ public class ModelCQRBiped extends ModelBiped {
 		if (this.hasExtraLayers) {
 			this.setClothingLayerVisible(visible);
 		}
+		AbstractEntityCQR entityCQR = (AbstractEntityCQR) entityIn;
+		ANIMATIONS.stream().filter(ani -> ani.canApply(entityCQR)).forEach(ani -> ani.apply(this, ageInTicks, entityCQR));
 	}
 
 	@Override
