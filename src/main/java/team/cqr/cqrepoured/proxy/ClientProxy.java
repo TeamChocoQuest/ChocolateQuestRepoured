@@ -27,6 +27,8 @@ import team.cqr.cqrepoured.client.render.entity.layer.LayerCrownRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerElectrocute;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSectionSerializer;
+import team.cqr.cqrepoured.client.resources.data.PartMetadataSection;
+import team.cqr.cqrepoured.client.resources.data.PartMetadataSectionSerializer;
 import team.cqr.cqrepoured.customtextures.CTResourcepack;
 import team.cqr.cqrepoured.util.GuiHandler;
 
@@ -46,6 +48,7 @@ public class ClientProxy implements IProxy {
 
 		// Add custom metadataserializers
 		mc.metadataSerializer.registerMetadataSectionType(new GlowingMetadataSectionSerializer(), GlowingMetadataSection.class);
+		mc.metadataSerializer.registerMetadataSectionType(new PartMetadataSectionSerializer(), PartMetadataSection.class);
 	}
 
 	@Override
