@@ -12,6 +12,7 @@ import team.cqr.cqrepoured.client.model.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.item.gun.ItemFlamethrower;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
 
@@ -48,8 +49,16 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
 			GlStateManager.translate(0, 0.35, -0.55);
+			if(item.getItem() instanceof ItemFlamethrower) {
+				GlStateManager.translate(0, -0.45, 0.25);
+			}
 
 			GlStateManager.rotate(180, 0, 0, 1);
+			if(item.getItem() instanceof ItemFlamethrower) {
+				GlStateManager.rotate(270, 1, 0, 0);
+				
+				GlStateManager.scale(1.5, 1.5, 1.5);
+			}
 		}
 	}
 
