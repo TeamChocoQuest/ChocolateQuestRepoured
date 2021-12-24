@@ -130,6 +130,8 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 				this.getBoss().resetCurrentAnimationTickTime();
 				this.getBoss().setSpinning(false);
 				this.getBoss().resetSpinsBlocked();
+				//Reset the velocity
+				this.movementVector = null;
 			}
 			if ((this.ignoreWallTicks <= 0 && this.getBoss().collidedHorizontally) || this.previousBlocks != this.getBoss().getSpinsBlocked()) {
 				if (this.getBoss().collidedHorizontally && !this.getBoss().getWorld().isRemote && this.explosionCooldown <= 0) {
@@ -159,10 +161,12 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 			this.getBoss().setSpinning(true);
 			this.getBoss().setCanBeStunned(false);
 			this.getBoss().setInShell(true);
-			this.getBoss().motionX = this.movementVector.x;
-			this.getBoss().motionZ = this.movementVector.z;
-			this.getBoss().motionY = this.entity.collidedHorizontally ? this.movementVector.y : 0.5 * this.movementVector.y;
-			this.getBoss().velocityChanged = true;
+			if(this.movementVector != null) {
+				this.getBoss().motionX = this.movementVector.x;
+				this.getBoss().motionZ = this.movementVector.z;
+				this.getBoss().motionY = this.entity.collidedHorizontally ? this.movementVector.y : 0.5 * this.movementVector.y;
+				this.getBoss().velocityChanged = true;
+			}
 		} else if (this.getBoss().getCurrentAnimationTick() <= this.BUBBLE_SHOOT_DURATION) {
 			// Shooting bubbles
 			this.getBoss().setSpinning(false);
