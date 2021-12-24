@@ -81,11 +81,6 @@ public class ModelCQRMandril extends ModelCQRBiped {
 		ModelBase.copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		ModelBase.copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 
-		// copyModelRotationPoint(bipedHead, bipedHeadwear);
-	}
-
-	@Override
-	protected void initExtraLayer() {
 		// Clothing layer
 		this.bipedHeadwear = new ModelRenderer(this, 32, 0);
 		this.bipedHeadwear.addBox(-4.0F, 0.0F, -4.0F, 8, 8, 8, 0.5F);
