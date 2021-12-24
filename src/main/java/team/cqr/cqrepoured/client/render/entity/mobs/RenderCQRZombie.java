@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRZombie;
 public class RenderCQRZombie extends RenderCQREntity<EntityCQRZombie> {
 
 	public RenderCQRZombie(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/zombie", true);
+		super(rendermanagerIn, "mob/zombie");
 	}
 
 }

@@ -8,7 +8,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
 	private final ModelRenderer nose;
 
 	public ModelCQRIllager() {
-		super(64, 64, false);
+		super(64, 64);
 
 		this.bipedHead = new ModelRenderer(this);
 		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -30,10 +30,6 @@ public class ModelCQRIllager extends ModelCQRBiped {
 		this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.bipedBody.setTextureOffset(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8, 12, 6, 0.0F);
 		this.bipedBody.setTextureOffset(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8, 18, 6, 0.0F + 0.5F);
-
-		ModelRenderer modelrenderer = new ModelRenderer(this, 44, 22);
-		modelrenderer.mirror = true;
-		modelrenderer.addBox(4.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
 
 		this.bipedRightLeg = new ModelRenderer(this, 0, 22);
 		this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);

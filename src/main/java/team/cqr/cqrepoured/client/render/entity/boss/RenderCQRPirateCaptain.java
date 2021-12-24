@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
 public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCaptain> {
 
 	public RenderCQRPirateCaptain(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "boss/pirate_captain", true);
+		super(rendermanagerIn, "boss/pirate_captain");
 	}
 
 }

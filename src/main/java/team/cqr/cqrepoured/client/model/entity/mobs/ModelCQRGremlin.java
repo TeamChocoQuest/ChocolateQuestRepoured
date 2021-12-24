@@ -15,7 +15,7 @@ public class ModelCQRGremlin extends ModelCQRBiped {
 	public ModelRenderer nose;
 
 	public ModelCQRGremlin() {
-		super(96, 96, false);
+		super(96, 96);
 
 		this.bipedLeftLeg = new ModelRenderer(this, 0, 22);
 		this.bipedLeftLeg.mirror = true;

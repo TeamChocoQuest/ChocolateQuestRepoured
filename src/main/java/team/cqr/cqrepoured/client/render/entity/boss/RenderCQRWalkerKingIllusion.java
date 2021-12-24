@@ -8,7 +8,8 @@ import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 public class RenderCQRWalkerKingIllusion extends RenderCQREntity<EntityWalkerKingIllusion> {
 
 	public RenderCQRWalkerKingIllusion(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "boss/walker_king", true);
 		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
+		super(rendermanagerIn, "boss/walker_king");
 	}
+
 }

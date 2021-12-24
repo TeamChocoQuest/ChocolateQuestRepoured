@@ -11,7 +11,6 @@ import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 public class RenderCQRSpectreLord extends RenderCQREntity<EntityCQRSpectreLord> {
 
 	public RenderCQRSpectreLord(RenderManager renderManager) {
-		super(renderManager, "boss/spectre_lord", true);
 	}
 
 	@Override
@@ -28,6 +27,7 @@ public class RenderCQRSpectreLord extends RenderCQREntity<EntityCQRSpectreLord> 
 		if (flag) {
 			GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		}
+		super(renderManager, "boss/spectre_lord");
 	}
 
 }

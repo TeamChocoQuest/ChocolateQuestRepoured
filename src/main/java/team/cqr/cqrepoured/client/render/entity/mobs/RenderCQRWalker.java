@@ -8,8 +8,8 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
 public class RenderCQRWalker extends RenderCQREntity<EntityCQRWalker> {
 
 	public RenderCQRWalker(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/walker", true);
 		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
+		super(rendermanagerIn, "mob/walker");
 	}
 
 }

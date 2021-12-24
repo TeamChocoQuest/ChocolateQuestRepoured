@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 public class ModelCQRSkeleton extends ModelCQRBiped {
 
 	public ModelCQRSkeleton() {
-		super(64, 64, false);
+		super(64, 64);
 
 		this.bipedRightArm = new ModelRenderer(this, 40, 16);
 		this.bipedRightArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
@@ -24,8 +24,6 @@ public class ModelCQRSkeleton extends ModelCQRBiped {
 		this.bipedLeftLeg.mirror = true;
 		this.bipedLeftLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
-
-		this.setClothingLayerVisible(false);
 	}
 
 	@Override

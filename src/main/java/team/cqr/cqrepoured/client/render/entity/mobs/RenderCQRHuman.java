@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRHuman;
 public class RenderCQRHuman extends RenderCQREntity<EntityCQRHuman> {
 
 	public RenderCQRHuman(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/human", true);
+		super(rendermanagerIn, "mob/human");
 	}
 
 }

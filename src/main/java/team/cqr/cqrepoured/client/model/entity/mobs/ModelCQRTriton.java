@@ -21,7 +21,7 @@ public class ModelCQRTriton extends ModelCQRBiped {
 	public ModelRenderer tailEnd3;
 
 	public ModelCQRTriton() {
-		super(64, 64, false);
+		super(64, 64);
 
 		this.disableLegs();
 
@@ -181,4 +181,5 @@ public class ModelCQRTriton extends ModelCQRBiped {
 		xAngle /= 6F;
 		this.mouthTentacle4.rotateAngleX = xAngle - 0.6981317007977318F;
 	}
+	
 }

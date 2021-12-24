@@ -17,7 +17,7 @@ public class ModelPigMage extends ModelCQRBiped {
 	public ModelRenderer Hood_Front;
 
 	public ModelPigMage() {
-		super(128, 64, false);
+		super(128, 64);
 
 		this.bipedRightArm = new ModelRenderer(this, 80, 34);
 		this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);

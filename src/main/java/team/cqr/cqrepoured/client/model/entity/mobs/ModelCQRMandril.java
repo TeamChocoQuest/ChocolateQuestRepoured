@@ -16,7 +16,7 @@ public class ModelCQRMandril extends ModelCQRBiped {
 	public ModelRenderer tail3;
 
 	public ModelCQRMandril() {
-		super(96, 96, true);
+		super(96, 96);
 
 		this.snout = new ModelRenderer(this, 64, 0);
 		this.snout.setRotationPoint(-2.0F, 5.0F, -7.0F);
@@ -74,7 +74,7 @@ public class ModelCQRMandril extends ModelCQRBiped {
 		this.tail1.addChild(this.tail2);
 
 		// Copying angles
-		ModelBase.copyModelAngles(this.bipedBody, this.bipedBodyWear);
+		ModelBase.copyModelAngles(this.bipedBody, this.bipedBodywear);
 		ModelBase.copyModelAngles(this.bipedHead, this.bipedHeadwear);
 		ModelBase.copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
 		ModelBase.copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
@@ -91,9 +91,9 @@ public class ModelCQRMandril extends ModelCQRBiped {
 		this.bipedHeadwear.addBox(-4.0F, 0.0F, -4.0F, 8, 8, 8, 0.5F);
 		this.bipedHeadwear.setRotationPoint(0.0F, -6.0F, -5.0F);
 
-		this.bipedBodyWear = new ModelRenderer(this, 16, 32);
-		this.bipedBodyWear.addBox(-4.0F, -0.4F, -6.5F, 8, 12, 4, 0.25F);
-		this.bipedBodyWear.setRotationPoint(0.0F, 0.0F, 0.0F);
+		this.bipedBodywear = new ModelRenderer(this, 16, 32);
+		this.bipedBodywear.addBox(-4.0F, -0.4F, -6.5F, 8, 12, 4, 0.25F);
+		this.bipedBodywear.setRotationPoint(0.0F, 0.0F, 0.0F);
 
 		this.bipedLeftArmwear = new ModelRenderer(this, 48, 48);
 		this.bipedLeftArmwear.addBox(-1.0F, 0.0F, -2.0F, 4, 12, 4, 0.25F);
@@ -122,7 +122,7 @@ public class ModelCQRMandril extends ModelCQRBiped {
 		this.bipedHead.setRotationPoint(0.0F, -6.0F, -5.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 1.5F, -3.0F);
 
-		ModelBase.copyModelAngles(this.bipedBody, this.bipedBodyWear);
+		ModelBase.copyModelAngles(this.bipedBody, this.bipedBodywear);
 		ModelBase.copyModelAngles(this.bipedHead, this.bipedHeadwear);
 		ModelBase.copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
 		ModelBase.copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);

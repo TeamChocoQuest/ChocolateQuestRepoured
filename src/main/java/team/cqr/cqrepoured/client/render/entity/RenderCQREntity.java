@@ -48,19 +48,11 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	private final String entityName;
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName) {
-		this(rendermanagerIn, textureName, 1.0D, 1.0D, false);
-	}
-
-	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, boolean hasExtraLayer) {
-		this(rendermanagerIn, textureName, 1.0D, 1.0D, hasExtraLayer);
+		this(rendermanagerIn, textureName, 1.0D, 1.0D);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale) {
-		this(rendermanagerIn, textureName, widthScale, heightScale, false);
-	}
-
-	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale, boolean hasExtraLayer) {
-		this(rendermanagerIn, new ModelCQRBiped(64, 64, hasExtraLayer), 0.5F, textureName, widthScale, heightScale);
+		this(rendermanagerIn, new ModelCQRBiped(64, 64), 0.5F, textureName, widthScale, heightScale);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {

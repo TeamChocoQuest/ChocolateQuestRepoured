@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQROrc;
 public class RenderCQROrc extends RenderCQREntity<EntityCQROrc> {
 
 	public RenderCQROrc(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/orc", true);
+		super(rendermanagerIn, "mob/orc");
 	}
 
 }

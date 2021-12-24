@@ -13,7 +13,7 @@ public class ModelCQROgre extends ModelCQRBiped {
 	public ModelRenderer Jaw1;
 
 	public ModelCQROgre() {
-		super(96, 64, true);
+		super(96, 64);
 
 		this.bipedBody = new ModelRenderer(this, 16, 16);
 		this.bipedBody.setRotationPoint(0.0F, 1.0F, 0.0F);
@@ -25,9 +25,9 @@ public class ModelCQROgre extends ModelCQRBiped {
 		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
 		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
 		this.setRotateAngle(this.bipedLeftArm, -0.0F, 0.0F, -0.10000736613927509F);
-		this.bipedBodyWear = new ModelRenderer(this, 16, 32);
-		this.bipedBodyWear.setRotationPoint(0.0F, 0.0F, -0.5F);
-		this.bipedBodyWear.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.55F);
+		this.bipedBodywear = new ModelRenderer(this, 16, 32);
+		this.bipedBodywear.setRotationPoint(0.0F, 0.0F, -0.5F);
+		this.bipedBodywear.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.55F);
 		this.Nose1 = new ModelRenderer(this, 64, 0);
 		this.Nose1.setRotationPoint(-1.0F, -3.3F, -4.5F);
 		this.Nose1.addBox(0.0F, 0.0F, 0.0F, 2, 2, 1, 0.0F);

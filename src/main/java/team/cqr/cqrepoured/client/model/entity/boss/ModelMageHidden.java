@@ -18,7 +18,7 @@ public class ModelMageHidden extends ModelCQRBiped {
 	public ModelRenderer Hood_Front;
 
 	public ModelMageHidden() {
-		super(128, 64, false);
+		super(128, 64);
 
 		this.bipedRightArm = new ModelRenderer(this, 16, 34);
 		this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);

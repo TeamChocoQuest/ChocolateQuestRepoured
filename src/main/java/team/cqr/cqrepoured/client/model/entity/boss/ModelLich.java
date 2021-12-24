@@ -20,7 +20,7 @@ public class ModelLich extends ModelCQRBiped {
 	public ModelRenderer Arm_Right_Bone;
 
 	public ModelLich() {
-		super(128, 64, false);
+		super(128, 64);
 
 		// arms
 		this.bipedRightArm = new ModelRenderer(this, 32, 34);

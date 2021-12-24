@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRMummy;
 public class RenderCQRMummy extends RenderCQREntity<EntityCQRMummy> {
 
 	public RenderCQRMummy(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/mummy", true);
+		super(rendermanagerIn, "mob/mummy");
 	}
 
 }

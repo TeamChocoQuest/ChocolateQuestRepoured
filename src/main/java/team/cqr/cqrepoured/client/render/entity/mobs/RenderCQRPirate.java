@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRPirate;
 public class RenderCQRPirate extends RenderCQREntity<EntityCQRPirate> {
 
 	public RenderCQRPirate(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/pirate", true);
+		super(rendermanagerIn, "mob/pirate");
 	}
 
 }

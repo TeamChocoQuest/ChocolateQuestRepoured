@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRNPC;
 public class RenderCQRNPC extends RenderCQREntity<EntityCQRNPC> {
 
 	public RenderCQRNPC(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/lunk", true);
+		super(rendermanagerIn, "mob/lunk");
 	}
 
 }

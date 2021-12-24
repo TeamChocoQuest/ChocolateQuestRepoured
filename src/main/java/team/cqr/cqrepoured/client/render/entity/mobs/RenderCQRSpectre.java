@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
 public class RenderCQRSpectre extends RenderCQREntity<EntityCQRSpectre> {
 
 	public RenderCQRSpectre(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/spectre", true);
+		super(rendermanagerIn, "mob/spectre");
 	}
 
 	@Override

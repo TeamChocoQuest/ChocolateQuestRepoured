@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 
 	public RenderCQRWalkerKing(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "boss/walker_king", true);
+		super(rendermanagerIn, "boss/walker_king");
 
 		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 		this.addLayer(new LayerBossDeath(191, 0, 255));

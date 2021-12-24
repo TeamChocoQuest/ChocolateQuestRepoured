@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRDwarf;
 public class RenderCQRDwarf extends RenderCQREntity<EntityCQRDwarf> {
 
 	public RenderCQRDwarf(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, "mob/dwarf", 0.9D, 0.65D, true);
+		super(rendermanagerIn, "mob/dwarf", 0.9D, 0.65D);
 	}
 
 }

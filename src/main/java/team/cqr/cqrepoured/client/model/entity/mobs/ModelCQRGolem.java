@@ -9,9 +9,8 @@ public class ModelCQRGolem extends ModelCQRBiped {
 	ModelRenderer bodyLower;
 
 	public ModelCQRGolem() {
-		super(64, 64, false);
+		super(64, 64);
 
-		// Biped components that need to be "adjusted"
 		this.bipedHead = new ModelRenderer(this, 0, 0);
 		this.bipedHead.addBox(-4F, -8F, -4F, 8, 8, 8, 0.0F);
 		this.bipedHead.setRotationPoint(0F, 0F, 0F);
@@ -48,7 +47,6 @@ public class ModelCQRGolem extends ModelCQRBiped {
 		this.bipedLeftLeg.setTextureSize(64, 64);
 		this.bipedLeftLeg.mirror = true;
 		this.setRotateAngle(this.bipedLeftLeg, 0F, 0F, 0F);
-		//
 
 		this.nose = new ModelRenderer(this, 32, 0);
 		this.nose.addBox(-1F, -3F, -6F, 2, 4, 2, 0.0F);

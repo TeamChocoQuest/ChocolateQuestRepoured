@@ -11,7 +11,7 @@ public class ModelCQRBoarman extends ModelCQRBiped {
 	protected ModelRenderer mane02;
 
 	public ModelCQRBoarman() {
-		super(64, 64, true);
+		super(64, 64);
 
 		this.righttusk = new ModelRenderer(this, 56, 16);
 		this.righttusk.addBox(-1F, -1F, -2F, 1, 2, 2, 0.0F);
