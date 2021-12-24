@@ -8,47 +8,46 @@ import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerMagicalArmor extends AbstractLayerCQR {
+public class LayerMagicalArmor<T extends AbstractEntityCQR> extends AbstractLayerCQR<T> {
 
-	protected final ResourceLocation ARMOR_TEXTURE;
-	protected final RenderCQREntity<? extends AbstractEntityCQR> RENDERER;
-	protected final ModelBase MODEL;
+	protected final ModelBase model;
+	protected final ResourceLocation texture;
 
-	public LayerMagicalArmor(RenderCQREntity<? extends AbstractEntityCQR> renderer, ResourceLocation texture, ModelBase model) {
+	public LayerMagicalArmor(RenderCQREntity<T> renderer, ModelBase model, ResourceLocation texture) {
 		super(renderer);
-		this.RENDERER = renderer;
-		this.ARMOR_TEXTURE = texture;
-		this.MODEL = model;
+		this.model = model;
+		this.texture = texture;
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-
-		if (entitylivingbaseIn.isMagicArmorActive()) {
-			GlStateManager.depthMask(!entitylivingbaseIn.isInvisible());
-			this.RENDERER.bindTexture(this.ARMOR_TEXTURE);
-			GlStateManager.matrixMode(5890);
-			GlStateManager.loadIdentity();
-			float f = entitylivingbaseIn.ticksExisted + partialTicks;
-			float f1 = MathHelper.cos(f * 0.02F) * 3.0F;
-			float f2 = f * 0.01F;
-			GlStateManager.translate(f1, f2, 0.0F);
-			GlStateManager.matrixMode(5888);
-			GlStateManager.enableBlend();
-			GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
-			GlStateManager.disableLighting();
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-			this.MODEL.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
-			this.MODEL.setModelAttributes(this.RENDERER.getMainModel());
-			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-			this.MODEL.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
-			GlStateManager.matrixMode(5890);
-			GlStateManager.loadIdentity();
-			GlStateManager.matrixMode(5888);
-			GlStateManager.enableLighting();
-			GlStateManager.disableBlend();
+	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+			float scale) {
+		if (!entity.isMagicArmorActive()) {
+			return;
 		}
+		GlStateManager.depthMask(!entity.isInvisible());
+		this.renderer.bindTexture(this.texture);
+		GlStateManager.matrixMode(5890);
+		GlStateManager.loadIdentity();
+		float f = entity.ticksExisted + partialTicks;
+		float f1 = MathHelper.cos(f * 0.02F) * 3.0F;
+		float f2 = f * 0.01F;
+		GlStateManager.translate(f1, f2, 0.0F);
+		GlStateManager.matrixMode(5888);
+		GlStateManager.enableBlend();
+		GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
+		GlStateManager.disableLighting();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+		this.model.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
+		this.model.setModelAttributes(this.renderer.getMainModel());
+		Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+		this.model.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+		GlStateManager.matrixMode(5890);
+		GlStateManager.loadIdentity();
+		GlStateManager.matrixMode(5888);
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
 	}
 
 	@Override

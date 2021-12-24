@@ -42,10 +42,10 @@ import team.cqr.cqrepoured.item.gun.ItemRevolver;
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
 
 	public ResourceLocation texture;
-	public double widthScale;
-	public double heightScale;
 
 	private final String entityName;
+	protected double widthScale;
+	protected double heightScale;
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName) {
 		this(rendermanagerIn, textureName, 1.0D, 1.0D);
@@ -330,6 +330,14 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), -1.0F, 0.0F, 0.0F);
 		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, -1.0F, 0.0F);
 		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, -1.0F);
+	}
+
+	public double getHeightScale() {
+		return heightScale;
+	}
+
+	public double getWidthScale() {
+		return widthScale;
 	}
 
 }

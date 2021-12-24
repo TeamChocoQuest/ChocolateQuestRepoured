@@ -32,7 +32,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQ
 			}
 		}
 		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
-		this.addLayer(new LayerMagicalArmor(this, TEXTURES_ARMOR, model));
+		this.addLayer(new LayerMagicalArmor<>(this, model, TEXTURES_ARMOR));
 	}
 
 	@Override

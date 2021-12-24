@@ -9,7 +9,7 @@ public class RenderCQRNecromancer extends RenderCQRMage<EntityCQRNecromancer> {
 
 	public RenderCQRNecromancer(RenderManager rendermanagerIn, ModelBiped model, String entityName) {
 		super(rendermanagerIn, model, entityName);
-		this.addLayer(new LayerCQRNecromancerBoneShield(this));
+		this.addLayer(new LayerCQRNecromancerBoneShield<>(this));
 	}
 
 }
