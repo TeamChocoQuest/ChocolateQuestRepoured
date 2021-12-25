@@ -40,7 +40,6 @@ public class ModelCQRBiped extends ModelBiped implements IHideable {
 
 		this.initModelParts();
 		this.initModelOverlayParts();
-		this.fillModelOverlayParts();
 
 		this.parts.put("bipedHead", this.bipedHead);
 		this.parts.put("bipedBody", this.bipedBody);
@@ -58,61 +57,80 @@ public class ModelCQRBiped extends ModelBiped implements IHideable {
 	}
 
 	protected void initModelParts() {
-		// seperate textures coords for both arms
-		this.bipedLeftArm = new ModelRenderer(this, 32, 48);
+		this.bipedHead = new ModelRenderer(this, 0, 0);
+		this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
+		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
+
+		this.bipedBody = new ModelRenderer(this, 32, 0);
+		this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.0F);
+		this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
+
+		this.bipedRightArm = new ModelRenderer(this, 56, 0);
+		this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
+		this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
+
+		this.bipedLeftArm = new ModelRenderer(this, 72, 0);
 		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
 
-		// seperate textures coords for both legs
-		this.bipedLeftLeg = new ModelRenderer(this, 16, 48);
+		this.bipedRightLeg = new ModelRenderer(this, 88, 0);
+		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
+		this.bipedRightLeg.setRotationPoint(-1.9F, 12.0F, 0.0F);
+
+		this.bipedLeftLeg = new ModelRenderer(this, 104, 0);
 		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
 		this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
 	}
 
 	protected void initModelOverlayParts() {
-		this.bipedHeadwear = new ModelRenderer(this, 32, 0);
+		this.bipedHeadwear = copy(this.bipedHead, 0, 0, 0.25F);
 		this.bipedHead.addChild(this.bipedHeadwear);
 
-		this.bipedBodywear = new ModelRenderer(this, 16, 32);
+		this.bipedBodywear = copy(this.bipedBody, 0, 0, 0.25F);
 		this.bipedBody.addChild(this.bipedBodywear);
 
-		this.bipedRightArmwear = new ModelRenderer(this, 40, 32);
+		this.bipedRightArmwear = copy(this.bipedRightArm, 0, 0, 0.25F);
 		this.bipedRightArm.addChild(this.bipedRightArmwear);
 
-		this.bipedLeftArmwear = new ModelRenderer(this, 48, 48);
+		this.bipedLeftArmwear = copy(this.bipedLeftArm, 0, 0, 0.25F);
 		this.bipedLeftArm.addChild(this.bipedLeftArmwear);
 
-		this.bipedRightLegwear = new ModelRenderer(this, 0, 32);
+		this.bipedRightLegwear = copy(this.bipedRightLeg, 0, 0, 0.25F);
 		this.bipedRightLeg.addChild(this.bipedRightLegwear);
 
-		this.bipedLeftLegwear = new ModelRenderer(this, 0, 48);
+		this.bipedLeftLegwear = copy(this.bipedLeftLeg, 0, 0, 0.25F);
 		this.bipedLeftLeg.addChild(this.bipedLeftLegwear);
 	}
 
-	protected void fillModelOverlayParts() {
-		copyBox(this.bipedHead, this.bipedHeadwear, 0.5F);
-		copyBox(this.bipedBody, this.bipedBodywear, 0.25F);
-		copyBox(this.bipedRightArm, this.bipedRightArmwear, 0.25F);
-		copyBox(this.bipedLeftArm, this.bipedLeftArmwear, 0.25F);
-		copyBox(this.bipedRightLeg, this.bipedRightLegwear, 0.25F);
-		copyBox(this.bipedLeftLeg, this.bipedLeftLegwear, 0.25F);
-	}
-
-	private static void copyBox(ModelRenderer source, ModelRenderer target, float scaleFactor) {
+	/**
+	 * When source.cubeList is empty a new {@link ModelRenderer} will be returned.<br>
+	 * <br>
+	 * Otherwise a new {@link ModelRenderer} will be created and the first {@link ModelBox} of the source will be copied
+	 * with the given scaleFactor. The texture coords of the copy will point at the position directly below the source
+	 * texture coords.
+	 */
+	protected ModelRenderer copy(ModelRenderer source, int texOffX, int texOffY, float scaleFactor) {
+		ModelRenderer copy = new ModelRenderer(this);
 		if (source.cubeList.isEmpty()) {
-			return;
+			return copy;
 		}
 		ModelBox box = source.cubeList.get(0);
 		int width = (int) (box.posX2 - box.posX1);
 		int height = (int) (box.posY2 - box.posY1);
 		int length = (int) (box.posZ2 - box.posZ1);
-		target.addBox(box.posX1, box.posY1, box.posZ1, width, height, length, scaleFactor);
+		copy.setTextureOffset(source.textureOffsetX + texOffX, source.textureOffsetY + texOffY + height + length);
+		copy.addBox(box.posX1, box.posY1, box.posZ1, width, height, length, scaleFactor);
+		return copy;
 	}
 
-	protected void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+	protected void setRotationDeg(ModelRenderer modelRenderer, double x, double y, double z) {
+		this.setRotationRad(modelRenderer, Math.toRadians(x), Math.toRadians(y), Math.toRadians(z));
+	}
+
+	protected void setRotationRad(ModelRenderer modelRenderer, double x, double y, double z) {
+		modelRenderer.rotateAngleX = (float) x;
+		modelRenderer.rotateAngleY = (float) y;
+		modelRenderer.rotateAngleZ = (float) z;
 	}
 
 	/**
@@ -129,7 +147,7 @@ public class ModelCQRBiped extends ModelBiped implements IHideable {
 		// fix rotation of bipedHeadwear (it is now a child of bipedHead and thus does not need to copy the rotation point and
 		// angles)
 		this.bipedHeadwear.setRotationPoint(0, 0, 0);
-		this.setRotateAngle(this.bipedHeadwear, 0, 0, 0);
+		this.setRotationRad(this.bipedHeadwear, 0, 0, 0);
 
 		AbstractEntityCQR entityCQR = (AbstractEntityCQR) entityIn;
 		ANIMATIONS.stream().filter(ani -> ani.canApply(entityCQR)).forEach(ani -> ani.apply(this, ageInTicks, entityCQR));
