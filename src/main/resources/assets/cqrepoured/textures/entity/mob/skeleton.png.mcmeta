@@ -13,6 +13,19 @@
 		"x2": 15,
 		"y2": 13
 	  }
+	],
+	"parts": [
+	  "bipedHead"
 	]
+  },
+  "parts": {
+    "parts": [
+      "bipedHead",
+      "bipedBody",
+      "bipedRightArm",
+      "bipedLeftArm",
+      "bipedRightLeg",
+      "bipedLeftLeg"
+    ]
   }
 }

@@ -8,20 +8,26 @@ import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 public class ModelCQRSkeleton extends ModelCQRBiped {
 
 	public ModelCQRSkeleton() {
-		super(64, 64);
+		super(128, 32);
+	}
 
-		this.bipedRightArm = new ModelRenderer(this, 40, 16);
+	@Override
+	protected void initModelParts() {
+		super.initModelParts();
+
+		this.bipedRightArm = new ModelRenderer(this, 56, 0);
 		this.bipedRightArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
 		this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-		this.bipedLeftArm = new ModelRenderer(this, 40, 16);
-		this.bipedLeftArm.mirror = true;
+
+		this.bipedLeftArm = new ModelRenderer(this, 72, 0);
 		this.bipedLeftArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
-		this.bipedRightLeg = new ModelRenderer(this, 0, 16);
+
+		this.bipedRightLeg = new ModelRenderer(this, 88, 0);
 		this.bipedRightLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
 		this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
-		this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-		this.bipedLeftLeg.mirror = true;
+
+		this.bipedLeftLeg = new ModelRenderer(this, 104, 0);
 		this.bipedLeftLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
 	}
