@@ -1,0 +1,16 @@
+{
+  "parts": {
+    "parts": [
+      "bipedHead",
+      "bipedBody",
+      "bipedRightArm",
+      "bipedLeftArm",
+      "bipedRightLeg",
+      "bipedLeftLeg",
+      "bipedHeadwear",
+      "bipedBodywear",
+      "bipedRightArmwear",
+      "bipedLeftArmwear"
+    ]
+  }
+}
