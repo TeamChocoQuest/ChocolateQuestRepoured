@@ -172,7 +172,6 @@
 					"name": "item_left_hand",
 					"parent": "arm_left",
 					"pivot": [11, 9, 0],
-					"rotation": [0, 90, 0],
 					"cubes": [
 						{"origin": [11, 9, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]

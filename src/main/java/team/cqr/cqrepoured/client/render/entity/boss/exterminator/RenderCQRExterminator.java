@@ -48,15 +48,19 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			GlStateManager.translate(0, 0.35, -0.55);
-			if(item.getItem() instanceof ItemFlamethrower) {
-				GlStateManager.translate(0, -0.45, 0.25);
-			}
-
-			GlStateManager.rotate(180, 0, 0, 1);
-			if(item.getItem() instanceof ItemFlamethrower) {
-				GlStateManager.rotate(270, 1, 0, 0);
-				
+			//move left or right (from the entity's POV, positive: Right), move up or down the arm, move above (negative) or under the arm (positive)
+			GlStateManager.translate(0.0, 0.0, -0.25);
+			//Since the golem is massive we need to scale it up a bit
+			
+			//Standard code from LayerHeldItem
+			GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+			if(!(item.getItem() instanceof ItemFlamethrower)) {
+				GlStateManager.rotate(100, 1, 0, 0);
+				GlStateManager.translate(0, -0.3, -0.2);
+				GlStateManager.scale(1.25, 1.25, 1.25);
+			} else {
+				//Different scale cause flamethrower is very small
 				GlStateManager.scale(1.5, 1.5, 1.5);
 			}
 		}
