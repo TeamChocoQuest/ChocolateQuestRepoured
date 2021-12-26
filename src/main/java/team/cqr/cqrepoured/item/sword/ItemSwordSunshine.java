@@ -26,7 +26,9 @@ public class ItemSwordSunshine extends ItemSword {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.world.isDaytime()) {
-			target.attackEntityFrom(DamageSource.GENERIC, 3.0F);
+			//Warning: This overrides the invincbility frame
+			target.hurtResistantTime = 0;
+			target.attackEntityFrom(DamageSource.GENERIC, 300.0F);
 		}
 		return super.hitEntity(stack, target, attacker);
 	}
