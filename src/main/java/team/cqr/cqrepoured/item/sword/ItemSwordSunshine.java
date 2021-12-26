@@ -28,7 +28,7 @@ public class ItemSwordSunshine extends ItemSword {
 		if (target.world.isDaytime()) {
 			//Warning: This overrides the invincbility frame
 			target.hurtResistantTime = 0;
-			target.attackEntityFrom(DamageSource.GENERIC, 300.0F);
+			target.attackEntityFrom(DamageSource.GENERIC, 3.0F);
 		}
 		return super.hitEntity(stack, target, attacker);
 	}
