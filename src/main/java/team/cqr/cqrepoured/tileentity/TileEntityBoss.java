@@ -14,7 +14,7 @@ public class TileEntityBoss extends TileEntity {
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
 		protected void onContentsChanged(int slot) {
-			if (!TileEntityBoss.this.world.isRemote) {
+			if (TileEntityBoss.this.world != null && !TileEntityBoss.this.world.isRemote) {
 				TileEntityBoss.this.markDirty();
 			}
 		}
