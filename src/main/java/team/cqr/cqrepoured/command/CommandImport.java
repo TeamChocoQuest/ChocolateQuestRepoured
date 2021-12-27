@@ -101,6 +101,7 @@ public class CommandImport extends CommandBase {
 
 			sender.sendMessage(new TextComponentString("Imported " + allFiles.size() + " structures successfully"));
 		} catch (Exception e) {
+			CQRMain.logger.error("Failed importing structures!", e);
 			throw new CommandException("Failed importing structures: %s", e);
 		} finally {
 			CQRConfig.advanced.structureImportMode = importMode;
