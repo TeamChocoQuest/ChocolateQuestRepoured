@@ -8,8 +8,11 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
@@ -17,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.init.CQRSounds;
 
 public class ItemMusket extends ItemRevolver {
@@ -82,4 +86,20 @@ public class ItemMusket extends ItemRevolver {
 	public SoundEvent getShootSound() {
 		return CQRSounds.MUSKET_SHOOT;
 	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (!(entityIn instanceof EntityLivingBase)) {
+			return;
+		}
+		if (!isSelected) {
+			return;
+		}
+		EntityLivingBase entityLiving = (EntityLivingBase) entityIn;
+		ItemStack offhand = entityLiving.getHeldItemOffhand();
+		if (!offhand.isEmpty()) {
+			entityLiving.addPotionEffect(new PotionEffect(CQRPotions.TWOHANDED, 30, 1));
+		}
+	}
+
 }

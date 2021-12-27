@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -27,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemGreatSword extends ItemCQRWeapon {
@@ -123,6 +125,21 @@ public class ItemGreatSword extends ItemCQRWeapon {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (!(entityIn instanceof EntityLivingBase)) {
+			return;
+		}
+		if (!isSelected) {
+			return;
+		}
+		EntityLivingBase entityLiving = (EntityLivingBase) entityIn;
+		ItemStack offhand = entityLiving.getHeldItemOffhand();
+		if (!offhand.isEmpty()) {
+			entityLiving.addPotionEffect(new PotionEffect(CQRPotions.TWOHANDED, 30, 1));
+		}
 	}
 
 }
