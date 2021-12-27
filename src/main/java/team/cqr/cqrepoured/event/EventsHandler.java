@@ -27,6 +27,7 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
@@ -45,6 +46,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.item.IEquipListener;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 import team.cqr.cqrepoured.item.crafting.RecipeArmorDyableBreathing;
@@ -331,8 +333,19 @@ public class EventsHandler {
 	}
 
 	@SubscribeEvent
+	public static void onLivingEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
+		EntityEquipmentSlot slot = event.getSlot();
+		if (slot != EntityEquipmentSlot.MAINHAND) {
 			return;
 		}
+		EntityLivingBase entity = event.getEntityLiving();
+		ItemStack stackOld = event.getFrom();
+		if (stackOld.getItem() instanceof IEquipListener) {
+			((IEquipListener) stackOld.getItem()).onUnequip(entity, stackOld, slot);
+		}
+		ItemStack stackNew = event.getTo();
+		if (stackNew.getItem() instanceof IEquipListener) {
+			((IEquipListener) stackNew.getItem()).onEquip(entity, stackNew, slot);
 		}
 	}
 
