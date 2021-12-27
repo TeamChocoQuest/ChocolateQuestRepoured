@@ -34,7 +34,7 @@ public class CommandDeleteProtectedRegion extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 3) {
-			throw new WrongUsageException("Not enough arguments!");
+			throw new WrongUsageException(this.getUsage(sender));
 		}
 
 		BlockPos pos = parseBlockPos(sender, args, 0, false);

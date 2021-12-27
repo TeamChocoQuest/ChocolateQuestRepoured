@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.command;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -71,10 +72,7 @@ public class CommandExport extends CommandBase {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
 		if (args.length == 1) {
-			List<String> list = new ArrayList<>();
-			list.add("false");
-			list.add("true");
-			return list;
+			return Stream.of("false", "true").collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}
