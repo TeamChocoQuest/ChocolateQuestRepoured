@@ -214,7 +214,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 					if (z + pos.getZ() < this.startZ || z + pos.getZ() > this.endZ) {
 						continue;
 					}
-					int y = this.endY + 1 - pos.getY();
+					int y = Math.min(this.endY + 1 - pos.getY(), size.getY() - 1);
 					while (y >= 0 && blocks.get((x * size.getY() + y) * size.getZ() + z) instanceof PreparableEmptyInfo) {
 						y--;
 					}
