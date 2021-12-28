@@ -988,6 +988,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setDropChance(EntityEquipmentSlot.OFFHAND, additionalData.readFloat());
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ByteBufUtils.readItemStack(additionalData));
 		this.trades.readFromNBT(ByteBufUtils.readTag(additionalData));
+		this.chooseNewRandomSpeechBubble();
 	}
 
 	// #################### Chocolate Quest Repoured ####################
