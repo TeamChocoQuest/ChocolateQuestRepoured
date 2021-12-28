@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
 import team.cqr.cqrepoured.util.GuiHandler;
 
@@ -144,8 +145,8 @@ public class GuiCQREntity extends GuiContainer {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		if (button == this.openTradeGUIButton && (player.isCreative() || (this.entity.getTrades() != null && !this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.entity.world, this.entity.getEntityId(), 0, 0);
+		if (button == this.openTradeGUIButton && (player.isCreative() || (!this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
+			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getEntityId()));
 		}
 	}
 
