@@ -28,11 +28,9 @@ import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCa
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerSyncCalamityRotation;
 import team.cqr.cqrepoured.network.client.handler.exterminator.CPacketHandlerUpdateEmitterTarget;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
-import team.cqr.cqrepoured.network.client.packet.CPacketAttackEntity;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
 import team.cqr.cqrepoured.network.client.packet.CPacketDeleteTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketEditTrade;
-import team.cqr.cqrepoured.network.client.packet.CPacketExtendedReachAttack;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenEditTradeGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
@@ -42,11 +40,9 @@ import team.cqr.cqrepoured.network.client.packet.CPacketSyncSelectedTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.client.packet.CPacketUpdateTradeIndex;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerAddPathNode;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerAttackEntity;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerCloseMapPlaceholderGuiSimple;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerDeleteTrade;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerEditTrade;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerExtendedReachAttack;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerOpenEditTradeGui;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerOpenMerchantGui;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSaveStructureRequest;
@@ -116,7 +112,6 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerStructureSelector.class, CPacketStructureSelector.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncEntity.class, CPacketSyncEntity.class, messageID++, Side.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerExtendedReachAttack.class, CPacketExtendedReachAttack.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerDeleteTrade.class, CPacketDeleteTrade.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerEditTrade.class, CPacketEditTrade.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerOpenEditTradeGui.class, CPacketOpenEditTradeGui.class, messageID++, Side.SERVER);
@@ -126,7 +121,6 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncTileEntity.class, CPacketSyncTileEntity.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerAddPathNode.class, CPacketAddPathNode.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerCloseMapPlaceholderGuiSimple.class, CPacketCloseMapPlaceholderGuiSimple.class, messageID++, Side.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerAttackEntity.class, CPacketAttackEntity.class, messageID++, Side.SERVER);
 	}
 
 }
