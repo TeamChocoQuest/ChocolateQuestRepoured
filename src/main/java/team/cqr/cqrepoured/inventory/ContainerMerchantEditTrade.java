@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.inventory;
 
+import java.util.stream.IntStream;
+
+import javax.annotation.Nullable;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -7,11 +12,18 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
+import team.cqr.cqrepoured.entity.trade.TraderOffer;
+import team.cqr.cqrepoured.faction.EReputationState;
+import team.cqr.cqrepoured.util.GuiHandler;
 
-public class ContainerMerchantEditTrade extends Container {
+public class ContainerMerchantEditTrade extends Container implements IInteractable {
 
 	private final AbstractEntityCQR entity;
 	private final IInventory tradeInventory;
@@ -102,6 +114,64 @@ public class ContainerMerchantEditTrade extends Container {
 			input[i] = this.tradeInventory.getStackInSlot(i);
 		}
 		return input;
+	}
+
+	@Override
+	public void onClickButton(EntityPlayer player, int button, ByteBuf extraData) {
+		if (button == 0) {
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.world, this.entity.getEntityId(), 0, 0);
+		} else if (button == 1) {
+			int index = extraData.readInt();
+			boolean[] ignoreMeta = new boolean[4];
+			IntStream.range(0, ignoreMeta.length).forEach(i -> ignoreMeta[i] = extraData.readBoolean());
+			boolean[] ignoreNBT = new boolean[4];
+			IntStream.range(0, ignoreNBT.length).forEach(i -> ignoreNBT[i] = extraData.readBoolean());
+			String reputationName = ByteBufUtils.readUTF8String(extraData);
+			String advancementName = ByteBufUtils.readUTF8String(extraData);
+			boolean stock = extraData.readBoolean();
+			int restock = extraData.readInt();
+			int inStock = extraData.readInt();
+			int maxStock = extraData.readInt();
+
+			TraderOffer trades = this.entity.getTrades();
+			int reputation = this.getRequriedReputation(reputationName);
+			ResourceLocation advancement = this.getRequiredAdvancement((WorldServer) player.world, advancementName);
+			ItemStack output = this.getOutput();
+			TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
+			Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
+
+			this.entity.getTrades().editTrade(index, trade);
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.world, this.entity.getEntityId(), 0, 0);
+		}
+	}
+
+	private TradeInput[] getTradeInput(ItemStack[] stacks, boolean[] ignoreMeta, boolean[] ignoreNBT) {
+		TradeInput[] input = new TradeInput[stacks.length];
+		for (int i = 0; i < input.length; i++) {
+			input[i] = new TradeInput(stacks[i], i < ignoreMeta.length && ignoreMeta[i], i < ignoreNBT.length && ignoreNBT[i]);
+		}
+		return input;
+	}
+
+	private int getRequriedReputation(String reputation) {
+		try {
+			EReputationState reputationState = EReputationState.valueOf(reputation.toUpperCase());
+			if (reputationState != null) {
+				return reputationState.getValue();
+			}
+		} catch (Exception e) {
+			// ignore
+		}
+		return Integer.MIN_VALUE;
+	}
+
+	@Nullable
+	private ResourceLocation getRequiredAdvancement(WorldServer world, String advancement) {
+		ResourceLocation requiredAdvancement = new ResourceLocation(advancement);
+		if (world.getAdvancementManager().getAdvancement(requiredAdvancement) != null) {
+			return requiredAdvancement;
+		}
+		return null;
 	}
 
 }

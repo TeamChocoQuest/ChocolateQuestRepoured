@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.inventory;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -7,12 +8,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.util.CraftingHelper;
+import team.cqr.cqrepoured.util.GuiHandler;
 
-public class ContainerMerchant extends Container {
+public class ContainerMerchant extends Container implements IInteractable {
 
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;
@@ -165,6 +168,47 @@ public class ContainerMerchant extends Container {
 			}
 		}
 
+	}
+
+	@Override
+	public void onClickButton(EntityPlayer player, int button, ByteBuf extraData) {
+		if (button < 10) {
+			if (button == 0) {
+				// new trade
+				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.world, this.entity.getEntityId(), this.entity.getTrades().size(), 0);
+			}
+		} else if (button < 20) {
+			// select
+			int index = extraData.readInt();
+			this.setCurrentTradeIndex(index);
+			this.updateInputsForTrade(index);
+		} else if (button < 30) {
+			// push up
+			int index = extraData.readInt();
+			int newIndex = index - 1;
+			this.entity.getTrades().updateTradeIndex(index, newIndex);
+		} else if (button < 40) {
+			// push down
+			int index = extraData.readInt();
+			int newIndex = index + 1;
+			this.entity.getTrades().updateTradeIndex(index, newIndex);
+		} else if (button < 50) {
+			// delete
+			int index = extraData.readInt();
+			this.entity.getTrades().deleteTrade(index);
+		} else if (button < 60) {
+			// edit
+			int index = extraData.readInt();
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.world, this.entity.getEntityId(), index, 0);
+		}
+	}
+
+	public void onTradesUpdated() {
+		this.merchantInventory.resetTradeAndSlots();
+	}
+
+	public AbstractEntityCQR getMerchant() {
+		return this.entity;
 	}
 
 }

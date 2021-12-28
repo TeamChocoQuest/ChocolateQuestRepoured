@@ -3,7 +3,10 @@ package team.cqr.cqrepoured.entity.trade;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -11,6 +14,7 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
 
 public class TraderOffer {
@@ -64,7 +68,19 @@ public class TraderOffer {
 
 	public void onTradesUpdated() {
 		if (!this.entity.world.isRemote) {
+			this.entity.world.playerEntities.stream()
+					.map(p -> p.openContainer)
+					.filter(Objects::nonNull)
+					.filter(ContainerMerchant.class::isInstance)
+					.map(ContainerMerchant.class::cast)
+					.filter(c -> c.getMerchant() == this.entity)
+					.forEach(c -> c.onTradesUpdated());
 			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncTrades(this.entity), this.entity);
+		} else {
+			Container c = Minecraft.getMinecraft().player.openContainer;
+			if (c instanceof ContainerMerchant) {
+				((ContainerMerchant) c).onTradesUpdated();
+			}
 		}
 	}
 

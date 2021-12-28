@@ -20,10 +20,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
-import team.cqr.cqrepoured.network.client.packet.CPacketDeleteTrade;
-import team.cqr.cqrepoured.network.client.packet.CPacketOpenEditTradeGui;
-import team.cqr.cqrepoured.network.client.packet.CPacketSyncSelectedTrade;
-import team.cqr.cqrepoured.network.client.packet.CPacketUpdateTradeIndex;
+import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 
 @SideOnly(Side.CLIENT)
 public class GuiMerchant extends GuiContainer implements IUpdatableGui {
@@ -113,17 +110,14 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 		if (button instanceof GuiButtonTrade) {
 			((ContainerMerchant) this.inventorySlots).setCurrentTradeIndex(((GuiButtonTrade) button).getIndex());
 			((ContainerMerchant) this.inventorySlots).updateInputsForTrade(((GuiButtonTrade) button).getIndex());
-			CQRMain.NETWORK.sendToServer(new CPacketSyncSelectedTrade(((GuiButtonTrade) button).getIndex()));
-		} else if (button == this.addNewTradeButton) {
-			CQRMain.NETWORK.sendToServer(new CPacketOpenEditTradeGui(this.entity.getEntityId(), this.trades.size()));
-		} else if (button.id >= 20 && button.id < 30) {
-			CQRMain.NETWORK.sendToServer(new CPacketUpdateTradeIndex(this.entity.getEntityId(), this.buttonStartIndex + button.id - 20, this.buttonStartIndex + button.id - 20 - 1));
-		} else if (button.id >= 30 && button.id < 40) {
-			CQRMain.NETWORK.sendToServer(new CPacketUpdateTradeIndex(this.entity.getEntityId(), this.buttonStartIndex + button.id - 30, this.buttonStartIndex + button.id - 30 + 1));
-		} else if (button.id >= 40 && button.id < 50) {
-			CQRMain.NETWORK.sendToServer(new CPacketDeleteTrade(this.entity.getEntityId(), this.buttonStartIndex + button.id - 40));
-		} else if (button.id >= 50 && button.id < 60) {
-			CQRMain.NETWORK.sendToServer(new CPacketOpenEditTradeGui(this.entity.getEntityId(), this.buttonStartIndex + button.id - 50));
+		}
+		if (button.id < 10) {
+			if (button.id == 0) {
+				CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(button.id));
+			}
+		} else {
+			int index = this.buttonStartIndex + (button.id % 10);
+			CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(button.id, buf -> buf.writeInt(index)));
 		}
 	}
 
