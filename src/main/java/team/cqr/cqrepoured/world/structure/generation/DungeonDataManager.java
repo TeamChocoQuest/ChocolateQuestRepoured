@@ -169,8 +169,7 @@ public class DungeonDataManager {
 				dungeonInfos.add(new DungeonInfo((NBTTagCompound) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {
-				String dungeonName = key.substring(0, 4).equals("dun-") ? key.substring(4) : key;
-				this.dungeonData.put(dungeonName, dungeonInfos);
+				this.dungeonData.put(key, dungeonInfos);
 			}
 		}
 	}
