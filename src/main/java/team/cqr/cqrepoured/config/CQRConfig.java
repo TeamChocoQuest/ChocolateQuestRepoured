@@ -330,6 +330,9 @@ public class CQRConfig {
 		public float maxUncappedDamageForNonBossMobs = 50F;
 		public float maxUncappedDamageInMaxHPPercent = 1F;
 		public boolean disableFirePanicAI = false;
+		
+		public boolean enableTradeRestockOverTime = true;
+		public long tradeRestockTime = 12000;
 
 	}
 
