@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CachedBlockAccess;
 
 @SideOnly(Side.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface

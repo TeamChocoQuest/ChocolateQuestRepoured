@@ -7,10 +7,11 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.armor.ItemCrown;
 
 @SideOnly(Side.CLIENT)
-@EventBusSubscriber(value = Side.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
 public class TooltipEventHandler {
 
 	@SubscribeEvent
