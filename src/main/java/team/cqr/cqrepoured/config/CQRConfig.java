@@ -330,6 +330,11 @@ public class CQRConfig {
 		public float maxUncappedDamageForNonBossMobs = 50F;
 		public float maxUncappedDamageInMaxHPPercent = 1F;
 		public boolean disableFirePanicAI = false;
+		
+		public boolean enableTradeRestockOverTime = true;
+		@Config.Comment("Measured in ticks)")
+		public int tradeRestockTime = 72000; // One hour
+		public int maxAutoRestocksOverTime = 8;
 
 	}
 
