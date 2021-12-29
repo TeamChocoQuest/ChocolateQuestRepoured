@@ -26,7 +26,6 @@ public interface IDungeonPart extends IGeneratable {
 
 		static {
 			register(BlockDungeonPart.class, "dungeon_part_block", new BlockDungeonPart.Serializer());
-			register(MultiBlockDungeonPart.class, "dungeon_part_block_special", new MultiBlockDungeonPart.Serializer());
 			register(CoverDungeonPart.class, "dungeon_part_cover", new CoverDungeonPart.Serializer());
 			register(EntityDungeonPart.class, "dungeon_part_entity", new EntityDungeonPart.Serializer());
 			register(PlateauDungeonPart.class, "dungeon_part_plateau", new PlateauDungeonPart.Serializer());
