@@ -332,7 +332,8 @@ public class CQRConfig {
 		public boolean disableFirePanicAI = false;
 		
 		public boolean enableTradeRestockOverTime = true;
-		public long tradeRestockTime = 12000;
+		@Config.Comment("Measured in milliseconds)")
+		public long tradeRestockTime = 3600000; // One hour
 
 	}
 
