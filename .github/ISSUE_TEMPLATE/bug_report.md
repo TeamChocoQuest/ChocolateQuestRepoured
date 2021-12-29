@@ -33,7 +33,7 @@ Steps to reproduce the behavior:
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
  
-**Versions (Note that 'latest' is **NOT** a valid version!**
+**Versions (Note that 'latest' is NOT a valid version!**
 Chocolate Quest Repoured:
 Forge:
 Minecraft:
