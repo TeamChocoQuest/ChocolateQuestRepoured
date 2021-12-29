@@ -1,21 +1,14 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo.Registry.ISerializer;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class GeneratableBossInfo extends GeneratablePosInfo {
 
@@ -54,25 +47,6 @@ public class GeneratableBossInfo extends GeneratablePosInfo {
 
 	public Entity getEntity() {
 		return this.entity;
-	}
-
-	public static class Serializer implements ISerializer<GeneratableBossInfo> {
-
-		@Override
-		public void write(GeneratableBossInfo generatable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			ByteBufUtils.writeVarInt(buf, nbtList.tagCount(), 5);
-			NBTTagCompound compound = new NBTTagCompound();
-			generatable.entity.writeToNBTAtomically(compound);
-			nbtList.appendTag(compound);
-		}
-
-		@Override
-		public GeneratableBossInfo read(World world, int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			NBTTagCompound compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
-			Entity entity = EntityList.createEntityFromNBT(compound, world);
-			return new GeneratableBossInfo(x, y, z, entity);
-		}
-
 	}
 
 }

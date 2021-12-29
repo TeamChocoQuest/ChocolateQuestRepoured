@@ -6,8 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -16,7 +14,6 @@ import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEmptyInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
@@ -231,51 +228,6 @@ public class PlateauDungeonPart implements IDungeonPart {
 		public PlateauDungeonPart build(World world, DungeonPlacement placement) {
 			return new PlateauDungeonPart(world.getSeed(), this.startX, this.startZ, this.endX, this.endY, this.endZ, this.wallSize, this.supportHillBlock,
 					this.supportHillTopBlock, this.ground);
-		}
-
-	}
-
-	public static class Serializer implements ISerializer<PlateauDungeonPart> {
-
-		@Override
-		public NBTTagCompound write(PlateauDungeonPart part, NBTTagCompound compound) {
-			compound.setLong("seed", part.seed);
-			compound.setInteger("startX", part.startX);
-			compound.setInteger("startZ", part.startZ);
-			compound.setInteger("endX", part.endX);
-			compound.setInteger("endY", part.endY);
-			compound.setInteger("endZ", part.endZ);
-			compound.setInteger("wallSize", part.wallSize);
-			compound.setTag("supportHillBlock", NBTUtil.writeBlockState(new NBTTagCompound(), part.supportHillBlock));
-			compound.setTag("supportHillTopBlock", NBTUtil.writeBlockState(new NBTTagCompound(), part.supportHillTopBlock));
-			compound.setInteger("chunkX", part.chunkX);
-			compound.setInteger("chunkZ", part.chunkZ);
-			compound.setInteger("chunkX1", part.chunkX1);
-			compound.setInteger("chunkZ1", part.chunkZ1);
-			return compound;
-		}
-
-		@Override
-		public PlateauDungeonPart read(World world, NBTTagCompound compound) {
-			long seed = compound.getLong("seed");
-			int startX = compound.getInteger("startX");
-			int startZ = compound.getInteger("startZ");
-			int endX = compound.getInteger("endX");
-			int endY = compound.getInteger("endY");
-			int endZ = compound.getInteger("endZ");
-			int wallSize = compound.getInteger("wallSize");
-			IBlockState supportHillBlock = NBTUtil.readBlockState(compound.getCompoundTag("supportHillBlock"));
-			IBlockState supportHillTopBlock = NBTUtil.readBlockState(compound.getCompoundTag("supportHillTopBlock"));
-			int chunkX = compound.getInteger("chunkX");
-			int chunkZ = compound.getInteger("chunkZ");
-			int chunkX1 = compound.getInteger("chunkX1");
-			int chunkZ1 = compound.getInteger("chunkZ1");
-			PlateauDungeonPart part = new PlateauDungeonPart(seed, startX, startZ, endX, endY, endZ, wallSize, supportHillBlock, supportHillTopBlock, null);
-			part.chunkX = chunkX;
-			part.chunkZ = chunkZ;
-			part.chunkX1 = chunkX1;
-			part.chunkZ1 = chunkZ1;
-			return part;
 		}
 
 	}

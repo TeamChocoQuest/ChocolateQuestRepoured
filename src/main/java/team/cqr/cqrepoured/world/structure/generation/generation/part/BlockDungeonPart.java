@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,21 +10,14 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.IGeneratable;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class BlockDungeonPart implements IDungeonPart, IProtectable {
 
@@ -254,67 +246,6 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			}
 
 			return new BlockDungeonPart(list1);
-		}
-
-	}
-
-	public static class Serializer implements ISerializer<BlockDungeonPart> {
-
-		@Override
-		public NBTTagCompound write(BlockDungeonPart part, NBTTagCompound compound) {
-			ByteBuf buf = Unpooled.buffer();
-			BlockStatePalette palette = new BlockStatePalette();
-			NBTTagList compoundList = new NBTTagList();
-			buf.writeInt(part.chunks.size());
-			part.chunks.forEach(chunkInfo -> {
-				buf.writeInt(chunkInfo.chunkX);
-				buf.writeInt(chunkInfo.chunkY);
-				buf.writeInt(chunkInfo.chunkZ);
-				GeneratablePosInfo[][][] arr = new GeneratablePosInfo[16][16][16];
-				chunkInfo.blocks.forEach(posInfo -> arr[posInfo.getX() & 15][posInfo.getY() & 15][posInfo.getZ() & 15] = posInfo);
-				for (int y = 0; y < 16; y++) {
-					for (int x = 0; x < 16; x++) {
-						for (int z = 0; z < 16; z++) {
-							if (arr[x][y][z] == null) {
-								buf.writeByte(-1);
-							} else {
-								GeneratablePosInfo.Registry.write(arr[x][y][z], buf, palette, compoundList);
-							}
-						}
-					}
-				}
-			});
-			compound.setByteArray("blocks", Arrays.copyOf(buf.array(), buf.writerIndex()));
-			compound.setTag("palette", palette.writeToNBT());
-			compound.setTag("compoundList", compoundList);
-			return compound;
-		}
-
-		@Override
-		public BlockDungeonPart read(World world, NBTTagCompound compound) {
-			ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("blocks"));
-			BlockStatePalette palette = new BlockStatePalette(compound.getTagList("palette", Constants.NBT.TAG_COMPOUND));
-			NBTTagList compoundList = compound.getTagList("compoundList", Constants.NBT.TAG_COMPOUND);
-			List<GeneratableChunkInfo> chunks = new ArrayList<>();
-			for (int i = buf.readInt(); i > 0; i--) {
-				int chunkX = buf.readInt();
-				int chunkY = buf.readInt();
-				int chunkZ = buf.readInt();
-				List<GeneratablePosInfo> blocks = new ArrayList<>();
-				for (int y = 0; y < 16; y++) {
-					for (int x = 0; x < 16; x++) {
-						for (int z = 0; z < 16; z++) {
-							if (buf.getByte(buf.readerIndex()) == -1) {
-								buf.readByte();
-								continue;
-							}
-							blocks.add(GeneratablePosInfo.Registry.read(world, (chunkX << 4) + x, (chunkY << 4) + y, (chunkZ << 4) + z, buf, palette, compoundList));
-						}
-					}
-				}
-				chunks.add(new GeneratableChunkInfo(chunkX, chunkY, chunkZ, blocks));
-			}
-			return new BlockDungeonPart(chunks);
 		}
 
 	}

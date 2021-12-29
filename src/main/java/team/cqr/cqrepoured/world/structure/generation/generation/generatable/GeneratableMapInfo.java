@@ -5,31 +5,23 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.storage.MapData;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo.Registry.ISerializer;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class GeneratableMapInfo extends GeneratablePosInfo {
 
@@ -229,39 +221,6 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 
 	public int getFillRadius() {
 		return this.fillRadius;
-	}
-
-	public static class Serializer implements ISerializer<GeneratableMapInfo> {
-
-		@Override
-		public void write(GeneratableMapInfo generatable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			ByteBufUtils.writeVarInt(buf, nbtList.tagCount(), 5);
-			NBTTagCompound compound = new NBTTagCompound();
-			generatable.entity.writeToNBTAtomically(compound);
-			nbtList.appendTag(compound);
-			ByteBufUtils.writeVarInt(buf, generatable.mapOriginX, 5);
-			ByteBufUtils.writeVarInt(buf, generatable.mapOriginZ, 5);
-			ByteBufUtils.writeVarInt(buf, generatable.mapX, 5);
-			ByteBufUtils.writeVarInt(buf, generatable.mapZ, 5);
-			buf.writeByte(generatable.scale);
-			buf.writeBoolean(generatable.fillMap);
-			ByteBufUtils.writeVarInt(buf, generatable.fillRadius, 5);
-		}
-
-		@Override
-		public GeneratableMapInfo read(World world, int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			NBTTagCompound compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
-			Entity entity = EntityList.createEntityFromNBT(compound, world);
-			int mapOriginX = ByteBufUtils.readVarInt(buf, 5);
-			int mapOriginZ = ByteBufUtils.readVarInt(buf, 5);
-			int mapX = ByteBufUtils.readVarInt(buf, 5);
-			int mapZ = ByteBufUtils.readVarInt(buf, 5);
-			byte scale = buf.readByte();
-			boolean fillMap = buf.readBoolean();
-			int fillRadius = ByteBufUtils.readVarInt(buf, 5);
-			return new GeneratableMapInfo(x, y, z, (EntityItemFrame) entity, mapOriginX, mapOriginZ, mapX, mapZ, scale, fillMap, fillRadius);
-		}
-
 	}
 
 }

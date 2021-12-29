@@ -2,15 +2,12 @@ package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart.Registry.ISerializer;
 
 public class CoverDungeonPart implements IDungeonPart {
 
@@ -116,37 +113,6 @@ public class CoverDungeonPart implements IDungeonPart {
 		@Override
 		public CoverDungeonPart build(World world, DungeonPlacement placement) {
 			return new CoverDungeonPart(this.startX, this.startZ, this.endX, this.endZ, this.coverBlock);
-		}
-
-	}
-
-	public static class Serializer implements ISerializer<CoverDungeonPart> {
-
-		@Override
-		public NBTTagCompound write(CoverDungeonPart part, NBTTagCompound compound) {
-			compound.setInteger("startX", part.startX);
-			compound.setInteger("startZ", part.startZ);
-			compound.setInteger("endX", part.endX);
-			compound.setInteger("endZ", part.endZ);
-			compound.setTag("coverBlock", NBTUtil.writeBlockState(new NBTTagCompound(), part.coverBlock));
-			compound.setInteger("chunkX", part.chunkX);
-			compound.setInteger("chunkZ", part.chunkZ);
-			return compound;
-		}
-
-		@Override
-		public CoverDungeonPart read(World world, NBTTagCompound compound) {
-			int startX = compound.getInteger("startX");
-			int startZ = compound.getInteger("startZ");
-			int endX = compound.getInteger("endX");
-			int endZ = compound.getInteger("endZ");
-			IBlockState coverBlock = NBTUtil.readBlockState(compound.getCompoundTag("coverBlock"));
-			int chunkX = compound.getInteger("chunkX");
-			int chunkZ = compound.getInteger("chunkZ");
-			CoverDungeonPart part = new CoverDungeonPart(startX, startZ, endX, endZ, coverBlock);
-			part.chunkX = chunkX;
-			part.chunkZ = chunkZ;
-			return part;
 		}
 
 	}

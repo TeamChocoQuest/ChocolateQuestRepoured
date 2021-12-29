@@ -1,11 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
-import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ByteMap;
-import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -13,7 +7,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import team.cqr.cqrepoured.util.BlockPlacingHelper.IBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public abstract class GeneratablePosInfo implements IGeneratable, IBlockInfo {
 
@@ -102,57 +95,6 @@ public abstract class GeneratablePosInfo implements IGeneratable, IBlockInfo {
 
 	public int getChunkZ() {
 		return this.z >> 4;
-	}
-
-	public static class Registry {
-
-		public interface ISerializer<T extends GeneratablePosInfo> {
-
-			void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
-
-			T read(World world, int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
-
-		}
-
-		private static byte nextId = 0;
-		private static final Object2ByteMap<Class<? extends GeneratablePosInfo>> CLASS_2_ID = new Object2ByteOpenHashMap<>();
-		private static final Byte2ObjectMap<ISerializer<?>> ID_2_SERIALIZER = new Byte2ObjectOpenHashMap<>();
-
-		static {
-			register(GeneratableBlockInfo.class, new GeneratableBlockInfo.Serializer());
-			register(GeneratableBossInfo.class, new GeneratableBossInfo.Serializer());
-			register(GeneratableMapInfo.class, new GeneratableMapInfo.Serializer());
-		}
-
-		private static <T extends GeneratablePosInfo> void register(Class<T> clazz, ISerializer<T> serializer) {
-			if (CLASS_2_ID.containsKey(clazz)) {
-				throw new IllegalArgumentException("Duplicate entry for class: " + clazz.getSimpleName());
-			}
-			byte id = nextId++;
-			CLASS_2_ID.put(clazz, id);
-			ID_2_SERIALIZER.put(id, serializer);
-		}
-
-		@SuppressWarnings("unchecked")
-		public static <T extends GeneratablePosInfo> void write(T generatable, ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
-			if (!CLASS_2_ID.containsKey(generatable.getClass())) {
-				throw new IllegalArgumentException("Class not registered: " + generatable.getClass().getSimpleName());
-			}
-			byte id = CLASS_2_ID.getByte(generatable.getClass());
-			buf.writeByte(id);
-			ISerializer<T> serializer = (ISerializer<T>) ID_2_SERIALIZER.get(id);
-			serializer.write(generatable, buf, palette, compoundList);
-		}
-
-		public static GeneratablePosInfo read(World world, int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
-			byte id = buf.readByte();
-			if (!ID_2_SERIALIZER.containsKey(id)) {
-				throw new IllegalArgumentException("No serializer registered for id: " + id);
-			}
-			ISerializer<?> serializer = ID_2_SERIALIZER.get(id);
-			return serializer.read(world, x, y, z, buf, palette, compoundList);
-		}
-
 	}
 
 }

@@ -12,10 +12,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.Mirror;
@@ -27,9 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.ChunkInfo.ChunkInfoMap;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart;
@@ -75,13 +69,6 @@ public class GeneratableDungeon {
 			this.light = light;
 		}
 
-		public static void write(ByteBuf buf, LightInfo lightInfo) {
-			buf.writeInt(lightInfo.pos.getX());
-			buf.writeInt(lightInfo.pos.getY());
-			buf.writeInt(lightInfo.pos.getZ());
-			buf.writeByte(lightInfo.light);
-		}
-
 	}
 
 	public enum GenerationState {
@@ -96,46 +83,6 @@ public class GeneratableDungeon {
 		this.protectedRegionBuilder = protectedRegionBuilder;
 		this.chunkInfoMap = new ChunkInfoMap();
 		this.chunkInfoMapExtended = new ChunkInfoMap();
-	}
-
-	public GeneratableDungeon(World world, NBTTagCompound compound) {
-		this.uuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("uuid"));
-		this.dungeonName = compound.getString("dungeonName");
-		this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
-		this.parts = new ArrayDeque<>();
-		compound.getTagList("parts", Constants.NBT.TAG_COMPOUND).forEach(nbt -> this.parts.add(IDungeonPart.Registry.read(world, (NBTTagCompound) nbt)));
-		this.protectedRegionBuilder = new ProtectedRegion.Builder(compound.getCompoundTag("protectedRegion"));
-		this.state = GenerationState.values()[compound.getInteger("state")];
-		this.chunkInfoMap = new ChunkInfoMap(compound.getCompoundTag("chunkInfoMap"));
-		this.chunkInfoMapExtended = new ChunkInfoMap(compound.getCompoundTag("chunkInfoMapExtended"));
-		ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("removedLights"));
-		while (buf.readableBytes() > 0) {
-			this.removedLights.add(new LightInfo(new BlockPos(buf.readInt(), buf.readInt(), buf.readInt()), buf.readByte()));
-		}
-		this.nextCheckBlockLightIndex = compound.getInteger("nextCheckBlockLightIndex");
-		this.nextGenerateSkylightMapIndex = compound.getInteger("nextGenerateSkylightMapIndex");
-		this.nextCheckSkyLightIndex = compound.getInteger("nextCheckSkyLightIndex");
-		this.nextMarkBlockForUpdateIndex = compound.getInteger("nextMarkBlockForUpdateIndex");
-		this.nextNotifyNeighborsRespectDebugIndex = compound.getInteger("nextNotifyNeighborsRespectDebugIndex");
-	}
-
-	public NBTTagCompound writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
-		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
-		compound.setString("dungeonName", this.dungeonName);
-		compound.setTag("pos", NBTUtil.createPosTag(this.pos));
-		compound.setTag("parts", this.parts.stream().map(IDungeonPart.Registry::write).collect(NBTCollectors.toList()));
-		compound.setTag("protectedRegionBuilder", this.protectedRegionBuilder.writeToNBT());
-		compound.setTag("chunkInfoMap", this.chunkInfoMap.writeToNBT());
-		compound.setTag("chunkInfoMapExtended", this.chunkInfoMapExtended.writeToNBT());
-		compound.setTag("removedLights", this.removedLights.stream().collect(NBTCollectors.toNBTByteArray(LightInfo::write)));
-		compound.setInteger("state", this.state.ordinal());
-		compound.setInteger("nextCheckBlockLightIndex", this.nextCheckBlockLightIndex);
-		compound.setInteger("nextGenerateSkylightMapIndex", this.nextGenerateSkylightMapIndex);
-		compound.setInteger("nextCheckSkyLightIndex", this.nextCheckSkyLightIndex);
-		compound.setInteger("nextMarkBlockForUpdateIndex", this.nextMarkBlockForUpdateIndex);
-		compound.setInteger("nextNotifyNeighborsRespectDebugIndex", this.nextNotifyNeighborsRespectDebugIndex);
-		return compound;
 	}
 
 	public void mark(int chunkX, int chunkY, int chunkZ) {

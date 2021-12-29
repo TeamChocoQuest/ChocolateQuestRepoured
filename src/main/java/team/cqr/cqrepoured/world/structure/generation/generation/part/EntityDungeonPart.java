@@ -8,15 +8,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableEntityInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
 
 public class EntityDungeonPart implements IDungeonPart {
@@ -60,25 +55,6 @@ public class EntityDungeonPart implements IDungeonPart {
 		@Override
 		public EntityDungeonPart build(World world, DungeonPlacement placement) {
 			return new EntityDungeonPart(this.entities.stream().map(preparable -> preparable.prepare(world, placement)).collect(Collectors.toList()));
-		}
-
-	}
-
-	public static class Serializer implements ISerializer<EntityDungeonPart> {
-
-		@Override
-		public NBTTagCompound write(EntityDungeonPart part, NBTTagCompound compound) {
-			compound.setTag("entities", part.entities.stream().map(GeneratableEntityInfo::writeToNBT).collect(NBTCollectors.toList()));
-			return compound;
-		}
-
-		@Override
-		public EntityDungeonPart read(World world, NBTTagCompound compound) {
-			List<GeneratableEntityInfo> entities = new ArrayList<>();
-			for (NBTBase nbt : compound.getTagList("entities", Constants.NBT.TAG_COMPOUND)) {
-				entities.add(new GeneratableEntityInfo(world, (NBTTagCompound) nbt));
-			}
-			return new EntityDungeonPart(entities);
 		}
 
 	}
