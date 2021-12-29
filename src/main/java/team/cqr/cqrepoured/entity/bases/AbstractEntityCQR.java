@@ -77,6 +77,7 @@ import team.cqr.cqrepoured.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.entity.ITextureVariants;
+import team.cqr.cqrepoured.entity.ITradeRestockOverTime;
 import team.cqr.cqrepoured.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowPath;
@@ -129,7 +130,7 @@ import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime {
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
@@ -216,6 +217,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int currentPathTargetPoint = -1;
 
 	private TraderOffer trades = new TraderOffer(this);
+	private long lastTimedTradeRestock = 0;
 
 	// Texture syncing
 	protected ResourceLocation textureOverride;
@@ -564,6 +566,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		compound.setTag("trades", this.trades.writeToNBT(new NBTTagCompound()));
+		compound.setLong("lastTimedRestockTime", this.getLastTimedRestockTime());
+		
 		if (this.hasTextureOverride()) {
 			compound.setString("textureOverride", this.getTextureOverride().toString());
 		}
@@ -628,6 +632,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		this.trades.readFromNBT(compound.getCompoundTag("trades"));
+		if(compound.hasKey("lastTimedRestockTime", Constants.NBT.TAG_LONG)) {
+			this.lastTimedTradeRestock = compound.getLong("lastTimedRestockTime");
+		}
 
 		if (compound.hasKey("textureOverride", Constants.NBT.TAG_STRING)) {
 			String ct = compound.getString("textureOverride");
@@ -1252,6 +1259,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setHealth(this.getMaxHealth());
 		this.setBaseHealthDependingOnPos(placement.getPos());
 
+		//Reset lastTimedRestockTick
+		this.setLastTimedRestockTime(System.currentTimeMillis());
+		
 		// Recalculate path points
 		for (Path.PathNode node : this.path.getNodes()) {
 			node.setPos(DungeonPlacement.transform(node.getPos().getX(), node.getPos().getY(), node.getPos().getZ(), BlockPos.ORIGIN, placement.getMirror(), placement.getRotation()));
@@ -1724,4 +1734,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive();
 	}
 
+	//ITradeRestockOverTime data accessors
+	@Override
+	public long getLastTimedRestockTime() {
+		return this.lastTimedTradeRestock;
+	}
+	
+	@Override
+	public void setLastTimedRestockTime(long newValue) {
+		this.lastTimedTradeRestock = newValue;
+	}
 }
