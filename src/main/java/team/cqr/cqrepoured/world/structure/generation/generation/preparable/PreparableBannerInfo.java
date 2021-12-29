@@ -35,7 +35,6 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	@Override
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
 		if (placement.getInhabitant().getBanner() != null && tileEntity instanceof TileEntityBanner) {
-			((TileEntityBanner) tileEntity).getColorList().clear();
 			((TileEntityBanner) tileEntity).setItemValues(placement.getInhabitant().getBanner().getBanner(), false);
 		}
 
