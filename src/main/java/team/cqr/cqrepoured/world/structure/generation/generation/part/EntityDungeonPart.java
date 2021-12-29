@@ -1,11 +1,9 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 import net.minecraft.world.World;
@@ -16,22 +14,17 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 
 public class EntityDungeonPart implements IDungeonPart {
 
-	private final Queue<GeneratableEntityInfo> entities;
+	private final List<GeneratableEntityInfo> entities;
 
 	protected EntityDungeonPart(Collection<GeneratableEntityInfo> entities) {
-		this.entities = new ArrayDeque<>(entities);
+		this.entities = new ArrayList<>(entities);
 	}
 
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
-		if (!this.entities.isEmpty()) {
-			this.entities.remove().generate(world, dungeon);
+		for (GeneratableEntityInfo entity : this.entities) {
+			entity.generate(world, dungeon);
 		}
-	}
-
-	@Override
-	public boolean isGenerated() {
-		return this.entities.isEmpty();
 	}
 
 	public Collection<GeneratableEntityInfo> getEntities() {

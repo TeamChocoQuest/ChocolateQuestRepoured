@@ -1,61 +1,46 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
-public class DungeonGenerationManager {
+public final class DungeonGenerationManager {
 
-	private static final Map<World, DungeonGenerationManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
+	private static final Map<World, DungeonGenerationManager> INSTANCES = new ConcurrentHashMap<>();
 
-	private final List<GeneratableDungeon> dungeonGeneratorList = Collections.synchronizedList(new ArrayList<>());
+	private final Queue<GeneratableDungeon> dungeonGeneratorList = new ConcurrentLinkedQueue<>();
 	private final World world;
 
-	public DungeonGenerationManager(World world) {
+	private DungeonGenerationManager(World world) {
 		this.world = world;
 	}
 
-	@Nullable
-	public static DungeonGenerationManager getInstance(World world) {
-		if (!world.isRemote) {
-			return INSTANCES.get(world);
-		}
-		return null;
-	}
-
 	public static void handleWorldLoad(World world) {
-		if (!world.isRemote && !INSTANCES.containsKey(world)) {
-			INSTANCES.put(world, new DungeonGenerationManager(world));
+		if (world.isRemote) {
+			return;
 		}
-	}
-
-	public static void handleWorldSave(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-		}
+		INSTANCES.computeIfAbsent(world, DungeonGenerationManager::new);
 	}
 
 	public static void handleWorldUnload(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			CQRMain.logger.info("Saved {} parts to generate", INSTANCES.get(world).dungeonGeneratorList.size());
-			INSTANCES.remove(world);
-		}
+		generateScheduledDungeons(world);
+		INSTANCES.remove(world);
 	}
 
-	public static void handleWorldTick(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).tick();
-		}
+	public static void generateScheduledDungeons(World world) {
+		INSTANCES.computeIfPresent(world, (k, v) -> {
+			v.generateScheduledDungeons();
+			return v;
+		});
 	}
 
 	public static void generate(World world, GeneratableDungeon generatableDungeon, @Nullable DungeonBase dungeon, DungeonSpawnType spawnType) {
@@ -73,21 +58,14 @@ public class DungeonGenerationManager {
 
 		boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
 		ForgeModContainer.logCascadingWorldGeneration = false;
-		while (!generatableDungeon.isGenerated()) {
-			generatableDungeon.tick(world);
-		}
+		generatableDungeon.generate(world);
 		ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;
 	}
 
-	private void tick() {
-		for (int i = 0; i < this.dungeonGeneratorList.size(); i++) {
-			GeneratableDungeon generatableDungeon = this.dungeonGeneratorList.get(i);
-
-			generatableDungeon.tick(this.world);
-
-			if (generatableDungeon.isGenerated()) {
-				this.dungeonGeneratorList.remove(i--);
-			}
+	private void generateScheduledDungeons() {
+		GeneratableDungeon generatbleDungeon;
+		while ((generatbleDungeon = this.dungeonGeneratorList.poll()) != null) {
+			generatbleDungeon.generate(this.world);
 		}
 	}
 

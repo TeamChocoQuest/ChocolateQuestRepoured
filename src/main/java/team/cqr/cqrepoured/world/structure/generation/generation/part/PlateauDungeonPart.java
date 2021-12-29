@@ -21,7 +21,6 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 public class PlateauDungeonPart implements IDungeonPart {
 
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
-	private final long seed;
 	private final int startX;
 	private final int startZ;
 	private final int endX;
@@ -30,16 +29,10 @@ public class PlateauDungeonPart implements IDungeonPart {
 	private final int wallSize;
 	private final IBlockState supportHillBlock;
 	private final IBlockState supportHillTopBlock;
-	private int chunkX;
-	private int chunkZ;
-	private int chunkX1;
-	private int chunkZ1;
-	private boolean generated;
 	private final int[][] ground;
 
-	protected PlateauDungeonPart(long seed, int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
+	protected PlateauDungeonPart(int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
 			@Nullable IBlockState supportHillTopBlock, int[][] ground) {
-		this.seed = seed;
 		this.startX = startX;
 		this.startZ = startZ;
 		this.endX = endX;
@@ -48,10 +41,6 @@ public class PlateauDungeonPart implements IDungeonPart {
 		this.wallSize = wallSize;
 		this.supportHillBlock = supportHillBlock;
 		this.supportHillTopBlock = supportHillTopBlock;
-		this.chunkX = this.startX >> 4;
-		this.chunkZ = this.startZ >> 4;
-		this.chunkX1 = this.startX >> 4;
-		this.chunkZ1 = this.startZ >> 4;
 		this.ground = ground;
 	}
 
@@ -87,7 +76,6 @@ public class PlateauDungeonPart implements IDungeonPart {
 				}
 			}
 		}
-		this.generated = true;
 	}
 
 	private int interpolatedHeight(int x, int y, int z) {
@@ -136,11 +124,6 @@ public class PlateauDungeonPart implements IDungeonPart {
 				MUTABLE.setY(MUTABLE.getY() - 1);
 			}
 		}
-	}
-
-	@Override
-	public boolean isGenerated() {
-		return this.generated;
 	}
 
 	public int getStartX() {
@@ -226,7 +209,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 
 		@Override
 		public PlateauDungeonPart build(World world, DungeonPlacement placement) {
-			return new PlateauDungeonPart(world.getSeed(), this.startX, this.startZ, this.endX, this.endY, this.endZ, this.wallSize, this.supportHillBlock,
+			return new PlateauDungeonPart(this.startX, this.startZ, this.endX, this.endY, this.endZ, this.wallSize, this.supportHillBlock,
 					this.supportHillTopBlock, this.ground);
 		}
 

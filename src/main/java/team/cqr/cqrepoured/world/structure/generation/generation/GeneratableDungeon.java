@@ -1,14 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Queue;
+import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,20 +40,13 @@ public class GeneratableDungeon {
 
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
 
-	private final UUID uuid;
 	private final String dungeonName;
 	private final BlockPos pos;
-	private final Queue<IDungeonPart> parts;
+	private final List<IDungeonPart> parts;
 	private final ProtectedRegion.Builder protectedRegionBuilder;
 	private final ChunkInfoMap chunkInfoMap;
 	private final ChunkInfoMap chunkInfoMapExtended;
-	private final Queue<LightInfo> removedLights = new ArrayDeque<>();
-	private GenerationState state = GenerationState.PRE_GENERATION;
-	private int nextCheckBlockLightIndex;
-	private int nextGenerateSkylightMapIndex;
-	private int nextCheckSkyLightIndex;
-	private int nextMarkBlockForUpdateIndex;
-	private int nextNotifyNeighborsRespectDebugIndex;
+	private final List<LightInfo> removedLights = new ArrayList<>();
 
 	private final long[] generationTimes = new long[8];
 
@@ -71,15 +62,10 @@ public class GeneratableDungeon {
 
 	}
 
-	public enum GenerationState {
-		PRE_GENERATION, GENERATION, POST_GENERATION;
-	}
-
 	protected GeneratableDungeon(String dungeonName, BlockPos pos, Collection<IDungeonPart> parts, ProtectedRegion.Builder protectedRegionBuilder) {
-		this.uuid = UUID.randomUUID();
 		this.dungeonName = dungeonName;
 		this.pos = pos;
-		this.parts = new ArrayDeque<>(parts);
+		this.parts = new ArrayList<>(parts);
 		this.protectedRegionBuilder = protectedRegionBuilder;
 		this.chunkInfoMap = new ChunkInfoMap();
 		this.chunkInfoMapExtended = new ChunkInfoMap();
@@ -97,14 +83,29 @@ public class GeneratableDungeon {
 		this.removedLights.add(new LightInfo(pos, light));
 	}
 
-	public void tick(World world) {
+	public void generate(World world) {
+		CQRMain.logger.info("Generating dungeon {} at {}", this.dungeonName, this.pos);
+
 		long t = System.nanoTime();
 
-		while (!this.isGenerated()) {
-			this.generateNext(world);
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
+		ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(world);
+		if (protectedRegion != null) {
+			protectedRegion.markDirty();
+			protectedRegionManager.addProtectedRegion(protectedRegion);
 		}
 
+		this.tryGeneratePart(world);
+		this.tryCheckBlockLight(world);
+		this.tryGenerateSkylightMap(world);
+		this.tryCheckSkyLight(world);
+		this.tryCheckRemovedBlockLight(world);
+		this.tryMarkBlockForUpdate(world);
+		this.tryNotifyNeighboursRespectDebug(world);
+
 		this.generationTimes[0] = System.nanoTime() - t;
+
+		CQRMain.logger.info("Generated dungeon {} at {}", this.dungeonName, this.pos);
 		CQRMain.logger.debug("Total: {} secs {} millis", this.generationTimes[0] / 1_000_000_000, this.generationTimes[0] / 1_000_000 % 1_000);
 		CQRMain.logger.debug("Parts: {} secs {} millis", this.generationTimes[1] / 1_000_000_000, this.generationTimes[1] / 1_000_000 % 1_000);
 		CQRMain.logger.debug("Blocklight: {} secs {} millis", this.generationTimes[2] / 1_000_000_000, this.generationTimes[2] / 1_000_000 % 1_000);
@@ -115,136 +116,76 @@ public class GeneratableDungeon {
 		CQRMain.logger.debug("Updates: {} secs {} millis", this.generationTimes[7] / 1_000_000_000, this.generationTimes[7] / 1_000_000 % 1_000);
 	}
 
-	public void generateNext(World world) {
-		if (this.state == GenerationState.PRE_GENERATION) {
-			CQRMain.logger.info("Generating dungeon {} at {}", this.dungeonName, this.pos);
-			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
-			ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(world);
-			if (protectedRegion != null) {
-				protectedRegion.markDirty();
-				protectedRegionManager.addProtectedRegion(protectedRegion);
-			}
-			this.state = GenerationState.GENERATION;
-			return;
-		}
-		if (this.tryGeneratePart(world)) {
-			return;
-		}
-		if (this.tryCheckBlockLight(world)) {
-			return;
-		}
-		if (this.tryGenerateSkylightMap(world)) {
-			return;
-		}
-		if (this.tryCheckSkyLight(world)) {
-			return;
-		}
-		if (this.tryCheckRemovedBlockLight(world)) {
-			return;
-		}
-		if (this.tryMarkBlockForUpdate(world)) {
-			return;
-		}
-		if (this.tryNotifyNeighboursRespectDebug(world)) {
-			return;
-		}
-		if (this.state == GenerationState.GENERATION) {
-			CQRMain.logger.info("Generated dungeon {} at {}", this.dungeonName, this.pos);
-			this.state = GenerationState.POST_GENERATION;
-		}
-	}
-
-	private boolean tryGeneratePart(World world) {
-		if (this.parts.isEmpty()) {
-			return false;
-		}
+	private void tryGeneratePart(World world) {
 		long t = System.nanoTime();
 
-		this.parts.element().generate(world, this);
-		if (this.parts.element().isGenerated()) {
-			this.parts.remove();
+		for (IDungeonPart part : this.parts) {
+			part.generate(world, this);
 		}
-		if (this.parts.isEmpty()) {
-			this.chunkInfoMap.forEach(chunkInfo -> {
-				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-				if (world.provider.hasSkyLight()) {
-					for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
-						ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-						if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-							blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
-							chunk.getBlockStorageArray()[chunkY] = blockStorage;
+
+		for (ChunkInfo chunkInfo : this.chunkInfoMap.values()) {
+			Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+			if (world.provider.hasSkyLight()) {
+				for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
+					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
+						blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
+						chunk.getBlockStorageArray()[chunkY] = blockStorage;
+					}
+					Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
+				}
+			}
+			chunkInfo.forEach(chunkY -> {
+				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+				if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
+					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
+				}
+				int r = 1;
+				for (int x = -r; x <= r; x++) {
+					for (int y = -r; y <= r; y++) {
+						for (int z = -r; z <= r; z++) {
+							this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
 						}
-						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 					}
 				}
-				chunkInfo.forEach(chunkY -> {
-					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-					if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
-						Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
-					}
-					int r = 1;
-					for (int x = -r; x <= r; x++) {
-						for (int y = -r; y <= r; y++) {
-							for (int z = -r; z <= r; z++) {
-								this.chunkInfoMapExtended.mark(chunkInfo.getChunkX() + x, chunkY + y, chunkInfo.getChunkZ() + z);
-							}
-						}
-					}
-				});
 			});
 		}
 
 		this.generationTimes[1] += System.nanoTime() - t;
-		return true;
 	}
 
-	private boolean tryCheckBlockLight(World world) {
-		if (this.nextCheckBlockLightIndex >= this.chunkInfoMapExtended.size()) {
-			return false;
-		}
+	private void tryCheckBlockLight(World world) {
 		long t = System.nanoTime();
 
-		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextCheckBlockLightIndex);
-		BlockLightUtil.checkBlockLight(world, chunkInfo);
+		for (ChunkInfo chunkInfo : this.chunkInfoMapExtended.values()) {
+			BlockLightUtil.checkBlockLight(world, chunkInfo);
+		}
 
 		this.generationTimes[2] += System.nanoTime() - t;
-		this.nextCheckBlockLightIndex++;
-		return true;
 	}
 
-	private boolean tryGenerateSkylightMap(World world) {
-		if (this.nextGenerateSkylightMapIndex >= this.chunkInfoMap.size()) {
-			return false;
-		}
+	private void tryGenerateSkylightMap(World world) {
 		long t = System.nanoTime();
 
-		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextGenerateSkylightMapIndex);
-		Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-		chunk.generateSkylightMap();
+		for (ChunkInfo chunkInfo : this.chunkInfoMap.values()) {
+			Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+			chunk.generateSkylightMap();
+		}
 
 		this.generationTimes[3] += System.nanoTime() - t;
-		this.nextGenerateSkylightMapIndex++;
-		return true;
 	}
 
-	private boolean tryCheckSkyLight(World world) {
-		if (this.nextCheckSkyLightIndex >= this.chunkInfoMapExtended.size()) {
-			return false;
-		}
+	private void tryCheckSkyLight(World world) {
 		long t = System.nanoTime();
 
-		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextCheckSkyLightIndex);
-		SkyLightUtil.checkSkyLight(world, chunkInfo);
+		for (ChunkInfo chunkInfo : this.chunkInfoMapExtended.values()) {
+			SkyLightUtil.checkSkyLight(world, chunkInfo);
+		}
 
 		this.generationTimes[4] += System.nanoTime() - t;
-		this.nextCheckSkyLightIndex++;
-		return true;
 	}
 
-	private boolean tryCheckRemovedBlockLight(World world) {
-		if (this.removedLights.isEmpty()) {
-			return false;
-		}
+	private void tryCheckRemovedBlockLight(World world) {
 		long t = System.nanoTime();
 
 		// TODO this could be improved further
@@ -266,52 +207,38 @@ public class GeneratableDungeon {
 				}
 			}
 		}
-		this.removedLights.clear();
 
 		this.generationTimes[5] += System.nanoTime() - t;
-		return true;
 	}
 
-	private boolean tryMarkBlockForUpdate(World world) {
-		if (this.nextMarkBlockForUpdateIndex >= this.chunkInfoMapExtended.size()) {
-			return false;
-		}
+	private void tryMarkBlockForUpdate(World world) {
 		long t = System.nanoTime();
 
-		ChunkInfo chunkInfo = this.chunkInfoMapExtended.get(this.nextMarkBlockForUpdateIndex);
-		Chunk chunk = world.getChunkProvider().getLoadedChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-		if (chunk != null) {
-			PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-			if (entry != null) {
-				entry.sendPacket(new SPacketChunkData(chunk, 0xFFFF >> (15 - chunkInfo.topMarked())));
+		for (ChunkInfo chunkInfo : this.chunkInfoMapExtended.values()) {
+			Chunk chunk = world.getChunkProvider().getLoadedChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+			if (chunk != null) {
+				PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+				if (entry != null) {
+					entry.sendPacket(new SPacketChunkData(chunk, 0xFFFF >> (15 - chunkInfo.topMarked())));
+				}
 			}
 		}
 
 		this.generationTimes[6] += System.nanoTime() - t;
-		this.nextMarkBlockForUpdateIndex++;
-		return true;
 	}
 
-	private boolean tryNotifyNeighboursRespectDebug(World world) {
-		if (this.nextNotifyNeighborsRespectDebugIndex >= this.chunkInfoMap.size()) {
-			return false;
-		}
+	private void tryNotifyNeighboursRespectDebug(World world) {
 		long t = System.nanoTime();
 
-		ChunkInfo chunkInfo = this.chunkInfoMap.get(this.nextNotifyNeighborsRespectDebugIndex);
-		BlockAddedUtil.onBlockAdded(world, chunkInfo);
+		for (ChunkInfo chunkInfo : this.chunkInfoMap.values()) {
+			BlockAddedUtil.onBlockAdded(world, chunkInfo);
+		}
 
 		this.generationTimes[7] += System.nanoTime() - t;
-		this.nextNotifyNeighborsRespectDebugIndex++;
-		return true;
 	}
 
-	public boolean isGenerated() {
-		return this.state == GenerationState.POST_GENERATION;
-	}
-
-	public UUID getUuid() {
-		return this.uuid;
+	public String getDungeonName() {
+		return dungeonName;
 	}
 
 	public BlockPos getPos() {
@@ -329,7 +256,8 @@ public class GeneratableDungeon {
 		public Builder(World world, BlockPos pos, DungeonBase dungeonConfig) {
 			this.dungeonName = dungeonConfig.getDungeonName();
 			this.pos = pos;
-			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(dungeonConfig.getDungeonMob(), world, pos.getX(), pos.getZ());
+			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(dungeonConfig.getDungeonMob(), world, pos.getX(),
+					pos.getZ());
 			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonConfig, pos);
 		}
 
@@ -341,7 +269,7 @@ public class GeneratableDungeon {
 		}
 
 		public GeneratableDungeon build(World world) {
-			List<IDungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).filter(part -> !part.isGenerated()).collect(Collectors.toList());
+			List<IDungeonPart> parts = this.partBuilders.stream().map(builder -> builder.apply(world)).filter(Objects::nonNull).collect(Collectors.toList());
 			parts.stream().filter(IProtectable.class::isInstance).map(IProtectable.class::cast).forEach(part -> {
 				this.protectedRegionBuilder.updateMin(part.minPos());
 				this.protectedRegionBuilder.updateMax(part.maxPos());

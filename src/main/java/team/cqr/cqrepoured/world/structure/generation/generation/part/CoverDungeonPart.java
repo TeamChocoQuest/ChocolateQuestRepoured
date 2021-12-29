@@ -17,8 +17,6 @@ public class CoverDungeonPart implements IDungeonPart {
 	private final int startZ;
 	private final int endX;
 	private final int endZ;
-	private int chunkX;
-	private int chunkZ;
 
 	protected CoverDungeonPart(int startX, int startZ, int endX, int endZ, IBlockState coverBlock) {
 		this.coverBlock = coverBlock;
@@ -26,52 +24,41 @@ public class CoverDungeonPart implements IDungeonPart {
 		this.startZ = startZ;
 		this.endX = endX;
 		this.endZ = endZ;
-		this.chunkX = startX >> 4;
-		this.chunkZ = startZ >> 4;
 	}
 
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
-		if (this.chunkX <= this.endX >> 4) {
-			Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
+		for (int cx = this.startX >> 4; cx <= this.endX >> 4; cx++) {
+			for (int cz = this.startZ >> 4; cz <= this.endZ >> 4; cz++) {
+				Chunk chunk = world.getChunk(cx, cz);
 
-			for (int x = 0; x < 16; x++) {
-				if ((this.chunkX << 4) + x < this.startX || (this.chunkX << 4) + x > this.endX) {
-					continue;
-				}
-				for (int z = 0; z < 16; z++) {
-					if ((this.chunkZ << 4) + z < this.startZ || (this.chunkZ << 4) + z > this.endZ) {
+				for (int x = 0; x < 16; x++) {
+					if ((cx << 4) + x < this.startX || (cx << 4) + x > this.endX) {
 						continue;
 					}
+					for (int z = 0; z < 16; z++) {
+						if ((cz << 4) + z < this.startZ || (cz << 4) + z > this.endZ) {
+							continue;
+						}
 
-					MUTABLE.setPos((this.chunkX << 4) + x, chunk.getTopFilledSegment() + 15, (this.chunkZ << 4) + z);
-					while (MUTABLE.getY() >= 0) {
-						IBlockState state = chunk.getBlockState(MUTABLE);
-						if (state.getBlock() == Blocks.AIR) {
-							MUTABLE.setY(MUTABLE.getY() - 1);
-						} else {
-							if (state.getBlock() != this.coverBlock.getBlock()) {
-								MUTABLE.setY(MUTABLE.getY() + 1);
-								BlockPlacingHelper.setBlockState(world, MUTABLE, this.coverBlock, null, 16, false);
-								dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
+						MUTABLE.setPos((cx << 4) + x, chunk.getTopFilledSegment() + 15, (cz << 4) + z);
+						while (MUTABLE.getY() >= 0) {
+							IBlockState state = chunk.getBlockState(MUTABLE);
+							if (state.getBlock() == Blocks.AIR) {
+								MUTABLE.setY(MUTABLE.getY() - 1);
+							} else {
+								if (state.getBlock() != this.coverBlock.getBlock()) {
+									MUTABLE.setY(MUTABLE.getY() + 1);
+									BlockPlacingHelper.setBlockState(world, MUTABLE, this.coverBlock, null, 16, false);
+									dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
 			}
-
-			this.chunkZ++;
-			if (this.chunkZ > this.endZ >> 4) {
-				this.chunkZ = this.startZ >> 4;
-				this.chunkX++;
-			}
 		}
-	}
-
-	@Override
-	public boolean isGenerated() {
-		return this.chunkX > this.endX >> 4;
 	}
 
 	public IBlockState getCoverBlock() {

@@ -4,6 +4,4 @@ import team.cqr.cqrepoured.world.structure.generation.generation.generatable.IGe
 
 public interface IDungeonPart extends IGeneratable {
 
-	boolean isGenerated();
-
 }

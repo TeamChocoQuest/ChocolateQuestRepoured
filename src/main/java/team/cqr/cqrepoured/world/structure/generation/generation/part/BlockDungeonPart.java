@@ -1,13 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 import net.minecraft.util.math.BlockPos;
@@ -21,22 +19,17 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 
 public class BlockDungeonPart implements IDungeonPart, IProtectable {
 
-	protected final Queue<GeneratableChunkInfo> chunks;
+	protected final List<GeneratableChunkInfo> chunks;
 
 	protected BlockDungeonPart(Collection<GeneratableChunkInfo> chunks) {
-		this.chunks = new ArrayDeque<>(chunks);
+		this.chunks = new ArrayList<>(chunks);
 	}
 
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
-		if (!this.chunks.isEmpty()) {
-			this.chunks.remove().generate(world, dungeon);
+		for (GeneratableChunkInfo chunk : this.chunks) {
+			chunk.generate(world, dungeon);
 		}
-	}
-
-	@Override
-	public boolean isGenerated() {
-		return this.chunks.isEmpty();
 	}
 
 	public Collection<GeneratableChunkInfo> getChunks() {

@@ -23,11 +23,6 @@ public class DungeonGenerationEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onWorldSaveEvent(WorldEvent.Save event) {
-		DungeonGenerationManager.handleWorldSave(event.getWorld());
-	}
-
-	@SubscribeEvent
 	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
 		DungeonGenerationManager.handleWorldUnload(event.getWorld());
 	}
@@ -35,7 +30,7 @@ public class DungeonGenerationEventHandler {
 	@SubscribeEvent
 	public static void onWorldTickEvent(TickEvent.WorldTickEvent event) {
 		if (event.phase == Phase.START) {
-			DungeonGenerationManager.handleWorldTick(event.world);
+			DungeonGenerationManager.generateScheduledDungeons(event.world);
 		}
 	}
 
