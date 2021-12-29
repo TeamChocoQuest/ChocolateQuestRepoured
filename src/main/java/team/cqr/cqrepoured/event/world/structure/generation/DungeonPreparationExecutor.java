@@ -14,12 +14,12 @@ import java.util.function.Supplier;
 
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.cqr.cqrepoured.CQRMain;
 
-@Mod.EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonPreparationExecutor {
 
 	private static final ThreadFactory DEFAULT_THREAD_FACTORY = task -> new Thread(task, "CQR Dungeon Preparation Thread");
@@ -58,13 +58,16 @@ public class DungeonPreparationExecutor {
 		}
 		executor.shutdown();
 		try {
-			if (executor.awaitTermination(10, TimeUnit.SECONDS)) {
-				return;
+			if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+				executor.shutdownNow();
+				if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+					CQRMain.logger.error("Couldn't shutdown dungeon preparation executor!");
+				}
 			}
 		} catch (InterruptedException e) {
+			executor.shutdownNow();
 			Thread.currentThread().interrupt();
 		}
-		executor.shutdownNow();
 	}
 
 }
