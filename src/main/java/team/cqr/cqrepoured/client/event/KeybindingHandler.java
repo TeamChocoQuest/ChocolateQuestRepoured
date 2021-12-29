@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.proxy.ClientProxy;
 import team.cqr.cqrepoured.util.GuiHandler;
 
 @SideOnly(Side.CLIENT)
-@EventBusSubscriber(value = Side.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
 public class KeybindingHandler {
 
 	// Opens repu GUI
