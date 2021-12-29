@@ -333,7 +333,7 @@ public class CQRConfig {
 		
 		public boolean enableTradeRestockOverTime = true;
 		@Config.Comment("Measured in milliseconds)")
-		public long tradeRestockTime = 3600000; // One hour
+		public int tradeRestockTime = 3600000; // One hour
 
 	}
 
