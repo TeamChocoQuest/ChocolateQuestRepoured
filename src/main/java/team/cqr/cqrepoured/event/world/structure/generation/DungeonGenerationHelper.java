@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.event.world.structure.generation;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -24,31 +25,15 @@ import team.cqr.cqrepoured.CQRMain;
 @EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonGenerationHelper {
 
-	private static class TravelingPlayer {
-
-		private final EntityPlayer player;
-		private boolean flag;
-
-		public TravelingPlayer(EntityPlayer player) {
-			this.player = player;
-		}
-
-	}
-
-	private static final Map<Integer, Set<TravelingPlayer>> TRAVELING_PLAYERS = new HashMap<>();
-	private static final Map<Integer, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
+	private static final Map<Integer, Set<EntityPlayer>> TRAVELING_PLAYERS = new HashMap<>();
+	private static final Map<World, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
 	private static boolean isGeneratingDelayedChunks = false;
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
-		if (!event.getWorld().isRemote) {
-			Integer dim = event.getWorld().provider.getDimension();
-			if (TRAVELING_PLAYERS.containsKey(dim)) {
-				TRAVELING_PLAYERS.get(dim).clear();
-			}
-
-			generateDelayedChunks(event.getWorld());
-		}
+		generateDelayedChunks(event.getWorld());
+		TRAVELING_PLAYERS.remove(event.getWorld().provider.getDimension());
+		DELAYED_CHUNKS.remove(event.getWorld());
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -59,44 +44,39 @@ public class DungeonGenerationHelper {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onEntityTravelToDimensionEvent(EntityTravelToDimensionEvent event) {
 		if (event.getEntity() instanceof EntityPlayer) {
-			TRAVELING_PLAYERS.computeIfAbsent(event.getDimension(), key -> new HashSet<>()).add(new TravelingPlayer((EntityPlayer) event.getEntity()));
+			TRAVELING_PLAYERS.computeIfAbsent(event.getDimension(), k -> new HashSet<>()).add((EntityPlayer) event.getEntity());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onChunkLoadEvent(ChunkEvent.Load event) {
-		World world = event.getWorld();
+		TRAVELING_PLAYERS.computeIfPresent(event.getWorld().provider.getDimension(), (k, v) -> {
+			Iterator<EntityPlayer> iterator = v.iterator();
+			while (iterator.hasNext()) {
+				EntityPlayer player = iterator.next();
 
-		if (!world.isRemote) {
-			Integer dim = world.provider.getDimension();
+				int chunkX = MathHelper.floor(player.posX) >> 4;
+				int chunkZ = MathHelper.floor(player.posZ) >> 4;
+				int radius = 4;
 
-			if (TRAVELING_PLAYERS.containsKey(dim) && !TRAVELING_PLAYERS.get(dim).isEmpty()) {
-				for (TravelingPlayer travelingPlayer : TRAVELING_PLAYERS.get(dim)) {
-					if (travelingPlayer.flag) {
-						continue;
-					}
-
-					travelingPlayer.flag = true;
-					EntityPlayer player = travelingPlayer.player;
-					int chunkX = MathHelper.floor(player.posX) >> 4;
-					int chunkZ = MathHelper.floor(player.posZ) >> 4;
-					int radius = 4;
-
-					for (int x = -radius; x <= radius + 1; x++) {
-						for (int z = -radius; z <= radius + 1; z++) {
-							world.getChunk(chunkX + x, chunkZ + z);
-						}
+				for (int x = -radius; x <= radius + 1; x++) {
+					for (int z = -radius; z <= radius + 1; z++) {
+						player.world.getChunk(chunkX + x, chunkZ + z);
 					}
 				}
+
+				iterator.remove();
 			}
-		}
+			return v;
+		});
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
-		if (TRAVELING_PLAYERS.containsKey(event.toDim)) {
-			TRAVELING_PLAYERS.get(event.toDim).removeIf(travellingPlayer -> travellingPlayer.player.equals(event.player));
-		}
+		TRAVELING_PLAYERS.computeIfPresent(event.toDim, (k, v) -> {
+			v.remove(event.player);
+			return v;
+		});
 	}
 
 	public static boolean shouldDelayDungeonGeneration(World world) {
@@ -104,7 +84,7 @@ public class DungeonGenerationHelper {
 	}
 
 	public static void addDelayedChunk(World world, int chunkX, int chunkZ) {
-		DELAYED_CHUNKS.computeIfAbsent(world.provider.getDimension(), key -> new HashSet<>()).add(new ChunkPos(chunkX, chunkZ));
+		DELAYED_CHUNKS.computeIfAbsent(world, k -> new HashSet<>()).add(new ChunkPos(chunkX, chunkZ));
 	}
 
 	public static boolean shouldGenerateDungeonImmediately(World world) {
@@ -114,31 +94,30 @@ public class DungeonGenerationHelper {
 		if (world.playerEntities.isEmpty()) {
 			return true;
 		}
-		Integer dim = world.provider.getDimension();
-		return TRAVELING_PLAYERS.containsKey(dim) && !TRAVELING_PLAYERS.get(dim).isEmpty();
+		Set<EntityPlayer> set = TRAVELING_PLAYERS.get(world.provider.getDimension());
+		return set != null && !set.isEmpty();
 	}
 
 	private static void generateDelayedChunks(World world) {
-		if (world.isRemote) {
-			return;
-		}
-		Integer dim = world.provider.getDimension();
-		if (!DELAYED_CHUNKS.containsKey(dim)) {
-			return;
-		}
-		for (ChunkPos chunkPos : DELAYED_CHUNKS.get(dim)) {
-			long worldSeed = world.getSeed();
-			Random fmlRandom = new Random(worldSeed);
-			long xSeed = fmlRandom.nextLong() >> 2 + 1L;
-			long zSeed = fmlRandom.nextLong() >> 2 + 1L;
-			long chunkSeed = (xSeed * chunkPos.x + zSeed * chunkPos.z) ^ worldSeed;
-			fmlRandom.setSeed(chunkSeed);
-			isGeneratingDelayedChunks = true;
-			CQRMain.DUNGEON_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator, world.getChunkProvider());
-			CQRMain.WALL_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator, world.getChunkProvider());
-			isGeneratingDelayedChunks = false;
-		}
-		DELAYED_CHUNKS.remove(dim);
+		DELAYED_CHUNKS.computeIfPresent(world, (k, v) -> {
+			for (ChunkPos chunkPos : v) {
+				long worldSeed = world.getSeed();
+				Random fmlRandom = new Random(worldSeed);
+				long xSeed = fmlRandom.nextLong() >> 2 + 1L;
+				long zSeed = fmlRandom.nextLong() >> 2 + 1L;
+				long chunkSeed = (xSeed * chunkPos.x + zSeed * chunkPos.z) ^ worldSeed;
+				fmlRandom.setSeed(chunkSeed);
+				isGeneratingDelayedChunks = true;
+				CQRMain.DUNGEON_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator,
+						world.getChunkProvider());
+				CQRMain.WALL_GENERATOR.generate(fmlRandom, chunkPos.x, chunkPos.z, world, ((WorldServer) world).getChunkProvider().chunkGenerator,
+						world.getChunkProvider());
+				isGeneratingDelayedChunks = false;
+			}
+
+			v.clear();
+			return v;
+		});
 	}
 
 }
