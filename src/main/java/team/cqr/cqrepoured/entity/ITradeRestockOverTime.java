@@ -13,7 +13,7 @@ public interface ITradeRestockOverTime {
 	public TraderOffer getTrades();
 	public boolean hasTrades();
 	
-	public default void onTick() {
+	public default void updateTradeRestockTimer() {
 		if(CQRConfig.mobs.enableTradeRestockOverTime) {
 			if(!this.hasTrades()) {
 				return;

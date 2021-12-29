@@ -823,6 +823,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		this.updateInvisibility();
 		this.updateLeader();
+		this.updateTradeRestockTimer();
 	}
 
 	@Override
