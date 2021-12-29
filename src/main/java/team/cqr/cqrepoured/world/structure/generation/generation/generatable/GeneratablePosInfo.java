@@ -49,30 +49,6 @@ public abstract class GeneratablePosInfo implements IGeneratable, IBlockInfo {
 
 	protected abstract boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon);
 
-	/**
-	 * Vanilla generation order:
-	 * 
-	 * <pre>
-	 * {@link #hasTileEntity} {@link #hasSpecialShape}
-	 *         false           false
-	 *          true               -
-	 *         false            true
-	 * </pre>
-	 */
-	public abstract boolean hasTileEntity();
-
-	/**
-	 * Vanilla generation order:
-	 * 
-	 * <pre>
-	 * {@link #hasTileEntity} {@link #hasSpecialShape}
-	 *         false           false
-	 *          true               -
-	 *         false            true
-	 * </pre>
-	 */
-	public abstract boolean hasSpecialShape();
-
 	public int getX() {
 		return this.x;
 	}

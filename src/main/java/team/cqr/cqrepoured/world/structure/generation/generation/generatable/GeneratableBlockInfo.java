@@ -40,16 +40,6 @@ public class GeneratableBlockInfo extends GeneratablePosInfo {
 		return true;
 	}
 
-	@Override
-	public boolean hasTileEntity() {
-		return this.tileEntity != null;
-	}
-
-	@Override
-	public boolean hasSpecialShape() {
-		return !this.state.isFullCube() && !this.state.isFullBlock();
-	}
-
 	public IBlockState getState() {
 		return this.state;
 	}

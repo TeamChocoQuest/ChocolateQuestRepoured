@@ -35,16 +35,6 @@ public class GeneratableBossInfo extends GeneratablePosInfo {
 		return flag;
 	}
 
-	@Override
-	public boolean hasTileEntity() {
-		return true;
-	}
-
-	@Override
-	public boolean hasSpecialShape() {
-		return true;
-	}
-
 	public Entity getEntity() {
 		return this.entity;
 	}

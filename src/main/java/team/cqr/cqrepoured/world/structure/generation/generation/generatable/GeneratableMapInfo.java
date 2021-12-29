@@ -67,16 +67,6 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		return flag;
 	}
 
-	@Override
-	public boolean hasTileEntity() {
-		return true;
-	}
-
-	@Override
-	public boolean hasSpecialShape() {
-		return true;
-	}
-
 	private static void updateMapData(World worldIn, int x, int z, int radius, MapData data) {
 		if (worldIn.provider.getDimension() != data.dimension) {
 			return;
