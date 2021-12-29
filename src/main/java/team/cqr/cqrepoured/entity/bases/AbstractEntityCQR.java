@@ -1261,7 +1261,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setBaseHealthDependingOnPos(placement.getPos());
 
 		//Reset lastTimedRestockTick
-		this.setLastTimedRestockTime(System.currentTimeMillis());
+		this.setLastTimedRestockTime(this.world.getTotalWorldTime());
 		
 		// Recalculate path points
 		for (Path.PathNode node : this.path.getNodes()) {

@@ -332,8 +332,8 @@ public class CQRConfig {
 		public boolean disableFirePanicAI = false;
 		
 		public boolean enableTradeRestockOverTime = true;
-		@Config.Comment("Measured in seconds)")
-		public int tradeRestockTime = 3600; // One hour
+		@Config.Comment("Measured in ticks)")
+		public int tradeRestockTime = 72000; // One hour
 		public int maxAutoRestocksOverTime = 8;
 
 	}
