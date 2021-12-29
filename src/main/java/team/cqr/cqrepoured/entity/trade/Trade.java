@@ -383,8 +383,8 @@ public class Trade {
 	}
 
 	public void incStock() {
-		if (this.inStock < this.maxStock) {
-			this.inStock++;
+		if (this.canRestock()) {
+			this.inStock += this.restockRate;
 			this.holder.onTradesUpdated();
 		}
 	}
@@ -427,6 +427,13 @@ public class Trade {
 
 	public int getMaxStock() {
 		return this.maxStock;
+	}
+	
+	public boolean canRestock() {
+		if(this.restockRate < 1) {
+			return false;
+		}
+		return this.maxStock - this.inStock >= this.restockRate;
 	}
 
 }
