@@ -21,7 +21,7 @@ public interface ITradeRestockOverTime {
 			long ticksExisted = System.currentTimeMillis();
 			long lastTimed = this.getLastTimedRestockTime();
 			final long delta = ticksExisted - lastTimed;
-			final int restocks = (int) Math.floorDiv(delta, CQRConfig.mobs.tradeRestockTime);
+			final int restocks = (int) Math.floorDiv(delta, 1000 * CQRConfig.mobs.tradeRestockTime);
 			if(delta > 0 && restocks > 0) {
 				if(this.getTrades() != null) {
 					TraderOffer offer = this.getTrades();
