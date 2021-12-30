@@ -139,7 +139,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 					this.getBoss().getWorld().newExplosion(this.getBoss(), this.entity.getPositionVector().x, this.entity.getPositionVector().y, this.entity.getPositionVector().z, 2, false, false);
 				}
 
-				if (this.ignoreWallTicks <= 0 && this.getBoss().collidedHorizontally && this.hitHardBlock(this.movementVector.x, this.movementVector.y, this.movementVector.z)) {
+				if (this.movementVector != null && this.ignoreWallTicks <= 0 && this.getBoss().collidedHorizontally && this.hitHardBlock(this.movementVector.x, this.movementVector.y, this.movementVector.z)) {
 					this.getBoss().setSpinning(false);
 					this.getBoss().setStunned(true);
 				}
