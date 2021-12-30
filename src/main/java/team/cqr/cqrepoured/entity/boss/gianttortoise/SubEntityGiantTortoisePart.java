@@ -68,7 +68,7 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	}
 
 	@Override
-	public boolean canbeTurnedToStone() {
+	public boolean canBeTurnedToStone() {
 		return false;
 	}
 

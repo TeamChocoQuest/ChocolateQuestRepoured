@@ -39,7 +39,7 @@ public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> e
 	}
 
 	@Override
-	public boolean canbeTurnedToStone() {
+	public boolean canBeTurnedToStone() {
 		return false;
 	}
 

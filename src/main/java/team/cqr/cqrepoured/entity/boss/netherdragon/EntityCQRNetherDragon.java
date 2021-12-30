@@ -961,7 +961,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * IaF Compat
 	 */
 	@Override
-	public boolean canbeTurnedToStone() {
+	public boolean canBeTurnedToStone() {
 		return false;
 	}
 

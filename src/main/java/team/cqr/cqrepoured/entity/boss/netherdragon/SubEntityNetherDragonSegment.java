@@ -125,7 +125,7 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 	}
 
 	@Override
-	public boolean canbeTurnedToStone() {
+	public boolean canBeTurnedToStone() {
 		return false;
 	}
 

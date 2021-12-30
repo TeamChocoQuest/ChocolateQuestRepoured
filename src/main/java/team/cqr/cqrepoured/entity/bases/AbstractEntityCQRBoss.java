@@ -140,7 +140,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	@Override
-	public boolean canbeTurnedToStone() {
+	public boolean canBeTurnedToStone() {
 		return !CQRConfig.bosses.blackListBossesFromIaFGorgonHead;
 	}
 
