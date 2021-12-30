@@ -73,7 +73,6 @@ import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
-import team.cqr.cqrepoured.entity.ECQREntityArmPoses;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.entity.ITextureVariants;
@@ -140,7 +139,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Float> INVISIBILITY = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> HAS_TARGET = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<String> ARM_POSE = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -252,7 +250,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(INVISIBILITY, 0.0F);
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(HAS_TARGET, false);
-		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
 		this.dataManager.register(TEXTURE_INDEX, this.getTextureVariant(this.getRNG()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
@@ -1335,14 +1332,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean isChatting() {
 		return this.dataManager.get(TALKING);
-	}
-
-	public void setArmPose(ECQREntityArmPoses pose) {
-		this.dataManager.set(ARM_POSE, pose.toString());
-	}
-
-	public ECQREntityArmPoses getArmPose() {
-		return ECQREntityArmPoses.valueOf(this.dataManager.get(ARM_POSE));
 	}
 
 	@SideOnly(Side.CLIENT)
