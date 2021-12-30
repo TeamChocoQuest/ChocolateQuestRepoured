@@ -224,7 +224,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(15, new EntityAIFireball(this)); /* AI for secondary Item */
 		this.tasks.addTask(16, new EntityAIHooker(this)); /* AI for secondary Item */
 		this.tasks.addTask(17, new EntityAIBackstab(this));
-		this.tasks.addTask(18, new EntityAIAttack(this));
+		this.tasks.addTask(18, new EntityAIAttack(this) {
+			@Override
+			public boolean shouldExecute() {
+				return super.shouldExecute() && !EntityCQRExterminator.this.isStunned();
+			}
+			
+			@Override
+			public boolean shouldContinueExecuting() {
+				return super.shouldContinueExecuting() && !EntityCQRExterminator.this.isStunned();
+			}
+		});
 		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this));
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
@@ -688,6 +698,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// Kick handling
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		if(this.isStunned()) {
+			return false;
+		}
 		boolean result = super.attackEntityAsMob(entityIn);
 
 		if (result) {
@@ -1056,5 +1069,5 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public int tickTimer() {
 		return this.ticksExisted;
 	}
-
+	
 }
