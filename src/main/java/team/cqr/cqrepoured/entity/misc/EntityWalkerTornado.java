@@ -153,7 +153,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			if (ent.getPersistentID().equals(this.getOwnerId())) {
 				return false;
 			}
-			Faction faction = FactionRegistry.instance().getFactionOf(this.owner);
+			Faction faction = FactionRegistry.instance(this).getFactionOf(this.owner);
 			if (faction != null) {
 				return !faction.isAlly(ent);
 			}

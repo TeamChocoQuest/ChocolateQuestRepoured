@@ -264,7 +264,7 @@ public class CQRMain {
 		// Since the CTS manager could also be corrupted, let's make him reload his data...
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 
-		FactionRegistry.instance().loadFactions();
+		FactionRegistry.getServerInstance().loadFactions();
 
 		CQStructure.cacheFiles();
 	}
@@ -281,7 +281,7 @@ public class CQRMain {
 
 	@EventHandler
 	public static void onFMLServerStoppingEvent(FMLServerStoppingEvent event) {
-		FactionRegistry.instance().saveAllReputationData(true);
+		FactionRegistry.getServerInstance().saveAllReputationData(true);
 		CQStructure.clearCache();
 	}
 

@@ -1143,7 +1143,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	protected Faction getDefaultFactionInstance() {
 		if (this.defaultFactionInstance == null) {
-			this.defaultFactionInstance = FactionRegistry.instance().getFactionInstance(this.getDefaultFaction().name());
+			this.defaultFactionInstance = FactionRegistry.instance(this).getFactionInstance(this.getDefaultFaction().name());
 		}
 		return this.defaultFactionInstance;
 	}
@@ -1156,7 +1156,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			 * if (this.hasLeader()) { return FactionRegistry.instance().getFactionOf(this.getLeader()); }
 			 */
 			if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
-				this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
+				this.factionInstance = FactionRegistry.instance(this).getFactionInstance(this.factionName);
 			}
 			if (this.factionInstance != null) {
 				return this.factionInstance;
@@ -1165,7 +1165,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
 			if (syncedFaction != null && !syncedFaction.isEmpty() && ((this.factionName == null) || !this.factionName.equals(syncedFaction))) {
 				this.factionName = syncedFaction;
-				this.factionInstance = FactionRegistry.instance().getFactionInstance(syncedFaction);
+				this.factionInstance = FactionRegistry.instance(this).getFactionInstance(syncedFaction);
 			}
 			if (this.factionInstance != null) {
 				return this.factionInstance;
@@ -1181,7 +1181,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
 		if (!this.world.isRemote) {
-			Faction faction = FactionRegistry.instance().getFactionInstance(newFac);
+			Faction faction = FactionRegistry.instance(this).getFactionInstance(newFac);
 			if (faction != null) {
 				this.factionInstance = null;
 				this.factionName = newFac;
@@ -1274,7 +1274,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.setItemStackToSlot(slot, new ItemStack(placement.getInhabitant().getShieldReplacement(), 1));
 			}
 		}
-		if (placement.getInhabitant() != null && placement.getInhabitant().getFactionOverride() != null && !placement.getInhabitant().getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(placement.getInhabitant().getFactionOverride()) != null) {
+		if (placement.getInhabitant() != null && placement.getInhabitant().getFactionOverride() != null && !placement.getInhabitant().getFactionOverride().isEmpty() && FactionRegistry.instance(this).getFactionInstance(placement.getInhabitant().getFactionOverride()) != null) {
 			this.setFaction(placement.getInhabitant().getFactionOverride());
 		}
 	}

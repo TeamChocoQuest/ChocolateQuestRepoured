@@ -121,9 +121,9 @@ public class Faction {
 		}
 		if (ent instanceof EntityPlayer) {
 			// Special case for player
-			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ENEMY;
+			return FactionRegistry.instance(ent).getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ENEMY;
 		}
-		return this.isEnemy(FactionRegistry.instance().getFactionOf(ent));
+		return this.isEnemy(FactionRegistry.instance(ent).getFactionOf(ent));
 	}
 
 	public boolean isEnemy(AbstractEntityCQR ent) {
@@ -159,9 +159,9 @@ public class Faction {
 		}
 		if (ent instanceof EntityPlayer) {
 			// Special case for player
-			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;
+			return FactionRegistry.instance(ent).getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;
 		}
-		return this.isAlly(FactionRegistry.instance().getFactionOf(ent));
+		return this.isAlly(FactionRegistry.instance(ent).getFactionOf(ent));
 	}
 
 	public boolean isAlly(AbstractEntityCQR ent) {
@@ -184,13 +184,13 @@ public class Faction {
 
 	public void decrementReputation(EntityPlayer player, int score) {
 		if (this.repuMayChange) {
-			FactionRegistry.instance().decrementRepuOf(player, this.name, score);
+			FactionRegistry.instance(player).decrementRepuOf(player, this.name, score);
 		}
 	}
 
 	public void incrementReputation(EntityPlayer player, int score) {
 		if (this.repuMayChange) {
-			FactionRegistry.instance().incrementRepuOf(player, this.name, score);
+			FactionRegistry.instance(player).incrementRepuOf(player, this.name, score);
 		}
 	}
 

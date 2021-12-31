@@ -180,7 +180,7 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
 		DungeonDataManager.handleWorldSave(e.getWorld());
-		FactionRegistry.instance().saveAllReputationData(false);
+		FactionRegistry.instance(e.getWorld()).saveAllReputationData(false);
 	}
 
 	@SubscribeEvent
@@ -202,19 +202,18 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
-		FactionRegistry.instance().loadPlayerReputationData(event.player);
+		FactionRegistry.instance(event.player).loadPlayerReputationData(event.player);
+		FactionRegistry.instance(event.player).syncPlayerReputationData((EntityPlayerMP) event.player);
 
 		// Send packets with ct's to player
 		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
 			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
-
-			FactionRegistry.instance().syncPlayerReputationData((EntityPlayerMP) event.player);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
-		FactionRegistry.instance().savePlayerReputationData((EntityPlayerMP) event.player);
+		FactionRegistry.instance(event.player).savePlayerReputationData((EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent

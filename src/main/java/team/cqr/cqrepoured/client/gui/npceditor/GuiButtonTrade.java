@@ -115,7 +115,7 @@ public class GuiButtonTrade extends GuiButton {
 					tooltip.add(formatting + advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
-					int i = FactionRegistry.instance().getExactReputationOf(parent.mc.player.getUniqueID(), this.trade.getHolder().getTraderFaction());
+					int i = FactionRegistry.instance(parent.mc.player).getExactReputationOf(parent.mc.player.getUniqueID(), this.trade.getHolder().getTraderFaction());
 					TextFormatting formatting = i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED;
 					tooltip.add("" + formatting + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation());
 				}

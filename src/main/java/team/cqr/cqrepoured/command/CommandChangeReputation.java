@@ -35,12 +35,12 @@ public class CommandChangeReputation extends CommandBase {
 		if (args.length < 2) {
 			throw new WrongUsageException(this.getUsage(sender));
 		}
-		Faction faction = FactionRegistry.instance().getFactionInstance(args[0]);
+		Faction faction = FactionRegistry.instance(sender.getEntityWorld()).getFactionInstance(args[0]);
 		if (faction == null) {
 			throw new CommandException("Faction '" + args[0] + "' cannot be found!");
 		}
 		int score = parseInt(args[1], EReputationStateRough.ENEMY.getLowBound(), EReputationStateRough.ALLY.getHighBound());
-		FactionRegistry.instance().changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
+		FactionRegistry.instance(sender.getEntityWorld()).changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
 		sender.sendMessage(new TextComponentString(
 				"Changed " + sender.getDisplayName().getFormattedText() + "'s reputation towards faction " + faction.getName() + " to " + score));
 	}
@@ -48,7 +48,7 @@ public class CommandChangeReputation extends CommandBase {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
 		if (args.length == 1) {
-			return FactionRegistry.instance().getLoadedFactions().stream().map(Faction::getName).collect(Collectors.toList());
+			return FactionRegistry.instance(sender.getEntityWorld()).getLoadedFactions().stream().map(Faction::getName).collect(Collectors.toList());
 		} else if (args.length == 2) {
 			return Arrays.stream(EReputationState.values()).mapToInt(EReputationState::getValue).mapToObj(Integer::toString).collect(Collectors.toList());
 		}

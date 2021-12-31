@@ -256,7 +256,7 @@ public class TargetUtil {
 			}
 		}
 
-		Faction faction = FactionRegistry.instance().getFactionOf(entity);
+		Faction faction = FactionRegistry.instance(entity).getFactionOf(entity);
 		if (faction.isAlly(target)) {
 			return true;
 		}
@@ -289,7 +289,7 @@ public class TargetUtil {
 			}
 		}
 
-		Faction faction = FactionRegistry.instance().getFactionOf(entity);
+		Faction faction = FactionRegistry.instance(entity).getFactionOf(entity);
 		if (target instanceof EntityPlayer && faction == FactionRegistry.DUMMY_FACTION) {
 			if (!(entity instanceof EntityMob)) {
 				return false;

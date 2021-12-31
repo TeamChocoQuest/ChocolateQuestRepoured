@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EReputationState;
-import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class SPacketInitialFactionInformation implements IMessage {
@@ -25,9 +26,9 @@ public class SPacketInitialFactionInformation implements IMessage {
 		// Default constructor for client side
 	}
 
-	public SPacketInitialFactionInformation(UUID playerID) {
+	public SPacketInitialFactionInformation(UUID playerID, Collection<Faction> factions, Object2IntMap<String> reputation) {
 		this.playerId = playerID;
-		List<Faction> loadedFactions = new ArrayList<>(FactionRegistry.instance().getLoadedFactions());
+		List<Faction> loadedFactions = new ArrayList<>(factions);
 		int arrSize = loadedFactions.size();
 		this.factions = new String[arrSize];
 		this.reputations = new int[arrSize];
@@ -36,7 +37,7 @@ public class SPacketInitialFactionInformation implements IMessage {
 		for (int i = 0; i < this.factions.length; i++) {
 			Faction fac = loadedFactions.get(i);
 			this.factions[i] = fac.getName();
-			int score = FactionRegistry.instance().getExactReputationOf(playerID, fac);
+			int score = reputation.getInt(fac.getName());
 			this.repuCanChange[i] = fac.canRepuChange();
 			this.defaultRepu[i] = fac.getDefaultReputation().toString();
 			this.reputations[i] = score;

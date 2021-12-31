@@ -350,7 +350,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 				// End IceAndFire compatibility
 
-				Faction fac = FactionRegistry.instance().getFactionOf(source.getTrueSource());
+				Faction fac = FactionRegistry.instance(this).getFactionOf(source.getTrueSource());
 				boolean dragonFactionFlag = fac != null && (fac.getName().equalsIgnoreCase("DRAGON") || fac.getName().equalsIgnoreCase("DRAGONS"));
 
 				// If we are attacked by a dragon: KILL IT

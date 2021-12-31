@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -28,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -47,21 +49,32 @@ import team.cqr.cqrepoured.util.data.FileIOUtil;
 
 public class FactionRegistry {
 
-	private static FactionRegistry instance;
-
-	private Map<String, Faction> factions = new HashMap<>();
-	private Map<UUID, Object2IntMap<String>> playerFactionRepuMap = new HashMap<>();
-	private Map<Class<? extends Entity>, Faction> entityFactionMap = new HashMap<>();
+	// TODO create IFactionRegistry interface to not have client/server methods available on the other side
+	private static final FactionRegistry CLIENT_INSTANCE = new FactionRegistry();
+	private static final FactionRegistry SERVER_INSTANCE = new FactionRegistry();
 
 	public static final DummyFaction DUMMY_FACTION = new DummyFaction();
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
 
-	public static FactionRegistry instance() {
-		if (instance == null) {
-			instance = new FactionRegistry();
-		}
-		return instance;
+	private final Map<String, Faction> factions = new HashMap<>();
+	private final Map<UUID, Object2IntMap<String>> playerFactionRepuMap = new HashMap<>();
+	private final Map<Class<? extends Entity>, Faction> entityFactionMap = new HashMap<>();
+
+	public static FactionRegistry getClientInstance() {
+		return CLIENT_INSTANCE;
+	}
+
+	public static FactionRegistry getServerInstance() {
+		return SERVER_INSTANCE;
+	}
+
+	public static FactionRegistry instance(World world) {
+		return world.isRemote ? CLIENT_INSTANCE : SERVER_INSTANCE;
+	}
+
+	public static FactionRegistry instance(Entity entity) {
+		return instance(entity.world);
 	}
 
 	public void loadFactions() {
@@ -389,7 +402,7 @@ public class FactionRegistry {
 
 	public void syncPlayerReputationData(EntityPlayerMP player) {
 		// Send over factions and reputations
-		CQRMain.NETWORK.sendTo(new SPacketInitialFactionInformation(player.getPersistentID()), player);
+		CQRMain.NETWORK.sendTo(new SPacketInitialFactionInformation(player.getPersistentID(), this.getLoadedFactions(), this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), Object2IntMaps.emptyMap())), player);
 	}
 
 	public void savePlayerReputationData(EntityPlayerMP player) {

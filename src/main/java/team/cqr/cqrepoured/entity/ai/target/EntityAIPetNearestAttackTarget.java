@@ -41,7 +41,7 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 	 */
 	@Override
 	public boolean shouldExecute() {
-		Faction faction = FactionRegistry.instance().getFactionOf(this.taskOwner);
+		Faction faction = FactionRegistry.instance(this.taskOwner).getFactionOf(this.taskOwner);
 		if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
 			return false;
 		} else if (faction != null)/* if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) */

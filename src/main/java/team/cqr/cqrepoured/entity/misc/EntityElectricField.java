@@ -99,7 +99,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		if (input instanceof IEntityOwnable) {
 			return !((IEntityOwnable) input).getOwnerId().equals(this.ownerID);
 		}
-		Faction ownerFaction = FactionRegistry.instance().getFactionOf(this.getOwner());
+		Faction ownerFaction = FactionRegistry.instance(this).getFactionOf(this.getOwner());
 		if (ownerFaction != null) {
 			return TargetUtil.createPredicateNonAlly(ownerFaction).apply(input);
 		}

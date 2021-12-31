@@ -246,7 +246,7 @@ public class EntityCalamityCrystal extends Entity {
 			return null;
 		}
 		if (this.owningEntity != null) {
-			return FactionRegistry.instance().getFactionOf(this.owningEntity);
+			return FactionRegistry.instance(this).getFactionOf(this.owningEntity);
 		}
 		return null;
 	}

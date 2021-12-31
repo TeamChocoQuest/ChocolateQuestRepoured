@@ -373,7 +373,7 @@ public class Trade {
 	}
 
 	public boolean isUnlockedFor(EntityPlayer player) {
-		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance().getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
+		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance(player).getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
 			return false;
 		}
 

@@ -200,12 +200,12 @@ public class CastleRoomSelector {
 
 		String factionOverride = mainInhabitant.getFactionOverride();
 		if (factionOverride != null) {
-			inhaFaction = FactionRegistry.instance().getFactionInstance(factionOverride);
+			inhaFaction = FactionRegistry.instance(world).getFactionInstance(factionOverride);
 		} else {
 			Entity entity = EntityList.createEntityByIDFromName(mainInhabitant.getEntityID(), world);
 
 			// It is possible for entity to be null here but getFactionOf handles that case with a default value
-			inhaFaction = FactionRegistry.instance().getFactionOf(entity);
+			inhaFaction = FactionRegistry.instance(world).getFactionOf(entity);
 
 		}
 		List<Faction> enemies = inhaFaction.getEnemies();

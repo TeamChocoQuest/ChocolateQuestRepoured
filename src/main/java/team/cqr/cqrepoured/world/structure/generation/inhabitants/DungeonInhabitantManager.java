@@ -126,13 +126,13 @@ public class DungeonInhabitantManager {
 		for (DungeonInhabitant inha : this.inhabitantMapping.values()) {
 			if (!inha.getName().equalsIgnoreCase(DEFAULT_DUNGEON_INHABITANT.getName())) {
 				if (inha.getFactionOverride() != null) {
-					if (faction.equals(FactionRegistry.instance().getFactionInstance(inha.getFactionOverride()))) {
+					if (faction.equals(FactionRegistry.instance(world).getFactionInstance(inha.getFactionOverride()))) {
 						result.add(inha);
 					}
 				} else {
 					// Maybe change this because DungeonInhabitant#getEntityID() returns a random one?
 					Entity entity = EntityList.createEntityByIDFromName(inha.getEntityID(), world);
-					if (entity != null && FactionRegistry.instance().getFactionOf(entity).equals(faction)) {
+					if (entity != null && FactionRegistry.instance(world).getFactionOf(entity).equals(faction)) {
 						result.add(inha);
 					}
 				}
