@@ -232,8 +232,13 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		FileIOUtil.writeNBTToFile(protectedRegion.writeToNBT(), file);
 	}
 
+	@Nullable
 	private ProtectedRegion createProtectedRegionFromFile(UUID uuid) {
 		File file = new File(this.folder, uuid.toString() + ".nbt");
+		if (!file.exists()) {
+			return null;
+		}
+
 		NBTTagCompound compound = FileIOUtil.readNBTFromFile(file);
 		ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
 
