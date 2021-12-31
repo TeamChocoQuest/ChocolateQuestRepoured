@@ -332,7 +332,7 @@ public class ProtectedRegionEventHandler {
 		if (files.isEmpty()) {
 			return;
 		}
-		NBTTagCompound compound = FileIOUtil.getRootNBTTagOfFile(files.get(0));
+		NBTTagCompound compound = FileIOUtil.readNBTFromFile(files.get(0));
 		if (compound != null && compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
 			return;
 		}
@@ -346,12 +346,10 @@ public class ProtectedRegionEventHandler {
 				t = System.currentTimeMillis();
 			}
 			File file = files.get(i);
-			NBTTagCompound tag = FileIOUtil.getRootNBTTagOfFile(file);
-			if (tag != null) {
-				ProtectedRegion protectedRegion = new ProtectedRegion(world, tag);
-				FileIOUtil.saveNBTCompoundToFile(protectedRegion.writeToNBT(), file);
-				updateChunkCapabilityEfficiently((WorldServer) world, protectedRegion);
-			}
+			NBTTagCompound tag = FileIOUtil.readNBTFromFile(file);
+			ProtectedRegion protectedRegion = new ProtectedRegion(world, tag);
+			FileIOUtil.writeNBTToFile(protectedRegion.writeToNBT(), file);
+			updateChunkCapabilityEfficiently((WorldServer) world, protectedRegion);
 		}
 		ProtectedRegion.logVersionWarnings = flag;
 		RegionFileCache.clearRegionFileReferences();

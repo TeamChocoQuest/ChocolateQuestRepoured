@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -369,13 +370,13 @@ public class FactionRegistry {
 	}
 
 	public void handlePlayerLogin(EntityPlayerMP player) {
-		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-		File f = new File(path, player.getPersistentID() + ".nbt");
+		File folder = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/CQR/reputation");
+		File file = new File(folder, player.getPersistentID() + ".nbt");
 		CQRMain.logger.info("Loading player reputation...");
 		Thread t = new Thread(() -> {
 			final UUID uuid = player.getPersistentID();
-			if (f.exists()) {
-				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
+			if (file.exists()) {
+				NBTTagCompound root = FileIOUtil.readNBTFromFile(file);
 				// NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 				if (!root.isEmpty()) {
 					while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
@@ -444,38 +445,25 @@ public class FactionRegistry {
 		Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(playerID);
 		// Map<String, Integer> entryMapping = new HashMap<>();
 		final UUID uuid = playerID;
-		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-		File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
-		if (f != null) {
-			while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
-				// Wait until the uuid isnt active
-			}
-			FactionRegistry.this.uuidsBeingLoaded.add(uuid);
-			try {
-				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
-				/*
-				 * NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND); for (int
-				 * i = 0; i < repuDataList.tagCount();
-				 * i++) { NBTTagCompound tag = repuDataList.getCompoundTagAt(i); if
-				 * (mapping.containsKey(tag.getString("factionName"))) { entryMapping.put(tag.getString("factionName"), i); } } for
-				 * (Map.Entry<String, Integer> entry :
-				 * mapping.entrySet()) { if (entryMapping.containsKey(entry.getKey())) {
-				 * repuDataList.removeTag(entryMapping.get(entry.getKey())); } NBTTagCompound tag = new NBTTagCompound();
-				 * tag.setString("factionName", entry.getKey());
-				 * tag.setInteger("reputation", entry.getValue()); repuDataList.appendTag(tag); }
-				 * root.removeTag("reputationdata"); root.setTag("reputationdata", repuDataList);
-				 */
-				for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
-					root.setInteger(entry.getKey(), entry.getValue());
-				}
+		File folder = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/CQR/reputation");
+		File file = new File(folder, uuid + ".nbt");
+		while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
+			// Wait until the uuid isnt active
+		}
+		FactionRegistry.this.uuidsBeingLoaded.add(uuid);
+		try {
+			NBTTagCompound root = file.exists() ? FileIOUtil.readNBTFromFile(file) : new NBTTagCompound();
 
-				FileIOUtil.saveNBTCompoundToFile(root, f);
-			} finally {
-				if (removeFromMap) {
-					FactionRegistry.this.playerFactionRepuMap.remove(playerID);
-				}
-				FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
+			for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
+				root.setInteger(entry.getKey(), entry.getValue());
 			}
+
+			FileIOUtil.writeNBTToFile(root, file);
+		} finally {
+			if (removeFromMap) {
+				FactionRegistry.this.playerFactionRepuMap.remove(playerID);
+			}
+			FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 		}
 		return true;
 	}

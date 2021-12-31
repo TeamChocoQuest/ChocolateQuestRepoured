@@ -1,17 +1,13 @@
 package team.cqr.cqrepoured.faction;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -207,45 +202,19 @@ public class Faction {
 		if (this.savedGlobally) {
 			// DONE: SAVE DATA
 			Thread t = new Thread(() -> {
-				File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), Faction.this.getName() + ".properties");
 				Properties prop = new Properties();
-				try (InputStream inputStream = new FileInputStream(file)) {
-					prop.load(inputStream);
-				} catch (IOException e) {
-					CQRMain.logger.error("Failed to read file {}", file.getName(), e);
-					return;
-				}
-				prop.setProperty(ConfigKeys.FACTION_NAME_KEY, Faction.this.name);
-				prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(!Faction.this.canRepuChange()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, Faction.this.getDefaultReputation().toString());
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(Faction.this.getRepuAllyKill()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(Faction.this.getRepuMemberKill()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(Faction.this.getRepuEnemyKill()));
-				String allies = "";
-				for (Faction af : Faction.this.allies) {
-					if (!allies.isEmpty()) {
-						allies += ", ";
-					}
-					allies += af.getName();
-				}
-				prop.setProperty(ConfigKeys.FACTION_ALLIES_KEY, allies);
-				String enemies = "";
-				for (Faction ef : Faction.this.enemies) {
-					if (!enemies.isEmpty()) {
-						enemies += ", ";
-					}
-					enemies += ef.getName();
-				}
-				prop.setProperty(ConfigKeys.FACTION_ENEMIES_KEY, enemies);
+				prop.setProperty(ConfigKeys.FACTION_NAME_KEY, this.name);
+				prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(!this.canRepuChange()));
+				prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, this.getDefaultReputation().toString());
+				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(this.getRepuAllyKill()));
+				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(this.getRepuMemberKill()));
+				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(this.getRepuEnemyKill()));
+				prop.setProperty(ConfigKeys.FACTION_ALLIES_KEY, this.allies.stream().map(Faction::getName).collect(Collectors.joining(", ")));
+				prop.setProperty(ConfigKeys.FACTION_ENEMIES_KEY, this.enemies.stream().map(Faction::getName).collect(Collectors.joining(", ")));
 
 				// Save file
-				try {
-					OutputStream out = new FileOutputStream(file);
-					prop.store(out, "saved faction data");
-				} catch (IOException ex) {
-					CQRMain.logger.error("Failed to write to file {}", file.getName(), ex);
-					return;
-				}
+				File file = new File(folder, this.getName() + ".properties");
+				FileIOUtil.writePropToFile(prop, file);
 			});
 			t.setDaemon(true);
 			t.start();

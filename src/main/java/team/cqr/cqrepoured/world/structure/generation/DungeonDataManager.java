@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +16,6 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
@@ -129,16 +127,6 @@ public class DungeonDataManager {
 
 	public void saveData() {
 		if (this.modifiedSinceLastSave) {
-			this.file.delete();
-			try {
-				if (!this.file.createNewFile()) {
-					CQRMain.logger.warn("Unable to create file: {}! Information about dungeons may be lost!", this.file.getAbsolutePath());
-					return;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
 			NBTTagCompound root = new NBTTagCompound();
 			for (Map.Entry<String, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
 				Set<DungeonInfo> dungeonInfos = data.getValue();
@@ -150,7 +138,7 @@ public class DungeonDataManager {
 					root.setTag(data.getKey(), nbtTagList);
 				}
 			}
-			FileIOUtil.saveNBTCompoundToFile(root, this.file);
+			FileIOUtil.writeNBTToFile(root, this.file);
 
 			this.modifiedSinceLastSave = false;
 		}
@@ -159,10 +147,12 @@ public class DungeonDataManager {
 	public void readData() {
 		this.dungeonData.clear();
 
-		NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(this.file);
-		if (root == null) {
+		if (!this.file.exists()) {
 			return;
 		}
+
+		NBTTagCompound root = FileIOUtil.readNBTFromFile(this.file);
+
 		for (String key : root.getKeySet()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
 			for (NBTBase nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
