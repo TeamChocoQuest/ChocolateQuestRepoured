@@ -1,23 +1,18 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,17 +24,18 @@ import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegion
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
+import team.cqr.cqrepoured.util.data.FileIOUtil;
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
-	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new ConcurrentHashMap<>();
+	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new HashMap<>();
 	private final World world;
 	private final File folder;
 
 	public static class ProtectedRegionContainer {
 		public final ProtectedRegion protectedRegion;
 		public long lastTickForceLoaded;
-		public final Set<Chunk> chunkSet = Collections.newSetFromMap(new ConcurrentHashMap<>());
+		public final Set<Chunk> chunkSet = new HashSet<>();
 
 		public ProtectedRegionContainer(ProtectedRegion protectedRegion, boolean loadChunks) {
 			this.protectedRegion = protectedRegion;
@@ -217,10 +213,6 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	public void saveProtectedRegions() {
-		if (!this.folder.exists()) {
-			this.folder.mkdirs();
-		}
-
 		for (Iterator<ProtectedRegionContainer> iterator = this.protectedRegions.values().iterator(); iterator.hasNext();) {
 			ProtectedRegionContainer container = iterator.next();
 			if (!container.protectedRegion.isValid()) {
@@ -237,38 +229,19 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	private void saveProtectedRegionToFile(ProtectedRegion protectedRegion) {
 		File file = new File(this.folder, protectedRegion.getUuid().toString() + ".nbt");
-		try {
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			try (OutputStream out = new FileOutputStream(file)) {
-				NBTTagCompound compound = protectedRegion.writeToNBT();
-				CompressedStreamTools.writeCompressed(compound, out);
-			}
-		} catch (IOException e) {
-			CQRMain.logger.error(String.format("Failed to write protected region to file: %s", file.getName()), e);
-		}
+		FileIOUtil.writeNBTToFile(protectedRegion.writeToNBT(), file);
 	}
 
-	@Nullable
 	private ProtectedRegion createProtectedRegionFromFile(UUID uuid) {
 		File file = new File(this.folder, uuid.toString() + ".nbt");
-		if (!file.exists()) {
-			return null;
-		}
-		try (InputStream in = new FileInputStream(file)) {
-			NBTTagCompound compound = CompressedStreamTools.readCompressed(in);
-			ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
+		NBTTagCompound compound = FileIOUtil.readNBTFromFile(file);
+		ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
 
-			if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
-				this.saveProtectedRegionToFile(protectedRegion);
-			}
-
-			return protectedRegion;
-		} catch (IOException e) {
-			CQRMain.logger.error(String.format("Failed to read protected region from file: %s", file.getName()), e);
+		if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
+			this.saveProtectedRegionToFile(protectedRegion);
 		}
-		return null;
+
+		return protectedRegion;
 	}
 
 }
