@@ -27,13 +27,14 @@ public class SPacketInitialFactionInformation implements IMessage {
 
 	public SPacketInitialFactionInformation(UUID playerID) {
 		this.playerId = playerID;
-		int arrSize = FactionRegistry.instance().getLoadedFactions().size();
+		List<Faction> loadedFactions = new ArrayList<>(FactionRegistry.instance().getLoadedFactions());
+		int arrSize = loadedFactions.size();
 		this.factions = new String[arrSize];
 		this.reputations = new int[arrSize];
 		this.repuCanChange = new boolean[arrSize];
 		this.defaultRepu = new String[arrSize];
 		for (int i = 0; i < this.factions.length; i++) {
-			Faction fac = FactionRegistry.instance().getLoadedFactions().get(i);
+			Faction fac = loadedFactions.get(i);
 			this.factions[i] = fac.getName();
 			int score = FactionRegistry.instance().getExactReputationOf(playerID, fac);
 			this.repuCanChange[i] = fac.canRepuChange();

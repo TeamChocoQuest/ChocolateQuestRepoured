@@ -202,20 +202,19 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
+		FactionRegistry.instance().loadPlayerReputationData(event.player);
+
 		// Send packets with ct's to player
 		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
 			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 
-			FactionRegistry.instance().handlePlayerLogin((EntityPlayerMP) event.player);
+			FactionRegistry.instance().syncPlayerReputationData((EntityPlayerMP) event.player);
 		}
-
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
-		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
-			FactionRegistry.instance().handlePlayerLogout((EntityPlayerMP) event.player);
-		}
+		FactionRegistry.instance().savePlayerReputationData((EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent
