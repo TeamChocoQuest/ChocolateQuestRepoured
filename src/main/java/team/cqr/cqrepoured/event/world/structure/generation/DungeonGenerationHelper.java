@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,11 +28,10 @@ public class DungeonGenerationHelper {
 	private static final Map<World, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
 	private static boolean isGeneratingDelayedChunks = false;
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
-		generateDelayedChunks(event.getWorld());
-		TRAVELING_PLAYERS.remove(event.getWorld().provider.getDimension());
-		DELAYED_CHUNKS.remove(event.getWorld());
+	public static void onWorldUnloadEvent(World world) {
+		generateDelayedChunks(world);
+		TRAVELING_PLAYERS.remove(world.provider.getDimension());
+		DELAYED_CHUNKS.remove(world);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

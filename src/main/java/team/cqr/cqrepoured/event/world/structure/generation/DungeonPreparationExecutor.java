@@ -50,9 +50,8 @@ public class DungeonPreparationExecutor {
 		DIM_2_EXECUTOR.computeIfAbsent(event.getWorld(), key -> Executors.newSingleThreadExecutor(DEFAULT_THREAD_FACTORY));
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
-		ExecutorService executor = DIM_2_EXECUTOR.remove(event.getWorld());
+	public static void onWorldUnloadEvent(World world) {
+		ExecutorService executor = DIM_2_EXECUTOR.remove(world);
 		if (executor == null) {
 			return;
 		}
