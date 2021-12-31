@@ -1,8 +1,10 @@
 package team.cqr.cqrepoured.entity.trade;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -390,11 +392,17 @@ public class Trade {
 	}
 
 	public void decStock() {
-		if (this.inStock > 0) {
+		if (!this.isInStock()) {
+			return;
+		}
+
+		if (this.hasLimitedStock) {
 			this.inStock--;
-			this.holder.get(rdm.nextInt(this.holder.getTrades().size())).incStock();
 			this.holder.onTradesUpdated();
 		}
+
+		List<Trade> trades = this.holder.getTrades().stream().filter(Trade::canRestock).collect(Collectors.toList());
+		trades.get(rdm.nextInt(trades.size())).incStock();
 	}
 
 	public boolean isInStock() {
@@ -430,10 +438,7 @@ public class Trade {
 	}
 	
 	public boolean canRestock() {
-		if(this.restockRate < 1) {
-			return false;
-		}
-		return this.maxStock - this.inStock >= this.restockRate;
+		return this.hasLimitedStock && this.restockRate > 0 && this.inStock < this.maxStock;
 	}
 
 }
