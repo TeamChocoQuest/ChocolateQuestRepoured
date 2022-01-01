@@ -25,7 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ChunkCache;
+import net.minecraft.world.Region;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
@@ -226,7 +226,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 			this.world.profiler.startSection("pathfind");
 			BlockPos entityPos = new BlockPos(this.hasMount() ? this.getMount() : this.entity);
-			ChunkCache chunkcache = new ChunkCacheCQR(this.world, entityPos, pos, entityPos, 32, false);
+			Region chunkcache = new ChunkCacheCQR(this.world, entityPos, pos, entityPos, 32, false);
 			Path path = this.pathFinder.findPath(chunkcache, this.hasMount() ? this.getMount() : this.entity, pos, MathHelper.ceil(distance + 32.0F));
 			this.world.profiler.endSection();
 			return path;

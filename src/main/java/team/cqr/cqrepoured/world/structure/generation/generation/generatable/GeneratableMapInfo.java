@@ -7,7 +7,7 @@ import com.google.common.collect.Multisets;
 
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockStone;
-import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.init.Blocks;
@@ -92,7 +92,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		double d0 = 0.0D;
 		int k2 = (data.xCenter / i + mapX - 64) * i;
 		int l2 = (data.zCenter / i + mapZ - 64) * i;
-		Multiset<MapColor> multiset = HashMultiset.create();
+		Multiset<MaterialColor> multiset = HashMultiset.create();
 		Chunk chunk = world.getChunk(k2 >> 4, l2 >> 4);
 		int i3 = k2 & 15;
 		int j3 = l2 & 15;
@@ -127,7 +127,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 								state = chunk.getBlockState(i4 + i3, k4, j4 + j3);
 								pos.setPos((chunk.x << 4) + i4 + i3, k4, (chunk.z << 4) + j4 + j3);
 
-								if (state.getMapColor(world, pos) != MapColor.AIR || k4 <= 0) {
+								if (state.getMapColor(world, pos) != MaterialColor.AIR || k4 <= 0) {
 									break;
 								}
 							}
@@ -165,9 +165,9 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 			i5 = 0;
 		}
 
-		MapColor mapcolor = Iterables.getFirst(Multisets.copyHighestCountFirst(multiset), MapColor.AIR);
+		MaterialColor mapcolor = Iterables.getFirst(Multisets.copyHighestCountFirst(multiset), MaterialColor.AIR);
 
-		if (mapcolor == MapColor.WATER) {
+		if (mapcolor == MaterialColor.WATER) {
 			d2 = k3 * 0.1D + (mapX + mapZ & 1) * 0.2D;
 			i5 = 1;
 

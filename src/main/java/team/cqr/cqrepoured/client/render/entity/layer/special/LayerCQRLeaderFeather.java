@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.render.entity.layer.special;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;

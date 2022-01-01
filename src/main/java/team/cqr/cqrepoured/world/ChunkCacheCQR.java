@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.world;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
+import net.minecraft.world.Region;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public class ChunkCacheCQR extends ChunkCache {
+public class ChunkCacheCQR extends Region {
 
 	/**
 	 * @param worldIn    The world from which the chunks will get taken.
