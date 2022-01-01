@@ -6,23 +6,23 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollow;
-import net.minecraft.entity.ai.EntityAIFollowOwnerFlying;
-import net.minecraft.entity.ai.EntityAISit;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWaterFlying;
-import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
+import net.minecraft.entity.ai.goal.FollowMobGoal;
+import net.minecraft.entity.ai.goal.FollowOwnerFlyingGoal;
+import net.minecraft.entity.passive.ParrotEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -31,7 +31,7 @@ import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot.BossAIPirateParro
 import team.cqr.cqrepoured.entity.ai.target.EntityAIPetNearestAttackTarget;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class EntityCQRPirateParrot extends EntityParrot {
+public class EntityCQRPirateParrot extends ParrotEntity {
 
 	public EntityCQRPirateParrot(World worldIn) {
 		super(worldIn);
@@ -39,21 +39,21 @@ public class EntityCQRPirateParrot extends EntityParrot {
 
 	@Override
 	protected void initEntityAI() {
-		this.aiSit = new EntityAISit(this);
+		this.aiSit = new SitGoal(this);
 		// this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
-		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(0, new SwimGoal(this));
 		this.tasks.addTask(1, new BossAIPirateParrotThrowPotions(this));
 		// this.tasks.addTask(2, this.aiSit);
-		this.tasks.addTask(2, new EntityAIFollowOwnerFlying(this, 1.0D, 5.0F, 1.0F));
-		this.tasks.addTask(4, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
+		this.tasks.addTask(2, new FollowOwnerFlyingGoal(this, 1.0D, 5.0F, 1.0F));
+		this.tasks.addTask(4, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
 		this.tasks.addTask(5, new BossAIPirateParrotLandOnCaptainsShoulder(this));
-		this.tasks.addTask(3, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
+		this.tasks.addTask(3, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
 
-		this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<>(this, EntityLiving.class, 100, true, false));
+		this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<>(this, MobEntity.class, 100, true, false));
 	}
 
 	@Override
-	public void addPotionEffect(PotionEffect effect) {
+	public void addPotionEffect(EffectInstance effect) {
 		if (effect.getPotion().isBadEffect()) {
 			return;
 		}
@@ -79,7 +79,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 
 	@Nullable
 	@Override
-	public EntityLivingBase getOwner() {
+	public LivingEntity getOwner() {
 		try {
 			UUID uuid = this.getOwnerId();
 			return uuid == null ? null : this.getOwnerInRange(uuid);
@@ -88,9 +88,9 @@ public class EntityCQRPirateParrot extends EntityParrot {
 		}
 	}
 
-	private EntityLivingBase getOwnerInRange(UUID uuid) {
-		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20), input -> input instanceof EntityLivingBase && input.getPersistentID().equals(uuid));
-		return ents.isEmpty() ? null : (EntityLivingBase) ents.get(0);
+	private LivingEntity getOwnerInRange(UUID uuid) {
+		List<Entity> ents = this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.posX - 20, this.posY - 20, this.posZ - 20, this.posX + 20, this.posY + 20, this.posZ + 20), input -> input instanceof LivingEntity && input.getPersistentID().equals(uuid));
+		return ents.isEmpty() ? null : (LivingEntity) ents.get(0);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	}
 
 	public boolean setCQREntityOnShoulder(AbstractEntityCQR p_191994_1_) {
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		CompoundNBT nbttagcompound = new CompoundNBT();
 		nbttagcompound.setString("id", this.getEntityString());
 		this.writeToNBT(nbttagcompound);
 
@@ -115,7 +115,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.FIRE_CHARGE, 1));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.FIRE_CHARGE, 1));
 	}
 
 	@Override
@@ -124,12 +124,12 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	}
 
 	@Override
-	public boolean setEntityOnShoulder(EntityPlayer p_191994_1_) {
+	public boolean setEntityOnShoulder(PlayerEntity p_191994_1_) {
 		return super.setEntityOnShoulder(p_191994_1_);
 	}
 
 	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInteract(PlayerEntity player, Hand hand) {
 		if (this.isTamed() && player != this.getOwner()) {
 			return true;
 		}

@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.entity.ai.item;
 
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -55,7 +55,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		Entity attackTarget = this.entity.getAttackTarget();
 
 		if (this.isHealing) {
-			this.entity.swingArm(EnumHand.MAIN_HAND);
+			this.entity.swingArm(Hand.MAIN_HAND);
 		} else {
 			if (attackTarget == null) {
 				this.startHealing();
@@ -128,10 +128,10 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 
 	private void checkAndPerformBlock() {
 		if (!this.entity.isActiveItemStackBlocking()) {
-			ItemStack offhand = this.entity.getHeldItem(EnumHand.OFF_HAND);
+			ItemStack offhand = this.entity.getHeldItem(Hand.OFF_HAND);
 
 			if (offhand.getItem().isShield(offhand, this.entity)) {
-				this.entity.setActiveHand(EnumHand.OFF_HAND);
+				this.entity.setActiveHand(Hand.OFF_HAND);
 			}
 		}
 	}
@@ -140,8 +140,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		double sin = -Math.sin(Math.toRadians(this.entity.rotationYaw));
 		double cos = Math.cos(Math.toRadians(this.entity.rotationYaw));
 		BlockPos pos = new BlockPos(this.entity.posX - sin, this.entity.posY - 0.001D, this.entity.posZ - cos);
-		IBlockState state = this.entity.world.getBlockState(pos);
-		return state.isSideSolid(this.entity.world, pos, EnumFacing.UP);
+		BlockState state = this.entity.world.getBlockState(pos);
+		return state.isSideSolid(this.entity.world, pos, Direction.UP);
 	}
 
 	public void startHealing() {
@@ -151,7 +151,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				this.entity.swapWeaponAndPotionSlotItemStacks();
 			}
 			this.entity.resetActiveHand();
-			this.entity.setActiveHand(EnumHand.MAIN_HAND);
+			this.entity.setActiveHand(Hand.MAIN_HAND);
 		}
 	}
 

@@ -18,22 +18,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -157,15 +156,15 @@ public class CQStructure {
 		return false;
 	}
 
-	private NBTTagCompound writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
+	private CompoundNBT writeToNBT() {
+		CompoundNBT compound = new CompoundNBT();
 
 		compound.setString("cqr_file_version", CQStructure.CQR_FILE_VERSION);
 		compound.setString("author", this.author);
 		compound.setTag("size", NBTUtil.createPosTag(this.size));
 
 		BlockStatePalette palette = new BlockStatePalette();
-		NBTTagList compoundList = new NBTTagList();
+		ListNBT compoundList = new ListNBT();
 
 		// Save normal blocks
 		ByteBuf buf = Unpooled.buffer(this.blockInfoList.size() * 2);
@@ -186,7 +185,7 @@ public class CQStructure {
 		return compound;
 	}
 
-	private void readFromNBT(NBTTagCompound compound) {
+	private void readFromNBT(CompoundNBT compound) {
 		String cqrFileVersion = compound.getString("cqr_file_version");
 		if (!cqrFileVersion.equals(CQR_FILE_VERSION)) {
 			if (cqrFileVersion.equals("1.1.0")) {
@@ -207,12 +206,12 @@ public class CQStructure {
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
-		NBTTagList compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+		ListNBT compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
 		int blockStateIndex = 0;
 		for (NBTBase nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((NBTTagCompound) nbt), blockStateIndex++);
+			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
 		}
 
 		// Load normal blocks
@@ -240,7 +239,7 @@ public class CQStructure {
 
 		// Load entities
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
-			this.entityInfoList.add(new PreparableEntityInfo((NBTTagCompound) nbt));
+			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 
 		this.unprotectedBlockList.clear();
@@ -273,7 +272,7 @@ public class CQStructure {
 		this.blockInfoList.clear();
 
 		for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
-			IBlockState state = world.getBlockState(pos);
+			BlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 
 			if (block != CQRBlocks.NULL_BLOCK
@@ -299,7 +298,7 @@ public class CQStructure {
 		this.entityInfoList.clear();
 		AxisAlignedBB aabb = new AxisAlignedBB(minPos, maxPos.add(1, 1, 1));
 
-		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, aabb, input -> !(input instanceof EntityPlayer))) {
+		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, aabb, input -> !(input instanceof PlayerEntity))) {
 			if (ignoreBasicEntities && !SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
 				CQRMain.logger.info("Skipping entity: {}", entity);
 				continue;
@@ -385,7 +384,7 @@ public class CQStructure {
 	}
 
 	@Deprecated
-	private void readFromDeprecatedNBT(NBTTagCompound compound) {
+	private void readFromDeprecatedNBT(CompoundNBT compound) {
 		String cqrFileVersion = compound.getString("cqr_file_version");
 		if (!cqrFileVersion.equals("1.1.0")) {
 			throw new IllegalArgumentException(String.format("Structure nbt is too old! Expected %s but got %s.", "1.1.0", cqrFileVersion));
@@ -400,12 +399,12 @@ public class CQStructure {
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
-		NBTTagList compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+		ListNBT compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
 		int blockStateIndex = 0;
 		for (NBTBase nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((NBTTagCompound) nbt), blockStateIndex++);
+			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
 		}
 
 		// Load normal blocks
@@ -413,7 +412,7 @@ public class CQStructure {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList));
+			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (IntArrayNBT) nbt, blockStatePalette, compoundTagList));
 			if (x < this.size.getX() - 1) {
 				x++;
 			} else if (y < this.size.getY() - 1) {
@@ -429,16 +428,16 @@ public class CQStructure {
 
 		// Load special blocks
 		for (NBTBase nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound tag = (NBTTagCompound) nbt;
+			CompoundNBT tag = (CompoundNBT) nbt;
 			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
-				NBTTagList pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
-				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
+				ListNBT pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
+				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (IntArrayNBT) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
 			}
 		}
 
 		// Load entities
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
-			this.entityInfoList.add(new PreparableEntityInfo((NBTTagCompound) nbt));
+			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 	}
 

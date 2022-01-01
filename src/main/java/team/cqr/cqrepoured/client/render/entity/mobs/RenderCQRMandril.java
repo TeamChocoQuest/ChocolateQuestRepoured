@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.inventory.EquipmentSlotType;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRMandril;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;
 
 public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 
-	public RenderCQRMandril(RenderManager rendermanagerIn) {
+	public RenderCQRMandril(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRMandril(), 0.5F, "mob/mandril", 1.0D, 1.0D);
 	}
 
@@ -27,28 +27,28 @@ public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 	}
 
 	@Override
-	public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupHeadOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyRotations(modelRenderer);
 		GlStateManager.translate(0.0D, 0.5D, 0.0D);
 		this.resetRotations(modelRenderer);
 	}
 
 	@Override
-	public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupBodyOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyRotations(modelRenderer);
 		GlStateManager.translate(0.0D, 0.0D, -0.28125D);
 		this.resetRotations(modelRenderer);
 	}
 
 	@Override
-	public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupRightArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyRotations(modelRenderer);
 		GlStateManager.translate(0.0D, 0.125D, 0.0D);
 		this.resetRotations(modelRenderer);
 	}
 
 	@Override
-	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyRotations(modelRenderer);
 		GlStateManager.translate(0.0D, 0.125D, 0.0D);
 		this.resetRotations(modelRenderer);

@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelExterminator;
@@ -19,7 +19,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/exterminator.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/exterminator.geo.json");
 
-	public RenderCQRExterminator(RenderManager renderManager) {
+	public RenderCQRExterminator(EntityRendererManager renderManager) {
 		super(renderManager, new ModelExterminator(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
 		
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQRExterminator>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
@@ -30,7 +30,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected ItemStack getHeldItemForBone(String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			return currentEntity.getHeldItem(EnumHand.MAIN_HAND);
+			return currentEntity.getHeldItem(Hand.MAIN_HAND);
 		}
 		return null;
 	}
@@ -41,7 +41,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	}
 
 	@Override
-	protected IBlockState getHeldBlockForBone(String boneName, EntityCQRExterminator currentEntity) {
+	protected BlockState getHeldBlockForBone(String boneName, EntityCQRExterminator currentEntity) {
 		return null;
 	}
 
@@ -67,7 +67,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	}
 
 	@Override
-	protected void preRenderBlock(IBlockState block, String boneName, EntityCQRExterminator currentEntity) {
+	protected void preRenderBlock(BlockState block, String boneName, EntityCQRExterminator currentEntity) {
 		// Unused
 	}
 
@@ -77,7 +77,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	}
 
 	@Override
-	protected void postRenderBlock(IBlockState block, String boneName, EntityCQRExterminator currentEntity) {
+	protected void postRenderBlock(BlockState block, String boneName, EntityCQRExterminator currentEntity) {
 		// Unused
 	}
 

@@ -7,19 +7,19 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.OcelotEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -36,14 +36,14 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class TargetUtil {
 
-	public static final Predicate<EntityLivingBase> PREDICATE_ATTACK_TARGET = input -> {
+	public static final Predicate<LivingEntity> PREDICATE_ATTACK_TARGET = input -> {
 		if (input == null) {
 			return false;
 		}
-		return EntitySelectors.CAN_AI_TARGET.apply(input);
+		return EntityPredicates.CAN_AI_TARGET.apply(input);
 	};
 
-	public static final Predicate<EntityLivingBase> PREDICATE_CAN_BE_ELECTROCUTED = input -> {
+	public static final Predicate<LivingEntity> PREDICATE_CAN_BE_ELECTROCUTED = input -> {
 		if (input == null || input.isDead) {
 			return false;
 		}
@@ -63,7 +63,7 @@ public class TargetUtil {
 		return true;
 	};
 
-	public static final Predicate<EntityLivingBase> PREDICATE_IS_ELECTROCUTED = input -> {
+	public static final Predicate<LivingEntity> PREDICATE_IS_ELECTROCUTED = input -> {
 		if (input == null || input.isDead) {
 			return false;
 		}
@@ -74,11 +74,11 @@ public class TargetUtil {
 		return icapability.isElectrocutionActive();
 	};
 
-	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = input -> {
+	public static final Predicate<MobEntity> PREDICATE_MOUNTS = input -> {
 		if (input == null) {
 			return false;
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.IS_ALIVE.apply(input)) {
 			return false;
 		}
 		if (input.isBeingRidden()) {
@@ -89,30 +89,30 @@ public class TargetUtil {
 		 * return false;
 		 * }
 		 */
-		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse /* || input instanceof EntityPig */;
+		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorseEntity /* || input instanceof EntityPig */;
 	};
 
-	public static final Predicate<EntityTameable> PREDICATE_PETS = input -> {
+	public static final Predicate<TameableEntity> PREDICATE_PETS = input -> {
 		if (input == null) {
 			return false;
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.IS_ALIVE.apply(input)) {
 			return false;
 		}
 		if (input.getOwnerId() != null) {
 			return false;
 		}
-		return input instanceof EntityOcelot || input instanceof EntityWolf;
+		return input instanceof OcelotEntity || input instanceof WolfEntity;
 	};
 
 	public static final Predicate<Entity> PREDICATE_LIVING = input -> {
 		if (input == null) {
 			return false;
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.IS_ALIVE.apply(input)) {
 			return false;
 		}
-		return input instanceof EntityLivingBase;
+		return input instanceof LivingEntity;
 	};
 
 	public static final Predicate<Entity> createPredicateAlly(Faction faction) {
@@ -123,7 +123,7 @@ public class TargetUtil {
 		return input -> !faction.isAlly(input);
 	}
 
-	public static final <T extends Entity> T getNearestEntity(EntityLiving entity, List<T> list) {
+	public static final <T extends Entity> T getNearestEntity(MobEntity entity, List<T> list) {
 		T nearestEntity = null;
 		double min = Double.MAX_VALUE;
 		for (T otherEntity : list) {
@@ -137,22 +137,22 @@ public class TargetUtil {
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, EntityLiving entity, BlockPos target, double minDist, double dxz, double dy) {
+	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, BlockPos target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, new Vec3d(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D), minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, EntityLiving entity, Entity target, double minDist, double dxz, double dy) {
+	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, Entity target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, target.getPositionVector(), minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, EntityLiving entity, Vec3d target, double minDist, double dxz, double dy) {
+	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, Vec3d target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, target, target, minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, EntityLiving entity, Vec3d target, Vec3d vec, double minDist, double dxz, double dy) {
+	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, Vec3d target, Vec3d vec, double minDist, double dxz, double dy) {
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		int tries = 200;
 		for (int i = 0; i < tries; i++) {
@@ -165,7 +165,7 @@ public class TargetUtil {
 			boolean flag = false;
 			mutablePos.setPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
 			for (int k = 0; k < 4; k++) {
-				IBlockState state = world.getBlockState(mutablePos);
+				BlockState state = world.getBlockState(mutablePos);
 				if (state.getMaterial().blocksMovement()) {
 					AxisAlignedBB aabb = state.getBoundingBox(world, mutablePos);
 					if (y >= mutablePos.getY() + aabb.maxY) {
@@ -231,13 +231,13 @@ public class TargetUtil {
 		return false;
 	}
 
-	public static boolean isAllyCheckingLeaders(EntityLivingBase entity, EntityLivingBase target) {
-		EntityLivingBase leader = getLeaderOrOwnerRecursive(entity);
-		if (leader instanceof EntityPlayer) {
+	public static boolean isAllyCheckingLeaders(LivingEntity entity, LivingEntity target) {
+		LivingEntity leader = getLeaderOrOwnerRecursive(entity);
+		if (leader instanceof PlayerEntity) {
 			entity = leader;
 		}
-		EntityLivingBase targetLeader = getLeaderOrOwnerRecursive(target);
-		if (targetLeader instanceof EntityPlayer) {
+		LivingEntity targetLeader = getLeaderOrOwnerRecursive(target);
+		if (targetLeader instanceof PlayerEntity) {
 			target = targetLeader;
 		}
 
@@ -245,12 +245,12 @@ public class TargetUtil {
 			return true;
 		}
 
-		if (entity instanceof EntityPlayer) {
-			if (target instanceof EntityPlayer) {
+		if (entity instanceof PlayerEntity) {
+			if (target instanceof PlayerEntity) {
 				// TODO add coop/pvp mode?
 				return false;
 			} else {
-				EntityLivingBase temp = entity;
+				LivingEntity temp = entity;
 				entity = target;
 				target = temp;
 			}
@@ -264,13 +264,13 @@ public class TargetUtil {
 		return false;
 	}
 
-	public static boolean isEnemyCheckingLeaders(EntityLivingBase entity, EntityLivingBase target) {
-		EntityLivingBase leader = getLeaderOrOwnerRecursive(entity);
-		if (leader instanceof EntityPlayer) {
+	public static boolean isEnemyCheckingLeaders(LivingEntity entity, LivingEntity target) {
+		LivingEntity leader = getLeaderOrOwnerRecursive(entity);
+		if (leader instanceof PlayerEntity) {
 			entity = leader;
 		}
-		EntityLivingBase targetLeader = getLeaderOrOwnerRecursive(target);
-		if (targetLeader instanceof EntityPlayer) {
+		LivingEntity targetLeader = getLeaderOrOwnerRecursive(target);
+		if (targetLeader instanceof PlayerEntity) {
 			target = targetLeader;
 		}
 
@@ -278,20 +278,20 @@ public class TargetUtil {
 			return false;
 		}
 
-		if (entity instanceof EntityPlayer) {
-			if (target instanceof EntityPlayer) {
+		if (entity instanceof PlayerEntity) {
+			if (target instanceof PlayerEntity) {
 				// TODO add coop/pvp mode?
 				return false;
 			} else {
-				EntityLivingBase temp = entity;
+				LivingEntity temp = entity;
 				entity = target;
 				target = temp;
 			}
 		}
 
 		Faction faction = FactionRegistry.instance(entity).getFactionOf(entity);
-		if (target instanceof EntityPlayer && faction == FactionRegistry.DUMMY_FACTION) {
-			if (!(entity instanceof EntityMob)) {
+		if (target instanceof PlayerEntity && faction == FactionRegistry.DUMMY_FACTION) {
+			if (!(entity instanceof MonsterEntity)) {
 				return false;
 			}
 		} else {
@@ -303,15 +303,15 @@ public class TargetUtil {
 		return true;
 	}
 
-	public static EntityLivingBase getLeaderOrOwnerRecursive(EntityLivingBase entity) {
+	public static LivingEntity getLeaderOrOwnerRecursive(LivingEntity entity) {
 		int i = 10;
 		while (i-- > 0) {
 			if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).hasLeader()) {
 				entity = ((AbstractEntityCQR) entity).getLeader();
 				continue;
 			}
-			if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() instanceof EntityLivingBase) {
-				entity = (EntityLivingBase) ((IEntityOwnable) entity).getOwner();
+			if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() instanceof LivingEntity) {
+				entity = (LivingEntity) ((IEntityOwnable) entity).getOwner();
 				continue;
 			}
 			break;

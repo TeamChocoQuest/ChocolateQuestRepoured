@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.boss.gianttortoise;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 
@@ -60,7 +60,7 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
 		if (this.getParent().isDead) {
 			return false;
 		}

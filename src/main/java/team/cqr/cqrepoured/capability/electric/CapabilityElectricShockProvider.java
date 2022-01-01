@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.capability.electric;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -23,7 +23,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 		CapabilityManager.INSTANCE.register(CapabilityElectricShock.class, new CapabilityElectricShockStorage(), () -> new CapabilityElectricShock(null));
 	}
 
-	public static CapabilityElectricShockProvider createProvider(EntityLivingBase entity) {
+	public static CapabilityElectricShockProvider createProvider(LivingEntity entity) {
 		return new CapabilityElectricShockProvider(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, new CapabilityElectricShock(entity));
 	}
 

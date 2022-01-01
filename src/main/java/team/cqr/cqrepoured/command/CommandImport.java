@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
+import net.minecraft.util.text.StringTextComponent;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.command.CommandBase;
@@ -17,7 +18,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -99,7 +99,7 @@ public class CommandImport extends CommandBase {
 				z += maxSizeZ + 30;
 			}
 
-			sender.sendMessage(new TextComponentString("Imported " + allFiles.size() + " structures successfully"));
+			sender.sendMessage(new StringTextComponent("Imported " + allFiles.size() + " structures successfully"));
 		} catch (Exception e) {
 			CQRMain.logger.error("Failed importing structures!", e);
 			throw new CommandException("Failed importing structures: %s", e);

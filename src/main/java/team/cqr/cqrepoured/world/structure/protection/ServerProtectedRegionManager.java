@@ -13,10 +13,10 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeModContainer;
 import team.cqr.cqrepoured.CQRMain;
@@ -43,7 +43,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 			boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
 			ForgeModContainer.logCascadingWorldGeneration = false;
-			((WorldServer) protectedRegion.getWorld()).addScheduledTask(() -> {
+			((ServerWorld) protectedRegion.getWorld()).addScheduledTask(() -> {
 				BlockPos p1 = protectedRegion.getStartPos();
 				BlockPos p2 = protectedRegion.getEndPos();
 				for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
@@ -239,7 +239,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			return null;
 		}
 
-		NBTTagCompound compound = FileIOUtil.readNBTFromFile(file);
+		CompoundNBT compound = FileIOUtil.readNBTFromFile(file);
 		ProtectedRegion protectedRegion = new ProtectedRegion(this.world, compound);
 
 		if (!compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {

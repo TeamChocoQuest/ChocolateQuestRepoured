@@ -6,10 +6,10 @@ import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 
@@ -80,7 +80,7 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
 		if (this.dragon == null || this.dragon.isDead) {
 			return false;
 		}
@@ -110,7 +110,7 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("skeletal", this.isSkeletal());
 		compound.setInteger("realID", this.realID);
@@ -118,7 +118,7 @@ public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.realID = compound.getInteger("realID");
 		this.partIndex = compound.getInteger("partIndex");

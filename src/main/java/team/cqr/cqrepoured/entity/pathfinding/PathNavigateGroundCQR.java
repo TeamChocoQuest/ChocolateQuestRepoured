@@ -4,24 +4,23 @@ import java.util.EnumSet;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.*;
+import net.minecraft.block.AbstractRailBlock;
+import net.minecraft.block.WallBlock;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.FenceBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -32,9 +31,9 @@ import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
 
 /**
- * Copied from {@link PathNavigateGround}
+ * Copied from {@link GroundPathNavigator}
  */
-public class PathNavigateGroundCQR extends PathNavigateGround {
+public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 	private int ticksAtLastPos;
 	private Vec3d lastPosCheck = Vec3d.ZERO;
@@ -47,7 +46,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	private BlockPos targetPos;
 	private PathFinder pathFinder;
 
-	public PathNavigateGroundCQR(EntityLiving entitylivingIn, World worldIn) {
+	public PathNavigateGroundCQR(MobEntity entitylivingIn, World worldIn) {
 		super(entitylivingIn, worldIn);
 	}
 
@@ -71,7 +70,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 							// TODO better method for calculating the facing from which the door will be entered
 							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
-									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), EnumFacing.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
+									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), Direction.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
 								pathnodetype = PathNodeType.WALKABLE;
 							}
 
@@ -79,7 +78,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 								pathnodetype = PathNodeType.BLOCKED;
 							}
 
-							if (pathnodetype == PathNodeType.RAIL && !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof BlockRailBase) && !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof BlockRailBase)) {
+							if (pathnodetype == PathNodeType.RAIL && !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof AbstractRailBlock) && !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof AbstractRailBlock)) {
 								pathnodetype = PathNodeType.FENCE;
 							}
 
@@ -98,7 +97,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			@Override
 			protected PathNodeType getPathNodeTypeRaw(IBlockAccess p_189553_1_, int p_189553_2_, int p_189553_3_, int p_189553_4_) {
 				BlockPos blockpos = new BlockPos(p_189553_2_, p_189553_3_, p_189553_4_);
-				IBlockState iblockstate = p_189553_1_.getBlockState(blockpos);
+				BlockState iblockstate = p_189553_1_.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 				Material material = iblockstate.getMaterial();
 
@@ -114,15 +113,15 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 						return PathNodeType.DAMAGE_FIRE;
 					} else if (block == Blocks.CACTUS) {
 						return PathNodeType.DAMAGE_CACTUS;
-					} else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof DoorBlock && material == Material.WOOD && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(DoorBlock.OPEN)) {
 						return PathNodeType.DOOR_WOOD_CLOSED;
-					} else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof DoorBlock && material == Material.IRON && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(DoorBlock.OPEN)) {
 						return PathNodeType.DOOR_IRON_CLOSED;
-					} else if (block instanceof BlockDoor && iblockstate.getActualState(p_189553_1_, blockpos).getValue(BlockDoor.OPEN)) {
+					} else if (block instanceof DoorBlock && iblockstate.getActualState(p_189553_1_, blockpos).getValue(DoorBlock.OPEN)) {
 						return PathNodeType.DOOR_OPEN;
-					} else if (block instanceof BlockRailBase) {
+					} else if (block instanceof AbstractRailBlock) {
 						return PathNodeType.RAIL;
-					} else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
+					} else if (!(block instanceof FenceBlock) && !(block instanceof WallBlock) && (!(block instanceof FenceGateBlock) || iblockstate.getValue(FenceGateBlock.OPEN).booleanValue())) {
 						if (material == Material.WATER) {
 							return PathNodeType.WATER;
 						} else if (material == Material.LAVA) {
@@ -175,7 +174,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	}
 
 	private boolean hasMount() {
-		return this.entity.getRidingEntity() instanceof EntityLiving;
+		return this.entity.getRidingEntity() instanceof MobEntity;
 	}
 
 	@Override
@@ -313,9 +312,9 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	}
 
 	@Nullable
-	private EntityLiving getMount() {
+	private MobEntity getMount() {
 		try {
-			return (EntityLiving) this.entity.getRidingEntity();
+			return (MobEntity) this.entity.getRidingEntity();
 		} catch (NullPointerException npe) {
 			return null;
 		}

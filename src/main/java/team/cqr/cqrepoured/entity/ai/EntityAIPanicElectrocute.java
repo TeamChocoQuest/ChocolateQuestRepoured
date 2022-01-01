@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.ai.goal.PanicGoal;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
-public class EntityAIPanicElectrocute extends EntityAIPanic {
+public class EntityAIPanicElectrocute extends PanicGoal {
 
-	public EntityAIPanicElectrocute(EntityCreature creature, double speedIn) {
+	public EntityAIPanicElectrocute(CreatureEntity creature, double speedIn) {
 		super(creature, speedIn);
 	}
 

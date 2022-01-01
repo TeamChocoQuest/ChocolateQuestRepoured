@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 		this.type = type;
 	}
 
-	public ProjectileBullet(World worldIn, EntityLivingBase shooter, int type) {
+	public ProjectileBullet(World worldIn, LivingEntity shooter, int type) {
 		super(worldIn, shooter);
 		this.type = type;
 	}
@@ -40,8 +40,8 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 					return;
 				}
 
-				if (result.entityHit instanceof EntityLivingBase) {
-					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
+				if (result.entityHit instanceof LivingEntity) {
+					LivingEntity entity = (LivingEntity) result.entityHit;
 
 					float damage = 5.0F;
 					if (this.type == 1) {
@@ -53,7 +53,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 					} else if (this.type == 4) {
 						damage += 5.0F;
 
-						if (entity.attackEntityFrom(new EntityDamageSourceIndirect("onFire", this, this.thrower).setFireDamage(), damage / 2)) {
+						if (entity.attackEntityFrom(new IndirectEntityDamageSource("onFire", this, this.thrower).setFireDamage(), damage / 2)) {
 							entity.setFire(3);
 						}
 					}

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.misc;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
@@ -36,8 +36,8 @@ public class EntityBubble extends Entity implements IDontRenderFire {
 					Entity entity = this.getPassengers().get(0);
 					entity.dismountRidingEntity();
 					entity.setPositionAndUpdate(this.posX, this.posY + 0.5D * (this.height - entity.height), this.posZ);
-					if (entity instanceof EntityLivingBase) {
-						if (!((EntityLivingBase) entity).canBreatheUnderwater() && !((EntityLivingBase) entity).isPotionActive(MobEffects.WATER_BREATHING)) {
+					if (entity instanceof LivingEntity) {
+						if (!((LivingEntity) entity).canBreatheUnderwater() && !((LivingEntity) entity).isPotionActive(Effects.WATER_BREATHING)) {
 							entity.setAir(entity.getAir() - 5);
 						}
 					} else {
@@ -66,12 +66,12 @@ public class EntityBubble extends Entity implements IDontRenderFire {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 		this.flyTicks = compound.getInteger("flyTicks");
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 		compound.setInteger("flyTicks", this.flyTicks);
 	}
 

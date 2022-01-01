@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.DoubleNBT;
 
 public class DataEntryDouble extends DataEntry<Double> {
 
@@ -17,13 +17,13 @@ public class DataEntryDouble extends DataEntry<Double> {
 
 	@Override
 	public NBTBase write() {
-		return new NBTTagDouble(this.value);
+		return new DoubleNBT(this.value);
 	}
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagDouble) {
-			this.value = ((NBTTagDouble) nbt).getDouble();
+		if (nbt instanceof DoubleNBT) {
+			this.value = ((DoubleNBT) nbt).getDouble();
 		}
 	}
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
+import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.CQRMain;
 @EventBusSubscriber(modid = CQRMain.MODID)
 public class CQRSerializers {
 
-	public static final DataSerializer<Vec3d> VEC3D = new DataSerializer<Vec3d>() {
+	public static final IDataSerializer<Vec3d> VEC3D = new IDataSerializer<Vec3d>() {
 		@Override
 		public void write(PacketBuffer buf, Vec3d value) {
 			buf.writeDouble(value.x);

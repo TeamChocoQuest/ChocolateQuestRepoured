@@ -3,14 +3,14 @@ package team.cqr.cqrepoured.entity.ai.item;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.PotionEntity;
+import net.minecraft.item.LingeringPotionItem;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemLingeringPotion;
-import net.minecraft.item.ItemSplashPotion;
+import net.minecraft.item.SplashPotionItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -31,18 +31,18 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 
 	@Override
 	protected boolean isRangedWeapon(Item item) {
-		return (item instanceof ItemAlchemyBag || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion);
+		return (item instanceof ItemAlchemyBag || item instanceof SplashPotionItem || item instanceof LingeringPotionItem);
 	}
 
 	@Override
-	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
+	protected void checkAndPerformAttack(LivingEntity attackTarget) {
 		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
 			ItemStack stack = this.getEquippedWeapon();
 			Item item = stack.getItem();
 
 			// Throwable potions
-			if (item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion) {
-				EntityPotion proj = new EntityPotion(this.world, this.entity, stack.copy());
+			if (item instanceof SplashPotionItem || item instanceof LingeringPotionItem) {
+				PotionEntity proj = new PotionEntity(this.world, this.entity, stack.copy());
 				double x = attackTarget.posX - this.entity.posX;
 				double y = attackTarget.posY + attackTarget.height * 0.5D - proj.posY;
 				double z = attackTarget.posZ - this.entity.posZ;
@@ -54,7 +54,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 					proj.motionY += this.entity.motionY;
 				}
 				this.entity.world.spawnEntity(proj);
-				this.entity.swingArm(EnumHand.OFF_HAND);
+				this.entity.swingArm(Hand.OFF_HAND);
 				this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 
 				if (CQRConfig.mobs.offhandPotionsAreSingleUse) {
@@ -78,8 +78,8 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 					ItemStack potion = st.copy();
 
 					// Now throw it
-					if (potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {
-						EntityPotion proj = new EntityPotion(this.world, this.entity, potion);
+					if (potion.getItem() instanceof SplashPotionItem || potion.getItem() instanceof LingeringPotionItem) {
+						PotionEntity proj = new PotionEntity(this.world, this.entity, potion);
 						double x = attackTarget.posX - this.entity.posX;
 						double y = attackTarget.posY + attackTarget.height * 0.5D - proj.posY;
 						double z = attackTarget.posZ - this.entity.posZ;
@@ -92,7 +92,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 						}
 						proj.velocityChanged = true;
 						this.entity.world.spawnEntity(proj);
-						this.entity.swingArm(EnumHand.OFF_HAND);
+						this.entity.swingArm(Hand.OFF_HAND);
 						this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}
 				}

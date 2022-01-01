@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -11,23 +14,19 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,27 +41,27 @@ public class ItemSoulBottle extends Item {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		if (player.isCreative()) {
 			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
-				NBTTagCompound bottle = stack.getTagCompound();
+				CompoundNBT bottle = stack.getTagCompound();
 
 				if (bottle == null) {
-					bottle = new NBTTagCompound();
+					bottle = new CompoundNBT();
 					stack.setTagCompound(bottle);
 				}
 
 				if (!bottle.hasKey(ENTITY_IN_TAG)) {
-					NBTTagCompound entityTag = new NBTTagCompound();
+					CompoundNBT entityTag = new CompoundNBT();
 					entity.writeToNBTOptional(entityTag);
 					entityTag.removeTag("UUIDLeast");
 					entityTag.removeTag("UUIDMost");
 					entityTag.removeTag("Pos");
-					NBTTagList passengers = entityTag.getTagList("Passengers", 10);
+					ListNBT passengers = entityTag.getTagList("Passengers", 10);
 					for (NBTBase passenger : passengers) {
-						((NBTTagCompound) passenger).removeTag("UUIDLeast");
-						((NBTTagCompound) passenger).removeTag("UUIDMost");
-						((NBTTagCompound) passenger).removeTag("Pos");
+						((CompoundNBT) passenger).removeTag("UUIDLeast");
+						((CompoundNBT) passenger).removeTag("UUIDMost");
+						((CompoundNBT) passenger).removeTag("Pos");
 					}
 					entity.setDead();
 					for (Entity passenger : entity.getPassengers()) {
@@ -78,16 +77,16 @@ public class ItemSoulBottle extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		if (!player.isSpectator()) {
 			ItemStack stack = player.getHeldItem(hand);
 
 			if (stack.hasTagCompound()) {
-				NBTTagCompound bottle = stack.getTagCompound();
+				CompoundNBT bottle = stack.getTagCompound();
 
 				if (bottle.hasKey(ENTITY_IN_TAG)) {
 					if (!worldIn.isRemote) {
-						NBTTagCompound entityTag = (NBTTagCompound) bottle.getTag(ENTITY_IN_TAG);
+						CompoundNBT entityTag = (CompoundNBT) bottle.getTag(ENTITY_IN_TAG);
 						this.createEntityFromNBT(entityTag, worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
 
 						if (player.isSneaking()) {
@@ -98,14 +97,14 @@ public class ItemSoulBottle extends Item {
 							stack.shrink(1);
 						}
 					}
-					return EnumActionResult.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			}
 		}
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
-	public Entity createEntityFromNBT(NBTTagCompound tag, World worldIn, double x, double y, double z) {
+	public Entity createEntityFromNBT(CompoundNBT tag, World worldIn, double x, double y, double z) {
 		if (!worldIn.isRemote) {
 			{
 				// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an
@@ -113,18 +112,18 @@ public class ItemSoulBottle extends Item {
 				tag.removeTag("UUIDLeast");
 				tag.removeTag("UUIDMost");
 				tag.removeTag("Pos");
-				NBTTagList passengers = tag.getTagList("Passengers", 10);
+				ListNBT passengers = tag.getTagList("Passengers", 10);
 				for (NBTBase passenger : passengers) {
-					((NBTTagCompound) passenger).removeTag("UUIDLeast");
-					((NBTTagCompound) passenger).removeTag("UUIDMost");
-					((NBTTagCompound) passenger).removeTag("Pos");
+					((CompoundNBT) passenger).removeTag("UUIDLeast");
+					((CompoundNBT) passenger).removeTag("UUIDMost");
+					((CompoundNBT) passenger).removeTag("Pos");
 				}
 			}
 			Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
 			entity.setPosition(x, y, z);
 			worldIn.spawnEntity(entity);
 
-			NBTTagList list = tag.getTagList("Passengers", 10);
+			ListNBT list = tag.getTagList("Passengers", 10);
 			if (!list.isEmpty()) {
 				Entity rider = this.createEntityFromNBT(list.getCompoundTagAt(0), worldIn, x, y, z);
 				rider.startRiding(entity);
@@ -139,7 +138,7 @@ public class ItemSoulBottle extends Item {
 
 	private void spawnAdditions(World world, double x, double y, double z) {
 		if (!world.isRemote) {
-			((WorldServer) world).spawnParticle(EnumParticleTypes.CLOUD, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			((ServerWorld) world).spawnParticle(EnumParticleTypes.CLOUD, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 0.6F + itemRand.nextFloat() * 0.2F);
 		}
 	}
@@ -147,7 +146,7 @@ public class ItemSoulBottle extends Item {
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		if (stack.hasTagCompound()) {
-			NBTTagCompound bottle = stack.getTagCompound();
+			CompoundNBT bottle = stack.getTagCompound();
 
 			if (bottle.hasKey(ENTITY_IN_TAG)) {
 				return true;
@@ -166,7 +165,7 @@ public class ItemSoulBottle extends Item {
 		}
 
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey(ENTITY_IN_TAG)) {
-			NBTTagCompound tag = (NBTTagCompound) stack.getTagCompound().getTag(ENTITY_IN_TAG);
+			CompoundNBT tag = (CompoundNBT) stack.getTagCompound().getTag(ENTITY_IN_TAG);
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.contains.name") + " " + this.getEntityName(tag.getString("id")));
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.contains.name") + " " + I18n.format("description.empty.name"));

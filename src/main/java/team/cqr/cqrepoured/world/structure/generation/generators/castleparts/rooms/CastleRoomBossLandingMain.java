@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -22,7 +22,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private static final int STAIR_OPENING_LENGTH_Z = 2;
 	private static final int BOSS_ROOM_WIDTH = 17; // may want to get this from the boss room itself later
 
-	private EnumFacing doorSide;
+	private Direction doorSide;
 	private int numRotations;
 
 	private int endX;
@@ -38,11 +38,11 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private int stairOpeningZStartIdx;
 	private int stairOpeningZEndIdx;
 
-	public CastleRoomBossLandingMain(int sideLength, int height, EnumFacing doorSide, int floor, Random rand) {
+	public CastleRoomBossLandingMain(int sideLength, int height, Direction doorSide, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.doorSide = doorSide;
-		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
+		this.numRotations = DungeonGenUtils.getCWRotationsBetween(Direction.NORTH, this.doorSide);
 		this.defaultCeiling = true;
 
 		this.endX = ROOMS_LONG * sideLength; // 1 wall space in between them
@@ -72,7 +72,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 		for (int x = 0; x <= this.endX; x++) {
 			for (int y = 0; y < this.height; y++) {
 				for (int z = 0; z <= this.endZ; z++) {
-					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
+					BlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
 					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
@@ -85,8 +85,8 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 		}
 	}
 
-	private IBlockState getBlockToBuild(DungeonRandomizedCastle dungeon, int x, int y, int z) {
-		IBlockState blockToBuild = Blocks.AIR.getDefaultState();
+	private BlockState getBlockToBuild(DungeonRandomizedCastle dungeon, int x, int y, int z) {
+		BlockState blockToBuild = Blocks.AIR.getDefaultState();
 
 		if (z == 0) {
 			if (x < this.connectingWallLength || x > this.endX - this.connectingWallLength || y == this.height - 1) {
@@ -99,8 +99,8 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 				if (z < this.stairsDownZIdx) {
 					blockToBuild = Blocks.QUARTZ_BLOCK.getDefaultState();
 				} else if (z == this.stairsDownZIdx) {
-					EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
-					blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+					Direction stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(Direction.NORTH, this.numRotations);
+					blockToBuild = dungeon.getStairBlockState().withProperty(StairsBlock.FACING, stairFacing);
 				} else {
 					return Blocks.AIR.getDefaultState();
 				}
@@ -147,12 +147,12 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public boolean canBuildDoorOnSide(EnumFacing side) {
+	public boolean canBuildDoorOnSide(Direction side) {
 		return true;
 	}
 
 	@Override
-	public boolean reachableFromSide(EnumFacing side) {
+	public boolean reachableFromSide(Direction side) {
 		return true;
 	}
 }

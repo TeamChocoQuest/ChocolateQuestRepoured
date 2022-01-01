@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.item.crafting;
 
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
@@ -16,7 +16,7 @@ public class RecipeArmorDyableBreathing extends IForgeRegistryEntry.Impl<IRecipe
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World world) {
+	public boolean matches(CraftingInventory inv, World world) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		int glowStoneDustCount = 0;
 
@@ -38,7 +38,7 @@ public class RecipeArmorDyableBreathing extends IForgeRegistryEntry.Impl<IRecipe
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		int glowStoneDustCount = 0;
 

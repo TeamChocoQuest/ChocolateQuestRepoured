@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.HorizontalBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -17,17 +17,17 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	public enum Alignment {
 		VERTICAL, HORIZONTAL;
 
-		private boolean canHaveInteriorWall(EnumFacing side) {
+		private boolean canHaveInteriorWall(Direction side) {
 			if (this == VERTICAL) {
-				return (side == EnumFacing.WEST || side == EnumFacing.EAST);
+				return (side == Direction.WEST || side == Direction.EAST);
 			} else {
-				return (side == EnumFacing.NORTH || side == EnumFacing.SOUTH);
+				return (side == Direction.NORTH || side == Direction.SOUTH);
 			}
 		}
 	}
 
 	private Alignment alignment;
-	EnumFacing patternStartFacing;
+	Direction patternStartFacing;
 
 	public CastleRoomHallway(int sideLength, int height, Alignment alignment, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
@@ -35,7 +35,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		this.alignment = alignment;
 		this.defaultFloor = true;
 		this.defaultCeiling = true;
-		this.patternStartFacing = EnumFacing.HORIZONTALS[this.random.nextInt(EnumFacing.HORIZONTALS.length)];
+		this.patternStartFacing = Direction.HORIZONTALS[this.random.nextInt(Direction.HORIZONTALS.length)];
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
 				BlockPos pos = this.getNonWallStartPos().add(x, 0, z);
-				IBlockState tcBlock = Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
-				EnumFacing tcFacing;
+				BlockState tcBlock = Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
+				Direction tcFacing;
 
 				// Terracotta patterns are formed in a 2x2 square from the pattern (going clockwise) N E S W
 				// So create that pattern here given some starting facing
@@ -61,7 +61,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 						tcFacing = this.patternStartFacing.rotateY().rotateY();
 					}
 				}
-				tcBlock = tcBlock.withProperty(BlockHorizontal.FACING, tcFacing);
+				tcBlock = tcBlock.withProperty(HorizontalBlock.FACING, tcFacing);
 				genArray.addBlockState(pos, tcBlock, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
@@ -78,11 +78,11 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		--halfZ;
 
 		BlockPos pillarStart = this.roomOrigin.add(halfX, 1, halfZ);
-		pillar.build(world, genArray, this, dungeon, pillarStart, EnumFacing.NORTH, this.usedDecoPositions);
+		pillar.build(world, genArray, this, dungeon, pillarStart, Direction.NORTH, this.usedDecoPositions);
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
+	protected BlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
 	}
 

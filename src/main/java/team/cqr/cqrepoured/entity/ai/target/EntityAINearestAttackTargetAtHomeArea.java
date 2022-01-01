@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -17,11 +17,11 @@ import team.cqr.cqrepoured.init.CQRItems;
 
 public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR & ICirclingEntity> extends AbstractCQREntityAI<T> {
 
-	protected final Predicate<EntityLivingBase> predicate = input -> {
+	protected final Predicate<LivingEntity> predicate = input -> {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
 			return false;
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.IS_ALIVE.apply(input)) {
 			return false;
 		}
 		return EntityAINearestAttackTargetAtHomeArea.this.isSuitableTarget(input);
@@ -33,7 +33,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (this.entity.world.getDifficulty() == Difficulty.PEACEFUL) {
 			this.entity.setAttackTarget(null);
 			return false;
 		}
@@ -54,13 +54,13 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	@Override
 	public void startExecuting() {
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().add(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
-		List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
+		List<LivingEntity> possibleTargets = this.entity.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.predicate);
 		if (!possibleTargets.isEmpty()) {
 			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
 		}
 	}
 
-	private boolean isSuitableTarget(EntityLivingBase possibleTarget) {
+	private boolean isSuitableTarget(LivingEntity possibleTarget) {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
@@ -93,11 +93,11 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 32.0D;
 	}
 
-	private boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
+	private boolean isStillSuitableTarget(LivingEntity possibleTarget) {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 			return false;
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(possibleTarget)) {
+		if (!EntityPredicates.IS_ALIVE.apply(possibleTarget)) {
 			return false;
 		}
 		if (possibleTarget == this.entity) {
@@ -127,7 +127,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		return this.isInHomeZone(possibleTarget);
 	}
 
-	private boolean isInHomeZone(EntityLivingBase possibleTarget) {
+	private boolean isInHomeZone(LivingEntity possibleTarget) {
 		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		return Math.abs(distance) <= 48 + 8 * (this.world.getDifficulty().ordinal());
 	}

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.util;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.world.EnumLightType;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -31,13 +31,13 @@ public class SkyLightUtil {
 						}
 						MUTABLE.setPos((chunk.x << 4) + x, (chunkY << 4) + y, (chunk.z << 4) + z);
 						if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
-							IBlockState state = blockStorage.get(x, y, z);
+							BlockState state = blockStorage.get(x, y, z);
 							if (state.getLightOpacity(world, MUTABLE) >= 15) {
 								// blockStorage.setSkyLight(x, y, z, 0);
 								continue;
 							}
 						}
-						world.checkLightFor(EnumLightType.SKY, MUTABLE);
+						world.checkLightFor(LightType.SKY, MUTABLE);
 					}
 				}
 			}

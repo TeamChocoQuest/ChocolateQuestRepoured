@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.target.exterminator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -11,10 +11,10 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 
-	private Supplier<EntityLivingBase> funcGetElectrocuteTarget;
-	private Consumer<EntityLivingBase> funcSetElectrocuteTarget;
+	private Supplier<LivingEntity> funcGetElectrocuteTarget;
+	private Consumer<LivingEntity> funcSetElectrocuteTarget;
 
-	public EntityAITargetElectrocute(AbstractEntityCQR entity, Supplier<EntityLivingBase> funcGetElectrocuteTarget, Consumer<EntityLivingBase> funcSetElectrocuteTarget) {
+	public EntityAITargetElectrocute(AbstractEntityCQR entity, Supplier<LivingEntity> funcGetElectrocuteTarget, Consumer<LivingEntity> funcSetElectrocuteTarget) {
 		super(entity);
 
 		this.funcGetElectrocuteTarget = funcGetElectrocuteTarget;
@@ -22,12 +22,12 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 	}
 
 	@Override
-	protected EntityLivingBase wrapperGetAttackTarget() {
+	protected LivingEntity wrapperGetAttackTarget() {
 		return this.funcGetElectrocuteTarget.get();
 	}
 
 	@Override
-	protected void wrapperSetAttackTarget(EntityLivingBase target) {
+	protected void wrapperSetAttackTarget(LivingEntity target) {
 		this.funcSetElectrocuteTarget.accept(target);
 	}
 
@@ -37,17 +37,17 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 	}
 
 	@Override
-	protected boolean isSuitableTargetAlly(EntityLivingBase possibleTarget) {
+	protected boolean isSuitableTargetAlly(LivingEntity possibleTarget) {
 		return false;
 	}
 
 	@Override
-	protected boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
+	protected boolean isStillSuitableTarget(LivingEntity possibleTarget) {
 		return possibleTarget != null && this.entity.getDistance(possibleTarget) <= (this.entity.getWidth() + 4 * CQRConfig.general.electricFieldEffectSpreadRange) && super.isStillSuitableTarget(possibleTarget) && this.entity.canEntityBeSeen(possibleTarget);
 	}
 
 	@Override
-	protected boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
+	protected boolean isSuitableTargetEnemy(LivingEntity possibleTarget) {
 		return possibleTarget != null && this.entity.getDistance(possibleTarget) <= (this.entity.getWidth() + CQRConfig.general.electricFieldEffectSpreadRange * 2) && super.isSuitableTargetEnemy(possibleTarget) && TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(possibleTarget)
 				&& !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(possibleTarget);
 	}

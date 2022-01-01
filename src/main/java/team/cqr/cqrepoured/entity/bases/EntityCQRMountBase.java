@@ -2,23 +2,23 @@ package team.cqr.cqrepoured.entity.bases;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public abstract class EntityCQRMountBase extends EntityAnimal {
+public abstract class EntityCQRMountBase extends AnimalEntity {
 
 	public EntityCQRMountBase(World worldIn) {
 		super(worldIn);
@@ -26,20 +26,20 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 0.9D));
-		this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 0.6D));
-		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		this.tasks.addTask(8, new EntityAILookIdle(this));
+		this.tasks.addTask(0, new SwimGoal(this));
+		this.tasks.addTask(1, new PanicGoal(this, 0.9D));
+		this.tasks.addTask(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
+		this.tasks.addTask(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+		this.tasks.addTask(8, new LookRandomlyGoal(this));
 	}
 
 	@Override
 	protected boolean canBeRidden(Entity entityIn) {
-		return entityIn instanceof AbstractEntityCQR || entityIn instanceof EntityPlayer;
+		return entityIn instanceof AbstractEntityCQR || entityIn instanceof PlayerEntity;
 	}
 
 	@Override
-	public EntityAgeable createChild(EntityAgeable ageable) {
+	public AgeableEntity createChild(AgeableEntity ageable) {
 		return null;
 	}
 
@@ -53,11 +53,11 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 	public boolean canBeSteered() {
 		Entity entity = this.getControllingPassenger();
 
-		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof EntityPlayer);
+		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof PlayerEntity);
 	}
 
 	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInteract(PlayerEntity player, Hand hand) {
 		if (!super.processInteract(player, hand)) {
 			if (!this.isBeingRidden()) {
 				if (!this.world.isRemote) {
@@ -75,7 +75,7 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 	@Override
 	public void travel(float strafe, float vertical, float forward) {
 		if (this.isBeingRidden() && this.canBeSteered()) {
-			EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null :
+			LivingEntity entity = (LivingEntity) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null :
 																						// (Entity)this.getPassengers().get(0);
 			this.rotationYaw = entity.rotationYaw;
 			this.prevRotationYaw = this.rotationYaw;

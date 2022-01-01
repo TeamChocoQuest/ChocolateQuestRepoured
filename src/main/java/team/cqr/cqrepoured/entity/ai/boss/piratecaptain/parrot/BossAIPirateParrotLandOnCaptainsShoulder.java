@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
 
-public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
+public class BossAIPirateParrotLandOnCaptainsShoulder extends Goal {
 
 	private final EntityCQRPirateParrot entity;
-	private EntityLivingBase owner;
+	private LivingEntity owner;
 	private boolean isSittingOnShoulder;
 
 	public BossAIPirateParrotLandOnCaptainsShoulder(EntityCQRPirateParrot parrot) {
@@ -21,7 +21,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
 	 */
 	@Override
 	public boolean shouldExecute() {
-		EntityLivingBase entitylivingbase = this.entity.getOwner();
+		LivingEntity entitylivingbase = this.entity.getOwner();
 		boolean flag = entitylivingbase != null && !entitylivingbase.isInWater();
 		return !this.entity.isSitting() && flag && this.entity.canSitOnShoulder();
 	}
@@ -53,8 +53,8 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
 			if (this.entity.getEntityBoundingBox().intersects(this.owner.getEntityBoundingBox())) {
 				if (this.owner instanceof AbstractEntityCQR) {
 					this.isSittingOnShoulder = this.entity.setCQREntityOnShoulder((AbstractEntityCQR) this.owner);
-				} else if (this.owner instanceof EntityPlayer) {
-					this.isSittingOnShoulder = this.entity.setEntityOnShoulder((EntityPlayer) this.owner);
+				} else if (this.owner instanceof PlayerEntity) {
+					this.isSittingOnShoulder = this.entity.setEntityOnShoulder((PlayerEntity) this.owner);
 				}
 			}
 		}

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryFacing;
@@ -16,7 +16,7 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
 	private final DataEntryInt scale = new DataEntryInt("scale", 0, true);
-	private final DataEntryFacing orientation = new DataEntryFacing("orientation", EnumFacing.NORTH, true);
+	private final DataEntryFacing orientation = new DataEntryFacing("orientation", Direction.NORTH, true);
 	private final DataEntryBoolean lockOrientation = new DataEntryBoolean("lockOrientation", false, true);
 	private final DataEntryInt originX = new DataEntryInt("originX", 0, true);
 	private final DataEntryInt originZ = new DataEntryInt("originZ", 0, true);
@@ -43,36 +43,36 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		super.writeToNBT(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(CompoundNBT compound) {
 		super.readFromNBT(compound);
 		this.dataManager.read(compound);
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 0, this.dataManager.write(new NBTTagCompound()));
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.pos, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		return this.writeToNBT(new NBTTagCompound());
+	public CompoundNBT getUpdateTag() {
+		return this.writeToNBT(new CompoundNBT());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.dataManager.read(pkt.getNbtCompound());
 	}
 
-	public void set(int scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int xOffset, int zOffset, boolean fillMap, int fillRadius) {
+	public void set(int scale, Direction orientation, boolean lockOrientation, int originX, int originZ, int xOffset, int zOffset, boolean fillMap, int fillRadius) {
 		this.scale.set(MathHelper.clamp(scale, 0, 4));
-		if (orientation.getAxis() != EnumFacing.Axis.Y) {
+		if (orientation.getAxis() != Direction.Axis.Y) {
 			this.orientation.set(orientation);
 		}
 		this.lockOrientation.set(lockOrientation);
@@ -88,7 +88,7 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 		return this.scale.getInt();
 	}
 
-	public EnumFacing getOrientation() {
+	public Direction getOrientation() {
 		return this.orientation.get();
 	}
 

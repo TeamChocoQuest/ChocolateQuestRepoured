@@ -4,17 +4,17 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.inventory.EquipmentSlotType;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -26,22 +26,22 @@ import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 
-public class ItemCrown extends ItemArmor {
+public class ItemCrown extends ArmorItem {
 
 	public static final String NBT_KEY_CROWN = "CQR Crown";
 
 	public ItemCrown(ArmorMaterial materialIn, int renderIndexIn) {
-		super(materialIn, renderIndexIn, EntityEquipmentSlot.HEAD);
+		super(materialIn, renderIndexIn, EquipmentSlotType.HEAD);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
 		return CQRArmorModels.crown;
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
 		return CapabilityDynamicCrownProvider.createProvider();
 	}
 

@@ -1,26 +1,26 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class RenderChungus<T extends AbstractEntityCQR> extends Render<T> {
+public class RenderChungus<T extends AbstractEntityCQR> extends EntityRenderer<T> {
 
 	public double widthScale = 1;
 	public double heightScale = 1;
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/chungus.png");
 
-	public RenderChungus(RenderManager rendermanagerIn) {
+	public RenderChungus(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn);
 	}
 

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class EntitySpectreLordExplosion extends Entity {
@@ -16,27 +16,27 @@ public class EntitySpectreLordExplosion extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 
 	}
 
 	@Override
-	public boolean writeToNBTAtomically(NBTTagCompound compound) {
+	public boolean writeToNBTAtomically(CompoundNBT compound) {
 		return false;
 	}
 
 	@Override
-	public boolean writeToNBTOptional(NBTTagCompound compound) {
+	public boolean writeToNBTOptional(CompoundNBT compound) {
 		return false;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		return compound;
 	}
 

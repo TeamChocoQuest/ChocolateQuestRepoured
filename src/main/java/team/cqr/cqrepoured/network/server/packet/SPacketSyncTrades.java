@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 public class SPacketSyncTrades implements IMessage {
 
 	private int entityId;
-	private NBTTagCompound trades;
+	private CompoundNBT trades;
 
 	public SPacketSyncTrades() {
 
@@ -17,7 +17,7 @@ public class SPacketSyncTrades implements IMessage {
 
 	public SPacketSyncTrades(AbstractEntityCQR entity) {
 		this.entityId = entity.getEntityId();
-		this.trades = entity.getTrades().writeToNBT(new NBTTagCompound());
+		this.trades = entity.getTrades().writeToNBT(new CompoundNBT());
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class SPacketSyncTrades implements IMessage {
 		return entityId;
 	}
 
-	public NBTTagCompound getTrades() {
+	public CompoundNBT getTrades() {
 		return trades;
 	}
 

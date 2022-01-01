@@ -8,10 +8,10 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -150,7 +150,7 @@ public class PropertyFileHelper {
 		return getResourceLocationFromString(s, defVal);
 	}
 
-	public static IBlockState getBlockStateProperty(Properties prop, String key, IBlockState defVal) {
+	public static BlockState getBlockStateProperty(Properties prop, String key, BlockState defVal) {
 		String s = prop.getProperty(key);
 		if (s == null) {
 			return defVal;
@@ -387,7 +387,7 @@ public class PropertyFileHelper {
 		return retArr;
 	}
 
-	public static IBlockState[] getBlockStateArrayProperty(Properties prop, String key, IBlockState[] defVal, boolean allowEmpty) {
+	public static BlockState[] getBlockStateArrayProperty(Properties prop, String key, BlockState[] defVal, boolean allowEmpty) {
 		String s = prop.getProperty(key);
 		if (s == null) {
 			return defVal;
@@ -399,10 +399,10 @@ public class PropertyFileHelper {
 		}
 
 		String[] splitStr = s.split(",");
-		IBlockState[] retArr = new IBlockState[splitStr.length];
+		BlockState[] retArr = new BlockState[splitStr.length];
 		int removed = 0;
 		for (int i = 0; i < splitStr.length; i++) {
-			IBlockState state = getBlockStateFromString(splitStr[i], null);
+			BlockState state = getBlockStateFromString(splitStr[i], null);
 			if (state != null) {
 				retArr[i - removed] = state;
 			} else {
@@ -480,7 +480,7 @@ public class PropertyFileHelper {
 		return retArr;
 	}
 
-	public static CQRWeightedRandom<IBlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<IBlockState> defVal, boolean allowEmpty) {
+	public static CQRWeightedRandom<BlockState> getWeightedBlockStateList(Properties prop, String key, CQRWeightedRandom<BlockState> defVal, boolean allowEmpty) {
 		String s = prop.getProperty(key);
 		if (s == null) {
 			return defVal;
@@ -492,11 +492,11 @@ public class PropertyFileHelper {
 		}
 
 		String[] splitStr1 = s.split(";");
-		CQRWeightedRandom<IBlockState> retList = new CQRWeightedRandom<>();
+		CQRWeightedRandom<BlockState> retList = new CQRWeightedRandom<>();
 		for (String string : splitStr1) {
 			String[] splitStr2 = string.split(",");
 			if (splitStr2.length >= 2) {
-				IBlockState state = getBlockStateFromString(splitStr2[0], null);
+				BlockState state = getBlockStateFromString(splitStr2[0], null);
 				int weight = 0;
 				try {
 					weight = Integer.parseInt(splitStr2[1].trim());
@@ -541,7 +541,7 @@ public class PropertyFileHelper {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static IBlockState getBlockStateFromString(String s, IBlockState defVal) {
+	private static BlockState getBlockStateFromString(String s, BlockState defVal) {
 		String[] splitStr = s.split(":");
 		Block block = null;
 		int meta = 0;

@@ -12,11 +12,11 @@ import java.util.stream.Stream;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
@@ -47,14 +47,14 @@ public class CommandExport extends CommandBase {
 			}
 		}
 
-		sender.sendMessage(new TextComponentString("Trying to export " + exporterList.size() + " structures..."));
+		sender.sendMessage(new StringTextComponent("Trying to export " + exporterList.size() + " structures..."));
 
 		Set<String> fileNames = new HashSet<>();
 		for (int i = 0; i < exporterList.size(); i++) {
 			TileEntityExporter exporter = exporterList.get(i);
 			if (!fileNames.add(exporter.getStructureName())) {
 				exporterList.remove(i--);
-				sender.sendMessage(new TextComponentString("Couldn't export structure " + exporter.getStructureName() + " because there is another exporter which wants to write to that file."));
+				sender.sendMessage(new StringTextComponent("Couldn't export structure " + exporter.getStructureName() + " because there is another exporter which wants to write to that file."));
 			}
 		}
 
@@ -62,9 +62,9 @@ public class CommandExport extends CommandBase {
 			File file = new File(CQRMain.CQ_EXPORT_FILES_FOLDER, exporter.getStructureName() + ".nbt");
 
 			if (!file.exists() || (args.length >= 1 && args[0].equals("true"))) {
-				exporter.saveStructure((EntityPlayer) sender);
+				exporter.saveStructure((PlayerEntity) sender);
 			} else {
-				sender.sendMessage(new TextComponentString("Couldn't export structure " + exporter.getStructureName() + " because a file with that name already exists and file overriding is disabled."));
+				sender.sendMessage(new StringTextComponent("Couldn't export structure " + exporter.getStructureName() + " because a file with that name already exists and file overriding is disabled."));
 			}
 		}
 	}

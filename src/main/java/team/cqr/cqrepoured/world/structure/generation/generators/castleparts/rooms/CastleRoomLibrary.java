@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;

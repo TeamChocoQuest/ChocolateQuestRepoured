@@ -4,21 +4,19 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -35,13 +33,13 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		this.shoot(worldIn, playerIn, stack, handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
-	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn) {
+	public void shoot(World worldIn, PlayerEntity playerIn, ItemStack stack, Hand handIn) {
 		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		playerIn.swingArm(handIn);
 
@@ -65,7 +63,7 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		shooter.swingArm(handIn);
 
 		if (!worldIn.isRemote) {

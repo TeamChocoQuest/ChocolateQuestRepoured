@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.network.datasync;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.items.ItemStackHandler;

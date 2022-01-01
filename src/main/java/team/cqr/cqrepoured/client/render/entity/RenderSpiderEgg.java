@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelSpiderEgg;
 import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
 
-public class RenderSpiderEgg extends Render<EntitySpiderEgg> {
+public class RenderSpiderEgg extends EntityRenderer<EntitySpiderEgg> {
 
 	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
 			new ResourceLocation(CQRMain.MODID, "textures/entity/spider_egg/0.png"),
@@ -21,7 +21,7 @@ public class RenderSpiderEgg extends Render<EntitySpiderEgg> {
 
 	private final ModelBase model;
 
-	public RenderSpiderEgg(RenderManager renderManager) {
+	public RenderSpiderEgg(EntityRendererManager renderManager) {
 		super(renderManager);
 		this.model = new ModelSpiderEgg();
 	}

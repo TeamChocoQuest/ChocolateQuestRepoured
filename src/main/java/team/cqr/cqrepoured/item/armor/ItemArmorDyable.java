@@ -4,17 +4,17 @@ import java.awt.Color;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 
-public class ItemArmorDyable extends ItemArmor {
+public class ItemArmorDyable extends ArmorItem {
 
-	public ItemArmorDyable(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+	public ItemArmorDyable(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 	}
 
@@ -29,7 +29,7 @@ public class ItemArmorDyable extends ItemArmor {
 	@Override
 	public boolean hasColor(ItemStack stack) {
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
+			CompoundNBT nbttagcompound = stack.getTagCompound();
 			return nbttagcompound != null && nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND) ? nbttagcompound.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT) : false;
 		} else {
 			return super.hasColor(stack);
@@ -42,10 +42,10 @@ public class ItemArmorDyable extends ItemArmor {
 	@Override
 	public int getColor(ItemStack stack) {
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
+			CompoundNBT nbttagcompound = stack.getTagCompound();
 
 			if (nbttagcompound != null) {
-				NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+				CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
 
 				if (nbttagcompound1 != null && nbttagcompound1.hasKey("color", Constants.NBT.TAG_INT)) {
 					int color = nbttagcompound1.getInteger("color");
@@ -84,10 +84,10 @@ public class ItemArmorDyable extends ItemArmor {
 	@Override
 	public void removeColor(ItemStack stack) {
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
+			CompoundNBT nbttagcompound = stack.getTagCompound();
 
 			if (nbttagcompound != null) {
-				NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+				CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
 
 				if (nbttagcompound1.hasKey("color")) {
 					nbttagcompound1.removeTag("color");
@@ -102,14 +102,14 @@ public class ItemArmorDyable extends ItemArmor {
 	@Override
 	public void setColor(ItemStack stack, int color) {
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			NBTTagCompound nbttagcompound = stack.getTagCompound();
+			CompoundNBT nbttagcompound = stack.getTagCompound();
 
 			if (nbttagcompound == null) {
-				nbttagcompound = new NBTTagCompound();
+				nbttagcompound = new CompoundNBT();
 				stack.setTagCompound(nbttagcompound);
 			}
 
-			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+			CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
 
 			if (!nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND)) {
 				nbttagcompound.setTag("display", nbttagcompound1);
@@ -130,12 +130,12 @@ public class ItemArmorDyable extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
 		if (this.getArmorMaterial() == ArmorMaterial.IRON) {
-			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EquipmentSlotType.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND) {
-			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EntityEquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EquipmentSlotType.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}

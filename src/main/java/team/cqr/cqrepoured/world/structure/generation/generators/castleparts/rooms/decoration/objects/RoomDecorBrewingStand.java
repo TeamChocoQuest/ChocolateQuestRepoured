@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 
 public class RoomDecorBrewingStand extends RoomDecorBlocksBase {

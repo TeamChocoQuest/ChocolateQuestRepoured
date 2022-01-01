@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -68,7 +68,7 @@ public class ProtectedRegion {
 		this.protectionStates = new byte[sizeX * sizeY * sizeZ];
 	}
 
-	public ProtectedRegion(World world, NBTTagCompound compound) {
+	public ProtectedRegion(World world, CompoundNBT compound) {
 		this.world = world;
 		this.readFromNBT(compound);
 		this.clearNeedsSaving();
@@ -82,8 +82,8 @@ public class ProtectedRegion {
 		this.clearNeedsSyncing();
 	}
 
-	public NBTTagCompound writeToNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
+	public CompoundNBT writeToNBT() {
+		CompoundNBT tag = new CompoundNBT();
 		this.writeToNBT(tag);
 		return tag;
 	}
@@ -109,7 +109,7 @@ public class ProtectedRegion {
 		return this.needsSyncing;
 	}
 
-	public void writeToNBT(NBTTagCompound compound) {
+	public void writeToNBT(CompoundNBT compound) {
 		compound.setString("version", PROTECTED_REGION_VERSION);
 		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
 		compound.setString("name", this.name);
@@ -125,19 +125,19 @@ public class ProtectedRegion {
 		compound.setBoolean("preventEntitySpawning", this.preventEntitySpawning);
 		compound.setBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
 		compound.setBoolean("isGenerating", this.isGenerating);
-		NBTTagList nbtTagList1 = new NBTTagList();
+		ListNBT nbtTagList1 = new ListNBT();
 		for (UUID entityUuid : this.entityDependencies) {
 			nbtTagList1.appendTag(NBTUtil.createUUIDTag(entityUuid));
 		}
 		compound.setTag("entityDependencies", nbtTagList1);
-		NBTTagList nbtTagList2 = new NBTTagList();
+		ListNBT nbtTagList2 = new ListNBT();
 		for (BlockPos blockPos : this.blockDependencies) {
 			nbtTagList2.appendTag(NBTUtil.createPosTag(blockPos));
 		}
 		compound.setTag("blockDependencies", nbtTagList2);
 	}
 
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(CompoundNBT compound) {
 		String version = compound.getString("version");
 		if (logVersionWarnings && !version.equals(PROTECTED_REGION_VERSION)) {
 			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
@@ -166,12 +166,12 @@ public class ProtectedRegion {
 		this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
 		this.isGenerating = compound.getBoolean("isGenerating");
 		this.entityDependencies.clear();
-		NBTTagList nbtTagList1 = compound.getTagList("entityDependencies", Constants.NBT.TAG_COMPOUND);
+		ListNBT nbtTagList1 = compound.getTagList("entityDependencies", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < nbtTagList1.tagCount(); i++) {
 			this.entityDependencies.add(NBTUtil.getUUIDFromTag(nbtTagList1.getCompoundTagAt(i)));
 		}
 		this.blockDependencies.clear();
-		NBTTagList nbtTagList2 = compound.getTagList("blockDependencies", Constants.NBT.TAG_COMPOUND);
+		ListNBT nbtTagList2 = compound.getTagList("blockDependencies", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
 			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
 		}
@@ -506,7 +506,7 @@ public class ProtectedRegion {
 			this.ignoreNoBossOrNexus = dungeonConfig.ignoreNoBossOrNexus();
 		}
 
-		public Builder(NBTTagCompound compound) {
+		public Builder(CompoundNBT compound) {
 			this.dungeonName = compound.getString("dungeonName");
 			this.dungeonPos = NBTUtil.getPosFromTag(compound.getCompoundTag("dungeonPos"));
 			this.min = NBTUtil.getPosFromTag(compound.getCompoundTag("min"));
@@ -533,8 +533,8 @@ public class ProtectedRegion {
 			}
 		}
 
-		public NBTTagCompound writeToNBT() {
-			NBTTagCompound compound = new NBTTagCompound();
+		public CompoundNBT writeToNBT() {
+			CompoundNBT compound = new CompoundNBT();
 			compound.setString("dungeonName", this.dungeonName);
 			compound.setTag("dungeonPos", NBTUtil.createPosTag(this.dungeonPos));
 			compound.setTag("min", NBTUtil.createPosTag(this.min));

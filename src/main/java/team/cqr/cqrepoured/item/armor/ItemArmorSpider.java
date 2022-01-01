@@ -4,26 +4,26 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -34,21 +34,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-public class ItemArmorSpider extends ItemArmor {
+public class ItemArmorSpider extends ArmorItem {
 
 	private AttributeModifier movementSpeed;
 
-	public ItemArmorSpider(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+	public ItemArmorSpider(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 
 		this.movementSpeed = new AttributeModifier("SpiderArmorModifier", 0.05D, 2);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EntityLiving.getSlotForItemStack(stack)) {
+		if (slot == MobEntity.getSlotForItemStack(stack)) {
 			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
 		}
 
@@ -66,7 +66,7 @@ public class ItemArmorSpider extends ItemArmor {
 	}
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+	public void onArmorTick(World world, PlayerEntity player, ItemStack itemStack) {
 		if (ItemUtil.hasFullSet(player, ItemArmorSpider.class)) {
 			if (player.isSpectator()) {
 				return;
@@ -87,11 +87,11 @@ public class ItemArmorSpider extends ItemArmor {
 			}
 			player.fallDistance = 0F;
 			player.jumpMovementFactor += 0.005;
-			player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 0, 1, false, false));
+			player.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 0, 1, false, false));
 		}
 	}
 
-	private void createClimbingParticles(EntityPlayer player, World world) {
+	private void createClimbingParticles(PlayerEntity player, World world) {
 		int i = (int) player.posX;
 		int j = MathHelper.floor(player.getPosition().getY());
 		int k = (int) player.posZ;
@@ -109,10 +109,10 @@ public class ItemArmorSpider extends ItemArmor {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -134,10 +134,10 @@ public class ItemArmorSpider extends ItemArmor {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -159,10 +159,10 @@ public class ItemArmorSpider extends ItemArmor {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -180,10 +180,10 @@ public class ItemArmorSpider extends ItemArmor {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -194,8 +194,8 @@ public class ItemArmorSpider extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.spiderArmorLegs : CQRArmorModels.spiderArmor;
+	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
+		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.spiderArmorLegs : CQRArmorModels.spiderArmor;
 	}
 
 }

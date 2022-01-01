@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.client.render.entity.mobs;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.inventory.EquipmentSlotType;
 import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRGoblin;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRGoblin;
 
 public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 
-	public RenderCQRGoblin(RenderManager rendermanagerIn) {
+	public RenderCQRGoblin(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRGoblin(), 0.3F, "mob/goblin", 1.0D, 1.0D);
 	}
 
@@ -23,7 +23,7 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupHeadOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyTranslations(modelRenderer);
 		this.applyRotations(modelRenderer);
 		GlStateManager.scale(0.8F, 0.8F, 0.8F);
@@ -32,7 +32,7 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupHeadwearOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupHeadwearOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyTranslations(modelRenderer);
 		this.applyRotations(modelRenderer);
 		GlStateManager.scale(0.8F, 0.8F, 0.8F);
@@ -41,14 +41,14 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-		if (slot == EntityEquipmentSlot.CHEST) {
+	public void setupBodyOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
+		if (slot == EquipmentSlotType.CHEST) {
 			this.applyTranslations(modelRenderer);
 			this.applyRotations(modelRenderer);
 			GlStateManager.scale(0.8F, 0.6F, 0.75F);
 			this.resetRotations(modelRenderer);
 			this.resetTranslations(modelRenderer);
-		} else if (slot == EntityEquipmentSlot.LEGS) {
+		} else if (slot == EquipmentSlotType.LEGS) {
 			this.applyTranslations(modelRenderer);
 			this.applyRotations(modelRenderer);
 			GlStateManager.scale(0.8F, 0.7F, 0.75F);
@@ -58,7 +58,7 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyTranslations(modelRenderer);
 		this.applyRotations(modelRenderer);
 		GlStateManager.scale(0.85F, 1.0F, 0.85F);
@@ -67,7 +67,7 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupRightArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 		this.applyTranslations(modelRenderer);
 		this.applyRotations(modelRenderer);
 		GlStateManager.scale(0.85F, 1.0F, 0.85F);
@@ -76,14 +76,14 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupLeftLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-		if (slot == EntityEquipmentSlot.LEGS) {
+	public void setupLeftLegOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
+		if (slot == EquipmentSlotType.LEGS) {
 			this.applyTranslations(modelRenderer);
 			this.applyRotations(modelRenderer);
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			this.resetRotations(modelRenderer);
 			this.resetTranslations(modelRenderer);
-		} else if (slot == EntityEquipmentSlot.FEET) {
+		} else if (slot == EquipmentSlotType.FEET) {
 			this.applyTranslations(modelRenderer);
 			this.applyRotations(modelRenderer);
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
@@ -93,14 +93,14 @@ public class RenderCQRGoblin extends RenderCQREntity<EntityCQRGoblin> {
 	}
 
 	@Override
-	public void setupRightLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-		if (slot == EntityEquipmentSlot.LEGS) {
+	public void setupRightLegOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
+		if (slot == EquipmentSlotType.LEGS) {
 			this.applyTranslations(modelRenderer);
 			this.applyRotations(modelRenderer);
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			this.resetRotations(modelRenderer);
 			this.resetTranslations(modelRenderer);
-		} else if (slot == EntityEquipmentSlot.FEET) {
+		} else if (slot == EquipmentSlotType.FEET) {
 			this.applyTranslations(modelRenderer);
 			this.applyRotations(modelRenderer);
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);

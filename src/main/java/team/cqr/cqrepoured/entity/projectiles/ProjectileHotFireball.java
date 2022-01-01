@@ -1,28 +1,28 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.item.ItemShield;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 
-public class ProjectileHotFireball extends EntityThrowable {
+public class ProjectileHotFireball extends ThrowableEntity {
 
 	public ProjectileHotFireball(World worldIn) {
 		super(worldIn);
 		this.setSize(0.5F, 0.5F);
 	}
 
-	public ProjectileHotFireball(World worldIn, EntityLivingBase shooter, double x, double y, double z) {
+	public ProjectileHotFireball(World worldIn, LivingEntity shooter, double x, double y, double z) {
 		super(worldIn, x, y, z);
 		this.thrower = shooter;
 		this.setSize(0.5F, 0.5F);
 	}
 
-	public ProjectileHotFireball(World worldIn, EntityLivingBase shooter) {
+	public ProjectileHotFireball(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.setSize(0.5F, 0.5F);
 	}
@@ -56,13 +56,13 @@ public class ProjectileHotFireball extends EntityThrowable {
 				return;
 			}
 
-			if (result.entityHit instanceof EntityLivingBase) {
-				if (((EntityLivingBase) result.entityHit).isActiveItemStackBlocking() && ((EntityLivingBase) result.entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
+			if (result.entityHit instanceof LivingEntity) {
+				if (((LivingEntity) result.entityHit).isActiveItemStackBlocking() && ((LivingEntity) result.entityHit).getActiveItemStack().getItem() instanceof ShieldItem) {
 					this.motionX = -this.motionX;
 					this.motionY = -this.motionY;
 					this.motionZ = -this.motionZ;
 					this.velocityChanged = true;
-					this.thrower = (EntityLivingBase) result.entityHit;
+					this.thrower = (LivingEntity) result.entityHit;
 					return;
 				}
 			}

@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
@@ -35,7 +35,7 @@ public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable>
 				GlStateManager.scale(0.5F, 0.5F, 0.5F);
 				GlStateManager.rotate(rotation, 0, -1, 0);
 
-				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
 
 				GlStateManager.popMatrix();
@@ -55,7 +55,7 @@ public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable>
 				GlStateManager.rotate(rotation, 0, 0, 1);
 				GlStateManager.scale(0.7F, 0.7F, 0.7F);
 
-				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
 
 				GlStateManager.popMatrix();

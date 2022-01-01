@@ -4,24 +4,24 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Hand;
+import net.minecraft.world.ServerWorld;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,25 +40,25 @@ public class ItemBadge extends Item {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		if (player.isCreative()) {
 			if (!player.world.isRemote) {
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, stack.copy());
-					((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+					((ServerWorld) player.world).spawnParticle((ServerPlayerEntity) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 				} else {
 					IItemHandler capability = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-					NBTTagList itemList = new NBTTagList();
+					ListNBT itemList = new ListNBT();
 					for (int i = 0; i < capability.getSlots(); i++) {
 						ItemStack stack1 = capability.getStackInSlot(i);
-						NBTTagCompound slotTag = new NBTTagCompound();
+						CompoundNBT slotTag = new CompoundNBT();
 						slotTag.setInteger("Index", 0);
 						stack1.writeToNBT(slotTag);
 						itemList.appendTag(slotTag);
 					}
 					if (!itemList.isEmpty()) {
 						entity.getEntityData().setTag("Items", itemList);
-						((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+						((ServerWorld) player.world).spawnParticle((ServerPlayerEntity) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 					}
 				}
 			}
@@ -68,14 +68,14 @@ public class ItemBadge extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (playerIn.isCreative()) {
 			if (!worldIn.isRemote) {
 				playerIn.openGui(CQRMain.INSTANCE, GuiHandler.BADGE_GUI_ID, worldIn, handIn.ordinal(), 0, 0);
 			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+			return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 		}
-		return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.FAIL, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class ItemBadge extends Item {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
 		return CapabilityItemHandlerItemProvider.createProvider(stack, 9);
 	}
 

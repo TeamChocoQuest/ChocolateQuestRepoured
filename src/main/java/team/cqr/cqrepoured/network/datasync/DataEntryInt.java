@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.network.datasync;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
 
 public class DataEntryInt extends DataEntry<Integer> {
 
@@ -17,13 +17,13 @@ public class DataEntryInt extends DataEntry<Integer> {
 
 	@Override
 	public NBTBase write() {
-		return new NBTTagInt(this.value);
+		return new IntNBT(this.value);
 	}
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagInt) {
-			this.value = ((NBTTagInt) nbt).getInt();
+		if (nbt instanceof IntNBT) {
+			this.value = ((IntNBT) nbt).getInt();
 		}
 	}
 

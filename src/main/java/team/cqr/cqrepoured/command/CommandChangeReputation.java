@@ -9,10 +9,10 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.faction.Faction;
@@ -40,8 +40,8 @@ public class CommandChangeReputation extends CommandBase {
 			throw new CommandException("Faction '" + args[0] + "' cannot be found!");
 		}
 		int score = parseInt(args[1], EReputationStateRough.ENEMY.getLowBound(), EReputationStateRough.ALLY.getHighBound());
-		FactionRegistry.instance(sender.getEntityWorld()).changeReputationTo((EntityPlayerMP) sender.getCommandSenderEntity(), score, faction);
-		sender.sendMessage(new TextComponentString(
+		FactionRegistry.instance(sender.getEntityWorld()).changeReputationTo((ServerPlayerEntity) sender.getCommandSenderEntity(), score, faction);
+		sender.sendMessage(new StringTextComponent(
 				"Changed " + sender.getDisplayName().getFormattedText() + "'s reputation towards faction " + faction.getName() + " to " + score));
 	}
 

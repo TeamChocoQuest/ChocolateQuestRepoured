@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.EntityAreaEffectCloud;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 
-	private EntityLivingBase shooter;
+	private LivingEntity shooter;
 	private boolean canPlaceAura = false;
 
 	public ProjectilePoisonSpell(World worldIn) {
@@ -20,7 +20,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 		super(worldIn, x, y, z);
 	}
 
-	public ProjectilePoisonSpell(World worldIn, EntityLivingBase shooter) {
+	public ProjectilePoisonSpell(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.isImmuneToFire = false;
@@ -40,7 +40,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 	protected void onUpdateInAir() {
 	}
 
-	public EntityLivingBase getShooter() {
+	public LivingEntity getShooter() {
 		return this.shooter;
 	}
 
@@ -51,7 +51,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 		}
 
 		if (this.canPlaceAura && DungeonGenUtils.percentageRandom(0.6)) {
-			EntityAreaEffectCloud cloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+			AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
 
 			cloud.setOwner(this.shooter);
 			cloud.setRadius(DungeonGenUtils.randomBetween(1, 3));
@@ -59,7 +59,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 			cloud.setWaitTime(10);
 			cloud.setDuration(300);
 			cloud.setRadiusPerTick(-cloud.getRadius() / cloud.getDuration());
-			cloud.setPotion(PotionTypes.STRONG_POISON);
+			cloud.setPotion(Potions.STRONG_POISON);
 			cloud.setColor(35849);
 			cloud.setNoGravity(false);
 

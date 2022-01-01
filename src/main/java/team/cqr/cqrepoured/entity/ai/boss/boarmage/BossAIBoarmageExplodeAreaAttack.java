@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -79,7 +79,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 
 			this.resetTask();
 		} else if (Math.abs(this.entity.ticksExisted - this.lastExplodeTechTick) > TIMEDIV) {
-			this.entity.swingArm(EnumHand.OFF_HAND);
+			this.entity.swingArm(Hand.OFF_HAND);
 			this.lastExplodeTechTick = this.entity.ticksExisted;
 			this.addExplosionLoc();
 		}

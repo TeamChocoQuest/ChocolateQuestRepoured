@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityFlying;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.projectile.EntitySpectralArrow;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateFlying;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -22,7 +22,7 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityFlyingSkullMinion extends EntityFlying implements IDontRenderFire {
+public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire {
 
 	protected Entity summoner;
 	protected Entity target;
@@ -36,7 +36,7 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 		this.setNoGravity(true);
 		this.setHealth(1F);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1F);
-		this.navigator = new PathNavigateFlying(this, worldIn);
+		this.navigator = new FlyingPathNavigator(this, worldIn);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 		if (source.getTrueSource() != null && EntityUtil.isEntityFlying(source.getTrueSource())) {
 			return false;
 		}
-		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
+		if (source.getImmediateSource() instanceof SpectralArrowEntity) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
@@ -68,7 +68,7 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 	}
 
 	@Override
-	public PathNavigate getNavigator() {
+	public PathNavigator getNavigator() {
 		return this.navigator;
 	}
 
@@ -126,10 +126,10 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 			super.collideWithEntity(entityIn);
 
 			if (EntityUtil.isEntityFlying(entityIn)) {
-				if (this.summoner instanceof EntityLivingBase && entityIn instanceof EntityLivingBase) {
-					((EntityLivingBase) this.summoner).heal(((EntityLivingBase) entityIn).getHealth() / 2);
-					((EntityLivingBase) entityIn).motionY *= -2;
-					((EntityLivingBase) entityIn).velocityChanged = true;
+				if (this.summoner instanceof LivingEntity && entityIn instanceof LivingEntity) {
+					((LivingEntity) this.summoner).heal(((LivingEntity) entityIn).getHealth() / 2);
+					((LivingEntity) entityIn).motionY *= -2;
+					((LivingEntity) entityIn).velocityChanged = true;
 				}
 			}
 			this.explode(0.75F);
@@ -169,7 +169,7 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("attacking", this.attacking);
 		compound.setDouble("vX", this.direction == null ? 0D : this.direction.x);
@@ -196,7 +196,7 @@ public class EntityFlyingSkullMinion extends EntityFlying implements IDontRender
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.attacking = compound.getBoolean("attacking");
 		double x, y, z;

@@ -4,21 +4,21 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -49,11 +49,11 @@ public class ItemSpikedGlove extends Item {
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		if (entityIn instanceof EntityLivingBase) {
-			EntityLivingBase entity = (EntityLivingBase) entityIn;
+		if (entityIn instanceof LivingEntity) {
+			LivingEntity entity = (LivingEntity) entityIn;
 			if (entity.getHeldItemMainhand().getItem() instanceof ItemSpikedGlove && entity.getHeldItemOffhand().getItem() instanceof ItemSpikedGlove) {
 				// We actually have two bear hands
-				if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator()) {
+				if (entity instanceof PlayerEntity && ((PlayerEntity) entity).isSpectator()) {
 					return;
 				}
 				if (entity.collidedHorizontally) {
@@ -90,7 +90,7 @@ public class ItemSpikedGlove extends Item {
 		return (enchantment == Enchantments.EFFICIENCY || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING);
 	}
 
-	private void createClimbingParticles(EntityLivingBase player, World world) {
+	private void createClimbingParticles(LivingEntity player, World world) {
 		int i = (int) player.posX;
 		int j = MathHelper.floor(player.getPosition().getY());
 		int k = (int) player.posZ;
@@ -108,10 +108,10 @@ public class ItemSpikedGlove extends Item {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -133,10 +133,10 @@ public class ItemSpikedGlove extends Item {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -158,10 +158,10 @@ public class ItemSpikedGlove extends Item {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}
@@ -179,10 +179,10 @@ public class ItemSpikedGlove extends Item {
 			}
 
 			BlockPos blockpos = new BlockPos(i, j, k);
-			IBlockState iblockstate = world.getBlockState(blockpos);
+			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
 					world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
 							Block.getStateId(iblockstate));
 				}

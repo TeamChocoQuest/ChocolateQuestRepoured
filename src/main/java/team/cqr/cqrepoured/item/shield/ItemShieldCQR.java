@@ -2,9 +2,7 @@ package team.cqr.cqrepoured.item.shield;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 

@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.entity.projectiles;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,10 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ProjectileEarthQuake extends EntityThrowable {
+public class ProjectileEarthQuake extends ThrowableEntity {
 	private int lifeTime = 60;
 	@SuppressWarnings("unused")
-	private EntityLivingBase thrower;
+	private LivingEntity thrower;
 	private double throwY = 0.3D;
 
 	public void setThrowHeight(double amount) {
@@ -34,7 +34,7 @@ public class ProjectileEarthQuake extends EntityThrowable {
 		super(worldIn, x, y, z);
 	}
 
-	public ProjectileEarthQuake(World worldIn, EntityLivingBase throwerIn) {
+	public ProjectileEarthQuake(World worldIn, LivingEntity throwerIn) {
 		super(worldIn, throwerIn);
 		this.thrower = throwerIn;
 
@@ -48,7 +48,7 @@ public class ProjectileEarthQuake extends EntityThrowable {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
-			if (!(result.entityHit instanceof EntityLiving)) {
+			if (!(result.entityHit instanceof MobEntity)) {
 				this.motionY = 0.0D;
 			}
 		}
@@ -82,7 +82,7 @@ public class ProjectileEarthQuake extends EntityThrowable {
 		}
 
 		BlockPos pos = new BlockPos(this.getPosition().getX(), this.getPosition().getY() - 1, this.getPosition().getZ());
-		IBlockState iblockstate = this.world.getBlockState(pos);
+		BlockState iblockstate = this.world.getBlockState(pos);
 
 		if (iblockstate.getBlock() == null || iblockstate.getBlock().isAir(iblockstate, this.world, pos)) {
 			iblockstate = Blocks.GLASS.getDefaultState();
@@ -90,10 +90,10 @@ public class ProjectileEarthQuake extends EntityThrowable {
 
 		double dist = 1.0D;
 		AxisAlignedBB var3 = this.getEntityBoundingBox().expand(dist, 2.0D, dist);
-		List<Entity> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, var3);
+		List<Entity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, var3);
 
 		for (Entity entity : list) {
-			if (entity instanceof EntityLivingBase && entity != this.getThrower() && !this.world.isRemote && entity.onGround) {
+			if (entity instanceof LivingEntity && entity != this.getThrower() && !this.world.isRemote && entity.onGround) {
 				entity.motionY += this.getEntityThrowDistance();
 				entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getThrower()), 1.0F);
 			}

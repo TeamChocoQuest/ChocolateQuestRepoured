@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;

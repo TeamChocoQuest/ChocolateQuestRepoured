@@ -4,20 +4,17 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -31,7 +28,7 @@ public class ItemDaggerNinja extends ItemDagger {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (playerIn.isSneaking()) {
@@ -53,9 +50,9 @@ public class ItemDaggerNinja extends ItemDagger {
 
 			if (worldIn.getBlockState(pos).getBlock().isPassable(worldIn, pos) && pos.getY() > 0) {
 				playerIn.setPosition(playerIn.posX + x * dist, playerIn.posY + y * dist + 1, playerIn.posZ + z * dist);
-				playerIn.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 40, 5, false, false));
+				playerIn.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 40, 5, false, false));
 			} else {
-				return new ActionResult<>(EnumActionResult.FAIL, stack);
+				return new ActionResult<>(ActionResultType.FAIL, stack);
 			}
 
 			stack.damageItem(1, playerIn);
@@ -66,7 +63,7 @@ public class ItemDaggerNinja extends ItemDagger {
 		} else {
 			super.onItemRightClick(worldIn, playerIn, handIn);
 		}
-		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
 
 	@Override

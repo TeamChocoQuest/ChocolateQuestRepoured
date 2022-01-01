@@ -6,12 +6,12 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockStone;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemMap;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -25,7 +25,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 
 public class GeneratableMapInfo extends GeneratablePosInfo {
 
-	private final EntityItemFrame entity;
+	private final ItemFrameEntity entity;
 	private final int mapOriginX;
 	private final int mapOriginZ;
 	private final int mapX;
@@ -34,7 +34,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 	private final boolean fillMap;
 	private final int fillRadius;
 
-	public GeneratableMapInfo(int x, int y, int z, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
+	public GeneratableMapInfo(int x, int y, int z, ItemFrameEntity entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
 		super(x, y, z);
 		this.entity = entity;
 		this.mapOriginX = mapOriginX;
@@ -46,21 +46,21 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		this.fillRadius = fillRadius;
 	}
 
-	public GeneratableMapInfo(BlockPos pos, EntityItemFrame entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
+	public GeneratableMapInfo(BlockPos pos, ItemFrameEntity entity, int mapOriginX, int mapOriginZ, int mapX, int mapZ, byte scale, boolean fillMap, int fillRadius) {
 		this(pos.getX(), pos.getY(), pos.getZ(), entity, mapOriginX, mapOriginZ, mapX, mapZ, scale, fillMap, fillRadius);
 	}
 
 	@Override
 	public boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		IBlockState state = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+		BlockState state = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
 		int light = state.getLightValue(world, pos);
 		if (light > 0) {
 			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), light);
 		}
 		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16);
-		ItemStack stack = ItemMap.setupNewMap(world, this.mapX, this.mapZ, this.scale, true, true);
+		ItemStack stack = FilledMapItem.setupNewMap(world, this.mapX, this.mapZ, this.scale, true, true);
 		if (this.fillMap) {
-			updateMapData(world, this.mapOriginX, this.mapOriginZ, this.fillRadius, ((ItemMap) stack.getItem()).getMapData(stack, world));
+			updateMapData(world, this.mapOriginX, this.mapOriginZ, this.fillRadius, ((FilledMapItem) stack.getItem()).getMapData(stack, world));
 		}
 		this.entity.setDisplayedItem(stack);
 		world.spawnEntity(this.entity);
@@ -116,7 +116,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 			for (int i4 = 0; i4 < i; ++i4) {
 				for (int j4 = 0; j4 < i; ++j4) {
 					int k4 = chunk.getHeightValue(i4 + i3, j4 + j3) + 1;
-					IBlockState state = Blocks.AIR.getDefaultState();
+					BlockState state = Blocks.AIR.getDefaultState();
 
 					if (k4 <= 1) {
 						state = Blocks.BEDROCK.getDefaultState();
@@ -136,7 +136,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 								int l4 = k4 - 1;
 
 								while (true) {
-									IBlockState iblockstate1 = chunk.getBlockState(i4 + i3, l4--, j4 + j3);
+									BlockState iblockstate1 = chunk.getBlockState(i4 + i3, l4--, j4 + j3);
 									++k3;
 
 									if (l4 <= 0 || !iblockstate1.getMaterial().isLiquid()) {
@@ -189,7 +189,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 		}
 	}
 
-	public EntityItemFrame getEntity() {
+	public ItemFrameEntity getEntity() {
 		return this.entity;
 	}
 

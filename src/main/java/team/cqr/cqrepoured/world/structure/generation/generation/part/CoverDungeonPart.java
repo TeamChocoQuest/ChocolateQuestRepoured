@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -12,13 +12,13 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 public class CoverDungeonPart implements IDungeonPart {
 
 	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
-	private final IBlockState coverBlock;
+	private final BlockState coverBlock;
 	private final int startX;
 	private final int startZ;
 	private final int endX;
 	private final int endZ;
 
-	protected CoverDungeonPart(int startX, int startZ, int endX, int endZ, IBlockState coverBlock) {
+	protected CoverDungeonPart(int startX, int startZ, int endX, int endZ, BlockState coverBlock) {
 		this.coverBlock = coverBlock;
 		this.startX = startX;
 		this.startZ = startZ;
@@ -43,7 +43,7 @@ public class CoverDungeonPart implements IDungeonPart {
 
 						MUTABLE.setPos((cx << 4) + x, chunk.getTopFilledSegment() + 15, (cz << 4) + z);
 						while (MUTABLE.getY() >= 0) {
-							IBlockState state = chunk.getBlockState(MUTABLE);
+							BlockState state = chunk.getBlockState(MUTABLE);
 							if (state.getBlock() == Blocks.AIR) {
 								MUTABLE.setY(MUTABLE.getY() - 1);
 							} else {
@@ -61,7 +61,7 @@ public class CoverDungeonPart implements IDungeonPart {
 		}
 	}
 
-	public IBlockState getCoverBlock() {
+	public BlockState getCoverBlock() {
 		return this.coverBlock;
 	}
 
@@ -87,9 +87,9 @@ public class CoverDungeonPart implements IDungeonPart {
 		private final int startZ;
 		private final int endX;
 		private final int endZ;
-		private final IBlockState coverBlock;
+		private final BlockState coverBlock;
 
-		public Builder(int startX, int startZ, int endX, int endZ, IBlockState coverBlock) {
+		public Builder(int startX, int startZ, int endX, int endZ, BlockState coverBlock) {
 			this.startX = Math.min(startX, endX);
 			this.startZ = Math.min(startZ, endZ);
 			this.endX = Math.max(startX, endX);

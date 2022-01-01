@@ -4,18 +4,18 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.util.ActionResultType;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -35,7 +35,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (this.isNotAirBlock(worldIn, playerIn)) {
@@ -45,13 +45,13 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 				stack.damageItem(1, playerIn);
 				playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
 			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(ActionResultType.SUCCESS, stack);
 		}
 
-		return new ActionResult<>(EnumActionResult.FAIL, stack);
+		return new ActionResult<>(ActionResultType.FAIL, stack);
 	}
 
-	public void spawnLightningBolt(EntityPlayer player, World worldIn) {
+	public void spawnLightningBolt(PlayerEntity player, World worldIn) {
 		if (!worldIn.isRemote) {
 			Vec3d start = player.getPositionEyes(1.0F);
 			Vec3d end = start.add(player.getLookVec().scale(20.0D));
@@ -64,7 +64,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 		}
 	}
 
-	public boolean isNotAirBlock(World worldIn, EntityPlayer player) {
+	public boolean isNotAirBlock(World worldIn, PlayerEntity player) {
 		Vec3d start = player.getPositionEyes(1.0F);
 		Vec3d end = start.add(player.getLookVec().scale(20.0D));
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
@@ -83,7 +83,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 		Vec3d pos = target.getPositionVector();
 		if (v.length() > 20) {

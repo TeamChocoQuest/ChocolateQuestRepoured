@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -55,9 +55,9 @@ public class GuiHandler implements IGuiHandler {
 
 	// SERVER
 	@Override
-	public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Container getServerGuiElement(int ID, PlayerEntity player, World world, int x, int y, int z) {
 		if (ID == BADGE_GUI_ID) {
-			return new ContainerBadge(player.inventory, player.getHeldItem(EnumHand.values()[x]), EnumHand.values()[x]);
+			return new ContainerBadge(player.inventory, player.getHeldItem(Hand.values()[x]), Hand.values()[x]);
 		}
 
 		if (ID == SPAWNER_GUI_ID) {
@@ -65,11 +65,11 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == BACKPACK_GUI_ID) {
-			return new ContainerBackpack(player.inventory, player.getHeldItem(EnumHand.values()[x]), EnumHand.values()[x]);
+			return new ContainerBackpack(player.inventory, player.getHeldItem(Hand.values()[x]), Hand.values()[x]);
 		}
 
 		if (ID == ALCHEMY_BAG_GUI_ID) {
-			return new ContainerAlchemyBag(player.inventory, player.getHeldItem(EnumHand.values()[x]), EnumHand.values()[x]);
+			return new ContainerAlchemyBag(player.inventory, player.getHeldItem(Hand.values()[x]), Hand.values()[x]);
 		}
 
 		if (ID == CQR_ENTITY_GUI_ID) {
@@ -93,7 +93,7 @@ public class GuiHandler implements IGuiHandler {
 
 	// CLIENT
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getClientGuiElement(int ID, PlayerEntity player, World world, int x, int y, int z) {
 		if (ID == BADGE_GUI_ID) {
 			return new GuiBadge(this.getServerGuiElement(ID, player, world, x, y, z));
 		}
@@ -127,7 +127,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == REPUTATION_GUI_ID) {
-			return new GuiReputation((EntityPlayerSP) player);
+			return new GuiReputation((ClientPlayerEntity) player);
 		}
 
 		if (ID == EXPORTER_CHEST_GUI_ID) {
@@ -143,7 +143,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == MAP_GUI_SIMPLE_ID) {
-			return new GuiMapPlaceholderSimple(new BlockPos(x, y & 0x9FFFFFFF, z), EnumFacing.byHorizontalIndex((y >> 29) & 3));
+			return new GuiMapPlaceholderSimple(new BlockPos(x, y & 0x9FFFFFFF, z), Direction.byHorizontalIndex((y >> 29) & 3));
 		}
 
 		return null;

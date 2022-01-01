@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
@@ -49,7 +49,7 @@ public class ItemMusket extends ItemRevolver {
 	}
 
 	@Override
-	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
+	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
 		boolean flag = player.capabilities.isCreativeMode;
 		ItemStack itemstack = this.findAmmo(player);
 
@@ -89,16 +89,16 @@ public class ItemMusket extends ItemRevolver {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (!(entityIn instanceof EntityLivingBase)) {
+		if (!(entityIn instanceof LivingEntity)) {
 			return;
 		}
 		if (!isSelected) {
 			return;
 		}
-		EntityLivingBase entityLiving = (EntityLivingBase) entityIn;
+		LivingEntity entityLiving = (LivingEntity) entityIn;
 		ItemStack offhand = entityLiving.getHeldItemOffhand();
 		if (!offhand.isEmpty()) {
-			entityLiving.addPotionEffect(new PotionEffect(CQRPotions.TWOHANDED, 30, 1));
+			entityLiving.addPotionEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}
 	}
 

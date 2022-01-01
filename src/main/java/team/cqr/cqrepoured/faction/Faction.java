@@ -13,9 +13,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -116,10 +116,10 @@ public class Faction {
 				return false;
 			}
 		}
-		if (ent.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (ent.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
-		if (ent instanceof EntityPlayer) {
+		if (ent instanceof PlayerEntity) {
 			// Special case for player
 			return FactionRegistry.instance(ent).getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ENEMY;
 		}
@@ -127,7 +127,7 @@ public class Faction {
 	}
 
 	public boolean isEnemy(AbstractEntityCQR ent) {
-		if (ent.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (ent.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
 		return this.isEnemy(ent.getFaction());
@@ -157,7 +157,7 @@ public class Faction {
 				return true;
 			}
 		}
-		if (ent instanceof EntityPlayer) {
+		if (ent instanceof PlayerEntity) {
 			// Special case for player
 			return FactionRegistry.instance(ent).getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;
 		}
@@ -182,13 +182,13 @@ public class Faction {
 		return false;
 	}
 
-	public void decrementReputation(EntityPlayer player, int score) {
+	public void decrementReputation(PlayerEntity player, int score) {
 		if (this.repuMayChange) {
 			FactionRegistry.instance(player).decrementRepuOf(player, this.name, score);
 		}
 	}
 
-	public void incrementReputation(EntityPlayer player, int score) {
+	public void incrementReputation(PlayerEntity player, int score) {
 		if (this.repuMayChange) {
 			FactionRegistry.instance(player).incrementRepuOf(player, this.name, score);
 		}

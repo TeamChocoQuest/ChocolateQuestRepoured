@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,9 +44,9 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleZ), 0.0F, 0.0F, 1.0F);
 					GlStateManager.translate(box.posX1 * 0.0625F, box.posY1 * 0.0625F, box.posZ1 * 0.0625F);
 					float f = 0.0F;
-					if (!entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty()) {
+					if (!entity.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
 						f = -1.0F;
-					} else if (!entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty()) {
+					} else if (!entity.getItemStackFromSlot(EquipmentSlotType.LEGS).isEmpty()) {
 						f = -0.5F;
 					}
 					GlStateManager.translate(f * 0.0625F - 0.0125F, (box.posY2 - box.posY1) * 0.0625F, (box.posZ2 - box.posZ1) * 0.0625F * 0.5F);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -22,7 +22,7 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 	}
 
 	@Override
-	public boolean wouldFit(BlockPos start, EnumFacing side, Set<BlockPos> decoArea, Set<BlockPos> decoMap, CastleRoomBase room) {
+	public boolean wouldFit(BlockPos start, Direction side, Set<BlockPos> decoArea, Set<BlockPos> decoMap, CastleRoomBase room) {
 		List<Vec3i> rotated = this.alignFootprint(this.footprint, side);
 
 		for (Vec3i placement : rotated) {
@@ -36,7 +36,7 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 	}
 
 	@Override
-	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, EnumFacing side, Set<BlockPos> decoMap) {
+	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, Direction side, Set<BlockPos> decoMap) {
 		List<Vec3i> rotated = this.alignFootprint(this.footprint, side);
 
 		for (Vec3i placement : rotated) {
@@ -46,9 +46,9 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 		this.createEntityDecoration(world, start, genArray, side);
 	}
 
-	protected abstract void createEntityDecoration(World world, BlockPos pos, BlockStateGenArray genArray, EnumFacing side);
+	protected abstract void createEntityDecoration(World world, BlockPos pos, BlockStateGenArray genArray, Direction side);
 
-	protected List<Vec3i> alignFootprint(List<Vec3i> unrotated, EnumFacing side) {
+	protected List<Vec3i> alignFootprint(List<Vec3i> unrotated, Direction side) {
 		List<Vec3i> result = new ArrayList<>();
 
 		unrotated.forEach(v -> result.add(DungeonGenUtils.rotateVec3i(v, side)));

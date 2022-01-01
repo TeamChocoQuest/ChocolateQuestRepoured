@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -73,8 +73,8 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		// Kill minions
 		for (Entity e : this.summonedMinions) {
 			if (e != null && !e.isDead) {
-				if (e instanceof EntityLivingBase) {
-					((EntityLivingBase) e).onDeath(cause);
+				if (e instanceof LivingEntity) {
+					((LivingEntity) e).onDeath(cause);
 				}
 				e.setDead();
 			}
@@ -121,7 +121,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public EntityLivingBase getSummoner() {
+	public LivingEntity getSummoner() {
 		return this;
 	}
 

@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 
-public class GuiButtonCustom extends GuiButton {
+public class GuiButtonCustom extends Button {
 
 	public GuiButtonCustom(int buttonId, int x, int y, int width, int height, String buttonText) {
 		super(buttonId, x, y, MathHelper.clamp(width, 4, 500), MathHelper.clamp(height, 4, 80), buttonText);

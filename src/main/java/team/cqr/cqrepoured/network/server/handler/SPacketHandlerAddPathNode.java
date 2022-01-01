@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -19,7 +19,7 @@ public class SPacketHandlerAddPathNode implements IMessageHandler<CPacketAddPath
 	public IMessage onMessage(CPacketAddPathNode message, MessageContext ctx) {
 		if (ctx.side.isServer()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 				ItemStack stack = player.getHeldItem(message.getHand());
 
 				if (stack.getItem() instanceof ItemPathTool) {
@@ -45,7 +45,7 @@ public class SPacketHandlerAddPathNode implements IMessageHandler<CPacketAddPath
 								}
 							}
 							ItemPathTool.setSelectedNode(stack, path.getNode(pos));
-							player.sendMessage(new TextComponentString("Added node!"));
+							player.sendMessage(new StringTextComponent("Added node!"));
 						}
 					}
 				}

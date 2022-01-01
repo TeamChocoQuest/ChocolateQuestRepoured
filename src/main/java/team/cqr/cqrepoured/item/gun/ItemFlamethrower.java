@@ -5,15 +5,15 @@ import java.util.function.Predicate;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,11 +38,11 @@ public class ItemFlamethrower extends ItemMagazineBased {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.BOW;
+	public UseAction getItemUseAction(ItemStack stack) {
+		return UseAction.BOW;
 	}
 
-	public void shootFlames(EntityLivingBase entity) {
+	public void shootFlames(LivingEntity entity) {
 		World world = entity.world;
 		float rotationYaw = MathHelper.wrapDegrees(entity.rotationYawHead);
 		double armDist = 1.0D;
@@ -69,7 +69,7 @@ public class ItemFlamethrower extends ItemMagazineBased {
 			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(entity.getLookVec().x * dist, entity.getLookVec().y * dist, entity.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
 
 			for (Entity e : list) {
-				if (e instanceof EntityLivingBase && !e.isWet() && !e.isBeingRidden()) {
+				if (e instanceof LivingEntity && !e.isWet() && !e.isBeingRidden()) {
 					double d = posX - e.posX;
 					double d2 = posZ - e.posZ;
 					double rotDiff = Math.atan2(d, d2);
@@ -87,27 +87,27 @@ public class ItemFlamethrower extends ItemMagazineBased {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (this.getAmmoInItem(playerIn.getHeldItem(handIn)) <= 0) {
-			return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+			return new ActionResult<>(ActionResultType.FAIL, playerIn.getHeldItem(handIn));
 		}
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		if (entityIn instanceof EntityLivingBase) {
-			EntityLivingBase user = (EntityLivingBase) entityIn;
+		if (entityIn instanceof LivingEntity) {
+			LivingEntity user = (LivingEntity) entityIn;
 			if (user.getActiveItemStack() == stack) {
 				if (user.isHandActive()) {
-					this.shootFlames((EntityLivingBase) entityIn);
+					this.shootFlames((LivingEntity) entityIn);
 					this.removeAmmoFromItem(stack, 1);
 				}
-			} else if ((((EntityLivingBase) entityIn).getHeldItemMainhand() == stack || ((EntityLivingBase) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
-				if (entityIn instanceof EntityPlayer) {
-					this.reloadFromInventory(((EntityPlayer) user).inventory, stack, !((EntityPlayer) user).isCreative());
+			} else if ((((LivingEntity) entityIn).getHeldItemMainhand() == stack || ((LivingEntity) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
+				if (entityIn instanceof PlayerEntity) {
+					this.reloadFromInventory(((PlayerEntity) user).inventory, stack, !((PlayerEntity) user).isCreative());
 				}
 			}
 		}

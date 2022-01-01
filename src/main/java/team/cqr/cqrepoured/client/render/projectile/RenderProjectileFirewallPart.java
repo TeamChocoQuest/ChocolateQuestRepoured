@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
 
-public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart> {
+public class RenderProjectileFirewallPart extends EntityRenderer<ProjectileFireWallPart> {
 
-	public RenderProjectileFirewallPart(RenderManager renderManager) {
+	public RenderProjectileFirewallPart(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
@@ -24,7 +24,7 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 	public void doRender(ProjectileFireWallPart entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GlStateManager.disableLighting();
-		TextureMap texturemap = Minecraft.getMinecraft().getTextureMapBlocks();
+		AtlasTexture texturemap = Minecraft.getMinecraft().getTextureMapBlocks();
 		TextureAtlasSprite textureatlassprite = texturemap.getAtlasSprite("minecraft:blocks/fire_layer_0");
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
@@ -42,7 +42,7 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 		float f8 = textureatlassprite.getMinU();
 		float f9 = textureatlassprite.getMaxV();
 
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getMinecraft().renderEngine.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 
 		int iterations = 8;
 		float rot = (360F / iterations);

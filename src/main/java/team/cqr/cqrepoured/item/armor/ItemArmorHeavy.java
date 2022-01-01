@@ -5,13 +5,13 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,12 +19,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.init.CQRMaterials;
 
-public class ItemArmorHeavy extends ItemArmor {
+public class ItemArmorHeavy extends ArmorItem {
 
 	private AttributeModifier movementSpeed;
 	private AttributeModifier knockbackResistance;
 
-	public ItemArmorHeavy(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+	public ItemArmorHeavy(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 
 		this.movementSpeed = new AttributeModifier("HeavySpeedModifier", -0.05D, 2);
@@ -32,10 +32,10 @@ public class ItemArmorHeavy extends ItemArmor {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EntityLiving.getSlotForItemStack(stack)) {
+		if (slot == MobEntity.getSlotForItemStack(stack)) {
 			multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), this.knockbackResistance);
 			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
 		}
@@ -44,20 +44,20 @@ public class ItemArmorHeavy extends ItemArmor {
 	}
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+	public void onArmorTick(World world, PlayerEntity player, ItemStack itemStack) {
 		player.jumpMovementFactor *= 0.95F;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		ArmorMaterial armorMaterial = ((ItemArmor) itemStack.getItem()).getArmorMaterial();
+	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
+		ArmorMaterial armorMaterial = ((ArmorItem) itemStack.getItem()).getArmorMaterial();
 
 		if (armorMaterial == CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND) {
-			return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.heavyDiamondArmorLegs : CQRArmorModels.heavyDiamondArmor;
+			return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.heavyDiamondArmorLegs : CQRArmorModels.heavyDiamondArmor;
 		} else if (armorMaterial == CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON) {
-			return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.heavyIronArmorLegs : CQRArmorModels.heavyIronArmor;
+			return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.heavyIronArmorLegs : CQRArmorModels.heavyIronArmor;
 		}
 
 		return null;

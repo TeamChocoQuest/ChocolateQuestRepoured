@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -25,7 +25,7 @@ public class GeneratableBossInfo extends GeneratablePosInfo {
 
 	@Override
 	protected boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		IBlockState state = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+		BlockState state = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
 		int light = state.getLightValue(world, pos);
 		if (light > 0) {
 			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), light);

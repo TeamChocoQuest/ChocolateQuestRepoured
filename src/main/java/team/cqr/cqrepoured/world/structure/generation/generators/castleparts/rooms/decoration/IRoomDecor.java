@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Set;
 
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;

@@ -4,19 +4,19 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.HandSide;
 
-public class LayerCQRHeldItem extends LayerHeldItem {
+public class LayerCQRHeldItem extends HeldItemLayer {
 
-	public LayerCQRHeldItem(RenderLivingBase<?> livingEntityRendererIn) {
+	public LayerCQRHeldItem(LivingRenderer<?> livingEntityRendererIn) {
 		super(livingEntityRendererIn);
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(LivingEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 
 		// when rendering a skull it messes up the gl state
@@ -24,12 +24,12 @@ public class LayerCQRHeldItem extends LayerHeldItem {
 	}
 
 	@Override
-	protected void translateToHand(EnumHandSide handSide) {
+	protected void translateToHand(HandSide handSide) {
 		super.translateToHand(handSide);
 		if (this.livingEntityRenderer.getMainModel() instanceof ModelBiped) {
 			ModelBiped model = (ModelBiped) this.livingEntityRenderer.getMainModel();
 			ModelRenderer armRenderer;
-			if (handSide == EnumHandSide.RIGHT) {
+			if (handSide == HandSide.RIGHT) {
 				armRenderer = model.bipedRightArm;
 			} else {
 				armRenderer = model.bipedLeftArm;
@@ -37,7 +37,7 @@ public class LayerCQRHeldItem extends LayerHeldItem {
 			if (!armRenderer.cubeList.isEmpty()) {
 				ModelBox armBox = armRenderer.cubeList.get(0);
 				float x = 0.125F - 0.03125F * (armBox.posX2 - armBox.posX1);
-				if (handSide == EnumHandSide.LEFT) {
+				if (handSide == HandSide.LEFT) {
 					x *= -1.0F;
 				}
 				float y = 0.0625F * (armBox.posY2 - armBox.posY1 - 12.0F);

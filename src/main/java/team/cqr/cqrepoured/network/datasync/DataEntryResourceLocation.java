@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
@@ -16,13 +16,13 @@ public class DataEntryResourceLocation extends DataEntryObject<ResourceLocation>
 
 	@Override
 	public NBTBase write() {
-		return new NBTTagString(this.value.toString());
+		return new StringNBT(this.value.toString());
 	}
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagString) {
-			this.value = new ResourceLocation(((NBTTagString) nbt).getString());
+		if (nbt instanceof StringNBT) {
+			this.value = new ResourceLocation(((StringNBT) nbt).getString());
 		}
 	}
 

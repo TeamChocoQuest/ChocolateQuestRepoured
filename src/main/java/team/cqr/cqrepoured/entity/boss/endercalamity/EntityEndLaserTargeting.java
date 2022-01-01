@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityTargetingLaser;
@@ -11,7 +11,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 		super(worldIn);
 	}
 
-	public EntityEndLaserTargeting(EntityLivingBase caster, EntityLivingBase target, Vec3d offset) {
+	public EntityEndLaserTargeting(LivingEntity caster, LivingEntity target, Vec3d offset) {
 		this(caster.world, caster, 48, target, offset);
 	}
 
@@ -20,7 +20,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 		return pass == 1 || pass == 0;
 	}
 
-	public EntityEndLaserTargeting(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target, Vec3d offset) {
+	public EntityEndLaserTargeting(World worldIn, LivingEntity caster, float length, LivingEntity target, Vec3d offset) {
 		super(worldIn, caster, length, target);
 
 		this.offsetVector = offset;

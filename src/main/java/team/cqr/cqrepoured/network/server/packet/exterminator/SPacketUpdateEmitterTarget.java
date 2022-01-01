@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.server.packet.exterminator;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
@@ -36,7 +36,7 @@ public class SPacketUpdateEmitterTarget implements IMessage {
 	public SPacketUpdateEmitterTarget(EntityCQRExterminator entity, boolean leftOrRightEmitter) {
 		this.entityId = entity.getEntityId();
 		this.leftEmitter = leftOrRightEmitter;
-		Entity target = this.leftEmitter ? (EntityLivingBase) entity.getElectroCuteTargetLeft() : (EntityLivingBase) entity.getElectroCuteTargetRight();
+		Entity target = this.leftEmitter ? (LivingEntity) entity.getElectroCuteTargetLeft() : (LivingEntity) entity.getElectroCuteTargetRight();
 		this.targetSet = target != null;
 		if (this.targetSet) {
 			this.targetID = target.getEntityId();

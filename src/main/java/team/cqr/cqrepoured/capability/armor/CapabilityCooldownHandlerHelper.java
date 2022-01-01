@@ -1,21 +1,21 @@
 package team.cqr.cqrepoured.capability.armor;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 
 public class CapabilityCooldownHandlerHelper {
 
-	public static int getCooldown(EntityLivingBase entity, Item item) {
+	public static int getCooldown(LivingEntity entity, Item item) {
 		CapabilityCooldownHandler icapability = entity.getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 		return icapability.getCooldown(item);
 	}
 
-	public static void setCooldown(EntityLivingBase entity, Item item, int cooldown) {
+	public static void setCooldown(LivingEntity entity, Item item, int cooldown) {
 		CapabilityCooldownHandler icapability = entity.getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 		icapability.setCooldown(item, cooldown);
 	}
 
-	public static boolean onCooldown(EntityLivingBase entity, Item item) {
+	public static boolean onCooldown(LivingEntity entity, Item item) {
 		return getCooldown(entity, item) > 0;
 	}
 

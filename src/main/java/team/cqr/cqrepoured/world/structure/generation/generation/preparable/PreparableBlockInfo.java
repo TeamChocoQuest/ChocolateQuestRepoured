@@ -5,14 +5,14 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.BlockSkull;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SkullBlock;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.SkullTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntitySkull;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -25,15 +25,15 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableBlockInfo extends PreparablePosInfo {
 
-	private final IBlockState state;
+	private final BlockState state;
 	@Nullable
-	private final NBTTagCompound tileEntityData;
+	private final CompoundNBT tileEntityData;
 
-	public PreparableBlockInfo(BlockPos pos, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
+	public PreparableBlockInfo(BlockPos pos, BlockState state, @Nullable CompoundNBT tileEntityData) {
 		this(pos.getX(), pos.getY(), pos.getZ(), state, tileEntityData);
 	}
 
-	public PreparableBlockInfo(int x, int y, int z, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
+	public PreparableBlockInfo(int x, int y, int z, BlockState state, @Nullable CompoundNBT tileEntityData) {
 		super(x, y, z);
 		this.state = state;
 		this.tileEntityData = tileEntityData;
@@ -41,7 +41,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	@Override
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
-		IBlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
+		BlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
@@ -51,9 +51,9 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 				this.tileEntityData.setInteger("y", pos.getY());
 				this.tileEntityData.setInteger("z", pos.getZ());
 				tileEntity.readFromNBT(this.tileEntityData);
-				if (tileEntity instanceof TileEntitySkull) {
-					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
-						TileEntitySkull skull = (TileEntitySkull) tileEntity;
+				if (tileEntity instanceof SkullTileEntity) {
+					if (transformedState.getValue(SkullBlock.FACING) == Direction.UP) {
+						SkullTileEntity skull = (SkullTileEntity) tileEntity;
 						skull.setSkullRotation(placement.getMirror().mirrorRotation(skull.skullRotation, 16));
 						skull.setSkullRotation(placement.getRotation().rotate(skull.skullRotation, 16));
 					}
@@ -72,7 +72,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	@Override
 	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		IBlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
+		BlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
@@ -82,9 +82,9 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 				this.tileEntityData.setInteger("y", pos.getY());
 				this.tileEntityData.setInteger("z", pos.getZ());
 				tileEntity.readFromNBT(this.tileEntityData);
-				if (tileEntity instanceof TileEntitySkull) {
-					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
-						TileEntitySkull skull = (TileEntitySkull) tileEntity;
+				if (tileEntity instanceof SkullTileEntity) {
+					if (transformedState.getValue(SkullBlock.FACING) == Direction.UP) {
+						SkullTileEntity skull = (SkullTileEntity) tileEntity;
 						skull.setSkullRotation(placement.getMirror().mirrorRotation(skull.skullRotation, 16));
 						skull.setSkullRotation(placement.getRotation().rotate(skull.skullRotation, 16));
 					}
@@ -101,27 +101,27 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		return this.prepareDebug(world, placement, pos, transformedState, tileEntity);
 	}
 
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
+	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity) {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
-	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
+	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity) {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
-	public IBlockState getState() {
+	public BlockState getState() {
 		return this.state;
 	}
 
 	@Nullable
-	public NBTTagCompound getTileEntityData() {
+	public CompoundNBT getTileEntityData() {
 		return this.tileEntityData;
 	}
 
 	public static class Factory implements IFactory<TileEntity> {
 
 		@Override
-		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
+		public PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<TileEntity> tileEntitySupplier) {
 			return new PreparableBlockInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
 		}
 
@@ -130,7 +130,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {
 
 		@Override
-		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
 			int data = (palette.idFor(preparable.state) << 1) | (preparable.tileEntityData != null ? 1 : 0);
 			ByteBufUtils.writeVarInt(buf, data, 5);
 			if (preparable.tileEntityData != null) {
@@ -140,10 +140,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBlockInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBlockInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
 			int data = ByteBufUtils.readVarInt(buf, 5);
-			IBlockState state = palette.stateFor(data >>> 1);
-			NBTTagCompound tileEntityData = null;
+			BlockState state = palette.stateFor(data >>> 1);
+			CompoundNBT tileEntityData = null;
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			}
@@ -152,10 +152,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableBlockInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBlockInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
-			IBlockState state = palette.stateFor(intArray[1]);
-			NBTTagCompound tileEntityData = null;
+			BlockState state = palette.stateFor(intArray[1]);
+			CompoundNBT tileEntityData = null;
 			if (intArray.length > 2) {
 				tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			}

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
@@ -12,7 +12,7 @@ public class EntityEndLaser extends EntityRotatingLaser {
 		super(worldIn);
 	}
 
-	public EntityEndLaser(World worldIn, EntityLivingBase caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
+	public EntityEndLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
 		super(worldIn, caster, length, deltaRotationYawPerTick, deltaRotationPitchPerTick);
 	}
 
@@ -52,7 +52,7 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	}
 
 	@Override
-	public float onHitBlock(BlockPos pos, IBlockState state) {
+	public float onHitBlock(BlockPos pos, BlockState state) {
 		return 64 * super.onHitBlock(pos, state);
 	}
 

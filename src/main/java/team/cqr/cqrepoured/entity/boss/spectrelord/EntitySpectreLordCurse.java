@@ -1,24 +1,24 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntitySpectreLordCurse extends Entity {
 
-	private EntityLivingBase caster;
-	private EntityLivingBase target;
+	private LivingEntity caster;
+	private LivingEntity target;
 	private int lastTimeHit;
 
 	public EntitySpectreLordCurse(World worldIn) {
 		this(worldIn, null, null);
 	}
 
-	public EntitySpectreLordCurse(World worldIn, EntityLivingBase caster, EntityLivingBase target) {
+	public EntitySpectreLordCurse(World worldIn, LivingEntity caster, LivingEntity target) {
 		super(worldIn);
 		this.caster = caster;
 		this.target = target;
@@ -65,27 +65,27 @@ public class EntitySpectreLordCurse extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 
 	}
 
 	@Override
-	public boolean writeToNBTAtomically(NBTTagCompound compound) {
+	public boolean writeToNBTAtomically(CompoundNBT compound) {
 		return false;
 	}
 
 	@Override
-	public boolean writeToNBTOptional(NBTTagCompound compound) {
+	public boolean writeToNBTOptional(CompoundNBT compound) {
 		return false;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		return compound;
 	}
 

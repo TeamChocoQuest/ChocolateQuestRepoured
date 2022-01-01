@@ -5,17 +5,17 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemShield;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -234,7 +234,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof PlayerEntity && ((PlayerEntity) source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
@@ -243,14 +243,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		 */
 		this.partSoundFlag = sentFromPart;
 
-		if (source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
+		if (source.getTrueSource() instanceof LivingEntity && !(source.getTrueSource() instanceof PlayerEntity)) {
 			if (this.getRNG().nextBoolean() && !sentFromPart) {
 				sentFromPart = true;
 			}
 		}
 
-		if (source.getTrueSource() instanceof EntityLivingBase) {
-			this.setRevengeTarget((EntityLivingBase) source.getTrueSource());
+		if (source.getTrueSource() instanceof LivingEntity) {
+			this.setRevengeTarget((LivingEntity) source.getTrueSource());
 		}
 
 		if (!sentFromPart) {
@@ -322,7 +322,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
 	}
 
 	@Override
@@ -447,8 +447,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void collideWithEntity(Entity entityIn) {
 		if (this.isSpinning()) {
 			boolean blocked = false;
-			if (entityIn instanceof EntityLivingBase) {
-				if (((EntityLivingBase) entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
+			if (entityIn instanceof LivingEntity) {
+				if (((LivingEntity) entityIn).getActiveItemStack().getItem() instanceof ShieldItem) {
 					if (this.getRNG().nextBoolean()) {
 						this.spinsBlocked++;
 					}
@@ -510,7 +510,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 
 		compound.setInteger("timesHealed", this.timesHealed);
@@ -518,7 +518,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 
 		this.setTimesHealed(compound.getInteger("timesHealed"));

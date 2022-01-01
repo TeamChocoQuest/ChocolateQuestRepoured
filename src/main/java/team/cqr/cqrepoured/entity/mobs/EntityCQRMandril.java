@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
+import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -16,7 +16,7 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(9, new EntityAILeapAtTarget(this, 0.6F));
+		this.tasks.addTask(9, new LeapAtTargetGoal(this, 0.6F));
 	}
 
 	@Override

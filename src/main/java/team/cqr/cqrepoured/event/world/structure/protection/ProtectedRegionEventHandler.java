@@ -10,27 +10,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
 import org.apache.commons.io.FileUtils;
 
 import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.RegionFileCache;
@@ -85,14 +85,14 @@ public class ProtectedRegionEventHandler {
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
 		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
-			CQRMain.NETWORK.sendTo(new SPacketSyncProtectionConfig(CQRConfig.dungeonProtection), (EntityPlayerMP) event.player);
+			CQRMain.NETWORK.sendTo(new SPacketSyncProtectionConfig(CQRConfig.dungeonProtection), (ServerPlayerEntity) event.player);
 		}
 
 		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
 		if (protectedRegionManager == null) {
 			return;
 		}
-		syncProtectedRegions(protectedRegionManager, (EntityPlayerMP) event.player);
+		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.player);
 	}
 
 	@SubscribeEvent
@@ -101,10 +101,10 @@ public class ProtectedRegionEventHandler {
 		if (protectedRegionManager == null) {
 			return;
 		}
-		syncProtectedRegions(protectedRegionManager, (EntityPlayerMP) event.player);
+		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.player);
 	}
 
-	private static void syncProtectedRegions(IProtectedRegionManager protectedRegionManager, EntityPlayerMP player) {
+	private static void syncProtectedRegions(IProtectedRegionManager protectedRegionManager, ServerPlayerEntity player) {
 		List<ProtectedRegion> list = new ArrayList<>();
 		protectedRegionManager.getProtectedRegions().forEach(list::add);
 		if (!list.isEmpty()) {
@@ -220,12 +220,12 @@ public class ProtectedRegionEventHandler {
 		ItemStack stack = event.getEmptyBucket();
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null || !fluidStack.getFluid().canBePlacedInWorld()) {
-			IBlockState state = world.getBlockState(pos.offset(result.sideHit));
+			BlockState state = world.getBlockState(pos.offset(result.sideHit));
 			if (state.getMaterial().isLiquid() && ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), true, true)) {
 				event.setCanceled(true);
 			}
 		} else {
-			IBlockState state = fluidStack.getFluid().getBlock().getDefaultState();
+			BlockState state = fluidStack.getFluid().getBlock().getDefaultState();
 			if (ProtectedRegionHelper.isBlockPlacingPrevented(world, pos.offset(result.sideHit), event.getEntityPlayer(), state, true, true)) {
 				event.setCanceled(true);
 			}
@@ -234,7 +234,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 		BlockPos offsetPos = pos.offset(event.getFace());
 
@@ -250,17 +250,17 @@ public class ProtectedRegionEventHandler {
 	@SubscribeEvent
 	public static void onRightClickBlockEvent(PlayerInteractEvent.RightClickBlock event) {
 		World world = event.getWorld();
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
-		EnumFacing facing = event.getFace();
+		Direction facing = event.getFace();
 		if (!world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
 			pos = pos.offset(facing);
 		}
 		ItemStack stack = event.getItemStack();
 		Vec3d hitVec = event.getHitVec();
-		EnumHand hand = event.getHand();
+		Hand hand = event.getHand();
 
-		IBlockState state = ProtectedRegionHelper.getBlockFromItem(stack, world, pos, facing, hitVec, player, hand);
+		BlockState state = ProtectedRegionHelper.getBlockFromItem(stack, world, pos, facing, hitVec, player, hand);
 
 		if (state == null) {
 			return;
@@ -273,7 +273,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 
 		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true)) {
@@ -332,7 +332,7 @@ public class ProtectedRegionEventHandler {
 		if (files.isEmpty()) {
 			return;
 		}
-		NBTTagCompound compound = FileIOUtil.readNBTFromFile(files.get(0));
+		CompoundNBT compound = FileIOUtil.readNBTFromFile(files.get(0));
 		if (compound != null && compound.getString("version").equals(ProtectedRegion.PROTECTED_REGION_VERSION)) {
 			return;
 		}
@@ -346,10 +346,10 @@ public class ProtectedRegionEventHandler {
 				t = System.currentTimeMillis();
 			}
 			File file = files.get(i);
-			NBTTagCompound tag = FileIOUtil.readNBTFromFile(file);
+			CompoundNBT tag = FileIOUtil.readNBTFromFile(file);
 			ProtectedRegion protectedRegion = new ProtectedRegion(world, tag);
 			FileIOUtil.writeNBTToFile(protectedRegion.writeToNBT(), file);
-			updateChunkCapabilityEfficiently((WorldServer) world, protectedRegion);
+			updateChunkCapabilityEfficiently((ServerWorld) world, protectedRegion);
 		}
 		ProtectedRegion.logVersionWarnings = flag;
 		RegionFileCache.clearRegionFileReferences();
@@ -361,7 +361,7 @@ public class ProtectedRegionEventHandler {
 	private static final ReflectionField<Set<UUID>> FIELD_PROTECTED_REGION_UUIDS = new ReflectionField<>(CapabilityProtectedRegionData.class, "protectedRegionUuids", "protectedRegionUuids");
 
 	@Deprecated
-	private static void updateChunkCapabilityEfficiently(WorldServer world, ProtectedRegion protectedRegion) {
+	private static void updateChunkCapabilityEfficiently(ServerWorld world, ProtectedRegion protectedRegion) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 		BlockPos p1 = protectedRegion.getStartPos();
 		BlockPos p2 = protectedRegion.getEndPos();
@@ -373,13 +373,13 @@ public class ProtectedRegionEventHandler {
 					cap.addProtectedRegionUuid(protectedRegion.getUuid());
 					FIELD_PROTECTED_REGIONS.get(manager).put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, false));
 				} else {
-					NBTTagCompound chunkNBT = getChunkNBT(world, x, z);
+					CompoundNBT chunkNBT = getChunkNBT(world, x, z);
 					if (chunkNBT != null) {
-						NBTTagCompound levelTag = chunkNBT.getCompoundTag("Level");
+						CompoundNBT levelTag = chunkNBT.getCompoundTag("Level");
 						if (!levelTag.hasKey("ForgeCaps", Constants.NBT.TAG_COMPOUND)) {
-							levelTag.setTag("ForgeCaps", new NBTTagCompound());
+							levelTag.setTag("ForgeCaps", new CompoundNBT());
 						}
-						NBTTagCompound capabilityTag = levelTag.getCompoundTag("ForgeCaps");
+						CompoundNBT capabilityTag = levelTag.getCompoundTag("ForgeCaps");
 						CapabilityProtectedRegionData cap = new CapabilityProtectedRegionData(null);
 						cap.readFromNBT(capabilityTag.getCompoundTag(CapabilityProtectedRegionDataProvider.LOCATION.toString()));
 						FIELD_PROTECTED_REGION_UUIDS.get(cap).add(protectedRegion.getUuid());
@@ -401,7 +401,7 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@Deprecated
-	private static NBTTagCompound getChunkNBT(WorldServer world, int chunkX, int chunkZ) {
+	private static CompoundNBT getChunkNBT(ServerWorld world, int chunkX, int chunkZ) {
 		AnvilChunkLoader chunkLoader = (AnvilChunkLoader) world.getChunkProvider().chunkLoader;
 		try (DataInputStream datainputstream = RegionFileCache.getChunkInputStream(chunkLoader.chunkSaveLocation, chunkX, chunkZ)) {
 			if (datainputstream != null) {

@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;

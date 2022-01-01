@@ -5,32 +5,29 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.*;
+import net.minecraft.world.ServerWorld;
 import org.lwjgl.input.Keyboard;
 
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -45,7 +42,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		boolean flag = super.hitEntity(stack, target, attacker);
 
 		if (flag && itemRand.nextInt(5) == 0) {
@@ -57,32 +54,32 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.swingArm(handIn);
 		this.shootFromEntity(playerIn);
 		this.changeTorch(worldIn, playerIn);
 		stack.damageItem(1, playerIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
-		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
 
-	public void changeTorch(World worldIn, EntityPlayer player) {
+	public void changeTorch(World worldIn, PlayerEntity player) {
 		Vec3d start = player.getPositionEyes(1.0F);
 		Vec3d end = start.add(player.getLookVec().scale(10.0D));
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null && !worldIn.isRemote) {
 			BlockPos pos = new BlockPos(result.hitVec);
-			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);
+			BlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
 			if (blockStateLookingAt.getBlock() == CQRBlocks.UNLIT_TORCH) {
-				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, blockStateLookingAt.getValue(BlockTorch.FACING)));
+				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(TorchBlock.FACING, blockStateLookingAt.getValue(TorchBlock.FACING)));
 			}
 		}
 	}
 
-	public void shootFromEntity(EntityLivingBase shooter) {
+	public void shootFromEntity(LivingEntity shooter) {
 		World world = shooter.world;
 
 		if (!world.isRemote) {
@@ -91,10 +88,10 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 				// TODO don't send 20 packets
 				Vec3d v = shooter.getLookVec();
 				v = v.add((r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D);
-				((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
+				((ServerWorld) world).spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
 			}
 
-			world.getEntitiesWithinAABB(EntityLivingBase.class, shooter.getEntityBoundingBox().grow(8.0D), entity -> {
+			world.getEntitiesWithinAABB(LivingEntity.class, shooter.getEntityBoundingBox().grow(8.0D), entity -> {
 				if (TargetUtil.isAllyCheckingLeaders(shooter, entity)) {
 					return false;
 				}
@@ -132,7 +129,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		this.shootFromEntity(shooter);
 	}
 

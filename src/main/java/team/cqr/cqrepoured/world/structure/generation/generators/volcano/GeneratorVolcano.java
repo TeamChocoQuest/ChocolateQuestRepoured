@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,8 +39,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	private final EStairSection startStairSection = StairCaseHelper.getRandomStartSection();
 
-	private final CQRWeightedRandom<IBlockState> volcanoBlocks;
-	private final CQRWeightedRandom<IBlockState> volcanoBlocksWithLava;
+	private final CQRWeightedRandom<BlockState> volcanoBlocks;
+	private final CQRWeightedRandom<BlockState> volcanoBlocksWithLava;
 
 	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
@@ -79,7 +79,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		final int r = outerRadiusArray[0];
 		BlockPos referenceLoc = this.pos.add(-r, -this.caveDepth, -r);
-		IBlockState[][][] blocks = new IBlockState[r * 2 + 1][this.volcanoHeight + this.caveDepth + 2][r * 2 + 1];
+		BlockState[][][] blocks = new BlockState[r * 2 + 1][this.volcanoHeight + this.caveDepth + 2][r * 2 + 1];
 		List<BlockPos> spawnerAndChestList = new ArrayList<>();
 
 		// Support platform
@@ -234,7 +234,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			if (this.dungeon.constructEntranceTunnel()) {
 				EStairSection stairSectionPrev = stairSection.getPredeccessor();
 				if (stairSectionPrev != null) {
-					EnumFacing direction = stairSectionPrev.getAsSkyDirection();
+					Direction direction = stairSectionPrev.getAsSkyDirection();
 					// direction = direction.rotateYCCW();
 					int segmentCenterX = (sectionMaxX - sectionMinX) / 2 + sectionMinX;
 					int segmentCenterZ = (sectionMaxZ - sectionMinZ) / 2 + sectionMinZ;
@@ -337,7 +337,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	}
 
-	private void generateHoles(IBlockState[][][] blocks) {
+	private void generateHoles(BlockState[][][] blocks) {
 		if (this.dungeon.isVolcanoDamaged()) {
 			List<BlockPos> list = new ArrayList<>((int) (this.volcanoHeight * 1.6D));
 
@@ -364,7 +364,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generatePillars(BlockPos pos, int radius, int height, IBlockState[][][] blocks, IBlockState pillarBlock) {
+	private void generatePillars(BlockPos pos, int radius, int height, BlockState[][][] blocks, BlockState pillarBlock) {
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = -radius; iX <= radius; iX++) {
 				for (int iZ = -radius; iZ <= radius; iZ++) {
@@ -387,7 +387,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			for (BlockPos pos : spawnerAndChestList) {
 				if (this.random.nextBoolean()) {
-					partBuilder.add(new PreparableLootChestInfo(pos.getX(), pos.getY(), pos.getZ(), lootTables[this.random.nextInt(lootTables.length)], EnumFacing.NORTH));
+					partBuilder.add(new PreparableLootChestInfo(pos.getX(), pos.getY(), pos.getZ(), lootTables[this.random.nextInt(lootTables.length)], Direction.NORTH));
 				}
 
 				int entityCount = 2 + this.random.nextInt(3);
@@ -446,13 +446,13 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		return x >= 0 && x < array.length && y >= 0 && y < array[x].length && z >= 0 && z < array[x][y].length;
 	}
 
-	private IBlockState getRandomVolcanoBlock() {
-		IBlockState state = this.volcanoBlocks.next(this.random);
+	private BlockState getRandomVolcanoBlock() {
+		BlockState state = this.volcanoBlocks.next(this.random);
 		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 
-	private IBlockState getRandomVolcanoBlockWithLava() {
-		IBlockState state = this.volcanoBlocksWithLava.next(this.random);
+	private BlockState getRandomVolcanoBlockWithLava() {
+		BlockState state = this.volcanoBlocksWithLava.next(this.random);
 		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 

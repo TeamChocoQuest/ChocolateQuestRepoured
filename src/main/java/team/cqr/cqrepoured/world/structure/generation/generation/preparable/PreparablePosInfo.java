@@ -12,12 +12,12 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBanner;
-import net.minecraft.block.BlockStructureVoid;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.block.BannerBlock;
+import net.minecraft.block.StructureVoidBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -95,17 +95,17 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 		public interface IFactory<T extends TileEntity> {
 
 			@SuppressWarnings("unchecked")
-			default PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, IBlockState state) {
+			default PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, BlockState state) {
 				return this.create(world, x, y, z, state, () -> state.getBlock().hasTileEntity(state) ? (T) world.getTileEntity(pos) : null);
 			}
 
-			PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<T> tileEntitySupplier);
+			PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<T> tileEntitySupplier);
 
-			static NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
+			static CompoundNBT writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
 				if (tileEntity == null) {
 					return null;
 				}
-				NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
+				CompoundNBT compound = tileEntity.writeToNBT(new CompoundNBT());
 				compound.removeTag("x");
 				compound.removeTag("y");
 				compound.removeTag("z");
@@ -116,12 +116,12 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 		public interface ISerializer<T extends PreparablePosInfo> {
 
-			void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
+			void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
 
-			T read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
+			T read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
 
 			@Deprecated
-			T read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList);
+			T read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList);
 
 		}
 
@@ -132,9 +132,9 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 		static {
 			register(BlockNull.class, new PreparableEmptyInfo.Factory());
-			register(BlockStructureVoid.class, new PreparableEmptyInfo.Factory());
+			register(StructureVoidBlock.class, new PreparableEmptyInfo.Factory());
 			register(Block.class, new PreparableBlockInfo.Factory());
-			register(BlockBanner.class, new PreparableBannerInfo.Factory());
+			register(BannerBlock.class, new PreparableBannerInfo.Factory());
 			register(BlockBossBlock.class, new PreparableBossInfo.Factory());
 			register(BlockForceFieldNexus.class, new PreparableForceFieldNexusInfo.Factory());
 			register(BlockExporterChest.class, new PreparableLootChestInfo.Factory());
@@ -173,7 +173,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			return factory;
 		}
 
-		public static <T extends TileEntity> PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, IBlockState state) {
+		public static <T extends TileEntity> PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, BlockState state) {
 			Class<? extends Block> blockClass = state.getBlock().getClass();
 			IFactory<T> factory = getFactory(blockClass);
 			return factory.create(world, pos, x, y, z, state);
@@ -189,7 +189,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 		}
 
 		@SuppressWarnings("unchecked")
-		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
+		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListNBT compoundList) {
 			if (!CLASS_2_ID.containsKey(preparable.getClass())) {
 				throw new IllegalArgumentException("Class not registered: " + preparable.getClass().getSimpleName());
 			}
@@ -199,7 +199,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			serializer.write(preparable, buf, palette, compoundList);
 		}
 
-		public static PreparablePosInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
+		public static PreparablePosInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT compoundList) {
 			byte id = buf.readByte();
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);
@@ -209,7 +209,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 		}
 
 		@Deprecated
-		public static PreparablePosInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList compoundList) {
+		public static PreparablePosInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT compoundList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			if (intArray.length == 0) {
 				return new PreparableEmptyInfo(x, y, z);

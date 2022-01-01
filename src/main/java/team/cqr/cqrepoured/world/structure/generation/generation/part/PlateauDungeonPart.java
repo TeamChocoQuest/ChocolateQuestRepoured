@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -27,12 +27,12 @@ public class PlateauDungeonPart implements IDungeonPart {
 	private final int endY;
 	private final int endZ;
 	private final int wallSize;
-	private final IBlockState supportHillBlock;
-	private final IBlockState supportHillTopBlock;
+	private final BlockState supportHillBlock;
+	private final BlockState supportHillTopBlock;
 	private final int[][] ground;
 
-	protected PlateauDungeonPart(int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable IBlockState supportHillBlock,
-			@Nullable IBlockState supportHillTopBlock, int[][] ground) {
+	protected PlateauDungeonPart(int startX, int startZ, int endX, int endY, int endZ, int wallSize, @Nullable BlockState supportHillBlock,
+                                 @Nullable BlockState supportHillTopBlock, int[][] ground) {
 		this.startX = startX;
 		this.startZ = startZ;
 		this.endX = endX;
@@ -49,8 +49,8 @@ public class PlateauDungeonPart implements IDungeonPart {
 		for (int x = this.startX - this.wallSize; x <= this.endX + this.wallSize; x++) {
 			for (int z = this.startZ - this.wallSize; z <= this.endZ + this.wallSize; z++) {
 				MUTABLE.setPos(x, 0, z);
-				IBlockState state1 = this.supportHillBlock;
-				IBlockState state2 = this.supportHillTopBlock;
+				BlockState state1 = this.supportHillBlock;
+				BlockState state2 = this.supportHillTopBlock;
 				if (state1 == null || state2 == null) {
 					Biome biome = world.getBiome(MUTABLE);
 					if (state1 == null) {
@@ -100,7 +100,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 	}
 
 	private static boolean isGround(World world, Chunk chunk, BlockPos pos) {
-		IBlockState state = chunk.getBlockState(pos);
+		BlockState state = chunk.getBlockState(pos);
 		Material material = state.getMaterial();
 		return material.blocksMovement() && material != Material.WOOD && material != Material.LEAVES && material != Material.PLANTS;
 	}
@@ -154,8 +154,8 @@ public class PlateauDungeonPart implements IDungeonPart {
 		private final int endY;
 		private final int endZ;
 		private final int wallSize;
-		private IBlockState supportHillBlock;
-		private IBlockState supportHillTopBlock;
+		private BlockState supportHillBlock;
+		private BlockState supportHillTopBlock;
 		private final int[][] ground;
 
 		public Builder(int startX, int startZ, int endX, int endY, int endZ, int wallSize) {
@@ -173,12 +173,12 @@ public class PlateauDungeonPart implements IDungeonPart {
 			}
 		}
 
-		public Builder setSupportHillBlock(@Nullable IBlockState state) {
+		public Builder setSupportHillBlock(@Nullable BlockState state) {
 			this.supportHillBlock = state;
 			return this;
 		}
 
-		public Builder setSupportHillTopBlock(@Nullable IBlockState state) {
+		public Builder setSupportHillTopBlock(@Nullable BlockState state) {
 			this.supportHillTopBlock = state;
 			return this;
 		}

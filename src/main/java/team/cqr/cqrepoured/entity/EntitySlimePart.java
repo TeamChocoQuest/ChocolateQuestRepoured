@@ -3,15 +3,15 @@ package team.cqr.cqrepoured.entity;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 
-public class EntitySlimePart extends EntitySlime {
+public class EntitySlimePart extends SlimeEntity {
 
 	private UUID ownerUuid;
 
@@ -19,7 +19,7 @@ public class EntitySlimePart extends EntitySlime {
 		super(worldIn);
 	}
 
-	public EntitySlimePart(World worldIn, EntityLivingBase owner) {
+	public EntitySlimePart(World worldIn, LivingEntity owner) {
 		this(worldIn);
 		this.ownerUuid = owner.getPersistentID();
 	}
@@ -48,8 +48,8 @@ public class EntitySlimePart extends EntitySlime {
 
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
-		if (entityIn instanceof EntityLivingBase && entityIn.getPersistentID().equals(this.ownerUuid)) {
-			((EntityLivingBase) entityIn).heal(2.0F);
+		if (entityIn instanceof LivingEntity && entityIn.getPersistentID().equals(this.ownerUuid)) {
+			((LivingEntity) entityIn).heal(2.0F);
 			this.setDead();
 		}
 	}
@@ -60,14 +60,14 @@ public class EntitySlimePart extends EntitySlime {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger("ticksExisted", this.ticksExisted);
 		compound.setTag("ownerUuid", NBTUtil.createUUIDTag(this.ownerUuid));
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.ticksExisted = compound.getInteger("ticksExisted");
 		this.ownerUuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("ownerUuid"));

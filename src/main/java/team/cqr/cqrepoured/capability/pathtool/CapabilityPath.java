@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.capability.pathtool;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.entity.pathfinding.Path;
 
@@ -42,9 +42,9 @@ public class CapabilityPath {
 		if (this.isReading) {
 			return;
 		}
-		NBTTagCompound tag = this.stack.getTagCompound();
+		CompoundNBT tag = this.stack.getTagCompound();
 		if (tag == null) {
-			tag = new NBTTagCompound();
+			tag = new CompoundNBT();
 			this.stack.setTagCompound(tag);
 		}
 		tag.setTag("path", this.path.writeToNBT());
@@ -57,7 +57,7 @@ public class CapabilityPath {
 		}
 		this.readFromStack = true;
 		this.isReading = true;
-		NBTTagCompound tag = this.stack.getTagCompound();
+		CompoundNBT tag = this.stack.getTagCompound();
 		if (tag == null) {
 			this.isReading = false;
 			return;

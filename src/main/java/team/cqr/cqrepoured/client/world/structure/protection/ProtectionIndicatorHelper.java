@@ -5,7 +5,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegio
 
 public class ProtectionIndicatorHelper {
 
-	public static void addOrResetProtectedRegionIndicator(World world, UUID uuid, BlockPos start, BlockPos end, BlockPos pos, @Nullable EntityPlayerMP player) {
+	public static void addOrResetProtectedRegionIndicator(World world, UUID uuid, BlockPos start, BlockPos end, BlockPos pos, @Nullable ServerPlayerEntity player) {
 		if (world.isRemote) {
 			RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
 			if (result != null && result.hitVec != null) {

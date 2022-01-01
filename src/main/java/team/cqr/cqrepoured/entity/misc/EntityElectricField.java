@@ -11,14 +11,14 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -31,7 +31,7 @@ import team.cqr.cqrepoured.util.EntityUtil;
 public class EntityElectricField extends Entity implements IDontRenderFire, IEntityOwnable {
 
 	private static Set<BlockPos> EXISTING_FIELDS = new HashSet<>();
-	private Queue<EnumFacing> facesToSpreadTo = this.generateFacesQueue();
+	private Queue<Direction> facesToSpreadTo = this.generateFacesQueue();
 
 	private int charge;
 	private int spreadTimer = 15;
@@ -42,15 +42,15 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		this(worldIn, 100, null);
 	}
 
-	private Queue<EnumFacing> generateFacesQueue() {
-		Queue<EnumFacing> q = new LinkedList<>();
+	private Queue<Direction> generateFacesQueue() {
+		Queue<Direction> q = new LinkedList<>();
 
-		q.add(EnumFacing.UP);
-		q.add(EnumFacing.DOWN);
-		q.add(EnumFacing.NORTH);
-		q.add(EnumFacing.EAST);
-		q.add(EnumFacing.SOUTH);
-		q.add(EnumFacing.WEST);
+		q.add(Direction.UP);
+		q.add(Direction.DOWN);
+		q.add(Direction.NORTH);
+		q.add(Direction.EAST);
+		q.add(Direction.SOUTH);
+		q.add(Direction.WEST);
 
 		return q;
 	}
@@ -81,11 +81,11 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		return false;
 	}
 
-	protected List<EntityLivingBase> getEntitiesAffectedByField() {
-		return this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), this.selectionPredicate);
+	protected List<LivingEntity> getEntitiesAffectedByField() {
+		return this.world.getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox(), this.selectionPredicate);
 	}
 
-	private Predicate<EntityLivingBase> selectionPredicate = input -> {
+	private Predicate<LivingEntity> selectionPredicate = input -> {
 		if (!TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(input)) {
 			return false;
 		}
@@ -103,8 +103,8 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		if (ownerFaction != null) {
 			return TargetUtil.createPredicateNonAlly(ownerFaction).apply(input);
 		}
-		if (this.getOwner() instanceof EntityLivingBase) {
-			return TargetUtil.isAllyCheckingLeaders((EntityLivingBase) this.getOwner(), input);
+		if (this.getOwner() instanceof LivingEntity) {
+			return TargetUtil.isAllyCheckingLeaders((LivingEntity) this.getOwner(), input);
 		}
 		return true;
 	};
@@ -144,11 +144,11 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 					this.spreadTimer = 5;
 
 					while (!this.facesToSpreadTo.isEmpty()) {
-						EnumFacing face = this.facesToSpreadTo.poll();
+						Direction face = this.facesToSpreadTo.poll();
 						if (face != null) {
 							BlockPos currentPos = pos.offset(face);
 							if (!EXISTING_FIELDS.contains(currentPos)) {
-								IBlockState blockState = this.world.getBlockState(currentPos);
+								BlockState blockState = this.world.getBlockState(currentPos);
 								if (blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.IRON) {
 									int charge = this.charge - 10;
 									if (charge > 0) {
@@ -171,7 +171,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 		this.charge = compound.getInteger("charge");
 		if (compound.hasKey("ownerId")) {
 			this.ownerID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("ownerId"));
@@ -179,7 +179,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 		compound.setInteger("charge", this.charge);
 		if (this.getOwner() != null) {
 			compound.setTag("ownerId", NBTUtil.createUUIDTag(this.getOwnerId()));

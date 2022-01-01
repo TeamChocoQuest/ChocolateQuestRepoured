@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -28,9 +28,9 @@ public class DungeonGridCity extends DungeonBase {
 	// private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
 	private boolean makeSpaceForBuildings = true;
-	private IBlockState bridgeBlock = Blocks.NETHER_BRICK.getDefaultState();
-	private IBlockState floorBlock = Blocks.LAVA.getDefaultState();
-	private IBlockState airBlockForPocket = Blocks.AIR.getDefaultState();
+	private BlockState bridgeBlock = Blocks.NETHER_BRICK.getDefaultState();
+	private BlockState floorBlock = Blocks.LAVA.getDefaultState();
+	private BlockState airBlockForPocket = Blocks.AIR.getDefaultState();
 
 	protected File buildingFolder;
 	protected File centralBuildingsFolder;
@@ -67,15 +67,15 @@ public class DungeonGridCity extends DungeonBase {
 		return this.heightY;
 	}
 
-	public IBlockState getBridgeBlock() {
+	public BlockState getBridgeBlock() {
 		return this.bridgeBlock;
 	}
 
-	public IBlockState getFloorBlock() {
+	public BlockState getFloorBlock() {
 		return this.floorBlock;
 	}
 
-	public IBlockState getAirPocketBlock() {
+	public BlockState getAirPocketBlock() {
 		return this.airBlockForPocket;
 	}
 

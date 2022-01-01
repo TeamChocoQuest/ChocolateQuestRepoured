@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
@@ -13,7 +13,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	private static final int MIN_DISTANCE = 8;
 
 	private AbstractEntityLaser activeLaser = null;
-	private EntityLivingBase target = null;
+	private LivingEntity target = null;
 
 	private int timer;
 	private int timeOut = 0;

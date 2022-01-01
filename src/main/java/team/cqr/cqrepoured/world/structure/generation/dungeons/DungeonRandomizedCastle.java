@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.world.structure.generation.dungeons;
 import java.util.Properties;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
@@ -25,17 +25,17 @@ public class DungeonRandomizedCastle extends DungeonBase {
 	private int maxSize;
 	private int roomSize;
 	private int floorHeight;
-	private IBlockState mainBlock;
-	private IBlockState fancyBlock;
-	private IBlockState slabBlock;
-	private IBlockState stairBlock;
-	private IBlockState roofBlock;
-	private IBlockState fenceBlock;
-	private IBlockState floorBlock;
-	private IBlockState woodStairBlock;
-	private IBlockState woodSlabBlock;
-	private IBlockState plankBlock;
-	private IBlockState doorBlock;
+	private BlockState mainBlock;
+	private BlockState fancyBlock;
+	private BlockState slabBlock;
+	private BlockState stairBlock;
+	private BlockState roofBlock;
+	private BlockState fenceBlock;
+	private BlockState floorBlock;
+	private BlockState woodStairBlock;
+	private BlockState woodSlabBlock;
+	private BlockState plankBlock;
+	private BlockState doorBlock;
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> towerRoofTypeRandomizer;
@@ -134,47 +134,47 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this, rand);
 	}
 
-	public IBlockState getMainBlockState() {
+	public BlockState getMainBlockState() {
 		return this.mainBlock;
 	}
 
-	public IBlockState getFancyBlockState() {
+	public BlockState getFancyBlockState() {
 		return this.fancyBlock;
 	}
 
-	public IBlockState getSlabBlockState() {
+	public BlockState getSlabBlockState() {
 		return this.slabBlock;
 	}
 
-	public IBlockState getStairBlockState() {
+	public BlockState getStairBlockState() {
 		return this.stairBlock;
 	}
 
-	public IBlockState getFloorBlockState() {
+	public BlockState getFloorBlockState() {
 		return this.floorBlock;
 	}
 
-	public IBlockState getRoofBlockState() {
+	public BlockState getRoofBlockState() {
 		return this.roofBlock;
 	}
 
-	public IBlockState getFenceBlockState() {
+	public BlockState getFenceBlockState() {
 		return this.fenceBlock;
 	}
 
-	public IBlockState getWoodStairBlockState() {
+	public BlockState getWoodStairBlockState() {
 		return this.woodStairBlock;
 	}
 
-	public IBlockState getWoodSlabBlockState() {
+	public BlockState getWoodSlabBlockState() {
 		return this.woodSlabBlock;
 	}
 
-	public IBlockState getPlankBlockState() {
+	public BlockState getPlankBlockState() {
 		return this.plankBlock;
 	}
 
-	public IBlockState getDoorBlockState() {
+	public BlockState getDoorBlockState() {
 		return this.doorBlock;
 	}
 

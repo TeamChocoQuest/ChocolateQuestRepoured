@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 
-public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
+public class LayerBossDeath implements LayerRenderer<LivingEntity> {
 
 	private final BossDeathRayHelper rayHelper;
 
@@ -17,7 +17,7 @@ public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 		this.rayHelper = new BossDeathRayHelper(red, green, blue, raySize);
 	}
 
-	protected int getAnimationTick(EntityLivingBase entity) {
+	protected int getAnimationTick(LivingEntity entity) {
 		if (entity instanceof AbstractEntityCQRBoss) {
 			return ((AbstractEntityCQRBoss) entity).deathTime;
 		}
@@ -25,7 +25,7 @@ public class LayerBossDeath implements LayerRenderer<EntityLivingBase> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(LivingEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		int ticks = this.getAnimationTick(entitylivingbaseIn);
 		if (ticks > 0) {
 			this.rayHelper.renderRays(ticks, partialTicks);

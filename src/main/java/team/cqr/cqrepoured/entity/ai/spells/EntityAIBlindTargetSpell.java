@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -22,14 +22,14 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 
 	@Override
 	public void startCastingSpell() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		Vec3d vec = attackTarget.getPositionVector();
 		vec = vec.subtract(attackTarget.getLookVec().scale(8.0D));
 		vec = vec.subtract(0.0D, 0.001D, 0.0D);
 		BlockPos pos = new BlockPos(vec);
 
-		attackTarget.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, this.duration));
-		if (this.entity.world.getBlockState(pos).isSideSolid(this.entity.world, pos, EnumFacing.UP)) {
+		attackTarget.addPotionEffect(new EffectInstance(Effects.BLINDNESS, this.duration));
+		if (this.entity.world.getBlockState(pos).isSideSolid(this.entity.world, pos, Direction.UP)) {
 			this.entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.7F, 1.1F);
 			this.entity.attemptTeleport(vec.x, vec.y, vec.z);
 		}

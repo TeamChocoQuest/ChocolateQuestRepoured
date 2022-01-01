@@ -4,21 +4,21 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelParrot;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderParrot;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.client.renderer.entity.ParrotRenderer;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
+import net.minecraft.util.HandSide;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LayerCQRPirateParrotHeldItem extends LayerHeldItem {
+public class LayerCQRPirateParrotHeldItem extends HeldItemLayer {
 
-	public LayerCQRPirateParrotHeldItem(RenderParrot renderCQREntity) {
+	public LayerCQRPirateParrotHeldItem(ParrotRenderer renderCQREntity) {
 		super(renderCQREntity);
 	}
 
 	@Override
-	protected void translateToHand(EnumHandSide handSide) {
+	protected void translateToHand(HandSide handSide) {
 		// super.translateToHand(handSide);
 		if (this.livingEntityRenderer.getMainModel() instanceof ModelParrot) {
 			ModelParrot model = (ModelParrot) this.livingEntityRenderer.getMainModel();

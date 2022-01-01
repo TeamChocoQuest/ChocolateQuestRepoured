@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.addons;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
@@ -26,7 +26,7 @@ public class CastleAddonRoofFourSided extends CastleAddonRoofBase {
 
 		do {
 			// Add the foundation under the roof
-			IBlockState state = dungeon.getMainBlockState();
+			BlockState state = dungeon.getMainBlockState();
 			if (underLenX > 0 && underLenZ > 0) {
 				for (int i = 0; i < underLenX; i++) {
 					genArray.addBlockState(new BlockPos(x + i, y, z), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
@@ -45,38 +45,38 @@ public class CastleAddonRoofFourSided extends CastleAddonRoofBase {
 
 			// add the north row
 			for (int i = 0; i < roofLenX; i++) {
-				IBlockState blockState = dungeon.getRoofBlockState();
-				blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
+				BlockState blockState = dungeon.getRoofBlockState();
+				blockState = blockState.withProperty(StairsBlock.FACING, Direction.SOUTH);
 
 				// Apply properties to corner pieces
 				if (i == 0) {
-					blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
+					blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_LEFT);
 				} else if (i == roofLenX - 1) {
-					blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
+					blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_RIGHT);
 				}
 
 				genArray.addBlockState(new BlockPos(roofX + i, y, roofZ), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 			// add the south row
 			for (int i = 0; i < roofLenX; i++) {
-				IBlockState blockState = dungeon.getRoofBlockState();
-				blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
+				BlockState blockState = dungeon.getRoofBlockState();
+				blockState = blockState.withProperty(StairsBlock.FACING, Direction.NORTH);
 
 				// Apply properties to corner pieces
 				if (i == 0) {
-					blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
+					blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_RIGHT);
 				} else if (i == roofLenX - 1) {
-					blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
+					blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_LEFT);
 				}
 
 				genArray.addBlockState(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 
 			for (int i = 0; i < roofLenZ; i++) {
-				IBlockState blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+				BlockState blockState = dungeon.getRoofBlockState().withProperty(StairsBlock.FACING, Direction.EAST);
 				genArray.addBlockState(new BlockPos(roofX, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 
-				blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+				blockState = dungeon.getRoofBlockState().withProperty(StairsBlock.FACING, Direction.WEST);
 
 				genArray.addBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}

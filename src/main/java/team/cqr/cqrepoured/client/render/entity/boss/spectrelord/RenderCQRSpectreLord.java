@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.client.render.entity.boss.spectrelord;
 
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 
 public class RenderCQRSpectreLord extends RenderCQREntity<EntityCQRSpectreLord> {
 
-	public RenderCQRSpectreLord(RenderManager renderManager) {
+	public RenderCQRSpectreLord(EntityRendererManager renderManager) {
 		super(renderManager, "boss/spectre_lord", true);
 	}
 

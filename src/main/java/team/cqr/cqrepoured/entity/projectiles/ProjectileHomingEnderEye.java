@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAreaEffectCloud;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.monster.EndermanEntity;
+import net.minecraft.potion.Effects;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
@@ -17,13 +17,13 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 public class ProjectileHomingEnderEye extends ProjectileBase {
 
 	private Entity target = null;
-	private EntityLivingBase shooter = null;
+	private LivingEntity shooter = null;
 
 	public ProjectileHomingEnderEye(World worldIn) {
 		super(worldIn);
 	}
 
-	public ProjectileHomingEnderEye(World worldIn, EntityLivingBase shooter, Entity target) {
+	public ProjectileHomingEnderEye(World worldIn, LivingEntity shooter, Entity target) {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.target = target;
@@ -34,7 +34,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	protected void onImpact(RayTraceResult result) {
 		// TODO: Remove a few end blocks around the location
 		if (!this.world.isRemote) {
-			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shooter);
 			entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
 			entityareaeffectcloud.setRadius(2F);
@@ -42,7 +42,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			entityareaeffectcloud.setRadiusOnUse(-0.25F);
 			entityareaeffectcloud.setWaitTime(10);
 			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
-			entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 20, 1));
+			entityareaeffectcloud.addEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 20, 1));
 
 			this.world.spawnEntity(entityareaeffectcloud);
 
@@ -63,7 +63,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if (entityIn == this.shooter) {
 			return;
 		}
-		if (entityIn instanceof ProjectileBase || entityIn instanceof EntityEnderman || entityIn instanceof EntityCQREnderman) {
+		if (entityIn instanceof ProjectileBase || entityIn instanceof EndermanEntity || entityIn instanceof EntityCQREnderman) {
 			return;
 		}
 		boolean hitTarget = this.target != null && entityIn != this.shooter;

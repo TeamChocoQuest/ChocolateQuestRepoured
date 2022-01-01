@@ -5,9 +5,9 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -30,7 +30,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 			if (input == null) {
 				return false;
 			}
-			if (!EntitySelectors.IS_ALIVE.apply(input)) {
+			if (!EntityPredicates.IS_ALIVE.apply(input)) {
 				return false;
 			}
 			return EntityAIIdleSit.this.isEntityAlly(input);
@@ -110,9 +110,9 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(this.entity);
-		EntityLivingBase targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
-		if (!(leader instanceof EntityPlayer) && targetLeader instanceof EntityPlayer) {
+		LivingEntity leader = TargetUtil.getLeaderOrOwnerRecursive(this.entity);
+		LivingEntity targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
+		if (!(leader instanceof PlayerEntity) && targetLeader instanceof PlayerEntity) {
 			return false;
 		}
 		if (!TargetUtil.isAllyCheckingLeaders(leader, targetLeader)) {

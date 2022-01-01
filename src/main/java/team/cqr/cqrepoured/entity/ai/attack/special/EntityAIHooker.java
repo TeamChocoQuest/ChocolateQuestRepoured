@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -103,7 +103,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			ItemStack hookItem = this.entity.getHeldItemOffhand();
 			if (hookItem.getItem() instanceof ItemHookshotBase) {
-				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getAttackTarget(), EnumHand.OFF_HAND);
+				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getAttackTarget(), Hand.OFF_HAND);
 				this.state = STATE.HOOK_FLYING;
 			}
 
@@ -125,7 +125,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 		this.state = STATE.PREPARING;
 	}
 
-	protected boolean hasHookShoot(EntityLiving ent) {
+	protected boolean hasHookShoot(MobEntity ent) {
 		ItemStack item = ent.getHeldItemOffhand();
 		if (!item.isEmpty()) {
 			return item.getItem() instanceof ItemHookshotBase;

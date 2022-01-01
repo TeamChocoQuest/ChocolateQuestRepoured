@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class BlockPillarDungeonBrick extends BlockRotatedPillar {
+public class BlockPillarDungeonBrick extends RotatedPillarBlock {
 
 	public BlockPillarDungeonBrick() {
 		super(Material.ROCK);

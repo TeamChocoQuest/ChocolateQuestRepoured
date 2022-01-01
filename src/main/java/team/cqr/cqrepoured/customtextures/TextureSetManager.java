@@ -12,9 +12,9 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -95,7 +95,7 @@ public class TextureSetManager {
 		}
 	}
 
-	public static void sendTexturesToClient(EntityPlayerMP joiningPlayer) {
+	public static void sendTexturesToClient(ServerPlayerEntity joiningPlayer) {
 		try {
 			getInstance().sendTexturesToClientImpl(joiningPlayer);
 		} catch (NoSuchMethodError ex) {
@@ -103,7 +103,7 @@ public class TextureSetManager {
 		}
 	}
 
-	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
+	private void sendTexturesToClientImpl(ServerPlayerEntity joiningPlayer) {
 		SPacketCustomTextures packet = new SPacketCustomTextures();
 		/*
 		 * for (File texture : TextureSet.getLoadedTextures()) { String base64 = CompressionUtil.encodeFileToBase64(texture);

@@ -12,29 +12,29 @@ import java.util.stream.Collector;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.nbt.ByteArrayNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByteArray;
-import net.minecraft.nbt.NBTTagList;
 
 public class NBTCollectors {
 
 	private static final Set<Collector.Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 	private static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
 
-	public static <T extends NBTBase> Collector<T, NBTTagList, NBTTagList> toList() {
-		return new Collector<T, NBTTagList, NBTTagList>() {
+	public static <T extends NBTBase> Collector<T, ListNBT, ListNBT> toList() {
+		return new Collector<T, ListNBT, ListNBT>() {
 			@Override
-			public Supplier<NBTTagList> supplier() {
-				return NBTTagList::new;
+			public Supplier<ListNBT> supplier() {
+				return ListNBT::new;
 			}
 
 			@Override
-			public BiConsumer<NBTTagList, T> accumulator() {
-				return NBTTagList::appendTag;
+			public BiConsumer<ListNBT, T> accumulator() {
+				return ListNBT::appendTag;
 			}
 
 			@Override
-			public BinaryOperator<NBTTagList> combiner() {
+			public BinaryOperator<ListNBT> combiner() {
 				return (list1, list2) -> {
 					list2.forEach(list1::appendTag);
 					return list1;
@@ -42,7 +42,7 @@ public class NBTCollectors {
 			}
 
 			@Override
-			public Function<NBTTagList, NBTTagList> finisher() {
+			public Function<ListNBT, ListNBT> finisher() {
 				return Function.identity();
 			}
 
@@ -53,8 +53,8 @@ public class NBTCollectors {
 		};
 	}
 
-	public static <T> Collector<T, ?, NBTTagByteArray> toNBTByteArray(BiConsumer<ByteBuf, T> accumulator) {
-		return new Collector<T, ByteBuf, NBTTagByteArray>() {
+	public static <T> Collector<T, ?, ByteArrayNBT> toNBTByteArray(BiConsumer<ByteBuf, T> accumulator) {
+		return new Collector<T, ByteBuf, ByteArrayNBT>() {
 			@Override
 			public Supplier<ByteBuf> supplier() {
 				return Unpooled::buffer;
@@ -71,8 +71,8 @@ public class NBTCollectors {
 			}
 
 			@Override
-			public Function<ByteBuf, NBTTagByteArray> finisher() {
-				return buf -> new NBTTagByteArray(buf.writerIndex() < buf.capacity() ? Arrays.copyOf(buf.array(), buf.writerIndex()) : buf.array());
+			public Function<ByteBuf, ByteArrayNBT> finisher() {
+				return buf -> new ByteArrayNBT(buf.writerIndex() < buf.capacity() ? Arrays.copyOf(buf.array(), buf.writerIndex()) : buf.array());
 			}
 
 			@Override

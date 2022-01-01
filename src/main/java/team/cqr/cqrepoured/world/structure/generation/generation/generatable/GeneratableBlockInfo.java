@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -13,23 +13,23 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 
 public class GeneratableBlockInfo extends GeneratablePosInfo {
 
-	private final IBlockState state;
+	private final BlockState state;
 	@Nullable
 	private final TileEntity tileEntity;
 
-	public GeneratableBlockInfo(int x, int y, int z, IBlockState state, @Nullable TileEntity tileEntity) {
+	public GeneratableBlockInfo(int x, int y, int z, BlockState state, @Nullable TileEntity tileEntity) {
 		super(x, y, z);
 		this.state = state;
 		this.tileEntity = tileEntity;
 	}
 
-	public GeneratableBlockInfo(BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
+	public GeneratableBlockInfo(BlockPos pos, BlockState state, @Nullable TileEntity tileEntity) {
 		this(pos.getX(), pos.getY(), pos.getZ(), state, tileEntity);
 	}
 
 	@Override
 	protected boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		IBlockState oldState = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+		BlockState oldState = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
 		int oldLight = oldState.getLightValue(world, pos);
 		if (!BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, this.state, this.tileEntity, 16)) {
 			return false;
@@ -40,7 +40,7 @@ public class GeneratableBlockInfo extends GeneratablePosInfo {
 		return true;
 	}
 
-	public IBlockState getState() {
+	public BlockState getState() {
 		return this.state;
 	}
 

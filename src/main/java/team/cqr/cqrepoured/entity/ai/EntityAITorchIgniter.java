@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -69,9 +69,9 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 	@Override
 	public void updateTask() {
 		if (this.entity.getDistanceSqToCenter(this.nearestTorch) <= REACH_DISTANCE_SQ) {
-			IBlockState state = this.entity.world.getBlockState(this.nearestTorch);
+			BlockState state = this.entity.world.getBlockState(this.nearestTorch);
 			if (state.getBlock() == CQRBlocks.UNLIT_TORCH) {
-				BlockUnlitTorch.lightUp(this.entity.world, this.nearestTorch, state.getValue(BlockTorch.FACING));
+				BlockUnlitTorch.lightUp(this.entity.world, this.nearestTorch, state.getValue(TorchBlock.FACING));
 			}
 			this.nearestTorch = null;
 		}

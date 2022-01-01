@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 
 @SideOnly(Side.CLIENT)
-public class GuiReputation extends GuiScreen {
+public class GuiReputation extends Screen {
 
 	// Textures
 	protected static final ResourceLocation TEXTURE_BG = new ResourceLocation(CQRMain.MODID, "textures/gui/repu/gui_reputation.png");
@@ -39,7 +39,7 @@ public class GuiReputation extends GuiScreen {
 
 	// Player texture: Player object -> getTexture or similar...
 
-	public GuiReputation(EntityPlayerSP player) {
+	public GuiReputation(ClientPlayerEntity player) {
 		super();
 		this.imgPlayerHead = player.getLocationSkin();
 

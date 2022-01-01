@@ -2,21 +2,21 @@ package team.cqr.cqrepoured.init;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.BlockTNT;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.TNTBlock;
+import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Bootstrap.BehaviorDispenseOptional;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.registry.Bootstrap.BehaviorDispenseOptional;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -32,20 +32,20 @@ public class CQRDispenseBehaviors {
 
 	public static void registerDispenseBehaviors() {
 		// Bubble Gun
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.BUBBLE_PISTOL, DISPENSE_BEHAVIOR_BUBBLE_GUN);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.BUBBLE_RIFLE, DISPENSE_BEHAVIOR_BUBBLE_GUN);
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.BUBBLE_PISTOL, DISPENSE_BEHAVIOR_BUBBLE_GUN);
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.BUBBLE_RIFLE, DISPENSE_BEHAVIOR_BUBBLE_GUN);
 
 		// Soul bottle
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.SOUL_BOTTLE, DISPENSE_BEHAVIOR_SOUL_BOTTLE);
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(CQRItems.SOUL_BOTTLE, DISPENSE_BEHAVIOR_SOUL_BOTTLE);
 
 		// CQR TNT
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Item.getItemFromBlock(CQRBlocks.TNT), DISPENSE_BEHAVIOR_TNT_CQR);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.FLINT_AND_STEEL, DISPENSE_BEHAVIOR_IGNITE_TNT_CQR);
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(Item.getItemFromBlock(CQRBlocks.TNT), DISPENSE_BEHAVIOR_TNT_CQR);
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.FLINT_AND_STEEL, DISPENSE_BEHAVIOR_IGNITE_TNT_CQR);
 	}
 
-	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_BUBBLE_GUN = (source, stack) -> {
+	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_BUBBLE_GUN = (source, stack) -> {
 		Vec3d velocity = new Vec3d(0, 0, 0);
-		switch (source.getBlockState().getValue(BlockDispenser.FACING)) {
+		switch (source.getBlockState().getValue(DispenserBlock.FACING)) {
 		case DOWN:
 			velocity = new Vec3d(0, -1, 0);
 			break;
@@ -68,7 +68,7 @@ public class CQRDispenseBehaviors {
 			break;
 
 		}
-		IPosition disPos = BlockDispenser.getDispensePosition(source);
+		IPosition disPos = DispenserBlock.getDispensePosition(source);
 		Vec3d startLoc = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ());
 		Item item = stack.getItem();
 		double acc = 0.5D;
@@ -97,9 +97,9 @@ public class CQRDispenseBehaviors {
 		return stack;
 	};
 
-	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_SOUL_BOTTLE = (source, stack) -> {
+	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_SOUL_BOTTLE = (source, stack) -> {
 		Vec3d velocity = new Vec3d(0, 0, 0);
-		switch (source.getBlockState().getValue(BlockDispenser.FACING)) {
+		switch (source.getBlockState().getValue(DispenserBlock.FACING)) {
 		case DOWN:
 			velocity = new Vec3d(0, -1, 0);
 			break;
@@ -122,15 +122,15 @@ public class CQRDispenseBehaviors {
 			break;
 
 		}
-		IPosition disPos = BlockDispenser.getDispensePosition(source);
+		IPosition disPos = DispenserBlock.getDispensePosition(source);
 		Vec3d pos = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ()).add(velocity);
 
 		if (stack.hasTagCompound()) {
-			NBTTagCompound bottle = stack.getTagCompound();
+			CompoundNBT bottle = stack.getTagCompound();
 
 			if (bottle.hasKey(ItemSoulBottle.ENTITY_IN_TAG)) {
 				if (!source.getWorld().isRemote) {
-					NBTTagCompound entityTag = (NBTTagCompound) bottle.getTag(ItemSoulBottle.ENTITY_IN_TAG);
+					CompoundNBT entityTag = (CompoundNBT) bottle.getTag(ItemSoulBottle.ENTITY_IN_TAG);
 					((ItemSoulBottle) stack.getItem()).createEntityFromNBT(entityTag, source.getWorld(), pos.x, pos.y, pos.z);
 				}
 			}
@@ -143,12 +143,12 @@ public class CQRDispenseBehaviors {
 		return stack;
 	};
 
-	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_TNT_CQR = (source, stack) -> {
+	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_TNT_CQR = (source, stack) -> {
 		World world = source.getWorld();
-		BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
-		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, blockpos.getX() + 0.5D, blockpos.getY(), blockpos.getZ() + 0.5D, (EntityLivingBase) null);
+		BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(DispenserBlock.FACING));
+		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, blockpos.getX() + 0.5D, blockpos.getY(), blockpos.getZ() + 0.5D, (LivingEntity) null);
 		world.spawnEntity(entitytntprimed);
-		world.playSound((EntityPlayer) null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		world.playSound((PlayerEntity) null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		stack.shrink(1);
 		return stack;
 	};
@@ -158,16 +158,16 @@ public class CQRDispenseBehaviors {
 		protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
 			World world = source.getWorld();
 			this.successful = true;
-			BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
+			BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(DispenserBlock.FACING));
 
 			if (world.isAirBlock(blockpos)) {
 				world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
 
-				if (stack.attemptDamageItem(1, world.rand, (EntityPlayerMP) null)) {
+				if (stack.attemptDamageItem(1, world.rand, (ServerPlayerEntity) null)) {
 					stack.setCount(0);
 				}
 			} else if (world.getBlockState(blockpos).getBlock() == CQRBlocks.TNT) {
-				CQRBlocks.TNT.onPlayerDestroy(world, blockpos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNT.EXPLODE, true));
+				CQRBlocks.TNT.onPlayerDestroy(world, blockpos, CQRBlocks.TNT.getDefaultState().withProperty(TNTBlock.EXPLODE, true));
 				world.setBlockToAir(blockpos);
 			} else {
 				this.successful = false;

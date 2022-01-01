@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -34,7 +34,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	private int roomSizeY = 10;
 	private int roomSizeZ = 17;
 
-	private IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
+	private BlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
 
 	// Important: All rooms must have the same dimensions!!!
 
@@ -146,7 +146,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 		return this.roomSizeZ;
 	}
 
-	public IBlockState getWallBlock() {
+	public BlockState getWallBlock() {
 		return this.wallBlock;
 	}
 }

@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArrow;
-import net.minecraft.item.ItemBow;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -37,7 +37,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if (attackTarget == null) {
 			return false;
 		}
@@ -49,7 +49,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if (attackTarget == null) {
 			return false;
 		}
@@ -70,7 +70,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 
 	@Override
 	public void updateTask() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if (attackTarget == null) {
 			return;
 		}
@@ -125,10 +125,10 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		return this.entity.isNonBoss() ? CQRConfig.mobs.enableEntityStrafing : CQRConfig.mobs.enableEntityStrafingBoss;
 	}
 
-	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
+	protected void checkAndPerformAttack(LivingEntity attackTarget) {
 		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
 			if (this.getAttackChargeTicks() > 0) {
-				this.entity.setActiveHand(EnumHand.MAIN_HAND);
+				this.entity.setActiveHand(Hand.MAIN_HAND);
 				this.entity.isSwingInProgress = true;
 			}
 
@@ -136,12 +136,12 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 				ItemStack stack = this.getEquippedWeapon();
 				Item item = stack.getItem();
 
-				if (item instanceof ItemBow) {
+				if (item instanceof BowItem) {
 					ItemStack arrowItem = this.entity.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
-					if (arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
+					if (arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ArrowItem)) {
 						arrowItem = new ItemStack(Items.ARROW);
 					}
-					EntityArrow arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.world, arrowItem, this.entity);
+					AbstractArrowEntity arrow = ((ArrowItem) arrowItem.getItem()).createArrow(this.world, arrowItem, this.entity);
 					// arrowItem.shrink(1);
 
 					double x = attackTarget.posX - this.entity.posX;
@@ -157,7 +157,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					this.world.spawnEntity(arrow);
 					this.entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 				} else if (item instanceof IRangedWeapon) {
-					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
+					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, Hand.MAIN_HAND);
 					if (((IRangedWeapon) item).getShootSound() != null) {
 						this.entity.playSound(((IRangedWeapon) item).getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}
@@ -168,7 +168,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					this.entity.resetActiveHand();
 					this.entity.isSwingInProgress = false;
 				} else {
-					this.entity.swingArm(EnumHand.MAIN_HAND);
+					this.entity.swingArm(Hand.MAIN_HAND);
 				}
 			}
 		}
@@ -176,23 +176,23 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 
 	protected float getInaccuracy() {
 		float inaccuracy = 4.0F;
-		if (this.world.getDifficulty() == EnumDifficulty.HARD) {
+		if (this.world.getDifficulty() == Difficulty.HARD) {
 			inaccuracy = 1.0F;
-		} else if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
+		} else if (this.world.getDifficulty() == Difficulty.NORMAL) {
 			inaccuracy = 2.0F;
 		}
 		return inaccuracy;
 	}
 
 	protected boolean isRangedWeapon(Item item) {
-		return item instanceof ItemBow || item instanceof IRangedWeapon;
+		return item instanceof BowItem || item instanceof IRangedWeapon;
 	}
 
 	protected double getAttackRange() {
 		ItemStack stack = this.getEquippedWeapon();
 		Item item = stack.getItem();
 
-		if (item instanceof ItemBow) {
+		if (item instanceof BowItem) {
 			return 32.0D;
 		} else if (item instanceof IRangedWeapon) {
 			return ((IRangedWeapon) item).getRange();
@@ -205,7 +205,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		ItemStack stack = this.getEquippedWeapon();
 		Item item = stack.getItem();
 
-		if (item instanceof ItemBow) {
+		if (item instanceof BowItem) {
 			switch (this.world.getDifficulty()) {
 			case HARD:
 				return 20;
@@ -225,7 +225,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		ItemStack stack = this.getEquippedWeapon();
 		Item item = stack.getItem();
 
-		if (item instanceof ItemBow) {
+		if (item instanceof BowItem) {
 			return 20;
 		} else if (item instanceof IRangedWeapon) {
 			return ((IRangedWeapon) item).getChargeTicks();

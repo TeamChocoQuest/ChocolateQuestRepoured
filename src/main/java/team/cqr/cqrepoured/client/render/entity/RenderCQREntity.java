@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.HeadLayer;
+import net.minecraft.item.UseAction;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
@@ -7,16 +11,12 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerArrow;
-import net.minecraft.client.renderer.entity.layers.LayerCustomHead;
-import net.minecraft.client.renderer.entity.layers.LayerElytra;
+import net.minecraft.client.renderer.entity.layers.ArrowLayer;
+import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumAction;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
@@ -39,7 +39,7 @@ import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
-public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
+public class RenderCQREntity<T extends AbstractEntityCQR> extends MobRenderer<T> {
 
 	public ResourceLocation texture;
 	public double widthScale;
@@ -47,23 +47,23 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	private final String entityName;
 
-	public RenderCQREntity(RenderManager rendermanagerIn, String textureName) {
+	public RenderCQREntity(EntityRendererManager rendermanagerIn, String textureName) {
 		this(rendermanagerIn, textureName, 1.0D, 1.0D, false);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, boolean hasExtraLayer) {
+	public RenderCQREntity(EntityRendererManager rendermanagerIn, String textureName, boolean hasExtraLayer) {
 		this(rendermanagerIn, textureName, 1.0D, 1.0D, hasExtraLayer);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale) {
+	public RenderCQREntity(EntityRendererManager rendermanagerIn, String textureName, double widthScale, double heightScale) {
 		this(rendermanagerIn, textureName, widthScale, heightScale, false);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale, boolean hasExtraLayer) {
+	public RenderCQREntity(EntityRendererManager rendermanagerIn, String textureName, double widthScale, double heightScale, boolean hasExtraLayer) {
 		this(rendermanagerIn, new ModelCQRBiped(64, 64, hasExtraLayer), 0.5F, textureName, widthScale, heightScale);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {
+	public RenderCQREntity(EntityRendererManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.entityName = textureName;
 		this.texture = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.entityName + ".png");
@@ -72,8 +72,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.addLayer(new LayerCQREntityArmor(this));
 		this.addLayer(new LayerCQRHeldItem(this));
 		// this.addLayer(new LayerRevolver(this));
-		this.addLayer(new LayerArrow(this));
-		this.addLayer(new LayerElytra(this));
+		this.addLayer(new ArrowLayer(this));
+		this.addLayer(new ElytraLayer(this));
 		this.addLayer(new LayerCQREntityCape(this));
 		this.addLayer(new LayerCQREntityPotion(this));
 
@@ -83,7 +83,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			this.addLayer(new LayerShoulderEntity(this));
 			if (model instanceof ModelCQRBiped) {
 				this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
-				this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
+				this.addLayer(new HeadLayer(((ModelCQRBiped) model).bipedHead));
 			}
 		}
 	}
@@ -139,7 +139,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				} else if (itemMainHand.getItem() instanceof ItemRevolver || itemMainHand.getItem() instanceof ItemHookshotBase) {
 					flagMain = true;
 				} else if (entity.getItemInUseCount() > 0) {
-					EnumAction action = itemMainHand.getItemUseAction();
+					UseAction action = itemMainHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
 					case EAT:
@@ -168,7 +168,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				} else if (itemMainHand.getItem() instanceof ItemRevolver || itemOffHand.getItem() instanceof ItemHookshotBase) {
 					flagOff = true;
 				} else if (entity.getItemInUseCount() > 0) {
-					EnumAction action = itemOffHand.getItemUseAction();
+					UseAction action = itemOffHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
 					case EAT:
@@ -189,7 +189,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			}
 
-			if (entity.getPrimaryHand() == EnumHandSide.LEFT) {
+			if (entity.getPrimaryHand() == HandSide.LEFT) {
 				ArmPose tmp = armPoseMain;
 				armPoseMain = armPoseOff;
 				armPoseOff = tmp;
@@ -286,31 +286,31 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		return super.getTeamColor(entityIn);
 	}
 
-	public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupHeadOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 
-	public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupBodyOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 
-	public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupRightArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 
-	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 
-	public void setupRightLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupRightLegOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 
-	public void setupLeftLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupLeftLegOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 
-	public void setupHeadwearOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+	public void setupHeadwearOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
 
 	}
 

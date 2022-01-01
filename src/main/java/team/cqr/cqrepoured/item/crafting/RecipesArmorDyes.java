@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.item.crafting;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 public class RecipesArmorDyes extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World worldIn) {
+	public boolean matches(CraftingInventory inv, World worldIn) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		List<ItemStack> list = new ArrayList<>();
 
@@ -37,19 +37,19 @@ public class RecipesArmorDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		int[] aint = new int[3];
 		int i = 0;
 		int j = 0;
-		ItemArmor itemarmor = null;
+		ArmorItem itemarmor = null;
 
 		for (int k = 0; k < inv.getSizeInventory(); ++k) {
 			ItemStack itemstack1 = inv.getStackInSlot(k);
 
 			if (!itemstack1.isEmpty()) {
 				if (itemstack == ItemStack.EMPTY && itemstack1.getItem() instanceof ItemArmorDyable) {
-					itemarmor = (ItemArmor) itemstack1.getItem();
+					itemarmor = (ArmorItem) itemstack1.getItem();
 
 					itemstack = itemstack1.copy();
 					itemstack.setCount(1);

@@ -6,12 +6,12 @@ import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.DoubleNBT;
+import net.minecraft.nbt.IntNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.LongNBT;
+import net.minecraft.tileentity.BannerTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -136,7 +136,7 @@ public class DungeonGenUtils {
 		return b instanceof BlockExporterChest;
 	}
 
-	public static boolean isCQBanner(TileEntityBanner banner) {
+	public static boolean isCQBanner(BannerTileEntity banner) {
 		return BannerHelper.isCQBanner(banner);
 	}
 
@@ -193,12 +193,12 @@ public class DungeonGenUtils {
 	/*
 	 * Rotate a vec3i to align with the given side. Assumes that the vec3i is default +x right, +z down coordinate system
 	 */
-	public static Vec3i rotateVec3i(Vec3i vec, EnumFacing side) {
-		if (side == EnumFacing.SOUTH) {
+	public static Vec3i rotateVec3i(Vec3i vec, Direction side) {
+		if (side == Direction.SOUTH) {
 			return new Vec3i(-vec.getX(), vec.getY(), -vec.getZ());
-		} else if (side == EnumFacing.WEST) {
+		} else if (side == Direction.WEST) {
 			return new Vec3i(vec.getZ(), vec.getY(), -vec.getX());
-		} else if (side == EnumFacing.EAST) {
+		} else if (side == Direction.EAST) {
 			return new Vec3i(-vec.getZ(), vec.getY(), vec.getX());
 		} else {
 			// North side, or some other invalid side
@@ -221,7 +221,7 @@ public class DungeonGenUtils {
 		}
 	}
 
-	public static int getCWRotationsBetween(EnumFacing start, EnumFacing end) {
+	public static int getCWRotationsBetween(Direction start, Direction end) {
 		int rotations = 0;
 		if (start.getAxis().isHorizontal() && end.getAxis().isHorizontal()) {
 			while (start != end) {
@@ -232,7 +232,7 @@ public class DungeonGenUtils {
 		return rotations;
 	}
 
-	public static EnumFacing rotateFacingNTimesAboutY(EnumFacing facing, int n) {
+	public static Direction rotateFacingNTimesAboutY(Direction facing, int n) {
 		for (int i = 0; i < n; i++) {
 			facing = facing.rotateY();
 		}
@@ -319,41 +319,41 @@ public class DungeonGenUtils {
 		}
 	}
 
-	public static NBTTagList writePosToList(BlockPos pos) {
-		NBTTagList nbtTagList = new NBTTagList();
-		nbtTagList.appendTag(new NBTTagInt(pos.getX()));
-		nbtTagList.appendTag(new NBTTagInt(pos.getY()));
-		nbtTagList.appendTag(new NBTTagInt(pos.getZ()));
+	public static ListNBT writePosToList(BlockPos pos) {
+		ListNBT nbtTagList = new ListNBT();
+		nbtTagList.appendTag(new IntNBT(pos.getX()));
+		nbtTagList.appendTag(new IntNBT(pos.getY()));
+		nbtTagList.appendTag(new IntNBT(pos.getZ()));
 		return nbtTagList;
 	}
 
-	public static BlockPos readPosFromList(NBTTagList nbtTagList) {
+	public static BlockPos readPosFromList(ListNBT nbtTagList) {
 		return new BlockPos(nbtTagList.getIntAt(0), nbtTagList.getIntAt(1), nbtTagList.getIntAt(2));
 	}
 
-	public static NBTTagList writeVecToList(Vec3d vec) {
-		NBTTagList nbtTagList = new NBTTagList();
-		nbtTagList.appendTag(new NBTTagDouble(vec.x));
-		nbtTagList.appendTag(new NBTTagDouble(vec.y));
-		nbtTagList.appendTag(new NBTTagDouble(vec.z));
+	public static ListNBT writeVecToList(Vec3d vec) {
+		ListNBT nbtTagList = new ListNBT();
+		nbtTagList.appendTag(new DoubleNBT(vec.x));
+		nbtTagList.appendTag(new DoubleNBT(vec.y));
+		nbtTagList.appendTag(new DoubleNBT(vec.z));
 		return nbtTagList;
 	}
 
-	public static Vec3d readVecFromList(NBTTagList nbtTagList) {
+	public static Vec3d readVecFromList(ListNBT nbtTagList) {
 		return new Vec3d(nbtTagList.getDoubleAt(0), nbtTagList.getDoubleAt(1), nbtTagList.getDoubleAt(2));
 	}
 
-	public static NBTTagList writeUUIDToList(UUID uuid) {
-		NBTTagList nbtTagList = new NBTTagList();
-		nbtTagList.appendTag(new NBTTagLong(uuid.getMostSignificantBits()));
-		nbtTagList.appendTag(new NBTTagLong(uuid.getLeastSignificantBits()));
+	public static ListNBT writeUUIDToList(UUID uuid) {
+		ListNBT nbtTagList = new ListNBT();
+		nbtTagList.appendTag(new LongNBT(uuid.getMostSignificantBits()));
+		nbtTagList.appendTag(new LongNBT(uuid.getLeastSignificantBits()));
 		return nbtTagList;
 	}
 
-	public static UUID readUUIDFromList(NBTTagList nbtTagList) {
+	public static UUID readUUIDFromList(ListNBT nbtTagList) {
 		NBTBase nbtM = nbtTagList.get(0);
 		NBTBase nbtL = nbtTagList.get(1);
-		return new UUID(nbtM instanceof NBTTagLong ? ((NBTTagLong) nbtM).getLong() : 0, nbtM instanceof NBTTagLong ? ((NBTTagLong) nbtL).getLong() : 0);
+		return new UUID(nbtM instanceof LongNBT ? ((LongNBT) nbtM).getLong() : 0, nbtM instanceof LongNBT ? ((LongNBT) nbtL).getLong() : 0);
 	}
 
 	/**

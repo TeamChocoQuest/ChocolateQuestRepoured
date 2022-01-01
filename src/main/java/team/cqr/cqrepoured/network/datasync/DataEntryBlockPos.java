@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -22,8 +22,8 @@ public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagList) {
-			this.value = DungeonGenUtils.readPosFromList((NBTTagList) nbt);
+		if (nbt instanceof ListNBT) {
+			this.value = DungeonGenUtils.readPosFromList((ListNBT) nbt);
 		}
 	}
 

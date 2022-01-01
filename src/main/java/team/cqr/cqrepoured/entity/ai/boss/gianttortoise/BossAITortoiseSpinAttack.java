@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -210,7 +210,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 			for (int l1 = y1; l1 <= y2; ++l1) {
 				for (int i2 = z1; i2 <= z2; ++i2) {
 					BlockPos blockpos = new BlockPos(k1, l1, i2);
-					IBlockState iblockstate = world.getBlockState(blockpos);
+					BlockState iblockstate = world.getBlockState(blockpos);
 					Block block = iblockstate.getBlock();
 
 					if (EntityCQRGiantTortoise.isHardBlock(block.getRegistryName())) {

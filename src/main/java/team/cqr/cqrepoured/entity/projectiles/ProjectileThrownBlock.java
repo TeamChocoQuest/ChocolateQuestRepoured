@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.entity.projectiles;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -24,7 +24,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 public class ProjectileThrownBlock extends ProjectileBase implements IEntityAdditionalSpawnData {
 
 	private ResourceLocation block = Blocks.END_STONE.getRegistryName();
-	private IBlockState state = null;
+	private BlockState state = null;
 	private boolean placeOnImpact = false;
 
 	public ProjectileThrownBlock(World worldIn) {
@@ -37,7 +37,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.setSize(1, 1);
 	}
 
-	public ProjectileThrownBlock(World worldIn, EntityLivingBase shooter, IBlockState block, boolean placeOnImpact) {
+	public ProjectileThrownBlock(World worldIn, LivingEntity shooter, BlockState block, boolean placeOnImpact) {
 		super(worldIn, shooter);
 		this.block = block.getBlock().getRegistryName();
 		this.placeOnImpact = placeOnImpact;
@@ -56,7 +56,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.state = Block.REGISTRY.getObject(this.block).getDefaultState();
 	}
 
-	public IBlockState getBlock() {
+	public BlockState getBlock() {
 		return this.state != null ? this.state : Blocks.BEDROCK.getDefaultState();
 	}
 
@@ -88,8 +88,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			// TODO: Add placed block to whitelist of protected region
 			this.world.setBlockState(new BlockPos(result.hitVec.x, result.hitVec.y, result.hitVec.z), this.state);
 			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
-			if (this.world instanceof WorldServer) {
-				WorldServer ws = (WorldServer) this.world;
+			if (this.world instanceof ServerWorld) {
+				ServerWorld ws = (ServerWorld) this.world;
 				Vec3d pos = result.hitVec;
 				double particleSpeed = 0.2D;
 				for (int i = 0; i < 50; i++) {
@@ -109,17 +109,17 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		NBTTagCompound blockstate = new NBTTagCompound();
+	public void writeEntityToNBT(CompoundNBT compound) {
+		CompoundNBT blockstate = new CompoundNBT();
 		NBTUtil.writeBlockState(blockstate, this.state);
 		compound.setTag("blockdata", blockstate);
 		super.writeEntityToNBT(compound);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		try {
-			NBTTagCompound blockstate = compound.getCompoundTag("blockdata");
+			CompoundNBT blockstate = compound.getCompoundTag("blockdata");
 			this.state = NBTUtil.readBlockState(blockstate);
 		} catch (Exception ex) {
 			// Ignore

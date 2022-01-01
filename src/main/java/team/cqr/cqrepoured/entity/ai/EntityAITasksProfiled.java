@@ -4,13 +4,13 @@ import java.util.Iterator;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 
-public class EntityAITasksProfiled extends EntityAITasks {
+public class EntityAITasksProfiled extends GoalSelector {
 
 	/** Instance of Profiler. */
 	private final Profiler profiler;
@@ -18,7 +18,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 	private int tickRate = 3;
 
 	/** CQR profiling */
-	private static final Object2LongMap<Class<? extends EntityAIBase>> AI_TIMES = new Object2LongOpenHashMap<>();
+	private static final Object2LongMap<Class<? extends Goal>> AI_TIMES = new Object2LongOpenHashMap<>();
 	private static long lastTimeLogged = 0;
 	private final World world;
 
@@ -33,7 +33,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 		this.profiler.startSection("goalSetup");
 
 		if (this.tickCount++ % this.tickRate == 0) {
-			for (EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry : this.taskEntries) {
+			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry : this.taskEntries) {
 				long t = System.nanoTime();
 
 				if (entityaitasks$entityaitaskentry.using) {
@@ -53,10 +53,10 @@ public class EntityAITasksProfiled extends EntityAITasks {
 				AI_TIMES.put(entityaitasks$entityaitaskentry.action.getClass(), t);
 			}
 		} else {
-			Iterator<EntityAITasks.EntityAITaskEntry> iterator = this.executingTaskEntries.iterator();
+			Iterator<GoalSelector.EntityAITaskEntry> iterator = this.executingTaskEntries.iterator();
 
 			while (iterator.hasNext()) {
-				EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry1 = iterator.next();
+				GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry1 = iterator.next();
 
 				long t = System.nanoTime();
 
@@ -77,7 +77,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 		if (!this.executingTaskEntries.isEmpty()) {
 			this.profiler.startSection("goalTick");
 
-			for (EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry2 : this.executingTaskEntries) {
+			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry2 : this.executingTaskEntries) {
 				long t = System.nanoTime();
 
 				entityaitasks$entityaitaskentry2.action.updateTask();
@@ -94,7 +94,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 			lastTimeLogged = this.world.getTotalWorldTime();
 
 			StringBuilder sb = new StringBuilder("AI Times: \n");
-			for (Object2LongMap.Entry<Class<? extends EntityAIBase>> entry : AI_TIMES.object2LongEntrySet()) {
+			for (Object2LongMap.Entry<Class<? extends Goal>> entry : AI_TIMES.object2LongEntrySet()) {
 				String s = entry.getKey().getSimpleName();
 				sb.append(s);
 				sb.append(':');
@@ -124,7 +124,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 	/**
 	 * Determine if a specific AI Task should continue being executed.
 	 */
-	private boolean canContinueCQR(EntityAITasks.EntityAITaskEntry taskEntry) {
+	private boolean canContinueCQR(GoalSelector.EntityAITaskEntry taskEntry) {
 		return taskEntry.action.shouldContinueExecuting();
 	}
 
@@ -132,13 +132,13 @@ public class EntityAITasksProfiled extends EntityAITasks {
 	 * Determine if a specific AI Task can be executed, which means that all running higher (= lower int value) priority
 	 * tasks are compatible with it or all lower priority tasks can be interrupted.
 	 */
-	private boolean canUseCQR(EntityAITasks.EntityAITaskEntry taskEntry) {
+	private boolean canUseCQR(GoalSelector.EntityAITaskEntry taskEntry) {
 		if (this.executingTaskEntries.isEmpty()) {
 			return true;
 		} else if (this.isControlFlagDisabled(taskEntry.action.getMutexBits())) {
 			return false;
 		} else {
-			for (EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry : this.executingTaskEntries) {
+			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry : this.executingTaskEntries) {
 				if (entityaitasks$entityaitaskentry != taskEntry) {
 					if (taskEntry.priority >= entityaitasks$entityaitaskentry.priority) {
 						if (!this.areTasksCompatibleCQR(taskEntry, entityaitasks$entityaitaskentry)) {
@@ -157,7 +157,7 @@ public class EntityAITasksProfiled extends EntityAITasks {
 	/**
 	 * Returns whether two EntityAITaskEntries can be executed concurrently
 	 */
-	private boolean areTasksCompatibleCQR(EntityAITasks.EntityAITaskEntry taskEntry1, EntityAITasks.EntityAITaskEntry taskEntry2) {
+	private boolean areTasksCompatibleCQR(GoalSelector.EntityAITaskEntry taskEntry1, GoalSelector.EntityAITaskEntry taskEntry2) {
 		return (taskEntry1.action.getMutexBits() & taskEntry2.action.getMutexBits()) == 0;
 	}
 

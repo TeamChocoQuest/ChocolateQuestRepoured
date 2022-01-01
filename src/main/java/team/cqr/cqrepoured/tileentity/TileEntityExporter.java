@@ -5,16 +5,16 @@ import java.util.Arrays;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
@@ -95,13 +95,13 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 				data[i * 3 + 1] = this.value[i].getY();
 				data[i * 3 + 2] = this.value[i].getZ();
 			}
-			return new NBTTagIntArray(data);
+			return new IntArrayNBT(data);
 		}
 
 		@Override
 		protected void readInternal(NBTBase nbt) {
-			if (nbt instanceof NBTTagIntArray) {
-				int[] data = ((NBTTagIntArray) nbt).getIntArray();
+			if (nbt instanceof IntArrayNBT) {
+				int[] data = ((IntArrayNBT) nbt).getIntArray();
 				this.value = new BlockPos[data.length / 3];
 				for (int i = 0; i < this.value.length; i++) {
 					this.value[i] = new BlockPos(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
@@ -150,31 +150,31 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		super.writeToNBT(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(CompoundNBT compound) {
 		super.readFromNBT(compound);
 		this.dataManager.read(compound);
 		this.onPositionsChanged();
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 0, this.dataManager.write(new NBTTagCompound()));
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.pos, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		return this.writeToNBT(new NBTTagCompound());
+	public CompoundNBT getUpdateTag() {
+		return this.writeToNBT(new CompoundNBT());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.dataManager.read(pkt.getNbtCompound());
 		this.onPositionsChanged();
 	}
@@ -233,7 +233,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		return d * d;
 	}
 
-	public void saveStructure(EntityPlayer author) {
+	public void saveStructure(PlayerEntity author) {
 		if (this.world == null) {
 			return;
 		}
@@ -242,9 +242,9 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
-					author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName.get()));
+					author.sendMessage(new StringTextComponent("Successfully exported structure: " + this.structureName.get()));
 				} else {
-					author.sendMessage(new TextComponentString("Failed to export structure: " + this.structureName.get()));
+					author.sendMessage(new StringTextComponent("Failed to export structure: " + this.structureName.get()));
 				}
 			}, "CQR Export Thread").start();
 		} else {

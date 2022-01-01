@@ -9,8 +9,8 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
@@ -19,9 +19,9 @@ public class GenerationTemplate {
 	private class GenerationRule {
 
 		private Predicate<Vec3i> condition;
-		private IBlockState block;
+		private BlockState block;
 
-		public GenerationRule(Predicate<Vec3i> condition, IBlockState blockToBuild) {
+		public GenerationRule(Predicate<Vec3i> condition, BlockState blockToBuild) {
 			this.condition = condition;
 			this.block = blockToBuild;
 		}
@@ -30,7 +30,7 @@ public class GenerationTemplate {
 			return this.condition;
 		}
 
-		public IBlockState getBlock() {
+		public BlockState getBlock() {
 			return this.block;
 		}
 
@@ -61,7 +61,7 @@ public class GenerationTemplate {
 		this.lengthZ = dimensions.getZ();
 	}
 
-	public void addRule(Predicate<Vec3i> condition, IBlockState blockToBuild) {
+	public void addRule(Predicate<Vec3i> condition, BlockState blockToBuild) {
 		this.generationRules.add(new GenerationRule(condition, blockToBuild));
 	}
 
@@ -70,10 +70,10 @@ public class GenerationTemplate {
 	}
 
 	public void addToGenArray(BlockPos origin, BlockStateGenArray genArray, BlockStateGenArray.GenerationPhase phase, @Nullable Set<BlockPos> positionsFilled) {
-		Map<BlockPos, IBlockState> genMap = this.getGenerationMap(origin, this.fillUnusedBlockWithAir);
+		Map<BlockPos, BlockState> genMap = this.getGenerationMap(origin, this.fillUnusedBlockWithAir);
 		genArray.addBlockStateMap(genMap, phase, BlockStateGenArray.EnumPriority.MEDIUM);
 		if (positionsFilled != null) {
-			for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
+			for (Map.Entry<BlockPos, BlockState> entry : genMap.entrySet()) {
 				if (entry.getValue().getBlock() != Blocks.AIR) {
 					positionsFilled.add(entry.getKey());
 				}
@@ -81,8 +81,8 @@ public class GenerationTemplate {
 		}
 	}
 
-	public Map<BlockPos, IBlockState> getGenerationMap(BlockPos origin, boolean fillUnusedWithAir) {
-		Map<BlockPos, IBlockState> result = new HashMap<>();
+	public Map<BlockPos, BlockState> getGenerationMap(BlockPos origin, boolean fillUnusedWithAir) {
+		Map<BlockPos, BlockState> result = new HashMap<>();
 
 		for (int x = 0; x < this.lengthX; x++) {
 			for (int z = 0; z < this.lengthZ; z++) {
@@ -108,7 +108,7 @@ public class GenerationTemplate {
 		return result;
 	}
 
-	public List<Map.Entry<BlockPos, IBlockState>> getGenerationList(BlockPos origin, boolean fillUnusedWithAir) {
+	public List<Map.Entry<BlockPos, BlockState>> getGenerationList(BlockPos origin, boolean fillUnusedWithAir) {
 		return new ArrayList<>(this.getGenerationMap(origin, fillUnusedWithAir).entrySet());
 	}
 }

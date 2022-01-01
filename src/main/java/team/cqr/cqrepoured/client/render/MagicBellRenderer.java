@@ -5,9 +5,10 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
+import net.minecraft.block.Blocks;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,7 +20,6 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -188,7 +188,7 @@ public class MagicBellRenderer {
 
 		buffer.setTranslation(-x, -y, -z);
 		this.highlightedPositions.forEach(posInfo -> {
-			IBlockState state = world.getBlockState(posInfo.pos);
+			BlockState state = world.getBlockState(posInfo.pos);
 			if (state.getBlock() == Blocks.AIR) {
 				return;
 			}

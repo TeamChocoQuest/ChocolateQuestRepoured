@@ -3,13 +3,13 @@ package team.cqr.cqrepoured.entity.projectiles;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -70,13 +70,13 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		super(worldIn);
 	}
 
-	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, ItemHookshotBase item, ItemStack stack) {
+	public ProjectileHookShotHook(World worldIn, LivingEntity shooter, ItemHookshotBase item, ItemStack stack) {
 		super(worldIn, shooter);
 		this.item = item;
 		this.stack = stack;
 	}
 
-	public void shootHook(EntityLivingBase shooter, double range, double speed) {
+	public void shootHook(LivingEntity shooter, double range, double speed) {
 		double x = shooter.posX;
 		double y = shooter.posY + shooter.getEyeHeight();
 		double z = shooter.posZ;
@@ -85,7 +85,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		this.shootHook(x, y, z, yaw, pitch, range, speed);
 	}
 
-	public void shootHook(EntityLivingBase shooter, double dirX, double dirY, double dirZ, double range, double speed) {
+	public void shootHook(LivingEntity shooter, double dirX, double dirY, double dirZ, double range, double speed) {
 		double x = shooter.posX;
 		double y = shooter.posY + shooter.getEyeHeight();
 		double z = shooter.posZ;
@@ -122,7 +122,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		this.thrower = (EntityLivingBase) this.world.getEntityByID(additionalData.readInt());
+		this.thrower = (LivingEntity) this.world.getEntityByID(additionalData.readInt());
 		this.range = additionalData.readFloat();
 		this.speed = additionalData.readFloat();
 		double x = additionalData.readFloat();
@@ -144,29 +144,29 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		// don't save entity
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		// don't save entity
 	}
 
 	@Override
-	public boolean writeToNBTAtomically(NBTTagCompound compound) {
-		// don't save entity
-		return false;
-	}
-
-	@Override
-	public boolean writeToNBTOptional(NBTTagCompound compound) {
+	public boolean writeToNBTAtomically(CompoundNBT compound) {
 		// don't save entity
 		return false;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public boolean writeToNBTOptional(CompoundNBT compound) {
+		// don't save entity
+		return false;
+	}
+
+	@Override
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		// don't save entity
 		return compound;
 	}
@@ -221,8 +221,8 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	@Override
 	public void onRemovedFromWorld() {
 		if (!this.world.isRemote) {
-			if (this.thrower instanceof EntityPlayer) {
-				((EntityPlayer) this.thrower).getCooldownTracker().setCooldown(this.item, 0);
+			if (this.thrower instanceof PlayerEntity) {
+				((PlayerEntity) this.thrower).getCooldownTracker().setCooldown(this.item, 0);
 			}
 			this.setHookItemShootingTag(false);
 		}
@@ -230,9 +230,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void setHookItemShootingTag(boolean isShooting) {
-		NBTTagCompound tag = this.stack.getTagCompound();
+		CompoundNBT tag = this.stack.getTagCompound();
 		if (tag == null) {
-			tag = new NBTTagCompound();
+			tag = new CompoundNBT();
 			this.stack.setTagCompound(tag);
 		}
 		tag.setBoolean("isShooting", isShooting);
@@ -453,7 +453,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote && this.getHookState() == EnumHookState.SHOOT) {
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-				IBlockState state = this.world.getBlockState(result.getBlockPos());
+				BlockState state = this.world.getBlockState(result.getBlockPos());
 
 				if (this.item.canLatchToBlock(state.getBlock())) {
 					// Hit a valid latch block, start pulling next tick
@@ -472,7 +472,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 					this.setHookState(EnumHookState.RETRACT);
 				}
 			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-				if (result.entityHit != this.thrower && result.entityHit instanceof EntityLivingBase) {
+				if (result.entityHit != this.thrower && result.entityHit instanceof LivingEntity) {
 					Entity entityHit = result.entityHit;
 
 					// Recalculate the hitVec because result.hitVec is just the pos of result.entityHit

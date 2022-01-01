@@ -9,18 +9,18 @@ import javax.annotation.Nullable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.Difficulty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -71,19 +71,19 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) this.inventory : super.getCapability(capability, facing);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		super.writeToNBT(compound);
 		compound.setTag("inventory", this.inventory.serializeNBT());
 		this.dataManager.write(compound);
@@ -91,36 +91,36 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(CompoundNBT compound) {
 		super.readFromNBT(compound);
 		this.inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		this.dataManager.read(compound);
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 0, this.dataManager.write(new NBTTagCompound()));
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.pos, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		return this.writeToNBT(new NBTTagCompound());
+	public CompoundNBT getUpdateTag() {
+		return this.writeToNBT(new CompoundNBT());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.dataManager.read(pkt.getNbtCompound());
 	}
 
 	@Nullable
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TextComponentString(I18n.format("tile.spawner.name"));
+		return new StringTextComponent(I18n.format("tile.spawner.name"));
 	}
 
 	@Override
 	public void update() {
-		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
+		if (!this.world.isRemote && this.world.getDifficulty() != Difficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
 			this.turnBackIntoEntity();
 		} else {
 			this.getDataManager().checkIfDirtyAndSync();
@@ -128,7 +128,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	}
 
 	public void forceTurnBackIntoEntity() {
-		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+		if (!this.world.isRemote && this.world.getDifficulty() != Difficulty.PEACEFUL) {
 			this.turnBackIntoEntity();
 		}
 	}
@@ -137,13 +137,13 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 		if (!this.world.isRemote) {
 			this.world.setBlockToAir(this.pos);
 
-			List<NBTTagCompound> entitiesToSpawn = new ArrayList<>();
+			List<CompoundNBT> entitiesToSpawn = new ArrayList<>();
 
 			for (int i = 0; i < this.inventory.getSlots(); i++) {
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
 				if (!stack.isEmpty() && stack.hasTagCompound()) {
-					NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
+					CompoundNBT nbt = stack.getTagCompound().getCompoundTag("EntityIn");
 
 					while (!stack.isEmpty()) {
 						entitiesToSpawn.add(nbt);
@@ -156,7 +156,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 		}
 	}
 
-	protected Entity spawnEntityFromNBT(NBTTagCompound entityTag) {
+	protected Entity spawnEntityFromNBT(CompoundNBT entityTag) {
 		if (entityTag.isEmpty()) {
 			return null;
 		}
@@ -182,9 +182,9 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 
 			this.world.spawnEntity(entity);
 
-			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+			ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
 			for (NBTBase passengerNBT : passengers) {
-				Entity passenger = this.spawnEntityFromNBT((NBTTagCompound) passengerNBT);
+				Entity passenger = this.spawnEntityFromNBT((CompoundNBT) passengerNBT);
 				passenger.startRiding(entity);
 			}
 		}
@@ -195,7 +195,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	protected boolean isNonCreativePlayerInRange(double range) {
 		if (range > 0.0D) {
 			double d = range * range;
-			for (EntityPlayer player : this.world.playerEntities) {
+			for (PlayerEntity player : this.world.playerEntities) {
 				if (!player.isCreative() && !player.isSpectator() && player.getDistanceSqToCenter(this.pos) < d) {
 					return true;
 				}

@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemShield;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -26,7 +26,7 @@ public class ProjectileBubble extends ProjectileBase {
 		super(worldIn, x, y, z);
 	}
 
-	public ProjectileBubble(World worldIn, EntityLivingBase shooter) {
+	public ProjectileBubble(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.damage = 1F;
@@ -56,7 +56,7 @@ public class ProjectileBubble extends ProjectileBase {
 			return;
 		}
 
-		if (entityHit instanceof EntityLiving && ((EntityLiving) entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
+		if (entityHit instanceof MobEntity && ((MobEntity) entityHit).getActiveItemStack().getItem() instanceof ShieldItem) {
 			return;
 		}
 

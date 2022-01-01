@@ -7,13 +7,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
@@ -102,7 +102,7 @@ public class EntityUtil {
 	@Nullable
 	public static Entity getEntityByUUID(World world, UUID uuid) {
 		if (!world.isRemote) {
-			return ((WorldServer) world).getEntityFromUuid(uuid);
+			return ((ServerWorld) world).getEntityFromUuid(uuid);
 		}
 
 		for (Entity entity : world.loadedEntityList) {
@@ -114,7 +114,7 @@ public class EntityUtil {
 		return null;
 	}
 
-	public static void applyMaxHealthModifier(EntityLivingBase entity, UUID uuid, String name, double amount) {
+	public static void applyMaxHealthModifier(LivingEntity entity, UUID uuid, String name, double amount) {
 		IAttributeInstance attribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 		if (attribute == null) {
 			return;

@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.entity.ai;
 
 import java.util.Random;
 
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 

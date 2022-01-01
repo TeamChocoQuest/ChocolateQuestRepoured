@@ -7,10 +7,10 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,7 +25,7 @@ import team.cqr.cqrepoured.util.math.BoundingBox;
 
 public abstract class AbstractEntityLaser extends Entity implements IEntityAdditionalSpawnData {
 
-	public EntityLivingBase caster;
+	public LivingEntity caster;
 	public float length;
 	public float rotationYawCQR;
 	public float rotationPitchCQR;
@@ -33,7 +33,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public float prevRotationPitchCQR;
 	public float serverRotationYawCQR;
 	public float serverRotationPitchCQR;
-	private final Object2IntMap<EntityLivingBase> hitInfoMap = new Object2IntOpenHashMap<>();
+	private final Object2IntMap<LivingEntity> hitInfoMap = new Object2IntOpenHashMap<>();
 	private final Map<BlockPos, BreakingInfo> blockBreakMap = new HashMap<>();
 	protected Vec3d offsetVector = Vec3d.ZERO;
 
@@ -50,7 +50,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this(worldIn, null, 4.0F);
 	}
 
-	protected AbstractEntityLaser(World worldIn, EntityLivingBase caster, float length) {
+	protected AbstractEntityLaser(World worldIn, LivingEntity caster, float length) {
 		super(worldIn);
 		this.caster = caster;
 		this.length = length;
@@ -107,27 +107,27 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 
 	}
 
 	@Override
-	public boolean writeToNBTAtomically(NBTTagCompound compound) {
+	public boolean writeToNBTAtomically(CompoundNBT compound) {
 		return false;
 	}
 
 	@Override
-	public boolean writeToNBTOptional(NBTTagCompound compound) {
+	public boolean writeToNBTOptional(CompoundNBT compound) {
 		return false;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		return compound;
 	}
 
@@ -162,7 +162,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 			if (result != null) {
 				BlockPos pos = result.getBlockPos();
-				IBlockState state = this.world.getBlockState(pos);
+				BlockState state = this.world.getBlockState(pos);
 				if (this.canHitBlock(pos, state)) {
 					float breakProgress = this.onHitBlock(pos, state);
 					if (breakProgress > 0.0F) {
@@ -203,7 +203,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 			Vec3d vec1 = new Vec3d(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
 			Vec3d vec2 = new Vec3d(this.laserEffectRadius(), this.laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
-			for (EntityLivingBase entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, EntityLivingBase.class, bb)) {
+			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, LivingEntity.class, bb)) {
 				if (this.canHitEntity(entity) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
 					this.onEntityHit(entity);
 					this.hitInfoMap.put(entity, this.ticksExisted);
@@ -212,11 +212,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 	}
 
-	public boolean canHitBlock(BlockPos pos, IBlockState state) {
+	public boolean canHitBlock(BlockPos pos, BlockState state) {
 		return true;
 	}
 
-	public float onHitBlock(BlockPos pos, IBlockState state) {
+	public float onHitBlock(BlockPos pos, BlockState state) {
 		float hardness = state.getBlockHardness(this.world, pos);
 		if (hardness < 0.0F) {
 			return 0.0F;
@@ -245,11 +245,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		return 10;
 	}
 
-	public boolean canHitEntity(EntityLivingBase entity) {
+	public boolean canHitEntity(LivingEntity entity) {
 		return !TargetUtil.isAllyCheckingLeaders(this.caster, entity);
 	}
 
-	public void onEntityHit(EntityLivingBase entity) {
+	public void onEntityHit(LivingEntity entity) {
 		entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), this.getDamage());
 	}
 
@@ -299,7 +299,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		this.caster = (EntityLivingBase) this.world.getEntityByID(additionalData.readInt());
+		this.caster = (LivingEntity) this.world.getEntityByID(additionalData.readInt());
 		this.length = additionalData.readFloat();
 		this.rotationYawCQR = additionalData.readFloat();
 		this.rotationPitchCQR = additionalData.readFloat();

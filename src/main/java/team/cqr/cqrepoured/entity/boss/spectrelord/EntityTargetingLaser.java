@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -9,14 +9,14 @@ import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
 public class EntityTargetingLaser extends AbstractEntityLaser {
 
-	private EntityLivingBase target;
+	private LivingEntity target;
 	protected float maxRotationPerTick = 2.0F;
 
 	public EntityTargetingLaser(World worldIn) {
 		this(worldIn, null, 4.0F, null);
 	}
 
-	public EntityTargetingLaser(World worldIn, EntityLivingBase caster, float length, EntityLivingBase target) {
+	public EntityTargetingLaser(World worldIn, LivingEntity caster, float length, LivingEntity target) {
 		super(worldIn, caster, length);
 		this.target = target;
 	}
@@ -56,7 +56,7 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		super.readSpawnData(additionalData);
-		this.target = (EntityLivingBase) this.world.getEntityByID(additionalData.readInt());
+		this.target = (LivingEntity) this.world.getEntityByID(additionalData.readInt());
 	}
 
 }

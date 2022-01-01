@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.ByteNBT;
 
 public class DataEntryBoolean extends DataEntry<Boolean> {
 
@@ -17,13 +17,13 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 
 	@Override
 	public NBTBase write() {
-		return new NBTTagByte((byte) (this.value ? 1 : 0));
+		return new ByteNBT((byte) (this.value ? 1 : 0));
 	}
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagByte) {
-			this.value = ((NBTTagByte) nbt).getByte() != 0;
+		if (nbt instanceof ByteNBT) {
+			this.value = ((ByteNBT) nbt).getByte() != 0;
 		}
 	}
 

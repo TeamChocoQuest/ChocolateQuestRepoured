@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall.wallparts;
 
 import net.minecraft.block.BlockStoneSlab;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -28,8 +28,8 @@ public class WallPartRailingTower implements IWallPart {
 		int startY = this.getTopY();
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
-		IBlockState stateAir = Blocks.AIR.getDefaultState();
+		BlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
+		BlockState stateAir = Blocks.AIR.getDefaultState();
 
 		int[] xValues = new int[] { 0, 1, 6, 7 };
 		int[] zValues = new int[] { 2, 3, 12, 13 };

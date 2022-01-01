@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
-public class GuiButtonTrade extends GuiButton {
+public class GuiButtonTrade extends Button {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_button_trade.png");
 	private int index;

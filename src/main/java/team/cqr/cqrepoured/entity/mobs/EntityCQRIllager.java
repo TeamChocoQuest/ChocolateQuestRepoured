@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTables;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
@@ -29,7 +29,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return LootTableList.ENTITIES_VINDICATION_ILLAGER;
+		return LootTables.ENTITIES_VINDICATION_ILLAGER;
 	}
 
 	@Override

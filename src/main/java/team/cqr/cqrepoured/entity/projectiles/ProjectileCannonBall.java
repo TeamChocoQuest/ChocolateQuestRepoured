@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
@@ -20,7 +20,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 		super(worldIn, x, y, z);
 	}
 
-	public ProjectileCannonBall(World worldIn, EntityLivingBase shooter, boolean fast) {
+	public ProjectileCannonBall(World worldIn, LivingEntity shooter, boolean fast) {
 		super(worldIn, shooter);
 		this.isFast = fast;
 	}
@@ -29,12 +29,12 @@ public class ProjectileCannonBall extends ProjectileBase {
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-				if (result.entityHit == this.thrower || !(result.entityHit instanceof EntityLivingBase)) {
+				if (result.entityHit == this.thrower || !(result.entityHit instanceof LivingEntity)) {
 					return;
 				}
 
-				if (result.entityHit instanceof EntityLivingBase) {
-					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
+				if (result.entityHit instanceof LivingEntity) {
+					LivingEntity entity = (LivingEntity) result.entityHit;
 
 					entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), 10.0F);
 				}
@@ -57,13 +57,13 @@ public class ProjectileCannonBall extends ProjectileBase {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("isFast", this.isFast);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.isFast = compound.getBoolean("isFast");
 	}
@@ -84,8 +84,8 @@ public class ProjectileCannonBall extends ProjectileBase {
 					this.motionZ = vec3d.z;
 				}
 
-				if (source.getTrueSource() instanceof EntityLivingBase) {
-					this.thrower = (EntityLivingBase) source.getTrueSource();
+				if (source.getTrueSource() instanceof LivingEntity) {
+					this.thrower = (LivingEntity) source.getTrueSource();
 				}
 
 				return true;

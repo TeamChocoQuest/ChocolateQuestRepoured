@@ -4,42 +4,42 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.potion.EffectInstance;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBootsCloud extends ItemArmor {
+public class ItemBootsCloud extends ArmorItem {
 
 	private AttributeModifier movementSpeed;
 
-	public ItemBootsCloud(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+	public ItemBootsCloud(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 
 		this.movementSpeed = new AttributeModifier("CloudBootsSpeedModifier", 0.15D, 2);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EntityLiving.getSlotForItemStack(stack)) {
+		if (slot == MobEntity.getSlotForItemStack(stack)) {
 			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
 		}
 
@@ -47,8 +47,8 @@ public class ItemBootsCloud extends ItemArmor {
 	}
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
-		player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 0, 4, false, false));
+	public void onArmorTick(World world, PlayerEntity player, ItemStack stack) {
+		player.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 0, 4, false, false));
 
 		player.jumpMovementFactor += 0.04F;
 		if (player.fallDistance > 0.0F || player.isSprinting()) {

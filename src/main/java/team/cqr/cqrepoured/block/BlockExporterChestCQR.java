@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
@@ -24,7 +24,7 @@ public class BlockExporterChestCQR extends BlockExporterChest {
 	}
 
 	@Override
-	public TileEntityExporterChest createTileEntity(World world, IBlockState state) {
+	public TileEntityExporterChest createTileEntity(World world, BlockState state) {
 		return new TileEntityExporterChestCQR();
 	}
 

@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -23,7 +23,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	protected static final boolean FORCE_MOUNTING = true;
 	protected static final double WALK_SPEED_TO_MOUNT = 1.0D;
 
-	protected EntityLiving entityToMount = null;
+	protected MobEntity entityToMount = null;
 
 	public EntityAISearchMount(AbstractEntityCQR entity) {
 		super(entity);
@@ -42,10 +42,10 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		return this.world.getPlayerEntityByUUID(uuid) != null;
 	}
 
-	protected boolean isMountOwnedByPlayer(EntityLiving mount) {
+	protected boolean isMountOwnedByPlayer(MobEntity mount) {
 
-		if (mount instanceof AbstractHorse) {
-			AbstractHorse horse = (AbstractHorse) mount;
+		if (mount instanceof AbstractHorseEntity) {
+			AbstractHorseEntity horse = (AbstractHorseEntity) mount;
 			if (horse.getOwnerUniqueId() != null) {
 				return this.belongsToPlayerEntity(horse.getOwnerUniqueId());
 			}
@@ -54,7 +54,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (mount instanceof IEntityOwnable) {
 			IEntityOwnable ownable = (IEntityOwnable) mount;
 			if (ownable.getOwner() != null) {
-				return ownable.getOwner() instanceof EntityPlayer;
+				return ownable.getOwner() instanceof PlayerEntity;
 			}
 			if (ownable.getOwnerId() != null) {
 				return this.belongsToPlayerEntity(ownable.getOwnerId());
@@ -75,7 +75,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			Vec3d vec1 = this.entity.getPositionVector().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<EntityLiving> possibleMounts = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && !this.isMountOwnedByPlayer(input) && this.entity.getEntitySenses().canSee(input));
+			List<MobEntity> possibleMounts = this.world.getEntitiesWithinAABB(MobEntity.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && !this.isMountOwnedByPlayer(input) && this.entity.getEntitySenses().canSee(input));
 			if (!possibleMounts.isEmpty()) {
 				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
 				return true;
@@ -119,8 +119,8 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.entity.getDistance(this.entityToMount) > DISTANCE_TO_MOUNT) {
 			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, WALK_SPEED_TO_MOUNT);
 		} else {
-			if (this.entityToMount instanceof AbstractHorse) {
-				AbstractHorse horse = (AbstractHorse) this.entityToMount;
+			if (this.entityToMount instanceof AbstractHorseEntity) {
+				AbstractHorseEntity horse = (AbstractHorseEntity) this.entityToMount;
 				horse.setOwnerUniqueId(this.entity.getPersistentID());
 
 				this.world.setEntityState(horse, (byte) 7);

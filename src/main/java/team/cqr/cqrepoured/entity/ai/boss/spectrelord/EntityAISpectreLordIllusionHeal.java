@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.faction.Faction;
 
 public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<EntitySpectreLordIllusion> implements IEntityAISpellAnimatedVanilla {
 
-	private EntityLivingBase target;
+	private LivingEntity target;
 
 	public EntityAISpectreLordIllusionHeal(EntitySpectreLordIllusion entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 0);
@@ -26,7 +26,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
 		Faction faction = this.entity.getFaction();
-		List<EntityLivingBase> alliesToHeal = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> {
+		List<LivingEntity> alliesToHeal = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;
 			}
@@ -52,7 +52,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		super.startChargingSpell();
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
 		Faction faction = this.entity.getFaction();
-		List<EntityLivingBase> alliesToHeal = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> {
+		List<LivingEntity> alliesToHeal = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;
 			}

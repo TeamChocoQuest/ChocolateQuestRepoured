@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
 
-public class RenderProjectileEarthQuake extends Render<ProjectileEarthQuake> {
-	public RenderProjectileEarthQuake(RenderManager renderManager) {
+public class RenderProjectileEarthQuake extends EntityRenderer<ProjectileEarthQuake> {
+	public RenderProjectileEarthQuake(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileEarthQuake entity) {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
+		return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
 	}
 }

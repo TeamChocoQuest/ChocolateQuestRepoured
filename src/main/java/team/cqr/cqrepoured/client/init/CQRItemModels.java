@@ -6,8 +6,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -44,7 +44,7 @@ public class CQRItemModels {
 		}
 
 		// register all other item block models
-		for (ItemBlock itemBlock : CQRBlocks.EventHandler.ITEM_BLOCKS) {
+		for (BlockItem itemBlock : CQRBlocks.EventHandler.ITEM_BLOCKS) {
 			if (!REGISTERED_ITEM_MODELS.contains(itemBlock)) {
 				registerItemModel(itemBlock);
 			}

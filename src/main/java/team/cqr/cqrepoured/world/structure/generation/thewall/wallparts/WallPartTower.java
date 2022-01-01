@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall.wallparts;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockStone;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -29,9 +29,9 @@ public class WallPartTower implements IWallPart {
 
 		if (this.getTopY() > startY) {
 			BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-			IBlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
-			IBlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
-			IBlockState stateAndesite = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH);
+			BlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
+			BlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
+			BlockState stateAndesite = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH);
 
 			int height = this.getTopY() - startY;
 			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 0, 15, height, 15)) {

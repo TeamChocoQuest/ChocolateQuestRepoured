@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
@@ -18,7 +18,7 @@ public class CastleRoomLandingDirectedBoss extends CastleRoomLandingDirected {
 	}
 
 	@Override
-	public boolean canBuildInnerWallOnSide(EnumFacing side) {
+	public boolean canBuildInnerWallOnSide(Direction side) {
 		return side != this.stairStartSide;
 	}
 }

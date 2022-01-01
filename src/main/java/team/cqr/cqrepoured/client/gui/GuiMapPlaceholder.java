@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.client.gui;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.Direction;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,19 +14,19 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 
 @SideOnly(Side.CLIENT)
-public class GuiMapPlaceholder extends GuiScreen {
+public class GuiMapPlaceholder extends Screen {
 
 	private final TileEntityMap tileEntity;
 
-	private GuiTextField scale;
+	private TextFieldWidget scale;
 	private GuiButtonOrientation orientation;
 	private GuiCheckBox lockOrientation;
-	private GuiTextField originX;
-	private GuiTextField originZ;
-	private GuiTextField offsetX;
-	private GuiTextField offsetZ;
+	private TextFieldWidget originX;
+	private TextFieldWidget originZ;
+	private TextFieldWidget offsetX;
+	private TextFieldWidget offsetZ;
 	private GuiCheckBox fillMap;
-	private GuiTextField fillRadius;
+	private TextFieldWidget fillRadius;
 
 	public GuiMapPlaceholder(TileEntityMap tileEntity) {
 		this.mc = Minecraft.getMinecraft();
@@ -47,15 +47,15 @@ public class GuiMapPlaceholder extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		this.scale = new GuiTextField(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
+		this.scale = new TextFieldWidget(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
 		this.orientation = new GuiButtonOrientation(1, this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, this.tileEntity.getOrientation());
 		this.lockOrientation = new GuiCheckBox(2, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, "Lock Orientation", this.tileEntity.lockOrientation());
-		this.originX = new GuiTextField(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
-		this.originZ = new GuiTextField(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
-		this.offsetX = new GuiTextField(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
-		this.offsetZ = new GuiTextField(6, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12);
+		this.originX = new TextFieldWidget(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
+		this.originZ = new TextFieldWidget(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
+		this.offsetX = new TextFieldWidget(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
+		this.offsetZ = new TextFieldWidget(6, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12);
 		this.fillMap = new GuiCheckBox(7, this.width / 2 - 1 - 38, this.height / 2 + 1 - 72 + 112, "Fill Map", this.tileEntity.fillMap());
-		this.fillRadius = new GuiTextField(8, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12);
+		this.fillRadius = new TextFieldWidget(8, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12);
 
 		this.sync();
 
@@ -68,7 +68,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 	public void onGuiClosed() {
 		try {
 			int scale = Integer.parseInt(this.scale.getText());
-			EnumFacing orientation = this.orientation.getDirection();
+			Direction orientation = this.orientation.getDirection();
 			boolean lockOrientation = this.lockOrientation.isChecked();
 			int originX = Integer.parseInt(this.originX.getText());
 			int originZ = Integer.parseInt(this.originZ.getText());
@@ -79,7 +79,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 
 			this.tileEntity.set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		} catch (IllegalArgumentException e) {
-			Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Invalid arguments"));
+			Minecraft.getMinecraft().player.sendMessage(new StringTextComponent("Invalid arguments"));
 		}
 
 		super.onGuiClosed();
@@ -173,7 +173,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 		private final String[] displayStrings = { "North", "East", "South", "West" };
 		private int index = 0;
 
-		public GuiButtonOrientation(int buttonId, int x, int y, int width, int height, EnumFacing orientation) {
+		public GuiButtonOrientation(int buttonId, int x, int y, int width, int height, Direction orientation) {
 			super(buttonId, x, y, width, height, "");
 			this.setDisplayString(orientation);
 		}
@@ -187,7 +187,7 @@ public class GuiMapPlaceholder extends GuiScreen {
 			this.displayString = this.displayStrings[this.index];
 		}
 
-		public void setDisplayString(EnumFacing orientation) {
+		public void setDisplayString(Direction orientation) {
 			switch (orientation) {
 			case EAST:
 				this.index = 1;
@@ -205,16 +205,16 @@ public class GuiMapPlaceholder extends GuiScreen {
 			this.displayString = this.displayStrings[this.index];
 		}
 
-		public EnumFacing getDirection() {
+		public Direction getDirection() {
 			switch (this.index) {
 			case 1:
-				return EnumFacing.EAST;
+				return Direction.EAST;
 			case 2:
-				return EnumFacing.SOUTH;
+				return Direction.SOUTH;
 			case 3:
-				return EnumFacing.WEST;
+				return Direction.WEST;
 			default:
-				return EnumFacing.NORTH;
+				return Direction.NORTH;
 			}
 		}
 	}

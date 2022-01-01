@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -17,7 +17,7 @@ public class SPacketHandlerStructureSelector implements IMessageHandler<CPacketS
 	public IMessage onMessage(CPacketStructureSelector message, MessageContext ctx) {
 		if (ctx.side.isServer()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 				ItemStack stack = player.getHeldItem(message.getHand());
 
 				if (stack.getItem() instanceof ItemStructureSelector) {

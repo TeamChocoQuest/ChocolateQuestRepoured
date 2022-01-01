@@ -10,15 +10,15 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.minecraft.network.play.server.SPacketChunkData;
+import net.minecraft.network.play.server.SChunkDataPacket;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.world.EnumLightType;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import team.cqr.cqrepoured.CQRMain;
@@ -202,7 +202,7 @@ public class GeneratableDungeon {
 						if (!updated.add(p)) {
 							continue;
 						}
-						world.checkLightFor(EnumLightType.BLOCK, p);
+						world.checkLightFor(LightType.BLOCK, p);
 					}
 				}
 			}
@@ -217,9 +217,9 @@ public class GeneratableDungeon {
 		for (ChunkInfo chunkInfo : this.chunkInfoMapExtended.values()) {
 			Chunk chunk = world.getChunkProvider().getLoadedChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 			if (chunk != null) {
-				PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+				PlayerChunkMapEntry entry = ((ServerWorld) world).getPlayerChunkMap().getEntry(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 				if (entry != null) {
-					entry.sendPacket(new SPacketChunkData(chunk, 0xFFFF >> (15 - chunkInfo.topMarked())));
+					entry.sendPacket(new SChunkDataPacket(chunk, 0xFFFF >> (15 - chunkInfo.topMarked())));
 				}
 			}
 		}

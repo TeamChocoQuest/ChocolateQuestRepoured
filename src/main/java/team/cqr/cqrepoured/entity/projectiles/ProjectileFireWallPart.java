@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.entity.projectiles;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -24,7 +24,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 		this.setSize(1F, 2.5F);
 	}
 
-	public ProjectileFireWallPart(World worldIn, EntityLivingBase shooter) {
+	public ProjectileFireWallPart(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.setSize(1F, 2.5F);
 	}
@@ -32,7 +32,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
 		super.applyEntityCollision(entityIn);
-		if ((!(entityIn instanceof EntityLivingBase) || !((EntityLivingBase) entityIn).isActiveItemStackBlocking())) {
+		if ((!(entityIn instanceof LivingEntity) || !((LivingEntity) entityIn).isActiveItemStackBlocking())) {
 			entityIn.setFire(4);
 		}
 	}
@@ -45,7 +45,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (!this.world.isRemote && this.world.getBlockState(this.getPosition().offset(EnumFacing.DOWN)).isFullBlock() && this.rdm.nextInt(15) == 8) {
+		if (!this.world.isRemote && this.world.getBlockState(this.getPosition().offset(Direction.DOWN)).isFullBlock() && this.rdm.nextInt(15) == 8) {
 			this.world.setBlockState(this.getPosition(), Blocks.FIRE.getDefaultState());
 		}
 	}
@@ -53,7 +53,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-			IBlockState state = this.world.getBlockState(result.getBlockPos());
+			BlockState state = this.world.getBlockState(result.getBlockPos());
 
 			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
 				if (this.world.isRemote) {

@@ -4,15 +4,13 @@ import java.util.Random;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
@@ -44,31 +42,31 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if (entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+		if (entityLiving instanceof PlayerEntity) {
+			((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
 		}
 		stack.damageItem(1, entityLiving);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
 		stack.damageItem(1, entityLiving);
-		if (entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
+		if (entityLiving instanceof PlayerEntity) {
+			((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
 		}
 	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isHandActive() && ((EntityLivingBase) entityIn).getActiveItemStack() == stack) {
-			this.shootBubbles((EntityLivingBase) entityIn);
+		if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).isHandActive() && ((LivingEntity) entityIn).getActiveItemStack() == stack) {
+			this.shootBubbles((LivingEntity) entityIn);
 		}
 	}
 
-	private void shootBubbles(EntityLivingBase entity) {
+	private void shootBubbles(LivingEntity entity) {
 		double x = -Math.sin(Math.toRadians(entity.rotationYaw));
 		double z = Math.cos(Math.toRadians(entity.rotationYaw));
 		double y = -Math.sin(Math.toRadians(entity.rotationPitch));
@@ -76,12 +74,12 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
-	private void shootBubbles(Vec3d velocity, EntityLivingBase shooter) {
+	private void shootBubbles(Vec3d velocity, LivingEntity shooter) {
 		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
@@ -97,12 +95,12 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.BOW;
+	public UseAction getItemUseAction(ItemStack stack) {
+		return UseAction.BOW;
 	}
 
 	@Override
-	public void shoot(World world, EntityLivingBase shooter, Entity target, EnumHand hand) {
+	public void shoot(World world, LivingEntity shooter, Entity target, Hand hand) {
 		this.shootBubbles(shooter);
 	}
 

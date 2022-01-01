@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTables;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CQRLoottables {
@@ -92,7 +92,7 @@ public class CQRLoottables {
 
 	public static void registerLootTables() {
 		for (ResourceLocation lootTable : LOOT_TABLES) {
-			LootTableList.register(lootTable);
+			LootTables.register(lootTable);
 		}
 	}
 

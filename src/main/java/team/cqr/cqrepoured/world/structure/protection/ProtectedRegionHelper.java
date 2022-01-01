@@ -7,18 +7,18 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.TNTEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -80,7 +80,7 @@ public class ProtectedRegionHelper {
 		return isBlockBreakingPrevented(world, pos, entity, updateProtectedRegions, addOrResetProtectedRegionIndicator, null);
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable EnumFacing clickedFace) {
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable Direction clickedFace) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -106,11 +106,11 @@ public class ProtectedRegionHelper {
 
 		boolean isBreakingPrevented = false;
 
-		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockBreaking && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockBreaking && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity : null);
 					}
 					isBreakingPrevented = true;
 					break;
@@ -127,14 +127,14 @@ public class ProtectedRegionHelper {
 		return isBreakingPrevented;
 	}
 
-	private static boolean isBlockBreakingWhitelisted(IBlockState state) {
+	private static boolean isBlockBreakingWhitelisted(BlockState state) {
 		if (BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
 			return true;
 		}
 		return BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, IBlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, BlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -149,11 +149,11 @@ public class ProtectedRegionHelper {
 
 		boolean isPlacingPrevented = false;
 
-		if (CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockPlacing && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
+		if (CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockPlacing && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof EntityPlayerMP ? (EntityPlayerMP) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity : null);
 					}
 					isPlacingPrevented = true;
 					break;
@@ -170,27 +170,27 @@ public class ProtectedRegionHelper {
 		return isPlacingPrevented;
 	}
 
-	private static boolean isBlockPlacingWhitelisted(IBlockState state) {
+	private static boolean isBlockPlacingWhitelisted(BlockState state) {
 		if (PLACEABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
 			return true;
 		}
 		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static IBlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing, @Nullable Vec3d hitVec, EntityLivingBase placer, EnumHand hand) {
+	public static BlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, Direction facing, @Nullable Vec3d hitVec, LivingEntity placer, Hand hand) {
 		if (stack.isEmpty()) {
 			return null;
 		}
 		Item item = stack.getItem();
-		if (item instanceof ItemBlock) {
-			Block block = ((ItemBlock) item).getBlock();
+		if (item instanceof BlockItem) {
+			Block block = ((BlockItem) item).getBlock();
 			if (hitVec == null) {
 				return block.getDefaultState();
 			}
 			if (!block.canPlaceBlockOnSide(world, pos, facing)) {
 				return block.getDefaultState();
 			}
-			int meta = ((ItemBlock) item).getMetadata(stack.getItemDamage());
+			int meta = ((BlockItem) item).getMetadata(stack.getItemDamage());
 			return block.getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
 		}
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
@@ -268,7 +268,7 @@ public class ProtectedRegionHelper {
 			return;
 		}
 
-		boolean flag = explosion.exploder instanceof EntityTNTPrimed;
+		boolean flag = explosion.exploder instanceof TNTEntity;
 		boolean flag1 = (flag && CQRConfig.dungeonProtection.enablePreventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.enablePreventExplosionOther);
 		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;
 

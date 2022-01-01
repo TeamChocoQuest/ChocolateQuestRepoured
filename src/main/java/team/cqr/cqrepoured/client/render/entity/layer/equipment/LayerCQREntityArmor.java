@@ -2,25 +2,25 @@ package team.cqr.cqrepoured.client.render.entity.layer.equipment;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import team.cqr.cqrepoured.client.model.armor.ModelCustomArmorBase;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
-public class LayerCQREntityArmor extends LayerBipedArmor {
+public class LayerCQREntityArmor extends BipedArmorLayer {
 
-	private final RenderLivingBase<?> renderer;
+	private final LivingRenderer<?> renderer;
 	private float alpha = 1.0F;
 	private float colorR = 1.0F;
 	private float colorG = 1.0F;
 	private float colorB = 1.0F;
 	private boolean skipRenderGlint;
 
-	public LayerCQREntityArmor(RenderLivingBase<?> rendererIn) {
+	public LayerCQREntityArmor(LivingRenderer<?> rendererIn) {
 		super(rendererIn);
 		this.renderer = rendererIn;
 	}
@@ -32,18 +32,18 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.CHEST);
-		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.LEGS);
-		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.FEET);
-		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.HEAD);
+	public void doRenderLayer(LivingEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EquipmentSlotType.CHEST);
+		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EquipmentSlotType.LEGS);
+		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EquipmentSlotType.FEET);
+		this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EquipmentSlotType.HEAD);
 	}
 
-	private void renderArmorLayer(EntityLivingBase entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slotIn) {
+	private void renderArmorLayer(LivingEntity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, EquipmentSlotType slotIn) {
 		ItemStack itemstack = entityLivingBaseIn.getItemStackFromSlot(slotIn);
 
-		if (itemstack.getItem() instanceof ItemArmor) {
-			ItemArmor itemarmor = (ItemArmor) itemstack.getItem();
+		if (itemstack.getItem() instanceof ArmorItem) {
+			ArmorItem itemarmor = (ArmorItem) itemstack.getItem();
 
 			if (itemarmor.getEquipmentSlot() == slotIn) {
 				ModelBiped model = this.getModelFromSlot(slotIn);

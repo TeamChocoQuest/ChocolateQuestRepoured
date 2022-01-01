@@ -6,21 +6,21 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.Hand;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,12 +32,12 @@ import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
 @SideOnly(Side.CLIENT)
-public class GuiAddPathNode extends GuiScreen {
+public class GuiAddPathNode extends Screen {
 
-	private final EnumHand hand;
+	private final Hand hand;
 	private final int rootNodeIndex;
 	private final BlockPos pos;
-	private final List<GuiTextField> textFieldList = new ArrayList<>();
+	private final List<TextFieldWidget> textFieldList = new ArrayList<>();
 
 	private GuiButtonExt buttonConfirm;
 	private GuiButtonExt buttonCancel;
@@ -69,7 +69,7 @@ public class GuiAddPathNode extends GuiScreen {
 	private float mouseOverheadX;
 	private float mouseOverheadY;
 
-	public GuiAddPathNode(EnumHand hand, int rootNode, BlockPos pos) {
+	public GuiAddPathNode(Hand hand, int rootNode, BlockPos pos) {
 		this.hand = hand;
 		this.rootNodeIndex = rootNode;
 		this.pos = pos;
@@ -149,7 +149,7 @@ public class GuiAddPathNode extends GuiScreen {
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		boolean textFieldFocused = false;
-		for (GuiTextField textField : this.textFieldList) {
+		for (TextFieldWidget textField : this.textFieldList) {
 			if (textField.isFocused()) {
 				textFieldFocused = true;
 				break;
@@ -157,11 +157,11 @@ public class GuiAddPathNode extends GuiScreen {
 		}
 		if (textFieldFocused) {
 			if (keyCode == 1) {
-				for (GuiTextField textField : this.textFieldList) {
+				for (TextFieldWidget textField : this.textFieldList) {
 					textField.setFocused(false);
 				}
 			} else {
-				for (GuiTextField textField : this.textFieldList) {
+				for (TextFieldWidget textField : this.textFieldList) {
 					textField.textboxKeyTyped(typedChar, keyCode);
 				}
 				if (this.textFieldX.isFocused()) {
@@ -253,7 +253,7 @@ public class GuiAddPathNode extends GuiScreen {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
-		for (GuiTextField textField : this.textFieldList) {
+		for (TextFieldWidget textField : this.textFieldList) {
 			textField.mouseClicked(mouseX, mouseY, mouseButton);
 		}
 
@@ -288,7 +288,7 @@ public class GuiAddPathNode extends GuiScreen {
 	public void updateScreen() {
 		super.updateScreen();
 
-		for (GuiTextField textField : this.textFieldList) {
+		for (TextFieldWidget textField : this.textFieldList) {
 			textField.updateCursorCounter();
 		}
 	}
@@ -298,7 +298,7 @@ public class GuiAddPathNode extends GuiScreen {
 		this.drawDefaultBackground();
 		this.drawCenteredString(this.fontRenderer, "Add Path Node (Index: " + ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand)).getSize() + ")", this.width / 2, 20, 0xFFFFFF);
 
-		for (GuiTextField textField : this.textFieldList) {
+		for (TextFieldWidget textField : this.textFieldList) {
 			textField.drawTextBox();
 		}
 
@@ -363,7 +363,7 @@ public class GuiAddPathNode extends GuiScreen {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(Button button) throws IOException {
 		if (button == this.buttonConfirm) {
 			try {
 				int posX = this.textFieldX.getInt();
@@ -378,7 +378,7 @@ public class GuiAddPathNode extends GuiScreen {
 				boolean bidirectional = this.checkBoxBidirectional.isChecked();
 				CQRMain.NETWORK.sendToServer(new CPacketAddPathNode(this.hand, this.rootNodeIndex, new BlockPos(posX, posY, posZ), waitingTimeMin, waitingTimeMax, waitingRotation, weight, timeMin, timeMax, bidirectional, this.blacklistedPrevNodes));
 			} catch (NumberFormatException e) {
-				this.mc.player.sendMessage(new TextComponentString("Invalid path node arguments!"));
+				this.mc.player.sendMessage(new StringTextComponent("Invalid path node arguments!"));
 			}
 
 			this.mc.player.closeScreen();

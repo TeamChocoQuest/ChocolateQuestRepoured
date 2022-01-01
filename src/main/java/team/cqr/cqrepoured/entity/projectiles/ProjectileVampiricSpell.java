@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectileVampiricSpell extends ProjectileBase {
-	private EntityLivingBase shooter;
+	private LivingEntity shooter;
 
 	public ProjectileVampiricSpell(World worldIn) {
 		super(worldIn);
@@ -17,7 +17,7 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 		super(worldIn, x, y, z);
 	}
 
-	public ProjectileVampiricSpell(World worldIn, EntityLivingBase shooter) {
+	public ProjectileVampiricSpell(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.isImmuneToFire = false;
@@ -27,8 +27,8 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-				if (result.entityHit instanceof EntityLivingBase) {
-					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
+				if (result.entityHit instanceof LivingEntity) {
+					LivingEntity entity = (LivingEntity) result.entityHit;
 					if (entity.isActiveItemStackBlocking()) {
 						this.setDead();
 						return;

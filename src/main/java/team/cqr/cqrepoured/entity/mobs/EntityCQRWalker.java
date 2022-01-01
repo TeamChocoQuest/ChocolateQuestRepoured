@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.projectile.EntitySpectralArrow;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -53,7 +53,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
+		if (source.getImmediateSource() instanceof SpectralArrowEntity) {
 			amount *= 2;
 		}
 		return super.attackEntityFrom(source, amount);
@@ -66,7 +66,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	}
 
 	@Override
-	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+	public void onStruckByLightning(LightningBoltEntity lightningBolt) {
 		this.heal(this.getMaxHealth() * 0.025F);
 	}
 

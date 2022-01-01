@@ -5,15 +5,15 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -42,11 +42,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public final Function<T, ResourceLocation> TEXTURE_GETTER;
 	public final Function<T, ResourceLocation> MODEL_ID_GETTER;
 
-	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider) {
+	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1D, 1D, 0);
 	}
 
-	protected RenderCQREntityGeo(RenderManager renderManager, AnimatedGeoModel<T> modelProvider, double widthScale, double heightScale, float shadowSize) {
+	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, double widthScale, double heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
@@ -120,7 +120,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 		if (this.currentModelRenderCycle == 0) {
 			ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
-			IBlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
+			BlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
 			if (boneItem != null || boneBlock != null) {
 				// Huge thanks to McHorse and Gecko to get this to work!!
 				Tessellator.getInstance().draw();
@@ -163,7 +163,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		}
 	}
 
-	private void renderBlock(IBlockState iBlockState, Entity currentEntity) {
+	private void renderBlock(BlockState iBlockState, Entity currentEntity) {
 		BlockRenderUtil.renderBlockAtEntity(iBlockState, currentEntity, this);
 	}
 
@@ -198,15 +198,15 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	 * Return null if there is no held block
 	 */
 	@Nullable
-	protected abstract IBlockState getHeldBlockForBone(String boneName, T currentEntity);
+	protected abstract BlockState getHeldBlockForBone(String boneName, T currentEntity);
 
 	protected abstract void preRenderItem(ItemStack item, String boneName, T currentEntity);
 
-	protected abstract void preRenderBlock(IBlockState block, String boneName, T currentEntity);
+	protected abstract void preRenderBlock(BlockState block, String boneName, T currentEntity);
 
 	protected abstract void postRenderItem(ItemStack item, String boneName, T currentEntity);
 
-	protected abstract void postRenderBlock(IBlockState block, String boneName, T currentEntity);
+	protected abstract void postRenderBlock(BlockState block, String boneName, T currentEntity);
 
 	/*
 	 * Return null, if the entity's texture is used

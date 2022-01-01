@@ -2,18 +2,16 @@ package team.cqr.cqrepoured.block;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFire;
-import net.minecraft.block.BlockTNT;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.*;
+import net.minecraft.block.TNTBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
-public class BlockFireCQR extends BlockFire {
+public class BlockFireCQR extends FireBlock {
 
 	public BlockFireCQR() {
 		this.setRegistryName("minecraft:fire");
@@ -25,7 +23,7 @@ public class BlockFireCQR extends BlockFire {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
 		if (worldIn.getGameRules().getBoolean("doFireTick")) {
 			if (!worldIn.isAreaLoaded(pos, 2)) {
 				return; // Forge: prevent loading unloaded chunks when spreading fire
@@ -35,7 +33,7 @@ public class BlockFireCQR extends BlockFire {
 			}
 
 			Block block = worldIn.getBlockState(pos.down()).getBlock();
-			boolean flag = block.isFireSource(worldIn, pos.down(), EnumFacing.UP);
+			boolean flag = block.isFireSource(worldIn, pos.down(), Direction.UP);
 
 			int i = (state.getValue(AGE));
 
@@ -51,14 +49,14 @@ public class BlockFireCQR extends BlockFire {
 
 				if (!flag) {
 					if (!this.canNeighborCatchFireCQR(worldIn, pos)) {
-						if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) || i > 3) {
+						if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), Direction.UP) || i > 3) {
 							worldIn.setBlockToAir(pos);
 						}
 
 						return;
 					}
 
-					if (!this.canCatchFire(worldIn, pos.down(), EnumFacing.UP) && i == 15 && rand.nextInt(4) == 0) {
+					if (!this.canCatchFire(worldIn, pos.down(), Direction.UP) && i == 15 && rand.nextInt(4) == 0) {
 						worldIn.setBlockToAir(pos);
 						return;
 					}
@@ -72,12 +70,12 @@ public class BlockFireCQR extends BlockFire {
 				}
 
 				if (!ProtectedRegionHelper.isFireSpreadingPrevented(worldIn, pos, null, false)) {
-					this.tryCatchFireCQR(worldIn, pos.east(), 300 + j, rand, i, EnumFacing.WEST);
-					this.tryCatchFireCQR(worldIn, pos.west(), 300 + j, rand, i, EnumFacing.EAST);
-					this.tryCatchFireCQR(worldIn, pos.down(), 250 + j, rand, i, EnumFacing.UP);
-					this.tryCatchFireCQR(worldIn, pos.up(), 250 + j, rand, i, EnumFacing.DOWN);
-					this.tryCatchFireCQR(worldIn, pos.north(), 300 + j, rand, i, EnumFacing.SOUTH);
-					this.tryCatchFireCQR(worldIn, pos.south(), 300 + j, rand, i, EnumFacing.NORTH);
+					this.tryCatchFireCQR(worldIn, pos.east(), 300 + j, rand, i, Direction.WEST);
+					this.tryCatchFireCQR(worldIn, pos.west(), 300 + j, rand, i, Direction.EAST);
+					this.tryCatchFireCQR(worldIn, pos.down(), 250 + j, rand, i, Direction.UP);
+					this.tryCatchFireCQR(worldIn, pos.up(), 250 + j, rand, i, Direction.DOWN);
+					this.tryCatchFireCQR(worldIn, pos.north(), 300 + j, rand, i, Direction.SOUTH);
+					this.tryCatchFireCQR(worldIn, pos.south(), 300 + j, rand, i, Direction.NORTH);
 
 					for (int k = -1; k <= 1; ++k) {
 						for (int l = -1; l <= 1; ++l) {
@@ -118,14 +116,14 @@ public class BlockFireCQR extends BlockFire {
 		}
 	}
 
-	private void tryCatchFireCQR(World worldIn, BlockPos pos, int chance, Random random, int age, EnumFacing face) {
+	private void tryCatchFireCQR(World worldIn, BlockPos pos, int chance, Random random, int age, Direction face) {
 		if (ProtectedRegionHelper.isFireSpreadingPrevented(worldIn, pos, null, false)) {
 			return;
 		}
 		int i = worldIn.getBlockState(pos).getBlock().getFlammability(worldIn, pos, face);
 
 		if (random.nextInt(chance) < i) {
-			IBlockState iblockstate = worldIn.getBlockState(pos);
+			BlockState iblockstate = worldIn.getBlockState(pos);
 
 			if (random.nextInt(age + 10) < 5 && !worldIn.isRainingAt(pos)) {
 				int j = age + random.nextInt(5) / 4;
@@ -140,13 +138,13 @@ public class BlockFireCQR extends BlockFire {
 			}
 
 			if (iblockstate.getBlock() == Blocks.TNT) {
-				Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, true));
+				Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(TNTBlock.EXPLODE, true));
 			}
 		}
 	}
 
 	private boolean canNeighborCatchFireCQR(World worldIn, BlockPos pos) {
-		for (EnumFacing enumfacing : EnumFacing.values()) {
+		for (Direction enumfacing : Direction.values()) {
 			if (this.canCatchFire(worldIn, pos.offset(enumfacing), enumfacing.getOpposite())) {
 				return true;
 			}
@@ -161,7 +159,7 @@ public class BlockFireCQR extends BlockFire {
 		} else {
 			int i = 0;
 
-			for (EnumFacing enumfacing : EnumFacing.values()) {
+			for (Direction enumfacing : Direction.values()) {
 				i = Math.max(worldIn.getBlockState(pos.offset(enumfacing)).getBlock().getFireSpreadSpeed(worldIn, pos.offset(enumfacing), enumfacing.getOpposite()), i);
 			}
 

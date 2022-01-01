@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -16,7 +16,7 @@ public class SPacketUpdateElectrocuteCapability implements IMessage {
 	public SPacketUpdateElectrocuteCapability() {
 	}
 
-	public SPacketUpdateElectrocuteCapability(EntityLivingBase entity) {
+	public SPacketUpdateElectrocuteCapability(LivingEntity entity) {
 		this.entityId = entity.getEntityId();
 		CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
 		if (cap != null) {

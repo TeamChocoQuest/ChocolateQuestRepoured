@@ -2,15 +2,12 @@ package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.*;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -38,7 +35,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source instanceof EntityDamageSourceIndirect) {
+		if (source instanceof IndirectEntityDamageSource) {
 			for (int i = 0; i < 64; ++i) {
 				if (this.teleportRandomly()) {
 					return false;
@@ -50,7 +47,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	protected void updateAITasks() {
-		if (this.isInWater() || (this.isWet() && this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty())) {
+		if (this.isInWater() || (this.isWet() && this.getItemStackFromSlot(EquipmentSlotType.HEAD).isEmpty())) {
 			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
 		}
 		super.updateAITasks();
@@ -71,7 +68,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 
 		if (flag) {
-			this.world.playSound((EntityPlayer) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+			this.world.playSound((PlayerEntity) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
 			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 		}
 

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -94,7 +94,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 				positions[arrayIndex] = startPos.add(new Vec3d(i * vL.x, 0, i * vL.z));
 				arrayIndex++;
 			}
-			this.entity.swingArm(EnumHand.MAIN_HAND);
+			this.entity.swingArm(Hand.MAIN_HAND);
 
 			for (Vec3d p : positions) {
 				if (p != null) {

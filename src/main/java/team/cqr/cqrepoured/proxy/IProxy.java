@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.proxy;
 
 import net.minecraft.advancements.Advancement;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

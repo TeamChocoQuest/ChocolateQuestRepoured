@@ -5,21 +5,21 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateClimber;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -74,7 +74,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void initEntityAI() {
 		this.spellHandler = this.createSpellHandler();
-		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(0, new SwimGoal(this));
 		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
 		this.tasks.addTask(2, new BossAISpiderWebshot(this));
 		this.tasks.addTask(3, new BossAISpiderHook(this));
@@ -120,7 +120,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
@@ -128,7 +128,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SPIDERHOOK, 1));
+		this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SPIDERHOOK, 1));
 	}
 
 	@Override
@@ -151,8 +151,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public void addPotionEffect(PotionEffect potioneffectIn) {
-		if (potioneffectIn.getPotion() == MobEffects.POISON || potioneffectIn.getPotion() == MobEffects.WEAKNESS || potioneffectIn.getPotion() == MobEffects.WITHER) {
+	public void addPotionEffect(EffectInstance potioneffectIn) {
+		if (potioneffectIn.getPotion() == Effects.POISON || potioneffectIn.getPotion() == Effects.WEAKNESS || potioneffectIn.getPotion() == Effects.WITHER) {
 			return;
 		}
 		super.addPotionEffect(potioneffectIn);
@@ -162,8 +162,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	 * Returns new PathNavigateGround instance
 	 */
 	@Override
-	protected PathNavigate createNavigator(World worldIn) {
-		return new PathNavigateClimber(this, worldIn);
+	protected PathNavigator createNavigator(World worldIn) {
+		return new ClimberPathNavigator(this, worldIn);
 	}
 
 	/**
@@ -205,9 +205,9 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			int effectlvl = 1;
 			if (this.getRNG().nextDouble() > 0.7) {
 				effectlvl = 2;
-				this.heal(Math.min(CQRConfig.bosses.giantSpiderMaxHealByBite, ((EntityLivingBase) entityIn).getHealth() * 0.25F));
+				this.heal(Math.min(CQRConfig.bosses.giantSpiderMaxHealByBite, ((LivingEntity) entityIn).getHealth() * 0.25F));
 			}
-			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
+			((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
 		}
 		return result;
 	}
@@ -257,8 +257,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
-		if (potioneffectIn.getPotion() == MobEffects.POISON) {
+	public boolean isPotionApplicable(EffectInstance potioneffectIn) {
+		if (potioneffectIn.getPotion() == Effects.POISON) {
 			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
 			return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
@@ -277,7 +277,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public EntityLivingBase getSummoner() {
+	public LivingEntity getSummoner() {
 		return this;
 	}
 

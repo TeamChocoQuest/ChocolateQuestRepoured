@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.init;
 
 import static team.cqr.cqrepoured.util.InjectionUtil.Null;
 
-import net.minecraft.potion.Potion;
+import net.minecraft.potion.Effect;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -14,14 +14,14 @@ import team.cqr.cqrepoured.potion.PotionTwohanded;
 @ObjectHolder(CQRMain.MODID)
 public class CQRPotions {
 
-	public static final Potion TWOHANDED = Null();
+	public static final Effect TWOHANDED = Null();
 
 	@EventBusSubscriber(modid = CQRMain.MODID)
 	public static class EventHandler {
 
 		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Potion> event) {
-			final IForgeRegistry<Potion> registry = event.getRegistry();
+		public static void onEvent(final RegistryEvent.Register<Effect> event) {
+			final IForgeRegistry<Effect> registry = event.getRegistry();
 
 			registry.registerAll(new PotionTwohanded());
 		}

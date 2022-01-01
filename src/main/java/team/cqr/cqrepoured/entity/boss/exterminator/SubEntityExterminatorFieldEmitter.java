@@ -6,9 +6,9 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -18,7 +18,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 	private EntityCQRExterminator exterminator;
 
-	private final Supplier<EntityLivingBase> funcGetElectrocuteTarget;
+	private final Supplier<LivingEntity> funcGetElectrocuteTarget;
 	private final Supplier<Boolean> funcGetIsActive;
 	private final Consumer<Boolean> funcSetIsActiveInParent;
 
@@ -26,7 +26,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	private int activeTimeNoTarget;
 	private int cooldown;
 
-	public SubEntityExterminatorFieldEmitter(EntityCQRExterminator parent, String partName, final Supplier<EntityLivingBase> funcGetElectrocuteTarget, final Supplier<Boolean> funcGetIsActive, final Consumer<Boolean> funcSetIsActiveInParent) {
+	public SubEntityExterminatorFieldEmitter(EntityCQRExterminator parent, String partName, final Supplier<LivingEntity> funcGetElectrocuteTarget, final Supplier<Boolean> funcGetIsActive, final Consumer<Boolean> funcSetIsActiveInParent) {
 		super(parent, partName, 0.5F, 0.5F);
 		this.exterminator = parent;
 		this.funcGetElectrocuteTarget = funcGetElectrocuteTarget;
@@ -58,7 +58,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 				// Play a sound
 				this.playSound(CQRSounds.EXTERMINATOR_ELECTRO_ZAP, 0.75F, 1.0F);
 			}
-			EntityLivingBase target = this.getTargetedEntity();
+			LivingEntity target = this.getTargetedEntity();
 			this.remainingActiveTime--;
 			// If we don't have a target we wait a bit and then deactivate
 			if (target == null) {
@@ -88,7 +88,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 
 	@Nullable
-	public EntityLivingBase getTargetedEntity() {
+	public LivingEntity getTargetedEntity() {
 		return this.funcGetElectrocuteTarget.get();
 	}
 
@@ -97,7 +97,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
 		if (this.exterminator == null || this.exterminator.isDead) {
 			return false;
 		}

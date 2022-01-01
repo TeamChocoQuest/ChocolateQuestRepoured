@@ -5,25 +5,25 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.SwordItem;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.item.IEquipListener;
 
-public class ItemSwordSunshine extends ItemSword implements IEquipListener {
+public class ItemSwordSunshine extends SwordItem implements IEquipListener {
 
 	protected static final UUID ATTACK_DAMAGE_MODIFIER = UUID.fromString("126A7773-3B53-4AC4-8A90-1CD46C888FD4");
 	private static final double DAMAGE_BONUS = 3.0D;
@@ -35,13 +35,13 @@ public class ItemSwordSunshine extends ItemSword implements IEquipListener {
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		if (!(entityIn instanceof EntityLivingBase)) {
+		if (!(entityIn instanceof LivingEntity)) {
 			return;
 		}
 		if (!isSelected) {
 			return;
 		}
-		IAttributeInstance attribute = ((EntityLivingBase) entityIn).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		IAttributeInstance attribute = ((LivingEntity) entityIn).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		if (worldIn.isDaytime()) {
 			if (attribute.getModifier(ATTACK_DAMAGE_MODIFIER) != null) {
 				return;
@@ -53,12 +53,12 @@ public class ItemSwordSunshine extends ItemSword implements IEquipListener {
 	}
 
 	@Override
-	public void onEquip(EntityLivingBase entity, ItemStack stack, EntityEquipmentSlot slot) {
+	public void onEquip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot) {
 
 	}
 
 	@Override
-	public void onUnequip(EntityLivingBase entity, ItemStack stack, EntityEquipmentSlot slot) {
+	public void onUnequip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot) {
 		IAttributeInstance attribute = entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		attribute.removeModifier(ATTACK_DAMAGE_MODIFIER);
 	}

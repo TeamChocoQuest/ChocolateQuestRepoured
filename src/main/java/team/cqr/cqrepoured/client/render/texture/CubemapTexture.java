@@ -11,14 +11,14 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-public class CubemapTexture extends AbstractTexture {
+public class CubemapTexture extends Texture {
 
 	protected final ResourceLocation originalTexture;
 	protected final ResourceLocation texture;
@@ -50,7 +50,7 @@ public class CubemapTexture extends AbstractTexture {
 	 */
 	public static ResourceLocation get(ResourceLocation originalTexture) {
 		ResourceLocation texture = appendBeforeEnding(originalTexture, "_cubemap");
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		EntityRendererManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		if (renderManager.renderEngine.getTexture(texture) == null) {
 			renderManager.renderEngine.loadTexture(texture, new CubemapTexture(originalTexture, texture));
 		}

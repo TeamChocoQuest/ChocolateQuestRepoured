@@ -7,15 +7,15 @@ import javax.annotation.Nullable;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 
-public class RenderColoredLightningBolt extends Render<EntityColoredLightningBolt> {
+public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLightningBolt> {
 
-	public RenderColoredLightningBolt(RenderManager renderManagerIn) {
+	public RenderColoredLightningBolt(EntityRendererManager renderManagerIn) {
 		super(renderManagerIn);
 	}
 

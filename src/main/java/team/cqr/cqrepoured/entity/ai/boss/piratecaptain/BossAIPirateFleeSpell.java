@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -17,11 +17,11 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
 
 public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirateCaptain> implements IEntityAISpellAnimatedVanilla {
 
-	protected final Predicate<EntityLiving> predicateAlly = input -> {
+	protected final Predicate<MobEntity> predicateAlly = input -> {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
 			return false;
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.IS_ALIVE.apply(input)) {
 			return false;
 		}
 		return BossAIPirateFleeSpell.this.isSuitableAlly(input);
@@ -51,16 +51,16 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		Vec3d v2 = this.entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
-		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
+		List<MobEntity> allies = this.entity.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly);
 		return !allies.isEmpty();
 	}
 
-	private int getNearbyAllies(EntityLiving o1) {
+	private int getNearbyAllies(MobEntity o1) {
 		Vec3d vec = new Vec3d(4, 2, 4);
 		Vec3d v1 = o1.getPositionVector().add(vec);
 		Vec3d v2 = o1.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
-		return o1.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly).size();
+		return o1.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly).size();
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		Vec3d v2 = this.entity.getPositionVector().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
-		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
+		List<MobEntity> allies = this.entity.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly);
 		allies.sort((o1, o2) -> {
 			int entCount1 = BossAIPirateFleeSpell.this.getNearbyAllies(o1);
 			int entCount2 = BossAIPirateFleeSpell.this.getNearbyAllies(o2);
@@ -107,7 +107,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		return 0;
 	}
 
-	protected boolean isSuitableAlly(EntityLiving possibleAlly) {
+	protected boolean isSuitableAlly(MobEntity possibleAlly) {
 		if (possibleAlly == this.entity) {
 			return false;
 		}

@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.entity.ai.target;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -23,7 +23,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	private static final double MAX_PATH_END_TO_TARGET_DISTANCE_SQ = 2.0D;
 	private static final int MAX_PATH_LENGTH = 20;
 	private static final double MAX_PATH_COMPLEXITY = 4;
-	protected EntityLivingBase attackTarget;
+	protected LivingEntity attackTarget;
 	protected int prevRevengeTimer;
 
 	public EntityAIHurtByTarget(AbstractEntityCQR entity) {
@@ -32,13 +32,13 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (this.world.getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
 		if (this.entity.getRevengeTimer() == this.prevRevengeTimer) {
 			return false;
 		}
-		EntityLivingBase revengeTarget = this.entity.getRevengeTarget();
+		LivingEntity revengeTarget = this.entity.getRevengeTarget();
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(revengeTarget)) {
 			return false;
 		}
@@ -69,7 +69,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		this.prevRevengeTimer = this.entity.getRevengeTimer();
 		this.trySetAttackTarget(this.entity);
 		Faction faction = this.entity.getFaction();
-		if (faction != null && faction.isEnemy(this.attackTarget) && !(this.entity.getLeader() instanceof EntityPlayer)) {
+		if (faction != null && faction.isEnemy(this.attackTarget) && !(this.entity.getLeader() instanceof PlayerEntity)) {
 			this.callForHelp();
 		}
 	}
@@ -87,7 +87,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	protected boolean isSuitableAlly(AbstractEntityCQR possibleAlly) {
-		if (!EntitySelectors.IS_ALIVE.apply(possibleAlly)) {
+		if (!EntityPredicates.IS_ALIVE.apply(possibleAlly)) {
 			return false;
 		}
 		if (possibleAlly == this.entity) {
@@ -124,7 +124,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (!isEnemyCheckingLeadersWhenAttacked(ally, this.attackTarget)) {
 			return false;
 		}
-		EntityLivingBase oldAttackTarget = ally.getAttackTarget();
+		LivingEntity oldAttackTarget = ally.getAttackTarget();
 		if (oldAttackTarget != null && ally.getEntitySenses().canSee(oldAttackTarget) && ally.getDistanceSq(oldAttackTarget) < ally.getDistanceSq(this.attackTarget)) {
 			return false;
 		}
@@ -132,18 +132,18 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		return true;
 	}
 
-	private static boolean isAllyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, EntityLivingBase possibleAlly) {
-		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
-		EntityLivingBase targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
-		if (!(leader instanceof EntityPlayer) && targetLeader instanceof EntityPlayer) {
+	private static boolean isAllyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, LivingEntity possibleAlly) {
+		LivingEntity leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
+		LivingEntity targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
+		if (!(leader instanceof PlayerEntity) && targetLeader instanceof PlayerEntity) {
 			return false;
 		}
 		return TargetUtil.isAllyCheckingLeaders(leader, targetLeader);
 	}
 
-	private static boolean isEnemyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, EntityLivingBase possibleEnemy) {
-		EntityLivingBase leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
-		if (!(leader instanceof EntityPlayer)) {
+	private static boolean isEnemyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, LivingEntity possibleEnemy) {
+		LivingEntity leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
+		if (!(leader instanceof PlayerEntity)) {
 			return !TargetUtil.isAllyCheckingLeaders(leader, possibleEnemy);
 		}
 		return TargetUtil.isEnemyCheckingLeaders(leader, possibleEnemy);

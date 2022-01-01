@@ -9,7 +9,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -55,7 +55,7 @@ public class TileEntityDataManager {
 		return this.entries.get(id);
 	}
 
-	public NBTTagCompound write(NBTTagCompound compound) {
+	public CompoundNBT write(CompoundNBT compound) {
 		for (DataEntry<?> entry : this.entries) {
 			compound.setTag(entry.getName(), entry.write());
 		}
@@ -63,7 +63,7 @@ public class TileEntityDataManager {
 		return compound;
 	}
 
-	public void read(NBTTagCompound compound) {
+	public void read(CompoundNBT compound) {
 		for (DataEntry<?> entry : this.entries) {
 			if (compound.hasKey(entry.getName())) {
 				entry.read(compound.getTag(entry.getName()));

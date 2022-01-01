@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
@@ -39,7 +39,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 			return false;
 		}
 		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
+			stack.setTagCompound(new CompoundNBT());
 		}
 		return stack.hasTagCompound() && stack.getTagCompound().hasKey(CONSTANT_AMMO_NBT_KEY, Constants.NBT.TAG_INT);
 	}
@@ -62,7 +62,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 	public void setAmmo(ItemStack stack, int amount) {
 		amount = amount < 0 ? 0 : amount;
 		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
+			stack.setTagCompound(new CompoundNBT());
 		}
 		stack.getTagCompound().setInteger(CONSTANT_AMMO_NBT_KEY, amount);
 	}
@@ -91,7 +91,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 		return MathHelper.hsvToRGB(this.getAmmoInItemInPercent(stack) / 3.0F, 1.0F, 1.0F);
 	}
 
-	public List<ItemStack> getAmmoItemsInInventory(InventoryPlayer playerInventory) {
+	public List<ItemStack> getAmmoItemsInInventory(PlayerInventory playerInventory) {
 		List<ItemStack> result = new ArrayList<>();
 		for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
 			ItemStack stack = playerInventory.getStackInSlot(i);
@@ -107,7 +107,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 		ItemStack def = super.getDefaultInstance();
 
 		if (!def.hasTagCompound()) {
-			def.setTagCompound(new NBTTagCompound());
+			def.setTagCompound(new CompoundNBT());
 		}
 
 		this.setAmmo(def, this.getMaxAmmo());
@@ -115,11 +115,11 @@ public abstract class ItemMagazineBased extends ItemLore {
 		return def;
 	}
 
-	protected void reloadFromInventory(InventoryPlayer playerInventory, ItemStack stack, boolean removeItems) {
+	protected void reloadFromInventory(PlayerInventory playerInventory, ItemStack stack, boolean removeItems) {
 		this.reloadFromAmmoItems(playerInventory, this.getAmmoItemsInInventory(playerInventory), stack, removeItems);
 	}
 
-	protected void reloadFromAmmoItems(InventoryPlayer playerInventory, List<ItemStack> fuelItems, ItemStack stack, boolean removeItems) {
+	protected void reloadFromAmmoItems(PlayerInventory playerInventory, List<ItemStack> fuelItems, ItemStack stack, boolean removeItems) {
 		if (fuelItems.isEmpty()) {
 			return;
 		}

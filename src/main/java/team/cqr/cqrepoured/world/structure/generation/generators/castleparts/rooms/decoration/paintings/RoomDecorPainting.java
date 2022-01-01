@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.entity.item.EntityPainting;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.item.PaintingEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -16,29 +16,29 @@ import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class RoomDecorPainting {
-	private Map<EntityPainting.EnumArt, List<Vec3i>> artFootprints = new EnumMap<>(EntityPainting.EnumArt.class);
+	private Map<PaintingEntity.EnumArt, List<Vec3i>> artFootprints = new EnumMap<>(PaintingEntity.EnumArt.class);
 
 	public RoomDecorPainting() {
 		super();
 
-		for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values()) {
+		for (PaintingEntity.EnumArt art : PaintingEntity.EnumArt.values()) {
 			this.artFootprints.put(art, this.getFootPrintFromArtType(art));
 		}
 	}
 
-	public boolean wouldFit(BlockPos start, EnumFacing side, Set<BlockPos> decoArea, Set<BlockPos> decoMap) {
+	public boolean wouldFit(BlockPos start, Direction side, Set<BlockPos> decoArea, Set<BlockPos> decoMap) {
 		return !this.getArtThatWouldFit(start, side, decoArea, decoMap).isEmpty();
 	}
 
-	public void buildRandom(World world, BlockPos start, BlockStateGenArray genArray, EnumFacing side, Set<BlockPos> decoArea, Set<BlockPos> decoMap) {
-		List<EntityPainting.EnumArt> artList = this.getArtThatWouldFit(start, side, decoArea, decoMap);
+	public void buildRandom(World world, BlockPos start, BlockStateGenArray genArray, Direction side, Set<BlockPos> decoArea, Set<BlockPos> decoMap) {
+		List<PaintingEntity.EnumArt> artList = this.getArtThatWouldFit(start, side, decoArea, decoMap);
 		if (!artList.isEmpty()) {
 			Collections.shuffle(artList);
 			this.build(artList.get(0), world, start, genArray, side, decoMap);
 		}
 	}
 
-	public void build(EntityPainting.EnumArt art, World world, BlockPos start, BlockStateGenArray genArray, EnumFacing side, Set<BlockPos> decoMap) {
+	public void build(PaintingEntity.EnumArt art, World world, BlockPos start, BlockStateGenArray genArray, Direction side, Set<BlockPos> decoMap) {
 		List<Vec3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
 
 		for (Vec3i placement : rotated) {
@@ -48,8 +48,8 @@ public class RoomDecorPainting {
 		this.createEntityDecoration(art, world, start, genArray, side);
 	}
 
-	protected void createEntityDecoration(EntityPainting.EnumArt art, World world, BlockPos pos, BlockStateGenArray genArray, EnumFacing side) {
-		EntityPainting painting = new EntityPainting(world);
+	protected void createEntityDecoration(PaintingEntity.EnumArt art, World world, BlockPos pos, BlockStateGenArray genArray, Direction side) {
+		PaintingEntity painting = new PaintingEntity(world);
 		painting.art = art;
 		painting.facingDirection = side.getOpposite();
 		float rotation = side.getHorizontalAngle();
@@ -60,10 +60,10 @@ public class RoomDecorPainting {
 
 	}
 
-	public List<EntityPainting.EnumArt> getArtThatWouldFit(BlockPos start, EnumFacing side, Set<BlockPos> decoArea, Set<BlockPos> decoMap) {
-		List<EntityPainting.EnumArt> fitList = new ArrayList<>();
+	public List<PaintingEntity.EnumArt> getArtThatWouldFit(BlockPos start, Direction side, Set<BlockPos> decoArea, Set<BlockPos> decoMap) {
+		List<PaintingEntity.EnumArt> fitList = new ArrayList<>();
 
-		for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values()) {
+		for (PaintingEntity.EnumArt art : PaintingEntity.EnumArt.values()) {
 			boolean fits = true;
 			List<Vec3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
 
@@ -83,7 +83,7 @@ public class RoomDecorPainting {
 		return fitList;
 	}
 
-	private List<Vec3i> getFootPrintFromArtType(EntityPainting.EnumArt artType) {
+	private List<Vec3i> getFootPrintFromArtType(PaintingEntity.EnumArt artType) {
 		final int pixelsPerBlock = 16;
 		List<Vec3i> footprint = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public class RoomDecorPainting {
 		return footprint;
 	}
 
-	protected List<Vec3i> alignFootprint(List<Vec3i> unrotated, EnumFacing side) {
+	protected List<Vec3i> alignFootprint(List<Vec3i> unrotated, Direction side) {
 		List<Vec3i> result = new ArrayList<>();
 
 		unrotated.forEach(v -> result.add(DungeonGenUtils.rotateVec3i(v, side)));

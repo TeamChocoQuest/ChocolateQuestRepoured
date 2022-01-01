@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.client.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -9,9 +9,9 @@ import team.cqr.cqrepoured.util.ByteBufUtil;
 public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 
 	private BlockPos pos;
-	private EnumFacing facing;
+	private Direction facing;
 	private int scale;
-	private EnumFacing orientation;
+	private Direction orientation;
 	private boolean lockOrientation;
 	private int sizeUp;
 	private int sizeDown;
@@ -24,7 +24,7 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 
 	}
 
-	public CPacketCloseMapPlaceholderGuiSimple(BlockPos pos, EnumFacing facing, int scale, EnumFacing orientation, boolean lockOrientation, int sizeUp, int sizeDown, int sizeRight, int sizeLeft, boolean fillMap, int fillRadius) {
+	public CPacketCloseMapPlaceholderGuiSimple(BlockPos pos, Direction facing, int scale, Direction orientation, boolean lockOrientation, int sizeUp, int sizeDown, int sizeRight, int sizeLeft, boolean fillMap, int fillRadius) {
 		this.pos = pos;
 		this.facing = facing;
 		this.scale = scale;
@@ -41,9 +41,9 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.pos = ByteBufUtil.readBlockPos(buf);
-		this.facing = EnumFacing.byHorizontalIndex(buf.readByte());
+		this.facing = Direction.byHorizontalIndex(buf.readByte());
 		this.scale = buf.readByte();
-		this.orientation = EnumFacing.byHorizontalIndex(buf.readByte());
+		this.orientation = Direction.byHorizontalIndex(buf.readByte());
 		this.lockOrientation = buf.readBoolean();
 		this.sizeUp = buf.readByte();
 		this.sizeDown = buf.readByte();
@@ -72,7 +72,7 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 		return this.pos;
 	}
 
-	public EnumFacing getFacing() {
+	public Direction getFacing() {
 		return this.facing;
 	}
 
@@ -80,7 +80,7 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 		return this.scale;
 	}
 
-	public EnumFacing getOrientation() {
+	public Direction getOrientation() {
 		return this.orientation;
 	}
 

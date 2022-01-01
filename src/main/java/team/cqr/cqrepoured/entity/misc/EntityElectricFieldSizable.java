@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.misc;
 
 import java.util.UUID;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ISizable;
 
@@ -17,13 +17,13 @@ public class EntityElectricFieldSizable extends EntityElectricField implements I
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.callOnReadFromNBT(compound);
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		this.callOnWriteToNBT(compound);
 	}

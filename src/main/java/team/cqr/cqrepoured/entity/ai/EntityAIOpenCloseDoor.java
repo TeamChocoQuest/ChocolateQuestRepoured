@@ -2,19 +2,18 @@ package team.cqr.cqrepoured.entity.ai;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockDoor.EnumDoorHalf;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockPressurePlate;
+import net.minecraft.block.*;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.DoorBlock.EnumDoorHalf;
+import net.minecraft.block.LeverBlock;
+import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,8 +24,8 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private final BlockPos.MutableBlockPos doorPos = new BlockPos.MutableBlockPos();
-	private BlockDoor doorBlock;
-	private EnumFacing doorEnterFacing;
+	private DoorBlock doorBlock;
+	private Direction doorEnterFacing;
 	private boolean hasStoppedDoorInteraction;
 	private double entityPositionX;
 	private double entityPositionZ;
@@ -46,9 +45,9 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		}
 
 		this.doorPos.setPos(this.entity.posX, this.entity.posY, this.entity.posZ);
-		IBlockState state = this.world.getBlockState(this.doorPos);
-		if (state.getBlock() instanceof BlockDoor) {
-			this.doorBlock = (BlockDoor) state.getBlock();
+		BlockState state = this.world.getBlockState(this.doorPos);
+		if (state.getBlock() instanceof DoorBlock) {
+			this.doorBlock = (DoorBlock) state.getBlock();
 			this.doorEnterFacing = this.entity.getHorizontalFacing().getOpposite();
 			return canMoveThroughDoor(this.world, this.doorPos, this.doorEnterFacing, true);
 		}
@@ -63,11 +62,11 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			}
 
 			state = this.world.getBlockState(this.doorPos);
-			if (state.getBlock() instanceof BlockDoor) {
-				this.doorBlock = (BlockDoor) state.getBlock();
+			if (state.getBlock() instanceof DoorBlock) {
+				this.doorBlock = (DoorBlock) state.getBlock();
 				if (i > 0) {
 					PathPoint pathPoint1 = path.getPathPointFromIndex(i - 1);
-					this.doorEnterFacing = EnumFacing.getFacingFromVector(pathPoint1.x - pathPoint.x, pathPoint1.y - pathPoint.y, pathPoint1.z - pathPoint.z);
+					this.doorEnterFacing = Direction.getFacingFromVector(pathPoint1.x - pathPoint.x, pathPoint1.y - pathPoint.y, pathPoint1.z - pathPoint.z);
 				} else {
 					this.doorEnterFacing = this.entity.getHorizontalFacing().getOpposite();
 				}
@@ -114,14 +113,14 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	private boolean openDoor() {
-		IBlockState state = this.world.getBlockState(this.doorPos);
-		if (!(state.getBlock() instanceof BlockDoor)) {
+		BlockState state = this.world.getBlockState(this.doorPos);
+		if (!(state.getBlock() instanceof DoorBlock)) {
 			return false;
 		}
 		state = state.getActualState(this.world, this.doorPos);
-		boolean doorOpen = state.getValue(BlockDoor.OPEN);
-		EnumFacing doorFacing = state.getValue(BlockDoor.FACING);
-		EnumFacing.Axis blockedAxis = doorOpen ? doorFacing.rotateY().getAxis() : doorFacing.getAxis();
+		boolean doorOpen = state.getValue(DoorBlock.OPEN);
+		Direction doorFacing = state.getValue(DoorBlock.FACING);
+		Direction.Axis blockedAxis = doorOpen ? doorFacing.rotateY().getAxis() : doorFacing.getAxis();
 		if (this.doorEnterFacing.getAxis() != blockedAxis) {
 			return false;
 		}
@@ -130,15 +129,15 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			return true;
 		}
 		if (!doorOpen) {
-			BlockPos pos = state.getValue(BlockDoor.HALF) == EnumDoorHalf.UPPER ? this.doorPos.down() : this.doorPos;
+			BlockPos pos = state.getValue(DoorBlock.HALF) == EnumDoorHalf.UPPER ? this.doorPos.down() : this.doorPos;
 			BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 			if (this.isPressurePlate(mutablePos.setPos(pos).move(this.doorEnterFacing))) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()).move(EnumFacing.UP), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()).move(Direction.UP), this.doorEnterFacing)) {
 				return true;
 			}
-			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()).move(EnumFacing.UP), this.doorEnterFacing)) {
+			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateYCCW()).move(Direction.UP), this.doorEnterFacing)) {
 				return true;
 			}
 			if (this.activateButtonOrLeverWithOrientation(mutablePos.setPos(pos).move(this.doorEnterFacing).move(this.doorEnterFacing.rotateY()), this.doorEnterFacing)) {
@@ -152,29 +151,29 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	private boolean isPressurePlate(BlockPos pos) {
-		IBlockState state = this.world.getBlockState(pos);
+		BlockState state = this.world.getBlockState(pos);
 		Block block = state.getBlock();
 		Material material = state.getMaterial();
-		return block instanceof BlockPressurePlate && (material == Material.WOOD || material == Material.ROCK);
+		return block instanceof PressurePlateBlock && (material == Material.WOOD || material == Material.ROCK);
 	}
 
-	private boolean activateButtonOrLeverWithOrientation(BlockPos pos, EnumFacing facing) {
-		IBlockState state = this.world.getBlockState(pos);
+	private boolean activateButtonOrLeverWithOrientation(BlockPos pos, Direction facing) {
+		BlockState state = this.world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block instanceof BlockButton && state.getValue(BlockDirectional.FACING) == facing) {
-			block.onBlockActivated(this.world, pos, state, null, EnumHand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
+		if (block instanceof AbstractButtonBlock && state.getValue(DirectionalBlock.FACING) == facing) {
+			block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
-		if (block instanceof BlockLever && state.getValue(BlockLever.FACING).getFacing() == facing) {
-			block.onBlockActivated(this.world, pos, state, null, EnumHand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
+		if (block instanceof LeverBlock && state.getValue(LeverBlock.FACING).getFacing() == facing) {
+			block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 		return false;
 	}
 
 	private boolean closeDoor() {
-		IBlockState state = this.world.getBlockState(this.doorPos);
-		if (!(state.getBlock() instanceof BlockDoor)) {
+		BlockState state = this.world.getBlockState(this.doorPos);
+		if (!(state.getBlock() instanceof DoorBlock)) {
 			return false;
 		}
 		if (state.getMaterial() != Material.WOOD) {
@@ -218,15 +217,15 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		return false;
 	}
 
-	public static boolean canMoveThroughDoor(IBlockAccess world, BlockPos pos, EnumFacing enterFacing, boolean canOpenCloseDoors) {
-		IBlockState state = world.getBlockState(pos);
-		if (!(state.getBlock() instanceof BlockDoor)) {
+	public static boolean canMoveThroughDoor(IBlockAccess world, BlockPos pos, Direction enterFacing, boolean canOpenCloseDoors) {
+		BlockState state = world.getBlockState(pos);
+		if (!(state.getBlock() instanceof DoorBlock)) {
 			return false;
 		}
 		state = state.getActualState(world, pos);
-		boolean doorOpen = state.getValue(BlockDoor.OPEN);
-		EnumFacing doorFacing = state.getValue(BlockDoor.FACING);
-		EnumFacing.Axis blockedAxis = doorOpen ? doorFacing.rotateY().getAxis() : doorFacing.getAxis();
+		boolean doorOpen = state.getValue(DoorBlock.OPEN);
+		Direction doorFacing = state.getValue(DoorBlock.FACING);
+		Direction.Axis blockedAxis = doorOpen ? doorFacing.rotateY().getAxis() : doorFacing.getAxis();
 		if (enterFacing.getAxis() != blockedAxis) {
 			return true;
 		}
@@ -241,16 +240,16 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			return false;
 		}
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-		if (state.getValue(BlockDoor.HALF) == EnumDoorHalf.UPPER) {
+		if (state.getValue(DoorBlock.HALF) == EnumDoorHalf.UPPER) {
 			pos = pos.down();
 		}
 		if (isPressurePlate(world, mutablePos.setPos(pos).move(enterFacing))) {
 			return true;
 		}
-		if (isButtonOrLeverWithOrientation(world, mutablePos.setPos(pos).move(enterFacing).move(enterFacing.rotateY()).move(EnumFacing.UP), enterFacing)) {
+		if (isButtonOrLeverWithOrientation(world, mutablePos.setPos(pos).move(enterFacing).move(enterFacing.rotateY()).move(Direction.UP), enterFacing)) {
 			return true;
 		}
-		if (isButtonOrLeverWithOrientation(world, mutablePos.setPos(pos).move(enterFacing).move(enterFacing.rotateYCCW()).move(EnumFacing.UP), enterFacing)) {
+		if (isButtonOrLeverWithOrientation(world, mutablePos.setPos(pos).move(enterFacing).move(enterFacing.rotateYCCW()).move(Direction.UP), enterFacing)) {
 			return true;
 		}
 		if (isButtonOrLeverWithOrientation(world, mutablePos.setPos(pos).move(enterFacing).move(enterFacing.rotateY()), enterFacing)) {
@@ -263,20 +262,20 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	private static boolean isPressurePlate(IBlockAccess world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
+		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		Material material = state.getMaterial();
-		return block instanceof BlockPressurePlate && (material == Material.WOOD || material == Material.ROCK);
+		return block instanceof PressurePlateBlock && (material == Material.WOOD || material == Material.ROCK);
 	}
 
-	private static boolean isButtonOrLeverWithOrientation(IBlockAccess world, BlockPos pos, EnumFacing facing) {
-		IBlockState state = world.getBlockState(pos);
+	private static boolean isButtonOrLeverWithOrientation(IBlockAccess world, BlockPos pos, Direction facing) {
+		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block instanceof BlockButton) {
-			return state.getValue(BlockDirectional.FACING) == facing;
+		if (block instanceof AbstractButtonBlock) {
+			return state.getValue(DirectionalBlock.FACING) == facing;
 		}
-		if (block instanceof BlockLever) {
-			return state.getValue(BlockLever.FACING).getFacing() == facing;
+		if (block instanceof LeverBlock) {
+			return state.getValue(LeverBlock.FACING).getFacing() == facing;
 		}
 		return false;
 	}

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -106,7 +106,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
-			if (source.isProjectile() || source.getImmediateSource() instanceof EntityArrow || source.getImmediateSource() instanceof IProjectile) {
+			if (source.isProjectile() || source.getImmediateSource() instanceof AbstractArrowEntity || source.getImmediateSource() instanceof IProjectile) {
 				amount = 0;
 				return false;
 			}
@@ -140,8 +140,8 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		// Kill minions
 		for (Entity e : this.getSummonedEntities()) {
 			if (e != null && !e.isDead) {
-				if (e instanceof EntityLivingBase) {
-					((EntityLivingBase) e).onDeath(cause);
+				if (e instanceof LivingEntity) {
+					((LivingEntity) e).onDeath(cause);
 				}
 				e.setDead();
 			}
@@ -179,7 +179,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public EntityLivingBase getSummoner() {
+	public LivingEntity getSummoner() {
 		return this;
 	}
 

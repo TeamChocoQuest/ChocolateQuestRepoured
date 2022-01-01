@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.faction.Faction;
@@ -22,15 +22,15 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 		if (!super.shouldExecute()) {
 			return false;
 		}
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		Faction faction = this.entity.getFaction();
 		if ((faction != null && faction.isAlly(attackTarget)) || this.entity.getLeader() == attackTarget) {
 			return false;
 		}
 		if (attackTarget.isRiding()) {
 			Entity entity = attackTarget.getLowestRidingEntity();
-			if (entity instanceof EntityLivingBase) {
-				attackTarget = (EntityLivingBase) entity;
+			if (entity instanceof LivingEntity) {
+				attackTarget = (LivingEntity) entity;
 			}
 		}
 		return EntityUtil.isEntityFlying(attackTarget);
@@ -39,7 +39,7 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 	@Override
 	public void startCastingSpell() {
 		super.startCastingSpell();
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		EntityColoredLightningBolt coloredLightningBolt = new EntityColoredLightningBolt(this.world, attackTarget.posX, attackTarget.posY, attackTarget.posZ, true, false, 0.8F, 0.35F, 0.1F, 0.3F);
 		this.world.spawnEntity(coloredLightningBolt);
 	}

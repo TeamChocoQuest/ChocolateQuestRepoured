@@ -1,32 +1,32 @@
 package team.cqr.cqrepoured.network.client.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class CPacketStructureSelector implements IMessage {
 
-	private EnumHand hand;
+	private Hand hand;
 
 	public CPacketStructureSelector() {
 
 	}
 
-	public CPacketStructureSelector(EnumHand hand) {
+	public CPacketStructureSelector(Hand hand) {
 		this.hand = hand;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.hand = buf.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+		this.hand = buf.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(this.hand == EnumHand.MAIN_HAND);
+		buf.writeBoolean(this.hand == Hand.MAIN_HAND);
 	}
 
-	public EnumHand getHand() {
+	public Hand getHand() {
 		return this.hand;
 	}
 

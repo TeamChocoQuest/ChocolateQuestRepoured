@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.minecraft.world.storage.loot.ILootGenerator;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.cache.LoadingCache;
@@ -25,13 +26,12 @@ import com.google.gson.JsonSyntaxException;
 import meldexun.reflectionutil.ReflectionConstructor;
 import meldexun.reflectionutil.ReflectionField;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import team.cqr.cqrepoured.CQRMain;
@@ -187,13 +187,13 @@ public class LootTableLoader {
 				LootTable newLootTable = new LootTable(new LootPool[0]);
 
 				if (CQRConfig.general.singleLootPoolPerLootTable) {
-					LootEntry[] entries = new LootEntry[items.size()];
+					ILootGenerator[] entries = new ILootGenerator[items.size()];
 					for (int i = 0; i < items.size(); i++) {
 						entries[i] = items.get(i).getAsLootEntry(i);
 					}
 
 					return new LootTable(new LootPool[] {
-							new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())),
+							new LootPool(entries, new ILootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())),
 									new RandomValueRange(0), name.getPath() + "_pool") });
 				} else {
 					for (int i = 0; i < items.size(); i++) {
@@ -217,7 +217,7 @@ public class LootTableLoader {
 		}
 	}
 
-	public static void registerCustomLootTables(WorldServer worldServer) {
+	public static void registerCustomLootTables(ServerWorld worldServer) {
 		Collection<File> files = FileUtils.listFiles(new File(CQRMain.CQ_CHEST_FOLDER, "chests"), new String[] { "json", "properties" }, false);
 		Set<ResourceLocation> cqrChestLootTables = CQRLoottables.getChestLootTables();
 		LootTableManager lootTableManager = worldServer.getLootTableManager();

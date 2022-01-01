@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spi
 
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -20,10 +20,10 @@ public class StrongholdBuilder {
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
 	private int blocksRemainingToWall;
-	private EnumFacing direction;
+	private Direction direction;
 	private World world;
 
-	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world, Random rand) {
+	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, World world, Random rand) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.startPos = start;

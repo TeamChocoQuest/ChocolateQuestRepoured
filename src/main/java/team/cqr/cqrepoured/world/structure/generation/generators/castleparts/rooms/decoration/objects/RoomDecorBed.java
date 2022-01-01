@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.*;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 
 public class RoomDecorBed extends RoomDecorBlocksBase {
@@ -14,9 +14,9 @@ public class RoomDecorBed extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		IBlockState head = Blocks.BED.getDefaultState().withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD);
-		this.schematic.add(new DecoBlockRotating(0, 0, 0, head, BlockHorizontal.FACING, EnumFacing.NORTH, BlockStateGenArray.GenerationPhase.MAIN));
-		IBlockState foot = Blocks.BED.getDefaultState().withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
-		this.schematic.add(new DecoBlockRotating(0, 0, 1, foot, BlockHorizontal.FACING, EnumFacing.NORTH, BlockStateGenArray.GenerationPhase.MAIN));
+		BlockState head = Blocks.BED.getDefaultState().withProperty(BedBlock.PART, BedBlock.EnumPartType.HEAD);
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, head, HorizontalBlock.FACING, Direction.NORTH, BlockStateGenArray.GenerationPhase.MAIN));
+		BlockState foot = Blocks.BED.getDefaultState().withProperty(BedBlock.PART, BedBlock.EnumPartType.FOOT);
+		this.schematic.add(new DecoBlockRotating(0, 0, 1, foot, HorizontalBlock.FACING, Direction.NORTH, BlockStateGenArray.GenerationPhase.MAIN));
 	}
 }

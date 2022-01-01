@@ -8,11 +8,11 @@ import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -27,7 +27,7 @@ import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 
 @SideOnly(Side.CLIENT)
-public class GuiMerchantEditTrade extends GuiContainer {
+public class GuiMerchantEditTrade extends ContainerScreen {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
 
@@ -39,12 +39,12 @@ public class GuiMerchantEditTrade extends GuiContainer {
 	private final GuiCheckBox[] ignoreNBTCheckBoxes = new GuiCheckBox[4];
 
 	private GuiCheckBox stockCheckBox;
-	private GuiTextField restockTextField;
-	private GuiTextField inStockTextField;
-	private GuiTextField maxStockTextField;
+	private TextFieldWidget restockTextField;
+	private TextFieldWidget inStockTextField;
+	private TextFieldWidget maxStockTextField;
 
 	private GuiButtonReputation reputationButton;
-	private GuiTextField advancementTextField;
+	private TextFieldWidget advancementTextField;
 
 	public GuiMerchantEditTrade(Container container, AbstractEntityCQR entity, int tradeIndex) {
 		super(container);
@@ -59,8 +59,8 @@ public class GuiMerchantEditTrade extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 
-		this.addButton(new GuiButton(0, this.guiLeft + 155, this.guiTop + 139, 142, 20, "Cancel"));
-		this.addButton(new GuiButton(1, this.guiLeft + 7, this.guiTop + 139, 142, 20, "Apply"));
+		this.addButton(new Button(0, this.guiLeft + 155, this.guiTop + 139, 142, 20, "Cancel"));
+		this.addButton(new Button(1, this.guiLeft + 7, this.guiTop + 139, 142, 20, "Apply"));
 
 		List<TradeInput> tradeInputs = this.trade != null ? this.trade.getInputItems() : Collections.emptyList();
 		for (int i = 0; i < this.ignoreMetaCheckBoxes.length; i++) {
@@ -74,19 +74,19 @@ public class GuiMerchantEditTrade extends GuiContainer {
 
 		this.reputationButton = this.addButton(new GuiButtonReputation(30, this.guiLeft + 7, this.guiTop + 72));
 		this.reputationButton.setReputationIndex(this.trade != null ? this.trade.getRequiredReputation() : Integer.MIN_VALUE);
-		this.advancementTextField = new GuiTextField(40, this.fontRenderer, this.guiLeft + 8, this.guiTop + 103, 58, 10);
+		this.advancementTextField = new TextFieldWidget(40, this.fontRenderer, this.guiLeft + 8, this.guiTop + 103, 58, 10);
 		this.advancementTextField
 				.setText(this.trade != null && this.trade.getRequiredAdvancement() != null ? this.trade.getRequiredAdvancement().toString() : "");
 
 		this.stockCheckBox = this.addButton(new GuiCheckBox(20, this.guiLeft + 237, this.guiTop + 17, "", this.trade != null && this.trade.hasLimitedStock()));
 		this.stockCheckBox.width = 11;
-		this.restockTextField = new GuiTextField(21, this.fontRenderer, this.guiLeft + 238, this.guiTop + 43, 38, 10);
+		this.restockTextField = new TextFieldWidget(21, this.fontRenderer, this.guiLeft + 238, this.guiTop + 43, 38, 10);
 		this.restockTextField.setText(this.trade != null ? Integer.toString(this.trade.getRestockRate()) : "0");
 		this.restockTextField.setEnabled(this.stockCheckBox.isChecked());
-		this.inStockTextField = new GuiTextField(21, this.fontRenderer, this.guiLeft + 238, this.guiTop + 69, 38, 10);
+		this.inStockTextField = new TextFieldWidget(21, this.fontRenderer, this.guiLeft + 238, this.guiTop + 69, 38, 10);
 		this.inStockTextField.setText(this.trade != null ? Integer.toString(this.trade.getInStock()) : "0");
 		this.inStockTextField.setEnabled(this.stockCheckBox.isChecked());
-		this.maxStockTextField = new GuiTextField(22, this.fontRenderer, this.guiLeft + 238, this.guiTop + 95, 38, 10);
+		this.maxStockTextField = new TextFieldWidget(22, this.fontRenderer, this.guiLeft + 238, this.guiTop + 95, 38, 10);
 		this.maxStockTextField.setText(this.trade != null ? Integer.toString(this.trade.getMaxStock()) : "0");
 		this.maxStockTextField.setEnabled(this.stockCheckBox.isChecked());
 	}
@@ -188,7 +188,7 @@ public class GuiMerchantEditTrade extends GuiContainer {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(Button button) throws IOException {
 		if (button.id == 0) {
 			CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(button.id));
 		} else if (button.id == 1) {

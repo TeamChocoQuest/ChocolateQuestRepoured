@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -137,7 +137,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 
 	private void buildPlatform(World world, BlockPos center, int radius, DungeonInhabitant mobType, GeneratableDungeon.Builder dungeonBuilder) {
-		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+		Map<BlockPos, BlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
 		int rad = (int) (1.05D * radius);
 		rad += 2;
@@ -163,13 +163,13 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		}
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+		for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
 			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(center), entry.getValue(), null));
 		}
 		dungeonBuilder.add(partBuilder, center);
 	}
 
-	private void buildChain(World world, BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
+	private void buildChain(World world, BlockPos pos, int iOffset, Map<BlockPos, BlockState> stateMap) {
 		/*
 		 * Chain from side: # # # # # # # # # # # # # # # # # # # #
 		 */
@@ -194,7 +194,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		}
 	}
 
-	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, IBlockState> stateMap) {
+	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, BlockState> stateMap) {
 		stateMap.put(lowerCenter, this.generator.getDungeon().getChainBlock());
 		stateMap.put(lowerCenter.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
 
@@ -214,11 +214,11 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		if (this.generator.getDungeon().isConstructBridges()) {
 			for (SuspensionBridgeHelper bridge : this.bridges) {
-				Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+				Map<BlockPos, BlockState> stateMap = new HashMap<>();
 				bridge.generate(stateMap);
 
 				BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-				for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+				for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
 					partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
 				}
 				dungeonBuilder.add(partBuilder, this.generator.getPos());

@@ -1,42 +1,41 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.*;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWaterFlying;
-import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.entity.ai.controller.FlyingMovementController;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.entity.passive.IFlyingAnimal;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateFlying;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityCQRWasp extends EntityCreature implements IFlyingAnimal {
+public class EntityCQRWasp extends CreatureEntity implements IFlyingAnimal {
 
 	public EntityCQRWasp(World worldIn) {
 		super(worldIn);
 		this.setSize(0.75F, 0.75F);
-		this.moveHelper = new EntityFlyHelper(this);
+		this.moveHelper = new FlyingMovementController(this);
 	}
 
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(4, new EntityAIPanic(this, 1.25D));
-		this.tasks.addTask(5, new EntityAIWanderAvoidWaterFlying(this, 1D));
+		this.tasks.addTask(4, new PanicGoal(this, 1.25D));
+		this.tasks.addTask(5, new WaterAvoidingRandomFlyingGoal(this, 1D));
 
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 100, true, true, input -> (input instanceof EntityPlayer || input.getCreatureAttribute() == EnumCreatureAttribute.ILLAGER || input.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD)));
+		this.targetTasks.addTask(0, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 100, true, true, input -> (input instanceof PlayerEntity || input.getCreatureAttribute() == EnumCreatureAttribute.ILLAGER || input.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD)));
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class EntityCQRWasp extends EntityCreature implements IFlyingAnimal {
 	}
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
 
 	@Override
@@ -76,8 +75,8 @@ public class EntityCQRWasp extends EntityCreature implements IFlyingAnimal {
 	 * Returns new PathNavigateGround instance
 	 */
 	@Override
-	protected PathNavigate createNavigator(World worldIn) {
-		PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
+	protected PathNavigator createNavigator(World worldIn) {
+		FlyingPathNavigator pathnavigateflying = new FlyingPathNavigator(this, worldIn);
 		pathnavigateflying.setCanOpenDoors(false);
 		pathnavigateflying.setCanFloat(true);
 		pathnavigateflying.setCanEnterDoors(true);
@@ -94,7 +93,7 @@ public class EntityCQRWasp extends EntityCreature implements IFlyingAnimal {
 		int k = MathHelper.floor(this.posZ);
 		BlockPos blockpos = new BlockPos(i, j, k);
 		Block block = this.world.getBlockState(blockpos.down()).getBlock();
-		return block instanceof BlockLeaves || block == Blocks.GRASS || block instanceof BlockLog || block == Blocks.AIR && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
+		return block instanceof LeavesBlock || block == Blocks.GRASS || block instanceof LogBlock || block == Blocks.AIR && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
 	}
 
 }

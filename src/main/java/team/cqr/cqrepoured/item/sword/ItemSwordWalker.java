@@ -4,18 +4,18 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.SwordItem;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSwordWalker extends ItemSword {
+public class ItemSwordWalker extends SwordItem {
 
 	public ItemSwordWalker(ToolMaterial material) {
 		super(material);

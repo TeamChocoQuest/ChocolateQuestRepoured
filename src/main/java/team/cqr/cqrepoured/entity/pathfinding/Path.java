@@ -10,9 +10,9 @@ import javax.annotation.Nullable;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -25,10 +25,10 @@ public class Path {
 	private static final String VERSION = "1.0.0";
 	private final List<PathNode> nodes = new ArrayList<>();
 
-	public NBTTagCompound writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
+	public CompoundNBT writeToNBT() {
+		CompoundNBT compound = new CompoundNBT();
 		compound.setString("version", VERSION);
-		NBTTagList nbtTagList = new NBTTagList();
+		ListNBT nbtTagList = new ListNBT();
 		for (PathNode node : this.nodes) {
 			nbtTagList.appendTag(node.writeToNBT());
 		}
@@ -36,14 +36,14 @@ public class Path {
 		return compound;
 	}
 
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(CompoundNBT compound) {
 		this.nodes.clear();
 		String s = compound.getString("version");
 		if (!s.equals(VERSION)) {
 			CQRMain.logger.warn("Reading path: Expected version {} but got {}", VERSION, s);
 		}
 		for (NBTBase nbt : compound.getTagList("nodes", Constants.NBT.TAG_COMPOUND)) {
-			this.nodes.add(new PathNode(this, (NBTTagCompound) nbt));
+			this.nodes.add(new PathNode(this, (CompoundNBT) nbt));
 		}
 		this.onPathChanged();
 	}
@@ -169,7 +169,7 @@ public class Path {
 			this.index = index;
 		}
 
-		private PathNode(Path path, NBTTagCompound compound) {
+		private PathNode(Path path, CompoundNBT compound) {
 			this.path = path;
 			this.pos = DungeonGenUtils.readPosFromList(compound.getTagList("pos", Constants.NBT.TAG_INT));
 			this.waitingTimeMin = compound.getInteger("waitingTimeMin");
@@ -183,8 +183,8 @@ public class Path {
 			this.blacklistedPrevNodes.addElements(0, compound.getIntArray("blacklistedPrevNodes"));
 		}
 
-		private NBTTagCompound writeToNBT() {
-			NBTTagCompound compound = new NBTTagCompound();
+		private CompoundNBT writeToNBT() {
+			CompoundNBT compound = new CompoundNBT();
 			compound.setTag("pos", DungeonGenUtils.writePosToList(this.pos));
 			compound.setInteger("waitingTimeMin", this.waitingTimeMin);
 			compound.setInteger("waitingTimeMax", this.waitingTimeMax);

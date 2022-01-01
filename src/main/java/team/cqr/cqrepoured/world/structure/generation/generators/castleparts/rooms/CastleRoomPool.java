@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -34,15 +34,15 @@ public class CastleRoomPool extends CastleRoomDecoratedBase {
 		Predicate<Vec3i> water = (v -> ((v.getY() == 0) && (v.getX() > 1) && (v.getX() < endX - 1) && (v.getZ() > 1) && (v.getZ() < endZ - 1)));
 
 		GenerationTemplate poolRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
-		poolRoomTemplate.addRule(northRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
-		poolRoomTemplate.addRule(southRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-		poolRoomTemplate.addRule(westRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
-		poolRoomTemplate.addRule(eastRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
+		poolRoomTemplate.addRule(northRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(StairsBlock.FACING, Direction.SOUTH));
+		poolRoomTemplate.addRule(southRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(StairsBlock.FACING, Direction.NORTH));
+		poolRoomTemplate.addRule(westRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(StairsBlock.FACING, Direction.EAST));
+		poolRoomTemplate.addRule(eastRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(StairsBlock.FACING, Direction.WEST));
 		poolRoomTemplate.addRule(water, Blocks.WATER.getDefaultState());
 
-		Map<BlockPos, IBlockState> genMap = poolRoomTemplate.getGenerationMap(this.getDecorationStartPos(), true);
+		Map<BlockPos, BlockState> genMap = poolRoomTemplate.getGenerationMap(this.getDecorationStartPos(), true);
 		genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
-		for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
+		for (Map.Entry<BlockPos, BlockState> entry : genMap.entrySet()) {
 			if (entry.getValue().getBlock() != Blocks.AIR) {
 				this.usedDecoPositions.add(entry.getKey());
 			}
@@ -51,7 +51,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
+	protected BlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return dungeon.getMainBlockState();
 	}
 

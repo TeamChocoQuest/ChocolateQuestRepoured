@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.boss.giantspider;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
 
-public class BossAISpiderLeapAttack extends EntityAIBase {
+public class BossAISpiderLeapAttack extends Goal {
 	/** The entity that is leaping. */
-	EntityLiving leaper;
+	MobEntity leaper;
 	/** The entity that the leaper is leaping towards. */
-	EntityLivingBase leapTarget;
+	LivingEntity leapTarget;
 	/** The entity's motionY after leaping. */
 	float leapMotionY = 0.8F;
 
@@ -20,7 +20,7 @@ public class BossAISpiderLeapAttack extends EntityAIBase {
 	private final double MAX_LEAP_DISTANCE = 256;
 	private final int MAX_COOLDOWN = 40;
 
-	public BossAISpiderLeapAttack(EntityLiving leapingEntity, float leapMotionYIn) {
+	public BossAISpiderLeapAttack(MobEntity leapingEntity, float leapMotionYIn) {
 		this.leaper = leapingEntity;
 		this.leapMotionY = leapMotionYIn;
 		this.setMutexBits(5);

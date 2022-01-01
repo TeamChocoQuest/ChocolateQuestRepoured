@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.util;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -54,7 +54,7 @@ public class BlockPlacingHelper {
 
 	}
 
-	public static boolean setBlockState(World world, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags, boolean updateLight) {
+	public static boolean setBlockState(World world, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, int flags, boolean updateLight) {
 		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates || updateLight) {
 			if (!world.setBlockState(pos, state, flags)) {
 				return false;
@@ -88,8 +88,8 @@ public class BlockPlacingHelper {
 		return setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags);
 	}
 
-	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags) {
-		IBlockState oldState = setBlockState(world, chunk, blockStorage, pos, state, tileEntity);
+	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, int flags) {
+		BlockState oldState = setBlockState(world, chunk, blockStorage, pos, state, tileEntity);
 
 		if (oldState == null) {
 			return false;
@@ -105,11 +105,11 @@ public class BlockPlacingHelper {
 	}
 
 	@Nullable
-	private static IBlockState setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity) {
+	private static BlockState setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity) {
 		int x = pos.getX() & 15;
 		int y = pos.getY() & 15;
 		int z = pos.getZ() & 15;
-		IBlockState oldState = setBlockState(blockStorage, x, y, z, state);
+		BlockState oldState = setBlockState(blockStorage, x, y, z, state);
 		if (oldState == null) {
 			return null;
 		}
@@ -156,11 +156,11 @@ public class BlockPlacingHelper {
 	}
 
 	@Nullable
-	private static IBlockState setBlockState(ExtendedBlockStorage blockStorage, int x, int y, int z, IBlockState state) {
+	private static BlockState setBlockState(ExtendedBlockStorage blockStorage, int x, int y, int z, BlockState state) {
 		if (state instanceof IExtendedBlockState) {
 			state = ((IExtendedBlockState) state).getClean();
 		}
-		IBlockState oldState = blockStorage.getData().get(x, y, z);
+		BlockState oldState = blockStorage.getData().get(x, y, z);
 		if (state == oldState) {
 			return null;
 		}

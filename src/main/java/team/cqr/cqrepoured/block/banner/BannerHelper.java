@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.BannerTileEntity;
 
 public class BannerHelper {
 
@@ -17,7 +17,7 @@ public class BannerHelper {
 		return itemList;
 	}
 
-	public static boolean isCQBanner(TileEntityBanner bannerTile) {
+	public static boolean isCQBanner(BannerTileEntity bannerTile) {
 		if (bannerTile.patterns == null) {
 			return false;
 		}
@@ -25,7 +25,7 @@ public class BannerHelper {
 			return false;
 		}
 		for (int i = 0; i < bannerTile.patterns.tagCount(); i++) {
-			NBTTagCompound nbttagcompound = bannerTile.patterns.getCompoundTagAt(i);
+			CompoundNBT nbttagcompound = bannerTile.patterns.getCompoundTagAt(i);
 			if (nbttagcompound.getString("Pattern").equals(EBannerPatternsCQ.CQ_BLANK.getPattern().getHashname())) {
 				return true;
 			}

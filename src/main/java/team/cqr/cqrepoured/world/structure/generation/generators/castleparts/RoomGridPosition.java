@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 
 import java.util.Objects;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public class RoomGridPosition {
 	private int floor;
@@ -45,11 +45,11 @@ public class RoomGridPosition {
 		this.z = z;
 	}
 
-	public RoomGridPosition move(EnumFacing direction) {
+	public RoomGridPosition move(Direction direction) {
 		return this.move(direction, 1);
 	}
 
-	public RoomGridPosition move(EnumFacing direction, int distance) {
+	public RoomGridPosition move(Direction direction, int distance) {
 		int floor = this.getFloor();
 		int x = this.getX();
 		int z = this.getZ();

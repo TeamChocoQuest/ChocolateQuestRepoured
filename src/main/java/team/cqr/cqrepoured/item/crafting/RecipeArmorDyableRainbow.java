@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.item.crafting;
 
 import java.util.Optional;
 
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
@@ -20,7 +20,7 @@ public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> 
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World world) {
+	public boolean matches(CraftingInventory inv, World world) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		int slimeBallCount = 0;
 		boolean dyeRed = false;
@@ -36,14 +36,14 @@ public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> 
 				} else if (itemstack1.getItem() == Items.SLIME_BALL) {
 					slimeBallCount++;
 				} else {
-					Optional<EnumDyeColor> optionalColor = DyeUtils.colorFromStack(itemstack1);
+					Optional<DyeColor> optionalColor = DyeUtils.colorFromStack(itemstack1);
 					if (optionalColor.isPresent()) {
-						EnumDyeColor color = optionalColor.get();
-						if (!dyeRed && color == EnumDyeColor.RED) {
+						DyeColor color = optionalColor.get();
+						if (!dyeRed && color == DyeColor.RED) {
 							dyeRed = true;
-						} else if (!dyeGreen && color == EnumDyeColor.GREEN) {
+						} else if (!dyeGreen && color == DyeColor.GREEN) {
 							dyeGreen = true;
-						} else if (!dyeBlue && color == EnumDyeColor.BLUE) {
+						} else if (!dyeBlue && color == DyeColor.BLUE) {
 							dyeBlue = true;
 						} else {
 							return false;
@@ -59,7 +59,7 @@ public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> 
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		int slimeBallCount = 0;
 		boolean dyeRed = false;
@@ -75,14 +75,14 @@ public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> 
 				} else if (itemstack1.getItem() == Items.SLIME_BALL) {
 					slimeBallCount++;
 				} else {
-					Optional<EnumDyeColor> optionalColor = DyeUtils.colorFromStack(itemstack1);
+					Optional<DyeColor> optionalColor = DyeUtils.colorFromStack(itemstack1);
 					if (optionalColor.isPresent()) {
-						EnumDyeColor color = optionalColor.get();
-						if (!dyeRed && color == EnumDyeColor.RED) {
+						DyeColor color = optionalColor.get();
+						if (!dyeRed && color == DyeColor.RED) {
 							dyeRed = true;
-						} else if (!dyeGreen && color == EnumDyeColor.GREEN) {
+						} else if (!dyeGreen && color == DyeColor.GREEN) {
 							dyeGreen = true;
-						} else if (!dyeBlue && color == EnumDyeColor.BLUE) {
+						} else if (!dyeBlue && color == DyeColor.BLUE) {
 							dyeBlue = true;
 						} else {
 							return ItemStack.EMPTY;

@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall.wallparts;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockStoneSlab;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -44,7 +44,7 @@ public class WallPartRailingWall implements IWallPart {
 		int startY = this.getTopY();
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
+		BlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
 		for (int y = 0; y < 8; y++) {
@@ -76,61 +76,61 @@ public class WallPartRailingWall implements IWallPart {
 	private void placeSpawner(BlockPos spawnerPos, World world, BlockDungeonPart.Builder partBuilder) {
 		Entity spawnerEnt = EntityList.createEntityByIDFromName(new ResourceLocation(CQRConfig.wall.mob), world);
 
-		if (spawnerEnt instanceof EntityLivingBase) {
-			EnumDifficulty difficulty = world.getDifficulty();
-			this.equipWeaponBasedOnDifficulty((EntityLivingBase) spawnerEnt, difficulty);
-			this.equipArmorBasedOnDifficulty((EntityLivingBase) spawnerEnt, difficulty);
+		if (spawnerEnt instanceof LivingEntity) {
+			Difficulty difficulty = world.getDifficulty();
+			this.equipWeaponBasedOnDifficulty((LivingEntity) spawnerEnt, difficulty);
+			this.equipArmorBasedOnDifficulty((LivingEntity) spawnerEnt, difficulty);
 
 			if (spawnerEnt instanceof AbstractEntityCQR) {
 				((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
 			}
 
-			IBlockState state2 = CQRBlocks.SPAWNER.getDefaultState();
+			BlockState state2 = CQRBlocks.SPAWNER.getDefaultState();
 			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
-			partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.writeToNBT(new NBTTagCompound())));
+			partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.writeToNBT(new CompoundNBT())));
 		}
 	}
 
-	private void equipWeaponBasedOnDifficulty(EntityLivingBase entity, EnumDifficulty difficulty) {
+	private void equipWeaponBasedOnDifficulty(LivingEntity entity, Difficulty difficulty) {
 		switch (entity.getRNG().nextInt(5)) {
 		case 0:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 1:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 2:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
 			break;
 		case 3:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 4:
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
 			break;
 		}
 	}
 
-	private void equipArmorBasedOnDifficulty(EntityLivingBase entity, EnumDifficulty difficulty) {
+	private void equipArmorBasedOnDifficulty(LivingEntity entity, Difficulty difficulty) {
 		ItemStack helm = new ItemStack(CQRItems.HELMET_IRON_DYABLE);
 		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_IRON_DYABLE);
 		ItemStack legs = new ItemStack(CQRItems.LEGGINGS_IRON_DYABLE);
 		ItemStack feet = new ItemStack(CQRItems.BOOTS_IRON_DYABLE);
 
-		if (difficulty == EnumDifficulty.HARD) {
+		if (difficulty == Difficulty.HARD) {
 			if (entity.getRNG().nextDouble() < 0.35D) {
 				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
 				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
 				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
 				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
 			}
-		} else if (difficulty == EnumDifficulty.NORMAL) {
+		} else if (difficulty == Difficulty.NORMAL) {
 			if (entity.getRNG().nextDouble() < 0.25D) {
 				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
 				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
@@ -158,10 +158,10 @@ public class WallPartRailingWall implements IWallPart {
 			((ItemArmorDyable) helm.getItem()).setColor(feet, 0);
 		}
 
-		entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, helm);
-		entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
-		entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
-		entity.setItemStackToSlot(EntityEquipmentSlot.FEET, feet);
+		entity.setItemStackToSlot(EquipmentSlotType.HEAD, helm);
+		entity.setItemStackToSlot(EquipmentSlotType.CHEST, chest);
+		entity.setItemStackToSlot(EquipmentSlotType.LEGS, legs);
+		entity.setItemStackToSlot(EquipmentSlotType.FEET, feet);
 	}
 
 }

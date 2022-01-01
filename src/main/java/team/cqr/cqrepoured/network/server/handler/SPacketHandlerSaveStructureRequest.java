@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,7 +16,7 @@ public class SPacketHandlerSaveStructureRequest implements IMessageHandler<CPack
 	public IMessage onMessage(CPacketSaveStructureRequest message, MessageContext ctx) {
 		if (ctx.side.isServer()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 				TileEntity tileEntity = player.world.getTileEntity(message.getPos());
 
 				if (tileEntity instanceof TileEntityExporter) {

@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelFlyingSkull;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 
-public class RenderFlyingSkull extends RenderLiving<EntityFlyingSkullMinion> {
+public class RenderFlyingSkull extends MobRenderer<EntityFlyingSkullMinion> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/flying_skull.png");
 
-	public RenderFlyingSkull(RenderManager renderManager) {
+	public RenderFlyingSkull(EntityRendererManager renderManager) {
 		super(renderManager, new ModelFlyingSkull(0F), 0F);
 	}
 

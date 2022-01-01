@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRParticleType;
@@ -24,8 +24,8 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 public class ItemMagicBell extends ItemLore {
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.BOW;
+	public UseAction getItemUseAction(ItemStack stack) {
+		return UseAction.BOW;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class ItemMagicBell extends ItemLore {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		if (!worldIn.isRemote) {
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(worldIn);
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(new BlockPos(entityLiving));
@@ -68,11 +68,11 @@ public class ItemMagicBell extends ItemLore {
 			});
 
 			worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, CQRSounds.BELL_USE, entityLiving.getSoundCategory(), 1.0F, 1.0F);
-			if (entityLiving instanceof EntityPlayer) {
+			if (entityLiving instanceof PlayerEntity) {
 				if (protectedRegions.isEmpty()) {
-					((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 60);
+					((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 60);
 				} else {
-					((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 200);
+					((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 200);
 				}
 			}
 		}

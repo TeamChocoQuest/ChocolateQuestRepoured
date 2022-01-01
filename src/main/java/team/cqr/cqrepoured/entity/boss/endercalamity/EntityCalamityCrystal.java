@@ -7,9 +7,9 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -30,8 +30,8 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class EntityCalamityCrystal extends Entity {
 
-	private EntityLiving owningEntity;
-	private EntityLivingBase currentTarget;
+	private MobEntity owningEntity;
+	private LivingEntity currentTarget;
 	public int innerRotation;
 
 	private int noTargetTicks = 0;
@@ -51,7 +51,7 @@ public class EntityCalamityCrystal extends Entity {
 		this.innerRotation = this.rand.nextInt(100_000);
 	}
 
-	public EntityCalamityCrystal(World world, EntityLiving owningEntity, double x, double y, double z) {
+	public EntityCalamityCrystal(World world, MobEntity owningEntity, double x, double y, double z) {
 		this(world);
 		this.owningEntity = owningEntity;
 		this.setPosition(x, y, z);
@@ -74,7 +74,7 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 		if (compound.hasKey("BeamTarget", 10)) {
 			this.setBeamTarget(NBTUtil.getPosFromTag(compound.getCompoundTag("BeamTarget")));
 		}
@@ -84,7 +84,7 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 		if (this.getBeamTarget() != null) {
 			compound.setTag("BeamTarget", NBTUtil.createPosTag(this.getBeamTarget()));
 		}
@@ -171,7 +171,7 @@ public class EntityCalamityCrystal extends Entity {
 			Vec3d p1 = this.getPositionVector().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			Vec3d p2 = this.getPositionVector().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this::doesEntityFitForAbsorbing);
+			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb, this::doesEntityFitForAbsorbing);
 			if (!affectedEntities.isEmpty()) {
 				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() - 1, this.rand));
 			}
@@ -216,7 +216,7 @@ public class EntityCalamityCrystal extends Entity {
 			Vec3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			Vec3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb);
+			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb);
 			if (!affectedEntities.isEmpty()) {
 				final float healingAmount = 4 * (this.absorbedHealth / affectedEntities.size());
 				affectedEntities.forEach(arg0 -> arg0.heal(healingAmount));
@@ -251,7 +251,7 @@ public class EntityCalamityCrystal extends Entity {
 		return null;
 	}
 
-	private boolean doesEntityFitForAbsorbing(EntityLiving living) {
+	private boolean doesEntityFitForAbsorbing(MobEntity living) {
 		if (living != this.owningEntity) {
 			if (TargetUtil.PREDICATE_LIVING.apply(living)) {
 				/*

@@ -3,14 +3,14 @@ package team.cqr.cqrepoured.inventory;
 import javax.annotation.Nullable;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArrow;
-import net.minecraft.item.ItemShield;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,7 +28,7 @@ public class ContainerCQREntity extends Container {
 
 	private final AbstractEntityCQR entity;
 
-	public ContainerCQREntity(InventoryPlayer playerInv, AbstractEntityCQR entity) {
+	public ContainerCQREntity(PlayerInventory playerInv, AbstractEntityCQR entity) {
 		this.entity = entity;
 		IItemHandler inventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		CapabilityExtraItemHandler extraInventory = entity.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
@@ -51,11 +51,11 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem().isValidArmor(stack, EntityEquipmentSlot.FEET, entity);
+				return stack.getItem().isValidArmor(stack, EquipmentSlotType.FEET, entity);
 			}
 
 			@Override
-			public boolean canTakeStack(EntityPlayer playerIn) {
+			public boolean canTakeStack(PlayerEntity playerIn) {
 				ItemStack itemstack = this.getStack();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
@@ -64,7 +64,7 @@ public class ContainerCQREntity extends Container {
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return ItemArmor.EMPTY_SLOT_NAMES[0];
+				return ArmorItem.EMPTY_SLOT_NAMES[0];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 1, 89, 8) {
@@ -75,11 +75,11 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem().isValidArmor(stack, EntityEquipmentSlot.LEGS, entity);
+				return stack.getItem().isValidArmor(stack, EquipmentSlotType.LEGS, entity);
 			}
 
 			@Override
-			public boolean canTakeStack(EntityPlayer playerIn) {
+			public boolean canTakeStack(PlayerEntity playerIn) {
 				ItemStack itemstack = this.getStack();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
@@ -88,7 +88,7 @@ public class ContainerCQREntity extends Container {
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return ItemArmor.EMPTY_SLOT_NAMES[1];
+				return ArmorItem.EMPTY_SLOT_NAMES[1];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 2, 71, 8) {
@@ -99,11 +99,11 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem().isValidArmor(stack, EntityEquipmentSlot.CHEST, entity);
+				return stack.getItem().isValidArmor(stack, EquipmentSlotType.CHEST, entity);
 			}
 
 			@Override
-			public boolean canTakeStack(EntityPlayer playerIn) {
+			public boolean canTakeStack(PlayerEntity playerIn) {
 				ItemStack itemstack = this.getStack();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
@@ -112,7 +112,7 @@ public class ContainerCQREntity extends Container {
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return ItemArmor.EMPTY_SLOT_NAMES[2];
+				return ArmorItem.EMPTY_SLOT_NAMES[2];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 3, 53, 8) {
@@ -122,7 +122,7 @@ public class ContainerCQREntity extends Container {
 			}
 
 			@Override
-			public boolean canTakeStack(EntityPlayer playerIn) {
+			public boolean canTakeStack(PlayerEntity playerIn) {
 				ItemStack itemstack = this.getStack();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
@@ -131,7 +131,7 @@ public class ContainerCQREntity extends Container {
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return ItemArmor.EMPTY_SLOT_NAMES[3];
+				return ArmorItem.EMPTY_SLOT_NAMES[3];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 4, 71, 26) {
@@ -179,7 +179,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(extraInventory, 2, 125, 26) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() instanceof ItemArrow || stack.getItem() instanceof ItemBullet;
+				return stack.getItem() instanceof ArrowItem || stack.getItem() instanceof ItemBullet;
 			}
 
 			@Override
@@ -192,7 +192,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
+	public boolean canInteractWith(PlayerEntity playerIn) {
 		if (!playerIn.isCreative() && this.entity.getLeader() != playerIn) {
 			return false;
 		}
@@ -203,7 +203,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		Slot slot = this.inventorySlots.get(index);
 
 		if (slot != null && slot.getHasStack()) {
@@ -223,7 +223,7 @@ public class ContainerCQREntity extends Container {
 					return itemstack;
 				} else if (this.mergeItemStack(itemstack1, 42, 45, false)) {
 					return itemstack;
-				} else if (itemstack1.getItem() instanceof ItemShield && this.mergeItemStack(itemstack1, 41, 42, false)) {
+				} else if (itemstack1.getItem() instanceof ShieldItem && this.mergeItemStack(itemstack1, 41, 42, false)) {
 					return itemstack;
 				} else if (this.mergeItemStack(itemstack1, 40, 42, false)) {
 					return itemstack;
@@ -245,7 +245,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	private boolean isHelmet(ItemStack stack) {
-		return (stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.HEAD) || stack.getItem().getEquipmentSlot(stack) == EntityEquipmentSlot.HEAD;
+		return (stack.getItem() instanceof ArmorItem && ((ArmorItem) stack.getItem()).armorType == EquipmentSlotType.HEAD) || stack.getItem().getEquipmentSlot(stack) == EquipmentSlotType.HEAD;
 	}
 
 }

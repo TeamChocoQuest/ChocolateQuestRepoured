@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -93,10 +93,10 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 			if (!(stack.getItem() instanceof ItemCursedBone)) {
 				return;
 			} else {
-				this.entity.swingArm(EnumHand.OFF_HAND);
+				this.entity.swingArm(Hand.OFF_HAND);
 			}
 		} else {
-			this.entity.swingArm(EnumHand.MAIN_HAND);
+			this.entity.swingArm(Hand.MAIN_HAND);
 		}
 
 		if (this.chargingTicks < 0) {
@@ -138,7 +138,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	@Override
-	public EntityLivingBase getSummoner() {
+	public LivingEntity getSummoner() {
 		return this.entity;
 	}
 

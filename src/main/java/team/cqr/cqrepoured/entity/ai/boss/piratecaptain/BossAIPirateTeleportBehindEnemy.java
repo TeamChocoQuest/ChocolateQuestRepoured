@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
@@ -36,7 +36,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 		this.timer++;
 		super.updateTask();
 		if (this.timer == 10) {
-			this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
+			this.entity.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
 
 		if (this.timer == 100) {
@@ -54,7 +54,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	public void resetTask() {
 		super.resetTask();
 		this.timer = 0;
-		this.entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
+		this.entity.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 	}
 
 }

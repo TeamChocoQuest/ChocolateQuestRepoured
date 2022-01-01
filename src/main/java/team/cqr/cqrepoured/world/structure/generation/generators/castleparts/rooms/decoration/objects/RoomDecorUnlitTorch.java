@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 
-import net.minecraft.block.BlockTorch;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.util.Direction;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 
@@ -12,7 +12,7 @@ public class RoomDecorUnlitTorch extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockRotating(0, 0, 0, CQRBlocks.UNLIT_TORCH.getDefaultState(), BlockTorch.FACING, EnumFacing.SOUTH, BlockStateGenArray.GenerationPhase.POST));
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, CQRBlocks.UNLIT_TORCH.getDefaultState(), TorchBlock.FACING, Direction.SOUTH, BlockStateGenArray.GenerationPhase.POST));
 
 	}
 }

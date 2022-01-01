@@ -17,6 +17,10 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.Difficulty;
 import org.apache.commons.io.FileUtils;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -24,11 +28,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -112,7 +112,7 @@ public class FactionRegistry {
 	}
 
 	// Variant on the server, used by the command
-	public void changeReputationTo(@Nonnull EntityPlayerMP player, int reputation, @Nonnull Faction faction) {
+	public void changeReputationTo(@Nonnull ServerPlayerEntity player, int reputation, @Nonnull Faction faction) {
 		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getPersistentID(), key -> new Object2IntOpenHashMap<>());
 		factionsOfPlayer.put(faction.getName(), reputation);
 
@@ -311,15 +311,15 @@ public class FactionRegistry {
 		return faction.getDefaultReputation().getValue();
 	}
 
-	void incrementRepuOf(EntityPlayer player, String faction, int score) {
+	void incrementRepuOf(PlayerEntity player, String faction, int score) {
 		this.changeRepuOf(player, faction, Math.abs(score));
 	}
 
-	void decrementRepuOf(EntityPlayer player, String faction, int score) {
+	void decrementRepuOf(PlayerEntity player, String faction, int score) {
 		this.changeRepuOf(player, faction, -Math.abs(score));
 	}
 
-	private void changeRepuOf(EntityPlayer player, String faction, int score) {
+	private void changeRepuOf(PlayerEntity player, String faction, int score) {
 		// System.out.println("Changing repu...");
 
 		/*
@@ -334,21 +334,21 @@ public class FactionRegistry {
 			// CQRMain.logger.info("Repu changed!");
 
 			// send packet to player
-			if (player instanceof EntityPlayerMP) {
-				this.sendRepuUpdatePacket((EntityPlayerMP) player, score + oldScore, faction);
+			if (player instanceof ServerPlayerEntity) {
+				this.sendRepuUpdatePacket((ServerPlayerEntity) player, score + oldScore, faction);
 			}
 		}
 		// System.out.println("Repu of " + player.getDisplayNameString() + " is " +
 		// this.getExactReputationOf(player.getPersistentID(), getFactionInstance(faction)));
 	}
 
-	private void sendRepuUpdatePacket(EntityPlayerMP player, int reputation, String faction) {
+	private void sendRepuUpdatePacket(ServerPlayerEntity player, int reputation, String faction) {
 		// System.out.println("Sending update packet...");
 		IMessage packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
 		CQRMain.NETWORK.sendTo(packet, player);
 	}
 
-	private boolean canDecrementRepu(EntityPlayer player, String faction) {
+	private boolean canDecrementRepu(PlayerEntity player, String faction) {
 		if (this.canRepuChange(player)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new Object2IntOpenHashMap<>());
 			if (factionsOfPlayer != null) {
@@ -364,7 +364,7 @@ public class FactionRegistry {
 		return false;
 	}
 
-	public boolean canIncrementRepu(EntityPlayer player, String faction) {
+	public boolean canIncrementRepu(PlayerEntity player, String faction) {
 		if (this.canRepuChange(player)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new Object2IntOpenHashMap<>());
 			if (factionsOfPlayer != null) {
@@ -380,18 +380,18 @@ public class FactionRegistry {
 		return false;
 	}
 
-	private boolean canRepuChange(EntityPlayer player) {
-		return player.getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && !player.isCreative() && !player.isSpectator();
+	private boolean canRepuChange(PlayerEntity player) {
+		return player.getEntityWorld().getDifficulty() != Difficulty.PEACEFUL && !player.isCreative() && !player.isSpectator();
 	}
 
-	public void loadPlayerReputationData(EntityPlayer player) {
+	public void loadPlayerReputationData(PlayerEntity player) {
 		CQRMain.logger.info("Loading player reputation...");
 
 		UUID uuid = player.getPersistentID();
 		File folder = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/CQR/reputation");
 		File file = new File(folder, uuid + ".nbt");
 		if (file.exists()) {
-			NBTTagCompound root = FileIOUtil.readNBTFromFile(file);
+			CompoundNBT root = FileIOUtil.readNBTFromFile(file);
 			Map<String, Integer> mapping = this.playerFactionRepuMap.computeIfAbsent(uuid, key -> new Object2IntOpenHashMap<>());
 			for (String factionName : root.getKeySet()) {
 				int value = root.getInteger(factionName);
@@ -400,12 +400,12 @@ public class FactionRegistry {
 		}
 	}
 
-	public void syncPlayerReputationData(EntityPlayerMP player) {
+	public void syncPlayerReputationData(ServerPlayerEntity player) {
 		// Send over factions and reputations
 		CQRMain.NETWORK.sendTo(new SPacketInitialFactionInformation(player.getPersistentID(), this.getLoadedFactions(), this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), Object2IntMaps.emptyMap())), player);
 	}
 
-	public void savePlayerReputationData(EntityPlayerMP player) {
+	public void savePlayerReputationData(ServerPlayerEntity player) {
 		if (this.playerFactionRepuMap.containsKey(player.getPersistentID())) {
 			CQRMain.logger.info("Saving player reputation...");
 			this.savePlayerReputation(player.getPersistentID(), true);
@@ -420,7 +420,7 @@ public class FactionRegistry {
 
 	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap) {
 		Map<String, Integer> mapping = this.playerFactionRepuMap.get(playerID);
-		NBTTagCompound root = new NBTTagCompound();
+		CompoundNBT root = new CompoundNBT();
 		for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
 			root.setInteger(entry.getKey(), entry.getValue());
 		}

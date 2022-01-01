@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 
-public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
+public class RenderSummoningCircle extends EntityRenderer<EntitySummoningCircle> {
 
 	// TODO: Move corner count, color and radius to the entity
 	// TODO: Render the letters on the corners
@@ -21,7 +21,7 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/flying_sword.png"),
 			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/meteor.png") };
 
-	public RenderSummoningCircle(RenderManager renderManager) {
+	public RenderSummoningCircle(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 

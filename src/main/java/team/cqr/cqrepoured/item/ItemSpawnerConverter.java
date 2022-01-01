@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
@@ -21,13 +21,13 @@ public class ItemSpawnerConverter extends Item {
 	}
 
 	@Override
-	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
 		Block block = world.getBlockState(pos).getBlock();
 		return block != CQRBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
 		if (player.isCreative()) {
 			Block block = world.getBlockState(pos).getBlock();
 			if (block == CQRBlocks.SPAWNER || block == Blocks.MOB_SPAWNER) {
@@ -42,10 +42,10 @@ public class ItemSpawnerConverter extends Item {
 					}
 					player.getCooldownTracker().setCooldown(this, 10);
 				}
-				return EnumActionResult.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
 		}
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
 }

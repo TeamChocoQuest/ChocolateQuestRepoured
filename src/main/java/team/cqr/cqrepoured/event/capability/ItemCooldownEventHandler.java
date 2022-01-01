@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.event.capability;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +16,7 @@ public class ItemCooldownEventHandler {
 
 	@SubscribeEvent
 	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		CapabilityCooldownHandler capabilityCooldown = entity.getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 		capabilityCooldown.tick();
 	}
@@ -25,7 +25,7 @@ public class ItemCooldownEventHandler {
 	public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 		if (!event.player.world.isRemote) {
 			CapabilityCooldownHandler capabilityCooldown = event.player.getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
-			CQRMain.NETWORK.sendTo(new SPacketArmorCooldownSync(capabilityCooldown.getItemCooldownMap()), (EntityPlayerMP) event.player);
+			CQRMain.NETWORK.sendTo(new SPacketArmorCooldownSync(capabilityCooldown.getItemCooldownMap()), (ServerPlayerEntity) event.player);
 		}
 	}
 

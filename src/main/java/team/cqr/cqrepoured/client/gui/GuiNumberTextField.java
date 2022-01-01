@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.client.gui;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 
-public class GuiNumberTextField extends GuiTextField {
+public class GuiNumberTextField extends TextFieldWidget {
 
 	private final boolean allowNegative;
 	private final boolean allowDouble;

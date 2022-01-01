@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.event;
 import java.util.Arrays;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.client.GuiModList;
@@ -32,7 +32,7 @@ public class GuiEventHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 		ScaledResolution scaled = new ScaledResolution(mc);
 
-		GuiButton buttonReloadDungeons = new GuiButton(0, scaled.getScaledWidth() - 102, 2, 100, 20, "Reload Dungeons") {
+		Button buttonReloadDungeons = new Button(0, scaled.getScaledWidth() - 102, 2, 100, 20, "Reload Dungeons") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
@@ -53,7 +53,7 @@ public class GuiEventHandler {
 		buttonReloadDungeons.enabled = mc.world == null || mc.isGamePaused();
 		event.getButtonList().add(buttonReloadDungeons);
 
-		GuiButton buttonMapTool = new GuiButton(1, 2, 2, 100, 20, "Map Tool") {
+		Button buttonMapTool = new Button(1, 2, 2, 100, 20, "Map Tool") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {

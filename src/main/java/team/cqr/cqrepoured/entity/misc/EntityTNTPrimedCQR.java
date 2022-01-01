@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.world.World;
 
-public class EntityTNTPrimedCQR extends EntityTNTPrimed {
+public class EntityTNTPrimedCQR extends TNTEntity {
 
 	public EntityTNTPrimedCQR(World worldIn) {
 		super(worldIn);
 	}
 
-	public EntityTNTPrimedCQR(World worldIn, double x, double y, double z, EntityLivingBase igniter) {
+	public EntityTNTPrimedCQR(World worldIn, double x, double y, double z, LivingEntity igniter) {
 		super(worldIn, x, y, z, igniter);
 	}
 

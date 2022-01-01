@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.item.staff;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -17,7 +17,7 @@ public class ItemStaffWind extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		// TODO Auto-generated method stub
 
 	}

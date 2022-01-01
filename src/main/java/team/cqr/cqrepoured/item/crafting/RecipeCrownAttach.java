@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.item.crafting;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
@@ -19,7 +19,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World worldIn) {
+	public boolean matches(CraftingInventory inv, World worldIn) {
 		ItemStack helmet = ItemStack.EMPTY;
 		ItemStack crown = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -31,7 +31,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 					} else {
 						return false;
 					}
-				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
+				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && MobEntity.getSlotForItemStack(stack) == EquipmentSlotType.HEAD && !ItemCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return false;
@@ -42,7 +42,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		ItemStack helmet = ItemStack.EMPTY;
 		ItemStack crown = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -54,7 +54,7 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 					} else {
 						return ItemStack.EMPTY;
 					}
-				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
+				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && MobEntity.getSlotForItemStack(stack) == EquipmentSlotType.HEAD && !ItemCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return ItemStack.EMPTY;
@@ -66,12 +66,12 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		}
 
 		ItemStack copy = helmet.copy();
-		NBTTagCompound nbt = copy.getTagCompound();
+		CompoundNBT nbt = copy.getTagCompound();
 		if (nbt == null) {
-			nbt = new NBTTagCompound();
+			nbt = new CompoundNBT();
 			copy.setTagCompound(nbt);
 		}
-		nbt.setTag(ItemCrown.NBT_KEY_CROWN, crown.writeToNBT(new NBTTagCompound()));
+		nbt.setTag(ItemCrown.NBT_KEY_CROWN, crown.writeToNBT(new CompoundNBT()));
 		return copy;
 	}
 

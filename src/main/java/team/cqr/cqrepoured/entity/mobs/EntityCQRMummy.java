@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -25,9 +25,9 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	public boolean attackEntityAsMob(Entity entityIn) {
 		boolean flag = super.attackEntityAsMob(entityIn);
 
-		if (flag && this.getHeldItemMainhand().isEmpty() && entityIn instanceof EntityLivingBase) {
+		if (flag && this.getHeldItemMainhand().isEmpty() && entityIn instanceof LivingEntity) {
 			int i = this.world.getDifficulty().getId();
-			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.HUNGER, 140 * i));
+			((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.HUNGER, 140 * i));
 		}
 
 		return flag;

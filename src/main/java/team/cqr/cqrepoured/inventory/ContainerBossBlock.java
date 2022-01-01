@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -15,7 +15,7 @@ public class ContainerBossBlock extends Container {
 
 	private final TileEntityBoss tileEntity;
 
-	public ContainerBossBlock(InventoryPlayer playerInv, TileEntityBoss tileentity) {
+	public ContainerBossBlock(PlayerInventory playerInv, TileEntityBoss tileentity) {
 		this.tileEntity = tileentity;
 		IItemHandler inventory = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
@@ -38,7 +38,7 @@ public class ContainerBossBlock extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
+	public boolean canInteractWith(PlayerEntity playerIn) {
 		if (!playerIn.isCreative()) {
 			return false;
 		}
@@ -49,7 +49,7 @@ public class ContainerBossBlock extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		Slot slot = this.inventorySlots.get(index);
 
 		if (slot != null && slot.getHasStack()) {

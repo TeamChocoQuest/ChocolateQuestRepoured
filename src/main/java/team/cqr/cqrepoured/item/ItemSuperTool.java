@@ -3,21 +3,20 @@ package team.cqr.cqrepoured.item;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -31,8 +30,8 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (player.isCreative() && !(entity instanceof EntityPlayer)) {
+	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
+		if (player.isCreative() && !(entity instanceof PlayerEntity)) {
 			entity.onKillCommand();
 			return true;
 		}
@@ -60,11 +59,11 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (!playerIn.isCreative()) {
-			return new ActionResult<>(EnumActionResult.FAIL, stack);
+			return new ActionResult<>(ActionResultType.FAIL, stack);
 		}
 
 		if (playerIn.isSneaking()) {
@@ -77,37 +76,37 @@ public class ItemSuperTool extends Item {
 			this.setMode(stack, mode);
 
 			if (!worldIn.isRemote) {
-				playerIn.sendStatusMessage(new TextComponentString("Pickaxe Mode: " + this.getModeName(mode)), true);
+				playerIn.sendStatusMessage(new StringTextComponent("Pickaxe Mode: " + this.getModeName(mode)), true);
 			}
 
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(ActionResultType.SUCCESS, stack);
 		}
 
-		return new ActionResult<>(EnumActionResult.FAIL, stack);
+		return new ActionResult<>(ActionResultType.FAIL, stack);
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
 
 		if (!player.isCreative()) {
-			return EnumActionResult.PASS;
+			return ActionResultType.PASS;
 		}
 
 		if (player.isSneaking()) {
 			this.setBlock(stack, worldIn.getBlockState(pos).getBlock());
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 
 		int size = 1;
-		EnumFacing facing1;
-		EnumFacing facing2;
+		Direction facing1;
+		Direction facing2;
 
-		if (facing.getAxis() == EnumFacing.Axis.Y) {
-			facing1 = EnumFacing.NORTH;
-			facing2 = EnumFacing.EAST;
+		if (facing.getAxis() == Direction.Axis.Y) {
+			facing1 = Direction.NORTH;
+			facing2 = Direction.EAST;
 		} else {
-			facing1 = EnumFacing.UP;
+			facing1 = Direction.UP;
 			facing2 = facing.rotateY();
 		}
 
@@ -117,7 +116,7 @@ public class ItemSuperTool extends Item {
 			}
 		}
 
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
 	private void performAction(World worldIn, BlockPos pos, ItemStack stack) {
@@ -145,10 +144,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public int getMode(ItemStack stack) {
-		NBTTagCompound stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTagCompound();
 
 		if (stackTag == null) {
-			stackTag = new NBTTagCompound();
+			stackTag = new CompoundNBT();
 			stack.setTagCompound(stackTag);
 		}
 
@@ -163,10 +162,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public Block getBlock(ItemStack stack) {
-		NBTTagCompound stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTagCompound();
 
 		if (stackTag == null) {
-			stackTag = new NBTTagCompound();
+			stackTag = new CompoundNBT();
 			stack.setTagCompound(stackTag);
 		}
 
@@ -176,10 +175,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public void setMode(ItemStack stack, int mode) {
-		NBTTagCompound stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTagCompound();
 
 		if (stackTag == null) {
-			stackTag = new NBTTagCompound();
+			stackTag = new CompoundNBT();
 			stack.setTagCompound(stackTag);
 		}
 
@@ -191,10 +190,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public void setBlock(ItemStack stack, Block blockIn) {
-		NBTTagCompound stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTagCompound();
 
 		if (stackTag == null) {
-			stackTag = new NBTTagCompound();
+			stackTag = new CompoundNBT();
 			stack.setTagCompound(stackTag);
 		}
 

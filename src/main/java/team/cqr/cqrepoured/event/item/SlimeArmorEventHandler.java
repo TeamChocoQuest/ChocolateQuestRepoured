@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.event.item;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +16,7 @@ public class SlimeArmorEventHandler {
 
 	@SubscribeEvent
 	public static void onLivingHurtEvent(LivingHurtEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 
 		if (ItemUtil.hasFullSet(entity, ItemArmorSlime.class) && !CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_SLIME)) {
 			if (!entity.world.isRemote) {

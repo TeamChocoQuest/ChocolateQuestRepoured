@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,11 +34,11 @@ public class DungeonVolcano extends DungeonBase {
 	private boolean damagedVolcano = true;
 	private int maxHoleSize = 8;
 
-	private CQRWeightedRandom<IBlockState> volcanoBlocks = new CQRWeightedRandom<>(new CQRWeightedRandom.WeightedObject<>(Blocks.STONE.getDefaultState(), 1));
-	private IBlockState lavaBlock = Blocks.LAVA.getDefaultState();
+	private CQRWeightedRandom<BlockState> volcanoBlocks = new CQRWeightedRandom<>(new CQRWeightedRandom.WeightedObject<>(Blocks.STONE.getDefaultState(), 1));
+	private BlockState lavaBlock = Blocks.LAVA.getDefaultState();
 	private int lavaWeight = 10;
-	private IBlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
-	private IBlockState pillarBlock = CQRBlocks.GRANITE_LARGE.getDefaultState();
+	private BlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
+	private BlockState pillarBlock = CQRBlocks.GRANITE_LARGE.getDefaultState();
 
 	private boolean buildStairwell = true;
 	private boolean digEntranceTunnel = true;
@@ -223,11 +223,11 @@ public class DungeonVolcano extends DungeonBase {
 		return this.maxHoleSize;
 	}
 
-	public CQRWeightedRandom<IBlockState> getVolcanoBlocks() {
+	public CQRWeightedRandom<BlockState> getVolcanoBlocks() {
 		return this.volcanoBlocks;
 	}
 
-	public IBlockState getLavaBlock() {
+	public BlockState getLavaBlock() {
 		return this.lavaBlock;
 	}
 
@@ -235,11 +235,11 @@ public class DungeonVolcano extends DungeonBase {
 		return this.lavaWeight;
 	}
 
-	public IBlockState getRampBlock() {
+	public BlockState getRampBlock() {
 		return this.rampBlock;
 	}
 
-	public IBlockState getPillarBlock() {
+	public BlockState getPillarBlock() {
 		return this.pillarBlock;
 	}
 

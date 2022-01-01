@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -24,7 +24,7 @@ public enum ESkyDirection {
 		}
 	}
 
-	public static ESkyDirection fromFacing(EnumFacing direction) {
+	public static ESkyDirection fromFacing(Direction direction) {
 		switch (direction) {
 		case EAST:
 			return EAST;

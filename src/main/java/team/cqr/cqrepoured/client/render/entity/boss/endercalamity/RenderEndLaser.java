@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
 public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T> {
 
-	public RenderEndLaser(RenderManager renderManager) {
+	public RenderEndLaser(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 

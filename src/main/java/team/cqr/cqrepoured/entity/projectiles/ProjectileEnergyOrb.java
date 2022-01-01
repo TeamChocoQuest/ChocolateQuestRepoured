@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAreaEffectCloud;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.DamagingProjectileEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
 
-public class ProjectileEnergyOrb extends EntityFireball {
+public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 
 	private int deflectionsByPlayer = 0;
 	public int innerRotation;
@@ -27,7 +27,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		this.setSize(1.5F, 1.5F);
 	}
 
-	public ProjectileEnergyOrb(World world, EntityLivingBase shooter, double vx, double vy, double vz) {
+	public ProjectileEnergyOrb(World world, LivingEntity shooter, double vx, double vy, double vz) {
 		super(world, shooter, vx, vy, vz);
 		this.innerRotation = this.rand.nextInt(100_000);
 	}
@@ -47,7 +47,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		boolean result = super.attackEntityFrom(source, amount);
 
 		if (result) {
-			if (source.getTrueSource() instanceof EntityPlayer) {
+			if (source.getTrueSource() instanceof PlayerEntity) {
 				this.deflectionsByPlayer++;
 			}
 		}
@@ -58,7 +58,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 	/*
 	 * Creates an orb that directly flies towards the target (no homing), it returns the spawned entity
 	 */
-	public static ProjectileEnergyOrb shootAt(Entity target, EntityLivingBase shooter, World world) {
+	public static ProjectileEnergyOrb shootAt(Entity target, LivingEntity shooter, World world) {
 		Vec3d vec3d = shooter.getLook(1.0F);
 		double vx = target.posX - (shooter.posX + vec3d.x * shooter.width);
 		double vy = target.getEntityBoundingBox().minY + target.height / 2.0F - (0.5D + shooter.posY + shooter.height / 2.0F);
@@ -72,7 +72,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 		return orb;
 	}
 
-	public void redirect(Entity target, EntityLivingBase shooter) {
+	public void redirect(Entity target, LivingEntity shooter) {
 		this.shootingEntity = shooter;
 		Vec3d vec3d = shooter.getLook(1.0F);
 		double accelX = target.posX - (shooter.posX + vec3d.x * shooter.width);
@@ -96,13 +96,13 @@ public class ProjectileEnergyOrb extends EntityFireball {
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.deflectionsByPlayer = compound.getInteger("deflections");
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger("deflections", this.deflectionsByPlayer);
 	}
@@ -118,7 +118,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 				this.applyEnchantments(this.shootingEntity, result.entityHit);
 			}
 			this.world.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 0.0F, false);
-			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shootingEntity);
 			entityareaeffectcloud.setParticle(EnumParticleTypes.SPELL_MOB);
 			entityareaeffectcloud.setColor(0xFFFF26);// Yellow
@@ -127,7 +127,7 @@ public class ProjectileEnergyOrb extends EntityFireball {
 			entityareaeffectcloud.setRadiusOnUse(-0.125F);
 			entityareaeffectcloud.setWaitTime(20);
 			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
-			entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.POISON, 60, 2));
+			entityareaeffectcloud.addEffect(new EffectInstance(Effects.POISON, 60, 2));
 
 			this.world.spawnEntity(entityareaeffectcloud);
 

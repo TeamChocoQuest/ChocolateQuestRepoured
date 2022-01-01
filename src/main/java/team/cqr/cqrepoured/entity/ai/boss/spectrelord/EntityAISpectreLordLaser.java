@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
 
 public class EntityAISpectreLordLaser extends AbstractEntityAISpell<EntityCQRSpectreLord> implements IEntityAISpellAnimatedVanilla {
 
-	private EntityLivingBase target;
+	private LivingEntity target;
 	private final List<AbstractEntityLaser> lasers = new ArrayList<>();
 
 	public EntityAISpectreLordLaser(EntityCQRSpectreLord entity, int cooldown, int chargingTicks, int castingTicks) {

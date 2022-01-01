@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.common.base.Predicates;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -30,25 +30,25 @@ public class ElectricEventHandler {
 	@SubscribeEvent
 	public static void onStartTracking(PlayerEvent.StartTracking event) {
 		Entity entity = event.getTarget();
-		if (!(entity instanceof EntityLivingBase) || !checkForCapabilityAndServerSide((EntityLivingBase) entity) || !(entity instanceof EntityPlayerMP)) {
+		if (!(entity instanceof LivingEntity) || !checkForCapabilityAndServerSide((LivingEntity) entity) || !(entity instanceof ServerPlayerEntity)) {
 			return;
 		}
-		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability((EntityLivingBase) entity), (EntityPlayerMP) event.getEntityPlayer());
+		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability((LivingEntity) entity), (ServerPlayerEntity) event.getEntityPlayer());
 	}
 
 	@SubscribeEvent
 	public static void onLogIn(PlayerLoggedInEvent event) {
-		EntityLivingBase entity = event.player;
-		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof EntityPlayerMP)) {
+		LivingEntity entity = event.player;
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayerEntity)) {
 			return;
 		}
-		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
+		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (ServerPlayerEntity) entity);
 	}
 
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
-		EntityLivingBase entity = event.player;
-		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof EntityPlayerMP)) {
+		LivingEntity entity = event.player;
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayerEntity)) {
 			return;
 		}
 		// First, reduce the ticks
@@ -61,14 +61,14 @@ public class ElectricEventHandler {
 
 	@SubscribeEvent
 	public static void onChangeDimension(PlayerChangedDimensionEvent event) {
-		EntityLivingBase entity = event.player;
-		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof EntityPlayerMP)) {
+		LivingEntity entity = event.player;
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayerEntity)) {
 			return;
 		}
-		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (EntityPlayerMP) entity);
+		CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(entity), (ServerPlayerEntity) entity);
 	}
 
-	private static boolean checkForCapabilityAndServerSide(EntityLivingBase entity) {
+	private static boolean checkForCapabilityAndServerSide(LivingEntity entity) {
 		if (!entity.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
 			return false;
 		}
@@ -82,7 +82,7 @@ public class ElectricEventHandler {
 
 	@SubscribeEvent
 	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if (!checkForCapabilityAndServerSide(entity)) {
 			return;
 		}
@@ -119,9 +119,9 @@ public class ElectricEventHandler {
 		}
 	}
 
-	private static void spreadElectrocute(EntityLivingBase spreader, CapabilityElectricShock sourceCap) {
+	private static void spreadElectrocute(LivingEntity spreader, CapabilityElectricShock sourceCap) {
 		// First, get all applicable entities in range
-		List<EntityLivingBase> entities = spreader.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spreader.getEntityBoundingBox().grow(12), Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
+		List<LivingEntity> entities = spreader.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, spreader.getEntityBoundingBox().grow(12), Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
 			if (entityLiving.getPersistentID().equals(sourceCap.getCasterID())) {
 				return false;
 			}
@@ -136,7 +136,7 @@ public class ElectricEventHandler {
 		if (entities.isEmpty()) {
 			return;
 		}
-		EntityLivingBase chosen = entities.get(spreader.world.rand.nextInt(entities.size()));
+		LivingEntity chosen = entities.get(spreader.world.rand.nextInt(entities.size()));
 		sourceCap.setTarget(chosen);
 		sourceCap.reduceSpreads();
 

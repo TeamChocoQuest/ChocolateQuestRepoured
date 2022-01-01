@@ -4,15 +4,11 @@ import java.util.List;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemShield;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.*;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -36,7 +32,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	protected boolean targetWasNullInLastCycle = false;
 
 	@Override
-	public boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
+	public boolean shouldStartAttack(AbstractEntityCQR attacker, LivingEntity target) {
 		if (!attacker.canUseSpinToWinAttack()) {
 			return false;
 		}
@@ -51,15 +47,15 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			return false;
 		}
 		final Item item = stack.getItem();
-		if (item instanceof ItemShield || item instanceof IRangedWeapon || item instanceof ItemGreatSword) {
+		if (item instanceof ShieldItem || item instanceof IRangedWeapon || item instanceof ItemGreatSword) {
 			return false;
 		}
 
-		return item instanceof ItemSword || item instanceof ItemDagger || item instanceof ItemAxe;
+		return item instanceof SwordItem || item instanceof ItemDagger || item instanceof AxeItem;
 	}
 
 	@Override
-	public boolean shouldContinueAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
+	public boolean shouldContinueAttack(AbstractEntityCQR attacker, LivingEntity target) {
 		return (target == null || attacker.getDistance(target) <= MAX_DISTANCE_TO_TARGET) && (!attacker.collidedHorizontally || (this.ticksCollided < 20));
 	}
 
@@ -69,18 +65,18 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	}
 
 	@Override
-	public void startAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
+	public void startAttack(AbstractEntityCQR attacker, LivingEntity target) {
 		attacker.setSpinToWin(true);
 		this.calcAttackDirection(attacker, target);
 	}
 
-	private void calcAttackDirection(AbstractEntityCQR attacker, EntityLivingBase target) {
+	private void calcAttackDirection(AbstractEntityCQR attacker, LivingEntity target) {
 		this.attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.25);
 		this.attackDirection = this.attackDirection.subtract(0, this.attackDirection.y, 0);
 	}
 
 	@Override
-	public void continueAttack(AbstractEntityCQR attacker, EntityLivingBase target, int tick) {
+	public void continueAttack(AbstractEntityCQR attacker, LivingEntity target, int tick) {
 		final boolean oldTargetWasNull = this.targetWasNullInLastCycle;
 		this.targetWasNullInLastCycle = target == null || target.isDead;
 		if (attacker.collidedHorizontally) {
@@ -110,8 +106,8 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			if (attacker.getDistance(entity) > radius) {
 				return;
 			}
-			if (entity instanceof EntityLivingBase) {
-				EntityLivingBase living = (EntityLivingBase) entity;
+			if (entity instanceof LivingEntity) {
+				LivingEntity living = (LivingEntity) entity;
 
 				float dmg = (float) attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
@@ -135,7 +131,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	}
 
 	@Override
-	public void stopAttack(AbstractEntityCQR attacker, EntityLivingBase target) {
+	public void stopAttack(AbstractEntityCQR attacker, LivingEntity target) {
 
 	}
 

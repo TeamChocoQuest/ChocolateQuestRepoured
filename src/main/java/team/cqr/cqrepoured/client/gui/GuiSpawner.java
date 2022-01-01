@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.client.gui;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,18 +15,18 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 @SideOnly(Side.CLIENT)
-public class GuiSpawner extends GuiContainer {
+public class GuiSpawner extends ContainerScreen {
 
 	private static final ResourceLocation GUI_SPAWNER = new ResourceLocation("textures/gui/container/dispenser.png");
 
 	private final TileEntitySpawner tileEntity;
 	private GuiCheckBox vanillaSpawnerCheckBox;
-	private GuiTextField minSpawnDelayTextField;
-	private GuiTextField maxSpawnDelayTextField;
-	private GuiTextField spawnCountTextField;
-	private GuiTextField maxNearbyEntitiesTextField;
-	private GuiTextField activatingRangeFromPlayerTextField;
-	private GuiTextField spawnRangeTextField;
+	private TextFieldWidget minSpawnDelayTextField;
+	private TextFieldWidget maxSpawnDelayTextField;
+	private TextFieldWidget spawnCountTextField;
+	private TextFieldWidget maxNearbyEntitiesTextField;
+	private TextFieldWidget activatingRangeFromPlayerTextField;
+	private TextFieldWidget spawnRangeTextField;
 
 	public GuiSpawner(TileEntitySpawner tileEntity, Container inventorySlotsIn) {
 		super(inventorySlotsIn);
@@ -37,12 +37,12 @@ public class GuiSpawner extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 		this.vanillaSpawnerCheckBox = this.addButton(new GuiCheckBox(0, this.width / 2 + 90, this.height / 2 - 80, "Vanilla Spawner", this.tileEntity.isVanillaSpawner()));
-		this.minSpawnDelayTextField = new GuiTextField(1, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 66, 32, 10);
-		this.maxSpawnDelayTextField = new GuiTextField(2, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 52, 32, 10);
-		this.spawnCountTextField = new GuiTextField(3, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 38, 32, 10);
-		this.maxNearbyEntitiesTextField = new GuiTextField(4, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 24, 32, 10);
-		this.activatingRangeFromPlayerTextField = new GuiTextField(5, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 10, 32, 10);
-		this.spawnRangeTextField = new GuiTextField(6, this.fontRenderer, this.width / 2 + 91, this.height / 2 + 4, 32, 10);
+		this.minSpawnDelayTextField = new TextFieldWidget(1, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 66, 32, 10);
+		this.maxSpawnDelayTextField = new TextFieldWidget(2, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 52, 32, 10);
+		this.spawnCountTextField = new TextFieldWidget(3, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 38, 32, 10);
+		this.maxNearbyEntitiesTextField = new TextFieldWidget(4, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 24, 32, 10);
+		this.activatingRangeFromPlayerTextField = new TextFieldWidget(5, this.fontRenderer, this.width / 2 + 91, this.height / 2 - 10, 32, 10);
+		this.spawnRangeTextField = new TextFieldWidget(6, this.fontRenderer, this.width / 2 + 91, this.height / 2 + 4, 32, 10);
 
 		this.minSpawnDelayTextField.setText(Integer.toString(this.tileEntity.getMinSpawnDelay()));
 		this.maxSpawnDelayTextField.setText(Integer.toString(this.tileEntity.getMaxSpawnDelay()));
@@ -174,7 +174,7 @@ public class GuiSpawner extends GuiContainer {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(Button button) throws IOException {
 		if (button == this.vanillaSpawnerCheckBox) {
 			boolean flag = this.vanillaSpawnerCheckBox.isChecked();
 			this.minSpawnDelayTextField.setEnabled(flag);

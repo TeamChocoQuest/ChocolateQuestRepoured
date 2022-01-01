@@ -4,12 +4,12 @@ import java.util.Arrays;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.ints.IntPriorityQueue;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.EnumLightType;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -44,7 +44,7 @@ public class BlockLightUtil {
 				for (int z = 0; z < 16; z++) {
 					for (int y = 15; y >= 0; y--) {
 						MUTABLE.setPos((chunk.x << 4) + x, (chunkY << 4) + y, (chunk.z << 4) + z);
-						IBlockState state = blockStorage.get(x, y, z);
+						BlockState state = blockStorage.get(x, y, z);
 						if (state.getLightValue(world, MUTABLE) <= 0) {
 							continue;
 						}
@@ -96,8 +96,8 @@ public class BlockLightUtil {
 	 */
 	public static void relightBlock(World world, BlockPos pos) {
 		int initialLight = world.getBlockState(pos).getLightValue(world, pos);
-		if (world.getLightFor(EnumLightType.BLOCK, pos) < initialLight) {
-			world.setLightFor(EnumLightType.BLOCK, pos, initialLight);
+		if (world.getLightFor(LightType.BLOCK, pos) < initialLight) {
+			world.setLightFor(LightType.BLOCK, pos, initialLight);
 		}
 		QUEUE.enqueue(encode(initialLight, 0, 0, 0));
 		getAndSetUsed(0, 0, 0);
@@ -110,7 +110,7 @@ public class BlockLightUtil {
 			int z = decodeZ(lxyz);
 			MUTABLE1.setPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
 
-			for (EnumFacing facing : EnumFacing.VALUES) {
+			for (Direction facing : Direction.VALUES) {
 				try {
 					MUTABLE1.move(facing);
 					if (getAndSetUsed(x + facing.getXOffset(), y + facing.getYOffset(), z + facing.getZOffset())) {

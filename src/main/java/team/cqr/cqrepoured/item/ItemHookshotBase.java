@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.input.Keyboard;
@@ -21,18 +24,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -95,9 +91,9 @@ public abstract class ItemHookshotBase extends Item {
 		this.addPropertyOverride(new ResourceLocation("hook_out"), new IItemPropertyGetter() {
 			@Override
 			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
 				if (entityIn != null && stack.getItem() instanceof ItemHookshotBase) {
-					NBTTagCompound stackTag = stack.getTagCompound();
+					CompoundNBT stackTag = stack.getTagCompound();
 					if ((stackTag != null) && (stackTag.getBoolean("isShooting"))) {
 						return 1.0f;
 					}
@@ -173,16 +169,16 @@ public abstract class ItemHookshotBase extends Item {
 
 	public abstract double getHookRange();
 
-	public abstract ProjectileHookShotHook getNewHookEntity(World worldIn, EntityLivingBase shooter, ItemStack stack);
+	public abstract ProjectileHookShotHook getNewHookEntity(World worldIn, LivingEntity shooter, ItemStack stack);
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		this.shoot(stack, worldIn, playerIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
 
-	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
+	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
 
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
@@ -194,7 +190,7 @@ public abstract class ItemHookshotBase extends Item {
 		}
 	}
 
-	public ProjectileHookShotHook entityAIshoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+	public ProjectileHookShotHook entityAIshoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack());
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());

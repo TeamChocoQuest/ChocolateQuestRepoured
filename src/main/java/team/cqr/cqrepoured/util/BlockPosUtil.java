@@ -6,8 +6,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -17,11 +17,11 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 public class BlockPosUtil {
 
 	public interface BlockInfoConsumer {
-		void accept(BlockPos.MutableBlockPos mutablePos, IBlockState state);
+		void accept(BlockPos.MutableBlockPos mutablePos, BlockState state);
 	}
 
 	public interface BlockInfoPredicate {
-		boolean test(BlockPos.MutableBlockPos mutablePos, IBlockState state);
+		boolean test(BlockPos.MutableBlockPos mutablePos, BlockState state);
 	}
 
 	public static void forEach(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
@@ -77,7 +77,7 @@ public class BlockPosUtil {
 					for (int z5 = blockStartZ; z5 <= blockEndZ; z5++) {
 						for (int y5 = blockStartY; y5 <= blockEndY; y5++) {
 							for (int x5 = blockStartX; x5 <= blockEndX; x5++) {
-								IBlockState state = extendedBlockStorage.get(x5 & 15, y5 & 15, z5 & 15);
+								BlockState state = extendedBlockStorage.get(x5 & 15, y5 & 15, z5 & 15);
 
 								if (skipAirBlocks && state.getBlock() == Blocks.AIR) {
 									continue;

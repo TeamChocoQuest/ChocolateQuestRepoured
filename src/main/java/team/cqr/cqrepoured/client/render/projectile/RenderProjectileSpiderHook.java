@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.client.render.projectile;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +20,7 @@ public class RenderProjectileSpiderHook extends RenderProjectileHookShotHook {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/blocks/web.png");
 
-	public RenderProjectileSpiderHook(RenderManager renderManager) {
+	public RenderProjectileSpiderHook(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
@@ -36,7 +36,7 @@ public class RenderProjectileSpiderHook extends RenderProjectileHookShotHook {
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		BlockPos pos = new BlockPos(entity);
-		IBlockState state = entity.world.getBlockState(pos);
+		BlockState state = entity.world.getBlockState(pos);
 		int lightmapCoords = state.getPackedLightmapCoords(entity.world, pos);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightmapCoords & 0xFFFF, lightmapCoords >>> 16);
 

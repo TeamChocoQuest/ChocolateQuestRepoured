@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 
 public class CastleRoomBossLandingEmpty extends CastleRoomDecoratedBase {
-	private EnumFacing doorSide;
+	private Direction doorSide;
 
-	public CastleRoomBossLandingEmpty(int sideLength, int height, EnumFacing doorSide, int floor, Random rand) {
+	public CastleRoomBossLandingEmpty(int sideLength, int height, Direction doorSide, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.pathable = false;

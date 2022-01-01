@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;

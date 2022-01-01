@@ -3,13 +3,13 @@ package team.cqr.cqrepoured.entity.ai.attack.special;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.EnumHand;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -63,7 +63,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					return false;
 				}
 				TileEntity te = this.world.getTileEntity(mutablePos);
-				if (!(te instanceof TileEntityChest) || ((TileEntityChest) te).isEmpty()) {
+				if (!(te instanceof ChestTileEntity) || ((ChestTileEntity) te).isEmpty()) {
 					return false;
 				}
 				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
@@ -75,7 +75,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	private boolean hasBackpackSpace() {
-		ItemStack backpack = this.entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+		ItemStack backpack = this.entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
 		IItemHandler inventory = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		if (inventory != null) {
 			for (int i = 0; i < inventory.getSlots(); i++) {
@@ -111,7 +111,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 		if (this.isInLootingRange()) {
 			this.entity.getNavigator().clearPath();
-			TileEntityChest tile = (TileEntityChest) this.world.getTileEntity(this.currentTarget);
+			ChestTileEntity tile = (ChestTileEntity) this.world.getTileEntity(this.currentTarget);
 			// TODO: let it stay open
 			if (this.currentLootingTime >= 0) {
 				this.currentLootingTime--;
@@ -126,9 +126,9 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					}
 					if (stolenItem != null) {
 						tile.markDirty();
-						this.entity.swingArm(EnumHand.MAIN_HAND);
-						this.entity.swingArm(EnumHand.OFF_HAND);
-						ItemStack backpack = this.entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+						this.entity.swingArm(Hand.MAIN_HAND);
+						this.entity.swingArm(Hand.OFF_HAND);
+						ItemStack backpack = this.entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
 						IItemHandler inventory = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 						if (inventory != null) {
 							for (int i = 0; i < inventory.getSlots(); i++) {
@@ -155,8 +155,8 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		return this.entity.getDistanceSq(this.currentTarget) <= this.REQUIRED_DISTANCE_TO_LOOT;
 	}
 
-	protected boolean hasBackpack(EntityLiving living) {
-		ItemStack chest = living.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+	protected boolean hasBackpack(MobEntity living) {
+		ItemStack chest = living.getItemStackFromSlot(EquipmentSlotType.CHEST);
 		return chest != null && chest.getItem() instanceof ItemBackpack;
 	}
 
@@ -168,7 +168,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 			return false;
 		}
 		TileEntity tile = this.world.getTileEntity(this.currentTarget);
-		return tile != null && tile instanceof TileEntityChest && !((TileEntityChest) tile).isEmpty();
+		return tile != null && tile instanceof ChestTileEntity && !((ChestTileEntity) tile).isEmpty();
 	}
 
 }

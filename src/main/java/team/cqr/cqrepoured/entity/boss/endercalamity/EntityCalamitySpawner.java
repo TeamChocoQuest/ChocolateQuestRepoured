@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -42,7 +42,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	@Override
-	public void onCollideWithPlayer(EntityPlayer entityIn) {
+	public void onCollideWithPlayer(PlayerEntity entityIn) {
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	private void spawnFirework(double x, double y, double z, ItemStack stack) {
-		EntityFireworkRocket firework = new EntityFireworkRocket(this.world, x, y, z, FIREWORK_PURPLE_SPARK);
+		FireworkRocketEntity firework = new FireworkRocketEntity(this.world, x, y, z, FIREWORK_PURPLE_SPARK);
 		firework.lifetime = 1;
 
 		firework.setInvisible(true);
@@ -183,13 +183,13 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(CompoundNBT compound) {
 		this.timer = compound.getInteger("entityTimer");
 		this.setFaction(compound.getString("faction"));
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(CompoundNBT compound) {
 		compound.setInteger("entityTimer", this.timer);
 		compound.setString("faction", this.getFaction());
 	}
@@ -203,14 +203,14 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	static {
-		NBTTagCompound compound = FIREWORK_PURPLE_SPARK.getTagCompound();
+		CompoundNBT compound = FIREWORK_PURPLE_SPARK.getTagCompound();
 		if (compound == null) {
-			compound = new NBTTagCompound();
+			compound = new CompoundNBT();
 		}
-		NBTTagCompound fwCompound = new NBTTagCompound();
-		NBTTagList explosionCompoundList = new NBTTagList();
+		CompoundNBT fwCompound = new CompoundNBT();
+		ListNBT explosionCompoundList = new ListNBT();
 
-		NBTTagCompound explosionCompound = new NBTTagCompound();
+		CompoundNBT explosionCompound = new CompoundNBT();
 		explosionCompound.setInteger("Type", 4);
 		explosionCompound.setIntArray("Colors", new int[] { 0x7B2FBE });
 		explosionCompound.setIntArray("FadeColors", new int[] { 0x253192, 0x6689D3, 0xC354CD });

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelNetherDragonHead;
@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.client.model.entity.boss.ModelNetherDragonHeadSkeleta
 import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
-public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
+public class RenderCQRNetherDragon extends MobRenderer<EntityCQRNetherDragon> {
 
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/nether_dragon.png");
 	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/nether_dragon_skeletal_head.png");
@@ -18,7 +18,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 	private final ModelNetherDragonHead modelNormal;
 	private final ModelNetherDragonHeadSkeletal modelSkeletal;
 
-	public RenderCQRNetherDragon(RenderManager manager) {
+	public RenderCQRNetherDragon(EntityRendererManager manager) {
 		super(manager, new ModelNetherDragonHead(), 0.5F);
 		this.modelNormal = (ModelNetherDragonHead) this.mainModel;
 		this.modelSkeletal = new ModelNetherDragonHeadSkeletal();

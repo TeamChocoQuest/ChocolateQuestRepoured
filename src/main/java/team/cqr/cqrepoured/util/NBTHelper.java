@@ -8,8 +8,8 @@ import java.util.zip.GZIPInputStream;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.common.util.Constants;
 
 public class NBTHelper {
@@ -24,10 +24,10 @@ public class NBTHelper {
 
 			while ((id = input.readByte()) != 0) {
 				String key = input.readUTF();
-				NBTBase nbtbase = NBTTagCompound.readNBT(id, key, input, 0, NBTSizeTracker.INFINITE);
+				NBTBase nbtbase = CompoundNBT.readNBT(id, key, input, 0, NBTSizeTracker.INFINITE);
 
 				if (key.equals("cqr_file_version")) {
-					return nbtbase instanceof NBTTagString ? ((NBTTagString) nbtbase).getString() : null;
+					return nbtbase instanceof StringNBT ? ((StringNBT) nbtbase).getString() : null;
 				}
 			}
 		} catch (Exception e) {

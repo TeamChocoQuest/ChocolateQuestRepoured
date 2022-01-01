@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.client.handler;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -21,7 +21,7 @@ public class CPacketHandlerSyncTrades implements IMessageHandler<SPacketSyncTrad
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 				World world = CQRMain.proxy.getWorld(ctx);
 				Entity entity = world.getEntityByID(message.getEntityId());
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 
 				if (entity instanceof AbstractEntityCQR) {
 					TraderOffer trades = ((AbstractEntityCQR) entity).getTrades();

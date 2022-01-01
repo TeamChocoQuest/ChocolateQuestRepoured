@@ -4,16 +4,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Optional;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.item.ItemStack;
@@ -77,7 +77,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/ender_calamity.geo.json");
 
-	public RenderCQREnderCalamity(RenderManager renderManager) {
+	public RenderCQREnderCalamity(EntityRendererManager renderManager) {
 		super(renderManager, new ModelEnderCalamity(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
 
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
@@ -133,8 +133,8 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 	@Nullable
 	@Override
-	protected IBlockState getHeldBlockForBone(String boneName, EntityCQREnderCalamity currentEntity) {
-		Optional<IBlockState> optional = currentEntity.getBlockFromHand(E_CALAMITY_HAND.getFromBoneName(boneName));
+	protected BlockState getHeldBlockForBone(String boneName, EntityCQREnderCalamity currentEntity) {
+		Optional<BlockState> optional = currentEntity.getBlockFromHand(E_CALAMITY_HAND.getFromBoneName(boneName));
 		if (optional.isPresent()) {
 			return optional.get();
 		}
@@ -142,12 +142,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 
 	@Override
-	protected void preRenderBlock(IBlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+	protected void preRenderBlock(BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(IBlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+	protected void postRenderBlock(BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
 		// Unused
 	}
 

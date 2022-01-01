@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.boss;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -54,14 +54,14 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
+	public boolean isPotionApplicable(EffectInstance potioneffectIn) {
 		if (!super.isPotionApplicable(potioneffectIn)) {
 			return false;
 		}
 		if (potioneffectIn.getPotion().beneficial) {
 			return true;
 		}
-		return potioneffectIn.getPotion() == MobEffects.GLOWING;
+		return potioneffectIn.getPotion() == Effects.GLOWING;
 	}
 
 	@Override
@@ -106,26 +106,26 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(CQRItems.BULLET_FIRE, 64));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 2));
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("spawnedParrot", this.spawnedParrot);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.spawnedParrot = compound.getBoolean("spawnedParrot");
 	}

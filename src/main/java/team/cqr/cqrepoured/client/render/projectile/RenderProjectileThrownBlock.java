@@ -1,27 +1,27 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 
-public class RenderProjectileThrownBlock extends Render<ProjectileThrownBlock> {
+public class RenderProjectileThrownBlock extends EntityRenderer<ProjectileThrownBlock> {
 
-	public RenderProjectileThrownBlock(RenderManager renderManager) {
+	public RenderProjectileThrownBlock(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileThrownBlock entity) {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
+		return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class RenderProjectileThrownBlock extends Render<ProjectileThrownBlock> {
 		GlStateManager.translate(-0.35F, 0F, 0.35F);
 		// GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		GlStateManager.scale(0.7F, 0.7F, 0.7F);
-		WorldClient world = Minecraft.getMinecraft().world;
+		ClientWorld world = Minecraft.getMinecraft().world;
 		double dx = entity.posX + (-0.5 + (world.rand.nextDouble()));
 		double dy = 0.25 + entity.posY + (-0.5 + (world.rand.nextDouble()));
 		double dz = entity.posZ + (-0.5 + (world.rand.nextDouble()));

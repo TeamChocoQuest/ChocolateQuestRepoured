@@ -4,30 +4,30 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.item.SwordItem;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSwordSpider extends ItemSword {
+public class ItemSwordSpider extends SwordItem {
 
 	public ItemSwordSpider(ToolMaterial material) {
 		super(material);
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		stack.damageItem(1, attacker);
-		target.addPotionEffect(new PotionEffect(MobEffects.POISON, 100));
+		target.addPotionEffect(new EffectInstance(Effects.POISON, 100));
 		return true;
 	}
 

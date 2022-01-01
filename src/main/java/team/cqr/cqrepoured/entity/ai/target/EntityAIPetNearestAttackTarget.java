@@ -4,15 +4,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
-public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends EntityAITarget {
+public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetGoal {
 
 	protected final Class<T> targetClass;
 	private final int targetChance;
@@ -20,15 +20,15 @@ public class EntityAIPetNearestAttackTarget<T extends EntityLiving> extends Enti
 	protected final EntityAIPetNearestAttackTarget.Sorter sorter;
 	protected T targetEntity;
 
-	public EntityAIPetNearestAttackTarget(EntityCreature creature, Class<T> classTarget, boolean checkSight) {
+	public EntityAIPetNearestAttackTarget(CreatureEntity creature, Class<T> classTarget, boolean checkSight) {
 		this(creature, classTarget, checkSight, false);
 	}
 
-	public EntityAIPetNearestAttackTarget(EntityCreature creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
+	public EntityAIPetNearestAttackTarget(CreatureEntity creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
 		this(creature, classTarget, 10, checkSight, onlyNearby);
 	}
 
-	public EntityAIPetNearestAttackTarget(EntityCreature creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby) {
+	public EntityAIPetNearestAttackTarget(CreatureEntity creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby) {
 		super(creature, checkSight, onlyNearby);
 		this.targetClass = classTarget;
 		this.targetChance = chance;

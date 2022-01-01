@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.client.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -14,7 +14,7 @@ public class CPacketHandlerHookShotPlayerStop implements IMessageHandler<SPacket
 	public IMessage onMessage(final SPacketHookShotPlayerStop message, MessageContext ctx) {
 		if (ctx.side.isClient()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 				player.setVelocity(0.0D, 0.0D, 0.0D);
 				player.velocityChanged = true;
 			});

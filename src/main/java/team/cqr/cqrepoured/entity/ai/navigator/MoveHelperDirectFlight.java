@@ -1,20 +1,20 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.util.math.MathHelper;
 
-public class MoveHelperDirectFlight extends EntityMoveHelper {
+public class MoveHelperDirectFlight extends MovementController {
 
-	public MoveHelperDirectFlight(EntityLiving entitylivingIn) {
+	public MoveHelperDirectFlight(MobEntity entitylivingIn) {
 		super(entitylivingIn);
 	}
 
 	@Override
 	public void onUpdateMoveHelper() {
-		if (this.action == EntityMoveHelper.Action.MOVE_TO) {
-			this.action = EntityMoveHelper.Action.WAIT;
+		if (this.action == MovementController.Action.MOVE_TO) {
+			this.action = MovementController.Action.WAIT;
 			this.entity.setNoGravity(true);
 			double d0 = this.posX - this.entity.posX;
 			double d1 = this.posY - this.entity.posY;

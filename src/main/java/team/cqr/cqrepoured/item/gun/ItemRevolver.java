@@ -4,21 +4,19 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -53,7 +51,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		// System.out.println("Hand: " + handIn.toString());
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		boolean flag = !this.findAmmo(playerIn).isEmpty();
@@ -62,16 +60,16 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 			if (flag) {
 				this.shoot(stack, worldIn, playerIn);
 			}
-			return flag ? new ActionResult(EnumActionResult.PASS, stack) : new ActionResult(EnumActionResult.FAIL, stack);
+			return flag ? new ActionResult(ActionResultType.PASS, stack) : new ActionResult(ActionResultType.FAIL, stack);
 		}
 
 		else {
 			this.shoot(stack, worldIn, playerIn);
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(ActionResultType.SUCCESS, stack);
 		}
 	}
 
-	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
+	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
 		boolean flag = player.capabilities.isCreativeMode;
 		ItemStack itemstack = this.findAmmo(player);
 
@@ -112,11 +110,11 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 		return stack.getItem() instanceof ItemBullet;
 	}
 
-	protected ItemStack findAmmo(EntityPlayer player) {
-		if (this.isBullet(player.getHeldItem(EnumHand.OFF_HAND))) {
-			return player.getHeldItem(EnumHand.OFF_HAND);
-		} else if (this.isBullet(player.getHeldItem(EnumHand.MAIN_HAND))) {
-			return player.getHeldItem(EnumHand.MAIN_HAND);
+	protected ItemStack findAmmo(PlayerEntity player) {
+		if (this.isBullet(player.getHeldItem(Hand.OFF_HAND))) {
+			return player.getHeldItem(Hand.OFF_HAND);
+		} else if (this.isBullet(player.getHeldItem(Hand.MAIN_HAND))) {
+			return player.getHeldItem(Hand.MAIN_HAND);
 		} else {
 			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
 				ItemStack itemstack = player.inventory.getStackInSlot(i);
@@ -130,7 +128,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 		}
 	}
 
-	protected ItemStack getBulletStack(ItemStack stack, EntityPlayer player) {
+	protected ItemStack getBulletStack(ItemStack stack, PlayerEntity player) {
 		if (stack.getItem() == CQRItems.BULLET_IRON) {
 			return new ItemStack(CQRItems.BULLET_IRON);
 		}
@@ -177,7 +175,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		if (!worldIn.isRemote) {
 			ItemStack bulletStack = new ItemStack(CQRItems.BULLET_IRON, 1);
 			if (shooter instanceof AbstractEntityCQR) {

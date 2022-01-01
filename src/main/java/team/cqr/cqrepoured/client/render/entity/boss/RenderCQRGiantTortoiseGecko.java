@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.client.render.entity.boss;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
@@ -16,7 +16,7 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/giant_tortoise.geo.json");
 
-	public RenderCQRGiantTortoiseGecko(RenderManager renderManager) {
+	public RenderCQRGiantTortoiseGecko(EntityRendererManager renderManager) {
 		super(renderManager, new ModelGiantTortoiseGecko(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
 	}
 
@@ -38,17 +38,17 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 
 	@Nullable
 	@Override
-	protected IBlockState getHeldBlockForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected BlockState getHeldBlockForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
 		return null;
 	}
 
 	@Override
-	protected void preRenderBlock(IBlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected void preRenderBlock(BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(IBlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected void postRenderBlock(BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
 		// Unused
 	}
 

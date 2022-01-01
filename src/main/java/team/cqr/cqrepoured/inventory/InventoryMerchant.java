@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.inventory;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
@@ -16,13 +16,13 @@ import team.cqr.cqrepoured.entity.trade.TraderOffer;
 public class InventoryMerchant implements IInventory {
 
 	private final AbstractEntityCQR entity;
-	private final EntityPlayer player;
+	private final PlayerEntity player;
 	private final NonNullList<ItemStack> slots = NonNullList.withSize(5, ItemStack.EMPTY);
 	@Nullable
 	private Trade currentTrade;
 	private int currentTradeIndex;
 
-	public InventoryMerchant(AbstractEntityCQR entity, EntityPlayer player) {
+	public InventoryMerchant(AbstractEntityCQR entity, PlayerEntity player) {
 		this.entity = entity;
 		this.player = player;
 	}
@@ -39,7 +39,7 @@ public class InventoryMerchant implements IInventory {
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TextComponentString(this.getName());
+		return new StringTextComponent(this.getName());
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		if (this.entity.isDead) {
 			return false;
 		}
@@ -150,12 +150,12 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 
 	}
 

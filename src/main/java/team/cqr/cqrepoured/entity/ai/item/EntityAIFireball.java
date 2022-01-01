@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityLargeFireball;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.init.Items;
+import net.minecraft.entity.projectile.DamagingProjectileEntity;
+import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.entity.projectile.SmallFireballEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -40,7 +40,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 		this.cooldown = 140;
 		this.entity.getHeldItemOffhand().shrink(1);
 		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
-		EntityFireball fireball = this.entity.getRNG().nextDouble() > 0.7 ? new EntityLargeFireball(this.entity.world, this.entity, v.x, v.y, v.z) : new EntitySmallFireball(this.entity.world, this.entity, v.x, v.y, v.z);
+		DamagingProjectileEntity fireball = this.entity.getRNG().nextDouble() > 0.7 ? new FireballEntity(this.entity.world, this.entity, v.x, v.y, v.z) : new SmallFireballEntity(this.entity.world, this.entity, v.x, v.y, v.z);
 		this.entity.world.spawnEntity(fireball);
 	}
 

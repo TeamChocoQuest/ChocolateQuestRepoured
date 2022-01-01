@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.client.model.armor;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
 /**
@@ -86,11 +86,11 @@ public class ModelCrown extends ModelCustomArmorBase {
 	}
 
 	@Override
-	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EntityEquipmentSlot slot) {
+	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EquipmentSlotType slot) {
 		this.render(entityIn, scale, renderer, model);
 	}
 
-	public void render(Entity entityIn, float scale, Render<?> renderer, ModelBiped model) {
+	public void render(Entity entityIn, float scale, EntityRenderer<?> renderer, ModelBiped model) {
 		float f = 1.3F;
 		float f1 = f - 1.0F;
 
@@ -104,7 +104,7 @@ public class ModelCrown extends ModelCustomArmorBase {
 			GlStateManager.translate(0.0F, 0.2F, 0.0F);
 		}
 		if (renderer instanceof RenderCQREntity) {
-			((RenderCQREntity<?>) renderer).setupHeadOffsets(this.bipedHead, EntityEquipmentSlot.HEAD);
+			((RenderCQREntity<?>) renderer).setupHeadOffsets(this.bipedHead, EquipmentSlotType.HEAD);
 		}
 		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1, -this.bipedHead.rotationPointZ * 0.0625F * f1);
 		GlStateManager.scale(f, f, f);

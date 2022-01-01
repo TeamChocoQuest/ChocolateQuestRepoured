@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.client.gui;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,21 +17,21 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
 
 @SideOnly(Side.CLIENT)
-public class GuiMapPlaceholderSimple extends GuiScreen {
+public class GuiMapPlaceholderSimple extends Screen {
 
 	private final BlockPos pos;
-	private final EnumFacing facing;
-	private GuiTextField scale;
+	private final Direction facing;
+	private TextFieldWidget scale;
 	private GuiButtonOrientation orientation;
 	private GuiCheckBox lockOrientation;
-	private GuiTextField sizeUp;
-	private GuiTextField sizeDown;
-	private GuiTextField sizeRight;
-	private GuiTextField sizeLeft;
+	private TextFieldWidget sizeUp;
+	private TextFieldWidget sizeDown;
+	private TextFieldWidget sizeRight;
+	private TextFieldWidget sizeLeft;
 	private GuiCheckBox fillMap;
-	private GuiTextField fillRadius;
+	private TextFieldWidget fillRadius;
 
-	public GuiMapPlaceholderSimple(BlockPos pos, EnumFacing facing) {
+	public GuiMapPlaceholderSimple(BlockPos pos, Direction facing) {
 		this.pos = pos;
 		this.facing = facing;
 	}
@@ -40,15 +40,15 @@ public class GuiMapPlaceholderSimple extends GuiScreen {
 	public void initGui() {
 		super.initGui();
 
-		this.scale = new GuiTextField(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
-		this.orientation = new GuiButtonOrientation(1, this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, EnumFacing.NORTH);
+		this.scale = new TextFieldWidget(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
+		this.orientation = new GuiButtonOrientation(1, this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, Direction.NORTH);
 		this.lockOrientation = new GuiCheckBox(2, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, "Lock Orientation", false);
-		this.sizeUp = new GuiTextField(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
-		this.sizeDown = new GuiTextField(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
-		this.sizeRight = new GuiTextField(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
-		this.sizeLeft = new GuiTextField(6, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12);
+		this.sizeUp = new TextFieldWidget(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
+		this.sizeDown = new TextFieldWidget(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
+		this.sizeRight = new TextFieldWidget(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
+		this.sizeLeft = new TextFieldWidget(6, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12);
 		this.fillMap = new GuiCheckBox(7, this.width / 2 - 1 - 38, this.height / 2 + 1 - 72 + 112, "Fill Map", false);
-		this.fillRadius = new GuiTextField(8, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12);
+		this.fillRadius = new TextFieldWidget(8, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12);
 
 		this.scale.setText("0");
 		this.sizeUp.setText("0");
@@ -65,7 +65,7 @@ public class GuiMapPlaceholderSimple extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		int scale = this.parseInt(this.scale.getText(), 0, 4, 0, "Invalid argument: scale");
-		EnumFacing orientation = this.orientation.getDirection();
+		Direction orientation = this.orientation.getDirection();
 		boolean lockOrientation = this.lockOrientation.isChecked();
 		int sizeUp = this.parseInt(this.sizeUp.getText(), 0, 16, 0, "Invalid argument: sizeUp");
 		int sizeDown = this.parseInt(this.sizeDown.getText(), 0, 16, 0, "Invalid argument: sizeDown");
@@ -82,7 +82,7 @@ public class GuiMapPlaceholderSimple extends GuiScreen {
 		try {
 			return MathHelper.clamp(Integer.parseInt(s), min, max);
 		} catch (Exception e) {
-			this.mc.player.sendMessage(new TextComponentString(warning));
+			this.mc.player.sendMessage(new StringTextComponent(warning));
 		}
 		return defaultValue;
 	}

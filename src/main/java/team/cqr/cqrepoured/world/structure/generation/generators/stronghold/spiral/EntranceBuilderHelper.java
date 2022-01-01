@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral;
 
-import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -15,7 +15,7 @@ public class EntranceBuilderHelper {
 
 	public static final int SEGMENT_LENGTH = 3;
 
-	public static void buildEntranceSegment(BlockPos startPosCentered, BlockDungeonPart.Builder partBuilder, EnumFacing direction) {
+	public static void buildEntranceSegment(BlockPos startPosCentered, BlockDungeonPart.Builder partBuilder, Direction direction) {
 		// COrner 2 is always the reference location for the part (!)
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2;
 		corner1 = null;
@@ -74,17 +74,17 @@ public class EntranceBuilderHelper {
 
 			// Left torch -> Facing side: rotate right (90.0°)
 			buildPillar(pillar1, partBuilder);
-			partBuilder.add(new PreparableBlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)), null));
+			partBuilder.add(new PreparableBlockInfo(torch1, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(TorchBlock.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)), null));
 			// Right torch -> Facing side: rotate left (-90.0°)
 			buildPillar(pillar2, partBuilder);
-			partBuilder.add(new PreparableBlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null));
+			partBuilder.add(new PreparableBlockInfo(torch2, CQRBlocks.UNLIT_TORCH.getDefaultState().withProperty(TorchBlock.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null));
 		}
 	}
 
 	private static void buildPillar(BlockPos bottom, BlockDungeonPart.Builder partBuilder) {
 		for (int iY = 1; iY <= 4; iY++) {
 			BlockPos pos = bottom.add(0, iY, 0);
-			partBuilder.add(new PreparableBlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y), null));
+			partBuilder.add(new PreparableBlockInfo(pos, CQRBlocks.GRANITE_PILLAR.getDefaultState().withProperty(RotatedPillarBlock.AXIS, Direction.Axis.Y), null));
 		}
 		partBuilder.add(new PreparableBlockInfo(bottom.add(0, 5, 0), CQRBlocks.GRANITE_CARVED.getDefaultState(), null));
 	}

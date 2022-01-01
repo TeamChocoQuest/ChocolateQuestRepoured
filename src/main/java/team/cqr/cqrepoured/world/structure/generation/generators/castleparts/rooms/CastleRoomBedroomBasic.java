@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.DyeColor;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
-	private EnumDyeColor carpetColor;
+	private DyeColor carpetColor;
 
 	public CastleRoomBedroomBasic(int sideLength, int height, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
@@ -25,7 +25,7 @@ public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
+	protected BlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return dungeon.getMainBlockState();
 	}
 }

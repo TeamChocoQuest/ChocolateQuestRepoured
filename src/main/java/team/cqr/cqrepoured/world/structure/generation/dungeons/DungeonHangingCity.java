@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -31,12 +31,12 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	private boolean constructBridges = true;
 	private float bridgeTension = 3.0F;
 
-	private IBlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
-	private IBlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
-	private IBlockState bridgeBlock = Blocks.PLANKS.getDefaultState();
-	private IBlockState bridgeFenceBlock = Blocks.OAK_FENCE.getDefaultState();
-	private IBlockState bridgeRailingBlock = Blocks.AIR.getDefaultState();
-	private IBlockState bridgeAnchorBlock = Blocks.OBSERVER.getDefaultState();
+	private BlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
+	private BlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
+	private BlockState bridgeBlock = Blocks.PLANKS.getDefaultState();
+	private BlockState bridgeFenceBlock = Blocks.OAK_FENCE.getDefaultState();
+	private BlockState bridgeRailingBlock = Blocks.AIR.getDefaultState();
+	private BlockState bridgeAnchorBlock = Blocks.OBSERVER.getDefaultState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
 	// private int bridgeChance = 20;
 	private boolean buildChains = true;
@@ -139,11 +139,11 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 		return this.maxBuildings;
 	}
 
-	public IBlockState getChainBlock() {
+	public BlockState getChainBlock() {
 		return this.chainBlock;
 	}
 
-	public IBlockState getIslandBlock() {
+	public BlockState getIslandBlock() {
 		return this.islandMaterial;
 	}
 
@@ -191,22 +191,22 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	}
 
 	@Override
-	public IBlockState getBridgePathBlock() {
+	public BlockState getBridgePathBlock() {
 		return this.bridgeBlock;
 	}
 
 	@Override
-	public IBlockState getBridgeFenceBlock() {
+	public BlockState getBridgeFenceBlock() {
 		return this.bridgeFenceBlock;
 	}
 
 	@Override
-	public IBlockState getBridgeRailingBlock() {
+	public BlockState getBridgeRailingBlock() {
 		return this.bridgeRailingBlock;
 	}
 
 	@Override
-	public IBlockState getBridgeAnchorBlock() {
+	public BlockState getBridgeAnchorBlock() {
 		return this.bridgeAnchorBlock;
 	}
 

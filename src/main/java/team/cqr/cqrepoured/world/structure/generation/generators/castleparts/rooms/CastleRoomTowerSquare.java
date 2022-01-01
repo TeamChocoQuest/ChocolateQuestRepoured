@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -13,12 +13,12 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomized
 
 public class CastleRoomTowerSquare extends CastleRoomBase {
 	private static final int MIN_SIZE = 5;
-	private EnumFacing connectedSide;
+	private Direction connectedSide;
 	private int stairYOffset;
 	private Vec3i pillarOffset;
-	private EnumFacing firstStairSide;
+	private Direction firstStairSide;
 
-	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor, Random rand) {
+	public CastleRoomTowerSquare(int sideLength, int height, Direction connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;
@@ -44,7 +44,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 
 		BlockPos pos;
-		IBlockState blockToBuild;
+		BlockState blockToBuild;
 
 		for (int x = 0; x < this.getDecorationLengthX(); x++) {
 			for (int z = 0; z < this.getDecorationLengthZ(); z++) {
@@ -70,8 +70,8 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 		}
 	}
 
-	public EnumFacing getLastStairSide() {
-		EnumFacing result = this.firstStairSide;
+	public Direction getLastStairSide() {
+		Direction result = this.firstStairSide;
 		for (int i = this.stairYOffset; i < this.height - 1; i++) {
 			result = result.rotateY();
 		}

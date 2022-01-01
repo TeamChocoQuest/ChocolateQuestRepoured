@@ -3,14 +3,14 @@ package team.cqr.cqrepoured.entity.boss.spectrelord;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -24,7 +24,7 @@ import team.cqr.cqrepoured.util.EntityUtil;
 
 public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 
-	private EntityLivingBase caster;
+	private LivingEntity caster;
 	private int lifeTime;
 	private boolean canCastHeal;
 	private boolean canCastExplosion;
@@ -33,7 +33,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 		this(worldIn, null, 200, false, false);
 	}
 
-	public EntitySpectreLordIllusion(World worldIn, EntityLivingBase caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
+	public EntitySpectreLordIllusion(World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
 		super(worldIn);
 		if (caster != null) {
 			this.caster = caster;
@@ -54,22 +54,22 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
 		super.onInitialSpawn(difficulty, livingdata);
 		if (this.rand.nextDouble() < 0.3D) {
 			switch (this.rand.nextInt(3)) {
 			case 0:
-				this.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.SPEAR_IRON));
+				this.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.SPEAR_IRON));
 				break;
 			case 1:
-				this.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_IRON));
+				this.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_IRON));
 				break;
 			case 2:
-				this.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(CQRItems.GREAT_SWORD_IRON));
+				this.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.GREAT_SWORD_IRON));
 				break;
 			}
 		} else {
-			this.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+			this.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
 		}
 		this.setHealingPotions(0);
 		return livingdata;
@@ -123,7 +123,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		if (this.caster != null && this.caster.isEntityAlive()) {
 			compound.setUniqueId("Summoner", this.caster.getPersistentID());
@@ -132,7 +132,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		if (compound.hasKey("SummonerMost", Constants.NBT.TAG_LONG)) {
 			UUID uuid = compound.getUniqueId("Summoner");

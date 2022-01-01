@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.PotionEffect;
-
 public interface IMechanical {
 
 	default boolean isImmuneToFire() {

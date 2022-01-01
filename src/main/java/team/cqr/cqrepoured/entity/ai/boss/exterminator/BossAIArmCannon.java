@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
@@ -70,7 +70,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	}
 
 	@Override
-	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
+	protected void checkAndPerformAttack(LivingEntity attackTarget) {
 		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
 			if (this.entity.isCannonRaised()) {
 				if (this.entity.isCannonArmReadyToShoot()) {
@@ -127,10 +127,10 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	}
 
 	private void spawnParticles(Vec3d armPos) {
-		if (this.world instanceof WorldServer) {
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, true, armPos.x, armPos.y, armPos.z, 10, 0, 0, 0, 0.05);
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.FLAME, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
+		if (this.world instanceof ServerWorld) {
+			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, true, armPos.x, armPos.y, armPos.z, 10, 0, 0, 0, 0.05);
+			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
+			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.FLAME, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
 		}
 	}
 

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.attack.special;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -28,7 +28,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public boolean shouldExecute() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if (attackTarget == null) {
 			return false;
 		}
@@ -56,7 +56,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 		if (this.tick >= this.activeSpecialAttack.getMaxUseTime()) {
 			return false;
 		}
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if ((this.activeSpecialAttack.needsTargetToContinue() || this.activeSpecialAttack.needsSightToContinue()) && attackTarget == null) {
 			return false;
 		}
@@ -76,7 +76,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 		this.specialAttackTick = this.entity.ticksExisted;
 		this.tick = 0;
 
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		this.activeSpecialAttack.startAttack(this.entity, attackTarget);
 	}
 
@@ -89,7 +89,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void updateTask() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getAttackTarget();
 		this.activeSpecialAttack.continueAttack(this.entity, attackTarget, this.tick++);
 
 		if (this.tick == this.activeSpecialAttack.getMaxUseTime()) {

@@ -8,12 +8,12 @@ import java.util.Random;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.item.SwordItem;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -28,10 +28,10 @@ public class GearedMobFactory {
 	private static final List<ItemStack> DEBUFF_ARROW_LIST = new ArrayList<>();
 
 	static {
-		for (Potion potion : ForgeRegistries.POTIONS.getValuesCollection()) {
+		for (Effect potion : ForgeRegistries.POTIONS.getValuesCollection()) {
 			if (potion.isBadEffect()) {
-				PotionEffect potionEffect = new PotionEffect(potion, potion.isInstant() ? 0 : 100);
-				List<PotionEffect> effectList = new ArrayList<>(1);
+				EffectInstance potionEffect = new EffectInstance(potion, potion.isInstant() ? 0 : 100);
+				List<EffectInstance> effectList = new ArrayList<>(1);
 				effectList.add(potionEffect);
 				DEBUFF_ARROW_LIST.add(PotionUtils.appendEffects(new ItemStack(Items.TIPPED_ARROW), effectList));
 			}
@@ -132,7 +132,7 @@ public class GearedMobFactory {
 				}
 				break;
 			}
-			if (mainHand.getItem().getClass() == ItemSword.class && this.random.nextDouble() < 0.3D) {
+			if (mainHand.getItem().getClass() == SwordItem.class && this.random.nextDouble() < 0.3D) {
 				offHand = new ItemStack(Items.SHIELD);
 			}
 			break;
@@ -197,13 +197,13 @@ public class GearedMobFactory {
 			EnchantmentHelper.addRandomEnchantment(this.random, feet, level, allowTreasure);
 		}
 
-		entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, mainHand);
-		entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, offHand);
+		entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, mainHand);
+		entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, offHand);
 
-		entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, head);
-		entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
-		entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
-		entity.setItemStackToSlot(EntityEquipmentSlot.FEET, feet);
+		entity.setItemStackToSlot(EquipmentSlotType.HEAD, head);
+		entity.setItemStackToSlot(EquipmentSlotType.CHEST, chest);
+		entity.setItemStackToSlot(EquipmentSlotType.LEGS, legs);
+		entity.setItemStackToSlot(EquipmentSlotType.FEET, feet);
 
 		if (entity instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR) entity).setHealingPotions(1);

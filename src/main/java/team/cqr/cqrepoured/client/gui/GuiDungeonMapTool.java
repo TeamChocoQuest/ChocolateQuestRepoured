@@ -9,16 +9,16 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.crash.CrashReport;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.util.tool.DungeonMapTask;
 
-public class GuiDungeonMapTool extends GuiScreen {
+public class GuiDungeonMapTool extends Screen {
 
 	private static int lastRadius = 100;
 	private static long lastSeed = 0L;
@@ -27,24 +27,24 @@ public class GuiDungeonMapTool extends GuiScreen {
 	private static double lastRarityDivisor = 0.0D;
 	private static boolean lastGenerateBiomes = false;
 
-	private final GuiScreen parent;
-	private final List<GuiTextField> textFieldList = new ArrayList<>();
+	private final Screen parent;
+	private final List<TextFieldWidget> textFieldList = new ArrayList<>();
 	private GuiNumberTextField textFieldRadius;
 	private GuiNumberTextField textFieldSeed;
-	private GuiButton buttonRandSeed;
-	private GuiButton buttonWorldSeed;
+	private Button buttonRandSeed;
+	private Button buttonWorldSeed;
 	private GuiNumberTextField textFieldDistance;
 	private GuiNumberTextField textFieldSpread;
 	private GuiNumberTextField textFieldRarityDivisor;
 	private GuiCheckBox checkBoxGenerateBiomes;
-	private GuiButton buttonExit;
-	private GuiButton buttonCancel;
-	private GuiButton buttonCreateMap;
+	private Button buttonExit;
+	private Button buttonCancel;
+	private Button buttonCreateMap;
 	private boolean canExit = true;
 	@Nullable
 	private DungeonMapTask task;
 
-	public GuiDungeonMapTool(GuiScreen parent) {
+	public GuiDungeonMapTool(Screen parent) {
 		this.parent = parent;
 	}
 
@@ -182,7 +182,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 		this.textFieldRarityDivisor.setText(Double.toString(lastRarityDivisor));
 		this.textFieldRarityDivisor.setEnabled(false);
 
-		this.buttonRandSeed = new GuiButton(id++, this.width / 2 + 140, 60, 20, 20, "R") {
+		this.buttonRandSeed = new Button(id++, this.width / 2 + 140, 60, 20, 20, "R") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
@@ -192,7 +192,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				return true;
 			}
 		};
-		this.buttonWorldSeed = new GuiButton(id++, this.width / 2 + 170, 60, 20, 20, "W") {
+		this.buttonWorldSeed = new Button(id++, this.width / 2 + 170, 60, 20, 20, "W") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
@@ -203,7 +203,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.buttonWorldSeed.enabled = this.mc.isIntegratedServerRunning();
-		this.buttonExit = new GuiButton(id++, 5, 5, 20, 20, "X") {
+		this.buttonExit = new Button(id++, 5, 5, 20, 20, "X") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
@@ -216,7 +216,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 				return true;
 			}
 		};
-		this.buttonCancel = new GuiButton(id++, this.width / 2 - 102, this.height - 24, 100, 20, "Cancel") {
+		this.buttonCancel = new Button(id++, this.width / 2 - 102, this.height - 24, 100, 20, "Cancel") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
@@ -230,7 +230,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.buttonCancel.enabled = false;
-		this.buttonCreateMap = new GuiButton(id++, this.width / 2 + 2, this.height - 24, 100, 20, "Create Map") {
+		this.buttonCreateMap = new Button(id++, this.width / 2 + 2, this.height - 24, 100, 20, "Create Map") {
 			@Override
 			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 				if (!super.mousePressed(mc, mouseX, mouseY)) {
@@ -297,7 +297,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		Optional<GuiTextField> focusedTextField = this.textFieldList.stream().filter(GuiTextField::isFocused).findFirst();
+		Optional<TextFieldWidget> focusedTextField = this.textFieldList.stream().filter(TextFieldWidget::isFocused).findFirst();
 		if (focusedTextField.isPresent()) {
 			if (keyCode == 1) {
 				focusedTextField.get().setFocused(false);
@@ -322,14 +322,14 @@ public class GuiDungeonMapTool extends GuiScreen {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		this.textFieldList.forEach(GuiTextField::updateCursorCounter);
+		this.textFieldList.forEach(TextFieldWidget::updateCursorCounter);
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawBackground(0);
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.textFieldList.forEach(GuiTextField::drawTextBox);
+		this.textFieldList.forEach(TextFieldWidget::drawTextBox);
 		int i = 0;
 		GuiHelper.drawString(this.fontRenderer, "Radius", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
 		GuiHelper.drawString(this.fontRenderer, "Seed", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -153,9 +153,9 @@ public class EntityRenderManager {
 		double percentX = dx * ((incX > 0) ? (1.0 - frac(camX)) : frac(camX));
 		double percentY = dy * ((incY > 0) ? (1.0 - frac(camY)) : frac(camY));
 		double percentZ = dz * ((incZ > 0) ? (1.0 - frac(camZ)) : frac(camZ));
-		final EnumFacing facingX = (incX > 0) ? EnumFacing.WEST : EnumFacing.EAST;
-		final EnumFacing facingY = (incY > 0) ? EnumFacing.DOWN : EnumFacing.UP;
-		final EnumFacing facingZ = (incZ > 0) ? EnumFacing.NORTH : EnumFacing.SOUTH;
+		final Direction facingX = (incX > 0) ? Direction.WEST : Direction.EAST;
+		final Direction facingY = (incY > 0) ? Direction.DOWN : Direction.UP;
+		final Direction facingZ = (incZ > 0) ? Direction.NORTH : Direction.SOUTH;
 		int x = floor(camX);
 		int y = floor(camY);
 		int z = floor(camZ);
@@ -184,7 +184,7 @@ public class EntityRenderManager {
 		}
 
 		while (percentX <= 1.0 || percentY <= 1.0 || percentZ <= 1.0) {
-			EnumFacing facing;
+			Direction facing;
 			if (percentX < percentY) {
 				if (percentX < percentZ) {
 					x += incX;

@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.util;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -75,12 +75,12 @@ public class CachedBlockAccess implements IBlockAccess {
 		throw new UnsupportedOperationException();
 	}
 
-	public IBlockState getBlockState(int x, int y, int z) {
+	public BlockState getBlockState(int x, int y, int z) {
 		return this.getBlockState(this.mutable.setPos(x, y, z));
 	}
 
 	@Override
-	public IBlockState getBlockState(BlockPos pos) {
+	public BlockState getBlockState(BlockPos pos) {
 		ExtendedBlockStorage section = this.getChunkSection(pos);
 		if (section == null) {
 			return Blocks.AIR.getDefaultState();
@@ -99,7 +99,7 @@ public class CachedBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public int getStrongPower(BlockPos pos, EnumFacing direction) {
+	public int getStrongPower(BlockPos pos, Direction direction) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -109,7 +109,7 @@ public class CachedBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+	public boolean isSideSolid(BlockPos pos, Direction side, boolean _default) {
 		throw new UnsupportedOperationException();
 	}
 

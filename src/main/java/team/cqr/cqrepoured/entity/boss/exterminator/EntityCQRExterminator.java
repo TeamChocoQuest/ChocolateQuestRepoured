@@ -6,22 +6,22 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -91,8 +91,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// non-stunned state
 	private MultiPartEntityPart[] parts;
 
-	private EntityLivingBase electroCuteTargetEmitterLeft;
-	private EntityLivingBase electroCuteTargetEmitterRight;
+	private LivingEntity electroCuteTargetEmitterLeft;
+	private LivingEntity electroCuteTargetEmitterRight;
 
 	private int stunTime = 0;
 
@@ -119,20 +119,20 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
 		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
 			@Override
-			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-				if (this.parent == null || ((EntityLivingBase) this.parent).isDead) {
+			public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+				if (this.parent == null || ((LivingEntity) this.parent).isDead) {
 					return false;
 				}
-				return ((EntityLivingBase) this.parent).processInitialInteract(player, hand);
+				return ((LivingEntity) this.parent).processInitialInteract(player, hand);
 			}
 		};
 		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
 			@Override
-			public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-				if (this.parent == null || ((EntityLivingBase) this.parent).isDead) {
+			public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+				if (this.parent == null || ((LivingEntity) this.parent).isDead) {
 					return false;
 				}
-				return ((EntityLivingBase) this.parent).processInitialInteract(player, hand);
+				return ((LivingEntity) this.parent).processInitialInteract(player, hand);
 			}
 		};
 	}
@@ -192,7 +192,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EntityEquipmentSlot.CHEST));
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
 	}
 
@@ -209,7 +209,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			this.tasks = new EntityAITasksProfiled(this.world.profiler, this.world);
 			this.targetTasks = new EntityAITasksProfiled(this.world.profiler, this.world);
 		}
-		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(1, new SwimGoal(this));
 		this.tasks.addTask(2, new EntityAIOpenCloseDoor(this));
 
 		this.tasks.addTask(0, new BossAIExterminatorStun(this));
@@ -252,11 +252,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
 	}
 
-	public EntityLivingBase getElectroCuteTargetLeft() {
+	public LivingEntity getElectroCuteTargetLeft() {
 		return this.electroCuteTargetEmitterLeft;
 	}
 
-	public void setElectroCuteTargetLeft(EntityLivingBase electroCuteTargetA) {
+	public void setElectroCuteTargetLeft(LivingEntity electroCuteTargetA) {
 		this.electroCuteTargetEmitterLeft = electroCuteTargetA;
 
 		if (this.isServerWorld()) {
@@ -264,11 +264,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 	}
 
-	public EntityLivingBase getElectroCuteTargetRight() {
+	public LivingEntity getElectroCuteTargetRight() {
 		return this.electroCuteTargetEmitterRight;
 	}
 
-	public void setElectroCuteTargetRight(EntityLivingBase electroCuteTargetB) {
+	public void setElectroCuteTargetRight(LivingEntity electroCuteTargetB) {
 		this.electroCuteTargetEmitterRight = electroCuteTargetB;
 
 		if (this.isServerWorld()) {
@@ -291,7 +291,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+	public void onStruckByLightning(LightningBoltEntity lightningBolt) {
 		if (this.isStunned()) {
 			this.stunTime += (50 / 3);
 		} else if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
@@ -637,7 +637,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return false;
 		}
 
-		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
+		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof PlayerEntity && ((PlayerEntity) source.getTrueSource()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
@@ -736,7 +736,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (!affectedEntities.isEmpty()) {
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
-				if ((entity instanceof EntityLivingBase && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (EntityLivingBase) entity))) || checkPred.test(entity)) {
+				if ((entity instanceof LivingEntity && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (LivingEntity) entity))) || checkPred.test(entity)) {
 					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
 
 					entity.motionX += flyDirection.x;
@@ -882,9 +882,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 				int i = this.getExperiencePoints(this.attackingPlayer);
 				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
 				while (i > 0) {
-					int j = EntityXPOrb.getXPSplit(i);
+					int j = ExperienceOrbEntity.getXPSplit(i);
 					i -= j;
-					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+					this.world.spawnEntity(new ExperienceOrbEntity(this.world, this.posX, this.posY, this.posZ, j));
 				}
 			}
 
@@ -1033,16 +1033,16 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	// Datasync stuff
 	public void updateEmitterTargetRightClient(Entity object) {
-		if (object != null && object instanceof EntityLivingBase) {
-			this.setElectroCuteTargetRight((EntityLivingBase) object);
+		if (object != null && object instanceof LivingEntity) {
+			this.setElectroCuteTargetRight((LivingEntity) object);
 		} else {
 			this.setElectroCuteTargetRight(null);
 		}
 	}
 
 	public void updateEmitterTargetLeftClient(Entity object) {
-		if (object != null && object instanceof EntityLivingBase) {
-			this.setElectroCuteTargetLeft((EntityLivingBase) object);
+		if (object != null && object instanceof LivingEntity) {
+			this.setElectroCuteTargetLeft((LivingEntity) object);
 		} else {
 			this.setElectroCuteTargetLeft(null);
 		}
@@ -1057,7 +1057,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
 
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL));
 	}
 
 	@Override

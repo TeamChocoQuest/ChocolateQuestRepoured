@@ -7,33 +7,30 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.util.*;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -315,7 +312,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
+	public boolean isPotionApplicable(EffectInstance potioneffectIn) {
 		return false;
 	}
 
@@ -335,7 +332,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
 		if (this.mouthTimer > 0 || this.world.isRemote) {
 			return;
 		}
@@ -371,8 +368,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
 		if (super.attackEntityAsMob(entityIn)) {
-			if (this.phase > 1 && (entityIn instanceof EntityLivingBase)) {
-				((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100 + entityIn.world.getDifficulty().ordinal() * 40, 3));
+			if (this.phase > 1 && (entityIn instanceof LivingEntity)) {
+				((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, 100 + entityIn.world.getDifficulty().ordinal() * 40, 3));
 			}
 			if (!this.world.isRemote) {
 				this.mouthTimer = 5;
@@ -459,7 +456,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public double getAttackReach(EntityLivingBase target) {
+	public double getAttackReach(LivingEntity target) {
 		return super.getAttackReach(target) * this.INITIAL_SEGMENT_COUNT;
 	}
 
@@ -574,7 +571,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			for (int l1 = y1; l1 <= y2; ++l1) {
 				for (int i2 = z1; i2 <= z2; ++i2) {
 					BlockPos blockpos = new BlockPos(k1, l1, i2);
-					IBlockState iblockstate = this.world.getBlockState(blockpos);
+					BlockState iblockstate = this.world.getBlockState(blockpos);
 					Block block = iblockstate.getBlock();
 
 					if (!block.isAir(iblockstate, this.world, blockpos) && iblockstate.getMaterial() != Material.FIRE) {
@@ -584,7 +581,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the
 						// protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
-							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(this.world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
 							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
 									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != CQRBlocks.PHYLACTERY && block != CQRBlocks.FORCE_FIELD_NEXUS && block != CQRBlocks.EXPORTER) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
@@ -751,19 +748,19 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void addTrackingPlayer(EntityPlayerMP player) {
+	public void addTrackingPlayer(ServerPlayerEntity player) {
 		super.addTrackingPlayer(player);
 		this.bossInfoServer.addPlayer(player);
 	}
 
 	@Override
-	public void removeTrackingPlayer(EntityPlayerMP player) {
+	public void removeTrackingPlayer(ServerPlayerEntity player) {
 		super.removeTrackingPlayer(player);
 		this.bossInfoServer.removePlayer(player);
 	}
 
 	@Override
-	protected PathNavigate createNavigator(World worldIn) {
+	protected PathNavigator createNavigator(World worldIn) {
 		return new PathNavigateDirectLine(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
@@ -839,9 +836,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	private void dropExperience(int p_184668_1_, double x, double y, double z) {
 		while (p_184668_1_ > 0) {
-			int i = EntityXPOrb.getXPSplit(p_184668_1_);
+			int i = ExperienceOrbEntity.getXPSplit(p_184668_1_);
 			p_184668_1_ -= i;
-			EntityXPOrb xp = new EntityXPOrb(this.world, x, y, z, i);
+			ExperienceOrbEntity xp = new ExperienceOrbEntity(this.world, x, y, z, i);
 			xp.setEntityInvulnerable(true);
 			this.world.spawnEntity(xp);
 		}
@@ -852,7 +849,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger("segmentCount", this.segmentCount);
 		compound.setInteger("phase", this.phase);
@@ -865,7 +862,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		if (compound.hasKey("segmentCount")) {
 			this.segmentCount = compound.getInteger("segmentCount");
@@ -920,7 +917,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
 
 	@Override

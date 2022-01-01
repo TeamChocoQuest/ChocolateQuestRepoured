@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockColored;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.DyeColor;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 public class CastleRoomBedroomFancy extends CastleRoomGenericBase {
-	private EnumDyeColor carpetColor;
+	private DyeColor carpetColor;
 
 	public CastleRoomBedroomFancy(int sideLength, int height, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
@@ -29,13 +29,13 @@ public class CastleRoomBedroomFancy extends CastleRoomGenericBase {
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FIREPLACE, 2);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BED, 3);
 
-		List<EnumDyeColor> possibleColors = Arrays.asList(EnumDyeColor.values());
+		List<DyeColor> possibleColors = Arrays.asList(DyeColor.values());
 		Collections.shuffle(possibleColors);
 		this.carpetColor = possibleColors.get(0);
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
+	protected BlockState getFloorBlock(DungeonRandomizedCastle dungeon) {
 		return Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, this.carpetColor);
 	}
 }

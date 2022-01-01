@@ -21,18 +21,18 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.IntCache;
@@ -85,7 +85,7 @@ public class DungeonMapTask {
 			if (t != null) {
 				this.progress.setErrored();
 			}
-			WorldServer world = DimensionManager.getWorld(0);
+			ServerWorld world = DimensionManager.getWorld(0);
 			if (world != null) {
 				DimensionManager.setWorld(0, null, world.getMinecraftServer());
 			}
@@ -335,7 +335,7 @@ public class DungeonMapTask {
 		return color(world, block.getDefaultState());
 	}
 
-	private static int color(World world, IBlockState state) {
+	private static int color(World world, BlockState state) {
 		return state.getMapColor(world, BlockPos.ORIGIN).colorValue;
 	}
 

@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
@@ -17,7 +17,7 @@ import net.minecraft.client.resources.data.TextureMetadataSection;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.util.Perlin2D;
 
-public class InvisibilityTexture extends AbstractTexture {
+public class InvisibilityTexture extends Texture {
 
 	private static final Random RANDOM = new Random();
 	private static final Perlin2D PERLIN = new Perlin2D(RANDOM.nextLong(), 4.0F);
@@ -34,7 +34,7 @@ public class InvisibilityTexture extends AbstractTexture {
 		String path = originalTexture.getPath();
 		int i = path.lastIndexOf('.');
 		ResourceLocation invisibilityTexture = new ResourceLocation(originalTexture.getNamespace(), path.substring(0, i) + "_invisible" + path.substring(i));
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		EntityRendererManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		if (renderManager.renderEngine.getTexture(invisibilityTexture) == null) {
 			renderManager.renderEngine.loadTexture(invisibilityTexture, new InvisibilityTexture(originalTexture, invisibilityTexture));
 		}

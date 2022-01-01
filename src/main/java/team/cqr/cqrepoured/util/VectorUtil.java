@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -61,15 +61,15 @@ public class VectorUtil {
 		return new Vec3i(start.getX() + x, start.getY() + y, start.getZ() + z);
 	}
 
-	public static NBTTagCompound createVectorNBTTag(Vec3d vector) {
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
+	public static CompoundNBT createVectorNBTTag(Vec3d vector) {
+		CompoundNBT nbttagcompound = new CompoundNBT();
 		nbttagcompound.setDouble("X", vector.x);
 		nbttagcompound.setDouble("Y", vector.y);
 		nbttagcompound.setDouble("Z", vector.z);
 		return nbttagcompound;
 	}
 
-	public static Vec3d getVectorFromTag(NBTTagCompound tag) {
+	public static Vec3d getVectorFromTag(CompoundNBT tag) {
 		return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
 	}
 

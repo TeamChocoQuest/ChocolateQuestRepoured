@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.UseAction;
+import net.minecraft.network.play.server.SPlayEntityEffectPacket;
+import net.minecraft.util.*;
 import net.minecraft.world.dimension.Dimension;
 import org.lwjgl.input.Keyboard;
 
@@ -11,29 +15,24 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketEntityEffect;
-import net.minecraft.network.play.server.SPacketRespawn;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SRespawnPacket;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,8 +52,8 @@ public class ItemTeleportStone extends Item {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.BOW;
+	public UseAction getItemUseAction(ItemStack stack) {
+		return UseAction.BOW;
 	}
 
 	@Override
@@ -63,22 +62,22 @@ public class ItemTeleportStone extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
 
 	/**
 	 * Taken from CoFHCore's EntityHelper
 	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
 	 */
-	private static void transferPlayerToDimension(EntityPlayerMP player, int dimension, PlayerList manager) {
+	private static void transferPlayerToDimension(ServerPlayerEntity player, int dimension, PlayerList manager) {
 		int oldDim = player.dimension;
-		WorldServer oldWorld = manager.getServerInstance().getWorld(player.dimension);
+		ServerWorld oldWorld = manager.getServerInstance().getWorld(player.dimension);
 		player.dimension = dimension;
-		WorldServer newWorld = manager.getServerInstance().getWorld(player.dimension);
-		player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+		ServerWorld newWorld = manager.getServerInstance().getWorld(player.dimension);
+		player.connection.sendPacket(new SRespawnPacket(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
 		oldWorld.removeEntityDangerously(player);
 		if (player.isBeingRidden()) {
 			player.removePassengers();
@@ -94,8 +93,8 @@ public class ItemTeleportStone extends Item {
 		manager.updateTimeAndWeatherForPlayer(player, newWorld);
 		manager.syncPlayerInventory(player);
 
-		for (PotionEffect potioneffect : player.getActivePotionEffects()) {
-			player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
+		for (EffectInstance potioneffect : player.getActivePotionEffects()) {
+			player.connection.sendPacket(new SPlayEntityEffectPacket(player.getEntityId(), potioneffect));
 		}
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
 	}
@@ -104,7 +103,7 @@ public class ItemTeleportStone extends Item {
 	 * Taken from CoFHCore's EntityHelper
 	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
 	 */
-	private static void transferEntityToWorld(Entity entity, WorldServer oldWorld, WorldServer newWorld) {
+	private static void transferEntityToWorld(Entity entity, ServerWorld oldWorld, ServerWorld newWorld) {
 		net.minecraft.world.dimension.Dimension oldWorldProvider = oldWorld.provider;
 		net.minecraft.world.dimension.Dimension newWorldProvider = newWorld.provider;
 		double moveFactor = oldWorldProvider.getMovementFactor() / newWorldProvider.getMovementFactor();
@@ -125,9 +124,9 @@ public class ItemTeleportStone extends Item {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if (entityLiving instanceof EntityPlayerMP) {
-			EntityPlayerMP player = (EntityPlayerMP) entityLiving;
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+		if (entityLiving instanceof ServerPlayerEntity) {
+			ServerPlayerEntity player = (ServerPlayerEntity) entityLiving;
 			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
 
 			if (player.isSneaking() && stack.hasTagCompound()) {
@@ -228,11 +227,11 @@ public class ItemTeleportStone extends Item {
 		}
 	}
 
-	private void setPoint(ItemStack stack, EntityPlayerMP player) {
-		NBTTagCompound stone = stack.getTagCompound();
+	private void setPoint(ItemStack stack, ServerPlayerEntity player) {
+		CompoundNBT stone = stack.getTagCompound();
 
 		if (stone == null) {
-			stone = new NBTTagCompound();
+			stone = new CompoundNBT();
 			stack.setTagCompound(stone);
 		}
 
@@ -263,7 +262,7 @@ public class ItemTeleportStone extends Item {
 	private BlockPos getPoint(ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
-				NBTTagCompound stone = stack.getTagCompound();
+				CompoundNBT stone = stack.getTagCompound();
 
 				double x = stone.getDouble(this.X);
 				double y = stone.getDouble(this.Y);

@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.ConfigGuiType;
 import net.minecraftforge.fml.client.config.DummyConfigElement.DummyListElement;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -21,20 +21,20 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 @SideOnly(Side.CLIENT)
-public class GuiExporter extends GuiScreen {
+public class GuiExporter extends Screen {
 
 	private final TileEntityExporter exporter;
 	private final DummyListElement unprotectedBlocksConfig;
 
 	private GuiButtonExt btnExport;
 	private GuiButtonExt btnUnprotectedBlocks;
-	private GuiTextField edtName;
-	private GuiTextField edtEndX;
-	private GuiTextField edtEndY;
-	private GuiTextField edtEndZ;
-	private GuiTextField edtStartX;
-	private GuiTextField edtStartY;
-	private GuiTextField edtStartZ;
+	private TextFieldWidget edtName;
+	private TextFieldWidget edtEndX;
+	private TextFieldWidget edtEndY;
+	private TextFieldWidget edtEndZ;
+	private TextFieldWidget edtStartX;
+	private TextFieldWidget edtStartY;
+	private TextFieldWidget edtStartZ;
 	private GuiCheckBox chbxRelativeMode;
 	private GuiCheckBox chbxIgnoreEntities;
 
@@ -65,22 +65,22 @@ public class GuiExporter extends GuiScreen {
 	public void initGui() {
 		int index = 0;
 
-		this.edtName = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 200, this.height / 2 - 70, 400, 20);
+		this.edtName = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 200, this.height / 2 - 70, 400, 20);
 		this.edtName.setMaxStringLength(1024);
 		this.edtName.setText(this.exporter.getStructureName());
 
-		this.edtEndX = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 10, 40, 20);
+		this.edtEndX = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 + 10, 40, 20);
 		this.edtEndX.setText(String.valueOf(this.exporter.getEndX()));
-		this.edtEndY = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 + 10, 40, 20);
+		this.edtEndY = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 + 10, 40, 20);
 		this.edtEndY.setText(String.valueOf(this.exporter.getEndY()));
-		this.edtEndZ = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 + 10, 40, 20);
+		this.edtEndZ = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 + 10, 40, 20);
 		this.edtEndZ.setText(String.valueOf(this.exporter.getEndZ()));
 
-		this.edtStartX = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 30, 40, 20);
+		this.edtStartX = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 30, 40, 20);
 		this.edtStartX.setText(String.valueOf(this.exporter.getStartX()));
-		this.edtStartY = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 - 30, 40, 20);
+		this.edtStartY = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 70 + 50, this.height / 2 - 30, 40, 20);
 		this.edtStartY.setText(String.valueOf(this.exporter.getStartY()));
-		this.edtStartZ = new GuiTextField(index++, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20);
+		this.edtStartZ = new TextFieldWidget(index++, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20);
 		this.edtStartZ.setText(String.valueOf(this.exporter.getStartZ()));
 
 		this.chbxRelativeMode = new GuiCheckBox(index++, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.isRelativeMode());
@@ -120,7 +120,7 @@ public class GuiExporter extends GuiScreen {
 				this.exporter.saveStructure(this.mc.player);
 			}
 		} catch (Exception e) {
-			Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Invalid exporter arguments"));
+			Minecraft.getMinecraft().player.sendMessage(new StringTextComponent("Invalid exporter arguments"));
 		}
 
 		super.onGuiClosed();
@@ -226,7 +226,7 @@ public class GuiExporter extends GuiScreen {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(Button button) throws IOException {
 		if (button == this.btnExport) {
 			this.saveStructOnExit = true;
 			this.mc.player.closeScreen();

@@ -7,38 +7,38 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
 
-public class ItemBullBattleAxe extends ItemSword {
+public class ItemBullBattleAxe extends SwordItem {
 
 	public ItemBullBattleAxe(ToolMaterial material) {
 		super(material);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (!playerIn.isSwingInProgress && playerIn.onGround) {
 			playerIn.posY += 0.1D;
 			playerIn.motionY += 0.35D;
@@ -49,18 +49,18 @@ public class ItemBullBattleAxe extends ItemSword {
 				worldIn.spawnEntity(quake);
 
 				playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItem(handIn).getItem(), 20);
-				return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+				return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 			}
 			playerIn.swingArm(handIn);
 		}
-		return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.FAIL, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EntityEquipmentSlot.MAINHAND) {
+		if (slot == EquipmentSlotType.MAINHAND) {
 			this.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 0.6);
 		}
 
@@ -89,7 +89,7 @@ public class ItemBullBattleAxe extends ItemSword {
 	}
 
 	@Override
-	public float getDestroySpeed(ItemStack stack, IBlockState state) {
+	public float getDestroySpeed(ItemStack stack, BlockState state) {
 		return (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE) ? 7.0F : super.getDestroySpeed(stack, state);
 	}
 

@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 
@@ -14,7 +14,7 @@ public class GeneratableEntityInfo implements IGeneratable {
 		this.entity = entity;
 	}
 
-	public GeneratableEntityInfo(World world, NBTTagCompound compound) {
+	public GeneratableEntityInfo(World world, CompoundNBT compound) {
 		this.entity = EntityList.createEntityFromNBT(compound, world);
 	}
 
@@ -27,8 +27,8 @@ public class GeneratableEntityInfo implements IGeneratable {
 		return this.entity;
 	}
 
-	public NBTTagCompound writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
+	public CompoundNBT writeToNBT() {
+		CompoundNBT compound = new CompoundNBT();
 		this.entity.writeToNBTAtomically(compound);
 		return compound;
 	}

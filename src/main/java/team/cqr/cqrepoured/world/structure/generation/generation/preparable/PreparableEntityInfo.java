@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.item.HangingEntity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityPainting;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.entity.item.PaintingEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.DoubleNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,26 +17,26 @@ import team.cqr.cqrepoured.world.structure.generation.generation.generatable.Gen
 
 public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> {
 
-	private final NBTTagCompound entityData;
+	private final CompoundNBT entityData;
 
 	public PreparableEntityInfo(BlockPos structurePos, Entity entity) {
-		this.entityData = new NBTTagCompound();
+		this.entityData = new CompoundNBT();
 		entity.writeToNBTOptional(this.entityData);
 		this.entityData.removeTag("UUIDMost");
 		this.entityData.removeTag("UUIDLeast");
-		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
-		nbtTagList.set(0, new NBTTagDouble(entity.posX - structurePos.getX()));
-		nbtTagList.set(1, new NBTTagDouble(entity.posY - structurePos.getY()));
-		nbtTagList.set(2, new NBTTagDouble(entity.posZ - structurePos.getZ()));
-		if (entity instanceof EntityHanging) {
-			BlockPos blockpos = ((EntityHanging) entity).getHangingPosition();
+		ListNBT nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+		nbtTagList.set(0, new DoubleNBT(entity.posX - structurePos.getX()));
+		nbtTagList.set(1, new DoubleNBT(entity.posY - structurePos.getY()));
+		nbtTagList.set(2, new DoubleNBT(entity.posZ - structurePos.getZ()));
+		if (entity instanceof HangingEntity) {
+			BlockPos blockpos = ((HangingEntity) entity).getHangingPosition();
 			this.entityData.setInteger("TileX", blockpos.getX() - structurePos.getX());
 			this.entityData.setInteger("TileY", blockpos.getY() - structurePos.getY());
 			this.entityData.setInteger("TileZ", blockpos.getZ() - structurePos.getZ());
 		}
 	}
 
-	public PreparableEntityInfo(NBTTagCompound entityData) {
+	public PreparableEntityInfo(CompoundNBT entityData) {
 		this.entityData = entityData;
 	}
 
@@ -47,13 +47,13 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 		double y;
 		double z;
 
-		if (entity instanceof EntityHanging) {
+		if (entity instanceof HangingEntity) {
 			x = this.entityData.getInteger("TileX");
 			y = this.entityData.getInteger("TileY");
 			z = this.entityData.getInteger("TileZ");
-			if (entity instanceof EntityPainting && placement.getMirror() != Mirror.NONE) {
-				int n = ((((EntityPainting) entity).art.sizeX >> 4) + 1) & 1;
-				switch (((EntityPainting) entity).facingDirection.rotateYCCW()) {
+			if (entity instanceof PaintingEntity && placement.getMirror() != Mirror.NONE) {
+				int n = ((((PaintingEntity) entity).art.sizeX >> 4) + 1) & 1;
+				switch (((PaintingEntity) entity).facingDirection.rotateYCCW()) {
 				case NORTH:
 					z -= n;
 					break;
@@ -75,7 +75,7 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 			y = pos.getY();
 			z = pos.getZ();
 		} else {
-			NBTTagList tagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+			ListNBT tagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
 			MutableVec3d vec = placement.transform(tagList.getDoubleAt(0), tagList.getDoubleAt(1), tagList.getDoubleAt(2));
 			x = vec.x;
 			y = vec.y;
@@ -94,7 +94,7 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 		return this.prepareNormal(world, placement);
 	}
 
-	public NBTTagCompound getEntityData() {
+	public CompoundNBT getEntityData() {
 		return this.entityData;
 	}
 

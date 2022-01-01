@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.HorizontalBlock;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -21,22 +21,22 @@ public class SPacketHandlerCloseMapPlaceholderGuiSimple implements IMessageHandl
 	public IMessage onMessage(CPacketCloseMapPlaceholderGuiSimple message, MessageContext ctx) {
 		if (ctx.side.isServer()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 				World world = CQRMain.proxy.getWorld(ctx);
 
-				EnumFacing facing = message.getFacing();
+				Direction facing = message.getFacing();
 				BlockPos pos = message.getPos().offset(facing);
 				if (player.getDistanceSqToCenter(pos) > 16 * 16) {
 					return;
 				}
 
 				int scale = message.getScale();
-				EnumFacing orientation = message.getOrientation();
+				Direction orientation = message.getOrientation();
 				boolean lockOrientation = message.isLockOrientation();
 				boolean fillMap = message.isFillMap();
 				int fillRadius = message.getFillRadius();
 
-				EnumFacing facingOpposite = facing.getOpposite();
+				Direction facingOpposite = facing.getOpposite();
 				BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 				for (int leftRight = -message.getSizeLeft(); leftRight <= message.getSizeRight(); leftRight++) {
 					for (int downUp = -message.getSizeDown(); downUp <= message.getSizeUp(); downUp++) {
@@ -65,7 +65,7 @@ public class SPacketHandlerCloseMapPlaceholderGuiSimple implements IMessageHandl
 								continue;
 							}
 
-							world.setBlockState(mutablePos, CQRBlocks.MAP_PLACEHOLDER.getDefaultState().withProperty(BlockHorizontal.FACING, facing));
+							world.setBlockState(mutablePos, CQRBlocks.MAP_PLACEHOLDER.getDefaultState().withProperty(HorizontalBlock.FACING, facing));
 						}
 
 						TileEntity tileEntity = world.getTileEntity(mutablePos);

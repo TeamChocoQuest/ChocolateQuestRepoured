@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.client.gui.npceditor;
 
 import java.io.IOException;
 
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.inventory.container.Container;
 import org.lwjgl.input.Mouse;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 
 @SideOnly(Side.CLIENT)
-public class GuiMerchant extends GuiContainer implements IUpdatableGui {
+public class GuiMerchant extends ContainerScreen implements IUpdatableGui {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant.png");
 	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_creative.png");
@@ -31,11 +31,11 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 	private final AbstractEntityCQR entity;
 	private final TraderOffer trades;
 	private final GuiButtonTrade[] tradeButtons = new GuiButtonTrade[7];
-	private final GuiButton[] pushUpButtons = new GuiButton[this.tradeButtons.length - 1];
-	private final GuiButton[] pushDownButtons = new GuiButton[this.tradeButtons.length - 1];
-	private final GuiButton[] deleteButtons = new GuiButton[this.tradeButtons.length - 1];
-	private final GuiButton[] editButtons = new GuiButton[this.tradeButtons.length - 1];
-	private GuiButton addNewTradeButton;
+	private final Button[] pushUpButtons = new Button[this.tradeButtons.length - 1];
+	private final Button[] pushDownButtons = new Button[this.tradeButtons.length - 1];
+	private final Button[] deleteButtons = new Button[this.tradeButtons.length - 1];
+	private final Button[] editButtons = new Button[this.tradeButtons.length - 1];
+	private Button addNewTradeButton;
 	private int buttonStartIndex = 0;
 	private boolean scrollBarClicked;
 
@@ -60,7 +60,7 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.guiLeft - 2, this.guiTop + 28 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_edit"));
 			}
 		}
-		this.addNewTradeButton = this.addButton(new GuiButton(0, this.guiLeft - 12, this.guiTop + 138, 136, 20, "- Create Trade -"));
+		this.addNewTradeButton = this.addButton(new Button(0, this.guiLeft - 12, this.guiTop + 138, 136, 20, "- Create Trade -"));
 
 		this.update();
 	}
@@ -106,7 +106,7 @@ public class GuiMerchant extends GuiContainer implements IUpdatableGui {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(Button button) throws IOException {
 		if (button instanceof GuiButtonTrade) {
 			((ContainerMerchant) this.inventorySlots).setCurrentTradeIndex(((GuiButtonTrade) button).getIndex());
 			((ContainerMerchant) this.inventorySlots).updateInputsForTrade(((GuiButtonTrade) button).getIndex());

@@ -2,16 +2,16 @@ package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
@@ -25,7 +25,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 
 	private final double dashSpeed;
 	private final double dashWidth;
-	private EntityLivingBase target;
+	private LivingEntity target;
 	private Vec3d targetDirection;
 	private double yawRadian;
 	private float yawDegree;
@@ -51,7 +51,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 			this.target = this.entity.getAttackTarget();
 		} else {
 			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 16.0D, this.entity.posY - 2.0D, this.entity.posZ - 16.0D, this.entity.posX + 16.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 16.0D);
-			List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && faction.isEnemy(e));
+			List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && faction.isEnemy(e));
 			if (list.isEmpty()) {
 				this.target = this.entity.getAttackTarget();
 			} else {
@@ -87,8 +87,8 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this.entity), this.entity);
 
 			this.entity.playSound(SoundEvents.EVOCATION_ILLAGER_PREPARE_WOLOLO, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.entity.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.entity.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.PORTAL, this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 		} else if (this.tick > this.chargingTicks + 20 - 1) {
 			this.entity.rotationYaw = this.yawDegree;
 
@@ -129,9 +129,9 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		Vec3d vec3 = new Vec3d(-this.dashWidth, 0.0D, 0.0D);
 		Vec3d vec4 = new Vec3d(this.dashWidth, this.entity.height, vec2.subtract(vec1).length());
 		BoundingBox bb = new BoundingBox(vec3, vec4, this.yawRadian, 0.0D, vec1);
-		List<EntityLivingBase> list = BoundingBox.getEntitiesInsideBB(this.world, this.entity, EntityLivingBase.class, bb);
+		List<LivingEntity> list = BoundingBox.getEntitiesInsideBB(this.world, this.entity, LivingEntity.class, bb);
 		Faction faction = this.entity.getFaction();
-		for (EntityLivingBase entity : list) {
+		for (LivingEntity entity : list) {
 			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(entity)) {
 				continue;
 			}

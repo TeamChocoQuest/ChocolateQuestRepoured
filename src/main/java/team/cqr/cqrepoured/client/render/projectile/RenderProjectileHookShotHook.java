@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -15,13 +15,13 @@ import team.cqr.cqrepoured.client.model.ModelChain;
 import team.cqr.cqrepoured.client.model.ModelHook;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 
-public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook> {
+public class RenderProjectileHookShotHook extends EntityRenderer<ProjectileHookShotHook> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/hook.png");
 	private final ModelBase model = new ModelHook();
 	private final ModelBase chainModel = new ModelChain();
 
-	public RenderProjectileHookShotHook(RenderManager renderManager) {
+	public RenderProjectileHookShotHook(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
@@ -110,7 +110,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 			double z = z1 - (z4 * i * segmentLength);
 
 			mutablePos.setPos(x3 + x, y3 + y, z3 + z);
-			IBlockState state = entity.world.getBlockState(mutablePos);
+			BlockState state = entity.world.getBlockState(mutablePos);
 			int lightmapCoords = state.getPackedLightmapCoords(entity.world, mutablePos);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightmapCoords & 0xFFFF, lightmapCoords >>> 16);
 

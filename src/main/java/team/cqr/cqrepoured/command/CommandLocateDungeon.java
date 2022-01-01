@@ -13,7 +13,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -53,12 +53,12 @@ public class CommandLocateDungeon extends CommandBase {
 		String dungeonToSearchFor = args.length >= 6 ? args[5] : null;
 
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
-			sender.sendMessage(new TextComponentString("Structures are disabled."));
+			sender.sendMessage(new StringTextComponent("Structures are disabled."));
 			return;
 		}
 
 		if (world.getWorldType() == WorldType.FLAT && !CQRConfig.general.dungeonsInFlat) {
-			sender.sendMessage(new TextComponentString("Flat world and dungeonsInFlat is disabled."));
+			sender.sendMessage(new StringTextComponent("Flat world and dungeonsInFlat is disabled."));
 			return;
 		}
 
@@ -69,9 +69,9 @@ public class CommandLocateDungeon extends CommandBase {
 			int dungeonX = (dungeonGenInfo.chunkX << 4) + 8;
 			int dungeonZ = (dungeonGenInfo.chunkZ << 4) + 8;
 			String s = String.format("Nearest dungeon: %s at x=%d z=%d", dungeonGenInfo.dungeonName, dungeonX, dungeonZ);
-			sender.sendMessage(new TextComponentString(s));
+			sender.sendMessage(new StringTextComponent(s));
 		} else {
-			sender.sendMessage(new TextComponentString("No dungeon found."));
+			sender.sendMessage(new StringTextComponent("No dungeon found."));
 		}
 	}
 

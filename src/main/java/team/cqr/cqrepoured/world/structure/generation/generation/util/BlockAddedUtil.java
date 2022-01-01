@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.world.structure.generation.generation.util;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -30,12 +30,12 @@ public class BlockAddedUtil {
 
 			IntUtil.forEachChunkXYZ((x, y, z) -> {
 				MUTABLE.setPos((chunk.x << 4) + x, (chunkY << 4) + y, (chunk.z << 4) + z);
-				IBlockState state = blockStorage.get(x, y, z);
+				BlockState state = blockStorage.get(x, y, z);
 
 				if (state.getMaterial().isLiquid()) {
 					state.getBlock().onBlockAdded(world, MUTABLE, state);
 				} else {
-					IBlockState stateDown = y == 0 ? get(blockStorageDown, x, 15, z) : get(blockStorage, x, y - 1, z);
+					BlockState stateDown = y == 0 ? get(blockStorageDown, x, 15, z) : get(blockStorage, x, y - 1, z);
 					if (stateDown.getBlock() == Blocks.GRASS && state.getLightOpacity(world, MUTABLE) >= 12) {
 						MUTABLE.setY(MUTABLE.getY() - 1);
 						BlockPlacingHelper.setBlockState(world, chunk, y == 0 ? blockStorageDown : blockStorage, MUTABLE, Blocks.DIRT.getDefaultState(), null, 2);
@@ -45,7 +45,7 @@ public class BlockAddedUtil {
 		});
 	}
 
-	private static IBlockState get(@Nullable ExtendedBlockStorage blockStorage, int x, int y, int z) {
+	private static BlockState get(@Nullable ExtendedBlockStorage blockStorage, int x, int y, int z) {
 		return blockStorage != null ? blockStorage.get(x, y, z) : Blocks.AIR.getDefaultState();
 	}
 

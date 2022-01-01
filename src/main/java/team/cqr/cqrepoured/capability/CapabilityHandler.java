@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.capability;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -20,15 +20,15 @@ public class CapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
-		if (event.getObject() instanceof EntityLivingBase) {
+		if (event.getObject() instanceof LivingEntity) {
 			event.addCapability(CapabilityCooldownHandlerProvider.REGISTRY_NAME, CapabilityCooldownHandlerProvider.createProvider());
 		}
 		if (event.getObject() instanceof AbstractEntityCQR) {
 			event.addCapability(CapabilityExtraItemHandlerProvider.REGISTRY_NAME, CapabilityExtraItemHandlerProvider.createProvider(3));
 		}
 
-		if (event.getObject() instanceof EntityLivingBase) {
-			event.addCapability(CapabilityElectricShockProvider.REGISTRY_NAME, CapabilityElectricShockProvider.createProvider((EntityLivingBase) event.getObject()));
+		if (event.getObject() instanceof LivingEntity) {
+			event.addCapability(CapabilityElectricShockProvider.REGISTRY_NAME, CapabilityElectricShockProvider.createProvider((LivingEntity) event.getObject()));
 		}
 	}
 
@@ -37,20 +37,20 @@ public class CapabilityHandler {
 		event.addCapability(CapabilityProtectedRegionDataProvider.LOCATION, CapabilityProtectedRegionDataProvider.createProvider(event.getObject()));
 	}
 
-	public static void writeToItemStackNBT(ItemStack stack, String key, NBTTagCompound compound) {
-		NBTTagCompound stackCompound = stack.getTagCompound();
+	public static void writeToItemStackNBT(ItemStack stack, String key, CompoundNBT compound) {
+		CompoundNBT stackCompound = stack.getTagCompound();
 
 		if (stackCompound == null) {
-			stackCompound = new NBTTagCompound();
+			stackCompound = new CompoundNBT();
 			stack.setTagCompound(stackCompound);
 		}
 
 		stackCompound.setTag(key, compound);
 	}
 
-	public static NBTTagCompound readFromItemStackNBT(ItemStack stack, String key) {
-		NBTTagCompound stackCompound = stack.getTagCompound();
-		return stackCompound != null ? stackCompound.getCompoundTag(key) : new NBTTagCompound();
+	public static CompoundNBT readFromItemStackNBT(ItemStack stack, String key) {
+		CompoundNBT stackCompound = stack.getTagCompound();
+		return stackCompound != null ? stackCompound.getCompoundTag(key) : new CompoundNBT();
 	}
 
 }

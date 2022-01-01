@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.entity.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.passive.horse.HorseEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 /*
@@ -22,8 +22,8 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	private static final AttributeModifier FOLLOW_RANGE_MODIFIER = new AttributeModifier("modifier.cqr_horse_path_extension", 24.d, 0).setSaved(false);
 	private final AttributeModifier moveSpeedModifier;
 
-	protected EntityLiving horse;
-	private final List<EntityAITasks.EntityAITaskEntry> horseAI = new ArrayList<>();
+	protected MobEntity horse;
+	private final List<GoalSelector.EntityAITaskEntry> horseAI = new ArrayList<>();
 
 	public EntityAIRideHorse(T entity, double speedFactor) {
 		super(entity);
@@ -39,19 +39,19 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	}
 
 	protected boolean shouldRideHorse() {
-		return this.horse == null && this.entity.getRidingEntity() instanceof EntityHorse;
+		return this.horse == null && this.entity.getRidingEntity() instanceof HorseEntity;
 	}
 
 	@Override
 	public void startExecuting() {
-		this.horse = (EntityLiving) this.entity.getRidingEntity();
+		this.horse = (MobEntity) this.entity.getRidingEntity();
 		this.onMountHorse();
 	}
 
 	protected void onMountHorse() {
 		this.removeHorseAI();
-		if (this.horse instanceof AbstractHorse) {
-			AbstractHorse h = (AbstractHorse) this.horse;
+		if (this.horse instanceof AbstractHorseEntity) {
+			AbstractHorseEntity h = (AbstractHorseEntity) this.horse;
 			h.setHorseSaddled(true);
 			h.setEatingHaystack(false);
 			h.setRearing(false);
@@ -68,14 +68,14 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 
 	protected void onDismountHorse() {
 		this.addHorseAI();
-		if (this.horse instanceof AbstractHorse) {
-			((AbstractHorse) this.horse).setHorseSaddled(true);
+		if (this.horse instanceof AbstractHorseEntity) {
+			((AbstractHorseEntity) this.horse).setHorseSaddled(true);
 			this.removeModifiers();
 		}
 	}
 
 	private void applyModifiers() {
-		if (this.horse instanceof AbstractHorse) {
+		if (this.horse instanceof AbstractHorseEntity) {
 			this.removeModifiers();
 			this.horse.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).applyModifier(this.moveSpeedModifier);
 			this.horse.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).applyModifier(FOLLOW_RANGE_MODIFIER);
@@ -90,7 +90,7 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	private void removeHorseAI() {
 		this.horseAI.clear();
 		this.horseAI.addAll(this.horse.tasks.taskEntries);
-		for (EntityAITasks.EntityAITaskEntry task : this.horseAI) {
+		for (GoalSelector.EntityAITaskEntry task : this.horseAI) {
 			this.horse.tasks.removeTask(task.action);
 		}
 	}

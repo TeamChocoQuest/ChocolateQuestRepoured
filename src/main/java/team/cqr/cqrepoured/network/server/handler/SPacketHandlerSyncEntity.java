@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.handler;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -23,12 +23,12 @@ public class SPacketHandlerSyncEntity implements IMessageHandler<CPacketSyncEnti
 					if (entity instanceof AbstractEntityCQR) {
 						AbstractEntityCQR cqrentity = (AbstractEntityCQR) entity;
 						cqrentity.setHealthScale(message.getHealthScaling() / 100.0D);
-						cqrentity.setDropChance(EntityEquipmentSlot.HEAD, message.getDropChanceHelm() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.CHEST, message.getDropChanceChest() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.LEGS, message.getDropChanceLegs() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.FEET, message.getDropChanceFeet() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, message.getDropChanceMainhand() / 100.0F);
-						cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, message.getDropChanceOffhand() / 100.0F);
+						cqrentity.setDropChance(EquipmentSlotType.HEAD, message.getDropChanceHelm() / 100.0F);
+						cqrentity.setDropChance(EquipmentSlotType.CHEST, message.getDropChanceChest() / 100.0F);
+						cqrentity.setDropChance(EquipmentSlotType.LEGS, message.getDropChanceLegs() / 100.0F);
+						cqrentity.setDropChance(EquipmentSlotType.FEET, message.getDropChanceFeet() / 100.0F);
+						cqrentity.setDropChance(EquipmentSlotType.MAINHAND, message.getDropChanceMainhand() / 100.0F);
+						cqrentity.setDropChance(EquipmentSlotType.OFFHAND, message.getDropChanceOffhand() / 100.0F);
 						cqrentity.setSizeVariation(message.getSizeScaling() / 100.0F);
 					}
 				}

@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRBoarman;
 
 public class RenderCQRBoarman extends RenderCQREntity<EntityCQRBoarman> {
 
-	public RenderCQRBoarman(RenderManager rendermanagerIn) {
+	public RenderCQRBoarman(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRBoarman(), 0.5F, "mob/boarman", 1.0D, 1.0D);
 	}
 

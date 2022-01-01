@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityEvokerFangs;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.EvokerFangsEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +34,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 
 	@Override
 	public void startCastingSpell() {
-		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
+		LivingEntity entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
 		float entityAngle = (float) MathHelper.atan2(entitylivingbase.posZ - this.entity.posZ, entitylivingbase.posX - this.entity.posX);
@@ -80,7 +80,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		while (true) {
 			if (!this.entity.world.isBlockNormalCube(blockpos, true) && this.entity.world.isBlockNormalCube(blockpos.down(), true)) {
 				if (!this.entity.world.isAirBlock(blockpos)) {
-					IBlockState iblockstate = this.entity.world.getBlockState(blockpos);
+					BlockState iblockstate = this.entity.world.getBlockState(blockpos);
 					AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.entity.world, blockpos);
 
 					if (axisalignedbb != null) {
@@ -100,7 +100,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		}
 
 		if (flag) {
-			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
+			EvokerFangsEntity entityevokerfangs = new EvokerFangsEntity(this.entity.world, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
 			this.entity.world.spawnEntity(entityevokerfangs);
 		}
 	}

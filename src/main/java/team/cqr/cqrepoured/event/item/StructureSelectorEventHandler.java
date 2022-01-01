@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.event.item;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +16,7 @@ public class StructureSelectorEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getEntityPlayer();
 		ItemStack stack = player.getHeldItem(event.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector) {
@@ -26,11 +26,11 @@ public class StructureSelectorEventHandler {
 				if (player.isSneaking()) {
 					BlockPos pos = new BlockPos(player);
 					structureSelector.setFirstPos(stack, pos);
-					player.sendMessage(new TextComponentString("First position set to " + pos));
+					player.sendMessage(new StringTextComponent("First position set to " + pos));
 				} else {
 					BlockPos pos = event.getPos();
 					structureSelector.setFirstPos(stack, pos);
-					player.sendMessage(new TextComponentString("First position set to " + pos));
+					player.sendMessage(new StringTextComponent("First position set to " + pos));
 				}
 			}
 
@@ -40,7 +40,7 @@ public class StructureSelectorEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickEmptyEvent(PlayerInteractEvent.LeftClickEmpty event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getEntityPlayer();
 		ItemStack stack = player.getHeldItem(event.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector && player.isSneaking()) {

@@ -7,7 +7,7 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MoverType;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,8 +64,8 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		}
 
 		if (this.getOwnerId() != null && this.owner == null && this.ticksExisted % 10 == 0) {
-			if (this.world instanceof WorldServer) {
-				Entity ent = ((WorldServer) this.world).getEntityFromUuid(this.getOwnerId());
+			if (this.world instanceof ServerWorld) {
+				Entity ent = ((ServerWorld) this.world).getEntityFromUuid(this.getOwnerId());
 				if (ent.isEntityAlive()) {
 					this.owner = ent;
 				}
@@ -162,7 +162,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		if (this.getOwnerId() != null) {
 			compound.setTag("summoner", NBTUtil.createUUIDTag(this.getOwnerId()));
 		}
@@ -173,7 +173,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		if (compound.hasKey("summoner")) {
 			this.setOwner(NBTUtil.getUUIDFromTag(compound.getCompoundTag("summoner")));
 		}

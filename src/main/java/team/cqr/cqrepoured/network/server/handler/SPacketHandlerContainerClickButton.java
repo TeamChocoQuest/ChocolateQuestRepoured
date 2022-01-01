@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -15,7 +15,7 @@ public class SPacketHandlerContainerClickButton implements IMessageHandler<CPack
 	public IMessage onMessage(CPacketContainerClickButton message, MessageContext ctx) {
 		if (ctx.side.isServer()) {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
 
 				if (player.openContainer instanceof IInteractable) {
 					((IInteractable) player.openContainer).onClickButton(player, message.getButton(), message.getExtraData());

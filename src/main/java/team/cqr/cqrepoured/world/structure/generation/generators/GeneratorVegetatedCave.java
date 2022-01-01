@@ -10,14 +10,14 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockHugeMushroom;
-import net.minecraft.block.BlockVine;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.*;
+import net.minecraft.block.HugeMushroomBlock;
+import net.minecraft.block.VineBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -43,8 +43,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private Set<BlockPos> giantMushrooms = new HashSet<>();
 	private Map<BlockPos, Integer> heightMap = new ConcurrentHashMap<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
-	private Map<BlockPos, IBlockState> blocks = new ConcurrentHashMap<>();
-	private IBlockState[][][] centralCaveBlocks;
+	private Map<BlockPos, BlockState> blocks = new ConcurrentHashMap<>();
+	private BlockState[][][] centralCaveBlocks;
 	private DungeonInhabitant mobtype;
 
 	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand) {
@@ -55,7 +55,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	public void preProcess() {
 		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
-		IBlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
+		BlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
 		this.centralCaveBlocks = blocks;
 		// if (this.dungeon.placeVines()) {
 		this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blocks, this.pos, random));
@@ -100,7 +100,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 
 		// Build
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		for (Map.Entry<BlockPos, IBlockState> entry : this.blocks.entrySet()) {
+		for (Map.Entry<BlockPos, BlockState> entry : this.blocks.entrySet()) {
 			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
 		this.dungeonBuilder.add(partBuilder);
@@ -111,7 +111,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		// DONE: Paste the building
 	}
 
-	private int getLowestY(IBlockState[][][] blocks, int rX, int rZ, int origY) {
+	private int getLowestY(BlockState[][][] blocks, int rX, int rZ, int origY) {
 		int y = 255;
 
 		int cX = blocks.length / 2;
@@ -150,7 +150,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	@Override
 	public void postProcess() {
 		// DONE: Place giant shrooms
-		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+		Map<BlockPos, BlockState> stateMap = new HashMap<>();
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		for (BlockPos mushroompos : this.giantMushrooms) {
 			// Place shroom
@@ -169,7 +169,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			}
 		}
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+		for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
 			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
 		this.dungeonBuilder.add(partBuilder);
@@ -186,8 +186,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		for (BlockPos chestpos : this.chests) {
 			Block block = Blocks.CHEST;
-			IBlockState state = block.getDefaultState();
-			TileEntityChest chest = (TileEntityChest) block.createTileEntity(this.world, state);
+			BlockState state = block.getDefaultState();
+			ChestTileEntity chest = (ChestTileEntity) block.createTileEntity(this.world, state);
 
 			if (chest != null) {
 				ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
@@ -197,7 +197,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 				}
 			}
 
-			NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
+			CompoundNBT nbt = chest.writeToNBT(new CompoundNBT());
 			partBuilder.add(new PreparableBlockInfo(chestpos.subtract(this.pos), state, nbt));
 		}
 		this.dungeonBuilder.add(partBuilder);
@@ -241,7 +241,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		angle /= (startSize - 2) / 2;
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for (int i = 0; i < initLength; i++) {
-			IBlockState[][][] blob = this.getRandomBlob(this.dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
+			BlockState[][][] blob = this.getRandomBlob(this.dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
 			// if (this.dungeon.placeVines()) {
 			this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
 			// }
@@ -259,7 +259,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		}
 	}
 
-	private List<BlockPos> getCeilingBlocksOfBlob(IBlockState[][][] blob, BlockPos blobCenter, Random random) {
+	private List<BlockPos> getCeilingBlocksOfBlob(BlockState[][][] blob, BlockPos blobCenter, Random random) {
 		List<BlockPos> ceilingBlocks = new ArrayList<>();
 		int radius = blob.length / 2;
 		for (int iX = 0; iX < blob.length; iX++) {
@@ -284,13 +284,13 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		return ceilingBlocks;
 	}
 
-	private void storeBlockArrayInMap(IBlockState[][][] blob, BlockPos blobCenter) {
+	private void storeBlockArrayInMap(BlockState[][][] blob, BlockPos blobCenter) {
 		int radius = blob.length / 2;
 		for (int iX = 0; iX < blob.length; iX++) {
 			for (int iZ = 0; iZ < blob[0][0].length; iZ++) {
 				for (int iY = 1; iY < blob[0].length; iY++) {
 					if (blob[iX][iY][iZ] != null) {
-						IBlockState state = blob[iX][iY][iZ];
+						BlockState state = blob[iX][iY][iZ];
 						BlockPos bp = new BlockPos(iX - radius, iY - radius, iZ - radius);
 						this.blocks.put(blobCenter.add(bp), state);
 					}
@@ -299,7 +299,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		}
 	}
 
-	private List<BlockPos> getFloorBlocksOfBlob(IBlockState[][][] blob, BlockPos blobCenter, Random random) {
+	private List<BlockPos> getFloorBlocksOfBlob(BlockState[][][] blob, BlockPos blobCenter, Random random) {
 		List<BlockPos> floorBlocks = new ArrayList<>();
 		int radius = blob.length / 2;
 		for (int iX = 0; iX < blob.length; iX++) {
@@ -316,12 +316,12 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		return floorBlocks;
 	}
 
-	private IBlockState[][][] getRandomBlob(IBlockState block, int radius, Random random) {
+	private BlockState[][][] getRandomBlob(BlockState block, int radius, Random random) {
 		return this.getRandomBlob(block, radius, (int) (radius * 0.75), random);
 	}
 
-	private IBlockState[][][] getRandomBlob(IBlockState block, int radius, int radiusY, Random random) {
-		IBlockState[][][] blocks = new IBlockState[radius * 4][radiusY * 4][radius * 4];
+	private BlockState[][][] getRandomBlob(BlockState block, int radius, int radiusY, Random random) {
+		BlockState[][][] blocks = new BlockState[radius * 4][radiusY * 4][radius * 4];
 		int subSphereCount = radius * 3;
 		double sphereSurface = 4 * Math.PI * (radius * radius);
 		double counter = sphereSurface / subSphereCount;
@@ -399,7 +399,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private void createVegetation(Random random) {
 		for (BlockPos floorPos : this.floorBlocks) {
 			int number = random.nextInt(300);
-			IBlockState state = null;
+			BlockState state = null;
 			if (number >= 295) {
 				// Giant mushroom
 				boolean flag = true;
@@ -450,11 +450,11 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 				if (this.dungeon.isVineShapeCross()) {
 					this.blocks.put(vineStart, this.dungeon.getVineLatchBlock());
 				}
-				IBlockState airState = this.dungeon.getAirBlock();
-				IBlockState sState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(BlockVine.NORTH, true) : null;
-				IBlockState wState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(BlockVine.EAST, true) : null;
-				IBlockState nState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(BlockVine.SOUTH, true) : null;
-				IBlockState eState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(BlockVine.WEST, true) : null;
+				BlockState airState = this.dungeon.getAirBlock();
+				BlockState sState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(VineBlock.NORTH, true) : null;
+				BlockState wState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(VineBlock.EAST, true) : null;
+				BlockState nState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(VineBlock.SOUTH, true) : null;
+				BlockState eState = this.dungeon.isVineShapeCross() ? this.dungeon.getVineBlock().withProperty(VineBlock.WEST, true) : null;
 				while (vineLength >= 0) {
 					if (this.dungeon.isVineShapeCross()) {
 						this.blocks.put(vN, nState);
@@ -481,7 +481,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		}
 	}
 
-	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, IBlockState> stateMap) {
+	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, BlockState> stateMap) {
 		// Taken from WorldGenBigMushroom
 		Block block = rand.nextBoolean() ? Blocks.BROWN_MUSHROOM_BLOCK : Blocks.RED_MUSHROOM_BLOCK;
 		int i = 6;
@@ -526,7 +526,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 							j2 += 3;
 						}
 
-						BlockHugeMushroom.EnumType blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.byMetadata(j2);
+						HugeMushroomBlock.EnumType blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.byMetadata(j2);
 
 						if (block == Blocks.BROWN_MUSHROOM_BLOCK || l2 < position.getY() + i) {
 							if ((l1 == k3 || l1 == l3) && (i2 == j1 || i2 == k1)) {
@@ -534,50 +534,50 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 							}
 
 							if (l1 == position.getX() - (j3 - 1) && i2 == j1) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.NORTH_WEST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_WEST;
 							}
 
 							if (l1 == k3 && i2 == position.getZ() - (j3 - 1)) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.NORTH_WEST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_WEST;
 							}
 
 							if (l1 == position.getX() + (j3 - 1) && i2 == j1) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.NORTH_EAST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_EAST;
 							}
 
 							if (l1 == l3 && i2 == position.getZ() - (j3 - 1)) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.NORTH_EAST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_EAST;
 							}
 
 							if (l1 == position.getX() - (j3 - 1) && i2 == k1) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.SOUTH_WEST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_WEST;
 							}
 
 							if (l1 == k3 && i2 == position.getZ() + (j3 - 1)) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.SOUTH_WEST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_WEST;
 							}
 
 							if (l1 == position.getX() + (j3 - 1) && i2 == k1) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.SOUTH_EAST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_EAST;
 							}
 
 							if (l1 == l3 && i2 == position.getZ() + (j3 - 1)) {
-								blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.SOUTH_EAST;
+								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_EAST;
 							}
 						}
 
-						if (blockhugemushroom$enumtype == BlockHugeMushroom.EnumType.CENTER && l2 < position.getY() + i) {
-							blockhugemushroom$enumtype = BlockHugeMushroom.EnumType.ALL_INSIDE;
+						if (blockhugemushroom$enumtype == HugeMushroomBlock.EnumType.CENTER && l2 < position.getY() + i) {
+							blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.ALL_INSIDE;
 						}
 
-						if (position.getY() >= position.getY() + i - 1 || blockhugemushroom$enumtype != BlockHugeMushroom.EnumType.ALL_INSIDE) {
+						if (position.getY() >= position.getY() + i - 1 || blockhugemushroom$enumtype != HugeMushroomBlock.EnumType.ALL_INSIDE) {
 							BlockPos blockpos = new BlockPos(l1, l2, i2);
 							// IBlockState state = worldIn.getBlockState(blockpos);
 
 							// PUT IN MAP
 							// this.setBlockAndNotifyAdequately(worldIn, blockpos, block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT,
 							// blockhugemushroom$enumtype));
-							stateMap.put(blockpos, block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, blockhugemushroom$enumtype));
+							stateMap.put(blockpos, block.getDefaultState().withProperty(HugeMushroomBlock.VARIANT, blockhugemushroom$enumtype));
 						}
 					}
 				}
@@ -588,7 +588,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 				// PUT IN MAP
 				// this.setBlockAndNotifyAdequately(worldIn, position.up(i3),
 				// block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumType.STEM));
-				stateMap.put(position.up(i3), block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumType.STEM));
+				stateMap.put(position.up(i3), block.getDefaultState().withProperty(HugeMushroomBlock.VARIANT, HugeMushroomBlock.EnumType.STEM));
 			}
 
 		}

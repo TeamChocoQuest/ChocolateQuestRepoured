@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagShort;
+import net.minecraft.nbt.ShortNBT;
 
 public class DataEntryShort extends DataEntry<Short> {
 
@@ -17,13 +17,13 @@ public class DataEntryShort extends DataEntry<Short> {
 
 	@Override
 	public NBTBase write() {
-		return new NBTTagShort(this.value);
+		return new ShortNBT(this.value);
 	}
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagShort) {
-			this.value = ((NBTTagShort) nbt).getShort();
+		if (nbt instanceof ShortNBT) {
+			this.value = ((ShortNBT) nbt).getShort();
 		}
 	}
 

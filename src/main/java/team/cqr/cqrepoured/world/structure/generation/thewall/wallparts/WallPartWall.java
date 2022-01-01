@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall.wallparts;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -29,8 +29,8 @@ public class WallPartWall implements IWallPart {
 		if (this.getTopY() > startY) {
 			// All the calculated block positions are stored within this map
 			BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-			IBlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
-			IBlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
+			BlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
+			BlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
 
 			int height = this.getTopY() - startY;
 			// Calculates all the block positions

@@ -2,19 +2,19 @@ package team.cqr.cqrepoured.item.armor;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 
-public class ItemHelmetDragon extends ItemArmor {
+public class ItemHelmetDragon extends ArmorItem {
 
 	private AttributeModifier attackDamage;
 	private AttributeModifier health;
 
-	public ItemHelmetDragon(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+	public ItemHelmetDragon(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 
 		this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, 0);
@@ -22,10 +22,10 @@ public class ItemHelmetDragon extends ItemArmor {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EntityLiving.getSlotForItemStack(stack)) {
+		if (slot == MobEntity.getSlotForItemStack(stack)) {
 			multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), this.health);
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), this.attackDamage);
 		}

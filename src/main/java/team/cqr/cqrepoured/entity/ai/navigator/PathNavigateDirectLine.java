@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateDirectLine extends PathNavigate {
+public class PathNavigateDirectLine extends PathNavigator {
 
-	public PathNavigateDirectLine(EntityLiving entity, World world) {
+	public PathNavigateDirectLine(MobEntity entity, World world) {
 		super(entity, world);
 	}
 

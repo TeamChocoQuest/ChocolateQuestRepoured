@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTables;
 import team.cqr.cqrepoured.block.BlockExporterChestCQR;
 
 public class TileEntityExporterChestCQR extends TileEntityExporterChest {
@@ -13,7 +13,7 @@ public class TileEntityExporterChestCQR extends TileEntityExporterChest {
 		if (block instanceof BlockExporterChestCQR) {
 			return ((BlockExporterChestCQR) block).getLootTable();
 		}
-		return LootTableList.EMPTY;
+		return LootTables.EMPTY;
 	}
 
 }

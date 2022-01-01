@@ -6,11 +6,11 @@ import com.google.common.base.Predicates;
 
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -48,12 +48,12 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
 	private void cloneParentEquipment(AbstractEntityCQR parent) {
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, parent.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
-		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, parent.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, parent.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
-		this.setItemStackToSlot(EntityEquipmentSlot.LEGS, parent.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
-		this.setItemStackToSlot(EntityEquipmentSlot.FEET, parent.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, parent.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(parent.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem(), 1));
+		this.setItemStackToSlot(EquipmentSlotType.CHEST, parent.getItemStackFromSlot(EquipmentSlotType.CHEST));
+		this.setItemStackToSlot(EquipmentSlotType.HEAD, parent.getItemStackFromSlot(EquipmentSlotType.HEAD));
+		this.setItemStackToSlot(EquipmentSlotType.LEGS, parent.getItemStackFromSlot(EquipmentSlotType.LEGS));
+		this.setItemStackToSlot(EquipmentSlotType.FEET, parent.getItemStackFromSlot(EquipmentSlotType.FEET));
+		this.setItemStackToSlot(EquipmentSlotType.OFFHAND, parent.getItemStackFromSlot(EquipmentSlotType.OFFHAND));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(parent.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem(), 1));
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	}
 
 	@Override
-	protected int getExperiencePoints(EntityPlayer player) {
+	protected int getExperiencePoints(PlayerEntity player) {
 		return 0;
 	}
 
@@ -171,14 +171,14 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger("ttl", this.ttl);
 		compound.setTag("illusionParent", NBTUtil.createUUIDTag(this.parentUUID));
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.ttl = compound.getInteger("ttl");
 		this.parentUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("illusionParent"));

@@ -2,16 +2,16 @@ package team.cqr.cqrepoured.client.gui;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 
-public class GuiExporterChestCustom extends GuiScreen {
+public class GuiExporterChestCustom extends Screen {
 
 	private final TileEntityExporterChestCustom tileEntity;
-	private GuiTextField lootTableTextField;
+	private TextFieldWidget lootTableTextField;
 
 	public GuiExporterChestCustom(TileEntityExporterChestCustom tileEntity) {
 		this.tileEntity = tileEntity;
@@ -19,7 +19,7 @@ public class GuiExporterChestCustom extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		this.lootTableTextField = new GuiTextField(0, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
+		this.lootTableTextField = new TextFieldWidget(0, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
 		this.lootTableTextField.setText(this.tileEntity.getLootTable().toString());
 	}
 

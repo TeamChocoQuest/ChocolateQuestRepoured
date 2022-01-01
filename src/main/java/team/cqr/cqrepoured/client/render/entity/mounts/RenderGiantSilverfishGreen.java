@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.client.render.entity.mounts;
 
+import net.minecraft.client.renderer.entity.MobRenderer;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelSilverfish;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishGreen;
 
-public class RenderGiantSilverfishGreen extends RenderLiving<EntityGiantSilverfishGreen> {
+public class RenderGiantSilverfishGreen extends MobRenderer<EntityGiantSilverfishGreen> {
 
 	static ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/mounts/giant_silverfish_green.png");
 
-	public RenderGiantSilverfishGreen(RenderManager rendermanagerIn) {
+	public RenderGiantSilverfishGreen(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelSilverfish(), 1.5F);
 	}
 

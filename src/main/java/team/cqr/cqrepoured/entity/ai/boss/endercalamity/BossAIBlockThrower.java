@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
 import com.google.common.base.Optional;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
@@ -95,7 +95,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected void execHandStateNoBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		IBlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
+		BlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
 		this.entity.equipBlock(hand, block);
 		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
 		this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
@@ -139,8 +139,8 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected void spawnEquipParticlesForHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		if (this.world instanceof WorldServer && CQRConfig.bosses.calamityBlockEquipParticles) {
-			WorldServer ws = (WorldServer) this.world;
+		if (this.world instanceof ServerWorld && CQRConfig.bosses.calamityBlockEquipParticles) {
+			ServerWorld ws = (ServerWorld) this.world;
 			Vec3d pos = this.getPositionOfHand(hand);
 			for (int i = 0; i < 50; i++) {
 				double dx = -0.5 + this.entity.getRNG().nextDouble();
@@ -200,12 +200,12 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			 * Calculate offset vector to spawn the projectile
 			 * Actually spawn the projectile and send it flying
 			 */
-			Optional<IBlockState> handContent = this.entity.getBlockFromHand(hand);
+			Optional<BlockState> handContent = this.entity.getBlockFromHand(hand);
 			if (!handContent.isPresent()) {
 				return false;
 			}
 			Vec3d position = this.getPositionOfHand(hand);
-			IBlockState block = handContent.get();
+			BlockState block = handContent.get();
 			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, true);
 			blockProj.setPosition(position.x, position.y, position.z);
 			blockProj.motionX = velocity.x;

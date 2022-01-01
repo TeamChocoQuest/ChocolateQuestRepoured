@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 import java.util.Random;
 import java.util.function.Predicate;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -16,12 +16,12 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 	public enum Alignment {
 		VERTICAL, HORIZONTAL;
 
-		static Alignment fromFacing(EnumFacing facing) {
-			return facing.getAxis() == EnumFacing.Axis.X ? HORIZONTAL : VERTICAL;
+		static Alignment fromFacing(Direction facing) {
+			return facing.getAxis() == Direction.Axis.X ? HORIZONTAL : VERTICAL;
 		}
 	}
 
-	public CastleRoomBridgeTop(int sideLength, int height, EnumFacing direction, int floor, Random rand) {
+	public CastleRoomBridgeTop(int sideLength, int height, Direction direction, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
 		this.roomType = EnumRoomType.BRIDGE_TOP;
 		this.defaultCeiling = false;
@@ -57,13 +57,13 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 	}
 
 	@Override
-	public boolean canBuildDoorOnSide(EnumFacing side) {
+	public boolean canBuildDoorOnSide(Direction side) {
 		// Really only works on this side, could add logic to align the doors for other sides later
 		return (Alignment.fromFacing(side) == this.alignment);
 	}
 
 	@Override
-	public boolean reachableFromSide(EnumFacing side) {
+	public boolean reachableFromSide(Direction side) {
 		return (Alignment.fromFacing(side) == this.alignment);
 	}
 }

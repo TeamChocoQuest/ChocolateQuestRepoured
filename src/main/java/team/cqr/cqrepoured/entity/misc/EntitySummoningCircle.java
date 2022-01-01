@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.entity.misc;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.Effects;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,7 +30,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	protected float timeMultiplierForSummon;
 	protected ECircleTexture texture;
 	protected ISummoner summoner;
-	protected EntityLivingBase summonerLiving;
+	protected LivingEntity summonerLiving;
 	protected Vec3d velForSummon = null;
 
 	public enum ECircleTexture {
@@ -49,7 +49,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 		this(worldIn, entityToSpawn, timeMultiplier, texture, summoner, null);
 	}
 
-	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture texture, ISummoner isummoner, EntityLivingBase summoner) {
+	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture texture, ISummoner isummoner, LivingEntity summoner) {
 		super(worldIn);
 		this.setSize(2.0F, 0.005F);
 		this.entityToSpawn = entityToSpawn;
@@ -110,8 +110,8 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 				if (!this.world.isRemote) {
 					Faction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
 					for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(this.width / 2, 0, this.width / 2), this.getPosition().add(-this.width / 2, 3, -this.width / 2)), faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
-						if (ent != null && ent.isEntityAlive() && ent instanceof EntityLivingBase) {
-							((EntityLivingBase) ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 80, 0));
+						if (ent != null && ent.isEntityAlive() && ent instanceof LivingEntity) {
+							((LivingEntity) ent).addPotionEffect(new EffectInstance(Effects.WITHER, 80, 0));
 						}
 					}
 				}
@@ -130,7 +130,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		this.timeMultiplierForSummon = compound.getFloat("cqrdata.timeMultiplier");
 		String resD = compound.getString("cqrdata.entityToSpawn.Domain");
 		String resP = compound.getString("cqrdata.entityToSpawn.Path");
@@ -139,7 +139,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		compound.setFloat("cqrdata.timeMultiplier", this.timeMultiplierForSummon);
 		compound.setString("cqrdata.entityToSpawn.Domain", this.entityToSpawn.getNamespace());
 		compound.setString("cqrdata.entityToSpawn.Path", this.entityToSpawn.getPath());

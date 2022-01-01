@@ -3,20 +3,20 @@ package team.cqr.cqrepoured.item;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.pathtool.CapabilityPathProvider;
@@ -31,7 +31,7 @@ public class ItemPathTool extends ItemLore {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
 		return CapabilityPathProvider.createProvider(stack);
 	}
 
@@ -49,7 +49,7 @@ public class ItemPathTool extends ItemLore {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		/*
 		 * sneak + left click -> apply path points to entity left click -> get path points from entity
 		 */
@@ -57,12 +57,12 @@ public class ItemPathTool extends ItemLore {
 			if (player.isSneaking()) {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
 				((AbstractEntityCQR) entity).getPath().copyFrom(getPath(stack), pos != null ? new BlockPos(-pos.getX(), -pos.getY(), -pos.getZ()) : BlockPos.ORIGIN);
-				((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
-				player.sendMessage(new TextComponentString("Applied path!"));
+				((ServerWorld) player.world).spawnParticle((ServerPlayerEntity) player, EnumParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+				player.sendMessage(new StringTextComponent("Applied path!"));
 			} else {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
 				getPath(stack).copyFrom(((AbstractEntityCQR) entity).getPath(), pos != null ? pos : BlockPos.ORIGIN);
-				player.sendMessage(new TextComponentString("Copied path!"));
+				player.sendMessage(new StringTextComponent("Copied path!"));
 			}
 		}
 
@@ -70,7 +70,7 @@ public class ItemPathTool extends ItemLore {
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
 		/*
 		 * sneak + right click -> edit existing position right click -> select existing position or add new position
 		 */
@@ -88,27 +88,27 @@ public class ItemPathTool extends ItemLore {
 			if (selectedNode != null && player.isSneaking()) {
 				if (selectedNode.addConnectedNode(node, false)) {
 					setSelectedNode(stack, node);
-					player.sendMessage(new TextComponentString("Added connection!"));
+					player.sendMessage(new StringTextComponent("Added connection!"));
 				}
 			} else {
 				setSelectedNode(stack, node);
-				player.sendMessage(new TextComponentString("Selected node!"));
+				player.sendMessage(new StringTextComponent("Selected node!"));
 			}
 		}
 
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		/*
 		 * sneak + right click -> delete path
 		 */
 		if (!worldIn.isRemote && playerIn.isSneaking()) {
 			ItemStack stack = playerIn.getHeldItem(handIn);
 			getPath(stack).clear();
-			playerIn.sendMessage(new TextComponentString("Cleared Path!"));
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+			playerIn.sendMessage(new StringTextComponent("Cleared Path!"));
+			return new ActionResult<>(ActionResultType.SUCCESS, stack);
 		}
 
 		return super.onItemRightClick(worldIn, playerIn, handIn);
@@ -118,7 +118,7 @@ public class ItemPathTool extends ItemLore {
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
-		if (isSelected && entityIn instanceof EntityPlayer && !worldIn.isRemote) {
+		if (isSelected && entityIn instanceof PlayerEntity && !worldIn.isRemote) {
 			Path path = getPath(stack);
 			Path.PathNode selectedNode = getSelectedNode(stack);
 
@@ -127,7 +127,7 @@ public class ItemPathTool extends ItemLore {
 				Vec3d vec = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
 				// Draw start point
-				((WorldServer) worldIn).spawnParticle((EntityPlayerMP) entityIn, node != selectedNode ? EnumParticleTypes.VILLAGER_HAPPY : EnumParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
+				((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, node != selectedNode ? EnumParticleTypes.VILLAGER_HAPPY : EnumParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
 
 				// Draw connection lines
 				for (int index : node.getConnectedNodes()) {
@@ -138,7 +138,7 @@ public class ItemPathTool extends ItemLore {
 					vec1 = vec1.normalize();
 
 					for (double d = 0.25D; d < dist; d += 0.5D) {
-						((WorldServer) worldIn).spawnParticle((EntityPlayerMP) entityIn, EnumParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
+						((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, EnumParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
 					}
 				}
 			}

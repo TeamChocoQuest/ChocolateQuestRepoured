@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.inventory;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import team.cqr.cqrepoured.CQRMain;
@@ -20,7 +20,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;
 
-	public ContainerMerchant(AbstractEntityCQR entity, EntityPlayer player) {
+	public ContainerMerchant(AbstractEntityCQR entity, PlayerEntity player) {
 		this.entity = entity;
 
 		for (int i = 0; i < 3; i++) {
@@ -52,7 +52,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
+	public boolean canInteractWith(PlayerEntity playerIn) {
 		if (this.entity.isDead) {
 			return false;
 		}
@@ -65,7 +65,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		ItemStack oldStack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
 
@@ -112,10 +112,10 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer playerIn) {
+	public void onContainerClosed(PlayerEntity playerIn) {
 		super.onContainerClosed(playerIn);
 
-		if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected()) {
+		if (!playerIn.isEntityAlive() || playerIn instanceof ServerPlayerEntity && ((ServerPlayerEntity) playerIn).hasDisconnected()) {
 			for (int i = 0; i < 4; i++) {
 				playerIn.dropItem(this.merchantInventory.removeStackFromSlot(i), false);
 			}
@@ -171,7 +171,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public void onClickButton(EntityPlayer player, int button, ByteBuf extraData) {
+	public void onClickButton(PlayerEntity player, int button, ByteBuf extraData) {
 		if (button < 10) {
 			if (button == 0) {
 				// new trade

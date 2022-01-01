@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.*;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -90,15 +89,15 @@ public class BlockStateGenArray {
 		return this.entityList;
 	}
 
-	public boolean addChestWithLootTable(World world, BlockPos pos, EnumFacing facing, ResourceLocation lootTable, GenerationPhase phase) {
+	public boolean addChestWithLootTable(World world, BlockPos pos, Direction facing, ResourceLocation lootTable, GenerationPhase phase) {
 		if (lootTable != null) {
 			Block chestBlock = Blocks.CHEST;
-			IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing);
-			TileEntityChest chest = (TileEntityChest) chestBlock.createTileEntity(world, state);
+			BlockState state = Blocks.CHEST.getDefaultState().withProperty(ChestBlock.FACING, facing);
+			ChestTileEntity chest = (ChestTileEntity) chestBlock.createTileEntity(world, state);
 			if (chest != null) {
 				long seed = WorldDungeonGenerator.getSeed(world, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
 				chest.setLootTable(lootTable, seed);
-				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
+				CompoundNBT nbt = chest.writeToNBT(new CompoundNBT());
 				return this.addBlockState(pos, state, nbt, phase, EnumPriority.MEDIUM);
 			}
 		} else {
@@ -108,19 +107,19 @@ public class BlockStateGenArray {
 		return false;
 	}
 
-	public void addBlockStateMap(Map<BlockPos, IBlockState> map, GenerationPhase phase, EnumPriority priority) {
+	public void addBlockStateMap(Map<BlockPos, BlockState> map, GenerationPhase phase, EnumPriority priority) {
 		map.entrySet().forEach(entry -> this.addBlockState(entry.getKey(), entry.getValue(), phase, priority));
 	}
 
-	public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase, EnumPriority priority) {
+	public boolean addBlockState(BlockPos pos, BlockState blockState, GenerationPhase phase, EnumPriority priority) {
 		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, null), priority);
 	}
 
-	public boolean addBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
+	public boolean addBlockState(BlockPos pos, BlockState blockState, CompoundNBT nbt, GenerationPhase phase, EnumPriority priority) {
 		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 
-	public boolean addSpawner(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
+	public boolean addSpawner(BlockPos pos, BlockState blockState, CompoundNBT nbt, GenerationPhase phase, EnumPriority priority) {
 		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 

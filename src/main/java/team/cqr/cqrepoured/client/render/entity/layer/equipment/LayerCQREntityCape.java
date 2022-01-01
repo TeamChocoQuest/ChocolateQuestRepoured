@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.client.render.entity.layer.equipment;
 
+import net.minecraft.inventory.EquipmentSlotType;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
@@ -26,7 +26,7 @@ public class LayerCQREntityCape extends AbstractLayerCQR {
 		}
 
 		if (/* entitylivingbaseIn.hasPlayerInfo() && */ !entitylivingbaseIn.isInvisible() && entitylivingbaseIn.hasCape() && entitylivingbaseIn.getResourceLocationOfCape() != null) {
-			ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+			ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EquipmentSlotType.CHEST);
 
 			if (itemstack.getItem() != Items.ELYTRA) {
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

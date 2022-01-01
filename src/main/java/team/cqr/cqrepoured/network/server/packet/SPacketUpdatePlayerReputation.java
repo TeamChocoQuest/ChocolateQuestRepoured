@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.server.packet;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -18,7 +18,7 @@ public class SPacketUpdatePlayerReputation implements IMessage {
 
 	}
 
-	public SPacketUpdatePlayerReputation(EntityPlayerMP player, String faction, int score) {
+	public SPacketUpdatePlayerReputation(ServerPlayerEntity player, String faction, int score) {
 		this.score = score;
 		this.faction = faction;
 		this.playerId = player.getPersistentID();

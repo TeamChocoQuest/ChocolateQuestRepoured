@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
@@ -30,7 +30,7 @@ public class ItemHookshot extends ItemHookshotBase {
 	}
 
 	@Override
-	public ProjectileHookShotHook getNewHookEntity(World worldIn, EntityLivingBase player, ItemStack stack) {
+	public ProjectileHookShotHook getNewHookEntity(World worldIn, LivingEntity player, ItemStack stack) {
 		return new ProjectileHookShotHook(worldIn, player, this, stack);
 	}
 

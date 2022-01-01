@@ -3,25 +3,25 @@ package team.cqr.cqrepoured.event;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemAxe;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.AxeItem;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -79,8 +79,8 @@ public class EventsHandler {
 	public static void onDefense(LivingAttackEvent event) {
 		boolean tep = false;
 
-		if (event.getEntityLiving() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+		if (event.getEntityLiving() instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 			Entity attacker = event.getSource().getTrueSource();
 			@SuppressWarnings("unused")
 			float amount = event.getAmount();
@@ -114,19 +114,19 @@ public class EventsHandler {
 				} else {
 					tep = false;
 					if (!world.isRemote) {
-						((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+						((ServerWorld) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
 					}
 				}
 			}
 
 			if (tep) {
 				if (world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
-					if (player instanceof EntityPlayerMP) {
-						EntityPlayerMP playerMP = (EntityPlayerMP) player;
+					if (player instanceof ServerPlayerEntity) {
+						ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
 
 						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
 						if (!world.isRemote) {
-							((WorldServer) world).spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+							((ServerWorld) world).spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
 						}
 						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
 					}
@@ -141,22 +141,22 @@ public class EventsHandler {
 	public static void onLivingDeath(LivingDeathEvent event) {
 		Random rand = new Random();
 		Entity entity = event.getEntity();
-		NBTTagCompound tag = entity.getEntityData();
+		CompoundNBT tag = entity.getEntityData();
 
 		if (tag.hasKey("Items")) {
-			NBTTagList itemList = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+			ListNBT itemList = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
 			if (itemList == null) {
 				return;
 			}
 
 			for (int i = 0; i < itemList.tagCount(); i++) {
-				NBTTagCompound entry = itemList.getCompoundTagAt(i);
+				CompoundNBT entry = itemList.getCompoundTagAt(i);
 				ItemStack stack = new ItemStack(entry);
 
 				if (!stack.isEmpty()) {
 					if (!entity.world.isRemote) {
-						entity.world.spawnEntity(new EntityItem(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
+						entity.world.spawnEntity(new ItemEntity(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
 					}
 				}
 			}
@@ -168,7 +168,7 @@ public class EventsHandler {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
 
 		if (!e.getWorld().isRemote && e.getWorld().provider.getDimension() == 0) {
-			LootTableLoader.registerCustomLootTables((WorldServer) e.getWorld());
+			LootTableLoader.registerCustomLootTables((ServerWorld) e.getWorld());
 		}
 	}
 
@@ -203,29 +203,29 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
 		FactionRegistry.instance(event.player).loadPlayerReputationData(event.player);
-		FactionRegistry.instance(event.player).syncPlayerReputationData((EntityPlayerMP) event.player);
+		FactionRegistry.instance(event.player).syncPlayerReputationData((ServerPlayerEntity) event.player);
 
 		// Send packets with ct's to player
 		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
-			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
+			TextureSetManager.sendTexturesToClient((ServerPlayerEntity) event.player);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
-		FactionRegistry.instance(event.player).savePlayerReputationData((EntityPlayerMP) event.player);
+		FactionRegistry.instance(event.player).savePlayerReputationData((ServerPlayerEntity) event.player);
 	}
 
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
 		if (CQRConfig.mobs.blockCancelledByAxe) {
-			EntityPlayer player = event.getEntityPlayer();
+			PlayerEntity player = event.getEntityPlayer();
 			World world = player.world;
 
 			if (!world.isRemote && event.getTarget() instanceof AbstractEntityCQR) {
 				AbstractEntityCQR targetCQR = (AbstractEntityCQR) event.getTarget();
 
-				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) >= 0.9F) {
+				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof AxeItem && player.getCooledAttackStrength(0) >= 0.9F) {
 					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
 				}
 			}
@@ -244,7 +244,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
-		if (CQRConfig.bosses.preventBlockPlacingNearBosses && (!(event.getEntity() instanceof EntityPlayer) || !((EntityPlayer) event.getEntity()).isCreative())) {
+		if (CQRConfig.bosses.preventBlockPlacingNearBosses && (!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity) event.getEntity()).isCreative())) {
 			BlockPos pos = new BlockPos(event.getEntity());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
@@ -257,14 +257,14 @@ public class EventsHandler {
 		if (event.getEntity().world.isRemote) {
 			return;
 		}
-		if (!(event.getEntity() instanceof EntityPlayer)) {
+		if (!(event.getEntity() instanceof PlayerEntity)) {
 			return;
 		}
-		if (!(event.getSource().getTrueSource() instanceof EntityLivingBase)) {
+		if (!(event.getSource().getTrueSource() instanceof LivingEntity)) {
 			return;
 		}
-		EntityPlayer player = (EntityPlayer) event.getEntity();
-		EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
+		PlayerEntity player = (PlayerEntity) event.getEntity();
+		LivingEntity attacker = (LivingEntity) event.getSource().getTrueSource();
 		double x = player.posX;
 		double y = player.posY + player.eyeHeight;
 		double z = player.posZ;
@@ -290,11 +290,11 @@ public class EventsHandler {
 		if (event.getEntityPlayer().world.isRemote) {
 			return;
 		}
-		if (!(event.getTarget() instanceof EntityLivingBase)) {
+		if (!(event.getTarget() instanceof LivingEntity)) {
 			return;
 		}
-		EntityPlayer player = event.getEntityPlayer();
-		EntityLivingBase target = (EntityLivingBase) event.getTarget();
+		PlayerEntity player = event.getEntityPlayer();
+		LivingEntity target = (LivingEntity) event.getTarget();
 		double x = player.posX;
 		double y = player.posY + player.eyeHeight;
 		double z = player.posZ;
@@ -314,10 +314,10 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onLivingFallEvent(LivingFallEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		ItemStack feet = entity.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-		ItemStack mainhand = entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-		ItemStack offhand = entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+		LivingEntity entity = event.getEntityLiving();
+		ItemStack feet = entity.getItemStackFromSlot(EquipmentSlotType.FEET);
+		ItemStack mainhand = entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+		ItemStack offhand = entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
 
 		if (feet.getItem() == CQRItems.BOOTS_CLOUD) {
 			event.setDistance(0.0F);
@@ -332,11 +332,11 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onLivingEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		EntityEquipmentSlot slot = event.getSlot();
-		if (slot != EntityEquipmentSlot.MAINHAND) {
+		EquipmentSlotType slot = event.getSlot();
+		if (slot != EquipmentSlotType.MAINHAND) {
 			return;
 		}
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		ItemStack stackOld = event.getFrom();
 		if (stackOld.getItem() instanceof IEquipListener) {
 			((IEquipListener) stackOld.getItem()).onUnequip(entity, stackOld, slot);

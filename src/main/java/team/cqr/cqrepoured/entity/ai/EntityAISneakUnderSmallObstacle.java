@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.AirBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -32,8 +32,8 @@ public class EntityAISneakUnderSmallObstacle<T extends AbstractEntityCQR> extend
 	}
 
 	private boolean isNotAir(final BlockPos pos) {
-		final IBlockState blockstate = this.world.getBlockState(pos);
-		if ((!Blocks.AIR.isAir(blockstate, this.world, pos) && !(blockstate.getBlock() instanceof BlockAir))) {
+		final BlockState blockstate = this.world.getBlockState(pos);
+		if ((!Blocks.AIR.isAir(blockstate, this.world, pos) && !(blockstate.getBlock() instanceof AirBlock))) {
 			return true;
 		}
 		return false;

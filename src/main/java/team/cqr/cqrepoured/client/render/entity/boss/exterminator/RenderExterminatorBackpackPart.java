@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEm
 
 public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends RenderMultiPartPart<T> {
 
-	public RenderExterminatorBackpackPart(RenderManager renderManager) {
+	public RenderExterminatorBackpackPart(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 

@@ -2,21 +2,21 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelBall;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
 
-public class RenderBubble extends Render<EntityBubble> {
+public class RenderBubble extends EntityRenderer<EntityBubble> {
 
 	protected final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/bubble_entity.png");
 
 	private final ModelBase model;
 
-	public RenderBubble(RenderManager renderManager) {
+	public RenderBubble(EntityRendererManager renderManager) {
 		super(renderManager);
 		this.model = new ModelBall();
 	}

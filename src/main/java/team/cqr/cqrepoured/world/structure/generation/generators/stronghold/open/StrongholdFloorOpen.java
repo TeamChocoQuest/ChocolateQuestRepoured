@@ -7,7 +7,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -151,7 +151,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		if (this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}
-		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
+		Map<BlockPos, BlockState> stateMap = new HashMap<>();
 		int dimX = this.generator.getDungeon().getRoomSizeX() / 2;
 		int dimZ = this.generator.getDungeon().getRoomSizeZ() / 2;
 		BlockPos p1 = this.roomGrid[this.sideLength - 1][this.sideLength - 1].add(1, 0, 1).add(dimX, -1, dimZ);
@@ -159,7 +159,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		BlockPos p3 = this.roomGrid[0][this.sideLength - 1].add(-1, 0, 1).add(-dimX, -1, dimZ);
 		BlockPos p4 = this.roomGrid[0][0].add(-1, 0, -1).add(-dimX, -1, -dimZ);
 
-		IBlockState state = this.generator.getDungeon().getWallBlock();
+		BlockState state = this.generator.getDungeon().getWallBlock();
 		int addY = 2 + this.generator.getDungeon().getRoomSizeY();
 
 		// 1-2
@@ -193,7 +193,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		}
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
+		for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
 			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
 		}
 		dungeonBuilder.add(partBuilder);

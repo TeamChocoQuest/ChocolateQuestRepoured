@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.entity.boss.exterminator;
 
 import java.util.function.Supplier;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 
@@ -40,7 +40,7 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
 		if (this.exterminator == null || this.exterminator.isDead) {
 			return false;
 		}

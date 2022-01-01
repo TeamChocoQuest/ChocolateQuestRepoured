@@ -5,15 +5,15 @@ import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -28,7 +28,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	private final AbstractEntityCQR entity;
 	private final IInventory tradeInventory;
 
-	public ContainerMerchantEditTrade(AbstractEntityCQR entity, EntityPlayer player, int tradeIndex) {
+	public ContainerMerchantEditTrade(AbstractEntityCQR entity, PlayerEntity player, int tradeIndex) {
 		this.entity = entity;
 
 		for (int i = 0; i < 3; i++) {
@@ -41,7 +41,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 			this.addSlotToContainer(new Slot(player.inventory, k, 72 + k * 18, 118));
 		}
 
-		this.tradeInventory = new InventoryBasic("", false, 5);
+		this.tradeInventory = new Inventory("", false, 5);
 		this.addSlotToContainer(new Slot(this.tradeInventory, 0, 74, 12));
 		this.addSlotToContainer(new Slot(this.tradeInventory, 1, 100, 12));
 		this.addSlotToContainer(new Slot(this.tradeInventory, 2, 126, 12));
@@ -59,7 +59,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
+	public boolean canInteractWith(PlayerEntity playerIn) {
 		if (!playerIn.isCreative()) {
 			return false;
 		}
@@ -70,7 +70,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		Slot slot = this.inventorySlots.get(index);
 
 		if (slot != null && slot.getHasStack()) {
@@ -92,7 +92,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer playerIn) {
+	public void onContainerClosed(PlayerEntity playerIn) {
 		super.onContainerClosed(playerIn);
 
 		/*
@@ -117,7 +117,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public void onClickButton(EntityPlayer player, int button, ByteBuf extraData) {
+	public void onClickButton(PlayerEntity player, int button, ByteBuf extraData) {
 		if (button == 0) {
 			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.world, this.entity.getEntityId(), 0, 0);
 		} else if (button == 1) {
@@ -135,7 +135,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 
 			TraderOffer trades = this.entity.getTrades();
 			int reputation = this.getRequriedReputation(reputationName);
-			ResourceLocation advancement = this.getRequiredAdvancement((WorldServer) player.world, advancementName);
+			ResourceLocation advancement = this.getRequiredAdvancement((ServerWorld) player.world, advancementName);
 			ItemStack output = this.getOutput();
 			TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
 			Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
@@ -166,7 +166,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Nullable
-	private ResourceLocation getRequiredAdvancement(WorldServer world, String advancement) {
+	private ResourceLocation getRequiredAdvancement(ServerWorld world, String advancement) {
 		ResourceLocation requiredAdvancement = new ResourceLocation(advancement);
 		if (world.getAdvancementManager().getAdvancement(requiredAdvancement) != null) {
 			return requiredAdvancement;

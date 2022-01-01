@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectileSpiderBall extends ProjectileBase {
-	private EntityLivingBase shooter;
+	private LivingEntity shooter;
 	protected float damage;
 
 	public ProjectileSpiderBall(World worldIn) {
@@ -20,7 +20,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 		super(worldIn, x, y, z);
 	}
 
-	public ProjectileSpiderBall(World worldIn, EntityLivingBase shooter) {
+	public ProjectileSpiderBall(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.isImmuneToFire = false;
@@ -31,14 +31,14 @@ public class ProjectileSpiderBall extends ProjectileBase {
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-				if (result.entityHit instanceof EntityLivingBase) {
-					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
+				if (result.entityHit instanceof LivingEntity) {
+					LivingEntity entity = (LivingEntity) result.entityHit;
 
 					if (result.entityHit == this.shooter) {
 						return;
 					}
 
-					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0));
+					entity.addPotionEffect(new EffectInstance(Effects.POISON, 100, 0));
 					entity.attackEntityFrom(DamageSource.MAGIC, this.damage);
 					this.setDead();
 				}

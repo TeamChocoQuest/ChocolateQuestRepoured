@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.util.SpiralStaircaseBuilder;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 
 public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
-	private EnumFacing firstStairSide;
+	private Direction firstStairSide;
 	private Vec3i pillarOffset;
 
 	public CastleRoomStaircaseSpiral(int sideLength, int height, int floor, Random rand) {
@@ -21,7 +21,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		this.defaultCeiling = false;
 		this.defaultFloor = false;
 
-		this.firstStairSide = EnumFacing.NORTH;
+		this.firstStairSide = Direction.NORTH;
 		this.recalcPillarOffset();
 	}
 
@@ -32,7 +32,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 
 		BlockPos pos;
-		IBlockState blockToBuild;
+		BlockState blockToBuild;
 
 		for (int x = 0; x < this.getDecorationLengthX(); x++) {
 			for (int z = 0; z < this.getDecorationLengthZ(); z++) {
@@ -80,8 +80,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		return false;
 	}
 
-	public EnumFacing getLastStairSide() {
-		EnumFacing result = EnumFacing.NORTH;
+	public Direction getLastStairSide() {
+		Direction result = Direction.NORTH;
 		for (int i = 0; i < this.height - 1; i++) {
 			result = result.rotateY();
 		}

@@ -1,8 +1,6 @@
 package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.ResourceLocation;
 

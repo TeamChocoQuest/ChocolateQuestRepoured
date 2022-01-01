@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.entity.mobs;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 
 /** Copied from vanilla skeleton model but modified */
@@ -29,8 +29,8 @@ public class ModelCQRSkeleton extends ModelCQRBiped {
 	}
 
 	@Override
-	public void postRenderArm(float scale, EnumHandSide side) {
-		float f = side == EnumHandSide.RIGHT ? 1.0F : -1.0F;
+	public void postRenderArm(float scale, HandSide side) {
+		float f = side == HandSide.RIGHT ? 1.0F : -1.0F;
 		ModelRenderer modelrenderer = this.getArmForSide(side);
 		modelrenderer.rotationPointX += f;
 		modelrenderer.postRender(scale);

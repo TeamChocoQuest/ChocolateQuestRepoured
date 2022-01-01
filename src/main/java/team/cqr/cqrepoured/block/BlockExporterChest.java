@@ -4,16 +4,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.*;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 
-public abstract class BlockExporterChest extends BlockHorizontal {
+public abstract class BlockExporterChest extends HorizontalBlock {
 
 	private static final Set<BlockExporterChest> EXPORTER_CHESTS = new HashSet<>();
 
@@ -63,37 +63,37 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return state.getValue(FACING).getHorizontalIndex();
 	}
 
 	@Deprecated
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+	public BlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(FACING, Direction.byHorizontalIndex(meta));
 	}
 
 	@Deprecated
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Deprecated
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Deprecated
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 
 	@Deprecated
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		if (BlockExporterChest.isChest(source.getBlockState(pos.north()).getBlock())) {
 			return NORTH_CHEST_AABB;
 		}
@@ -115,14 +115,14 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 
 	@Deprecated
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-		EnumFacing connectedChestDirection = null;
-		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+	public void onBlockAdded(World worldIn, BlockPos pos, BlockState state) {
+		Direction connectedChestDirection = null;
+		for (Direction facing : Direction.HORIZONTALS) {
 			if (BlockExporterChest.isChest(worldIn.getBlockState(pos.offset(facing)).getBlock())) {
 				connectedChestDirection = facing;
 				break;
@@ -130,9 +130,9 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 		}
 
 		if (connectedChestDirection != null) {
-			IBlockState connectedChestState = worldIn.getBlockState(pos.offset(connectedChestDirection));
-			EnumFacing facing = state.getValue(FACING);
-			EnumFacing otherFacing = connectedChestState.getValue(FACING);
+			BlockState connectedChestState = worldIn.getBlockState(pos.offset(connectedChestDirection));
+			Direction facing = state.getValue(FACING);
+			Direction otherFacing = connectedChestState.getValue(FACING);
 
 			if (facing != otherFacing || facing == connectedChestDirection || facing.getOpposite() == connectedChestDirection) {
 				if (facing.rotateYCCW() == connectedChestDirection || facing.rotateY() == connectedChestDirection) {
@@ -155,7 +155,7 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 	public static boolean canPlaceChestAt(World worldIn, BlockPos pos) {
 		int i = 0;
 
-		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+		for (Direction facing : Direction.HORIZONTALS) {
 			if (isChest(worldIn.getBlockState(pos.offset(facing)).getBlock())) {
 				if (isDoubleChest(worldIn, pos, facing)) {
 					return false;
@@ -172,7 +172,7 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 		return block instanceof BlockExporterChest || block == Blocks.CHEST;
 	}
 
-	private static boolean isDoubleChest(World worldIn, BlockPos pos, EnumFacing facing) {
+	private static boolean isDoubleChest(World worldIn, BlockPos pos, Direction facing) {
 		if (isChest(worldIn.getBlockState(pos.offset(facing)).getBlock())) {
 			BlockPos blockpos = pos.offset(facing).offset(facing.rotateYCCW());
 			BlockPos blockpos1 = pos.offset(facing).offset(facing);
@@ -195,17 +195,17 @@ public abstract class BlockExporterChest extends BlockHorizontal {
 	}
 
 	@Override
-	public abstract TileEntityExporterChest createTileEntity(World world, IBlockState state);
+	public abstract TileEntityExporterChest createTileEntity(World world, BlockState state);
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
 
 	@Deprecated
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 }

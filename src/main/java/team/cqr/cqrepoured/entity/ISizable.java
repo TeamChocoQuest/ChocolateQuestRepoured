@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.entity;
 
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 
 public interface ISizable {
 

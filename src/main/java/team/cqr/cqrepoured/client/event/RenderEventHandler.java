@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.event;
 
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -11,8 +13,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -43,26 +43,26 @@ public class RenderEventHandler {
 		}
 
 		if (itemMain instanceof ItemMusket || itemMain instanceof ItemMusketKnife) {
-			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
+			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			} else {
 				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
+			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 			} else {
 				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
 			}
 		}
 		if (itemOff instanceof ItemMusket || itemOff instanceof ItemMusketKnife) {
-			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			} else {
 				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 			} else {
 				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
@@ -75,7 +75,7 @@ public class RenderEventHandler {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
 		if (itemMain instanceof ItemRevolver && (!(itemMain instanceof ItemMusket) && !(itemMain instanceof ItemMusketKnife))) {
-			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
+			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -83,7 +83,7 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -92,7 +92,7 @@ public class RenderEventHandler {
 			}
 		}
 		if (itemOff instanceof ItemRevolver && (!(itemOff instanceof ItemMusket) && !(itemOff instanceof ItemMusketKnife))) {
-			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -100,7 +100,7 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if ((event.getEntityPlayer().getPrimaryHand() != EnumHandSide.LEFT)) {
+			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
 			} else {
@@ -117,7 +117,7 @@ public class RenderEventHandler {
 	@SubscribeEvent
 	public static void onRenderWorldLastEvent(RenderWorldLastEvent event) {
 		Minecraft mc = Minecraft.getMinecraft();
-		for (EnumHand hand : EnumHand.values()) {
+		for (Hand hand : Hand.values()) {
 			ItemStack stack = mc.player.getHeldItem(hand);
 			if (!(stack.getItem() instanceof ItemUnprotectedPositionTool)) {
 				continue;

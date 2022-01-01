@@ -4,19 +4,19 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
+import net.minecraft.world.spawner.AbstractSpawner;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,13 +37,13 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableSpawnerInfo extends PreparablePosInfo {
 
-	private final NBTTagCompound tileEntityData;
+	private final CompoundNBT tileEntityData;
 
-	public PreparableSpawnerInfo(BlockPos pos, NBTTagCompound tileEntityData) {
+	public PreparableSpawnerInfo(BlockPos pos, CompoundNBT tileEntityData) {
 		this(pos.getX(), pos.getY(), pos.getZ(), tileEntityData);
 	}
 
-	public PreparableSpawnerInfo(int x, int y, int z, NBTTagCompound tileEntityData) {
+	public PreparableSpawnerInfo(int x, int y, int z, CompoundNBT tileEntityData) {
 		super(x, y, z);
 		this.tileEntityData = tileEntityData;
 	}
@@ -64,19 +64,19 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		this(x, y, z, getNBTTagCompoundFromEntityList(entities));
 	}
 
-	private static NBTTagCompound getNBTTagCompoundFromEntityList(Entity... entities) {
+	private static CompoundNBT getNBTTagCompoundFromEntityList(Entity... entities) {
 		TileEntitySpawner tileEntitySpawner = new TileEntitySpawner();
 		for (int i = 0; i < entities.length && i < tileEntitySpawner.inventory.getSlots(); i++) {
 			if (entities[i] != null) {
 				tileEntitySpawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(entities[i]));
 			}
 		}
-		return tileEntitySpawner.writeToNBT(new NBTTagCompound());
+		return tileEntitySpawner.writeToNBT(new CompoundNBT());
 	}
 
 	@Override
 	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
-		IBlockState state;
+		BlockState state;
 		TileEntity tileEntity;
 		BlockPos p = pos.toImmutable();
 
@@ -84,8 +84,8 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 			state = Blocks.MOB_SPAWNER.getDefaultState();
 			tileEntity = state.getBlock().createTileEntity(world, state);
 
-			if (tileEntity instanceof TileEntityMobSpawner) {
-				this.vanillaSpawnerReadFromNBT(world, placement, p, (TileEntityMobSpawner) tileEntity);
+			if (tileEntity instanceof MobSpawnerTileEntity) {
+				this.vanillaSpawnerReadFromNBT(world, placement, p, (MobSpawnerTileEntity) tileEntity);
 			}
 		} else {
 			state = CQRBlocks.SPAWNER.getDefaultState();
@@ -101,7 +101,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 
 	@Override
 	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		IBlockState transformedState = CQRBlocks.SPAWNER.getDefaultState().withMirror(placement.getMirror()).withRotation(placement.getRotation());
+		BlockState transformedState = CQRBlocks.SPAWNER.getDefaultState().withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
@@ -122,9 +122,9 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, transformedState, tileEntity);
 	}
 
-	private void vanillaSpawnerReadFromNBT(World world, DungeonPlacement placement, BlockPos pos, TileEntityMobSpawner tileEntity) {
-		MobSpawnerBaseLogic spawnerBaseLogic = tileEntity.getSpawnerBaseLogic();
-		NBTTagCompound compound = new NBTTagCompound();
+	private void vanillaSpawnerReadFromNBT(World world, DungeonPlacement placement, BlockPos pos, MobSpawnerTileEntity tileEntity) {
+		AbstractSpawner spawnerBaseLogic = tileEntity.getSpawnerBaseLogic();
+		CompoundNBT compound = new CompoundNBT();
 
 		compound.setShort("Delay", (short) 20);
 		if (this.tileEntityData.hasKey("MinSpawnDelay", Constants.NBT.TAG_ANY_NUMERIC)) {
@@ -139,15 +139,15 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		if (this.tileEntityData.hasKey("SpawnRange", Constants.NBT.TAG_ANY_NUMERIC)) {
 			compound.setShort("SpawnRange", this.tileEntityData.getShort("SpawnRange"));
 		}
-		NBTTagList nbttaglist = new NBTTagList();
-		NBTTagList items = this.tileEntityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		ListNBT nbttaglist = new ListNBT();
+		ListNBT items = this.tileEntityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound itemTag = items.getCompoundTagAt(i);
-			NBTTagCompound entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
+			CompoundNBT itemTag = items.getCompoundTagAt(i);
+			CompoundNBT entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
 			Entity entity = this.createEntityFromTag(world, placement, pos, entityTag);
 
 			if (entity != null) {
-				NBTTagCompound newEntityTag = new NBTTagCompound();
+				CompoundNBT newEntityTag = new CompoundNBT();
 				entity.writeToNBTAtomically(newEntityTag);
 
 				newEntityTag.removeTag("UUIDLeast");
@@ -166,15 +166,15 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	}
 
 	private void cqrSpawnerReadFromNBT(World world, DungeonPlacement placement, BlockPos pos, TileEntitySpawner tileEntity) {
-		NBTTagList items = this.tileEntityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		ListNBT items = this.tileEntityData.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
 		for (int i = 0; i < items.tagCount() && i < tileEntity.inventory.getSlots(); i++) {
-			NBTTagCompound itemTag = items.getCompoundTagAt(i);
-			NBTTagCompound entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
+			CompoundNBT itemTag = items.getCompoundTagAt(i);
+			CompoundNBT entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
 			Entity entity = this.createEntityFromTag(world, placement, pos, entityTag);
 
 			if (entity != null) {
-				NBTTagCompound newEntityTag = new NBTTagCompound();
+				CompoundNBT newEntityTag = new CompoundNBT();
 				entity.writeToNBTAtomically(newEntityTag);
 
 				newEntityTag.removeTag("UUIDLeast");
@@ -182,7 +182,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 				newEntityTag.removeTag("Pos");
 
 				ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE, itemTag.getByte("Count"));
-				NBTTagCompound stackTag = new NBTTagCompound();
+				CompoundNBT stackTag = new CompoundNBT();
 				stackTag.setTag("EntityIn", newEntityTag);
 				stack.setTagCompound(stackTag);
 				tileEntity.inventory.insertItem(i, stack, false);
@@ -190,7 +190,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		}
 	}
 
-	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos, NBTTagCompound entityTag) {
+	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos, CompoundNBT entityTag) {
 		if (entityTag.isEmpty()) {
 			return null;
 		}
@@ -211,17 +211,17 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		if (entity != null) {
 			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 
-			if (entity instanceof EntityLiving) {
-				((EntityLiving) entity).enablePersistence();
+			if (entity instanceof MobEntity) {
+				((MobEntity) entity).enablePersistence();
 
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
 				}
 			}
 
-			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+			ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
 			for (NBTBase passengerNBT : passengers) {
-				Entity passenger = this.createEntityFromTag(world, placement, pos, (NBTTagCompound) passengerNBT);
+				Entity passenger = this.createEntityFromTag(world, placement, pos, (CompoundNBT) passengerNBT);
 				passenger.startRiding(entity);
 			}
 		}
@@ -229,31 +229,31 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		return entity;
 	}
 
-	public NBTTagCompound getTileEntityData() {
+	public CompoundNBT getTileEntityData() {
 		return this.tileEntityData;
 	}
 
 	public static class Factory implements IFactory<TileEntitySpawner> {
 
 		@Override
-		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntitySpawner> tileEntitySupplier) {
+		public PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<TileEntitySpawner> tileEntitySupplier) {
 			TileEntitySpawner tileEntity = tileEntitySupplier.get();
 			return new PreparableSpawnerInfo(x, y, z, getNBTFromTileEntity(world, tileEntity.getPos(), tileEntity));
 		}
 
-		private static NBTTagCompound getNBTFromTileEntity(World world, BlockPos pos, TileEntitySpawner tileEntity) {
-			NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
+		private static CompoundNBT getNBTFromTileEntity(World world, BlockPos pos, TileEntitySpawner tileEntity) {
+			CompoundNBT compound = tileEntity.writeToNBT(new CompoundNBT());
 			compound.removeTag("x");
 			compound.removeTag("y");
 			compound.removeTag("z");
-			NBTTagList items = compound.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
+			ListNBT items = compound.getCompoundTag("inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
 			for (int i = 0; i < items.tagCount(); i++) {
-				NBTTagCompound itemTag = items.getCompoundTagAt(i);
-				NBTTagCompound itemTagCompound = itemTag.getCompoundTag("tag");
-				NBTTagCompound entityTag = itemTagCompound.getCompoundTag("EntityIn");
+				CompoundNBT itemTag = items.getCompoundTagAt(i);
+				CompoundNBT itemTagCompound = itemTag.getCompoundTag("tag");
+				CompoundNBT entityTag = itemTagCompound.getCompoundTag("EntityIn");
 				Entity entity = createEntityForExporting(entityTag, world, pos);
 				if (entity != null) {
-					NBTTagCompound newEntityTag = new NBTTagCompound();
+					CompoundNBT newEntityTag = new CompoundNBT();
 					entity.writeToNBTAtomically(newEntityTag);
 					itemTagCompound.setTag("EntityIn", newEntityTag);
 				}
@@ -261,16 +261,16 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 			return compound;
 		}
 
-		private static Entity createEntityForExporting(NBTTagCompound entityTag, World world, BlockPos pos) {
+		private static Entity createEntityForExporting(CompoundNBT entityTag, World world, BlockPos pos) {
 			Entity entity = EntityList.createEntityFromNBT(entityTag, world);
 			if (entity != null) {
 				entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).onExportFromWorld();
 				}
-				NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+				ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
 				for (NBTBase passengerNBT : passengers) {
-					Entity passenger = createEntityForExporting((NBTTagCompound) passengerNBT, world, pos);
+					Entity passenger = createEntityForExporting((CompoundNBT) passengerNBT, world, pos);
 					passenger.startRiding(entity);
 				}
 			}
@@ -282,22 +282,22 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableSpawnerInfo> {
 
 		@Override
-		public void write(PreparableSpawnerInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableSpawnerInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
 			ByteBufUtils.writeVarInt(buf, nbtList.tagCount(), 5);
 			nbtList.appendTag(preparable.tileEntityData);
 		}
 
 		@Override
-		public PreparableSpawnerInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			NBTTagCompound tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
+		public PreparableSpawnerInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+			CompoundNBT tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			return new PreparableSpawnerInfo(x, y, z, tileEntityData);
 		}
 
 		@Override
 		@Deprecated
-		public PreparableSpawnerInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableSpawnerInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
-			NBTTagCompound tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
+			CompoundNBT tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			return new PreparableSpawnerInfo(x, y, z, tileEntityData);
 		}
 

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;

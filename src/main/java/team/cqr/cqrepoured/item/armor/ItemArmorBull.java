@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
@@ -11,16 +15,12 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,21 +28,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-public class ItemArmorBull extends ItemArmor {
+public class ItemArmorBull extends ArmorItem {
 
 	private AttributeModifier strength;
 
-	public ItemArmorBull(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+	public ItemArmorBull(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 
 		this.strength = new AttributeModifier("BullArmorModifier", 1D, 0);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EntityLiving.getSlotForItemStack(stack)) {
+		if (slot == MobEntity.getSlotForItemStack(stack)) {
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), this.strength);
 		}
 
@@ -60,10 +60,10 @@ public class ItemArmorBull extends ItemArmor {
 	}
 
 	@Override
-	public void onArmorTick(World worldIn, EntityPlayer player, ItemStack stack) {
+	public void onArmorTick(World worldIn, PlayerEntity player, ItemStack stack) {
 		if (ItemUtil.hasFullSet(player, ItemArmorBull.class)) {
 			if (player.isSprinting()) {
-				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 0, 1, false, false));
+				player.addPotionEffect(new EffectInstance(Effects.SPEED, 0, 1, false, false));
 			}
 		}
 	}
@@ -71,8 +71,8 @@ public class ItemArmorBull extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? CQRArmorModels.bullArmorLegs : CQRArmorModels.bullArmor;
+	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
+		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.bullArmorLegs : CQRArmorModels.bullArmor;
 	}
 
 }

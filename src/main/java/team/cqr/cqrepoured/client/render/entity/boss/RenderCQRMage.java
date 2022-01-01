@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
@@ -20,14 +20,14 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQ
 	private final ModelBiped modelHidden;
 	private final ModelBiped modelRevealed;
 
-	public RenderCQRMage(RenderManager rendermanagerIn, ModelBiped model, String entityName) {
+	public RenderCQRMage(EntityRendererManager rendermanagerIn, ModelBiped model, String entityName) {
 		super(rendermanagerIn, model, 0.5F, entityName, 1D, 1D);
 		this.modelHidden = new ModelMageHidden();
 		this.modelRevealed = model;
 
 		for (int i = 0; i < this.layerRenderers.size(); i++) {
 			LayerRenderer<?> layer = this.layerRenderers.get(i);
-			if (layer instanceof LayerBipedArmor) {
+			if (layer instanceof BipedArmorLayer) {
 				this.layerRenderers.remove(i--);
 			}
 		}

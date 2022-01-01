@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.client.render.texture;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
 
-public class AutoGlowingTexture extends AbstractTexture {
+public class AutoGlowingTexture extends Texture {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
@@ -34,7 +34,7 @@ public class AutoGlowingTexture extends AbstractTexture {
 		String path = originalTexture.getPath();
 		int i = path.lastIndexOf('.');
 		ResourceLocation glowingTexture = new ResourceLocation(originalTexture.getNamespace(), path.substring(0, i) + "_glowing" + path.substring(i));
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		EntityRendererManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		if (renderManager.renderEngine.getTexture(glowingTexture) == null) {
 			renderManager.renderEngine.loadTexture(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
 		}

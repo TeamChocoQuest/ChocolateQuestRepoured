@@ -9,22 +9,22 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -32,7 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
@@ -91,12 +91,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 
-	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<IBlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<IBlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
 
 	// AI stuff
 	private boolean isDowned = false;
@@ -650,7 +650,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return false;
 		}
 
-		if (source instanceof EntityDamageSourceIndirect) {
+		if (source instanceof IndirectEntityDamageSource) {
 			// DONE: Switch attack target to the shooter
 			// DONE: Teleport
 			// DONE: Spawn homing ender eyes => Handled by AI
@@ -661,8 +661,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 * waits 1 second, repeat
 			 */
 			if (this.teleportAI != null) {
-				if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
-					this.setAttackTarget((EntityLivingBase) source.getTrueSource());
+				if (source.getTrueSource() != null && source.getTrueSource() instanceof LivingEntity) {
+					this.setAttackTarget((LivingEntity) source.getTrueSource());
 				}
 
 				this.forceTeleport();
@@ -747,7 +747,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			Vec3i size = new Vec3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
 			size = new Vec3i(size.getX() * 0.5, size.getY() * 0.5, size.getZ() * 0.5);
 			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size).add(0, size.getY(), 0))) {
-				IBlockState iblockstate = this.world.getBlockState(blockpos);
+				BlockState iblockstate = this.world.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 
 				if (!block.isAir(iblockstate, this.world, blockpos) && block.canEntityDestroy(iblockstate, this.world, blockpos, this) && net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
@@ -755,7 +755,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				}
 			}
 			if (flag) {
-				this.world.playEvent((EntityPlayer) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, new BlockPos(this), 0);
+				this.world.playEvent((PlayerEntity) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, new BlockPos(this), 0);
 			}
 		}
 
@@ -904,7 +904,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		CQRMain.NETWORK.sendToAllTracking(packet, this);
 	}
 
-	public Optional<IBlockState> getBlockFromHand(E_CALAMITY_HAND hand) {
+	public Optional<BlockState> getBlockFromHand(E_CALAMITY_HAND hand) {
 		if (hand == null) {
 			return Optional.absent();
 		}
@@ -927,7 +927,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	public void removeHandBlock(E_CALAMITY_HAND hand) {
-		Optional<IBlockState> value = Optional.absent();
+		Optional<BlockState> value = Optional.absent();
 		this.equipBlock(hand, value);
 	}
 
@@ -935,7 +935,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		this.equipBlock(hand, block.getDefaultState());
 	}
 
-	public void equipBlock(E_CALAMITY_HAND hand, Optional<IBlockState> value) {
+	public void equipBlock(E_CALAMITY_HAND hand, Optional<BlockState> value) {
 		// Don't execute this on client side
 		if (this.world.isRemote) {
 			return;
@@ -964,7 +964,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 	}
 
-	public void equipBlock(E_CALAMITY_HAND hand, IBlockState blockstate) {
+	public void equipBlock(E_CALAMITY_HAND hand, BlockState blockstate) {
 		this.equipBlock(hand, Optional.of(blockstate));
 	}
 
@@ -987,7 +987,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public EntityLivingBase getSummoner() {
+	public LivingEntity getSummoner() {
 		return this;
 	}
 
@@ -1007,19 +1007,19 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		double oldZ = this.posZ;
 		super.teleport(x, y, z);
 		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 3.0F, 0.9F + this.rand.nextFloat() * 0.2F);
-		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
-		((WorldServer) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+		((ServerWorld) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+		((ServerWorld) this.world).spawnParticle(EnumParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("isDowned", this.isDowned);
 		compound.setBoolean("deadAndOnGround", this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND));
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		this.isDowned = compound.getBoolean("isDowned");
 		this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, compound.getBoolean("deadAndOnGround"));
@@ -1104,7 +1104,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private boolean isFalling = false;
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 		this.isFalling = !onGroundIn;
 		super.updateFallState(y, onGroundIn, state, pos);
 	}
@@ -1154,7 +1154,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private void dropSingleItemFromLoottable(ResourceLocation table, boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 		if (table != null) {
 			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(table);
-			LootContext.Builder lootContextBuilder = new LootContext.Builder((WorldServer) this.world).withLootedEntity(this).withDamageSource(source);
+			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.world).withLootedEntity(this).withDamageSource(source);
 			if (wasRecentlyHit && this.attackingPlayer != null) {
 				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
 			}
@@ -1166,7 +1166,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			Collections.shuffle(loot, this.getRNG());
 
 			ItemStack rolledItem = loot.get(0);
-			EntityItem item = this.entityDropItem(rolledItem, 0.0F);
+			ItemEntity item = this.entityDropItem(rolledItem, 0.0F);
 
 			double vy = 0.25D + 0.5D * this.getRNG().nextDouble();
 			double vx = -0.25D + 0.5D * this.getRNG().nextDouble();

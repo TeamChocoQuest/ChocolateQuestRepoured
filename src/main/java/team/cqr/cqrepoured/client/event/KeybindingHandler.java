@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -20,7 +20,7 @@ public class KeybindingHandler {
 	public static void onKeyPress(KeyInputEvent event) {
 		// Repu key
 		if (ClientProxy.keybindReputationGUI.isPressed()) {
-			EntityPlayerSP player = Minecraft.getMinecraft().player;
+			ClientPlayerEntity player = Minecraft.getMinecraft().player;
 			player.openGui(CQRMain.INSTANCE, GuiHandler.REPUTATION_GUI_ID, Minecraft.getMinecraft().world, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}
 	}

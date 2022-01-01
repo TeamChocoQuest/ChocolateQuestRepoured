@@ -1,28 +1,28 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.world.ClientWorld;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHotFireball;
 
-public class RenderProjectileHotFireball extends Render<ProjectileHotFireball> {
+public class RenderProjectileHotFireball extends EntityRenderer<ProjectileHotFireball> {
 
-	public RenderProjectileHotFireball(RenderManager renderManager) {
+	public RenderProjectileHotFireball(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileHotFireball entity) {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
+		return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class RenderProjectileHotFireball extends Render<ProjectileHotFireball> {
 		GlStateManager.translate(-0.25F, 0F, 0.25F);
 		// GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		GlStateManager.scale(0.5F, 0.5F, 0.5F);
-		WorldClient world = Minecraft.getMinecraft().world;
+		ClientWorld world = Minecraft.getMinecraft().world;
 		double dx = entity.posX + (-0.5 + (world.rand.nextDouble()));
 		double dy = 0.25 + entity.posY + (-0.5 + (world.rand.nextDouble()));
 		double dz = entity.posZ + (-0.5 + (world.rand.nextDouble()));

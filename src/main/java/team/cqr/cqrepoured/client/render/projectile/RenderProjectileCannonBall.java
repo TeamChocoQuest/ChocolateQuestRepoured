@@ -2,20 +2,20 @@ package team.cqr.cqrepoured.client.render.projectile;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelCannonBall;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 
-public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
+public class RenderProjectileCannonBall extends EntityRenderer<ProjectileCannonBall> {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/ball_cannon.png");
 
 	private final ModelBase model = new ModelCannonBall();
 
-	public RenderProjectileCannonBall(RenderManager renderManager) {
+	public RenderProjectileCannonBall(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 

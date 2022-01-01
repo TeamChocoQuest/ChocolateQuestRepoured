@@ -11,7 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import net.minecraft.client.resources.data.BaseMetadataSectionSerializer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.Tuple;
 
 // TODO: Change to be completely json based, not some weird string monsters
@@ -24,17 +24,17 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 
 	@Override
 	public GlowingMetadataSection deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		JsonObject jsonobject = JsonUtils.getJsonObject(json, "metadata section");
+		JsonObject jsonobject = JSONUtils.getJsonObject(json, "metadata section");
 		if (jsonobject.has("sections")) {
-			JsonArray jsonarray = JsonUtils.getJsonArray(jsonobject, "sections");
+			JsonArray jsonarray = JSONUtils.getJsonArray(jsonobject, "sections");
 			GlowingMetadataSection result = new GlowingMetadataSection();
 			for (int i = 0; i < jsonarray.size(); ++i) {
 				JsonElement jsonelement = jsonarray.get(i);
 
-				int x1 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "x1", 0);
-				int y1 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "y1", 0);
-				int x2 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "x2", 0);
-				int y2 = JsonUtils.getInt(jsonelement.getAsJsonObject(), "y2", 0);
+				int x1 = JSONUtils.getInt(jsonelement.getAsJsonObject(), "x1", 0);
+				int y1 = JSONUtils.getInt(jsonelement.getAsJsonObject(), "y1", 0);
+				int x2 = JSONUtils.getInt(jsonelement.getAsJsonObject(), "x2", 0);
+				int y2 = JSONUtils.getInt(jsonelement.getAsJsonObject(), "y2", 0);
 
 				Tuple<Integer, Integer> pos1 = new Tuple<>(x1, y1);
 				Tuple<Integer, Integer> pos2 = new Tuple<>(x2, y2);

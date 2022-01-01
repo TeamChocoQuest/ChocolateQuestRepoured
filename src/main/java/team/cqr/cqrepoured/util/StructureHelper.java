@@ -6,15 +6,15 @@ import javax.annotation.Nullable;
 
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.gen.ChunkGeneratorDebug;
-import net.minecraft.world.gen.ChunkGeneratorEnd;
-import net.minecraft.world.gen.ChunkGeneratorFlat;
-import net.minecraft.world.gen.ChunkGeneratorNether;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
+import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.NetherChunkGenerator;
+import net.minecraft.world.gen.OverworldChunkGenerator;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.EndChunkGenerator;
+import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.MineshaftStructure;
 import net.minecraft.world.gen.feature.Structure;
 import team.cqr.cqrepoured.CQRMain;
@@ -38,9 +38,9 @@ public class StructureHelper {
 			return AW2Integration.isAW2StructureInRange(world, pos, radius);
 		}
 
-		IChunkGenerator chunkGenerator = ((WorldServer) world).getChunkProvider().chunkGenerator;
+		ChunkGenerator chunkGenerator = ((ServerWorld) world).getChunkProvider().chunkGenerator;
 
-		if (chunkGenerator instanceof ChunkGeneratorOverworld || chunkGenerator instanceof ChunkGeneratorNether || chunkGenerator instanceof ChunkGeneratorEnd || chunkGenerator instanceof ChunkGeneratorFlat || chunkGenerator instanceof ChunkGeneratorDebug) {
+		if (chunkGenerator instanceof OverworldChunkGenerator || chunkGenerator instanceof NetherChunkGenerator || chunkGenerator instanceof EndChunkGenerator || chunkGenerator instanceof FlatChunkGenerator || chunkGenerator instanceof DebugChunkGenerator) {
 			// vanilla chunk generator
 			Structure structureGenerator = getStructureGenerator(world, name);
 
@@ -75,63 +75,63 @@ public class StructureHelper {
 
 	@Nullable
 	private static Structure getStructureGenerator(World world, String name) {
-		IChunkGenerator chunkGenerator = ((WorldServer) world).getChunkProvider().chunkGenerator;
+		ChunkGenerator chunkGenerator = ((ServerWorld) world).getChunkProvider().chunkGenerator;
 
-		if (chunkGenerator instanceof ChunkGeneratorOverworld) {
-			if (!((ChunkGeneratorOverworld) chunkGenerator).mapFeaturesEnabled) {
+		if (chunkGenerator instanceof OverworldChunkGenerator) {
+			if (!((OverworldChunkGenerator) chunkGenerator).mapFeaturesEnabled) {
 				return null;
 			}
-			ChunkGeneratorSettings settings = ((ChunkGeneratorOverworld) chunkGenerator).settings;
+			ChunkGeneratorSettings settings = ((OverworldChunkGenerator) chunkGenerator).settings;
 			switch (name) {
 			case "Stronghold":
 				if (!settings.useStrongholds) {
 					return null;
 				}
-				return ((ChunkGeneratorOverworld) chunkGenerator).strongholdGenerator;
+				return ((OverworldChunkGenerator) chunkGenerator).strongholdGenerator;
 			case "Village":
 				if (!settings.useVillages) {
 					return null;
 				}
-				return ((ChunkGeneratorOverworld) chunkGenerator).villageGenerator;
+				return ((OverworldChunkGenerator) chunkGenerator).villageGenerator;
 			case "Mineshaft":
 				if (!settings.useMineShafts) {
 					return null;
 				}
-				return ((ChunkGeneratorOverworld) chunkGenerator).mineshaftGenerator;
+				return ((OverworldChunkGenerator) chunkGenerator).mineshaftGenerator;
 			case "Temple":
 				if (!settings.useTemples) {
 					return null;
 				}
-				return ((ChunkGeneratorOverworld) chunkGenerator).scatteredFeatureGenerator;
+				return ((OverworldChunkGenerator) chunkGenerator).scatteredFeatureGenerator;
 			case "Monument":
 				if (!settings.useMonuments) {
 					return null;
 				}
-				return ((ChunkGeneratorOverworld) chunkGenerator).oceanMonumentGenerator;
+				return ((OverworldChunkGenerator) chunkGenerator).oceanMonumentGenerator;
 			case "Mansion":
 				if (!settings.useMansions) {
 					return null;
 				}
-				return ((ChunkGeneratorOverworld) chunkGenerator).woodlandMansionGenerator;
+				return ((OverworldChunkGenerator) chunkGenerator).woodlandMansionGenerator;
 			default:
 				break;
 			}
-		} else if (chunkGenerator instanceof ChunkGeneratorNether) {
-			if (!((ChunkGeneratorNether) chunkGenerator).generateStructures) {
+		} else if (chunkGenerator instanceof NetherChunkGenerator) {
+			if (!((NetherChunkGenerator) chunkGenerator).generateStructures) {
 				return null;
 			}
 			if (name.equals("Fortress")) {
-				return ((ChunkGeneratorNether) chunkGenerator).genNetherBridge;
+				return ((NetherChunkGenerator) chunkGenerator).genNetherBridge;
 			}
-		} else if (chunkGenerator instanceof ChunkGeneratorEnd) {
-			if (!((ChunkGeneratorEnd) chunkGenerator).mapFeaturesEnabled) {
+		} else if (chunkGenerator instanceof EndChunkGenerator) {
+			if (!((EndChunkGenerator) chunkGenerator).mapFeaturesEnabled) {
 				return null;
 			}
 			if (name.equals("EndCity")) {
-				return ((ChunkGeneratorEnd) chunkGenerator).endCityGen;
+				return ((EndChunkGenerator) chunkGenerator).endCityGen;
 			}
-		} else if (chunkGenerator instanceof ChunkGeneratorFlat) {
-			return ((ChunkGeneratorFlat) chunkGenerator).structureGenerators.get(name);
+		} else if (chunkGenerator instanceof FlatChunkGenerator) {
+			return ((FlatChunkGenerator) chunkGenerator).structureGenerators.get(name);
 		}
 
 		return null;

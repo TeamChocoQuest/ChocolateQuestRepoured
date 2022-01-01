@@ -2,14 +2,14 @@ package team.cqr.cqrepoured.network.client.packet;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.IntCollection;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class CPacketAddPathNode implements IMessage {
 
-	private EnumHand hand;
+	private Hand hand;
 	private int rootNode;
 	private BlockPos pos;
 	private int waitingTimeMin;
@@ -25,7 +25,7 @@ public class CPacketAddPathNode implements IMessage {
 
 	}
 
-	public CPacketAddPathNode(EnumHand hand, int rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, boolean bidirectional, IntCollection blacklistedPrevNodes) {
+	public CPacketAddPathNode(Hand hand, int rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, boolean bidirectional, IntCollection blacklistedPrevNodes) {
 		this.hand = hand;
 		this.rootNode = rootNode;
 		this.pos = pos;
@@ -41,7 +41,7 @@ public class CPacketAddPathNode implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.hand = EnumHand.values()[buf.readByte()];
+		this.hand = Hand.values()[buf.readByte()];
 		this.rootNode = buf.readInt();
 		this.pos = ByteBufUtil.readBlockPos(buf);
 		this.waitingTimeMin = buf.readShort();
@@ -75,7 +75,7 @@ public class CPacketAddPathNode implements IMessage {
 		}
 	}
 
-	public EnumHand getHand() {
+	public Hand getHand() {
 		return this.hand;
 	}
 

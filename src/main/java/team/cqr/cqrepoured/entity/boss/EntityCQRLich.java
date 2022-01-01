@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -97,8 +97,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		// Kill minions
 		for (Entity e : this.summonedMinions) {
 			if (e != null && !e.isDead) {
-				if (e instanceof EntityLivingBase) {
-					((EntityLivingBase) e).onDeath(cause);
+				if (e instanceof LivingEntity) {
+					((LivingEntity) e).onDeath(cause);
 				}
 				e.setDead();
 			}
@@ -134,7 +134,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public EntityLivingBase getSummoner() {
+	public LivingEntity getSummoner() {
 		return this;
 	}
 
@@ -148,7 +148,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		if (this.currentPhylacteryPosition != null) {
 			compound.setTag("currentPhylactery", NBTUtil.createPosTag(this.currentPhylacteryPosition));
@@ -156,7 +156,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		super.readEntityFromNBT(compound);
 		if (compound.hasKey("currentPhylactery")) {
 			this.currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));

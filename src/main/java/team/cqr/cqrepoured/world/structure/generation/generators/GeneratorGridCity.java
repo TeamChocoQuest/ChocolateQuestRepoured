@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -34,7 +34,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 	private Set<BlockPos> bridgeBlocks = new HashSet<>();
 	private Set<BlockPos> lavaBlocks = new HashSet<>();
 
-	private Map<BlockPos, IBlockState> blockMap = new HashMap<>();
+	private Map<BlockPos, BlockState> blockMap = new HashMap<>();
 
 	private int minX;
 	private int maxX;
@@ -196,7 +196,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 		}
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		for (Map.Entry<BlockPos, IBlockState> entry : this.blockMap.entrySet()) {
+		for (Map.Entry<BlockPos, BlockState> entry : this.blockMap.entrySet()) {
 			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
 		this.dungeonBuilder.add(partBuilder);

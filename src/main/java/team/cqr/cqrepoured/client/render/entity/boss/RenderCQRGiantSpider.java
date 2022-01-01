@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelGiantSpider;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
 import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 
-public class RenderCQRGiantSpider extends RenderLiving<EntityCQRGiantSpider> {
+public class RenderCQRGiantSpider extends MobRenderer<EntityCQRGiantSpider> {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_spider.png");
 
-	public RenderCQRGiantSpider(RenderManager rendermanagerIn) {
+	public RenderCQRGiantSpider(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelGiantSpider(), 2.0F);
 		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 	}

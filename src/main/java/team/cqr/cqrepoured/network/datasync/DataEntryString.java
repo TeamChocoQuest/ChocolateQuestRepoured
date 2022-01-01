@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class DataEntryString extends DataEntryObject<String> {
@@ -15,13 +15,13 @@ public class DataEntryString extends DataEntryObject<String> {
 
 	@Override
 	public NBTBase write() {
-		return new NBTTagString(this.value);
+		return new StringNBT(this.value);
 	}
 
 	@Override
 	protected void readInternal(NBTBase nbt) {
-		if (nbt instanceof NBTTagString) {
-			this.value = ((NBTTagString) nbt).getString();
+		if (nbt instanceof StringNBT) {
+			this.value = ((StringNBT) nbt).getString();
 		}
 	}
 

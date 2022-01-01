@@ -3,14 +3,14 @@ package team.cqr.cqrepoured.client.render.entity.layer.geo;
 import java.awt.Color;
 import java.util.function.Function;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.client.util.EmissiveUtil;
 
-public class LayerGlowingAreasGeo<T extends EntityLiving & IAnimatable> extends AbstractCQRLayerGeo<T> {
+public class LayerGlowingAreasGeo<T extends MobEntity & IAnimatable> extends AbstractCQRLayerGeo<T> {
 
 	public LayerGlowingAreasGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);

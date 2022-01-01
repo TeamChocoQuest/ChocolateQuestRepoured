@@ -5,10 +5,10 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
@@ -17,20 +17,20 @@ import team.cqr.cqrepoured.util.EntityUtil;
 
 public class CapabilityElectricShock {
 
-	private final EntityLivingBase entity;
+	private final LivingEntity entity;
 	private UUID originalCasterID;
 	private Entity target;
 	private int remainingTicks = -1;
 	private int cooldown = -1;
 	private int remainingSpreads = 16;
 
-	public CapabilityElectricShock(EntityLivingBase entity) {
+	public CapabilityElectricShock(LivingEntity entity) {
 		this.entity = entity;
 		this.originalCasterID = null;
 	}
 
 	public NBTBase writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
+		CompoundNBT compound = new CompoundNBT();
 
 		compound.setInteger("cooldown", this.cooldown);
 		compound.setInteger("ticks", this.remainingTicks);
@@ -58,8 +58,8 @@ public class CapabilityElectricShock {
 
 	protected void sendUpdate() {
 		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateElectrocuteCapability(this.entity), this.entity);
-		if (this.entity instanceof EntityPlayerMP) {
-			CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(this.entity), (EntityPlayerMP) this.entity);
+		if (this.entity instanceof ServerPlayerEntity) {
+			CQRMain.NETWORK.sendTo(new SPacketUpdateElectrocuteCapability(this.entity), (ServerPlayerEntity) this.entity);
 		}
 	}
 
@@ -115,7 +115,7 @@ public class CapabilityElectricShock {
 		return this.remainingTicks >= 0;
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(CompoundNBT nbt) {
 		this.remainingTicks = nbt.getInteger("ticks");
 		this.cooldown = nbt.getInteger("cooldown");
 		this.remainingSpreads = nbt.getInteger("remainingSpreads");

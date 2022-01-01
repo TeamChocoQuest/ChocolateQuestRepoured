@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.enchantment;
 
-import net.minecraft.enchantment.EnchantmentDamage;
+import net.minecraft.enchantment.DamageEnchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.potion.Effects;
+import net.minecraft.potion.EffectInstance;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
-public class EnchantmentSpectral extends EnchantmentDamage {
+public class EnchantmentSpectral extends DamageEnchantment {
 
 	public EnchantmentSpectral() {
-		super(Rarity.VERY_RARE, 0, EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND);
+		super(Rarity.VERY_RARE, 0, EquipmentSlotType.MAINHAND, EquipmentSlotType.OFFHAND);
 		this.setName("spectral");
 		this.setRegistryName(CQRMain.MODID, "spectral");
 	}
@@ -38,16 +38,16 @@ public class EnchantmentSpectral extends EnchantmentDamage {
 	}
 
 	@Override
-	public void onEntityDamaged(EntityLivingBase user, Entity target, int level) {
-		if (!(target instanceof EntityLivingBase)) {
+	public void onEntityDamaged(LivingEntity user, Entity target, int level) {
+		if (!(target instanceof LivingEntity)) {
 			return;
 		}
-		EntityLivingBase livingTarget = (EntityLivingBase) target;
+		LivingEntity livingTarget = (LivingEntity) target;
 		if (livingTarget.getCreatureAttribute() != CQRCreatureAttributes.VOID) {
 			return;
 		}
 		int i = 20 + user.getRNG().nextInt(10 * level);
-		livingTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, i, 2));
+		livingTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, i, 2));
 	}
 
 }

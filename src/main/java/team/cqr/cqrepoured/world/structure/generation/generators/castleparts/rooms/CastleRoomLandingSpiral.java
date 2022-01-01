@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.SpiralStaircaseBuilder;
@@ -23,9 +23,9 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		BlockPos pos;
-		IBlockState blockToBuild;
+		BlockState blockToBuild;
 		BlockPos pillarStart = this.roomOrigin.add(this.stairsBelow.getStairCenterOffsetX(), 0, this.stairsBelow.getStairCenterOffsetZ());
-		EnumFacing firstStairSide = this.stairsBelow.getLastStairSide().rotateY();
+		Direction firstStairSide = this.stairsBelow.getLastStairSide().rotateY();
 
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 

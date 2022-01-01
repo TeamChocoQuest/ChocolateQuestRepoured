@@ -11,8 +11,8 @@ import java.util.Properties;
 
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.crash.ReportedException;
 
 public class FileIOUtil {
@@ -23,7 +23,7 @@ public class FileIOUtil {
 		return NBT_FILE_FILTER;
 	}
 
-	public static void writeNBTToFile(NBTTagCompound compound, File file) {
+	public static void writeNBTToFile(CompoundNBT compound, File file) {
 		try {
 			file.getParentFile().mkdirs();
 			try (OutputStream outStream = new FileOutputStream(file)) {
@@ -36,9 +36,9 @@ public class FileIOUtil {
 		}
 	}
 
-	public static NBTTagCompound readNBTFromFile(File file) {
+	public static CompoundNBT readNBTFromFile(File file) {
 		try {
-			NBTTagCompound compound;
+			CompoundNBT compound;
 			try (InputStream in = new FileInputStream(file)) {
 				compound = CompressedStreamTools.readCompressed(in);
 			}

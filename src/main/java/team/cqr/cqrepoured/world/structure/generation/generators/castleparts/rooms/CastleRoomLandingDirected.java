@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 
 import java.util.Random;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -15,7 +15,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	protected int openingWidth;
 	protected int openingSeparation;
 	protected int stairZ;
-	protected EnumFacing stairStartSide;
+	protected Direction stairStartSide;
 
 	public CastleRoomLandingDirected(int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
@@ -29,12 +29,12 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
-		IBlockState blockToBuild;
+		BlockState blockToBuild;
 
 		// If stairs are facing to the east or west, need to flip the build lengths since we are essentially
 		// generating a room facing south and then rotating it
-		int lenX = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.getDecorationLengthX() : this.getDecorationLengthZ();
-		int lenZ = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.getDecorationLengthZ() : this.getDecorationLengthX();
+		int lenX = this.stairStartSide.getAxis() == Direction.Axis.Z ? this.getDecorationLengthX() : this.getDecorationLengthZ();
+		int lenZ = this.stairStartSide.getAxis() == Direction.Axis.Z ? this.getDecorationLengthZ() : this.getDecorationLengthX();
 
 		for (int x = 0; x < lenX - 1; x++) {
 			for (int z = 0; z < lenZ - 1; z++) {
@@ -45,8 +45,8 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 							blockToBuild = dungeon.getFloorBlockState();
 						} else if (x < this.openingWidth || ((x >= this.openingSeparation + this.openingWidth) && (x < this.openingSeparation + this.openingWidth * 2))) {
 							if (z == this.stairZ) {
-								EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.stairStartSide));
-								blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+								Direction stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(Direction.SOUTH, DungeonGenUtils.getCWRotationsBetween(Direction.SOUTH, this.stairStartSide));
+								blockToBuild = dungeon.getWoodStairBlockState().withProperty(StairsBlock.FACING, stairFacing);
 							}
 						} else {
 							blockToBuild = dungeon.getFloorBlockState();
@@ -60,13 +60,13 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public boolean canBuildDoorOnSide(EnumFacing side) {
+	public boolean canBuildDoorOnSide(Direction side) {
 		// Really only works on this side, could add logic to align the doors for other sides later
 		return (side == this.stairStartSide);
 	}
 
 	@Override
-	public boolean reachableFromSide(EnumFacing side) {
+	public boolean reachableFromSide(Direction side) {
 		return (side == this.stairStartSide || side == this.stairStartSide.getOpposite());
 	}
 }

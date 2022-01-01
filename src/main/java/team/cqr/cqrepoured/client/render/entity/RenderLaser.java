@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -16,12 +16,12 @@ import team.cqr.cqrepoured.client.model.entity.ModelLaser;
 import team.cqr.cqrepoured.client.util.EmissiveUtil;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
-public class RenderLaser<T extends AbstractEntityLaser> extends Render<T> {
+public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/effects/ray.png");
 	private final ModelBase model;
 
-	public RenderLaser(RenderManager renderManager) {
+	public RenderLaser(EntityRendererManager renderManager) {
 		super(renderManager);
 		this.model = new ModelLaser();
 	}

@@ -10,8 +10,8 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,18 +30,18 @@ public class DungeonDataManager {
 			this.spawnType = spawnType;
 		}
 
-		public DungeonInfo(NBTTagCompound compound) {
+		public DungeonInfo(CompoundNBT compound) {
 			this.readFromNBT(compound);
 		}
 
-		public NBTTagCompound writeToNBT() {
-			NBTTagCompound compound = new NBTTagCompound();
+		public CompoundNBT writeToNBT() {
+			CompoundNBT compound = new CompoundNBT();
 			compound.setTag("pos", NBTUtil.createPosTag(this.pos));
 			compound.setInteger("spawnType", this.spawnType.ordinal());
 			return compound;
 		}
 
-		public void readFromNBT(NBTTagCompound compound) {
+		public void readFromNBT(CompoundNBT compound) {
 			if (compound.hasKey("pos", Constants.NBT.TAG_COMPOUND)) {
 				this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
 			} else {
@@ -127,11 +127,11 @@ public class DungeonDataManager {
 
 	public void saveData() {
 		if (this.modifiedSinceLastSave) {
-			NBTTagCompound root = new NBTTagCompound();
+			CompoundNBT root = new CompoundNBT();
 			for (Map.Entry<String, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
 				Set<DungeonInfo> dungeonInfos = data.getValue();
 				if (!dungeonInfos.isEmpty()) {
-					NBTTagList nbtTagList = new NBTTagList();
+					ListNBT nbtTagList = new ListNBT();
 					for (DungeonInfo dungeonInfo : dungeonInfos) {
 						nbtTagList.appendTag(dungeonInfo.writeToNBT());
 					}
@@ -151,12 +151,12 @@ public class DungeonDataManager {
 			return;
 		}
 
-		NBTTagCompound root = FileIOUtil.readNBTFromFile(this.file);
+		CompoundNBT root = FileIOUtil.readNBTFromFile(this.file);
 
 		for (String key : root.getKeySet()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
 			for (NBTBase nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
-				dungeonInfos.add(new DungeonInfo((NBTTagCompound) nbt));
+				dungeonInfos.add(new DungeonInfo((CompoundNBT) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {
 				this.dungeonData.put(key, dungeonInfos);

@@ -6,9 +6,9 @@ import java.util.List;
 import net.minecraft.item.ItemGroup;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.BlockFire;
+import net.minecraft.block.FireBlock;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -236,7 +236,7 @@ public class CQRMain {
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		CQRMaterials.setRepairItemsForMaterials();
 		SmeltingHandler.init();
-		BlockFire.init();
+		FireBlock.init();
 
 	}
 

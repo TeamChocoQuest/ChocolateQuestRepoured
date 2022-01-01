@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -14,11 +14,11 @@ public class SpiralStaircaseBuilder {
 	private static final int STAIR_WIDTH = 2;
 
 	private BlockPos start;
-	private EnumFacing firstSide;
-	private IBlockState platformBlockState;
-	private IBlockState stairBlockState;
+	private Direction firstSide;
+	private BlockState platformBlockState;
+	private BlockState stairBlockState;
 
-	public SpiralStaircaseBuilder(BlockPos pillarStart, EnumFacing firstStairSide, IBlockState platformBlockState, IBlockState stairBlockState) {
+	public SpiralStaircaseBuilder(BlockPos pillarStart, Direction firstStairSide, BlockState platformBlockState, BlockState stairBlockState) {
 		this.start = pillarStart;
 		this.firstSide = firstStairSide;
 		this.platformBlockState = platformBlockState;
@@ -31,8 +31,8 @@ public class SpiralStaircaseBuilder {
 		return ((Math.abs(position.getX() - this.start.getX()) <= STAIR_WIDTH) && (Math.abs(position.getZ() - this.start.getZ()) <= STAIR_WIDTH) && (position.getY() >= this.start.getY()));
 	}
 
-	public IBlockState getBlock(BlockPos position) {
-		EnumFacing stairSide;
+	public BlockState getBlock(BlockPos position) {
+		Direction stairSide;
 		int startX = this.start.getX();
 		int startZ = this.start.getZ();
 		int posX = position.getX();
@@ -44,12 +44,12 @@ public class SpiralStaircaseBuilder {
 
 		// The side of the stairs rotates each level from the bottom
 		stairSide = this.rotateFacingNTimesCW(this.firstSide, Math.abs(position.getY() - this.start.getY()));
-		EnumFacing stairFacing = this.rotateFacingNTimesCW(stairSide, 1);
+		Direction stairFacing = this.rotateFacingNTimesCW(stairSide, 1);
 
 		switch (stairSide) {
 		case NORTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
-				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, -STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -57,7 +57,7 @@ public class SpiralStaircaseBuilder {
 
 		case SOUTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
-				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -65,7 +65,7 @@ public class SpiralStaircaseBuilder {
 
 		case WEST:
 			if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, -STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -73,7 +73,7 @@ public class SpiralStaircaseBuilder {
 
 		case EAST:
 			if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -84,7 +84,7 @@ public class SpiralStaircaseBuilder {
 		return Blocks.AIR.getDefaultState();
 	}
 
-	private EnumFacing rotateFacingNTimesCW(EnumFacing facing, int n) {
+	private Direction rotateFacingNTimesCW(Direction facing, int n) {
 		n = n % 4; // cap at 0-3 rotations, any more is redundant
 		while (n != 0) {
 			facing = facing.rotateY();

@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiAlchemyBag extends GuiContainer {
+public class GuiAlchemyBag extends ContainerScreen {
 
 	private static final ResourceLocation GUI_ALCHEMY_BAG = new ResourceLocation("textures/gui/container/hopper.png");
 

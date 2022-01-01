@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -16,9 +16,9 @@ import team.cqr.cqrepoured.item.armor.ItemBackpack;
 public class ContainerBackpack extends Container {
 
 	private final ItemStack stack;
-	private final EnumHand hand;
+	private final Hand hand;
 
-	public ContainerBackpack(InventoryPlayer playerInv, ItemStack stack, EnumHand hand) {
+	public ContainerBackpack(PlayerInventory playerInv, ItemStack stack, Hand hand) {
 		this.stack = stack;
 		this.hand = hand;
 		IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -37,7 +37,7 @@ public class ContainerBackpack extends Container {
 				this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142) {
 
 					@Override
-					public boolean canTakeStack(EntityPlayer playerIn) {
+					public boolean canTakeStack(PlayerEntity playerIn) {
 						return false;
 					}
 
@@ -69,12 +69,12 @@ public class ContainerBackpack extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
+	public boolean canInteractWith(PlayerEntity playerIn) {
 		return playerIn.getHeldItem(this.hand) == this.stack;
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		Slot slot = this.inventorySlots.get(index);
 
 		if (slot == null) {

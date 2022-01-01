@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -46,7 +46,7 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityForceFieldNexus> {
 
 		@Override
-		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityForceFieldNexus> tileEntitySupplier) {
+		public PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<TileEntityForceFieldNexus> tileEntitySupplier) {
 			return new PreparableForceFieldNexusInfo(x, y, z);
 		}
 
@@ -55,18 +55,18 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableForceFieldNexusInfo> {
 
 		@Override
-		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
 			return new PreparableForceFieldNexusInfo(x, y, z);
 		}
 
 		@Override
 		@Deprecated
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList) {
 			return new PreparableForceFieldNexusInfo(x, y, z);
 		}
 

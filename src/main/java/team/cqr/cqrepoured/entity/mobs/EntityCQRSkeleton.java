@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;

@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.block;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockTNT;
+import net.minecraft.block.TNTBlock;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +16,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 
-public class BlockTNTCQR extends BlockTNT {
+public class BlockTNTCQR extends TNTBlock {
 
 	// DONE Idea: better visuals
 	/*
@@ -42,7 +42,7 @@ public class BlockTNTCQR extends BlockTNT {
 	}
 
 	@Override
-	public void explode(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase igniter) {
+	public void explode(World worldIn, BlockPos pos, BlockState state, LivingEntity igniter) {
 		if (worldIn.isRemote) {
 			return;
 		}
@@ -55,7 +55,7 @@ public class BlockTNTCQR extends BlockTNT {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public Item getItemDropped(BlockState state, Random rand, int fortune) {
 		return Item.getItemFromBlock(Blocks.TNT);
 	}
 
@@ -66,12 +66,12 @@ public class BlockTNTCQR extends BlockTNT {
 
 	@Deprecated
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(EXPLODE, (meta + 1) % 2 == 0).withProperty(HIDDEN, meta >= 2);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		/*
 		 * 0: Hidden + explode = false
 		 * 1: Hidden = false, explode = true

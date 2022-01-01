@@ -1,35 +1,31 @@
 package team.cqr.cqrepoured.entity.boss;
 
-import net.minecraft.block.BlockWeb;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.WebBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntitySpectralArrow;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemShield;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.AxeItem;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -37,7 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
@@ -105,7 +101,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
@@ -124,7 +120,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
 				teleportPos = new BlockPos(this.getAttackTarget().getPositionVector().subtract(v));
-				if (this.world.isBlockFullCube(teleportPos) || this.world.isBlockFullCube(teleportPos.offset(EnumFacing.UP)) || this.world.isAirBlock(teleportPos.offset(EnumFacing.DOWN))) {
+				if (this.world.isBlockFullCube(teleportPos) || this.world.isBlockFullCube(teleportPos.offset(Direction.UP)) || this.world.isAirBlock(teleportPos.offset(Direction.DOWN))) {
 					teleportPos = this.getAttackTarget().getPosition();
 				}
 			} else if (this.getHomePositionCQR() != null && !this.world.isRemote) {
@@ -134,7 +130,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// spawn cloud
 				for (int ix = -1; ix <= 1; ix++) {
 					for (int iz = -1; iz <= 1; iz++) {
-						((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
+						((ServerWorld) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 					}
 				}
 				this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
@@ -179,7 +175,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 
 			// Anti cobweb stuff
-			if (this.isInWeb || this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockWeb) {
+			if (this.isInWeb || this.world.getBlockState(this.getPosition()).getBlock() instanceof WebBlock) {
 				this.handleInWeb();
 			}
 
@@ -202,7 +198,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+	public void onStruckByLightning(LightningBoltEntity lightningBolt) {
 		this.heal(1F);
 	}
 
@@ -228,7 +224,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if (this.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
 				for (int iz = -1; iz <= 1; iz++) {
-					((WorldServer) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
+					((ServerWorld) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + ix, this.posY + 2, this.posZ + iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
 				}
 			}
 			this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
@@ -244,7 +240,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	private void handleAttackedByDragon(Entity dragon) {
 		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null /* && (getRNG().nextInt(100) +1) > 95 */) {
-			if (dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
+			if (dragon instanceof MobEntity && dragon.getControllingPassenger() instanceof LivingEntity) {
 				dragon.getControllingPassenger().dismountRidingEntity();
 				// ((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
 				/*
@@ -321,17 +317,17 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		 * }
 		 * }
 		 */
-		if (/* !spectralFlag && */((source.getImmediateSource() == null) || !(source.getImmediateSource() instanceof EntitySpectralArrow)) && !CQRConfig.bosses.armorForTheWalkerKing) {
+		if (/* !spectralFlag && */((source.getImmediateSource() == null) || !(source.getImmediateSource() instanceof SpectralArrowEntity)) && !CQRConfig.bosses.armorForTheWalkerKing) {
 			amount *= 0.5F;
 		}
 
 		if (source.getImmediateSource() != null) {
-			if (source.getImmediateSource() instanceof EntitySpectralArrow) {
+			if (source.getImmediateSource() instanceof SpectralArrowEntity) {
 				amount *= 2;
 				super.attackEntityFrom(source, amount, sentFromPart);
 				return true;
 			}
-			if ((source.getImmediateSource() instanceof EntityThrowable || source.getImmediateSource() instanceof EntityArrow) && !this.world.isRemote) {
+			if ((source.getImmediateSource() instanceof ThrowableEntity || source.getImmediateSource() instanceof AbstractArrowEntity) && !this.world.isRemote) {
 				// STAB HIM IN THE BACK!!
 				this.backStabAttacker(source);
 				return false;
@@ -365,20 +361,20 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 			// How about killing the one who tries with the axe?
 			// Maybe move this whole ability to the king shield itself??
-			ItemStack shieldStack = this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
-			if (amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ItemShield) {
+			ItemStack shieldStack = this.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+			if (amount > 0F && this.canBlockDamageSource(source) && shieldStack != null && !shieldStack.isEmpty() && shieldStack.getItem() instanceof ShieldItem) {
 				this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
-				if (source.getImmediateSource() instanceof EntityLivingBase/* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+				if (source.getImmediateSource() instanceof LivingEntity/* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((LivingEntity) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof AxeItem) {
 					if (DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
 						Vec3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
 						v = v.add(0, 0.75, 0);
 
-						EntityLivingBase attacker = (EntityLivingBase) source.getImmediateSource();
+						LivingEntity attacker = (LivingEntity) source.getImmediateSource();
 						attacker.motionX = v.x;
 						attacker.motionY = v.y;
 						attacker.motionZ = v.z;
 						attacker.velocityChanged = true;
-						this.swingArm(EnumHand.OFF_HAND);
+						this.swingArm(Hand.OFF_HAND);
 
 						return false;
 					}
@@ -443,7 +439,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		while (true) {
 			if (!this.world.isBlockNormalCube(blockpos, true) && this.world.isBlockNormalCube(blockpos.down(), true)) {
 				if (!this.world.isAirBlock(blockpos)) {
-					IBlockState iblockstate = this.world.getBlockState(blockpos);
+					BlockState iblockstate = this.world.getBlockState(blockpos);
 					AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
 
 					if (axisalignedbb != null) {
@@ -522,16 +518,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
 
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, this.getSword());
-		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_WALKER_KING, 1));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, this.getSword());
+		this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 3));
 
-		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
+		this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
 
 		// Give him some armor...
 		if (CQRConfig.bosses.armorForTheWalkerKing) {
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+			CompoundNBT nbttagcompound = new CompoundNBT();
+			CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
 
 			if (!nbttagcompound.hasKey("display", 10)) {
 				nbttagcompound.setTag("display", nbttagcompound1);
@@ -540,15 +536,15 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			nbttagcompound1.setInteger("color", 0x9000FF);
 			ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 0x9000FF);
-			this.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
+			this.setItemStackToSlot(EquipmentSlotType.CHEST, chest);
 
 			ItemStack legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) CQRItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 0x9000FF);
-			this.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
+			this.setItemStackToSlot(EquipmentSlotType.LEGS, legs);
 
 			ItemStack boobs = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) CQRItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 0x9000FF);
-			this.setItemStackToSlot(EntityEquipmentSlot.FEET, boobs);
+			this.setItemStackToSlot(EquipmentSlotType.FEET, boobs);
 		}
 	}
 
@@ -607,15 +603,15 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	protected int getExperiencePoints(EntityPlayer player) {
+	protected int getExperiencePoints(PlayerEntity player) {
 		return super.getExperiencePoints(player);
 	}
 
 	private void dropExperience(int p_184668_1_) {
 		while (p_184668_1_ > 0) {
-			int i = EntityXPOrb.getXPSplit(p_184668_1_);
+			int i = ExperienceOrbEntity.getXPSplit(p_184668_1_);
 			p_184668_1_ -= i;
-			this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
+			this.world.spawnEntity(new ExperienceOrbEntity(this.world, this.posX, this.posY, this.posZ, i));
 		}
 	}
 

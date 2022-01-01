@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.addons;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
@@ -39,7 +39,7 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 				}
 			}
 			// Add the foundation under the roof
-			IBlockState state = dungeon.getMainBlockState();
+			BlockState state = dungeon.getMainBlockState();
 			if (underLenX > 0 && underLenZ > 0) {
 				for (int i = 0; i < underLenX; i++) {
 					genArray.addBlockState(new BlockPos(x + i, y, z), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
@@ -59,19 +59,19 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 
 				// add the north row
 				for (int i = 0; i < roofLenX; i++) {
-					IBlockState blockState = dungeon.getStairBlockState();
-					blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
+					BlockState blockState = dungeon.getStairBlockState();
+					blockState = blockState.withProperty(StairsBlock.FACING, Direction.SOUTH);
 
 					// Apply properties to corner pieces
 					if (i == 0) {
 						if (firstLayer) {
-							blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
+							blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_LEFT);
 						} else {
 							blockState = Blocks.AIR.getDefaultState();
 						}
 					} else if (i == roofLenX - 1) {
 						if (firstLayer) {
-							blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
+							blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_RIGHT);
 						} else {
 							blockState = Blocks.AIR.getDefaultState();
 						}
@@ -81,19 +81,19 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 				}
 				// add the south row
 				for (int i = 0; i < roofLenX; i++) {
-					IBlockState blockState = dungeon.getStairBlockState();
-					blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
+					BlockState blockState = dungeon.getStairBlockState();
+					blockState = blockState.withProperty(StairsBlock.FACING, Direction.NORTH);
 
 					// Apply properties to corner pieces
 					if (i == 0) {
 						if (firstLayer) {
-							blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
+							blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_RIGHT);
 						} else {
 							blockState = Blocks.AIR.getDefaultState();
 						}
 					} else if (i == roofLenX - 1) {
 						if (firstLayer) {
-							blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
+							blockState = blockState.withProperty(StairsBlock.SHAPE, StairsBlock.EnumShape.INNER_LEFT);
 						} else {
 							blockState = Blocks.AIR.getDefaultState();
 						}
@@ -103,10 +103,10 @@ public class CastleAddonRoofSpire extends CastleAddonRoofBase {
 				}
 
 				for (int i = 0; i < roofLenZ; i++) {
-					IBlockState blockState = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+					BlockState blockState = dungeon.getStairBlockState().withProperty(StairsBlock.FACING, Direction.EAST);
 					genArray.addBlockState(new BlockPos(roofX, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 
-					blockState = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+					blockState = dungeon.getStairBlockState().withProperty(StairsBlock.FACING, Direction.WEST);
 
 					genArray.addBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
