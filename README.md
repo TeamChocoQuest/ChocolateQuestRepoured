@@ -1,4 +1,6 @@
 # ChocolateQuestRepoured
+This branch is for maintenance on minecraft 1.12.2, it won't receive content updates and only bug fixes if those are truly necessary.
+
 CQ Repoured is a rewrite of the classic Chocolate Quest and Better Dungeons Minecraft mods, for Minecraft version 1.12.2.
 
 To use, please head to our Website or curseforge page and download the latest stable build.
