@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomePlains;
+import net.minecraft.world.biome.PlainsBiome;
 import net.minecraft.world.biome.BiomeSnow;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -52,7 +52,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 			GeneratableDungeon.Builder dungeonBuilder = new GeneratableDungeon.Builder(world, pos, "Wall in the North", CQRConfig.wall.mob);
 
 			Biome biome = world.getBiomeProvider().getBiome(pos);
-			if (biome instanceof BiomePlains || biome instanceof BiomeSnow) {
+			if (biome instanceof PlainsBiome || biome instanceof BiomeSnow) {
 				// Flag for the gate
 			}
 			IWallPart wallPart = null;

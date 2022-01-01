@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation.util;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.EnumLightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -37,7 +37,7 @@ public class SkyLightUtil {
 								continue;
 							}
 						}
-						world.checkLightFor(EnumSkyBlock.SKY, MUTABLE);
+						world.checkLightFor(EnumLightType.SKY, MUTABLE);
 					}
 				}
 			}

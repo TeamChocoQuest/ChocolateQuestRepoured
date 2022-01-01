@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -474,7 +474,7 @@ public class CQRItems {
 			return setItemNameAndTab(item, name, CQRMain.CQR_ITEMS_TAB);
 		}
 
-		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {
+		private static Item setItemNameAndTab(Item item, String name, @Nullable ItemGroup tab) {
 			return item.setRegistryName(CQRMain.MODID, name).setTranslationKey(name).setCreativeTab(tab);
 		}
 

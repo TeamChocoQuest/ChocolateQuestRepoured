@@ -9,7 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.EnumLightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -96,8 +96,8 @@ public class BlockLightUtil {
 	 */
 	public static void relightBlock(World world, BlockPos pos) {
 		int initialLight = world.getBlockState(pos).getLightValue(world, pos);
-		if (world.getLightFor(EnumSkyBlock.BLOCK, pos) < initialLight) {
-			world.setLightFor(EnumSkyBlock.BLOCK, pos, initialLight);
+		if (world.getLightFor(EnumLightType.BLOCK, pos) < initialLight) {
+			world.setLightFor(EnumLightType.BLOCK, pos, initialLight);
 		}
 		QUEUE.enqueue(encode(initialLight, 0, 0, 0));
 		getAndSetUsed(0, 0, 0);

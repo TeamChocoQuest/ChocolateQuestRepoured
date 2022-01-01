@@ -16,7 +16,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.EnumLightType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -202,7 +202,7 @@ public class GeneratableDungeon {
 						if (!updated.add(p)) {
 							continue;
 						}
-						world.checkLightFor(EnumSkyBlock.BLOCK, p);
+						world.checkLightFor(EnumLightType.BLOCK, p);
 					}
 				}
 			}

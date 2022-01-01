@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.dimension.Dimension;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -32,7 +33,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -105,8 +105,8 @@ public class ItemTeleportStone extends Item {
 	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
 	 */
 	private static void transferEntityToWorld(Entity entity, WorldServer oldWorld, WorldServer newWorld) {
-		WorldProvider oldWorldProvider = oldWorld.provider;
-		WorldProvider newWorldProvider = newWorld.provider;
+		net.minecraft.world.dimension.Dimension oldWorldProvider = oldWorld.provider;
+		net.minecraft.world.dimension.Dimension newWorldProvider = newWorld.provider;
 		double moveFactor = oldWorldProvider.getMovementFactor() / newWorldProvider.getMovementFactor();
 		double x = entity.posX * moveFactor;
 		double z = entity.posZ * moveFactor;

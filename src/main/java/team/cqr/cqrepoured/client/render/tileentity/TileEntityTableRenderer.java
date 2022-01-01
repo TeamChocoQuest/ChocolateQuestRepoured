@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -8,12 +9,11 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
-public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntityTable> {
+public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable> {
 	@Override
 	public void render(TileEntityTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);

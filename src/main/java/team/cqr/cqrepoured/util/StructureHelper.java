@@ -11,18 +11,18 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.ChunkGeneratorDebug;
 import net.minecraft.world.gen.ChunkGeneratorEnd;
 import net.minecraft.world.gen.ChunkGeneratorFlat;
-import net.minecraft.world.gen.ChunkGeneratorHell;
+import net.minecraft.world.gen.ChunkGeneratorNether;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.structure.MapGenMineshaft;
-import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.feature.MineshaftStructure;
+import net.minecraft.world.gen.feature.Structure;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.integration.ancientwarfare.AW2Integration;
 
 public class StructureHelper {
 
-	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(MapGenStructure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
+	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(Structure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	public static boolean isStructureInRange(World world, BlockPos pos, int radius, String name) {
 		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
@@ -40,9 +40,9 @@ public class StructureHelper {
 
 		IChunkGenerator chunkGenerator = ((WorldServer) world).getChunkProvider().chunkGenerator;
 
-		if (chunkGenerator instanceof ChunkGeneratorOverworld || chunkGenerator instanceof ChunkGeneratorHell || chunkGenerator instanceof ChunkGeneratorEnd || chunkGenerator instanceof ChunkGeneratorFlat || chunkGenerator instanceof ChunkGeneratorDebug) {
+		if (chunkGenerator instanceof ChunkGeneratorOverworld || chunkGenerator instanceof ChunkGeneratorNether || chunkGenerator instanceof ChunkGeneratorEnd || chunkGenerator instanceof ChunkGeneratorFlat || chunkGenerator instanceof ChunkGeneratorDebug) {
 			// vanilla chunk generator
-			MapGenStructure structureGenerator = getStructureGenerator(world, name);
+			Structure structureGenerator = getStructureGenerator(world, name);
 
 			if (structureGenerator != null) {
 				return isStructureInRange(world, structureGenerator, pos, radius);
@@ -74,7 +74,7 @@ public class StructureHelper {
 	}
 
 	@Nullable
-	private static MapGenStructure getStructureGenerator(World world, String name) {
+	private static Structure getStructureGenerator(World world, String name) {
 		IChunkGenerator chunkGenerator = ((WorldServer) world).getChunkProvider().chunkGenerator;
 
 		if (chunkGenerator instanceof ChunkGeneratorOverworld) {
@@ -116,12 +116,12 @@ public class StructureHelper {
 			default:
 				break;
 			}
-		} else if (chunkGenerator instanceof ChunkGeneratorHell) {
-			if (!((ChunkGeneratorHell) chunkGenerator).generateStructures) {
+		} else if (chunkGenerator instanceof ChunkGeneratorNether) {
+			if (!((ChunkGeneratorNether) chunkGenerator).generateStructures) {
 				return null;
 			}
 			if (name.equals("Fortress")) {
-				return ((ChunkGeneratorHell) chunkGenerator).genNetherBridge;
+				return ((ChunkGeneratorNether) chunkGenerator).genNetherBridge;
 			}
 		} else if (chunkGenerator instanceof ChunkGeneratorEnd) {
 			if (!((ChunkGeneratorEnd) chunkGenerator).mapFeaturesEnabled) {
@@ -137,7 +137,7 @@ public class StructureHelper {
 		return null;
 	}
 
-	private static boolean isStructureInRange(World world, MapGenStructure structureType, BlockPos pos, int radius) {
+	private static boolean isStructureInRange(World world, Structure structureType, BlockPos pos, int radius) {
 		int x = pos.getX() >> 4;
 		int z = pos.getZ() >> 4;
 		Random random = structureType.rand;
@@ -155,7 +155,7 @@ public class StructureHelper {
 					int x2 = x + x1;
 					int z2 = z + z1;
 
-					if (structureType instanceof MapGenMineshaft) {
+					if (structureType instanceof MineshaftStructure) {
 						random.setSeed(x2 ^ z2 ^ world.getSeed());
 						random.nextInt();
 					}

@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEntityExporter> {
+public class TileEntityExporterRenderer extends TileEntityRenderer<TileEntityExporter> {
 
 	@Override
 	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

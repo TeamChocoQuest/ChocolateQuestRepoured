@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -301,7 +301,7 @@ public class CQRBlocks {
 			return setBlockNameAndTab(block, name, CQRMain.CQR_BLOCKS_TAB);
 		}
 
-		private static Block setBlockNameAndTab(Block block, String name, @Nullable CreativeTabs tab) {
+		private static Block setBlockNameAndTab(Block block, String name, @Nullable ItemGroup tab) {
 			return block.setTranslationKey(name).setRegistryName(CQRMain.MODID, name).setCreativeTab(tab);
 		}
 

@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.tileentity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
  * Github: https://github.com/DerToaster98
  */
 @SideOnly(Side.CLIENT)
-public class TileEntityForceFieldNexusRenderer extends TileEntitySpecialRenderer<TileEntityForceFieldNexus> {
+public class TileEntityForceFieldNexusRenderer extends TileEntityRenderer<TileEntityForceFieldNexus> {
 
 	private final ModelBase crystal = new ModelNexusCrystal();
 	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/nexus_crystal.png");

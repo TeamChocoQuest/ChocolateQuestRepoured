@@ -3,10 +3,10 @@ package team.cqr.cqrepoured;
 import java.io.File;
 import java.util.List;
 
+import net.minecraft.item.ItemGroup;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.BlockFire;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -99,25 +99,25 @@ public class CQRMain {
 	public static boolean isCubicChunksInstalled;
 	public static boolean isAW2Installed;
 
-	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(CQRMain.MODID + "_items") {
+	public static final ItemGroup CQR_ITEMS_TAB = new ItemGroup(CQRMain.MODID + "_items") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRItems.BOOTS_CLOUD);
 		}
 	};
-	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs(CQRMain.MODID + "_blocks") {
+	public static final ItemGroup CQR_BLOCKS_TAB = new ItemGroup(CQRMain.MODID + "_blocks") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.TABLE_OAK);
 		}
 	};
-	public static final CreativeTabs CQR_CREATIVE_TOOL_TAB = new CreativeTabs(CQRMain.MODID + "_creative_tools") {
+	public static final ItemGroup CQR_CREATIVE_TOOL_TAB = new ItemGroup(CQRMain.MODID + "_creative_tools") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER);
 		}
 	};
-	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs(CQRMain.MODID + "_banners") {
+	public static final ItemGroup CQR_BANNERS_TAB = new ItemGroup(CQRMain.MODID + "_banners") {
 		@Override
 		public ItemStack createIcon() {
 			return EBanners.WALKER_ORDO.getBanner();
@@ -132,19 +132,19 @@ public class CQRMain {
 			}
 		}
 	};
-	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs(CQRMain.MODID + "_dungeon_placers") {
+	public static final ItemGroup CQR_DUNGEON_PLACER_TAB = new ItemGroup(CQRMain.MODID + "_dungeon_placers") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
 		}
 	};
-	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs(CQRMain.MODID + "_exporter_chests") {
+	public static final ItemGroup CQR_EXPORTER_CHEST_TAB = new ItemGroup(CQRMain.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
 		}
 	};
-	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs(CQRMain.MODID + "_spawn_eggs") {
+	public static final ItemGroup CQR_SPAWN_EGG_TAB = new ItemGroup(CQRMain.MODID + "_spawn_eggs") {
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(Items.SPAWN_EGG);

@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.client.model.ModelChestNormal;
 import team.cqr.cqrepoured.client.model.ModelChestRight;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 
-public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<TileEntityExporterChest> {
+public class TileEntityExporterChestRenderer extends TileEntityRenderer<TileEntityExporterChest> {
 
 	private final ModelChestNormal chestNormal = new ModelChestNormal();
 	private final ModelChestNormal chestRight = new ModelChestRight();

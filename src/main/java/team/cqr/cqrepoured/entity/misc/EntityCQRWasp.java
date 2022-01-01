@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWaterFlying;
 import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNavigate;
@@ -21,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityCQRWasp extends EntityCreature implements net.minecraft.entity.passive.EntityFlying {
+public class EntityCQRWasp extends EntityCreature implements IFlyingAnimal {
 
 	public EntityCQRWasp(World worldIn) {
 		super(worldIn);
