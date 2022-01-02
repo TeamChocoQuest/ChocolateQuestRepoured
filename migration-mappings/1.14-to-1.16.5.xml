@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<migrationMap>
+	<name value=".\migrations\1.14-to-1.16.6.csv" />
+	<description value=".\migrations\1.15-to-1.16.5.csv" />
+	<entry oldName="net.minecraftforge.fml.relauncher.Side" newName="net.minecraftforge.api.distmarker.OnlyIn" type="class" />
+	<entry oldName="net.minecraftforge.fml.relauncher.SideOnly" newName="net.minecraftforge.api.distmarker.Dist" type="class" />
+	<entry oldName="net.minecraft.util.math.Vec3d" newName="net.minecraft.util.math.vector.Vector3d" type="class" />
+	<entry oldName="net.minecraft.util.math.Vec3i" newName="net.minecraft.util.math.vector.Vector3i" type="class" />
+	<entry oldName="net.minecraft.util.math.Vec3f" newName="net.minecraft.util.math.vector.Vector3f" type="class" />
+	<entry oldName="net.minecraft.util.math.Vec4f" newName="net.minecraft.util.math.vector.Vector4f" type="class" />
+	<entry oldName="net.minecraft.util.math.Vec2f" newName="net.minecraft.util.math.vector.Vector2f" type="class" />
+</migrationMap>
