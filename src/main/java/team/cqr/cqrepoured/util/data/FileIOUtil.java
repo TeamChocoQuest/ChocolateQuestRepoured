@@ -78,8 +78,8 @@ public class FileIOUtil {
 	}
 
 	private static void addFileInfo(CrashReport crash, File file) {
-		CrashReportCategory category = crash.makeCategory("File Info");
-		category.addCrashSection("File", file);
+		CrashReportCategory category = crash.addCategory("File Info");
+		category.setDetail("File", file);
 	}
 
 }
