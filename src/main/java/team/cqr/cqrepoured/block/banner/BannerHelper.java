@@ -18,14 +18,14 @@ public class BannerHelper {
 	}
 
 	public static boolean isCQBanner(BannerTileEntity bannerTile) {
-		if (bannerTile.patterns == null) {
+		if (bannerTile.itemPatterns == null) {
 			return false;
 		}
-		if (bannerTile.patterns.isEmpty()) {
+		if (bannerTile.itemPatterns.isEmpty()) {
 			return false;
 		}
-		for (int i = 0; i < bannerTile.patterns.tagCount(); i++) {
-			CompoundNBT nbttagcompound = bannerTile.patterns.getCompoundTagAt(i);
+		for (int i = 0; i < bannerTile.itemPatterns.size(); i++) {
+			CompoundNBT nbttagcompound = bannerTile.itemPatterns.getCompound(i);
 			if (nbttagcompound.getString("Pattern").equals(EBannerPatternsCQ.CQ_BLANK.getPattern().getHashname())) {
 				return true;
 			}
