@@ -21,7 +21,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity != null && !this.entity.isDead && this.entity.hasAttackTarget()) {
 
 			if (this.entity.isStunned()) {
@@ -53,12 +53,12 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.entity.sendAnimationUpdate(EntityCQRExterminator.ANIM_NAME_GROUND_SMASH);
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.entity.isStunned()) {
 			return false;
 		}
@@ -66,8 +66,8 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		if (this.entity.isCannonRaised()) {
 			this.entity.switchCannonArmState(false);
 			return;
@@ -96,8 +96,8 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		this.shockwaveWasSpawnedInCurrentCycle = false;
 	}

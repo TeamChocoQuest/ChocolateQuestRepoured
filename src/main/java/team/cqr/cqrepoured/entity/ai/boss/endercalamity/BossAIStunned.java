@@ -11,12 +11,12 @@ public class BossAIStunned extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		return this.entity.isDowned();
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.entity.hasHomePositionCQR()) {
 			BlockPos home = this.entity.getHomePositionCQR();
 			this.entity.teleport(home.getX(), home.getY(), home.getZ());

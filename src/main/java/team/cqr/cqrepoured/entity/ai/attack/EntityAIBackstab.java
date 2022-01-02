@@ -14,24 +14,24 @@ public class EntityAIBackstab extends EntityAIAttack {
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.shouldExecute();
+	public boolean canUse() {
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.canUse();
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.shouldContinueExecuting();
+	public boolean canContinueToUse() {
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.canContinueToUse();
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.entity.setSneaking(false);
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 
 		LivingEntity attackTarget = this.entity.getAttackTarget();
 

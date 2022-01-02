@@ -23,7 +23,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.cooldown > 0) {
 			this.cooldown--;
 			return false;
@@ -34,7 +34,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	protected boolean internalCheck() {
 		if (this.entity.isEntityAlive()) {
 			if (this.entity.getHealth() / this.entity.getMaxHealth() <= MAX_HEALTH_PERCENT_TO_START) {
-				return super.shouldExecute();
+				return super.canUse();
 			}
 
 		}
@@ -42,7 +42,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 
@@ -53,7 +53,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		// Spawn the crystals
 		final int crystalCount = this.getCrystalCount();
 		BlockPos centralPosition = this.entity.getCirclingCenter().add(0, 8, 0);
@@ -69,7 +69,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 		} else {
 			this.spawnCrystal(centralPosition);
 		}
-		super.startExecuting();
+		super.start();
 	}
 
 	protected void spawnCrystal(BlockPos position) {
@@ -78,7 +78,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.cooldown = 100;
 	}
 

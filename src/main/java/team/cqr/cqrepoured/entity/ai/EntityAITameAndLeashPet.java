@@ -25,7 +25,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityC
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.canTameEntity()) {
 			return false;
 		}
@@ -46,7 +46,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityC
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if ((!(this.entity.getHeldItemMainhand().getItem() instanceof LeadItem) && !(this.entity.getHeldItemOffhand().getItem() instanceof LeadItem))) {
 			return false;
 		}
@@ -66,14 +66,14 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityC
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.entity.getDistance(this.entityToTame) > DISTANCE_TO_PET) {
 			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToTame, WALK_SPEED_TO_PET);
 		}
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.getDistance(this.entityToTame) > DISTANCE_TO_PET) {
 			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToTame, WALK_SPEED_TO_PET);
 		} else {
@@ -84,7 +84,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityC
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entityToTame = null;
 		this.entity.getNavigator().clearPath();
 	}

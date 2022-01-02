@@ -25,7 +25,7 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity.getCirclingCenter() != null && this.entity.deathTime <= 0 && !this.entity.isFlyingUp()) {
 			return true;
 		}
@@ -33,8 +33,8 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.shouldExecute();
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.canUse();
 	}
 
 	private void calculateTargetPositions(Vector3d vInit) {
@@ -60,8 +60,8 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		double dist = this.entity.getDistance(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z);
 		if (dist <= MIN_DISTANCE_TO_TARGET) {
 			this.calculateTargetPositions();
@@ -82,15 +82,15 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.vAngle = null;
 		this.nextPosition = null;
 		this.targetPosition = null;
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		if (this.targetPosition == null) {
 			Vector3d v = new Vector3d(32, 0, 0);
 			this.calculateTargetPositions(v);

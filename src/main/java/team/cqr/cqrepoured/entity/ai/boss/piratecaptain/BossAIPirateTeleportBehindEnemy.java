@@ -21,20 +21,20 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		this.cooldown--;
 		return this.cooldown <= 0 && this.entity.getAttackTarget() != null && this.entity.getDistance(this.entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE && (!this.entity.isInvisible() && !this.entity.isReintegrating() && !this.entity.isDisintegrating());
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.timer < 120 && this.entity.getAttackTarget() != null;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		this.timer++;
-		super.updateTask();
+		super.tick();
 		if (this.timer == 10) {
 			this.entity.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
@@ -51,8 +51,8 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.timer = 0;
 		this.entity.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 	}

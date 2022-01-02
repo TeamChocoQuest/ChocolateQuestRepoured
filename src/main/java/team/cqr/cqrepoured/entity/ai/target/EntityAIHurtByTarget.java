@@ -31,7 +31,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.world.getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
@@ -60,12 +60,12 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.prevRevengeTimer = this.entity.getRevengeTimer();
 		this.trySetAttackTarget(this.entity);
 		Faction faction = this.entity.getFaction();

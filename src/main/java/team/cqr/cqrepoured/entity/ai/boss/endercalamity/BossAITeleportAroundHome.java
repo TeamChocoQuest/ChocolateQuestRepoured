@@ -22,8 +22,8 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		if (super.shouldExecute() && this.checkHome()) {
+	public boolean canUse() {
+		if (super.canUse() && this.checkHome()) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -35,13 +35,13 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.cooldown = this.MAX_COOLDOWN;
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		float angle = this.entity.getRNG().nextFloat() * 360F;
 		Vector3d vec = new Vector3d(EntityCQREnderCalamity.getArenaRadius(), 0, 0);
 		vec = vec.rotateYaw(angle);
@@ -56,18 +56,18 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 
 		this.entity.teleport(x, y, z);
 
-		this.resetTask();
+		this.stop();
 	}
 
 	public void forceExecution() {
 		if (this.world.isRemote) {
 			return;
 		}
-		this.startExecuting();
+		this.start();
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 

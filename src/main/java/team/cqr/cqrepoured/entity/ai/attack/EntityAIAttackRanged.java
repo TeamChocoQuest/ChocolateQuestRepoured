@@ -33,7 +33,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
@@ -45,7 +45,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
@@ -57,19 +57,19 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.entity.getNavigator().clearPath();
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entity.getNavigator().clearPath();
 		this.entity.resetActiveHand();
 		this.entity.isSwingInProgress = false;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if (attackTarget == null) {
 			return;

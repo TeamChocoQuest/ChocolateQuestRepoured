@@ -27,7 +27,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		LivingEntity attackTarget = this.entity.getAttackTarget();
 		if (attackTarget == null) {
 			return false;
@@ -52,7 +52,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.tick >= this.activeSpecialAttack.getMaxUseTime()) {
 			return false;
 		}
@@ -67,12 +67,12 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return this.activeSpecialAttack.isInterruptible(this.entity);
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.specialAttackTick = this.entity.ticksExisted;
 		this.tick = 0;
 
@@ -81,14 +81,14 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.tick = -1;
 
 		this.activeSpecialAttack.resetAttack(this.entity);
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		LivingEntity attackTarget = this.entity.getAttackTarget();
 		this.activeSpecialAttack.continueAttack(this.entity, attackTarget, this.tick++);
 

@@ -15,7 +15,7 @@ public class BossAITortoiseSwimming extends SwimGoal {
 
 	@Override
 	public boolean shouldExecute() {
-		if (super.shouldExecute()) {
+		if (super.canUse()) {
 			return this.boss.getAttackTarget() != null;
 		}
 		return false;
@@ -23,7 +23,7 @@ public class BossAITortoiseSwimming extends SwimGoal {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (super.shouldContinueExecuting()) {
+		if (super.canContinueToUse()) {
 			return this.boss.getAttackTarget() != null;
 		}
 		return false;
@@ -31,7 +31,7 @@ public class BossAITortoiseSwimming extends SwimGoal {
 
 	@Override
 	public void updateTask() {
-		super.updateTask();
+		super.tick();
 		if (this.boss.getAttackTarget() != null) {
 			this.boss.getNavigator().tryMoveToEntityLiving(this.boss.getAttackTarget(), 3);
 		}

@@ -11,7 +11,7 @@ public abstract class AbstractBossAIEnderCalamity extends AbstractCQREntityAI<En
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		return this.canExecuteDuringPhase(this.entity.getCurrentPhase());
 	}
 

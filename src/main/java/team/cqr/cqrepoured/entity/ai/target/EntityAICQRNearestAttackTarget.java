@@ -29,7 +29,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.world.getDifficulty() == Difficulty.PEACEFUL) {
 			this.wrapperSetAttackTarget(null);
 			return false;
@@ -42,12 +42,12 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
 		List<LivingEntity> possibleTargets = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb);
 		List<LivingEntity> possibleTargetsAlly = new ArrayList<>();

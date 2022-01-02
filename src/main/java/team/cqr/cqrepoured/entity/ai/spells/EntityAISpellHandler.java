@@ -39,7 +39,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.spells.isEmpty()) {
 			return false;
 		}
@@ -76,29 +76,29 @@ public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.activeSpell.shouldContinueExecuting();
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return this.activeSpell.isInterruptible();
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.activeSpell.startExecuting();
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.activeSpell.resetTask();
 		this.activeSpell = null;
 		this.prevTimeCasted = this.entity.ticksExisted;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		this.activeSpell.updateTask();
 	}
 

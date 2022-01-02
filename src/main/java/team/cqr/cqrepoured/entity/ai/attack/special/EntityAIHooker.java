@@ -30,7 +30,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.hasHookShoot(this.entity)) {
 			if (this.cooldown > 0) {
 				this.cooldown--;
@@ -43,8 +43,8 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.state = STATE.PREPARING;
 		if (this.entity.hasPath()) {
 			this.entity.getNavigator().clearPath();
@@ -64,8 +64,8 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 
 		if (this.hook != null && !this.hook.isDead) {
 			this.entity.getLookHelper().setLookPositionWithEntity(this.hook, 30, 30);
@@ -114,13 +114,13 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.entity.hasAttackTarget() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.entity.hasAttackTarget() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.hook = null;
 		this.state = STATE.PREPARING;
 	}

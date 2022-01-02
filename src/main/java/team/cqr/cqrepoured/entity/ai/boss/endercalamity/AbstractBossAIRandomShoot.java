@@ -22,7 +22,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity != null && this.entity.hasAttackTarget()) {
 			return this.canExecuteDuringPhase(this.entity.getCurrentPhase());
 		}
@@ -30,13 +30,13 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return this.shouldExecute();
+	public boolean canContinueToUse() {
+		return this.canUse();
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.currentPhase = E_PHASE.PREPARING_TO_TELEPORT;
 		this.cooldown = this.execPrepareShoot();
 	}
@@ -46,7 +46,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		this.cooldown--;
 		if (this.entity.hasAttackTarget()) {
 			if (this.faceTarget()) {
@@ -93,10 +93,10 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 	public abstract int execPrepareShoot();
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.killProjectile();
 		this.entity.setCantUpdatePhase(false);
-		super.resetTask();
+		super.stop();
 	}
 
 	protected void killProjectile() {

@@ -26,7 +26,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity == null || this.entity.isDead) {
 			return false;
 		}
@@ -38,7 +38,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.entity == null) {
 			return;
 		}
@@ -61,7 +61,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 

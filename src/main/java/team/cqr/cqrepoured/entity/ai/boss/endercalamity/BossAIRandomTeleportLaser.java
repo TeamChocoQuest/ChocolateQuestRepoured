@@ -38,8 +38,8 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		boolean value = this.projectile != null;
 
 		if (this.entity.rotateBodyPitch() != value) {
@@ -96,14 +96,14 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		// IMessage message =
 		// SPacketUpdateAnimationOfEntity.builder(this.entity).animate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY).build();
 		// CQRMain.NETWORK.sendToAllTracking(message, this.entity);
 		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY);
 
 		this.entity.setRotateBodyPitch(false);
-		super.resetTask();
+		super.stop();
 	}
 
 }

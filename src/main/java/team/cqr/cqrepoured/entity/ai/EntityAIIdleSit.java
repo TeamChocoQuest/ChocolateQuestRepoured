@@ -38,7 +38,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.onGround) {
 			return false;
 		}
@@ -55,7 +55,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.cooldown = 0;
 		this.cooldwonForPartnerCycle = 0;
 		this.talkingPartner = null;
@@ -64,7 +64,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (++this.cooldown > COOLDOWN_BORDER) {
 			// Make entity sit
 			this.entity.setSitting(true);

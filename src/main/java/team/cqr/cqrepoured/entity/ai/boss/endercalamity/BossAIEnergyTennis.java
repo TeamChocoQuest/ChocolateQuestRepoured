@@ -44,18 +44,18 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		return this.remainingAttempts > 0 && super.shouldExecute() && this.entity.hasAttackTarget();
+	public boolean canUse() {
+		return this.remainingAttempts > 0 && super.canUse() && this.entity.hasAttackTarget();
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return this.shouldExecute() && (this.tennisball != null || this.warmupTime >= 0) && this.ballTicks < 200;
+	public boolean canContinueToUse() {
+		return this.canUse() && (this.tennisball != null || this.warmupTime >= 0) && this.ballTicks < 200;
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.entity.setCantUpdatePhase(true);
 		this.entity.forceTeleport();
 
@@ -68,7 +68,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.hasAttackTarget()) {
 			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
 		}
@@ -98,8 +98,8 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		if (this.tennisball != null) {
 			this.tennisball.setDead();
 		}

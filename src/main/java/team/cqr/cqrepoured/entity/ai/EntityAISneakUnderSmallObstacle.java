@@ -17,7 +17,7 @@ public class EntityAISneakUnderSmallObstacle<T extends AbstractEntityCQR> extend
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity.isSneaking()) {
 			return false;
 		}
@@ -40,7 +40,7 @@ public class EntityAISneakUnderSmallObstacle<T extends AbstractEntityCQR> extend
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		boolean preResult = this.areBlocksAtHeadLevelNotAir();
 		if (!preResult) {
 			this.crouchTimerCooldown--;
@@ -52,12 +52,12 @@ public class EntityAISneakUnderSmallObstacle<T extends AbstractEntityCQR> extend
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.entity.setSneaking(true);
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entity.setSneaking(false);
 		this.crouchTimerCooldown = 30;
 	}

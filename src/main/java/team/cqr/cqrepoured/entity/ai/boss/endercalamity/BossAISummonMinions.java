@@ -32,16 +32,16 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		if (this.entity.hasAttackTarget() && super.shouldExecute()) {
+	public boolean canUse() {
+		if (this.entity.hasAttackTarget() && super.canUse()) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		if (this.shouldExecute()) {
+	public boolean canContinueToUse() {
+		if (this.canUse()) {
 			if (this.entity.getHealth() <= (this.borderHPForMinions * this.entity.getMaxHealth())) {
 				return true;// (this.minionSpawnTick > this.borderMinion);
 			}
@@ -50,8 +50,8 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		if (this.minionSpawnTick < this.borderMinion) {
 			this.minionSpawnTick++;
 			return;

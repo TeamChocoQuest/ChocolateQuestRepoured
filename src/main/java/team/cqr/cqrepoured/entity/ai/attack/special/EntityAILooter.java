@@ -40,7 +40,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.cooldown > 0) {
 			this.cooldown--;
 		}
@@ -88,20 +88,20 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.currentLootingTime = this.LOOTING_DURATION;
 		this.entity.getNavigator().tryMoveToXYZ(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.isChestStillThere() && this.hasBackpack(this.entity) && this.hasBackpackSpace();
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.isChestStillThere() && this.hasBackpack(this.entity) && this.hasBackpackSpace();
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 
 		if (this.entity.getNavigator().getPathToPos(this.currentTarget) == null) {
 			this.visitedChests.add(this.currentTarget);

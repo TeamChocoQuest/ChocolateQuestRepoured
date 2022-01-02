@@ -23,7 +23,7 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity.hasAttackTarget()) {
 			return true;
 		}
@@ -31,8 +31,8 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		if (super.shouldContinueExecuting() && this.shouldExecute()) {
+	public boolean canContinueToUse() {
+		if (super.canContinueToUse() && this.canUse()) {
 			this.lightningTick++;
 			return (this.lightningTick > this.borderLightning);
 		}
@@ -40,7 +40,7 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.lightningTick < this.borderLightning) {
 			return;
 		}

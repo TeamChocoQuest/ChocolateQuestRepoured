@@ -16,26 +16,26 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		return attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget);
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		return attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget);
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		this.updatePath(attackTarget);
 		this.checkAndPerformBlock();
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 
 		if (attackTarget != null) {
@@ -47,7 +47,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entity.getNavigator().clearPath();
 		this.entity.resetActiveHand();
 	}

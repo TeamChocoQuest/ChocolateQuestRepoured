@@ -17,12 +17,12 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.prepareTime > 0) {
 			this.prepareTime--;
 			return false;
 		}
-		if (super.shouldExecute()) {
+		if (super.canUse()) {
 			return this.checkTurtleSpecific();
 		}
 		return false;
@@ -51,37 +51,37 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		if (super.shouldContinueExecuting()) {
+	public boolean canContinueToUse() {
+		if (super.canContinueToUse()) {
 			return this.checkTurtleSpecific();
 		}
 		return false;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (!this.isTortoiseReadyToWalk() && this.getBoss().getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_EXIT_SHELL);
 			return;
 		}
 		if (!this.getBoss().isInShell()) {
-			super.updateTask();
+			super.tick();
 		}
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
 		this.prepareTime = PREPARE_TIME;
 		this.getBoss().setInShell(true);
-		super.resetTask();
+		super.stop();
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.getBoss().setInShell(false);
 		this.prepareTime = PREPARE_TIME;
-		super.startExecuting();
+		super.start();
 	}
 
 }

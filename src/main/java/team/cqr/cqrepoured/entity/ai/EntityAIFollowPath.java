@@ -17,7 +17,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity.getPath().getSize() <= 1) {
 			return false;
 		}
@@ -25,7 +25,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entity.getNavigator().clearPath();
 		this.hasPath = false;
 		this.ticksToWait = 0;
@@ -33,7 +33,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		Path path = this.entity.getPath();
 		Path.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
 

@@ -32,7 +32,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity.world.getDifficulty() == Difficulty.PEACEFUL) {
 			this.entity.setAttackTarget(null);
 			return false;
@@ -45,14 +45,14 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 
 	private static final Vector3i SIZE_VECTOR = new Vector3i(32, 32, 32);
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().add(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
 		List<LivingEntity> possibleTargets = this.entity.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.predicate);
 		if (!possibleTargets.isEmpty()) {

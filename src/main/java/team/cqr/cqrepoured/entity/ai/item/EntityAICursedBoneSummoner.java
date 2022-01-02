@@ -41,7 +41,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		this.filterSummons();
 		if (!this.hasCursedBone()) {
 			return false;
@@ -74,7 +74,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (!this.hasCursedBone()) {
 			return false;
 		}
@@ -83,9 +83,9 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 
 	// TODO: Add some magic sounds...
 	@Override
-	public void updateTask() {
+	public void tick() {
 		this.chargingTicks--;
-		super.updateTask();
+		super.tick();
 
 		ItemStack stack = this.entity.getHeldItemMainhand();
 		if (!(stack.getItem() instanceof ItemCursedBone)) {
@@ -120,11 +120,11 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 		this.chargingTicks = 20;
 		this.prevTimeUsed = this.entity.ticksExisted;
-		super.resetTask();
+		super.stop();
 	}
 
 	@Override

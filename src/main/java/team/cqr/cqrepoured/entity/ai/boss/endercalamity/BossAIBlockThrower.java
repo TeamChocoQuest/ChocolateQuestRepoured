@@ -74,16 +74,16 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity != null && this.entity.hasAttackTarget()) {
-			return super.shouldExecute();
+			return super.canUse();
 		}
 		return false;
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return this.shouldExecute();
+	public boolean canContinueToUse() {
+		return this.canUse();
 	}
 
 	protected void execHandStateBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
@@ -104,8 +104,8 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 
 		for (EntityCQREnderCalamity.E_CALAMITY_HAND hand : EntityCQREnderCalamity.E_CALAMITY_HAND.values()) {
 			switch (this.getStateOfHand(hand)) {
@@ -156,8 +156,8 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 	}
 
 	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {

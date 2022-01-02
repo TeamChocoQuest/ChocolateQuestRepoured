@@ -44,8 +44,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
@@ -1725,5 +1723,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@Override
 	public void setLastTimedRestockTime(long newValue) {
 		this.lastTimedTradeRestock = newValue;
+	}
+
+	public World getWorld() {
+		return this.level;
 	}
 }

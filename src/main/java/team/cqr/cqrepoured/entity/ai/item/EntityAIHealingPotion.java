@@ -29,19 +29,19 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		return this.entity.getHealingPotions() > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.15F, 5.0F);
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.entity.getNavigator().clearPath();
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
 		this.entity.resetActiveHand();
@@ -51,7 +51,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		Entity attackTarget = this.entity.getAttackTarget();
 
 		if (this.isHealing) {

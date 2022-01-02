@@ -28,8 +28,8 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	private static final int MAX_COOLDOWN = 400;
 
 	@Override
-	public boolean shouldExecute() {
-		if (super.shouldExecute()) {
+	public boolean canUse() {
+		if (super.canUse()) {
 			if (this.entity.isStunned()) {
 				return false;
 			}
@@ -54,11 +54,11 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.entity.isStunned()) {
 			return false;
 		}
-		return super.shouldContinueExecuting() && (this.isFarAwayEnough() || this.isSequenceRunning);
+		return super.canContinueToUse() && (this.isFarAwayEnough() || this.isSequenceRunning);
 	}
 
 	private boolean isFarAwayEnough() {
@@ -108,7 +108,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 					this.remainingShotsInSequence--;
 					if (this.remainingShotsInSequence <= 0) {
 						this.prevTimeAttacked = this.entity.ticksExisted;
-						this.resetTask();
+						this.stop();
 					}
 				}
 			} else {
@@ -135,7 +135,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return this.entity.getRNG().nextBoolean();
 	}
 
@@ -153,8 +153,8 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 
 		this.entity.setCannonArmAutoTimeoutForLowering(40);
 

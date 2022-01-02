@@ -39,12 +39,12 @@ public class EntityAITasksProfiled extends GoalSelector {
 				if (entityaitasks$entityaitaskentry.using) {
 					if (!this.canUseCQR(entityaitasks$entityaitaskentry) || !this.canContinueCQR(entityaitasks$entityaitaskentry)) {
 						entityaitasks$entityaitaskentry.using = false;
-						entityaitasks$entityaitaskentry.action.resetTask();
+						entityaitasks$entityaitaskentry.action.stop();
 						this.executingTaskEntries.remove(entityaitasks$entityaitaskentry);
 					}
-				} else if (this.canUseCQR(entityaitasks$entityaitaskentry) && entityaitasks$entityaitaskentry.action.shouldExecute()) {
+				} else if (this.canUseCQR(entityaitasks$entityaitaskentry) && entityaitasks$entityaitaskentry.action.canUse()) {
 					entityaitasks$entityaitaskentry.using = true;
-					entityaitasks$entityaitaskentry.action.startExecuting();
+					entityaitasks$entityaitaskentry.action.start();
 					this.executingTaskEntries.add(entityaitasks$entityaitaskentry);
 				}
 
@@ -62,7 +62,7 @@ public class EntityAITasksProfiled extends GoalSelector {
 
 				if (!this.canContinueCQR(entityaitasks$entityaitaskentry1)) {
 					entityaitasks$entityaitaskentry1.using = false;
-					entityaitasks$entityaitaskentry1.action.resetTask();
+					entityaitasks$entityaitaskentry1.action.stop();
 					iterator.remove();
 				}
 
@@ -80,7 +80,7 @@ public class EntityAITasksProfiled extends GoalSelector {
 			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry2 : this.executingTaskEntries) {
 				long t = System.nanoTime();
 
-				entityaitasks$entityaitaskentry2.action.updateTask();
+				entityaitasks$entityaitaskentry2.action.tick();
 
 				t = System.nanoTime() - t;
 				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry2.action.getClass());
@@ -125,7 +125,7 @@ public class EntityAITasksProfiled extends GoalSelector {
 	 * Determine if a specific AI Task should continue being executed.
 	 */
 	private boolean canContinueCQR(GoalSelector.EntityAITaskEntry taskEntry) {
-		return taskEntry.action.shouldContinueExecuting();
+		return taskEntry.action.canContinueToUse();
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class EntityAITasksProfiled extends GoalSelector {
 						if (!this.areTasksCompatibleCQR(taskEntry, entityaitasks$entityaitaskentry)) {
 							return false;
 						}
-					} else if (!entityaitasks$entityaitaskentry.action.isInterruptible()) {
+					} else if (!entityaitasks$entityaitaskentry.action.isInterruptable()) {
 						return false;
 					}
 				}

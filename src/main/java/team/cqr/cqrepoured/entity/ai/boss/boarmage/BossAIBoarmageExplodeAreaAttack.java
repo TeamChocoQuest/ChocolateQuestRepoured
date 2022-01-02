@@ -31,7 +31,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.cooldown > 0) {
 			this.cooldown--;
 			return false;
@@ -40,12 +40,12 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.entity != null && this.entity.isEntityAlive() && this.entity.isExecutingExplodeAreaAttack();
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.explosionCount = DungeonGenUtils.randomBetween(MIN_EXPLOSIONS, MAX_EXPLOSIONS, this.entity.getRNG());
 		this.lastExplodeTechTick = this.entity.ticksExisted;
 		this.addExplosionLoc();
@@ -58,8 +58,8 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		// Particles on positions
 		if (this.entity.ticksExisted % 5 == 0) {
 			for (BlockPos p : this.explosions) {
@@ -77,7 +77,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 				this.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 3, this.entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionAreaDestroysTerrain);
 			}
 
-			this.resetTask();
+			this.stop();
 		} else if (Math.abs(this.entity.ticksExisted - this.lastExplodeTechTick) > TIMEDIV) {
 			this.entity.swingArm(Hand.OFF_HAND);
 			this.lastExplodeTechTick = this.entity.ticksExisted;
@@ -86,8 +86,8 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.explosionCount = 0;
 		this.explosions.clear();
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());

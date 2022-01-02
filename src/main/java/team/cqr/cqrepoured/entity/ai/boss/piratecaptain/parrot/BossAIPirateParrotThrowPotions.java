@@ -38,7 +38,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 
 	@Override
 	public void startExecuting() {
-		super.startExecuting();
+		super.start();
 
 		// Equip potion
 		this.equipPotion(this.entity);
@@ -71,7 +71,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 
 	@Override
 	public void updateTask() {
-		super.updateTask();
+		super.tick();
 
 		this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
 		if (this.entity.getDistanceSq(this.entity.getAttackTarget()) <= MIN_DISTANCE_SQ) {
@@ -102,7 +102,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.shouldExecute();
+		return super.canContinueToUse() && this.shouldExecute();
 	}
 
 }

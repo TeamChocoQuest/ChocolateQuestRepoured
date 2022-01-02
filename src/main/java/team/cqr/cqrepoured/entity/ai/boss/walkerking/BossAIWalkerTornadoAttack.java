@@ -21,7 +21,7 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity != null && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
 			this.cooldown--;
 			return this.cooldown <= 0;
@@ -30,13 +30,13 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.shouldExecute();
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.canUse();
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.spawnTornadoes(DungeonGenUtils.randomBetween(MIN_TORNADOES, MAX_TORNADOES + 1, this.entity.getRNG()));
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
 	}

@@ -18,7 +18,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.cooldown > 0) {
 			this.cooldown--;
 			return false;
@@ -35,8 +35,8 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.cooldown = 140;
 		this.entity.getHeldItemOffhand().shrink(1);
 		Vector3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());

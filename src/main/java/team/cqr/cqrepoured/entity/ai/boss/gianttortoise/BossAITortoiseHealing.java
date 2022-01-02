@@ -23,7 +23,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		this.healingActive = false;
 		if (!this.getBoss().isSpinning() && !this.getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= this.MIN_HEALING_AMOUNT) {
 			this.entity.setHealing(true);
@@ -41,22 +41,22 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return false;
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.getBoss().setCanBeStunned(false);
 		this.entity.setReadyToSpin(false);
 		this.getBoss().setStunned(false);
 		this.currHealTicks = 0;
-		this.updateTask();
+		this.tick();
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		this.healingActive = false;
 		if (!this.entity.isDead && this.currHealTicks <= this.getHealingAmount()) {
 			if (this.entity.isInShell()) {
@@ -68,7 +68,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		this.entity.setHealing(true);
 		if (this.entity.getCurrentAnimationId() != EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL) {
 			this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_ENTER_SHELL);
@@ -99,8 +99,8 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.getBoss().setCanBeStunned(true);
 		this.currHealTicks = 0;
 		this.entity.setHealing(false);

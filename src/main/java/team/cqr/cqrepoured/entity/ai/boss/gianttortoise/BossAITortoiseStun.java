@@ -19,7 +19,7 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.getBoss() != null && !this.getBoss().isDead && this.getBoss().isStunned()) {
 			return true;
 		}
@@ -27,13 +27,13 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.getBoss().shouldCurrentAnimationBePlaying() && this.getBoss().isStunned();
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.getBoss().shouldCurrentAnimationBePlaying() && this.getBoss().isStunned();
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.getBoss().setReadyToSpin(false);
 		this.getBoss().setSpinning(false);
 		this.getBoss().setStunned(true);
@@ -42,8 +42,8 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		this.getBoss().setStunned(true);
 		this.getBoss().setCanBeStunned(false);
 
@@ -55,8 +55,8 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.getBoss().setNextAnimation(EntityCQRGiantTortoise.ANIMATION_ID_IN_SHELL);
 		this.getBoss().setCanBeStunned(true);
 		this.getBoss().setStunned(false);

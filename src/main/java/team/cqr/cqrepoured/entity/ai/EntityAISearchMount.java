@@ -64,7 +64,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.canMountEntity()) {
 			return false;
 		}
@@ -85,7 +85,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (!this.entity.canMountEntity()) {
 			return false;
 		}
@@ -108,14 +108,14 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.entity.getDistance(this.entityToMount) > DISTANCE_TO_MOUNT) {
 			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, WALK_SPEED_TO_MOUNT);
 		}
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.getDistance(this.entityToMount) > DISTANCE_TO_MOUNT) {
 			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, WALK_SPEED_TO_MOUNT);
 		} else {
@@ -136,7 +136,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entityToMount = null;
 		this.entity.getNavigator().clearPath();
 	}

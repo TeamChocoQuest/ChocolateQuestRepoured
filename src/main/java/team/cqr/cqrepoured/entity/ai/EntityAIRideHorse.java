@@ -31,7 +31,7 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity != null && this.entity.canMountEntity()) {
 			return this.shouldRideHorse();
 		}
@@ -43,7 +43,7 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.horse = (MobEntity) this.entity.getRidingEntity();
 		this.onMountHorse();
 	}

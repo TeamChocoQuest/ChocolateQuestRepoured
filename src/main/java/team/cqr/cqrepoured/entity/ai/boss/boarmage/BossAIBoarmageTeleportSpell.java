@@ -30,7 +30,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.ticksAtTeleport != 0) {
 			return false;
 		}
@@ -42,8 +42,8 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRNG());
 		this.wallCounter = 0;
 		this.world.newExplosion(this.entity, this.entity.posX, this.entity.posY, this.entity.posZ, 2, false, CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
@@ -56,22 +56,22 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 				return;
 			}
 		}
-		this.resetTask();
+		this.stop();
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.ticksAtTeleport != 0 && this.wallCounter <= this.wallsMax && this.entity.hasAttackTarget();
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return false;
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		if (Math.abs(this.entity.ticksExisted - this.ticksAtTeleport) > PREPARE_TIME) {
 			this.ticksAtTeleport = this.entity.ticksExisted;
 			// Summon fire wall here
@@ -115,8 +115,8 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.cooldown = 60;
 		this.ticksAtTeleport = 0;
 	}

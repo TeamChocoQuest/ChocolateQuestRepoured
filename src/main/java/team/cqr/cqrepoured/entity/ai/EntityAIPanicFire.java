@@ -11,14 +11,14 @@ public class EntityAIPanicFire extends PanicGoal {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (CQRConfig.mobs.disableFirePanicAI) {
 			return false;
 		}
-		if (this.creature.isImmuneToFire()) {
+		if (this.mob.fireImmune()) {
 			return false;
 		}
-		if (this.creature.isInLava() || this.creature.isBurning()) {
+		if (this.mob.isInLava() || this.mob.isOnFire()) {
 			return this.findRandomPosition();
 		}
 		return false;

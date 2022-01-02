@@ -20,23 +20,23 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		this.aiCooldown--;
-		return super.shouldExecute() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead && this.aiCooldown <= 0 && !this.entity.isFlyingUp();
+		return super.canUse() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead && this.aiCooldown <= 0 && !this.entity.isFlyingUp();
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead;
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.getPositionVector().distanceTo(this.getTargetLocation()) <= 4) {
 			this.entity.attackEntityAsMob(this.entity.getAttackTarget());
-			this.resetTask();
+			this.stop();
 		}
-		super.updateTask();
+		super.tick();
 		if (!this.breathFire) {
 			this.attackCooldown--;
 			if (this.attackCooldown <= 0) {
@@ -50,15 +50,15 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 
 		this.breathFire = this.entity.getRNG().nextDouble() >= 0.75;
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.aiCooldown = 40;
 		if (this.breathFire) {
 			this.entity.setBreathingFireFlag(false);

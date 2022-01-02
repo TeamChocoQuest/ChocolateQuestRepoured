@@ -91,7 +91,7 @@ public class BossAISpiderLeapAttack extends Goal {
 	public void resetTask() {
 		this.cooldown = this.MAX_COOLDOWN;
 
-		super.resetTask();
+		super.stop();
 	}
 
 }

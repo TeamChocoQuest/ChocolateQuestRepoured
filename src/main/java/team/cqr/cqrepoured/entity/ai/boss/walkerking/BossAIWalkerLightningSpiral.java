@@ -26,7 +26,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.world.isRemote && !this.entity.isDead && this.entity.getAttackTarget() != null && this.lightningCount < MAX_LIGHTNINGS) {
 			this.cooldown--;
 			return this.cooldown <= 0;
@@ -35,13 +35,13 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return this.shouldExecute() && this.lightningCount < MAX_LIGHTNINGS;
+	public boolean canContinueToUse() {
+		return this.canUse() && this.lightningCount < MAX_LIGHTNINGS;
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.cooldown_circle = 1;
 		this.lightningCount = 0;
 		this.angle = 0;
@@ -49,8 +49,8 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		this.cooldown_circle--;
 		if (this.cooldown_circle <= 0) {
 			this.spawnLightning();
@@ -73,16 +73,16 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.r = 2;
 		this.lightningCount = 0;
 		this.angle = 0;
 		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
-		super.resetTask();
+		super.stop();
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return false;
 	}
 

@@ -226,13 +226,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.tasks.addTask(17, new EntityAIBackstab(this));
 		this.tasks.addTask(18, new EntityAIAttack(this) {
 			@Override
-			public boolean shouldExecute() {
-				return super.shouldExecute() && !EntityCQRExterminator.this.isStunned();
+			public boolean canUse() {
+				return super.canUse() && !EntityCQRExterminator.this.isStunned();
 			}
 			
 			@Override
-			public boolean shouldContinueExecuting() {
-				return super.shouldContinueExecuting() && !EntityCQRExterminator.this.isStunned();
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && !EntityCQRExterminator.this.isStunned();
 			}
 		});
 		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this));

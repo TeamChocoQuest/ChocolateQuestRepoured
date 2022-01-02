@@ -26,7 +26,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.canPutOutFire()) {
 			return false;
 		}
@@ -49,7 +49,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.nearestFire == null) {
 			return false;
 		}
@@ -60,7 +60,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.entity.getDistanceSqToCenter(this.nearestFire) > REACH_DISTANCE_SQ) {
 			this.entity.getNavigator().tryMoveToXYZ(this.nearestFire.getX(), this.nearestFire.getY(), this.nearestFire.getZ(), 1.0D);
 		}
@@ -68,13 +68,13 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.nearestFire = null;
 		this.entity.getNavigator().clearPath();
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.getDistanceSqToCenter(this.nearestFire) <= REACH_DISTANCE_SQ) {
 			if (this.entity.world.getBlockState(this.nearestFire).getBlock() == Blocks.FIRE) {
 				this.entity.world.setBlockToAir(this.nearestFire);

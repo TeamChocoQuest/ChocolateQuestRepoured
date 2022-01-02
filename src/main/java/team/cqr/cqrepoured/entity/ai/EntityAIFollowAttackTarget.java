@@ -13,12 +13,12 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		return this.entity.getAttackTarget() != null;
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.entity.getAttackTarget() == null) {
 			return false;
 		}
@@ -33,18 +33,18 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		Vector3d v = this.entity.getLastPosAttackTarget();
 		this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.entity.getNavigator().clearPath();
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.ticksExisted) {
 			Vector3d v = this.entity.getLastPosAttackTarget();
 			this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);

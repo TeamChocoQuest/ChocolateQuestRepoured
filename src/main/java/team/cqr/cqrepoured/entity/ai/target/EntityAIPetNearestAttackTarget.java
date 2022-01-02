@@ -89,7 +89,7 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 	@Override
 	public void startExecuting() {
 		this.taskOwner.setAttackTarget(this.targetEntity);
-		super.startExecuting();
+		super.start();
 	}
 
 	public static class Sorter implements Comparator<Entity> {

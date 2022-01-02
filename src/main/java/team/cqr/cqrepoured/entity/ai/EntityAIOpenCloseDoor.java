@@ -36,7 +36,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.canOpenDoors()) {
 			return false;
 		}
@@ -78,18 +78,18 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return !this.hasStoppedDoorInteraction;
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.entityPositionX = this.doorPos.getX() + 0.5D - this.entity.posX;
 		this.entityPositionZ = this.doorPos.getZ() + 0.5D - this.entity.posZ;
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.hasStoppedDoorInteraction = false;
 		this.tick = 0;
 
@@ -97,7 +97,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.tick++ > 60) {
 			this.hasStoppedDoorInteraction = true;
 		}

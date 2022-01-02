@@ -25,7 +25,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (!this.entity.canIgniteTorch()) {
 			return false;
 		}
@@ -43,7 +43,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.nearestTorch == null) {
 			return false;
 		}
@@ -54,20 +54,20 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.entity.getDistanceSqToCenter(this.nearestTorch) > REACH_DISTANCE_SQ) {
 			this.entity.getNavigator().tryMoveToXYZ(this.nearestTorch.getX(), this.nearestTorch.getY(), this.nearestTorch.getZ(), 1.0D);
 		}
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.nearestTorch = null;
 		this.entity.getNavigator().clearPath();
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (this.entity.getDistanceSqToCenter(this.nearestTorch) <= REACH_DISTANCE_SQ) {
 			BlockState state = this.entity.world.getBlockState(this.nearestTorch);
 			if (state.getBlock() == CQRBlocks.UNLIT_TORCH) {

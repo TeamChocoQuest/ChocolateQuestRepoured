@@ -1,23 +1,24 @@
 package team.cqr.cqrepoured.customtextures;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.client.resources.data.IMetadataSection;
-import net.minecraft.client.resources.data.MetadataSerializer;
+import net.minecraft.renderer.ThreadDownloadImageData;
+import net.minecraft.resources.IResourcePack;
+import net.minecraft.resources.ResourcePackType;
+import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.ResourceLocation;
 
 public class CTResourcepack implements IResourcePack {
@@ -36,40 +37,6 @@ public class CTResourcepack implements IResourcePack {
 	}
 
 	private CTResourcepack() {
-	}
-
-	@Override
-	public InputStream getInputStream(ResourceLocation var1) throws IOException {
-		File file = this.FILES.getOrDefault(var1, null);
-		if (file != null) {
-			return new FileInputStream(file);
-		}
-		return null;
-	}
-
-	@Override
-	public boolean resourceExists(ResourceLocation var1) {
-		return this.FILES.containsKey(var1);
-	}
-
-	@Override
-	public Set<String> getResourceDomains() {
-		return this.DOMAIN_SET;
-	}
-
-	@Override
-	public <T extends IMetadataSection> T getPackMetadata(MetadataSerializer var1, String var2) throws IOException {
-		return null;
-	}
-
-	@Override
-	public BufferedImage getPackImage() throws IOException {
-		return null;
-	}
-
-	@Override
-	public String getPackName() {
-		return "CQR-NPC-Textures";
 	}
 
 	public static void add(ResourceLocation resLoc, File file) {
@@ -112,7 +79,7 @@ public class CTResourcepack implements IResourcePack {
 	}
 
 	private void loadAllTexturesImpl() {
-		TextureManager tm = Minecraft.getMinecraft().getTextureManager();
+		TextureManager tm = Minecraft.getInstance().getTextureManager();
 		for (Map.Entry<ResourceLocation, File> entry : this.FILES.entrySet()) {
 			if (entry.getKey().getPath().endsWith(".mcmeta")) {
 				continue;
@@ -125,6 +92,51 @@ public class CTResourcepack implements IResourcePack {
 			}
 			tm.loadTexture(entry.getKey(), tex);
 		}
+	}
+
+	@Override
+	public InputStream getRootResource(String p_195763_1_) throws IOException {
+		return null;
+	}
+
+	@Override
+	public InputStream getResource(ResourcePackType p_195761_1_, ResourceLocation p_195761_2_) throws IOException {
+		File file = this.FILES.getOrDefault(p_195761_2_, null);
+		if (file != null) {
+			return new FileInputStream(file);
+		}
+		return null;
+	}
+
+	@Override
+	public Collection<ResourceLocation> getResources(ResourcePackType p_225637_1_, String p_225637_2_, String p_225637_3_, int p_225637_4_, Predicate<String> p_225637_5_) {
+		return null;
+	}
+
+	@Override
+	public boolean hasResource(ResourcePackType p_195764_1_, ResourceLocation p_195764_2_) {
+		return this.FILES.containsKey(p_195764_2_) && p_195764_1_ == ResourcePackType.CLIENT_RESOURCES;
+	}
+
+	@Override
+	public Set<String> getNamespaces(ResourcePackType p_195759_1_) {
+		return this.DOMAIN_SET;
+	}
+
+	@Override
+	public <T> T getMetadataSection(IMetadataSectionSerializer<T> p_195760_1_) throws IOException {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return "CQR-NPC-Textures";
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

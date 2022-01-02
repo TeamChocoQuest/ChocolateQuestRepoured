@@ -163,10 +163,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(20, new BossAITortoiseMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
-			public boolean shouldExecute() {
-				if (super.shouldExecute() && ((EntityCQRGiantTortoise) this.entity).isInShell() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
+			public boolean canUse() {
+				if (super.canUse() && ((EntityCQRGiantTortoise) this.entity).isInShell() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
 					return true;
-				} else if (super.shouldExecute() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
+				} else if (super.canUse() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
 					if (EntityCQRGiantTortoise.this.getCurrentAnimationId() != ANIMATION_ID_IN_SHELL) {
 						if (EntityCQRGiantTortoise.this.getCurrentAnimationId() == ANIMATION_ID_WALK) {
 							EntityCQRGiantTortoise.this.setNextAnimation(ANIMATION_ID_ENTER_SHELL);
@@ -224,7 +224,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public World getWorld() {
-		return this.world;
+		return this.level;
 	}
 
 	@Override

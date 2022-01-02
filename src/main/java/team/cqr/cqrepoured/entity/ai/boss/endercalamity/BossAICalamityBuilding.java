@@ -23,7 +23,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.buildingCycles >= 0;
 	}
 
@@ -41,14 +41,14 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.forceDropAllBlocks();
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		if (this.entity.hasAttackTarget()) {
 			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
 		}
@@ -100,7 +100,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.buildingCycles = 3;
 		this.teleportCooldown = 10;
 		this.blockEquipTimer = 5;

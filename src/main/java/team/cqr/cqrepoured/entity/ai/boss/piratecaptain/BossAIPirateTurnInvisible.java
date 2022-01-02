@@ -16,7 +16,7 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.entity != null && this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5 && this.entity.getAttackTarget() != null && !this.entity.isDead) {
 			this.cooldown--;
 			return this.cooldown <= 0;
@@ -25,18 +25,18 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.invisibleTime = 200;
 		this.entity.setInvisibility(this.invisibleTime);
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.entity.getInvisibility() > 0;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		boolean disInt = false;
 		boolean reInt = false;
 		if (this.invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {

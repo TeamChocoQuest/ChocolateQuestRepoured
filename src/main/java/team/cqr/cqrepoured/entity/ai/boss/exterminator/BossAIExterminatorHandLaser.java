@@ -25,7 +25,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.timeOut > 0) {
 			this.timeOut--;
 			return false;
@@ -43,7 +43,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (this.entity.isStunned()) {
 			return false;
 		}
@@ -51,9 +51,9 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.timer = 150;
-		super.startExecuting();
+		super.start();
 		this.checkAndOrStartCannonLaser();
 	}
 
@@ -84,8 +84,8 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		this.timer--;
 		// System.out.println("Executing...");
 		if (this.checkAndOrStartCannonLaser()) {
@@ -100,13 +100,13 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return false;
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 		this.target = null;
 		this.timer = 300;
 		if (this.activeLaser != null) {

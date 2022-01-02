@@ -25,7 +25,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.executionTime = 0;
 		if (this.entity.hasHomePositionCQR()) {
 			BlockPos home = this.entity.getHomePositionCQR();
@@ -40,8 +40,8 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 
 		this.executionTime++;
 
@@ -82,7 +82,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		if (this.endlaser != null) {
 			this.endlaser.setDead();
 			this.endlaser = null;
@@ -93,7 +93,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_IDLE_BODY);
 		this.entity.setCantUpdatePhase(false);
 		this.entity.forceTeleport();
-		super.resetTask();
+		super.stop();
 	}
 
 }

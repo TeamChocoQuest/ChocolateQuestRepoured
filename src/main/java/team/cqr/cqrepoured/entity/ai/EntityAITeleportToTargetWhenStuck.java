@@ -11,7 +11,7 @@ public class EntityAITeleportToTargetWhenStuck<T extends AbstractEntityCQR> exte
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.cooldown > 0) {
 			this.cooldown--;
 			return false;
@@ -27,20 +27,20 @@ public class EntityAITeleportToTargetWhenStuck<T extends AbstractEntityCQR> exte
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 
 		this.entity.teleport(this.entity.getAttackTarget().posX, this.entity.getAttackTarget().posY, this.entity.getAttackTarget().posZ);
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 
 		this.cooldown = 15;
 	}

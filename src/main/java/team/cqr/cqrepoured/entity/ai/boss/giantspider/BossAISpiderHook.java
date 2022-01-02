@@ -13,7 +13,7 @@ public class BossAISpiderHook extends EntityAIHooker {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.hasHookShoot(this.entity)) {
 			if (this.cooldown > 0) {
 				this.cooldown--;
@@ -26,8 +26,8 @@ public class BossAISpiderHook extends EntityAIHooker {
 	}
 
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 		this.state = STATE.PREPARING;
 		if (this.entity.hasPath()) {
 			this.entity.getNavigator().clearPath();
@@ -38,7 +38,7 @@ public class BossAISpiderHook extends EntityAIHooker {
 				this.entity.getNavigator().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
-				this.resetTask();
+				this.stop();
 			}
 		}
 	}

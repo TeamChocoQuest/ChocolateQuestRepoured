@@ -28,7 +28,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.summoner == null || this.entity == null) {
 			return false;
 		}
@@ -57,7 +57,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (this.summoner == null || this.entity == null) {
 			return;
 		}
@@ -80,7 +80,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return false;
 	}
 

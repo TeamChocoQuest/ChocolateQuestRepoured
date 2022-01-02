@@ -12,12 +12,12 @@ public class BossAIExterminatorStun extends AbstractCQREntityAI<EntityCQRExtermi
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		return this.entity.isStunned() || TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this.entity);
 	}
 
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return false;
 	}
 
