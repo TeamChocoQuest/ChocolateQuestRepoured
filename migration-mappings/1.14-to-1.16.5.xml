@@ -23,4 +23,5 @@
 	<entry oldName="net.minecraft.client.resources.SimpleReloadableResourceManager" newName="net.minecraft.resources.SimpleReloadableResourceManager" type="class" />
 	<entry oldName="net.minecraftforge.client.resource.VanillaResourceType" newName="net.minecraftforge.resource.VanillaResourceType" type="class" />
 	<entry oldName="net.minecraft.entity.ai.attributes.IAttributeInstance" newName="net.minecraft.entity.ai.attributes.ModifiableAttributeInstance" type="class" />
+	<entry oldName="net.minecraft.item.ArmorItem.ArmorMaterial" newName="net.minecraft.block.material.Material" type="class" />
 </migrationMap>
