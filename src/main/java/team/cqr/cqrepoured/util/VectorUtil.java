@@ -18,11 +18,11 @@ public class VectorUtil {
 	 * Important: Mathematical positive => turn left around
 	 */
 	public static Vector3d rotateVectorAroundY(Vector3d vector, double degrees) {
-		return vector.rotateYaw((float) Math.toRadians(degrees));
+		return vector.yRot((float) Math.toRadians(degrees));
 	}
 
 	public static double getAngleBetween(final Vector3d axis, final Vector3d vector) {
-		double cosphi = axis.dotProduct(vector);
+		double cosphi = axis.dot(vector);
 		cosphi /= axis.length() * vector.length();
 		double phi = Math.acos(cosphi);
 		return Math.toDegrees(phi);
@@ -63,9 +63,9 @@ public class VectorUtil {
 
 	public static CompoundNBT createVectorNBTTag(Vector3d vector) {
 		CompoundNBT nbttagcompound = new CompoundNBT();
-		nbttagcompound.setDouble("X", vector.x);
-		nbttagcompound.setDouble("Y", vector.y);
-		nbttagcompound.setDouble("Z", vector.z);
+		nbttagcompound.putDouble("X", vector.x);
+		nbttagcompound.putDouble("Y", vector.y);
+		nbttagcompound.putDouble("Z", vector.z);
 		return nbttagcompound;
 	}
 
