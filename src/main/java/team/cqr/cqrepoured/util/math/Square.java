@@ -15,11 +15,11 @@ public class Square {
 		this.vec2 = vec2;
 		this.vec3 = vec3;
 		this.vec4 = vec4;
-		this.normal = vec2.subtract(vec1).crossProduct(vec3.subtract(vec1));
+		this.normal = vec2.subtract(vec1).cross(vec3.subtract(vec1));
 	}
 
 	public boolean isVecBehindPlane(Vector3d vec) {
-		return vec.subtract(this.vec1).dotProduct(this.normal) >= 0.0D;
+		return vec.subtract(this.vec1).dot(this.normal) >= 0.0D;
 	}
 
 	public Vector3d getVec1() {
