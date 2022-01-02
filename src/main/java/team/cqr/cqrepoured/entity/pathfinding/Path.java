@@ -27,12 +27,12 @@ public class Path {
 
 	public CompoundNBT writeToNBT() {
 		CompoundNBT compound = new CompoundNBT();
-		compound.setString("version", VERSION);
+		compound.putString("version", VERSION);
 		ListNBT nbtTagList = new ListNBT();
 		for (PathNode node : this.nodes) {
-			nbtTagList.appendTag(node.writeToNBT());
+			nbtTagList.add(node.writeToNBT());
 		}
-		compound.setTag("nodes", nbtTagList);
+		compound.put("nodes", nbtTagList);
 		return compound;
 	}
 
@@ -42,7 +42,7 @@ public class Path {
 		if (!s.equals(VERSION)) {
 			CQRMain.logger.warn("Reading path: Expected version {} but got {}", VERSION, s);
 		}
-		for (INBT nbt : compound.getTagList("nodes", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getList("nodes", Constants.NBT.TAG_COMPOUND)) {
 			this.nodes.add(new PathNode(this, (CompoundNBT) nbt));
 		}
 		this.onPathChanged();
@@ -76,13 +76,13 @@ public class Path {
 					otherNode.index--;
 				}
 				for (int i = 0; i < otherNode.connectedNodes.size(); i++) {
-					if (otherNode.connectedNodes.get(i) > node.index) {
-						otherNode.connectedNodes.set(i, otherNode.connectedNodes.get(i) - 1);
+					if (otherNode.connectedNodes.getInt(i) > node.index) {
+						otherNode.connectedNodes.set(i, otherNode.connectedNodes.getInt(i) - 1);
 					}
 				}
 				for (int i = 0; i < otherNode.blacklistedPrevNodes.size(); i++) {
-					if (otherNode.blacklistedPrevNodes.get(i) > node.index) {
-						otherNode.blacklistedPrevNodes.set(i, otherNode.blacklistedPrevNodes.get(i) - 1);
+					if (otherNode.blacklistedPrevNodes.getInt(i) > node.index) {
+						otherNode.blacklistedPrevNodes.set(i, otherNode.blacklistedPrevNodes.getInt(i) - 1);
 					}
 				}
 			}
@@ -128,7 +128,7 @@ public class Path {
 	}
 
 	public void copyFrom(Path path) {
-		this.copyFrom(path, BlockPos.ORIGIN);
+		this.copyFrom(path, BlockPos.ZERO);
 	}
 
 	public void copyFrom(Path path, BlockPos offset) {
@@ -159,7 +159,7 @@ public class Path {
 
 		private PathNode(Path path, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, int index) {
 			this.path = path;
-			this.pos = pos.toImmutable();
+			this.pos = pos.immutable();
 			this.waitingTimeMin = MathHelper.clamp(Math.min(waitingTimeMin, waitingTimeMax), 0, 24000);
 			this.waitingTimeMax = MathHelper.clamp(Math.max(waitingTimeMin, waitingTimeMax), 0, 24000);
 			this.waitingRotation = MathHelper.wrapDegrees(waitingRotation);
@@ -171,30 +171,30 @@ public class Path {
 
 		private PathNode(Path path, CompoundNBT compound) {
 			this.path = path;
-			this.pos = DungeonGenUtils.readPosFromList(compound.getTagList("pos", Constants.NBT.TAG_INT));
-			this.waitingTimeMin = compound.getInteger("waitingTimeMin");
-			this.waitingTimeMax = compound.getInteger("waitingTimeMax");
+			this.pos = DungeonGenUtils.readPosFromList(compound.getList("pos", Constants.NBT.TAG_INT));
+			this.waitingTimeMin = compound.getInt("waitingTimeMin");
+			this.waitingTimeMax = compound.getInt("waitingTimeMax");
 			this.waitingRotation = compound.getFloat("waitingRotation");
-			this.weight = compound.getInteger("weight");
-			this.timeMin = compound.getInteger("timeMin");
-			this.timeMax = compound.getInteger("timeMax");
-			this.index = compound.getInteger("index");
+			this.weight = compound.getInt("weight");
+			this.timeMin = compound.getInt("timeMin");
+			this.timeMax = compound.getInt("timeMax");
+			this.index = compound.getInt("index");
 			this.connectedNodes.addElements(0, compound.getIntArray("connectedNodes"));
 			this.blacklistedPrevNodes.addElements(0, compound.getIntArray("blacklistedPrevNodes"));
 		}
 
 		private CompoundNBT writeToNBT() {
 			CompoundNBT compound = new CompoundNBT();
-			compound.setTag("pos", DungeonGenUtils.writePosToList(this.pos));
-			compound.setInteger("waitingTimeMin", this.waitingTimeMin);
-			compound.setInteger("waitingTimeMax", this.waitingTimeMax);
-			compound.setFloat("waitingRotation", this.waitingRotation);
-			compound.setInteger("weight", this.weight);
-			compound.setInteger("timeMin", this.timeMin);
-			compound.setInteger("timeMax", this.timeMax);
-			compound.setInteger("index", this.index);
-			compound.setIntArray("connectedNodes", this.connectedNodes.toIntArray());
-			compound.setIntArray("blacklistedPrevNodes", this.blacklistedPrevNodes.toIntArray());
+			compound.put("pos", DungeonGenUtils.writePosToList(this.pos));
+			compound.putInt("waitingTimeMin", this.waitingTimeMin);
+			compound.putInt("waitingTimeMax", this.waitingTimeMax);
+			compound.putFloat("waitingRotation", this.waitingRotation);
+			compound.putInt("weight", this.weight);
+			compound.putInt("timeMin", this.timeMin);
+			compound.putInt("timeMax", this.timeMax);
+			compound.putInt("index", this.index);
+			compound.putIntArray("connectedNodes", this.connectedNodes.toIntArray());
+			compound.putIntArray("blacklistedPrevNodes", this.blacklistedPrevNodes.toIntArray());
 			return compound;
 		}
 
@@ -288,7 +288,7 @@ public class Path {
 			if (this.connectedNodes.isEmpty()) {
 				return null;
 			}
-			long time = world.getWorldTime() % 24000;
+			long time = world.getGameTime() % 24000;
 			int totalWeight = 0;
 			int totalWeightIgnoreTime = 0;
 			for (int connectedNode : this.connectedNodes) {
@@ -349,7 +349,7 @@ public class Path {
 		}
 
 		public void setPos(BlockPos pos) {
-			this.pos = pos.toImmutable();
+			this.pos = pos.immutable();
 			Path.this.onPathChanged();
 		}
 
@@ -416,7 +416,12 @@ public class Path {
 		}
 
 		private PathNode copy(Path path, BlockPos offset) {
-			PathNode copy = new PathNode(path, this.pos.add(offset), this.waitingTimeMin, this.waitingTimeMax, this.waitingRotation, this.weight, this.timeMin, this.timeMax, this.index);
+			BlockPos posNew = new BlockPos(
+					this.pos.getX() + offset.getX(),
+					this.pos.getY() + offset.getY(),
+					this.pos.getZ() + offset.getZ()
+			);
+			PathNode copy = new PathNode(path, posNew, this.waitingTimeMin, this.waitingTimeMax, this.waitingRotation, this.weight, this.timeMin, this.timeMax, this.index);
 			copy.connectedNodes.addAll(this.connectedNodes);
 			return copy;
 		}

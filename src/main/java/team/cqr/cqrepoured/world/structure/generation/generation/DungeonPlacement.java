@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
@@ -36,7 +35,7 @@ public class DungeonPlacement {
 
 	}
 
-	private static final ThreadLocal<MutableBlockPos> LOCAL_MUTABLE_BLOCKPOS = ThreadLocal.withInitial(MutableBlockPos::new);
+	private static final ThreadLocal<BlockPos.Mutable> LOCAL_MUTABLE_BLOCKPOS = ThreadLocal.withInitial(BlockPos.Mutable::new);
 	private static final ThreadLocal<MutableVec3d> LOCAL_MUTABLE_VEC3D = ThreadLocal.withInitial(MutableVec3d::new);
 	private final BlockPos pos;
 	private final BlockPos partPos;
@@ -78,27 +77,27 @@ public class DungeonPlacement {
 		return this.protectedRegionBuilder;
 	}
 
-	public MutableBlockPos transform(BlockPos pos) {
+	public BlockPos.Mutable transform(BlockPos pos) {
 		return transform(pos.getX(), pos.getY(), pos.getZ(), this.partPos, this.mirror, this.rotation);
 	}
 
-	public MutableBlockPos transform(int x, int y, int z) {
+	public BlockPos.Mutable transform(int x, int y, int z) {
 		return transform(x, y, z, this.partPos, this.mirror, this.rotation);
 	}
 
-	public static MutableBlockPos transform(BlockPos pos, Mirror mirror, Rotation rotation) {
-		return transform(pos.getX(), pos.getY(), pos.getZ(), BlockPos.ORIGIN, mirror, rotation);
+	public static BlockPos.Mutable transform(BlockPos pos, Mirror mirror, Rotation rotation) {
+		return transform(pos.getX(), pos.getY(), pos.getZ(), BlockPos.ZERO, mirror, rotation);
 	}
 
-	public static MutableBlockPos transform(int x, int y, int z, Mirror mirror, Rotation rotation) {
-		return transform(x, y, z, BlockPos.ORIGIN, mirror, rotation);
+	public static BlockPos.Mutable transform(int x, int y, int z, Mirror mirror, Rotation rotation) {
+		return transform(x, y, z, BlockPos.ZERO, mirror, rotation);
 	}
 
-	public static MutableBlockPos transform(BlockPos pos, BlockPos origin, Mirror mirror, Rotation rotation) {
+	public static BlockPos.Mutable transform(BlockPos pos, BlockPos origin, Mirror mirror, Rotation rotation) {
 		return transform(pos.getX(), pos.getY(), pos.getZ(), origin, mirror, rotation);
 	}
 
-	public static MutableBlockPos transform(int x, int y, int z, BlockPos origin, Mirror mirror, Rotation rotation) {
+	public static BlockPos.Mutable transform(int x, int y, int z, BlockPos origin, Mirror mirror, Rotation rotation) {
 		switch (mirror) {
 		case LEFT_RIGHT:
 			z = -z;
@@ -112,13 +111,13 @@ public class DungeonPlacement {
 
 		switch (rotation) {
 		case COUNTERCLOCKWISE_90:
-			return LOCAL_MUTABLE_BLOCKPOS.get().setPos(origin.getX() + z, origin.getY() + y, origin.getZ() - x);
+			return LOCAL_MUTABLE_BLOCKPOS.get().set(origin.getX() + z, origin.getY() + y, origin.getZ() - x);
 		case CLOCKWISE_90:
-			return LOCAL_MUTABLE_BLOCKPOS.get().setPos(origin.getX() - z, origin.getY() + y, origin.getZ() + x);
+			return LOCAL_MUTABLE_BLOCKPOS.get().set(origin.getX() - z, origin.getY() + y, origin.getZ() + x);
 		case CLOCKWISE_180:
-			return LOCAL_MUTABLE_BLOCKPOS.get().setPos(origin.getX() - x, origin.getY() + y, origin.getZ() - z);
+			return LOCAL_MUTABLE_BLOCKPOS.get().set(origin.getX() - x, origin.getY() + y, origin.getZ() - z);
 		default:
-			return LOCAL_MUTABLE_BLOCKPOS.get().setPos(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
+			return LOCAL_MUTABLE_BLOCKPOS.get().set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
 		}
 	}
 
@@ -131,11 +130,11 @@ public class DungeonPlacement {
 	}
 
 	public static MutableVec3d transform(Vector3d vec, Mirror mirror, Rotation rotation) {
-		return transform(vec.x, vec.y, vec.z, BlockPos.ORIGIN, mirror, rotation);
+		return transform(vec.x, vec.y, vec.z, BlockPos.ZERO, mirror, rotation);
 	}
 
 	public static MutableVec3d transform(double x, double y, double z, Mirror mirror, Rotation rotation) {
-		return transform(x, y, z, BlockPos.ORIGIN, mirror, rotation);
+		return transform(x, y, z, BlockPos.ZERO, mirror, rotation);
 	}
 
 	public static MutableVec3d transform(Vector3d vec, BlockPos origin, Mirror mirror, Rotation rotation) {
@@ -171,7 +170,7 @@ public class DungeonPlacement {
 	}
 
 	public static float transform(Entity entity, Mirror mirror, Rotation rotation) {
-		return entity.rotationYaw + entity.getMirroredYaw(mirror) - entity.getRotatedYaw(rotation);
+		return entity.getYHeadRot() + entity.mirror(mirror) - entity.rotate(rotation);
 	}
 
 }
