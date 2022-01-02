@@ -7,10 +7,9 @@ import java.util.Random;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -18,7 +17,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -28,12 +27,12 @@ public class GearedMobFactory {
 	private static final List<ItemStack> DEBUFF_ARROW_LIST = new ArrayList<>();
 
 	static {
-		for (Effect potion : ForgeRegistries.POTIONS.getValuesCollection()) {
-			if (potion.isBadEffect()) {
-				EffectInstance potionEffect = new EffectInstance(potion, potion.isInstant() ? 0 : 100);
+		for (Effect potion : ForgeRegistries.POTIONS.getValues()) {
+			if (!potion.isBeneficial()) {
+				EffectInstance potionEffect = new EffectInstance(potion, potion.isInstantenous() ? 0 : 100);
 				List<EffectInstance> effectList = new ArrayList<>(1);
 				effectList.add(potionEffect);
-				DEBUFF_ARROW_LIST.add(PotionUtils.appendEffects(new ItemStack(Items.TIPPED_ARROW), effectList));
+				DEBUFF_ARROW_LIST.add(PotionUtils.setCustomEffects(new ItemStack(Items.TIPPED_ARROW), effectList));
 			}
 		}
 	}
@@ -49,7 +48,7 @@ public class GearedMobFactory {
 	}
 
 	public Entity getGearedEntityByFloor(int floor, World world) {
-		Entity entity = EntityList.createEntityByIDFromName(this.entityID, world);
+		Entity entity = ForgeRegistries.ENTITIES.getValue(this.entityID).create(world);
 
 		EArmorType armorType = this.getGearTier(floor);
 		EWeaponType weaponType = this.getHandEquipment();
@@ -189,21 +188,21 @@ public class GearedMobFactory {
 			int level = 30 * (floor / this.floorCount);
 			boolean allowTreasure = level > 20;
 			// EnchantmentHelper
-			EnchantmentHelper.addRandomEnchantment(this.random, mainHand, level, allowTreasure);
+			EnchantmentHelper.selectEnchantment(this.random, mainHand, level, allowTreasure);
 
-			EnchantmentHelper.addRandomEnchantment(this.random, head, level, allowTreasure);
-			EnchantmentHelper.addRandomEnchantment(this.random, chest, level, allowTreasure);
-			EnchantmentHelper.addRandomEnchantment(this.random, legs, level, allowTreasure);
-			EnchantmentHelper.addRandomEnchantment(this.random, feet, level, allowTreasure);
+			EnchantmentHelper.selectEnchantment(this.random, head, level, allowTreasure);
+			EnchantmentHelper.selectEnchantment(this.random, chest, level, allowTreasure);
+			EnchantmentHelper.selectEnchantment(this.random, legs, level, allowTreasure);
+			EnchantmentHelper.selectEnchantment(this.random, feet, level, allowTreasure);
 		}
 
-		entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, mainHand);
-		entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, offHand);
+		entity.setItemSlot(EquipmentSlotType.MAINHAND, mainHand);
+		entity.setItemSlot(EquipmentSlotType.OFFHAND, offHand);
 
-		entity.setItemStackToSlot(EquipmentSlotType.HEAD, head);
-		entity.setItemStackToSlot(EquipmentSlotType.CHEST, chest);
-		entity.setItemStackToSlot(EquipmentSlotType.LEGS, legs);
-		entity.setItemStackToSlot(EquipmentSlotType.FEET, feet);
+		entity.setItemSlot(EquipmentSlotType.HEAD, head);
+		entity.setItemSlot(EquipmentSlotType.CHEST, chest);
+		entity.setItemSlot(EquipmentSlotType.LEGS, legs);
+		entity.setItemSlot(EquipmentSlotType.FEET, feet);
 
 		if (entity instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR) entity).setHealingPotions(1);
