@@ -49,7 +49,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		super.tick();
 
 		if (this.ticksExisted >= EntityWalkerTornado.MAX_LIVING_TICKS) {

@@ -1,61 +1,71 @@
 package team.cqr.cqrepoured.entity.misc;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.Pose;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
+import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
 
-public class EntityBubble extends Entity implements IDontRenderFire {
+public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRiddenHelper {
 
 	private static final int FLY_TIME_MAX = 160;
 
 	private int flyTicks = 0;
+	
+	private float size = 1;
 
 	public EntityBubble(World worldIn) {
 		super(worldIn);
-		this.isImmuneToFire = true;
 		this.setNoGravity(true);
 	}
-
+	
 	@Override
-	protected void entityInit() {
-
+	public EntitySize getDimensions(Pose p_213305_1_) {
+		return super.getDimensions(p_213305_1_).scale(this.size);
 	}
 
+	protected static final Vector3d MOVEMENT_DIRECTION = new Vector3d(0, 0.5, 0);
+
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		super.tick();
 
-		if (!this.world.isRemote) {
-			if (!this.isBeingRidden() || this.isInLava() || (this.collidedVertically && !this.onGround) || this.flyTicks > FLY_TIME_MAX) {
-				if (this.isBeingRidden()) {
-					Entity entity = this.getPassengers().get(0);
-					entity.dismountRidingEntity();
-					entity.setPositionAndUpdate(this.posX, this.posY + 0.5D * (this.height - entity.height), this.posZ);
-					if (entity instanceof LivingEntity) {
-						if (!((LivingEntity) entity).canBreatheUnderwater() && !((LivingEntity) entity).isPotionActive(Effects.WATER_BREATHING)) {
-							entity.setAir(entity.getAir() - 5);
-						}
-					} else {
-						entity.setAir(entity.getAir() - 5);
-					}
-				}
-				this.setDead();
+		if (!this.level.isClientSide) {
+			if (this.isInLava() || (this.verticalCollision && !this.onGround) || this.flyTicks > FLY_TIME_MAX) {
+				this.remove();
 				return;
+			}
+			if (!this.getPassengers().isEmpty()) {
+				Entity entity = this.getPassengers().get(0);
+				entity.unRide();
+				Vector3d newPos = this.position().add(0, 0.5D * (this.getBbHeight() - entity.getBbHeight()), 0);
+				entity.setPos(newPos.x, newPos.y, newPos.z);
+				if (entity instanceof LivingEntity) {
+					if (!((LivingEntity) entity).canBreatheUnderwater() && !((LivingEntity) entity).hasEffect(Effects.WATER_BREATHING)) {
+						entity.setAirSupply(entity.getAirSupply() - 5);
+					}
+				} else {
+					entity.setAirSupply(entity.getAirSupply() - 5);
+				}
 			}
 
 			this.flyTicks++;
 		}
 
-		this.move(MoverType.SELF, 0.0D, 0.05D, 0.0D);
+		this.move(MoverType.SELF, MOVEMENT_DIRECTION);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		this.flyTicks += 40;
 		return true;
 	}
@@ -66,49 +76,61 @@ public class EntityBubble extends Entity implements IDontRenderFire {
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		this.flyTicks = compound.getInteger("flyTicks");
-	}
-
-	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-		compound.setInteger("flyTicks", this.flyTicks);
-	}
-
-	@Override
-	public double getMountedYOffset() {
+	public double getPassengersRidingOffset() {
 		if (this.isBeingRidden()) {
 			Entity entity = this.getPassengers().get(0);
-			return 0.5D * (this.height - entity.height) - entity.getYOffset();
+			return 0.5D * (this.getBbHeight() - entity.getBbHeight()) - entity.getMyRidingOffset();
 		}
 		return 0.0D;
 	}
-
+	
 	@Override
 	protected void addPassenger(Entity passenger) {
 		super.addPassenger(passenger);
-		float size = Math.max(passenger.width, passenger.height) + 0.1F;
-		this.setSize(size, size);
+		float size = Math.max(passenger.getBbWidth(), passenger.getBbHeight()) + 0.1F;
+		this.setSize(size);
+	}
+
+	
+	private void setSize(float sizeIn) {
+		this.size = sizeIn;
+		
+		this.refreshDimensions();
 	}
 
 	@Override
-	protected boolean canFitPassenger(Entity passenger) {
-		return !this.isBeingRidden();
+	protected boolean canAddPassenger(Entity passenger) {
+		return this.getPassengers().isEmpty();
 	}
 
 	@Override
 	public boolean shouldRiderSit() {
 		return false;
 	}
-
+	
 	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
 	}
 
 	@Override
-	public boolean shouldDismountInWater(Entity rider) {
-		return false;
+	protected void defineSynchedData() {
+		
+	}
+
+	@Override
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		this.flyTicks = compound.getInt("flyTicks");
+	}
+
+	@Override
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		compound.putInt("flyTicks", this.flyTicks);
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
