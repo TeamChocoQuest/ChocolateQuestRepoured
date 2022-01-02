@@ -18,4 +18,5 @@
 	<entry oldName="net.minecraft.entity.MultiPartEntityPart" newName="net.minecraftforge.entity.PartEntity" type="class" />
 	<entry oldName="net.minecraft.util.EnumParticleTypes" newName="net.minecraft.particles.ParticleTypes" type="class" />
 	<entry oldName="net.minecraftforge.fml.common.registry.ForgeRegistries" newName="net.minecraftforge.registries.ForgeRegistries" type="class" />
+	<entry oldName="net.minecraft.nbt.NBTBase" newName="net.minecraft.nbt.INBT" type="class" />
 </migrationMap>
