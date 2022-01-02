@@ -111,19 +111,20 @@ public class BoundingBox {
 	}
 
 	private static Vector3d rotatePitch(Vector3d vec, float pitch) {
-		return Math.abs(pitch) > 1.0E-4 ? vec.rotatePitch(pitch) : vec;
+		//TODO: Is this x or z axis?
+		return Math.abs(pitch) > 1.0E-4 ? vec.zRot(pitch) : vec;
 	}
 
 	private static Vector3d rotateYaw(Vector3d vec, float yaw) {
-		return Math.abs(yaw) > 1.0E-4 ? vec.rotateYaw(yaw) : vec;
+		return Math.abs(yaw) > 1.0E-4 ? vec.yRot(yaw) : vec;
 	}
 
 	public static <T extends Entity> List<T> getEntitiesInsideBB(World world, @Nullable T toIgnore, Class<T> entityClass, BoundingBox bb1) {
-		return world.getEntitiesWithinAABB(entityClass, bb1.getAabb(), input -> {
+		return world.getEntitiesOfClass(entityClass, bb1.getAabb(), input -> {
 			if (input == toIgnore) {
 				return false;
 			}
-			BoundingBox bb2 = new BoundingBox(input.getEntityBoundingBox(), 0.0D, 0.0D, Vector3d.ZERO);
+			BoundingBox bb2 = new BoundingBox(input.getBoundingBox(), 0.0D, 0.0D, Vector3d.ZERO);
 			for (Vector3d vertice : bb2.vertices) {
 				if (bb1.isVecInside(vertice)) {
 					return true;
@@ -148,13 +149,13 @@ public class BoundingBox {
 			Vector3d lineDirectionNormalized = lineDirection.normalize();
 
 			for (Square plane : bb2.planes) {
-				Vector3d planeNormal = plane.vec2.subtract(plane.vec1).crossProduct(plane.vec3.subtract(plane.vec1));
-				if (planeNormal.dotProduct(lineDirectionNormalized) == 0.0D) {
+				Vector3d planeNormal = plane.vec2.subtract(plane.vec1).cross(plane.vec3.subtract(plane.vec1));
+				if (planeNormal.dot(lineDirectionNormalized) == 0.0D) {
 					continue;
 				}
 
-				Vector3d vec = lineDirectionNormalized.scale((planeNormal.dotProduct(plane.vec1) - planeNormal.dotProduct(edge.vec1)) / planeNormal.dotProduct(lineDirectionNormalized));
-				if (vec.x < 0 != lineDirection.x < 0 || vec.y < 0 != lineDirection.y < 0 || vec.z < 0 != lineDirection.z < 0 || vec.lengthSquared() > lineDirection.lengthSquared()) {
+				Vector3d vec = lineDirectionNormalized.scale((planeNormal.dot(plane.vec1) - planeNormal.dot(edge.vec1)) / planeNormal.dot(lineDirectionNormalized));
+				if (vec.x < 0 != lineDirection.x < 0 || vec.y < 0 != lineDirection.y < 0 || vec.z < 0 != lineDirection.z < 0 || vec.lengthSqr() > lineDirection.lengthSqr()) {
 					continue;
 				}
 
@@ -173,7 +174,7 @@ public class BoundingBox {
 	private static double getAreaOfTriangle(Vector3d vec1, Vector3d vec2, Vector3d vec3) {
 		Vector3d v1 = vec2.subtract(vec1);
 		Vector3d v2 = vec3.subtract(vec1);
-		return 0.5D * v1.crossProduct(v2).length();
+		return 0.5D * v1.cross(v2).length();
 	}
 
 }
