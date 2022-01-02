@@ -6,14 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.particle.ParticleBeam;
 import team.cqr.cqrepoured.client.particle.ParticleMagicBell;
 import team.cqr.cqrepoured.init.CQRParticleType;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class CQRParticleManager {
 
 	private static final Int2ObjectMap<IParticleFactory> ID_PARTICLE_FACTORY_MAP = new Int2ObjectOpenHashMap<>();

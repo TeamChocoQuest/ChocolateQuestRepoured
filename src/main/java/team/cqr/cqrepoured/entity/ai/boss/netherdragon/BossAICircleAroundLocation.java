@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNetherDragon> {
 
-	private Vec3d targetPosition = null;
-	private Vec3d nextPosition = null;
-	private Vec3d vAngle = null;
-	private Vec3d direction = null;
-	private Vec3d center = null;
+	private Vector3d targetPosition = null;
+	private Vector3d nextPosition = null;
+	private Vector3d vAngle = null;
+	private Vector3d direction = null;
+	private Vector3d center = null;
 	static double DELTA_Y = 1.5;
 	static final double CIRCLING_HEIGHT = 20;
 	protected static final double ANGLE_INCREMENT = 36;
@@ -37,10 +37,10 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 		return super.shouldContinueExecuting() && this.shouldExecute();
 	}
 
-	private void calculateTargetPositions(Vec3d vInit) {
+	private void calculateTargetPositions(Vector3d vInit) {
 		this.vAngle = vInit;
 		if (this.center == null) {
-			this.center = new Vec3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+			this.center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		}
 		this.calculateTargetPositions();
 	}
@@ -53,7 +53,7 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 		}
 		this.vAngle = VectorUtil.rotateVectorAroundY(this.vAngle, ANGLE_INCREMENT);
 		this.nextPosition = this.center.add(this.vAngle);
-		this.nextPosition = this.nextPosition.add(new Vec3d(0, DELTA_Y + CIRCLING_HEIGHT, 0));
+		this.nextPosition = this.nextPosition.add(new Vector3d(0, DELTA_Y + CIRCLING_HEIGHT, 0));
 		DELTA_Y *= -1;
 		this.direction = this.nextPosition.subtract(this.targetPosition);
 		this.direction = this.direction.normalize();
@@ -92,7 +92,7 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	public void startExecuting() {
 		super.startExecuting();
 		if (this.targetPosition == null) {
-			Vec3d v = new Vec3d(32, 0, 0);
+			Vector3d v = new Vector3d(32, 0, 0);
 			this.calculateTargetPositions(v);
 		}
 	}

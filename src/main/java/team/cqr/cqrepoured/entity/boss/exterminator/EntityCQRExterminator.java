@@ -24,11 +24,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -418,11 +418,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public static final String ANIM_NAME_CANNON_SHOOT = ANIM_NAME_PREFIX + "shoot_cannon";
 	public static final String ANIM_NAME_THROW = ANIM_NAME_PREFIX + "throw";
 	public static final String ANIM_NAME_GROUND_SMASH = ANIM_NAME_PREFIX + "ground_slam";
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	private boolean shootIndicator;// = false; Default value for boolean field is false, for boolean wrapper object it is null (cause it is an object...)
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	private boolean throwIndicator;// = false;
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	private boolean smashIndicator;// = false;
 
 	private <E extends IAnimatable> PlayState predicateBigAnimations(AnimationEvent<E> event) {
@@ -707,7 +707,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			if (this.isCurrentlyPlayingAnimation()) {
 				if (this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
 					if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
-						Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
+						Vector3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
 						v = v.normalize().scale(1.5D);
 
 						// YEET!
@@ -737,7 +737,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
 				if ((entity instanceof LivingEntity && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (LivingEntity) entity))) || checkPred.test(entity)) {
-					Vec3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
+					Vector3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
 
 					entity.motionX += flyDirection.x;
 					entity.motionY += flyDirection.y;
@@ -764,19 +764,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	private void alignParts() {
 		// Artificial main hitbox
-		final Vec3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookVec().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
+		final Vector3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookVec().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
 		this.parts[4].setPosition(this.posX + offsetMainHitbox.x, this.posY, this.posZ + offsetMainHitbox.z);
 		this.parts[3].setPosition(this.posX - offsetMainHitbox.x, this.posY, this.posZ - offsetMainHitbox.z);
 
 		// Backpack and emitters
-		Vec3d offset = this.getLookVec().normalize().scale(-0.25D * this.getSizeVariation());
+		Vector3d offset = this.getLookVec().normalize().scale(-0.25D * this.getSizeVariation());
 		offset = offset.add(0, 1.25D * this.getSizeVariation(), 0);
 
 		this.parts[0].setPosition(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z);
 
-		Vec3d offsetEmittersHorizontal = this.getLookVec().normalize().scale(0.5 * this.getSizeVariation());
+		Vector3d offsetEmittersHorizontal = this.getLookVec().normalize().scale(0.5 * this.getSizeVariation());
 
-		Vec3d offsetEmitters = this.getLookVec().normalize().scale(-0.4D * this.getSizeVariation());
+		Vector3d offsetEmitters = this.getLookVec().normalize().scale(-0.4D * this.getSizeVariation());
 		offsetEmitters = offsetEmitters.add(0, 2.375D * this.getSizeVariation(), 0);
 
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 90);
@@ -973,14 +973,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		return this.dataManager.get(CANNON_RAISED);
 	}
 
-	public Vec3d getCannonFiringPointOffset() {
-		Vec3d result = Vec3d.ZERO;
+	public Vector3d getCannonFiringPointOffset() {
+		Vector3d result = Vector3d.ZERO;
 
 		final float scale = this.getSizeVariation();
 
 		result = result.add(0, 2.0D, 0);
 
-		final Vec3d facing = this.getLookVec().normalize();
+		final Vector3d facing = this.getLookVec().normalize();
 		result = result.add(facing.scale(0.75));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.65));
 
@@ -989,24 +989,24 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		return result;
 	}
 
-	public Vec3d getCannonFiringLocation() {
-		Vec3d result = this.getCannonFiringPointOffset();
+	public Vector3d getCannonFiringLocation() {
+		Vector3d result = this.getCannonFiringPointOffset();
 		result = result.add(this.posX, this.posY, this.posZ);
 		return result;
 	}
 
 	// Kick stuff
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	private boolean kickInProgressClient;
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public boolean isUsingKickAnimation() {
 		return this.kickInProgressClient;
 	}
 
 	// IServerAnimationReceiver logic
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void processAnimationUpdate(String animationID) {
 		this.currentAnimationPlaying = animationID;
 		switch (animationID) {

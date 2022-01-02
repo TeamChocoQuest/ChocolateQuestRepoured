@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -8,11 +9,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class TileEntityExporterRenderer extends TileEntityRenderer<TileEntityExporter> {
 
 	@Override

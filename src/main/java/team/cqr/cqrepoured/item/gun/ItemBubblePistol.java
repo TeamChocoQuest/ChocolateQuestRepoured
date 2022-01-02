@@ -11,7 +11,7 @@ import net.minecraft.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -70,7 +70,7 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 		double x = -Math.sin(Math.toRadians(entity.rotationYaw));
 		double z = Math.cos(Math.toRadians(entity.rotationYaw));
 		double y = -Math.sin(Math.toRadians(entity.rotationPitch));
-		this.shootBubbles(new Vec3d(x, y, z), entity);
+		this.shootBubbles(new Vector3d(x, y, z), entity);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
-	private void shootBubbles(Vec3d velocity, LivingEntity shooter) {
-		Vec3d v = new Vec3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
+	private void shootBubbles(Vector3d velocity, LivingEntity shooter) {
+		Vector3d v = new Vector3d(-this.getInaccurary() + velocity.x + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.y + (2 * this.getInaccurary() * this.rng.nextDouble()), -this.getInaccurary() + velocity.z + (2 * this.getInaccurary() * this.rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 

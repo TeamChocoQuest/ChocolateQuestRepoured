@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.ai.spells;
 
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -18,24 +18,24 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 
 	@Override
 	public void startCastingSpell() {
-		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
-		v = new Vec3d(v.x, 0, v.z);
+		Vector3d v = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
+		v = new Vector3d(v.x, 0, v.z);
 		v = v.normalize();
-		Vec3d vR = VectorUtil.rotateVectorAroundY(v, 90);
-		Vec3d vL = VectorUtil.rotateVectorAroundY(v, 270);
-		Vec3d[] positions = new Vec3d[WALL_LENGTH + 2];
-		Vec3d startPos = this.entity.getPositionVector().add(new Vec3d(v.x / 2, 0, v.z / 2));
+		Vector3d vR = VectorUtil.rotateVectorAroundY(v, 90);
+		Vector3d vL = VectorUtil.rotateVectorAroundY(v, 270);
+		Vector3d[] positions = new Vector3d[WALL_LENGTH + 2];
+		Vector3d startPos = this.entity.getPositionVector().add(new Vector3d(v.x / 2, 0, v.z / 2));
 		int arrayIndex = 0;
 		positions[arrayIndex] = startPos;
 		arrayIndex++;
 		for (int i = 1; i <= WALL_LENGTH / 2; i++) {
-			positions[arrayIndex] = startPos.add(new Vec3d(i * vR.x, 0, i * vR.z));
+			positions[arrayIndex] = startPos.add(new Vector3d(i * vR.x, 0, i * vR.z));
 			arrayIndex++;
-			positions[arrayIndex] = startPos.add(new Vec3d(i * vL.x, 0, i * vL.z));
+			positions[arrayIndex] = startPos.add(new Vector3d(i * vL.x, 0, i * vL.z));
 			arrayIndex++;
 		}
 
-		for (Vec3d p : positions) {
+		for (Vector3d p : positions) {
 			if (p != null) {
 				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity.world, this.entity);
 				wallPart.setPosition(p.x, p.y, p.z);

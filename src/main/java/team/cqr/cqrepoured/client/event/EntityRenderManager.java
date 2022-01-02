@@ -5,21 +5,21 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CachedBlockAccess;
 
-@SideOnly(Side.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface
@@ -50,7 +50,7 @@ public class EntityRenderManager {
 				x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTick;
 				y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTick;
 				z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTick;
-				Vec3d cam = ActiveRenderInfo.getCameraPosition();
+				Vector3d cam = ActiveRenderInfo.getCameraPosition();
 				camX = x + cam.x;
 				camY = y + cam.y;
 				camZ = z + cam.z;

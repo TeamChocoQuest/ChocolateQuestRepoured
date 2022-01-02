@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.particle;
 
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -11,10 +13,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 
 public class ParticleBeam extends Particle {
@@ -40,11 +40,11 @@ public class ParticleBeam extends Particle {
 		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
-		Vec3d[] avec3d = new Vec3d[] {
-				new Vec3d(-rotationX * f4 - rotationXY * f4, -rotationZ * f4, -rotationYZ * f4 - rotationXZ * f4),
-				new Vec3d(-rotationX * f4 + rotationXY * f4, rotationZ * f4, -rotationYZ * f4 + rotationXZ * f4),
-				new Vec3d(rotationX * f4 + rotationXY * f4, rotationZ * f4, rotationYZ * f4 + rotationXZ * f4),
-				new Vec3d(rotationX * f4 - rotationXY * f4, -rotationZ * f4, rotationYZ * f4 - rotationXZ * f4) };
+		Vector3d[] avec3d = new Vector3d[] {
+				new Vector3d(-rotationX * f4 - rotationXY * f4, -rotationZ * f4, -rotationYZ * f4 - rotationXZ * f4),
+				new Vector3d(-rotationX * f4 + rotationXY * f4, rotationZ * f4, -rotationYZ * f4 + rotationXZ * f4),
+				new Vector3d(rotationX * f4 + rotationXY * f4, rotationZ * f4, rotationYZ * f4 + rotationXZ * f4),
+				new Vector3d(rotationX * f4 - rotationXY * f4, -rotationZ * f4, rotationYZ * f4 - rotationXZ * f4) };
 
 		if (this.particleAngle != 0.0F) {
 			float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
@@ -52,7 +52,7 @@ public class ParticleBeam extends Particle {
 			float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
 			float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
 			float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
-			Vec3d vec3d = new Vec3d(f10, f11, f12);
+			Vector3d vec3d = new Vector3d(f10, f11, f12);
 
 			for (int l = 0; l < 4; ++l) {
 				avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale(f9 * f9 - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale(2.0F * f9));
@@ -74,7 +74,7 @@ public class ParticleBeam extends Particle {
 		return 3;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public static class Factory implements IParticleFactory {
 		@Override
 		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {

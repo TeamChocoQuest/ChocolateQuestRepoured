@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
@@ -58,7 +58,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 		final int crystalCount = this.getCrystalCount();
 		BlockPos centralPosition = this.entity.getCirclingCenter().add(0, 8, 0);
 		if (crystalCount > 1) {
-			Vec3d direction = this.entity.getLookVec();
+			Vector3d direction = this.entity.getLookVec();
 			direction = direction.normalize().scale(16);
 			double angle = 360 / crystalCount;
 			for (int i = 0; i < crystalCount; i++) {

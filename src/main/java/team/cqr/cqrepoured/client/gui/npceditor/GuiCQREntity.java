@@ -11,16 +11,16 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiSlider;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class GuiCQREntity extends ContainerScreen {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_cqr_entity.png");

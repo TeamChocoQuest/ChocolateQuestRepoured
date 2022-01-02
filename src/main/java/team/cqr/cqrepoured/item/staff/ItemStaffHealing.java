@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.world.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
@@ -23,8 +25,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.ISupportWeapon;
@@ -64,7 +64,7 @@ public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwo
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_healing.name"));

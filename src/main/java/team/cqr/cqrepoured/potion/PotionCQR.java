@@ -5,8 +5,8 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 
@@ -25,7 +25,7 @@ public class PotionCQR extends Effect {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void renderInventoryEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z) {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.renderEngine.bindTexture(this.texture);
@@ -33,7 +33,7 @@ public class PotionCQR extends Effect {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.renderEngine.bindTexture(this.texture);

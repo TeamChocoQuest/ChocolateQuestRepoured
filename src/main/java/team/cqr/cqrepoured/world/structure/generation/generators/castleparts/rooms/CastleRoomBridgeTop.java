@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.GenerationTemplate;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
@@ -38,8 +38,8 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		final int endX = this.getRoomLengthX() - 3;
 		final int endZ = this.getRoomLengthZ() - 3;
 
-		Predicate<Vec3i> bottom;
-		Predicate<Vec3i> edges;
+		Predicate<Vector3i> bottom;
+		Predicate<Vector3i> edges;
 
 		GenerationTemplate bridgeTopTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		if (this.alignment == Alignment.HORIZONTAL) {

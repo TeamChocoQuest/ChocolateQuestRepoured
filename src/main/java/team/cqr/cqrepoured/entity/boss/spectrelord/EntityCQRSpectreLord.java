@@ -16,7 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordChannelHate;
@@ -93,7 +93,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 		if (!this.world.isRemote && this.fallDistance > 3.0F) {
 			this.fallDistance = 0.0F;
 			if (this.hasAttackTarget()) {
-				Vec3d vec = TargetUtil.getPositionNearTarget(this.world, this, this.getAttackTarget(), 2.0D, 8.0D, 2.0D);
+				Vector3d vec = TargetUtil.getPositionNearTarget(this.world, this, this.getAttackTarget(), 2.0D, 8.0D, 2.0D);
 				if (vec != null) {
 					this.teleport(vec.x, vec.y, vec.z);
 				}
@@ -101,7 +101,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 				BlockPos pos = this.getHomePositionCQR();
 				this.teleport(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			} else {
-				Vec3d vec = TargetUtil.getPositionNearTarget(this.world, this, this, 0.0D, 16.0D, 8.0D);
+				Vector3d vec = TargetUtil.getPositionNearTarget(this.world, this, this, 0.0D, 16.0D, 8.0D);
 				if (vec != null) {
 					this.teleport(vec.x, vec.y, vec.z);
 				}

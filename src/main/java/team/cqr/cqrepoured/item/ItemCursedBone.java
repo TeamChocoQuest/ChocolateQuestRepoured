@@ -24,14 +24,14 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
@@ -96,8 +96,8 @@ public class ItemCursedBone extends Item {
 	}
 
 	public boolean spawnEntity(PlayerEntity player, World worldIn, ItemStack item) {
-		Vec3d start = player.getPositionEyes(1.0F);
-		Vec3d end = start.add(player.getLookVec().scale(5.0D));
+		Vector3d start = player.getPositionEyes(1.0F);
+		Vector3d end = start.add(player.getLookVec().scale(5.0D));
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null) {
@@ -127,7 +127,7 @@ public class ItemCursedBone extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (hasCursedBoneEntityTag(stack)) {
 			try {

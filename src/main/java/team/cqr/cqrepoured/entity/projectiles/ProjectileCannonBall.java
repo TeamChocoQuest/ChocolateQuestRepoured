@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class ProjectileCannonBall extends ProjectileBase {
@@ -76,7 +76,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 			this.markVelocityChanged();
 
 			if (source.getTrueSource() != null) {
-				Vec3d vec3d = source.getTrueSource().getLookVec();
+				Vector3d vec3d = source.getTrueSource().getLookVec();
 
 				if (vec3d != null) {
 					this.motionX = vec3d.x;

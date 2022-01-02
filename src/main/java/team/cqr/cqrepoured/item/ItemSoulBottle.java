@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -29,8 +30,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemSoulBottle extends Item {
 
@@ -156,7 +156,7 @@ public class ItemSoulBottle extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.soul_bottle.name"));

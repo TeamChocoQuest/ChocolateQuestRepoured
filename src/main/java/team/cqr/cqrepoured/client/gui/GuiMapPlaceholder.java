@@ -7,13 +7,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class GuiMapPlaceholder extends Screen {
 
 	private final TileEntityMap tileEntity;

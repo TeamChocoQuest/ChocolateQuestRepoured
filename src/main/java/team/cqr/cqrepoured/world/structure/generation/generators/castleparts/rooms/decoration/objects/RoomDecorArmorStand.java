@@ -3,15 +3,15 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 
 public class RoomDecorArmorStand extends RoomDecorEntityBase {
 	public RoomDecorArmorStand() {
 		super();
-		this.footprint.add(new Vec3i(0, 0, 0));
-		this.footprint.add(new Vec3i(0, 1, 0));
+		this.footprint.add(new Vector3i(0, 0, 0));
+		this.footprint.add(new Vector3i(0, 1, 0));
 	}
 
 	@Override

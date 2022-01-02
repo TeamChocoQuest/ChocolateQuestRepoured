@@ -8,7 +8,7 @@ import java.util.Random;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -69,7 +69,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		for (int i = 0; i < buildings; i++) {
 			this.processStructure(this.loadStructureFromFile(structure), position);
 			structure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder(), this.random);
-			Vec3i v = new Vec3i(DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random), 0, 0);
+			Vector3i v = new Vector3i(DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random), 0, 0);
 			v = VectorUtil.rotateVectorAroundY(v, degrees * i);
 			position = this.pos.add(v);
 			position = new BlockPos(position.getX(), this.dungeon.getYForPos(this.getWorld(), position.getX(), position.getZ(), this.random), position.getZ());

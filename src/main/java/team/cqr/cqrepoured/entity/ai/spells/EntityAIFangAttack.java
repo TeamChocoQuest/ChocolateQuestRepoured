@@ -8,7 +8,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -50,7 +50,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 				this.spawnFangs(this.entity.posX + MathHelper.cos(f2) * 2.5D, this.entity.posZ + MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {
-			Vec3d v = new Vec3d(MathHelper.cos(entityAngle), 0, MathHelper.sin(entityAngle));
+			Vector3d v = new Vector3d(MathHelper.cos(entityAngle), 0, MathHelper.sin(entityAngle));
 			v = v.normalize().scale(1.25D);
 			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRNG());
 			double angle = rows > 0 ? 120 / rows : 0;

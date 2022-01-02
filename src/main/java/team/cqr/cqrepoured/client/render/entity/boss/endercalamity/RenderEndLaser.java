@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.MinecraftForgeClient;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
@@ -29,19 +29,19 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 			double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
 			double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
 
-			Vec3d laserDirection = Vec3d.fromPitchYaw(pitch, yaw).scale(0.5D);
+			Vector3d laserDirection = Vector3d.fromPitchYaw(pitch, yaw).scale(0.5D);
 			x1 += laserDirection.x;
 			y1 += laserDirection.y;
 			z1 += laserDirection.z;
 
-			Vec3d worldPos = new Vec3d(x1, y1, z1);
+			Vector3d worldPos = new Vector3d(x1, y1, z1);
 
 			// REnder ring 1
 			float ticks = 0.25F * entity.ticksExisted;
 			float colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks)));
 			this.renderRing(5, worldPos, entity, pitch, yaw, 1D, partialTicks, laserDirection, colorMultiplier);
 			if (entity.length >= 4) {
-				Vec3d increment = Vec3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
+				Vector3d increment = Vector3d.fromPitchYaw(pitch, yaw).normalize().scale(4);
 				worldPos = worldPos.add(increment);
 				colorMultiplier = (float) (0.5F + 0.25F * (1 + Math.sin(ticks + (Math.PI / 2))));
 				this.renderRing(7, worldPos, entity, pitch, yaw, 1.5D, partialTicks, laserDirection, colorMultiplier);
@@ -61,7 +61,7 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 
 	}
 
-	private void renderRing(double corners, Vec3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vec3d laserDirection, float colorMultiplier) {
+	private void renderRing(double corners, Vector3d worldPos, T entity, float pitch, float yaw, double scale, float partialTicks, Vector3d laserDirection, float colorMultiplier) {
 		GlStateManager.pushMatrix();
 
 		// View coordinates

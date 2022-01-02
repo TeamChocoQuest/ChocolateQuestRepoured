@@ -23,7 +23,7 @@ import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Region;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,8 +36,8 @@ import team.cqr.cqrepoured.world.ChunkCacheCQR;
 public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 	private int ticksAtLastPos;
-	private Vec3d lastPosCheck = Vec3d.ZERO;
-	private Vec3d timeoutCachedNode = Vec3d.ZERO;
+	private Vector3d lastPosCheck = Vector3d.ZERO;
+	private Vector3d timeoutCachedNode = Vector3d.ZERO;
 	private long timeoutTimer;
 	@SuppressWarnings("unused")
 	private long lastTimeoutCheck;
@@ -273,7 +273,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	}
 
 	@Override
-	protected void checkForStuck(Vec3d positionVec3) {
+	protected void checkForStuck(Vector3d positionVec3) {
 		if (this.totalTicks - this.ticksAtLastPos >= 100) {
 			double aiMoveSpeed = this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed();
 			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
@@ -286,7 +286,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 		}
 
 		if (this.currentPath != null && !this.currentPath.isFinished()) {
-			Vec3d vec3d = this.currentPath.getCurrentPos();
+			Vector3d vec3d = this.currentPath.getCurrentPos();
 
 			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
@@ -303,7 +303,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 			}
 
 			if (this.timeoutLimit > 0.0D && this.totalTicks - this.timeoutTimer > this.timeoutLimit * 2.0D) {
-				this.timeoutCachedNode = Vec3d.ZERO;
+				this.timeoutCachedNode = Vector3d.ZERO;
 				this.timeoutTimer = 0L;
 				this.timeoutLimit = 0.0D;
 				this.clearPath();

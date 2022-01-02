@@ -12,7 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -72,8 +72,8 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			return false;
 		}
 		if (this.random.nextInt(10) == 0) {
-			Vec3d vec1 = this.entity.getPositionVector().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
-			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
+			Vector3d vec1 = this.entity.getPositionVector().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
+			Vector3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<MobEntity> possibleMounts = this.world.getEntitiesWithinAABB(MobEntity.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && !this.isMountOwnedByPlayer(input) && this.entity.getEntitySenses().canSee(input));
 			if (!possibleMounts.isEmpty()) {

@@ -34,8 +34,8 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
@@ -97,12 +97,12 @@ public class FactionRegistry {
 		this.loadEntityFactionRelations();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addFaction(Faction faction) {
 		this.factions.put(faction.getName(), faction);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void setReputation(UUID player, int reputation, Faction faction) {
 		if (faction.canRepuChange()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new Object2IntOpenHashMap<>());

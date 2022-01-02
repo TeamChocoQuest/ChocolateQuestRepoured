@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -90,7 +90,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 			if (this.world instanceof ServerWorld) {
 				ServerWorld ws = (ServerWorld) this.world;
-				Vec3d pos = result.hitVec;
+				Vector3d pos = result.hitVec;
 				double particleSpeed = 0.2D;
 				for (int i = 0; i < 50; i++) {
 					double dx = -0.5 + this.rand.nextDouble();

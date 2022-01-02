@@ -4,10 +4,10 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class GuiBadge extends ContainerScreen {
 
 	private static final ResourceLocation GUI_BADGE = new ResourceLocation("textures/gui/container/dispenser.png");

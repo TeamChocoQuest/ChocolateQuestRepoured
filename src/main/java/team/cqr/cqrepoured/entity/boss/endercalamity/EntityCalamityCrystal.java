@@ -17,11 +17,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.faction.Faction;
@@ -168,8 +168,8 @@ public class EntityCalamityCrystal extends Entity {
 		// Our old target was not good, we need a new one
 		if (this.currentTarget == null) {
 			// DONE: Create faction based predicate that checks for entities, also check their health
-			Vec3d p1 = this.getPositionVector().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
-			Vec3d p2 = this.getPositionVector().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
+			Vector3d p1 = this.getPositionVector().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
+			Vector3d p2 = this.getPositionVector().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb, this::doesEntityFitForAbsorbing);
 			if (!affectedEntities.isEmpty()) {
@@ -213,8 +213,8 @@ public class EntityCalamityCrystal extends Entity {
 		if (source != DamageSource.OUT_OF_WORLD) {
 			// DONE: Implement healing of all entities nearby
 
-			Vec3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
-			Vec3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			Vector3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			Vector3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb);
 			if (!affectedEntities.isEmpty()) {
@@ -235,7 +235,7 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public boolean isInRangeToRenderDist(double distance) {
 		return super.isInRangeToRenderDist(distance) || this.getBeamTarget() != null;
 	}

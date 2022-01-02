@@ -7,7 +7,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
@@ -23,7 +23,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 	@Override
 	public void startCastingSpell() {
 		LivingEntity attackTarget = this.entity.getAttackTarget();
-		Vec3d vec = attackTarget.getPositionVector();
+		Vector3d vec = attackTarget.getPositionVector();
 		vec = vec.subtract(attackTarget.getLookVec().scale(8.0D));
 		vec = vec.subtract(0.0D, 0.001D, 0.0D);
 		BlockPos pos = new BlockPos(vec);

@@ -9,7 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.GenerationTemplate;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
@@ -42,17 +42,17 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase {
 		int zStart = halfZ - 2;
 		int zEnd = halfZ + 2;
 
-		Predicate<Vec3i> firstLayer = (v -> (v.getY() == 0));
-		Predicate<Vec3i> northEdge = firstLayer.and(v -> (v.getX() >= xStart) && (v.getX() <= xEnd) && (v.getZ() == zStart));
-		Predicate<Vec3i> southEdge = firstLayer.and(v -> (v.getX() >= xStart) && (v.getX() <= xEnd) && (v.getZ() == zEnd));
-		Predicate<Vec3i> westEdge = firstLayer.and(v -> (v.getZ() >= zStart) && (v.getZ() <= zEnd) && (v.getX() == xStart));
-		Predicate<Vec3i> eastEdge = firstLayer.and(v -> (v.getZ() >= zStart) && (v.getZ() <= zEnd) && (v.getX() == xEnd));
-		Predicate<Vec3i> portalBot = (v -> (v.getY() == 0) && (v.getZ() == halfZ) && (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1));
-		Predicate<Vec3i> portalTop = (v -> (v.getY() == 4) && (v.getZ() == halfZ) && (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1));
-		Predicate<Vec3i> portalSides = (v -> (v.getY() > 0) && (v.getY() < 4) && (v.getZ() == halfZ) && ((v.getX() == xStart + 1) || (v.getX() == xEnd - 1)));
-		Predicate<Vec3i> portalMid = (v -> (v.getY() > 0) && (v.getY() < 4) && (v.getZ() == halfZ) && ((v.getX() > xStart + 1) && (v.getX() < xEnd - 1)));
-		Predicate<Vec3i> portal = portalBot.or(portalTop).or(portalSides);
-		Predicate<Vec3i> platform = portal.negate().and(firstLayer.and(v -> (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1) && (v.getZ() >= zStart + 1) && (v.getZ() <= zEnd - 1)));
+		Predicate<Vector3i> firstLayer = (v -> (v.getY() == 0));
+		Predicate<Vector3i> northEdge = firstLayer.and(v -> (v.getX() >= xStart) && (v.getX() <= xEnd) && (v.getZ() == zStart));
+		Predicate<Vector3i> southEdge = firstLayer.and(v -> (v.getX() >= xStart) && (v.getX() <= xEnd) && (v.getZ() == zEnd));
+		Predicate<Vector3i> westEdge = firstLayer.and(v -> (v.getZ() >= zStart) && (v.getZ() <= zEnd) && (v.getX() == xStart));
+		Predicate<Vector3i> eastEdge = firstLayer.and(v -> (v.getZ() >= zStart) && (v.getZ() <= zEnd) && (v.getX() == xEnd));
+		Predicate<Vector3i> portalBot = (v -> (v.getY() == 0) && (v.getZ() == halfZ) && (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1));
+		Predicate<Vector3i> portalTop = (v -> (v.getY() == 4) && (v.getZ() == halfZ) && (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1));
+		Predicate<Vector3i> portalSides = (v -> (v.getY() > 0) && (v.getY() < 4) && (v.getZ() == halfZ) && ((v.getX() == xStart + 1) || (v.getX() == xEnd - 1)));
+		Predicate<Vector3i> portalMid = (v -> (v.getY() > 0) && (v.getY() < 4) && (v.getZ() == halfZ) && ((v.getX() > xStart + 1) && (v.getX() < xEnd - 1)));
+		Predicate<Vector3i> portal = portalBot.or(portalTop).or(portalSides);
+		Predicate<Vector3i> platform = portal.negate().and(firstLayer.and(v -> (v.getX() >= xStart + 1) && (v.getX() <= xEnd - 1) && (v.getZ() >= zStart + 1) && (v.getZ() <= zEnd - 1)));
 
 		GenerationTemplate portalRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		portalRoomTemplate.addRule(northEdge, dungeon.getWoodStairBlockState().withProperty(StairsBlock.FACING, Direction.SOUTH));

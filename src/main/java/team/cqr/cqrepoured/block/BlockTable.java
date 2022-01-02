@@ -22,8 +22,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
@@ -74,7 +74,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}

@@ -6,6 +6,7 @@ import java.nio.IntBuffer;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import net.minecraft.util.math.vector.Vector3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -16,7 +17,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class ElectricFieldRenderUtil {
@@ -135,7 +135,7 @@ public class ElectricFieldRenderUtil {
 	/*
 	 * X, Y, Z are the weird xyz from the rendering stuff in the entities
 	 */
-	public static void renderElectricLineBetween(Vec3d startOffset, Vec3d endOffset, double maxOffset, double posX, double posY, double posZ, int boltCount, long seed) {
+	public static void renderElectricLineBetween(Vector3d startOffset, Vector3d endOffset, double maxOffset, double posX, double posY, double posZ, int boltCount, long seed) {
 		startOffset = startOffset.add(posX, posY, posZ);
 		endOffset = endOffset.add(posX, posY, posZ);
 		RANDOM.setSeed(seed);
@@ -158,14 +158,14 @@ public class ElectricFieldRenderUtil {
 
 		startLineStripBatch(DefaultVertexFormats.POSITION);
 
-		Vec3d direction = endOffset.subtract(startOffset);
+		Vector3d direction = endOffset.subtract(startOffset);
 		double distance = direction.length();
 		direction = direction.scale(1.0D / distance);
-		Vec3d directionOffset;
+		Vector3d directionOffset;
 		if (direction.x < 0.5D) {
-			directionOffset = direction.crossProduct(new Vec3d(1.0D, 0.0D, 0.0D)).normalize();
+			directionOffset = direction.crossProduct(new Vector3d(1.0D, 0.0D, 0.0D)).normalize();
 		} else {
-			directionOffset = direction.crossProduct(new Vec3d(0.0D, 0.0D, 1.0D)).normalize();
+			directionOffset = direction.crossProduct(new Vector3d(0.0D, 0.0D, 1.0D)).normalize();
 		}
 		int steps = Math.max(MathHelper.floor(distance / (maxOffset * 2.0D)), 4);
 		double lineLength = distance / steps;
@@ -186,10 +186,10 @@ public class ElectricFieldRenderUtil {
 		EmissiveUtil.postEmissiveTextureRendering();
 	}
 
-	private static void renderSingleElectricLineBetween(Vec3d start, Vec3d direction, Vec3d directionOffset, double lineLength, int steps, double offset) {
+	private static void renderSingleElectricLineBetween(Vector3d start, Vector3d direction, Vector3d directionOffset, double lineLength, int steps, double offset) {
 		addVertex(start.x, start.y, start.z, false);
 		for (int i = 1; i < steps; i++) {
-			Vec3d offsetVector = generateOffsetVector(direction, directionOffset);
+			Vector3d offsetVector = generateOffsetVector(direction, directionOffset);
 			double offsetScale = RANDOM.nextFloat() * offset;
 			double vX = start.x + (direction.x * i * lineLength) + (offsetVector.x * offsetScale);
 			double vY = start.y + (direction.y * i * lineLength) + (offsetVector.y * offsetScale);
@@ -199,7 +199,7 @@ public class ElectricFieldRenderUtil {
 		addVertex(start.x + direction.x * steps * lineLength, start.y + direction.y * steps * lineLength, start.z + direction.z * steps * lineLength, true);
 	}
 
-	private static Vec3d generateOffsetVector(Vec3d direction, Vec3d directionOffset) {
+	private static Vector3d generateOffsetVector(Vector3d direction, Vector3d directionOffset) {
 		return VectorUtil.rotateAroundAnyAxis(direction, directionOffset, RANDOM.nextFloat() * 360.0D);
 	}
 

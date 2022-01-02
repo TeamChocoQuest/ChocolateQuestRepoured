@@ -7,10 +7,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.ParrotRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.HandSide;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class LayerCQRPirateParrotHeldItem extends HeldItemLayer {
 
 	public LayerCQRPirateParrotHeldItem(ParrotRenderer renderCQREntity) {

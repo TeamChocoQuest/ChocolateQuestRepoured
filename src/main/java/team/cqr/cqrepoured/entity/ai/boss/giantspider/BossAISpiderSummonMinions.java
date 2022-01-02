@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.boss.giantspider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -63,9 +63,9 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		}
 		int minionCount = Math.min(this.MAX_MINIONS_AT_A_TIME, this.MAX_MINIONS - this.getAliveMinionCount());
 		double angle = 360 / minionCount;
-		Vec3d v = new Vec3d(1, 0, 0);
+		Vector3d v = new Vector3d(1, 0, 0);
 		for (int i = 0; i < minionCount; i++) {
-			Vec3d pos = this.entity.getPositionVector().add(v);
+			Vector3d pos = this.entity.getPositionVector().add(v);
 			v = VectorUtil.rotateVectorAroundY(v, angle);
 
 			Entity minion = EntityList.createEntityByIDFromName(this.minionOverride, this.entity.world);

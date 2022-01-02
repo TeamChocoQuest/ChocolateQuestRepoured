@@ -13,7 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -55,7 +55,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				return false;
 			}
 			BlockPos pos = new BlockPos(this.entity);
-			Vec3d vec = this.entity.getPositionEyes(1.0F);
+			Vector3d vec = this.entity.getPositionEyes(1.0F);
 			int horizontalRadius = CQRConfig.mobs.looterAIChestSearchRange;
 			int verticalRadius = horizontalRadius >> 1;
 			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
@@ -66,7 +66,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				if (!(te instanceof ChestTileEntity) || ((ChestTileEntity) te).isEmpty()) {
 					return false;
 				}
-				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				return result == null || result.getBlockPos().equals(mutablePos);
 			});
 		}

@@ -12,14 +12,14 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 
-@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
 public class CQRItemModels {
 
 	private static final List<Item> REGISTERED_ITEM_MODELS = new ArrayList<>();

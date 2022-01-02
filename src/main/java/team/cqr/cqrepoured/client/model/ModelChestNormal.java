@@ -4,10 +4,10 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class ModelChestNormal extends ModelBase {
 
 	public ModelRenderer chestBase;

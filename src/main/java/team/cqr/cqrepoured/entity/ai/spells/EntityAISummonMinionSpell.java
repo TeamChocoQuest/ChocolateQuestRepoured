@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -26,7 +26,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 	protected int MAX_MINIONS_AT_A_TIME = 3;
 	protected List<Entity> activeCircles = new ArrayList<>();
 	protected boolean summonViaCircle = true;
-	protected Vec3d positionOffsetForSummons = new Vec3d(0, 0, 0);
+	protected Vector3d positionOffsetForSummons = new Vector3d(0, 0, 0);
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
 
@@ -38,7 +38,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 		}
 	}
 
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vector3d offsetV) {
 		this(entity, cooldown, chargeUpTicks);
 		this.summonViaCircle = useCircle;
 		this.minionOverride = minion;
@@ -83,7 +83,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 
 	@Override
 	public void startCastingSpell() {
-		Vec3d vector = this.entity.getLookVec().normalize();
+		Vector3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();
 		if (minionCount > this.MAX_MINIONS_AT_A_TIME) {

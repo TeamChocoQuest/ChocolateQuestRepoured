@@ -4,7 +4,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
@@ -23,7 +23,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 
 	@Override
 	public void startCastingSpell() {
-		Vec3d vector = this.entity.getLookVec().normalize();
+		Vector3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 
 		int ballCount = DungeonGenUtils.randomBetween(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRNG());
@@ -33,7 +33,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
 			BlockPos centeredPos = this.entity.getAttackTarget().getPosition();
-			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+			Vector3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
 			v = v.normalize().scale(Math.abs((ballCount / 3) - 2));
 			centeredPos = centeredPos.add(v.x, v.y, v.z);
 			for (int i = 0; i < ballCount; i++) {
@@ -47,7 +47,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 					EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 0.1F, texture, null);
 					circle.setSummon(summon);
 					circle.setPosition(p.getX(), p.getY() + 10.0D, p.getZ());
-					circle.setVelocityForSummon(new Vec3d(0D, -1D, 0D));
+					circle.setVelocityForSummon(new Vector3d(0D, -1D, 0D));
 
 					this.entity.world.spawnEntity(circle);
 				}

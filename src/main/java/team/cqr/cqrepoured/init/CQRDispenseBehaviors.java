@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Bootstrap.BehaviorDispenseOptional;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
@@ -44,39 +44,39 @@ public class CQRDispenseBehaviors {
 	}
 
 	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_BUBBLE_GUN = (source, stack) -> {
-		Vec3d velocity = new Vec3d(0, 0, 0);
+		Vector3d velocity = new Vector3d(0, 0, 0);
 		switch (source.getBlockState().getValue(DispenserBlock.FACING)) {
 		case DOWN:
-			velocity = new Vec3d(0, -1, 0);
+			velocity = new Vector3d(0, -1, 0);
 			break;
 		case EAST:
-			velocity = new Vec3d(1, 0, 0);
+			velocity = new Vector3d(1, 0, 0);
 			break;
 		case NORTH:
-			velocity = new Vec3d(0, 0, -1);
+			velocity = new Vector3d(0, 0, -1);
 			break;
 		case SOUTH:
-			velocity = new Vec3d(0, 0, 1);
+			velocity = new Vector3d(0, 0, 1);
 			break;
 		case UP:
-			velocity = new Vec3d(0, 1, 0);
+			velocity = new Vector3d(0, 1, 0);
 			break;
 		case WEST:
-			velocity = new Vec3d(-1, 0, 0);
+			velocity = new Vector3d(-1, 0, 0);
 			break;
 		default:
 			break;
 
 		}
 		IPosition disPos = DispenserBlock.getDispensePosition(source);
-		Vec3d startLoc = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ());
+		Vector3d startLoc = new Vector3d(disPos.getX(), disPos.getY(), disPos.getZ());
 		Item item = stack.getItem();
 		double acc = 0.5D;
 		if (item instanceof ItemBubblePistol) {
 			ItemBubblePistol pistol = (ItemBubblePistol) item;
 			acc = pistol.getInaccurary();
 		}
-		Vec3d v = new Vec3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
+		Vector3d v = new Vector3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 
@@ -98,32 +98,32 @@ public class CQRDispenseBehaviors {
 	};
 
 	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_SOUL_BOTTLE = (source, stack) -> {
-		Vec3d velocity = new Vec3d(0, 0, 0);
+		Vector3d velocity = new Vector3d(0, 0, 0);
 		switch (source.getBlockState().getValue(DispenserBlock.FACING)) {
 		case DOWN:
-			velocity = new Vec3d(0, -1, 0);
+			velocity = new Vector3d(0, -1, 0);
 			break;
 		case EAST:
-			velocity = new Vec3d(1, 0, 0);
+			velocity = new Vector3d(1, 0, 0);
 			break;
 		case NORTH:
-			velocity = new Vec3d(0, 0, -1);
+			velocity = new Vector3d(0, 0, -1);
 			break;
 		case SOUTH:
-			velocity = new Vec3d(0, 0, 1);
+			velocity = new Vector3d(0, 0, 1);
 			break;
 		case UP:
-			velocity = new Vec3d(0, 2, 0);
+			velocity = new Vector3d(0, 2, 0);
 			break;
 		case WEST:
-			velocity = new Vec3d(-1, 0, 0);
+			velocity = new Vector3d(-1, 0, 0);
 			break;
 		default:
 			break;
 
 		}
 		IPosition disPos = DispenserBlock.getDispensePosition(source);
-		Vec3d pos = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ()).add(velocity);
+		Vector3d pos = new Vector3d(disPos.getX(), disPos.getY(), disPos.getZ()).add(velocity);
 
 		if (stack.hasTagCompound()) {
 			CompoundNBT bottle = stack.getTagCompound();

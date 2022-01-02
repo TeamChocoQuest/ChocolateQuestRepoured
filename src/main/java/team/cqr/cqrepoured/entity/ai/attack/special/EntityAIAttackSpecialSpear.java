@@ -7,7 +7,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
@@ -48,18 +48,18 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 
 	@Override
 	public void stopAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		Vec3d vec1 = attacker.getPositionEyes(1.0F);
+		Vector3d vec1 = attacker.getPositionEyes(1.0F);
 		double x = target.posX - vec1.x;
 		double y = MathHelper.clamp(vec1.y, target.posY, target.posY + target.height) - vec1.y;
 		double z = target.posZ - vec1.z;
 		double dist = MathHelper.sqrt(x * x + z * z);
 		double yaw = MathHelper.atan2(-x, z);
 		double pitch = MathHelper.atan2(-y, dist);
-		Vec3d vec2 = Vec3d.fromPitchYaw((float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw));
+		Vector3d vec2 = Vector3d.fromPitchYaw((float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw));
 		ItemStack stack = attacker.getHeldItemMainhand();
 		ItemSpearBase item = ((ItemSpearBase) stack.getItem());
 		double reachDistance = attacker.width + 0.85D + item.getReach() * 2.5D;
-		BoundingBox bb = new BoundingBox(new Vec3d(-0.25D, -0.25D, 0.0D), new Vec3d(0.25D, 0.25D, reachDistance), yaw, pitch, vec1);
+		BoundingBox bb = new BoundingBox(new Vector3d(-0.25D, -0.25D, 0.0D), new Vector3d(0.25D, 0.25D, reachDistance), yaw, pitch, vec1);
 
 		for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(attacker.world, attacker, LivingEntity.class, bb)) {
 			if (!attacker.getFaction().isAlly(entity)) {
@@ -68,9 +68,9 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 			}
 		}
 
-		Vec3d vec3 = vec1.add(new Vec3d(-0.4D, -0.5D, 0.0D).rotatePitch((float) -pitch).rotateYaw((float) -yaw));
+		Vector3d vec3 = vec1.add(new Vector3d(-0.4D, -0.5D, 0.0D).rotatePitch((float) -pitch).rotateYaw((float) -yaw));
 		for (double d = reachDistance; d >= 0.0D; d--) {
-			Vec3d vec4 = vec3.add(vec2.scale(d));
+			Vector3d vec4 = vec3.add(vec2.scale(d));
 			((ServerWorld) attacker.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 		}
 

@@ -6,14 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TextureUtil {
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public static boolean loadFileInResourcepack(File textureFile, ResourceLocation resLoc) {
 		if (textureFile != null && textureFile.exists() && resLoc != null) {
 			// This code basically loads a new texture or reloads an existing one
@@ -27,7 +27,7 @@ public class TextureUtil {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public static boolean unloadTexture(ResourceLocation texture) {
 		try {
 			CTResourcepack.remove(texture);
@@ -38,7 +38,7 @@ public class TextureUtil {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public static void reloadResourcepacks() {
 		CTResourcepack.loadAllTextures();
 		IResourceManager rm = Minecraft.getMinecraft().getResourceManager();

@@ -7,7 +7,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -49,7 +49,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		return false;
 	}
 
-	private static final Vec3i SIZE_VECTOR = new Vec3i(32, 32, 32);
+	private static final Vector3i SIZE_VECTOR = new Vector3i(32, 32, 32);
 
 	@Override
 	public void startExecuting() {

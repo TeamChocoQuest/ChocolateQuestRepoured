@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.boss.spectrelord;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
@@ -24,10 +24,10 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 	@Override
 	public void updatePositionAndRotation() {
 		// TODO reduce unnecessary vec3d creation
-		Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
+		Vector3d vec1 = new Vector3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
 		vec1 = vec1.add(this.getOffsetVector());
-		Vec3d vec2 = new Vec3d(this.target.posX, this.target.posY + this.target.height * 0.6D, this.target.posZ);
-		Vec3d vec3 = vec2.subtract(vec1);
+		Vector3d vec2 = new Vector3d(this.target.posX, this.target.posY + this.target.height * 0.6D, this.target.posZ);
+		Vector3d vec3 = vec2.subtract(vec1);
 		double dist = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z);
 		// TODO make pitch rotatable to < -90 and > 90
 		float yaw = (float) Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
@@ -43,7 +43,7 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 		this.rotationYawCQR += deltaYaw;
 		this.rotationYawCQR = MathHelper.wrapDegrees(this.rotationYawCQR);
 		this.rotationPitchCQR += deltaPitch;
-		Vec3d vec4 = Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
+		Vector3d vec4 = Vector3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
 		this.setPosition(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
 	}
 

@@ -10,7 +10,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.*;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.IRangedWeapon;
@@ -27,7 +27,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	protected static final int ATTACK_DURATION = 200;
 	protected static final float MAX_DISTANCE_TO_TARGET = 12;
 
-	protected Vec3d attackDirection = Vec3d.ZERO;
+	protected Vector3d attackDirection = Vector3d.ZERO;
 	protected short ticksCollided = 0;
 	protected boolean targetWasNullInLastCycle = false;
 

@@ -15,7 +15,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -52,17 +52,17 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 	private static final DataParameter<Byte> HOOK_STATE = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.BYTE);
 	private static final DataParameter<Integer> LATCHED_ENTITY = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.VARINT);
-	private static final DataParameter<Vec3d> LATCHED_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, CQRSerializers.VEC3D);
+	private static final DataParameter<Vector3d> LATCHED_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, CQRSerializers.VEC3D);
 
 	private double range;
 	private double speed;
-	private Vec3d startLocation = Vec3d.ZERO;
+	private Vector3d startLocation = Vector3d.ZERO;
 	private ItemStack stack;
 	private ItemHookshotBase item;
 	private Entity latchedEntity;
 
 	// last recorded position of the shooter - used to detect blocked path
-	private Vec3d lastCheckedPosition;
+	private Vector3d lastCheckedPosition;
 	// tick count of last time shooter/entity position was recorded
 	private int lastMovementCheckTick;
 
@@ -96,9 +96,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	public void shootHook(double x, double y, double z, float yaw, float pitch, double range, double speed) {
-		Vec3d v = Vec3d.fromPitchYaw(pitch, yaw);
+		Vector3d v = Vector3d.fromPitchYaw(pitch, yaw);
 		this.setPosition(x, y, z);
-		this.startLocation = new Vec3d(x, y, z);
+		this.startLocation = new Vector3d(x, y, z);
 		this.rotationYaw = yaw;
 		this.rotationPitch = pitch;
 		this.range = range;
@@ -128,7 +128,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double x = additionalData.readFloat();
 		double y = additionalData.readFloat();
 		double z = additionalData.readFloat();
-		this.startLocation = new Vec3d(x, y, z);
+		this.startLocation = new Vector3d(x, y, z);
 		this.rotationYaw = additionalData.readFloat();
 		this.prevRotationYaw = this.rotationYaw;
 		this.rotationPitch = additionalData.readFloat();
@@ -140,7 +140,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		super.entityInit();
 		this.dataManager.register(HOOK_STATE, (byte) EnumHookState.SHOOT.getIndex());
 		this.dataManager.register(LATCHED_ENTITY, -1);
-		this.dataManager.register(LATCHED_POS, Vec3d.ZERO);
+		this.dataManager.register(LATCHED_POS, Vector3d.ZERO);
 	}
 
 	@Override
@@ -197,11 +197,11 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		this.dataManager.set(LATCHED_ENTITY, latchedEntityId);
 	}
 
-	private Vec3d getLatchedPos() {
+	private Vector3d getLatchedPos() {
 		return this.dataManager.get(LATCHED_POS);
 	}
 
-	private void setLatchedPos(Vec3d vec) {
+	private void setLatchedPos(Vector3d vec) {
 		this.dataManager.set(LATCHED_POS, vec);
 	}
 
@@ -276,7 +276,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void handleStateShoot() {
-		Vec3d v = Vec3d.fromPitchYaw(this.rotationPitch, this.rotationYaw);
+		Vector3d v = Vector3d.fromPitchYaw(this.rotationPitch, this.rotationYaw);
 		this.motionX = v.x * this.speed;
 		this.motionY = v.y * this.speed;
 		this.motionZ = v.z * this.speed;
@@ -330,7 +330,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.checkForEntityStuck(latchedEntity);
 		}
 
-		Vec3d v = this.getLatchedPos();
+		Vector3d v = this.getLatchedPos();
 		this.setPosition(latchedEntity.posX + v.x, latchedEntity.posY + v.y, latchedEntity.posZ + v.z);
 
 		double x = this.thrower.posX - this.posX;
@@ -362,10 +362,10 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.checkForEntityStuck(this.thrower);
 		}
 
-		Vec3d v = this.getLatchedPos();
+		Vector3d v = this.getLatchedPos();
 		this.setPosition(v.x, v.y, v.z);
 
-		Vec3d v1 = Vec3d.fromPitchYaw(0.0F, this.rotationYaw);
+		Vector3d v1 = Vector3d.fromPitchYaw(0.0F, this.rotationYaw);
 		double x = this.posX - this.thrower.posX + v1.x * 0.1D;
 		double y = this.posY - this.thrower.posY + 1.0D;
 		double z = this.posZ - this.thrower.posZ + v1.z * 0.1D;
@@ -405,7 +405,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.checkForEntityStuck(this.thrower);
 		}
 
-		Vec3d v = this.getLatchedPos();
+		Vector3d v = this.getLatchedPos();
 		this.setPosition(latchedEntity.posX + v.x, latchedEntity.posY + v.y, latchedEntity.posZ + v.z);
 
 		double x = this.posX - this.thrower.posX;
@@ -435,7 +435,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	private void checkForEntityStuck(Entity entity) {
 		// once every 4 ticks ~ 0.2 seconds
 		if (this.ticksExisted - this.lastMovementCheckTick >= 4) {
-			Vec3d currentPos = entity.getPositionVector();
+			Vector3d currentPos = entity.getPositionVector();
 
 			if (this.lastCheckedPosition != null) {
 				double distanceTraveledSqr = currentPos.squareDistanceTo(this.lastCheckedPosition);
@@ -457,7 +457,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 				if (this.item.canLatchToBlock(state.getBlock())) {
 					// Hit a valid latch block, start pulling next tick
-					Vec3d v = result.hitVec;
+					Vector3d v = result.hitVec;
 					this.setPosition(v.x, v.y, v.z);
 					this.motionX = 0.0D;
 					this.motionY = 0.0D;
@@ -476,12 +476,12 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 					Entity entityHit = result.entityHit;
 
 					// Recalculate the hitVec because result.hitVec is just the pos of result.entityHit
-					Vec3d start = new Vec3d(this.posX, this.posY, this.posZ);
-					Vec3d end = start.add(this.motionX, this.motionY, this.motionZ);
+					Vector3d start = new Vector3d(this.posX, this.posY, this.posZ);
+					Vector3d end = start.add(this.motionX, this.motionY, this.motionZ);
 					AxisAlignedBB aabb = entityHit.getEntityBoundingBox().grow(0.3D);
 					RayTraceResult result1 = aabb.calculateIntercept(start, end);
 
-					Vec3d v = result1.hitVec;
+					Vector3d v = result1.hitVec;
 					this.setPosition(v.x, v.y, v.z);
 					this.motionX = 0.0D;
 					this.motionY = 0.0D;

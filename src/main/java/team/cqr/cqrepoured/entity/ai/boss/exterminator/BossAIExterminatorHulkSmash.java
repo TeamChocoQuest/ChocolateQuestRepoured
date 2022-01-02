@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
@@ -78,7 +78,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 			this.shockwaveWasSpawnedInCurrentCycle = true;
 
 			// Now, spawn a explosion and create the shockwave entities
-			final Vec3d hitLocation = this.entity.getPositionVector().add(this.entity.getLookVec().normalize().scale(1.5 * this.entity.getSizeVariation()));
+			final Vector3d hitLocation = this.entity.getPositionVector().add(this.entity.getLookVec().normalize().scale(1.5 * this.entity.getSizeVariation()));
 			this.world.createExplosion(this.entity, hitLocation.x, hitLocation.y, hitLocation.z, 4.0F, false);
 
 			// now, create the shockwaves

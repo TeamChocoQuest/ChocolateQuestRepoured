@@ -29,7 +29,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -115,7 +115,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			BlockPos teleportPos = null;
 			boolean teleport = this.getAttackTarget() != null || this.getHomePositionCQR() != null;
 			if (this.getAttackTarget() != null && !this.world.isRemote) {
-				Vec3d v = this.getAttackTarget().getLookVec();
+				Vector3d v = this.getAttackTarget().getLookVec();
 				v = v.normalize();
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
@@ -220,7 +220,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	private boolean teleportBehindEntity(Entity entity, boolean force) {
-		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
+		Vector3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
 		if (this.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
 				for (int iz = -1; iz <= 1; iz++) {
@@ -259,9 +259,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		int lightningCount = 6 + this.getRNG().nextInt(3);
 		double angle = 360 / lightningCount;
 		double dragonSize = dragon.width > dragon.height ? dragon.width : dragon.height;
-		Vec3d v = new Vec3d(3 + (3 * dragonSize), 0, 0);
+		Vector3d v = new Vector3d(3 + (3 * dragonSize), 0, 0);
 		for (int i = 0; i < lightningCount; i++) {
-			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
+			Vector3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
 			int dY = -3 + this.getRNG().nextInt(7);
 			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(this.world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, false, false, 1F, 0.00F, 0.0F, 0.4F);
 			this.world.spawnEntity(clb);
@@ -366,7 +366,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 				if (source.getImmediateSource() instanceof LivingEntity/* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((LivingEntity) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof AxeItem) {
 					if (DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
-						Vec3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
+						Vector3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
 						v = v.add(0, 0.75, 0);
 
 						LivingEntity attacker = (LivingEntity) source.getImmediateSource();

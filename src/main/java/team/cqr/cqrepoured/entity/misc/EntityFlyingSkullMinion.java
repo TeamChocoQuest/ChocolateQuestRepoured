@@ -15,7 +15,7 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -28,7 +28,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	protected Entity target;
 	protected boolean attacking = false;
 	protected boolean isLeftSkull = false;
-	protected Vec3d direction = null;
+	protected Vector3d direction = null;
 
 	public EntityFlyingSkullMinion(World worldIn) {
 		super(worldIn);
@@ -88,7 +88,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			if (this.target != null && !this.target.isDead) {
 				this.updateDirection();
 			}
-			Vec3d v = this.direction;
+			Vector3d v = this.direction;
 			v = v.normalize();
 			// this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
 			this.motionX = v.x * 0.4D;
@@ -100,15 +100,15 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			}
 
 		} else if (this.summoner != null) {
-			Vec3d v = this.summoner.getLookVec();
-			v = new Vec3d(v.x, 2.25D, v.z);
+			Vector3d v = this.summoner.getLookVec();
+			v = new Vector3d(v.x, 2.25D, v.z);
 			v = v.normalize();
 			v = v.scale(2.5D);
 			v = VectorUtil.rotateVectorAroundY(v, this.isLeftSkull ? 270 : 90);
-			Vec3d targetPos = this.summoner.getPositionVector().add(v);
+			Vector3d targetPos = this.summoner.getPositionVector().add(v);
 			this.getLookHelper().setLookPositionWithEntity(this.summoner, 30, 30);
 			if (this.getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
-				Vec3d velo = targetPos.subtract(this.getPositionVector());
+				Vector3d velo = targetPos.subtract(this.getPositionVector());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
 				// this.setVelocity(velo.x, velo.y * 1.5, velo.z);
@@ -203,7 +203,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 		x = compound.getDouble("vX");
 		y = compound.getDouble("vY");
 		z = compound.getDouble("vZ");
-		this.direction = new Vec3d(x, y, z);
+		this.direction = new Vector3d(x, y, z);
 		if (compound.hasKey("targetID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("targetID"));
 			if (this.world != null) {

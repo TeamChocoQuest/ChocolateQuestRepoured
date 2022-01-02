@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.block.BlockUnlitTorch;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -32,9 +32,9 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 
 		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
-			Vec3d vec = this.entity.getPositionEyes(1.0F);
+			Vector3d vec = this.entity.getPositionEyes(1.0F);
 			this.nearestTorch = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, CQRBlocks.UNLIT_TORCH, (mutablePos, state) -> {
-				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				return result == null || result.getBlockPos().equals(mutablePos);
 			});
 		}

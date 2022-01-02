@@ -12,8 +12,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
@@ -88,7 +88,7 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	class DataHolder {
 		public UUID entityId;
 		public LivingRenderer<? extends LivingEntity> renderer;

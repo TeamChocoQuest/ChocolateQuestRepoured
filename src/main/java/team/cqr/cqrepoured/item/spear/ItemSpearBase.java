@@ -11,6 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.base.Predicate;
@@ -28,12 +30,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.item.sword.ItemCQRWeapon;
@@ -102,8 +102,8 @@ public class ItemSpearBase extends ItemCQRWeapon {
 			PlayerEntity player = (PlayerEntity) entityLiving;
 
 			if (!worldIn.isRemote) {
-				Vec3d vec1 = player.getPositionEyes(1.0F);
-				Vec3d vec2 = player.getLookVec();
+				Vector3d vec1 = player.getPositionEyes(1.0F);
+				Vector3d vec2 = player.getLookVec();
 				double reachDistance = player.getEntityAttribute(PlayerEntity.REACH_DISTANCE).getAttributeValue();
 				float charge = Math.min((float) player.getItemInUseMaxCount() / (float) 40, 1.0F);
 
@@ -112,9 +112,9 @@ public class ItemSpearBase extends ItemCQRWeapon {
 					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), (1.0F + this.getAttackDamage()) * charge);
 				}
 
-				Vec3d vec3 = vec1.add(new Vec3d(0.0D, -0.5D, 0.0D).rotatePitch((float) Math.toRadians(-player.rotationPitch))).add(new Vec3d(-0.4D, 0.0D, 0.0D).rotateYaw((float) Math.toRadians(-player.rotationYaw)));
+				Vector3d vec3 = vec1.add(new Vector3d(0.0D, -0.5D, 0.0D).rotatePitch((float) Math.toRadians(-player.rotationPitch))).add(new Vector3d(-0.4D, 0.0D, 0.0D).rotateYaw((float) Math.toRadians(-player.rotationYaw)));
 				for (double d = reachDistance; d >= 0.0D; d--) {
-					Vec3d vec4 = vec3.add(vec2.scale(d));
+					Vector3d vec4 = vec3.add(vec2.scale(d));
 					((ServerWorld) worldIn).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 				}
 
@@ -126,11 +126,11 @@ public class ItemSpearBase extends ItemCQRWeapon {
 		}
 	}
 
-	private <T extends Entity> List<T> getEntities(World world, Class<T> entityClass, @Nullable T toIgnore, Vec3d vec1, Vec3d vec2, double range, @Nullable Predicate<T> predicate) {
+	private <T extends Entity> List<T> getEntities(World world, Class<T> entityClass, @Nullable T toIgnore, Vector3d vec1, Vector3d vec2, double range, @Nullable Predicate<T> predicate) {
 		List<T> list = new ArrayList<>();
-		Vec3d vec3 = vec1.add(vec2.normalize().scale(range));
+		Vector3d vec3 = vec1.add(vec2.normalize().scale(range));
 		RayTraceResult rayTraceResult1 = world.rayTraceBlocks(vec1, vec3, false, true, false);
-		Vec3d vec4 = rayTraceResult1 != null ? rayTraceResult1.hitVec : vec3;
+		Vector3d vec4 = rayTraceResult1 != null ? rayTraceResult1.hitVec : vec3;
 		AxisAlignedBB aabb1 = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec4.x, vec4.y, vec4.z);
 
 		for (T entity : world.getEntitiesWithinAABB(entityClass, aabb1, predicate)) {
@@ -150,7 +150,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.spear_diamond.name"));

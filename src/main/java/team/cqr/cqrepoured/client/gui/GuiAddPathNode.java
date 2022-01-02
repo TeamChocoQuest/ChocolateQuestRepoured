@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector2f;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -19,19 +20,18 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.pathfinding.Path;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class GuiAddPathNode extends Screen {
 
 	private final Hand hand;
@@ -460,17 +460,17 @@ public class GuiAddPathNode extends Screen {
 				int offsetX2 = connectedNode.getPos().getX() - centerX;
 				int offsetZ2 = connectedNode.getPos().getZ() - centerY;
 				boolean flag2 = offsetX2 < -radiusX || offsetX2 > radiusX || offsetZ2 < -radiusY || offsetZ2 > radiusY;
-				Vec2f start = null;
-				Vec2f end = null;
+				Vector2f start = null;
+				Vector2f end = null;
 				if (flag) {
 					start = this.calculateIntercept(offsetX2, offsetZ2, offsetX, offsetZ, -radiusX - 1, -radiusY - 1, radiusX + 1, radiusY + 1);
 				} else {
-					start = new Vec2f(offsetX, offsetZ);
+					start = new Vector2f(offsetX, offsetZ);
 				}
 				if (flag2) {
 					end = this.calculateIntercept(offsetX, offsetZ, offsetX2, offsetZ2, -radiusX - 1, -radiusY - 1, radiusX + 1, radiusY + 1);
 				} else {
-					end = new Vec2f(offsetX2, offsetZ2);
+					end = new Vector2f(offsetX2, offsetZ2);
 				}
 				if (start != null && end != null) {
 					GL11.glVertex2d(start.x, start.y);
@@ -486,17 +486,17 @@ public class GuiAddPathNode extends Screen {
 			int offsetZ2 = rootNode.getPos().getZ() - centerY;
 			boolean flag = offsetX < -radiusX || offsetX > radiusX || offsetZ < -radiusY || offsetZ > radiusY;
 			boolean flag2 = offsetX2 < -radiusX || offsetX2 > radiusX || offsetZ2 < -radiusY || offsetZ2 > radiusY;
-			Vec2f start = null;
-			Vec2f end = null;
+			Vector2f start = null;
+			Vector2f end = null;
 			if (flag) {
 				start = this.calculateIntercept(offsetX2, offsetZ2, offsetX, offsetZ, -radiusX - 1, -radiusY - 1, radiusX + 1, radiusY + 1);
 			} else {
-				start = new Vec2f(offsetX, offsetZ);
+				start = new Vector2f(offsetX, offsetZ);
 			}
 			if (flag2) {
 				end = this.calculateIntercept(offsetX, offsetZ, offsetX2, offsetZ2, -radiusX - 1, -radiusY - 1, radiusX + 1, radiusY + 1);
 			} else {
-				end = new Vec2f(offsetX2, offsetZ2);
+				end = new Vector2f(offsetX2, offsetZ2);
 			}
 			if (start != null && end != null) {
 				GL11.glVertex2d(start.x, start.y);
@@ -536,9 +536,9 @@ public class GuiAddPathNode extends Screen {
 	}
 
 	@Nullable
-	private Vec2f calculateIntercept(float x1, float y1, float x2, float y2, float minX, float minY, float maxX, float maxY) {
-		Vec2f result = null;
-		Vec2f vec = this.intersectionPoint(x1, y1, x2, y2, minX, minY, minX, maxY);
+	private Vector2f calculateIntercept(float x1, float y1, float x2, float y2, float minX, float minY, float maxX, float maxY) {
+		Vector2f result = null;
+		Vector2f vec = this.intersectionPoint(x1, y1, x2, y2, minX, minY, minX, maxY);
 		if (vec != null && this.isInside(vec, minX, minY, maxX, maxY)) {
 			result = vec;
 		}
@@ -558,7 +558,7 @@ public class GuiAddPathNode extends Screen {
 	}
 
 	@Nullable
-	private Vec2f intersectionPoint(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+	private Vector2f intersectionPoint(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
 		float f1 = x2 - x1;
 		float f2 = y2 - y1;
 		float f3 = x4 - x3;
@@ -570,11 +570,11 @@ public class GuiAddPathNode extends Screen {
 		float f6 = x1 * y2 - y1 * x2;
 		float f7 = x3 * y4 - y3 * x4;
 		float f8 = 1.0F / f5;
-		return new Vec2f((f7 * f1 - f6 * f3) * f8, (f7 * f2 - f6 * f4) * f8);
+		return new Vector2f((f7 * f1 - f6 * f3) * f8, (f7 * f2 - f6 * f4) * f8);
 	}
 
 	@Nullable
-	private Vec2f getNearest(float x1, float y1, @Nullable Vec2f vec1, @Nullable Vec2f vec2) {
+	private Vector2f getNearest(float x1, float y1, @Nullable Vector2f vec1, @Nullable Vector2f vec2) {
 		if (vec1 == null) {
 			return vec2;
 		}
@@ -594,7 +594,7 @@ public class GuiAddPathNode extends Screen {
 		}
 	}
 
-	private boolean isInside(Vec2f vec, float minX, float minY, float maxX, float maxY) {
+	private boolean isInside(Vector2f vec, float minX, float minY, float maxX, float maxY) {
 		return vec.x >= minX - 0.001F && vec.x <= maxX + 0.001F && vec.y >= minY - 0.001F && vec.y <= maxY + 0.001F;
 	}
 

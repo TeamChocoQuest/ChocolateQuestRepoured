@@ -5,7 +5,7 @@ import java.util.Random;
 
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
@@ -55,24 +55,24 @@ public class SpiralStrongholdBuilder {
 
 		// If we generate inwards our first step is to place a stairwell to invert the entrance direction
 		EStrongholdRoomType stairwellType = EStrongholdRoomType.STAIR_NN;
-		Vec3i offsetVector = null;
+		Vector3i offsetVector = null;
 		if (this.buildInwards) {
 			switch (this.allowedDirection) {
 			case NORTH:
 				stairwellType = EStrongholdRoomType.STAIR_SS;
-				offsetVector = new Vec3i(0, 0, this.dungeon.getRoomSizeZ());
+				offsetVector = new Vector3i(0, 0, this.dungeon.getRoomSizeZ());
 				break;
 			case EAST:
 				stairwellType = EStrongholdRoomType.STAIR_WW;
-				offsetVector = new Vec3i(-this.dungeon.getRoomSizeX(), 0, 0);
+				offsetVector = new Vector3i(-this.dungeon.getRoomSizeX(), 0, 0);
 				break;
 			case SOUTH:
 				stairwellType = EStrongholdRoomType.STAIR_NN;
-				offsetVector = new Vec3i(0, 0, -this.dungeon.getRoomSizeZ());
+				offsetVector = new Vector3i(0, 0, -this.dungeon.getRoomSizeZ());
 				break;
 			case WEST:
 				stairwellType = EStrongholdRoomType.STAIR_EE;
-				offsetVector = new Vec3i(this.dungeon.getRoomSizeX(), 0, 0);
+				offsetVector = new Vector3i(this.dungeon.getRoomSizeX(), 0, 0);
 				break;
 			}
 

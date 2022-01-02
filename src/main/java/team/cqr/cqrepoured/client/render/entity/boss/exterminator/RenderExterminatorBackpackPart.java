@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
@@ -38,8 +38,8 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				y2 += target.getEyeHeight();
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
-				final Vec3d start = new Vec3d(0, entity.getHeight() * 0.5, 0);
-				final Vec3d end = new Vec3d(x2 - x1, y2 - y1, z2 - z1);
+				final Vector3d start = new Vector3d(0, entity.getHeight() * 0.5, 0);
+				final Vector3d end = new Vector3d(x2 - x1, y2 - y1, z2 - z1);
 
 				GlStateManager.pushMatrix();
 

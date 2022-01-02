@@ -9,9 +9,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.network.datasync.DataEntryByte;
@@ -88,7 +88,7 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(this.getPos(), this.getPos().add(1, 2, 1));
 	}

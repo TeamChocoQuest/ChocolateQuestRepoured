@@ -11,7 +11,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
@@ -121,7 +121,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			if (dY <= (this.dungeon.getRoomSizeY() + 2)) {
 				this.floors[i - 1].setExitIsBossRoom(true);
 			} else {
-				initPos = initPos.subtract(new Vec3i(0, this.loadStructureFromFile(stair).getSize().getY(), 0));
+				initPos = initPos.subtract(new Vector3i(0, this.loadStructureFromFile(stair).getSize().getY(), 0));
 				if (!isFirst) {
 					initPos = initPos.add(0, this.dungeon.getRoomSizeY(), 0);
 				}

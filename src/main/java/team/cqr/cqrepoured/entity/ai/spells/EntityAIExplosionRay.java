@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.spells;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -16,7 +16,7 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQ
 
 	@Override
 	public void startCastingSpell() {
-		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
+		Vector3d v = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 		int explosionCount = (int) v.length();
 		v = v.normalize().scale(2);
 		explosionCount /= 2;

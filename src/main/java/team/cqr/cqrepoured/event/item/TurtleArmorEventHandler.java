@@ -8,7 +8,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -73,7 +73,7 @@ public class TurtleArmorEventHandler {
 		DamageSource source = event.getSource();
 
 		if (entity.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == CQRItems.CHESTPLATE_TURTLE && source.getDamageLocation() != null) {
-			Vec3d hitVec = source.getDamageLocation();
+			Vector3d hitVec = source.getDamageLocation();
 			double x = entity.posX - hitVec.x;
 			double z = entity.posZ - hitVec.z;
 			double yaw = Math.toDegrees(Math.atan2(-x, z));

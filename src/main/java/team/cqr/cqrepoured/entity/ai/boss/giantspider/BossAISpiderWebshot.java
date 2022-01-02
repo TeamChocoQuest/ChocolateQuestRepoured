@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.giantspider;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBase;
@@ -44,9 +44,9 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 		}
 		int projCount = DungeonGenUtils.randomBetween(MIN_WEBS, MAX_WEBS, this.entity.getRNG());
 		double angle = 180 / projCount;
-		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector()).normalize();
+		Vector3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector()).normalize();
 		for (int i = -(projCount / 2); i <= (projCount / 2); i++) {
-			Vec3d velo = VectorUtil.rotateVectorAroundY(v, i * angle);
+			Vector3d velo = VectorUtil.rotateVectorAroundY(v, i * angle);
 			velo = velo.add(0, 0.1, 0);
 
 			ProjectileBase web = this.entity.getRNG().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.world, this.entity) : new ProjectileWeb(this.entity.world, this.entity);

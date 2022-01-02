@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.model.ModelBiped;
@@ -20,8 +22,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
@@ -35,7 +35,7 @@ public class ItemCrown extends ArmorItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
 		return CQRArmorModels.crown;
 	}

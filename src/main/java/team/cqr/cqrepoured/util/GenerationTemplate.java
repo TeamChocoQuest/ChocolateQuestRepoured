@@ -12,21 +12,21 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 public class GenerationTemplate {
 
 	private class GenerationRule {
 
-		private Predicate<Vec3i> condition;
+		private Predicate<Vector3i> condition;
 		private BlockState block;
 
-		public GenerationRule(Predicate<Vec3i> condition, BlockState blockToBuild) {
+		public GenerationRule(Predicate<Vector3i> condition, BlockState blockToBuild) {
 			this.condition = condition;
 			this.block = blockToBuild;
 		}
 
-		public Predicate<Vec3i> getCondition() {
+		public Predicate<Vector3i> getCondition() {
 			return this.condition;
 		}
 
@@ -54,14 +54,14 @@ public class GenerationTemplate {
 		this.fillUnusedBlockWithAir = shouldFill;
 	}
 
-	public GenerationTemplate(Vec3i dimensions) {
+	public GenerationTemplate(Vector3i dimensions) {
 		this.generationRules = new ArrayList<>();
 		this.lengthX = dimensions.getX();
 		this.lengthY = dimensions.getY();
 		this.lengthZ = dimensions.getZ();
 	}
 
-	public void addRule(Predicate<Vec3i> condition, BlockState blockToBuild) {
+	public void addRule(Predicate<Vector3i> condition, BlockState blockToBuild) {
 		this.generationRules.add(new GenerationRule(condition, blockToBuild));
 	}
 
@@ -89,7 +89,7 @@ public class GenerationTemplate {
 				for (int y = 0; y < this.lengthY; y++) {
 					boolean foundRule = false;
 
-					Vec3i offset = new Vec3i(x, y, z);
+					Vector3i offset = new Vector3i(x, y, z);
 					for (GenerationRule rule : this.generationRules) {
 						if (rule.getCondition().test(offset)) {
 							result.put(origin.add(offset), rule.getBlock());

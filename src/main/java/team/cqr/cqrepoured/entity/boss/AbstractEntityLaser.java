@@ -15,7 +15,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.CQRMain;
@@ -35,7 +35,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public float serverRotationPitchCQR;
 	private final Object2IntMap<LivingEntity> hitInfoMap = new Object2IntOpenHashMap<>();
 	private final Map<BlockPos, BreakingInfo> blockBreakMap = new HashMap<>();
-	protected Vec3d offsetVector = Vec3d.ZERO;
+	protected Vector3d offsetVector = Vector3d.ZERO;
 
 	private static class BreakingInfo {
 
@@ -82,7 +82,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.noClip = true;
 	}
 
-	public Vec3d getOffsetVector() {
+	public Vector3d getOffsetVector() {
 		return this.offsetVector;
 	}
 
@@ -92,7 +92,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public Vec3d getPositionVector() {
+	public Vector3d getPositionVector() {
 		return super.getPositionVector().add(this.getOffsetVector());
 	}
 
@@ -155,8 +155,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 
 		if (!this.world.isRemote) {
-			Vec3d start = this.getPositionVector();
-			Vec3d end = start.add(Vec3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
+			Vector3d start = this.getPositionVector();
+			Vector3d end = start.add(Vector3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
 			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, false, false);
 			double d = result != null ? (float) result.hitVec.subtract(this.getPositionVector()).length() : this.length;
 
@@ -200,8 +200,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 				}
 			}
 
-			Vec3d vec1 = new Vec3d(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
-			Vec3d vec2 = new Vec3d(this.laserEffectRadius(), this.laserEffectRadius(), d);
+			Vector3d vec1 = new Vector3d(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
+			Vector3d vec2 = new Vector3d(this.laserEffectRadius(), this.laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
 			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, LivingEntity.class, bb)) {
 				if (this.canHitEntity(entity) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
@@ -309,7 +309,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		double vx = additionalData.readDouble();
 		double vy = additionalData.readDouble();
 		double vz = additionalData.readDouble();
-		this.offsetVector = new Vec3d(vx, vy, vz);
+		this.offsetVector = new Vector3d(vx, vy, vz);
 	}
 
 	public float getColorR() {

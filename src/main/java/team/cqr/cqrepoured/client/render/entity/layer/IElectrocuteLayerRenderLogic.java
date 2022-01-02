@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.render.entity.layer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
@@ -35,8 +35,8 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 				double y2 = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
 				double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
 
-				final Vec3d start = new Vec3d(0, entity.height * 0.5, 0);
-				final Vec3d end = new Vec3d(x2 - x1, target.height * 0.5 + y2 - y1, z2 - z1);
+				final Vector3d start = new Vector3d(0, entity.height * 0.5, 0);
+				final Vector3d end = new Vector3d(x2 - x1, target.height * 0.5 + y2 - y1, z2 - z1);
 
 				GlStateManager.pushMatrix();
 

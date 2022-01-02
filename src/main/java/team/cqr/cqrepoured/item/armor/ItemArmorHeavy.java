@@ -14,8 +14,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.init.CQRMaterials;
 
@@ -49,7 +49,7 @@ public class ItemArmorHeavy extends ArmorItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
 		ArmorMaterial armorMaterial = ((ArmorItem) itemStack.getItem()).getArmorMaterial();

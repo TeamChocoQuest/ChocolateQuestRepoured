@@ -7,7 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -67,14 +67,14 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
-		Vec3i offset;
+		Vector3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
 			for (int y = 0; y < this.height; y++) {
 				for (int z = 0; z <= this.endZ; z++) {
 					BlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
-					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
+					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vector3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
 					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {

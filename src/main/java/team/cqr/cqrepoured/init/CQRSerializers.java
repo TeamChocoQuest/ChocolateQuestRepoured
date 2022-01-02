@@ -5,7 +5,7 @@ import java.io.IOException;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,26 +18,26 @@ import team.cqr.cqrepoured.CQRMain;
 @EventBusSubscriber(modid = CQRMain.MODID)
 public class CQRSerializers {
 
-	public static final IDataSerializer<Vec3d> VEC3D = new IDataSerializer<Vec3d>() {
+	public static final IDataSerializer<Vector3d> VEC3D = new IDataSerializer<Vector3d>() {
 		@Override
-		public void write(PacketBuffer buf, Vec3d value) {
+		public void write(PacketBuffer buf, Vector3d value) {
 			buf.writeDouble(value.x);
 			buf.writeDouble(value.y);
 			buf.writeDouble(value.z);
 		}
 
 		@Override
-		public Vec3d read(PacketBuffer buf) throws IOException {
-			return new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+		public Vector3d read(PacketBuffer buf) throws IOException {
+			return new Vector3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		}
 
 		@Override
-		public DataParameter<Vec3d> createKey(int id) {
+		public DataParameter<Vector3d> createKey(int id) {
 			return new DataParameter<>(id, this);
 		}
 
 		@Override
-		public Vec3d copyValue(Vec3d value) {
+		public Vector3d copyValue(Vector3d value) {
 			return value;
 		}
 	};

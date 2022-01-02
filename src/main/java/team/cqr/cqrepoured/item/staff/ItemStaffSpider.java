@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.*;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -17,11 +18,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderBall;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 
@@ -53,7 +53,7 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_spider.name"));
@@ -68,7 +68,7 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 
 		if (!worldIn.isRemote) {
 			ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, shooter);
-			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.5D);
 			// ball.setVelocity(v.x, v.y, v.z);

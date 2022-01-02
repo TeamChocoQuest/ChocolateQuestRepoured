@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -40,8 +40,8 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 		}
 
 		if (this.timer == 100) {
-			Vec3d v = this.entity.getAttackTarget().getLookVec().normalize().scale(2);
-			Vec3d p = this.entity.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
+			Vector3d v = this.entity.getAttackTarget().getLookVec().normalize().scale(2);
+			Vector3d p = this.entity.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
 			this.entity.attemptTeleport(p.x, p.y, p.z);
 			this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
 			this.entity.attackEntityAsMob(this.entity.getAttackTarget());

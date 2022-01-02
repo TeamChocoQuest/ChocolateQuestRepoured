@@ -4,8 +4,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
  * Author: DerToaster98
  * Github: https://github.com/DerToaster98
  */
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class TileEntityForceFieldNexusRenderer extends TileEntityRenderer<TileEntityForceFieldNexus> {
 
 	private final ModelBase crystal = new ModelNexusCrystal();

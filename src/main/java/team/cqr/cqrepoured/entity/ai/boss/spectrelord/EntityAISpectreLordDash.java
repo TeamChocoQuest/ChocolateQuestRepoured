@@ -10,7 +10,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
@@ -26,7 +26,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 	private final double dashSpeed;
 	private final double dashWidth;
 	private LivingEntity target;
-	private Vec3d targetDirection;
+	private Vector3d targetDirection;
 	private double yawRadian;
 	private float yawDegree;
 
@@ -79,7 +79,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 			double dx = this.target.posX - this.entity.posX;
 			double dz = this.target.posZ - this.entity.posZ;
 			double dist = Math.sqrt(dx * dx + dz * dz);
-			this.targetDirection = new Vec3d(dx / dist * this.dashSpeed, 0.0D, dz / dist * this.dashSpeed);
+			this.targetDirection = new Vector3d(dx / dist * this.dashSpeed, 0.0D, dz / dist * this.dashSpeed);
 			this.yawRadian = Math.atan2(-dx, dz);
 			this.yawDegree = (float) Math.toDegrees(this.yawRadian);
 			this.entity.rotationYaw = this.yawDegree;
@@ -102,22 +102,22 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		double dx = this.target.posX - this.entity.posX;
 		double dz = this.target.posZ - this.entity.posZ;
 		double dist = Math.sqrt(dx * dx + dz * dz);
-		Vec3d start = this.target.getPositionVector();
-		Vec3d end = start.add(dx / dist * 3.0D, 0.0D, dz / dist * 3.0D);
+		Vector3d start = this.target.getPositionVector();
+		Vector3d end = start.add(dx / dist * 3.0D, 0.0D, dz / dist * 3.0D);
 		RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
-		Vec3d vec = TargetUtil.getPositionNearTarget(this.world, this.entity, result != null ? result.hitVec : end, start, 2.0D, 4.0D, 1.0D);
+		Vector3d vec = TargetUtil.getPositionNearTarget(this.world, this.entity, result != null ? result.hitVec : end, start, 2.0D, 4.0D, 1.0D);
 		if (vec != null) {
 			this.entity.setPosition(vec.x, vec.y, vec.z);
 		}
 	}
 
 	private void dashToTarget() {
-		Vec3d vec1 = this.entity.getPositionVector();
+		Vector3d vec1 = this.entity.getPositionVector();
 
 		boolean noClip = this.entity.noClip;
 		if (!noClip) {
-			Vec3d start = new Vec3d(this.entity.posX, this.entity.posY + this.entity.getEyeHeight(), this.entity.posZ);
-			Vec3d end = start.add(this.targetDirection);
+			Vector3d start = new Vector3d(this.entity.posX, this.entity.posY + this.entity.getEyeHeight(), this.entity.posZ);
+			Vector3d end = start.add(this.targetDirection);
 			if (this.world.rayTraceBlocks(start, end, false, true, false) == null && !this.world.collidesWithAnyBlock(this.entity.getEntityBoundingBox().offset(this.targetDirection))) {
 				this.entity.noClip = true;
 			}
@@ -125,9 +125,9 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		this.entity.move(MoverType.SELF, this.targetDirection.x, this.targetDirection.y, this.targetDirection.z);
 		this.entity.noClip = noClip;
 
-		Vec3d vec2 = this.entity.getPositionVector();
-		Vec3d vec3 = new Vec3d(-this.dashWidth, 0.0D, 0.0D);
-		Vec3d vec4 = new Vec3d(this.dashWidth, this.entity.height, vec2.subtract(vec1).length());
+		Vector3d vec2 = this.entity.getPositionVector();
+		Vector3d vec3 = new Vector3d(-this.dashWidth, 0.0D, 0.0D);
+		Vector3d vec4 = new Vector3d(this.dashWidth, this.entity.height, vec2.subtract(vec1).length());
 		BoundingBox bb = new BoundingBox(vec3, vec4, this.yawRadian, 0.0D, vec1);
 		List<LivingEntity> list = BoundingBox.getEntitiesInsideBB(this.world, this.entity, LivingEntity.class, bb);
 		Faction faction = this.entity.getFaction();

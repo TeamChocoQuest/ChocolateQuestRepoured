@@ -6,12 +6,12 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class BoundingBox {
 
-	private final Vec3d[] vertices;
+	private final Vector3d[] vertices;
 	private final Line[] edges;
 	private final Square[] planes;
 	private double minX;
@@ -22,7 +22,7 @@ public class BoundingBox {
 	private double maxZ;
 	private final AxisAlignedBB aabb;
 
-	public BoundingBox(Vec3d[] vertices, int[][] edges, int[][] planes) {
+	public BoundingBox(Vector3d[] vertices, int[][] edges, int[][] planes) {
 		this.vertices = vertices;
 		this.minX = vertices[0].x;
 		this.minY = vertices[0].y;
@@ -31,7 +31,7 @@ public class BoundingBox {
 		this.maxY = vertices[0].y;
 		this.maxZ = vertices[0].z;
 		for (int i = 1; i < vertices.length; i++) {
-			Vec3d vec = vertices[i];
+			Vector3d vec = vertices[i];
 			this.minX = Math.min(this.minX, vec.x);
 			this.minY = Math.min(this.minY, vec.y);
 			this.minZ = Math.min(this.minZ, vec.z);
@@ -50,7 +50,7 @@ public class BoundingBox {
 		}
 	}
 
-	public BoundingBox(Vec3d[] vertices) {
+	public BoundingBox(Vector3d[] vertices) {
 		this(vertices, new int[][] { { 0, 1 }, { 1, 3 }, { 3, 2 }, { 2, 0 }, { 0, 4 }, { 1, 5 }, { 3, 7 }, { 2, 6 }, { 4, 5 }, { 5, 7 }, { 7, 6 }, { 6, 4 } }, new int[][] { { 2, 3, 0, 1 }, { 0, 1, 4, 5 }, { 1, 3, 5, 7 }, { 3, 2, 7, 6 }, { 2, 0, 6, 4 }, { 4, 5, 6, 7 } });
 	}
 
@@ -59,23 +59,23 @@ public class BoundingBox {
 	 * y = up<br>
 	 * z = forward
 	 */
-	public BoundingBox(Vec3d start, Vec3d end, double yaw, double pitch, Vec3d origin) {
-		this(new Vec3d[] {
+	public BoundingBox(Vector3d start, Vector3d end, double yaw, double pitch, Vector3d origin) {
+		this(new Vector3d[] {
 				rotatePitchYaw(start, (float) -pitch, (float) -yaw).add(origin),
-				rotatePitchYaw(new Vec3d(end.x, start.y, start.z), (float) -pitch, (float) -yaw).add(origin),
-				rotatePitchYaw(new Vec3d(start.x, start.y, end.z), (float) -pitch, (float) -yaw).add(origin),
-				rotatePitchYaw(new Vec3d(end.x, start.y, end.z), (float) -pitch, (float) -yaw).add(origin),
-				rotatePitchYaw(new Vec3d(start.x, end.y, start.z), (float) -pitch, (float) -yaw).add(origin),
-				rotatePitchYaw(new Vec3d(end.x, end.y, start.z), (float) -pitch, (float) -yaw).add(origin),
-				rotatePitchYaw(new Vec3d(start.x, end.y, end.z), (float) -pitch, (float) -yaw).add(origin),
+				rotatePitchYaw(new Vector3d(end.x, start.y, start.z), (float) -pitch, (float) -yaw).add(origin),
+				rotatePitchYaw(new Vector3d(start.x, start.y, end.z), (float) -pitch, (float) -yaw).add(origin),
+				rotatePitchYaw(new Vector3d(end.x, start.y, end.z), (float) -pitch, (float) -yaw).add(origin),
+				rotatePitchYaw(new Vector3d(start.x, end.y, start.z), (float) -pitch, (float) -yaw).add(origin),
+				rotatePitchYaw(new Vector3d(end.x, end.y, start.z), (float) -pitch, (float) -yaw).add(origin),
+				rotatePitchYaw(new Vector3d(start.x, end.y, end.z), (float) -pitch, (float) -yaw).add(origin),
 				rotatePitchYaw(end, (float) -pitch, (float) -yaw).add(origin) });
 	}
 
-	public BoundingBox(AxisAlignedBB aabb, double yaw, double pitch, Vec3d origin) {
-		this(new Vec3d(aabb.minX, aabb.minY, aabb.minZ), new Vec3d(aabb.maxX, aabb.maxY, aabb.maxZ), yaw, pitch, origin);
+	public BoundingBox(AxisAlignedBB aabb, double yaw, double pitch, Vector3d origin) {
+		this(new Vector3d(aabb.minX, aabb.minY, aabb.minZ), new Vector3d(aabb.maxX, aabb.maxY, aabb.maxZ), yaw, pitch, origin);
 	}
 
-	public boolean isVecInside(Vec3d vec) {
+	public boolean isVecInside(Vector3d vec) {
 		for (Square plane : this.planes) {
 			if (!plane.isVecBehindPlane(vec)) {
 				return false;
@@ -84,8 +84,8 @@ public class BoundingBox {
 		return true;
 	}
 
-	public Vec3d[] getVertices() {
-		Vec3d[] copy = new Vec3d[this.vertices.length];
+	public Vector3d[] getVertices() {
+		Vector3d[] copy = new Vector3d[this.vertices.length];
 		System.arraycopy(this.vertices, 0, copy, 0, this.vertices.length);
 		return copy;
 	}
@@ -106,15 +106,15 @@ public class BoundingBox {
 		return this.aabb;
 	}
 
-	private static Vec3d rotatePitchYaw(Vec3d vec, float pitch, float yaw) {
+	private static Vector3d rotatePitchYaw(Vector3d vec, float pitch, float yaw) {
 		return rotateYaw(rotatePitch(vec, pitch), yaw);
 	}
 
-	private static Vec3d rotatePitch(Vec3d vec, float pitch) {
+	private static Vector3d rotatePitch(Vector3d vec, float pitch) {
 		return Math.abs(pitch) > 1.0E-4 ? vec.rotatePitch(pitch) : vec;
 	}
 
-	private static Vec3d rotateYaw(Vec3d vec, float yaw) {
+	private static Vector3d rotateYaw(Vector3d vec, float yaw) {
 		return Math.abs(yaw) > 1.0E-4 ? vec.rotateYaw(yaw) : vec;
 	}
 
@@ -123,13 +123,13 @@ public class BoundingBox {
 			if (input == toIgnore) {
 				return false;
 			}
-			BoundingBox bb2 = new BoundingBox(input.getEntityBoundingBox(), 0.0D, 0.0D, Vec3d.ZERO);
-			for (Vec3d vertice : bb2.vertices) {
+			BoundingBox bb2 = new BoundingBox(input.getEntityBoundingBox(), 0.0D, 0.0D, Vector3d.ZERO);
+			for (Vector3d vertice : bb2.vertices) {
 				if (bb1.isVecInside(vertice)) {
 					return true;
 				}
 			}
-			for (Vec3d vertice : bb1.vertices) {
+			for (Vector3d vertice : bb1.vertices) {
 				if (bb2.isVecInside(vertice)) {
 					return true;
 				}
@@ -144,21 +144,21 @@ public class BoundingBox {
 
 	private static boolean checkIfEdgeHitsPlane(BoundingBox bb1, BoundingBox bb2) {
 		for (Line edge : bb1.edges) {
-			Vec3d lineDirection = edge.vec2.subtract(edge.vec1);
-			Vec3d lineDirectionNormalized = lineDirection.normalize();
+			Vector3d lineDirection = edge.vec2.subtract(edge.vec1);
+			Vector3d lineDirectionNormalized = lineDirection.normalize();
 
 			for (Square plane : bb2.planes) {
-				Vec3d planeNormal = plane.vec2.subtract(plane.vec1).crossProduct(plane.vec3.subtract(plane.vec1));
+				Vector3d planeNormal = plane.vec2.subtract(plane.vec1).crossProduct(plane.vec3.subtract(plane.vec1));
 				if (planeNormal.dotProduct(lineDirectionNormalized) == 0.0D) {
 					continue;
 				}
 
-				Vec3d vec = lineDirectionNormalized.scale((planeNormal.dotProduct(plane.vec1) - planeNormal.dotProduct(edge.vec1)) / planeNormal.dotProduct(lineDirectionNormalized));
+				Vector3d vec = lineDirectionNormalized.scale((planeNormal.dotProduct(plane.vec1) - planeNormal.dotProduct(edge.vec1)) / planeNormal.dotProduct(lineDirectionNormalized));
 				if (vec.x < 0 != lineDirection.x < 0 || vec.y < 0 != lineDirection.y < 0 || vec.z < 0 != lineDirection.z < 0 || vec.lengthSquared() > lineDirection.lengthSquared()) {
 					continue;
 				}
 
-				Vec3d intersectionPoint = edge.vec1.add(vec);
+				Vector3d intersectionPoint = edge.vec1.add(vec);
 				int i1 = (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec1, plane.vec2)) + (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec2, plane.vec4)) + (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec4, plane.vec3))
 						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec3, plane.vec1));
 				int i2 = (int) (1000 * getAreaOfTriangle(plane.vec1, plane.vec2, plane.vec3)) + (int) (1000 * getAreaOfTriangle(plane.vec2, plane.vec3, plane.vec4));
@@ -170,9 +170,9 @@ public class BoundingBox {
 		return false;
 	}
 
-	private static double getAreaOfTriangle(Vec3d vec1, Vec3d vec2, Vec3d vec3) {
-		Vec3d v1 = vec2.subtract(vec1);
-		Vec3d v2 = vec3.subtract(vec1);
+	private static double getAreaOfTriangle(Vector3d vec1, Vector3d vec2, Vector3d vec3) {
+		Vector3d v1 = vec2.subtract(vec1);
+		Vector3d v2 = vec3.subtract(vec1);
 		return 0.5D * v1.crossProduct(v2).length();
 	}
 

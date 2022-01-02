@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.attack.special;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
@@ -56,7 +56,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector()).normalize().scale(6);
+				Vector3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector()).normalize().scale(6);
 				v = v.add(this.entity.getPositionVector());
 				this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.3);
 			}
@@ -92,7 +92,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vec3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector()).normalize().scale(6);
+				Vector3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector()).normalize().scale(6);
 				v = v.add(this.entity.getPositionVector());
 				this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.3);
 			}

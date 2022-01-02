@@ -22,8 +22,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -46,7 +46,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.great_sword.name"));

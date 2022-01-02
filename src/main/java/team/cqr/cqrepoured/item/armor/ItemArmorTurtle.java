@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
@@ -22,8 +23,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -50,7 +50,7 @@ public class ItemArmorTurtle extends ArmorItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		PlayerEntity player = Minecraft.getMinecraft().player;
 		if (player != null) {
@@ -80,7 +80,7 @@ public class ItemArmorTurtle extends ArmorItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
 		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.turtleArmorLegs : CQRArmorModels.turtleArmor;

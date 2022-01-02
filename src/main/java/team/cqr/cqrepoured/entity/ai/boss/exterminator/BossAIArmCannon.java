@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
@@ -85,7 +85,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 					this.entity.faceEntity(attackTarget, 180, 180);
 
 					ProjectileCannonBall cannonBall = new ProjectileCannonBall(this.world, this.entity, this.isCurrentSequenceFast);
-					final Vec3d armPos = this.entity.getCannonFiringLocation();
+					final Vector3d armPos = this.entity.getCannonFiringLocation();
 
 					this.spawnParticles(armPos);
 
@@ -126,7 +126,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 		return super.getStrafingSpeed();
 	}
 
-	private void spawnParticles(Vec3d armPos) {
+	private void spawnParticles(Vector3d armPos) {
 		if (this.world instanceof ServerWorld) {
 			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, true, armPos.x, armPos.y, armPos.z, 10, 0, 0, 0, 0.05);
 			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);

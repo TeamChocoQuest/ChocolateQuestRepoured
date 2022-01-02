@@ -20,7 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
@@ -62,13 +62,13 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		// }
 		this.floorBlocks.addAll(this.getFloorBlocksOfBlob(blocks, this.pos, random));
 		this.storeBlockArrayInMap(blocks, this.pos);
-		Vec3d center = new Vec3d(this.pos.down(this.dungeon.getCentralCaveSize() / 2));
-		Vec3d rad = new Vec3d(this.dungeon.getCentralCaveSize() * 1.75, 0, 0);
+		Vector3d center = new Vector3d(this.pos.down(this.dungeon.getCentralCaveSize() / 2));
+		Vector3d rad = new Vector3d(this.dungeon.getCentralCaveSize() * 1.75, 0, 0);
 		int tunnelCount = this.dungeon.getTunnelCount(random);
 		double angle = 360D / tunnelCount;
 		for (int i = 0; i < tunnelCount; i++) {
-			Vec3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
-			Vec3d startPos = center.add(v);
+			Vector3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
+			Vector3d startPos = center.add(v);
 			this.createTunnel(startPos, angle * i, this.dungeon.getTunnelStartSize(), this.dungeon.getCaveSegmentCount(), random);
 		}
 		// Filter floorblocks
@@ -235,11 +235,11 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		}
 	}
 
-	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random) {
+	private void createTunnel(Vector3d startPos, double initAngle, int startSize, int initLength, Random random) {
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize - 2) / 2;
-		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
+		Vector3d expansionDir = VectorUtil.rotateVectorAroundY(new Vector3d(startSize, 0, 0), initAngle);
 		for (int i = 0; i < initLength; i++) {
 			BlockState[][][] blob = this.getRandomBlob(this.dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
 			// if (this.dungeon.placeVines()) {

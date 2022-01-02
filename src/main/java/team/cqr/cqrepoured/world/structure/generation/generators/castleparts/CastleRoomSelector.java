@@ -21,7 +21,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.faction.Faction;
@@ -603,21 +603,21 @@ public class CastleRoomSelector {
 				if (snapToSide == Direction.NORTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
 					int x = (distFromEdge / 2) + 1;
-					rootRoom.setBossBuildOffset(new Vec3i(x, 0, 0));
+					rootRoom.setBossBuildOffset(new Vector3i(x, 0, 0));
 				} else if (snapToSide == Direction.WEST) {
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
 					int z = (distFromEdge / 2) + 1;
-					rootRoom.setBossBuildOffset(new Vec3i(0, 0, z));
+					rootRoom.setBossBuildOffset(new Vector3i(0, 0, z));
 				} else if (snapToSide == Direction.SOUTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
 					int x = (distFromEdge / 2) + 1;
 					int z = distFromEdge + 1;
-					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
+					rootRoom.setBossBuildOffset(new Vector3i(x, 0, z));
 				} else { // east
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
 					int z = (distFromEdge / 2) + 1;
 					int x = distFromEdge + 1;
-					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
+					rootRoom.setBossBuildOffset(new Vector3i(x, 0, z));
 				}
 			}
 		} else {

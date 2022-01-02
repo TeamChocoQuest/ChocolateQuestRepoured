@@ -18,7 +18,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -28,7 +28,7 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomized
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
 
 public class CastleRoomRoofBossMain extends CastleRoomBase {
-	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
+	private Vector3i bossBuildOffset = new Vector3i(0, 0, 0);
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
 	private DungeonRandomizedCastle dungeon;
 
@@ -38,7 +38,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		this.pathable = false;
 	}
 
-	public void setBossBuildOffset(Vec3i bossBuildOffset) {
+	public void setBossBuildOffset(Vector3i bossBuildOffset) {
 		this.bossBuildOffset = bossBuildOffset;
 	}
 

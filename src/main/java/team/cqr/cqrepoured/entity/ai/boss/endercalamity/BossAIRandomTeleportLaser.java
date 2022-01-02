@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaserTargeting;
@@ -14,12 +14,12 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
 	@Override
 	protected int execRandomShoot() {
-		Vec3d laserPosition = this.entity.getPositionVector();
+		Vector3d laserPosition = this.entity.getPositionVector();
 		laserPosition = laserPosition.add(0, this.entity.height / 2, 0);
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation
 		// Head distance with scale = 100%: 0.75 blocks
-		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget(), Vec3d.ZERO);
+		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget(), Vector3d.ZERO);
 		laser.setPosition(laserPosition.x, laserPosition.y, laserPosition.z);
 		this.world.spawnEntity(laser);
 		this.projectile = laser;

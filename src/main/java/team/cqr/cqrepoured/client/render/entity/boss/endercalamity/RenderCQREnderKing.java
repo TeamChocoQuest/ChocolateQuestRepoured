@@ -5,13 +5,13 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class RenderCQREnderKing extends RenderCQREntity<EntityCQREnderKing> {
 
 	public RenderCQREnderKing(EntityRendererManager rendermanagerIn) {

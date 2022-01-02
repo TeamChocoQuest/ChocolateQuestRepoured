@@ -10,14 +10,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public class ItemBullet extends Item {
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getItem() == CQRItems.BULLET_IRON) {
 			tooltip.add(TextFormatting.BLUE + "+2.5 " + I18n.format("description.bullet_damage.name"));

@@ -13,7 +13,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
@@ -124,7 +124,7 @@ public class ItemPathTool extends ItemLore {
 
 			for (Path.PathNode node : path.getNodes()) {
 				BlockPos pos = node.getPos();
-				Vec3d vec = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				Vector3d vec = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
 				// Draw start point
 				((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, node != selectedNode ? EnumParticleTypes.VILLAGER_HAPPY : EnumParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
@@ -133,7 +133,7 @@ public class ItemPathTool extends ItemLore {
 				for (int index : node.getConnectedNodes()) {
 					Path.PathNode connectedNode = path.getNode(index);
 					BlockPos pos1 = connectedNode.getPos();
-					Vec3d vec1 = new Vec3d(pos1.getX() + 0.5D - vec.x, pos1.getY() + 0.5D - vec.y, pos1.getZ() + 0.5D - vec.z);
+					Vector3d vec1 = new Vector3d(pos1.getX() + 0.5D - vec.x, pos1.getY() + 0.5D - vec.y, pos1.getZ() + 0.5D - vec.z);
 					double dist = vec1.length();
 					vec1 = vec1.normalize();
 

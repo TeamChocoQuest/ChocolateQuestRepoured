@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
@@ -141,7 +141,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	protected void spawnEquipParticlesForHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		if (this.world instanceof ServerWorld && CQRConfig.bosses.calamityBlockEquipParticles) {
 			ServerWorld ws = (ServerWorld) this.world;
-			Vec3d pos = this.getPositionOfHand(hand);
+			Vector3d pos = this.getPositionOfHand(hand);
 			for (int i = 0; i < 50; i++) {
 				double dx = -0.5 + this.entity.getRNG().nextDouble();
 				dx *= 2;
@@ -161,7 +161,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		Vec3d v = this.entity.getLookVec().normalize();
+		Vector3d v = this.entity.getLookVec().normalize();
 		if (this.entity.hasAttackTarget()) {
 			v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
 			v = v.normalize();
@@ -171,9 +171,9 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return this.throwBlockOfHand(hand, v);
 	}
 
-	protected Vec3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		Vec3d offset = this.entity.getLookVec().normalize().scale(1.25);
-		offset = new Vec3d(offset.x, 0, offset.z);
+	protected Vector3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+		Vector3d offset = this.entity.getLookVec().normalize().scale(1.25);
+		offset = new Vector3d(offset.x, 0, offset.z);
 		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 90 : 270);
 		switch (hand.name().split("_")[1].toUpperCase()) {
 		case "LOWER":
@@ -189,11 +189,11 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			break;
 		}
 		offset = offset.scale(this.entity.getSizeVariation());
-		Vec3d position = this.entity.getPositionVector().add(offset);
+		Vector3d position = this.entity.getPositionVector().add(offset);
 		return position;
 	}
 
-	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vec3d velocity) {
+	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vector3d velocity) {
 		if (this.getStateOfHand(hand) == E_HAND_STATE.BLOCK) {
 			// DONE: Implement
 			/*
@@ -204,7 +204,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			if (!handContent.isPresent()) {
 				return false;
 			}
-			Vec3d position = this.getPositionOfHand(hand);
+			Vector3d position = this.getPositionOfHand(hand);
 			BlockState block = handContent.get();
 			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, true);
 			blockProj.setPosition(position.x, position.y, position.z);
@@ -231,7 +231,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 
 	public void forceDropAllBlocks() {
 		for (EntityCQREnderCalamity.E_CALAMITY_HAND hand : EntityCQREnderCalamity.E_CALAMITY_HAND.values()) {
-			this.throwBlockOfHand(hand, new Vec3d(0, -0.5, 0));
+			this.throwBlockOfHand(hand, new Vector3d(0, -0.5, 0));
 		}
 	}
 

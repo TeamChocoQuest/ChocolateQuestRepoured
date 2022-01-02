@@ -34,7 +34,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -95,7 +95,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private static final DataParameter<Integer> SERVER_PART_LENGTH = EntityDataManager.<Integer>createKey(EntityCQRNetherDragon.class, DataSerializers.VARINT);
 
 	// AI stuff
-	private Vec3d targetLocation = null;
+	private Vector3d targetLocation = null;
 	private boolean flyingUp = false;
 
 	private static List<ResourceLocation> breakableBlocks = new ArrayList<>();
@@ -340,7 +340,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// Shoot fireball
 			this.mouthTimer = 10;
 
-			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
+			Vector3d velocity = target.getPositionVector().subtract(this.getPositionVector());
 			velocity = velocity.normalize().scale(1.5);
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			// proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
@@ -411,10 +411,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			double y = this.dragonBodyParts[i].posY;
 			double z = this.dragonBodyParts[i].posZ;
 
-			Vec3d deltaPos = new Vec3d(x - headerX, y - headerY, z - headerZ);
+			Vector3d deltaPos = new Vector3d(x - headerX, y - headerY, z - headerZ);
 			deltaPos = deltaPos.normalize();
 
-			deltaPos = deltaPos.add(new Vec3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
+			deltaPos = deltaPos.add(new Vector3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
 
 			// Dont change these values, they are important for the correct allignment of the segments!!!
 			double f = i != 0 ? 0.378D : 0.338D;
@@ -436,7 +436,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
-		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(0.5).offset(new Vec3d(this.motionX, this.motionY, this.motionZ).scale(1.5)));
+		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(0.5).offset(new Vector3d(this.motionX, this.motionY, this.motionZ).scale(1.5)));
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (segment != null) {
 				this.destroyBlocksInAABB(segment.getEntityBoundingBox());
@@ -467,12 +467,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				indx = this.getRNG().nextInt(this.dragonBodyParts.length);
 			}
 			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx - 1];
-			Vec3d v = this.dragonBodyParts[indx].getPositionVector();
+			Vector3d v = this.dragonBodyParts[indx].getPositionVector();
 			if (this.hasAttackTarget() && this.getRNG().nextDouble() > 0.6) {
 				v = this.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
 			} else {
 				v = pre.getPositionVector().subtract(v);
-				v = v.add(new Vec3d(0, 1 - (2 * this.getRNG().nextDouble()), 0));
+				v = v.add(new Vector3d(0, 1 - (2 * this.getRNG().nextDouble()), 0));
 				if (this.getRNG().nextBoolean()) {
 					v = VectorUtil.rotateVectorAroundY(v, 45);
 					int angle = this.getRNG().nextInt(61);
@@ -497,12 +497,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	public void breatheFire() {
 		double motionX, motionZ;
-		Vec3d look = this.getLookVec();
+		Vector3d look = this.getLookVec();
 		motionX = look.x;
 		motionZ = look.z;
-		Vec3d flameStartPos = this.getPositionVector().add((new Vec3d(motionX, 0, motionZ).scale((this.width / 2) - 0.25).subtract(0, 0.2, 0)));
+		Vector3d flameStartPos = this.getPositionVector().add((new Vector3d(motionX, 0, motionZ).scale((this.width / 2) - 0.25).subtract(0, 0.2, 0)));
 		flameStartPos = flameStartPos.add(0, this.height / 2, 0);
-		Vec3d v = new Vec3d(motionX, 0, motionZ).scale(0.75);
+		Vector3d v = new Vector3d(motionX, 0, motionZ).scale(0.75);
 		double ANGLE_MAX = 22.5;
 		double MAX_LENGTH = 24;
 		double angle = ANGLE_MAX / MAX_LENGTH;
@@ -511,8 +511,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if (this.world.isRemote) {
 			for (int i = 0; i <= MAX_LENGTH; i++) {
 				for (int iY = 0; iY <= 10; iY++) {
-					Vec3d vOrig = v;
-					v = new Vec3d(v.x, -0.15 + iY * dY, v.z).scale(1.5);
+					Vector3d vOrig = v;
+					v = new Vector3d(v.x, -0.15 + iY * dY, v.z).scale(1.5);
 
 					this.world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x * 0.5, v.y * 0.5, v.z * 0.5);
 					this.world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
@@ -522,7 +522,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				v = VectorUtil.rotateVectorAroundY(v, angle);
 			}
 		} else {
-			v = new Vec3d(motionX, 0, motionZ).scale(0.75);
+			v = new Vector3d(motionX, 0, motionZ).scale(0.75);
 			double angleTan = Math.tan(Math.toRadians(ANGLE_MAX / 2D));
 			MAX_LENGTH *= 1.25;
 			int count = 9;
@@ -531,8 +531,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			for (int i = 0; i < count; i++) {
 				double r = angleTan * currentLength;
 				// System.out.println("R=" + r);
-				Vec3d v2 = new Vec3d(v.x, -0.15 + (5 * -0.05), v.z).scale(currentLength - r);
-				Vec3d pCenter = flameStartPos.add(v2);
+				Vector3d v2 = new Vector3d(v.x, -0.15 + (5 * -0.05), v.z).scale(currentLength - r);
+				Vector3d pCenter = flameStartPos.add(v2);
 				AxisAlignedBB aabb = new AxisAlignedBB(pCenter.x - r, pCenter.y - r, pCenter.z - r, pCenter.x + r, pCenter.y + r, pCenter.z + r).shrink(0.25);
 				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, aabb, TargetUtil.createPredicateNonAlly(this.getFaction()))) {
 					ent.setFire(8);
@@ -941,11 +941,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// AI stuff
 	@Nullable
-	public Vec3d getTargetLocation() {
+	public Vector3d getTargetLocation() {
 		return this.targetLocation;
 	}
 
-	public void setTargetLocation(Vec3d newTarget) {
+	public void setTargetLocation(Vector3d newTarget) {
 		this.targetLocation = newTarget;
 	}
 

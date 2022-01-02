@@ -14,10 +14,10 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -26,7 +26,7 @@ import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class GuiMerchantEditTrade extends ContainerScreen {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");

@@ -4,7 +4,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class PathNavigateDirectLine extends PathNavigator {
@@ -23,7 +23,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 
 	@Override
 	protected void pathFollow() {
-		Vec3d vec3d = this.getEntityPosition();
+		Vector3d vec3d = this.getEntityPosition();
 		float f = this.entity.width * this.entity.width;
 		// int i = 6;
 
@@ -32,7 +32,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 		}
 
 		for (int j = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); j > this.currentPath.getCurrentPathIndex(); --j) {
-			Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, j);
+			Vector3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, j);
 
 			if (vec3d1.squareDistanceTo(vec3d) <= 36.0D && this.isDirectPathBetweenPoints(vec3d, vec3d1, 0, 0, 0)) {
 				this.currentPath.setCurrentPathIndex(j);
@@ -43,8 +43,8 @@ public class PathNavigateDirectLine extends PathNavigator {
 	}
 
 	@Override
-	protected Vec3d getEntityPosition() {
-		return new Vec3d(this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ);
+	protected Vector3d getEntityPosition() {
+		return new Vector3d(this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 	}
 
 	@Override
-	protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ) {
+	protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
 		return true;
 	}
 

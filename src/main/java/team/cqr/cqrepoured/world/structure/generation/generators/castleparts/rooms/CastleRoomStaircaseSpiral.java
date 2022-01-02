@@ -6,14 +6,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.SpiralStaircaseBuilder;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 
 public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	private Direction firstStairSide;
-	private Vec3i pillarOffset;
+	private Vector3i pillarOffset;
 
 	public CastleRoomStaircaseSpiral(int sideLength, int height, int floor, Random rand) {
 		super(sideLength, height, floor, rand);
@@ -99,6 +99,6 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	private void recalcPillarOffset() {
 		int centerX = (this.roomLengthX - 1) / 2;
 		int centerZ = (this.roomLengthZ - 1) / 2;
-		this.pillarOffset = new Vec3i(centerX, 0, centerZ);
+		this.pillarOffset = new Vector3i(centerX, 0, centerZ);
 	}
 }

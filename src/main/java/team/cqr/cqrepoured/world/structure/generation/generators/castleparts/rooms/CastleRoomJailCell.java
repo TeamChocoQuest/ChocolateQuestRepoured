@@ -17,7 +17,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
@@ -70,10 +70,10 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 		int endX = this.getDecorationLengthX() - 1;
 		int endZ = this.getDecorationLengthZ() - 1;
 
-		Predicate<Vec3i> northRow = (v -> ((v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
-		Predicate<Vec3i> southRow = (v -> ((v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
-		Predicate<Vec3i> westRow = (v -> ((v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
-		Predicate<Vec3i> eastRow = (v -> ((v.getX() == endX - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+		Predicate<Vector3i> northRow = (v -> ((v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
+		Predicate<Vector3i> southRow = (v -> ((v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
+		Predicate<Vector3i> westRow = (v -> ((v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+		Predicate<Vector3i> eastRow = (v -> ((v.getX() == endX - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
 
 		GenerationTemplate template = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		// here we take advantage of the fact that rules added to the template earlier will take priority
@@ -81,12 +81,12 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 
 		if (this.doorSide == Direction.NORTH) {
 			int half = this.getDecorationLengthX() / 2;
-			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
-			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == 1) && (v.getX() == half)));
-			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == 1) && (v.getX() == half + 1)));
-			Predicate<Vec3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getZ() == 1) && (v.getX() == half)));
-			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getZ() == 1) && (v.getX() == half + 1)));
-			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getZ() == 0) && ((v.getX() == half - 1) || (v.getX() == half + 2))));
+			Predicate<Vector3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
+			Predicate<Vector3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == 1) && (v.getX() == half)));
+			Predicate<Vector3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == 1) && (v.getX() == half + 1)));
+			Predicate<Vector3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getZ() == 1) && (v.getX() == half)));
+			Predicate<Vector3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getZ() == 1) && (v.getX() == half + 1)));
+			Predicate<Vector3i> levers = (v -> ((v.getY() == 1) && (v.getZ() == 0) && ((v.getX() == half - 1) || (v.getX() == half + 2))));
 
 			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.SOUTH).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.RIGHT));
 			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.SOUTH).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.LEFT));
@@ -96,12 +96,12 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(LeverBlock.FACING, LeverBlock.EnumOrientation.NORTH));
 		} else if (this.doorSide == Direction.SOUTH) {
 			int half = this.getDecorationLengthX() / 2;
-			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == endZ - 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
-			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half)));
-			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
-			Predicate<Vec3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getZ() == endZ - 1) && (v.getX() == half)));
-			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
-			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getZ() == endZ) && ((v.getX() == half - 1) || (v.getX() == half + 2))));
+			Predicate<Vector3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getZ() == endZ - 1) && (v.getX() >= half - 1) && (v.getX() <= half + 2)));
+			Predicate<Vector3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half)));
+			Predicate<Vector3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
+			Predicate<Vector3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getZ() == endZ - 1) && (v.getX() == half)));
+			Predicate<Vector3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getZ() == endZ - 1) && (v.getX() == half + 1)));
+			Predicate<Vector3i> levers = (v -> ((v.getY() == 1) && (v.getZ() == endZ) && ((v.getX() == half - 1) || (v.getX() == half + 2))));
 
 			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.NORTH).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.LEFT));
 			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.NORTH).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.RIGHT));
@@ -111,12 +111,12 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(LeverBlock.FACING, LeverBlock.EnumOrientation.SOUTH));
 		} else if (this.doorSide == Direction.WEST) {
 			int half = this.getDecorationLengthZ() / 2;
-			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
-			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == 1) && (v.getZ() == half)));
-			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == 1) && (v.getZ() == half + 1)));
-			Predicate<Vec3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getX() == 1) && (v.getZ() == half)));
-			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getX() == 1) && (v.getZ() == half + 1)));
-			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getX() == 0) && ((v.getZ() == half - 1) || (v.getZ() == half + 2))));
+			Predicate<Vector3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
+			Predicate<Vector3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == 1) && (v.getZ() == half)));
+			Predicate<Vector3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == 1) && (v.getZ() == half + 1)));
+			Predicate<Vector3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getX() == 1) && (v.getZ() == half)));
+			Predicate<Vector3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getX() == 1) && (v.getZ() == half + 1)));
+			Predicate<Vector3i> levers = (v -> ((v.getY() == 1) && (v.getX() == 0) && ((v.getZ() == half - 1) || (v.getZ() == half + 2))));
 
 			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.EAST).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.LEFT));
 			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.EAST).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.RIGHT));
@@ -126,12 +126,12 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 			template.addRule(levers, Blocks.LEVER.getDefaultState().withProperty(LeverBlock.FACING, LeverBlock.EnumOrientation.WEST));
 		} else if (this.doorSide == Direction.EAST) {
 			int half = this.getDecorationLengthZ() / 2;
-			Predicate<Vec3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == endX - 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
-			Predicate<Vec3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half)));
-			Predicate<Vec3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
-			Predicate<Vec3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getX() == endX - 1) && (v.getZ() == half)));
-			Predicate<Vec3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
-			Predicate<Vec3i> levers = (v -> ((v.getY() == 1) && (v.getX() == endX) && ((v.getZ() == half - 1) || (v.getZ() == half + 2))));
+			Predicate<Vector3i> doorFrame = (v -> ((v.getY() >= 0) && (v.getY() <= 2) && (v.getX() == endX - 1) && (v.getZ() >= half - 1) && (v.getZ() <= half + 2)));
+			Predicate<Vector3i> doorLower1 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half)));
+			Predicate<Vector3i> doorLower2 = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
+			Predicate<Vector3i> doorUpper1 = (v -> ((v.getY() == 1) && (v.getX() == endX - 1) && (v.getZ() == half)));
+			Predicate<Vector3i> doorUpper2 = (v -> ((v.getY() == 1) && (v.getX() == endX - 1) && (v.getZ() == half + 1)));
+			Predicate<Vector3i> levers = (v -> ((v.getY() == 1) && (v.getX() == endX) && ((v.getZ() == half - 1) || (v.getZ() == half + 2))));
 
 			template.addRule(doorLower1, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.WEST).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.RIGHT));
 			template.addRule(doorLower2, Blocks.IRON_DOOR.getDefaultState().withProperty(DoorBlock.FACING, Direction.WEST).withProperty(DoorBlock.HALF, DoorBlock.EnumDoorHalf.LOWER).withProperty(DoorBlock.HINGE, DoorBlock.EnumHingePosition.LEFT));

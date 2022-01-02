@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -19,8 +21,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
@@ -29,8 +29,8 @@ import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
-@SideOnly(Side.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
 public class RenderEventHandler {
 
 	@SubscribeEvent

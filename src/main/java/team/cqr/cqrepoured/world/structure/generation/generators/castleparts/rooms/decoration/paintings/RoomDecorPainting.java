@@ -10,13 +10,13 @@ import java.util.Set;
 import net.minecraft.entity.item.PaintingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class RoomDecorPainting {
-	private Map<PaintingEntity.EnumArt, List<Vec3i>> artFootprints = new EnumMap<>(PaintingEntity.EnumArt.class);
+	private Map<PaintingEntity.EnumArt, List<Vector3i>> artFootprints = new EnumMap<>(PaintingEntity.EnumArt.class);
 
 	public RoomDecorPainting() {
 		super();
@@ -39,9 +39,9 @@ public class RoomDecorPainting {
 	}
 
 	public void build(PaintingEntity.EnumArt art, World world, BlockPos start, BlockStateGenArray genArray, Direction side, Set<BlockPos> decoMap) {
-		List<Vec3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
+		List<Vector3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
 
-		for (Vec3i placement : rotated) {
+		for (Vector3i placement : rotated) {
 			BlockPos pos = start.add(placement);
 			decoMap.add(pos);
 		}
@@ -65,9 +65,9 @@ public class RoomDecorPainting {
 
 		for (PaintingEntity.EnumArt art : PaintingEntity.EnumArt.values()) {
 			boolean fits = true;
-			List<Vec3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
+			List<Vector3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
 
-			for (Vec3i placement : rotated) {
+			for (Vector3i placement : rotated) {
 				BlockPos pos = start.add(placement);
 				if (!decoArea.contains(pos) || decoMap.contains(pos)) {
 					fits = false;
@@ -83,23 +83,23 @@ public class RoomDecorPainting {
 		return fitList;
 	}
 
-	private List<Vec3i> getFootPrintFromArtType(PaintingEntity.EnumArt artType) {
+	private List<Vector3i> getFootPrintFromArtType(PaintingEntity.EnumArt artType) {
 		final int pixelsPerBlock = 16;
-		List<Vec3i> footprint = new ArrayList<>();
+		List<Vector3i> footprint = new ArrayList<>();
 
 		int blockWidth = artType.sizeX / pixelsPerBlock;
 		int blockHeight = artType.sizeY / pixelsPerBlock;
 		for (int x = 0; x < blockWidth; x++) {
 			for (int y = 0; y < blockHeight; y++) {
-				footprint.add(new Vec3i(x, y, 0));
+				footprint.add(new Vector3i(x, y, 0));
 			}
 		}
 
 		return footprint;
 	}
 
-	protected List<Vec3i> alignFootprint(List<Vec3i> unrotated, Direction side) {
-		List<Vec3i> result = new ArrayList<>();
+	protected List<Vector3i> alignFootprint(List<Vector3i> unrotated, Direction side) {
+		List<Vector3i> result = new ArrayList<>();
 
 		unrotated.forEach(v -> result.add(DungeonGenUtils.rotateVec3i(v, side)));
 

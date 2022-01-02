@@ -9,6 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
@@ -29,8 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.util.ItemUtil;
 
@@ -56,7 +56,7 @@ public class ItemArmorSpider extends ArmorItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.spider_armor.name"));
@@ -192,7 +192,7 @@ public class ItemArmorSpider extends ArmorItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
 		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.spiderArmorLegs : CQRArmorModels.spiderArmor;

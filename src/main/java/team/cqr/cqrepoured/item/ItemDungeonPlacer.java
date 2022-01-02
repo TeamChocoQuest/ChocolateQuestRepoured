@@ -21,13 +21,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
@@ -78,7 +78,7 @@ public class ItemDungeonPlacer extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("dependencies")) {
@@ -113,8 +113,8 @@ public class ItemDungeonPlacer extends Item {
 				DungeonBase dungeon = DungeonRegistry.getInstance().getDungeon(dungeonName);
 
 				if (dungeon != null) {
-					Vec3d vec = playerIn.getPositionEyes(1.0F);
-					Vec3d look = playerIn.getLookVec();
+					Vector3d vec = playerIn.getPositionEyes(1.0F);
+					Vector3d look = playerIn.getLookVec();
 
 					RayTraceResult result = worldIn.rayTraceBlocks(vec, vec.add(look.scale(256.0D)));
 

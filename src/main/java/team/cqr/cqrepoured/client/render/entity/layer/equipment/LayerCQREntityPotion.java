@@ -8,14 +8,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class LayerCQREntityPotion extends AbstractLayerCQR {
 
 	public LayerCQREntityPotion(RenderCQREntity<?> renderCQREntity) {

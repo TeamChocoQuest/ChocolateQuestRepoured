@@ -15,8 +15,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.util.GuiHandler;
@@ -54,7 +54,7 @@ public class BlockBossBlock extends Block {
 		return BlockRenderType.MODEL;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;

@@ -6,7 +6,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -30,9 +30,9 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 				((LivingEntity) t).addPotionEffect(new EffectInstance(Effect.getPotionById(15), 40));
 			}
 		});
-		Vec3d v = new Vec3d(2.5, 0, 0);
+		Vector3d v = new Vector3d(2.5, 0, 0);
 		for (int i = 0; i < 3; i++) {
-			Vec3d pos = this.entity.getPositionVector().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
+			Vector3d pos = this.entity.getPositionVector().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
 			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.getEntityWorld());
 			illusion.setPosition(pos.x, pos.y, pos.z);
 			this.entity.world.spawnEntity(illusion);

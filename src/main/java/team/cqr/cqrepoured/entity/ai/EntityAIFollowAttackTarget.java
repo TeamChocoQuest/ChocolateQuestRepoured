@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
@@ -34,7 +34,7 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 
 	@Override
 	public void startExecuting() {
-		Vec3d v = this.entity.getLastPosAttackTarget();
+		Vector3d v = this.entity.getLastPosAttackTarget();
 		this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
 	}
 
@@ -46,7 +46,7 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 	@Override
 	public void updateTask() {
 		if (this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.ticksExisted) {
-			Vec3d v = this.entity.getLastPosAttackTarget();
+			Vector3d v = this.entity.getLastPosAttackTarget();
 			this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
 		}
 		if (!this.entity.hasPath()) {

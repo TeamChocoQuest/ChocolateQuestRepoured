@@ -5,7 +5,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
@@ -122,7 +122,7 @@ public class DungeonPlacement {
 		}
 	}
 
-	public MutableVec3d transform(Vec3d vec) {
+	public MutableVec3d transform(Vector3d vec) {
 		return transform(vec.x, vec.y, vec.z, this.partPos, this.mirror, this.rotation);
 	}
 
@@ -130,7 +130,7 @@ public class DungeonPlacement {
 		return transform(x, y, z, this.partPos, this.mirror, this.rotation);
 	}
 
-	public static MutableVec3d transform(Vec3d vec, Mirror mirror, Rotation rotation) {
+	public static MutableVec3d transform(Vector3d vec, Mirror mirror, Rotation rotation) {
 		return transform(vec.x, vec.y, vec.z, BlockPos.ORIGIN, mirror, rotation);
 	}
 
@@ -138,7 +138,7 @@ public class DungeonPlacement {
 		return transform(x, y, z, BlockPos.ORIGIN, mirror, rotation);
 	}
 
-	public static MutableVec3d transform(Vec3d vec, BlockPos origin, Mirror mirror, Rotation rotation) {
+	public static MutableVec3d transform(Vector3d vec, BlockPos origin, Mirror mirror, Rotation rotation) {
 		return transform(vec.x, vec.y, vec.z, origin, mirror, rotation);
 	}
 

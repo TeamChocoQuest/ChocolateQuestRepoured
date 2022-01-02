@@ -42,20 +42,20 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.ServerBossInfo;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.CQRMain;
@@ -153,7 +153,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected float sizeScaling = 1.0F;
 	protected int lastTickWithAttackTarget = Integer.MIN_VALUE;
 	protected int lastTimeSeenAttackTarget = Integer.MIN_VALUE;
-	protected Vec3d lastPosAttackTarget = Vec3d.ZERO;
+	protected Vector3d lastPosAttackTarget = Vector3d.ZERO;
 	protected EntityAISpellHandler spellHandler;
 	private int invisibilityTick;
 
@@ -215,7 +215,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected ServerBossInfo bossInfoServer;
 
 	// Client only
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	protected ESpeechBubble currentSpeechBubbleID;
 
 	protected AbstractEntityCQR(World worldIn) {
@@ -392,12 +392,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
 		if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking()) {
-			Vec3d vec3d = damageSourceIn.getDamageLocation();
+			Vector3d vec3d = damageSourceIn.getDamageLocation();
 
 			if (vec3d != null) {
-				Vec3d vec3d1 = this.getLook(1.0F);
-				Vec3d vec3d2 = vec3d.subtractReverse(new Vec3d(this.posX, this.posY, this.posZ)).normalize();
-				vec3d2 = new Vec3d(vec3d2.x, 0.0D, vec3d2.z);
+				Vector3d vec3d1 = this.getLook(1.0F);
+				Vector3d vec3d2 = vec3d.subtractReverse(new Vector3d(this.posX, this.posY, this.posZ)).normalize();
+				vec3d2 = new Vector3d(vec3d2.x, 0.0D, vec3d2.z);
 
 				if (vec3d2.dotProduct(vec3d1) < 0.0D) {
 					return true;
@@ -1326,12 +1326,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		return this.dataManager.get(TALKING);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public ESpeechBubble getCurrentSpeechBubble() {
 		return this.currentSpeechBubbleID;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
 		if (this.hasTrades()) {
 			this.currentSpeechBubbleID = ESpeechBubble.getRandTraderBubble(this.rand);
@@ -1340,7 +1340,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public int getTextureIndex() {
 		return this.dataManager.get(TEXTURE_INDEX);
 	}
@@ -1523,7 +1523,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		return this.lastTimeSeenAttackTarget;
 	}
 
-	public Vec3d getLastPosAttackTarget() {
+	public Vector3d getLastPosAttackTarget() {
 		return this.lastPosAttackTarget;
 	}
 

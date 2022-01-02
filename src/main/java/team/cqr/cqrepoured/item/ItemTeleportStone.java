@@ -9,6 +9,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.network.play.server.SPlayEntityEffectPacket;
 import net.minecraft.util.*;
 import net.minecraft.world.dimension.Dimension;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -35,8 +36,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
 
 public class ItemTeleportStone extends Item {
 
@@ -208,7 +208,7 @@ public class ItemTeleportStone extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone.name"));

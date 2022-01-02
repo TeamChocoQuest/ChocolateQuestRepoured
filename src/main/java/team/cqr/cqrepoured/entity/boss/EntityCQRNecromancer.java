@@ -13,7 +13,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -41,13 +41,13 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 30, 10, new ResourceLocation(CQRMain.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3d(0, 0, 0)) {
+		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 30, 10, new ResourceLocation(CQRMain.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vector3d(0, 0, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;
 			}
 		});
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 20, 5, new ResourceLocation(CQRMain.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vec3d(0, 2.5, 0)) {
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 20, 5, new ResourceLocation(CQRMain.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vector3d(0, 2.5, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;

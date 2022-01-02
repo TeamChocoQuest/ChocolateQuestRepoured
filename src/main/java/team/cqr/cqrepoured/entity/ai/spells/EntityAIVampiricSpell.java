@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.ai.spells;
 
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -22,16 +22,16 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell<AbstractEntityC
 	public void startCastingSpell() {
 		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
-		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
+		Vector3d vector = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
 		vector = vector.add(vector).add(vector).add(vector);
 		double angle = 180D / projectiles;
 		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
-		Vec3d velocities[] = new Vec3d[projectiles];
+		Vector3d velocities[] = new Vector3d[projectiles];
 		for (int i = 0; i < projectiles; i++) {
 			velocities[i] = VectorUtil.rotateVectorAroundY(vector, angle * i);
 		}
 
-		for (Vec3d v : velocities) {
+		for (Vector3d v : velocities) {
 			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.world, this.entity);
 			// proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
 			proj.motionX = v.x * 0.5D;

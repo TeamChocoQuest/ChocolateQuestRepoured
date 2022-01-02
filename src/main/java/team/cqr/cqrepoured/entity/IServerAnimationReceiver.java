@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity;
 
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
@@ -15,7 +15,7 @@ public interface IServerAnimationReceiver {
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	void processAnimationUpdate(String animationID);
 
 	default void sendAnimationUpdate(final String animationName) {

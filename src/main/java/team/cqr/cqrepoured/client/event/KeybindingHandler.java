@@ -2,17 +2,17 @@ package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.proxy.ClientProxy;
 import team.cqr.cqrepoured.util.GuiHandler;
 
-@SideOnly(Side.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
 public class KeybindingHandler {
 
 	// Opens repu GUI

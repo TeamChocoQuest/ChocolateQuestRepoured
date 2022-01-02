@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.roo
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.IRoomDecor;
 
 public abstract class RoomDecorEntityBase implements IRoomDecor {
-	protected List<Vec3i> footprint; // Array of blockstates and their offsets
+	protected List<Vector3i> footprint; // Array of blockstates and their offsets
 
 	protected RoomDecorEntityBase() {
 		this.footprint = new ArrayList<>();
@@ -23,9 +23,9 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 
 	@Override
 	public boolean wouldFit(BlockPos start, Direction side, Set<BlockPos> decoArea, Set<BlockPos> decoMap, CastleRoomBase room) {
-		List<Vec3i> rotated = this.alignFootprint(this.footprint, side);
+		List<Vector3i> rotated = this.alignFootprint(this.footprint, side);
 
-		for (Vec3i placement : rotated) {
+		for (Vector3i placement : rotated) {
 			BlockPos pos = start.add(placement);
 			if (!decoArea.contains(pos) || decoMap.contains(pos)) {
 				return false;
@@ -37,9 +37,9 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 
 	@Override
 	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, DungeonRandomizedCastle dungeon, BlockPos start, Direction side, Set<BlockPos> decoMap) {
-		List<Vec3i> rotated = this.alignFootprint(this.footprint, side);
+		List<Vector3i> rotated = this.alignFootprint(this.footprint, side);
 
-		for (Vec3i placement : rotated) {
+		for (Vector3i placement : rotated) {
 			BlockPos pos = start.add(placement);
 			decoMap.add(pos);
 		}
@@ -48,8 +48,8 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 
 	protected abstract void createEntityDecoration(World world, BlockPos pos, BlockStateGenArray genArray, Direction side);
 
-	protected List<Vec3i> alignFootprint(List<Vec3i> unrotated, Direction side) {
-		List<Vec3i> result = new ArrayList<>();
+	protected List<Vector3i> alignFootprint(List<Vector3i> unrotated, Direction side) {
+		List<Vector3i> result = new ArrayList<>();
 
 		unrotated.forEach(v -> result.add(DungeonGenUtils.rotateVec3i(v, side)));
 

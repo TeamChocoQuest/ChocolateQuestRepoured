@@ -10,7 +10,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 
@@ -85,7 +85,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			return;
 		}
 		if (!this.world.isRemote && this.target != null) {
-			Vec3d v = this.target.getPositionVector().subtract(this.getPositionVector());
+			Vector3d v = this.target.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.4);
 

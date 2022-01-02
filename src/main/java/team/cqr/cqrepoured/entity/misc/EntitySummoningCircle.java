@@ -10,11 +10,11 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -31,7 +31,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	protected ECircleTexture texture;
 	protected ISummoner summoner;
 	protected LivingEntity summonerLiving;
-	protected Vec3d velForSummon = null;
+	protected Vector3d velForSummon = null;
 
 	public enum ECircleTexture {
 		ZOMBIE(), SKELETON(), FLYING_SKULL(), FLYING_SWORD(), METEOR();
@@ -160,12 +160,12 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 		this.ticksExisted = additionalData.readInt();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public int getTextureID() {
 		return this.texture.ordinal();
 	}
 
-	public void setVelocityForSummon(Vec3d v) {
+	public void setVelocityForSummon(Vector3d v) {
 		this.velForSummon = v;
 	}
 

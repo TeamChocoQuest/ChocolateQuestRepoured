@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.ro
 import net.minecraft.block.BlockState;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -18,7 +18,7 @@ public class DecoBlockRotating extends DecoBlockBase {
 		this.initialFacing = initialFacing;
 	}
 
-	protected DecoBlockRotating(Vec3i offset, BlockState initialState, PropertyDirection directionProperty, Direction initialFacing, BlockStateGenArray.GenerationPhase generationPhase) {
+	protected DecoBlockRotating(Vector3i offset, BlockState initialState, PropertyDirection directionProperty, Direction initialFacing, BlockStateGenArray.GenerationPhase generationPhase) {
 		super(offset, initialState, generationPhase);
 		this.directionProperty = directionProperty;
 		this.initialFacing = initialFacing;

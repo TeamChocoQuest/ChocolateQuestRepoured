@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntitySpectreLordCurse extends Entity {
@@ -35,7 +35,7 @@ public class EntitySpectreLordCurse extends Entity {
 		super.onEntityUpdate();
 
 		if (!this.world.isRemote) {
-			Vec3d vec = this.target.getPositionVector().subtract(this.getPositionVector()).normalize().scale(0.12F);
+			Vector3d vec = this.target.getPositionVector().subtract(this.getPositionVector()).normalize().scale(0.12F);
 			this.motionX = vec.x;
 			this.motionY = vec.y;
 			this.motionZ = vec.z;

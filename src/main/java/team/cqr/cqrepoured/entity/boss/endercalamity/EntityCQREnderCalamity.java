@@ -29,15 +29,15 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -744,8 +744,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (this.blockDestructionTimer <= 0) {
 			this.blockDestructionTimer = 10;
 			boolean flag = false;
-			Vec3i size = new Vec3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
-			size = new Vec3i(size.getX() * 0.5, size.getY() * 0.5, size.getZ() * 0.5);
+			Vector3i size = new Vector3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
+			size = new Vector3i(size.getX() * 0.5, size.getY() * 0.5, size.getZ() * 0.5);
 			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size).add(0, size.getY(), 0))) {
 				BlockState iblockstate = this.world.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
@@ -1069,7 +1069,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private Optional<String> newAnimation = Optional.absent();
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void processAnimationUpdate(String animationID) {
 		// Only process this on client!!
 		if (this.world.isRemote) {

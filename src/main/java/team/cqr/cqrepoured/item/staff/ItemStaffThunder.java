@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.ActionResultType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -18,11 +20,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
@@ -53,8 +53,8 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 
 	public void spawnLightningBolt(PlayerEntity player, World worldIn) {
 		if (!worldIn.isRemote) {
-			Vec3d start = player.getPositionEyes(1.0F);
-			Vec3d end = start.add(player.getLookVec().scale(20.0D));
+			Vector3d start = player.getPositionEyes(1.0F);
+			Vector3d end = start.add(player.getLookVec().scale(20.0D));
 			RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 			if (result != null) {
@@ -65,15 +65,15 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	}
 
 	public boolean isNotAirBlock(World worldIn, PlayerEntity player) {
-		Vec3d start = player.getPositionEyes(1.0F);
-		Vec3d end = start.add(player.getLookVec().scale(20.0D));
+		Vector3d start = player.getPositionEyes(1.0F);
+		Vector3d end = start.add(player.getLookVec().scale(20.0D));
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		return result != null && !worldIn.isAirBlock(result.getBlockPos());
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_thunder.name"));
@@ -84,8 +84,8 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 
 	@Override
 	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
-		Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
-		Vec3d pos = target.getPositionVector();
+		Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+		Vector3d pos = target.getPositionVector();
 		if (v.length() > 20) {
 			v = v.normalize();
 			v = v.scale(20D);

@@ -7,7 +7,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.BlockPosUtil;
@@ -33,14 +33,14 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 
 		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
-			Vec3d vec = this.entity.getPositionEyes(1.0F);
+			Vector3d vec = this.entity.getPositionEyes(1.0F);
 			this.nearestFire = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL, true, true, Blocks.FIRE, (mutablePos, state) -> {
 				mutablePos.setY(mutablePos.getY() - 1);
 				if (this.world.getBlockState(mutablePos).getBlock().isFireSource(this.world, mutablePos, Direction.UP)) {
 					return false;
 				}
 				mutablePos.setY(mutablePos.getY() + 1);
-				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vec3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				return result == null || result.getBlockPos().equals(mutablePos);
 			});
 		}

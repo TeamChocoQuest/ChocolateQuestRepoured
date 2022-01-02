@@ -6,7 +6,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.init.CQRSounds;
 
 public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 
-	private Vec3d movementVector;
+	private Vector3d movementVector;
 
 	private static final int COOLDOWN = 2;
 	private int cooldown = COOLDOWN / 2;
@@ -173,7 +173,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 			if (this.getBoss().getCurrentAnimationTick() % 5 == 0) {
 				this.getBoss().playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * this.getBoss().getRNG().nextFloat()));
 			}
-			Vec3d v = new Vec3d(this.entity.getRNG().nextDouble() - 0.5D, 0.125D * (this.entity.getRNG().nextDouble() - 0.5D), this.entity.getRNG().nextDouble() - 0.5D);
+			Vector3d v = new Vector3d(this.entity.getRNG().nextDouble() - 0.5D, 0.125D * (this.entity.getRNG().nextDouble() - 0.5D), this.entity.getRNG().nextDouble() - 0.5D);
 			v = v.normalize();
 			v = v.scale(1.4);
 			this.entity.faceEntity(this.entity.getAttackTarget(), 30, 30);
@@ -191,7 +191,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 	}
 
 	private boolean hitHardBlock(double vx, double vy, double vz) {
-		Vec3d velocity = new Vec3d(vx, vy, vz);
+		Vector3d velocity = new Vector3d(vx, vy, vz);
 		AxisAlignedBB aabb = this.getBoss().getCollisionBoundingBox();
 		if (aabb == null) {
 			return false;

@@ -6,11 +6,11 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class ModelCustomArmorBase extends ModelBiped {
 
 	private final FloatPriorityQueue rotations = new FloatArrayFIFOQueue();

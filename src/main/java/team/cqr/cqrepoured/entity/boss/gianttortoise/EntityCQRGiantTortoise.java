@@ -25,11 +25,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -108,7 +108,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int timesHealed = 1;
 	private boolean isHealing = false;
 
-	private Vec3d lastTickPos = null;
+	private Vector3d lastTickPos = null;
 	private int stuckTicks = 0;
 	private static final int MAX_STUCK_TICKS = 60;
 
@@ -353,7 +353,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if (this.getHomePositionCQR() == null) {
 				this.setHomePositionCQR(this.getPosition());
 			}
-			Vec3d curPos = this.getPositionVector();
+			Vector3d curPos = this.getPositionVector();
 			if (this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
 				if (curPos.distanceTo(this.lastTickPos) <= 0.05) {
 					this.stuckTicks++;
@@ -390,7 +390,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			rotYawHead -= 360F;
 		}
 		// v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
-		Vec3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
+		Vector3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
 
 		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.15F : 0.5F;
 		vy *= this.getSizeVariation();
@@ -460,7 +460,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if (!blocked) {
 				entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F * (Math.max(1, this.world.getDifficulty().getId()) * 1.5F));
 			}
-			Vec3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
+			Vector3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
 			if (blocked) {
 				v = v.scale(0.8D);
@@ -573,8 +573,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public Vec3d getPositionEyes(float partialTicks) {
-		Vec3d headPos = this.parts[this.parts.length - 1].getPositionVector();
+	public Vector3d getPositionEyes(float partialTicks) {
+		Vector3d headPos = this.parts[this.parts.length - 1].getPositionVector();
 		return headPos.add(headPos.subtract(this.posX, 0, this.posZ)).normalize().scale(0.25D);
 	}
 
@@ -598,7 +598,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	private int currentAnimationClient/* = 0 */; // Important: For SideOnly fields => DO NOT set an initial value at declaration, that WON'T work
 
 	// Animation controller

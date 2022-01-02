@@ -9,7 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -227,8 +227,8 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 
 	BlockPos getConnectorPointForBridgeTo(final HangingCityBuilding bridgeTarget) {
-		Vec3d bridgeVector = new Vec3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
-		Vec3d horizontalVector = new Vec3d(bridgeVector.x, 0, bridgeVector.z);
+		Vector3d bridgeVector = new Vector3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
+		Vector3d horizontalVector = new Vector3d(bridgeVector.x, 0, bridgeVector.z);
 		horizontalVector = horizontalVector.normalize();
 		horizontalVector = horizontalVector.scale((1.05D * this.islandRadius) - 2);
 

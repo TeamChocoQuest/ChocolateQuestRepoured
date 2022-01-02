@@ -9,7 +9,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -113,12 +113,12 @@ public class EntityCalamitySpawner extends Entity {
 						double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
 						radius *= percentage;
 						radius += 1.5;
-						Vec3d vector = new Vec3d(radius, 0, 0);
+						Vector3d vector = new Vector3d(radius, 0, 0);
 						final int lines = 5;
 						final int rotationDegree = 360 / lines;
 						vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
 						for (int i = 0; i < lines; i++) {
-							Vec3d particlePosition = this.getPositionVector().add(vector);
+							Vector3d particlePosition = this.getPositionVector().add(vector);
 
 							this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
 
@@ -141,8 +141,8 @@ public class EntityCalamitySpawner extends Entity {
 		this.world.spawnEntity(firework);
 	}
 
-	private Vec3d getRandomPositionAroundPosition() {
-		Vec3d v = new Vec3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0, 0);
+	private Vector3d getRandomPositionAroundPosition() {
+		Vector3d v = new Vector3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.rand));
 
 		return v.add(this.getPositionVector());
@@ -168,7 +168,7 @@ public class EntityCalamitySpawner extends Entity {
 	// Spawns some fireworks and a small enderman too
 	protected void spawnFireworks(int count) {
 		for (int i = 0; i < count; i++) {
-			Vec3d v = this.getRandomPositionAroundPosition();
+			Vector3d v = this.getRandomPositionAroundPosition();
 			this.spawnFirework(v.x, v.y, v.z, FIREWORK_PURPLE_SPARK);
 		}
 	}

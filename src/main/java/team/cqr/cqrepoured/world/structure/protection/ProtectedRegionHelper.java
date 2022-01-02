@@ -22,7 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -177,7 +177,7 @@ public class ProtectedRegionHelper {
 		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static BlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, Direction facing, @Nullable Vec3d hitVec, LivingEntity placer, Hand hand) {
+	public static BlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, Direction facing, @Nullable Vector3d hitVec, LivingEntity placer, Hand hand) {
 		if (stack.isEmpty()) {
 			return null;
 		}

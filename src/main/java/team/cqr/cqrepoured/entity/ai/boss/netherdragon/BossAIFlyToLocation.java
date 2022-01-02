@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
@@ -25,7 +25,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 		return super.shouldContinueExecuting() && this.entity.getPositionVector().distanceTo(this.getTargetLocation()) > MIN_DISTANCE_TO_REACH;
 	}
 
-	protected Vec3d getTargetLocation() {
+	protected Vector3d getTargetLocation() {
 		return this.entity.getTargetLocation();
 	}
 

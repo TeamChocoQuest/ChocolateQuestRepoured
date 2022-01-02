@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelLaser;
 import team.cqr.cqrepoured.client.util.EmissiveUtil;
@@ -47,7 +47,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		z1 += entity.getOffsetVector().z;
 		float yaw = this.getYaw(entity, partialTicks);
 		float pitch = this.getPitch(entity, partialTicks);
-		Vec3d vec = Vec3d.fromPitchYaw(pitch, yaw).scale(0.25D);
+		Vector3d vec = Vector3d.fromPitchYaw(pitch, yaw).scale(0.25D);
 		x1 += vec.x;
 		y1 += vec.y;
 		z1 += vec.z;
@@ -116,8 +116,8 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 	}
 
 	protected double getLaserLength(T entity, float pitch, float yaw) {
-		Vec3d start = entity.getPositionVector();
-		Vec3d end = start.add(Vec3d.fromPitchYaw(pitch, yaw).scale(entity.length));
+		Vector3d start = entity.getPositionVector();
+		Vector3d end = start.add(Vector3d.fromPitchYaw(pitch, yaw).scale(entity.length));
 		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
 		double d = result != null ? (float) result.hitVec.subtract(entity.getPositionVector()).length() : entity.length;
 

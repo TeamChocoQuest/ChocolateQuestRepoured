@@ -12,7 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
 
@@ -59,7 +59,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	 * Creates an orb that directly flies towards the target (no homing), it returns the spawned entity
 	 */
 	public static ProjectileEnergyOrb shootAt(Entity target, LivingEntity shooter, World world) {
-		Vec3d vec3d = shooter.getLook(1.0F);
+		Vector3d vec3d = shooter.getLook(1.0F);
 		double vx = target.posX - (shooter.posX + vec3d.x * shooter.width);
 		double vy = target.getEntityBoundingBox().minY + target.height / 2.0F - (0.5D + shooter.posY + shooter.height / 2.0F);
 		double vz = target.posZ - (shooter.posZ + vec3d.z * shooter.width);
@@ -74,7 +74,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 
 	public void redirect(Entity target, LivingEntity shooter) {
 		this.shootingEntity = shooter;
-		Vec3d vec3d = shooter.getLook(1.0F);
+		Vector3d vec3d = shooter.getLook(1.0F);
 		double accelX = target.posX - (shooter.posX + vec3d.x * shooter.width);
 		double accelY = target.getEntityBoundingBox().minY + target.height / 2.0F - (0.5D + shooter.posY + shooter.height / 2.0F);
 		double accelZ = target.posZ - (shooter.posZ + vec3d.z * shooter.width);

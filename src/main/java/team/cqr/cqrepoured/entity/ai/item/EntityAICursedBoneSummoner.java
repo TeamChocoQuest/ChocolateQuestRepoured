@@ -9,7 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -104,10 +104,10 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 			int mobCount = Math.min(SUMMONS_PER_CAST, remainingEntitySlots);
 
 			if (mobCount > 0) {
-				Vec3d vector = this.entity.getLookVec().normalize().scale(3);
+				Vector3d vector = this.entity.getLookVec().normalize().scale(3);
 				ItemCursedBone cursedBone = (ItemCursedBone) stack.getItem();
 				for (int i = 0; i < mobCount; i++) {
-					Vec3d posV = this.entity.getPositionVector().add(vector);
+					Vector3d posV = this.entity.getPositionVector().add(vector);
 					BlockPos pos = new BlockPos(posV.x, posV.y, posV.z);
 					Optional<Entity> circle = cursedBone.spawnEntity(pos, this.world, stack, this.entity, this);
 					if (circle.isPresent()) {

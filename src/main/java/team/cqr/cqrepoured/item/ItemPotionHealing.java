@@ -10,6 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -19,8 +21,6 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemPotionHealing extends Item {
 
@@ -74,7 +74,7 @@ public class ItemPotionHealing extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.healing_potion.name"));

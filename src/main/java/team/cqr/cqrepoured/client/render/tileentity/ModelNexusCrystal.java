@@ -5,15 +5,15 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 /*
  * 06.01.2020
  * Author: DerToaster98
  * Github: https://github.com/DerToaster98
  */
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class ModelNexusCrystal extends ModelBase {
 
 	/** The cube model for the Ender Crystal. */

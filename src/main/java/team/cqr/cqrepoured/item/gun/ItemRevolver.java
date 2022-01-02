@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -17,11 +19,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
@@ -37,7 +37,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.BLUE + "5.0 " + I18n.format("description.bullet_damage.name"));
 		tooltip.add(TextFormatting.RED + "-30 " + I18n.format("description.fire_rate.name"));
@@ -187,7 +187,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 				}
 			}
 			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, this.getBulletType(bulletStack));
-			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(3.5D);
 			// bulletE.setVelocity(v.x, v.y, v.z);

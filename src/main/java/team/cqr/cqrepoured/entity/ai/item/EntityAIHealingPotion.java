@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -65,8 +65,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		boolean flag = true;
 		if (attackTarget != null) {
 			int alertRadius = CQRConfig.mobs.alertRadius;
-			Vec3d vec1 = this.entity.getPositionVector().add(alertRadius, alertRadius * 0.5D, alertRadius);
-			Vec3d vec2 = this.entity.getPositionVector().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
+			Vector3d vec1 = this.entity.getPositionVector().add(alertRadius, alertRadius * 0.5D, alertRadius);
+			Vector3d vec2 = this.entity.getPositionVector().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<Entity> possibleEnts = this.entity.world.getEntitiesInAABBexcluding(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 

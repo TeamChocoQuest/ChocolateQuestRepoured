@@ -9,6 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.Hand;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
@@ -22,8 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -77,7 +77,7 @@ public class ItemDagger extends ItemCQRWeapon {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.BLUE + "200% " + I18n.format("description.rear_damage.name"));
 

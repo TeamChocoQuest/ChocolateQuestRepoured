@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
@@ -152,14 +152,14 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedBody.rotateAngleY = f;
 		this.bipedBody.rotateAngleZ = 0.0F;
 
-		Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
+		Vector3d v = new Vector3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
 		this.bipedRightArm.rotationPointX = (float) v.x;
 		this.bipedRightArm.rotationPointZ = (float) v.z;
 		this.bipedRightArm.rotateAngleX = 0.0F;
 		this.bipedRightArm.rotateAngleY = f;
 		this.bipedRightArm.rotateAngleZ = 0.0F;
 
-		Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
+		Vector3d v1 = new Vector3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
 		this.bipedLeftArm.rotationPointX = (float) v1.x;
 		this.bipedLeftArm.rotationPointZ = (float) v1.z;
 		this.bipedLeftArm.rotateAngleX = 0.0F;
@@ -184,14 +184,14 @@ public class ModelCQRBiped extends ModelBiped {
 		if (this.swingProgress > 0.0F) {
 
 		}
-		Vec3d v = new Vec3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
+		Vector3d v = new Vector3d(-5.0F, 0.0F, 0.0F).rotateYaw(f);
 		this.bipedRightArm.rotationPointX = (float) v.x;
 		this.bipedRightArm.rotationPointZ = (float) v.z;
 		this.bipedRightArm.rotateAngleX = 0.0F;
 		this.bipedRightArm.rotateAngleY = f;
 		this.bipedRightArm.rotateAngleZ = 0.0F;
 
-		Vec3d v1 = new Vec3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
+		Vector3d v1 = new Vector3d(5.0F, 0.0F, 0.0F).rotateYaw(f);
 		this.bipedLeftArm.rotationPointX = (float) v1.x;
 		this.bipedLeftArm.rotationPointZ = (float) v1.z;
 		this.bipedLeftArm.rotateAngleX = 0.0F;

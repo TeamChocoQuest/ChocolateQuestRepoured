@@ -14,8 +14,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 public class BlockNull extends Block {
 
@@ -80,14 +80,14 @@ public class BlockNull extends Block {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
 		BlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
 		Block block = iblockstate.getBlock();

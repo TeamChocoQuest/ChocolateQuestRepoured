@@ -9,7 +9,7 @@ import net.minecraft.block.StairsBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.GenerationTemplate;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
@@ -27,11 +27,11 @@ public class CastleRoomPool extends CastleRoomDecoratedBase {
 	protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon) {
 		int endX = this.getDecorationLengthX() - 1;
 		int endZ = this.getDecorationLengthZ() - 1;
-		Predicate<Vec3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
-		Predicate<Vec3i> southRow = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
-		Predicate<Vec3i> westRow = (v -> ((v.getY() == 0) && (v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
-		Predicate<Vec3i> eastRow = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
-		Predicate<Vec3i> water = (v -> ((v.getY() == 0) && (v.getX() > 1) && (v.getX() < endX - 1) && (v.getZ() > 1) && (v.getZ() < endZ - 1)));
+		Predicate<Vector3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
+		Predicate<Vector3i> southRow = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
+		Predicate<Vector3i> westRow = (v -> ((v.getY() == 0) && (v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+		Predicate<Vector3i> eastRow = (v -> ((v.getY() == 0) && (v.getX() == endX - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+		Predicate<Vector3i> water = (v -> ((v.getY() == 0) && (v.getX() > 1) && (v.getX() < endX - 1) && (v.getZ() > 1) && (v.getZ() < endZ - 1)));
 
 		GenerationTemplate poolRoomTemplate = new GenerationTemplate(this.getDecorationLengthX(), this.getDecorationLengthY(), this.getDecorationLengthZ());
 		poolRoomTemplate.addRule(northRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(StairsBlock.FACING, Direction.SOUTH));

@@ -10,7 +10,7 @@ import java.util.Set;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.PlateauBuilder;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
@@ -186,7 +186,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 				CQStructure structure = this.structures[iX][iZ];
 
 				if (structurePos != null && structure != null) {
-					BlockPos cL = structurePos.subtract(new Vec3i(structure.getSize().getX() / 2 + 2, 0, structure.getSize().getZ() / 2 + 2));
+					BlockPos cL = structurePos.subtract(new Vector3i(structure.getSize().getX() / 2 + 2, 0, structure.getSize().getZ() / 2 + 2));
 					BlockPos cU = structurePos.add(structure.getSize().getX() / 2 + 2, 0, structure.getSize().getZ() / 2 + 2);
 					BlockPos.getAllInBox(cL, cU).forEach(p -> this.blockMap.put(p, this.dungeon.getBridgeBlock()));
 

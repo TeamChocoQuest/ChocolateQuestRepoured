@@ -4,13 +4,13 @@ import java.time.Month;
 import java.time.MonthDay;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
@@ -440,7 +440,7 @@ public class CQRConfig {
 		return false;
 	}
 
-	@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
+	@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
 	private static class EventHandler {
 
 		@SubscribeEvent

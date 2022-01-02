@@ -15,12 +15,12 @@ import net.minecraftforge.fml.client.config.DummyConfigElement.DummyListElement;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiEditArray;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
-@SideOnly(Side.CLIENT)
+@Dist(OnlyIn.CLIENT)
 public class GuiExporter extends Screen {
 
 	private final TileEntityExporter exporter;

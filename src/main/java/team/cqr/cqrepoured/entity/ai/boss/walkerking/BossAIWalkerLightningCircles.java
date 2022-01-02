@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.walkerking;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
@@ -56,7 +56,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 	private void spawnLightnings() {
 		int count = 2 * this.circleRad;
 		int angle = 360 / count;
-		Vec3d v = new Vec3d(this.circleRad, 0, 0);
+		Vector3d v = new Vector3d(this.circleRad, 0, 0);
 		for (int i = 0; i < count; i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle);
 			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.world, this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);

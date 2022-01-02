@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
@@ -89,7 +89,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 
 	@Override
 	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		Vec3i v = new Vec3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
+		Vector3i v = new Vector3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				if (((iX != this.entranceStairIndex.getFirst()) || (iZ != this.entranceStairIndex.getSecond()))) {

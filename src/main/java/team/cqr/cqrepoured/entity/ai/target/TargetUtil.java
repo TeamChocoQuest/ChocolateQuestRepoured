@@ -23,7 +23,7 @@ import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -137,22 +137,22 @@ public class TargetUtil {
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, BlockPos target, double minDist, double dxz, double dy) {
-		return getPositionNearTarget(world, entity, new Vec3d(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D), minDist, dxz, dy);
+	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, BlockPos target, double minDist, double dxz, double dy) {
+		return getPositionNearTarget(world, entity, new Vector3d(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D), minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, Entity target, double minDist, double dxz, double dy) {
+	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Entity target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, target.getPositionVector(), minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, Vec3d target, double minDist, double dxz, double dy) {
+	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Vector3d target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, target, target, minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vec3d getPositionNearTarget(World world, MobEntity entity, Vec3d target, Vec3d vec, double minDist, double dxz, double dy) {
+	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Vector3d target, Vector3d vec, double minDist, double dxz, double dy) {
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		int tries = 200;
 		for (int i = 0; i < tries; i++) {
@@ -195,7 +195,7 @@ public class TargetUtil {
 					continue;
 				}
 			}
-			return new Vec3d(x, y, z);
+			return new Vector3d(x, y, z);
 		}
 		return null;
 	}

@@ -13,12 +13,12 @@ import java.util.Properties;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
 
@@ -128,7 +128,7 @@ public class TextureSetManager {
 		this.textureSets.put(set.getName(), set);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	private void unloadTexturesImpl() {
 		for (TextureSet set : this.textureSets.values()) {
 			for (ResourceLocation rs : set.getTextures()) {

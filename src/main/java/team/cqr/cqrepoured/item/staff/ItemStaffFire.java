@@ -7,7 +7,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.TorchBlock;
@@ -25,11 +28,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.item.IRangedWeapon;
@@ -65,8 +65,8 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	}
 
 	public void changeTorch(World worldIn, PlayerEntity player) {
-		Vec3d start = player.getPositionEyes(1.0F);
-		Vec3d end = start.add(player.getLookVec().scale(10.0D));
+		Vector3d start = player.getPositionEyes(1.0F);
+		Vector3d end = start.add(player.getLookVec().scale(10.0D));
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null && !worldIn.isRemote) {
@@ -86,7 +86,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 			Random r = shooter.getRNG();
 			for (int i = 0; i < 20; i++) {
 				// TODO don't send 20 packets
-				Vec3d v = shooter.getLookVec();
+				Vector3d v = shooter.getLookVec();
 				v = v.add((r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D);
 				((ServerWorld) world).spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
 			}
@@ -103,8 +103,8 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 					return false;
 				}
 
-				Vec3d a = shooter.getLookVec();
-				Vec3d b = new Vec3d(x, y, z);
+				Vector3d a = shooter.getLookVec();
+				Vector3d b = new Vector3d(x, y, z);
 				if (Math.toDegrees(Math.acos(a.dotProduct(b) / (a.length() * b.length()))) > 40.0D) {
 					return false;
 				}
@@ -119,7 +119,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_fire.name"));

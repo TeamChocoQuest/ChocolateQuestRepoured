@@ -14,12 +14,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.ServerWorld;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.entity.particle.ParticleWalkerTornado;
@@ -31,7 +31,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	protected static final int PARTICLE_COUNT = 2;
 	protected static final int MAX_LIVING_TICKS = 200;
 	protected final List<EntityParticle> particles = new ArrayList<>();
-	protected Vec3d velocity = new Vec3d(0, 0, 0);
+	protected Vector3d velocity = new Vector3d(0, 0, 0);
 	protected Entity owner = null;
 
 	public static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityWalkerTornado.class, DataSerializers.VARINT);
@@ -82,7 +82,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	// Particle code taken from aether legacy's whirlwind
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public void updateParticles() {
 		final Integer color = this.getColor();
 		for (int k = 0; k < 4; ++k) {
@@ -117,7 +117,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Dist(OnlyIn.CLIENT)
 	public float getDistanceToParticle(final EntityParticle particle) {
 		final float f = (float) (this.posX - particle.getX());
 		final float f2 = (float) (this.posY - particle.getY());
@@ -136,7 +136,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 
 	protected void collideWithEntity(Entity entityIn) {
 		if (this.isEntityAffected(entityIn)) {
-			Vec3d vAway = entityIn.getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25D);
+			Vector3d vAway = entityIn.getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25D);
 			vAway = vAway.add(0, vAway.y * 0.1D, 0);
 			entityIn.motionX = vAway.x * 0.75;
 			entityIn.motionY = Math.max(Math.abs(vAway.y), 0.6D);
@@ -180,11 +180,11 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		double x = compound.getDouble("vX");
 		double y = compound.getDouble("vY");
 		double z = compound.getDouble("vZ");
-		this.velocity = new Vec3d(x, y, z);
+		this.velocity = new Vector3d(x, y, z);
 		this.ticksExisted = compound.getInteger("ticksExisted");
 	}
 
-	public void setVelocity(Vec3d v) {
+	public void setVelocity(Vector3d v) {
 		this.velocity = v;
 	}
 
