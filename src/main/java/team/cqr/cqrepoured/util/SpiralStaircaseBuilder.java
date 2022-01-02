@@ -49,7 +49,7 @@ public class SpiralStaircaseBuilder {
 		switch (stairSide) {
 		case NORTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
-				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, -STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -57,7 +57,7 @@ public class SpiralStaircaseBuilder {
 
 		case SOUTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
-				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -65,7 +65,7 @@ public class SpiralStaircaseBuilder {
 
 		case WEST:
 			if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, -STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -73,7 +73,7 @@ public class SpiralStaircaseBuilder {
 
 		case EAST:
 			if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlockState.withProperty(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -81,13 +81,13 @@ public class SpiralStaircaseBuilder {
 		default:
 			break;
 		}
-		return Blocks.AIR.getDefaultState();
+		return Blocks.AIR.defaultBlockState();
 	}
 
 	private Direction rotateFacingNTimesCW(Direction facing, int n) {
 		n = n % 4; // cap at 0-3 rotations, any more is redundant
 		while (n != 0) {
-			facing = facing.rotateY();
+			facing = facing.getClockWise();
 			n--;
 		}
 
