@@ -234,7 +234,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
-		if (CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
+		if (CQRConfig.bosses.antiCowardMode && event.getEntityPlayer() != null && !event.getEntityPlayer().isCreative()) {
 			BlockPos pos = new BlockPos(event.getEntityPlayer());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
@@ -244,7 +244,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
-		if (CQRConfig.bosses.preventBlockPlacingNearBosses && (!(event.getEntity() instanceof EntityPlayer) || !((EntityPlayer) event.getEntity()).isCreative())) {
+		if (CQRConfig.bosses.preventBlockPlacingNearBosses && event.getEntity() != null && (!(event.getEntity() instanceof EntityPlayer) || !((EntityPlayer) event.getEntity()).isCreative())) {
 			BlockPos pos = new BlockPos(event.getEntity());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
