@@ -22,4 +22,5 @@
 	<entry oldName="net.minecraft.client.resources.IResourceManager" newName="net.minecraft.resources.IResourceManager" type="class" />
 	<entry oldName="net.minecraft.client.resources.SimpleReloadableResourceManager" newName="net.minecraft.resources.SimpleReloadableResourceManager" type="class" />
 	<entry oldName="net.minecraftforge.client.resource.VanillaResourceType" newName="net.minecraftforge.resource.VanillaResourceType" type="class" />
+	<entry oldName="net.minecraft.entity.ai.attributes.IAttributeInstance" newName="net.minecraft.entity.ai.attributes.ModifiableAttributeInstance" type="class" />
 </migrationMap>
