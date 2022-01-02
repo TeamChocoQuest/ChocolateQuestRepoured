@@ -540,7 +540,9 @@ public class PropertyFileHelper {
 		return path != null ? new ResourceLocation(namespace, path) : defVal;
 	}
 
-	@SuppressWarnings("deprecation")
+	/*
+	 * TODO: Change to fit the new system with square bracket stuff...
+	 */
 	private static BlockState getBlockStateFromString(String s, BlockState defVal) {
 		String[] splitStr = s.split(":");
 		Block block = null;
@@ -564,7 +566,7 @@ public class PropertyFileHelper {
 			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splitStr[0].trim()));
 		}
 
-		return block != null ? block.getStateFromMeta(meta) : defVal;
+		return block != null ? Block.stateById(meta) : defVal;
 	}
 
 	public static BlockPos getBlockPosFromString(String s, BlockPos defVal) {
