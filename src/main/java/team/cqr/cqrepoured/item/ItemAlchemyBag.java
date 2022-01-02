@@ -26,12 +26,12 @@ public class ItemAlchemyBag extends ItemLore {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity playerIn, Hand handIn) {
-		if (!world.isRemote) {
-			if (playerIn.isSneaking()) {
+		if (!world.isClientSide) {
+			if (playerIn.isCrouching()) {
 				playerIn.openGui(CQRMain.INSTANCE, GuiHandler.ALCHEMY_BAG_GUI_ID, world, handIn.ordinal(), 0, 0);
-				return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+				return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
 			}
-			ItemStack stack = playerIn.getHeldItem(handIn);
+			ItemStack stack = playerIn.getItemInHand(handIn);
 			Item item = stack.getItem();
 			if (item == this) {
 				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -40,20 +40,21 @@ public class ItemAlchemyBag extends ItemLore {
 					ItemStack potion = inventory.extractItem(i, 1, false);
 					if (!potion.isEmpty()) {
 						if (potion.getItem() instanceof SplashPotionItem || potion.getItem() instanceof LingeringPotionItem) {
-							PotionEntity entitypotion = new PotionEntity(world, playerIn, potion);
+							PotionEntity entitypotion = new PotionEntity(world, playerIn);
+							entitypotion.setItem(potion);
 							entitypotion.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
-							world.spawnEntity(entitypotion);
+							world.addFreshEntity(entitypotion);
 
-							world.playSound((PlayerEntity) null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+							world.playSound((PlayerEntity) null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.SPLASH_POTION_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
 
-							return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+							return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
 						}
 					}
 				}
 			}
 
 		}
-		return new ActionResult<>(ActionResultType.FAIL, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.FAIL, playerIn.getItemInHand(handIn));
 	}
 
 	@Override

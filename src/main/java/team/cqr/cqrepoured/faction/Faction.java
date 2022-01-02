@@ -116,18 +116,18 @@ public class Faction {
 				return false;
 			}
 		}
-		if (ent.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
+		if (ent.level.getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
 		if (ent instanceof PlayerEntity) {
 			// Special case for player
-			return FactionRegistry.instance(ent).getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ENEMY;
+			return FactionRegistry.instance(ent).getReputationOf(ent.getUUID(), this) == EReputationStateRough.ENEMY;
 		}
 		return this.isEnemy(FactionRegistry.instance(ent).getFactionOf(ent));
 	}
 
 	public boolean isEnemy(AbstractEntityCQR ent) {
-		if (ent.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
+		if (ent.level.getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
 		return this.isEnemy(ent.getFaction());
@@ -159,7 +159,7 @@ public class Faction {
 		}
 		if (ent instanceof PlayerEntity) {
 			// Special case for player
-			return FactionRegistry.instance(ent).getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;
+			return FactionRegistry.instance(ent).getReputationOf(ent.getUUID(), this) == EReputationStateRough.ALLY;
 		}
 		return this.isAlly(FactionRegistry.instance(ent).getFactionOf(ent));
 	}
