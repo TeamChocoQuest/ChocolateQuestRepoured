@@ -28,7 +28,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit instanceof LivingEntity) {
@@ -43,7 +43,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 					this.setDead();
 				}
 			}
-			super.onImpact(result);
+			super.onHit(result);
 		}
 	}
 

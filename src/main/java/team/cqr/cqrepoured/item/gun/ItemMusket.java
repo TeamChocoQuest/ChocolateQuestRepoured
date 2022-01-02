@@ -96,7 +96,7 @@ public class ItemMusket extends ItemRevolver {
 			return;
 		}
 		LivingEntity entityLiving = (LivingEntity) entityIn;
-		ItemStack offhand = entityLiving.getHeldItemOffhand();
+		ItemStack offhand = entityLiving.getMainHandItem();
 		if (!offhand.isEmpty()) {
 			entityLiving.addPotionEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}

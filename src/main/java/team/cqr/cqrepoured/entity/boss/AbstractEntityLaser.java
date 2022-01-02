@@ -93,7 +93,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	@Override
 	public Vector3d getPositionVector() {
-		return super.getPositionVector().add(this.getOffsetVector());
+		return super.position().add(this.getOffsetVector());
 	}
 
 	@Override

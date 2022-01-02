@@ -28,7 +28,7 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 		if (this.ticksWaiting < 100) {
 			return true;
 		}
-		this.entity.setAttackTarget(null);
+		this.entity.setTarget(null);
 		return false;
 	}
 

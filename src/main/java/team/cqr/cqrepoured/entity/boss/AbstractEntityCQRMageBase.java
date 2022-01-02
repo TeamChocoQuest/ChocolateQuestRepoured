@@ -20,8 +20,8 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 
 		this.dataManager.register(IDENTITY_HIDDEN, true);
 	}
@@ -54,7 +54,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setBoolean("identityHidden", this.isIdentityHidden());
 	}
 

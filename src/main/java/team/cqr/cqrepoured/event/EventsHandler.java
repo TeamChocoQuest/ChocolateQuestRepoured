@@ -281,7 +281,7 @@ public class EventsHandler {
 			if (entity.hasAttackTarget()) {
 				continue;
 			}
-			entity.setAttackTarget(attacker);
+			entity.setTarget(attacker);
 		}
 	}
 
@@ -308,7 +308,7 @@ public class EventsHandler {
 			if (stack.getItem() instanceof IFakeWeapon) {
 				continue;
 			}
-			entity.setAttackTarget(target);
+			entity.setTarget(target);
 		}
 	}
 

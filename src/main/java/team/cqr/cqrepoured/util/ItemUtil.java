@@ -143,7 +143,7 @@ public class ItemUtil {
 					i = i + EnchantmentHelper.getKnockbackBonus(player);
 
 					if (player.isSprinting() && flag) {
-						player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F, 1.0F);
+						player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
 						++i;
 						flag1 = true;
 					}
@@ -193,7 +193,7 @@ public class ItemUtil {
 					if (flag5) {
 						if (i > 0) {
 							if (targetEntity instanceof LivingEntity) {
-								((LivingEntity) targetEntity).knockBack(player, i * 0.5F, MathHelper.sin(player.rotationYaw * 0.017453292F), (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
+								((LivingEntity) targetEntity).knockback(player, i * 0.5F, MathHelper.sin(player.rotationYaw * 0.017453292F), (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
 							} else {
 								targetEntity.addVelocity(-MathHelper.sin(player.rotationYaw * 0.017453292F) * i * 0.5F, 0.1D, MathHelper.cos(player.rotationYaw * 0.017453292F) * i * 0.5F);
 							}
@@ -215,7 +215,7 @@ public class ItemUtil {
 								// CQR: Increase sweeping range when players reach distance is higher
 								if (entitylivingbase != player && entitylivingbase != targetEntity && !player.isAlliedTo(entitylivingbase) && player.distanceToSqr(entitylivingbase) < entityReachDistanceSqr) {
 									// CQR: Allow modification of sweeping knockback strength
-									entitylivingbase.knockBack(player, sweepingKnockback, MathHelper.sin(player.rotationYaw * 0.017453292F), (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
+									entitylivingbase.knockback(player, sweepingKnockback, MathHelper.sin(player.rotationYaw * 0.017453292F), (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
 									entitylivingbase.attackEntityFrom(DamageSource.playerAttack(player), f3);
 								}
 							}
@@ -233,18 +233,18 @@ public class ItemUtil {
 						}
 
 						if (flag2) {
-							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
+							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.0F);
 							player.onCriticalHit(targetEntity);
 						} else if (fakeCrit) { // CQR: Allow fake crits to happen
-							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.2F);
+							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.2F);
 							player.onCriticalHit(targetEntity);
 						}
 
 						if (!flag2 && !fakeCrit && !flag3) {
 							if (flag) {
-								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
+								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0F, 1.0F);
 							} else {
-								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
+								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundSource(), 1.0F, 1.0F);
 							}
 						}
 
@@ -296,7 +296,7 @@ public class ItemUtil {
 
 						player.addExhaustion(0.1F);
 					} else {
-						player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0F, 1.0F);
+						player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0F, 1.0F);
 
 						if (flag4) {
 							targetEntity.extinguish();

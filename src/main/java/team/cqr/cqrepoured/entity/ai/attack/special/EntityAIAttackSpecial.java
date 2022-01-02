@@ -32,7 +32,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 		if (attackTarget == null) {
 			return false;
 		}
-		if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+		if (!this.entity.getSensing().canSee(attackTarget)) {
 			return false;
 		}
 		for (AbstractEntityAIAttackSpecial specialAttack : SPECIAL_ATTACKS) {
@@ -60,7 +60,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 		if ((this.activeSpecialAttack.needsTargetToContinue() || this.activeSpecialAttack.needsSightToContinue()) && attackTarget == null) {
 			return false;
 		}
-		if (this.activeSpecialAttack.needsSightToContinue() && !this.entity.getEntitySenses().canSee(attackTarget)) {
+		if (this.activeSpecialAttack.needsSightToContinue() && !this.entity.getSensing().canSee(attackTarget)) {
 			return false;
 		}
 		return this.activeSpecialAttack.shouldContinueAttack(this.entity, attackTarget);

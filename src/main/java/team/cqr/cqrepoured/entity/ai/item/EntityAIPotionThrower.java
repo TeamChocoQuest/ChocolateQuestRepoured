@@ -26,7 +26,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 
 	@Override
 	protected ItemStack getEquippedWeapon() {
-		return this.entity.getHeldItemOffhand();
+		return this.entity.getMainHandItem();
 	}
 
 	@Override

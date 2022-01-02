@@ -163,7 +163,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
 		Vector3d v = this.entity.getLookVec().normalize();
 		if (this.entity.hasAttackTarget()) {
-			v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+			v = this.entity.getAttackTarget().position().subtract(this.entity.position());
 			v = v.normalize();
 			v = v.scale(0.5);
 			v = v.add(0, 0.5, 0);
@@ -189,7 +189,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			break;
 		}
 		offset = offset.scale(this.entity.getSizeVariation());
-		Vector3d position = this.entity.getPositionVector().add(offset);
+		Vector3d position = this.entity.position().add(offset);
 		return position;
 	}
 

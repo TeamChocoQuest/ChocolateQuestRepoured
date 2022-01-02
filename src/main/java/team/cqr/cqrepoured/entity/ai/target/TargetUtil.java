@@ -143,7 +143,7 @@ public class TargetUtil {
 
 	@Nullable
 	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Entity target, double minDist, double dxz, double dy) {
-		return getPositionNearTarget(world, entity, target.getPositionVector(), minDist, dxz, dy);
+		return getPositionNearTarget(world, entity, target.position(), minDist, dxz, dy);
 	}
 
 	@Nullable

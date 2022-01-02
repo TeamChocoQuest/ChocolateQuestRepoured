@@ -134,7 +134,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	private Entity createEntityFromEntityID(World world, DungeonPlacement placement, BlockPos pos) {
 		Entity entity = EntityList.createEntityByIDFromName(placement.getInhabitant().getEntityID(), world);
 		entity.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-		entity.setCustomNameTag("Temporary Boss");
+		entity.setCustomName("Temporary Boss");
 
 		if (entity instanceof MobEntity) {
 			MobEntity living = (MobEntity) entity;

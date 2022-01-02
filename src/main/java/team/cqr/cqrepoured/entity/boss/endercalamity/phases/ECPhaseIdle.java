@@ -56,7 +56,7 @@ public final class ECPhaseIdle implements IEnderCalamityPhase {
 		}
 		IEnderCalamityPhase[] successors = this.getPossibleSuccessors();
 		if (successors.length > 0) {
-			return Optional.of(successors[boss.getRNG().nextInt(successors.length)]);
+			return Optional.of(successors[boss.getRandom().nextInt(successors.length)]);
 		}
 		return Optional.empty();
 	}

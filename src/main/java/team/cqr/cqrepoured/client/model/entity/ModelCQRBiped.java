@@ -121,7 +121,7 @@ public class ModelCQRBiped extends ModelBiped {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					}
 				}
-				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && (cqrEnt.getMainHandItem().getItem() instanceof ItemRevolver || cqrEnt.getMainHandItem().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getMainHandItem().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {

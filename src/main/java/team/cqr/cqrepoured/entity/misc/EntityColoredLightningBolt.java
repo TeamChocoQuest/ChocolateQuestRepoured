@@ -132,7 +132,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 
 	@Override
 	protected void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setFloat("red", this.red);
 		compound.setFloat("green", this.green);
 		compound.setFloat("blue", this.blue);

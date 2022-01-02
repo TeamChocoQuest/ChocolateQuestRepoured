@@ -36,7 +36,7 @@ public class RenderEventHandler {
 	@SubscribeEvent
 	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
-		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
+		Item itemOff = event.getEntityPlayer().getMainHandItem().getItem();
 
 		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
@@ -73,7 +73,7 @@ public class RenderEventHandler {
 	@SubscribeEvent
 	public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
-		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
+		Item itemOff = event.getEntityPlayer().getMainHandItem().getItem();
 		if (itemMain instanceof ItemRevolver && (!(itemMain instanceof ItemMusket) && !(itemMain instanceof ItemMusketKnife))) {
 			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));

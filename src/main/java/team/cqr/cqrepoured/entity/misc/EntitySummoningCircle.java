@@ -66,7 +66,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		super.tick();
 
 		if (!this.world.isRemote) {
 			if (this.ticksExisted >= EntitySummoningCircle.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon) {

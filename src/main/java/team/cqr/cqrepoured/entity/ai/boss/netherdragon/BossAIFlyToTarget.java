@@ -32,8 +32,8 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 
 	@Override
 	public void tick() {
-		if (this.entity.getPositionVector().distanceTo(this.getTargetLocation()) <= 4) {
-			this.entity.attackEntityAsMob(this.entity.getAttackTarget());
+		if (this.entity.position().distanceTo(this.getTargetLocation()) <= 4) {
+			this.entity.canAttack(this.entity.getAttackTarget());
 			this.stop();
 		}
 		super.tick();
@@ -69,7 +69,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 
 	@Override
 	protected Vector3d getTargetLocation() {
-		return (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) ? this.entity.getAttackTarget().getPositionVector() : null;
+		return (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) ? this.entity.getAttackTarget().position() : null;
 	}
 
 }

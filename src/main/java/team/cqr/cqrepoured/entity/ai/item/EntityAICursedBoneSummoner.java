@@ -37,7 +37,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	}
 
 	private boolean hasCursedBone() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemCursedBone || this.entity.getHeldItemOffhand().getItem() instanceof ItemCursedBone;
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemCursedBone || this.entity.getMainHandItem().getItem() instanceof ItemCursedBone;
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 
 		ItemStack stack = this.entity.getHeldItemMainhand();
 		if (!(stack.getItem() instanceof ItemCursedBone)) {
-			stack = this.entity.getHeldItemOffhand();
+			stack = this.entity.getMainHandItem();
 			if (!(stack.getItem() instanceof ItemCursedBone)) {
 				return;
 			} else {
@@ -107,7 +107,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 				Vector3d vector = this.entity.getLookVec().normalize().scale(3);
 				ItemCursedBone cursedBone = (ItemCursedBone) stack.getItem();
 				for (int i = 0; i < mobCount; i++) {
-					Vector3d posV = this.entity.getPositionVector().add(vector);
+					Vector3d posV = this.entity.position().add(vector);
 					BlockPos pos = new BlockPos(posV.x, posV.y, posV.z);
 					Optional<Entity> circle = cursedBone.spawnEntity(pos, this.world, stack, this.entity, this);
 					if (circle.isPresent()) {

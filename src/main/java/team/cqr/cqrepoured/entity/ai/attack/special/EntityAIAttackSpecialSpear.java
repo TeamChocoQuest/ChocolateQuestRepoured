@@ -38,7 +38,7 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 
 	@Override
 	public void startAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundCategory(), 1.0F, 1.0F);
+		attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundSource(), 1.0F, 1.0F);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 			((ServerWorld) attacker.world).spawnParticle(ParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 		}
 
-		attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundCategory(), 1.0F, 1.0F);
+		attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundSource(), 1.0F, 1.0F);
 		attacker.swingArm(Hand.MAIN_HAND);
 	}
 

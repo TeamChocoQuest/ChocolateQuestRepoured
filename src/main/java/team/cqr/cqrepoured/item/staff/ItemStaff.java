@@ -24,7 +24,7 @@ public class ItemStaff extends Item {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		target.knockBack(attacker, 1.0F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+		target.knockback(attacker, 1.0F, attacker.posX - target.posX, attacker.posZ - target.posZ);
 		return false;
 	}
 

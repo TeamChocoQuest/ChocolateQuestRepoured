@@ -34,13 +34,13 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	@Override
 	public boolean canUse() {
 		if (this.entity.world.getDifficulty() == Difficulty.PEACEFUL) {
-			this.entity.setAttackTarget(null);
+			this.entity.setTarget(null);
 			return false;
 		}
 		if (this.isStillSuitableTarget(this.entity.getAttackTarget())) {
 			return false;
 		}
-		this.entity.setAttackTarget(null);
+		this.entity.setTarget(null);
 		return true;
 	}
 
@@ -56,7 +56,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().add(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
 		List<LivingEntity> possibleTargets = this.entity.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.predicate);
 		if (!possibleTargets.isEmpty()) {
-			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
+			this.entity.setTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
 		}
 	}
 

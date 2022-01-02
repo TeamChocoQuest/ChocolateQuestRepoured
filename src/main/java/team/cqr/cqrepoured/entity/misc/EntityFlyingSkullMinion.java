@@ -105,10 +105,10 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			v = v.normalize();
 			v = v.scale(2.5D);
 			v = VectorUtil.rotateVectorAroundY(v, this.isLeftSkull ? 270 : 90);
-			Vector3d targetPos = this.summoner.getPositionVector().add(v);
+			Vector3d targetPos = this.summoner.position().add(v);
 			this.getLookHelper().setLookPositionWithEntity(this.summoner, 30, 30);
 			if (this.getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
-				Vector3d velo = targetPos.subtract(this.getPositionVector());
+				Vector3d velo = targetPos.subtract(this.position());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
 				// this.setVelocity(velo.x, velo.y * 1.5, velo.z);
@@ -165,12 +165,12 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	private void updateDirection() {
-		this.direction = this.target.getPositionVector().subtract(this.getPositionVector());
+		this.direction = this.target.position().subtract(this.position());
 	}
 
 	@Override
 	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setBoolean("attacking", this.attacking);
 		compound.setDouble("vX", this.direction == null ? 0D : this.direction.x);
 		compound.setDouble("vY", this.direction == null ? 0D : this.direction.y);

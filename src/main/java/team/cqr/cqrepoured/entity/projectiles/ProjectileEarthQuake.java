@@ -70,7 +70,7 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 			}
 
 			this.onUpdateInAir();
-			super.onUpdate();
+			super.tick();
 		}
 	}
 

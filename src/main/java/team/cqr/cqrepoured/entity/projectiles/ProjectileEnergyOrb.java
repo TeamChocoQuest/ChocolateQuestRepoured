@@ -39,7 +39,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	@Override
 	public void onUpdate() {
 		++this.innerRotation;
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 
 	@Override
 	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setInteger("deflections", this.deflectionsByPlayer);
 	}
 

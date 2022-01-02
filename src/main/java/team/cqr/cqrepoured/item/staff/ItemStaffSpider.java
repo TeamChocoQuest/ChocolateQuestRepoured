@@ -68,7 +68,7 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 
 		if (!worldIn.isRemote) {
 			ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, shooter);
-			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(0.5D);
 			// ball.setVelocity(v.x, v.y, v.z);

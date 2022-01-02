@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity.bases;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -9,48 +10,63 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.NameTagItem;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -218,38 +234,38 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	protected AbstractEntityCQR(World worldIn) {
 		super(worldIn);
-		if (worldIn.isRemote) {
+		if (worldIn.isClientSide) {
 			this.chooseNewRandomSpeechBubble();
 		}
-		this.experienceValue = 5;
+		this.xpReward = 5;
 		this.initializeSize();
 	}
 
 	public void enableBossBar() {
-		if (!this.world.isRemote && this.bossInfoServer == null) {
+		if (!this.level.isClientSide && this.bossInfoServer == null) {
 			this.bossInfoServer = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 			this.bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
 		}
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 
-		this.dataManager.register(IS_LEADER, false);
-		this.dataManager.register(INVISIBILITY, 0.0F);
-		this.dataManager.register(IS_SITTING, false);
-		this.dataManager.register(HAS_TARGET, false);
-		this.dataManager.register(TALKING, false);
-		this.dataManager.register(TEXTURE_INDEX, this.getTextureVariant(this.getRNG()));
-		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
-		this.dataManager.register(SPELL_INFORMATION, 0);
-		this.dataManager.register(SPIN_TO_WIN, false);
-		this.dataManager.register(TEXTURE_OVERRIDE, "");
-		this.dataManager.register(FACTION_OVERRIDE_SYNC, "");
+		this.entityData.define(IS_LEADER, false);
+		this.entityData.define(INVISIBILITY, 0.0F);
+		this.entityData.define(IS_SITTING, false);
+		this.entityData.define(HAS_TARGET, false);
+		this.entityData.define(TALKING, false);
+		this.entityData.define(TEXTURE_INDEX, this.getTextureVariant(this.getRandom()));
+		this.entityData.define(MAGIC_ARMOR_ACTIVE, false);
+		this.entityData.define(SPELL_INFORMATION, 0);
+		this.entityData.define(SPIN_TO_WIN, false);
+		this.entityData.define(TEXTURE_OVERRIDE, "");
+		this.entityData.define(FACTION_OVERRIDE_SYNC, "");
 
 		// Shoulder entity stuff
-		this.dataManager.register(SHOULDER_ENTITY, new CompoundNBT());
+		this.entityData.define(SHOULDER_ENTITY, new CompoundNBT());
 	}
 
 	@Override
@@ -275,9 +291,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	protected PathNavigator createNavigator(World worldIn) {
+	protected PathNavigator createNavigation(World worldIn) {
 		PathNavigator navigator = new PathNavigateGroundCQR(this, worldIn);
-		((GroundPathNavigator) navigator).setEnterDoors(this.canOpenDoors());
+		((GroundPathNavigator) navigator).setCanOpenDoors(this.canOpenDoors());
 		((GroundPathNavigator) navigator).setBreakDoors(this.canOpenDoors());
 		return navigator;
 	}
@@ -300,10 +316,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		// Shoulder entity stuff
 		this.spawnShoulderEntities();
 
-		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
+		if (this.level.getWorldInfo().isHardcoreModeEnabled()) {
 			amount *= 0.7F;
 		} else {
-			Difficulty difficulty = this.world.getDifficulty();
+			Difficulty difficulty = this.level.getDifficulty();
 			if (difficulty == Difficulty.HARD) {
 				amount *= 0.8F;
 			} else if (difficulty == Difficulty.NORMAL) {
@@ -314,14 +330,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		amount = this.handleDamageCap(source, amount);
 
-		if (!this.world.isRemote && amount > 0.0F && this.canBlockDamageSource(source)) {
+		if (!this.level.isClientSide && amount > 0.0F && this.canBlockDamageSource(source)) {
 			if (source.getImmediateSource() instanceof LivingEntity && !(source.getImmediateSource() instanceof PlayerEntity) && ((LivingEntity) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof AxeItem) {
-				this.lastTickShieldDisabled = this.ticksExisted;
+				this.lastTickShieldDisabled = this.tickCount;
 			} else {
 				this.damageBlockedWithShield += amount;
 				if (this.damageBlockedWithShield >= CQRConfig.general.damageBlockedByShield) {
 					this.damageBlockedWithShield = 0.0F;
-					this.lastTickShieldDisabled = this.ticksExisted;
+					this.lastTickShieldDisabled = this.tickCount;
 				}
 			}
 		}
@@ -336,8 +352,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) {
-		LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(this, entityIn, strength, xRatio, zRatio);
+	public void knockback(float strength, double xRatio, double zRatio) {
+		LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(this, strength, xRatio, zRatio);
 		if (event.isCanceled()) {
 			return;
 		}
@@ -346,7 +362,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		zRatio = event.getRatioZ();
 
 		// CQR: reduce knockback strength instead of having a chance to not be knocked backed
-		double knockbackResistance = this.getEntityAttribute(Attributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+		double knockbackResistance = this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
 		strength *= 1.0F - Math.min((float) knockbackResistance, 1.0F);
 
 		this.isAirBorne = true;
@@ -397,7 +413,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				Vector3d vec3d2 = vec3d.subtractReverse(new Vector3d(this.posX, this.posY, this.posZ)).normalize();
 				vec3d2 = new Vector3d(vec3d2.x, 0.0D, vec3d2.z);
 
-				if (vec3d2.dotProduct(vec3d1) < 0.0D) {
+				if (vec3d2.dot(vec3d1) < 0.0D) {
 					return true;
 				}
 			}
@@ -411,9 +427,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		if (this.isHoldingPotion()) {
 			this.swapWeaponAndPotionSlotItemStacks();
 		}
-		Item item = this.getHeldItemMainhand().getItem();
+		Item item = this.getMainHandItem().getItem();
 		if (item instanceof IFakeWeapon<?>) {
-			this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+			this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
 		}
 
 		super.onDeath(cause);
@@ -422,43 +438,43 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 		if (CQRConfig.advanced.debugAI) {
-			this.tasks = new EntityAITasksProfiled(this.world.profiler, this.world);
-			this.targetTasks = new EntityAITasksProfiled(this.world.profiler, this.world);
+			this.goalSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
+			this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
 		this.spellHandler = this.createSpellHandler();
-		this.tasks.addTask(0, new SwimGoal(this));
-		this.tasks.addTask(1, new EntityAIOpenCloseDoor(this));
+		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(1, new EntityAIOpenCloseDoor(this));
 		// TODO disabled for now as it doesn't work properly
 		// this.tasks.addTask(2, new EntityAISneakUnderSmallObstacle<AbstractEntityCQR>(this));
 
 		if (this.canMountEntity()) {
 			this.horseAI = new EntityAIRideHorse<>(this, 1.5);
-			this.tasks.addTask(8, this.horseAI);
+			this.goalSelector.addGoal(8, this.horseAI);
 		}
-		this.tasks.addTask(9, new EntityAIHealingPotion(this));
-		this.tasks.addTask(11, this.spellHandler);
-		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
-		this.tasks.addTask(13, new EntityAIAttackRanged<>(this));
-		this.tasks.addTask(14, new EntityAIPotionThrower(this));
-		this.tasks.addTask(15, new EntityAIFireball(this));
-		this.tasks.addTask(16, new EntityAIHooker(this));
-		this.tasks.addTask(17, new EntityAIBackstab(this));
-		this.tasks.addTask(18, new EntityAIAttack(this));
-		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this));
+		this.goalSelector.addGoal(9, new EntityAIHealingPotion(this));
+		this.goalSelector.addGoal(11, this.spellHandler);
+		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
+		this.goalSelector.addGoal(13, new EntityAIAttackRanged<>(this));
+		this.goalSelector.addGoal(14, new EntityAIPotionThrower(this));
+		this.goalSelector.addGoal(15, new EntityAIFireball(this));
+		this.goalSelector.addGoal(16, new EntityAIHooker(this));
+		this.goalSelector.addGoal(17, new EntityAIBackstab(this));
+		this.goalSelector.addGoal(18, new EntityAIAttack(this));
+		this.goalSelector.addGoal(19, new EntityAICursedBoneSummoner(this));
 
-		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
-		this.tasks.addTask(22, new EntityAIFireFighter(this));
-		this.tasks.addTask(23, new EntityAITorchIgniter(this));
-		this.tasks.addTask(24, new EntityAILooter(this));
-		this.tasks.addTask(25, new EntityAITameAndLeashPet(this));
-		this.tasks.addTask(26, new EntityAISearchMount(this));
+		this.goalSelector.addGoal(20, new EntityAIFollowAttackTarget(this));
+		this.goalSelector.addGoal(22, new EntityAIFireFighter(this));
+		this.goalSelector.addGoal(23, new EntityAITorchIgniter(this));
+		this.goalSelector.addGoal(24, new EntityAILooter(this));
+		this.goalSelector.addGoal(25, new EntityAITameAndLeashPet(this));
+		this.goalSelector.addGoal(26, new EntityAISearchMount(this));
 
-		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(31, new EntityAIFollowPath(this));
-		this.tasks.addTask(32, new EntityAIMoveToHome(this));
-		this.tasks.addTask(33, new EntityAIIdleSit(this));
+		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
+		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
+		this.goalSelector.addGoal(33, new EntityAIIdleSit(this));
 
 		// Electrocution stuff
 		// this.tasks.addTask(10, new EntityAIPanicElectrocute(this, 2.0D));
@@ -468,8 +484,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		// this.tasks.addTask(2, new EntityAIAvoidEntity<EntityElectricField>(this, EntityElectricField.class, 1.0F, 1.5D,
 		// 1.5D));
 
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		this.targetSelector.addGoal(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
@@ -491,7 +507,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		double max = Math.max(CQRConfig.mobs.dropDurabilityMaximum, modalValue);
 
 		for (EquipmentSlotType entityequipmentslot : EquipmentSlotType.values()) {
-			ItemStack itemstack = this.getItemStackFromSlot(entityequipmentslot);
+			ItemStack itemstack = this.getItemBySlot(entityequipmentslot);
 			double d0 = this.getDropChance(entityequipmentslot);
 			boolean flag = d0 > 1.0D;
 
@@ -508,9 +524,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				}
 			}
 
-			if (backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && this.rand.nextFloat() - lootingModifier * 0.01F < d0)) {
-				if (!flag && itemstack.isItemStackDamageable() && !backpackflag) {
-					double durability = modalValue + MathHelper.clamp(this.rand.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
+			if (backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && this.random.nextFloat() - lootingModifier * 0.01F < d0)) {
+				if (!flag && itemstack.isDamageableItem() && !backpackflag) {
+					double durability = modalValue + MathHelper.clamp(this.random.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
 					itemstack.setItemDamage((int) (itemstack.getMaxDamage() * (1.0D - durability)));
 				}
 
@@ -518,119 +534,121 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			}
 		}
 	}
-
+	
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public boolean save(CompoundNBT compound) {
+		boolean result = super.save(compound);
 
 		if (this.homePosition != null) {
-			compound.setTag("home", NBTUtil.createPosTag(this.homePosition));
+			compound.put("home", NBTUtil.writeBlockPos(this.homePosition));
 		}
 
 		if (this.leaderUUID != null) {
-			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
+			compound.put("leader", NBTUtil.createUUID(this.leaderUUID));
 		}
 		if (this.factionName != null && !this.factionName.equalsIgnoreCase(this.getDefaultFaction().name())) {
-			compound.setString("factionOverride", this.factionName);
+			compound.putString("factionOverride", this.factionName);
 		}
-		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
-		compound.setByte("usedHealingPotions", this.usedPotions);
+		compound.putInt("textureIndex", this.entityData.get(TEXTURE_INDEX));
+		compound.putByte("usedHealingPotions", this.usedPotions);
 		// compound.setFloat("sizeScaling", this.sizeScaling);
 		this.callOnWriteToNBT(compound);
 		// compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
-		compound.setBoolean("holdingPotion", this.holdingPotion);
-		compound.setDouble("healthScale", this.healthScale);
+		compound.putBoolean("holdingPotion", this.holdingPotion);
+		compound.putDouble("healthScale", this.healthScale);
 
 		CompoundNBT pathTag = new CompoundNBT();
-		pathTag.setTag("path", this.path.writeToNBT());
-		pathTag.setInteger("prevPathTargetPoint", this.prevPathTargetPoint);
-		pathTag.setInteger("currentPathTargetPoint", this.currentPathTargetPoint);
-		compound.setTag("pathTag", pathTag);
+		pathTag.put("path", this.path.writeToNBT());
+		pathTag.putInt("prevPathTargetPoint", this.prevPathTargetPoint);
+		pathTag.putInt("currentPathTargetPoint", this.currentPathTargetPoint);
+		compound.put("pathTag", pathTag);
 
 		// Shoulder entity stuff
 		if (!this.getLeftShoulderEntity().isEmpty()) {
-			compound.setTag("ShoulderEntityLeft", this.getLeftShoulderEntity());
+			compound.put("ShoulderEntityLeft", this.getLeftShoulderEntity());
 		}
 
-		compound.setTag("trades", this.trades.writeToNBT(new CompoundNBT()));
-		compound.setLong("lastTimedRestockTime", this.getLastTimedRestockTime());
+		compound.put("trades", this.trades.writeToNBT(new CompoundNBT()));
+		compound.putLong("lastTimedRestockTime", this.getLastTimedRestockTime());
 		
 		if (this.hasTextureOverride()) {
-			compound.setString("textureOverride", this.getTextureOverride().toString());
+			compound.putString("textureOverride", this.getTextureOverride().toString());
 		}
 
 		if (this.bossInfoServer != null) {
-			compound.setBoolean("hasBossBar", true);
+			compound.putBoolean("hasBossBar", true);
 		}
+		
+		return result;
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
+	public void load(CompoundNBT compound) {
+		super.load(compound);
 
-		if (compound.hasKey("home")) {
-			this.homePosition = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
+		if (compound.contains("home")) {
+			this.homePosition = NBTUtil.readBlockPos(compound.getCompound("home"));
 		}
 
-		if (compound.hasKey("leader")) {
-			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		if (compound.contains("leader")) {
+			this.leaderUUID = NBTUtil.loadUUID(compound.getCompound("leader"));
 		}
 
-		if (compound.hasKey("factionOverride")) {
+		if (compound.contains("factionOverride")) {
 			this.setFaction(compound.getString("factionOverride"));
 		}
 
-		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
+		this.entityData.set(TEXTURE_INDEX, compound.getInt("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
 		// this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
 		this.callOnReadFromNBT(compound);
 		// this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
-		this.setHealthScale(compound.hasKey("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
+		this.setHealthScale(compound.contains("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
 
-		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
-			CompoundNBT pathTag = compound.getCompoundTag("pathingAI");
-			ListNBT nbtTagList = pathTag.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
+		if (compound.contains("pathingAI", Constants.NBT.TAG_COMPOUND)) {
+			CompoundNBT pathTag = compound.getCompound("pathingAI");
+			ListNBT nbtTagList = pathTag.getList("pathPoints", Constants.NBT.TAG_COMPOUND);
 			this.path.clear();
-			for (int i = 0; i < nbtTagList.tagCount(); i++) {
-				BlockPos pos = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
+			for (int i = 0; i < nbtTagList.size(); i++) {
+				BlockPos pos = NBTUtil.readBlockPos(nbtTagList.getCompound(i));
 				this.path.addNode(this.path.getNode(this.path.getSize() - 1), pos, 0, 0, 0.0F, 1, 0, 24000, true);
 			}
-			this.currentPathTargetPoint = pathTag.getInteger("currentPathPoint");
-			if (nbtTagList.tagCount() > 1) {
+			this.currentPathTargetPoint = pathTag.getInt("currentPathPoint");
+			if (nbtTagList.size() > 1) {
 				if (this.currentPathTargetPoint > 0) {
 					this.prevPathTargetPoint = this.currentPathTargetPoint - 1;
 				} else {
-					this.prevPathTargetPoint = nbtTagList.tagCount();
+					this.prevPathTargetPoint = nbtTagList.size();
 				}
 			} else {
 				this.prevPathTargetPoint = -1;
 			}
-		} else if (compound.hasKey("pathTag", Constants.NBT.TAG_COMPOUND)) {
-			CompoundNBT pathTag = compound.getCompoundTag("pathTag");
-			this.path.readFromNBT(pathTag.getCompoundTag("path"));
-			this.prevPathTargetPoint = pathTag.getInteger("prevPathTargetPoint");
-			this.currentPathTargetPoint = pathTag.getInteger("currentPathTargetPoint");
+		} else if (compound.contains("pathTag", Constants.NBT.TAG_COMPOUND)) {
+			CompoundNBT pathTag = compound.getCompound("pathTag");
+			this.path.readFromNBT(pathTag.getCompound("path"));
+			this.prevPathTargetPoint = pathTag.getInt("prevPathTargetPoint");
+			this.currentPathTargetPoint = pathTag.getInt("currentPathTargetPoint");
 		}
 
 		// Shoulder entity stuff
 		if (compound.hasKey("ShoulderEntityLeft", 10)) {
-			this.setLeftShoulderEntity(compound.getCompoundTag("ShoulderEntityLeft"));
+			this.setLeftShoulderEntity(compound.getCompound("ShoulderEntityLeft"));
 		}
 
-		this.trades.readFromNBT(compound.getCompoundTag("trades"));
-		if(compound.hasKey("lastTimedRestockTime", Constants.NBT.TAG_LONG)) {
+		this.trades.readFromNBT(compound.getCompound("trades"));
+		if(compound.contains("lastTimedRestockTime", Constants.NBT.TAG_LONG)) {
 			this.lastTimedTradeRestock = compound.getLong("lastTimedRestockTime");
 		}
 
-		if (compound.hasKey("textureOverride", Constants.NBT.TAG_STRING)) {
+		if (compound.contains("textureOverride", Constants.NBT.TAG_STRING)) {
 			String ct = compound.getString("textureOverride");
 			if (!ct.isEmpty()) {
 				this.setCustomTexture(new ResourceLocation(ct));
 			}
 		}
 
-		if (compound.hasKey("hasBossBar")) {
+		if (compound.contains("hasBossBar")) {
 			this.enableBossBar();
 		}
 
@@ -649,19 +667,19 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		if (!player.isSneaking()) {
 			if (player.isCreative() || this.getLeader() == player) {
-				if (!this.world.isRemote) {
-					player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				if (!this.level.isRemote) {
+					player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.level, this.getEntityId(), 0, 0);
 				}
 				flag = true;
 			} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
-				if (!this.world.isRemote) {
-					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+				if (!this.level.isRemote) {
+					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getEntityId(), 0, 0);
 				}
 				flag = true;
 			}
 		} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
-			if (!this.world.isRemote) {
-				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.world, this.getEntityId(), 0, 0);
+			if (!this.level.isRemote) {
+				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getEntityId(), 0, 0);
 			}
 			flag = true;
 		}
@@ -689,8 +707,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 		ResourceLocation resourcelocation = this.getLootTable();
 		if (resourcelocation != null) {
-			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(resourcelocation);
-			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.world).withLootedEntity(this).withDamageSource(source);
+			LootTable lootTable = this.level.getLootTableManager().getLootTableFromLocation(resourcelocation);
+			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.level).withLootedEntity(this).withDamageSource(source);
 			if (wasRecentlyHit && this.attackingPlayer != null) {
 				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
 			}
@@ -707,55 +725,55 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected void dropBadgeContentOnDeath() {
 		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BADGE);
 		if (badge.getItem() instanceof ItemBadge) {
-			IItemHandler capability = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			LazyOptional<IItemHandler> capability = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			for (int i = 0; i < capability.getSlots(); i++) {
 				this.entityDropItem(capability.getStackInSlot(i), 0.0F);
 			}
 		}
 	}
-
+	
 	@Override
-	public void onUpdate() {
-		LivingEntity attackTarget = this.getAttackTarget();
+	public void tick() {
+		LivingEntity attackTarget = this.getTarget();
 		if (attackTarget != null) {
-			this.lastTickWithAttackTarget = this.ticksExisted;
-			if (this.isInSightRange(attackTarget) && this.getEntitySenses().canSee(attackTarget)) {
-				this.lastTimeSeenAttackTarget = this.ticksExisted;
+			this.lastTickWithAttackTarget = this.tickCount;
+			if (this.isInSightRange(attackTarget) && this.getSensing().canSee(attackTarget)) {
+				this.lastTimeSeenAttackTarget = this.tickCount;
 			}
-			if (this.lastTimeSeenAttackTarget + 100 >= this.ticksExisted) {
-				this.lastPosAttackTarget = attackTarget.getPositionVector();
+			if (this.lastTimeSeenAttackTarget + 100 >= this.tickCount) {
+				this.lastPosAttackTarget = attackTarget.position();
 			}
 		}
 
-		if (this.lastTickWithAttackTarget + 60 < this.ticksExisted && this.damageBlockedWithShield > 0.0F) {
+		if (this.lastTickWithAttackTarget + 60 < this.tickCount && this.damageBlockedWithShield > 0.0F) {
 			this.damageBlockedWithShield = Math.max(this.damageBlockedWithShield - 0.02F, 0.0F);
 		}
 
-		ItemStack stackMainhand = this.getHeldItemMainhand();
-		if (!stackMainhand.getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(Attributes.ATTACK_SPEED.getName())) {
-			IAttributeInstance attribute = this.getEntityAttribute(Attributes.ATTACK_SPEED);
+		ItemStack stackMainhand = this.getMainHandItem();
+		if (!stackMainhand.getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(Attributes.ATTACK_SPEED)) {
+			ModifiableAttributeInstance attribute = this.getAttribute(Attributes.ATTACK_SPEED);
 			if (attribute.getModifier(BASE_ATTACK_SPEED_ID) == null) {
-				AttributeModifier modifier = new AttributeModifier(BASE_ATTACK_SPEED_ID, "Base Attack Speed", -2.4D, 0);
-				modifier.setSaved(false);
-				attribute.applyModifier(modifier);
+				AttributeModifier modifier = new AttributeModifier(BASE_ATTACK_SPEED_ID, "Base Attack Speed", -2.4D, Operation.ADDITION);
+				modifier.save();
+				attribute.addPermanentModifier(modifier);
 			}
 		} else {
-			IAttributeInstance attribute = this.getEntityAttribute(Attributes.ATTACK_SPEED);
+			ModifiableAttributeInstance attribute = this.getAttribute(Attributes.ATTACK_SPEED);
 			attribute.removeModifier(BASE_ATTACK_SPEED_ID);
 		}
 
-		super.onUpdate();
+		super.tick();
 
-		if (!this.world.isRemote && this.isMagicArmorActive()) {
+		if (!this.level.isClientSide && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
 		}
-		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == Difficulty.PEACEFUL) {
-			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
+		if (!this.level.isClientSide && !this.isNonBoss() && this.level.getDifficulty() == Difficulty.PEACEFUL) {
+			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.level, this.getPosition());
 			this.setDead();
 		}
 
 		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
-		if (!this.world.isRemote && stack != this.prevPotion) {
+		if (!this.level.isClientSide && stack != this.prevPotion) {
 			CQRMain.NETWORK.sendToAllTracking(new SPacketItemStackSync(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack), this);
 		}
 		this.prevPotion = stack;
@@ -773,7 +791,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.prevSneaking = this.isSneaking();
 		this.prevSitting = this.isSitting();
 
-		if (!this.world.isRemote) {
+		if (!this.level.isRemote) {
 			int spellInformation = 0;
 			if (this.spellHandler != null) {
 				if (this.spellHandler.isSpellCharging()) {
@@ -790,20 +808,20 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 					spellInformation = spellInformation | ((int) (spell.getBlue() * 255.0D) & 255);
 				}
 			}
-			this.dataManager.set(SPELL_INFORMATION, spellInformation);
+			this.entityData.set(SPELL_INFORMATION, spellInformation);
 		} else {
 			if (this.isSpellCharging() && this.isSpellAnimated()) {
-				int spellColor = this.dataManager.get(SPELL_INFORMATION);
+				int spellColor = this.entityData.get(SPELL_INFORMATION);
 				double red = ((spellColor >> 16) & 255) / 255.0D;
 				double green = ((spellColor >> 8) & 255) / 255.0D;
 				double blue = (spellColor & 255) / 255.0D;
-				float f = this.renderYawOffset * 0.017453292F + MathHelper.cos(this.ticksExisted * 0.6662F) * 0.25F;
+				float f = this.renderYawOffset * 0.017453292F + MathHelper.cos(this.tickCount * 0.6662F) * 0.25F;
 				float f1 = MathHelper.cos(f);
 				float f2 = MathHelper.sin(f);
-				this.world.spawnParticle(ParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
-				this.world.spawnParticle(ParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + this.height, this.posZ - (double) f2 * (double) this.width, red, green, blue);
+				this.level.spawnParticle(ParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
+				this.level.spawnParticle(ParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + this.height, this.posZ - (double) f2 * (double) this.width, red, green, blue);
 			}
-			if (this.isChatting() && this.ticksExisted % LayerCQRSpeechbubble.CHANGE_BUBBLE_INTERVAL == 0) {
+			if (this.isChatting() && this.tickCount % LayerCQRSpeechbubble.CHANGE_BUBBLE_INTERVAL == 0) {
 				this.chooseNewRandomSpeechBubble();
 			}
 		}
@@ -814,7 +832,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public SoundCategory getSoundCategory() {
+	public SoundCategory getSoundSource() {
 		return SoundCategory.HOSTILE;
 	}
 
@@ -845,9 +863,13 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 	}
 
+	protected void setCustomName(String name) {
+		this.setCustomName(new StringTextComponent(name));
+	}
+	
 	@Override
-	public void setCustomNameTag(String name) {
-		super.setCustomNameTag(name);
+	public void setCustomName(ITextComponent name) {
+		super.setCustomName(name);
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setName(this.getDisplayName());
 		}
@@ -855,45 +877,45 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	@Override
 	protected SoundEvent getSwimSound() {
-		return SoundEvents.ENTITY_HOSTILE_SWIM;
+		return SoundEvents.GENERIC_SWIM;
 	}
 
 	@Override
 	protected SoundEvent getSplashSound() {
-		return SoundEvents.ENTITY_HOSTILE_SPLASH;
+		return SoundEvents.GENERIC_SPLASH;
 	}
 
 	@Override
 	protected final SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return this.canBlockDamageSource(damageSourceIn) ? SoundEvents.ITEM_SHIELD_BLOCK : this.getDefaultHurtSound(damageSourceIn);
+		return this.canBlockDamageSource(damageSourceIn) ? SoundEvents.SHIELD_BLOCK : this.getDefaultHurtSound(damageSourceIn);
 	}
 
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_HOSTILE_HURT;
+		return SoundEvents.HOSTILE_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_HOSTILE_DEATH;
+		return SoundEvents.HOSTILE_DEATH;
 	}
 
 	@Override
 	protected SoundEvent getFallSound(int heightIn) {
-		return heightIn > 4 ? SoundEvents.ENTITY_HOSTILE_BIG_FALL : SoundEvents.ENTITY_HOSTILE_SMALL_FALL;
+		return heightIn > 4 ? SoundEvents.GENERIC_BIG_FALL : SoundEvents.GENERIC_SMALL_FALL;
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
+	public boolean canAttack(LivingEntity entityIn) {
 		// Shoulder entity stuff
 		this.spawnShoulderEntities();
-
-		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
+		
+		if (this.getMainHandItem().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof LivingEntity) {
-				if (!this.world.isRemote) {
+				if (!this.level.isClientSide) {
 					((LivingEntity) entityIn).heal(ItemStaffHealing.HEAL_AMOUNT_ENTITIES);
-					entityIn.setFire(0);
-					((ServerWorld) this.world).spawnParticle(ParticleTypes.HEART, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-					this.world.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
+					entityIn.setSecondsOnFire(0);
+					((ServerWorld) this.level).spawnParticle(ParticleTypes.HEART, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+					this.level.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, CQRSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
 				}
 				return true;
 			}
@@ -903,7 +925,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		int i = 0;
 
 		if (entityIn instanceof LivingEntity) {
-			f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((LivingEntity) entityIn).getCreatureAttribute());
+			f += EnchantmentHelper.getModifierForCreature(this.getMainHandItem(), ((LivingEntity) entityIn).getCreatureAttribute());
 			i += EnchantmentHelper.getKnockbackModifier(this);
 		}
 		// Start IceAndFire compatibility
@@ -918,7 +940,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		if (flag) {
 			if (i > 0 && entityIn instanceof LivingEntity) {
-				((LivingEntity) entityIn).knockBack(this, i * 0.5F, MathHelper.sin(this.rotationYaw * 0.017453292F), (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+				((LivingEntity) entityIn).knockback(this, i * 0.5F, MathHelper.sin(this.rotationYaw * 0.017453292F), (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
 				this.motionX *= 0.6D;
 				this.motionZ *= 0.6D;
 			}
@@ -931,7 +953,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 			if (entityIn instanceof PlayerEntity) {
 				PlayerEntity entityplayer = (PlayerEntity) entityIn;
-				ItemStack itemstack = this.getHeldItemMainhand();
+				ItemStack itemstack = this.getMainHandItem();
 				ItemStack itemstack1 = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY;
 
 				if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this) && itemstack1.getItem().isShield(itemstack1, entityplayer)) {
@@ -939,7 +961,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 					if (this.rand.nextFloat() < f1) {
 						entityplayer.getCooldownTracker().setCooldown(itemstack1.getItem(), 100);
-						this.world.setEntityState(entityplayer, (byte) 30);
+						this.level.setEntityState(entityplayer, (byte) 30);
 					}
 				}
 			}
@@ -956,7 +978,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
+	public void writeSpawnData(PacketBuffer buffer) {
 		// buffer.writeFloat(this.getSizeVariation());
 		buffer.writeFloat(this.getSizeVariation());
 		buffer.writeDouble(this.getHealthScale());
@@ -966,12 +988,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		buffer.writeFloat(this.getDropChance(EquipmentSlotType.FEET));
 		buffer.writeFloat(this.getDropChance(EquipmentSlotType.MAINHAND));
 		buffer.writeFloat(this.getDropChance(EquipmentSlotType.OFFHAND));
-		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
-		ByteBufUtils.writeTag(buffer, this.trades.writeToNBT(new CompoundNBT()));
+		buffer.writeItemStack(this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION), true);
+		buffer.writeNbt(this.trades.writeToNBT(new CompoundNBT()));
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
+	public void readSpawnData(PacketBuffer additionalData) {
 		// this.setSizeVariation(additionalData.readFloat());
 		this.setSizeVariation(additionalData.readFloat());
 		this.setHealthScale(additionalData.readDouble());
@@ -981,28 +1003,28 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.setDropChance(EquipmentSlotType.FEET, additionalData.readFloat());
 		this.setDropChance(EquipmentSlotType.MAINHAND, additionalData.readFloat());
 		this.setDropChance(EquipmentSlotType.OFFHAND, additionalData.readFloat());
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ByteBufUtils.readItemStack(additionalData));
-		this.trades.readFromNBT(ByteBufUtils.readTag(additionalData));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, additionalData.readItem());
+		this.trades.readFromNBT(additionalData.readNbt());
 		this.chooseNewRandomSpeechBubble();
 	}
 
 	// #################### Chocolate Quest Repoured ####################
 
 	public void updateLeader() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return;
 		}
 		// sync with clients that this is a leader
-		this.dataManager.set(IS_LEADER, this.ticksExisted - this.lastTickPingedAsLeader < 200);
+		this.entityData.set(IS_LEADER, this.tickCount - this.lastTickPingedAsLeader < 200);
 		if (this.leaderUUID == null) {
 			this.leader = null;
 			return;
 		}
 		if (this.leader == null) {
-			if ((this.getEntityId() + this.ticksExisted) % 20 != 0) {
+			if ((this.getEntityId() + this.tickCount) % 20 != 0) {
 				return;
 			}
-			Entity entity = EntityUtil.getEntityByUUID(this.world, this.leaderUUID);
+			Entity entity = EntityUtil.getEntityByUUID(this.level, this.leaderUUID);
 			if (entity instanceof LivingEntity) {
 				this.leader = (LivingEntity) entity;
 			}
@@ -1021,7 +1043,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void setLeader(LivingEntity leader) {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return;
 		}
 		if (leader == null) {
@@ -1038,7 +1060,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public boolean isLeader() {
-		return this.dataManager.get(IS_LEADER);
+		return this.entityData.get(IS_LEADER);
 	}
 
 	public BlockPos getHomePositionCQR() {
@@ -1056,9 +1078,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public abstract float getBaseHealth();
 
 	public void setBaseHealthDependingOnPos(BlockPos pos) {
-		if (CQRConfig.mobs.enableHealthChangeOnDistance && !this.world.isRemote) {
-			double x = (double) pos.getX() - DungeonGenUtils.getSpawnX(this.world);
-			double z = (double) pos.getZ() - DungeonGenUtils.getSpawnZ(this.world);
+		if (CQRConfig.mobs.enableHealthChangeOnDistance && !this.level.isClientSide) {
+			double x = (double) pos.getX() - DungeonGenUtils.getSpawnX(this.level);
+			double z = (double) pos.getZ() - DungeonGenUtils.getSpawnZ(this.level);
 			double distance = Math.sqrt(x * x + z * z);
 			double amount = 0.1D * (int) (distance / CQRConfig.mobs.distanceDivisor);
 
@@ -1067,7 +1089,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void handleArmorBreaking() {
-		if (!this.world.isRemote && this.usedPotions + 1 > this.getHealingPotions()) {
+		if (!this.level.isClientSide && this.usedPotions + 1 > this.getHealingPotions()) {
 			boolean armorBroke = false;
 			float hpPrcntg = this.getHealth() / this.getMaxHealth();
 			float[] thresholds = { 0.8F, 0.6F, 0.4F, 0.2F };
@@ -1077,10 +1099,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				if (hpPrcntg > thresholds[i]) {
 					break;
 				}
-				if (this.getItemStackFromSlot(slots[i]).isEmpty()) {
+				if (this.getItemBySlot(slots[i]).isEmpty()) {
 					continue;
 				}
-				this.setItemStackToSlot(slots[i], ItemStack.EMPTY);
+				this.setItemSlot(slots[i], ItemStack.EMPTY);
 				armorBroke = true;
 			}
 
@@ -1101,7 +1123,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public void setHealingPotions(int amount) {
 		ItemStack stack = new ItemStack(CQRItems.POTION_HEALING, amount);
 		if (this.holdingPotion) {
-			this.setItemStackToSlot(EquipmentSlotType.MAINHAND, stack);
+			this.setItemSlot(EquipmentSlotType.MAINHAND, stack);
 		} else {
 			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, stack);
 		}
@@ -1118,9 +1140,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void swapWeaponAndPotionSlotItemStacks() {
-		ItemStack stack1 = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+		ItemStack stack1 = this.getItemBySlot(EquipmentSlotType.MAINHAND);
 		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, stack2);
+		this.setItemSlot(EquipmentSlotType.MAINHAND, stack2);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, stack1);
 		this.holdingPotion = !this.holdingPotion;
 	}
@@ -1140,7 +1162,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	@Nullable
 	public Faction getFaction() {
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			// Leader faction is set when assigning the leader
 			/*
 			 * if (this.hasLeader()) { return FactionRegistry.instance().getFactionOf(this.getLeader()); }
@@ -1152,7 +1174,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				return this.factionInstance;
 			}
 		} else {
-			String syncedFaction = this.dataManager.get(FACTION_OVERRIDE_SYNC);
+			String syncedFaction = this.entityData.get(FACTION_OVERRIDE_SYNC);
 			if (syncedFaction != null && !syncedFaction.isEmpty() && ((this.factionName == null) || !this.factionName.equals(syncedFaction))) {
 				this.factionName = syncedFaction;
 				this.factionInstance = FactionRegistry.instance(this).getFactionInstance(syncedFaction);
@@ -1170,7 +1192,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			Faction faction = FactionRegistry.instance(this).getFactionInstance(newFac);
 			if (faction != null) {
 				this.factionInstance = null;
@@ -1181,14 +1203,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 						this.setCustomTexture(rs);
 					}
 				}
-				this.dataManager.set(FACTION_OVERRIDE_SYNC, newFac);
+				this.entityData.set(FACTION_OVERRIDE_SYNC, newFac);
 			}
 		}
 	}
 
 	@Override
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
-		this.dataManager.set(TEXTURE_OVERRIDE, texture.toString());
+		this.entityData.set(TEXTURE_OVERRIDE, texture.toString());
 	}
 
 	public boolean hasFaction() {
@@ -1196,7 +1218,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void updateReputationOnDeath(DamageSource cause) {
-		if (cause.getTrueSource() instanceof PlayerEntity && this.hasFaction() && !this.world.isRemote) {
+		if (cause.getTrueSource() instanceof PlayerEntity && this.hasFaction() && !this.level.isRemote) {
 			PlayerEntity player = (PlayerEntity) cause.getTrueSource();
 			int range = CQRConfig.mobs.factionUpdateRadius;
 			double x1 = player.posX - range;
@@ -1209,7 +1231,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 			List<Faction> checkedFactions = new ArrayList<>();
 			// boolean setRepu = false;
-			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
+			for (AbstractEntityCQR cqrentity : this.level.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
 					Faction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
@@ -1248,7 +1270,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.setBaseHealthDependingOnPos(placement.getPos());
 
 		//Reset lastTimedRestockTick
-		this.setLastTimedRestockTime(this.world.getTotalWorldTime());
+		this.setLastTimedRestockTime(this.level.getTotalWorldTime());
 		
 		// Recalculate path points
 		for (Path.PathNode node : this.path.getNodes()) {
@@ -1258,10 +1280,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		// Replace shield
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			ItemStack stack = this.getItemStackFromSlot(slot);
+			ItemStack stack = this.getItemBySlot(slot);
 			Item item = stack.getItem();
 			if (item instanceof ItemShieldDummy && placement.getInhabitant() != null) {
-				this.setItemStackToSlot(slot, new ItemStack(placement.getInhabitant().getShieldReplacement(), 1));
+				this.setItemSlot(slot, new ItemStack(placement.getInhabitant().getShieldReplacement(), 1));
 			}
 		}
 		if (placement.getInhabitant() != null && placement.getInhabitant().getFactionOverride() != null && !placement.getInhabitant().getFactionOverride().isEmpty() && FactionRegistry.instance(this).getFactionInstance(placement.getInhabitant().getFactionOverride()) != null) {
@@ -1306,22 +1328,22 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void setSitting(boolean sitting) {
-		this.dataManager.set(IS_SITTING, sitting);
+		this.entityData.set(IS_SITTING, sitting);
 	}
 
 	public boolean isSitting() {
 		if (this.hasTrades()) {
 			return false;
 		}
-		return this.dataManager.get(IS_SITTING);
+		return this.entityData.get(IS_SITTING);
 	}
 
 	public void setChatting(boolean chatting) {
-		this.dataManager.set(TALKING, chatting);
+		this.entityData.set(TALKING, chatting);
 	}
 
 	public boolean isChatting() {
-		return this.dataManager.get(TALKING);
+		return this.entityData.get(TALKING);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -1332,7 +1354,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@OnlyIn(Dist.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
 		if (this.hasTrades()) {
-			this.currentSpeechBubbleID = ESpeechBubble.getRandTraderBubble(this.rand);
+			this.currentSpeechBubbleID = ESpeechBubble.getRandTraderBubble(this.random);
 		} else {
 			this.currentSpeechBubbleID = ESpeechBubble.getRandNormalBubble(this.rand);
 		}
@@ -1340,12 +1362,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	@OnlyIn(Dist.CLIENT)
 	public int getTextureIndex() {
-		return this.dataManager.get(TEXTURE_INDEX);
+		return this.entityData.get(TEXTURE_INDEX);
 	}
 
 	public double getAttackReach(LivingEntity target) {
 		double reach = ((double) this.width + (double) target.width) * 0.5D + 0.85D;
-		ItemStack stack = this.getHeldItemMainhand();
+		ItemStack stack = this.getMainHandItem();
 		if (stack.getItem() instanceof ItemSpearBase) {
 			reach += ((ItemSpearBase) stack.getItem()).getReach();
 		}
@@ -1414,7 +1436,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public void setHealthScale(double newHealthScale) {
 		if (this.healthScale != newHealthScale) {
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide) {
 				EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_SLIDER_ID, "Health Scale Slider", newHealthScale - 1.0D);
 			}
 			this.healthScale = newHealthScale;
@@ -1426,11 +1448,11 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public float getDropChance(EquipmentSlotType slot) {
-		switch (slot.getSlotType()) {
+		switch (slot.getType()) {
 		case HAND:
-			return this.inventoryHandsDropChances[slot.getIndex()];
+			return this.handDropChances[slot.getIndex()];
 		case ARMOR:
-			return this.inventoryArmorDropChances[slot.getIndex()];
+			return this.armorDropChances[slot.getIndex()];
 		default:
 			return 0.0F;
 		}
@@ -1438,31 +1460,31 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public boolean isInSightRange(Entity target) {
 		double sightRange = 32.0D;
-		sightRange *= 0.6D + 0.4D * this.world.getLight(new BlockPos(target)) / 15.0D;
-		sightRange *= this.isPotionActive(Effects.BLINDNESS) ? 0.5D : 1.0D;
-		return this.getDistanceSq(target) <= sightRange * sightRange;
+		sightRange *= 0.6D + 0.4D * this.level.getLightEmission(target.blockPosition()) / 15.0D;
+		sightRange *= this.hasEffect(Effects.BLINDNESS) ? 0.5D : 1.0D;
+		return this.distanceToSqr(target) <= sightRange * sightRange;
 	}
 
 	public ItemStack getHeldItemWeapon() {
-		return this.isHoldingPotion() ? this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION) : this.getHeldItemMainhand();
+		return this.isHoldingPotion() ? this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION) : this.getMainHandItem();
 	}
 
 	public ItemStack getHeldItemPotion() {
-		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
+		return this.isHoldingPotion() ? this.getMainHandItem() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 	}
 
 	public boolean isMagicArmorActive() {
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			return this.armorActive;
 		}
-		return this.dataManager.get(MAGIC_ARMOR_ACTIVE);
+		return this.entityData.get(MAGIC_ARMOR_ACTIVE);
 	}
 
 	public void setMagicArmorActive(boolean val) {
 		if (val != this.armorActive) {
 			this.armorActive = val;
-			this.setEntityInvulnerable(this.armorActive);
-			this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
+			this.setInvulnerable(this.armorActive);
+			this.entityData.set(MAGIC_ARMOR_ACTIVE, val);
 		}
 	}
 
@@ -1530,15 +1552,15 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public boolean isSpellCharging() {
-		return ((this.dataManager.get(SPELL_INFORMATION) >> 26) & 1) == 1;
+		return ((this.entityData.get(SPELL_INFORMATION) >> 26) & 1) == 1;
 	}
 
 	public boolean isSpellCasting() {
-		return ((this.dataManager.get(SPELL_INFORMATION) >> 25) & 1) == 1;
+		return ((this.entityData.get(SPELL_INFORMATION) >> 25) & 1) == 1;
 	}
 
 	public boolean isSpellAnimated() {
-		return ((this.dataManager.get(SPELL_INFORMATION) >> 24) & 1) == 1;
+		return ((this.entityData.get(SPELL_INFORMATION) >> 24) & 1) == 1;
 	}
 
 	public void setLastTimeHitByAxeWhileBlocking(int tick) {
@@ -1551,42 +1573,42 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	// @SideOnly(Side.CLIENT)
 	public boolean hasAttackTarget() {
-		if (this.world.isRemote) {
-			return this.dataManager.get(HAS_TARGET);
+		if (this.level.isClientSide) {
+			return this.entityData.get(HAS_TARGET);
 		} else {
-			return this.getAttackTarget() != null && !this.getAttackTarget().isDead;
+			return this.getTarget() != null && !this.getTarget().isDead;
 		}
 	}
 
 	@Override
-	public void setAttackTarget(LivingEntity entitylivingbaseIn) {
-		LivingEntity prevAttackTarget = this.getAttackTarget();
-		super.setAttackTarget(entitylivingbaseIn);
-		LivingEntity attackTarget = this.getAttackTarget();
+	public void setTarget(LivingEntity entitylivingbaseIn) {
+		LivingEntity prevAttackTarget = this.getTarget();
+		super.setTarget(entitylivingbaseIn);
+		LivingEntity attackTarget = this.getTarget();
 		if (prevAttackTarget == attackTarget) {
 			return;
 		}
 		if (attackTarget == null) {
-			this.dataManager.set(HAS_TARGET, false);
+			this.entityData.set(HAS_TARGET, false);
 			this.lastTimeSeenAttackTarget = Integer.MIN_VALUE;
-			this.lastPosAttackTarget = this.getPositionVector();
+			this.lastPosAttackTarget = this.position();
 
-			Item item = this.getHeldItemMainhand().getItem();
+			Item item = this.getMainHandItem().getItem();
 			if (item instanceof IFakeWeapon<?>) {
-				this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+				this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
 			}
 		} else {
-			this.dataManager.set(HAS_TARGET, true);
-			this.lastTimeSeenAttackTarget = this.ticksExisted;
-			this.lastPosAttackTarget = attackTarget.getPositionVector();
+			this.entityData.set(HAS_TARGET, true);
+			this.lastTimeSeenAttackTarget = this.tickCount;
+			this.lastPosAttackTarget = attackTarget.position();
 
-			Item item = this.getHeldItemMainhand().getItem();
+			Item item = this.getMainHandItem().getItem();
 			if (TargetUtil.isAllyCheckingLeaders(this, attackTarget)) {
 				if (item instanceof IFakeWeapon<?>) {
-					this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+					this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
 				}
 			} else if (item instanceof ISupportWeapon<?>) {
-				this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeWeapon()));
+				this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeWeapon()));
 			}
 		}
 	}
@@ -1612,24 +1634,24 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	private void spawnShoulderEntity(@Nullable CompoundNBT compound) {
-		if (!this.world.isRemote && compound != null && !compound.isEmpty()) {
-			Entity entity = EntityList.createEntityFromNBT(compound, this.world);
+		if (!this.level.isClientSide && compound != null && !compound.isEmpty()) {
+			Entity entity = EntityList.createEntityFromNBT(compound, this.level);
 
 			if (entity instanceof TameableEntity) {
-				((TameableEntity) entity).setOwnerId(this.entityUniqueID);
+				((TameableEntity) entity).setOwnerUUID(this.getUUID());
 			}
 
-			entity.setPosition(this.posX, this.posY + 0.699999988079071D, this.posZ);
-			this.world.spawnEntity(entity);
+			entity.setPos(this.posX, this.posY + 0.699999988079071D, this.posZ);
+			this.level.spawnEntity(entity);
 		}
 	}
 
 	public CompoundNBT getLeftShoulderEntity() {
-		return this.dataManager.get(SHOULDER_ENTITY);
+		return this.entityData.get(SHOULDER_ENTITY);
 	}
 
 	protected void setLeftShoulderEntity(CompoundNBT tag) {
-		this.dataManager.set(SHOULDER_ENTITY, tag);
+		this.entityData.set(SHOULDER_ENTITY, tag);
 	}
 
 	public boolean canUseSpinToWinAttack() {
@@ -1637,13 +1659,17 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public boolean isSpinToWinActive() {
-		return this.canUseSpinToWinAttack() && this.dataManager.get(SPIN_TO_WIN);
+		return this.canUseSpinToWinAttack() && this.entityData.get(SPIN_TO_WIN);
 	}
 
 	public void setSpinToWin(boolean value) {
 		if (this.isServerWorld()) {
-			this.dataManager.set(SPIN_TO_WIN, value);
+			this.entityData.set(SPIN_TO_WIN, value);
 		}
+	}
+
+	private boolean isServerWorld() {
+		return this.level != null && !this.level.isClientSide;
 	}
 
 	public TraderOffer getTrades() {
@@ -1651,31 +1677,31 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void teleport(double x, double y, double z) {
-		this.setPosition(x, y, z);
+		this.setPos(x, y, z);
 		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this), this);
 	}
 
 	// Custom textures
 	@Override
 	public boolean hasTextureOverride() {
-		return this.dataManager.get(TEXTURE_OVERRIDE) != null && !this.dataManager.get(TEXTURE_OVERRIDE).isEmpty();
+		return this.entityData.get(TEXTURE_OVERRIDE) != null && !this.entityData.get(TEXTURE_OVERRIDE).isEmpty();
 	}
 
 	@Override
 	public ResourceLocation getTextureOverride() {
-		if (this.textureOverride == null || !this.textureOverride.toString().equals(this.dataManager.get(TEXTURE_OVERRIDE))) {
-			this.textureOverride = new ResourceLocation(this.dataManager.get(TEXTURE_OVERRIDE));
+		if (this.textureOverride == null || !this.textureOverride.toString().equals(this.entityData.get(TEXTURE_OVERRIDE))) {
+			this.textureOverride = new ResourceLocation(this.entityData.get(TEXTURE_OVERRIDE));
 		}
 		return this.textureOverride;
 	}
 
 	public void updateInvisibility() {
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			if (this.invisibilityTick > 0) {
 				this.invisibilityTick--;
-				this.dataManager.set(INVISIBILITY, Math.min(this.dataManager.get(INVISIBILITY) + 1.0F / this.getInvisibilityTurningTime(), 1.0F));
+				this.entityData.set(INVISIBILITY, Math.min(this.entityData.get(INVISIBILITY) + 1.0F / this.getInvisibilityTurningTime(), 1.0F));
 			} else {
-				this.dataManager.set(INVISIBILITY, Math.max(this.dataManager.get(INVISIBILITY) - 1.0F / this.getInvisibilityTurningTime(), 0.0F));
+				this.entityData.set(INVISIBILITY, Math.max(this.entityData.get(INVISIBILITY) - 1.0F / this.getInvisibilityTurningTime(), 0.0F));
 			}
 		}
 	}
@@ -1696,7 +1722,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public float getInvisibility() {
-		return this.dataManager.get(INVISIBILITY);
+		return this.entityData.get(INVISIBILITY);
 	}
 
 	// ISizable stuff
@@ -1711,7 +1737,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public boolean canPlayDeathAnimation() {
-		return this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive();
+		return this.dead || this.getHealth() < 0.01 || this.dead || !this.isAlive();
 	}
 
 	//ITradeRestockOverTime data accessors

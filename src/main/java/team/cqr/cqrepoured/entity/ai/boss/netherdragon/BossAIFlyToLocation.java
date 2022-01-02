@@ -22,7 +22,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 
 	@Override
 	public boolean canContinueToUse() {
-		return super.canContinueToUse() && this.entity.getPositionVector().distanceTo(this.getTargetLocation()) > MIN_DISTANCE_TO_REACH;
+		return super.canContinueToUse() && this.entity.position().distanceTo(this.getTargetLocation()) > MIN_DISTANCE_TO_REACH;
 	}
 
 	protected Vector3d getTargetLocation() {

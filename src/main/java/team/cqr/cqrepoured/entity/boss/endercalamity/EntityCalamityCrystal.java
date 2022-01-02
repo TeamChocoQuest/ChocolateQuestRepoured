@@ -168,8 +168,8 @@ public class EntityCalamityCrystal extends Entity {
 		// Our old target was not good, we need a new one
 		if (this.currentTarget == null) {
 			// DONE: Create faction based predicate that checks for entities, also check their health
-			Vector3d p1 = this.getPositionVector().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
-			Vector3d p2 = this.getPositionVector().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
+			Vector3d p1 = this.position().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
+			Vector3d p2 = this.position().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb, this::doesEntityFitForAbsorbing);
 			if (!affectedEntities.isEmpty()) {
@@ -213,8 +213,8 @@ public class EntityCalamityCrystal extends Entity {
 		if (source != DamageSource.OUT_OF_WORLD) {
 			// DONE: Implement healing of all entities nearby
 
-			Vector3d p1 = this.getPositionVector().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
-			Vector3d p2 = this.getPositionVector().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			Vector3d p1 = this.position().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			Vector3d p2 = this.position().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb);
 			if (!affectedEntities.isEmpty()) {

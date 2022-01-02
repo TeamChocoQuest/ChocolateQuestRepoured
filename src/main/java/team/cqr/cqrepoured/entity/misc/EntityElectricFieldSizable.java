@@ -23,7 +23,7 @@ public class EntityElectricFieldSizable extends EntityElectricField implements I
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
+	protected void save(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		this.callOnWriteToNBT(compound);
 	}

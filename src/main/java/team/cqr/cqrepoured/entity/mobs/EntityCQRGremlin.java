@@ -57,11 +57,6 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getEyeHeight() {
-		return this.height * 0.7F;
-	}
-
-	@Override
 	public float getDefaultWidth() {
 		return 0.9F;
 	}

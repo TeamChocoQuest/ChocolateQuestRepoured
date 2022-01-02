@@ -50,7 +50,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		super.tick();
 
 		if (this.ticksExisted >= EntityWalkerTornado.MAX_LIVING_TICKS) {
 			this.setDead();
@@ -136,7 +136,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 
 	protected void collideWithEntity(Entity entityIn) {
 		if (this.isEntityAffected(entityIn)) {
-			Vector3d vAway = entityIn.getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25D);
+			Vector3d vAway = entityIn.position().subtract(this.position()).normalize().scale(1.25D);
 			vAway = vAway.add(0, vAway.y * 0.1D, 0);
 			entityIn.motionX = vAway.x * 0.75;
 			entityIn.motionY = Math.max(Math.abs(vAway.y), 0.6D);
@@ -162,7 +162,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
+	public void save(CompoundNBT compound) {
 		if (this.getOwnerId() != null) {
 			compound.setTag("summoner", NBTUtil.createUUIDTag(this.getOwnerId()));
 		}

@@ -55,7 +55,7 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		super.tick();
 
 		++this.ticksExisted;
 
@@ -111,7 +111,7 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 
 	@Override
 	protected void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setBoolean("skeletal", this.isSkeletal());
 		compound.setInteger("realID", this.realID);
 		compound.setInteger("partIndex", this.partIndex);

@@ -118,7 +118,7 @@ public class EntityCalamitySpawner extends Entity {
 						final int rotationDegree = 360 / lines;
 						vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
 						for (int i = 0; i < lines; i++) {
-							Vector3d particlePosition = this.getPositionVector().add(vector);
+							Vector3d particlePosition = this.position().add(vector);
 
 							this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
 
@@ -145,7 +145,7 @@ public class EntityCalamitySpawner extends Entity {
 		Vector3d v = new Vector3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.rand));
 
-		return v.add(this.getPositionVector());
+		return v.add(this.position());
 	}
 
 	private void spawnCalamity() {

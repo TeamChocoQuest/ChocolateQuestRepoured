@@ -2,34 +2,35 @@ package team.cqr.cqrepoured.entity;
 
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundNBT;
 
 public interface ISizable {
 
 	// Now, let's proceed to some hackery... (Just some dirty access to entity fields)
 	default float getWidth() {
 		if (this instanceof Entity) {
-			return ((Entity) this).width;
+			return ((Entity) this).getBbWidth();
 		}
 		return 0F;
 	}
 
 	default float getHeight() {
 		if (this instanceof Entity) {
-			return ((Entity) this).height;
+			return ((Entity) this).getBbHeight();
 		}
 		return 0F;
 	}
 
 	default float getStepHeight() {
 		if (this instanceof Entity) {
-			return ((Entity) this).stepHeight;
+			return ((Entity) this).maxUpStep;
 		}
 		return 0F;
 	}
 
 	default void setStepHeight(float value) {
 		if (this instanceof Entity) {
-			((Entity) this).stepHeight = value;
+			((Entity) this).maxUpStep = value;
 		}
 	}
 
@@ -73,12 +74,12 @@ public interface ISizable {
 	}
 
 	// These two methods NEED to be called on read/write entity to NBT!! OTherwise it won't get saved!
-	default void callOnWriteToNBT(NBTTagCompound compound) {
-		compound.setFloat("sizeScaling", this.getSizeVariation());
+	default void callOnWriteToNBT(CompoundNBT compound) {
+		compound.putFloat("sizeScaling", this.getSizeVariation());
 	}
 
-	default void callOnReadFromNBT(NBTTagCompound compound) {
-		this.setSizeVariation(compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F);
+	default void callOnReadFromNBT(CompoundNBT compound) {
+		this.setSizeVariation(compound.contains("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F);
 	}
 
 }

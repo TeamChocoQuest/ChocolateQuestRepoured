@@ -33,7 +33,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit == this.thrower) {
@@ -66,7 +66,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 				}
 			}
 
-			super.onImpact(result);
+			super.onHit(result);
 		}
 	}
 

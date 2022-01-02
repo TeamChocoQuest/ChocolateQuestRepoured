@@ -37,7 +37,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			return false;
 		}
 		ItemStack itemStackMain = attacker.getHeldItemMainhand();
-		ItemStack itemStackOff = attacker.getHeldItemOffhand();
+		ItemStack itemStackOff = attacker.getMainHandItem();
 
 		return this.doesItemStackFitForSpinAttack(itemStackMain) && this.doesItemStackFitForSpinAttack(itemStackOff);
 	}
@@ -71,7 +71,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	}
 
 	private void calcAttackDirection(AbstractEntityCQR attacker, LivingEntity target) {
-		this.attackDirection = target.getPositionVector().subtract(attacker.getPositionVector()).normalize().scale(0.25);
+		this.attackDirection = target.position().subtract(attacker.position()).normalize().scale(0.25);
 		this.attackDirection = this.attackDirection.subtract(0, this.attackDirection.y, 0);
 	}
 
@@ -111,7 +111,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 				float dmg = (float) attacker.getEntityAttribute(Attributes.ATTACK_DAMAGE).getAttributeValue();
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
-				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
+				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getMainHandItem(), living.getCreatureAttribute());
 
 				/*
 				 * living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
@@ -125,7 +125,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 				final float knockbackStrength = 0.6125F * attacker.getSizeVariation();
 				living.attackEntityFrom(DamageSource.causeMobDamage(attacker), dmg);
-				living.knockBack(entity, knockbackStrength, 1, 1);
+				living.knockback(entity, knockbackStrength, 1, 1);
 			}
 		});
 	}

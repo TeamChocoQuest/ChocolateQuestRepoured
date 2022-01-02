@@ -16,7 +16,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -41,7 +41,7 @@ public class ItemSwordSunshine extends SwordItem implements IEquipListener {
 		if (!isSelected) {
 			return;
 		}
-		IAttributeInstance attribute = ((LivingEntity) entityIn).getEntityAttribute(Attributes.ATTACK_DAMAGE);
+		ModifiableAttributeInstance attribute = ((LivingEntity) entityIn).getEntityAttribute(Attributes.ATTACK_DAMAGE);
 		if (worldIn.isDaytime()) {
 			if (attribute.getModifier(ATTACK_DAMAGE_MODIFIER) != null) {
 				return;
@@ -59,7 +59,7 @@ public class ItemSwordSunshine extends SwordItem implements IEquipListener {
 
 	@Override
 	public void onUnequip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot) {
-		IAttributeInstance attribute = entity.getEntityAttribute(Attributes.ATTACK_DAMAGE);
+		ModifiableAttributeInstance attribute = entity.getEntityAttribute(Attributes.ATTACK_DAMAGE);
 		attribute.removeModifier(ATTACK_DAMAGE_MODIFIER);
 	}
 

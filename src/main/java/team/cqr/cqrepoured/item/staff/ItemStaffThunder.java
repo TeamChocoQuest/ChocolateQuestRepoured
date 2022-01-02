@@ -84,12 +84,12 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 
 	@Override
 	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
-		Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
-		Vector3d pos = target.getPositionVector();
+		Vector3d v = target.position().subtract(shooter.position());
+		Vector3d pos = target.position();
 		if (v.length() > 20) {
 			v = v.normalize();
 			v = v.scale(20D);
-			pos = shooter.getPositionVector().add(v);
+			pos = shooter.position().add(v);
 		}
 		EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, pos.x, pos.y, pos.z, true, false);
 		worldIn.spawnEntity(entity);

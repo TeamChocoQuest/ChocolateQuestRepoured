@@ -172,8 +172,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 
 		this.dataManager.register(IS_STUNNED, false);
 		this.dataManager.register(CANNON_RAISED, false);
@@ -204,7 +204,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 		if (CQRConfig.advanced.debugAI) {
 			this.tasks = new EntityAITasksProfiled(this.world.profiler, this.world);
 			this.targetTasks = new EntityAITasksProfiled(this.world.profiler, this.world);
@@ -503,8 +503,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater()) && !this.isStunned()) {
 			this.setStunned(true, 10);
@@ -522,7 +522,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 		for (PartEntity part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
-			part.onUpdate();
+			part.tick();
 		}
 
 		this.alignParts();
@@ -697,17 +697,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	// Kick handling
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
+	public boolean canAttack(Entity entityIn) {
 		if(this.isStunned()) {
 			return false;
 		}
-		boolean result = super.attackEntityAsMob(entityIn);
+		boolean result = super.canAttack(entityIn);
 
 		if (result) {
 			if (this.isCurrentlyPlayingAnimation()) {
 				if (this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
 					if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
-						Vector3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
+						Vector3d v = entityIn.position().subtract(this.position());
 						v = v.normalize().scale(1.5D);
 
 						// YEET!
@@ -737,7 +737,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
 				if ((entity instanceof LivingEntity && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (LivingEntity) entity))) || checkPred.test(entity)) {
-					Vector3d flyDirection = entity.getPositionVector().subtract(this.getPositionVector()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
+					Vector3d flyDirection = entity.position().subtract(this.position()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
 
 					entity.motionX += flyDirection.x;
 					entity.motionY += flyDirection.y;
@@ -746,7 +746,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 					entity.velocityChanged = true;
 
 					if (entity != attackingMob) {
-						super.attackEntityAsMob(entity);
+						super.canAttack(entity);
 					}
 				}
 			});

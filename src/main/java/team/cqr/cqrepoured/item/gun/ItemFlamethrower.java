@@ -105,7 +105,7 @@ public class ItemFlamethrower extends ItemMagazineBased {
 					this.shootFlames((LivingEntity) entityIn);
 					this.removeAmmoFromItem(stack, 1);
 				}
-			} else if ((((LivingEntity) entityIn).getHeldItemMainhand() == stack || ((LivingEntity) entityIn).getHeldItemOffhand() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
+			} else if ((((LivingEntity) entityIn).getHeldItemMainhand() == stack || ((LivingEntity) entityIn).getMainHandItem() == stack) && entityIn.ticksExisted % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
 				if (entityIn instanceof PlayerEntity) {
 					this.reloadFromInventory(((PlayerEntity) user).inventory, stack, !((PlayerEntity) user).isCreative());
 				}

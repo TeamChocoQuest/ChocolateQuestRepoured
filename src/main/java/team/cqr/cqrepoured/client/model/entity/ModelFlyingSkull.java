@@ -37,7 +37,7 @@ public class ModelFlyingSkull extends ModelBase {
 			this.jaw.rotateAngleX = (float) Math.toRadians(22.5D * (0.5D * (1D + (Math.sin(((2D * Math.PI) / 8) * entity.ticksExisted)))));
 			this.skull.render(scale);
 			GlStateManager.popMatrix();
-			Minecraft.getMinecraft().world.spawnParticle(ParticleTypes.SPELL_WITCH, entity.getPositionVector().x, entity.getPositionVector().y + 0.02, entity.getPositionVector().z, 0F, 0.5F, 0F, 2);
+			Minecraft.getMinecraft().world.spawnParticle(ParticleTypes.SPELL_WITCH, entity.position().x, entity.position().y + 0.02, entity.position().z, 0F, 0.5F, 0F, 2);
 		}
 	}
 

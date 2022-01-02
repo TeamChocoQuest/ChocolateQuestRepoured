@@ -192,8 +192,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 
 		this.dataManager.register(MOUTH_OPEN, false);
 		this.dataManager.register(SKELE_COUNT, -1);
@@ -300,7 +300,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 		this.tasks.addTask(5, new BossAIFlyToTarget(this));
 		this.tasks.addTask(8, new BossAIFlyToLocation(this));
 		this.tasks.addTask(10, new BossAISpiralUpToCirclingCenter(this));
@@ -340,7 +340,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// Shoot fireball
 			this.mouthTimer = 10;
 
-			Vector3d velocity = target.getPositionVector().subtract(this.getPositionVector());
+			Vector3d velocity = target.position().subtract(this.position());
 			velocity = velocity.normalize().scale(1.5);
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			// proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
@@ -366,8 +366,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		if (super.attackEntityAsMob(entityIn)) {
+	public boolean canAttack(Entity entityIn) {
+		if (super.canAttack(entityIn)) {
 			if (this.phase > 1 && (entityIn instanceof LivingEntity)) {
 				((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, 100 + entityIn.world.getDifficulty().ordinal() * 40, 3));
 			}
@@ -467,11 +467,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				indx = this.getRNG().nextInt(this.dragonBodyParts.length);
 			}
 			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx - 1];
-			Vector3d v = this.dragonBodyParts[indx].getPositionVector();
+			Vector3d v = this.dragonBodyParts[indx].position();
 			if (this.hasAttackTarget() && this.getRNG().nextDouble() > 0.6) {
-				v = this.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
+				v = this.getAttackTarget().position().subtract(v).add(0, 0.5, 0);
 			} else {
-				v = pre.getPositionVector().subtract(v);
+				v = pre.position().subtract(v);
 				v = v.add(new Vector3d(0, 1 - (2 * this.getRNG().nextDouble()), 0));
 				if (this.getRNG().nextBoolean()) {
 					v = VectorUtil.rotateVectorAroundY(v, 45);
@@ -500,7 +500,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		Vector3d look = this.getLookVec();
 		motionX = look.x;
 		motionZ = look.z;
-		Vector3d flameStartPos = this.getPositionVector().add((new Vector3d(motionX, 0, motionZ).scale((this.width / 2) - 0.25).subtract(0, 0.2, 0)));
+		Vector3d flameStartPos = this.position().add((new Vector3d(motionX, 0, motionZ).scale((this.width / 2) - 0.25).subtract(0, 0.2, 0)));
 		flameStartPos = flameStartPos.add(0, this.height / 2, 0);
 		Vector3d v = new Vector3d(motionX, 0, motionZ).scale(0.75);
 		double ANGLE_MAX = 22.5;
@@ -608,7 +608,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		if (this.phase == 1 && !this.world.isRemote) {
 			this.phaseChangeTimer--;
 			if (this.phaseChangeTimer <= 0) {
@@ -663,7 +663,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.lengthSyncServer();
 		}
 
-		super.onUpdate();
+		super.tick();
 
 		// update bodySegments parts
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
@@ -760,7 +760,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	protected PathNavigator createNavigator(World worldIn) {
+	protected PathNavigator createNavigation(World worldIn) {
 		return new PathNavigateDirectLine(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
@@ -849,8 +849,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 		compound.setInteger("segmentCount", this.segmentCount);
 		compound.setInteger("phase", this.phase);
 		compound.setInteger("skeleCount", this.getSkeleProgress());

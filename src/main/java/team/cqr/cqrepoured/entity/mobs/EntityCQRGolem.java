@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.entity.mobs;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem.ArmorMaterial;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -39,17 +40,17 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_IRONGOLEM_HURT;
+		return SoundEvents.IRON_GOLEM_HURT;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_IRONGOLEM_STEP;
+		return SoundEvents.IRON_GOLEM_STEP;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_IRONGOLEM_DEATH;
+		return SoundEvents.IRON_GOLEM_DEATH;
 	}
 
 	@Override
@@ -59,14 +60,14 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isFireDamage()) {
+		if (source.isFire()) {
 			return false;
 		}
 		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.MECHANICAL;
 	}
 
@@ -74,8 +75,8 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(Attributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
-		this.getEntityAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
+		this.getAttribute(Attributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDefenseForSlot(EquipmentSlotType.CHEST));
+		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
 	}
 
 }

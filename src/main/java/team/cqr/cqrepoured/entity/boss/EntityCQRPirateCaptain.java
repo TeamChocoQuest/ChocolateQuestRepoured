@@ -65,14 +65,14 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
+	public boolean canAttack(Entity entityIn) {
 		this.spawnShoulderEntities();
-		return super.attackEntityAsMob(entityIn);
+		return super.canAttack(entityIn);
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void registerGoals() {
+		super.registerGoals();
 
 		this.spellHandler.addSpell(1, new BossAIPirateSummonParrot(this, 0, 20, 20));
 		this.spellHandler.addSpell(0, new BossAIPirateFleeSpell(this, 60, 30, 30));
@@ -97,8 +97,8 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 		this.dataManager.register(IS_DISINTEGRATING, false);
 		this.dataManager.register(IS_REINTEGRATING, false);
 	}
@@ -119,8 +119,8 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 		compound.setBoolean("spawnedParrot", this.spawnedParrot);
 	}
 

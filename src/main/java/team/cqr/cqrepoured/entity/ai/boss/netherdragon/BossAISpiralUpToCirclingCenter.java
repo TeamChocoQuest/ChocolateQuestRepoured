@@ -23,7 +23,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 	public boolean canUse() {
 		Vector3d center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		double yCirclingCenter = center.y + BossAICircleAroundLocation.CIRCLING_HEIGHT + (1.5 * BossAICircleAroundLocation.DELTA_Y);
-		return this.entity.getPositionVector().distanceTo(center) <= MIN_DISTANCE_TO_HOME && this.entity.posY < yCirclingCenter;
+		return this.entity.position().distanceTo(center) <= MIN_DISTANCE_TO_HOME && this.entity.posY < yCirclingCenter;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.entity.getPositionVector().distanceTo(this.targetPos) <= MIN_DISTANCE_TO_NODE) {
+		if (this.entity.position().distanceTo(this.targetPos) <= MIN_DISTANCE_TO_NODE) {
 			this.v = VectorUtil.rotateVectorAroundY(this.v, this.angleIncrement);
 			this.center = this.center.add(0, this.v.y, 0);
 			this.targetPos = this.center.add(this.v);

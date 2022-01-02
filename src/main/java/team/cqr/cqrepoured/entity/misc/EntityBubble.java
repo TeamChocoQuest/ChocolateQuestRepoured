@@ -28,7 +28,7 @@ public class EntityBubble extends Entity implements IDontRenderFire {
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		super.tick();
 
 		if (!this.world.isRemote) {
 			if (!this.isBeingRidden() || this.isInLava() || (this.collidedVertically && !this.onGround) || this.flyTicks > FLY_TIME_MAX) {

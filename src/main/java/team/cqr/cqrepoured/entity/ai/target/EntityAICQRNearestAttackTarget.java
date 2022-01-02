@@ -21,7 +21,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	protected void wrapperSetAttackTarget(LivingEntity target) {
-		this.entity.setAttackTarget(target);
+		this.entity.setTarget(target);
 	}
 
 	protected LivingEntity wrapperGetAttackTarget() {
@@ -99,14 +99,14 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (!this.entity.isInSightRange(possibleTarget)) {
 			return false;
 		}
-		return this.entity.getEntitySenses().canSee(possibleTarget);
+		return this.entity.getSensing().canSee(possibleTarget);
 	}
 
 	protected boolean isSuitableTargetEnemy(LivingEntity possibleTarget) {
 		if (!TargetUtil.isEnemyCheckingLeaders(this.entity, possibleTarget)) {
 			return false;
 		}
-		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+		if (!this.entity.getSensing().canSee(possibleTarget)) {
 			return false;
 		}
 		if (this.entity.isInAttackReach(possibleTarget)) {

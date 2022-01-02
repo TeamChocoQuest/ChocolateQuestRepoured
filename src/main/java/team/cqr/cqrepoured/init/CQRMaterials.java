@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.item.Items;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ArmorItem.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.util.EnumHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.ArmorConfig;
@@ -28,11 +28,11 @@ public class CQRMaterials {
 		public static final ArmorMaterial ARMOR_SPIDER = createArmorMaterial("spider", CQRConfig.materials.armorMaterials.spider, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
 		public static final ArmorMaterial ARMOR_TURTLE = createArmorMaterial("turtle", CQRConfig.materials.armorMaterials.turtle, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
 
-		private static ArmorMaterial createArmorMaterial(String name, ArmorConfig config, SoundEvent soundOnEquip) {
+		private static Material createArmorMaterial(String name, ArmorConfig config, SoundEvent soundOnEquip) {
 			return createArmorMaterial(name, config.durability, config.reductionAmounts, config.enchantability, soundOnEquip, config.toughness);
 		}
 
-		private static ArmorMaterial createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {
+		private static Material createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {
 			return EnumHelper.addArmorMaterial(CQRMain.MODID + ":" + name, CQRMain.MODID + ":" + name, durability, reductionAmounts, enchantability, soundOnEquip, toughness);
 		}
 	}

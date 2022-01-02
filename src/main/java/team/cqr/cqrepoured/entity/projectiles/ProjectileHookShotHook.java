@@ -137,7 +137,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 	@Override
 	protected void entityInit() {
-		super.entityInit();
+		super.defineSynchedData();
 		this.dataManager.register(HOOK_STATE, (byte) EnumHookState.SHOOT.getIndex());
 		this.dataManager.register(LATCHED_ENTITY, -1);
 		this.dataManager.register(LATCHED_POS, Vector3d.ZERO);
@@ -206,7 +206,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return true;
 	}
 
@@ -239,13 +239,13 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.hookStateMachine();
 
 		// save and restore rotation because mc does weird things otherwise
 		float f1 = this.rotationYaw;
 		float f2 = this.rotationPitch;
-		super.onUpdate();
+		super.tick();
 		this.rotationYaw = f1;
 		this.prevRotationYaw = f1;
 		this.rotationPitch = f2;
@@ -435,7 +435,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	private void checkForEntityStuck(Entity entity) {
 		// once every 4 ticks ~ 0.2 seconds
 		if (this.ticksExisted - this.lastMovementCheckTick >= 4) {
-			Vector3d currentPos = entity.getPositionVector();
+			Vector3d currentPos = entity.position();
 
 			if (this.lastCheckedPosition != null) {
 				double distanceTraveledSqr = currentPos.squareDistanceTo(this.lastCheckedPosition);
@@ -450,7 +450,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote && this.getHookState() == EnumHookState.SHOOT) {
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 				BlockState state = this.world.getBlockState(result.getBlockPos());

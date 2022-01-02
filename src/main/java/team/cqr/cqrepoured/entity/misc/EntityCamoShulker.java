@@ -20,7 +20,7 @@ public class EntityCamoShulker extends ShulkerEntity {
 
 	@Override
 	protected void entityInit() {
-		super.entityInit();
+		super.defineSynchedData();
 		this.dataManager.set(CAMO_BLOCK, Optional.of(Blocks.PURPUR_BLOCK.getDefaultState()));
 	}
 

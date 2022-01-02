@@ -29,7 +29,7 @@ public class ProjectileWeb extends ProjectileBase {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit instanceof LivingEntity) {
@@ -51,12 +51,12 @@ public class ProjectileWeb extends ProjectileBase {
 					}
 				});
 			}
-			super.onImpact(result);
+			super.onHit(result);
 		}
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return false;
 	}
 

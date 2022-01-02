@@ -7,6 +7,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -53,25 +54,25 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.getImmediateSource() instanceof SpectralArrowEntity) {
+		if (source.getDirectEntity() instanceof SpectralArrowEntity) {
 			amount *= 2;
 		}
 		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void registerGoals() {
+		super.registerGoals();
 		this.spellHandler.addSpell(0, new EntityAIAntiAirSpellWalker(this));
 	}
 
 	@Override
-	public void onStruckByLightning(LightningBoltEntity lightningBolt) {
+	public void thunderHit(ServerWorld serverLevel,LightningBoltEntity lightningBolt) {
 		this.heal(this.getMaxHealth() * 0.025F);
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.VOID;
 	}
 

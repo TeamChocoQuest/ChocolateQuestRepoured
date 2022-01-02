@@ -171,8 +171,8 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 		compound.setInteger("ttl", this.ttl);
 		compound.setTag("illusionParent", NBTUtil.createUUIDTag(this.parentUUID));
 	}

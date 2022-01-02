@@ -63,7 +63,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	}
 
 	private void createLaser() {
-		Vector3d laserPosition = this.entity.getPositionVector();
+		Vector3d laserPosition = this.entity.position();
 		laserPosition = laserPosition.add(0, this.entity.height / 2, 0);
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation

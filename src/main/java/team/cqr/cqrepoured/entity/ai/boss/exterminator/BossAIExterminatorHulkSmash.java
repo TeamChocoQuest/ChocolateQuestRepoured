@@ -78,7 +78,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 			this.shockwaveWasSpawnedInCurrentCycle = true;
 
 			// Now, spawn a explosion and create the shockwave entities
-			final Vector3d hitLocation = this.entity.getPositionVector().add(this.entity.getLookVec().normalize().scale(1.5 * this.entity.getSizeVariation()));
+			final Vector3d hitLocation = this.entity.position().add(this.entity.getLookVec().normalize().scale(1.5 * this.entity.getSizeVariation()));
 			this.world.createExplosion(this.entity, hitLocation.x, hitLocation.y, hitLocation.z, 4.0F, false);
 
 			// now, create the shockwaves

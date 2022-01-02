@@ -31,7 +31,7 @@ public class EntityCQRWasp extends CreatureEntity implements IFlyingAnimal {
 
 	@Override
 	protected void initEntityAI() {
-		super.initEntityAI();
+		super.registerGoals();
 		this.tasks.addTask(4, new PanicGoal(this, 1.25D));
 		this.tasks.addTask(5, new WaterAvoidingRandomFlyingGoal(this, 1D));
 

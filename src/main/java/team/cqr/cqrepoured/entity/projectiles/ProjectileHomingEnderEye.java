@@ -31,7 +31,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		// TODO: Remove a few end blocks around the location
 		if (!this.world.isRemote) {
 			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
@@ -53,7 +53,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 				this.applyEntityCollisionEye(result.entityHit);
 			}
 		}
-		super.onImpact(result);
+		super.onHit(result);
 	}
 
 	public void applyEntityCollisionEye(Entity entityIn) {
@@ -85,7 +85,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			return;
 		}
 		if (!this.world.isRemote && this.target != null) {
-			Vector3d v = this.target.getPositionVector().subtract(this.getPositionVector());
+			Vector3d v = this.target.position().subtract(this.position());
 			v = v.normalize();
 			v = v.scale(0.4);
 

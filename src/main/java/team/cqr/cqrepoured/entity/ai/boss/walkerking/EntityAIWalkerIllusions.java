@@ -32,7 +32,7 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 		});
 		Vector3d v = new Vector3d(2.5, 0, 0);
 		for (int i = 0; i < 3; i++) {
-			Vector3d pos = this.entity.getPositionVector().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
+			Vector3d pos = this.entity.position().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
 			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.getEntityWorld());
 			illusion.setPosition(pos.x, pos.y, pos.z);
 			this.entity.world.spawnEntity(illusion);

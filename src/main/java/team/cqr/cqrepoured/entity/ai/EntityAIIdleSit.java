@@ -118,7 +118,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (!TargetUtil.isAllyCheckingLeaders(leader, targetLeader)) {
 			return false;
 		}
-		return this.entity.getEntitySenses().canSee(possibleAlly);
+		return this.entity.getSensing().canSee(possibleAlly);
 	}
 
 	private boolean isEntityMoving(Entity entity) {

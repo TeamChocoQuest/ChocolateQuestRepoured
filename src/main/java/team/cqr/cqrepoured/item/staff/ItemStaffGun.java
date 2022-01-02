@@ -64,7 +64,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		if (!worldIn.isRemote) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, shooter, false);
-			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(3.5D);
 			// ball.setVelocity(v.x, v.y, v.z);

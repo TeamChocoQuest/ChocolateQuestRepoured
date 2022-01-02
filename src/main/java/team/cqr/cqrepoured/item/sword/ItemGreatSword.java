@@ -133,7 +133,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 			return;
 		}
 		LivingEntity entityLiving = (LivingEntity) entityIn;
-		ItemStack offhand = entityLiving.getHeldItemOffhand();
+		ItemStack offhand = entityLiving.getMainHandItem();
 		if (!offhand.isEmpty()) {
 			entityLiving.addPotionEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}

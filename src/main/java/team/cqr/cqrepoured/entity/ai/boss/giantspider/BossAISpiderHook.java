@@ -19,7 +19,7 @@ public class BossAISpiderHook extends EntityAIHooker {
 				this.cooldown--;
 				return false;
 			}
-			return this.entity.hasAttackTarget() && this.entity.getDistanceSq(this.entity.getAttackTarget()) >= this.MIN_RANGE && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return this.entity.hasAttackTarget() && this.entity.distanceToSqr(this.entity.getTarget()) >= this.MIN_RANGE && this.entity.getSensing().canSee(this.entity.getTarget());
 		}
 
 		return false;
@@ -29,13 +29,13 @@ public class BossAISpiderHook extends EntityAIHooker {
 	public void start() {
 		super.start();
 		this.state = STATE.PREPARING;
-		if (this.entity.hasPath()) {
-			this.entity.getNavigator().clearPath();
-			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
+		if (this.entity.isPathFinding()) {
+			this.entity.getNavigation().clearPath();
+			double dist = this.entity.distanceToSqr(this.entity.getTarget());
 			if (dist > this.MAX_RANGE) {
-				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
+				this.entity.getNavigation().moveTo(this.entity.getTarget(), 1.1);
 			} else if (dist >= this.MIN_RANGE) {
-				this.entity.getNavigator().clearPath();
+				this.entity.getNavigation().clearPath();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				this.stop();

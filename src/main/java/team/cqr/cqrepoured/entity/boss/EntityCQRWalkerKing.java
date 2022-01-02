@@ -91,8 +91,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void registerGoals() {
+		super.registerGoals();
 		this.spellHandler.addSpell(0, new EntityAIAntiAirSpellWalker(this));
 		this.spellHandler.addSpell(1, new EntityAIWalkerIllusions(this, 600, 40));
 		this.tasks.addTask(15, new BossAIWalkerTornadoAttack(this));
@@ -119,7 +119,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				v = v.normalize();
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
-				teleportPos = new BlockPos(this.getAttackTarget().getPositionVector().subtract(v));
+				teleportPos = new BlockPos(this.getAttackTarget().position().subtract(v));
 				if (this.world.isBlockFullCube(teleportPos) || this.world.isBlockFullCube(teleportPos.offset(Direction.UP)) || this.world.isAirBlock(teleportPos.offset(Direction.DOWN))) {
 					teleportPos = this.getAttackTarget().getPosition();
 				}
@@ -167,7 +167,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 			if (this.isInLava() && this.hasAttackTarget() && this.lavaCounterAttackCooldown <= 0) {
 				this.teleportBehindEntity(this.getAttackTarget());
-				this.attackEntityAsMob(this.getAttackTarget());
+				this.canAttack(this.getAttackTarget());
 				this.lavaCounterAttackCooldown = 20;
 			}
 			if (this.lavaCounterAttackCooldown > 0) {
@@ -193,7 +193,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			this.world.spawnEntity(illusion);
 
 			this.teleportBehindEntity(this.getAttackTarget());
-			this.attackEntityAsMob(this.getAttackTarget());
+			this.canAttack(this.getAttackTarget());
 		}
 	}
 
@@ -210,7 +210,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	private void backStabAttacker(DamageSource source) {
 		if (source.getTrueSource() != null) {
 			if (this.teleportBehindEntity(source.getTrueSource())) {
-				this.attackEntityAsMob(source.getTrueSource());
+				this.canAttack(source.getTrueSource());
 			}
 		}
 	}
@@ -220,7 +220,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	private boolean teleportBehindEntity(Entity entity, boolean force) {
-		Vector3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
+		Vector3d p = entity.position().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
 		if (this.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
 				for (int iz = -1; iz <= 1; iz++) {
@@ -300,7 +300,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			this.world.spawnEntity(illusion);
 
 			this.teleportBehindEntity(this.getAttackTarget(), true);
-			this.attackEntityAsMob(this.getAttackTarget());
+			this.canAttack(this.getAttackTarget());
 			return false;
 		}
 
@@ -366,7 +366,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 				if (source.getImmediateSource() instanceof LivingEntity/* && (source.getImmediateSource() instanceof EntityPlayer) */ && ((LivingEntity) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof AxeItem) {
 					if (DungeonGenUtils.percentageRandom(0.75, this.getRNG())) {
-						Vector3d v = source.getImmediateSource().getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25);
+						Vector3d v = source.getImmediateSource().position().subtract(this.position()).normalize().scale(1.25);
 						v = v.add(0, 0.75, 0);
 
 						LivingEntity attacker = (LivingEntity) source.getImmediateSource();
@@ -384,7 +384,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			if (this.getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
 				// Revenge Attack
 				if (this.getRNG().nextDouble() < 0.7) {
-					this.attackEntityAsMob(source.getTrueSource());
+					this.canAttack(source.getTrueSource());
 					this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 					this.teleportBehindEntity(source.getTrueSource());
 				}

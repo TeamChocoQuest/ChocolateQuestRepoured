@@ -187,7 +187,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 				}
 			}
 			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, this.getBulletType(bulletStack));
-			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(3.5D);
 			// bulletE.setVelocity(v.x, v.y, v.z);

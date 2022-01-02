@@ -63,8 +63,8 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 		// this.dataManager.register(INVISIBILITY, 0.0F);
 		this.dataManager.register(SWORD_SHIELD_ACTIVE, 0);
 		this.dataManager.register(CHANNELING_LASER, false);
@@ -79,8 +79,8 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void registerGoals() {
+		super.registerGoals();
 		this.spellHandler.addSpell(0, new EntityAISpectreLordChannelHate(this, 600, 60, 480));
 		this.spellHandler.addSpell(1, new EntityAISpectreLordDash(this, 200, 40, 3, 3.0D, 1.5D));
 		this.spellHandler.addSpell(2, new EntityAISpectreLordLaser(this, 600, 60, 320));

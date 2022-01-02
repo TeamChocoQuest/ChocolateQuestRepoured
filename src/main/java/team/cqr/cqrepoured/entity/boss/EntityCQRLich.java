@@ -64,8 +64,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void registerGoals() {
+		super.registerGoals();
 		this.spellHandler.addSpell(0, new EntityAIArmorSpell(this, 50, 30) {
 			@Override
 			public boolean isInterruptible() {
@@ -148,8 +148,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 		if (this.currentPhylacteryPosition != null) {
 			compound.setTag("currentPhylactery", NBTUtil.createPosTag(this.currentPhylacteryPosition));
 		}

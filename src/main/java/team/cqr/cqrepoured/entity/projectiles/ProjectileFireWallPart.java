@@ -38,7 +38,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return true;
 	}
 
@@ -51,7 +51,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockState state = this.world.getBlockState(result.getBlockPos());
 

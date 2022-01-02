@@ -125,10 +125,10 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 			return false;
 		}
 		LivingEntity oldAttackTarget = ally.getAttackTarget();
-		if (oldAttackTarget != null && ally.getEntitySenses().canSee(oldAttackTarget) && ally.getDistanceSq(oldAttackTarget) < ally.getDistanceSq(this.attackTarget)) {
+		if (oldAttackTarget != null && ally.getSensing().canSee(oldAttackTarget) && ally.getDistanceSq(oldAttackTarget) < ally.getDistanceSq(this.attackTarget)) {
 			return false;
 		}
-		ally.setAttackTarget(this.attackTarget);
+		ally.setTarget(this.attackTarget);
 		return true;
 	}
 

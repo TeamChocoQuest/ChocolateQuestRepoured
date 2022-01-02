@@ -61,12 +61,12 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return false;
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (this.world.isRemote) {
 			return;
 		}
@@ -113,7 +113,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		CompoundNBT blockstate = new CompoundNBT();
 		NBTUtil.writeBlockState(blockstate, this.state);
 		compound.setTag("blockdata", blockstate);
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 	}
 
 	@Override

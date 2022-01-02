@@ -34,7 +34,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 			this.cooldown--;
 			return false;
 		}
-		return this.entity.hasAttackTarget() && this.entity.getDistanceSq(this.entity.getAttackTarget()) < MAX_DISTANCE_TO_TARGET;
+		return this.entity.hasAttackTarget() && this.entity.distanceToSqr(this.entity.getTarget()) < MAX_DISTANCE_TO_TARGET;
 	}
 
 	@Override
@@ -42,22 +42,22 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 		if (this.entity == null) {
 			return;
 		}
-		int projCount = DungeonGenUtils.randomBetween(MIN_WEBS, MAX_WEBS, this.entity.getRNG());
+		int projCount = DungeonGenUtils.randomBetween(MIN_WEBS, MAX_WEBS, this.entity.getRandom());
 		double angle = 180 / projCount;
-		Vector3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector()).normalize();
+		Vector3d v = this.entity.getTarget().position().subtract(this.entity.position()).normalize();
 		for (int i = -(projCount / 2); i <= (projCount / 2); i++) {
 			Vector3d velo = VectorUtil.rotateVectorAroundY(v, i * angle);
 			velo = velo.add(0, 0.1, 0);
 
-			ProjectileBase web = this.entity.getRNG().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.world, this.entity) : new ProjectileWeb(this.entity.world, this.entity);
+			ProjectileBase web = this.entity.getRandom().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.level, this.entity) : new ProjectileWeb(this.entity.level, this.entity);
 			web.motionX = velo.x * SPEED_MULTIPLIER;
 			web.motionY = velo.y * SPEED_MULTIPLIER;
 			web.motionZ = velo.z * SPEED_MULTIPLIER;
 			web.velocityChanged = true;
-			this.entity.world.spawnEntity(web);
+			this.entity.level.addFreshEntity(web);
 
 		}
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 	}
 
 	@Override

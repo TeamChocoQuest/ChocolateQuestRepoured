@@ -47,8 +47,8 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 
 	private boolean hasNearbyAllies() {
 		Vector3d vec = new Vector3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
-		Vector3d v1 = this.entity.getPositionVector().add(vec);
-		Vector3d v2 = this.entity.getPositionVector().subtract(vec);
+		Vector3d v1 = this.entity.position().add(vec);
+		Vector3d v2 = this.entity.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
 		List<MobEntity> allies = this.entity.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly);
@@ -57,8 +57,8 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 
 	private int getNearbyAllies(MobEntity o1) {
 		Vector3d vec = new Vector3d(4, 2, 4);
-		Vector3d v1 = o1.getPositionVector().add(vec);
-		Vector3d v2 = o1.getPositionVector().subtract(vec);
+		Vector3d v1 = o1.position().add(vec);
+		Vector3d v2 = o1.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 		return o1.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly).size();
 	}
@@ -68,8 +68,8 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		super.castSpell();
 
 		Vector3d vec = new Vector3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
-		Vector3d v1 = this.entity.getPositionVector().add(vec);
-		Vector3d v2 = this.entity.getPositionVector().subtract(vec);
+		Vector3d v1 = this.entity.position().add(vec);
+		Vector3d v2 = this.entity.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
 		List<MobEntity> allies = this.entity.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly);
@@ -78,7 +78,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 			int entCount2 = BossAIPirateFleeSpell.this.getNearbyAllies(o2);
 			return entCount2 - entCount1;
 		});
-		Vector3d p = allies.get(0).getPositionVector();
+		Vector3d p = allies.get(0).position();
 		this.entity.attemptTeleport(p.x, p.y, p.z);
 	}
 

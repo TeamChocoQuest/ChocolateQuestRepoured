@@ -25,14 +25,14 @@ public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPir
 	public void startCastingSpell() {
 		Vector3d v = this.entity.getLookVec().normalize().scale(3);
 		v = VectorUtil.rotateVectorAroundY(v, 90);
-		if (this.entity.world.getBlockState(new BlockPos(this.entity.getPositionVector().add(v).add(0, 1, 0))).getBlock() != Blocks.AIR) {
+		if (this.entity.world.getBlockState(new BlockPos(this.entity.position().add(v).add(0, 1, 0))).getBlock() != Blocks.AIR) {
 			v = new Vector3d(0, 1, 0);
 		}
 		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(this.world);
 		parrot.setOwnerId(this.entity.getUniqueID());
 		parrot.setTamed(true);
 		parrot.setOwnerId(this.entity.getUniqueID());
-		Vector3d pos = this.entity.getPositionVector().add(v);
+		Vector3d pos = this.entity.position().add(v);
 		parrot.setPosition(pos.x, pos.y, pos.z);
 		this.entity.world.spawnEntity(parrot);
 		this.entity.setSpawnedParrot(true);

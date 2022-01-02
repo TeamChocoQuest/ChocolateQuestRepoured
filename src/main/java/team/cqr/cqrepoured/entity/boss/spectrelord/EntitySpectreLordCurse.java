@@ -35,7 +35,7 @@ public class EntitySpectreLordCurse extends Entity {
 		super.onEntityUpdate();
 
 		if (!this.world.isRemote) {
-			Vector3d vec = this.target.getPositionVector().subtract(this.getPositionVector()).normalize().scale(0.12F);
+			Vector3d vec = this.target.position().subtract(this.position()).normalize().scale(0.12F);
 			this.motionX = vec.x;
 			this.motionY = vec.y;
 			this.motionZ = vec.z;

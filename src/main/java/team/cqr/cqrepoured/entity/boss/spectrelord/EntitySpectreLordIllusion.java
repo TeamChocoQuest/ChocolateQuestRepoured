@@ -123,8 +123,8 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 		if (this.caster != null && this.caster.isEntityAlive()) {
 			compound.setUniqueId("Summoner", this.caster.getPersistentID());
 		}

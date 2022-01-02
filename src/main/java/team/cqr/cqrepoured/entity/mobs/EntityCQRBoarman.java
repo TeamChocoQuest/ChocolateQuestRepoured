@@ -29,17 +29,17 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_ZOMBIE_PIG_HURT;
+		return SoundEvents.ZOMBIFIED_PIGLIN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_ZOMBIE_PIG_AMBIENT;
+		return SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_ZOMBIE_PIG_DEATH;
+		return SoundEvents.ZOMBIFIED_PIGLIN_DEATH;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isFireDamage()) {
+		if (source.isFire()) {
 			return false;
 		}
 		return super.attackEntityFrom(source, amount);
@@ -61,7 +61,7 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.UNDEAD;
 	}
 

@@ -47,9 +47,9 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRNG());
 		this.wallCounter = 0;
 		this.world.newExplosion(this.entity, this.entity.posX, this.entity.posY, this.entity.posZ, 2, false, CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
-		Vector3d v = this.entity.getPositionVector().subtract(this.entity.getAttackTarget().getPositionVector());
+		Vector3d v = this.entity.position().subtract(this.entity.getAttackTarget().position());
 		v = v.normalize().scale(5);
-		Vector3d p = this.entity.getAttackTarget().getPositionVector().subtract(v);
+		Vector3d p = this.entity.getAttackTarget().position().subtract(v);
 		if (this.entity.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
 			if (this.entity.attemptTeleport(p.x, p.y, p.z)) {
 				this.ticksAtTeleport = this.entity.ticksExisted;
@@ -84,7 +84,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 			Vector3d vR = VectorUtil.rotateVectorAroundY(v, 90);
 			Vector3d vL = VectorUtil.rotateVectorAroundY(v, 270);
 			Vector3d[] positions = new Vector3d[wallLength + 2];
-			Vector3d startPos = this.entity.getPositionVector().add(new Vector3d(v.x / 2, 0, v.z / 2));
+			Vector3d startPos = this.entity.position().add(new Vector3d(v.x / 2, 0, v.z / 2));
 			int arrayIndex = 0;
 			positions[arrayIndex] = startPos;
 			arrayIndex++;

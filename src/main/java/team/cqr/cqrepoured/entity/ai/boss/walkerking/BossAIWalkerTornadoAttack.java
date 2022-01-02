@@ -44,11 +44,11 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	private void spawnTornadoes(int count) {
 		// System.out.println("Executing");
 		double angle = 90 / (count - 1);
-		Vector3d velocity = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+		Vector3d velocity = this.entity.getAttackTarget().position().subtract(this.entity.position());
 		velocity = VectorUtil.rotateVectorAroundY(velocity, -45);
 		for (int i = 0; i < count; i++) {
 			Vector3d v = VectorUtil.rotateVectorAroundY(velocity, angle * i);
-			Vector3d p = this.entity.getPositionVector().add(v.normalize().scale(0.5));
+			Vector3d p = this.entity.position().add(v.normalize().scale(0.5));
 			v = v.normalize().scale(0.25);
 			// System.out.println("V=" + v.toString());
 			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.world);

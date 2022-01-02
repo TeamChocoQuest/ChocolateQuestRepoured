@@ -118,7 +118,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 					((ServerWorld) worldIn).spawnParticle(ParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 				}
 
-				player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F, 1.0F);
+				player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
 				player.getCooldownTracker().setCooldown(stack.getItem(), 200);
 			} else {
 				player.swingArm(Hand.MAIN_HAND);
@@ -168,7 +168,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 			return;
 		}
 		LivingEntity entityLiving = (LivingEntity) entityIn;
-		ItemStack offhand = entityLiving.getHeldItemOffhand();
+		ItemStack offhand = entityLiving.getMainHandItem();
 		if (!offhand.isEmpty()) {
 			entityLiving.addPotionEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}

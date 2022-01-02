@@ -1,9 +1,12 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public abstract class ProjectileBase extends EntityThrowable {
+public abstract class ProjectileBase extends ThrowableEntity {
 
 	public ProjectileBase(World worldIn) {
 		super(worldIn);
@@ -22,28 +25,26 @@ public abstract class ProjectileBase extends EntityThrowable {
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return true;
 	}
 
 	@Override
-	public void onUpdate() {
-		if (this.ticksExisted > 400) {
-			this.setDead();
+	public void tick() {
+		if (this.tickCount > 400) {
+			this.remove();
 		}
 
-		super.onUpdate();
+		super.tick();
 		this.onUpdateInAir();
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
-		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-			IBlockState state = this.world.getBlockState(result.getBlockPos());
+	protected void onHitBlock(BlockRayTraceResult result) {
+		BlockState state = this.level.getBlockState(result.getBlockPos());
 
-			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
-				this.setDead();
-			}
+		if (!state.getBlock().isPassable(this.level, result.getBlockPos())) {
+			this.remove();
 		}
 	}
 

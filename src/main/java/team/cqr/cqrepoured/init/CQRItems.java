@@ -7,12 +7,12 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ArmorItem.ArmorMaterial;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -385,15 +385,15 @@ public class CQRItems {
 					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EquipmentSlotType.LEGS), "leggings_heavy_iron"),
 					setItemName(new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EquipmentSlotType.FEET), "boots_heavy_iron"),
 
-					setItemName(new ItemArmorDyable(ArmorMaterial.DIAMOND, -1, EquipmentSlotType.HEAD), "helmet_diamond_dyable"),
-					setItemName(new ItemArmorDyable(ArmorMaterial.DIAMOND, -1, EquipmentSlotType.CHEST), "chestplate_diamond_dyable"),
-					setItemName(new ItemArmorDyable(ArmorMaterial.DIAMOND, -1, EquipmentSlotType.LEGS), "leggings_diamond_dyable"),
-					setItemName(new ItemArmorDyable(ArmorMaterial.DIAMOND, -1, EquipmentSlotType.FEET), "boots_diamond_dyable"),
+					setItemName(new ItemArmorDyable(Material.DIAMOND, -1, EquipmentSlotType.HEAD), "helmet_diamond_dyable"),
+					setItemName(new ItemArmorDyable(Material.DIAMOND, -1, EquipmentSlotType.CHEST), "chestplate_diamond_dyable"),
+					setItemName(new ItemArmorDyable(Material.DIAMOND, -1, EquipmentSlotType.LEGS), "leggings_diamond_dyable"),
+					setItemName(new ItemArmorDyable(Material.DIAMOND, -1, EquipmentSlotType.FEET), "boots_diamond_dyable"),
 
-					setItemName(new ItemArmorDyable(ArmorMaterial.IRON, -1, EquipmentSlotType.HEAD), "helmet_iron_dyable"),
-					setItemName(new ItemArmorDyable(ArmorMaterial.IRON, -1, EquipmentSlotType.CHEST), "chestplate_iron_dyable"),
-					setItemName(new ItemArmorDyable(ArmorMaterial.IRON, -1, EquipmentSlotType.LEGS), "leggings_iron_dyable"),
-					setItemName(new ItemArmorDyable(ArmorMaterial.IRON, -1, EquipmentSlotType.FEET), "boots_iron_dyable"),
+					setItemName(new ItemArmorDyable(Material.IRON, -1, EquipmentSlotType.HEAD), "helmet_iron_dyable"),
+					setItemName(new ItemArmorDyable(Material.IRON, -1, EquipmentSlotType.CHEST), "chestplate_iron_dyable"),
+					setItemName(new ItemArmorDyable(Material.IRON, -1, EquipmentSlotType.LEGS), "leggings_iron_dyable"),
+					setItemName(new ItemArmorDyable(Material.IRON, -1, EquipmentSlotType.FEET), "boots_iron_dyable"),
 
 					setItemName(new ItemLore(), "scale_turtle"),
 					setItemName(new ItemLore(), "leather_bull"),

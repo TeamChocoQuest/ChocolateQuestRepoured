@@ -88,7 +88,7 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 	 */
 	@Override
 	public void startExecuting() {
-		this.taskOwner.setAttackTarget(this.targetEntity);
+		this.taskOwner.setTarget(this.targetEntity);
 		super.start();
 	}
 

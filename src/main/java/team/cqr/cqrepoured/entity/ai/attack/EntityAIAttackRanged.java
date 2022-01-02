@@ -41,7 +41,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		if (attackTarget == null) {
 			return false;
 		}
-		return this.entity.getEntitySenses().canSee(attackTarget);
+		return this.entity.getSensing().canSee(attackTarget);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		double distanceSq = this.entity.getDistanceSq(attackTarget);
 		double attackRangeSq = this.getAttackRange() * this.getAttackRange();
 
-		if (this.entity.getEntitySenses().canSee(attackTarget) && (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.hasPath()))) {
+		if (this.entity.getSensing().canSee(attackTarget) && (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.hasPath()))) {
 			// this.entity.faceEntity(attackTarget, 30.0F, 30.0F);
 			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 			this.checkAndPerformAttack(attackTarget);

@@ -32,7 +32,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return false;
 	}
 
@@ -45,7 +45,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (this.world.isRemote) {
 			return;
 		}
@@ -66,6 +66,6 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 			this.world.spawnEntity(cloud);
 		}
 
-		super.onImpact(result);
+		super.onHit(result);
 	}
 }

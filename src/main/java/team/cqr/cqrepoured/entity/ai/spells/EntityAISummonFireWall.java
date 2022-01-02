@@ -24,7 +24,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 		Vector3d vR = VectorUtil.rotateVectorAroundY(v, 90);
 		Vector3d vL = VectorUtil.rotateVectorAroundY(v, 270);
 		Vector3d[] positions = new Vector3d[WALL_LENGTH + 2];
-		Vector3d startPos = this.entity.getPositionVector().add(new Vector3d(v.x / 2, 0, v.z / 2));
+		Vector3d startPos = this.entity.position().add(new Vector3d(v.x / 2, 0, v.z / 2));
 		int arrayIndex = 0;
 		positions[arrayIndex] = startPos;
 		arrayIndex++;

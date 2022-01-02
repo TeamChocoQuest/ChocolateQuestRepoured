@@ -65,7 +65,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		double angle = 360 / minionCount;
 		Vector3d v = new Vector3d(1, 0, 0);
 		for (int i = 0; i < minionCount; i++) {
-			Vector3d pos = this.entity.getPositionVector().add(v);
+			Vector3d pos = this.entity.position().add(v);
 			v = VectorUtil.rotateVectorAroundY(v, angle);
 
 			Entity minion = EntityList.createEntityByIDFromName(this.minionOverride, this.entity.world);

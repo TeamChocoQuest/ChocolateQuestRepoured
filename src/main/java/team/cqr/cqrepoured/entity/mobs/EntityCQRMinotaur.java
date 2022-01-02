@@ -33,7 +33,7 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isFireDamage()) {
+		if (source.isFire()) {
 			return false;
 		}
 		return super.attackEntityFrom(source, amount);
@@ -41,17 +41,17 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_COW_DEATH;
+		return SoundEvents.COW_DEATH;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_COW_AMBIENT;
+		return SoundEvents.COW_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_COW_HURT;
+		return SoundEvents.COW_HURT;
 	}
 
 }

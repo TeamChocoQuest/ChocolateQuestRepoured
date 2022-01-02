@@ -6,14 +6,14 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.profiler.Profiler;
+import net.minecraft.profiler.IProfiler;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 
 public class EntityAITasksProfiled extends GoalSelector {
 
 	/** Instance of Profiler. */
-	private final Profiler profiler;
+	private final IProfiler profiler;
 	private int tickCount;
 	private int tickRate = 3;
 
@@ -22,14 +22,14 @@ public class EntityAITasksProfiled extends GoalSelector {
 	private static long lastTimeLogged = 0;
 	private final World world;
 
-	public EntityAITasksProfiled(Profiler profilerIn, World world) {
-		super(profilerIn);
+	public EntityAITasksProfiled(IProfiler profilerIn, World world) {
+		super(() -> profilerIn);
 		this.profiler = profilerIn;
 		this.world = world;
 	}
 
 	@Override
-	public void onUpdateTasks() {
+	public void tick() {
 		this.profiler.startSection("goalSetup");
 
 		if (this.tickCount++ % this.tickRate == 0) {

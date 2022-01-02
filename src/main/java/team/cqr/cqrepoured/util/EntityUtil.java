@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -115,7 +115,7 @@ public class EntityUtil {
 	}
 
 	public static void applyMaxHealthModifier(LivingEntity entity, UUID uuid, String name, double amount) {
-		IAttributeInstance attribute = entity.getEntityAttribute(Attributes.MAX_HEALTH);
+		ModifiableAttributeInstance attribute = entity.getEntityAttribute(Attributes.MAX_HEALTH);
 		if (attribute == null) {
 			return;
 		}

@@ -14,9 +14,9 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(9, new LeapAtTargetGoal(this, 0.6F));
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(9, new LeapAtTargetGoal(this, 0.6F));
 	}
 
 	@Override
@@ -37,11 +37,6 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	@Override
 	public boolean canMountEntity() {
 		return false;
-	}
-
-	@Override
-	public float getEyeHeight() {
-		return this.height * 0.84F;
 	}
 
 	@Override

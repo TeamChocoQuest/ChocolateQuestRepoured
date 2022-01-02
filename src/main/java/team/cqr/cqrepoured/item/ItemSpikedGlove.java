@@ -51,7 +51,7 @@ public class ItemSpikedGlove extends Item {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (entityIn instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) entityIn;
-			if (entity.getHeldItemMainhand().getItem() instanceof ItemSpikedGlove && entity.getHeldItemOffhand().getItem() instanceof ItemSpikedGlove) {
+			if (entity.getHeldItemMainhand().getItem() instanceof ItemSpikedGlove && entity.getMainHandItem().getItem() instanceof ItemSpikedGlove) {
 				// We actually have two bear hands
 				if (entity instanceof PlayerEntity && ((PlayerEntity) entity).isSpectator()) {
 					return;
@@ -62,14 +62,14 @@ public class ItemSpikedGlove extends Item {
 							double vY = 0.2D;
 
 							int effLvlMain = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getHeldItemMainhand());
-							int effLvlOff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getHeldItemOffhand());
+							int effLvlOff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getMainHandItem());
 							if (effLvlMain > 0 && effLvlOff > 0) {
 								vY += 0.1D * (((0.5D * effLvlMain) + (0.5D * effLvlOff)) / 2);
 							}
 
 							entity.motionY = vY;
 							entity.getHeldItemMainhand().damageItem(1, entity);
-							entity.getHeldItemOffhand().damageItem(1, entity);
+							entity.getMainHandItem().damageItem(1, entity);
 							this.createClimbingParticles(entity, worldIn);
 						} else if (entity.isSneaking()) {
 							entity.motionY = 0.0D;

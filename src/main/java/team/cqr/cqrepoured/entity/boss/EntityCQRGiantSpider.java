@@ -72,7 +72,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new SwimGoal(this));
 		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
@@ -105,14 +105,14 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 		this.dataManager.register(CLIMBING, (byte) 0);
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		if (!this.world.isRemote) {
 			this.setBesideClimbableBlock(this.collidedHorizontally);
@@ -162,7 +162,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	 * Returns new PathNavigateGround instance
 	 */
 	@Override
-	protected PathNavigator createNavigator(World worldIn) {
+	protected PathNavigator createNavigation(World worldIn) {
 		return new ClimberPathNavigator(this, worldIn);
 	}
 
@@ -199,8 +199,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		boolean result = super.attackEntityAsMob(entityIn);
+	public boolean canAttack(Entity entityIn) {
+		boolean result = super.canAttack(entityIn);
 		if (result) {
 			int effectlvl = 1;
 			if (this.getRNG().nextDouble() > 0.7) {

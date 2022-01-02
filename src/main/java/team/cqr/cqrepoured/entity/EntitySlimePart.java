@@ -5,7 +5,7 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -26,14 +26,14 @@ public class EntitySlimePart extends SlimeEntity {
 
 	@Override
 	protected void initEntityAI() {
-		super.initEntityAI();
+		super.registerGoals();
 		this.targetTasks.taskEntries.clear();
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		IAttributeInstance iattributeinstance = this.getEntityAttribute(Attributes.MOVEMENT_SPEED);
+		ModifiableAttributeInstance iattributeinstance = this.getEntityAttribute(Attributes.MOVEMENT_SPEED);
 		iattributeinstance.setBaseValue(iattributeinstance.getBaseValue() * 0.5D);
 	}
 
@@ -43,7 +43,7 @@ public class EntitySlimePart extends SlimeEntity {
 			this.setDead();
 		}
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class EntitySlimePart extends SlimeEntity {
 
 	@Override
 	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setInteger("ticksExisted", this.ticksExisted);
 		compound.setTag("ownerUuid", NBTUtil.createUUIDTag(this.ownerUuid));
 	}

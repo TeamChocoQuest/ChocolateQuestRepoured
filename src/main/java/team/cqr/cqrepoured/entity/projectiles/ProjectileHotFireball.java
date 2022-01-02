@@ -39,7 +39,7 @@ public class ProjectileHotFireball extends ThrowableEntity {
 			this.setDead();
 		}
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override

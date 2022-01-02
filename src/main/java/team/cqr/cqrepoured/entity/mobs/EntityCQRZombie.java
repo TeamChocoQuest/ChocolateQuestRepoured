@@ -29,17 +29,17 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_ZOMBIE_HURT;
+		return SoundEvents.ZOMBIE_HURT;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_ZOMBIE_AMBIENT;
+		return SoundEvents.ZOMBIE_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_ZOMBIE_DEATH;
+		return SoundEvents.ZOMBIE_DEATH;
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.UNDEAD;
 	}
 

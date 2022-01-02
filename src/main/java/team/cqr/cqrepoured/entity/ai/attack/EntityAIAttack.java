@@ -18,13 +18,13 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	@Override
 	public boolean canUse() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		return attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget);
+		return attackTarget != null && this.entity.getSensing().canSee(attackTarget);
 	}
 
 	@Override
 	public boolean canContinueToUse() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		return attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget);
+		return attackTarget != null && this.entity.getSensing().canSee(attackTarget);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.entity.resetActiveHand();
 			}
 		} else if (this.attackTick + this.getBlockCooldownPeriod() <= this.entity.ticksExisted && !this.entity.isActiveItemStackBlocking()) {
-			ItemStack offhand = this.entity.getHeldItemOffhand();
+			ItemStack offhand = this.entity.getMainHandItem();
 			if (offhand.getItem().isShield(offhand, this.entity)) {
 				this.entity.setActiveHand(EnumHand.OFF_HAND);
 			}
@@ -81,7 +81,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			this.attackTick = this.entity.ticksExisted;
 			this.entity.swingArm(EnumHand.MAIN_HAND);
-			this.entity.attackEntityAsMob(attackTarget);
+			this.entity.canAttack(attackTarget);
 		}
 	}
 

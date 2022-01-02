@@ -44,7 +44,7 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		super.tick();
 
 		++this.ticksExisted;
 	}

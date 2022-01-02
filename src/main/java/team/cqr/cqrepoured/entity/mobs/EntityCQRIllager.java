@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.entity.mobs;
 
+import net.minecraft.data.loot.EntityLootTables;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.loot.LootTables;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTables;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
@@ -28,33 +29,34 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected ResourceLocation getLootTable() {
-		return LootTables.ENTITIES_VINDICATION_ILLAGER;
-	}
-
-	@Override
 	public int getTextureCount() {
 		return 2;
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.ILLAGER;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.VINDICATION_ILLAGER_AMBIENT;
+		return SoundEvents.PILLAGER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_VINDICATION_ILLAGER_HURT;
+		return SoundEvents.PILLAGER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_ILLAGER_DEATH;
+		return SoundEvents.PILLAGER_DEATH;
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		//TODO: REimplement
+		return null;
 	}
 
 }

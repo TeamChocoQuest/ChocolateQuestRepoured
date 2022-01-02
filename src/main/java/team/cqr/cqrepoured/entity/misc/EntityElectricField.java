@@ -179,7 +179,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
+	protected void save(CompoundNBT compound) {
 		compound.setInteger("charge", this.charge);
 		if (this.getOwner() != null) {
 			compound.setTag("ownerId", NBTUtil.createUUIDTag(this.getOwnerId()));

@@ -188,8 +188,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void registerGoals() {
+		super.registerGoals();
 
 		this.teleportAI = new BossAITeleportAroundHome(this, 40);
 		this.tasks.addTask(8, this.teleportAI);
@@ -216,8 +216,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 
 		this.dataManager.register(IS_HURT, false);
 		this.dataManager.register(SHIELD_ACTIVE, true);
@@ -336,7 +336,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return;
 		}
 
-		this.world.playSound(this.posX, this.posY, this.posZ, sound, this.getSoundCategory(), volume, pitch, false);
+		this.world.playSound(this.posX, this.posY, this.posZ, sound, this.getSoundSource(), volume, pitch, false);
 	}
 
 	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
@@ -662,7 +662,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 */
 			if (this.teleportAI != null) {
 				if (source.getTrueSource() != null && source.getTrueSource() instanceof LivingEntity) {
-					this.setAttackTarget((LivingEntity) source.getTrueSource());
+					this.setTarget((LivingEntity) source.getTrueSource());
 				}
 
 				this.forceTeleport();
@@ -1012,8 +1012,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 		compound.setBoolean("isDowned", this.isDowned);
 		compound.setBoolean("deadAndOnGround", this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND));
 	}

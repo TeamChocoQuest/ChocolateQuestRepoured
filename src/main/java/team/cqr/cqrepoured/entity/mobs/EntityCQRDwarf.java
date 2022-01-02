@@ -34,12 +34,12 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_VILLAGER_AMBIENT;
+		return SoundEvents.VILLAGER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_VILLAGER_DEATH;
+		return SoundEvents.VILLAGER_DEATH;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isFireDamage()) {
+		if (source.isFire()) {
 			return false;
 		}
 		return super.attackEntityFrom(source, amount);
@@ -58,11 +58,6 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	@Override
 	public int getTextureCount() {
 		return 3;
-	}
-
-	@Override
-	public float getEyeHeight() {
-		return this.height * 0.85F;
 	}
 
 	@Override

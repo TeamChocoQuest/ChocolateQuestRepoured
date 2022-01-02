@@ -193,7 +193,7 @@ public abstract class ItemHookshotBase extends Item {
 	public ProjectileHookShotHook entityAIshoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack());
-			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.position().subtract(shooter.position());
 			hookEntity.shootHook(shooter, v.x, v.y, v.z, this.getHookRange(), 1.8D);
 			worldIn.spawnEntity(hookEntity);
 			return hookEntity;

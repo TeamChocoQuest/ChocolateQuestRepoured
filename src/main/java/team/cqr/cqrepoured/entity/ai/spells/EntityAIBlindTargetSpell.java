@@ -23,7 +23,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 	@Override
 	public void startCastingSpell() {
 		LivingEntity attackTarget = this.entity.getAttackTarget();
-		Vector3d vec = attackTarget.getPositionVector();
+		Vector3d vec = attackTarget.position();
 		vec = vec.subtract(attackTarget.getLookVec().scale(8.0D));
 		vec = vec.subtract(0.0D, 0.001D, 0.0D);
 		BlockPos pos = new BlockPos(vec);

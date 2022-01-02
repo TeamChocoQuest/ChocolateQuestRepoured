@@ -27,7 +27,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	private boolean hasFireball() {
-		ItemStack item = this.entity.getHeldItemOffhand();
+		ItemStack item = this.entity.getMainHandItem();
 		if (item.isEmpty() || item.getItem() != Items.FIRE_CHARGE) {
 			return false;
 		}
@@ -38,8 +38,8 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void start() {
 		super.start();
 		this.cooldown = 140;
-		this.entity.getHeldItemOffhand().shrink(1);
-		Vector3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+		this.entity.getMainHandItem().shrink(1);
+		Vector3d v = this.entity.getAttackTarget().position().subtract(this.entity.position());
 		DamagingProjectileEntity fireball = this.entity.getRNG().nextDouble() > 0.7 ? new FireballEntity(this.entity.world, this.entity, v.x, v.y, v.z) : new SmallFireballEntity(this.entity.world, this.entity, v.x, v.y, v.z);
 		this.entity.world.spawnEntity(fireball);
 	}

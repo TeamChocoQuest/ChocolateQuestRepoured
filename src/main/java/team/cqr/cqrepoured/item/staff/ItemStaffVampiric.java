@@ -67,7 +67,7 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 
 		if (!worldIn.isRemote) {
 			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(worldIn, shooter);
-			Vector3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(0.75D);
 			// spell.setVelocity(v.x, v.y, v.z);

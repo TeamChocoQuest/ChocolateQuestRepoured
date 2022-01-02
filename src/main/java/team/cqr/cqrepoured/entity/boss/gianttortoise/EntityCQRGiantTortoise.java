@@ -154,7 +154,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
 		this.tasks.addTask(2, new BossAITortoiseStun(this));
 		this.tasks.addTask(4, new BossAITortoiseHealing(this));
@@ -192,8 +192,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void defineSynchedData() {
+		super.defineSynchedData();
 
 		this.dataManager.register(IN_SHELL, true);
 		this.dataManager.register(IN_SHELL_BYPASS, false);
@@ -331,8 +331,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		this.setAir(999);
 		for (SubEntityGiantTortoisePart part : this.parts) {
@@ -348,12 +348,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.onEntityUpdate();
 		if (this.hasAttackTarget()) {
 			if (this.lastTickPos == null) {
-				this.lastTickPos = this.getPositionVector();
+				this.lastTickPos = this.position();
 			}
 			if (this.getHomePositionCQR() == null) {
 				this.setHomePositionCQR(this.getPosition());
 			}
-			Vector3d curPos = this.getPositionVector();
+			Vector3d curPos = this.position();
 			if (this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
 				if (curPos.distanceTo(this.lastTickPos) <= 0.05) {
 					this.stuckTicks++;
@@ -361,7 +361,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 					this.lastTickPos = curPos;
 				}
 				if (this.stuckTicks >= MAX_STUCK_TICKS) {
-					this.setAttackTarget(null);
+					this.setTarget(null);
 					this.stuckTicks = 0;
 				}
 			}
@@ -460,7 +460,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if (!blocked) {
 				entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F * (Math.max(1, this.world.getDifficulty().getId()) * 1.5F));
 			}
-			Vector3d v = entityIn.getPositionVector().subtract(this.getPositionVector());
+			Vector3d v = entityIn.position().subtract(this.position());
 			v = v.normalize();
 			if (blocked) {
 				v = v.scale(0.8D);
@@ -510,8 +510,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	public void save(CompoundNBT compound) {
+		super.save(compound);
 
 		compound.setInteger("timesHealed", this.timesHealed);
 		compound.setBoolean("inShell", this.isInShell());
@@ -574,7 +574,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public Vector3d getPositionEyes(float partialTicks) {
-		Vector3d headPos = this.parts[this.parts.length - 1].getPositionVector();
+		Vector3d headPos = this.parts[this.parts.length - 1].position();
 		return headPos.add(headPos.subtract(this.posX, 0, this.posZ)).normalize().scale(0.25D);
 	}
 

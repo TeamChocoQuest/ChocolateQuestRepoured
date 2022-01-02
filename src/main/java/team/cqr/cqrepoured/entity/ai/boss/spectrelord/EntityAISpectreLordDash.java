@@ -56,7 +56,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 				this.target = this.entity.getAttackTarget();
 			} else {
 				this.target = list.get(this.random.nextInt(list.size()));
-				this.entity.setAttackTarget(this.target);
+				this.entity.setTarget(this.target);
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		double dx = this.target.posX - this.entity.posX;
 		double dz = this.target.posZ - this.entity.posZ;
 		double dist = Math.sqrt(dx * dx + dz * dz);
-		Vector3d start = this.target.getPositionVector();
+		Vector3d start = this.target.position();
 		Vector3d end = start.add(dx / dist * 3.0D, 0.0D, dz / dist * 3.0D);
 		RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 		Vector3d vec = TargetUtil.getPositionNearTarget(this.world, this.entity, result != null ? result.hitVec : end, start, 2.0D, 4.0D, 1.0D);
@@ -112,7 +112,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 	}
 
 	private void dashToTarget() {
-		Vector3d vec1 = this.entity.getPositionVector();
+		Vector3d vec1 = this.entity.position();
 
 		boolean noClip = this.entity.noClip;
 		if (!noClip) {
@@ -125,7 +125,7 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 		this.entity.move(MoverType.SELF, this.targetDirection.x, this.targetDirection.y, this.targetDirection.z);
 		this.entity.noClip = noClip;
 
-		Vector3d vec2 = this.entity.getPositionVector();
+		Vector3d vec2 = this.entity.position();
 		Vector3d vec3 = new Vector3d(-this.dashWidth, 0.0D, 0.0D);
 		Vector3d vec4 = new Vector3d(this.dashWidth, this.entity.height, vec2.subtract(vec1).length());
 		BoundingBox bb = new BoundingBox(vec3, vec4, this.yawRadian, 0.0D, vec1);

@@ -36,7 +36,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 
 	@Override
 	protected void entityInit() {
-		super.entityInit();
+		super.defineSynchedData();
 	}
 
 	public boolean isActive() {

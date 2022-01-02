@@ -120,7 +120,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends MobRenderer<T>
 			ModelBiped model = (ModelBiped) this.mainModel;
 
 			ItemStack itemMainHand = entity.getHeldItemMainhand();
-			ItemStack itemOffHand = entity.getHeldItemOffhand();
+			ItemStack itemOffHand = entity.getMainHandItem();
 
 			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
 			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;

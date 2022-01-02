@@ -25,7 +25,7 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 
 	}
 

@@ -26,7 +26,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit == this.thrower || !(result.entityHit instanceof LivingEntity)) {
@@ -43,7 +43,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 				this.setDead();
 			}
 
-			super.onImpact(result);
+			super.onHit(result);
 		}
 	}
 
@@ -58,7 +58,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 
 	@Override
 	public void writeEntityToNBT(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+		super.save(compound);
 		compound.setBoolean("isFast", this.isFast);
 	}
 

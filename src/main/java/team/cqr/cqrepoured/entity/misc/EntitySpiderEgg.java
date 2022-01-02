@@ -49,7 +49,7 @@ public class EntitySpiderEgg extends Entity {
 				this.dataManager.set(STAGE, this.getStage() + 1);
 				this.currentStageDuration = 0;
 			}
-			super.onUpdate();
+			super.tick();
 			if (this.getStage() >= STAGE_COUNT) {
 				// Destroy yourself and spawn the spider
 				Entity spider = EntityList.createEntityByIDFromName(MINION_ID, this.world);
@@ -60,7 +60,7 @@ public class EntitySpiderEgg extends Entity {
 				this.setDead();
 			}
 		} else {
-			super.onUpdate();
+			super.tick();
 		}
 	}
 
