@@ -9,4 +9,8 @@
 	<entry oldName="net.minecraft.util.math.Vec3f" newName="net.minecraft.util.math.vector.Vector3f" type="class" />
 	<entry oldName="net.minecraft.util.math.Vec4f" newName="net.minecraft.util.math.vector.Vector4f" type="class" />
 	<entry oldName="net.minecraft.util.math.Vec2f" newName="net.minecraft.util.math.vector.Vector2f" type="class" />
+	<entry oldName="net.minecraft.world.ServerWorld" newName="net.minecraft.world.server.ServerWorld" type="class" />
+	<entry oldName="net.minecraft.world.gen.feature.MineshaftStructure" newName="net.minecraft.world.gen.feature.structure.MineshaftStructure" type="class" />
+	<entry oldName="net.minecraft.world.gen.feature.Structure" newName="net.minecraft.world.gen.feature.structure.Structure" type="class" />
+	<entry oldName="net.minecraft.entity.ai.attributes.IAttribute" newName="net.minecraft.entity.ai.attributes.Attribute" type="class" />
 </migrationMap>
