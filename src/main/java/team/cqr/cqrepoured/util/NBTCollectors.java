@@ -13,15 +13,15 @@ import java.util.stream.Collector;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.ByteArrayNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTBase;
 
 public class NBTCollectors {
 
 	private static final Set<Collector.Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 	private static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
 
-	public static <T extends NBTBase> Collector<T, ListNBT, ListNBT> toList() {
+	public static <T extends INBT> Collector<T, ListNBT, ListNBT> toList() {
 		return new Collector<T, ListNBT, ListNBT>() {
 			@Override
 			public Supplier<ListNBT> supplier() {
@@ -30,13 +30,13 @@ public class NBTCollectors {
 
 			@Override
 			public BiConsumer<ListNBT, T> accumulator() {
-				return ListNBT::appendTag;
+				return ListNBT::add;
 			}
 
 			@Override
 			public BinaryOperator<ListNBT> combiner() {
 				return (list1, list2) -> {
-					list2.forEach(list1::appendTag);
+					list2.forEach(list1::add);
 					return list1;
 				};
 			}
