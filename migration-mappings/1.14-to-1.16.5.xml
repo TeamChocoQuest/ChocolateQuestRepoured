@@ -16,5 +16,6 @@
 	<entry oldName="net.minecraft.entity.EnumCreatureAttribute" newName="net.minecraft.entity.CreatureAttribute" type="class" />
 	<entry oldName="net.minecraft.entity.SharedMonsterAttributes" newName="net.minecraft.entity.ai.attributes.Attributes" type="class" />
 	<entry oldName="net.minecraft.entity.MultiPartEntityPart" newName="net.minecraftforge.entity.PartEntity" type="class" />
-	<entry oldName="" newName="" type="class" />
+	<entry oldName="net.minecraft.util.EnumParticleTypes" newName="net.minecraft.particles.ParticleTypes" type="class" />
+	<entry oldName="net.minecraftforge.fml.common.registry.ForgeRegistries" newName="net.minecraftforge.registries.ForgeRegistries" type="class" />
 </migrationMap>
