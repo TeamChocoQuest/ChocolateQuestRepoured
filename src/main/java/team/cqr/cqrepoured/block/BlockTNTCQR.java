@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -24,11 +25,11 @@ public class BlockTNTCQR extends TNTBlock {
 	 * it will show a special tnt texture, it
 	 * gets set to false upon dungeon generation
 	 */
-	public static final PropertyBool HIDDEN = PropertyBool.create("hidden");
+	public static final BooleanProperty HIDDEN = BooleanProperty.create("hidden");
 
 	public BlockTNTCQR() {
 		super();
-		this.setDefaultState(super.getDefaultState().withProperty(HIDDEN, false));
+		this.registerDefaultState(super.defaultBlockState().setValue(HIDDEN, false));
 	}
 
 	@Override

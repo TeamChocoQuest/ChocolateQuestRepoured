@@ -1,8 +1,6 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.data.loot.EntityLootTables;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.loot.LootTables;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;

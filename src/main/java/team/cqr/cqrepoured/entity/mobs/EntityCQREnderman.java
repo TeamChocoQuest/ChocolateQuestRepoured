@@ -34,7 +34,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		if (source instanceof IndirectEntityDamageSource) {
 			for (int i = 0; i < 64; ++i) {
 				if (this.teleportRandomly()) {
@@ -42,7 +42,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 				}
 			}
 		}
-		return super.attackEntityFrom(source, amount);
+		return super.hurt(source, amount);
 	}
 
 	@Override

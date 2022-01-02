@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IMechanical;
@@ -53,17 +52,18 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 		return SoundEvents.IRON_GOLEM_DEATH;
 	}
 
-	@Override
+	//Removed in 1.16
+	/*@Override
 	public boolean isImmuneToExplosions() {
 		return true;
-	}
+	}*/
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isFire()) {
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.isFire() || source.isExplosion()) {
 			return false;
 		}
-		return super.attackEntityFrom(source, amount);
+		return super.hurt(source, amount);
 	}
 
 	@Override
