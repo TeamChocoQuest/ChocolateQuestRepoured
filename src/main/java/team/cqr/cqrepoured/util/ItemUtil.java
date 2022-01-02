@@ -18,8 +18,8 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.SwordItem;
@@ -34,7 +34,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -44,7 +44,7 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 public class ItemUtil {
 
 	public static boolean hasFullSet(LivingEntity entity, Class<? extends Item> itemClass) {
-		Iterator<ItemStack> iterable = entity.getArmorInventoryList().iterator();
+		Iterator<ItemStack> iterable = entity.getArmorSlots().iterator();
 		Class<? extends Item> helm, chest, legs, feet;
 		try {
 			helm = iterable.next().getItem().getClass();
@@ -67,7 +67,7 @@ public class ItemUtil {
 	}
 
 	public static boolean isCheaterItem(ItemStack item) {
-		if (!item.isItemEnchanted()) {
+		if (!item.isEnchanted()) {
 			return false;
 		}
 		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
@@ -80,14 +80,14 @@ public class ItemUtil {
 		return false;
 	}
 
-	public static void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, Function<Double, Double> function) {
+	public static void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, Function<Double, Double> function) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
 			AttributeModifier modifier = modifierOptional.get();
 			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), function.apply(modifier.getAmount()), modifier.getOperation()));
+			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), function.apply(modifier.getAmount()), modifier.getOperation()));
 		}
 	}
 
@@ -143,7 +143,7 @@ public class ItemUtil {
 					i = i + EnchantmentHelper.getKnockbackModifier(player);
 
 					if (player.isSprinting() && flag) {
-						player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F, 1.0F);
+						player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0F, 1.0F);
 						++i;
 						flag1 = true;
 					}
@@ -164,8 +164,8 @@ public class ItemUtil {
 					double d0 = player.distanceWalkedModified - player.prevDistanceWalkedModified;
 
 					// CQR: Disable sweep attack when sweepingEnabled is false
-					if (sweepingEnabled && flag && !flag2 && !flag1 && player.onGround && d0 < player.getAIMoveSpeed()) {
-						ItemStack itemstack = player.getHeldItem(Hand.MAIN_HAND);
+					if (sweepingEnabled && flag && !flag2 && !flag1 && player.isOnGround() && d0 < player.getAIMoveSpeed()) {
+						ItemStack itemstack = player.getItemInHand(Hand.MAIN_HAND);
 
 						if (itemstack.getItem() instanceof SwordItem) {
 							flag3 = true;
@@ -174,14 +174,14 @@ public class ItemUtil {
 
 					float f4 = 0.0F;
 					boolean flag4 = false;
-					int j = EnchantmentHelper.getFireAspectModifier(player);
+					int j = EnchantmentHelper.getFireAspect(player);
 
 					if (targetEntity instanceof LivingEntity) {
 						f4 = ((LivingEntity) targetEntity).getHealth();
 
-						if (j > 0 && !targetEntity.isBurning()) {
+						if (j > 0 && !targetEntity.isOnFire()) {
 							flag4 = true;
-							targetEntity.setFire(1);
+							targetEntity.setSecondsOnFire(1);
 						}
 					}
 
@@ -210,8 +210,8 @@ public class ItemUtil {
 
 							double entityReachDistanceSqr = getEntityReachDistanceSqr(player);
 							// CQR: Allow modification of sweeping hitbox
-							AxisAlignedBB aabb = targetEntity.getEntityBoundingBox().grow(sweepingRangeHorizontal, sweepingRangeVertical, sweepingRangeHorizontal);
-							for (LivingEntity entitylivingbase : player.world.getEntitiesWithinAABB(LivingEntity.class, aabb)) {
+							AxisAlignedBB aabb = targetEntity.getBoundingBox().grow(sweepingRangeHorizontal, sweepingRangeVertical, sweepingRangeHorizontal);
+							for (LivingEntity entitylivingbase : player.level.getEntitiesWithinAABB(LivingEntity.class, aabb)) {
 								// CQR: Increase sweeping range when players reach distance is higher
 								if (entitylivingbase != player && entitylivingbase != targetEntity && !player.isOnSameTeam(entitylivingbase) && player.getDistanceSq(entitylivingbase) < entityReachDistanceSqr) {
 									// CQR: Allow modification of sweeping knockback strength
@@ -220,7 +220,7 @@ public class ItemUtil {
 								}
 							}
 
-							player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
 							player.spawnSweepParticles();
 						}
 
@@ -233,18 +233,18 @@ public class ItemUtil {
 						}
 
 						if (flag2) {
-							player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
+							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
 							player.onCriticalHit(targetEntity);
 						} else if (fakeCrit) { // CQR: Allow fake crits to happen
-							player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.2F);
+							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.2F);
 							player.onCriticalHit(targetEntity);
 						}
 
 						if (!flag2 && !fakeCrit && !flag3) {
 							if (flag) {
-								player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
+								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
 							} else {
-								player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
+								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
 							}
 						}
 
@@ -276,7 +276,7 @@ public class ItemUtil {
 
 							if (itemstack1.isEmpty()) {
 								ForgeEventFactory.onPlayerDestroyItem(player, beforeHitCopy, Hand.MAIN_HAND);
-								player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+								player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 							}
 						}
 
@@ -288,9 +288,9 @@ public class ItemUtil {
 								targetEntity.setFire(j * 4);
 							}
 
-							if (player.world instanceof ServerWorld && f5 > 2.0F) {
+							if (player.level instanceof ServerWorld && f5 > 2.0F) {
 								int k = (int) (f5 * 0.5D);
-								((ServerWorld) player.world).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, targetEntity.posX, targetEntity.posY + targetEntity.height * 0.5F, targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
+								((ServerWorld) player.level).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, targetEntity.posX, targetEntity.posY + targetEntity.height * 0.5F, targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
 							}
 						}
 

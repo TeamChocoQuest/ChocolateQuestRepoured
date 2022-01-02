@@ -26,7 +26,7 @@ import com.google.gson.JsonSyntaxException;
 import meldexun.reflectionutil.ReflectionConstructor;
 import meldexun.reflectionutil.ReflectionField;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;

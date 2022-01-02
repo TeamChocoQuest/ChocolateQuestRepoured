@@ -12,6 +12,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
@@ -32,7 +33,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;

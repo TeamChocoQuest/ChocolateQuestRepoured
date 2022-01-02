@@ -6,7 +6,8 @@ import javax.annotation.Nullable;
 
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.*;
 import net.minecraft.world.gen.NetherChunkGenerator;
@@ -15,8 +16,6 @@ import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.EndChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.MineshaftStructure;
-import net.minecraft.world.gen.feature.Structure;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.integration.ancientwarfare.AW2Integration;
 
@@ -155,7 +154,7 @@ public class StructureHelper {
 					int x2 = x + x1;
 					int z2 = z + z1;
 
-					if (structureType instanceof MineshaftStructure) {
+					if (structureType instanceof net.minecraft.world.gen.feature.structure.MineshaftStructure) {
 						random.setSeed(x2 ^ z2 ^ world.getSeed());
 						random.nextInt();
 					}

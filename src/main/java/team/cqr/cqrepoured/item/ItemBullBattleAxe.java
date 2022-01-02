@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.SwordItem;
@@ -24,7 +25,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.text.TextFormatting;
@@ -67,7 +67,7 @@ public class ItemBullBattleAxe extends SwordItem {
 		return modifiers;
 	}
 
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double multiplier) {
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, double multiplier) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
 		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
 

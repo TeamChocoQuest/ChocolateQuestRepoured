@@ -7,7 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;

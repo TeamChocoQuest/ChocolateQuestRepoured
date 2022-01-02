@@ -17,7 +17,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordChannelHate;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordDash;

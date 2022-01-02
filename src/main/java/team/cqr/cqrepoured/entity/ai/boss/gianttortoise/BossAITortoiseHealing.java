@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 

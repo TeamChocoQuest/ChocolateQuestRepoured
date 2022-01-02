@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;

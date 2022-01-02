@@ -13,7 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,7 +39,7 @@ public class ItemMusketKnife extends ItemMusket {
 		return modifiers;
 	}
 
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, double value) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
 		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
 

@@ -9,6 +9,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.network.play.server.SPlayEntityEffectPacket;
 import net.minecraft.util.*;
 import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Keyboard;
 
@@ -33,7 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.api.distmarker.Dist;

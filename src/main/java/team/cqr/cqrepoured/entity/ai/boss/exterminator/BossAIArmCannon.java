@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
