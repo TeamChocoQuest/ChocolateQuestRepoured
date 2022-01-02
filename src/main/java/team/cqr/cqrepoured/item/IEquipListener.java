@@ -1,11 +1,13 @@
 package team.cqr.cqrepoured.item;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 
 public interface IEquipListener {
 
-	void onEquip(EntityLivingBase entity, ItemStack stack, EntityEquipmentSlot slot);
+	void onEquip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot);
 
-	void onUnequip(EntityLivingBase entity, ItemStack stack, EntityEquipmentSlot slot);
+	void onUnequip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot);
 
 }
