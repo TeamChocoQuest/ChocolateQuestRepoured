@@ -13,7 +13,7 @@ import net.minecraft.util.ObjectIntIdentityMap;
 
 public class BlockStatePalette implements Iterable<BlockState> {
 
-	public static final BlockState DEFAULT_BLOCK_STATE = Blocks.AIR.getDefaultState();
+	public static final BlockState DEFAULT_BLOCK_STATE = Blocks.AIR.defaultBlockState();
 	private final ObjectIntIdentityMap<BlockState> ids = new ObjectIntIdentityMap<>(16);
 	private int lastId;
 
@@ -26,11 +26,11 @@ public class BlockStatePalette implements Iterable<BlockState> {
 	}
 
 	public int idFor(BlockState state) {
-		int i = this.ids.get(state);
+		int i = this.ids.getId(state);
 
 		if (i == -1) {
 			i = this.lastId++;
-			this.ids.put(state, i);
+			this.ids.addMapping(state, i);;
 		}
 
 		return i;
@@ -38,7 +38,7 @@ public class BlockStatePalette implements Iterable<BlockState> {
 
 	@Nullable
 	public BlockState stateFor(int id) {
-		BlockState iblockstate = this.ids.getByValue(id);
+		BlockState iblockstate = this.ids.byId(id);
 		return iblockstate == null ? DEFAULT_BLOCK_STATE : iblockstate;
 	}
 
@@ -48,7 +48,7 @@ public class BlockStatePalette implements Iterable<BlockState> {
 	}
 
 	public void addMapping(BlockState state, int id) {
-		this.ids.put(state, id);
+		this.ids.addMapping(state, id);
 	}
 
 	public int size() {
@@ -57,7 +57,7 @@ public class BlockStatePalette implements Iterable<BlockState> {
 
 	public ListNBT writeToNBT() {
 		ListNBT nbtList = new ListNBT();
-		this.ids.forEach(state -> nbtList.appendTag(NBTUtil.writeBlockState(new CompoundNBT(), (BlockState) state)));
+		this.ids.forEach(state -> nbtList.add(NBTUtil.writeBlockState((BlockState) state)));
 		return nbtList;
 	}
 

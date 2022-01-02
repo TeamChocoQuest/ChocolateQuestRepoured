@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.common.Loader;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -69,11 +69,11 @@ public abstract class DungeonBase {
 	protected boolean replaceBanners = true;
 
 	protected boolean buildSupportPlatform = true;
-	protected IBlockState supportBlock = null;
-	protected IBlockState supportTopBlock = null;
+	protected BlockState supportBlock = null;
+	protected BlockState supportTopBlock = null;
 
 	protected boolean useCoverBlock;
-	protected IBlockState coverBlock;
+	protected BlockState coverBlock;
 
 	// Protection system stuff
 	protected boolean enableProtectionSystem = false;
@@ -121,7 +121,7 @@ public abstract class DungeonBase {
 		this.supportTopBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblocktop", this.supportTopBlock);
 
 		this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
-		this.coverBlock = PropertyFileHelper.getBlockStateProperty(prop, "coverblock", Blocks.AIR.getDefaultState());
+		this.coverBlock = PropertyFileHelper.getBlockStateProperty(prop, "coverblock", Blocks.AIR.defaultBlockState());
 
 		// protection system
 		this.enableProtectionSystem = PropertyFileHelper.getBooleanProperty(prop, "enableProtectionSystem", false);
@@ -455,11 +455,11 @@ public abstract class DungeonBase {
 		return this.buildSupportPlatform;
 	}
 
-	public IBlockState getSupportBlock() {
+	public BlockState getSupportBlock() {
 		return this.supportBlock;
 	}
 
-	public IBlockState getSupportTopBlock() {
+	public BlockState getSupportTopBlock() {
 		return this.supportTopBlock;
 	}
 
@@ -467,7 +467,7 @@ public abstract class DungeonBase {
 		return this.useCoverBlock;
 	}
 
-	public IBlockState getCoverBlock() {
+	public BlockState getCoverBlock() {
 		return this.coverBlock;
 	}
 

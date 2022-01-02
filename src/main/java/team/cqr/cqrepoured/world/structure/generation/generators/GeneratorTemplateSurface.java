@@ -43,8 +43,8 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 		this.structurePos = Offset.CENTER.apply(this.pos, this.structure, this.mirror, this.rotation);
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			BlockPos startPos = this.structurePos.up(this.dungeon.getUnderGroundOffset()).down();
-			BlockPos endPos = startPos.add(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
+			BlockPos startPos = this.structurePos.above(this.dungeon.getUnderGroundOffset()).below();
+			BlockPos endPos = startPos.offset(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), CQRConfig.general.supportHillWallSize);
@@ -64,7 +64,7 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 	protected void postProcess() {
 		if (this.dungeon.isCoverBlockEnabled()) {
 			BlockPos startPos = this.structurePos;
-			BlockPos endPos = startPos.add(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
+			BlockPos endPos = startPos.offset(DungeonPlacement.transform(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1, this.mirror, this.rotation));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			this.dungeonBuilder.add(new CoverDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));

@@ -185,10 +185,10 @@ public class ProtectedRegionHelper {
 		if (item instanceof BlockItem) {
 			Block block = ((BlockItem) item).getBlock();
 			if (hitVec == null) {
-				return block.getDefaultState();
+				return block.defaultBlockState();
 			}
 			if (!block.canPlaceBlockOnSide(world, pos, facing)) {
-				return block.getDefaultState();
+				return block.defaultBlockState();
 			}
 			int meta = ((BlockItem) item).getMetadata(stack.getItemDamage());
 			return block.getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
@@ -257,18 +257,18 @@ public class ProtectedRegionHelper {
 			return;
 		}
 
-		List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
+		List<BlockPos> affectedBlockPositions = explosion.getToBlow();
 
 		if (affectedBlockPositions.isEmpty()) {
 			return;
 		}
 
 		// If the exploder is our own custom tnt => let it blow!
-		if (explosion.exploder instanceof EntityTNTPrimedCQR) {
+		if (explosion.source instanceof EntityTNTPrimedCQR) {
 			return;
 		}
 
-		boolean flag = explosion.exploder instanceof TNTEntity;
+		boolean flag = explosion.source instanceof TNTEntity;
 		boolean flag1 = (flag && CQRConfig.dungeonProtection.enablePreventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.enablePreventExplosionOther);
 		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;
 
@@ -355,7 +355,7 @@ public class ProtectedRegionHelper {
 		if (manager != null && manager instanceof ServerProtectedRegionManager) {
 			for (ProtectedRegion region : manager.getProtectedRegionsAt(position)) {
 				AxisAlignedBB regionAABB = new AxisAlignedBB(region.getStartPos(), region.getEndPos());
-				set.addAll(world.getEntitiesWithinAABB(entityClass, regionAABB));
+				set.addAll(world.getEntitiesOfClass(entityClass, regionAABB));
 			}
 		}
 

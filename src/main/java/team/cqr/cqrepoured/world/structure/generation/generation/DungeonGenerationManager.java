@@ -25,7 +25,7 @@ public final class DungeonGenerationManager {
 	}
 
 	public static void handleWorldLoad(World world) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		INSTANCES.computeIfAbsent(world, DungeonGenerationManager::new);

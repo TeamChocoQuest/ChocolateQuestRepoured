@@ -64,17 +64,17 @@ public class StrongholdBuilder {
 			// this.buildSegment(pos.subtract(this.startPos), partBuilder);
 			EntranceBuilderHelper.buildEntranceSegment(pos.subtract(this.startPos), partBuilder, this.direction);
 
-			pos = pos.add(expansionVector);
+			pos = pos.offset(expansionVector);
 		}
 		this.dungeonBuilder.add(partBuilder, this.startPos);
 
-		this.buildStronghold(pos.add(0, -1, 0), this.world, cX, cZ);
+		this.buildStronghold(pos.offset(0, -1, 0), this.world, cX, cZ);
 	}
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
 		stronghold.calculateFloors(pos, world2);
-		stronghold.buildFloors(pos.add(0, -1, 0), this.world);
+		stronghold.buildFloors(pos.offset(0, -1, 0), this.world);
 	}
 
 }

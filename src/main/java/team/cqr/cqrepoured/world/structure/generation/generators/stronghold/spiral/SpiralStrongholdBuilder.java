@@ -84,7 +84,7 @@ public class SpiralStrongholdBuilder {
 				CQStructure room = this.generator.loadStructureFromFile(file);
 				room.addAll(this.dungeonBuilder, new BlockPos(strongholdEntrancePos.getX(), y, strongholdEntrancePos.getZ()), Offset.CENTER);
 			}
-			strongholdEntrancePos = strongholdEntrancePos.add(offsetVector);
+			strongholdEntrancePos = strongholdEntrancePos.offset(offsetVector);
 			posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());
 		}
 
@@ -140,8 +140,8 @@ public class SpiralStrongholdBuilder {
 					floor.overrideFirstRoomType(EStrongholdRoomType.NONE);
 				}
 			}
-			entranceX = floor.getExitIndex().getFirst();
-			entranceZ = floor.getExitIndex().getSecond();
+			entranceX = floor.getExitIndex().getA();
+			entranceZ = floor.getExitIndex().getB();
 			if (i == (this.floors.length - 1)) {
 				floor.overrideLastRoomType(EStrongholdRoomType.BOSS);
 			} else {

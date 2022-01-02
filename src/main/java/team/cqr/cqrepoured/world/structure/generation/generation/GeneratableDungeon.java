@@ -15,6 +15,7 @@ import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.Mutable;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -38,7 +39,7 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
 public class GeneratableDungeon {
 
-	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
+	private static final BlockPos.Mutable MUTABLE = new Mutable();
 
 	private final String dungeonName;
 	private final BlockPos pos;
@@ -56,7 +57,7 @@ public class GeneratableDungeon {
 		public final int light;
 
 		public LightInfo(BlockPos pos, int light) {
-			this.pos = pos.toImmutable();
+			this.pos = pos.immutable();
 			this.light = light;
 		}
 
@@ -193,12 +194,12 @@ public class GeneratableDungeon {
 		for (LightInfo removedLight : this.removedLights) {
 			int r = removedLight.light - 1;
 			for (int y = -r; y <= r; y++) {
-				if (world.isOutsideBuildHeight(MUTABLE.setPos(0, removedLight.pos.getY() + y, 0))) {
+				if (World.isOutsideBuildHeight(MUTABLE.set(0, removedLight.pos.getY() + y, 0))) {
 					continue;
 				}
 				for (int x = -r; x <= r; x++) {
 					for (int z = -r; z <= r; z++) {
-						BlockPos p = new BlockPos(removedLight.pos.add(x, y, z));
+						BlockPos p = new BlockPos(removedLight.pos.offset(x, y, z));
 						if (!updated.add(p)) {
 							continue;
 						}

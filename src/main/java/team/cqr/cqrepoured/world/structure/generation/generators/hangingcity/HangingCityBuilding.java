@@ -121,18 +121,18 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		// Order: Air, Island, Chains, Building
 		int rad = 2 * this.getRadius();
 		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight() : this.structure.getSize().getY();
-		BlockPos start = this.worldPosition.add(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
-		BlockPos end = this.worldPosition.add(rad, height, rad);
+		BlockPos start = this.worldPosition.offset(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
+		BlockPos end = this.worldPosition.offset(rad, height, rad);
 
 		int wall = CQRConfig.general.supportHillWallSize;
-		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.add(-wall, -wall, -wall));
+		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.offset(-wall, -wall, -wall));
 	}
 
 	@Override
 	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		this.buildPlatform(world, this.worldPosition, this.islandRadius, mobType, dungeonBuilder);
 		if (this.structure != null) {
-			this.structure.addAll(dungeonBuilder, this.worldPosition.up(), Offset.CENTER);
+			this.structure.addAll(dungeonBuilder, this.worldPosition.above(), Offset.CENTER);
 		}
 	}
 
@@ -147,7 +147,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			for (int iX = -rad; iX <= rad; iX++) {
 				for (int iZ = -rad; iZ <= rad; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad)) {
-						stateMap.put((center.add(iX, -decrementor, iZ)), this.generator.getDungeon().getIslandBlock());
+						stateMap.put((center.offset(iX, -decrementor, iZ)), this.generator.getDungeon().getIslandBlock());
 					}
 				}
 			}
@@ -156,10 +156,10 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		}
 
 		if (this.generator.getDungeon().doBuildChains()) {
-			this.buildChain(world, center.add(radius * 0.75, -2, radius * 0.75), 0, stateMap);
-			this.buildChain(world, center.add(-radius * 0.75, -2, -radius * 0.75), 0, stateMap);
-			this.buildChain(world, center.add(-radius * 0.75, -2, radius * 0.75), 1, stateMap);
-			this.buildChain(world, center.add(radius * 0.75, -2, -radius * 0.75), 1, stateMap);
+			this.buildChain(world, center.offset(radius * 0.75, -2, radius * 0.75), 0, stateMap);
+			this.buildChain(world, center.offset(-radius * 0.75, -2, -radius * 0.75), 0, stateMap);
+			this.buildChain(world, center.offset(-radius * 0.75, -2, radius * 0.75), 1, stateMap);
+			this.buildChain(world, center.offset(radius * 0.75, -2, -radius * 0.75), 1, stateMap);
 		}
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
@@ -185,28 +185,28 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		for (int i = 0; i < chainCount; i++) {
 			// Check the direction of the chain
 			int yOffset = i * deltaYPerChainSegment;
-			BlockPos startPos = pos.add(0, yOffset, 0);
+			BlockPos startPos = pos.offset(0, yOffset, 0);
 			if ((i + iOffset) % 2 > 0) {
-				this.buildChainSegment(startPos, startPos.north(), startPos.south(), startPos.north(2).up(), startPos.south(2).up(), stateMap);
+				this.buildChainSegment(startPos, startPos.north(), startPos.south(), startPos.north(2).above(), startPos.south(2).above(), stateMap);
 			} else {
-				this.buildChainSegment(startPos, startPos.east(), startPos.west(), startPos.east(2).up(), startPos.west(2).up(), stateMap);
+				this.buildChainSegment(startPos, startPos.east(), startPos.west(), startPos.east(2).above(), startPos.west(2).above(), stateMap);
 			}
 		}
 	}
 
 	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, BlockState> stateMap) {
 		stateMap.put(lowerCenter, this.generator.getDungeon().getChainBlock());
-		stateMap.put(lowerCenter.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerCenter.offset(0, 6, 0), this.generator.getDungeon().getChainBlock());
 
 		stateMap.put(lowerLeft, this.generator.getDungeon().getChainBlock());
-		stateMap.put(lowerLeft.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerLeft.offset(0, 6, 0), this.generator.getDungeon().getChainBlock());
 
 		stateMap.put(lowerRight, this.generator.getDungeon().getChainBlock());
-		stateMap.put(lowerRight.add(0, 6, 0), this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerRight.offset(0, 6, 0), this.generator.getDungeon().getChainBlock());
 
 		for (int i = 0; i < 5; i++) {
-			stateMap.put(lowerBoundL.add(0, i, 0), this.generator.getDungeon().getChainBlock());
-			stateMap.put(lowerBoundR.add(0, i, 0), this.generator.getDungeon().getChainBlock());
+			stateMap.put(lowerBoundL.offset(0, i, 0), this.generator.getDungeon().getChainBlock());
+			stateMap.put(lowerBoundR.offset(0, i, 0), this.generator.getDungeon().getChainBlock());
 		}
 	}
 
@@ -227,12 +227,13 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 
 	BlockPos getConnectorPointForBridgeTo(final HangingCityBuilding bridgeTarget) {
-		Vector3d bridgeVector = new Vector3d(bridgeTarget.getWorldPosition().subtract(this.getWorldPosition()));
+		final BlockPos vIn = bridgeTarget.getWorldPosition().subtract(this.getWorldPosition());
+		Vector3d bridgeVector = new Vector3d(vIn.getX(), vIn.getY(), vIn.getZ());
 		Vector3d horizontalVector = new Vector3d(bridgeVector.x, 0, bridgeVector.z);
 		horizontalVector = horizontalVector.normalize();
 		horizontalVector = horizontalVector.scale((1.05D * this.islandRadius) - 2);
 
-		final BlockPos result = this.getWorldPosition().add(horizontalVector.x, 1, horizontalVector.z);
+		final BlockPos result = this.getWorldPosition().offset(horizontalVector.x, 1, horizontalVector.z);
 
 		return result;
 	}

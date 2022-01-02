@@ -21,21 +21,21 @@ public class ProtectedRegionManager {
 		if (world == null) {
 			return null;
 		}
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return CLIENT_INSTANCE;
 		}
 		return INSTANCES.get(world.provider.getDimension());
 	}
 
 	public static void handleWorldLoad(World world) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		INSTANCES.computeIfAbsent(world.provider.getDimension(), key -> new ServerProtectedRegionManager(world));
 	}
 
 	public static void handleWorldSave(World world) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		ServerProtectedRegionManager manager = INSTANCES.get(world.provider.getDimension());
@@ -45,14 +45,14 @@ public class ProtectedRegionManager {
 	}
 
 	public static void handleWorldUnload(World world) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		INSTANCES.remove(world.provider.getDimension());
 	}
 
 	public static void handleChunkLoad(World world, Chunk chunk) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		ServerProtectedRegionManager manager = INSTANCES.get(world.provider.getDimension());
@@ -62,7 +62,7 @@ public class ProtectedRegionManager {
 	}
 
 	public static void handleChunkUnload(World world, Chunk chunk) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		ServerProtectedRegionManager manager = INSTANCES.get(world.provider.getDimension());
@@ -72,7 +72,7 @@ public class ProtectedRegionManager {
 	}
 
 	public static void handleWorldTick(World world) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		ServerProtectedRegionManager manager = INSTANCES.get(world.provider.getDimension());

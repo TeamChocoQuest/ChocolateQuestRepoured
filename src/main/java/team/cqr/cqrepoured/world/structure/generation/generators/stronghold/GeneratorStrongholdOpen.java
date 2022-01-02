@@ -58,7 +58,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	private void computeNotFittingStructures() {
 		for (File f : this.dungeon.getRoomFolder().listFiles(FileIOUtil.getNBTFileFilter())) {
 			CQStructure struct = this.loadStructureFromFile(f);
-			if (struct != null && (struct.getSize().getX() != this.structureBounds.getFirst() || struct.getSize().getZ() != this.structureBounds.getSecond())) {
+			if (struct != null && (struct.getSize().getX() != this.structureBounds.getA() || struct.getSize().getZ() != this.structureBounds.getB())) {
 				this.blacklistedRooms.add(f.getParent() + "/" + f.getName());
 			}
 		}
@@ -100,7 +100,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			if (isFirst) {
 				floor = new StrongholdFloorOpen(this, rgd, rgd / 2, rgd / 2, this.random);
 			} else {
-				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getFirst(), prevFloor.getExitStairIndexes().getSecond(), this.random);
+				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getA(), prevFloor.getExitStairIndexes().getB(), this.random);
 			}
 			File stair = null;
 			if (isFirst) {
@@ -123,7 +123,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			} else {
 				initPos = initPos.subtract(new Vector3i(0, this.loadStructureFromFile(stair).getSize().getY(), 0));
 				if (!isFirst) {
-					initPos = initPos.add(0, this.dungeon.getRoomSizeY(), 0);
+					initPos = initPos.offset(0, this.dungeon.getRoomSizeY(), 0);
 				}
 				if ((i + 1) == this.floors.length) {
 					floor.setExitIsBossRoom(true);
@@ -132,11 +132,11 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 				if (isFirst) {
 					floor.setEntranceStairPosition(stair, initPos.getX(), initPos.getY(), initPos.getZ());
 				} else {
-					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(), prevFloor.getExitCoordinates().getSecond());
+					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getA(), initPos.getY(), prevFloor.getExitCoordinates().getB());
 				}
 
 				floor.preProcess(this.world, this.dungeonBuilder, null);
-				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
+				initPos = new BlockPos(floor.getExitCoordinates().getA(), initPos.getY(), floor.getExitCoordinates().getB());
 			}
 			prevFloor = floor;
 			this.floors[i] = floor;

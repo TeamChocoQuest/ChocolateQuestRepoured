@@ -91,7 +91,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 				 * boolean noAddFlag = false; if (this.dungeon.centralBuildingIsSpecial() && iX == 0 && iZ == 0) { noAddFlag = true; }
 				 */
 
-				BlockPos p = this.pos.add((iX * this.distanceBetweenBuildings), 0, (iZ * this.distanceBetweenBuildings));
+				BlockPos p = this.pos.offset((iX * this.distanceBetweenBuildings), 0, (iZ * this.distanceBetweenBuildings));
 				// if (!noAddFlag) {
 				this.gridPositions[iX + rowsX][iZ + rowsZ] = p;
 				// }
@@ -121,15 +121,15 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 			 * cUpper, WorldDungeonGenerator.getSeed(world,
 			 * pocketCenter.getX(), pocketCenter.getZ()), world); } } else {
 			 */
-			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).add(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
-			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).add(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
+			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).offset(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
+			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).offset(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
 
 			this.dungeonBuilder.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ)), cLower);
 
 		}
 
 		// Build the roads / bridges and the floors
-		for (BlockPos lavaPos : BlockPos.getAllInBox(this.minX - this.distanceBetweenBuildings, this.pos.getY(), this.minZ - this.distanceBetweenBuildings, this.maxX + this.distanceBetweenBuildings, this.pos.getY(), this.maxZ + this.distanceBetweenBuildings)) {
+		for (BlockPos lavaPos : BlockPos.betweenClosed(this.minX - this.distanceBetweenBuildings, this.pos.getY(), this.minZ - this.distanceBetweenBuildings, this.maxX + this.distanceBetweenBuildings, this.pos.getY(), this.maxZ + this.distanceBetweenBuildings)) {
 			this.lavaBlocks.add(lavaPos);
 		}
 		// Bridges from south to north
@@ -187,10 +187,10 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 				if (structurePos != null && structure != null) {
 					BlockPos cL = structurePos.subtract(new Vector3i(structure.getSize().getX() / 2 + 2, 0, structure.getSize().getZ() / 2 + 2));
-					BlockPos cU = structurePos.add(structure.getSize().getX() / 2 + 2, 0, structure.getSize().getZ() / 2 + 2);
-					BlockPos.getAllInBox(cL, cU).forEach(p -> this.blockMap.put(p, this.dungeon.getBridgeBlock()));
+					BlockPos cU = structurePos.offset(structure.getSize().getX() / 2 + 2, 0, structure.getSize().getZ() / 2 + 2);
+					BlockPos.betweenClosed(cL, cU).forEach(p -> this.blockMap.put(p, this.dungeon.getBridgeBlock()));
 
-					structureMap.put(structurePos.up(), structure);
+					structureMap.put(structurePos.above(), structure);
 				}
 			}
 		}

@@ -69,7 +69,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		this.entranceStair = entranceStair;
 		this.yPos = y;
 		this.entranceStairBlockPosition = new Tuple<>(x, z);
-		this.roomGrid[this.entranceStairIndex.getFirst()][this.entranceStairIndex.getSecond()] = new BlockPos(x, y, z);
+		this.roomGrid[this.entranceStairIndex.getA()][this.entranceStairIndex.getB()] = new BlockPos(x, y, z);
 	}
 
 	public void setIsFirstFloor(boolean val) {
@@ -92,26 +92,26 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		Vector3i v = new Vector3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
-				if (((iX != this.entranceStairIndex.getFirst()) || (iZ != this.entranceStairIndex.getSecond()))) {
-					int multiplierX = iX - this.entranceStairIndex.getFirst();
-					int multiplierZ = iZ - this.entranceStairIndex.getSecond();
+				if (((iX != this.entranceStairIndex.getA()) || (iZ != this.entranceStairIndex.getB()))) {
+					int multiplierX = iX - this.entranceStairIndex.getA();
+					int multiplierZ = iZ - this.entranceStairIndex.getB();
 
-					BlockPos pos = new BlockPos(this.entranceStairBlockPosition.getFirst() + (multiplierX * this.generator.getDungeon().getRoomSizeX()), this.yPos, this.entranceStairBlockPosition.getSecond() + (multiplierZ * this.generator.getDungeon().getRoomSizeZ()));
+					BlockPos pos = new BlockPos(this.entranceStairBlockPosition.getA() + (multiplierX * this.generator.getDungeon().getRoomSizeX()), this.yPos, this.entranceStairBlockPosition.getB() + (multiplierZ * this.generator.getDungeon().getRoomSizeZ()));
 
 					this.roomGrid[iX][iZ] = pos;
-					if (iX == this.exitStairIndex.getFirst() && iZ == this.exitStairIndex.getSecond()) {
+					if (iX == this.exitStairIndex.getA() && iZ == this.exitStairIndex.getB()) {
 						BlockPos p1 = pos.subtract(v);
-						BlockPos p2 = pos.add(v);
+						BlockPos p2 = pos.offset(v);
 						this.exitStairCorners = new Tuple<>(p1, p2);
 						this.exitStairBlockPosition = new Tuple<>(pos.getX(), pos.getZ());
 					}
 				} else {
-					BlockPos p = new BlockPos(this.entranceStairBlockPosition.getFirst(), this.yPos, this.entranceStairBlockPosition.getSecond());
-					this.entranceStairCorners = new Tuple<>(p.subtract(v), p.add(v));
+					BlockPos p = new BlockPos(this.entranceStairBlockPosition.getA(), this.yPos, this.entranceStairBlockPosition.getB());
+					this.entranceStairCorners = new Tuple<>(p.subtract(v), p.offset(v));
 				}
 			}
 		}
-		BlockPos exitPos = this.roomGrid[this.exitStairIndex.getFirst()][this.exitStairIndex.getSecond()];
+		BlockPos exitPos = this.roomGrid[this.exitStairIndex.getA()][this.exitStairIndex.getB()];
 		this.entranceStairBlockPosition = new Tuple<>(exitPos.getX(), exitPos.getZ());
 	}
 
@@ -121,8 +121,8 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos pos = this.roomGrid[x][z];
 				File file = null;
-				if (((x != this.exitStairIndex.getFirst()) || (z != this.exitStairIndex.getSecond()))) {
-					if (x == this.entranceStairIndex.getFirst() && z == this.entranceStairIndex.getSecond()) {
+				if (((x != this.exitStairIndex.getA()) || (z != this.exitStairIndex.getB()))) {
+					if (x == this.entranceStairIndex.getA() && z == this.entranceStairIndex.getB()) {
 						if (this.entranceStair != null) {
 							file = this.entranceStair;
 						} else if (this.isFirstFloor) {
@@ -154,40 +154,40 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 		Map<BlockPos, BlockState> stateMap = new HashMap<>();
 		int dimX = this.generator.getDungeon().getRoomSizeX() / 2;
 		int dimZ = this.generator.getDungeon().getRoomSizeZ() / 2;
-		BlockPos p1 = this.roomGrid[this.sideLength - 1][this.sideLength - 1].add(1, 0, 1).add(dimX, -1, dimZ);
-		BlockPos p2 = this.roomGrid[this.sideLength - 1][0].add(1, 0, -1).add(dimX, -1, -dimZ);
-		BlockPos p3 = this.roomGrid[0][this.sideLength - 1].add(-1, 0, 1).add(-dimX, -1, dimZ);
-		BlockPos p4 = this.roomGrid[0][0].add(-1, 0, -1).add(-dimX, -1, -dimZ);
+		BlockPos p1 = this.roomGrid[this.sideLength - 1][this.sideLength - 1].offset(1, 0, 1).offset(dimX, -1, dimZ);
+		BlockPos p2 = this.roomGrid[this.sideLength - 1][0].offset(1, 0, -1).offset(dimX, -1, -dimZ);
+		BlockPos p3 = this.roomGrid[0][this.sideLength - 1].offset(-1, 0, 1).offset(-dimX, -1, dimZ);
+		BlockPos p4 = this.roomGrid[0][0].offset(-1, 0, -1).offset(-dimX, -1, -dimZ);
 
 		BlockState state = this.generator.getDungeon().getWallBlock();
 		int addY = 2 + this.generator.getDungeon().getRoomSizeY();
 
 		// 1-2
-		for (BlockPos p12 : BlockPos.getAllInBoxMutable(p1, p2.add(0, addY, 0))) {
+		for (BlockPos p12 : BlockPos.betweenClosed(p1, p2.offset(0, addY, 0))) {
 			stateMap.put(p12, state);
 		}
 		// 1-3
-		for (BlockPos p13 : BlockPos.getAllInBoxMutable(p1, p3.add(0, addY, 0))) {
+		for (BlockPos p13 : BlockPos.betweenClosed(p1, p3.offset(0, addY, 0))) {
 			stateMap.put(p13, state);
 		}
 		// 4-2
-		for (BlockPos p42 : BlockPos.getAllInBoxMutable(p4, p2.add(0, addY, 0))) {
+		for (BlockPos p42 : BlockPos.betweenClosed(p4, p2.offset(0, addY, 0))) {
 			stateMap.put(p42, state);
 		}
 		// 4-3
-		for (BlockPos p43 : BlockPos.getAllInBoxMutable(p4, p3.add(0, addY, 0))) {
+		for (BlockPos p43 : BlockPos.betweenClosed(p4, p3.offset(0, addY, 0))) {
 			stateMap.put(p43, state);
 		}
 		// Top
-		for (BlockPos pT : BlockPos.getAllInBoxMutable(p1.add(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.add(0, addY, 0))) {
-			if (((((pT.getX() < this.entranceStairCorners.getFirst().getX()) || (pT.getX() > this.entranceStairCorners.getSecond().getX())) || (pT.getZ() < this.entranceStairCorners.getFirst().getZ())) || (pT.getZ() > this.entranceStairCorners.getSecond().getZ()))) {
+		for (BlockPos pT : BlockPos.betweenClosed(p1.offset(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.offset(0, addY, 0))) {
+			if (((((pT.getX() < this.entranceStairCorners.getA().getX()) || (pT.getX() > this.entranceStairCorners.getB().getX())) || (pT.getZ() < this.entranceStairCorners.getA().getZ())) || (pT.getZ() > this.entranceStairCorners.getB().getZ()))) {
 				stateMap.put(pT, state);
 			}
 		}
 		// Bottom
-		for (BlockPos pB : BlockPos.getAllInBoxMutable(p1, p4)) {
+		for (BlockPos pB : BlockPos.betweenClosed(p1, p4)) {
 			if (this.exitStairIsBossRoom
-					|| (pB != null && this.exitStairCorners != null && ((((pB.getX() < this.exitStairCorners.getFirst().getX()) || (pB.getX() > this.exitStairCorners.getSecond().getX())) || (pB.getZ() < this.exitStairCorners.getFirst().getZ())) || (pB.getZ() > this.exitStairCorners.getSecond().getZ())))) {
+					|| (pB != null && this.exitStairCorners != null && ((((pB.getX() < this.exitStairCorners.getA().getX()) || (pB.getX() > this.exitStairCorners.getB().getX())) || (pB.getZ() < this.exitStairCorners.getA().getZ())) || (pB.getZ() > this.exitStairCorners.getB().getZ())))) {
 				stateMap.put(pB, state);
 			}
 		}

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.banner.EBanners;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
@@ -43,7 +44,7 @@ public class DungeonInhabitant {
 		String stTmp = prop.getProperty(ConfigKeys.KEY_SHIELD_ITEM, null);
 		if (stTmp != null && !stTmp.isEmpty() && !stTmp.equalsIgnoreCase("UNUSED")) {
 			ResourceLocation itemResLoc = new ResourceLocation(stTmp);
-			this.shieldReplacement = Item.REGISTRY.getObject(itemResLoc);
+			this.shieldReplacement = ForgeRegistries.ITEMS.getValue(itemResLoc);
 		}
 	}
 

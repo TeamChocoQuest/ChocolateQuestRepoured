@@ -78,7 +78,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 
 		final int r = outerRadiusArray[0];
-		BlockPos referenceLoc = this.pos.add(-r, -this.caveDepth, -r);
+		BlockPos referenceLoc = this.pos.offset(-r, -this.caveDepth, -r);
 		BlockState[][][] blocks = new BlockState[r * 2 + 1][this.volcanoHeight + this.caveDepth + 2][r * 2 + 1];
 		List<BlockPos> spawnerAndChestList = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
 				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						blocks[iX + r][iY][iZ + r] = Blocks.AIR.getDefaultState();
+						blocks[iX + r][iY][iZ + r] = Blocks.AIR.defaultBlockState();
 					} else if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius)) {
 						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
 							blocks[iX + r][iY][iZ + r] = this.getRandomVolcanoBlockWithLava();
@@ -145,7 +145,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
 						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
 							forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
-								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == Blocks.AIR.getDefaultState()) {
+								if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] == Blocks.AIR.defaultBlockState()) {
 									blocks[p.getX() + r][p.getY()][p.getZ() + r] = this.getRandomVolcanoBlock();
 								}
 							});
@@ -285,8 +285,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 					// First: air sphere around the entrance
 					forEachSpherePosition(new BlockPos(endX, highestPlatformY + 3, endZ), 4 + this.random.nextInt(2), p -> {
-						if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] != Blocks.AIR.getDefaultState()) {
-							blocks[p.getX() + r][p.getY()][p.getZ() + r] = Blocks.AIR.getDefaultState();
+						if (this.isIndexValid(p.getX() + r, p.getY(), p.getZ() + r, blocks) && blocks[p.getX() + r][p.getY()][p.getZ() + r] != Blocks.AIR.defaultBlockState()) {
+							blocks[p.getX() + r][p.getY()][p.getZ() + r] = Blocks.AIR.defaultBlockState();
 						}
 					});
 
@@ -347,7 +347,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 					int y = this.random.nextInt(blocks[x].length);
 					int z = this.random.nextInt(blocks[x][y].length);
 
-					if (blocks[x][y][z] != null && blocks[x][y][z] != Blocks.AIR.getDefaultState()) {
+					if (blocks[x][y][z] != null && blocks[x][y][z] != Blocks.AIR.defaultBlockState()) {
 						list.add(new BlockPos(x, y, z));
 						break;
 					}
@@ -356,8 +356,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			for (BlockPos pos : list) {
 				forEachSpherePosition(pos, DungeonGenUtils.randomBetween(2, this.dungeon.getMaxHoleSize(), this.random), p -> {
-					if (this.isIndexValid(p.getX(), p.getY(), p.getZ(), blocks) && (blocks[p.getX()][p.getY()][p.getZ()] != null && blocks[p.getX()][p.getY()][p.getZ()] != Blocks.AIR.getDefaultState())) {
-						blocks[p.getX()][p.getY()][p.getZ()] = Blocks.AIR.getDefaultState();
+					if (this.isIndexValid(p.getX(), p.getY(), p.getZ(), blocks) && (blocks[p.getX()][p.getY()][p.getZ()] != null && blocks[p.getX()][p.getY()][p.getZ()] != Blocks.AIR.defaultBlockState())) {
+						blocks[p.getX()][p.getY()][p.getZ()] = Blocks.AIR.defaultBlockState();
 					}
 				});
 			}
@@ -412,20 +412,20 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			switch (entranceDirection) {
 			case EAST:
 			case EAST_SEC:
-				entranceStartPos = this.pos.add(wideness, 1 - this.caveDepth, 0);
+				entranceStartPos = this.pos.offset(wideness, 1 - this.caveDepth, 0);
 				break;
 			case NORTH:
 			case NORTH_SEC:
-				entranceStartPos = this.pos.add(0, 1 - this.caveDepth, -wideness);
+				entranceStartPos = this.pos.offset(0, 1 - this.caveDepth, -wideness);
 				break;
 			case SOUTH:
 			case SOUTH_SEC:
-				entranceStartPos = this.pos.add(0, 1 - this.caveDepth, wideness);
+				entranceStartPos = this.pos.offset(0, 1 - this.caveDepth, wideness);
 				break;
 			case WEST:
 			case WEST_SEC:
 			default:
-				entranceStartPos = this.pos.add(-wideness, 1 - this.caveDepth, 0);
+				entranceStartPos = this.pos.offset(-wideness, 1 - this.caveDepth, 0);
 				break;
 			}
 
@@ -434,8 +434,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	public static void forEachSpherePosition(BlockPos center, int radius, Consumer<BlockPos.MutableBlockPos> action) {
-		for (BlockPos.MutableBlockPos p : BlockPos.getAllInBoxMutable(center.getX() - radius, center.getY() - radius, center.getZ() - radius, center.getX() + radius, center.getY() + radius, center.getZ() + radius)) {
+	public static void forEachSpherePosition(BlockPos center, int radius, Consumer<BlockPos> action) {
+		for (BlockPos p : BlockPos.betweenClosed(center.getX() - radius, center.getY() - radius, center.getZ() - radius, center.getX() + radius, center.getY() + radius, center.getZ() + radius)) {
 			if (DungeonGenUtils.isInsideSphere(p.getX() - center.getX(), p.getY() - center.getY(), p.getZ() - center.getZ(), radius)) {
 				action.accept(p);
 			}
@@ -448,12 +448,12 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	private BlockState getRandomVolcanoBlock() {
 		BlockState state = this.volcanoBlocks.next(this.random);
-		return state != null ? state : Blocks.STONE.getDefaultState();
+		return state != null ? state : Blocks.STONE.defaultBlockState();
 	}
 
 	private BlockState getRandomVolcanoBlockWithLava() {
 		BlockState state = this.volcanoBlocksWithLava.next(this.random);
-		return state != null ? state : Blocks.STONE.getDefaultState();
+		return state != null ? state : Blocks.STONE.defaultBlockState();
 	}
 
 }

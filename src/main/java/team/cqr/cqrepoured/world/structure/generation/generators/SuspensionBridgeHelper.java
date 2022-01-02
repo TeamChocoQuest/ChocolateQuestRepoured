@@ -2,7 +2,9 @@ package team.cqr.cqrepoured.world.structure.generation.generators;
 
 import java.util.Map;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
 
 public class SuspensionBridgeHelper {
 
@@ -11,20 +13,20 @@ public class SuspensionBridgeHelper {
 
 	private final BlockPos startPos, endPos;
 
-	private IBlockState pathBlock, fenceBlock, railingBlock, anchorBlock;
+	private BlockState pathBlock, fenceBlock, railingBlock, anchorBlock;
 
 	public interface IBridgeDataSupplier {
 		float getBridgeTension();
 
 		int getBridgeWidth();
 
-		IBlockState getBridgePathBlock();
+		BlockState getBridgePathBlock();
 
-		IBlockState getBridgeFenceBlock();
+		BlockState getBridgeFenceBlock();
 
-		IBlockState getBridgeRailingBlock();
+		BlockState getBridgeRailingBlock();
 
-		IBlockState getBridgeAnchorBlock();
+		BlockState getBridgeAnchorBlock();
 	}
 
 	public SuspensionBridgeHelper(IBridgeDataSupplier data, BlockPos start, BlockPos end) {
@@ -34,7 +36,7 @@ public class SuspensionBridgeHelper {
 	/*
 	 * @param bridgePoints needs to contain at least two elements
 	 */
-	public SuspensionBridgeHelper(float tension, int width, BlockPos start, BlockPos end, IBlockState pathBlock, IBlockState fenceBlock, IBlockState railingBlock, IBlockState anchorBlock) {
+	public SuspensionBridgeHelper(float tension, int width, BlockPos start, BlockPos end, BlockState pathBlock, BlockState fenceBlock, BlockState railingBlock, BlockState anchorBlock) {
 		this.tension = tension;
 		this.width = width;
 		this.pathBlock = pathBlock;
@@ -48,14 +50,14 @@ public class SuspensionBridgeHelper {
 
 	// DONE: Return stateMap or add parameter for statemap
 
-	public boolean generate(Map<BlockPos, IBlockState> stateMap) {
+	public boolean generate(Map<BlockPos, BlockState> stateMap) {
 
 		this.saggyPath(this.startPos, this.endPos, stateMap);
 
 		return true;
 	}
 
-	private void saggyPath(BlockPos currentPos, BlockPos nextPos, Map<BlockPos, IBlockState> stateMap) {
+	private void saggyPath(BlockPos currentPos, BlockPos nextPos, Map<BlockPos, BlockState> stateMap) {
 		double dx = nextPos.getX() - currentPos.getX();
 		double dy = nextPos.getY() - currentPos.getY();
 		double dz = nextPos.getZ() - currentPos.getZ();
@@ -104,14 +106,14 @@ public class SuspensionBridgeHelper {
 
 		BlockPos lxPos = new BlockPos(lx, currentPos.getY(), lz);
 
-		this.drawLine(this.anchorBlock, lxPos, lxPos.add(0, 2, 0), stateMap);
-		this.drawLine(this.anchorBlock, lxPos.add(dthetax * dist, 0, dthetax * dist), lxPos.add(dthetax * dist, 2, dthetax * dist), stateMap);
-		this.drawLine(this.anchorBlock, lxPos.add(distance * Math.cos(theta) * Math.cos(phi), distance * Math.sin(phi), distance * Math.sin(theta) * Math.cos(phi)), lxPos.add(distance * Math.cos(theta) * Math.cos(phi), 3 + distance * Math.sin(phi), distance * Math.sin(theta) * Math.cos(phi)), stateMap);
-		this.drawLine(this.anchorBlock, lxPos.add(dthetax * dist + distance * Math.cos(theta) * Math.cos(phi), distance * Math.sin(phi), dthetaz * dist + distance * Math.sin(theta) * Math.cos(phi)),
-				lxPos.add(distance * Math.cos(theta) * Math.cos(phi), 3 + distance * Math.sin(phi), distance * Math.sin(theta) * Math.cos(phi)), stateMap);
+		this.drawLine(this.anchorBlock, lxPos, lxPos.offset(0, 2, 0), stateMap);
+		this.drawLine(this.anchorBlock, lxPos.offset(dthetax * dist, 0, dthetax * dist), lxPos.offset(dthetax * dist, 2, dthetax * dist), stateMap);
+		this.drawLine(this.anchorBlock, lxPos.offset(distance * Math.cos(theta) * Math.cos(phi), distance * Math.sin(phi), distance * Math.sin(theta) * Math.cos(phi)), lxPos.offset(distance * Math.cos(theta) * Math.cos(phi), 3 + distance * Math.sin(phi), distance * Math.sin(theta) * Math.cos(phi)), stateMap);
+		this.drawLine(this.anchorBlock, lxPos.offset(dthetax * dist + distance * Math.cos(theta) * Math.cos(phi), distance * Math.sin(phi), dthetaz * dist + distance * Math.sin(theta) * Math.cos(phi)),
+				lxPos.offset(distance * Math.cos(theta) * Math.cos(phi), 3 + distance * Math.sin(phi), distance * Math.sin(theta) * Math.cos(phi)), stateMap);
 	}
 
-	private void drawSaggyArc(IBlockState material, BlockPos pos, double theta, double phi, double distance, Map<BlockPos, IBlockState> stateMap) {
+	private void drawSaggyArc(BlockState material, BlockPos pos, double theta, double phi, double distance, Map<BlockPos, BlockState> stateMap) {
 		double midPoint = distance / 2;
 		double scale = distance / this.tension;
 
@@ -121,7 +123,7 @@ public class SuspensionBridgeHelper {
 			double xx = (iterator - midPoint) / midPoint;
 			double ddy = xx * xx * scale;
 			BlockPos n = new BlockPos((int) (pos.getX() + iterator * Math.cos(theta) * Math.cos(phi)), (int) (pos.getY() + iterator * Math.sin(phi) + ddy - scale), (int) (pos.getZ() + iterator * Math.sin(theta) * Math.cos(phi)));
-			if (p.getDistance(0, 0, 0) != 0.0) {
+			if (p.distSqr(Vector3i.ZERO) != 0.0) {
 				this.drawLine(material, p, n, stateMap);
 			}
 
@@ -130,11 +132,11 @@ public class SuspensionBridgeHelper {
 		}
 	}
 
-	private void drawLine(IBlockState material, BlockPos p, BlockPos n, Map<BlockPos, IBlockState> stateMap) {
+	private void drawLine(BlockState material, BlockPos p, BlockPos n, Map<BlockPos, BlockState> stateMap) {
 		this.drawLineConstrained(material, p, n, stateMap, 0);
 	}
 
-	private void drawLineConstrained(IBlockState material, BlockPos p, BlockPos n, Map<BlockPos, IBlockState> stateMap, int maxLength) {
+	private void drawLineConstrained(BlockState material, BlockPos p, BlockPos n, Map<BlockPos, BlockState> stateMap, int maxLength) {
 		int dx = n.getX() - p.getX();
 		int dy = n.getY() - p.getY();
 		int dz = n.getZ() - p.getZ();
@@ -148,7 +150,7 @@ public class SuspensionBridgeHelper {
 
 			double iterator = 0;
 			while (iterator <= distance) {
-				stateMap.put(p.add(iterator * Math.cos(theta) * Math.cos(phi), iterator * Math.sin(phi), iterator * Math.sin(theta) * Math.cos(phi)), material);
+				stateMap.put(p.offset(iterator * Math.cos(theta) * Math.cos(phi), iterator * Math.sin(phi), iterator * Math.sin(theta) * Math.cos(phi)), material);
 				iterator += 0.5D;
 			}
 		}

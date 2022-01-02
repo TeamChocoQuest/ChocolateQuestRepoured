@@ -18,7 +18,7 @@ public enum Offset {
 			 */
 			BlockPos size = structure.getSize();
 			BlockPos p = DungeonPlacement.transform(size.getX(), 0, size.getZ(), mirror, rotation);
-			return pos.add(-Math.min(p.getX(), 0), 0, -Math.min(p.getZ(), 0));
+			return pos.offset(-Math.min(p.getX(), 0), 0, -Math.min(p.getZ(), 0));
 		}
 	},
 	SOUTH_EAST {
@@ -32,7 +32,7 @@ public enum Offset {
 			 */
 			BlockPos size = structure.getSize();
 			BlockPos p = DungeonPlacement.transform(size.getX(), 0, size.getZ(), mirror, rotation);
-			return pos.add(-Math.min(p.getX(), 0), 0, -Math.max(p.getZ(), 0));
+			return pos.offset(-Math.min(p.getX(), 0), 0, -Math.max(p.getZ(), 0));
 		}
 	},
 	SOUTH_WEST {
@@ -46,7 +46,7 @@ public enum Offset {
 			 */
 			BlockPos size = structure.getSize();
 			BlockPos p = DungeonPlacement.transform(size.getX(), 0, size.getZ(), mirror, rotation);
-			return pos.add(-Math.max(p.getX(), 0), 0, -Math.max(p.getZ(), 0));
+			return pos.offset(-Math.max(p.getX(), 0), 0, -Math.max(p.getZ(), 0));
 		}
 	},
 	NORTH_WEST {
@@ -60,7 +60,7 @@ public enum Offset {
 			 */
 			BlockPos size = structure.getSize();
 			BlockPos p = DungeonPlacement.transform(size.getX(), 0, size.getZ(), mirror, rotation);
-			return pos.add(-Math.max(p.getX(), 0), 0, -Math.min(p.getZ(), 0));
+			return pos.offset(-Math.max(p.getX(), 0), 0, -Math.min(p.getZ(), 0));
 		}
 	},
 	CENTER {
@@ -74,7 +74,7 @@ public enum Offset {
 			 */
 			BlockPos size = structure.getSize();
 			BlockPos p = DungeonPlacement.transform(size.getX(), 0, size.getZ(), mirror, rotation);
-			return pos.add(-(p.getX() >> 1), 0, -(p.getZ() >> 1));
+			return pos.offset(-(p.getX() >> 1), 0, -(p.getZ() >> 1));
 		}
 	};
 

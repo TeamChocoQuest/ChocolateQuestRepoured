@@ -65,7 +65,7 @@ public class CQStructure {
 	private final List<PreparablePosInfo> blockInfoList = new ArrayList<>();
 	private final List<PreparableEntityInfo> entityInfoList = new ArrayList<>();
 	private final List<BlockPos> unprotectedBlockList = new ArrayList<>();
-	private BlockPos size = BlockPos.ORIGIN;
+	private BlockPos size = BlockPos.ZERO;
 	private String author = "";
 
 	private CQStructure() {
@@ -159,9 +159,9 @@ public class CQStructure {
 	private CompoundNBT writeToNBT() {
 		CompoundNBT compound = new CompoundNBT();
 
-		compound.setString("cqr_file_version", CQStructure.CQR_FILE_VERSION);
-		compound.setString("author", this.author);
-		compound.setTag("size", NBTUtil.createPosTag(this.size));
+		compound.putString("cqr_file_version", CQStructure.CQR_FILE_VERSION);
+		compound.putString("author", this.author);
+		compound.put("size", NBTUtil.writeBlockPos(this.size));
 
 		BlockStatePalette palette = new BlockStatePalette();
 		ListNBT compoundList = new ListNBT();
@@ -169,18 +169,18 @@ public class CQStructure {
 		// Save normal blocks
 		ByteBuf buf = Unpooled.buffer(this.blockInfoList.size() * 2);
 		this.blockInfoList.forEach(preparable -> PreparablePosInfo.Registry.write(preparable, buf, palette, compoundList));
-		compound.setByteArray("blockInfoList", Arrays.copyOf(buf.array(), buf.writerIndex()));
+		compound.putByteArray("blockInfoList", Arrays.copyOf(buf.array(), buf.writerIndex()));
 
 		// Save entities
-		compound.setTag("entityInfoList", this.entityInfoList.stream().map(PreparableEntityInfo::getEntityData).collect(NBTCollectors.toList()));
+		compound.put("entityInfoList", this.entityInfoList.stream().map(PreparableEntityInfo::getEntityData).collect(NBTCollectors.toList()));
 
 		// Save block states
-		compound.setTag("palette", palette.writeToNBT());
+		compound.put("palette", palette.writeToNBT());
 
 		// Save compound tags
-		compound.setTag("compoundTagList", compoundList);
+		compound.put("compoundTagList", compoundList);
 
-		compound.setIntArray("unprotectedBlockList", this.unprotectedBlockList.stream().flatMapToInt(pos -> IntStream.of(pos.getX(), pos.getY(), pos.getZ())).toArray());
+		compound.putIntArray("unprotectedBlockList", this.unprotectedBlockList.stream().flatMapToInt(pos -> IntStream.of(pos.getX(), pos.getY(), pos.getZ())).toArray());
 
 		return compound;
 	}
@@ -198,7 +198,7 @@ public class CQStructure {
 		}
 
 		this.author = compound.getString("author");
-		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
+		this.size = NBTUtil.readBlockPos(compound.getCompound("size"));
 
 		this.blockInfoList.clear();
 		this.entityInfoList.clear();
@@ -206,11 +206,11 @@ public class CQStructure {
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
-		ListNBT compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+		ListNBT compoundTagList = compound.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
 		int blockStateIndex = 0;
-		for (INBT nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getList("palette", Constants.NBT.TAG_COMPOUND)) {
 			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
 		}
 
@@ -225,7 +225,7 @@ public class CQStructure {
 		}
 
 		// Load special blocks
-		if (compound.hasKey("specialBlockInfoList", Constants.NBT.TAG_BYTE_ARRAY)) {
+		if (compound.contains("specialBlockInfoList", Constants.NBT.TAG_BYTE_ARRAY)) {
 			buf = Unpooled.wrappedBuffer(compound.getByteArray("specialBlockInfoList"));
 			int specialBlockCount = buf.readInt();
 			for (int i = 0; i < specialBlockCount; i++) {
@@ -238,7 +238,7 @@ public class CQStructure {
 		}
 
 		// Load entities
-		for (INBT nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 
@@ -251,7 +251,7 @@ public class CQStructure {
 		BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 		BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 
-		this.size = pos2.subtract(pos1).add(1, 1, 1);
+		this.size = pos2.subtract(pos1).offset(1, 1, 1);
 
 		this.takeBlocksFromWorld(world, pos1, pos2);
 		this.takeEntitiesFromWorld(world, pos1, pos2, ignoreBasicEntities);
@@ -271,7 +271,7 @@ public class CQStructure {
 	private void takeBlocksFromWorld(World world, BlockPos minPos, BlockPos maxPos) {
 		this.blockInfoList.clear();
 
-		for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
+		for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
 			BlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 
@@ -296,9 +296,9 @@ public class CQStructure {
 
 	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
 		this.entityInfoList.clear();
-		AxisAlignedBB aabb = new AxisAlignedBB(minPos, maxPos.add(1, 1, 1));
+		AxisAlignedBB aabb = new AxisAlignedBB(minPos, maxPos.offset(1, 1, 1));
 
-		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, aabb, input -> !(input instanceof PlayerEntity))) {
+		for (Entity entity : world.getEntitiesOfClass(Entity.class, aabb, input -> !(input instanceof PlayerEntity))) {
 			if (ignoreBasicEntities && !SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
 				CQRMain.logger.info("Skipping entity: {}", entity);
 				continue;
@@ -391,7 +391,7 @@ public class CQStructure {
 		}
 
 		this.author = compound.getString("author");
-		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
+		this.size = NBTUtil.readBlockPos(compound.getCompound("size"));
 
 		this.blockInfoList.clear();
 		this.entityInfoList.clear();
@@ -399,11 +399,11 @@ public class CQStructure {
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
-		ListNBT compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+		ListNBT compoundTagList = compound.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
 		int blockStateIndex = 0;
-		for (INBT nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getList("palette", Constants.NBT.TAG_COMPOUND)) {
 			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
 		}
 
@@ -411,7 +411,7 @@ public class CQStructure {
 		int x = 0;
 		int y = 0;
 		int z = 0;
-		for (INBT nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
+		for (INBT nbt : compound.getList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
 			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (IntArrayNBT) nbt, blockStatePalette, compoundTagList));
 			if (x < this.size.getX() - 1) {
 				x++;
@@ -427,16 +427,16 @@ public class CQStructure {
 		this.blockInfoList.sort(DEFAULT_COMPARATOR);
 
 		// Load special blocks
-		for (INBT nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
 			CompoundNBT tag = (CompoundNBT) nbt;
-			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
-				ListNBT pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
-				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (IntArrayNBT) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
+			if (tag.contains("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
+				ListNBT pos = tag.getList("pos", Constants.NBT.TAG_INT);
+				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getInt(0), pos.getInt(1), pos.getInt(2), (IntArrayNBT) tag.get("blockInfo"), blockStatePalette, compoundTagList));
 			}
 		}
 
 		// Load entities
-		for (INBT nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 	}

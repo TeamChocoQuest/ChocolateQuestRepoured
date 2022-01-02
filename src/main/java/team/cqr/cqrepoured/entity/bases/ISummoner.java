@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Items;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.faction.Faction;
 
@@ -15,7 +17,7 @@ public interface ISummoner {
 
 	List<Entity> getSummonedEntities();
 
-	EntityLivingBase getSummoner();
+	LivingEntity getSummoner();
 
 	default void setSummonedEntityFaction(Entity summoned) {
 		if (summoned instanceof AbstractEntityCQR) {
@@ -30,8 +32,8 @@ public interface ISummoner {
 	void addSummonedEntityToList(Entity summoned);
 
 	default void tryEquipSummon(Entity summoned, Random rand) {
-		if (summoned instanceof EntityLivingBase) {
-			EntityLivingBase living = (EntityLivingBase) summoned;
+		if (summoned instanceof LivingEntity) {
+			LivingEntity living = (LivingEntity) summoned;
 
 			int material = rand.nextInt(3); // wood, stone, iron
 			int weapon = rand.nextInt(4); // sword, pickaxe, axe, shovel
@@ -67,7 +69,7 @@ public interface ISummoner {
 					stack = new ItemStack(Items.IRON_SHOVEL);
 				}
 			}
-			living.setHeldItem(EnumHand.MAIN_HAND, stack);
+			living.setItemInHand(Hand.MAIN_HAND, stack);
 		}
 	}
 

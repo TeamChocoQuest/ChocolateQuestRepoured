@@ -79,10 +79,10 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 				}
 			}
 
-			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()] = new HangingCityBuilding(this, coords.getFirst(), coords.getSecond(), structure);
-			this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()].preProcess(this.world, this.dungeonBuilder, null);
-			this.buildings.add(this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()]);
-			lastProcessed = this.buildingGrid[offsetXY + coords.getFirst()][offsetXY + coords.getSecond()];
+			this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()] = new HangingCityBuilding(this, coords.getA(), coords.getB(), structure);
+			this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()].preProcess(this.world, this.dungeonBuilder, null);
+			this.buildings.add(this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()]);
+			lastProcessed = this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()];
 		}
 		// Calculate bridge connections
 		// Needs to call building.connectTo on the first and markAsConnected on the second
@@ -146,7 +146,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 		int offsetY = this.dungeon.getRandomHeightVariation(this.random);
 
-		final BlockPos pos = centerGen.add(offsetX, offsetY, offsetZ);
+		final BlockPos pos = centerGen.offset(offsetX, offsetY, offsetZ);
 		return pos;
 	}
 

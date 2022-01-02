@@ -26,7 +26,7 @@ public class DungeonDataManager {
 		private DungeonSpawnType spawnType;
 
 		public DungeonInfo(BlockPos pos, DungeonSpawnType spawnType) {
-			this.pos = pos.toImmutable();
+			this.pos = pos.immutable();
 			this.spawnType = spawnType;
 		}
 
@@ -36,18 +36,18 @@ public class DungeonDataManager {
 
 		public CompoundNBT writeToNBT() {
 			CompoundNBT compound = new CompoundNBT();
-			compound.setTag("pos", NBTUtil.createPosTag(this.pos));
-			compound.setInteger("spawnType", this.spawnType.ordinal());
+			compound.put("pos", NBTUtil.writeBlockPos(this.pos));
+			compound.putInt("spawnType", this.spawnType.ordinal());
 			return compound;
 		}
 
 		public void readFromNBT(CompoundNBT compound) {
-			if (compound.hasKey("pos", Constants.NBT.TAG_COMPOUND)) {
-				this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
+			if (compound.contains("pos", Constants.NBT.TAG_COMPOUND)) {
+				this.pos = NBTUtil.readBlockPos(compound.getCompound("pos"));
 			} else {
-				this.pos = NBTUtil.getPosFromTag(compound);
+				this.pos = NBTUtil.readBlockPos(compound);
 			}
-			this.spawnType = DungeonSpawnType.values()[compound.getInteger("spawnType")];
+			this.spawnType = DungeonSpawnType.values()[compound.getInt("spawnType")];
 		}
 	}
 
@@ -72,27 +72,27 @@ public class DungeonDataManager {
 
 	@Nullable
 	public static DungeonDataManager getInstance(World world) {
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			return INSTANCES.get(world);
 		}
 		return null;
 	}
 
 	public static void handleWorldLoad(World world) {
-		if (!world.isRemote && !INSTANCES.containsKey(world)) {
+		if (!world.isClientSide && !INSTANCES.containsKey(world)) {
 			INSTANCES.put(world, new DungeonDataManager(world));
 			INSTANCES.get(world).readData();
 		}
 	}
 
 	public static void handleWorldSave(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
+		if (!world.isClientSide && INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).saveData();
 		}
 	}
 
 	public static void handleWorldUnload(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
+		if (!world.isClientSide && INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).saveData();
 			INSTANCES.remove(world);
 		}
@@ -133,9 +133,9 @@ public class DungeonDataManager {
 				if (!dungeonInfos.isEmpty()) {
 					ListNBT nbtTagList = new ListNBT();
 					for (DungeonInfo dungeonInfo : dungeonInfos) {
-						nbtTagList.appendTag(dungeonInfo.writeToNBT());
+						nbtTagList.add(dungeonInfo.writeToNBT());
 					}
-					root.setTag(data.getKey(), nbtTagList);
+					root.put(data.getKey(), nbtTagList);
 				}
 			}
 			FileIOUtil.writeNBTToFile(root, this.file);
@@ -153,9 +153,9 @@ public class DungeonDataManager {
 
 		CompoundNBT root = FileIOUtil.readNBTFromFile(this.file);
 
-		for (String key : root.getKeySet()) {
+		for (String key : root.getAllKeys()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
-			for (INBT nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
+			for (INBT nbt : root.getList(key, Constants.NBT.TAG_COMPOUND)) {
 				dungeonInfos.add(new DungeonInfo((CompoundNBT) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {

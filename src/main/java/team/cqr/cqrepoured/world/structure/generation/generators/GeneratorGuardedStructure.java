@@ -45,8 +45,8 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		if (this.dungeon.doBuildSupportPlatform()) {
 			BlockPos structurePos = Offset.CENTER.apply(position, structure, mirror, rotation);
-			BlockPos startPos = structurePos.up(this.dungeon.getUnderGroundOffset()).down();
-			BlockPos endPos = startPos.add(DungeonPlacement.transform(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1, mirror, rotation));
+			BlockPos startPos = structurePos.above(this.dungeon.getUnderGroundOffset()).below();
+			BlockPos endPos = startPos.offset(DungeonPlacement.transform(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1, mirror, rotation));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), CQRConfig.general.supportHillWallSize);
@@ -71,7 +71,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			structure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder(), this.random);
 			Vector3i v = new Vector3i(DungeonGenUtils.randomBetween(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance(), this.random), 0, 0);
 			v = VectorUtil.rotateVectorAroundY(v, degrees * i);
-			position = this.pos.add(v);
+			position = this.pos.offset(v);
 			position = new BlockPos(position.getX(), this.dungeon.getYForPos(this.getWorld(), position.getX(), position.getZ(), this.random), position.getZ());
 		}
 		this.processStructure(this.loadStructureFromFile(structure), position);
@@ -98,7 +98,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 				Rotation rotation = this.rotationMap.get(structurePos);
 
 				BlockPos startPos = structurePos;
-				BlockPos endPos = startPos.add(DungeonPlacement.transform(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1, mirror, rotation));
+				BlockPos endPos = startPos.offset(DungeonPlacement.transform(structure.getSize().getX() - 1, 0, structure.getSize().getZ() - 1, mirror, rotation));
 				BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 				BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 				this.dungeonBuilder.add(new CoverDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));

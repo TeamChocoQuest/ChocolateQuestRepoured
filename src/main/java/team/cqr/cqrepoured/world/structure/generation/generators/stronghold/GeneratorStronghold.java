@@ -49,8 +49,8 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 			floor.generateRoomPattern(sX, sZ, exitDir);
 			this.floors[i] = floor;
 			exitDir = floor.getExitDirection();
-			sX = floor.getLastRoomGridPos().getFirst();
-			sZ = floor.getLastRoomGridPos().getSecond();
+			sX = floor.getLastRoomGridPos().getA();
+			sZ = floor.getLastRoomGridPos().getB();
 		}
 	}
 
