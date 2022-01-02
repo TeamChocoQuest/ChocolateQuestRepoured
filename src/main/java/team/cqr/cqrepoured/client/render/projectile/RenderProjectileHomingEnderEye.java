@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.render.projectile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.render.RenderSpriteBase;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
@@ -22,7 +22,7 @@ public class RenderProjectileHomingEnderEye extends RenderSpriteBase<ProjectileH
 		double dx = entity.posX + (-0.25 + (0.5 * world.rand.nextDouble()));
 		double dy = 0.125 + entity.posY + (-0.25 + (0.5 * world.rand.nextDouble()));
 		double dz = entity.posZ + (-0.25 + (0.5 * world.rand.nextDouble()));
-		world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
+		world.spawnParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
 		// }
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);

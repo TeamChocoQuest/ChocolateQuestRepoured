@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.entity.projectiles;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -36,7 +36,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if (!this.world.isRemote) {
 			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shooter);
-			entityareaeffectcloud.setParticle(EnumParticleTypes.DRAGON_BREATH);
+			entityareaeffectcloud.setParticle(ParticleTypes.DRAGON_BREATH);
 			entityareaeffectcloud.setRadius(2F);
 			entityareaeffectcloud.setDuration(200);
 			entityareaeffectcloud.setRadiusOnUse(-0.25F);

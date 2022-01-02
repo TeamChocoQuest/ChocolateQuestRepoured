@@ -7,11 +7,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
@@ -57,7 +57,7 @@ public class ItemPathTool extends ItemLore {
 			if (player.isSneaking()) {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
 				((AbstractEntityCQR) entity).getPath().copyFrom(getPath(stack), pos != null ? new BlockPos(-pos.getX(), -pos.getY(), -pos.getZ()) : BlockPos.ORIGIN);
-				((ServerWorld) player.world).spawnParticle((ServerPlayerEntity) player, EnumParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
+				((ServerWorld) player.world).spawnParticle((ServerPlayerEntity) player, ParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 				player.sendMessage(new StringTextComponent("Applied path!"));
 			} else {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
@@ -127,7 +127,7 @@ public class ItemPathTool extends ItemLore {
 				Vector3d vec = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
 				// Draw start point
-				((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, node != selectedNode ? EnumParticleTypes.VILLAGER_HAPPY : EnumParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
+				((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, node != selectedNode ? ParticleTypes.VILLAGER_HAPPY : ParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
 
 				// Draw connection lines
 				for (int index : node.getConnectedNodes()) {
@@ -138,7 +138,7 @@ public class ItemPathTool extends ItemLore {
 					vec1 = vec1.normalize();
 
 					for (double d = 0.25D; d < dist; d += 0.5D) {
-						((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, EnumParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
+						((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, ParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
 					}
 				}
 			}

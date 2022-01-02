@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -80,7 +80,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			illusion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(illusion)), null);
 			this.entity.addSummonedEntityToList(illusion);
 			this.world.spawnEntity(illusion);
-			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.SPELL, illusion.posX, illusion.posY + 0.5D * illusion.height, illusion.posZ, 8, 0.25D, 0.25D, 0.25D, 0.5D);
+			((ServerWorld) this.world).spawnParticle(ParticleTypes.SPELL, illusion.posX, illusion.posY + 0.5D * illusion.height, illusion.posZ, 8, 0.25D, 0.25D, 0.25D, 0.5D);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			if (e.getDistanceSq(this.entity) <= 32.0D * 32.0D) {
 				heal += 0.05F;
 				e.setDead();
-				((ServerWorld) this.world).spawnParticle(EnumParticleTypes.SPELL_INSTANT, e.posX, e.posY + e.height * 0.5D, e.posZ, 4, 0.25D, 0.25D, 0.25D, 0.5D);
+				((ServerWorld) this.world).spawnParticle(ParticleTypes.SPELL_INSTANT, e.posX, e.posY + e.height * 0.5D, e.posZ, 4, 0.25D, 0.25D, 0.25D, 0.5D);
 			}
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 8.0D, this.entity.posY - 0.5D, this.entity.posZ - 8.0D, this.entity.posX + 8.0D, this.entity.posY + this.entity.height + 0.5D, this.entity.posZ + 8.0D);

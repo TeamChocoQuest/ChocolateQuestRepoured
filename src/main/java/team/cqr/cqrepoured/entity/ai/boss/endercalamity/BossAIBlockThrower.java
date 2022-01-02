@@ -5,7 +5,7 @@ import com.google.common.base.Optional;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -149,7 +149,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 				dy *= 2;
 				double dz = -0.5 + this.entity.getRNG().nextDouble();
 				dz *= 2;
-				ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
+				ws.spawnParticle(ParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
 				this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 			}
 		}

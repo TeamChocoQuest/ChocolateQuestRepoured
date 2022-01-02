@@ -6,7 +6,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelNetherDragonBodyParts;
@@ -46,7 +46,7 @@ public class RenderCQRNetherDragonSegment extends RenderMultiPartPart<SubEntityN
 				double dx = entity.posX + (-0.25 + (0.5 * world.rand.nextDouble()));
 				double dy = 0.5 + entity.posY + (-0.25 + (0.5 * world.rand.nextDouble()));
 				double dz = entity.posZ + (-0.25 + (0.5 * world.rand.nextDouble()));
-				world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+				world.spawnParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
 			}
 		} else {
 			model = this.modelNormal;

@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -19,7 +19,7 @@ public class ProtectionIndicatorHelper {
 		if (world.isRemote) {
 			RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
 			if (result != null && result.hitVec != null) {
-				world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, result.hitVec.x, result.hitVec.y, result.hitVec.z, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(ParticleTypes.VILLAGER_HAPPY, result.hitVec.x, result.hitVec.y, result.hitVec.z, 0.0D, 0.0D, 0.0D);
 			}
 		} else if (player != null) {
 			CQRMain.NETWORK.sendTo(new SPacketAddOrResetProtectedRegionIndicator(uuid, start, end, pos), player);

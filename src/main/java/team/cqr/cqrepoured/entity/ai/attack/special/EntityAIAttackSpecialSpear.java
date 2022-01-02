@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -71,7 +71,7 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 		Vector3d vec3 = vec1.add(new Vector3d(-0.4D, -0.5D, 0.0D).rotatePitch((float) -pitch).rotateYaw((float) -yaw));
 		for (double d = reachDistance; d >= 0.0D; d--) {
 			Vector3d vec4 = vec3.add(vec2.scale(d));
-			((ServerWorld) attacker.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
+			((ServerWorld) attacker.world).spawnParticle(ParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 		}
 
 		attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundCategory(), 1.0F, 1.0F);

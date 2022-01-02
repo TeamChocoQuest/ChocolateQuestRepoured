@@ -16,6 +16,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -30,7 +31,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.*;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -514,8 +514,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 					Vector3d vOrig = v;
 					v = new Vector3d(v.x, -0.15 + iY * dY, v.z).scale(1.5);
 
-					this.world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x * 0.5, v.y * 0.5, v.z * 0.5);
-					this.world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
+					this.world.spawnParticle(ParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x * 0.5, v.y * 0.5, v.z * 0.5);
+					this.world.spawnParticle(ParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
 
 					v = vOrig;
 				}
@@ -601,7 +601,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			double y = aabb.minY + (aabb.maxY - aabb.minY) * this.rand.nextFloat();
 			double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * this.rand.nextFloat();
 
-			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 0.0D, 0.0D, 0.0D);
+			this.world.spawnParticle(ParticleTypes.EXPLOSION_LARGE, x, y, z, 0.0D, 0.0D, 0.0D);
 		}
 
 		return cancelled;
@@ -899,8 +899,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public EnumParticleTypes getDeathAnimParticles() {
-		return EnumParticleTypes.LAVA;
+	public ParticleTypes getDeathAnimParticles() {
+		return ParticleTypes.LAVA;
 	}
 
 	@Override

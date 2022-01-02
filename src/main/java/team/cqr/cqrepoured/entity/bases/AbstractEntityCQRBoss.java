@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.entity.bases;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.entity.MoverType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -106,8 +106,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 		return false;
 	}
 
-	protected EnumParticleTypes getDeathAnimParticles() {
-		return EnumParticleTypes.EXPLOSION_HUGE;
+	protected ParticleTypes getDeathAnimParticles() {
+		return ParticleTypes.EXPLOSION_HUGE;
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 			double d2 = this.rand.nextGaussian() * 0.02D;
 			double d0 = this.rand.nextGaussian() * 0.02D;
 			double d1 = this.rand.nextGaussian() * 0.02D;
-			((WorldServer) this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, 1, d2, d0, d1, 0.05);
+			((WorldServer) this.world).spawnParticle(ParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, 1, d2, d0, d1, 0.05);
 		}
 	}
 

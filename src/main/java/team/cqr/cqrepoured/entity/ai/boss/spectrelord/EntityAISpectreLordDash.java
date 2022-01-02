@@ -4,9 +4,9 @@ import java.util.List;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -87,8 +87,8 @@ public class EntityAISpectreLordDash extends AbstractEntityAISpell<EntityCQRSpec
 			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this.entity), this.entity);
 
 			this.entity.playSound(SoundEvents.EVOCATION_ILLAGER_PREPARE_WOLOLO, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
-			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.PORTAL, oldX, oldY + this.entity.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
-			((ServerWorld) this.world).spawnParticle(EnumParticleTypes.PORTAL, this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+			((ServerWorld) this.world).spawnParticle(ParticleTypes.PORTAL, oldX, oldY + this.entity.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+			((ServerWorld) this.world).spawnParticle(ParticleTypes.PORTAL, this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
 		} else if (this.tick > this.chargingTicks + 20 - 1) {
 			this.entity.rotationYaw = this.yawDegree;
 

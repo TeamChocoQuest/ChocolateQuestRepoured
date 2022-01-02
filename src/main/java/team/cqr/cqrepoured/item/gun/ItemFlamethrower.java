@@ -10,11 +10,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ISizable;
@@ -62,7 +62,7 @@ public class ItemFlamethrower extends ItemMagazineBased {
 
 		if (world.isRemote) {
 			for (int i = 0; i < 8; i++) {
-				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (vx + itemRand.nextFloat() - 0.5D) / 3.0D, (vy + itemRand.nextFloat() - 0.5D) / 8.0D, (vz + itemRand.nextFloat() - 0.5D) / 3.0D);
+				world.spawnParticle(ParticleTypes.FLAME, posX, posY, posZ, (vx + itemRand.nextFloat() - 0.5D) / 3.0D, (vy + itemRand.nextFloat() - 0.5D) / 8.0D, (vz + itemRand.nextFloat() - 0.5D) / 3.0D);
 			}
 		} else {
 			int dist = 10;

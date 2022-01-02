@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.*;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -36,7 +36,7 @@ public class ItemDaggerNinja extends ItemDagger {
 			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+				worldIn.spawnParticle(ParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
 			}
 
 			double x = -Math.sin(Math.toRadians(playerIn.rotationYaw));
@@ -58,7 +58,7 @@ public class ItemDaggerNinja extends ItemDagger {
 			stack.damageItem(1, playerIn);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+				worldIn.spawnParticle(ParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
 			}
 		} else {
 			super.onItemRightClick(worldIn, playerIn, handIn);

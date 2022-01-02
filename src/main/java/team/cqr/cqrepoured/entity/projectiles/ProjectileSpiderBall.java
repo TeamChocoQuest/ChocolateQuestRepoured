@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -51,7 +51,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 	protected void onUpdateInAir() {
 		if (this.world.isRemote) {
 			if (this.ticksExisted < 10) {
-				this.world.spawnParticle(EnumParticleTypes.SLIME, this.posX, this.posY + 0.1D, this.posZ, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(ParticleTypes.SLIME, this.posX, this.posY + 0.1D, this.posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

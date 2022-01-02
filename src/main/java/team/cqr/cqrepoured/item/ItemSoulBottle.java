@@ -9,6 +9,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -24,12 +25,11 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemSoulBottle extends Item {
@@ -138,7 +138,7 @@ public class ItemSoulBottle extends Item {
 
 	private void spawnAdditions(World world, double x, double y, double z) {
 		if (!world.isRemote) {
-			((ServerWorld) world).spawnParticle(EnumParticleTypes.CLOUD, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			((ServerWorld) world).spawnParticle(ParticleTypes.CLOUD, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 0.6F + itemRand.nextFloat() * 0.2F);
 		}
 	}

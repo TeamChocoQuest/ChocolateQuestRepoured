@@ -14,7 +14,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -137,7 +137,7 @@ public class ItemSuperTool extends Item {
 				worldIn.setBlockToAir(pos);
 
 				for (int i = 0; i < 5; i++) {
-					worldIn.spawnParticle(EnumParticleTypes.BLOCK_CRACK, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 0, 0, 0, Block.getIdFromBlock(block));
+					worldIn.spawnParticle(ParticleTypes.BLOCK_CRACK, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 0, 0, 0, Block.getIdFromBlock(block));
 				}
 			}
 		}

@@ -6,10 +6,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
@@ -120,7 +120,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 			this.world.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 0.0F, false);
 			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
 			entityareaeffectcloud.setOwner(this.shootingEntity);
-			entityareaeffectcloud.setParticle(EnumParticleTypes.SPELL_MOB);
+			entityareaeffectcloud.setParticle(ParticleTypes.SPELL_MOB);
 			entityareaeffectcloud.setColor(0xFFFF26);// Yellow
 			entityareaeffectcloud.setRadius(4F);
 			entityareaeffectcloud.setDuration(400);

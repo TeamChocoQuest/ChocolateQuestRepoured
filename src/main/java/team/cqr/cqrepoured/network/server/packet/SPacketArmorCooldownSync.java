@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class SPacketArmorCooldownSync implements IMessage {
 

@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.entity.projectiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -78,7 +78,7 @@ public class ProjectileBubble extends ProjectileBase {
 		super.onUpdateInAir();
 		if (this.world.isRemote) {
 			if (this.ticksExisted % 5 == 0) {
-				this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX, this.posY + 0.1D, this.posZ, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(ParticleTypes.WATER_BUBBLE, this.posX, this.posY + 0.1D, this.posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

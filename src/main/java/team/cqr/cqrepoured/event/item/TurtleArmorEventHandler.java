@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.event.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -34,7 +34,7 @@ public class TurtleArmorEventHandler {
 				double x = entity.posX;
 				double y = entity.posY + entity.getEyeHeight();
 				double z = entity.posZ;
-				((ServerWorld) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
+				((ServerWorld) entity.world).spawnParticle(ParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class TurtleArmorEventHandler {
 		double x = entity.posX;
 		double y = entity.posY + entity.getEyeHeight();
 		double z = entity.posZ;
-		((ServerWorld) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
+		((ServerWorld) entity.world).spawnParticle(ParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
 
 		entity.world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
 

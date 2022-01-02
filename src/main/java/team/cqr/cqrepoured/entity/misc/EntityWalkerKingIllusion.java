@@ -9,11 +9,11 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -109,11 +109,11 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	private void playDeathEffect() {
 		if (this.world.isRemote) {
 			for (int i = 0; i < 15; i++) {
-				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.0, 0.025, 0.0);
-				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.025, 0.01, 0.025);
-				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.025, 0.01, -0.025);
-				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, -0.025, 0.01, 0.025);
-				this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, -0.025, 0.01, -0.025);
+				this.world.spawnParticle(ParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.0, 0.025, 0.0);
+				this.world.spawnParticle(ParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.025, 0.01, 0.025);
+				this.world.spawnParticle(ParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, 0.025, 0.01, -0.025);
+				this.world.spawnParticle(ParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, -0.025, 0.01, 0.025);
+				this.world.spawnParticle(ParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, -0.025, 0.01, -0.025);
 			}
 			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
 		}
