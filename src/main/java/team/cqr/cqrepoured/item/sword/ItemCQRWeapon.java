@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.item.sword;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -25,10 +25,10 @@ public class ItemCQRWeapon extends ItemSword {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 		if (slot == EntityEquipmentSlot.MAINHAND) {
 			if (this.attackDamageBonus != 0.0D) {
-				ItemUtil.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, oldValue -> (oldValue + this.attackDamageBonus));
+				ItemUtil.replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, oldValue -> (oldValue + this.attackDamageBonus));
 			}
 			if (this.attackSpeedBonus != 0.0D) {
-				ItemUtil.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, oldValue -> (oldValue + this.attackSpeedBonus));
+				ItemUtil.replaceModifier(modifiers, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, oldValue -> (oldValue + this.attackSpeedBonus));
 			}
 		}
 		return modifiers;

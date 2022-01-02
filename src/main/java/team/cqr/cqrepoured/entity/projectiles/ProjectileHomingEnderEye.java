@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.projectiles;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
@@ -49,7 +49,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 				this.world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
 				this.setDead();
-			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof PartEntity)) {
 				this.applyEntityCollisionEye(result.entityHit);
 			}
 		}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -97,7 +97,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				this.updateRotation(attackTarget, 2.5F, 2.5F);
 
 				if (canMoveBackwards) {
-					EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
+					EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
 				}
 			}
 

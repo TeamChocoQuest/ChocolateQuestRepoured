@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
@@ -91,7 +91,7 @@ public abstract class EntityCQRMountBase extends AnimalEntity {
 				v = vertical * 0.5F;
 			}
 			if (this.canPassengerSteer()) {
-				float f = (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 0.5F;
+				float f = (float) this.getEntityAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue() * 0.5F;
 
 				this.setAIMoveSpeed(f);
 				super.travel(entity.moveStrafing * f, v, entity.moveForward * f);

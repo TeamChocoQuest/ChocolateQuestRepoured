@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
@@ -96,7 +96,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40);
+		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(40);
 	}
 
 	public boolean setCQREntityOnShoulder(AbstractEntityCQR p_191994_1_) {

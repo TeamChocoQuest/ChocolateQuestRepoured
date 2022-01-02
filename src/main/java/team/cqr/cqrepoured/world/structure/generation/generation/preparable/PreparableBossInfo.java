@@ -9,7 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Items;
@@ -146,13 +146,13 @@ public class PreparableBossInfo extends PreparablePosInfo {
 				AbstractEntityCQR entityCQR = (AbstractEntityCQR) entity;
 				entityCQR.onSpawnFromCQRSpawnerInDungeon(placement);
 				entityCQR.enableBossBar();
-				entityCQR.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(entityCQR.getBaseHealth() * 5.0D);
+				entityCQR.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(entityCQR.getBaseHealth() * 5.0D);
 			} else {
-				living.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
+				living.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(100.0D);
 			}
 
 			living.setHealth(living.getMaxHealth());
-			living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).applyModifier(new AttributeModifier("temp_boss_speed_buff", 0.35D, 2));
+			living.getEntityAttribute(Attributes.MOVEMENT_SPEED).applyModifier(new AttributeModifier("temp_boss_speed_buff", 0.35D, 2));
 
 			// Some gear
 			living.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));

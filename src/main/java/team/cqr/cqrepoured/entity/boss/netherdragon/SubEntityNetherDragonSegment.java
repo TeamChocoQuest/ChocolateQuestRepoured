@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
@@ -13,7 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 
-public class SubEntityNetherDragonSegment extends MultiPartEntityPart implements IBlacklistedFromStatues, IDontRenderFire {
+public class SubEntityNetherDragonSegment extends PartEntity implements IBlacklistedFromStatues, IDontRenderFire {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;

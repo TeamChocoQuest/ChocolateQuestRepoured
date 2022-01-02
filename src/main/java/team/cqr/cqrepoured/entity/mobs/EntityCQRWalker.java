@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.util.DamageSource;
@@ -71,7 +71,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.VOID;
 	}
 

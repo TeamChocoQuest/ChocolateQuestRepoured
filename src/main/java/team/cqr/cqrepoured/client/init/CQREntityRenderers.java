@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.init;
 
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelLich;
@@ -224,7 +224,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 
 		// Multipart parts
-		RenderingRegistry.registerEntityRenderingHandler(MultiPartEntityPart.class, RenderMultiPartPart::new);
+		RenderingRegistry.registerEntityRenderingHandler(PartEntity.class, RenderMultiPartPart::new);
 	}
 
 	protected static void registerEntityRenderers() {

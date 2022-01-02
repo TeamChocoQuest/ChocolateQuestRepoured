@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -491,7 +491,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 					if (CQRConfig.general.hookOnlyPullsSmallerEntities) {
 						double sizeOwner = this.thrower.width * this.thrower.height * 1.25D;
 						double sizeHit = entityHit.width * entityHit.height;
-						if (sizeOwner >= sizeHit || entityHit instanceof MultiPartEntityPart) {
+						if (sizeOwner >= sizeHit || entityHit instanceof PartEntity) {
 							this.setHookState(EnumHookState.PULL_ENTITY_TO_SHOOTER);
 						} else {
 							this.setHookState(EnumHookState.PULL_SHOOTER_TO_HOOK_LATCHED_TO_ENTITY);

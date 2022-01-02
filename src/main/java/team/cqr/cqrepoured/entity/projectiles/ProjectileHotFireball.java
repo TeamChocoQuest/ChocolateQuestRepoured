@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.math.RayTraceResult;
@@ -52,7 +52,7 @@ public class ProjectileHotFireball extends ThrowableEntity {
 				return;
 			}
 
-			if (result.entityHit instanceof MultiPartEntityPart && ((MultiPartEntityPart) result.entityHit).parent == this.thrower) {
+			if (result.entityHit instanceof PartEntity && ((PartEntity) result.entityHit).parent == this.thrower) {
 				return;
 			}
 

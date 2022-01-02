@@ -16,7 +16,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,7 @@ public class ItemArmorBull extends ArmorItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), this.strength);
+			multimap.put(Attributes.ATTACK_DAMAGE.getName(), this.strength);
 		}
 
 		return multimap;

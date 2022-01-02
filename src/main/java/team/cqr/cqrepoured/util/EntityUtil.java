@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.BlockPos;
@@ -115,7 +115,7 @@ public class EntityUtil {
 	}
 
 	public static void applyMaxHealthModifier(LivingEntity entity, UUID uuid, String name, double amount) {
-		IAttributeInstance attribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		IAttributeInstance attribute = entity.getEntityAttribute(Attributes.MAX_HEALTH);
 		if (attribute == null) {
 			return;
 		}

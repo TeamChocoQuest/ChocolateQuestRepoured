@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderMultiPartPart<T extends MultiPartEntityPart> extends Render<T> {
+public class RenderMultiPartPart<T extends PartEntity> extends Render<T> {
 
 	public RenderMultiPartPart(RenderManager renderManager) {
 		super(renderManager);

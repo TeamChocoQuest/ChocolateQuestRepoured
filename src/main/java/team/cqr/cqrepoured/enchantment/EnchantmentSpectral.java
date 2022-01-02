@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.enchantment;
 import net.minecraft.enchantment.DamageEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
@@ -29,7 +29,7 @@ public class EnchantmentSpectral extends DamageEnchantment {
 	}
 
 	@Override
-	public float calcDamageByCreature(int level, EnumCreatureAttribute creatureType) {
+	public float calcDamageByCreature(int level, CreatureAttribute creatureType) {
 		// TODO make this effective against vanilla endermen
 		if (creatureType == CQRCreatureAttributes.VOID) {
 			return level * 1.5F;

@@ -6,8 +6,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
@@ -35,7 +35,7 @@ public class EntityCQRWasp extends CreatureEntity implements IFlyingAnimal {
 		this.tasks.addTask(4, new PanicGoal(this, 1.25D));
 		this.tasks.addTask(5, new WaterAvoidingRandomFlyingGoal(this, 1D));
 
-		this.targetTasks.addTask(0, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 100, true, true, input -> (input instanceof PlayerEntity || input.getCreatureAttribute() == EnumCreatureAttribute.ILLAGER || input.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD)));
+		this.targetTasks.addTask(0, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 100, true, true, input -> (input instanceof PlayerEntity || input.getCreatureAttribute() == CreatureAttribute.ILLAGER || input.getCreatureAttribute() == CreatureAttribute.UNDEAD)));
 	}
 
 	@Override
@@ -65,10 +65,10 @@ public class EntityCQRWasp extends CreatureEntity implements IFlyingAnimal {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.4000000059604645D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
+		this.getAttributeMap().registerAttribute(Attributes.FLYING_SPEED);
+		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(12.0D);
+		this.getEntityAttribute(Attributes.FLYING_SPEED).setBaseValue(0.4000000059604645D);
+		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
 	}
 
 	/**

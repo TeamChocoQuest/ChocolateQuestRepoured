@@ -12,12 +12,12 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraftforge.entity.PartEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
@@ -120,7 +120,7 @@ public class ItemUtil {
 		}
 		if (targetEntity.canBeAttackedWithItem()) {
 			if (!targetEntity.hitByEntity(player)) {
-				float f = (float) player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				float f = (float) player.getEntityAttribute(Attributes.ATTACK_DAMAGE).getAttributeValue();
 				// CQR: Add flat damage bonus
 				f = f + damageBonus;
 				float f1;
@@ -128,7 +128,7 @@ public class ItemUtil {
 				if (targetEntity instanceof LivingEntity) {
 					f1 = EnchantmentHelper.getModifierForCreature(player.getHeldItemMainhand(), ((LivingEntity) targetEntity).getCreatureAttribute());
 				} else {
-					f1 = EnchantmentHelper.getModifierForCreature(player.getHeldItemMainhand(), EnumCreatureAttribute.UNDEFINED);
+					f1 = EnchantmentHelper.getModifierForCreature(player.getHeldItemMainhand(), CreatureAttribute.UNDEFINED);
 				}
 
 				float f2 = player.getCooledAttackStrength(0.5F);
@@ -262,8 +262,8 @@ public class ItemUtil {
 						ItemStack itemstack1 = player.getHeldItemMainhand();
 						Entity entity = targetEntity;
 
-						if (targetEntity instanceof MultiPartEntityPart) {
-							IEntityMultiPart ientitymultipart = ((MultiPartEntityPart) targetEntity).parent;
+						if (targetEntity instanceof PartEntity) {
+							IEntityMultiPart ientitymultipart = ((PartEntity) targetEntity).parent;
 
 							if (ientitymultipart instanceof LivingEntity) {
 								entity = (LivingEntity) ientitymultipart;

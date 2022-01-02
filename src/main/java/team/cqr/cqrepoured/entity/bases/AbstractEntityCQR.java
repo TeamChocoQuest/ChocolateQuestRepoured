@@ -13,7 +13,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -267,13 +267,13 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		this.getAttributeMap().registerAttribute(Attributes.ATTACK_DAMAGE);
 		// speed (in blocks per second) = x^2 * 0.98 / (1 - slipperiness * 0.91) * 20 -> usually slipperiness = 0.6
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
+		this.getAttributeMap().registerAttribute(Attributes.ATTACK_SPEED);
 		// Default value: 16
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
+		this.getEntityAttribute(Attributes.FOLLOW_RANGE).setBaseValue(64.0D);
 	}
 
 	@Override
@@ -348,7 +348,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		zRatio = event.getRatioZ();
 
 		// CQR: reduce knockback strength instead of having a chance to not be knocked backed
-		double knockbackResistance = this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+		double knockbackResistance = this.getEntityAttribute(Attributes.KNOCKBACK_RESISTANCE).getAttributeValue();
 		strength *= 1.0F - Math.min((float) knockbackResistance, 1.0F);
 
 		this.isAirBorne = true;
@@ -734,15 +734,15 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 
 		ItemStack stackMainhand = this.getHeldItemMainhand();
-		if (!stackMainhand.getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(SharedMonsterAttributes.ATTACK_SPEED.getName())) {
-			IAttributeInstance attribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+		if (!stackMainhand.getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(Attributes.ATTACK_SPEED.getName())) {
+			IAttributeInstance attribute = this.getEntityAttribute(Attributes.ATTACK_SPEED);
 			if (attribute.getModifier(BASE_ATTACK_SPEED_ID) == null) {
 				AttributeModifier modifier = new AttributeModifier(BASE_ATTACK_SPEED_ID, "Base Attack Speed", -2.4D, 0);
 				modifier.setSaved(false);
 				attribute.applyModifier(modifier);
 			}
 		} else {
-			IAttributeInstance attribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+			IAttributeInstance attribute = this.getEntityAttribute(Attributes.ATTACK_SPEED);
 			attribute.removeModifier(BASE_ATTACK_SPEED_ID);
 		}
 
@@ -901,7 +901,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			}
 			return false;
 		}
-		float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+		float f = (float) this.getEntityAttribute(Attributes.ATTACK_DAMAGE).getAttributeValue();
 		int i = 0;
 
 		if (entityIn instanceof LivingEntity) {
@@ -1245,7 +1245,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public void onSpawnFromCQRSpawnerInDungeon(DungeonPlacement placement) {
 		this.setHomePositionCQR(new BlockPos(this));
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
+		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 		this.setHealth(this.getMaxHealth());
 		this.setBaseHealthDependingOnPos(placement.getPos());
 

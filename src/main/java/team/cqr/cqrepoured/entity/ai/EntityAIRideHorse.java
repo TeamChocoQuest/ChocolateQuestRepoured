@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
@@ -77,14 +77,14 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	private void applyModifiers() {
 		if (this.horse instanceof AbstractHorseEntity) {
 			this.removeModifiers();
-			this.horse.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).applyModifier(this.moveSpeedModifier);
-			this.horse.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).applyModifier(FOLLOW_RANGE_MODIFIER);
+			this.horse.getEntityAttribute(Attributes.MOVEMENT_SPEED).applyModifier(this.moveSpeedModifier);
+			this.horse.getEntityAttribute(Attributes.FOLLOW_RANGE).applyModifier(FOLLOW_RANGE_MODIFIER);
 		}
 	}
 
 	private void removeModifiers() {
-		this.horse.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).removeModifier(this.moveSpeedModifier);
-		this.horse.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_MODIFIER);
+		this.horse.getEntityAttribute(Attributes.MOVEMENT_SPEED).removeModifier(this.moveSpeedModifier);
+		this.horse.getEntityAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_MODIFIER);
 	}
 
 	private void removeHorseAI() {

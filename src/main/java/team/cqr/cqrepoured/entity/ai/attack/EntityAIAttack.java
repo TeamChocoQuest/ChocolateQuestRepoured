@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -86,7 +86,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	public float getAttackCooldownPeriod() {
-		return (float) (1.0D / this.entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * 20.0D) + this.attackCooldownOverhead;
+		return (float) (1.0D / this.entity.getEntityAttribute(Attributes.ATTACK_SPEED).getAttributeValue() * 20.0D) + this.attackCooldownOverhead;
 	}
 
 	public int getBlockCooldownPeriod() {

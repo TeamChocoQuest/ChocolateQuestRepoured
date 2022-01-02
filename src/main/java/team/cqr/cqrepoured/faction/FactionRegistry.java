@@ -21,13 +21,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.Difficulty;
+import net.minecraftforge.entity.PartEntity;
 import org.apache.commons.io.FileUtils;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -264,8 +264,8 @@ public class FactionRegistry {
 			}
 		}
 
-		if (entity instanceof MultiPartEntityPart && ((MultiPartEntityPart) entity).parent instanceof Entity) {
-			return this.getFactionOf((Entity) ((MultiPartEntityPart) entity).parent);
+		if (entity instanceof PartEntity && ((PartEntity) entity).parent instanceof Entity) {
+			return this.getFactionOf((Entity) ((PartEntity) entity).parent);
 		}
 
 		if (entity instanceof AbstractEntityCQR) {

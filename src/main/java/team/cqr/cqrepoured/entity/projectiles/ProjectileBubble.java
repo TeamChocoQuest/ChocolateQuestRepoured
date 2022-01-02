@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.projectiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.DamageSource;
@@ -35,7 +35,7 @@ public class ProjectileBubble extends ProjectileBase {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof PartEntity)) {
 			this.applyEntityCollision(result.entityHit);
 		}
 

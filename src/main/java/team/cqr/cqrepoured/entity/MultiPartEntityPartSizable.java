@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.entity;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 
-public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> extends MultiPartEntityPart implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
+public class MultiPartEntityPartSizable<T extends IEntityMultiPart & ISizable> extends PartEntity implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
 
 	private final float dw, dh;
 

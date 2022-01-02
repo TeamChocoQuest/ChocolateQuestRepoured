@@ -7,7 +7,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -36,8 +36,8 @@ public class ItemArmorHeavy extends ArmorItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), this.knockbackResistance);
-			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
+			multimap.put(Attributes.KNOCKBACK_RESISTANCE.getName(), this.knockbackResistance);
+			multimap.put(Attributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
 		}
 
 		return multimap;

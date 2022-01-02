@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -35,7 +35,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 		this.setSize(0.5F, 0.5F);
 		this.setNoGravity(true);
 		this.setHealth(1F);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1F);
+		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(1F);
 		this.navigator = new FlyingPathNavigator(this, worldIn);
 	}
 

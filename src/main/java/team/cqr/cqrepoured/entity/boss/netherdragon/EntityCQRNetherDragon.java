@@ -12,12 +12,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraftforge.entity.PartEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -164,11 +164,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(1.5D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.25D);
-		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8);
+		this.getAttributeMap().registerAttribute(Attributes.FLYING_SPEED);
+		this.getEntityAttribute(Attributes.FLYING_SPEED).setBaseValue(1.5D);
+		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(1.25D);
+		this.getEntityAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
+		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
+	public boolean attackEntityFromPart(PartEntity dragonPart, DamageSource source, float damage) {
 		if (this.phase == 0) {
 			damage = damage / 4.0F + Math.min(damage, 1.0F);
 			if (damage >= this.getHealth()) {
@@ -950,8 +950,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return this.phase > 0 ? EnumCreatureAttribute.UNDEAD : EnumCreatureAttribute.UNDEFINED;
+	public CreatureAttribute getCreatureAttribute() {
+		return this.phase > 0 ? CreatureAttribute.UNDEAD : CreatureAttribute.UNDEFINED;
 	}
 
 	/*

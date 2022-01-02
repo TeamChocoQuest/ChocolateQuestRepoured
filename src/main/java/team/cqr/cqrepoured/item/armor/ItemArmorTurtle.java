@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
@@ -16,7 +17,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
@@ -43,7 +43,7 @@ public class ItemArmorTurtle extends ArmorItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), this.health);
+			multimap.put(Attributes.MAX_HEALTH.getName(), this.health);
 		}
 
 		return multimap;

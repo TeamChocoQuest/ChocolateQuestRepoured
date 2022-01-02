@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
@@ -78,7 +78,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		if (this.parent != null) {
-			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.parent.getMaxHealth());
+			this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(this.parent.getMaxHealth());
 			this.setHealth(this.parent.getHealth());
 		}
 	}
@@ -185,7 +185,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.VOID;
 	}
 

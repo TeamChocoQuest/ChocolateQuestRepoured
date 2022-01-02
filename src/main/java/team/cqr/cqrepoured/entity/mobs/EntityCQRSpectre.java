@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -36,7 +36,7 @@ public class EntityCQRSpectre extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.VOID;
 	}
 

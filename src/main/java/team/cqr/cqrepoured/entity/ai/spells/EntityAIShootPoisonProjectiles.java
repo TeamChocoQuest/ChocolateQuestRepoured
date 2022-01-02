@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
@@ -36,7 +36,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity.world, this.entity);
 			// proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
 
-			if (this.entity.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD) {
+			if (this.entity.getCreatureAttribute() == CreatureAttribute.ARTHROPOD) {
 				proj.enableAuraPlacement();
 			}
 

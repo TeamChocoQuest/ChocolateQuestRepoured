@@ -15,7 +15,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
@@ -43,7 +43,7 @@ public class ItemSoulBottle extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		if (player.isCreative()) {
-			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
+			if (!player.world.isRemote && !(entity instanceof PartEntity)) {
 				CompoundNBT bottle = stack.getTagCompound();
 
 				if (bottle == null) {

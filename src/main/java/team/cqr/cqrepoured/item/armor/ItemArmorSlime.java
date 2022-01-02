@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,7 +18,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -41,8 +41,8 @@ public class ItemArmorSlime extends ArmorItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), this.health);
-			multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), this.knockBack);
+			multimap.put(Attributes.MAX_HEALTH.getName(), this.health);
+			multimap.put(Attributes.KNOCKBACK_RESISTANCE.getName(), this.knockBack);
 		}
 
 		return multimap;

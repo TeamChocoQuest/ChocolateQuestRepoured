@@ -7,7 +7,7 @@ import net.minecraft.item.ItemGroup;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.FireBlock;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -182,7 +182,7 @@ public class CQRMain {
 		// Instantiating enums
 		EBannerPatternsCQ.values();
 		EBanners.values();
-		EnumCreatureAttribute.values();
+		CreatureAttribute.values();
 		/* DO NOT REMOVE, this fixes the neat issue */
 		CQRCreatureAttributes.VOID.name();
 

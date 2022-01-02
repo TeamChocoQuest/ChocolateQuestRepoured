@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.item;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
@@ -32,7 +32,7 @@ public class ItemMobToSpawner extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		if (player.isCreative()) {
-			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
+			if (!player.world.isRemote && !(entity instanceof PartEntity)) {
 				SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
 				entity.setDead();
 				for (Entity passenger : entity.getPassengers()) {

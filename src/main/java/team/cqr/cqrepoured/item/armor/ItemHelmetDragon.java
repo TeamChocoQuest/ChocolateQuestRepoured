@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.item.armor;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -26,8 +26,8 @@ public class ItemHelmetDragon extends ArmorItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), this.health);
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), this.attackDamage);
+			multimap.put(Attributes.MAX_HEALTH.getName(), this.health);
+			multimap.put(Attributes.ATTACK_DAMAGE.getName(), this.attackDamage);
 		}
 
 		return multimap;

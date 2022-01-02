@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PotionEntity;
@@ -57,7 +57,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 			type = Potions.STRONG_POISON;
 			break;
 		}
-		if (this.entity.getAttackTarget().getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
+		if (this.entity.getAttackTarget().getCreatureAttribute() == CreatureAttribute.UNDEAD) {
 			if (type == Potions.STRONG_HARMING) {
 				type = Potions.STRONG_HEALING;
 			}

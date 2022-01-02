@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraftforge.entity.PartEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -89,7 +89,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// 2 => Emitter right
 	// 3 & 4 => Artificial hitbox (left and right), purpose is to avoid entities punching though the boss when it is in
 	// non-stunned state
-	private MultiPartEntityPart[] parts;
+	private PartEntity[] parts;
 
 	private LivingEntity electroCuteTargetEmitterLeft;
 	private LivingEntity electroCuteTargetEmitterRight;
@@ -112,7 +112,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		super(worldIn);
 		this.experienceValue = 100;
 
-		this.parts = new MultiPartEntityPart[5];
+		this.parts = new PartEntity[5];
 
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
@@ -192,8 +192,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
+		this.getEntityAttribute(Attributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
+		this.getEntityAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
 	}
 
 	@Override
@@ -520,7 +520,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			}
 			this.setStunned(this.stunTime > 0);
 		}
-		for (MultiPartEntityPart part : this.parts) {
+		for (PartEntity part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
 			part.onUpdate();
 		}
@@ -610,7 +610,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
+	public boolean attackEntityFromPart(PartEntity part, DamageSource source, float damage) {
 		boolean isMainHBPart = ((part != this.parts[3]) && (part != this.parts[4])) || part == null;
 		return this.attackEntityFrom(source, damage, isMainHBPart);
 	}
@@ -683,7 +683,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
 		List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
-		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof MultiPartEntityPart));
+		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
 		}
@@ -790,7 +790,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public void resize(float widthScale, float heightSacle) {
 		super.resize(widthScale, heightSacle);
 
-		for (MultiPartEntityPart part : this.parts) {
+		for (PartEntity part : this.parts) {
 			if (part instanceof ISizable) {
 				((ISizable) part).resize(widthScale, heightSacle);
 			}
@@ -804,7 +804,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public void setDead() {
-		for (MultiPartEntityPart part : this.parts) {
+		for (PartEntity part : this.parts) {
 			this.world.removeEntityDangerously(part);
 		}
 

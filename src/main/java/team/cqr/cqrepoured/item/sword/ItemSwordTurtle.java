@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.item.sword;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class ItemSwordTurtle extends SwordItem {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
 
 		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), this.knockBack);
+			multimap.put(Attributes.KNOCKBACK_RESISTANCE.getName(), this.knockBack);
 		}
 
 		return multimap;

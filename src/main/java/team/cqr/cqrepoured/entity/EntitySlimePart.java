@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -33,7 +33,7 @@ public class EntitySlimePart extends SlimeEntity {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		IAttributeInstance iattributeinstance = this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
+		IAttributeInstance iattributeinstance = this.getEntityAttribute(Attributes.MOVEMENT_SPEED);
 		iattributeinstance.setBaseValue(iattributeinstance.getBaseValue() * 0.5D);
 	}
 

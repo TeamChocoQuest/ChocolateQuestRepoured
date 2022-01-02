@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.*;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -108,8 +108,8 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
+		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
+		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.0D);
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.VOID;
 	}
 }

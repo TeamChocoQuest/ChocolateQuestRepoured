@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem.ArmorMaterial;
@@ -66,7 +66,7 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.MECHANICAL;
 	}
 
@@ -74,8 +74,8 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
+		this.getEntityAttribute(Attributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
+		this.getEntityAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
 	}
 
 }

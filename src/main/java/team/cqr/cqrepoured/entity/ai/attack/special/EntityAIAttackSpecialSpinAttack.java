@@ -5,8 +5,8 @@ import java.util.List;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraftforge.entity.PartEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.*;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
@@ -100,7 +100,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			if (entity == null) {
 				return;
 			}
-			if (entity instanceof MultiPartEntityPart) {
+			if (entity instanceof PartEntity) {
 				return;
 			}
 			if (attacker.getDistance(entity) > radius) {
@@ -109,7 +109,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			if (entity instanceof LivingEntity) {
 				LivingEntity living = (LivingEntity) entity;
 
-				float dmg = (float) attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				float dmg = (float) attacker.getEntityAttribute(Attributes.ATTACK_DAMAGE).getAttributeValue();
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
 				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemOffhand(), living.getCreatureAttribute());
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.network.datasync.DataParameter;
@@ -193,8 +193,8 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.ILLAGER;
+	public CreatureAttribute getCreatureAttribute() {
+		return CreatureAttribute.ILLAGER;
 	}
 
 	public boolean isBoneShieldActive() {

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.util.math.MathHelper;
 
@@ -30,9 +30,9 @@ public class MoveHelperDirectFlight extends MovementController {
 			float f1;
 
 			if (this.entity.onGround) {
-				f1 = (float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+				f1 = (float) (this.speed * this.entity.getEntityAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue());
 			} else {
-				f1 = (float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).getAttributeValue());
+				f1 = (float) (this.speed * this.entity.getEntityAttribute(Attributes.FLYING_SPEED).getAttributeValue());
 			}
 
 			this.entity.setAIMoveSpeed(f1);
