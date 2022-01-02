@@ -13,7 +13,6 @@ public class EnchantmentLightningProtection extends Enchantment {
 
 	private EnchantmentLightningProtection(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
 		super(rarityIn, typeIn, slots);
-		this.setName("lightning_protection");
 		this.setRegistryName(CQRMain.MODID, "lightning_protection");
 	}
 
@@ -23,10 +22,10 @@ public class EnchantmentLightningProtection extends Enchantment {
 	}
 
 	@Override
-	public boolean isTreasureEnchantment() {
+	public boolean isTreasureOnly() {
 		return true;
 	}
-
+	
 	@Override
 	public int getMinLevel() {
 		return 1;
