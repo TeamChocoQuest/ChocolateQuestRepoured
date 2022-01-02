@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.LongNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 
 public class DataEntryLong extends DataEntry<Long> {
 
@@ -16,12 +16,12 @@ public class DataEntryLong extends DataEntry<Long> {
 	}
 
 	@Override
-	public NBTBase write() {
+	public INBT write() {
 		return new LongNBT(this.value);
 	}
 
 	@Override
-	protected void readInternal(NBTBase nbt) {
+	protected void readInternal(INBT nbt) {
 		if (nbt instanceof LongNBT) {
 			this.value = ((LongNBT) nbt).getLong();
 		}

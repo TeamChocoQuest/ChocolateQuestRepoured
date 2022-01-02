@@ -29,7 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.block.Blocks;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
@@ -210,7 +210,7 @@ public class CQStructure {
 
 		// Load block states
 		int blockStateIndex = 0;
-		for (NBTBase nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
 			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
 		}
 
@@ -238,7 +238,7 @@ public class CQStructure {
 		}
 
 		// Load entities
-		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 
@@ -403,7 +403,7 @@ public class CQStructure {
 
 		// Load block states
 		int blockStateIndex = 0;
-		for (NBTBase nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
 			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
 		}
 
@@ -411,7 +411,7 @@ public class CQStructure {
 		int x = 0;
 		int y = 0;
 		int z = 0;
-		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
+		for (INBT nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
 			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (IntArrayNBT) nbt, blockStatePalette, compoundTagList));
 			if (x < this.size.getX() - 1) {
 				x++;
@@ -427,7 +427,7 @@ public class CQStructure {
 		this.blockInfoList.sort(DEFAULT_COMPARATOR);
 
 		// Load special blocks
-		for (NBTBase nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
 			CompoundNBT tag = (CompoundNBT) nbt;
 			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
 				ListNBT pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
@@ -436,7 +436,7 @@ public class CQStructure {
 		}
 
 		// Load entities
-		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 	}

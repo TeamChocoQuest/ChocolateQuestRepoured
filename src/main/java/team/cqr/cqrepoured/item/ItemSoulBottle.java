@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
 import net.minecraft.world.server.ServerWorld;
@@ -21,7 +22,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -58,7 +58,7 @@ public class ItemSoulBottle extends Item {
 					entityTag.removeTag("UUIDMost");
 					entityTag.removeTag("Pos");
 					ListNBT passengers = entityTag.getTagList("Passengers", 10);
-					for (NBTBase passenger : passengers) {
+					for (INBT passenger : passengers) {
 						((CompoundNBT) passenger).removeTag("UUIDLeast");
 						((CompoundNBT) passenger).removeTag("UUIDMost");
 						((CompoundNBT) passenger).removeTag("Pos");
@@ -113,7 +113,7 @@ public class ItemSoulBottle extends Item {
 				tag.removeTag("UUIDMost");
 				tag.removeTag("Pos");
 				ListNBT passengers = tag.getTagList("Passengers", 10);
-				for (NBTBase passenger : passengers) {
+				for (INBT passenger : passengers) {
 					((CompoundNBT) passenger).removeTag("UUIDLeast");
 					((CompoundNBT) passenger).removeTag("UUIDMost");
 					((CompoundNBT) passenger).removeTag("Pos");

@@ -12,7 +12,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -183,7 +183,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 			this.world.spawnEntity(entity);
 
 			ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
-			for (NBTBase passengerNBT : passengers) {
+			for (INBT passengerNBT : passengers) {
 				Entity passenger = this.spawnEntityFromNBT((CompoundNBT) passengerNBT);
 				passenger.startRiding(entity);
 			}

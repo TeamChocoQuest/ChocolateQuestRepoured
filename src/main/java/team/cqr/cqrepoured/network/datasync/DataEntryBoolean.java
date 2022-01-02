@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.datasync;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ByteNBT;
 
 public class DataEntryBoolean extends DataEntry<Boolean> {
@@ -16,12 +16,12 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 	}
 
 	@Override
-	public NBTBase write() {
+	public INBT write() {
 		return new ByteNBT((byte) (this.value ? 1 : 0));
 	}
 
 	@Override
-	protected void readInternal(NBTBase nbt) {
+	protected void readInternal(INBT nbt) {
 		if (nbt instanceof ByteNBT) {
 			this.value = ((ByteNBT) nbt).getByte() != 0;
 		}

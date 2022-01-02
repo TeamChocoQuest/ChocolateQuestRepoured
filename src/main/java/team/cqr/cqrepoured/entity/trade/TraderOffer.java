@@ -8,8 +8,8 @@ import java.util.Objects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTBase;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -29,7 +29,7 @@ public class TraderOffer {
 	public void readFromNBT(CompoundNBT nbt) {
 		this.trades.clear();
 		ListNBT tradesNBT = nbt.getTagList("trades", Constants.NBT.TAG_COMPOUND);
-		for (NBTBase tag : tradesNBT) {
+		for (INBT tag : tradesNBT) {
 			this.trades.add(Trade.createFromNBT(this, (CompoundNBT) tag));
 		}
 	}

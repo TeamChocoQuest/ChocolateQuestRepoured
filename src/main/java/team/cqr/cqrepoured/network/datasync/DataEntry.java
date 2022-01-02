@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.datasync;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.world.World;
 
 public abstract class DataEntry<T> {
@@ -19,13 +19,13 @@ public abstract class DataEntry<T> {
 		this.isClientModificationAllowed = isClientModificationAllowed;
 	}
 
-	public abstract NBTBase write();
+	public abstract INBT write();
 
-	public void read(NBTBase nbt) {
+	public void read(INBT nbt) {
 		this.readInternal(nbt);
 	}
 
-	protected abstract void readInternal(NBTBase nbt);
+	protected abstract void readInternal(INBT nbt);
 
 	public abstract void writeChanges(ByteBuf buf);
 

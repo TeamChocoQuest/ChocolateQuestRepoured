@@ -7,8 +7,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
@@ -88,7 +88,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	};
 	private final DataEntryObject<BlockPos[]> unprotectedBlocks = new DataEntryObject<BlockPos[]>("UnprotectedBlocks", new BlockPos[0], true) {
 		@Override
-		public NBTBase write() {
+		public INBT write() {
 			int[] data = new int[this.value.length * 3];
 			for (int i = 0; i < this.value.length; i++) {
 				data[i * 3] = this.value[i].getX();
@@ -99,7 +99,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 
 		@Override
-		protected void readInternal(NBTBase nbt) {
+		protected void readInternal(INBT nbt) {
 			if (nbt instanceof IntArrayNBT) {
 				int[] data = ((IntArrayNBT) nbt).getIntArray();
 				this.value = new BlockPos[data.length / 3];

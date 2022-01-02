@@ -9,7 +9,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -155,7 +155,7 @@ public class DungeonDataManager {
 
 		for (String key : root.getKeySet()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
-			for (NBTBase nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
+			for (INBT nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
 				dungeonInfos.add(new DungeonInfo((CompoundNBT) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {

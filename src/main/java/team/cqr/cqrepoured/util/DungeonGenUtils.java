@@ -5,11 +5,8 @@ import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongNBT;
+import net.minecraft.nbt.*;
+import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
@@ -351,8 +348,8 @@ public class DungeonGenUtils {
 	}
 
 	public static UUID readUUIDFromList(ListNBT nbtTagList) {
-		NBTBase nbtM = nbtTagList.get(0);
-		NBTBase nbtL = nbtTagList.get(1);
+		INBT nbtM = nbtTagList.get(0);
+		INBT nbtL = nbtTagList.get(1);
 		return new UUID(nbtM instanceof LongNBT ? ((LongNBT) nbtM).getLong() : 0, nbtM instanceof LongNBT ? ((LongNBT) nbtL).getLong() : 0);
 	}
 

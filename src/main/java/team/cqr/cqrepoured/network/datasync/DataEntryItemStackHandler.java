@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.datasync;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.items.ItemStackHandler;
@@ -18,12 +18,12 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 	}
 
 	@Override
-	public NBTBase write() {
+	public INBT write() {
 		return this.value.serializeNBT();
 	}
 
 	@Override
-	protected void readInternal(NBTBase nbt) {
+	protected void readInternal(INBT nbt) {
 		this.canMarkDirty = false;
 		if (nbt instanceof NBTTagCompound) {
 			this.value.deserializeNBT((NBTTagCompound) nbt);

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.datasync;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -15,12 +15,12 @@ public class DataEntryResourceLocation extends DataEntryObject<ResourceLocation>
 	}
 
 	@Override
-	public NBTBase write() {
+	public INBT write() {
 		return new StringNBT(this.value.toString());
 	}
 
 	@Override
-	protected void readInternal(NBTBase nbt) {
+	protected void readInternal(INBT nbt) {
 		if (nbt instanceof StringNBT) {
 			this.value = new ResourceLocation(((StringNBT) nbt).getString());
 		}

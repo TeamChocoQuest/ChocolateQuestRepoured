@@ -11,8 +11,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
@@ -83,7 +83,7 @@ public class ItemDungeonPlacer extends Item {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("dependencies")) {
 			tooltip.add("Mod Dependencies: ");
-			for (NBTBase nbtTag : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
+			for (INBT nbtTag : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
 				String dependency = nbtTag.toString().replace("\"", "");
 				if (Loader.isModLoaded(dependency)) {
 					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.DARK_GREEN + dependency);

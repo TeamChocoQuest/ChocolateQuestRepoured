@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
@@ -220,7 +220,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 			}
 
 			ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
-			for (NBTBase passengerNBT : passengers) {
+			for (INBT passengerNBT : passengers) {
 				Entity passenger = this.createEntityFromTag(world, placement, pos, (CompoundNBT) passengerNBT);
 				passenger.startRiding(entity);
 			}
@@ -269,7 +269,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 					((AbstractEntityCQR) entity).onExportFromWorld();
 				}
 				ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
-				for (NBTBase passengerNBT : passengers) {
+				for (INBT passengerNBT : passengers) {
 					Entity passenger = createEntityForExporting((CompoundNBT) passengerNBT, world, pos);
 					passenger.startRiding(entity);
 				}

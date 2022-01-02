@@ -4,7 +4,7 @@ import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCooldownHandler> {
 
 	@Override
-	public NBTBase writeNBT(Capability<CapabilityCooldownHandler> capability, CapabilityCooldownHandler instance, Direction side) {
+	public INBT writeNBT(Capability<CapabilityCooldownHandler> capability, CapabilityCooldownHandler instance, Direction side) {
 		ListNBT nbtTagList = new ListNBT();
 
 		for (Map.Entry<Item, Integer> entry : instance.getItemCooldownMap().entrySet()) {
@@ -29,7 +29,7 @@ public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCool
 	}
 
 	@Override
-	public void readNBT(Capability<CapabilityCooldownHandler> capability, CapabilityCooldownHandler instance, Direction side, NBTBase nbt) {
+	public void readNBT(Capability<CapabilityCooldownHandler> capability, CapabilityCooldownHandler instance, Direction side, INBT nbt) {
 		if (nbt instanceof ListNBT) {
 			ListNBT nbtTagList = (ListNBT) nbt;
 

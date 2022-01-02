@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
@@ -29,7 +29,7 @@ public class CapabilityElectricShock {
 		this.originalCasterID = null;
 	}
 
-	public NBTBase writeToNBT() {
+	public INBT writeToNBT() {
 		CompoundNBT compound = new CompoundNBT();
 
 		compound.setInteger("cooldown", this.cooldown);

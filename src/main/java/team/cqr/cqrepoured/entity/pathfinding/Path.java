@@ -12,7 +12,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -42,7 +42,7 @@ public class Path {
 		if (!s.equals(VERSION)) {
 			CQRMain.logger.warn("Reading path: Expected version {} but got {}", VERSION, s);
 		}
-		for (NBTBase nbt : compound.getTagList("nodes", Constants.NBT.TAG_COMPOUND)) {
+		for (INBT nbt : compound.getTagList("nodes", Constants.NBT.TAG_COMPOUND)) {
 			this.nodes.add(new PathNode(this, (CompoundNBT) nbt));
 		}
 		this.onPathChanged();

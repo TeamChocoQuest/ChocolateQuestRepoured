@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.datasync;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -16,12 +16,12 @@ public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 	}
 
 	@Override
-	public NBTBase write() {
+	public INBT write() {
 		return DungeonGenUtils.writePosToList(this.value);
 	}
 
 	@Override
-	protected void readInternal(NBTBase nbt) {
+	protected void readInternal(INBT nbt) {
 		if (nbt instanceof ListNBT) {
 			this.value = DungeonGenUtils.readPosFromList((ListNBT) nbt);
 		}

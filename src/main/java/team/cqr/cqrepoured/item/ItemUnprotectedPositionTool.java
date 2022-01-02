@@ -12,7 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
@@ -83,9 +83,9 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 		if (tagList == null) {
 			return false;
 		}
-		Iterator<NBTBase> iterator = tagList.iterator();
+		Iterator<INBT> iterator = tagList.iterator();
 		while (iterator.hasNext()) {
-			NBTBase tag = iterator.next();
+			INBT tag = iterator.next();
 			int[] data = ((IntArrayNBT) tag).getIntArray();
 			if (data[0] == pos.getX() && data[1] == pos.getY() && data[2] == pos.getZ()) {
 				iterator.remove();
