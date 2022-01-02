@@ -12,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -160,7 +160,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 		this.ticksExisted = additionalData.readInt();
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getTextureID() {
 		return this.texture.ordinal();
 	}

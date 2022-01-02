@@ -215,7 +215,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected ServerBossInfo bossInfoServer;
 
 	// Client only
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected ESpeechBubble currentSpeechBubbleID;
 
 	protected AbstractEntityCQR(World worldIn) {
@@ -1326,12 +1326,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		return this.dataManager.get(TALKING);
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ESpeechBubble getCurrentSpeechBubble() {
 		return this.currentSpeechBubbleID;
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
 		if (this.hasTrades()) {
 			this.currentSpeechBubbleID = ESpeechBubble.getRandTraderBubble(this.rand);
@@ -1340,7 +1340,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getTextureIndex() {
 		return this.dataManager.get(TEXTURE_INDEX);
 	}

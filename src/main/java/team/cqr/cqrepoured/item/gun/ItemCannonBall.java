@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.init.CQRItems;
 public class ItemCannonBall extends Item {
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getItem() == CQRItems.CANNON_BALL) {
 			tooltip.add(TextFormatting.BLUE + "+5 " + I18n.format("description.bullet_damage.name"));

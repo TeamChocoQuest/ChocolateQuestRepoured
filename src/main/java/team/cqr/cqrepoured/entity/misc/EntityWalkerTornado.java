@@ -17,9 +17,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.entity.particle.ParticleWalkerTornado;
@@ -82,7 +82,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	// Particle code taken from aether legacy's whirlwind
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateParticles() {
 		final Integer color = this.getColor();
 		for (int k = 0; k < 4; ++k) {
@@ -117,7 +117,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		}
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getDistanceToParticle(final EntityParticle particle) {
 		final float f = (float) (this.posX - particle.getX());
 		final float f2 = (float) (this.posY - particle.getY());

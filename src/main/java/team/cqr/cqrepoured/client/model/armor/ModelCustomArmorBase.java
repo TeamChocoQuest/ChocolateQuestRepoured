@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelCustomArmorBase extends ModelBiped {
 
 	private final FloatPriorityQueue rotations = new FloatArrayFIFOQueue();

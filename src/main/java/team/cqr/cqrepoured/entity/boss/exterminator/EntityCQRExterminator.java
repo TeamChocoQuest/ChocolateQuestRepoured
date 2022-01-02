@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityMultiPart;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -27,8 +29,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -418,11 +418,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public static final String ANIM_NAME_CANNON_SHOOT = ANIM_NAME_PREFIX + "shoot_cannon";
 	public static final String ANIM_NAME_THROW = ANIM_NAME_PREFIX + "throw";
 	public static final String ANIM_NAME_GROUND_SMASH = ANIM_NAME_PREFIX + "ground_slam";
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private boolean shootIndicator;// = false; Default value for boolean field is false, for boolean wrapper object it is null (cause it is an object...)
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private boolean throwIndicator;// = false;
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private boolean smashIndicator;// = false;
 
 	private <E extends IAnimatable> PlayState predicateBigAnimations(AnimationEvent<E> event) {
@@ -996,17 +996,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	// Kick stuff
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private boolean kickInProgressClient;
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean isUsingKickAnimation() {
 		return this.kickInProgressClient;
 	}
 
 	// IServerAnimationReceiver logic
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void processAnimationUpdate(String animationID) {
 		this.currentAnimationPlaying = animationID;
 		switch (animationID) {

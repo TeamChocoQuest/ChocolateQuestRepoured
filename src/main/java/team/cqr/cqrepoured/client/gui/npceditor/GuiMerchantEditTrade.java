@@ -26,7 +26,7 @@ import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiMerchantEditTrade extends ContainerScreen {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");

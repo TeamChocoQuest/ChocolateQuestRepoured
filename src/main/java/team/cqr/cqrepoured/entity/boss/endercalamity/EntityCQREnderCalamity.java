@@ -36,8 +36,8 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -1069,7 +1069,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private Optional<String> newAnimation = Optional.absent();
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void processAnimationUpdate(String animationID) {
 		// Only process this on client!!
 		if (this.world.isRemote) {

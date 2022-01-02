@@ -5,10 +5,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 
-@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class CQRTextureAtlasSprites {
 
 	@SubscribeEvent

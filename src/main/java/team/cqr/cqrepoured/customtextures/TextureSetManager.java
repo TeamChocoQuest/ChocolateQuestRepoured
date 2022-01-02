@@ -128,7 +128,7 @@ public class TextureSetManager {
 		this.textureSets.put(set.getName(), set);
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void unloadTexturesImpl() {
 		for (TextureSet set : this.textureSets.values()) {
 			for (ResourceLocation rs : set.getTextures()) {

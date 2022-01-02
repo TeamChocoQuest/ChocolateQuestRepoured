@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerCQREntityPotion extends AbstractLayerCQR {
 
 	public LayerCQREntityPotion(RenderCQREntity<?> renderCQREntity) {

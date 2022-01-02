@@ -16,7 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.input.Keyboard;
@@ -33,7 +33,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -90,7 +90,7 @@ public abstract class ItemHookshotBase extends Item {
 
 		this.addPropertyOverride(new ResourceLocation("hook_out"), new IItemPropertyGetter() {
 			@Override
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
 				if (entityIn != null && stack.getItem() instanceof ItemHookshotBase) {
 					CompoundNBT stackTag = stack.getTagCompound();
@@ -155,7 +155,7 @@ public abstract class ItemHookshotBase extends Item {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format(this.getTranslationKey()));

@@ -13,7 +13,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class TextureUtil {
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean loadFileInResourcepack(File textureFile, ResourceLocation resLoc) {
 		if (textureFile != null && textureFile.exists() && resLoc != null) {
 			// This code basically loads a new texture or reloads an existing one
@@ -27,7 +27,7 @@ public class TextureUtil {
 		return false;
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static boolean unloadTexture(ResourceLocation texture) {
 		try {
 			CTResourcepack.remove(texture);
@@ -38,10 +38,10 @@ public class TextureUtil {
 		return false;
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void reloadResourcepacks() {
 		CTResourcepack.loadAllTextures();
-		IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
+		IResourceManager rm = Minecraft.getInstance().getResourceManager();
 		if (rm instanceof SimpleReloadableResourceManager) {
 			((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
 		} else {

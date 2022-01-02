@@ -10,6 +10,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.input.Keyboard;
 
@@ -30,7 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemSoulBottle extends Item {
 
@@ -156,7 +156,7 @@ public class ItemSoulBottle extends Item {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.soul_bottle.name"));

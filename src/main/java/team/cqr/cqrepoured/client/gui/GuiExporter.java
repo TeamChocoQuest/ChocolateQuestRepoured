@@ -10,17 +10,17 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.ConfigGuiType;
 import net.minecraftforge.fml.client.config.DummyConfigElement.DummyListElement;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiEditArray;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiExporter extends Screen {
 
 	private final TileEntityExporter exporter;

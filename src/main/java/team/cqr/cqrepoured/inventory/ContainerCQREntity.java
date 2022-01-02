@@ -62,7 +62,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return ArmorItem.EMPTY_SLOT_NAMES[0];
 			}
@@ -86,7 +86,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return ArmorItem.EMPTY_SLOT_NAMES[1];
 			}
@@ -110,7 +110,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return ArmorItem.EMPTY_SLOT_NAMES[2];
 			}
@@ -129,7 +129,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return ArmorItem.EMPTY_SLOT_NAMES[3];
 			}
@@ -137,7 +137,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(inventory, 4, 71, 26) {
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return "cqrepoured:items/empty_slot_sword";
 			}
@@ -145,7 +145,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(inventory, 5, 89, 26) {
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return "minecraft:items/empty_armor_slot_shield";
 			}
@@ -158,7 +158,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return "cqrepoured:items/empty_slot_potion";
 			}
@@ -171,7 +171,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return "cqrepoured:items/empty_slot_badge";
 			}
@@ -184,7 +184,7 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			@Nullable
-			@Dist(OnlyIn.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public String getSlotTexture() {
 				return "cqrepoured:items/empty_slot_arrow";
 			}

@@ -7,19 +7,19 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CachedBlockAccess;
 
-@Dist(OnlyIn.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface

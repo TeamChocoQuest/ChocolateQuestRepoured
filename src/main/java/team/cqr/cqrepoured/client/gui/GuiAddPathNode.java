@@ -10,6 +10,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector2f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -23,15 +25,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.pathfinding.Path;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiAddPathNode extends Screen {
 
 	private final Hand hand;

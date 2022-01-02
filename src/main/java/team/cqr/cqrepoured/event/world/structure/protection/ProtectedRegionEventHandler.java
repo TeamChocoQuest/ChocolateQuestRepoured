@@ -16,6 +16,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 import org.apache.commons.io.FileUtils;
 
@@ -55,7 +56,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -131,10 +131,10 @@ public class ProtectedRegionEventHandler {
 		}
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static CQRConfig.DungeonProtection cachedProtectionConfig;
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientConnectedToServerEvent(ClientConnectedToServerEvent event) {
 		if (!Minecraft.getMinecraft().isIntegratedServerRunning()) {
@@ -142,7 +142,7 @@ public class ProtectedRegionEventHandler {
 		}
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientDisconnectionFromServerEvent(ClientDisconnectionFromServerEvent event) {
 		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(Minecraft.getMinecraft().world);

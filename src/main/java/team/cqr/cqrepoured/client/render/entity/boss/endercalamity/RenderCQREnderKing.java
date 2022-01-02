@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderCQREnderKing extends RenderCQREntity<EntityCQREnderKing> {
 
 	public RenderCQREnderKing(EntityRendererManager rendermanagerIn) {

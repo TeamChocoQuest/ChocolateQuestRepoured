@@ -77,7 +77,7 @@ public class ItemDagger extends ItemCQRWeapon {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.BLUE + "200% " + I18n.format("description.rear_damage.name"));
 

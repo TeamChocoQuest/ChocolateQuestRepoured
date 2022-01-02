@@ -25,7 +25,7 @@ public class PotionCQR extends Effect {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void renderInventoryEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z) {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.renderEngine.bindTexture(this.texture);
@@ -33,7 +33,7 @@ public class PotionCQR extends Effect {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.renderEngine.bindTexture(this.texture);

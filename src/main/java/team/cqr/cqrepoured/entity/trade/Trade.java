@@ -16,9 +16,9 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.CraftingHelper;
@@ -330,7 +330,7 @@ public class Trade {
 		return this.output.copy();
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ItemStack getOutputClient() {
 		return this.output;
 	}
@@ -343,7 +343,7 @@ public class Trade {
 		return list;
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public NonNullList<TradeInput> getInputItemsClient() {
 		return this.inputs;
 	}

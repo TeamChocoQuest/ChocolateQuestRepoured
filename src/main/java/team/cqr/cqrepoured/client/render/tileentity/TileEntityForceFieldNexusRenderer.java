@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
  * Author: DerToaster98
  * Github: https://github.com/DerToaster98
  */
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TileEntityForceFieldNexusRenderer extends TileEntityRenderer<TileEntityForceFieldNexus> {
 
 	private final ModelBase crystal = new ModelNexusCrystal();

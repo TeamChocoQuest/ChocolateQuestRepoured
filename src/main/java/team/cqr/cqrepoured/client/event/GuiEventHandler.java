@@ -5,17 +5,17 @@ import java.util.Arrays;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiDungeonMapTool;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 
-@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class GuiEventHandler {
 
 	@SubscribeEvent

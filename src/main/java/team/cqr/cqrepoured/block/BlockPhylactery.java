@@ -76,7 +76,7 @@ public class BlockPhylactery extends Block {
 		return BlockRenderType.MODEL;
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;

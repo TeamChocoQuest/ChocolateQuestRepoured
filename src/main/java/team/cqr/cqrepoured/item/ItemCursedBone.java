@@ -127,7 +127,7 @@ public class ItemCursedBone extends Item {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (hasCursedBoneEntityTag(stack)) {
 			try {

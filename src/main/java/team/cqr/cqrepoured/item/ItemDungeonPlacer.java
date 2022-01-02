@@ -24,9 +24,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
@@ -78,7 +78,7 @@ public class ItemDungeonPlacer extends Item {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("dependencies")) {

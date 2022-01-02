@@ -4,12 +4,12 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 
-@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class DyableItemEventHandler {
 
 	@SubscribeEvent

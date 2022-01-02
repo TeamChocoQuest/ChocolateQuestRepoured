@@ -5,12 +5,12 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiReputation extends Screen {
 
 	// Textures

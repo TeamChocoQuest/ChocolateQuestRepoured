@@ -4,14 +4,14 @@ import java.nio.FloatBuffer;
 
 import javax.vecmath.Matrix4f;
 
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 // Copied from https://github.com/mchorse/mclib/blob/1.12/src/main/java/mchorse/mclib/utils/MatrixUtils.java
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class MatrixUtil {
 	/**
 	 * Model view matrix buffer

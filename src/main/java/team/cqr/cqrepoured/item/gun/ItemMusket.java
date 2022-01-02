@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.input.Keyboard;
 
@@ -18,7 +19,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -31,7 +31,7 @@ public class ItemMusket extends ItemRevolver {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.BLUE + "7.5 " + I18n.format("description.bullet_damage.name"));
 		tooltip.add(TextFormatting.RED + "-60 " + I18n.format("description.fire_rate.name"));

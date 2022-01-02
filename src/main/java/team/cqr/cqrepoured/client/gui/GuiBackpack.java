@@ -4,10 +4,10 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiBackpack extends ContainerScreen {
 
 	private static final ResourceLocation GUI_BACKPACK = new ResourceLocation("textures/gui/container/shulker_box.png");

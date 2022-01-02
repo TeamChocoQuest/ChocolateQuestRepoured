@@ -11,8 +11,8 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.proxy.ClientProxy;
 import team.cqr.cqrepoured.util.GuiHandler;
 
-@Dist(OnlyIn.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class KeybindingHandler {
 
 	// Opens repu GUI

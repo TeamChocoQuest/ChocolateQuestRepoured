@@ -29,8 +29,8 @@ import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
-@Dist(OnlyIn.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
+@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class RenderEventHandler {
 
 	@SubscribeEvent

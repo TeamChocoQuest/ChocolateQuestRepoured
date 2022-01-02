@@ -21,7 +21,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.Difficulty;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.FileUtils;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -34,8 +36,6 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
@@ -97,12 +97,12 @@ public class FactionRegistry {
 		this.loadEntityFactionRelations();
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addFaction(Faction faction) {
 		this.factions.put(faction.getName(), faction);
 	}
 
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setReputation(UUID player, int reputation, Faction faction) {
 		if (faction.canRepuChange()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new Object2IntOpenHashMap<>());

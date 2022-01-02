@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiBossBlock extends ContainerScreen {
 
 	private static final ResourceLocation GUI_BOSS_BLOCK = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_boss_block.png");

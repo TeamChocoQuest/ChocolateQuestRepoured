@@ -10,7 +10,7 @@ import net.minecraft.util.HandSide;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerCQRPirateParrotHeldItem extends HeldItemLayer {
 
 	public LayerCQRPirateParrotHeldItem(ParrotRenderer renderCQREntity) {

@@ -20,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.faction.Faction;
@@ -235,7 +235,7 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean isInRangeToRenderDist(double distance) {
 		return super.isInRangeToRenderDist(distance) || this.getBeamTarget() != null;
 	}

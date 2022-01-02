@@ -22,7 +22,7 @@ import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 
-@Dist(OnlyIn.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiMerchant extends ContainerScreen implements IUpdatableGui {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant.png");

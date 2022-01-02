@@ -4,7 +4,7 @@ import java.time.Month;
 import java.time.MonthDay;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigManager;
@@ -440,7 +440,7 @@ public class CQRConfig {
 		return false;
 	}
 
-	@EventBusSubscriber(modid = CQRMain.MODID, value = OnlyIn.CLIENT)
+	@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 	private static class EventHandler {
 
 		@SubscribeEvent

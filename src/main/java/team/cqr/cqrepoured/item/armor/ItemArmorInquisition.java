@@ -7,8 +7,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 
 public class ItemArmorInquisition extends ArmorItem {
@@ -18,7 +18,7 @@ public class ItemArmorInquisition extends ArmorItem {
 	}
 
 	@Override
-	@Dist(OnlyIn.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
 		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.inquisitionArmorLegs : CQRArmorModels.inquisitionArmor;
