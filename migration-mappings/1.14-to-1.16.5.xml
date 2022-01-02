@@ -13,4 +13,8 @@
 	<entry oldName="net.minecraft.world.gen.feature.MineshaftStructure" newName="net.minecraft.world.gen.feature.structure.MineshaftStructure" type="class" />
 	<entry oldName="net.minecraft.world.gen.feature.Structure" newName="net.minecraft.world.gen.feature.structure.Structure" type="class" />
 	<entry oldName="net.minecraft.entity.ai.attributes.IAttribute" newName="net.minecraft.entity.ai.attributes.Attribute" type="class" />
+	<entry oldName="net.minecraft.entity.EnumCreatureAttribute" newName="net.minecraft.entity.CreatureAttribute" type="class" />
+	<entry oldName="net.minecraft.entity.SharedMonsterAttributes" newName="net.minecraft.entity.ai.attributes.Attributes" type="class" />
+	<entry oldName="net.minecraft.entity.MultiPartEntityPart" newName="net.minecraftforge.entity.PartEntity" type="class" />
+	<entry oldName="" newName="" type="class" />
 </migrationMap>
