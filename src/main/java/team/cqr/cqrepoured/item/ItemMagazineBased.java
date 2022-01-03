@@ -16,11 +16,10 @@ public abstract class ItemMagazineBased extends ItemLore {
 
 	protected final Predicate<ItemStack> predicateAmmo;
 
-	public ItemMagazineBased(Predicate<ItemStack> fuelPredicate) {
-		super();
+	public ItemMagazineBased(Properties itemProperties, Predicate<ItemStack> fuelPredicate) {
+		super(itemProperties);
 
 		this.predicateAmmo = fuelPredicate;
-		this.setMaxStackSize(1);
 	}
 
 	public abstract int getMaxAmmo();
@@ -30,18 +29,18 @@ public abstract class ItemMagazineBased extends ItemLore {
 	protected abstract int getAmmoForSingleAmmoItem(ItemStack ammoItem);
 
 	@Override
-	public boolean isRepairable() {
+	public boolean isRepairable(ItemStack stack) {
 		return false;
 	}
-
+	
 	public boolean hasMagazineTag(ItemStack stack) {
 		if (stack == null) {
 			return false;
 		}
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new CompoundNBT());
+		if (!stack.hasTag()) {
+			stack.setTag(new CompoundNBT());
 		}
-		return stack.hasTagCompound() && stack.getTagCompound().hasKey(CONSTANT_AMMO_NBT_KEY, Constants.NBT.TAG_INT);
+		return stack.hasTag() && stack.getTag().contains(CONSTANT_AMMO_NBT_KEY, Constants.NBT.TAG_INT);
 	}
 
 	public void removeAmmoFromItem(ItemStack stack, int amount) {
@@ -50,7 +49,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 
 	public int getAmmoInItem(ItemStack stack) {
 		if (this.hasMagazineTag(stack)) {
-			return stack.getTagCompound().getInteger(CONSTANT_AMMO_NBT_KEY);
+			return stack.getTag().getInt(CONSTANT_AMMO_NBT_KEY);
 		}
 		return 0;
 	}
@@ -61,10 +60,10 @@ public abstract class ItemMagazineBased extends ItemLore {
 
 	public void setAmmo(ItemStack stack, int amount) {
 		amount = amount < 0 ? 0 : amount;
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new CompoundNBT());
+		if (!stack.hasTag()) {
+			stack.setTag(new CompoundNBT());
 		}
-		stack.getTagCompound().setInteger(CONSTANT_AMMO_NBT_KEY, amount);
+		stack.getTag().putInt(CONSTANT_AMMO_NBT_KEY, amount);
 	}
 
 	public float getAmmoInItemInPercent(ItemStack stack) {
@@ -88,13 +87,13 @@ public abstract class ItemMagazineBased extends ItemLore {
 
 	@Override
 	public int getRGBDurabilityForDisplay(ItemStack stack) {
-		return MathHelper.hsvToRGB(this.getAmmoInItemInPercent(stack) / 3.0F, 1.0F, 1.0F);
+		return MathHelper.hsvToRgb(this.getAmmoInItemInPercent(stack) / 3.0F, 1.0F, 1.0F);
 	}
 
 	public List<ItemStack> getAmmoItemsInInventory(PlayerInventory playerInventory) {
 		List<ItemStack> result = new ArrayList<>();
-		for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
-			ItemStack stack = playerInventory.getStackInSlot(i);
+		for (int i = 0; i < playerInventory.getContainerSize(); i++) {
+			ItemStack stack = playerInventory.getItem(i);
 			if (this.isValidAmmo(stack)) {
 				result.add(stack);
 			}
@@ -106,8 +105,8 @@ public abstract class ItemMagazineBased extends ItemLore {
 	public ItemStack getDefaultInstance() {
 		ItemStack def = super.getDefaultInstance();
 
-		if (!def.hasTagCompound()) {
-			def.setTagCompound(new CompoundNBT());
+		if (!def.hasTag()) {
+			def.setTag(new CompoundNBT());
 		}
 
 		this.setAmmo(def, this.getMaxAmmo());
@@ -147,7 +146,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 				}
 			}
 			if (fuel.isEmpty() && removeItems) {
-				playerInventory.deleteStack(fuel);
+				playerInventory.removeItem(fuel);
 			}
 			// Exit the loop when too many items were processed
 			if (processedItems >= this.getMaxProcessedItemsPerReloadCycle()) {
