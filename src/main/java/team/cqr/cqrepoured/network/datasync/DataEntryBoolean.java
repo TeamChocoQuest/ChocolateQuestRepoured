@@ -17,13 +17,13 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 
 	@Override
 	public INBT write() {
-		return new ByteNBT((byte) (this.value ? 1 : 0));
+		return ByteNBT.valueOf((byte) (this.value ? 1 : 0));
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof ByteNBT) {
-			this.value = ((ByteNBT) nbt).getByte() != 0;
+			this.value = ((ByteNBT) nbt).getAsByte() != 0;
 		}
 	}
 

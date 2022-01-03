@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.network.datasync;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -25,8 +27,8 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 	@Override
 	protected void readInternal(INBT nbt) {
 		this.canMarkDirty = false;
-		if (nbt instanceof NBTTagCompound) {
-			this.value.deserializeNBT((NBTTagCompound) nbt);
+		if (nbt instanceof CompoundNBT) {
+			this.value.deserializeNBT((CompoundNBT) nbt);
 		}
 		this.canMarkDirty = true;
 	}
@@ -79,11 +81,11 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 		if (dataManager == null) {
 			return;
 		}
-		World world = dataManager.getTileEntity().getWorld();
+		World world = dataManager.getTileEntity().getLevel();
 		if (world == null) {
 			return;
 		}
-		if (world.isRemote && !this.isClientModificationAllowed()) {
+		if (world.isClientSide && !this.isClientModificationAllowed()) {
 			return;
 		}
 		this.isDirty = true;

@@ -17,13 +17,13 @@ public class DataEntryDouble extends DataEntry<Double> {
 
 	@Override
 	public INBT write() {
-		return new DoubleNBT(this.value);
+		return DoubleNBT.valueOf(this.value);
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof DoubleNBT) {
-			this.value = ((DoubleNBT) nbt).getDouble();
+			this.value = ((DoubleNBT) nbt).getAsDouble();
 		}
 	}
 

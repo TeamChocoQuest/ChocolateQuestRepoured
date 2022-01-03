@@ -91,11 +91,11 @@ public abstract class DataEntry<T> {
 		if (this.dataManager == null) {
 			return;
 		}
-		World world = this.dataManager.getTileEntity().getWorld();
+		World world = this.dataManager.getTileEntity().getLevel();
 		if (world == null) {
 			return;
 		}
-		if (world.isRemote && !this.isClientModificationAllowed) {
+		if (world.isClientSide && !this.isClientModificationAllowed) {
 			return;
 		}
 		this.isDirty = true;

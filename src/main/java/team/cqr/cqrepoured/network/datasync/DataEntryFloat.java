@@ -17,13 +17,13 @@ public class DataEntryFloat extends DataEntry<Float> {
 
 	@Override
 	public INBT write() {
-		return new FloatNBT(this.value);
+		return FloatNBT.valueOf(this.value);
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof FloatNBT) {
-			this.value = ((FloatNBT) nbt).getFloat();
+			this.value = ((FloatNBT) nbt).getAsFloat();
 		}
 	}
 

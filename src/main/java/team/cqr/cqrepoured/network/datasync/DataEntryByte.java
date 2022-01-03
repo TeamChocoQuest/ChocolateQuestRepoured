@@ -17,13 +17,13 @@ public class DataEntryByte extends DataEntry<Byte> {
 
 	@Override
 	public INBT write() {
-		return new ByteNBT(this.value);
+		return ByteNBT.valueOf(this.value);
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof ByteNBT) {
-			this.value = ((ByteNBT) nbt).getByte();
+			this.value = ((ByteNBT) nbt).getAsByte();
 		}
 	}
 

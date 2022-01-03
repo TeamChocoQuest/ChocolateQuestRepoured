@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 
 	public DataEntryBlockPos(String name, @Nonnull BlockPos defaultValue, boolean isClientModificationAllowed) {
-		super(name, defaultValue.toImmutable(), isClientModificationAllowed);
+		super(name, defaultValue.immutable(), isClientModificationAllowed);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 
 	@Override
 	protected void setInternal(BlockPos value) {
-		super.setInternal(value.toImmutable());
+		super.setInternal(value.immutable());
 	}
 
 }

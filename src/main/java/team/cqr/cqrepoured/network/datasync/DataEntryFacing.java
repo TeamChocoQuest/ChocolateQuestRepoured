@@ -13,13 +13,13 @@ public class DataEntryFacing extends DataEntryObject<Direction> {
 
 	@Override
 	public INBT write() {
-		return new ByteNBT((byte) this.value.ordinal());
+		return ByteNBT.valueOf((byte) this.value.ordinal());
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof ByteNBT) {
-			this.value = Direction.values()[((ByteNBT) nbt).getByte()];
+			this.value = Direction.values()[((ByteNBT) nbt).getAsByte()];
 		}
 	}
 

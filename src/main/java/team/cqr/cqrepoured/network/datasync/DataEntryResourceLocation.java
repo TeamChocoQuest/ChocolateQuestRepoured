@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.network.datasync;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
@@ -16,19 +17,19 @@ public class DataEntryResourceLocation extends DataEntryObject<ResourceLocation>
 
 	@Override
 	public INBT write() {
-		return new StringNBT(this.value.toString());
+		return StringNBT.valueOf(this.value.toString());
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof StringNBT) {
-			this.value = new ResourceLocation(((StringNBT) nbt).getString());
+			this.value = new ResourceLocation(((StringNBT) nbt).getAsString());
 		}
 	}
 
 	@Override
 	public void writeChanges(ByteBuf buf) {
-		ByteBufUtils.writeUTF8String(buf, this.value.toString());
+		ByteBufUtil.writeUtf8(buf, this.value.toString());
 	}
 
 	@Override

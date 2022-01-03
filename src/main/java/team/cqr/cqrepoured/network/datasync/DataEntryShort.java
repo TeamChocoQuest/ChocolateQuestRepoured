@@ -17,13 +17,13 @@ public class DataEntryShort extends DataEntry<Short> {
 
 	@Override
 	public INBT write() {
-		return new ShortNBT(this.value);
+		return ShortNBT.valueOf(this.value);
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof ShortNBT) {
-			this.value = ((ShortNBT) nbt).getShort();
+			this.value = ((ShortNBT) nbt).getAsShort();
 		}
 	}
 

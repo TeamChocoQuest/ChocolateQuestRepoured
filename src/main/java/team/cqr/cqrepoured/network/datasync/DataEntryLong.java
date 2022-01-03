@@ -17,13 +17,13 @@ public class DataEntryLong extends DataEntry<Long> {
 
 	@Override
 	public INBT write() {
-		return new LongNBT(this.value);
+		return LongNBT.valueOf(this.value);
 	}
 
 	@Override
 	protected void readInternal(INBT nbt) {
 		if (nbt instanceof LongNBT) {
-			this.value = ((LongNBT) nbt).getLong();
+			this.value = ((LongNBT) nbt).getAsLong();
 		}
 	}
 
