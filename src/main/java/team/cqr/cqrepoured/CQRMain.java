@@ -12,6 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -101,31 +102,32 @@ public class CQRMain {
 
 	public static final ItemGroup CQR_ITEMS_TAB = new ItemGroup(CQRMain.MODID + "_items") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(CQRItems.BOOTS_CLOUD);
 		}
+
 	};
 	public static final ItemGroup CQR_BLOCKS_TAB = new ItemGroup(CQRMain.MODID + "_blocks") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.TABLE_OAK);
 		}
 	};
 	public static final ItemGroup CQR_CREATIVE_TOOL_TAB = new ItemGroup(CQRMain.MODID + "_creative_tools") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER);
 		}
 	};
 	public static final ItemGroup CQR_BANNERS_TAB = new ItemGroup(CQRMain.MODID + "_banners") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return EBanners.WALKER_ORDO.getBanner();
 		}
-
+		
 		@Override
-		public void displayAllRelevantItems(NonNullList<ItemStack> itemList) {
-			super.displayAllRelevantItems(itemList);
+		public void fillItemList(NonNullList<ItemStack> itemList) {
+			super.fillItemList(itemList);
 			List<ItemStack> banners = BannerHelper.addBannersToTabs();
 			for (ItemStack stack : banners) {
 				itemList.add(stack);
@@ -134,27 +136,27 @@ public class CQRMain {
 	};
 	public static final ItemGroup CQR_DUNGEON_PLACER_TAB = new ItemGroup(CQRMain.MODID + "_dungeon_placers") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
 		}
 	};
 	public static final ItemGroup CQR_EXPORTER_CHEST_TAB = new ItemGroup(CQRMain.MODID + "_exporter_chests") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
 		}
 	};
 	public static final ItemGroup CQR_SPAWN_EGG_TAB = new ItemGroup(CQRMain.MODID + "_spawn_eggs") {
 		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(Items.SPAWN_EGG);
+		public ItemStack makeIcon() {
+			return new ItemStack(Items.PILLAGER_SPAWN_EGG);
 		}
 	};
 
 	public static final WorldDungeonGenerator DUNGEON_GENERATOR = new WorldDungeonGenerator();
 	public static final WorldWallGenerator WALL_GENERATOR = new WorldWallGenerator();
 
-	@EventHandler
+	@SubscribeEvent
 	public void preInit(FMLPreInitializationEvent event) {
 		// The geckolib comment says this should be in the constructor but that only applies to MC 1.16+
 		GeckoLib.initialize();
@@ -229,7 +231,7 @@ public class CQRMain {
 		}
 	}
 
-	@EventHandler
+	@SubscribeEvent
 	public void init(FMLInitializationEvent event) {
 		proxy.init();
 
@@ -241,7 +243,7 @@ public class CQRMain {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler
+	@SubscribeEvent
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
 
@@ -259,7 +261,7 @@ public class CQRMain {
 		DungeonInhabitantManager.instance().loadDungeonInhabitants();
 	}
 
-	@EventHandler
+	@SubscribeEvent
 	public static void onFMLServerStartingEvent(FMLServerAboutToStartEvent event) {
 		// Since the CTS manager could also be corrupted, let's make him reload his data...
 		TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
@@ -269,7 +271,7 @@ public class CQRMain {
 		CQStructure.cacheFiles();
 	}
 
-	@EventHandler
+	@SubscribeEvent
 	public static void onFMLServerStartingEvent(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandExport());
 		event.registerServerCommand(new CommandChangeReputation());
@@ -279,9 +281,9 @@ public class CQRMain {
 		event.registerServerCommand(new CommandImport());
 	}
 
-	@EventHandler
-	public static void onFMLServerStoppingEvent(FMLServerStoppingEvent event) {
-		FactionRegistry.getServerInstance().saveAllReputationData(true);
+	@SubscribeEvent
+	public static void onFMLServerStoppingEvent(net.minecraftforge.fml.event.server.FMLServerStoppingEvent event) {
+		FactionRegistry.getServerInstance().saveAllReputationData(true, event.getServer().overworld());
 		CQStructure.clearCache();
 	}
 
