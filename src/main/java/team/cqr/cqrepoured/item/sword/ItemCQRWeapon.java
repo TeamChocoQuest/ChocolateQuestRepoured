@@ -18,6 +18,10 @@ public class ItemCQRWeapon extends SwordItem {
 	private final double attackDamageBonus;
 	private final double attackSpeedBonus;
 
+	public ItemCQRWeapon(IItemTier material, int attackDamage, Item.Properties props) {
+		this(material, attackDamage, material.getSpeed(), props);
+	}
+	
 	public ItemCQRWeapon(IItemTier material, int attackDamageBonus, float attackSpeedBonus, Item.Properties itemProps) {
 		super(material, attackDamageBonus, attackSpeedBonus, itemProps);
 		this.attackDamageBonus = attackDamageBonus;
