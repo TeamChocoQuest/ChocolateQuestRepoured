@@ -10,6 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCooldownHandler> {
 
@@ -20,9 +21,9 @@ public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCool
 		for (Map.Entry<Item, Integer> entry : instance.getItemCooldownMap().entrySet()) {
 			CompoundNBT compound = new CompoundNBT();
 
-			compound.setString("item", entry.getKey().getRegistryName().toString());
-			compound.setInteger("cooldown", entry.getValue());
-			nbtTagList.appendTag(compound);
+			compound.putString("item", entry.getKey().getRegistryName().toString());
+			compound.putInt("cooldown", entry.getValue());
+			nbtTagList.add(compound);
 		}
 
 		return nbtTagList;
@@ -33,12 +34,12 @@ public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCool
 		if (nbt instanceof ListNBT) {
 			ListNBT nbtTagList = (ListNBT) nbt;
 
-			for (int i = 0; i < nbtTagList.tagCount(); i++) {
-				CompoundNBT compound = nbtTagList.getCompoundTagAt(i);
-				Item item = Item.REGISTRY.getObject(new ResourceLocation(compound.getString("item")));
+			for (int i = 0; i < nbtTagList.size(); i++) {
+				CompoundNBT compound = nbtTagList.getCompound(i);
+				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(compound.getString("item")));
 
 				if (item != null) {
-					instance.setCooldown(item, compound.getInteger("cooldown"));
+					instance.setCooldown(item, compound.getInt("cooldown"));
 				}
 			}
 		}
