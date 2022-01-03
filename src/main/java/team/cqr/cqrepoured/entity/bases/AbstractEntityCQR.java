@@ -522,16 +522,15 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			boolean backpackflag = false;
 			if (itemstack.getItem() instanceof ItemBackpack) {
 				LazyOptional<IItemHandler> invOpt = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				invOpt.ifPresent(inv -> {
-					if (inv != null) {
-						for (int i = 0; i < inv.getSlots(); i++) {
-							if (!inv.getStackInSlot(i).isEmpty()) {
-								backpackflag = true;
-								break;
-							}
+				if(invOpt.isPresent()) {
+					IItemHandler ih = invOpt.resolve().get();
+					for (int i = 0; i < ih.getSlots(); i++) {
+						if (!ih.getStackInSlot(i).isEmpty()) {
+							backpackflag = true;
+							break;
 						}
 					}
-				});
+				}
 			}
 
 			if (backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && this.random.nextFloat() - lootingModifier * 0.01F < d0)) {
@@ -1151,10 +1150,11 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
-		LazyOptional<CapabilityExtraItemHandler> capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
-		ItemStack result = ItemStack.EMPTY;
-		capability.ifPresent(capa -> {result = capa.getStackInSlot(slot.getIndex());});
-		return result;
+		LazyOptional<CapabilityExtraItemHandler> lOpCap = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
+		if(lOpCap.isPresent()) {
+			return lOpCap.resolve().get().getStackInSlot(slot.getIndex());
+		}
+		return ItemStack.EMPTY;
 	}
 
 	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
