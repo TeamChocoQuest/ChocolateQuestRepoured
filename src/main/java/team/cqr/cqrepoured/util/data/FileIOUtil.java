@@ -9,11 +9,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.crash.ReportedException;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 
 public class FileIOUtil {
 
@@ -23,6 +28,28 @@ public class FileIOUtil {
 		return NBT_FILE_FILTER;
 	}
 
+	@Nullable
+	public static File getWorldRootFolder(World world) {
+		File levelDatFile = getDatFileInWorldAtPath(world, "level");
+		if(levelDatFile != null) {
+			return levelDatFile.getParentFile();
+		}
+		return null;
+	}
+	
+	@Nullable
+	public static File getDatFileInWorldAtPath(World world, String filePath) {
+		if(!(world instanceof ServerWorld)) {
+			return null;
+		}
+		if(filePath.endsWith(".dat")) {
+			filePath = filePath.substring(0, ".dat".length());
+		}
+		ServerWorld sw = (ServerWorld) world;
+		DimensionSavedDataManager storage = sw.getDataStorage();
+		return storage.getDataFile(filePath);
+	}
+	
 	public static void writeNBTToFile(CompoundNBT compound, File file) {
 		try {
 			file.getParentFile().mkdirs();
