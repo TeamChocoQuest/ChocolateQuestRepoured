@@ -42,13 +42,13 @@ public class CapabilityPath {
 		if (this.isReading) {
 			return;
 		}
-		CompoundNBT tag = this.stack.getTagCompound();
+		CompoundNBT tag = this.stack.getTag();
 		if (tag == null) {
 			tag = new CompoundNBT();
-			this.stack.setTagCompound(tag);
+			this.stack.setTag(tag);
 		}
-		tag.setTag("path", this.path.writeToNBT());
-		tag.setInteger("selectedNode", this.selectedNode != null ? this.selectedNode.getIndex() : -1);
+		tag.put("path", this.path.writeToNBT());
+		tag.putInt("selectedNode", this.selectedNode != null ? this.selectedNode.getIndex() : -1);
 	}
 
 	private void readFromStack() {
@@ -57,16 +57,16 @@ public class CapabilityPath {
 		}
 		this.readFromStack = true;
 		this.isReading = true;
-		CompoundNBT tag = this.stack.getTagCompound();
+		CompoundNBT tag = this.stack.getTag();
 		if (tag == null) {
 			this.isReading = false;
 			return;
 		}
-		if (tag.hasKey("path", Constants.NBT.TAG_COMPOUND)) {
-			this.path.readFromNBT(tag.getCompoundTag("path"));
+		if (tag.contains("path", Constants.NBT.TAG_COMPOUND)) {
+			this.path.readFromNBT(tag.getCompound("path"));
 		}
-		if (tag.hasKey("selectedNode", Constants.NBT.TAG_INT)) {
-			this.selectedNode = this.path.getNode(tag.getInteger("selectedNode"));
+		if (tag.contains("selectedNode", Constants.NBT.TAG_INT)) {
+			this.selectedNode = this.path.getNode(tag.getInt("selectedNode"));
 		}
 		this.isReading = false;
 		this.writeToStack();
