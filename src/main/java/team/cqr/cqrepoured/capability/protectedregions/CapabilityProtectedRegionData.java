@@ -30,7 +30,7 @@ public class CapabilityProtectedRegionData {
 			UUID uuid = iterator.next();
 			if (predicate.test(uuid)) {
 				iterator.remove();
-				this.chunk.markDirty();
+				this.chunk.markUnsaved();
 			}
 		}
 	}
@@ -38,13 +38,13 @@ public class CapabilityProtectedRegionData {
 	public void clearProtectedRegionUuids() {
 		if (!this.protectedRegionUuids.isEmpty()) {
 			this.protectedRegionUuids.clear();
-			this.chunk.markDirty();
+			this.chunk.markUnsaved();
 		}
 	}
 
 	public boolean addProtectedRegionUuid(UUID uuid) {
 		if (this.protectedRegionUuids.add(uuid)) {
-			this.chunk.markDirty();
+			this.chunk.markUnsaved();
 			return true;
 		}
 		return false;
@@ -52,7 +52,7 @@ public class CapabilityProtectedRegionData {
 
 	public boolean removeProtectedRegionUuid(UUID uuid) {
 		if (this.protectedRegionUuids.remove(uuid)) {
-			this.chunk.markDirty();
+			this.chunk.markUnsaved();
 			return true;
 		}
 		return false;
@@ -69,7 +69,7 @@ public class CapabilityProtectedRegionData {
 			data[i * 4 + 3] = (int) uuid.getLeastSignificantBits();
 			i++;
 		}
-		compound.setTag("protectedRegionUuids", new IntArrayNBT(data));
+		compound.put("protectedRegionUuids", new IntArrayNBT(data));
 		return compound;
 	}
 
