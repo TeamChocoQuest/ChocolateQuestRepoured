@@ -23,8 +23,9 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
+import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemStaffGun extends Item implements IRangedWeapon {
+public class ItemStaffGun extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffGun() {
 		this.setMaxDamage(2048);
@@ -47,16 +48,6 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 			worldIn.spawnEntity(ball);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 20);
-		}
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_gun.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 

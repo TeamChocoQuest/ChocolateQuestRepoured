@@ -8,8 +8,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
+import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemStaffWind extends Item implements IRangedWeapon {
+public class ItemStaffWind extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffWind() {
 		this.setMaxDamage(2048);

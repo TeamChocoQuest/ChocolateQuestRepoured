@@ -15,8 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemStaff extends Item {
+public class ItemStaff extends ItemLore {
 
 	public ItemStaff() {
 		this.setMaxStackSize(1);
@@ -26,16 +27,6 @@ public class ItemStaff extends Item {
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		target.knockback(attacker, 1.0F, attacker.posX - target.posX, attacker.posZ - target.posZ);
 		return false;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
 	}
 
 }

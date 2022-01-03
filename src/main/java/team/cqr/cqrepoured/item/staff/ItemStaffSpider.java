@@ -24,8 +24,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderBall;
 import team.cqr.cqrepoured.item.IRangedWeapon;
+import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemStaffSpider extends Item implements IRangedWeapon {
+public class ItemStaffSpider extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffSpider() {
 		this.setMaxDamage(2048);
@@ -49,16 +50,6 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 			worldIn.spawnEntity(ball);
 			stack.damageItem(1, playerIn);
 			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
-		}
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_spider.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 

@@ -23,8 +23,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.item.IRangedWeapon;
+import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemStaffVampiric extends Item implements IRangedWeapon {
+public class ItemStaffVampiric extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffVampiric() {
 		this.setMaxDamage(2048);
@@ -48,16 +49,6 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 			worldIn.spawnEntity(spell);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 20);
-		}
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_vampiric.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 

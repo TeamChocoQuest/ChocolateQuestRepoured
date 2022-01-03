@@ -28,9 +28,10 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.ISupportWeapon;
+import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
 
-public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwordHealingStaff> {
+public class ItemStaffHealing extends ItemLore implements ISupportWeapon<ItemFakeSwordHealingStaff> {
 
 	public static final float HEAL_AMOUNT_ENTITIES = 4.0F;
 
@@ -61,16 +62,6 @@ public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwo
 		}
 
 		return multimap;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_healing.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
 	}
 
 	@Override

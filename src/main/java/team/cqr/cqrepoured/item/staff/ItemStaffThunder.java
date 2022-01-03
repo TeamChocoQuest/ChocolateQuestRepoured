@@ -26,8 +26,9 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
+import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemStaffThunder extends Item implements IRangedWeapon {
+public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffThunder() {
 		this.setMaxDamage(2048);
@@ -70,16 +71,6 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		return result != null && !worldIn.isAirBlock(result.getBlockPos());
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.staff_thunder.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
 	}
 
 	@Override
