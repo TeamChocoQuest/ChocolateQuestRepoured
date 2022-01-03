@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.entity;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -15,19 +16,19 @@ public class EntitySlimePart extends SlimeEntity {
 
 	private UUID ownerUuid;
 
-	public EntitySlimePart(World worldIn) {
-		super(worldIn);
+	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	public EntitySlimePart(World worldIn, LivingEntity owner) {
 		this(worldIn);
-		this.ownerUuid = owner.getPersistentID();
+		this.ownerUuid = owner.getUUID();
 	}
 
 	@Override
-	protected void initEntityAI() {
+	protected void registerGoals() {
 		super.registerGoals();
-		this.targetTasks.taskEntries.clear();
+		this.targetSelector.availableGoals.clear();
 	}
 
 	@Override
@@ -38,9 +39,9 @@ public class EntitySlimePart extends SlimeEntity {
 	}
 
 	@Override
-	public void onUpdate() {
-		if (this.ticksExisted > 400) {
-			this.setDead();
+	public void tick() {
+		if (this.tickCount > 400) {
+			this.remove();
 		}
 
 		super.tick();

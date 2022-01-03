@@ -80,7 +80,7 @@ public class ItemUtil {
 		return false;
 	}
 
-	public static void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, Function<Double, Double> function) {
+	public static void replaceModifier(Multimap<Attribute, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, Function<Double, Double> function) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
 		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 

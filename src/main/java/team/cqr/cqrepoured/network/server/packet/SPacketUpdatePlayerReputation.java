@@ -21,7 +21,7 @@ public class SPacketUpdatePlayerReputation implements IMessage {
 	public SPacketUpdatePlayerReputation(ServerPlayerEntity player, String faction, int score) {
 		this.score = score;
 		this.faction = faction;
-		this.playerId = player.getPersistentID();
+		this.playerId = player.getUUID();
 	}
 
 	@Override

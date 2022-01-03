@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
 
@@ -121,7 +122,7 @@ public class TextureSetManager {
 		for (TextureSet ts : this.textureSets.values()) {
 			packet.addTextureSet(ts);
 		}
-		CQRMain.NETWORK.sendTo(packet, joiningPlayer);
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> joiningPlayer), packet);
 	}
 
 	private void registerTextureSetImpl(TextureSet set) {

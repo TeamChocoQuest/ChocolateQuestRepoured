@@ -3,33 +3,29 @@ package team.cqr.cqrepoured;
 import java.io.File;
 import java.util.List;
 
-import net.minecraft.item.ItemGroup;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.item.Items;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;raftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import software.bernie.geckolib3.GeckoLib;
-import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.block.banner.EBannerPatternsCQ;
 import team.cqr.cqrepoured.block.banner.EBanners;
 import team.cqr.cqrepoured.command.CommandChangeReputation;
@@ -62,22 +58,22 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WorldWallGenerator;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
-@Mod(modid = CQRMain.MODID, version = CQRMain.VERSION, acceptedMinecraftVersions = CQRMain.ACCEPTED_MINECRAFT_VERSIONS)
+@Mod(CQRMain.MODID)
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
 	public static final String VERSION = "2.6.3B";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 
-	@Instance
 	public static CQRMain INSTANCE;
 
-	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(CQRMain.MODID);
+	private static final String PROTOCOL_VERSION = "1";
+	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main-network-channel"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
 	@SidedProxy(clientSide = "team.cqr.cqrepoured.proxy.ClientProxy", serverSide = "team.cqr.cqrepoured.proxy.ServerProxy")
 	public static IProxy proxy;
 
-	public static Logger logger = null;
+	public static Logger logger = LogManager.getLogger();
 
 	public static File CQ_CONFIG_FOLDER = null;
 	public static File CQ_DUNGEON_GRID_FOLDER = null;
@@ -156,6 +152,14 @@ public class CQRMain {
 	public static final WorldDungeonGenerator DUNGEON_GENERATOR = new WorldDungeonGenerator();
 	public static final WorldWallGenerator WALL_GENERATOR = new WorldWallGenerator();
 
+	public CQRMain() {
+		INSTANCE = this;
+		
+		GeckoLib.initialize();
+		
+		isWorkspaceEnvironment = !CQRMain.class.getResource("").getProtocol().equals("jar");
+	}
+	
 	@SubscribeEvent
 	public void preInit(FMLPreInitializationEvent event) {
 		// The geckolib comment says this should be in the constructor but that only applies to MC 1.16+
@@ -282,7 +286,7 @@ public class CQRMain {
 	}
 
 	@SubscribeEvent
-	public static void onFMLServerStoppingEvent(net.minecraftforge.fml.event.server.FMLServerStoppingEvent event) {
+	public static void onFMLServerStoppingEvent(FMLServerStoppingEvent event) {
 		FactionRegistry.getServerInstance().saveAllReputationData(true, event.getServer().overworld());
 		CQStructure.clearCache();
 	}

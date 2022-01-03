@@ -13,7 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.network.NetworkRegistry;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
@@ -57,7 +57,7 @@ public class TileEntityDataManager {
 
 	public CompoundNBT write(CompoundNBT compound) {
 		for (DataEntry<?> entry : this.entries) {
-			compound.setTag(entry.getName(), entry.write());
+			compound.put(entry.getName(), entry.write());
 		}
 
 		return compound;
@@ -65,29 +65,29 @@ public class TileEntityDataManager {
 
 	public void read(CompoundNBT compound) {
 		for (DataEntry<?> entry : this.entries) {
-			if (compound.hasKey(entry.getName())) {
-				entry.read(compound.getTag(entry.getName()));
+			if (compound.contains(entry.getName())) {
+				entry.read(compound.get(entry.getName()));
 			}
 		}
 	}
 
 	public void onDataEntryChanged(DataEntry<?> entry) {
-		if (!this.tileEntity.hasWorld()) {
+		if (!this.tileEntity.hasLevel()) {
 			return;
 		}
-		this.tileEntity.markDirty();
+		this.tileEntity.setChanged();
 	}
 
 	public void checkIfDirtyAndSync() {
 		if (this.isDirty) {
-			World world = this.tileEntity.getWorld();
+			World world = this.tileEntity.getLevel();
 
 			if (world != null) {
 				List<DataEntry<?>> entryList = new ArrayList<>();
 
 				for (DataEntry<?> entry : this.entries) {
 					if (entry.isDirty()) {
-						if (!world.isRemote || entry.isClientModificationAllowed()) {
+						if (!world.isClientSide || entry.isClientModificationAllowed()) {
 							entryList.add(entry);
 						} else {
 							entry.clearDirty();
@@ -96,13 +96,13 @@ public class TileEntityDataManager {
 				}
 
 				if (!entryList.isEmpty()) {
-					if (!world.isRemote) {
-						int dim = world.provider.getDimension();
-						BlockPos pos = this.tileEntity.getPos();
+					if (!world.isClientSide) {
+						int dim = world.diprovider.getDimension();
+						BlockPos pos = this.tileEntity.getBlockPos();
 						NetworkRegistry.TargetPoint targetPoint = new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), 0.0D);
 						CQRMain.NETWORK.sendToAllTracking(new SPacketSyncTileEntity(pos, entryList), targetPoint);
 					} else {
-						CQRMain.NETWORK.sendToServer(new CPacketSyncTileEntity(this.tileEntity.getPos(), entryList));
+						CQRMain.NETWORK.sendToServer(new CPacketSyncTileEntity(this.tileEntity.getBlockPos(), entryList));
 					}
 
 					for (DataEntry<?> entry : entryList) {
@@ -124,11 +124,11 @@ public class TileEntityDataManager {
 	}
 
 	public void markDirty() {
-		if (!this.tileEntity.hasWorld()) {
+		if (!this.tileEntity.hasLevel()) {
 			return;
 		}
 		this.isDirty = true;
-		this.tileEntity.markDirty();
+		this.tileEntity.setChanged();
 	}
 
 	public void clearDirty() {
