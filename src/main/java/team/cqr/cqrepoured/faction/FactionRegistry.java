@@ -32,9 +32,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -42,6 +40,7 @@ import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
+import team.cqr.cqrepoured.network.IMessage;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
@@ -345,7 +344,7 @@ public class FactionRegistry {
 
 	private void sendRepuUpdatePacket(ServerPlayerEntity player, int reputation, String faction) {
 		// System.out.println("Sending update packet...");
-		IMessage packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
+		SPacketUpdatePlayerReputation packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
 		CQRMain.NETWORK.sendTo(packet, player);
 	}
 
@@ -389,7 +388,7 @@ public class FactionRegistry {
 		CQRMain.logger.info("Loading player reputation...");
 
 		UUID uuid = player.getUUID();
-		File folder = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/CQR/reputation");
+		File folder = new File(FileIOUtil.getWorldRootFolder(player.level), "data/CQR/reputation");
 		File file = new File(folder, uuid + ".nbt");
 		if (file.exists()) {
 			CompoundNBT root = FileIOUtil.readNBTFromFile(file);
@@ -409,24 +408,24 @@ public class FactionRegistry {
 	public void savePlayerReputationData(ServerPlayerEntity player) {
 		if (this.playerFactionRepuMap.containsKey(player.getUUID())) {
 			CQRMain.logger.info("Saving player reputation...");
-			this.savePlayerReputation(player.getUUID(), true);
+			this.savePlayerReputation(player.getUUID(), true, player.level);
 		}
 	}
 
-	public void saveAllReputationData(final boolean removeMapsFromMemory) {
+	public void saveAllReputationData(final boolean removeMapsFromMemory, final World world) {
 		for (UUID playerID : this.playerFactionRepuMap.keySet()) {
-			this.savePlayerReputation(playerID, removeMapsFromMemory);
+			this.savePlayerReputation(playerID, removeMapsFromMemory, world);
 		}
 	}
 
-	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap) {
+	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap, final World world) {
 		Map<String, Integer> mapping = this.playerFactionRepuMap.get(playerID);
 		CompoundNBT root = new CompoundNBT();
 		for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
 			root.putInt(entry.getKey(), entry.getValue());
 		}
 
-		File folder = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/CQR/reputation");
+		File folder = new File(FileIOUtil.getWorldRootFolder(world), "data/CQR/reputation");
 		File file = new File(folder, playerID + ".nbt");
 		FileIOUtil.writeNBTToFile(root, file);
 
