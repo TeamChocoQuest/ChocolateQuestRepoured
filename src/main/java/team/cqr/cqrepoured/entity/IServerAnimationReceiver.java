@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
 public interface IServerAnimationReceiver {
 
-	default EntityLivingBase getEntity() {
-		if (this instanceof EntityLivingBase) {
-			return (EntityLivingBase) this;
+	default LivingEntity getEntity() {
+		if (this instanceof LivingEntity) {
+			return (LivingEntity) this;
 		}
 		return null;
 	}
@@ -19,8 +20,8 @@ public interface IServerAnimationReceiver {
 	void processAnimationUpdate(String animationID);
 
 	default void sendAnimationUpdate(final String animationName) {
-		IMessage message = SPacketUpdateAnimationOfEntity.builder(this).animate(animationName).build();
-		CQRMain.NETWORK.sendToAllTracking(message, this.getEntity());
+		SPacketUpdateAnimationOfEntity message = SPacketUpdateAnimationOfEntity.builder(this).animate(animationName).build();
+		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getEntity), message);
 	}
 
 }
