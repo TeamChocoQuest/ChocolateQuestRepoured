@@ -17,10 +17,10 @@ public class CapabilityItemHandlerItem extends ItemStackHandler {
 	public CapabilityItemHandlerItem(ItemStack stack, int size) {
 		super(size);
 		this.stack = stack;
-		if (!this.stack.hasTagCompound()) {
-			this.stack.setTagCompound(new CompoundNBT());
+		if (!this.stack.hasTag()) {
+			this.stack.setTag(new CompoundNBT());
 		}
-		if (this.stack.getTagCompound().hasKey(CapabilityItemHandlerProvider.REGISTRY_NAME.toString())) {
+		if (this.stack.getTag().contains(CapabilityItemHandlerProvider.REGISTRY_NAME.toString())) {
 			this.deserializeNBT(null);
 		} else {
 			this.serializeNBT();
@@ -37,16 +37,16 @@ public class CapabilityItemHandlerItem extends ItemStackHandler {
 
 	@Override
 	public CompoundNBT serializeNBT() {
-		if (this.stack.hasTagCompound()) {
-			this.stack.getTagCompound().setTag(CapabilityItemHandlerProvider.REGISTRY_NAME.toString(), super.serializeNBT());
+		if (this.stack.hasTag()) {
+			this.stack.getTag().put(CapabilityItemHandlerProvider.REGISTRY_NAME.toString(), super.serializeNBT());
 		}
 		return null;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
-		if (this.stack.hasTagCompound()) {
-			super.deserializeNBT(this.stack.getTagCompound().getCompoundTag(CapabilityItemHandlerProvider.REGISTRY_NAME.toString()));
+		if (this.stack.hasTag()) {
+			super.deserializeNBT(this.stack.getTag().getCompound(CapabilityItemHandlerProvider.REGISTRY_NAME.toString()));
 			this.hasBeenDeserialized = true;
 		}
 	}
