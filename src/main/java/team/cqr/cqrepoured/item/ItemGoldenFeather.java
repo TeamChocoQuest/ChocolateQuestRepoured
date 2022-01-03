@@ -8,14 +8,15 @@ import net.minecraft.world.World;
 
 public class ItemGoldenFeather extends ItemLore {
 
-	public ItemGoldenFeather() {
-		super();
-		this.setMaxStackSize(1);
-		this.setMaxDamage(385);
+	public ItemGoldenFeather(Properties props) {
+		super(props);
+		//Move to creation of item
+		//this.setMaxStackSize(1);
+		//this.setMaxDamage(385);
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		// mainhand or offhand
 		if (!isSelected && itemSlot != 0) {
 			return;
@@ -23,7 +24,7 @@ public class ItemGoldenFeather extends ItemLore {
 		if (entityIn.fallDistance <= 0.0F) {
 			return;
 		}
-		worldIn.spawnParticle(ParticleTypes.CLOUD, entityIn.posX, entityIn.posY, entityIn.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.5F) / 2.0F);
+		worldIn.addParticle(ParticleTypes.CLOUD, entityIn.position().x(), entityIn.position().y(), entityIn.position().z(), (random.nextFloat() - 0.5F) / 2.0F, -0.5D, (random.nextFloat() - 0.5F) / 2.0F);
 	}
 
 	@Override
