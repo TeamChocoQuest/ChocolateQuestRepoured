@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CapabilityDynamicCrown {
 
@@ -24,8 +25,8 @@ public class CapabilityDynamicCrown {
 	}
 
 	public void attachItem(ResourceLocation itemResLoc) {
-		if (Item.REGISTRY.containsKey(itemResLoc)) {
-			this.attachedItem = Item.REGISTRY.getObject(itemResLoc);
+		if (ForgeRegistries.ITEMS.containsKey(itemResLoc)) {
+			this.attachedItem = ForgeRegistries.ITEMS.getValue(itemResLoc);
 		}
 	}
 
