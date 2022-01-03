@@ -14,7 +14,7 @@ public class CapabilityDynamicCrownStorage implements IStorage<CapabilityDynamic
 	public INBT writeNBT(Capability<CapabilityDynamicCrown> capability, CapabilityDynamicCrown instance, Direction side) {
 		CompoundNBT compound = new CompoundNBT();
 		if (instance.getAttachedItem() != null) {
-			compound.setString("attachedItem", instance.getAttachedItem().getRegistryName().toString());
+			compound.putString("attachedItem", instance.getAttachedItem().getRegistryName().toString());
 		}
 		return compound;
 	}
@@ -22,7 +22,7 @@ public class CapabilityDynamicCrownStorage implements IStorage<CapabilityDynamic
 	@Override
 	public void readNBT(Capability<CapabilityDynamicCrown> capability, CapabilityDynamicCrown instance, Direction side, INBT nbt) {
 		CompoundNBT compound = (CompoundNBT) nbt;
-		if (compound.hasKey("attachedItem", Constants.NBT.TAG_STRING)) {
+		if (compound.contains("attachedItem", Constants.NBT.TAG_STRING)) {
 			instance.attachItem(new ResourceLocation(compound.getString("attachedItem")));
 		}
 	}
