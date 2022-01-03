@@ -19,9 +19,9 @@ public class CapabilityExtraItemHandlerStorage implements IStorage<CapabilityExt
 			ItemStack stack = instance.getStackInSlot(i);
 			if (!stack.isEmpty()) {
 				CompoundNBT itemTag = new CompoundNBT();
-				itemTag.setInteger("Slot", i);
-				stack.writeToNBT(itemTag);
-				nbtTagList.appendTag(itemTag);
+				itemTag.putInt("Slot", i);
+				stack.save(itemTag);
+				nbtTagList.add(itemTag);
 			}
 		}
 		return nbtTagList;
@@ -31,12 +31,12 @@ public class CapabilityExtraItemHandlerStorage implements IStorage<CapabilityExt
 	public void readNBT(Capability<CapabilityExtraItemHandler> capability, CapabilityExtraItemHandler instance, Direction side, INBT base) {
 		IItemHandlerModifiable itemHandlerModifiable = instance;
 		ListNBT tagList = (ListNBT) base;
-		for (int i = 0; i < tagList.tagCount(); i++) {
-			CompoundNBT itemTags = tagList.getCompoundTagAt(i);
-			int j = itemTags.getInteger("Slot");
+		for (int i = 0; i < tagList.size(); i++) {
+			CompoundNBT itemTag = tagList.getCompound(i);
+			int j = itemTag.getInt("Slot");
 
 			if (j >= 0 && j < instance.getSlots()) {
-				itemHandlerModifiable.setStackInSlot(j, new ItemStack(itemTags));
+				itemHandlerModifiable.setStackInSlot(j, ItemStack.of(itemTag));
 			}
 		}
 	}
