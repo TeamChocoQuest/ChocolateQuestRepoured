@@ -75,14 +75,14 @@ public class TradeInput {
 
 	public CompoundNBT writeToNBT() {
 		CompoundNBT compound = new CompoundNBT();
-		compound.setTag("stack", this.stack.writeToNBT(new CompoundNBT()));
-		compound.setBoolean("ignoreMeta", this.ignoreMeta);
-		compound.setBoolean("ignoreNBT", this.ignoreNBT);
+		compound.put("stack", this.stack.save(new CompoundNBT()));
+		compound.putBoolean("ignoreMeta", this.ignoreMeta);
+		compound.putBoolean("ignoreNBT", this.ignoreNBT);
 		return compound;
 	}
 
 	public void readFromNBT(CompoundNBT compound) {
-		this.stack = new ItemStack(compound.getCompoundTag("stack"));
+		this.stack = ItemStack.of(compound.getCompound("stack"));
 		this.ignoreMeta = compound.getBoolean("ignoreMeta");
 		this.ignoreNBT = compound.getBoolean("ignoreNBT");
 	}

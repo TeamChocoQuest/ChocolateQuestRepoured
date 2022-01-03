@@ -80,20 +80,20 @@ public class Trade {
 
 	private void readFromNBT(CompoundNBT nbt) {
 		this.inputs.clear();
-		ListNBT inItems = nbt.getTagList("inputs", Constants.NBT.TAG_COMPOUND);
+		ListNBT inItems = nbt.getList("inputs", Constants.NBT.TAG_COMPOUND);
 		for (INBT tag : inItems) {
 			this.inputs.add(new TradeInput((CompoundNBT) tag));
 		}
-		this.output = new ItemStack(nbt.getCompoundTag("output"));
+		this.output = ItemStack.of(nbt.getCompound("output"));
 		this.isSimple = nbt.getBoolean("isSimple");
 
-		this.requiredReputation = nbt.getInteger("requiredReputation");
-		this.requiredAdvancement = nbt.hasKey("requiredAdvancement", Constants.NBT.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement")) : null;
+		this.requiredReputation = nbt.getInt("requiredReputation");
+		this.requiredAdvancement = nbt.contains("requiredAdvancement", Constants.NBT.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement")) : null;
 
 		this.hasLimitedStock = nbt.getBoolean("hasLimitedStock");
-		this.restockRate = nbt.getInteger("restockRate");
-		this.inStock = nbt.getInteger("inStock");
-		this.maxStock = nbt.getInteger("maxStock");
+		this.restockRate = nbt.getInt("restockRate");
+		this.inStock = nbt.getInt("inStock");
+		this.maxStock = nbt.getInt("maxStock");
 	}
 
 	public CompoundNBT writeToNBT() {
@@ -101,20 +101,20 @@ public class Trade {
 
 		ListNBT inItems = new ListNBT();
 		for (TradeInput input : this.inputs) {
-			inItems.appendTag(input.writeToNBT());
+			inItems.add(input.writeToNBT());
 		}
-		nbt.setTag("inputs", inItems);
-		nbt.setTag("output", this.output.writeToNBT(new CompoundNBT()));
-		nbt.setBoolean("isSimple", this.isSimple);
+		nbt.put("inputs", inItems);
+		nbt.put("output", this.output.save(new CompoundNBT()));
+		nbt.putBoolean("isSimple", this.isSimple);
 
-		nbt.setBoolean("hasLimitedStock", this.hasLimitedStock);
-		nbt.setInteger("restockRate", this.restockRate);
-		nbt.setInteger("inStock", this.inStock);
-		nbt.setInteger("maxStock", this.maxStock);
+		nbt.putBoolean("hasLimitedStock", this.hasLimitedStock);
+		nbt.putInt("restockRate", this.restockRate);
+		nbt.putInt("inStock", this.inStock);
+		nbt.putInt("maxStock", this.maxStock);
 
-		nbt.setInteger("requiredReputation", this.requiredReputation);
+		nbt.putInt("requiredReputation", this.requiredReputation);
 		if (this.requiredAdvancement != null) {
-			nbt.setString("requiredAdvancement", this.requiredAdvancement.toString());
+			nbt.putString("requiredAdvancement", this.requiredAdvancement.toString());
 		}
 
 		return nbt;
@@ -272,7 +272,7 @@ public class Trade {
 				}
 			}
 
-			if (!player.world.isRemote) {
+			if (!player.level.isClientSide) {
 				this.decStock();
 			}
 
@@ -373,7 +373,7 @@ public class Trade {
 	}
 
 	public boolean isUnlockedFor(PlayerEntity player) {
-		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance(player).getExactReputationOf(player.getUniqueID(), this.holder.getTraderFaction()) < this.requiredReputation) {
+		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance(player).getExactReputationOf(player.getUUID(), this.holder.getTraderFaction()) < this.requiredReputation) {
 			return false;
 		}
 

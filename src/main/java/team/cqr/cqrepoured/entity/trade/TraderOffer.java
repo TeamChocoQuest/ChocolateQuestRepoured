@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
@@ -28,7 +29,7 @@ public class TraderOffer {
 
 	public void readFromNBT(CompoundNBT nbt) {
 		this.trades.clear();
-		ListNBT tradesNBT = nbt.getTagList("trades", Constants.NBT.TAG_COMPOUND);
+		ListNBT tradesNBT = nbt.getList("trades", Constants.NBT.TAG_COMPOUND);
 		for (INBT tag : tradesNBT) {
 			this.trades.add(Trade.createFromNBT(this, (CompoundNBT) tag));
 		}
@@ -37,9 +38,9 @@ public class TraderOffer {
 	public CompoundNBT writeToNBT(CompoundNBT nbt) {
 		ListNBT tradesNBT = new ListNBT();
 		for (Trade trade : this.trades) {
-			tradesNBT.appendTag(trade.writeToNBT());
+			tradesNBT.add(trade.writeToNBT());
 		}
-		nbt.setTag("trades", tradesNBT);
+		nbt.put("trades", tradesNBT);
 		return nbt;
 	}
 
@@ -67,17 +68,17 @@ public class TraderOffer {
 	}
 
 	public void onTradesUpdated() {
-		if (!this.entity.world.isRemote) {
-			this.entity.world.playerEntities.stream()
-					.map(p -> p.openContainer)
+		if (!this.entity.level.isClientSide) {
+			this.entity.level.players().stream()
+					.map(p -> p.containerMenu)
 					.filter(Objects::nonNull)
 					.filter(ContainerMerchant.class::isInstance)
 					.map(ContainerMerchant.class::cast)
 					.filter(c -> c.getMerchant() == this.entity)
 					.forEach(c -> c.onTradesUpdated());
-			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncTrades(this.entity), this.entity);
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new SPacketSyncTrades(this.entity));
 		} else {
-			Container c = Minecraft.getMinecraft().player.openContainer;
+			Container c = Minecraft.getInstance().player.containerMenu;
 			if (c instanceof ContainerMerchant) {
 				((ContainerMerchant) c).onTradesUpdated();
 			}
