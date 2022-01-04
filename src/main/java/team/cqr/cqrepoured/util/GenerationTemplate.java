@@ -92,14 +92,14 @@ public class GenerationTemplate {
 					Vector3i offset = new Vector3i(x, y, z);
 					for (GenerationRule rule : this.generationRules) {
 						if (rule.getCondition().test(offset)) {
-							result.put(origin.add(offset), rule.getBlock());
+							result.put(origin.offset(offset), rule.getBlock());
 							foundRule = true;
 							break; // No need to test other rules
 						}
 					}
 
 					if (!foundRule && fillUnusedWithAir) {
-						result.put(origin.add(offset), Blocks.AIR.getDefaultState());
+						result.put(origin.offset(offset), Blocks.AIR.defaultBlockState());
 					}
 				}
 			}
