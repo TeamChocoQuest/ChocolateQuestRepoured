@@ -42,7 +42,7 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isInsideSphere(BlockPos pos, BlockPos center, int radius) {
-		return center.distanceSq(pos) < radius * radius;
+		return center.distSqr(pos) < radius * radius;
 	}
 
 	public static boolean isInsideSphere(int x, int y, int z, int radius) {
@@ -222,7 +222,7 @@ public class DungeonGenUtils {
 		int rotations = 0;
 		if (start.getAxis().isHorizontal() && end.getAxis().isHorizontal()) {
 			while (start != end) {
-				start = start.rotateY();
+				start = start.getClockWise();
 				rotations++;
 			}
 		}
@@ -231,7 +231,7 @@ public class DungeonGenUtils {
 
 	public static Direction rotateFacingNTimesAboutY(Direction facing, int n) {
 		for (int i = 0; i < n; i++) {
-			facing = facing.rotateY();
+			facing = facing.getClockWise();
 		}
 		return facing;
 	}
@@ -318,39 +318,39 @@ public class DungeonGenUtils {
 
 	public static ListNBT writePosToList(BlockPos pos) {
 		ListNBT nbtTagList = new ListNBT();
-		nbtTagList.appendTag(new IntNBT(pos.getX()));
-		nbtTagList.appendTag(new IntNBT(pos.getY()));
-		nbtTagList.appendTag(new IntNBT(pos.getZ()));
+		nbtTagList.add(IntNBT.valueOf(pos.getX()));
+		nbtTagList.add(IntNBT.valueOf(pos.getY()));
+		nbtTagList.add(IntNBT.valueOf(pos.getZ()));
 		return nbtTagList;
 	}
 
 	public static BlockPos readPosFromList(ListNBT nbtTagList) {
-		return new BlockPos(nbtTagList.getIntAt(0), nbtTagList.getIntAt(1), nbtTagList.getIntAt(2));
+		return new BlockPos(nbtTagList.getInt(0), nbtTagList.getInt(1), nbtTagList.getInt(2));
 	}
 
 	public static ListNBT writeVecToList(Vector3d vec) {
 		ListNBT nbtTagList = new ListNBT();
-		nbtTagList.appendTag(new DoubleNBT(vec.x));
-		nbtTagList.appendTag(new DoubleNBT(vec.y));
-		nbtTagList.appendTag(new DoubleNBT(vec.z));
+		nbtTagList.add(DoubleNBT.valueOf(vec.x));
+		nbtTagList.add(DoubleNBT.valueOf(vec.y));
+		nbtTagList.add(DoubleNBT.valueOf(vec.z));
 		return nbtTagList;
 	}
 
 	public static Vector3d readVecFromList(ListNBT nbtTagList) {
-		return new Vector3d(nbtTagList.getDoubleAt(0), nbtTagList.getDoubleAt(1), nbtTagList.getDoubleAt(2));
+		return new Vector3d(nbtTagList.getDouble(0), nbtTagList.getDouble(1), nbtTagList.getDouble(2));
 	}
 
 	public static ListNBT writeUUIDToList(UUID uuid) {
 		ListNBT nbtTagList = new ListNBT();
-		nbtTagList.appendTag(new LongNBT(uuid.getMostSignificantBits()));
-		nbtTagList.appendTag(new LongNBT(uuid.getLeastSignificantBits()));
+		nbtTagList.add(LongNBT.valueOf(uuid.getMostSignificantBits()));
+		nbtTagList.add(LongNBT.valueOf(uuid.getLeastSignificantBits()));
 		return nbtTagList;
 	}
 
 	public static UUID readUUIDFromList(ListNBT nbtTagList) {
 		INBT nbtM = nbtTagList.get(0);
 		INBT nbtL = nbtTagList.get(1);
-		return new UUID(nbtM instanceof LongNBT ? ((LongNBT) nbtM).getLong() : 0, nbtM instanceof LongNBT ? ((LongNBT) nbtL).getLong() : 0);
+		return new UUID(nbtM instanceof LongNBT ? ((LongNBT) nbtM).getAsLong() : 0, nbtM instanceof LongNBT ? ((LongNBT) nbtL).getAsLong() : 0);
 	}
 
 	/**
@@ -361,12 +361,12 @@ public class DungeonGenUtils {
 	@Deprecated
 	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
 		BlockPos transformedSize = Template.transformedBlockPos(settings, structure.getSize());
-		return pos.add(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
+		return pos.offset(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
 	}
 
 	public static int getSpawnX(World world) {
 		int x = world.getWorldInfo().getSpawnX();
-		return x >= world.getWorldBorder().minX() && x < world.getWorldBorder().maxX() ? x : MathHelper.floor(world.getWorldBorder().getCenterX());
+		return x >= world.getWorldBorder().getMinX() && x < world.getWorldBorder().getMaxX() ? x : MathHelper.floor(world.getWorldBorder().getCenterX());
 	}
 
 	public static int getSpawnY(World world) {
@@ -375,7 +375,7 @@ public class DungeonGenUtils {
 
 	public static int getSpawnZ(World world) {
 		int z = world.getWorldInfo().getSpawnZ();
-		return z >= world.getWorldBorder().minZ() && z < world.getWorldBorder().maxZ() ? z : MathHelper.floor(world.getWorldBorder().getCenterZ());
+		return z >= world.getWorldBorder().getMinZ() && z < world.getWorldBorder().getMaxZ() ? z : MathHelper.floor(world.getWorldBorder().getCenterZ());
 	}
 
 }
