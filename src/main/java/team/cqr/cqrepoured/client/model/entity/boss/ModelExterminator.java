@@ -34,7 +34,7 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 	public void setLivingAnimations(EntityCQRExterminator entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-		if (entity.getHealth() < 0.01 || entity.isDead || !entity.isEntityAlive()) {
+		if (entity.getHealth() < 0.01 || entity.removed || !entity.isAlive()) {
 			return;
 		}
 
