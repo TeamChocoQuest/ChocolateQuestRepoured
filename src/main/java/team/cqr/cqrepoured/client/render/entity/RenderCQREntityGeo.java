@@ -3,56 +3,59 @@ package team.cqr.cqrepoured.client.render.entity;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
-import software.bernie.geckolib3.util.MatrixStack;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
-import team.cqr.cqrepoured.client.util.MatrixUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
+@OnlyIn(Dist.CLIENT)
 public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatable> extends GeoEntityRenderer<T> {
 
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
-	protected double widthScale;
-	protected double heightScale;
+	protected float widthScale;
+	protected float heightScale;
 
 	public final Function<T, ResourceLocation> TEXTURE_GETTER;
 	public final Function<T, ResourceLocation> MODEL_ID_GETTER;
 
 	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
-		this(renderManager, modelProvider, 1D, 1D, 0);
+		this(renderManager, modelProvider, 1F, 1F, 0);
+	}
+	
+	@SuppressWarnings("resource")
+	protected void bindTexture(ResourceLocation textureLocation) {
+		Minecraft.getInstance().textureManager.bind(textureLocation);
 	}
 
-	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, double widthScale, double heightScale, float shadowSize) {
+	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
 		this.TEXTURE_GETTER = modelProvider::getTextureLocation;
 
-		this.shadowSize = shadowSize;
+		this.shadowRadius = shadowSize;
 		this.widthScale = widthScale;
 		this.heightScale = heightScale;
 
@@ -69,35 +72,38 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	// Entrypoint for rendering, calls everything else
 	@Override
-	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
 		this.currentModelRenderCycle = 0;
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
 	}
-
+	
 	// Rendercall to render the model itself
 	@Override
-	public void render(GeoModel model, T animatable, float partialTicks, float red, float green, float blue, float alpha) {
-		super.render(model, animatable, partialTicks, red, green, blue, alpha);
+	public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn,
+			float red, float green, float blue, float alpha) {
+		super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		this.currentModelRenderCycle++;
 	}
 
-	protected double getWidthScale(T entity) {
+	protected float getWidthScale(T entity) {
 		return this.widthScale * entity.getSizeVariation();
 	}
 
-	protected double getHeightScale(T entity) {
+	protected float getHeightScale(T entity) {
 		return this.heightScale * entity.getSizeVariation();
 	}
 
 	@Override
-	public void renderEarly(T animatable, float ticks, float red, float green, float blue, float partialTicks) {
+	public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue,
+			float partialTicks) {
+		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		if (this.currentModelRenderCycle == 0 /* Pre-Layers */) {
-			double width = this.getWidthScale(animatable);
-			double height = this.getHeightScale(animatable);
-			GlStateManager.scale(width, height, width);
+			float width = this.getWidthScale(animatable);
+			float height = this.getHeightScale(animatable);
+			stackIn.scale(width, height, width);
 		}
 	}
-
+	
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
 		return this.TEXTURE_GETTER.apply(entity);
@@ -106,32 +112,28 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	private T currentEntityBeingRendered;
 
 	@Override
-	public void renderLate(T animatable, float ticks, float red, float green, float blue, float partialTicks) {
-		super.renderLate(animatable, ticks, red, green, blue, partialTicks);
+	public void renderLate(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue,
+			float partialTicks) {
+		super.renderLate(animatable, stackIn, ticks, renderTypeBuffer, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		this.currentEntityBeingRendered = animatable;
 	}
-
+	
 	@Override
-	public void renderRecursively(BufferBuilder builder, GeoBone bone, float red, float green, float blue, float alpha) {
+	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		boolean customTextureMarker = this.currentModelRenderCycle == 0 && this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered) != null;
 		if (customTextureMarker) {
 			this.bindTexture(this.getTextureForBone(bone.getName(), this.currentEntityBeingRendered));
 		}
-
 		if (this.currentModelRenderCycle == 0) {
 			ItemStack boneItem = this.getHeldItemForBone(bone.getName(), this.currentEntityBeingRendered);
 			BlockState boneBlock = this.getHeldBlockForBone(bone.getName(), this.currentEntityBeingRendered);
 			if (boneItem != null || boneBlock != null) {
-				// Huge thanks to McHorse and Gecko to get this to work!!
-				Tessellator.getInstance().draw();
-
-				GlStateManager.pushMatrix();
-				multiplyMatrix(IGeoRenderer.MATRIX_STACK, bone);
-
+				stack.pushPose();
+				
 				if (boneItem != null) {
 					this.preRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 
-					Minecraft.getMinecraft().getItemRenderer().renderItem(this.currentEntityBeingRendered, boneItem, this.getCameraTransformForItemAtBone(boneItem, bone.getName()));
+					Minecraft.getInstance().getItemRenderer().renderStatic(boneItem, this.getCameraTransformForItemAtBone(boneItem, bone.getName()), packedLightIn, packedOverlayIn, stack, this.rtb);
 
 					this.postRenderItem(boneItem, bone.getName(), this.currentEntityBeingRendered);
 				}
@@ -142,48 +144,20 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 					this.postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
 				}
-
-				GlStateManager.popMatrix();
-				this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
-
-				builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+				
+				stack.popPose();
 			}
 		}
-		// TODO: ONly reimplement for the armor layer!!
-		/*
-		 * if (bone.getName().equalsIgnoreCase("root") && this.renderPass == 1) {
-		 * bone.setScaleX(bone.getScaleX() + 0.05F);
-		 * bone.setScaleZ(bone.getScaleZ() + 0.05F);
-		 * bone.setScaleY(bone.getScaleY() + 0.025F);
-		 * }
-		 */
-		super.renderRecursively(builder, bone, red, green, blue, alpha);
+		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		
 		if (customTextureMarker) {
-			this.bindTexture(this.getEntityTexture(this.currentEntityBeingRendered));
+			this.bindTexture(this.getTextureLocation(this.currentEntityBeingRendered));
 		}
 	}
+	
 
 	private void renderBlock(BlockState iBlockState, Entity currentEntity) {
 		BlockRenderUtil.renderBlockAtEntity(iBlockState, currentEntity, this);
-	}
-
-	// Code by McHorse
-	private static Matrix4f matrix = new Matrix4f();
-
-	/**
-	 * Multiply given matrix stack onto OpenGL's matrix stack
-	 */
-	public static void multiplyMatrix(MatrixStack stack, GeoBone bone) {
-		matrix.set(stack.getModelMatrix());
-		matrix.transpose();
-
-		MatrixUtil.matrixToFloat(MatrixUtil.floats, matrix);
-		MatrixUtil.buffer.clear();
-		MatrixUtil.buffer.put(MatrixUtil.floats);
-		MatrixUtil.buffer.flip();
-
-		GlStateManager.multMatrix(MatrixUtil.buffer);
-		GlStateManager.translate(bone.rotationPointX / 16, bone.rotationPointY / 16, bone.rotationPointZ / 16);
 	}
 
 	/*

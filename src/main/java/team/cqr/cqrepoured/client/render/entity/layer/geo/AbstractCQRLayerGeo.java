@@ -3,6 +3,11 @@ package team.cqr.cqrepoured.client.render.entity.layer.geo;
 import java.awt.Color;
 import java.util.function.Function;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -23,13 +28,25 @@ public abstract class AbstractCQRLayerGeo<T extends LivingEntity & IAnimatable> 
 		this.funcGetCurrentModel = funcGetCurrentModel;
 	}
 	
-	@Override
-	public boolean shouldCombineTextures() {
-		return false;
-	}
-	
-	protected void reRenderCurrentModelInRenderer(T entity, float partialTicks, Color renderColor) {
-		this.entityRenderer.render(
+	protected void reRenderCurrentModelInRenderer(T entity, float partialTicks, Color renderColor, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, RenderType cameo) {
+		matrixStackIn.pushPose();
+
+		this.getRenderer().render(
+				this.getEntityModel().getModel(this.funcGetCurrentModel.apply(entity)), 
+				entity, 
+				partialTicks, 
+				cameo, 
+				matrixStackIn, 
+				bufferIn, 
+				bufferIn.getBuffer(cameo), 
+				packedLightIn, 
+				OverlayTexture.NO_OVERLAY, 
+				1F, 1F, 1F, 1F
+		);
+		
+		matrixStackIn.popPose();
+		//1.12.2
+		/*this.getRenderer().render(
 			this.getEntityModel().getModel(this.funcGetCurrentModel.apply(entity)), 
 			entity, 
 			partialTicks, 
@@ -37,7 +54,7 @@ public abstract class AbstractCQRLayerGeo<T extends LivingEntity & IAnimatable> 
 			(float) renderColor.getBlue() / 255f,
 			(float) renderColor.getGreen() / 255f, 
 			(float) renderColor.getAlpha() / 255
-		);
+		);*/
 	}
 
 }

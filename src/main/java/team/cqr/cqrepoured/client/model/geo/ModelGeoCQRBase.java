@@ -24,6 +24,7 @@ public abstract class ModelGeoCQRBase<T extends LivingEntity & IAnimatable & IAn
 		this.ENTITY_REGISTRY_PATH_NAME = entityName;
 	}
 
+	
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
 		if (entity instanceof IHasTextureOverride) {

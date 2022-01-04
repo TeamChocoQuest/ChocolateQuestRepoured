@@ -1,9 +1,13 @@
 package team.cqr.cqrepoured.client.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -11,15 +15,26 @@ import net.minecraft.entity.Entity;
 
 public class BlockRenderUtil {
 
-	public static void renderBlockAtEntity(BlockState iBlockState, Entity currentEntity, EntityRenderer<? extends Entity> renderer) {
-		BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+	public static void renderBlockAtEntity(MatrixStack matrixStack, IRenderTypeBuffer rtb, BlockState iBlockState, Entity currentEntity, EntityRenderer<? extends Entity> renderer) {
+		if(iBlockState.getRenderShape() != BlockRenderType.MODEL) {
+			return;
+		}
+		matrixStack.pushPose();
+		
+		matrixStack.translate(-0.25F, -0.25F, 0.25F);
+		matrixStack.scale(0.5F, 0.5F, 0.5F);
+
+		//TODO: Recreate in 1.16... find how i made it in the first place...
+		
+		matrixStack.popPose();
+		
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.pushMatrix();
 
 		GlStateManager.translate(-0.25F, -0.25F, 0.25F);
 		GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
-		int i = currentEntity.getBrightnessForRender();
+		int i = currentEntity.getBrightness();
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
