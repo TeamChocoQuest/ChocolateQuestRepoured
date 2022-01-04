@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -40,7 +41,6 @@ import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
-import team.cqr.cqrepoured.network.IMessage;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
@@ -345,7 +345,7 @@ public class FactionRegistry {
 	private void sendRepuUpdatePacket(ServerPlayerEntity player, int reputation, String faction) {
 		// System.out.println("Sending update packet...");
 		SPacketUpdatePlayerReputation packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
-		CQRMain.NETWORK.sendTo(packet, player);
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), packet);
 	}
 
 	private boolean canDecrementRepu(PlayerEntity player, String faction) {
@@ -402,7 +402,7 @@ public class FactionRegistry {
 
 	public void syncPlayerReputationData(ServerPlayerEntity player) {
 		// Send over factions and reputations
-		CQRMain.NETWORK.sendTo(new SPacketInitialFactionInformation(player.getUUID(), this.getLoadedFactions(), this.playerFactionRepuMap.getOrDefault(player.getUUID(), Object2IntMaps.emptyMap())), player);
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new SPacketInitialFactionInformation(player.getUUID(), this.getLoadedFactions(), this.playerFactionRepuMap.getOrDefault(player.getUUID(), Object2IntMaps.emptyMap())));
 	}
 
 	public void savePlayerReputationData(ServerPlayerEntity player) {
