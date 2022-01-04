@@ -3,10 +3,9 @@ package team.cqr.cqrepoured.client.resources.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.util.Tuple;
 
-public class GlowingMetadataSection implements IMetadataSection {
+public class GlowingMetadataSection /*implements IMetadataSection*/ {
 
 	private List<Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> glowingSections = new ArrayList<>();
 
