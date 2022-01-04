@@ -24,13 +24,12 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,7 +42,7 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
-public abstract class ItemHookshotBase extends Item {
+public abstract class ItemHookshotBase extends ItemLore {
 
 	private enum BlockGroup {
 		BASE_SOLID("BASE_SOLID"), BASE_WOOD("BASE_WOOD"), BASE_STONE("BASE_STONE"), BASE_DIRT("BASE_DIRT");
@@ -82,7 +81,8 @@ public abstract class ItemHookshotBase extends Item {
 	protected List<Block> validLatchBlocks = new ArrayList<>();
 	protected List<BlockGroup> latchGroups = new ArrayList<>();
 
-	public ItemHookshotBase(String hookshotName) {
+	public ItemHookshotBase(String hookshotName, Properties props) {
+		super(props);
 		this.setMaxDamage(300);
 		this.setMaxStackSize(1);
 
@@ -91,9 +91,9 @@ public abstract class ItemHookshotBase extends Item {
 		this.addPropertyOverride(new ResourceLocation("hook_out"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
+			public float call(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
 				if (entityIn != null && stack.getItem() instanceof ItemHookshotBase) {
-					CompoundNBT stackTag = stack.getTagCompound();
+					CompoundNBT stackTag = stack.getTag();
 					if ((stackTag != null) && (stackTag.getBoolean("isShooting"))) {
 						return 1.0f;
 					}
@@ -110,7 +110,7 @@ public abstract class ItemHookshotBase extends Item {
 		Optional<File> configFile = files.stream().filter(f -> FilenameUtils.getBaseName(f.getName()).equalsIgnoreCase(hookshotName)).findFirst();
 
 		if (configFile.isPresent()) {
-			Properties hookshotConfig = new Properties();
+			java.util.Properties hookshotConfig = new java.util.Properties();
 			try (InputStream in = new FileInputStream(configFile.get())) {
 				hookshotConfig.load(in);
 
@@ -154,36 +154,23 @@ public abstract class ItemHookshotBase extends Item {
 		return this.validLatchBlocks.contains(block);
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format(this.getTranslationKey()));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
-	}
-
-	@Override
-	public abstract String getTranslationKey();
-
 	public abstract double getHookRange();
 
 	public abstract ProjectileHookShotHook getNewHookEntity(World worldIn, LivingEntity shooter, ItemStack stack);
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 		this.shoot(stack, worldIn, playerIn);
 		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
 
 	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
 
-		if (!worldIn.isRemote) {
+		if (!worldIn.isClientSide) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
 			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
-			worldIn.spawnEntity(hookEntity);
+			worldIn.addFreshEntity(hookEntity);
 			player.getCooldownTracker().setCooldown(this, 100);
 			stack.damageItem(1, player);
 			worldIn.playSound(null, player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -191,11 +178,11 @@ public abstract class ItemHookshotBase extends Item {
 	}
 
 	public ProjectileHookShotHook entityAIshoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
-		if (!worldIn.isRemote) {
-			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getActiveItemStack());
+		if (!worldIn.isClientSide) {
+			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getUseItem());
 			Vector3d v = target.position().subtract(shooter.position());
 			hookEntity.shootHook(shooter, v.x, v.y, v.z, this.getHookRange(), 1.8D);
-			worldIn.spawnEntity(hookEntity);
+			worldIn.addFreshEntity(hookEntity);
 			return hookEntity;
 		}
 		return null;
