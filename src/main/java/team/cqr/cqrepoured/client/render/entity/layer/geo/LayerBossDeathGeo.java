@@ -1,8 +1,10 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
-import java.awt.Color;
 import java.util.function.Function;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -28,11 +30,11 @@ public class LayerBossDeathGeo<T extends AbstractEntityCQRBoss & IAnimatable> ex
 	}
 
 	@Override
-	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
-		int ticks = this.getAnimationTick(entitylivingbaseIn);
+	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+		int ticks = this.getAnimationTick(entityLivingBaseIn);
 		if(ticks > 0) {
 			this.rayHelper.renderRays(ticks, partialTicks);
 		}
 	}
-
+	
 }
