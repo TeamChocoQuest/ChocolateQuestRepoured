@@ -3,20 +3,22 @@ package team.cqr.cqrepoured.client.render.texture;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.client.resources.data.TextureMetadataSection;
+import net.minecraft.client.resources.data.TextureMetadataSectionSerializer;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
+import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSectionSerializer;
 
 public class AutoGlowingTexture extends Texture {
 
@@ -34,45 +36,46 @@ public class AutoGlowingTexture extends Texture {
 		String path = originalTexture.getPath();
 		int i = path.lastIndexOf('.');
 		ResourceLocation glowingTexture = new ResourceLocation(originalTexture.getNamespace(), path.substring(0, i) + "_glowing" + path.substring(i));
-		EntityRendererManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		if (renderManager.renderEngine.getTexture(glowingTexture) == null) {
-			renderManager.renderEngine.loadTexture(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
+		EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+		if (renderManager.textureManager.getTexture(glowingTexture) == null) {
+			renderManager.textureManager.loadTexture(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
 		}
 		return glowingTexture;
 	}
 
 	@Override
-	public void loadTexture(IResourceManager resourceManager) throws IOException {
-		this.deleteGlTexture();
+	public void load(IResourceManager resourceManager) throws IOException {
+		this.releaseId();
 
 		try (IResource iresource = resourceManager.getResource(this.originalTexture)) {
 			// Needed to get the GL-texture id
-			ITextureObject ito = Minecraft.getMinecraft().renderEngine.getTexture(iresource.getResourceLocation());
-			BufferedImage bufferedimage = TextureUtil.readBufferedImage(iresource.getInputStream());
-			BufferedImage glowingBI = new BufferedImage(bufferedimage.getWidth(), bufferedimage.getHeight(), bufferedimage.getType());
+			Texture ito = Minecraft.getInstance().textureManager.getTexture(iresource.getLocation());
+			NativeImage bufferedimage = NativeImage.read(TextureUtil.readResource(iresource.getInputStream()));
+			NativeImage glowingBI = new NativeImage(bufferedimage.getWidth(), bufferedimage.getHeight(), false/*, bufferedimage.getType()*/);
 
 			boolean flag = false;
 			boolean flag1 = false;
 
-			if (iresource.hasMetadata()) {
+			//Nonexistant in 1.15+ cause the getters are nullable...
+			//if (iresource.hasMetadata()) {
 				try {
 					// DONE: Fix this for the CTS!! Cts for whatever reason tries to load png as mcmeta file...
-					TextureMetadataSection texturemetadatasection = (TextureMetadataSection) iresource.getMetadata("texture");
+					TextureMetadataSection texturemetadatasection = iresource.getMetadata(new TextureMetadataSectionSerializer());
 
 					if (texturemetadatasection != null) {
-						flag = texturemetadatasection.getTextureBlur();
-						flag1 = texturemetadatasection.getTextureClamp();
+						flag = texturemetadatasection.isBlur();
+						flag1 = texturemetadatasection.isClamp();
 					}
 
-					GlowingMetadataSection glowInformation = (GlowingMetadataSection) iresource.getMetadata("glowsections");
+					GlowingMetadataSection glowInformation = iresource.getMetadata(new GlowingMetadataSectionSerializer());
 					if (glowInformation != null) {
 						for (Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> area : glowInformation.getGlowingSections()) {
-							for (int ix = area.getFirst().getFirst(); ix < area.getSecond().getFirst(); ix++) {
-								for (int iy = area.getFirst().getSecond(); iy < area.getSecond().getSecond(); iy++) {
-									glowingBI.setRGB(ix, iy, bufferedimage.getRGB(ix, iy));
+							for (int ix = area.getA().getA(); ix < area.getB().getA(); ix++) {
+								for (int iy = area.getA().getB(); iy < area.getB().getB(); iy++) {
+									glowingBI.setPixelRGBA(ix, iy, bufferedimage.getPixelRGBA(ix, iy));
 
 									// Remove it from the original
-									bufferedimage.setRGB(ix, iy, 0);
+									bufferedimage.setPixelRGBA(ix, iy, 0);
 								}
 							}
 						}
@@ -86,12 +89,12 @@ public class AutoGlowingTexture extends Texture {
 				} catch (RuntimeException runtimeexception) {
 					LOGGER.warn("Failed reading metadata of: {}", this.originalTexture, runtimeexception);
 				}
-			}
+			//}
 
-			TextureUtil.uploadTextureImageAllocate(this.getGlTextureId(), glowingBI, flag, flag1);
+			TextureUtil.uploadTextureImageAllocate(this.getId(), glowingBI, flag, flag1);
 
 			// Also upload the changes to the original texture...
-			TextureUtil.uploadTextureImage(ito.getGlTextureId(), bufferedimage);
+			TextureUtil.uploadTextureImage(ito.getId(), bufferedimage);
 		}
 	}
 
