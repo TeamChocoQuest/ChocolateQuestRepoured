@@ -12,9 +12,10 @@ import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResource;
+import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -50,9 +51,9 @@ public class CubemapTexture extends Texture {
 	 */
 	public static ResourceLocation get(ResourceLocation originalTexture) {
 		ResourceLocation texture = appendBeforeEnding(originalTexture, "_cubemap");
-		EntityRendererManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		if (renderManager.renderEngine.getTexture(texture) == null) {
-			renderManager.renderEngine.loadTexture(texture, new CubemapTexture(originalTexture, texture));
+		EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+		if (renderManager.textureManager.getTexture(texture) == null) {
+			renderManager.textureManager.loadTexture(texture, new CubemapTexture(originalTexture, texture));
 		}
 		return texture;
 	}
@@ -64,10 +65,10 @@ public class CubemapTexture extends Texture {
 	}
 
 	@Override
-	public void loadTexture(IResourceManager resourceManager) throws IOException {
-		this.deleteGlTexture();
+	public void load(IResourceManager resourceManager) throws IOException {
+		this.releaseId();
 
-		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, this.getGlTextureId());
+		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, this.getId());
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_WRAP_R, GL12.GL_CLAMP_TO_EDGE);
@@ -85,7 +86,7 @@ public class CubemapTexture extends Texture {
 
 	private void load(IResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
 		try (IResource iresource = resourceManager.getResource(location)) {
-			BufferedImage bufferedimage = TextureUtil.readBufferedImage(iresource.getInputStream());
+			NativeImage bufferedimage = NativeImage.read(TextureUtil.readResource(iresource.getInputStream()));
 			int w = bufferedimage.getWidth();
 			int h = bufferedimage.getHeight();
 			IntBuffer data = ByteBuffer.allocateDirect(w * h * 4).order(ByteOrder.nativeOrder()).asIntBuffer();

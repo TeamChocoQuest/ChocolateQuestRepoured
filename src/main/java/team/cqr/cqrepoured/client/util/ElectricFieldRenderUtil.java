@@ -6,17 +6,18 @@ import java.nio.IntBuffer;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import net.minecraft.util.math.vector.Vector3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class ElectricFieldRenderUtil {
@@ -40,7 +41,7 @@ public class ElectricFieldRenderUtil {
 		}
 	};
 	private static final Tessellator TESSELATOR = Tessellator.getInstance();
-	private static final BufferBuilder VERTEX_BUFFER = TESSELATOR.getBuffer();
+	private static final BufferBuilder VERTEX_BUFFER = TESSELATOR.getBuilder();
 	private static final IntBuffer FIRST_BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asIntBuffer();
 	private static final IntBuffer COUNT_BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asIntBuffer();
 	private static int vertexCount;
@@ -50,7 +51,7 @@ public class ElectricFieldRenderUtil {
 	}
 
 	private static void addVertex(double x, double y, double z, boolean endLineStrip) {
-		VERTEX_BUFFER.pos(x, y, z).endVertex();
+		VERTEX_BUFFER.vertex(x, y, z).endVertex();
 		vertexCount++;
 
 		if (endLineStrip) {
@@ -65,18 +66,18 @@ public class ElectricFieldRenderUtil {
 			throw new IllegalStateException("Last line strip not finished!");
 		}
 
-		VERTEX_BUFFER.finishDrawing();
+		VERTEX_BUFFER.end();
 		FIRST_BUFFER.flip();
 		COUNT_BUFFER.flip();
 
 		VertexFormat format = VERTEX_BUFFER.getVertexFormat();
-		IntStream.range(0, format.getElementCount()).forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
+		IntStream.range(0, format.getElements().size()).forEach((int i) -> format.getElements().get(i).getUsage().preDraw(format, i, format.getVertexSize(), VERTEX_BUFFER.getgetByteBuffer()));
 
 		GL14.glMultiDrawArrays(GL11.GL_LINE_STRIP, FIRST_BUFFER, COUNT_BUFFER);
 
-		IntStream.range(0, format.getElementCount()).forEach((int i) -> format.getElement(i).getUsage().preDraw(format, i, format.getSize(), VERTEX_BUFFER.getByteBuffer()));
+		IntStream.range(0, format.getElements().size()).forEach((int i) -> format.getElements().get(i).getUsage().preDraw(format, i, format.getVertexSize(), VERTEX_BUFFER.getByteBuffer()));
 
-		VERTEX_BUFFER.reset();
+		VERTEX_BUFFER.clear();
 		FIRST_BUFFER.clear();
 		COUNT_BUFFER.clear();
 	}
@@ -87,18 +88,18 @@ public class ElectricFieldRenderUtil {
 		EmissiveUtil.preEmissiveTextureRendering();
 
 		// First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
+		GlStateManager._disableTexture();
+		GlStateManager._disableLighting();
 
 		// Since we use a blend function, enable it and apply the blend function
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GlStateManager._enableBlend();
+		GlStateManager._blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 		// Grab some random instance and set the line width
-		GlStateManager.glLineWidth(3.0F);
+		GlStateManager._lineWidth(3.0F);
 
 		// Since we're using vertex.position we need to set the color beforehand
-		GlStateManager.color(0.5F, 0.64F, 1.0F, 0.6F);
+		GlStateManager._color4f(0.5F, 0.64F, 1.0F, 0.6F);
 
 		// Initialize the drawing process, our vertices consist of positions and color information
 		startLineStripBatch(DefaultVertexFormats.POSITION);
@@ -125,9 +126,9 @@ public class ElectricFieldRenderUtil {
 		endLineStripBatch();
 
 		// Finally re-enable tex2d and lightning and disable blending
-		GlStateManager.disableBlend();
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
+		GlStateManager._disableBlend();
+		GlStateManager._enableTexture();
+		GlStateManager._enableLighting();
 		
 		EmissiveUtil.postEmissiveTextureRendering();
 	}
@@ -143,18 +144,18 @@ public class ElectricFieldRenderUtil {
 		EmissiveUtil.preEmissiveTextureRendering();
 		
 		// First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
+		GlStateManager._disableTexture();
+		GlStateManager._disableLighting();
 
 		// Since we use a blend function, enable it and apply the blend function
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GlStateManager._enableBlend();
+		GlStateManager._blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 		// Grab some random instance and set the line width
-		GlStateManager.glLineWidth(3.0F);
+		GlStateManager._lineWidth(3.0F);
 
 		// Since we're using vertex.position we need to set the color beforehand
-		GlStateManager.color(0.5F, 0.64F, 1.0F, 0.6F);
+		GlStateManager._color4f(0.5F, 0.64F, 1.0F, 0.6F);
 
 		startLineStripBatch(DefaultVertexFormats.POSITION);
 
@@ -163,9 +164,9 @@ public class ElectricFieldRenderUtil {
 		direction = direction.scale(1.0D / distance);
 		Vector3d directionOffset;
 		if (direction.x < 0.5D) {
-			directionOffset = direction.crossProduct(new Vector3d(1.0D, 0.0D, 0.0D)).normalize();
+			directionOffset = direction.cross(new Vector3d(1.0D, 0.0D, 0.0D)).normalize();
 		} else {
-			directionOffset = direction.crossProduct(new Vector3d(0.0D, 0.0D, 1.0D)).normalize();
+			directionOffset = direction.cross(new Vector3d(0.0D, 0.0D, 1.0D)).normalize();
 		}
 		int steps = Math.max(MathHelper.floor(distance / (maxOffset * 2.0D)), 4);
 		double lineLength = distance / steps;
@@ -179,9 +180,9 @@ public class ElectricFieldRenderUtil {
 		endLineStripBatch();
 
 		// Finally re-enable tex2d and lightning and disable blending
-		GlStateManager.disableBlend();
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
+		GlStateManager._disableBlend();
+		GlStateManager._enableTexture();
+		GlStateManager._enableLighting();
 		
 		EmissiveUtil.postEmissiveTextureRendering();
 	}
@@ -212,7 +213,7 @@ public class ElectricFieldRenderUtil {
 	 */
 
 	public static void renderElectricFieldWithSizeOfEntityAt(Entity entity, double x, double y, double z, int bolts, long seed) {
-		renderElectricField(entity.width / 2, entity.height / 2, x, y + entity.height / 2, z, bolts, seed);
+		renderElectricField(entity.getBbWidth() / 2, entity.getBbHeight() / 2, x, y + entity.getBbHeight() / 2, z, bolts, seed);
 	}
 
 }
