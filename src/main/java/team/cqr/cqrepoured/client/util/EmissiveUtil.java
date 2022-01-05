@@ -1,25 +1,26 @@
 package team.cqr.cqrepoured.client.util;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 
 public class EmissiveUtil {
 
 	public static void preEmissiveTextureRendering() {
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.disableLighting();
-		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GlStateManager.disableTexture2D();
-		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		GlStateManager._enableBlend();
+		GlStateManager._blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value);
+		GlStateManager._disableLighting();
+		GlStateManager._setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		GlStateManager._disableTexture();
+		GlStateManager._setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 
 	public static void postEmissiveTextureRendering() {
-		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GlStateManager.enableTexture2D();
-		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-		GlStateManager.enableLighting();
-		GlStateManager.disableBlend();
+		GlStateManager._setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		GlStateManager._enableTexture();
+		GlStateManager._setActiveTexture(OpenGlHelper.defaultTexUnit);
+		GlStateManager._enableLighting();
+		GlStateManager._disableBlend();
 	}
 
 }
