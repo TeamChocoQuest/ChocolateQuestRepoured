@@ -11,11 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import javax.imageio.ImageIO;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DownloadingTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.renderer.ThreadDownloadImageData;
 import net.minecraft.resources.IResourcePack;
 import net.minecraft.resources.ResourcePackType;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
@@ -84,13 +82,15 @@ public class CTResourcepack implements IResourcePack {
 			if (entry.getKey().getPath().endsWith(".mcmeta")) {
 				continue;
 			}
-			ThreadDownloadImageData tex = new ThreadDownloadImageData(entry.getValue(), null, entry.getKey(), new UniversalImageBuffer());
-			try {
-				tex.setBufferedImage(ImageIO.read(entry.getValue()));
+			DownloadingTexture dlt = new DownloadingTexture(entry.getValue(), null, entry.getKey(), false, null);
+			//ThreadDownloadImageData tex = new ThreadDownloadImageData(entry.getValue(), null, entry.getKey(), new UniversalImageBuffer());
+			//Looks like this is no longer required in 1.16... was hacky either way
+			/*try {
+				dlt.setBufferedImage(ImageIO.read(entry.getValue()));
 			} catch (IOException e) {
 				// Ignore
-			}
-			tm.loadTexture(entry.getKey(), tex);
+			}*/
+			tm.register(entry.getKey(), dlt);
 		}
 	}
 
