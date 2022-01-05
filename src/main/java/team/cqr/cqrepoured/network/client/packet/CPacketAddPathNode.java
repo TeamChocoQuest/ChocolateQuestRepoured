@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.IntCollection;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
-public class CPacketAddPathNode implements IMessage {
+public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 
 	private Hand hand;
 	private int rootNode;
@@ -39,39 +39,40 @@ public class CPacketAddPathNode implements IMessage {
 		this.blacklistedPrevNodes = blacklistedPrevNodes.toIntArray();
 	}
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.hand = Hand.values()[buf.readByte()];
-		this.rootNode = buf.readInt();
-		this.pos = ByteBufUtil.readBlockPos(buf);
-		this.waitingTimeMin = buf.readShort();
-		this.waitingTimeMax = buf.readShort();
-		this.waitingRotation = buf.readFloat();
-		this.weight = buf.readShort();
-		this.timeMin = buf.readShort();
-		this.timeMax = buf.readShort();
-		this.bidirectional = buf.readBoolean();
-		this.blacklistedPrevNodes = new int[buf.readInt()];
-		for (int i = 0; i < this.blacklistedPrevNodes.length; i++) {
-			this.blacklistedPrevNodes[i] = buf.readInt();
+	public CPacketAddPathNode fromBytes(PacketBuffer buf) {
+		CPacketAddPathNode result = new CPacketAddPathNode();
+		result.hand = Hand.values()[buf.readByte()];
+		result.rootNode = buf.readInt();
+		result.pos = ByteBufUtil.readBlockPos(buf);
+		result.waitingTimeMin = buf.readShort();
+		result.waitingTimeMax = buf.readShort();
+		result.waitingRotation = buf.readFloat();
+		result.weight = buf.readShort();
+		result.timeMin = buf.readShort();
+		result.timeMax = buf.readShort();
+		result.bidirectional = buf.readBoolean();
+		result.blacklistedPrevNodes = new int[buf.readInt()];
+		for (int i = 0; i < result.blacklistedPrevNodes.length; i++) {
+			result.blacklistedPrevNodes[i] = buf.readInt();
 		}
+		
+		return result;
 	}
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeByte(this.hand.ordinal());
-		buf.writeInt(this.rootNode);
-		ByteBufUtil.writeBlockPos(buf, this.pos);
-		buf.writeShort(this.waitingTimeMin);
-		buf.writeShort(this.waitingTimeMax);
-		buf.writeFloat(this.waitingRotation);
-		buf.writeShort(this.weight);
-		buf.writeShort(this.timeMin);
-		buf.writeShort(this.timeMax);
-		buf.writeBoolean(this.bidirectional);
-		buf.writeInt(this.blacklistedPrevNodes.length);
-		for (int i = 0; i < this.blacklistedPrevNodes.length; i++) {
-			buf.writeInt(this.blacklistedPrevNodes[i]);
+	public void toBytes(CPacketAddPathNode packet, PacketBuffer buf) {
+		buf.writeByte(packet.hand.ordinal());
+		buf.writeInt(packet.rootNode);
+		ByteBufUtil.writeBlockPos(buf, packet.pos);
+		buf.writeShort(packet.waitingTimeMin);
+		buf.writeShort(packet.waitingTimeMax);
+		buf.writeFloat(packet.waitingRotation);
+		buf.writeShort(packet.weight);
+		buf.writeShort(packet.timeMin);
+		buf.writeShort(packet.timeMax);
+		buf.writeBoolean(packet.bidirectional);
+		buf.writeInt(packet.blacklistedPrevNodes.length);
+		for (int i = 0; i < packet.blacklistedPrevNodes.length; i++) {
+			buf.writeInt(packet.blacklistedPrevNodes[i]);
 		}
 	}
 
@@ -117,6 +118,11 @@ public class CPacketAddPathNode implements IMessage {
 
 	public int[] getBlacklistedPrevNodes() {
 		return this.blacklistedPrevNodes;
+	}
+
+	@Override
+	public Class<CPacketAddPathNode> getPacketClass() {
+		return CPacketAddPathNode.class;
 	}
 
 }

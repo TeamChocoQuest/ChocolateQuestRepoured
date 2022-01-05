@@ -1,7 +1,12 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.Optional;
+
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.network.NetworkDirection;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.IMessage;
+import team.cqr.cqrepoured.network.IMessageHandler;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAddOrResetProtectedRegionIndicator;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAnimationUpdateOfEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
@@ -92,14 +97,32 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateEmitterTarget.class, SPacketUpdateEmitterTarget.class, messageID++, Dist.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTrades.class, SPacketSyncTrades.class, messageID++, Dist.CLIENT);
 
-		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerStructureSelector.class, CPacketStructureSelector.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncEntity.class, CPacketSyncEntity.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerOpenMerchantGui.class, CPacketOpenMerchantGui.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncTileEntity.class, CPacketSyncTileEntity.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerAddPathNode.class, CPacketAddPathNode.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerCloseMapPlaceholderGuiSimple.class, CPacketCloseMapPlaceholderGuiSimple.class, messageID++, Dist.SERVER);
-		CQRMain.NETWORK.registerMessage(SPacketHandlerContainerClickButton.class, CPacketContainerClickButton.class, messageID++, Dist.SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, messageID++, Dist.DEDICATED_SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerStructureSelector.class, CPacketStructureSelector.class, messageID++, Dist.DEDICATED_SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncEntity.class, CPacketSyncEntity.class, messageID++, Dist.DEDICATED_SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerOpenMerchantGui.class, CPacketOpenMerchantGui.class, messageID++, Dist.DEDICATED_SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerSyncTileEntity.class, CPacketSyncTileEntity.class, messageID++, Dist.DEDICATED_SERVER);
+		//CQRMain.NETWORK.registerMessage(SPacketHandlerAddPathNode.class, CPacketAddPathNode.class, messageID++, Dist.DEDICATED_SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerCloseMapPlaceholderGuiSimple.class, CPacketCloseMapPlaceholderGuiSimple.class, messageID++, Dist.DEDICATED_SERVER);
+		CQRMain.NETWORK.registerMessage(SPacketHandlerContainerClickButton.class, CPacketContainerClickButton.class, messageID++, Dist.DEDICATED_SERVER);
+		
+		//1.16
+		register((new CPacketAddPathNode()).cast(), (new SPacketHandlerAddPathNode()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
+	}
+	
+	protected static <MSG> void register(IMessage<MSG> message, IMessageHandler<MSG> handler) {
+		register(message, handler, Optional.empty());
+	}
+	
+	protected static <MSG> void register(IMessage<MSG> message, IMessageHandler<MSG> handler, final Optional<NetworkDirection> networkDirection) {
+		CQRMain.NETWORK.registerMessage(
+				messageID++, 
+				message.getPacketClass(),
+				message::toBytes,
+				message::fromBytes,
+				handler::handlePacket,
+				networkDirection
+		);
 	}
 
 }
