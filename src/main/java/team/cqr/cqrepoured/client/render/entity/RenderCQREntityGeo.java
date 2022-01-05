@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -96,6 +95,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	@Override
 	public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue,
 			float partialTicks) {
+		this.rtb = renderTypeBuffer;
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		if (this.currentModelRenderCycle == 0 /* Pre-Layers */) {
 			float width = this.getWidthScale(animatable);
@@ -110,6 +110,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	private T currentEntityBeingRendered;
+	private IRenderTypeBuffer rtb;
 
 	@Override
 	public void renderLate(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue,
@@ -140,7 +141,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 				if (boneBlock != null) {
 					this.preRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
 
-					this.renderBlock(boneBlock, this.currentEntityBeingRendered);
+					this.renderBlock(stack, this.rtb, packedLightIn, boneBlock);
 
 					this.postRenderBlock(boneBlock, bone.getName(), this.currentEntityBeingRendered);
 				}
@@ -156,8 +157,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 	
 
-	private void renderBlock(BlockState iBlockState, Entity currentEntity) {
-		BlockRenderUtil.renderBlockAtEntity(iBlockState, currentEntity, this);
+	private void renderBlock(MatrixStack matrixStack, IRenderTypeBuffer rtb, int packedLightIn, BlockState iBlockState) {
+		BlockRenderUtil.renderBlockAtEntity(matrixStack, rtb, packedLightIn, iBlockState, this.currentEntityBeingRendered, this);
 	}
 
 	/*
