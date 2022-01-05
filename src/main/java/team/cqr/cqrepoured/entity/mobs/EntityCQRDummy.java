@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTables;
@@ -10,8 +11,8 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 
 public class EntityCQRDummy extends AbstractEntityCQR {
 
-	public EntityCQRDummy(World worldIn) {
-		super(worldIn);
+	public EntityCQRDummy(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -37,11 +38,6 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
 
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return LootTables.EMPTY;
 	}
 
 }

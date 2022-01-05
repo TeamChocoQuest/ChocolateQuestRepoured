@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -13,13 +13,12 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRSounds;
 
 public class EntityCQRWalker extends AbstractEntityCQR {
 
-	public EntityCQRWalker(World worldIn) {
-		super(worldIn);
+	public EntityCQRWalker(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -45,11 +44,6 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return CQRSounds.WALKER_DEATH;
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_WALKER;
 	}
 
 	@Override

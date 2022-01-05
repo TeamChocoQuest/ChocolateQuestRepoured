@@ -1,19 +1,18 @@
 package team.cqr.cqrepoured.entity.mobs;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
-import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRSounds;
 
 public class EntityCQRGremlin extends AbstractEntityCQR {
 
-	public EntityCQRGremlin(World worldIn) {
-		super(worldIn);
+	public EntityCQRGremlin(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -24,11 +23,6 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.GREMLINS;
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_GREMLIN;
 	}
 
 	@Override

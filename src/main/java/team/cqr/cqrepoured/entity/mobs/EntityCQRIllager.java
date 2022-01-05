@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -12,8 +12,8 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 
 public class EntityCQRIllager extends AbstractEntityCQR {
 
-	public EntityCQRIllager(World worldIn) {
-		super(worldIn);
+	public EntityCQRIllager(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -49,12 +49,6 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.PILLAGER_DEATH;
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		//TODO: REimplement
-		return null;
 	}
 
 }

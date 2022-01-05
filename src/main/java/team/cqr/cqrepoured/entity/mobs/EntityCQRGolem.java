@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -14,12 +14,11 @@ import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 
-	public EntityCQRGolem(World worldIn) {
-		super(worldIn);
+	public EntityCQRGolem(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -30,11 +29,6 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.DWARVES_AND_GOLEMS;
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_GOLEM;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.*;
@@ -20,8 +21,8 @@ import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
 
-	public EntityCQREnderman(World worldIn) {
-		super(worldIn);
+	public EntityCQREnderman(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
@@ -30,7 +31,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected void registerGoals() {
 		super.registerGoals();
 
-		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<>(this));
+		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<>(this));
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	protected void updateAITasks() {
-		if (this.isInWater() || (this.isWet() && this.getItemStackFromSlot(EquipmentSlotType.HEAD).isEmpty())) {
+		if (this.isInWater() /*|| (this.isWet()*/ && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty())) {
 			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
 		}
 		super.updateAITasks();
@@ -110,11 +111,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
 		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.0D);
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_ENDERMAN;
 	}
 
 	@Override
