@@ -107,14 +107,18 @@ public class CQRMessages {
 		//CQRMain.NETWORK.registerMessage(SPacketHandlerContainerClickButton.class, CPacketContainerClickButton.class, messageID++, Dist.DEDICATED_SERVER);
 		
 		//1.16
-		register((new CPacketSaveStructureRequest()).cast(), (new SPacketHandlerSaveStructureRequest()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketStructureSelector()).cast(), (new SPacketHandlerStructureSelector()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketSyncEntity()).cast(), (new SPacketHandlerSyncEntity()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketOpenMerchantGui()).cast(), (new SPacketHandlerOpenMerchantGui()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketSyncTileEntity()).cast(), (new SPacketHandlerSyncTileEntity()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketAddPathNode()).cast(), (new SPacketHandlerAddPathNode()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketCloseMapPlaceholderGuiSimple()).cast(), (new SPacketHandlerCloseMapPlaceholderGuiSimple()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		register((new CPacketContainerClickButton()).cast(), (new SPacketHandlerContainerClickButton()).cast(), Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		registerClientToServer((new CPacketSaveStructureRequest()).cast(), (new SPacketHandlerSaveStructureRequest()).cast());
+		registerClientToServer((new CPacketStructureSelector()).cast(), (new SPacketHandlerStructureSelector()).cast());
+		registerClientToServer((new CPacketSyncEntity()).cast(), (new SPacketHandlerSyncEntity()).cast());
+		registerClientToServer((new CPacketOpenMerchantGui()).cast(), (new SPacketHandlerOpenMerchantGui()).cast());
+		registerClientToServer((new CPacketSyncTileEntity()).cast(), (new SPacketHandlerSyncTileEntity()).cast());
+		registerClientToServer((new CPacketAddPathNode()).cast(), (new SPacketHandlerAddPathNode()).cast());
+		registerClientToServer((new CPacketCloseMapPlaceholderGuiSimple()).cast(), (new SPacketHandlerCloseMapPlaceholderGuiSimple()).cast());
+		registerClientToServer((new CPacketContainerClickButton()).cast(), (new SPacketHandlerContainerClickButton()).cast());
+	}
+	
+	protected static <MSG> void registerClientToServer(IMessage<MSG> message, IMessageHandler<MSG> handler) {
+		register(message, handler, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 	}
 	
 	protected static <MSG> void register(IMessage<MSG> message, IMessageHandler<MSG> handler) {
