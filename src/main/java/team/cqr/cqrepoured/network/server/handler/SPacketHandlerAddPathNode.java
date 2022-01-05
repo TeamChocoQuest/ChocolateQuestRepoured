@@ -10,16 +10,9 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.pathfinding.Path;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
-import team.cqr.cqrepoured.network.IMessageHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
 public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddPathNode> {
-
-
-	@Override
-	public IMessageHandler<CPacketAddPathNode> cast() {
-		return (IMessageHandler<CPacketAddPathNode>)this;
-	}
 
 	@Override
 	public void handlePacket(CPacketAddPathNode packet, Supplier<Context> context) {

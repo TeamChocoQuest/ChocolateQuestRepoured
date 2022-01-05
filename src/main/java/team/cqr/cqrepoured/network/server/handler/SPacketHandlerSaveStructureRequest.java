@@ -1,30 +1,28 @@
 package team.cqr.cqrepoured.network.server.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
-public class SPacketHandlerSaveStructureRequest implements IMessageHandler<CPacketSaveStructureRequest, IMessage> {
+public class SPacketHandlerSaveStructureRequest extends AbstractPacketHandler<CPacketSaveStructureRequest> {
 
 	@Override
-	public IMessage onMessage(CPacketSaveStructureRequest message, MessageContext ctx) {
-		if (ctx.side.isServer()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
-				TileEntity tileEntity = player.world.getTileEntity(message.getPos());
+	public void handlePacket(CPacketSaveStructureRequest packet, Supplier<Context> context) {
+		context.get().enqueueWork(() -> {
+			PlayerEntity player = context.get().getSender();
+			
+			TileEntity tileEntity = player.level.getBlockEntity(packet.getPos());
 
-				if (tileEntity instanceof TileEntityExporter) {
-					((TileEntityExporter) tileEntity).saveStructure(player);
-				}
-			});
-		}
-		return null;
+			if (tileEntity instanceof TileEntityExporter) {
+				((TileEntityExporter) tileEntity).saveStructure(player);
+			}
+		});
+		context.get().setPacketHandled(true);
 	}
 
 }

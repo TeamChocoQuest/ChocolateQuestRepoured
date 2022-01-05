@@ -1,28 +1,24 @@
 package team.cqr.cqrepoured.network.server.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.inventory.IInteractable;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 
-public class SPacketHandlerContainerClickButton implements IMessageHandler<CPacketContainerClickButton, IMessage> {
+public class SPacketHandlerContainerClickButton extends AbstractPacketHandler<CPacketContainerClickButton> {
 
 	@Override
-	public IMessage onMessage(CPacketContainerClickButton message, MessageContext ctx) {
-		if (ctx.side.isServer()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
-
-				if (player.openContainer instanceof IInteractable) {
-					((IInteractable) player.openContainer).onClickButton(player, message.getButton(), message.getExtraData());
-				}
-			});
-		}
-		return null;
+	public void handlePacket(CPacketContainerClickButton packet, Supplier<Context> context) {
+		context.get().enqueueWork(() -> {
+			PlayerEntity player = context.get().getSender();
+			if (player.containerMenu instanceof IInteractable) {
+				((IInteractable) player.containerMenu).onClickButton(player, packet.getButton(), packet.getExtraData());
+			}
+		});
+		context.get().setPacketHandled(true);
 	}
 
 }
