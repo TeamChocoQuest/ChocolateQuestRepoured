@@ -3,28 +3,29 @@ package team.cqr.cqrepoured.item.sword;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.Hand;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.collect.Multimap;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
 
@@ -34,8 +35,8 @@ public class ItemDagger extends ItemCQRWeapon {
 	private final double movementSpeedBonus;
 	private final int specialAttackCooldown;
 
-	public ItemDagger(ToolMaterial material, int cooldown) {
-		super(material, CQRConfig.materials.toolMaterials.daggerAttackDamageBonus, CQRConfig.materials.toolMaterials.daggerAttackSpeedBonus);
+	public ItemDagger(Properties props, IItemTier material, int cooldown) {
+		super(material, CQRConfig.materials.toolMaterials.daggerAttackDamageBonus, CQRConfig.materials.toolMaterials.daggerAttackSpeedBonus, props);
 		this.movementSpeedBonus = CQRConfig.materials.toolMaterials.daggerMovementSpeedBonus;
 		this.specialAttackCooldown = cooldown;
 	}
@@ -48,21 +49,21 @@ public class ItemDagger extends ItemCQRWeapon {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType slot) {
+		Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(slot);
 
 		if (slot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, 2));
+			multimap.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, Operation.ADDITION));
 		}
 
 		return multimap;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if (playerIn.onGround && !playerIn.isSwingInProgress) {
+		if (playerIn.isOnGround() && !playerIn.isSwingInProgress) {
 			EntityUtil.move2D(playerIn, playerIn.moveStrafing, playerIn.moveForward, 1.0D, playerIn.rotationYaw);
 
 			playerIn.motionY = 0.2D;
@@ -70,22 +71,13 @@ public class ItemDagger extends ItemCQRWeapon {
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
-
-	@Override
-	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		return super.hitEntity(stack, target, attacker);
-	}
-
+	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.BLUE + "200% " + I18n.format("description.rear_damage.name"));
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new StringTextComponent(TextFormatting.BLUE + "200% " + I18n.get("description.rear_damage.name")));
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.dagger.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
+		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 	}
 
 }
