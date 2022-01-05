@@ -38,13 +38,17 @@ public class ItemLore extends Item {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		if(this.hasLore(stack)) {
-			if (isLShiftPressed() || isRShiftPressed()) {
-				tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.get("description." + this.getRegistryName().getPath() + ".name", '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n')));
-			} else {
-				tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.get("description.click_shift.name")));
-			}
+			addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 		} else {
 			super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		}
+	}
+	
+	public static void addHoverTextLogic(List<ITextComponent> tooltip, ITooltipFlag flagIn, String registryNamePath) {
+		if (isLShiftPressed() || isRShiftPressed()) {
+			tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.get("description." + registryNamePath + ".name", '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n')));
+		} else {
+			tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.get("description.click_shift.name")));
 		}
 	}
 	
