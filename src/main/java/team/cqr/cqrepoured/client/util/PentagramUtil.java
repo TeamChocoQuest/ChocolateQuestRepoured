@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.client.util;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import team.cqr.cqrepoured.client.model.entity.ModelPentagram;
 
@@ -10,29 +12,34 @@ public class PentagramUtil {
 		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 
 		if (disabled) {
-			GlStateManager.disableTexture2D();
+			GlStateManager._disableTexture();
 		} else {
-			GlStateManager.enableTexture2D();
+			GlStateManager._enableTexture();
 		}
 
 		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 
 	public static void preRenderPentagram(double x, double y, double z, int ticksExisted) {
-		GlStateManager.disableFog();
-		GlStateManager.disableLighting();
-		GlStateManager.disableCull();
-		GlStateManager.disableTexture2D();
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager._disableFog();
+		GlStateManager._disableLighting();
+		GlStateManager._disableCull();
+		GlStateManager._disableTexture();
+		GlStateManager._enableBlend();
+		GlStateManager._blendFuncSeparate(
+				GlStateManager.SourceFactor.SRC_ALPHA.value, 
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value, 
+				GlStateManager.SourceFactor.ONE.value, 
+				GlStateManager.DestFactor.ZERO.value
+		);
 	}
 
 	public static void postRenderPentagram() {
-		GlStateManager.disableBlend();
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableCull();
-		GlStateManager.enableLighting();
-		GlStateManager.enableFog();
+		GlStateManager._disableBlend();
+		GlStateManager._enableTexture();
+		GlStateManager._enableCull();
+		GlStateManager._enableLighting();
+		GlStateManager._enableFog();
 	}
 
 	public static void renderPentagram(int ticksExisted) {
@@ -51,7 +58,7 @@ public class PentagramUtil {
 		renderPentagram(ticksExisted, r, g, b, corners);
 	}
 
-	public static void renderPentagram(int ticksExisted, int r, int g, int b, double corners) {
+	public static void renderPentagram(MatrixStack matrix, int ticksExisted, int r, int g, int b, double corners) {
 		setLightmapDisabled(true);
 
 		/*
@@ -86,8 +93,8 @@ public class PentagramUtil {
 		 * tess.draw();
 		 */
 		// GL11.glColor4ub((byte) r, (byte) g, (byte) b, (byte) 255);
-		GlStateManager.color(r / 255.0F, g / 255.0F, b / 255.0F, 1.0F);
-		ModelPentagram.render((int) corners, 0.75F, 0.05F, 0.05F);
+		GlStateManager._color4f(r / 255.0F, g / 255.0F, b / 255.0F, 1.0F);
+		ModelPentagram.render(matrix, (int) corners, 0.75F, 0.05F, 0.05F);
 
 		setLightmapDisabled(false);
 	}

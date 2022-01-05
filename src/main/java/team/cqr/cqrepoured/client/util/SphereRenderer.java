@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL20;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -181,7 +181,7 @@ public class SphereRenderer {
 	 * Buffers all vertices of a shape.
 	 */
 	public static <T extends Shape> Consumer<T> defaultBufferer(BufferBuilder buffer) {
-		return shape -> shape.vertices().forEach(vertex -> buffer.pos(vertex.x, vertex.y, vertex.z).endVertex());
+		return shape -> shape.vertices().forEach(vertex -> buffer.vertex(vertex.x, vertex.y, vertex.z).endVertex());
 	}
 
 	/**
@@ -220,10 +220,10 @@ public class SphereRenderer {
 					Vertex v1 = outer1[i * lod1 + j];
 					Vertex v2 = next(outer1, i * lod1 + j);
 					Vertex v3 = next(inner1, i * lod1 + j);
-					buffer.pos(v0.x, v0.y, v0.z).endVertex();
-					buffer.pos(v1.x, v1.y, v1.z).endVertex();
-					buffer.pos(v2.x, v2.y, v2.z).endVertex();
-					buffer.pos(v3.x, v3.y, v3.z).endVertex();
+					buffer.vertex(v0.x, v0.y, v0.z).endVertex();
+					buffer.vertex(v1.x, v1.y, v1.z).endVertex();
+					buffer.vertex(v2.x, v2.y, v2.z).endVertex();
+					buffer.vertex(v3.x, v3.y, v3.z).endVertex();
 				}
 			}
 		};
@@ -248,7 +248,7 @@ public class SphereRenderer {
 		}
 		preDraw(textureLocation);
 
-		buffer.bindBuffer();
+		buffer.bind();
 		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
 		GL20.glEnableVertexAttribArray(0);
 
@@ -262,7 +262,7 @@ public class SphereRenderer {
 		}
 
 		GL20.glDisableVertexAttribArray(0);
-		buffer.unbindBuffer();
+		buffer.unbind();
 
 		postDraw();
 	}
@@ -299,10 +299,10 @@ public class SphereRenderer {
 
 		if (textureLocation != null) {
 			GL20.glUniform1i(uniformTexture, 1);
-			Minecraft mc = Minecraft.getMinecraft();
+			Minecraft mc = Minecraft.getInstance();
 			TextureManager textureManager = mc.getTextureManager();
-			ITextureObject texture = textureManager.getTexture(CubemapTexture.get(textureLocation));
-			GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture.getGlTextureId());
+			Texture texture = textureManager.getTexture(CubemapTexture.get(textureLocation));
+			GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture.getId());
 		} else {
 			GL20.glUniform1i(uniformTexture, 0);
 		}
