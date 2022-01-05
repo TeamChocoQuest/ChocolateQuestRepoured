@@ -197,7 +197,7 @@ item.banner.illager_banner.name=Illager Banner
 item.banner.walker_ordo.name=Walker Banner 2
 item.banner.gremlin_banner.name=Gremlin Banner
 
-#Gui
+#GUI
 gui.repu.name=Reputation
 gui.repu.faction=Faction
 gui.repu.reputation=Your reputation
@@ -454,11 +454,11 @@ tile.prismarine_large.name=Large Prismarine Bricks
 
 #Endstone blocks
 tile.endstone_carved.name=Carved Endstone
-tile.endstone_pillar.name=Endstone Pillar
-tile.endstone_cube.name=Endstone Cube
-tile.endstone_scale.name=Endstone Scale
-tile.endstone_square.name=Endstone Square
-tile.endstone_small.name=Small Endstone Bricks
+tile.endstone_pillar.name=End Stone Pillar
+tile.endstone_cube.name=End Stone Cube
+tile.endstone_scale.name=End Stone Scale
+tile.endstone_square.name=End Stone Square
+tile.endstone_small.name=Small End Stone Bricks
 
 #Purpur blocks
 tile.purpur_carved.name=Carved Purpur
@@ -468,12 +468,12 @@ tile.purpur_small.name=Small Purpur Bricks
 tile.purpur_large.name=Large Purpur Bricks
 
 #Red Netherbrick blocks
-tile.red_netherbrick_carved.name=Carved Red Netherbrick
-tile.red_netherbrick_pillar.name=Red Netherbrick Pillar
-tile.red_netherbrick_cube.name=Red Netherbrick Cube
-tile.red_netherbrick_scale.name=Red Netherbrick Scale
-tile.red_netherbrick_square.name=Red Netherbrick Square
-tile.red_netherbrick_large.name=Large Red Netherbricks
+tile.red_netherbrick_carved.name=Carved Red Nether Brick
+tile.red_netherbrick_pillar.name=Red Nether Brick Pillar
+tile.red_netherbrick_cube.name=Red Nether Brick Cube
+tile.red_netherbrick_scale.name=Red Nether Brick Scale
+tile.red_netherbrick_square.name=Red Nether Brick Square
+tile.red_netherbrick_large.name=Large Red Nether Bricks
 
 #Stone blocks
 tile.stone_pillar.name=Stone Pillar
@@ -504,7 +504,7 @@ tile.exporter_chest_vanilla_stronghold_library.name=Exporter Chest - Stronghold 
 tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Chest - Stronghold Mine
 tile.exporter_chest_custom.name=Exporter Chest - Custom
 
-#technical
+#Technical
 tile.phylactery.name=Lich Phylactery
 tile.temporary_web.name=Decaying Web
 
