@@ -1,14 +1,20 @@
 package team.cqr.cqrepoured.item.sword;
 
+import java.util.List;
+
 import com.google.common.collect.Multimap;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemCQRWeapon extends SwordItem {
@@ -40,6 +46,11 @@ public class ItemCQRWeapon extends SwordItem {
 			}
 		}
 		return modifiers;
+	}
+
+	@Override
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 }
