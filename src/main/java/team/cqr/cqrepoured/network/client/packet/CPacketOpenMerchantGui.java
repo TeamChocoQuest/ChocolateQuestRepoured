@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class CPacketOpenMerchantGui implements IMessage {
+public class CPacketOpenMerchantGui extends AbstractPacket<CPacketOpenMerchantGui> {
 
 	private int entityId;
 
@@ -16,17 +16,24 @@ public class CPacketOpenMerchantGui implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
+	public CPacketOpenMerchantGui fromBytes(PacketBuffer buf) {
+		CPacketOpenMerchantGui result = new CPacketOpenMerchantGui();
+		result.entityId = buf.readInt();
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
+	public void toBytes(CPacketOpenMerchantGui packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
 	}
 
 	public int getEntityId() {
 		return this.entityId;
+	}
+
+	@Override
+	public Class<CPacketOpenMerchantGui> getPacketClass() {
+		return CPacketOpenMerchantGui.class;
 	}
 
 }

@@ -4,9 +4,10 @@ import java.util.function.Consumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class CPacketContainerClickButton implements IMessage {
+public class CPacketContainerClickButton extends AbstractPacket<CPacketContainerClickButton> {
 
 	private int button;
 	private final ByteBuf extraData = Unpooled.buffer();
@@ -25,15 +26,17 @@ public class CPacketContainerClickButton implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.button = buf.readInt();
-		this.extraData.writeBytes(buf);
+	public CPacketContainerClickButton fromBytes(PacketBuffer buf) {
+		CPacketContainerClickButton result = new CPacketContainerClickButton();
+		result.button = buf.readInt();
+		result.extraData.writeBytes(buf);
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.button);
-		buf.writeBytes(this.extraData);
+	public void toBytes(CPacketContainerClickButton packet, PacketBuffer buf) {
+		buf.writeInt(packet.button);
+		buf.writeBytes(packet.extraData);
 	}
 
 	public int getButton() {
@@ -42,6 +45,11 @@ public class CPacketContainerClickButton implements IMessage {
 
 	public ByteBuf getExtraData() {
 		return extraData;
+	}
+
+	@Override
+	public Class<CPacketContainerClickButton> getPacketClass() {
+		return CPacketContainerClickButton.class;
 	}
 
 }

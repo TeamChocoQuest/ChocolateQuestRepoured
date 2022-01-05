@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
-public class CPacketSaveStructureRequest implements IMessage {
+public class CPacketSaveStructureRequest extends AbstractPacket<CPacketSaveStructureRequest> {
 
 	private BlockPos pos;
 
@@ -18,17 +18,24 @@ public class CPacketSaveStructureRequest implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.pos = ByteBufUtil.readBlockPos(buf);
+	public CPacketSaveStructureRequest fromBytes(PacketBuffer buf) {
+		CPacketSaveStructureRequest result = new CPacketSaveStructureRequest();
+		result.pos = ByteBufUtil.readBlockPos(buf);
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeBlockPos(buf, this.pos);
+	public void toBytes(CPacketSaveStructureRequest packet, PacketBuffer buf) {
+		ByteBufUtil.writeBlockPos(buf, packet.pos);
 	}
 
 	public BlockPos getPos() {
 		return this.pos;
+	}
+
+	@Override
+	public Class<CPacketSaveStructureRequest> getPacketClass() {
+		return CPacketSaveStructureRequest.class;
 	}
 
 }

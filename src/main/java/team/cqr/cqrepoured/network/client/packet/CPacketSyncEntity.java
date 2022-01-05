@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class CPacketSyncEntity implements IMessage {
+public class CPacketSyncEntity extends AbstractPacket<CPacketSyncEntity> {
 
 	private int entityId;
 	private int healthScaling;
@@ -32,29 +32,31 @@ public class CPacketSyncEntity implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.healthScaling = buf.readShort();
-		this.dropChanceHelm = buf.readByte();
-		this.dropChanceChest = buf.readByte();
-		this.dropChanceLegs = buf.readByte();
-		this.dropChanceFeet = buf.readByte();
-		this.dropChanceMainhand = buf.readByte();
-		this.dropChanceOffhand = buf.readByte();
-		this.sizeScaling = buf.readShort();
+	public CPacketSyncEntity fromBytes(PacketBuffer buf) {
+		CPacketSyncEntity result = new CPacketSyncEntity();
+		result.entityId = buf.readInt();
+		result.healthScaling = buf.readShort();
+		result.dropChanceHelm = buf.readByte();
+		result.dropChanceChest = buf.readByte();
+		result.dropChanceLegs = buf.readByte();
+		result.dropChanceFeet = buf.readByte();
+		result.dropChanceMainhand = buf.readByte();
+		result.dropChanceOffhand = buf.readByte();
+		result.sizeScaling = buf.readShort();
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeShort(this.healthScaling);
-		buf.writeByte(this.dropChanceHelm);
-		buf.writeByte(this.dropChanceChest);
-		buf.writeByte(this.dropChanceLegs);
-		buf.writeByte(this.dropChanceFeet);
-		buf.writeByte(this.dropChanceMainhand);
-		buf.writeByte(this.dropChanceOffhand);
-		buf.writeShort(this.sizeScaling);
+	public void toBytes(CPacketSyncEntity packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeShort(packet.healthScaling);
+		buf.writeByte(packet.dropChanceHelm);
+		buf.writeByte(packet.dropChanceChest);
+		buf.writeByte(packet.dropChanceLegs);
+		buf.writeByte(packet.dropChanceFeet);
+		buf.writeByte(packet.dropChanceMainhand);
+		buf.writeByte(packet.dropChanceOffhand);
+		buf.writeShort(packet.sizeScaling);
 	}
 
 	public int getEntityId() {
@@ -92,5 +94,11 @@ public class CPacketSyncEntity implements IMessage {
 	public int getSizeScaling() {
 		return this.sizeScaling;
 	}
+
+	@Override
+	public Class<CPacketSyncEntity> getPacketClass() {
+		return CPacketSyncEntity.class;
+	}
+
 
 }

@@ -4,15 +4,16 @@ import java.util.Collection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
-public class CPacketSyncTileEntity implements IMessage {
+public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity> {
 
-	private BlockPos pos = BlockPos.ORIGIN;
+	private BlockPos pos = BlockPos.ZERO;
 	private ByteBuf buffer = Unpooled.buffer(32);
 
 	public CPacketSyncTileEntity() {
@@ -29,15 +30,17 @@ public class CPacketSyncTileEntity implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.pos = ByteBufUtil.readBlockPos(buf);
-		this.buffer.writeBytes(buf);
+	public CPacketSyncTileEntity fromBytes(PacketBuffer buf) {
+		CPacketSyncTileEntity result = new CPacketSyncTileEntity();
+		result.pos = ByteBufUtil.readBlockPos(buf);
+		result.buffer.writeBytes(buf);
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeBlockPos(buf, this.pos);
-		buf.writeBytes(this.buffer);
+	public void toBytes(CPacketSyncTileEntity packet, PacketBuffer buf) {
+		ByteBufUtil.writeBlockPos(buf, packet.pos);
+		buf.writeBytes(packet.buffer);
 	}
 
 	public BlockPos getPos() {
@@ -46,6 +49,11 @@ public class CPacketSyncTileEntity implements IMessage {
 
 	public ByteBuf getBuffer() {
 		return this.buffer;
+	}
+
+	@Override
+	public Class<CPacketSyncTileEntity> getPacketClass() {
+		return CPacketSyncTileEntity.class;
 	}
 
 }

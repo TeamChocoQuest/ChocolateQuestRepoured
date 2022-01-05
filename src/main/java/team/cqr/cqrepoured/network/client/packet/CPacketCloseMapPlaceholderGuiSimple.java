@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
-public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
+public class CPacketCloseMapPlaceholderGuiSimple extends AbstractPacket<CPacketCloseMapPlaceholderGuiSimple> {
 
 	private BlockPos pos;
 	private Direction facing;
@@ -39,33 +39,37 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.pos = ByteBufUtil.readBlockPos(buf);
-		this.facing = Direction.byHorizontalIndex(buf.readByte());
-		this.scale = buf.readByte();
-		this.orientation = Direction.byHorizontalIndex(buf.readByte());
-		this.lockOrientation = buf.readBoolean();
-		this.sizeUp = buf.readByte();
-		this.sizeDown = buf.readByte();
-		this.sizeRight = buf.readByte();
-		this.sizeLeft = buf.readByte();
-		this.fillMap = buf.readBoolean();
-		this.fillRadius = buf.readShort();
+	public CPacketCloseMapPlaceholderGuiSimple fromBytes(PacketBuffer buf) {
+		CPacketCloseMapPlaceholderGuiSimple result = new CPacketCloseMapPlaceholderGuiSimple();
+		
+		result.pos = ByteBufUtil.readBlockPos(buf);
+		result.facing = Direction.from2DDataValue(buf.readByte());
+		result.scale = buf.readByte();
+		result.orientation = Direction.from2DDataValue(buf.readByte());
+		result.lockOrientation = buf.readBoolean();
+		result.sizeUp = buf.readByte();
+		result.sizeDown = buf.readByte();
+		result.sizeRight = buf.readByte();
+		result.sizeLeft = buf.readByte();
+		result.fillMap = buf.readBoolean();
+		result.fillRadius = buf.readShort();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(CPacketCloseMapPlaceholderGuiSimple packet, PacketBuffer buf) {
 		ByteBufUtil.writeBlockPos(buf, this.pos);
-		buf.writeByte(this.facing.getHorizontalIndex());
-		buf.writeByte(this.scale);
-		buf.writeByte(this.orientation.getHorizontalIndex());
-		buf.writeBoolean(this.lockOrientation);
-		buf.writeByte(this.sizeUp);
-		buf.writeByte(this.sizeDown);
-		buf.writeByte(this.sizeRight);
-		buf.writeByte(this.sizeLeft);
-		buf.writeBoolean(this.fillMap);
-		buf.writeShort(this.fillRadius);
+		buf.writeByte(packet.facing.get2DDataValue());
+		buf.writeByte(packet.scale);
+		buf.writeByte(packet.orientation.get2DDataValue());
+		buf.writeBoolean(packet.lockOrientation);
+		buf.writeByte(packet.sizeUp);
+		buf.writeByte(packet.sizeDown);
+		buf.writeByte(packet.sizeRight);
+		buf.writeByte(packet.sizeLeft);
+		buf.writeBoolean(packet.fillMap);
+		buf.writeShort(packet.fillRadius);
 	}
 
 	public BlockPos getPos() {
@@ -110,6 +114,11 @@ public class CPacketCloseMapPlaceholderGuiSimple implements IMessage {
 
 	public int getFillRadius() {
 		return this.fillRadius;
+	}
+
+	@Override
+	public Class<CPacketCloseMapPlaceholderGuiSimple> getPacketClass() {
+		return CPacketCloseMapPlaceholderGuiSimple.class;
 	}
 
 }

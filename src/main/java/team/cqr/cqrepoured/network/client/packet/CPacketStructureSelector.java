@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class CPacketStructureSelector implements IMessage {
+public class CPacketStructureSelector extends AbstractPacket<CPacketStructureSelector> {
 
 	private Hand hand;
 
@@ -17,17 +17,24 @@ public class CPacketStructureSelector implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.hand = buf.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+	public CPacketStructureSelector fromBytes(PacketBuffer buf) {
+		CPacketStructureSelector result = new CPacketStructureSelector();
+		result.hand = buf.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(this.hand == Hand.MAIN_HAND);
+	public void toBytes(CPacketStructureSelector packet, PacketBuffer buf) {
+		buf.writeBoolean(packet.hand == Hand.MAIN_HAND);
 	}
 
 	public Hand getHand() {
 		return this.hand;
+	}
+
+	@Override
+	public Class<CPacketStructureSelector> getPacketClass() {
+		return CPacketStructureSelector.class;
 	}
 
 }
