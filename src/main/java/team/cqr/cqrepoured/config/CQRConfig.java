@@ -122,13 +122,13 @@ public class CQRConfig {
 		public ToolConfig turtle = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
 		public ToolConfig walker = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
 
-		public double daggerAttackDamageBonus = -1.0D;
-		public double daggerAttackSpeedBonus = 0.4D;
+		public int daggerAttackDamageBonus = -1;
+		public float daggerAttackSpeedBonus = 0.4F;
 		public double daggerMovementSpeedBonus = 0.05D;
 		public double greatSwordAttackDamageBonus = 3.0D;
 		public double greatSwordAttackSpeedBonus = -0.4D;
-		public double spearAttackDamageBonus = 1.0D;
-		public double spearAttackSpeedBonus = -0.1D;
+		public int spearAttackDamageBonus = 1;
+		public float spearAttackSpeedBonus = -0.F;
 		public double spearReachDistanceBonus = 1.0D;
 
 	}
