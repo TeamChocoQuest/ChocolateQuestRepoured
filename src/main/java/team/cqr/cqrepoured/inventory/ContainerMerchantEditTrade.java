@@ -6,9 +6,10 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -28,61 +29,62 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	private final AbstractEntityCQR entity;
 	private final IInventory tradeInventory;
 
-	public ContainerMerchantEditTrade(AbstractEntityCQR entity, PlayerEntity player, int tradeIndex) {
+	public ContainerMerchantEditTrade(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerEntity player, int tradeIndex) {
+		super(type, containerID);
 		this.entity = entity;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 72 + j * 18, 60 + i * 18));
+				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 72 + j * 18, 60 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlotToContainer(new Slot(player.inventory, k, 72 + k * 18, 118));
+			this.addSlot(new Slot(player.inventory, k, 72 + k * 18, 118));
 		}
 
-		this.tradeInventory = new Inventory("", false, 5);
-		this.addSlotToContainer(new Slot(this.tradeInventory, 0, 74, 12));
-		this.addSlotToContainer(new Slot(this.tradeInventory, 1, 100, 12));
-		this.addSlotToContainer(new Slot(this.tradeInventory, 2, 126, 12));
-		this.addSlotToContainer(new Slot(this.tradeInventory, 3, 152, 12));
-		this.addSlotToContainer(new Slot(this.tradeInventory, 4, 210, 12));
+		this.tradeInventory = new Inventory(/*"", false,*/ 5);
+		this.addSlot(new Slot(this.tradeInventory, 0, 74, 12));
+		this.addSlot(new Slot(this.tradeInventory, 1, 100, 12));
+		this.addSlot(new Slot(this.tradeInventory, 2, 126, 12));
+		this.addSlot(new Slot(this.tradeInventory, 3, 152, 12));
+		this.addSlot(new Slot(this.tradeInventory, 4, 210, 12));
 
 		Trade trade = entity.getTrades().get(tradeIndex);
 		if (trade != null) {
 			NonNullList<TradeInput> tradeInputs = trade.getInputItems();
-			for (int i = 0; i < tradeInputs.size() && i < this.tradeInventory.getSizeInventory() - 1; i++) {
-				this.tradeInventory.setInventorySlotContents(i, tradeInputs.get(i).getStack());
+			for (int i = 0; i < tradeInputs.size() && i < this.tradeInventory.getContainerSize() - 1; i++) {
+				this.tradeInventory.setItem(i, tradeInputs.get(i).getStack());
 			}
-			this.tradeInventory.setInventorySlotContents(this.tradeInventory.getSizeInventory() - 1, trade.getOutput());
+			this.tradeInventory.setItem(this.tradeInventory.getContainerSize() - 1, trade.getOutput());
 		}
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
+	public boolean stillValid(PlayerEntity playerIn) {
 		if (!playerIn.isCreative()) {
 			return false;
 		}
-		if (this.entity.isDead) {
+		if (!this.entity.isAlive()) {
 			return false;
 		}
-		return playerIn.getDistanceSq(this.entity) <= 64.0D;
+		return playerIn.distanceToSqr(this.entity) <= 64.0D;
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-		Slot slot = this.inventorySlots.get(index);
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+		Slot slot = this.slots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			ItemStack itemstack = itemstack1.copy();
 
 			if (index > 35) {
-				if (this.mergeItemStack(itemstack1, 0, 36, false)) {
+				if (this.moveItemStackTo(itemstack1, 0, 36, false)) {
 					return itemstack;
 				}
 			} else {
-				if (this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
+				if (this.moveItemStackTo(itemstack1, 36, this.slots.size(), false)) {
 					return itemstack;
 				}
 			}
@@ -92,8 +94,8 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity playerIn) {
-		super.onContainerClosed(playerIn);
+	public void removed(PlayerEntity playerIn) {
+		super.removed(playerIn);
 
 		/*
 		 * if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected())
@@ -105,13 +107,13 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	public ItemStack getOutput() {
-		return this.tradeInventory.getStackInSlot(4);
+		return this.tradeInventory.getItem(4);
 	}
 
 	public ItemStack[] getInput() {
 		ItemStack[] input = new ItemStack[4];
 		for (int i = 0; i < 4; i++) {
-			input[i] = this.tradeInventory.getStackInSlot(i);
+			input[i] = this.tradeInventory.getItem(i);
 		}
 		return input;
 	}
@@ -119,7 +121,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	@Override
 	public void onClickButton(PlayerEntity player, int button, ByteBuf extraData) {
 		if (button == 0) {
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.world, this.entity.getEntityId(), 0, 0);
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
 		} else if (button == 1) {
 			int index = extraData.readInt();
 			boolean[] ignoreMeta = new boolean[4];
@@ -135,13 +137,13 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 
 			TraderOffer trades = this.entity.getTrades();
 			int reputation = this.getRequriedReputation(reputationName);
-			ResourceLocation advancement = this.getRequiredAdvancement((ServerWorld) player.world, advancementName);
+			ResourceLocation advancement = this.getRequiredAdvancement((ServerWorld) player.level, advancementName);
 			ItemStack output = this.getOutput();
 			TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
 			Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
 
 			this.entity.getTrades().editTrade(index, trade);
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.world, this.entity.getEntityId(), 0, 0);
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
 		}
 	}
 
@@ -168,7 +170,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	@Nullable
 	private ResourceLocation getRequiredAdvancement(ServerWorld world, String advancement) {
 		ResourceLocation requiredAdvancement = new ResourceLocation(advancement);
-		if (world.getAdvancementManager().getAdvancement(requiredAdvancement) != null) {
+		if (world.getServer().getAdvancements().getAdvancement(requiredAdvancement) != null) {
 			return requiredAdvancement;
 		}
 		return null;

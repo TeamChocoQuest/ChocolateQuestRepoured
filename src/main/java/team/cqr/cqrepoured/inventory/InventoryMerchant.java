@@ -43,7 +43,7 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.slots.size();
 	}
 
@@ -59,13 +59,13 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.slots.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		ItemStack stack = ItemStackHelper.getAndSplit(this.slots, index, index == 5 ? this.slots.get(index).getCount() : count);
+	public ItemStack removeItem(int index, int count) {
+		ItemStack stack = ItemStackHelper.removeItem(this.slots, index, index == 5 ? this.slots.get(index).getCount() : count);
 		if (!stack.isEmpty()) {
 			this.resetTradeAndSlots();
 		}
@@ -73,8 +73,8 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		ItemStack stack = ItemStackHelper.getAndRemove(this.slots, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		ItemStack stack = ItemStackHelper.takeItem(this.slots, index);
 		if (!stack.isEmpty()) {
 			this.resetTradeAndSlots();
 		}
@@ -82,7 +82,7 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		if (stack.getCount() > this.getInventoryStackLimit()) {
 			stack.setCount(this.getInventoryStackLimit());
 		}
@@ -91,15 +91,15 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.entity.isDead) {
+	public boolean stillValid(PlayerEntity player) {
+		if (!this.entity.isAlive()) {
 			return false;
 		}
-		return player.getDistanceSq(this.entity) <= 64.0D;
+		return player.distanceToSqr(this.entity) <= 64.0D;
 	}
 
 	@Override
-	public void markDirty() {
+	public void setChanged() {
 		this.resetTradeAndSlots();
 	}
 
@@ -107,7 +107,7 @@ public class InventoryMerchant implements IInventory {
 		TraderOffer traderOffer = this.entity.getTrades();
 		if (traderOffer != null && !traderOffer.isEmpty()) {
 			this.currentTrade = traderOffer.get(this.currentTradeIndex);
-			ItemStack[] input = new ItemStack[] { this.getStackInSlot(0), this.getStackInSlot(1), this.getStackInSlot(2), this.getStackInSlot(3) };
+			ItemStack[] input = new ItemStack[] { this.getItem(0), this.getItem(1), this.getItem(2), this.getItem(3) };
 			if (this.currentTrade != null && this.currentTrade.isUnlockedFor(this.player) && this.currentTrade.isInStock() && this.currentTrade.doItemsMatch(input)) {
 				this.slots.set(4, this.currentTrade.getOutput());
 			} else {
@@ -135,7 +135,7 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.slots.clear();
 	}
 

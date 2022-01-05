@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -15,31 +16,32 @@ public class ContainerSpawner extends Container {
 
 	private final TileEntitySpawner tileEntity;
 
-	public ContainerSpawner(PlayerInventory playerInv, TileEntitySpawner tileentity) {
+	public ContainerSpawner(final int containerID, PlayerInventory playerInv, TileEntitySpawner tileentity) {
+		super(ContainerType.GENERIC_3x3, containerID);
 		this.tileEntity = tileentity;
 		IItemHandler inventory = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142));
+			this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
 		}
 
 		for (int l = 0; l < 3; l++) {
 			for (int m = 0; m < 3; m++) {
-				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
+				this.addSlot(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
 					@Override
-					public void onSlotChanged() {
-						tileentity.markDirty();
+					public void setChanged() {
+						tileentity.setChanged();
 					}
 
 					@Override
-					public boolean isItemValid(ItemStack stack) {
-						return stack.getItem() instanceof ItemSoulBottle && stack.hasTagCompound() && stack.getTagCompound().hasKey("EntityIn");
+					public boolean mayPlace(ItemStack stack) {
+						return stack.getItem() instanceof ItemSoulBottle && stack.hasTag() && stack.getTag().contains("EntityIn");
 					}
 				});
 			}
@@ -47,30 +49,31 @@ public class ContainerSpawner extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
+	public boolean stillValid(PlayerEntity playerIn) {
 		if (!playerIn.isCreative()) {
 			return false;
 		}
-		if (playerIn.world.getTileEntity(this.tileEntity.getPos()) != this.tileEntity) {
+		if (playerIn.level.getBlockEntity(this.tileEntity.getBlockPos()) != this.tileEntity) {
 			return false;
 		}
-		return playerIn.getDistanceSqToCenter(this.tileEntity.getPos()) <= 64.0D;
+		//TODO: Check if this does the same, old was "distanceToSqrCenter"
+		return playerIn.blockPosition().distManhattan(this.tileEntity.getBlockPos()) <= 64.0D;
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-		Slot slot = this.inventorySlots.get(index);
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+		Slot slot = this.slots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			ItemStack itemstack = itemstack1.copy();
 
 			if (index > 35) {
-				if (this.mergeItemStack(itemstack1, 0, 36, false)) {
+				if (this.moveItemStackTo(itemstack1, 0, 36, false)) {
 					return itemstack;
 				}
 			} else {
-				if (this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
+				if (this.moveItemStackTo(itemstack1, 36, this.slots.size(), false)) {
 					return itemstack;
 				}
 			}

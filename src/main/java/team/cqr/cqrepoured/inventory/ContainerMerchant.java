@@ -3,11 +3,13 @@ package team.cqr.cqrepoured.inventory;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
@@ -20,31 +22,32 @@ public class ContainerMerchant extends Container implements IInteractable {
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;
 
-	public ContainerMerchant(AbstractEntityCQR entity, PlayerEntity player) {
+	public ContainerMerchant(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerEntity player) {
+		super(type, containerID);
 		this.entity = entity;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 139 + j * 18, 84 + i * 18));
+				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 139 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlotToContainer(new Slot(player.inventory, k, 139 + k * 18, 142));
+			this.addSlot(new Slot(player.inventory, k, 139 + k * 18, 142));
 		}
 
 		this.merchantInventory = new InventoryMerchant(entity, player);
-		this.addSlotToContainer(new Slot(this.merchantInventory, 0, 141, 37));
-		this.addSlotToContainer(new Slot(this.merchantInventory, 1, 167, 37));
-		this.addSlotToContainer(new Slot(this.merchantInventory, 2, 193, 37));
-		this.addSlotToContainer(new Slot(this.merchantInventory, 3, 219, 37));
-		this.addSlotToContainer(new SlotMerchantOutput(player, this.merchantInventory, 4, 277, 37));
+		this.addSlot(new Slot(this.merchantInventory, 0, 141, 37));
+		this.addSlot(new Slot(this.merchantInventory, 1, 167, 37));
+		this.addSlot(new Slot(this.merchantInventory, 2, 193, 37));
+		this.addSlot(new Slot(this.merchantInventory, 3, 219, 37));
+		this.addSlot(new SlotMerchantOutput(player, this.merchantInventory, 4, 277, 37));
 	}
 
 	@Override
-	public void onCraftMatrixChanged(IInventory inventoryIn) {
+	public void slotsChanged(IInventory inventoryIn) {
 		this.merchantInventory.resetTradeAndSlots();
-		super.onCraftMatrixChanged(inventoryIn);
+		super.slotsChanged(inventoryIn);
 	}
 
 	public void setCurrentTradeIndex(int index) {
@@ -52,53 +55,56 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		if (this.entity.isDead) {
+	public boolean stillValid(PlayerEntity playerIn) {
+		if (!this.entity.isAlive()) {
 			return false;
 		}
-		return playerIn.getDistanceSq(this.entity) <= 64.0D;
+		return playerIn.distanceToSqr(this.entity) <= 64.0D;
 	}
-
+	
+	
+	
 	@Override
-	public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
+	public boolean canTakeItemForPickAll(ItemStack stack, Slot slotIn) {
 		return !(slotIn instanceof SlotMerchantOutput);
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack oldStack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
+		Slot slot = this.slots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
-			ItemStack newStack = slot.getStack();
+		if (slot != null && slot.hasItem()) {
+			ItemStack newStack = slot.getItem();
 			oldStack = newStack.copy();
 
 			if (index == 40) {
-				if (!this.mergeItemStack(newStack, 0, 36, true)) {
+				if (!this.moveItemStackTo(newStack, 0, 36, true)) {
 					return ItemStack.EMPTY;
 				}
 
-				slot.onSlotChange(newStack, oldStack);
+				//Correct method?
+				slot.onQuickCraft(newStack, oldStack);
 			} else if (index > 35) {
-				if (!this.mergeItemStack(newStack, 0, 36, false)) {
+				if (!this.moveItemStackTo(newStack, 0, 36, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(newStack, 36, 40, false)) {
+			} else if (!this.moveItemStackTo(newStack, 36, 40, false)) {
 				if (index > 26) {
-					if (this.mergeItemStack(newStack, 0, 27, false)) {
+					if (this.moveItemStackTo(newStack, 0, 27, false)) {
 						return ItemStack.EMPTY;
 					}
 				} else {
-					if (this.mergeItemStack(newStack, 27, 36, false)) {
+					if (this.moveItemStackTo(newStack, 27, 36, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
 			}
 
 			if (newStack.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 
 			if (newStack.getCount() == oldStack.getCount()) {
@@ -110,18 +116,18 @@ public class ContainerMerchant extends Container implements IInteractable {
 
 		return oldStack;
 	}
-
+	
 	@Override
-	public void onContainerClosed(PlayerEntity playerIn) {
-		super.onContainerClosed(playerIn);
+	public void removed(PlayerEntity playerIn) {
+		super.removed(playerIn);
 
-		if (!playerIn.isEntityAlive() || playerIn instanceof ServerPlayerEntity && ((ServerPlayerEntity) playerIn).hasDisconnected()) {
+		if (!playerIn.isAlive() || playerIn instanceof ServerPlayerEntity && ((ServerPlayerEntity) playerIn).hasDisconnected()) {
 			for (int i = 0; i < 4; i++) {
-				playerIn.dropItem(this.merchantInventory.removeStackFromSlot(i), false);
+				playerIn.drop(this.merchantInventory.removeStackFromSlot(i), false);
 			}
 		} else {
 			for (int i = 0; i < 4; i++) {
-				playerIn.inventory.placeItemBackInInventory(playerIn.world, this.merchantInventory.removeStackFromSlot(i));
+				playerIn.inventory.placeItemBackInInventory(playerIn.level, this.merchantInventory.removeStackFromSlot(i));
 			}
 		}
 	}
@@ -134,7 +140,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 			for (int i = 0; i < 4; i++) {
 				ItemStack stack = this.merchantInventory.getStackInSlot(i);
 				if (!stack.isEmpty()) {
-					if (!this.mergeItemStack(stack, 0, 36, true)) {
+					if (!this.moveItemStackTo(stack, 0, 36, true)) {
 						return;
 					}
 
@@ -151,7 +157,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	private void fillSlot(int slotIndex, TradeInput input) {
 		if (!input.getStack().isEmpty()) {
 			for (int i = 0; i < 36; i++) {
-				ItemStack stack1 = this.inventorySlots.get(i).getStack();
+				ItemStack stack1 = this.slots.get(i).getItem();
 				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(input.getStack(), stack1, input.ignoreMeta(), input.ignoreNBT())) {
 					ItemStack stack2 = this.merchantInventory.getStackInSlot(slotIndex);
 					int j = stack2.isEmpty() ? 0 : stack2.getCount();
@@ -175,7 +181,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 		if (button < 10) {
 			if (button == 0) {
 				// new trade
-				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.world, this.entity.getEntityId(), this.entity.getTrades().size(), 0);
+				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.level, this.entity.getId(), this.entity.getTrades().size(), 0);
 			}
 		} else if (button < 20) {
 			// select
@@ -199,7 +205,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 		} else if (button < 60) {
 			// edit
 			int index = extraData.readInt();
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.world, this.entity.getEntityId(), index, 0);
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.level, this.entity.getId(), index, 0);
 		}
 	}
 

@@ -290,5 +290,9 @@ public class CQRMain {
 		FactionRegistry.getServerInstance().saveAllReputationData(true, event.getServer().overworld());
 		CQStructure.clearCache();
 	}
+	
+	public static final ResourceLocation prefix(final String path) {
+		return new ResourceLocation(MODID, path);
+	}
 
 }
