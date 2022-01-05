@@ -15,6 +15,7 @@ import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
+import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
 import org.apache.logging.log4j.LogManager;
@@ -53,7 +54,13 @@ public class ShaderProgram {
 			shaderList.add(shader);
 		}
 
-		shaderList.forEach(shader -> glAttachShader(this.shaderProgram, shader));
+		shaderList.forEach(new IntConsumer() {
+			
+			@Override
+			public void accept(int value) {
+				glAttachShader(ShaderProgram.this.shaderProgram, value);
+			}
+		});
 		glLinkProgram(this.shaderProgram);
 
 		int logLength = glGetProgrami(this.shaderProgram, GL20.GL_INFO_LOG_LENGTH);
@@ -65,7 +72,13 @@ public class ShaderProgram {
 			throw new RuntimeException("Failed to link programm: " + linkStatus);
 		}
 
-		shaderList.forEach(GL20::glDeleteShader);
+		shaderList.forEach(new IntConsumer() {
+			
+			@Override
+			public void accept(int value) {
+				GL20.glDeleteShader(value);
+			}
+		});
 	}
 
 	public void use() {
