@@ -3,11 +3,12 @@ package team.cqr.cqrepoured.entity.boss;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -20,22 +21,22 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIBlindTargetSpell;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIFangAttack;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMinionSpell;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
-import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.faction.Faction;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {
 
-	private static final DataParameter<Boolean> BONE_SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRNecromancer.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> BONE_SHIELD_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRNecromancer.class, DataSerializers.BOOLEAN);
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
 
-	public EntityCQRNecromancer(World worldIn) {
-		super(worldIn);
+	public EntityCQRNecromancer(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.dataManager.register(BONE_SHIELD_ACTIVE, false);
+		this.entityData.define(BONE_SHIELD_ACTIVE, false);
 	}
 
 	@Override
@@ -81,17 +82,17 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 			}
 		}
 
-		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
-			this.dataManager.set(BONE_SHIELD_ACTIVE, true);
-		} else if (!this.world.isRemote) {
-			this.dataManager.set(BONE_SHIELD_ACTIVE, false);
+		if (!this.level.isClientSide && this.getHealth() <= this.getMaxHealth() / 2) {
+			this.entityData.set(BONE_SHIELD_ACTIVE, true);
+		} else if (!this.level.isClientSide) {
+			this.entityData.set(BONE_SHIELD_ACTIVE, false);
 		}
 
-		if (this.getAttackTarget() != null && !this.getAttackTarget().isDead && !this.summonedSkulls.isEmpty()) {
+		if (this.getTarget() != null && this.getTarget().isAlive() && !this.summonedSkulls.isEmpty()) {
 			for (int i = 0; i < this.summonedSkulls.size(); i++) {
 				EntityFlyingSkullMinion skull = this.summonedSkulls.get(i);
 				if (!skull.hasTarget()) {
-					skull.setTarget(this.getAttackTarget());
+					skull.setTarget(this.getTarget());
 				}
 			}
 			for (int i = 0; i < this.summonedSkulls.size(); i++) {
@@ -104,20 +105,20 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
-			if (source.isProjectile() || source.getImmediateSource() instanceof AbstractArrowEntity || source.getImmediateSource() instanceof IProjectile) {
+	public boolean hurt(DamageSource source, float amount) {
+		if (!this.level.isClientSide && this.getHealth() <= this.getMaxHealth() / 2) {
+			if (source.isProjectile() || source.getDirectEntity() instanceof AbstractArrowEntity || source.getDirectEntity() instanceof ProjectileEntity) {
 				amount = 0;
 				return false;
 			}
 		}
-		return super.attackEntityFrom(source, amount);
+		return super.hurt(source, amount);
 	}
 
 	private void filterSummonLists() {
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.isDead) {
+			if (ent == null || ent.removed) {
 				tmp.add(ent);
 			}
 		}
@@ -126,7 +127,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		}
 		tmp.clear();
 		for (Entity ent : this.summonedSkulls) {
-			if (ent == null || ent.isDead) {
+			if (ent == null || ent.removed) {
 				tmp.add(ent);
 			}
 		}
@@ -136,24 +137,19 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		// Kill minions
 		for (Entity e : this.getSummonedEntities()) {
-			if (e != null && !e.isDead) {
+			if (e != null && !e.removed) {
 				if (e instanceof LivingEntity) {
-					((LivingEntity) e).onDeath(cause);
+					((LivingEntity) e).die(cause);
 				}
-				e.setDead();
+				e.remove();
 			}
 		}
 		this.summonedMinions.clear();
 
-		super.onDeath(cause);
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_NECROMANCER;
+		super.die(cause);
 	}
 
 	@Override
@@ -193,12 +189,12 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.ILLAGER;
 	}
 
 	public boolean isBoneShieldActive() {
-		return this.dataManager.get(BONE_SHIELD_ACTIVE);
+		return this.entityData.get(BONE_SHIELD_ACTIVE);
 	}
 
 }

@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity.bases;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,8 +19,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 
 	public static final int MAX_DEATH_TICKS = 200;
 
-	protected AbstractEntityCQRBoss(World worldIn) {
-		super(worldIn);
+	protected AbstractEntityCQRBoss(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 		this.xpReward = 50;
 		this.enableBossBar();
 	}
@@ -64,7 +65,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	@Override
-	protected void onDeathUpdate() {
+	protected void tickDeath() {
 		if (this.usesEnderDragonDeath()) {
 			if (this.isSitting()) {
 				this.setSitting(false);
@@ -91,7 +92,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 				this.onFinalDeath();
 			}
 		} else {
-			super.onDeathUpdate();
+			super.tickDeath();
 		}
 	}
 
@@ -112,7 +113,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	protected ParticleTypes getDeathAnimParticles() {
-		return ParticleTypes.EXPLOSION_HUGE;
+		return ParticleTypes.EXPLOSION;
 	}
 
 	@Override

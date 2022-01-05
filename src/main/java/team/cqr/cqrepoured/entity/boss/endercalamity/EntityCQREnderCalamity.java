@@ -1098,7 +1098,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void onDeath(DamageSource cause) {
 		this.deathCause = cause;
 		this.dataManager.set(SHIELD_ACTIVE, false);
-		super.onDeath(cause);
+		super.die(cause);
 	}
 
 	private boolean isFalling = false;

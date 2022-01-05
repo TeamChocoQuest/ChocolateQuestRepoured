@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -19,20 +20,20 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAIArmorSpell;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIFangAttack;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMinionSpell;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected BlockPos currentPhylacteryPosition = null;
 
-	public EntityCQRLich(World worldIn) {
-		super(worldIn);
+	public EntityCQRLich(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -40,7 +41,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.isDead) {
+			if (ent == null || ent.removed) {
 				tmp.add(ent);
 			}
 		}
@@ -49,7 +50,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		}
 		// Phylactery
 		if (this.currentPhylacteryPosition != null) {
-			if (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY) {
+			if (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY) {
 				this.setMagicArmorActive(true);
 			} else {
 				this.currentPhylacteryPosition = null;
@@ -91,26 +92,21 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 			}
 		});
 	}
-
+	
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		// Kill minions
 		for (Entity e : this.summonedMinions) {
-			if (e != null && !e.isDead) {
+			if (e != null && e.isAlive()) {
 				if (e instanceof LivingEntity) {
-					((LivingEntity) e).onDeath(cause);
+					((LivingEntity) e).die(cause);
 				}
-				e.setDead();
+				e.remove();
 			}
 		}
 		this.summonedMinions.clear();
 
-		super.onDeath(cause);
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_LICH;
+		super.die(cause);
 	}
 
 	@Override
@@ -148,28 +144,28 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public void save(CompoundNBT compound) {
-		super.save(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 		if (this.currentPhylacteryPosition != null) {
-			compound.setTag("currentPhylactery", NBTUtil.createPosTag(this.currentPhylacteryPosition));
+			compound.put("currentPhylactery", NBTUtil.writeBlockPos(this.currentPhylacteryPosition));
 		}
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
-		if (compound.hasKey("currentPhylactery")) {
-			this.currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
+		if (compound.contains("currentPhylactery")) {
+			this.currentPhylacteryPosition = NBTUtil.readBlockPos(compound.getCompound("currentPhylactery"));
 		}
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.UNDEAD;
 	}
 
 	public boolean hasPhylactery() {
-		return (this.currentPhylacteryPosition != null && (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY));
+		return (this.currentPhylacteryPosition != null && (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY));
 	}
 
 }

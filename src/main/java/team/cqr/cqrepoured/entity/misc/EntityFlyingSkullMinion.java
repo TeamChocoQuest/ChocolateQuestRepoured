@@ -139,7 +139,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 
 	@Override
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
+		super.die(cause);
 		this.explode(1.25F);
 	}
 

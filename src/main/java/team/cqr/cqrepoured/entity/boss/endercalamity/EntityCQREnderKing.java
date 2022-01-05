@@ -122,7 +122,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 			EntityUtil.addEntityToAllRegionsAt(pos, cs);
 		}
-		super.onDeath(cause);
+		super.die(cause);
 	}
 
 	protected boolean teleportRandomly() {

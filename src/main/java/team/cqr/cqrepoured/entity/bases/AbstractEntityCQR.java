@@ -1692,7 +1692,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 	}
 
-	private boolean isServerWorld() {
+	protected boolean isServerWorld() {
 		return this.level != null && !this.level.isClientSide;
 	}
 

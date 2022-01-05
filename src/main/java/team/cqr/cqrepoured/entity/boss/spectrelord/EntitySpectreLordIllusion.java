@@ -146,7 +146,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 
 	@Override
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
+		super.die(cause);
 		if (this.caster != null) {
 			this.caster.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor(), this.caster.getMaxHealth() * 0.025F);
 		}

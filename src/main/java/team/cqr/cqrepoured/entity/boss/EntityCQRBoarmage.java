@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -16,6 +17,7 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAIExplodeAreaStartSpell;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIExplosionRay;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonFireWall;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMeteors;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
@@ -27,17 +29,20 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	protected boolean startedExplodeAreaAttack = false;
 
-	public EntityCQRBoarmage(World worldIn) {
-		super(worldIn);
-
-		this.isImmuneToFire = true;
+	public EntityCQRBoarmage(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 	}
-
+	
 	@Override
-	public boolean isImmuneToExplosions() {
+	public boolean fireImmune() {
 		return true;
 	}
 
+	@Override
+	public boolean ignoreExplosion() {
+		return true;
+	}
+	
 	public void startExplodeAreaAttack() {
 		this.startedExplodeAreaAttack = true;
 	}
@@ -55,7 +60,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.isDead) {
+			if (ent == null || ent.removed) {
 				tmp.add(ent);
 			}
 		}
@@ -63,41 +68,36 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 			this.summonedMinions.remove(e);
 		}
 
-		if ((this.isInLava() || this.isBurning()) && this.ticksExisted % 5 == 0) {
+		if ((this.isInLava() || this.isOnFire()) && this.tickCount % 5 == 0) {
 			this.heal(1);
 		}
 	}
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		// Kill minions
 		for (Entity e : this.summonedMinions) {
-			if (e != null && !e.isDead) {
+			if (e != null && !e.removed) {
 				if (e instanceof LivingEntity) {
-					((LivingEntity) e).onDeath(cause);
+					((LivingEntity) e).die(cause);
 				}
-				e.setDead();
+				e.remove();
 			}
 		}
 		this.summonedMinions.clear();
 
-		super.onDeath(cause);
+		super.die(cause);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.tasks.addTask(10, new BossAIBoarmageTeleportSpell(this));
-		this.tasks.addTask(0, new BossAIBoarmageExplodeAreaAttack(this));
+		this.goalSelector.addGoal(10, new BossAIBoarmageTeleportSpell(this));
+		this.goalSelector.addGoal(0, new BossAIBoarmageExplodeAreaAttack(this));
 		this.spellHandler.addSpell(0, new EntityAISummonMeteors(this, 75, 20));
 		this.spellHandler.addSpell(3, new EntityAIExplosionRay(this, 100, 10));
 		this.spellHandler.addSpell(2, new EntityAISummonFireWall(this, 50, 25));
 		this.spellHandler.addSpell(1, new EntityAIExplodeAreaStartSpell(this, 200, 20, 5));
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_BOARMAGE;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.UNDEAD;
 	}
 

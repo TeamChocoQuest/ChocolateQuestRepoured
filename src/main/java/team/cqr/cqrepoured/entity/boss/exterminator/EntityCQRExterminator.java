@@ -854,7 +854,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public void onDeath(DamageSource cause) {
 		this.deathCause = cause;
-		super.onDeath(cause);
+		super.die(cause);
 	}
 
 	@Override

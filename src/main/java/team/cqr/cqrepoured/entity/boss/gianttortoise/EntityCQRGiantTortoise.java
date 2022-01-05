@@ -689,7 +689,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public void onDeath(DamageSource cause) {
 		this.deathCause = cause;
-		super.onDeath(cause);
+		super.die(cause);
 	}
 
 	@Override
