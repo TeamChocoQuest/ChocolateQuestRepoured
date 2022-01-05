@@ -1,0 +1,156 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.golem_minigun.warmup": {
+			"animation_length": 1
+		},
+		"animation.golem_minigun.firing_loop": {
+			"loop": true,
+			"animation_length": 1.32,
+			"bones": {
+				"barrels": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 11.25]
+						},
+						"0.08": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 0, -45]
+						},
+						"0.36": {
+							"vector": [0, 0, -90]
+						},
+						"0.52": {
+							"vector": [0, 0, -135]
+						},
+						"0.68": {
+							"vector": [0, 0, -180]
+						},
+						"0.84": {
+							"vector": [0, 0, -225]
+						},
+						"1.0": {
+							"vector": [0, 0, -270]
+						},
+						"1.16": {
+							"vector": [0, 0, -315]
+						},
+						"1.32": {
+							"vector": [0, 0, -348.75]
+						}
+					}
+				},
+				"barrel1": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.08": {
+							"vector": [0, 0, 0.75]
+						},
+						"0.2": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel2": {
+					"position": {
+						"0.16": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 0, 0.75]
+						},
+						"0.36": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel3": {
+					"position": {
+						"0.32": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [0, 0, 0.75]
+						},
+						"0.52": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel4": {
+					"position": {
+						"0.48": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 0.75]
+						},
+						"0.68": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel5": {
+					"position": {
+						"0.64": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [0, 0, 0.75]
+						},
+						"0.84": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel6": {
+					"position": {
+						"0.8": {
+							"vector": [0, 0, 0]
+						},
+						"0.84": {
+							"vector": [0, 0, 0.75]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel7": {
+					"position": {
+						"0.96": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0.75]
+						},
+						"1.16": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel8": {
+					"position": {
+						"1.12": {
+							"vector": [0, 0, 0]
+						},
+						"1.16": {
+							"vector": [0, 0, 0.75]
+						},
+						"1.32": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.golem_minigun.cooldown": {
+			"loop": true
+		}
+	},
+	"geckolib_format_version": 2
+}
