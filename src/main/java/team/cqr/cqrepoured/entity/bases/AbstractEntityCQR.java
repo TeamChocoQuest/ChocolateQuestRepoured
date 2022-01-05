@@ -11,6 +11,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -29,6 +30,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.NameTagItem;
 import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -41,7 +44,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.Effects;
-import net.minecraft.profiler.IProfiler;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -55,7 +57,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.BossInfo;
@@ -72,6 +73,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.CQRMain;
@@ -96,7 +98,6 @@ import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.entity.ai.EntityAIRideHorse;
 import team.cqr.cqrepoured.entity.ai.EntityAISearchMount;
 import team.cqr.cqrepoured.entity.ai.EntityAITameAndLeashPet;
-import team.cqr.cqrepoured.entity.ai.EntityAITasksProfiled;
 import team.cqr.cqrepoured.entity.ai.EntityAITorchIgniter;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttack;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
@@ -235,8 +236,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@OnlyIn(Dist.CLIENT)
 	protected ESpeechBubble currentSpeechBubbleID;
 
-	protected AbstractEntityCQR(World worldIn) {
-		super(worldIn);
+	protected AbstractEntityCQR(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+		super(type, worldIn);
 		if (worldIn.isClientSide) {
 			this.chooseNewRandomSpeechBubble();
 		}
@@ -270,15 +271,21 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		// Shoulder entity stuff
 		this.entityData.define(SHOULDER_ENTITY, new CompoundNBT());
 	}
-
+	
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		// Not wanted
 	}
 
+	//Correct method?
 	@Override
-	protected boolean canDespawn() {
+	protected boolean shouldDespawnInPeaceful() {
 		return false;
+	}
+	//Alternative:
+	@Override
+	public void checkDespawn() {
+		//Nope
 	}
 
 	@Override
@@ -444,8 +451,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected void registerGoals() {
 		if (CQRConfig.advanced.debugAI) {
 			//TODO: AI Selectors are final now, change this or not?
-			this.goalSelector = new EntityAITasksProfiled((IProfiler) this.level.getProfiler(), this.level);
-			this.targetSelector = new EntityAITasksProfiled((IProfiler) this.level.getProfiler(), this.level);
+			//this.goalSelector = new EntityAITasksProfiled((IProfiler) this.level.getProfiler(), this.level);
+			//this.targetSelector = new EntityAITasksProfiled((IProfiler) this.level.getProfiler(), this.level);
 		}
 		this.spellHandler = this.createSpellHandler();
 		this.goalSelector.addGoal(0, new SwimGoal(this));
@@ -692,11 +699,11 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 
 		if (flag && !this.getLookControl().isHasWanted() && !this.isPathFinding()) {
-			double x1 = player.posX - this.posX;
-			double z1 = player.posZ - this.posZ;
+			double x1 = player.position().x() - this.position().x();
+			double z1 = player.position().z() - this.position().z();
 			float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
-			this.rotationYaw = yaw;
-			this.rotationYawHead = yaw;
+			this.yBodyRot = yaw;
+			this.yHeadRot = yaw;
 			this.renderYawOffset = yaw;
 		}
 
@@ -708,19 +715,16 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	protected abstract ResourceLocation getLootTable();
-
-	@Override
 	protected void dropCustomDeathLoot(DamageSource deathCause, int lootingModifier, boolean wasRecentlyHit) {
 		ResourceLocation resourcelocation = this.getLootTable();
 		if (resourcelocation != null) {
-			LootTable lootTable = this.level.getLootTableManager().getLootTableFromLocation(resourcelocation);
-			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.level).withLootedEntity(this).withDamageSource(source);
-			if (wasRecentlyHit && this.attackingPlayer != null) {
-				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
+			LootTable lootTable = this.level.getServer().getLootTables().get(resourcelocation);
+			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.level).withParameter(LootParameters.THIS_ENTITY, this).withOptionalParameter(LootParameters.DAMAGE_SOURCE, deathCause);
+			if (wasRecentlyHit && this.lastHurtByPlayer != null) {
+				lootContextBuilder = lootContextBuilder.withParameter(LootParameters.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
 			}
 
-			for (ItemStack itemstack : lootTable.generateLootForPools(this.random, lootContextBuilder.build())) {
+			for (ItemStack itemstack : lootTable.getRandomItems(lootContextBuilder.withRandom(this.random).create(LootParameterSets.ENTITY))) {
 				this.spawnAtLocation(itemstack, 0.0F);
 			}
 		}
@@ -783,7 +787,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		if (!this.level.isClientSide && stack != this.prevPotion) {
-			CQRMain.NETWORK.sendToAllTracking(new SPacketItemStackSync(this.getType().getRegistryName(), EntityEquipmentExtraSlot.POTION.getIndex(), stack), this);
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new SPacketItemStackSync(this.getId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
 
@@ -914,7 +918,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public boolean canAttack(LivingEntity entityIn) {
+	public boolean doHurtTarget(Entity entityIn) {
 		// Shoulder entity stuff
 		this.spawnShoulderEntities();
 		
@@ -1698,7 +1702,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public void teleport(double x, double y, double z) {
 		this.setPos(x, y, z);
-		CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEntityPrevPos(this), this);
+		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new SPacketUpdateEntityPrevPos(this));
 	}
 
 	// Custom textures
