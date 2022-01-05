@@ -1,11 +1,11 @@
 Ficheiro de linguagem português de Portugal para o mod Chocolate Quest Repoured!
 Esta tradução foi criada por todos os desenvolvedores e foi polida por ArloTheEpic
 
-#DamageSources
+#Damage Sources
 death.attack.ray=%1$s was fired by mah lazor!
 death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
-#CreativeTabs
+#Creative Tabs
 itemGroup.ChocolateQuestRepouredBlocksTab=Blocos do CQR
 itemGroup.ChocolateQuestRepouredItemsTab=Items do CQR
 itemGroup.ChocolateQuestRepouredDungeonPlacers=Geradores de Dungeons do CQR
@@ -196,8 +196,7 @@ item.banner.illager_banner.name=Bandeira dos Illagers
 item.banner.walker_ordo.name=Bandeira Walker 2
 item.banner.gremlin_banner.name=Bandeira Gremlin
 
-
-#Gui
+#GUI
 gui.repu.name=Reputação
 gui.repu.faction=Tribo
 gui.repu.reputation=A tua reputação
@@ -230,7 +229,6 @@ item.dummy_shield.name=Escudo Manequim
 #Axes
 item.battle_axe_bull.name=Machado de Batalha do Touro
 
-
 #Dragon Items
 item.helmet_dragon.name=Cabeça de Dragão
 
@@ -260,7 +258,6 @@ item.cqr_shield_r09.name=Escudo do Tritão
 #Walker set
 item.sword_walker.name=Lâmina do Walker
 item.shield_walker.name=Escudo do rei dos Walkers
-
 
 #Shields
 item.shield_bull.name=Escudo do Touro de Geki
@@ -300,7 +297,6 @@ item.spear_diamond.name=Lança de Diamante
 item.spear_iron.name=Lança de Ferro
 attribute.name.generic.attackRange=Alcançe
 
-
 #Staves
 item.staff.name=Staff
 item.staff_fire.name=Fire Staff
@@ -337,7 +333,6 @@ item.spiderhook.name=Gancho Aracnídeo
 item.boots_cloud.name=Botas de Nuvem
 item.feather_golden.name=Pena Dourada
 
-
 #Monking Items
 item.bone_monking.name=Osso do Monking
 
@@ -350,7 +345,6 @@ item.chestplate_inquisition.name=Peitoral da Inquisição
 item.leggings_inquisition.name=Calças da Inquisição
 item.boots_inquisition.name=Botas da Inquisição
 
-
 #Bull Armor
 item.helmet_bull.name=Capacete do Touro
 item.chestplate_bull.name=Peitoral do Touro
@@ -358,7 +352,6 @@ item.leggings_bull.name=Calças do Touro
 item.boots_bull.name=Botas do Touro
 item.leather_bull.name=Couro de Touro
 item.horn_bull.name=Chifre de Touro
-
 
 #Turtle Armor
 item.helmet_turtle.name=Capacete da Tartaruga
@@ -381,7 +374,6 @@ item.leggings_spider.name=Calças de Aranha
 item.boots_spider.name=Botas de Aranha
 item.leather_spider.name=Couro de Aranha
 item.giant_spider_poison.name=Veneno de Aranha Gigante
-
 
 #Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Capacete de Diamante Pesado
@@ -422,7 +414,7 @@ tile.boss_block.name=Bloco do Chefe
 tile.force_field_nexus.name=Centro de Campo de Força
 tile.map_placeholder.name=Marcador de Posição no Mapa
 
-//Andesite blocks
+#Andesite blocks
 tile.andesite_carved.name=Andesito Esculpido
 tile.andesite_pillar.name=Pilar de Andesito
 tile.andesite_cube.name=Cubo de Andesito
@@ -431,7 +423,7 @@ tile.andesite_square.name=Quadrado de Andesito
 tile.andesite_small.name=Tijolos de Andesito Pequenos
 tile.andesite_large.name=Tijolos de Andesito Grandes
 
-//Diorite blocks
+#Diorite blocks
 tile.diorite_carved.name=Diorito Esculpido
 tile.diorite_pillar.name=Pilar de Diorito
 tile.diorite_cube.name=Cubo de Diorito
@@ -440,8 +432,7 @@ tile.diorite_square.name=Quadrado de Diorito
 tile.diorite_small.name=Tijolos de Diorito Pequenos
 tile.diorite_large.name=Tijolos de Diorito Grandes
 
-
-//Granite blocks
+#Granite blocks
 tile.granite_carved.name=Granito Esculpido
 tile.granite_pillar.name=Pilar de Granito
 tile.granite_cube.name=Cubo de Granito
@@ -450,7 +441,7 @@ tile.granite_square.name=Quadrado de Granito
 tile.granite_small.name=Tijolos de Granito Pequenos
 tile.granite_large.name=Tijolos de Granito Grandes
 
-//Prismarine blocks
+#Prismarine blocks
 tile.prismarine_carved.name=Prismarine Esculpida
 tile.prismarine_pillar.name=Pilar de Prismarine
 tile.prismarine_cube.name=Cubo de Prismarine
@@ -458,7 +449,7 @@ tile.prismarine_square.name=Quadrado de Prismarine
 tile.prismarine_small.name=Tijolos de Prismarine Pequenos
 tile.prismarine_large.name=Tijolos de Prismarine Grandes
 
-//Endstone blocks
+#Endstone blocks
 tile.endstone_carved.name=Pedra do Fim Esculpida
 tile.endstone_pillar.name=Pilar de Pedra do Fim
 tile.endstone_cube.name=Cubo de Pedra do Fim
@@ -466,14 +457,14 @@ tile.endstone_scale.name=Escama de Endstone
 tile.endstone_square.name=Quadrado de Pedra do Fim
 tile.endstone_small.name=Tijolos de Pedra do Fim Pequenos
 
-//Purpur blocks
+#Purpur blocks
 tile.purpur_carved.name=Purpur Esculpida
 tile.purpur_cube.name=Cubo de Purpur
 tile.purpur_scale.name=Escama de Purpur
 tile.purpur_small.name=Tijolos de Purpur Pequenos
 tile.purpur_large.name=Tijolos de Purpur Grandes
 
-//Red Netherbrick blocks
+#Red Netherbrick blocks
 tile.red_netherbrick_carved.name=Tijolo do Nether Vermelho Esculpido
 tile.red_netherbrick_pillar.name=Pilar de Tijolo do Nether Vermelho
 tile.red_netherbrick_cube.name=Cubo de Tijolo do Nether Vermelho
@@ -510,7 +501,7 @@ tile.exporter_chest_vanilla_stronghold_library.name=Exporter Chest - Stronghold 
 tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Chest - Stronghold Mine
 tile.exporter_chest_custom.name=Exporter Chest - Custom
 
-#technical
+#Technical
 tile.phylactery.name=Lich Phylactery
 tile.temporary_web.name=Decaying Web
 
@@ -550,12 +541,12 @@ description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm nozzle flame
 description.badge.name=Apenas disponível no Creativo. Left-click num mob para abrir o inventário.
 description.backpack.name=Right-click para abrir
 description.alchemy_bag.name=Right-click para abrir. Apenas pode levar poções
-//description.woodshot.name=Right-click para atirar gancho. Se bater num bloco de madeira, vais ser puxado para ele
-//description.hookshot.name=Right-click para atirar gancho.Se bater num bloco, vais ser puxado para ele.
-//description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
-//description.manualhook.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
-//description.spidershot.name=Right-click para atirar rede.Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
-//description.hooksword.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+#description.woodshot.name=Right-click para atirar gancho. Se bater num bloco de madeira, vais ser puxado para ele
+description.hookshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
+description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
+#description.manualhook.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+#description.spidershot.name=Right-click para atirar rede. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+#description.hooksword.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
 description.moonlight.name=A inscrição na lâmina diz :"O meu poder so pode ser acordado à luz da lua"
 description.sunshine.name=A inscrição na lâmina diz :"O meu poder so pode ser acordado à luz do Sol"
 description.attack_damage_at_night.name=Dano de ataque durante a noite
@@ -579,7 +570,6 @@ description.leather_spider.name= Que nojo, pele de aranha. Pode ser que alguém 
 description.king_crown.name=Pode ser usado sozinho ou com um capacete.
 description.bubble_pistol.name=Right click para mandar bolhas. Pressionar right click para um jato constante.
 description.bubble_rifle.name=Right click para mandar bolhas. Pressionar right click para um jato constante, mas com recarga lenta.
- Expells liquid faster and further than a traditional bubble gun, and holding the Right Mouse button lasts for longer. 
 description.path_tool.name=Shift+Left Click numa entidade para aplicar o caminho para essa entidade.Left Click numa entitade para copiar o caminho dessa entidade. Shift+Right Click num bloco para adicionar um novo caminho. Right Click num bloco para selecionar um caminho existente an .Sneak+Right Click  no ar para limpar um caminho.
 
 #Trading GUI
@@ -628,7 +618,6 @@ entity.cqr_giant_endermite.name=Giant Endermite
 entity.cqr_giant_silverfish.name=Giant Silverfish
 entity.cqr_giant_silverfish1.name=Giant Lava Silverfish
 entity.cqr_giant_silverfish2.name=Giant Swamp Silverfish
-
 
 #Bosses
 entity.nether_dragon.name=Dragão do Nether
