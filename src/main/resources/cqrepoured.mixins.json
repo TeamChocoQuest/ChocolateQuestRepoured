@@ -1,0 +1,10 @@
+{
+	"required": true,
+	"package": "team.cq.cqrepoured.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"refmap": "cqrepoured.refmap.json",
+	"mixins": [
+		"AccessorAbstractSpawner"
+	],
+	"minVersion": "0.8"
+}
