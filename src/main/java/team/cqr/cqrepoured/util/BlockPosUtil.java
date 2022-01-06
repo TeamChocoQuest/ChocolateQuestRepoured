@@ -10,18 +10,17 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.ChunkSection;
 
 public class BlockPosUtil {
 
 	public interface BlockInfoConsumer {
-		void accept(BlockPos.MutableBlockPos mutablePos, BlockState state);
+		void accept(BlockPos.Mutable mutablePos, BlockState state);
 	}
 
 	public interface BlockInfoPredicate {
-		boolean test(BlockPos.MutableBlockPos mutablePos, BlockState state);
+		boolean test(BlockPos.Mutable mutablePos, BlockState state);
 	}
 
 	public static void forEach(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
@@ -29,7 +28,7 @@ public class BlockPosUtil {
 	}
 
 	public static void forEach(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
-		if (world.getWorldType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+		if (world.isDebug()) {
 			return;
 		}
 
@@ -50,20 +49,20 @@ public class BlockPosUtil {
 		int chunkEndY = y2 >> 4;
 		int chunkEndZ = z2 >> 4;
 
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 
 		for (int chunkX = chunkStartX; chunkX <= chunkEndX; chunkX++) {
 			for (int chunkZ = chunkStartZ; chunkZ <= chunkEndZ; chunkZ++) {
-				if (skipUnloadedChunks && !world.isBlockLoaded(mutablePos.setPos(chunkX << 4, 0, chunkZ << 4))) {
+				if (skipUnloadedChunks && !world.isLoaded(mutablePos.set(chunkX << 4, 0, chunkZ << 4))) {
 					continue;
 				}
 
 				Chunk chunk = world.getChunk(chunkX, chunkZ);
-				ExtendedBlockStorage[] blockStorageArray = chunk.getBlockStorageArray();
+				ChunkSection[] blockStorageArray = chunk.getSections();
 				for (int chunkY = chunkStartY; chunkY <= chunkEndY; chunkY++) {
-					ExtendedBlockStorage extendedBlockStorage = blockStorageArray[chunkY];
+					ChunkSection extendedBlockStorage = blockStorageArray[chunkY];
 
-					if (skipAirBlocks && extendedBlockStorage == Chunk.NULL_BLOCK_STORAGE) {
+					if (skipAirBlocks && extendedBlockStorage == Chunk.EMPTY_SECTION) {
 						continue;
 					}
 
@@ -77,13 +76,13 @@ public class BlockPosUtil {
 					for (int z5 = blockStartZ; z5 <= blockEndZ; z5++) {
 						for (int y5 = blockStartY; y5 <= blockEndY; y5++) {
 							for (int x5 = blockStartX; x5 <= blockEndX; x5++) {
-								BlockState state = extendedBlockStorage.get(x5 & 15, y5 & 15, z5 & 15);
+								BlockState state = extendedBlockStorage.getBlockState(x5 & 15, y5 & 15, z5 & 15);
 
 								if (skipAirBlocks && state.getBlock() == Blocks.AIR) {
 									continue;
 								}
 
-								mutablePos.setPos(x5, y5, z5);
+								mutablePos.set(x5, y5, z5);
 								action.accept(mutablePos, state);
 							}
 						}
@@ -101,7 +100,7 @@ public class BlockPosUtil {
 		List<BlockPos> list = new ArrayList<>();
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
 			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
-				list.add(mutablePos.toImmutable());
+				list.add(mutablePos.immutable());
 			}
 		});
 		return list;
@@ -116,20 +115,20 @@ public class BlockPosUtil {
 		blockPosDistInfo.dist = Integer.MAX_VALUE;
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
 			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
-				double dist = pos.distanceSq(mutablePos);
+				double dist = pos.distSqr(mutablePos);
 				if (dist < blockPosDistInfo.dist) {
-					blockPosDistInfo.mutablePos.setPos(mutablePos);
+					blockPosDistInfo.mutablePos.set(mutablePos);
 					blockPosDistInfo.dist = dist;
 					blockPosDistInfo.empty = false;
 				}
 			}
 		});
-		return !blockPosDistInfo.empty ? blockPosDistInfo.mutablePos.toImmutable() : null;
+		return !blockPosDistInfo.empty ? blockPosDistInfo.mutablePos.immutable() : null;
 	}
 
 	private static class BlockPosDistInfo {
 
-		private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		private final BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		private double dist;
 		private boolean empty = true;
 

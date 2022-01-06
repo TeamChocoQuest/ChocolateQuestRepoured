@@ -16,9 +16,11 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -39,7 +41,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 		public ProtectedRegionContainer(ProtectedRegion protectedRegion, boolean loadChunks) {
 			this.protectedRegion = protectedRegion;
-			this.lastTickForceLoaded = protectedRegion.getWorld().getTotalWorldTime();
+			this.lastTickForceLoaded = protectedRegion.getWorld().getGameTime();
 
 			boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
 			ForgeModContainer.logCascadingWorldGeneration = false;
@@ -162,8 +164,10 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 		if (container != null) {
 			for (Chunk chunk : container.chunkSet) {
-				CapabilityProtectedRegionData capProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
-				capProtectedRegionData.removeProtectedRegionUuid(uuid);
+				LazyOptional<CapabilityProtectedRegionData> lOpCapProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+				lOpCapProtectedRegionData.ifPresent((cap) -> {
+					cap.removeProtectedRegionUuid(uuid);
+				});
 			}
 			CQRMain.NETWORK.sendToDimension(new SPacketUnloadProtectedRegion(uuid), this.world.provider.getDimension());
 		}
@@ -189,18 +193,24 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	@Override
 	public List<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
 		// load chunk which also loads all associated protected regions
-		Chunk chunk = this.world.getChunk(pos);
-		CapabilityProtectedRegionData cap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
-		if (cap == null) {
+		IChunk ichunk = this.world.getChunk(pos);
+		if(!(ichunk instanceof Chunk)) {
+			return Collections.emptyList();
+		}
+		Chunk chunk = (Chunk)ichunk;
+		LazyOptional<CapabilityProtectedRegionData> lOpCap = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+		if (!lOpCap.isPresent()) {
 			return Collections.emptyList();
 		}
 		List<ProtectedRegion> list = new ArrayList<>();
-		cap.removeIf(uuid -> {
-			ProtectedRegionContainer container = this.protectedRegions.get(uuid);
-			if (container != null && container.protectedRegion.isInsideProtectedRegion(pos)) {
-				list.add(container.protectedRegion);
-			}
-			return container == null;
+		lOpCap.ifPresent((cap) -> {
+			cap.removeIf(uuid -> {
+				ProtectedRegionContainer container = this.protectedRegions.get(uuid);
+				if (container != null && container.protectedRegion.isInsideProtectedRegion(pos)) {
+					list.add(container.protectedRegion);
+				}
+				return container == null;
+			});
 		});
 		return list;
 	}

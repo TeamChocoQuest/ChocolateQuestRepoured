@@ -1,26 +1,26 @@
 package team.cqr.cqrepoured.client.event;
 
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
@@ -116,9 +116,9 @@ public class RenderEventHandler {
 
 	@SubscribeEvent
 	public static void onRenderWorldLastEvent(RenderWorldLastEvent event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		for (Hand hand : Hand.values()) {
-			ItemStack stack = mc.player.getHeldItem(hand);
+			ItemStack stack = mc.player.getItemInHand(hand);
 			if (!(stack.getItem() instanceof ItemUnprotectedPositionTool)) {
 				continue;
 			}
@@ -150,13 +150,13 @@ public class RenderEventHandler {
 			item.getPositions(stack).forEach(pos -> {
 				renderBox(bufferbuilder, pos.getX() - d1, pos.getY() - d1, pos.getZ() - d1, pos.getX() + d2, pos.getY() + d2, pos.getZ() + d2);
 			});
-			tessellator.draw();
+			tessellator.end();
 			GlStateManager.color(0.0F, 0.0F, 1.0F, 1.0F);
 			bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 			item.getPositions(stack).forEach(pos -> {
 				renderBoxOutline(bufferbuilder, pos.getX() - d3, pos.getY() - d3, pos.getZ() - d3, pos.getX() + d4, pos.getY() + d4, pos.getZ() + d4);
 			});
-			tessellator.draw();
+			tessellator.end();
 			bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -180,70 +180,70 @@ public class RenderEventHandler {
 	}
 
 	public static void renderBoxOutline(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y1, z1).endVertex();
+		buffer.vertex(x1, y1, z1).endVertex();
+		buffer.vertex(x2, y1, z1).endVertex();
+		buffer.vertex(x2, y1, z1).endVertex();
+		buffer.vertex(x2, y1, z2).endVertex();
+		buffer.vertex(x2, y1, z2).endVertex();
+		buffer.vertex(x1, y1, z2).endVertex();
+		buffer.vertex(x1, y1, z2).endVertex();
+		buffer.vertex(x1, y1, z1).endVertex();
 
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
+		buffer.vertex(x1, y1, z1).endVertex();
+		buffer.vertex(x1, y2, z1).endVertex();
+		buffer.vertex(x1, y1, z2).endVertex();
+		buffer.vertex(x1, y2, z2).endVertex();
+		buffer.vertex(x2, y1, z1).endVertex();
+		buffer.vertex(x2, y2, z1).endVertex();
+		buffer.vertex(x2, y1, z2).endVertex();
+		buffer.vertex(x2, y2, z2).endVertex();
 
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
+		buffer.vertex(x1, y2, z2).endVertex();
+		buffer.vertex(x2, y2, z2).endVertex();
+		buffer.vertex(x2, y2, z2).endVertex();
+		buffer.vertex(x2, y2, z1).endVertex();
+		buffer.vertex(x2, y2, z1).endVertex();
+		buffer.vertex(x1, y2, z1).endVertex();
+		buffer.vertex(x1, y2, z1).endVertex();
+		buffer.vertex(x1, y2, z2).endVertex();
 	}
 
 	public static void renderBox(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
 		// down
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
+		buffer.vertex(x1, y1, z1).endVertex();
+		buffer.vertex(x2, y1, z1).endVertex();
+		buffer.vertex(x2, y1, z2).endVertex();
+		buffer.vertex(x1, y1, z2).endVertex();
 
 		// south
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
+		buffer.vertex(x1, y1, z2).endVertex();
+		buffer.vertex(x2, y1, z2).endVertex();
+		buffer.vertex(x2, y2, z2).endVertex();
+		buffer.vertex(x1, y2, z2).endVertex();
 
 		// north
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
+		buffer.vertex(x2, y1, z1).endVertex();
+		buffer.vertex(x1, y1, z1).endVertex();
+		buffer.vertex(x1, y2, z1).endVertex();
+		buffer.vertex(x2, y2, z1).endVertex();
 
 		// up
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
+		buffer.vertex(x1, y2, z2).endVertex();
+		buffer.vertex(x2, y2, z2).endVertex();
+		buffer.vertex(x2, y2, z1).endVertex();
+		buffer.vertex(x1, y2, z1).endVertex();
 
 		// west
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
+		buffer.vertex(x1, y1, z1).endVertex();
+		buffer.vertex(x1, y1, z2).endVertex();
+		buffer.vertex(x1, y2, z2).endVertex();
+		buffer.vertex(x1, y2, z1).endVertex();
 
 		// east
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
+		buffer.vertex(x2, y1, z2).endVertex();
+		buffer.vertex(x2, y1, z1).endVertex();
+		buffer.vertex(x2, y2, z1).endVertex();
+		buffer.vertex(x2, y2, z2).endVertex();
 	}
 
 }

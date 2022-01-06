@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.world.structure.protection;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -193,9 +194,12 @@ public class ProtectedRegionHelper {
 			int meta = ((BlockItem) item).getMetadata(stack.getItemDamage());
 			return block.getStateForPlacement(world, pos, facing, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, meta, placer, hand);
 		}
-		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
-		if (fluidStack != null && fluidStack.amount != 0 && fluidStack.getFluid() != null && fluidStack.getFluid().canBePlacedInWorld()) {
-			return fluidStack.getFluid().getBlock().getDefaultState();
+		Optional<FluidStack> opFluidStack = FluidUtil.getFluidContained(stack);
+		if(opFluidStack.isPresent()) {
+			FluidStack fluidStack = opFluidStack.get();
+			if (fluidStack.getAmount() != 0 && fluidStack.getFluid() != null && fluidStack.getFluid().canBePlacedInWorld()) {
+				return fluidStack.getFluid().getBlock().getDefaultState();
+			}
 		}
 		return null;
 	}

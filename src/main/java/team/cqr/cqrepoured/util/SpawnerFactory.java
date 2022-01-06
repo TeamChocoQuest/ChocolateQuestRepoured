@@ -5,23 +5,26 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.mixin.AccessorAbstractSpawner;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 /**
@@ -69,7 +72,8 @@ public final class SpawnerFactory {
 	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(CompoundNBT[] entities, boolean multiUseSpawner, @Nullable CompoundNBT spawnerSettingsOverrides, World world, BlockPos pos) {
-		world.setBlockState(pos, multiUseSpawner ? Blocks.SPAWNER.defaultBlockState() : CQRBlocks.SPAWNER.defaultBlockState());
+		BlockState blockState =  multiUseSpawner ? Blocks.SPAWNER.defaultBlockState() : CQRBlocks.SPAWNER.defaultBlockState(); 
+		world.setBlockAndUpdate(pos,blockState);
 
 		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (multiUseSpawner) {
@@ -114,7 +118,7 @@ public final class SpawnerFactory {
 			}
 
 			// Read data from modified nbt
-			tileEntityMobSpawner.readFromNBT(compound);
+			tileEntityMobSpawner.load(blockState, compound);
 
 			tileEntityMobSpawner.setChanged();
 		} else {
@@ -135,10 +139,10 @@ public final class SpawnerFactory {
 	 * entity that it should spawn.
 	 */
 	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
-		world.setBlockState(pos, Blocks.SPAWNER.defaultBlockState());
+		world.setBlockAndUpdate(pos, Blocks.SPAWNER.defaultBlockState());
 		MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) world.getBlockEntity(pos);
 
-		spawner.getSpawner().setEntityId(entityResLoc);
+		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITIES.getValue(entityResLoc));
 
 		spawner.updateContainingBlockInfo();
 		spawner.update();
@@ -146,7 +150,7 @@ public final class SpawnerFactory {
 
 	public static MobSpawnerTileEntity getSpawnerTile(World world, ResourceLocation entity, BlockPos pos) {
 		MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) world.getBlockEntity(pos);
-		spawner.getSpawner().setEntityId(entity);
+		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITIES.getValue(entity));
 		return spawner;
 	}
 
@@ -209,7 +213,8 @@ public final class SpawnerFactory {
 		if (tile != null && tile instanceof MobSpawnerTileEntity) {
 			MobSpawnerTileEntity spawnerMultiUseTile = (MobSpawnerTileEntity) tile;
 
-			List<WeightedSpawnerEntity> spawnerEntries = spawnerMultiUseTile.getSpawner().potentialSpawns;
+			//TODO: Create mixin to retrieve this
+			List<WeightedSpawnerEntity> spawnerEntries = ((AccessorAbstractSpawner)spawnerMultiUseTile.getSpawner()).getSpawnPotentials();
 			if (!spawnerEntries.isEmpty()) {
 				Iterator<WeightedSpawnerEntity> iterator = spawnerEntries.iterator();
 

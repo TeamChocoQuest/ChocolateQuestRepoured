@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.IntNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.LongNBT;
 import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
@@ -274,7 +277,7 @@ public class DungeonGenUtils {
 
 	public static int getYForPos(World world, int x, int z, boolean ignoreWater) {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, chunk.getTopFilledSegment() + 15, z);
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable(x, chunk.getTopFilledSegment() + 15, z);
 		Material material = chunk.getBlockState(mutablePos).getMaterial();
 		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
 			mutablePos.setY(mutablePos.getY() - 1);

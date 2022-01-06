@@ -92,12 +92,12 @@ public class BlockStateGenArray {
 	public boolean addChestWithLootTable(World world, BlockPos pos, Direction facing, ResourceLocation lootTable, GenerationPhase phase) {
 		if (lootTable != null) {
 			Block chestBlock = Blocks.CHEST;
-			BlockState state = Blocks.CHEST.getDefaultState().withProperty(ChestBlock.FACING, facing);
-			ChestTileEntity chest = (ChestTileEntity) chestBlock.createTileEntity(world, state);
+			BlockState state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, facing);
+			ChestTileEntity chest = (ChestTileEntity) chestBlock.createTileEntity(state, world);
 			if (chest != null) {
 				long seed = WorldDungeonGenerator.getSeed(world, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
 				chest.setLootTable(lootTable, seed);
-				CompoundNBT nbt = chest.writeToNBT(new CompoundNBT());
+				CompoundNBT nbt = chest.save(new CompoundNBT());
 				return this.addBlockState(pos, state, nbt, phase, EnumPriority.MEDIUM);
 			}
 		} else {

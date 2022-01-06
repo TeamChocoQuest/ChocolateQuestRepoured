@@ -16,23 +16,23 @@ public class ChunkCacheCQR extends Region {
 	 * @param loadChunks Whether chunks should be loaded or not.
 	 */
 	public ChunkCacheCQR(World worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, boolean loadChunks) {
-		super(worldIn, pos3, pos3, 0);
+		super(worldIn, pos3, pos3/*, 0*/);
 
-		this.chunkX = Math.min(pos1.getX() >> 4, pos3.getX() >> 4);
-		this.chunkZ = Math.min(pos1.getZ() >> 4, pos3.getZ() >> 4);
+		this.centerX = Math.min(pos1.getX() >> 4, pos3.getX() >> 4);
+		this.centerZ = Math.min(pos1.getZ() >> 4, pos3.getZ() >> 4);
 		int chunkX2 = Math.max(pos2.getX() >> 4, pos3.getX() >> 4);
 		int chunkZ2 = Math.max(pos2.getZ() >> 4, pos3.getZ() >> 4);
 		int y1 = Math.min(pos1.getY(), pos3.getY());
 		int y2 = Math.max(pos2.getY(), pos3.getY());
-		this.chunkArray = new Chunk[chunkX2 - this.chunkX + 1][chunkZ2 - this.chunkZ + 1];
+		this.chunks = new Chunk[chunkX2 - this.centerX + 1][chunkZ2 - this.centerZ + 1];
 
-		for (int x = this.chunkX; x <= chunkX2; x++) {
-			for (int z = this.chunkZ; z <= chunkZ2; z++) {
-				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkProvider().getLoadedChunk(x, z);
-				this.chunkArray[x - this.chunkX][z - this.chunkZ] = chunk;
+		for (int x = this.centerX; x <= chunkX2; x++) {
+			for (int z = this.centerZ; z <= chunkZ2; z++) {
+				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkSource().getChunkNow(x, z);
+				this.chunks[x - this.centerX][z - this.centerZ] = chunk;
 
-				if (this.empty && chunk != null && !chunk.isEmptyBetween(y1, y2)) {
-					this.empty = false;
+				if (this.allEmpty && chunk != null && !chunk.isYSpaceEmpty(y1, y2)) {
+					this.allEmpty = false;
 				}
 			}
 		}
@@ -48,31 +48,31 @@ public class ChunkCacheCQR extends Region {
 	 * @param loadChunks Whether chunks should be loaded or not.
 	 */
 	public ChunkCacheCQR(World worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, int blockRange, boolean loadChunks) {
-		super(worldIn, pos3, pos3, 0);
+		super(worldIn, pos3, pos3/*, 0*/);
 
-		this.chunkX = (Math.min(pos1.getX(), pos2.getX()) - blockRange) >> 4;
-		this.chunkZ = (Math.min(pos1.getZ(), pos2.getZ()) - blockRange) >> 4;
+		this.centerX = (Math.min(pos1.getX(), pos2.getX()) - blockRange) >> 4;
+		this.centerZ = (Math.min(pos1.getZ(), pos2.getZ()) - blockRange) >> 4;
 		int chunkX2 = (Math.max(pos1.getX(), pos2.getX()) + blockRange) >> 4;
 		int chunkZ2 = (Math.max(pos1.getZ(), pos2.getZ()) + blockRange) >> 4;
 		int y1 = Math.min(pos1.getY(), pos2.getY());
 		int y2 = Math.max(pos1.getY(), pos2.getY());
-		this.chunkArray = new Chunk[chunkX2 - this.chunkX + 1][chunkZ2 - this.chunkZ + 1];
+		this.chunks = new Chunk[chunkX2 - this.centerX + 1][chunkZ2 - this.centerZ + 1];
 
 		double lineStartX = pos1.getX() + 0.5D;
 		double lineStartZ = pos1.getZ() + 0.5D;
 		double lineDirectionX = pos2.getX() - pos1.getX();
 		double lineDirectionZ = pos2.getZ() - pos1.getZ();
-		for (int x = this.chunkX; x <= chunkX2; x++) {
-			for (int z = this.chunkZ; z <= chunkZ2; z++) {
+		for (int x = this.centerX; x <= chunkX2; x++) {
+			for (int z = this.centerZ; z <= chunkZ2; z++) {
 				if (!isChunkCornerInRangeToLine(lineStartX, lineStartZ, lineDirectionX, lineDirectionZ, x << 4, z << 4, blockRange)) {
 					continue;
 				}
 
-				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkProvider().getLoadedChunk(x, z);
-				this.chunkArray[x - this.chunkX][z - this.chunkZ] = chunk;
+				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkSource().getChunkNow(x, z);
+				this.chunks[x - this.centerX][z - this.centerZ] = chunk;
 
-				if (this.empty && chunk != null && !chunk.isEmptyBetween(y1, y2)) {
-					this.empty = false;
+				if (this.allEmpty && chunk != null && !chunk.isYSpaceEmpty(y1, y2)) {
+					this.allEmpty = false;
 				}
 			}
 		}

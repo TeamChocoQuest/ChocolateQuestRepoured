@@ -11,6 +11,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.util.BlockSnapshot;
@@ -20,10 +22,10 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 
 public class BlockPlacingHelper {
 
-	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
+	private static final BlockPos.Mutable MUTABLE = new BlockPos.Mutable();
 
 	public static boolean setBlockStates(World world, int chunkX, int chunkY, int chunkZ, GeneratableDungeon dungeon, IBlockInfo blockInfo) {
-		if (world.isOutsideBuildHeight(MUTABLE.setPos(chunkX << 4, chunkY << 4, chunkZ << 4))) {
+		if (world.isOutsideBuildHeight(MUTABLE.set(chunkX << 4, chunkY << 4, chunkZ << 4))) {
 			return false;
 		}
 
@@ -32,13 +34,13 @@ public class BlockPlacingHelper {
 		}
 
 		Chunk chunk = world.getChunk(chunkX, chunkZ);
-		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+		ChunkSection blockStorage = chunk.getSections()[chunkY];
 
-		if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-			blockStorage = new ExtendedBlockStorage(chunkY << 4, world.provider.hasSkyLight());
-			chunk.getBlockStorageArray()[chunkY] = blockStorage;
+		if (blockStorage == Chunk.EMPTY_SECTION) {
+			blockStorage = new ChunkSection(chunkY << 4/*, world.dimensionType().hasSkyLight()*/);
+			chunk.getSections()[chunkY] = blockStorage;
 			if (!blockInfo.place(world, chunk, blockStorage, dungeon)) {
-				chunk.getBlockStorageArray()[chunkY] = null;
+				chunk.getSections()[chunkY] = null;
 				return false;
 			}
 			return true;
@@ -50,17 +52,17 @@ public class BlockPlacingHelper {
 	@FunctionalInterface
 	public interface IBlockInfo {
 
-		boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, GeneratableDungeon dungeon);
+		boolean place(World world, Chunk chunk, ChunkSection blockStorage, GeneratableDungeon dungeon);
 
 	}
 
 	public static boolean setBlockState(World world, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, int flags, boolean updateLight) {
 		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates || updateLight) {
-			if (!world.setBlockState(pos, state, flags)) {
+			if (!world.setBlock(pos, state, flags)) {
 				return false;
 			}
 			if (tileEntity != null) {
-				world.setTileEntity(pos, tileEntity);
+				world.setBlockEntity(pos, tileEntity);
 				tileEntity.updateContainingBlockInfo();
 			}
 			return true;
@@ -74,21 +76,21 @@ public class BlockPlacingHelper {
 			return false;
 		}
 
-		Chunk chunk = world.getChunk(pos);
-		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[pos.getY() >> 4];
-		if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-			if (state == Blocks.AIR.getDefaultState()) {
+		IChunk chunk = world.getChunk(pos);
+		ChunkSection blockStorage = chunk.getSections()[pos.getY() >> 4];
+		if (blockStorage == Chunk.EMPTY_SECTION) {
+			if (state == Blocks.AIR.defaultBlockState()) {
 				return false;
 			}
 
-			blockStorage = new ExtendedBlockStorage(pos.getY() >> 4 << 4, world.provider.hasSkyLight());
-			chunk.getBlockStorageArray()[pos.getY() >> 4] = blockStorage;
+			blockStorage = new ChunkSection(pos.getY() >> 4 << 4/*, world.provider.hasSkyLight()*/);
+			chunk.getSections()[pos.getY() >> 4] = blockStorage;
 		}
 
 		return setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags);
 	}
 
-	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, int flags) {
+	public static boolean setBlockState(World world, Chunk chunk, ChunkSection blockStorage, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, int flags) {
 		BlockState oldState = setBlockState(world, chunk, blockStorage, pos, state, tileEntity);
 
 		if (oldState == null) {
@@ -96,7 +98,7 @@ public class BlockPlacingHelper {
 		}
 
 		if (!world.isRemote && world.captureBlockSnapshots) {
-			world.capturedBlockSnapshots.add(new BlockSnapshot(world, pos.toImmutable(), oldState, flags));
+			world.capturedBlockSnapshots.add(new BlockSnapshot(world, pos.immutable(), oldState, flags));
 		} else {
 			world.markAndNotifyBlock(pos, chunk, oldState, state, flags);
 		}
@@ -105,7 +107,7 @@ public class BlockPlacingHelper {
 	}
 
 	@Nullable
-	private static BlockState setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity) {
+	private static BlockState setBlockState(World world, Chunk chunk, ChunkSection blockStorage, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity) {
 		int x = pos.getX() & 15;
 		int y = pos.getY() & 15;
 		int z = pos.getZ() & 15;
@@ -137,13 +139,13 @@ public class BlockPlacingHelper {
 		}
 		if (block.hasTileEntity(state)) {
 			if (tileEntity != null) {
-				world.setTileEntity(pos, tileEntity);
+				world.setBlockEntity(pos, tileEntity);
 				tileEntity.updateContainingBlockInfo();
 			} else {
 				TileEntity te = chunk.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
 				if (te == null) {
 					te = block.createTileEntity(world, state);
-					world.setTileEntity(pos, te);
+					world.setBlockEntity(pos, te);
 				}
 				if (te != null) {
 					te.updateContainingBlockInfo();
@@ -151,12 +153,12 @@ public class BlockPlacingHelper {
 			}
 		}
 
-		chunk.markDirty();
+		chunk.markUnsaved();
 		return oldState;
 	}
 
 	@Nullable
-	private static BlockState setBlockState(ExtendedBlockStorage blockStorage, int x, int y, int z, BlockState state) {
+	private static BlockState setBlockState(ChunkSection blockStorage, int x, int y, int z, BlockState state) {
 		if (state instanceof IExtendedBlockState) {
 			state = ((IExtendedBlockState) state).getClean();
 		}
@@ -177,7 +179,7 @@ public class BlockPlacingHelper {
 		if (block != Blocks.AIR) {
 			blockStorage.blockRefCount += 1;
 
-			if (block.getTickRandomly()) {
+			if (block.isRandomlyTicking(state)) {
 				blockStorage.tickRefCount += 1;
 			}
 		}

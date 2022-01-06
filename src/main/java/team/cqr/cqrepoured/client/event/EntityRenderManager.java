@@ -6,13 +6,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -39,12 +38,12 @@ public class EntityRenderManager {
 
 	@SubscribeEvent
 	public static void onRenderTickEvent(RenderTickEvent event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
 		if (event.phase == Phase.START) {
-			CACHED_BLOCK_ACCESS.setupCached(mc.world);
+			CACHED_BLOCK_ACCESS.setupCached(mc.level);
 
-			Entity entity = mc.getRenderViewEntity();
+			Entity entity = mc.getCameraEntity();
 			if (entity != null) {
 				double partialTick = mc.getRenderPartialTicks();
 				x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTick;
@@ -71,7 +70,7 @@ public class EntityRenderManager {
 			return true;
 		}
 
-		AxisAlignedBB aabb = entity.getRenderBoundingBox();
+		AxisAlignedBB aabb = entity.getBoundingBoxForCulling();
 		double minX = aabb.minX - 0.5D;
 		double minY = aabb.minY - 0.5D;
 		double minZ = aabb.minZ - 0.5D;

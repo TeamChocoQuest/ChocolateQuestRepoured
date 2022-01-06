@@ -1,18 +1,7 @@
 package team.cqr.cqrepoured.asm;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
-
-import meldexun.asmutil.ASMUtil;
 import meldexun.asmutil.transformer.clazz.AbstractClassTransformer;
-import net.minecraft.launchwrapper.IClassTransformer;
+import meldexun.asmutil.transformer.clazz.IClassTransformer;
 
 public class CQRClassTransformer extends AbstractClassTransformer implements IClassTransformer {
 
@@ -20,26 +9,28 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 	protected void registerTransformers() {
 		// @formatter:off
 		// Potion hook
-		this.registerMethodTransformer("aez", "c", "(Lvp;)Z", "net/minecraft/entity/projectile/EntityPotion", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", methodNode -> {
+		//Now in  livingEntity => can be overridden!
+		/*this.registerMethodTransformer("aez", "c", "(Lvp;)Z", "net/minecraft/entity/projectile/EntityPotion", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", methodNode -> {
 			ASMUtil.LOGGER.info("Transforming method: EntityPotion#isWaterSensitiveEntity(EntityLivingBase)");
 
 			AbstractInsnNode popNode1 = new LabelNode();
 
 			methodNode.instructions.insert(ASMUtil.listOf(new VarInsnNode(Opcodes.ALOAD, 0), new MethodInsnNode(Opcodes.INVOKESTATIC, "team/cqr/cqrepoured/asm/hook/EntityPotionHook", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", false), new JumpInsnNode(Opcodes.IFEQ, (LabelNode) popNode1),
 					new InsnNode(Opcodes.ICONST_1), new InsnNode(Opcodes.IRETURN), popNode1));
-		});
+		});*/
+		//Now handled by mixins
 		// Change creature attribute of Enderman to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEnderman", "VOID");
+		//this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEnderman", "VOID");
 		// Change creature attribute of Enderdragon to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/boss/EntityDragon", "VOID");
+		//this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/boss/EntityDragon", "VOID");
 		// Change creature attribute of Shulkers to void
-		this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityShulker", "VOID");
+		//this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityShulker", "VOID");
 		// Change creature attribute of Endermites to void
 		// this.changeCreatureAttributeOfEntity("", "net/minecraft/entity/monster/EntityEndermite", "VOID");
 		// @formatter:on
 	}
 
-	protected void changeCreatureAttributeOfEntity(final String obfuscatedClassName, final String entityClassPath, final String newCA) {
+	/*protected void changeCreatureAttributeOfEntity(final String obfuscatedClassName, final String entityClassPath, final String newCA) {
 		// @formatter:off
 		this.registerClassTransformer(obfuscatedClassName, entityClassPath, classNode -> {
 			MethodNode methodGetCreatureAttribute = new MethodNode(Opcodes.ACC_PUBLIC, "getCreatureAttribute", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null);
@@ -47,6 +38,6 @@ public class CQRClassTransformer extends AbstractClassTransformer implements ICl
 			classNode.methods.add(methodGetCreatureAttribute);
 		});
 		// @formatter:on
-	}
+	}*/
 
 }

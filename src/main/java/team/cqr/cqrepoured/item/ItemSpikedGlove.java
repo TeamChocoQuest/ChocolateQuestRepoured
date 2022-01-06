@@ -27,23 +27,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 
-public class ItemSpikedGlove extends Item {
+public class ItemSpikedGlove extends ItemLore {
 
 	public ItemSpikedGlove() {
 		super();
 		this.setMaxStackSize(1);
 		// With this durability you should be able to climb 1200m in total
 		this.setMaxDamage(6000);
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.spiked_glove.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
-import java.awt.Color;
 import java.util.function.Function;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -28,7 +27,7 @@ public abstract class AbstractCQRLayerGeo<T extends LivingEntity & IAnimatable> 
 		this.funcGetCurrentModel = funcGetCurrentModel;
 	}
 	
-	protected void reRenderCurrentModelInRenderer(T entity, float partialTicks, Color renderColor, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, RenderType cameo) {
+	protected void reRenderCurrentModelInRenderer(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, RenderType cameo) {
 		matrixStackIn.pushPose();
 
 		this.getRenderer().render(
