@@ -20,8 +20,8 @@ public class EntitySlimePart extends SlimeEntity {
 		super(type, worldIn);
 	}
 
-	public EntitySlimePart(World worldIn, LivingEntity owner) {
-		this(worldIn);
+	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, World worldIn, LivingEntity owner) {
+		this(type, worldIn);
 		this.ownerUuid = owner.getUUID();
 	}
 
@@ -46,32 +46,32 @@ public class EntitySlimePart extends SlimeEntity {
 
 		super.tick();
 	}
-
+	
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
-		if (entityIn instanceof LivingEntity && entityIn.getPersistentID().equals(this.ownerUuid)) {
+		if (entityIn instanceof LivingEntity && entityIn.getUUID().equals(this.ownerUuid)) {
 			((LivingEntity) entityIn).heal(2.0F);
-			this.setDead();
+			this.remove();
 		}
 	}
-
+	
 	@Override
-	protected boolean canDropLoot() {
+	protected boolean shouldDropLoot() {
 		return false;
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.save(compound);
-		compound.setInteger("ticksExisted", this.ticksExisted);
-		compound.setTag("ownerUuid", NBTUtil.createUUIDTag(this.ownerUuid));
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putInt("ticksExisted", this.tickCount);
+		compound.put("ownerUuid", NBTUtil.createUUID(this.ownerUuid));
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
-		this.ticksExisted = compound.getInteger("ticksExisted");
-		this.ownerUuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("ownerUuid"));
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
+		this.tickCount = compound.getInt("ticksExisted");
+		this.ownerUuid = NBTUtil.loadUUID(compound.getCompound("ownerUuid"));
 	}
 
 }
