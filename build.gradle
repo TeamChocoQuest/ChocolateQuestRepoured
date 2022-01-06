@@ -2,15 +2,19 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
 		maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+		//Parchment Mappings
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
 		classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+		classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -75,7 +79,7 @@ dependencies {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'parchment', version: '2021.10.17-1.16.5'
 
     def atDepFileTree = files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree()
     accessTransformer = files(
