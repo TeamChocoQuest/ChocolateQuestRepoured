@@ -4,7 +4,10 @@
 	"compatibilityLevel": "JAVA_8",
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
-		"AccessorAbstractSpawner"
+		"AccessorAbstractSpawner",
+		"MixinEndermanEntity",
+		"MixinShulkerEntity",
+		"MixinEnderdragonEntity"
 	],
 	"minVersion": "0.8"
 }
