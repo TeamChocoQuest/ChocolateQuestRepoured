@@ -120,6 +120,7 @@ import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IFakeWeapon;
@@ -1777,5 +1778,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public World getWorld() {
 		return this.level;
+	}
+	
+	@Override
+	public boolean isSensitiveToWater() {
+		return super.isSensitiveToWater() || this.getMobType() == CQRCreatureAttributes.MECHANICAL;
 	}
 }
