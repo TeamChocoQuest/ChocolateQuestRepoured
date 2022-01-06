@@ -12,13 +12,13 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.FileUtils;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
@@ -80,7 +80,8 @@ public class TextureSetManager {
 			}
 			CQRMain.logger.info("Loaded {} texture Sets!", loadedSets);
 
-			if (!FMLCommonHandler.instance().getSide().isServer()) {
+			//Correct replacement for FMLCommonHandler.isServer()?
+			if (FMLEnvironment.dist.isClient()) {
 				// Load the textures
 				for (Map.Entry<String, File> entry : TextureSet.getLoadedFiles().entrySet()) {
 					TextureUtil.loadFileInResourcepack(entry.getValue(), TextureSet.getResLocOfTexture(entry.getKey()));
