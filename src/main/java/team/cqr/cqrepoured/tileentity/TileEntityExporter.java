@@ -3,13 +3,13 @@ package team.cqr.cqrepoured.tileentity;
 import java.io.File;
 import java.util.Arrays;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -110,7 +110,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 
 		@Override
-		public void writeChanges(ByteBuf buf) {
+		public void writeChanges(PacketBuffer buf) {
 			buf.writeInt(this.value.length);
 			for (BlockPos pos : this.value) {
 				ByteBufUtil.writeBlockPos(buf, pos);
@@ -118,7 +118,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 
 		@Override
-		protected void readChangesInternal(ByteBuf buf) {
+		protected void readChangesInternal(PacketBuffer buf) {
 			this.value = new BlockPos[buf.readInt()];
 			for (int i = 0; i < this.value.length; i++) {
 				this.value[i] = ByteBufUtil.readBlockPos(buf);
