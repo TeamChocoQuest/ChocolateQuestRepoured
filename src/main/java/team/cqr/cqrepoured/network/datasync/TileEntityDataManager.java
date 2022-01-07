@@ -13,7 +13,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.PacketDistributor.TargetPoint;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
@@ -97,10 +98,11 @@ public class TileEntityDataManager {
 
 				if (!entryList.isEmpty()) {
 					if (!world.isClientSide) {
-						int dim = world.diprovider.getDimension();
 						BlockPos pos = this.tileEntity.getBlockPos();
-						NetworkRegistry.TargetPoint targetPoint = new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), 0.0D);
-						CQRMain.NETWORK.sendToAllTracking(new SPacketSyncTileEntity(pos, entryList), targetPoint);
+						/*int dim = world.provider.getDimension();
+						
+						NetworkRegistry.TargetPoint targetPoint = new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), 0.0D);*/
+						CQRMain.NETWORK.send(PacketDistributor.NEAR.with(TargetPoint.p(pos.getX(), pos.getY(), pos.getZ(), 0.0D, world.dimension())), new SPacketSyncTileEntity(pos, entryList));
 					} else {
 						CQRMain.NETWORK.sendToServer(new CPacketSyncTileEntity(this.tileEntity.getBlockPos(), entryList));
 					}

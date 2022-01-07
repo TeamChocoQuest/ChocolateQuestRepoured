@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.INBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.nbt.DoubleNBT;
 
 public class DataEntryDouble extends DataEntry<Double> {
@@ -28,12 +28,12 @@ public class DataEntryDouble extends DataEntry<Double> {
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
+	public void writeChanges(PacketBuffer buf) {
 		buf.writeDouble(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
+	protected void readChangesInternal(PacketBuffer buf) {
 		this.value = buf.readDouble();
 	}
 

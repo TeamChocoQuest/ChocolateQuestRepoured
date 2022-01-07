@@ -2,12 +2,10 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.StringNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class DataEntryResourceLocation extends DataEntryObject<ResourceLocation> {
 
@@ -28,13 +26,13 @@ public class DataEntryResourceLocation extends DataEntryObject<ResourceLocation>
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
-		ByteBufUtil.writeUtf8(buf, this.value.toString());
+	public void writeChanges(PacketBuffer buf) {
+		buf.writeUtf(this.value.toString());
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
-		this.value = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
+	protected void readChangesInternal(PacketBuffer buf) {
+		this.value = new ResourceLocation(buf.readUtf());
 	}
 
 }

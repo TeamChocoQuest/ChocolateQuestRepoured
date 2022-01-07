@@ -1,11 +1,9 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler> {
@@ -34,7 +32,7 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
+	public void writeChanges(PacketBuffer buf) {
 		int size = 0;
 		for (boolean dirtySlot : this.dirtySlots) {
 			if (dirtySlot) {
@@ -44,18 +42,18 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 		buf.writeInt(size);
 		for (int i = 0; i < this.value.getSlots(); i++) {
 			if (this.dirtySlots[i]) {
-				ByteBufUtils.writeVarInt(buf, i, 5);
-				ByteBufUtils.writeItemStack(buf, this.value.getStackInSlot(i));
+				buf.writeVarInt(i);
+				buf.writeItem(this.value.getStackInSlot(i));
 			}
 		}
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
+	protected void readChangesInternal(PacketBuffer buf) {
 		this.canMarkDirty = false;
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
-			this.value.setStackInSlot(ByteBufUtils.readVarInt(buf, 5), ByteBufUtils.readItemStack(buf));
+			this.value.setStackInSlot(buf.readVarInt(), buf.readItem());
 		}
 		this.canMarkDirty = true;
 	}

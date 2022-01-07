@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntNBT;
+import net.minecraft.network.PacketBuffer;
 
 public class DataEntryInt extends DataEntry<Integer> {
 
@@ -28,12 +28,12 @@ public class DataEntryInt extends DataEntry<Integer> {
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
+	public void writeChanges(PacketBuffer buf) {
 		buf.writeInt(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
+	protected void readChangesInternal(PacketBuffer buf) {
 		this.value = buf.readInt();
 	}
 

@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.INBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.nbt.ByteNBT;
 
 public class DataEntryBoolean extends DataEntry<Boolean> {
@@ -28,12 +28,12 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
+	public void writeChanges(PacketBuffer buf) {
 		buf.writeBoolean(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
+	protected void readChangesInternal(PacketBuffer buf) {
 		this.value = buf.readBoolean();
 	}
 

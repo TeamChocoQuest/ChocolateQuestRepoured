@@ -2,11 +2,9 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.StringNBT;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraft.network.PacketBuffer;
 
 public class DataEntryString extends DataEntryObject<String> {
 
@@ -27,13 +25,13 @@ public class DataEntryString extends DataEntryObject<String> {
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
-		ByteBufUtil.writeUtf8(buf, this.value);
+	public void writeChanges(PacketBuffer buf) {
+		buf.writeUtf(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
-		this.value = ByteBufUtils.readUTF8String(buf);
+	protected void readChangesInternal(PacketBuffer buf) {
+		this.value = buf.readUtf();
 	}
 
 }

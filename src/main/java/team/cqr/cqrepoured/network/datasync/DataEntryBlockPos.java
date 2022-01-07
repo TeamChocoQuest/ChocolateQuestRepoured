@@ -2,11 +2,10 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
@@ -28,13 +27,13 @@ public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 	}
 
 	@Override
-	public void writeChanges(ByteBuf buf) {
-		ByteBufUtil.writeBlockPos(buf, this.value);
+	public void writeChanges(PacketBuffer buf) {
+		buf.writeBlockPos(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(ByteBuf buf) {
-		this.value = ByteBufUtil.readBlockPos(buf);
+	protected void readChangesInternal(PacketBuffer buf) {
+		this.value = buf.readBlockPos();
 	}
 
 	@Override

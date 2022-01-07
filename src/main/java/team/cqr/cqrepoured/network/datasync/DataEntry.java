@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.INBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
 public abstract class DataEntry<T> {
@@ -27,14 +27,14 @@ public abstract class DataEntry<T> {
 
 	protected abstract void readInternal(INBT nbt);
 
-	public abstract void writeChanges(ByteBuf buf);
+	public abstract void writeChanges(PacketBuffer buf);
 
-	public void readChanges(ByteBuf buf) {
+	public void readChanges(PacketBuffer buf) {
 		this.readChangesInternal(buf);
 		this.onValueChanged();
 	}
 
-	protected abstract void readChangesInternal(ByteBuf buf);
+	protected abstract void readChangesInternal(PacketBuffer buf);
 
 	public void setDataManagerAndId(TileEntityDataManager dataManager, int id) {
 		if (this.dataManager == null && dataManager != null) {
