@@ -4,7 +4,6 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
@@ -12,10 +11,10 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
@@ -119,7 +118,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public void onClickButton(PlayerEntity player, int button, ByteBuf extraData) {
+	public void onClickButton(PlayerEntity player, int button, PacketBuffer extraData) {
 		if (button == 0) {
 			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
 		} else if (button == 1) {
@@ -128,8 +127,8 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 			IntStream.range(0, ignoreMeta.length).forEach(i -> ignoreMeta[i] = extraData.readBoolean());
 			boolean[] ignoreNBT = new boolean[4];
 			IntStream.range(0, ignoreNBT.length).forEach(i -> ignoreNBT[i] = extraData.readBoolean());
-			String reputationName = ByteBufUtils.readUTF8String(extraData);
-			String advancementName = ByteBufUtils.readUTF8String(extraData);
+			String reputationName = extraData.readUtf();
+			String advancementName = extraData.readUtf();
 			boolean stock = extraData.readBoolean();
 			int restock = extraData.readInt();
 			int inStock = extraData.readInt();

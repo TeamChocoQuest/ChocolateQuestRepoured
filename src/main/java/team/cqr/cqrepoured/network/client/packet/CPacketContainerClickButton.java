@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.network.AbstractPacket;
 public class CPacketContainerClickButton extends AbstractPacket<CPacketContainerClickButton> {
 
 	private int button;
-	private final ByteBuf extraData = Unpooled.buffer();
+	private final PacketBuffer extraData = new PacketBuffer(Unpooled.buffer());
 
 	public CPacketContainerClickButton() {
 
@@ -43,7 +43,7 @@ public class CPacketContainerClickButton extends AbstractPacket<CPacketContainer
 		return button;
 	}
 
-	public ByteBuf getExtraData() {
+	public PacketBuffer getExtraData() {
 		return extraData;
 	}
 
