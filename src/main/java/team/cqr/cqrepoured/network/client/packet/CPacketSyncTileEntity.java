@@ -2,11 +2,9 @@ package team.cqr.cqrepoured.network.client.packet;
 
 import java.util.Collection;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -14,7 +12,7 @@ import team.cqr.cqrepoured.util.ByteBufUtil;
 public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity> {
 
 	private BlockPos pos = BlockPos.ZERO;
-	private ByteBuf buffer = Unpooled.buffer(32);
+	private PacketBuffer buffer = new PacketBuffer(Unpooled.buffer(32));
 
 	public CPacketSyncTileEntity() {
 
@@ -22,9 +20,11 @@ public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity>
 
 	public CPacketSyncTileEntity(BlockPos pos, Collection<DataEntry<?>> entries) {
 		this.pos = pos;
-		ByteBufUtils.writeVarInt(this.buffer, entries.size(), 5);
+		this.buffer.writeVarInt(entries.size());
+		//ByteBufUtils.writeVarInt(this.buffer, entries.size(), 5);
 		for (DataEntry<?> entry : entries) {
-			ByteBufUtils.writeVarInt(this.buffer, entry.getId(), 5);
+			this.buffer.writeVarInt(entry.getId());
+			//ByteBufUtils.writeVarInt(this.buffer, entry.getId(), 5);
 			entry.writeChanges(this.buffer);
 		}
 	}
@@ -47,7 +47,7 @@ public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity>
 		return this.pos;
 	}
 
-	public ByteBuf getBuffer() {
+	public PacketBuffer getBuffer() {
 		return this.buffer;
 	}
 

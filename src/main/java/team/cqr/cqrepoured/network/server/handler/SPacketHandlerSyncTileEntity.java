@@ -2,11 +2,10 @@ package team.cqr.cqrepoured.network.server.handler;
 
 import java.util.function.Supplier;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
@@ -25,11 +24,11 @@ public class SPacketHandlerSyncTileEntity extends AbstractPacketHandler<CPacketS
 
 			if (tileEntity instanceof ITileEntitySyncable) {
 				TileEntityDataManager dataManager = ((ITileEntitySyncable) tileEntity).getDataManager();
-				ByteBuf buf = packet.getBuffer();
+				PacketBuffer buf = packet.getBuffer();
 
-				int size = ByteBufUtils.readVarInt(buf, 5);
+				int size = buf.readVarInt();
 				for (int i = 0; i < size; i++) {
-					int id = ByteBufUtils.readVarInt(buf, 5);
+					int id = buf.readVarInt();
 					DataEntry<?> entry = dataManager.getById(id);
 					if (entry == null) {
 						throw new IllegalArgumentException(String.format("No tile entity data manager entry found for id %s.", id));
