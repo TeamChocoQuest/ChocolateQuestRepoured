@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.vector.Vector3d;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketUpdateEntityPrevPos implements IMessage {
+public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEntityPrevPos> {
 
 	private int entityId;
 	private float x;
@@ -17,30 +18,35 @@ public class SPacketUpdateEntityPrevPos implements IMessage {
 	}
 
 	public SPacketUpdateEntityPrevPos(Entity entity) {
-		this.entityId = entity.getEntityId();
-		this.x = (float) entity.posX;
-		this.y = (float) entity.posY;
-		this.z = (float) entity.posZ;
-		this.yaw = entity.rotationYaw;
+		this.entityId = entity.getId();
+		Vector3d p = entity.position();
+		this.x = (float) p.x;
+		this.y = (float) p.y;
+		this.z = (float) p.z;
+		this.yaw = entity.yRot;
 
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.x = buf.readFloat();
-		this.y = buf.readFloat();
-		this.z = buf.readFloat();
-		this.yaw = buf.readFloat();
+	public SPacketUpdateEntityPrevPos fromBytes(PacketBuffer buf) {
+		SPacketUpdateEntityPrevPos result = new SPacketUpdateEntityPrevPos();
+		
+		result.entityId = buf.readInt();
+		result.x = buf.readFloat();
+		result.y = buf.readFloat();
+		result.z = buf.readFloat();
+		result.yaw = buf.readFloat();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeFloat(this.x);
-		buf.writeFloat(this.y);
-		buf.writeFloat(this.z);
-		buf.writeFloat(this.yaw);
+	public void toBytes(SPacketUpdateEntityPrevPos packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeFloat(packet.x);
+		buf.writeFloat(packet.y);
+		buf.writeFloat(packet.z);
+		buf.writeFloat(packet.yaw);
 	}
 
 	public int getEntityId() {
@@ -61,6 +67,11 @@ public class SPacketUpdateEntityPrevPos implements IMessage {
 
 	public float getYaw() {
 		return this.yaw;
+	}
+
+	@Override
+	public Class<SPacketUpdateEntityPrevPos> getPacketClass() {
+		return SPacketUpdateEntityPrevPos.class;
 	}
 
 }

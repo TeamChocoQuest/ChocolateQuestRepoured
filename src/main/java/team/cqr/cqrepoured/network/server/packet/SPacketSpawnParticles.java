@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketSpawnParticles implements IMessage {
+public class SPacketSpawnParticles extends AbstractPacket<SPacketSpawnParticles> {
 
 	private int particleId;
 	private double xCoord;
@@ -51,44 +50,48 @@ public class SPacketSpawnParticles implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.particleId = ByteBufUtils.readVarInt(buf, 5);
-		this.xCoord = buf.readFloat();
-		this.yCoord = buf.readFloat();
-		this.zCoord = buf.readFloat();
-		this.xSpeed = buf.readFloat();
-		this.ySpeed = buf.readFloat();
-		this.zSpeed = buf.readFloat();
-		this.count = ByteBufUtils.readVarInt(buf, 5);
-		if (this.count > 1) {
-			this.xOffset = buf.readFloat();
-			this.yOffset = buf.readFloat();
-			this.zOffset = buf.readFloat();
+	public SPacketSpawnParticles fromBytes(PacketBuffer buf) {
+		SPacketSpawnParticles result = new SPacketSpawnParticles();
+		
+		result.particleId = buf.readVarInt();
+		result.xCoord = buf.readFloat();
+		result.yCoord = buf.readFloat();
+		result.zCoord = buf.readFloat();
+		result.xSpeed = buf.readFloat();
+		result.ySpeed = buf.readFloat();
+		result.zSpeed = buf.readFloat();
+		result.count = buf.readVarInt();
+		if (result.count > 1) {
+			result.xOffset = buf.readFloat();
+			result.yOffset = buf.readFloat();
+			result.zOffset = buf.readFloat();
 		}
-		this.optionalArguments = new int[ByteBufUtils.readVarInt(buf, 5)];
-		for (int i = 0; i < this.optionalArguments.length; i++) {
-			this.optionalArguments[i] = ByteBufUtils.readVarInt(buf, 5);
+		result.optionalArguments = new int[buf.readVarInt()];
+		for (int i = 0; i < result.optionalArguments.length; i++) {
+			result.optionalArguments[i] = buf.readVarInt();
 		}
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, this.particleId, 5);
-		buf.writeFloat((float) this.xCoord);
-		buf.writeFloat((float) this.yCoord);
-		buf.writeFloat((float) this.zCoord);
-		buf.writeFloat((float) this.xSpeed);
-		buf.writeFloat((float) this.ySpeed);
-		buf.writeFloat((float) this.zSpeed);
-		ByteBufUtils.writeVarInt(buf, this.count, 5);
+	public void toBytes(SPacketSpawnParticles packet, PacketBuffer buf) {
+		buf.writeVarInt(packet.particleId);
+		buf.writeFloat((float) packet.xCoord);
+		buf.writeFloat((float) packet.yCoord);
+		buf.writeFloat((float) packet.zCoord);
+		buf.writeFloat((float) packet.xSpeed);
+		buf.writeFloat((float) packet.ySpeed);
+		buf.writeFloat((float) packet.zSpeed);
+		buf.writeVarInt(packet.count);
 		if (this.count > 1) {
-			buf.writeFloat((float) this.xOffset);
-			buf.writeFloat((float) this.yOffset);
-			buf.writeFloat((float) this.zOffset);
+			buf.writeFloat((float) packet.xOffset);
+			buf.writeFloat((float) packet.yOffset);
+			buf.writeFloat((float) packet.zOffset);
 		}
-		ByteBufUtils.writeVarInt(buf, this.optionalArguments.length, 5);
+		buf.writeVarInt(packet.optionalArguments.length);
 		for (int i = 0; i < this.optionalArguments.length; i++) {
-			ByteBufUtils.writeVarInt(buf, this.optionalArguments[i], 5);
+			buf.writeVarInt(packet.optionalArguments[i]);
 		}
 	}
 
@@ -138,6 +141,11 @@ public class SPacketSpawnParticles implements IMessage {
 
 	public int[] getOptionalArguments() {
 		return this.optionalArguments;
+	}
+
+	@Override
+	public Class<SPacketSpawnParticles> getPacketClass() {
+		return SPacketSpawnParticles.class;
 	}
 
 }

@@ -2,11 +2,10 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.UUID;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.util.ByteBufUtil;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketUnloadProtectedRegion implements IMessage {
+public class SPacketUnloadProtectedRegion extends AbstractPacket<SPacketUnloadProtectedRegion> {
 
 	private UUID uuid;
 
@@ -19,17 +18,26 @@ public class SPacketUnloadProtectedRegion implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.uuid = ByteBufUtil.readUuid(buf);
+	public SPacketUnloadProtectedRegion fromBytes(PacketBuffer buf) {
+		SPacketUnloadProtectedRegion result = new SPacketUnloadProtectedRegion();
+		
+		result.uuid = buf.readUUID();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, this.uuid);
+	public void toBytes(SPacketUnloadProtectedRegion packet, PacketBuffer buf) {
+		buf.writeUUID(packet.uuid);
 	}
 
 	public UUID getUuid() {
 		return this.uuid;
+	}
+
+	@Override
+	public Class<SPacketUnloadProtectedRegion> getPacketClass() {
+		return SPacketUnloadProtectedRegion.class;
 	}
 
 }

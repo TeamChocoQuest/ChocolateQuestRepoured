@@ -2,14 +2,14 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.Collection;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
-public class SPacketSyncProtectedRegions implements IMessage {
+public class SPacketSyncProtectedRegions extends AbstractPacket<SPacketSyncProtectedRegions> {
 
-	private ByteBuf buffer = Unpooled.buffer();
+	private PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
 
 	public SPacketSyncProtectedRegions() {
 
@@ -24,17 +24,26 @@ public class SPacketSyncProtectedRegions implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.buffer.writeBytes(buf);
+	public SPacketSyncProtectedRegions fromBytes(PacketBuffer buf) {
+		SPacketSyncProtectedRegions result = new SPacketSyncProtectedRegions();
+		
+		result.buffer.writeBytes(buf);
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeBytes(this.buffer);
+	public void toBytes(SPacketSyncProtectedRegions packet, PacketBuffer buf) {
+		buf.writeBytes(packet.buffer);
 	}
 
-	public ByteBuf getBuffer() {
+	public PacketBuffer getBuffer() {
 		return this.buffer;
+	}
+
+	@Override
+	public Class<SPacketSyncProtectedRegions> getPacketClass() {
+		return SPacketSyncProtectedRegions.class;
 	}
 
 }

@@ -5,16 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EReputationState;
+import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 
-public class SPacketInitialFactionInformation implements IMessage {
+public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInitialFactionInformation> {
 
 	private String[] factions;
 	private int[] reputations;
@@ -65,35 +64,42 @@ public class SPacketInitialFactionInformation implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.playerId = ByteBufUtil.readUuid(buf);
+	public SPacketInitialFactionInformation fromBytes(PacketBuffer buf) {
+		SPacketInitialFactionInformation result = new SPacketInitialFactionInformation();
+		result.playerId = buf.readUUID();
 		int count = buf.readInt();
-		this.factions = new String[count];
-		this.reputations = new int[count];
-		this.repuCanChange = new boolean[count];
-		this.defaultRepu = new String[count];
+		result.factions = new String[count];
+		result.reputations = new int[count];
+		result.repuCanChange = new boolean[count];
+		result.defaultRepu = new String[count];
 		for (int i = 0; i < count; i++) {
-			this.factions[i] = ByteBufUtils.readUTF8String(buf);
-			this.repuCanChange[i] = buf.readBoolean();
-			this.defaultRepu[i] = ByteBufUtils.readUTF8String(buf);
-			this.reputations[i] = buf.readInt();
+			result.factions[i] = buf.readUtf();
+			result.repuCanChange[i] = buf.readBoolean();
+			result.defaultRepu[i] = buf.readUtf();
+			result.reputations[i] = buf.readInt();
 		}
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, this.playerId);
-		buf.writeInt(this.factions.length);
-		for (int i = 0; i < this.factions.length; i++) {
-			ByteBufUtils.writeUTF8String(buf, this.factions[i]);
-			buf.writeBoolean(this.repuCanChange[i]);
-			ByteBufUtils.writeUTF8String(buf, this.defaultRepu[i]);
-			buf.writeInt(this.reputations[i]);
+	public void toBytes(SPacketInitialFactionInformation packet, PacketBuffer buf) {
+		ByteBufUtil.writeUuid(buf, packet.playerId);
+		buf.writeInt(packet.factions.length);
+		for (int i = 0; i < packet.factions.length; i++) {
+			buf.writeUtf(packet.factions[i]);
+			buf.writeBoolean(packet.repuCanChange[i]);
+			buf.writeUtf(packet.defaultRepu[i]);
+			buf.writeInt(packet.reputations[i]);
 		}
 	}
 
 	public UUID getPlayerId() {
 		return this.playerId;
+	}
+
+	@Override
+	public Class<SPacketInitialFactionInformation> getPacketClass() {
+		return SPacketInitialFactionInformation.class;
 	}
 
 }

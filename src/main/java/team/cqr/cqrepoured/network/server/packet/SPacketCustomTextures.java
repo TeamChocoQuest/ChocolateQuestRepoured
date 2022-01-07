@@ -5,13 +5,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import team.cqr.cqrepoured.customtextures.TextureSet;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketCustomTextures implements IMessage {
+public class SPacketCustomTextures extends AbstractPacket<SPacketCustomTextures> {
 
 	private Map<String, byte[]> entries = new HashMap<>();
 	private Map<String, Map<ResourceLocation, Set<ResourceLocation>>> textureSets = new HashMap<>();
@@ -29,59 +28,63 @@ public class SPacketCustomTextures implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public SPacketCustomTextures fromBytes(PacketBuffer buf) {
+		SPacketCustomTextures result = new SPacketCustomTextures();
+		
 		int keys = buf.readInt();
 		int tscount = buf.readInt();
 		while (keys > 0) {
-			String k = ByteBufUtils.readUTF8String(buf);
+			String k = buf.readUtf();
 			byte[] v = new byte[buf.readInt()];
 			buf.readBytes(v);
-			this.entries.put(k, v);
+			result.entries.put(k, v);
 			keys--;
 		}
 
 		while (tscount > 0) {
-			String tsname = ByteBufUtils.readUTF8String(buf);
-			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = this.textureSets.getOrDefault(tsname, new HashMap<>());
+			String tsname = buf.readUtf();
+			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = result.textureSets.getOrDefault(tsname, new HashMap<>());
 			int tskeys = buf.readInt();
 			while (tskeys > 0) {
-				String key = ByteBufUtils.readUTF8String(buf);
+				String key = buf.readUtf();
 				Set<ResourceLocation> values = new HashSet<>();
 				int vals = buf.readInt();
 				while (vals > 0) {
-					String val = ByteBufUtils.readUTF8String(buf);
+					String val = buf.readUtf();
 					values.add(new ResourceLocation(val));
 					vals--;
 				}
 				entityTextureMap.put(new ResourceLocation(key), values);
 				tskeys--;
 			}
-			this.textureSets.put(tsname, entityTextureMap);
+			result.textureSets.put(tsname, entityTextureMap);
 			tscount--;
 		}
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entries.size());
-		buf.writeInt(this.textureSets.size());
+	public void toBytes(SPacketCustomTextures packet, PacketBuffer buf) {
+		buf.writeInt(packet.entries.size());
+		buf.writeInt(packet.textureSets.size());
 		// Textures
-		for (Map.Entry<String, byte[]> entry : this.entries.entrySet()) {
-			ByteBufUtils.writeUTF8String(buf, entry.getKey());
+		for (Map.Entry<String, byte[]> entry : packet.entries.entrySet()) {
+			buf.writeUtf(entry.getKey());
 			buf.writeInt(entry.getValue().length);
 			buf.writeBytes(entry.getValue());
 		}
 		// Texture sets
-		for (Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : this.textureSets.entrySet()) {
-			ByteBufUtils.writeUTF8String(buf, entry.getKey());
+		for (Map.Entry<String, Map<ResourceLocation, Set<ResourceLocation>>> entry : packet.textureSets.entrySet()) {
+			buf.writeUtf(entry.getKey());
 			Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = entry.getValue();
 			buf.writeInt(entityTextureMap.size());
 
 			entityTextureMap.forEach((k, v) -> {
-				ByteBufUtils.writeUTF8String(buf, k.toString());
+				buf.writeUtf(k.toString());
 				buf.writeInt(v.size());
 				for (ResourceLocation val : v) {
-					ByteBufUtils.writeUTF8String(buf, val.toString());
+					buf.writeUtf(val.toString());
 				}
 			});
 		}
@@ -94,6 +97,11 @@ public class SPacketCustomTextures implements IMessage {
 
 	public Map<String, Map<ResourceLocation, Set<ResourceLocation>>> getTextureSets() {
 		return this.textureSets;
+	}
+
+	@Override
+	public Class<SPacketCustomTextures> getPacketClass() {
+		return SPacketCustomTextures.class;
 	}
 
 }

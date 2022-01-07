@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketUpdateElectrocuteCapability implements IMessage {
+public class SPacketUpdateElectrocuteCapability extends AbstractPacket<SPacketUpdateElectrocuteCapability> {
 
 	private int entityId;
 	private boolean electroCuted = false;
@@ -17,38 +18,42 @@ public class SPacketUpdateElectrocuteCapability implements IMessage {
 	}
 
 	public SPacketUpdateElectrocuteCapability(LivingEntity entity) {
-		this.entityId = entity.getEntityId();
-		CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-		if (cap != null) {
+		this.entityId = entity.getId();
+		LazyOptional<CapabilityElectricShock> lOpCap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		lOpCap.ifPresent((cap) -> {
 			// this.electroCharge = cap.getRemainingTicks();
 			this.electroCuted = cap.isElectrocutionActive();
-			this.hasTarget = cap.getTarget() != null && cap.getTarget().isEntityAlive();
+			this.hasTarget = cap.getTarget() != null && cap.getTarget().isAlive();
 			if (this.hasTarget) {
-				this.entityIdTarget = cap.getTarget().getEntityId();
+				this.entityIdTarget = cap.getTarget().getId();
 			}
-		}
+		});
 
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
+	public SPacketUpdateElectrocuteCapability fromBytes(PacketBuffer buf) {
+		SPacketUpdateElectrocuteCapability result = new SPacketUpdateElectrocuteCapability();
+		
+		result.entityId = buf.readInt();
 		// this.electroCharge = buf.readInt();
-		this.electroCuted = buf.readBoolean();
-		this.hasTarget = buf.readBoolean();
-		if (this.hasTarget) {
-			this.entityIdTarget = buf.readInt();
+		result.electroCuted = buf.readBoolean();
+		result.hasTarget = buf.readBoolean();
+		if (result.hasTarget) {
+			result.entityIdTarget = buf.readInt();
 		}
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
+	public void toBytes(SPacketUpdateElectrocuteCapability packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
 		// buf.writeInt(this.electroCharge);
-		buf.writeBoolean(this.electroCuted);
-		buf.writeBoolean(this.hasTarget);
-		if (this.hasTarget) {
-			buf.writeInt(this.entityIdTarget);
+		buf.writeBoolean(packet.electroCuted);
+		buf.writeBoolean(packet.hasTarget);
+		if (packet.hasTarget) {
+			buf.writeInt(packet.entityIdTarget);
 		}
 	}
 
@@ -71,6 +76,11 @@ public class SPacketUpdateElectrocuteCapability implements IMessage {
 
 	public boolean hasTarget() {
 		return this.hasTarget;
+	}
+
+	@Override
+	public Class<SPacketUpdateElectrocuteCapability> getPacketClass() {
+		return SPacketUpdateElectrocuteCapability.class;
 	}
 
 }

@@ -1,22 +1,27 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketHookShotPlayerStop implements IMessage {
+public class SPacketHookShotPlayerStop extends AbstractPacket<SPacketHookShotPlayerStop> {
 
 	public SPacketHookShotPlayerStop() {
 
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-
+	public Class<SPacketHookShotPlayerStop> getPacketClass() {
+		return SPacketHookShotPlayerStop.class;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public SPacketHookShotPlayerStop fromBytes(PacketBuffer buffer) {
+		return new SPacketHookShotPlayerStop();
+	}
 
+	@Override
+	public void toBytes(SPacketHookShotPlayerStop packet, PacketBuffer buffer) {
+		
 	}
 
 }

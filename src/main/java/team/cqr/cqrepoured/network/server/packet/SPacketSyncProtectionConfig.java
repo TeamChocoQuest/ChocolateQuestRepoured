@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketSyncProtectionConfig implements IMessage {
+public class SPacketSyncProtectionConfig extends AbstractPacket<SPacketSyncProtectionConfig> {
 
 	private CQRConfig.DungeonProtection protectionConfig;
 
@@ -18,62 +17,71 @@ public class SPacketSyncProtectionConfig implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.protectionConfig = new CQRConfig.DungeonProtection();
-		this.protectionConfig.protectionSystemEnabled = buf.readBoolean();
-		this.protectionConfig.enablePreventBlockBreaking = buf.readBoolean();
-		this.protectionConfig.enablePreventBlockPlacing = buf.readBoolean();
-		this.protectionConfig.enablePreventEntitySpawning = buf.readBoolean();
-		this.protectionConfig.enablePreventExplosionOther = buf.readBoolean();
-		this.protectionConfig.enablePreventExplosionTNT = buf.readBoolean();
-		this.protectionConfig.enablePreventFireSpreading = buf.readBoolean();
-		this.protectionConfig.protectionSystemBreakableBlockWhitelist = new String[buf.readInt()];
-		for (int i = 0; i < this.protectionConfig.protectionSystemBreakableBlockWhitelist.length; i++) {
-			this.protectionConfig.protectionSystemBreakableBlockWhitelist[i] = ByteBufUtils.readUTF8String(buf);
+	public SPacketSyncProtectionConfig fromBytes(PacketBuffer buf) {
+		SPacketSyncProtectionConfig result = new SPacketSyncProtectionConfig();
+		
+		result.protectionConfig = new CQRConfig.DungeonProtection();
+		result.protectionConfig.protectionSystemEnabled = buf.readBoolean();
+		result.protectionConfig.enablePreventBlockBreaking = buf.readBoolean();
+		result.protectionConfig.enablePreventBlockPlacing = buf.readBoolean();
+		result.protectionConfig.enablePreventEntitySpawning = buf.readBoolean();
+		result.protectionConfig.enablePreventExplosionOther = buf.readBoolean();
+		result.protectionConfig.enablePreventExplosionTNT = buf.readBoolean();
+		result.protectionConfig.enablePreventFireSpreading = buf.readBoolean();
+		result.protectionConfig.protectionSystemBreakableBlockWhitelist = new String[buf.readInt()];
+		for (int i = 0; i < result.protectionConfig.protectionSystemBreakableBlockWhitelist.length; i++) {
+			result.protectionConfig.protectionSystemBreakableBlockWhitelist[i] = buf.readUtf();
 		}
-		this.protectionConfig.protectionSystemBreakableMaterialWhitelist = new String[buf.readInt()];
-		for (int i = 0; i < this.protectionConfig.protectionSystemBreakableMaterialWhitelist.length; i++) {
-			this.protectionConfig.protectionSystemBreakableMaterialWhitelist[i] = ByteBufUtils.readUTF8String(buf);
+		result.protectionConfig.protectionSystemBreakableMaterialWhitelist = new String[buf.readInt()];
+		for (int i = 0; i < result.protectionConfig.protectionSystemBreakableMaterialWhitelist.length; i++) {
+			result.protectionConfig.protectionSystemBreakableMaterialWhitelist[i] = buf.readUtf();
 		}
-		this.protectionConfig.protectionSystemPlaceableBlockWhitelist = new String[buf.readInt()];
-		for (int i = 0; i < this.protectionConfig.protectionSystemPlaceableBlockWhitelist.length; i++) {
-			this.protectionConfig.protectionSystemPlaceableBlockWhitelist[i] = ByteBufUtils.readUTF8String(buf);
+		result.protectionConfig.protectionSystemPlaceableBlockWhitelist = new String[buf.readInt()];
+		for (int i = 0; i < result.protectionConfig.protectionSystemPlaceableBlockWhitelist.length; i++) {
+			result.protectionConfig.protectionSystemPlaceableBlockWhitelist[i] = buf.readUtf();
 		}
-		this.protectionConfig.protectionSystemPlaceableMaterialWhitelist = new String[buf.readInt()];
-		for (int i = 0; i < this.protectionConfig.protectionSystemPlaceableMaterialWhitelist.length; i++) {
-			this.protectionConfig.protectionSystemPlaceableMaterialWhitelist[i] = ByteBufUtils.readUTF8String(buf);
+		result.protectionConfig.protectionSystemPlaceableMaterialWhitelist = new String[buf.readInt()];
+		for (int i = 0; i < result.protectionConfig.protectionSystemPlaceableMaterialWhitelist.length; i++) {
+			result.protectionConfig.protectionSystemPlaceableMaterialWhitelist[i] = buf.readUtf();
 		}
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(this.protectionConfig.protectionSystemEnabled);
-		buf.writeBoolean(this.protectionConfig.enablePreventBlockBreaking);
-		buf.writeBoolean(this.protectionConfig.enablePreventBlockPlacing);
-		buf.writeBoolean(this.protectionConfig.enablePreventEntitySpawning);
-		buf.writeBoolean(this.protectionConfig.enablePreventExplosionOther);
-		buf.writeBoolean(this.protectionConfig.enablePreventExplosionTNT);
-		buf.writeBoolean(this.protectionConfig.enablePreventFireSpreading);
-		buf.writeInt(this.protectionConfig.protectionSystemBreakableBlockWhitelist.length);
-		for (String s : this.protectionConfig.protectionSystemBreakableBlockWhitelist) {
-			ByteBufUtils.writeUTF8String(buf, s);
+	public void toBytes(SPacketSyncProtectionConfig packet, PacketBuffer buf) {
+		buf.writeBoolean(packet.protectionConfig.protectionSystemEnabled);
+		buf.writeBoolean(packet.protectionConfig.enablePreventBlockBreaking);
+		buf.writeBoolean(packet.protectionConfig.enablePreventBlockPlacing);
+		buf.writeBoolean(packet.protectionConfig.enablePreventEntitySpawning);
+		buf.writeBoolean(packet.protectionConfig.enablePreventExplosionOther);
+		buf.writeBoolean(packet.protectionConfig.enablePreventExplosionTNT);
+		buf.writeBoolean(packet.protectionConfig.enablePreventFireSpreading);
+		buf.writeInt(packet.protectionConfig.protectionSystemBreakableBlockWhitelist.length);
+		for (String s : packet.protectionConfig.protectionSystemBreakableBlockWhitelist) {
+			buf.writeUtf(s);
 		}
-		buf.writeInt(this.protectionConfig.protectionSystemBreakableMaterialWhitelist.length);
-		for (String s : this.protectionConfig.protectionSystemBreakableMaterialWhitelist) {
-			ByteBufUtils.writeUTF8String(buf, s);
+		buf.writeInt(packet.protectionConfig.protectionSystemBreakableMaterialWhitelist.length);
+		for (String s : packet.protectionConfig.protectionSystemBreakableMaterialWhitelist) {
+			buf.writeUtf(s);
 		}
-		buf.writeInt(this.protectionConfig.protectionSystemPlaceableBlockWhitelist.length);
-		for (String s : this.protectionConfig.protectionSystemPlaceableBlockWhitelist) {
-			ByteBufUtils.writeUTF8String(buf, s);
+		buf.writeInt(packet.protectionConfig.protectionSystemPlaceableBlockWhitelist.length);
+		for (String s : packet.protectionConfig.protectionSystemPlaceableBlockWhitelist) {
+			buf.writeUtf(s);
 		}
-		buf.writeInt(this.protectionConfig.protectionSystemPlaceableMaterialWhitelist.length);
-		for (String s : this.protectionConfig.protectionSystemPlaceableMaterialWhitelist) {
-			ByteBufUtils.writeUTF8String(buf, s);
+		buf.writeInt(packet.protectionConfig.protectionSystemPlaceableMaterialWhitelist.length);
+		for (String s : packet.protectionConfig.protectionSystemPlaceableMaterialWhitelist) {
+			buf.writeUtf(s);
 		}
 	}
 
 	public CQRConfig.DungeonProtection getProtectionConfig() {
 		return this.protectionConfig;
+	}
+
+	@Override
+	public Class<SPacketSyncProtectionConfig> getPacketClass() {
+		return SPacketSyncProtectionConfig.class;
 	}
 
 }

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketSyncLaserRotation implements IMessage {
+public class SPacketSyncLaserRotation extends AbstractPacket<SPacketSyncLaserRotation> {
 
 	private int entityId;
 	private float yaw;
@@ -15,23 +15,27 @@ public class SPacketSyncLaserRotation implements IMessage {
 	}
 
 	public SPacketSyncLaserRotation(AbstractEntityLaser laser) {
-		this.entityId = laser.getEntityId();
+		this.entityId = laser.getId();
 		this.yaw = laser.rotationYawCQR;
 		this.pitch = laser.rotationPitchCQR;
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.yaw = buf.readFloat();
-		this.pitch = buf.readFloat();
+	public SPacketSyncLaserRotation fromBytes(PacketBuffer buf) {
+		SPacketSyncLaserRotation result = new SPacketSyncLaserRotation();
+		
+		result.entityId = buf.readInt();
+		result.yaw = buf.readFloat();
+		result.pitch = buf.readFloat();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeFloat(this.yaw);
-		buf.writeFloat(this.pitch);
+	public void toBytes(SPacketSyncLaserRotation packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeFloat(packet.yaw);
+		buf.writeFloat(packet.pitch);
 	}
 
 	public int getEntityId() {
@@ -44,6 +48,11 @@ public class SPacketSyncLaserRotation implements IMessage {
 
 	public float getPitch() {
 		return this.pitch;
+	}
+
+	@Override
+	public Class<SPacketSyncLaserRotation> getPacketClass() {
+		return SPacketSyncLaserRotation.class;
 	}
 
 }

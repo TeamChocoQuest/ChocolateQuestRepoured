@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.network.server.packet.endercalamity;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketCalamityUpdateHand implements IMessage {
+public class SPacketCalamityUpdateHand extends AbstractPacket<SPacketCalamityUpdateHand> {
 
 	private int entityId;
 	private byte[] handStates = new byte[6];
@@ -24,15 +24,19 @@ public class SPacketCalamityUpdateHand implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		buf.readBytes(this.handStates);
+	public SPacketCalamityUpdateHand fromBytes(PacketBuffer buf) {
+		SPacketCalamityUpdateHand result = new SPacketCalamityUpdateHand();
+		
+		result.entityId = buf.readInt();
+		result.handStates = buf.readByteArray();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeBytes(this.handStates);
+	public void toBytes(SPacketCalamityUpdateHand packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeBytes(packet.handStates);
 	}
 
 	public byte[] getHandStates() {
@@ -46,7 +50,7 @@ public class SPacketCalamityUpdateHand implements IMessage {
 	public static class Builder {
 
 		private Builder(EntityCQREnderCalamity entity) {
-			this.entityID = entity.getEntityId();
+			this.entityID = entity.getId();
 		}
 
 		private int entityID;
@@ -80,6 +84,11 @@ public class SPacketCalamityUpdateHand implements IMessage {
 
 	public int getEntityId() {
 		return this.entityId;
+	}
+
+	@Override
+	public Class<SPacketCalamityUpdateHand> getPacketClass() {
+		return SPacketCalamityUpdateHand.class;
 	}
 
 }

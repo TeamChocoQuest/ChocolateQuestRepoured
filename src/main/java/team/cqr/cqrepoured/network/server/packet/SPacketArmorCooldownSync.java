@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.registries.ForgeRegistries;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketArmorCooldownSync implements IMessage {
+public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldownSync> {
 
 	private Map<Item, Integer> itemCooldownMap = new HashMap<>();
 
@@ -23,26 +22,37 @@ public class SPacketArmorCooldownSync implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public SPacketArmorCooldownSync fromBytes(PacketBuffer buf) {
+		SPacketArmorCooldownSync result = new SPacketArmorCooldownSync();
+		
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
-			Item item = ByteBufUtils.readRegistryEntry(buf, ForgeRegistries.ITEMS);
+			//Item item = ByteBufUtils.readRegistryEntry(buf, ForgeRegistries.ITEMS);
+			Item item = buf.readRegistryIdSafe(ForgeRegistries.ITEMS.getRegistrySuperType());
 			int cooldown = buf.readInt();
-			this.itemCooldownMap.put(item, cooldown);
+			result.itemCooldownMap.put(item, cooldown);
 		}
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.itemCooldownMap.size());
-		for (Entry<Item, Integer> entry : this.itemCooldownMap.entrySet()) {
-			ByteBufUtils.writeRegistryEntry(buf, entry.getKey());
+	public void toBytes(SPacketArmorCooldownSync packet, PacketBuffer buf) {
+		buf.writeInt(packet.itemCooldownMap.size());
+		for (Entry<Item, Integer> entry : packet.itemCooldownMap.entrySet()) {
+			//ByteBufUtils.writeRegistryEntry(buf, entry.getKey());
+			buf.writeRegistryId(entry.getKey());
 			buf.writeInt(entry.getValue());
 		}
 	}
 
 	public Map<Item, Integer> getItemCooldownMap() {
 		return this.itemCooldownMap;
+	}
+
+	@Override
+	public Class<SPacketArmorCooldownSync> getPacketClass() {
+		return SPacketArmorCooldownSync.class;
 	}
 
 }

@@ -2,13 +2,11 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.UUID;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.util.ByteBufUtil;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketUpdatePlayerReputation implements IMessage {
+public class SPacketUpdatePlayerReputation extends AbstractPacket<SPacketUpdatePlayerReputation> {
 
 	private int score;
 	private String faction;
@@ -25,10 +23,14 @@ public class SPacketUpdatePlayerReputation implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.playerId = ByteBufUtil.readUuid(buf);
-		this.faction = ByteBufUtils.readUTF8String(buf);
-		this.score = buf.readInt();
+	public SPacketUpdatePlayerReputation fromBytes(PacketBuffer buf) {
+		SPacketUpdatePlayerReputation result = new SPacketUpdatePlayerReputation();
+		
+		result.playerId = buf.readUUID();
+		result.faction = buf.readUtf();
+		result.score = buf.readInt();
+		
+		return result;
 	}
 
 	public int getScore() {
@@ -44,10 +46,15 @@ public class SPacketUpdatePlayerReputation implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, this.playerId);
-		ByteBufUtils.writeUTF8String(buf, this.faction);
-		buf.writeInt(this.score);
+	public void toBytes(SPacketUpdatePlayerReputation packet, PacketBuffer buf) {
+		buf.writeUUID(packet.playerId);
+		buf.writeUtf(packet.faction);
+		buf.writeInt(packet.score);
+	}
+
+	@Override
+	public Class<SPacketUpdatePlayerReputation> getPacketClass() {
+		return SPacketUpdatePlayerReputation.class;
 	}
 
 }

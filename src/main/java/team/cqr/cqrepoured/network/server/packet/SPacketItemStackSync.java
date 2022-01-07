@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketItemStackSync implements IMessage {
+public class SPacketItemStackSync extends AbstractPacket<SPacketItemStackSync> {
 
 	private int entityId;
 	private int slotIndex;
@@ -22,17 +21,19 @@ public class SPacketItemStackSync implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.slotIndex = buf.readInt();
-		this.stack = ByteBufUtils.readItemStack(buf);
+	public SPacketItemStackSync fromBytes(PacketBuffer buf) {
+		SPacketItemStackSync res = new SPacketItemStackSync();
+		res.entityId = buf.readInt();
+		res.slotIndex = buf.readInt();
+		res.stack = buf.readItem();
+		return res;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeInt(this.slotIndex);
-		ByteBufUtils.writeItemStack(buf, this.stack);
+	public void toBytes(SPacketItemStackSync packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeInt(packet.slotIndex);
+		buf.writeItem(packet.stack);
 	}
 
 	public int getEntityId() {
@@ -45,6 +46,11 @@ public class SPacketItemStackSync implements IMessage {
 
 	public ItemStack getStack() {
 		return this.stack;
+	}
+
+	@Override
+	public Class<SPacketItemStackSync> getPacketClass() {
+		return SPacketItemStackSync.class;
 	}
 
 }

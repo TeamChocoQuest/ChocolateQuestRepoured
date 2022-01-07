@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet.endercalamity;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketSyncCalamityRotation implements IMessage {
+public class SPacketSyncCalamityRotation extends AbstractPacket<SPacketSyncCalamityRotation> {
 
 	private int entityId;
 	private float pitch;
@@ -13,20 +13,24 @@ public class SPacketSyncCalamityRotation implements IMessage {
 	}
 
 	public SPacketSyncCalamityRotation(EntityCQREnderCalamity entity) {
-		this.entityId = entity.getEntityId();
+		this.entityId = entity.getId();
 		this.pitch = entity.rotationPitchCQR;
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.pitch = buf.readFloat();
+	public SPacketSyncCalamityRotation fromBytes(PacketBuffer buf) {
+		SPacketSyncCalamityRotation result = new SPacketSyncCalamityRotation();
+		
+		result.entityId = buf.readInt();
+		result.pitch = buf.readFloat();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeFloat(this.pitch);
+	public void toBytes(SPacketSyncCalamityRotation packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeFloat(packet.pitch);
 	}
 
 	public int getEntityId() {
@@ -35,6 +39,11 @@ public class SPacketSyncCalamityRotation implements IMessage {
 
 	public float getPitch() {
 		return this.pitch;
+	}
+
+	@Override
+	public Class<SPacketSyncCalamityRotation> getPacketClass() {
+		return SPacketSyncCalamityRotation.class;
 	}
 
 }

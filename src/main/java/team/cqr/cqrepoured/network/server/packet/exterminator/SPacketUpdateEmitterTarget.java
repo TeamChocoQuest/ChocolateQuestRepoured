@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.network.server.packet.exterminator;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketUpdateEmitterTarget implements IMessage {
+public class SPacketUpdateEmitterTarget extends AbstractPacket<SPacketUpdateEmitterTarget> {
 
 	private int entityId; // ID of the exterminator
 
@@ -34,35 +34,44 @@ public class SPacketUpdateEmitterTarget implements IMessage {
 	}
 
 	public SPacketUpdateEmitterTarget(EntityCQRExterminator entity, boolean leftOrRightEmitter) {
-		this.entityId = entity.getEntityId();
+		this.entityId = entity.getId();
 		this.leftEmitter = leftOrRightEmitter;
 		Entity target = this.leftEmitter ? (LivingEntity) entity.getElectroCuteTargetLeft() : (LivingEntity) entity.getElectroCuteTargetRight();
 		this.targetSet = target != null;
 		if (this.targetSet) {
-			this.targetID = target.getEntityId();
+			this.targetID = target.getId();
 		}
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
+	public SPacketUpdateEmitterTarget fromBytes(PacketBuffer buf) {
+		SPacketUpdateEmitterTarget result = new SPacketUpdateEmitterTarget();
+		
+		result.entityId = buf.readInt();
 
-		this.leftEmitter = buf.readBoolean();
-		this.targetSet = buf.readBoolean();
-		if (this.targetSet) {
-			this.targetID = buf.readInt();
+		result.leftEmitter = buf.readBoolean();
+		result.targetSet = buf.readBoolean();
+		if (result.targetSet) {
+			result.targetID = buf.readInt();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public void toBytes(SPacketUpdateEmitterTarget packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+
+		buf.writeBoolean(packet.leftEmitter);
+		buf.writeBoolean(packet.targetSet);
+		if (packet.targetSet) {
+			buf.writeInt(packet.targetID);
 		}
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-
-		buf.writeBoolean(this.leftEmitter);
-		buf.writeBoolean(this.targetSet);
-		if (this.targetSet) {
-			buf.writeInt(this.targetID);
-		}
+	public Class<SPacketUpdateEmitterTarget> getPacketClass() {
+		return SPacketUpdateEmitterTarget.class;
 	}
 
 }

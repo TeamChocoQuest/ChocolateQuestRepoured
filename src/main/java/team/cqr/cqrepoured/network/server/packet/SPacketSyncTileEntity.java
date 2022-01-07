@@ -7,7 +7,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity> {
 
@@ -32,14 +31,14 @@ public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity>
 	@Override
 	public SPacketSyncTileEntity fromBytes(PacketBuffer buf) {
 		SPacketSyncTileEntity res = new SPacketSyncTileEntity();
-		res.pos = ByteBufUtil.readBlockPos(buf);
+		res.pos = buf.readBlockPos();
 		res.buffer.writeBytes(buf);
 		return res;
 	}
 
 	@Override
 	public void toBytes(SPacketSyncTileEntity packet, PacketBuffer buf) {
-		ByteBufUtil.writeBlockPos(buf, packet.pos);
+		buf.writeBlockPos(packet.pos);
 		buf.writeBytes(packet.buffer);
 	}
 

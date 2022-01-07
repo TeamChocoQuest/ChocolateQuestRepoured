@@ -2,12 +2,11 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketUpdateAnimationOfEntity implements IMessage {
+public class SPacketUpdateAnimationOfEntity extends AbstractPacket<SPacketUpdateAnimationOfEntity> {
 
 	private int entityId;
 	private String animationID;
@@ -26,15 +25,19 @@ public class SPacketUpdateAnimationOfEntity implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.animationID = ByteBufUtils.readUTF8String(buf);
+	public SPacketUpdateAnimationOfEntity fromBytes(PacketBuffer buf) {
+		SPacketUpdateAnimationOfEntity result = new SPacketUpdateAnimationOfEntity();
+		
+		result.entityId = buf.readInt();
+		result.animationID = buf.readUtf();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		ByteBufUtils.writeUTF8String(buf, this.animationID);
+	public void toBytes(SPacketUpdateAnimationOfEntity packet, PacketBuffer buf) {
+		buf.writeInt(packet.entityId);
+		buf.writeUtf(packet.animationID);
 	}
 
 	public static Builder builder(IServerAnimationReceiver entity) {
@@ -44,7 +47,7 @@ public class SPacketUpdateAnimationOfEntity implements IMessage {
 	public static class Builder {
 
 		private Builder(IServerAnimationReceiver entity) {
-			this.entityID = entity.getEntity().getEntityId();
+			this.entityID = entity.getEntity().getId();
 		}
 
 		private int entityID;
@@ -76,6 +79,11 @@ public class SPacketUpdateAnimationOfEntity implements IMessage {
 
 	public int getEntityId() {
 		return this.entityId;
+	}
+
+	@Override
+	public Class<SPacketUpdateAnimationOfEntity> getPacketClass() {
+		return SPacketUpdateAnimationOfEntity.class;
 	}
 
 }

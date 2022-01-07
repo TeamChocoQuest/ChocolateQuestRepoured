@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.item.ItemDungeonPlacer.ClientDungeon;
+import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
-public class SPacketDungeonSync implements IMessage {
+public class SPacketDungeonSync extends AbstractPacket<SPacketDungeonSync> {
 
 	private Collection<DungeonBase> dungeons;
 	private List<ClientDungeon> fakeDungeonSet;
@@ -24,37 +23,44 @@ public class SPacketDungeonSync implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public SPacketDungeonSync fromBytes(PacketBuffer buf) {
+		SPacketDungeonSync result = new SPacketDungeonSync();
 		int dungeonCount = buf.readByte();
-		this.fakeDungeonSet = new ArrayList<>(dungeonCount);
+		result.fakeDungeonSet = new ArrayList<>(dungeonCount);
 		for (int i = 0; i < dungeonCount; i++) {
-			String name = ByteBufUtils.readUTF8String(buf);
+			String name = buf.readUtf();
 			int iconID = buf.readByte();
 			int dependencyCount = buf.readByte();
 			String[] dependencies = new String[dependencyCount];
 			for (int j = 0; j < dependencyCount; j++) {
-				dependencies[j] = ByteBufUtils.readUTF8String(buf);
+				dependencies[j] = buf.readUtf();
 			}
 
-			this.fakeDungeonSet.add(new ClientDungeon(name, iconID, dependencies));
+			result.fakeDungeonSet.add(new ClientDungeon(name, iconID, dependencies));
 		}
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeByte(this.dungeons.size());
+	public void toBytes(SPacketDungeonSync packet, PacketBuffer buf) {
+		buf.writeByte(packet.dungeons.size());
 		for (DungeonBase dungeon : this.dungeons) {
-			ByteBufUtils.writeUTF8String(buf, dungeon.getDungeonName());
+			buf.writeUtf(dungeon.getDungeonName());
 			buf.writeByte(dungeon.getIconID());
 			buf.writeByte(dungeon.getModDependencies().length);
 			for (String dependency : dungeon.getModDependencies()) {
-				ByteBufUtils.writeUTF8String(buf, dependency);
+				buf.writeUtf(dependency);
 			}
 		}
 	}
 
 	public List<ClientDungeon> getFakeDungeonList() {
 		return this.fakeDungeonSet;
+	}
+
+	@Override
+	public Class<SPacketDungeonSync> getPacketClass() {
+		return SPacketDungeonSync.class;
 	}
 
 }

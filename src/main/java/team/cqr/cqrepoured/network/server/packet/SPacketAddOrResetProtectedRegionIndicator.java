@@ -2,12 +2,11 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.UUID;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import team.cqr.cqrepoured.util.ByteBufUtil;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketAddOrResetProtectedRegionIndicator implements IMessage {
+public class SPacketAddOrResetProtectedRegionIndicator extends AbstractPacket<SPacketAddOrResetProtectedRegionIndicator> {
 
 	private UUID uuid;
 	private BlockPos start;
@@ -26,19 +25,23 @@ public class SPacketAddOrResetProtectedRegionIndicator implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.uuid = ByteBufUtil.readUuid(buf);
-		this.start = ByteBufUtil.readBlockPos(buf);
-		this.end = ByteBufUtil.readBlockPos(buf);
-		this.pos = ByteBufUtil.readBlockPos(buf);
+	public SPacketAddOrResetProtectedRegionIndicator fromBytes(PacketBuffer buf) {
+		SPacketAddOrResetProtectedRegionIndicator result = new SPacketAddOrResetProtectedRegionIndicator();
+		
+		result.uuid = buf.readUUID();
+		result.start = buf.readBlockPos();
+		result.end = buf.readBlockPos();
+		result.pos = buf.readBlockPos();
+		
+		return result;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, this.uuid);
-		ByteBufUtil.writeBlockPos(buf, this.start);
-		ByteBufUtil.writeBlockPos(buf, this.end);
-		ByteBufUtil.writeBlockPos(buf, this.pos);
+	public void toBytes(SPacketAddOrResetProtectedRegionIndicator packet, PacketBuffer buf) {
+		buf.writeUUID(packet.uuid);
+		buf.writeBlockPos(packet.start);
+		buf.writeBlockPos(packet.end);
+		buf.writeBlockPos(packet.pos);
 	}
 
 	public UUID getUuid() {
@@ -55,6 +58,11 @@ public class SPacketAddOrResetProtectedRegionIndicator implements IMessage {
 
 	public BlockPos getPos() {
 		return this.pos;
+	}
+
+	@Override
+	public Class<SPacketAddOrResetProtectedRegionIndicator> getPacketClass() {
+		return SPacketAddOrResetProtectedRegionIndicator.class;
 	}
 
 }
