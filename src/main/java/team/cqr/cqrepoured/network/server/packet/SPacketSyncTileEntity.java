@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.Collection;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +47,7 @@ public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity>
 		return this.pos;
 	}
 
-	public ByteBuf getBuffer() {
+	public PacketBuffer getBuffer() {
 		return this.buffer;
 	}
 
