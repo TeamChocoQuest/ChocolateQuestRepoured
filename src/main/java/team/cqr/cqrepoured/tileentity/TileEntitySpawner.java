@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.resources.I18n;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,13 +15,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.Difficulty;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -39,8 +33,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	public final ItemStackHandler inventory = new ItemStackHandler(9) {
 		@Override
 		protected void onContentsChanged(int slot) {
-			if (TileEntitySpawner.this.world != null && !TileEntitySpawner.this.world.isRemote) {
-				TileEntitySpawner.this.markDirty();
+			if (TileEntitySpawner.this.level != null && !TileEntitySpawner.this.level.isClientSide) {
+				TileEntitySpawner.this.setChanged();
 			}
 		}
 	};
@@ -55,7 +49,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	private final DataEntryInt activatingRangeFromPlayer = new DataEntryInt("activatingRangeFromPlayer", 16, true);
 	private final DataEntryInt spawnRange = new DataEntryInt("spawnRange", 4, true);
 
-	public TileEntitySpawner() {
+	public TileEntitySpawner(TileEntityType<? extends TileEntitySpawner> type) {
+		super(type);
 		this.dataManager.register(this.vanillaSpawner);
 		this.dataManager.register(this.minSpawnDelay);
 		this.dataManager.register(this.maxSpawnDelay);
@@ -70,7 +65,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 		return this.dataManager;
 	}
 
-	@Override
+	//No longer needed?
+	/*@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
@@ -80,47 +76,49 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) this.inventory : super.getCapability(capability, facing);
-	}
+	}*/
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
-		super.writeToNBT(compound);
-		compound.setTag("inventory", this.inventory.serializeNBT());
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
+		compound.put("inventory", this.inventory.serializeNBT());
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT compound) {
-		super.readFromNBT(compound);
-		this.inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
+		this.inventory.deserializeNBT(compound.getCompound("inventory"));
 		this.dataManager.read(compound);
 	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, this.dataManager.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		return this.writeToNBT(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.dataManager.read(pkt.getNbtCompound());
+		this.dataManager.read(pkt.getTag());
 	}
 
+	/*Gone?
 	@Nullable
 	@Override
 	public ITextComponent getDisplayName() {
 		return new StringTextComponent(I18n.format("tile.spawner.name"));
 	}
+	*/
 
 	@Override
-	public void update() {
-		if (!this.world.isRemote && this.world.getDifficulty() != Difficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
+	public void tick() {
+		if (!this.level.isClientSide && this.level.getDifficulty() != Difficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
 			this.turnBackIntoEntity();
 		} else {
 			this.getDataManager().checkIfDirtyAndSync();
@@ -128,22 +126,22 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	}
 
 	public void forceTurnBackIntoEntity() {
-		if (!this.world.isRemote && this.world.getDifficulty() != Difficulty.PEACEFUL) {
+		if (!this.level.isClientSide && this.level.getDifficulty() != Difficulty.PEACEFUL) {
 			this.turnBackIntoEntity();
 		}
 	}
 
 	protected void turnBackIntoEntity() {
-		if (!this.world.isRemote) {
-			this.world.setBlockToAir(this.pos);
+		if (!this.level.isClientSide) {
+			this.level.destroyBlock(this.worldPosition, false);
 
 			List<CompoundNBT> entitiesToSpawn = new ArrayList<>();
 
 			for (int i = 0; i < this.inventory.getSlots(); i++) {
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
-				if (!stack.isEmpty() && stack.hasTagCompound()) {
-					CompoundNBT nbt = stack.getTagCompound().getCompoundTag("EntityIn");
+				if (!stack.isEmpty() && stack.hasTag()) {
+					CompoundNBT nbt = stack.getTag().getCompound("EntityIn");
 
 					while (!stack.isEmpty()) {
 						entitiesToSpawn.add(nbt);
@@ -167,22 +165,22 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 
 		// compatibility with old spawners
 		if (entityTag.getString("id").equals(CQRMain.MODID + ":dummy")) {
-			DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistance(this.world, this.pos.getX(), this.pos.getZ());
-			entityTag.setString("id", mobType.getEntityID().toString());
+			DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistance(this.level, this.worldPosition.getX(), this.worldPosition.getZ());
+			entityTag.putString("id", mobType.getEntityID().toString());
 		}
 
-		Entity entity = EntityList.createEntityFromNBT(entityTag, this.world);
+		Entity entity = EntityList.createEntityFromNBT(entityTag, this.level);
 
 		if (entity != null) {
-			double offset = entity.width < 0.96F ? 0.5D - entity.width * 0.5D : 0.02D;
-			double x = this.pos.getX() + 0.5D + (RANDOM.nextDouble() - RANDOM.nextDouble()) * offset;
-			double y = this.pos.getY();
-			double z = this.pos.getZ() + 0.5D + (RANDOM.nextDouble() - RANDOM.nextDouble()) * offset;
-			entity.setPosition(x, y, z);
+			double offset = entity.getBbWidth() < 0.96F ? 0.5D - entity.getBbWidth() * 0.5D : 0.02D;
+			double x = this.worldPosition.getX() + 0.5D + (RANDOM.nextDouble() - RANDOM.nextDouble()) * offset;
+			double y = this.worldPosition.getY();
+			double z = this.worldPosition.getZ() + 0.5D + (RANDOM.nextDouble() - RANDOM.nextDouble()) * offset;
+			entity.setPos(x, y, z);
 
-			this.world.spawnEntity(entity);
+			this.level.addFreshEntity(entity);
 
-			ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+			ListNBT passengers = entityTag.getList("Passengers", Constants.NBT.TAG_COMPOUND);
 			for (INBT passengerNBT : passengers) {
 				Entity passenger = this.spawnEntityFromNBT((CompoundNBT) passengerNBT);
 				passenger.startRiding(entity);
@@ -195,8 +193,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	protected boolean isNonCreativePlayerInRange(double range) {
 		if (range > 0.0D) {
 			double d = range * range;
-			for (PlayerEntity player : this.world.playerEntities) {
-				if (!player.isCreative() && !player.isSpectator() && player.getDistanceSqToCenter(this.pos) < d) {
+			for (PlayerEntity player : this.level.players()) {
+				if (!player.isCreative() && !player.isSpectator() && player.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()) < d) {
 					return true;
 				}
 			}

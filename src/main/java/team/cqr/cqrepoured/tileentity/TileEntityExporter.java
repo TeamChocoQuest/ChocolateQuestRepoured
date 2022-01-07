@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.tileentity;
 import java.io.File;
 import java.util.Arrays;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,6 +13,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
@@ -101,7 +103,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		@Override
 		protected void readInternal(INBT nbt) {
 			if (nbt instanceof IntArrayNBT) {
-				int[] data = ((IntArrayNBT) nbt).getIntArray();
+				int[] data = ((IntArrayNBT) nbt).getAsIntArray();
 				this.value = new BlockPos[data.length / 3];
 				for (int i = 0; i < this.value.length; i++) {
 					this.value[i] = new BlockPos(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
@@ -126,12 +128,13 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 	};
 
-	private final BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos();
-	private final BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos();
-	private final BlockPos.MutableBlockPos minPosRelative = new BlockPos.MutableBlockPos();
-	private final BlockPos.MutableBlockPos maxPosRelative = new BlockPos.MutableBlockPos();
+	private final BlockPos.Mutable minPos = new BlockPos.Mutable();
+	private final BlockPos.Mutable maxPos = new BlockPos.Mutable();
+	private final BlockPos.Mutable minPosRelative = new BlockPos.Mutable();
+	private final BlockPos.Mutable maxPosRelative = new BlockPos.Mutable();
 
-	public TileEntityExporter() {
+	public TileEntityExporter(TileEntityType<? extends TileEntityExporter> type) {
+		super(type);
 		this.dataManager.register(this.structureName);
 		this.dataManager.register(this.startX);
 		this.dataManager.register(this.startY);
@@ -150,40 +153,40 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
-		super.writeToNBT(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT compound) {
-		super.readFromNBT(compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
 		this.dataManager.read(compound);
 		this.onPositionsChanged();
 	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, this.dataManager.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		return this.writeToNBT(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.dataManager.read(pkt.getNbtCompound());
+		this.dataManager.read(pkt.getTag());
 		this.onPositionsChanged();
 	}
 
 	@Override
-	public void setPos(BlockPos posIn) {
-		boolean flag = !this.pos.equals(posIn);
+	public void setPosition(BlockPos posIn) {
+		boolean flag = !this.worldPosition.equals(posIn);
 
-		super.setPos(posIn);
+		super.setPosition(posIn);
 
 		if (flag) {
 			this.onPositionsChanged();
@@ -198,27 +201,27 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		int y2 = Math.max(this.startY.getInt(), this.endY.getInt());
 		int z2 = Math.max(this.startZ.getInt(), this.endZ.getInt());
 		if (this.relativeMode.getBoolean()) {
-			this.minPosRelative.setPos(x1, y1, z1);
-			this.maxPosRelative.setPos(x2, y2, z2);
-			x1 += this.pos.getX();
-			y1 += this.pos.getY();
-			z1 += this.pos.getZ();
-			x2 += this.pos.getX();
-			y2 += this.pos.getY();
-			z2 += this.pos.getZ();
-			this.minPos.setPos(x1, y1, z1);
-			this.maxPos.setPos(x2, y2, z2);
+			this.minPosRelative.set(x1, y1, z1);
+			this.maxPosRelative.set(x2, y2, z2);
+			x1 += this.worldPosition.getX();
+			y1 += this.worldPosition.getY();
+			z1 += this.worldPosition.getZ();
+			x2 += this.worldPosition.getX();
+			y2 += this.worldPosition.getY();
+			z2 += this.worldPosition.getZ();
+			this.minPos.set(x1, y1, z1);
+			this.maxPos.set(x2, y2, z2);
 		} else {
-			this.minPos.setPos(x1, y1, z1);
-			this.maxPos.setPos(x2, y2, z2);
-			x1 -= this.pos.getX();
-			y1 -= this.pos.getY();
-			z1 -= this.pos.getZ();
-			x2 -= this.pos.getX();
-			y2 -= this.pos.getY();
-			z2 -= this.pos.getZ();
-			this.minPosRelative.setPos(x1, y1, z1);
-			this.maxPosRelative.setPos(x2, y2, z2);
+			this.minPos.set(x1, y1, z1);
+			this.maxPos.set(x2, y2, z2);
+			x1 -= this.worldPosition.getX();
+			y1 -= this.worldPosition.getY();
+			z1 -= this.worldPosition.getZ();
+			x2 -= this.worldPosition.getX();
+			y2 -= this.worldPosition.getY();
+			z2 -= this.worldPosition.getZ();
+			this.minPosRelative.set(x1, y1, z1);
+			this.maxPosRelative.set(x2, y2, z2);
 		}
 	}
 
@@ -226,30 +229,30 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
 	}
-
+	
 	@Override
-	public double getMaxRenderDistanceSquared() {
-		double d = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16.0D;
+	public double getViewDistance() {
+		double d = Minecraft.getInstance().gameRenderer.getRenderDistance() * 16.0D;
 		return d * d;
 	}
 
 	public void saveStructure(PlayerEntity author) {
-		if (this.world == null) {
+		if (this.level == null) {
 			return;
 		}
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = CQStructure.createFromWorld(this.world, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName());
+			CQStructure structure = CQStructure.createFromWorld(this.level, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName().toString());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
-					author.sendMessage(new StringTextComponent("Successfully exported structure: " + this.structureName.get()));
+					author.sendMessage(new StringTextComponent("Successfully exported structure: " + this.structureName.get()), null);
 				} else {
-					author.sendMessage(new StringTextComponent("Failed to export structure: " + this.structureName.get()));
+					author.sendMessage(new StringTextComponent("Failed to export structure: " + this.structureName.get()), null);
 				}
 			}, "CQR Export Thread").start();
 		} else {
 			this.dataManager.checkIfDirtyAndSync();
-			CQRMain.NETWORK.sendToServer(new CPacketSaveStructureRequest(this.pos));
+			CQRMain.NETWORK.sendToServer(new CPacketSaveStructureRequest(this.worldPosition));
 		}
 	}
 
@@ -314,11 +317,11 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		return this.unprotectedBlocks.get();
 	}
 
-	public BlockPos.MutableBlockPos getMinPos() {
+	public BlockPos.Mutable getMinPos() {
 		return this.minPos;
 	}
 
-	public BlockPos.MutableBlockPos getMaxPos() {
+	public BlockPos.Mutable getMaxPos() {
 		return this.maxPos;
 	}
 

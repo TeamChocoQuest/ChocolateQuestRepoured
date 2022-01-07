@@ -1,18 +1,14 @@
 package team.cqr.cqrepoured.tileentity;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.network.datasync.DataEntryByte;
 import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler;
@@ -31,7 +27,8 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 	}, false);
 	private final DataEntryByte rotation = new DataEntryByte("rotation", (byte) 0, false);
 
-	public TileEntityTable() {
+	public TileEntityTable(TileEntityType<? extends TileEntityTable> type) {
+		super(type);
 		this.dataManager.register(this.inventory);
 		this.dataManager.register(this.rotation);
 	}
@@ -41,6 +38,7 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 		return this.dataManager;
 	}
 
+	/*Not needed anymore?
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
@@ -51,52 +49,54 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) this.inventory.get() : super.getCapability(capability, facing);
-	}
+	}*/
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
 		this.dataManager.read(compound);
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 0, this.dataManager.write(new NBTTagCompound()));
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		return this.writeToNBT(new NBTTagCompound());
+	public CompoundNBT getUpdateTag() {
+		return this.save(new CompoundNBT());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		this.dataManager.read(pkt.getNbtCompound());
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		this.dataManager.read(pkt.getTag());
 	}
 
+	/* Gone?
 	@Override
 	public ITextComponent getDisplayName() {
 		ItemStack stack = this.inventory.get().getStackInSlot(0);
 		return stack.hasDisplayName() ? new TextComponentString(stack.getDisplayName()) : null;
-	}
+	}*/
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(this.getPos(), this.getPos().add(1, 2, 1));
+		return new AxisAlignedBB(this.getBlockPos(), this.getBlockPos().offset(1, 2, 1));
 	}
 
+	/*Not needed anymore
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
 		return oldState.getBlock() != newSate.getBlock();
-	}
+	}*/
 
 	public void setRotation(int rotation) {
 		rotation = rotation % 16;

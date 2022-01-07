@@ -1,9 +1,11 @@
 package team.cqr.cqrepoured.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
@@ -25,7 +27,8 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 	private final DataEntryBoolean fillMap = new DataEntryBoolean("fillMap", false, true);
 	private final DataEntryInt fillRadius = new DataEntryInt("fillRadius", 256, true);
 
-	public TileEntityMap() {
+	public TileEntityMap(TileEntityType<? extends TileEntityMap> type) {
+		super(type);
 		this.dataManager.register(this.scale);
 		this.dataManager.register(this.orientation);
 		this.dataManager.register(this.lockOrientation);
@@ -43,31 +46,31 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
-		super.writeToNBT(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT compound) {
-		super.readFromNBT(compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
 		this.dataManager.read(compound);
 	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, this.dataManager.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		return this.writeToNBT(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.dataManager.read(pkt.getNbtCompound());
+		this.dataManager.read(pkt.getTag());
 	}
 
 	public void set(int scale, Direction orientation, boolean lockOrientation, int originX, int originZ, int xOffset, int zOffset, boolean fillMap, int fillRadius) {
