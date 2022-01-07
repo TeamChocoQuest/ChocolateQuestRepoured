@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.inventory;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -8,6 +7,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.CQRMain;
@@ -177,7 +177,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public void onClickButton(PlayerEntity player, int button, ByteBuf extraData) {
+	public void onClickButton(PlayerEntity player, int button, PacketBuffer extraData) {
 		if (button < 10) {
 			if (button == 0) {
 				// new trade
