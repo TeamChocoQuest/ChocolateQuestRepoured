@@ -6,12 +6,16 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
@@ -36,8 +40,14 @@ public class EntityUtil {
 			double d1 = Math.sin(Math.toRadians(yaw));
 			double d2 = Math.cos(Math.toRadians(yaw));
 
-			entity.motionX += strafe * d2 - forward * d1;
-			entity.motionZ += forward * d2 + strafe * d1;
+			entity.setDeltaMovement(entity.getDeltaMovement().add(
+					strafe * d2 - forward * d1,
+					0,
+					forward * d2 + strafe * d1
+			));
+			
+			/*entity.motionX += strafe * d2 - forward * d1;
+			entity.motionZ += forward * d2 + strafe * d1;*/
 		}
 	}
 
@@ -59,54 +69,60 @@ public class EntityUtil {
 			double d3 = Math.sin(Math.toRadians(pitch));
 			double d4 = Math.cos(Math.toRadians(pitch));
 
-			entity.motionX += strafe * d2 - forward * d1 * d4;
+			entity.setDeltaMovement(entity.getDeltaMovement().add(
+					strafe * d2 - forward * d1 * d4,
+					up - forward * d3,
+					forward * d2 * d4 + strafe * d1
+			));
+			/*entity.motionX += strafe * d2 - forward * d1 * d4;
 			entity.motionY += up - forward * d3;
-			entity.motionZ += forward * d2 * d4 + strafe * d1;
+			entity.motionZ += forward * d2 * d4 + strafe * d1;*/
 		}
 	}
 
 	public static boolean isEntityFlying(Entity entity) {
-		if (entity.onGround) {
+		if (entity.isOnGround()) {
 			return false;
 		}
-		if (entity.collided) {
+		if (entity.horizontalCollision || entity.verticalCollision) {
 			return false;
 		}
-		if (entity.motionY < -0.1D) {
+		if (entity.getDeltaMovement().y() < -0.1D) {
 			return false;
 		}
-		BlockPos pos = new BlockPos(entity);
+		BlockPos pos = entity.blockPosition();
 		int y = 0;
 		int count = 0;
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				mutablePos.setPos(pos.getX() + i, pos.getY(), pos.getZ() + j);
-				if (!entity.getEntityWorld().isBlockLoaded(mutablePos)) {
+				mutablePos.set(pos.getX() + i, pos.getY(), pos.getZ() + j);
+				if (!entity.level.isLoaded(mutablePos)) {
 					continue;
 				}
-				while (mutablePos.getY() > 0 && entity.getEntityWorld().getBlockState(mutablePos).getCollisionBoundingBox(entity.getEntityWorld(), mutablePos) == Block.NULL_AABB) {
+				//TODO: Check if this is correct
+				while (mutablePos.getY() > 0 && entity.level.getBlockState(mutablePos).getCollisionShape(entity.level, mutablePos) == VoxelShapes.INFINITY) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
 				y += mutablePos.getY() + 1;
 				count++;
 			}
 		}
-		y = count > 0 ? y / count : (int) entity.posY;
-		if (entity.posY < y + 8) {
+		y = count > 0 ? y / count : (int) entity.getY();
+		if (entity.getY() < y + 8) {
 			return false;
 		}
-		return !entity.getEntityWorld().checkBlockCollision(entity.getEntityBoundingBox());
+		return entity.level.noCollision(entity.getBoundingBox());
 	}
 
 	@Nullable
 	public static Entity getEntityByUUID(World world, UUID uuid) {
-		if (!world.isRemote) {
-			return ((ServerWorld) world).getEntityFromUuid(uuid);
+		if (!world.isClientSide) {
+			return ((ServerWorld) world).getEntity(uuid);
 		}
 
 		for (Entity entity : world.loadedEntityList) {
-			if (entity.getPersistentID().equals(uuid)) {
+			if (entity.getUUID().equals(uuid)) {
 				return entity;
 			}
 		}
@@ -115,7 +131,7 @@ public class EntityUtil {
 	}
 
 	public static void applyMaxHealthModifier(LivingEntity entity, UUID uuid, String name, double amount) {
-		ModifiableAttributeInstance attribute = entity.getEntityAttribute(Attributes.MAX_HEALTH);
+		ModifiableAttributeInstance attribute = entity.getAttribute(Attributes.MAX_HEALTH);
 		if (attribute == null) {
 			return;
 		}
@@ -129,7 +145,7 @@ public class EntityUtil {
 			}
 			attribute.removeModifier(oldModifier);
 		}
-		attribute.applyModifier(new AttributeModifier(uuid, name, amount, 2));
+		attribute.addPermanentModifier(new AttributeModifier(uuid, name, amount, Operation.MULTIPLY_TOTAL));
 		entity.setHealth((float) (oldHealth / (1.0D + oldAmount) * (1.0D + amount) + 1e-7D));
 	}
 
@@ -138,15 +154,15 @@ public class EntityUtil {
 			return false;
 		}
 
-		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level);
 		if (manager instanceof ServerProtectedRegionManager) {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
 			if (regions != null && !regions.isEmpty()) {
 				if (!regions.isEmpty()) {
 					regions.forEach(t -> {
-						if (!t.isEntityDependency(entity.getPersistentID())) {
-							t.addEntityDependency(entity.getPersistentID());
+						if (!t.isEntityDependency(entity.getUUID())) {
+							t.addEntityDependency(entity.getUUID());
 						}
 					});
 					return true;
@@ -163,13 +179,13 @@ public class EntityUtil {
 			return false;
 		}
 
-		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level);
 		if (manager instanceof ServerProtectedRegionManager) {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
 			if (regions != null && !regions.isEmpty()) {
 				if (!regions.isEmpty()) {
-					regions.forEach(t -> t.removeEntityDependency(entity.getPersistentID()));
+					regions.forEach(t -> t.removeEntityDependency(entity.getUUID()));
 					return true;
 				}
 			}
