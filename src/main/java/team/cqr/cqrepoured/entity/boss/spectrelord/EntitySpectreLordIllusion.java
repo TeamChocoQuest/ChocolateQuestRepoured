@@ -118,7 +118,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	protected boolean canDropLoot() {
+	protected boolean shouldDropLoot() {
 		return false;
 	}
 

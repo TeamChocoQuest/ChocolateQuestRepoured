@@ -18,6 +18,7 @@ import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ShieldItem;
@@ -280,7 +281,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		if (source == DamageSource.WITHER) {
 			this.heal(amount / 2);
 			return true;
@@ -319,7 +320,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if (source.getDirectEntity() != null) {
 			if (source.getDirectEntity() instanceof SpectralArrowEntity) {
 				amount *= 2;
-				super.attackEntityFrom(source, amount, sentFromPart);
+				super.hurt(source, amount, sentFromPart);
 				return true;
 			}
 			if ((source.getDirectEntity() instanceof ThrowableEntity || source.getDirectEntity() instanceof AbstractArrowEntity) && !this.level.isClientSide) {
@@ -385,7 +386,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 			}
 		}
-		return super.attackEntityFrom(source, amount, sentFromPart);
+		return super.hurt(source, amount, sentFromPart);
 	}
 
 	@Override
@@ -588,7 +589,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	protected ParticleTypes getDeathAnimParticles() {
+	protected IParticleData getDeathAnimParticles() {
 		return ParticleTypes.EXPLOSION_HUGE;
 	}
 

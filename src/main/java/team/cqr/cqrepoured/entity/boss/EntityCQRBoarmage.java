@@ -56,8 +56,8 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
+	public void tick() {
+		super.tick();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
 			if (ent == null || ent.removed) {

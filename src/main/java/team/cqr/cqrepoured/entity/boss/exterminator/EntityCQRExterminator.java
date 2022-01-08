@@ -166,8 +166,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 	
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
 
 		this.getAttribute(Attributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDefenseForSlot(EquipmentSlotType.CHEST));
 		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
@@ -585,11 +585,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	public boolean hurt(PartEntity part, DamageSource source, float damage) {
 		boolean isMainHBPart = ((part != this.parts[3]) && (part != this.parts[4])) || part == null;
-		return this.attackEntityFrom(source, damage, isMainHBPart);
+		return this.hurt(source, damage, isMainHBPart);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		this.handleAttackedByLargeGroups();
 
 		boolean overrideFlag = false;
@@ -603,7 +603,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 
 		if (source.getDirectEntity() instanceof ProjectileCannonBall && source.getEntity() != this) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.hurt(source, amount, sentFromPart);
 		}
 
 		if (source.isExplosion() && source.getEntity() != null && source.getEntity() == this) {
@@ -611,7 +611,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 
 		if (source.isCreativePlayer() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof PlayerEntity && ((PlayerEntity) source.getEntity()).isCreative())) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.hurt(source, amount, sentFromPart);
 		}
 
 		if (source.isFire()) {
@@ -639,7 +639,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		}
 		this.partSoundFlag = false;
 
-		overrideFlag |= super.attackEntityFrom(source, amount, sentFromPart);
+		overrideFlag |= super.hurt(source, amount, sentFromPart);
 
 		return overrideFlag;
 	}

@@ -150,7 +150,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 					this.previousBlocks = this.getBoss().getSpinsBlocked();
 					damage *= 1.5F;
 					damage /= Math.max(1, this.getBoss().getWorld().getDifficulty().getId());
-					this.getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
+					this.getBoss().hurt(DamageSource.IN_WALL, damage, true);
 				}
 
 				/*

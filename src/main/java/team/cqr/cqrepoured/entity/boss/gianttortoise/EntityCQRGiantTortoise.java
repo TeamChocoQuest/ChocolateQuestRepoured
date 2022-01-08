@@ -229,13 +229,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFromPart(PartEntity dragonPart, DamageSource source, float damage) {
-		return this.attackEntityFrom(source, damage, true);
+		return this.hurt(source, damage, true);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof PlayerEntity && ((PlayerEntity) source.getTrueSource()).isCreative())) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.hurt(source, amount, sentFromPart);
 		}
 
 		/*
@@ -261,7 +261,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if (this.stunned) {
 				amount *= 2F;
 			}
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.hurt(source, amount, sentFromPart);
 		}
 		return true;
 	}

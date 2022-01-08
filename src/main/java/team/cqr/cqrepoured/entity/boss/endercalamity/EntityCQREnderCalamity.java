@@ -619,9 +619,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		if (source.canHarmInCreative()) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.hurt(source, amount, sentFromPart);
 		}
 		amount /= 2;
 		// Projectile attack
@@ -685,7 +685,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		// Other attack
 		if (!this.dataManager.get(IS_HURT) && !this.isShieldActive()) {
-			if (!super.attackEntityFrom(source, amount, sentFromPart)) {
+			if (!super.hurt(source, amount, sentFromPart)) {
 				return false;
 			}
 			if (!this.world.isRemote) {

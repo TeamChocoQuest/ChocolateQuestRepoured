@@ -6,23 +6,23 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.ClimberPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -41,19 +41,18 @@ import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISummoner {
 
-	private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityCQRGiantSpider.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>defineId(EntityCQRGiantSpider.class, DataSerializers.BYTE);
 
 	protected List<Entity> activeEggs = new ArrayList<>();
 
-	public EntityCQRGiantSpider(World worldIn) {
-		super(worldIn);
+	public EntityCQRGiantSpider(EntityType<? extends EntityCQRGiantSpider> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
@@ -74,48 +73,48 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void registerGoals() {
 		this.spellHandler = this.createSpellHandler();
-		this.tasks.addTask(0, new SwimGoal(this));
-		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
-		this.tasks.addTask(2, new BossAISpiderWebshot(this));
-		this.tasks.addTask(3, new BossAISpiderHook(this));
-		this.tasks.addTask(12, new BossAISpiderLeapAttack(this, 1.2F));
-		this.tasks.addTask(14, new EntityAIAttack(this));
+		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(1, new BossAISpiderSummonMinions(this));
+		this.goalSelector.addGoal(2, new BossAISpiderWebshot(this));
+		this.goalSelector.addGoal(3, new BossAISpiderHook(this));
+		this.goalSelector.addGoal(12, new BossAISpiderLeapAttack(this, 1.2F));
+		this.goalSelector.addGoal(14, new EntityAIAttack(this));
 
-		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
+		this.goalSelector.addGoal(20, new EntityAIFollowAttackTarget(this));
 
-		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(31, new EntityAIFollowPath(this));
-		this.tasks.addTask(32, new EntityAIMoveToHome(this));
+		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
+		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
 
-		this.tasks.addTask(11, this.spellHandler);
+		this.goalSelector.addGoal(11, this.spellHandler);
 		this.spellHandler.addSpell(0, new EntityAIShootPoisonProjectiles(this, 80, 20) {
 			@Override
 			protected SoundEvent getStartChargingSound() {
-				return SoundEvents.ENTITY_SPIDER_HURT;
+				return SoundEvents.SPIDER_HURT;
 			}
 
 			@Override
 			protected SoundEvent getStartCastingSound() {
-				return SoundEvents.ENTITY_SPIDER_AMBIENT;
+				return SoundEvents.SPIDER_AMBIENT;
 			}
 		});
 
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		this.goalSelector.addGoal(0, new EntityAICQRNearestAttackTarget(this));
+		this.goalSelector.addGoal(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.dataManager.register(CLIMBING, (byte) 0);
+		this.entityData.define(CLIMBING, (byte) 0);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
 
-		if (!this.world.isRemote) {
-			this.setBesideClimbableBlock(this.collidedHorizontally);
+		if (!this.level.isClientSide) {
+			this.setBesideClimbableBlock(this.horizontalCollision);
 		}
 	}
 
@@ -141,7 +140,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.activeEggs) {
-			if (ent == null || ent.isDead) {
+			if (ent == null || !ent.isAlive()) {
 				tmp.add(ent);
 			}
 		}
@@ -149,13 +148,13 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.activeEggs.remove(e);
 		}
 	}
-
+	
 	@Override
-	public void addPotionEffect(EffectInstance potioneffectIn) {
-		if (potioneffectIn.getPotion() == Effects.POISON || potioneffectIn.getPotion() == Effects.WEAKNESS || potioneffectIn.getPotion() == Effects.WITHER) {
+	public void forceAddEffect(EffectInstance potioneffectIn) {
+		if (potioneffectIn.getEffect() == Effects.POISON || potioneffectIn.getEffect() == Effects.WEAKNESS || potioneffectIn.getEffect() == Effects.WITHER) {
 			return;
 		}
-		super.addPotionEffect(potioneffectIn);
+		super.addEffect(potioneffectIn);
 	}
 
 	/**
@@ -171,7 +170,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	 * setBesideClimableBlock.
 	 */
 	public boolean isBesideClimbableBlock() {
-		return (this.dataManager.get(CLIMBING).byteValue() & 1) != 0;
+		return (this.entityData.get(CLIMBING).byteValue() & 1) != 0;
 	}
 
 	/**
@@ -179,7 +178,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	 * false.
 	 */
 	public void setBesideClimbableBlock(boolean climbing) {
-		byte b0 = (this.dataManager.get(CLIMBING));
+		byte b0 = (this.entityData.get(CLIMBING));
 
 		if (climbing) {
 			b0 = (byte) (b0 | 1);
@@ -187,7 +186,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			b0 = (byte) (b0 & -2);
 		}
 
-		this.dataManager.set(CLIMBING, b0);
+		this.entityData.set(CLIMBING, b0);
 	}
 
 	@Override
@@ -199,22 +198,17 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public boolean canAttack(Entity entityIn) {
-		boolean result = super.canAttack(entityIn);
+	public boolean doHurtTarget(Entity entityIn) {
+		boolean result = super.doHurtTarget(entityIn);
 		if (result) {
 			int effectlvl = 1;
-			if (this.getRNG().nextDouble() > 0.7) {
+			if (this.getRandom().nextDouble() > 0.7) {
 				effectlvl = 2;
 				this.heal(Math.min(CQRConfig.bosses.giantSpiderMaxHealByBite, ((LivingEntity) entityIn).getHealth() * 0.25F));
 			}
-			((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
+			((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 20 + entityIn.level.getDifficulty().ordinal() * 40, effectlvl));
 		}
 		return result;
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_SPIDER;
 	}
 
 	@Override
@@ -228,23 +222,23 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.ARTHROPOD;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_SPIDER_AMBIENT;
+		return SoundEvents.SPIDER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_SPIDER_HURT;
+		return SoundEvents.SPIDER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_SPIDER_DEATH;
+		return SoundEvents.SPIDER_DEATH;
 	}
 
 	@Override
@@ -255,15 +249,15 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	public void setInWeb() {
 	}
-
+	
 	@Override
-	public boolean isPotionApplicable(EffectInstance potioneffectIn) {
-		if (potioneffectIn.getPotion() == Effects.POISON) {
+	public boolean addEffect(EffectInstance potioneffectIn) {
+		if (potioneffectIn.getEffect() == Effects.POISON) {
 			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
 			return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
 		}
-		return super.isPotionApplicable(potioneffectIn);
+		return super.addEffect(potioneffectIn);
 	}
 
 	@Override
@@ -287,7 +281,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 

@@ -19,6 +19,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -86,6 +87,7 @@ import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
+import team.cqr.cqrepoured.entity.CQRAttributeInfo;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
 import team.cqr.cqrepoured.entity.ISizable;
@@ -296,32 +298,43 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		//Nope
 	}
 
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(Attributes.ATTACK_DAMAGE);
+	public static AttributeModifierMap.MutableAttribute createCQRAttributes() {
+		AttributeModifierMap.MutableAttribute map = CreatureEntity.createMobAttributes()
+				.add(Attributes.ATTACK_DAMAGE)
+				.add(Attributes.MOVEMENT_SPEED, 0.25D)
+				.add(Attributes.MAX_HEALTH, 20.0D)
+				.add(Attributes.ATTACK_SPEED)
+				.add(Attributes.FOLLOW_RANGE, 64.0D);
+		//this.getAttributeMap().registerAttribute(Attributes.ATTACK_DAMAGE);
 		// speed (in blocks per second) = x^2 * 0.98 / (1 - slipperiness * 0.91) * 20 -> usually slipperiness = 0.6
-		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
-		this.getAttributeMap().registerAttribute(Attributes.ATTACK_SPEED);
+		//this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		//this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
+		//this.getAttributeMap().registerAttribute(Attributes.ATTACK_SPEED);
 		// Default value: 16
-		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(64.0D);
+		//this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(64.0D);
+		
+		return map;
+	}
+	
+	protected void applyAttributeValues() {
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 	}
 
 	@Override
 	protected PathNavigator createNavigation(World worldIn) {
 		PathNavigator navigator = new PathNavigateGroundCQR(this, worldIn);
 		((GroundPathNavigator) navigator).setCanOpenDoors(this.canOpenDoors());
-		((GroundPathNavigator) navigator).setBreakDoors(this.canOpenDoors());
+		//Seems to be moved or removed in 1.16
+		//((GroundPathNavigator) navigator).setBreakDoors(this.canOpenDoors());
 		return navigator;
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		return this.attackEntityFrom(source, amount, false);
+		return this.hurt(source, amount, false);
 	}
 
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		// Start IceAndFire compatibility
 		if (CQRConfig.advanced.enableSpecialFeatures && source.getEntity() != null) {
 			ResourceLocation resLoc = EntityList.getKey(source.getEntity());
@@ -522,6 +535,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
 			this.setDropChance(slot, 0.04F);
 		}
+
+		//Apply base attributes
+		this.applyAttributeValues();
 		
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
@@ -720,7 +736,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
 			this.yBodyRot = yaw;
 			this.yHeadRot = yaw;
-			this.renderYawOffset = yaw;
+			//Old 1.12.2
+			//this.renderYawOffset = yaw;
+			this.rotOffs = yaw;
 		}
 
 		return flag ? ActionResultType.SUCCESS : ActionResultType.PASS;
@@ -816,7 +834,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 		if (this.isSitting() && !this.prevSitting) {
 			//TODO: Create sitting pose
-			this.resize(1.0F, 0.75F);
+			//this.resize(1.0F, 0.75F);
+			//Handled in GetSize directly
 		} else if (!this.isSitting() && this.prevSitting) {
 			this.setPose(Pose.STANDING);
 			//this.resize(1.0F, 4.0F / 3.0F);
@@ -848,7 +867,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				double red = ((spellColor >> 16) & 255) / 255.0D;
 				double green = ((spellColor >> 8) & 255) / 255.0D;
 				double blue = (spellColor & 255) / 255.0D;
-				float f = this.renderYawOffset * 0.017453292F + MathHelper.cos(this.tickCount * 0.6662F) * 0.25F;
+				float f = /* OLD: renderYawOffset */this.rotOffs * 0.017453292F + MathHelper.cos(this.tickCount * 0.6662F) * 0.25F;
 				float f1 = MathHelper.cos(f);
 				float f2 = MathHelper.sin(f);
 				this.level.spawnParticle(ParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
@@ -862,6 +881,19 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.updateInvisibility();
 		this.updateLeader();
 		this.updateTradeRestockTimer();
+	}
+	
+	protected boolean isNonBoss() {
+		return !this.isBoss();
+	}
+	
+	public boolean isBoss() {
+		return false;
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double pDistanceToClosestPlayer) {
+		return false;
 	}
 
 	@Override
@@ -1779,7 +1811,15 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 	
 	private EntitySize getDimensionsCloneFromEntity(Pose poseIn) {
-		return poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize().scale(this.getScale());
+		EntitySize result = poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize().scale(this.getScale());
+		
+		if(poseIn != Pose.SLEEPING) {
+			if(this.isSitting()) {
+				result.scale(1.0F, 0.75F);
+			}
+		}
+		
+		return result;
 	}
 
 	@Override
