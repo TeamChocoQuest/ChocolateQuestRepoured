@@ -7,17 +7,16 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -75,7 +74,7 @@ public class ProtectedRegion {
 		this.clearNeedsSyncing();
 	}
 
-	public ProtectedRegion(World world, ByteBuf buf) {
+	public ProtectedRegion(World world, PacketBuffer buf) {
 		this.world = world;
 		this.readFromByteBuf(buf);
 		this.clearNeedsSaving();
@@ -179,12 +178,20 @@ public class ProtectedRegion {
 		this.markDirty();
 	}
 
-	public void writeToByteBuf(ByteBuf buf) {
-		ByteBufUtil.writeUuid(buf, this.uuid);
+	public void writeToByteBuf(PacketBuffer buf) {
+		/*ByteBufUtil.writeUuid(buf, this.uuid);
 		ByteBufUtils.writeUTF8String(buf, this.name);
 		ByteBufUtil.writeBlockPos(buf, this.pos);
 		ByteBufUtil.writeBlockPos(buf, this.startPos);
-		ByteBufUtil.writeBlockPos(buf, this.endPos);
+		ByteBufUtil.writeBlockPos(buf, this.endPos);*/
+		
+		buf.writeUUID(this.uuid);
+		buf.writeUtf(this.name);
+		buf.writeBlockPos(this.pos);
+		buf.writeBlockPos(this.startPos);
+		buf.writeBlockPos(this.endPos);
+		
+		
 		buf.writeBytes(this.protectionStates);
 
 		byte flags = 0;
@@ -200,21 +207,21 @@ public class ProtectedRegion {
 
 		buf.writeShort(this.entityDependencies.size());
 		for (UUID entityUuid : this.entityDependencies) {
-			ByteBufUtil.writeUuid(buf, entityUuid);
+			buf.writeUUID(entityUuid);
 		}
 
 		buf.writeShort(this.blockDependencies.size());
 		for (BlockPos blockPos : this.blockDependencies) {
-			ByteBufUtil.writeBlockPos(buf, blockPos);
+			buf.writeBlockPos(blockPos);
 		}
 	}
 
-	public void readFromByteBuf(ByteBuf buf) {
-		this.uuid = ByteBufUtil.readUuid(buf);
-		this.name = ByteBufUtils.readUTF8String(buf);
-		this.pos = ByteBufUtil.readBlockPos(buf);
-		this.startPos = ByteBufUtil.readBlockPos(buf);
-		this.endPos = ByteBufUtil.readBlockPos(buf);
+	public void readFromByteBuf(PacketBuffer buf) {
+		this.uuid = buf.readUUID();
+		this.name = buf.readUtf();
+		this.pos = buf.readBlockPos();
+		this.startPos = buf.readBlockPos();
+		this.endPos = buf.readBlockPos();
 		int sizeX = this.endPos.getX() - this.startPos.getX() + 1;
 		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
@@ -234,12 +241,12 @@ public class ProtectedRegion {
 
 		short entityDependenciesCount = buf.readShort();
 		for (int i = 0; i < entityDependenciesCount; i++) {
-			this.entityDependencies.add(ByteBufUtil.readUuid(buf));
+			this.entityDependencies.add(buf.readUUID());
 		}
 
 		short blockDependenciesCount = buf.readShort();
 		for (int i = 0; i < blockDependenciesCount; i++) {
-			this.blockDependencies.add(ByteBufUtil.readBlockPos(buf));
+			this.blockDependencies.add(buf.readBlockPos());
 		}
 
 		this.markDirty();
@@ -519,15 +526,15 @@ public class ProtectedRegion {
 			this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
 			this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
 			this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
-			ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies"));
+			PacketBuffer buf = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
 			while (buf.readerIndex() < buf.writerIndex()) {
 				this.entityDependencies.add(ByteBufUtil.readUuid(buf));
 			}
-			ByteBuf buf1 = Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies"));
+			PacketBuffer buf1 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
 			while (buf1.readerIndex() < buf1.writerIndex()) {
 				this.blockDependencies.add(ByteBufUtil.readBlockPos(buf1));
 			}
-			ByteBuf buf2 = Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies"));
+			PacketBuffer buf2 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
 			while (buf2.readerIndex() < buf2.writerIndex()) {
 				this.unprotectedBlocks.add(ByteBufUtil.readBlockPos(buf2));
 			}
