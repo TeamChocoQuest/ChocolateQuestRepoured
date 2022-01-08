@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -26,7 +27,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		int nearbyPlayerCount = 0;
 		for (PlayerEntity player : this.level.players()) {
 			if (this.distanceToSqr(player) < 100.0D * 100.0D) {
@@ -36,7 +37,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 		for (int i = 0; i < nearbyPlayerCount - 1; i++) {
 			amount *= 1.0F - CQRConfig.mobs.bossDamageReductionPerPlayer;
 		}
-		return super.attackEntityFrom(source, amount, sentFromPart);
+		return super.hurt(source, amount, sentFromPart);
 	}
 
 	@Override
@@ -48,16 +49,16 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 	
 	@Override
-	public boolean isNonBoss() {
-		return false;
+	public boolean isBoss() {
+		return true;
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void tick() {
 		if (this.canHealWhenIdling() && CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.tickCount && this.tickCount % 5 == 0) {
 			this.heal(this.getMaxHealth() * 0.005F);
 		}
-		super.onLivingUpdate();
+		super.tick();
 	}
 
 	protected boolean canHealWhenIdling() {
@@ -112,7 +113,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 		return false;
 	}
 
-	protected ParticleTypes getDeathAnimParticles() {
+	protected IParticleData getDeathAnimParticles() {
 		return ParticleTypes.EXPLOSION;
 	}
 
