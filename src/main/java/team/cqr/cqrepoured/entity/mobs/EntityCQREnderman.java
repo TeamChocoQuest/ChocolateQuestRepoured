@@ -2,13 +2,16 @@ package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.*;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -17,7 +20,6 @@ import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
 
@@ -105,12 +107,12 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ENDERMEN_DEATH;
 	}
-
+	
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
-		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.0D);
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.33D);
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7D);
 	}
 
 	@Override
@@ -139,7 +141,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void tick() {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
@@ -147,7 +149,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 						(this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
-		super.onLivingUpdate();
+		super.tick();
 	}
 
 	@Override

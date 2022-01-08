@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity.misc;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.Pose;
@@ -23,8 +24,8 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	
 	private float size = 1;
 
-	public EntityBubble(World worldIn) {
-		super(worldIn);
+	public EntityBubble(EntityType<? extends EntityBubble> type, World worldIn) {
+		super(type, worldIn);
 		this.setNoGravity(true);
 	}
 	

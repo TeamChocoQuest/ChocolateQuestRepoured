@@ -2,20 +2,21 @@ package team.cqr.cqrepoured.entity.misc;
 
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -102,28 +103,28 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 
 				if (this.spreadFire && !this.world.isRemote) {
 					this.boltVertex = this.rand.nextLong();
-					BlockPos blockpos = new BlockPos(this);
+					BlockPos blockpos = this.blockPosition();
 
-					if (this.world.getGameRules().getBoolean("doFireTick") && this.world.isAreaLoaded(blockpos, 10) && this.world.getBlockState(blockpos).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(this.world, blockpos)) {
-						this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
+					if (this.level.getGameRules().getBoolean("doFireTick") && this.world.isAreaLoaded(blockpos, 10) && this.world.getBlockState(blockpos).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(this.world, blockpos)) {
+						this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
 					}
 				}
 			}
 		}
 
 		if (this.lightningState >= 0) {
-			if (this.world.isRemote) {
-				this.world.setLastLightningBolt(2);
+			if (this.level.isClientSide) {
+				this.level.setLastLightningBolt(2);
 			} else if (this.hitEntities) {
-				AxisAlignedBB aabb = new AxisAlignedBB(this.posX - 3.0D, this.posY - 3.0D, this.posZ - 3.0D, this.posX + 3.0D, this.posY + 6.0D + 3.0D, this.posZ + 3.0D);
-				List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, aabb);
+				AxisAlignedBB aabb = new AxisAlignedBB(this.getX() - 3.0D, this.getY() - 3.0D, this.getZ() - 3.0D, this.getX() + 3.0D, this.getY() + 6.0D + 3.0D, this.getZ() + 3.0D);
+				List<Entity> list = this.level.getEntities(this, aabb);
 
 				for (Entity entity : list) {
 					if (!ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
-						if (CQRConfig.advanced.flyingCowardPenaltyEnabled && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getLowestRidingEntity()))) {
-							entity.attackEntityFrom(DamageSource.MAGIC, (float) CQRConfig.advanced.flyingCowardPenaltyDamage);
+						if (CQRConfig.advanced.flyingCowardPenaltyEnabled && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getControllingPassenger()))) {
+							entity.hurt(DamageSource.MAGIC, (float) CQRConfig.advanced.flyingCowardPenaltyDamage);
 						}
-						entity.onStruckByLightning(this);
+						entity.thunderHit((ServerWorld)this.level, this);
 					}
 				}
 			}
@@ -131,17 +132,17 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-		super.save(compound);
-		compound.setFloat("red", this.red);
-		compound.setFloat("green", this.green);
-		compound.setFloat("blue", this.blue);
-		compound.setFloat("alpha", this.alpha);
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putFloat("red", this.red);
+		compound.putFloat("green", this.green);
+		compound.putFloat("blue", this.blue);
+		compound.putFloat("alpha", this.alpha);
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 		this.red = compound.getFloat("red");
 		this.green = compound.getFloat("green");
 		this.blue = compound.getFloat("blue");
@@ -149,7 +150,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
+	public void writeSpawnData(PacketBuffer buffer) {
 		buffer.writeFloat(this.red);
 		buffer.writeFloat(this.green);
 		buffer.writeFloat(this.blue);
@@ -157,7 +158,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
+	public void readSpawnData(PacketBuffer additionalData) {
 		this.red = additionalData.readFloat();
 		this.green = additionalData.readFloat();
 		this.blue = additionalData.readFloat();

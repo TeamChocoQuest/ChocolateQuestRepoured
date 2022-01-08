@@ -46,12 +46,11 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 		return SoundEvents.IRON_GOLEM_DEATH;
 	}
 
-	//Removed in 1.16
-	/*@Override
-	public boolean isImmuneToExplosions() {
+	@Override
+	public boolean ignoreExplosion() {
 		return true;
-	}*/
-
+	}
+	
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.isFire() || source.isExplosion()) {
@@ -66,9 +65,9 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		
 		this.getAttribute(Attributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDefenseForSlot(EquipmentSlotType.CHEST));
 		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
 	}
