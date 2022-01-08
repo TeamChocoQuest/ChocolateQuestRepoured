@@ -34,10 +34,10 @@ public class EntitySlimePart extends SlimeEntity {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		ModifiableAttributeInstance iattributeinstance = this.getEntityAttribute(Attributes.MOVEMENT_SPEED);
+		ModifiableAttributeInstance iattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 		iattributeinstance.setBaseValue(iattributeinstance.getBaseValue() * 0.5D);
 	}
-
+	
 	@Override
 	public void tick() {
 		if (this.tickCount > 400) {
@@ -48,7 +48,12 @@ public class EntitySlimePart extends SlimeEntity {
 	}
 	
 	@Override
-	protected void collideWithEntity(Entity entityIn) {
+	protected void doPush(Entity pEntity) {
+		this.push(pEntity);
+	}
+	
+	@Override
+	public void push(Entity entityIn) {
 		if (entityIn instanceof LivingEntity && entityIn.getUUID().equals(this.ownerUuid)) {
 			((LivingEntity) entityIn).heal(2.0F);
 			this.remove();
