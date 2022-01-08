@@ -14,6 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -252,9 +253,9 @@ public class CQRMain {
 		proxy.postInit();
 
 		isPhosphorInstalled = CQRMain.class.getResource("").getProtocol().equals("jar") && Loader.isModLoaded("phosphor-lighting");
-		isEntityCullingInstalled = Loader.isModLoaded("entity_culling");
-		isCubicChunksInstalled = Loader.isModLoaded("cubicchunks");
-		isAW2Installed = Loader.isModLoaded("ancientwarfare");
+		isEntityCullingInstalled = ModList.get().isLoaded("entity_culling");
+		isCubicChunksInstalled = ModList.get().isLoaded("cubicchunks");
+		isAW2Installed = ModList.get().isLoaded("ancientwarfare");
 
 		DungeonRegistry.getInstance().loadDungeonFiles();
 		CQStructure.checkAndUpdateStructureFiles();
