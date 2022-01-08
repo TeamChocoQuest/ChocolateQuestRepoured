@@ -4,32 +4,39 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
-import net.minecraft.block.Block;
-import net.minecraftforge.entity.PartEntity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion.Mode;
+import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 
-public class SubEntityNetherDragonSegment extends PartEntity implements IBlacklistedFromStatues, IDontRenderFire {
+public class SubEntityNetherDragonSegment extends PartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
 	private boolean isSkeletal = false;
+	
+	public static final EntitySize DEFAULT_SIZE = new EntitySize(1.25F, 1.25F, false);
 
 	public SubEntityNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
-		super(dragon, "dragonPart" + partID, 0.5F, 0.5F);
+		super(dragon);
 
-		this.setSize(1.25F, 1.25F);
 		this.dragon = dragon;
 		this.partIndex = dragon.INITIAL_SEGMENT_COUNT - partID;
 		this.realID = partID;
 
 		// String partName, float width, float height
 		this.setInvisible(false);
+	}
+	
+	@Override
+	public boolean isPickable() {
+		return true;
 	}
 
 	public void onRemovedFromBody() {
@@ -40,8 +47,8 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isExplosion() || source.isFireDamage() || this.dragon == null) {
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.isExplosion() || source.isFire() || this.dragon == null) {
 			return false;
 		}
 
@@ -54,37 +61,27 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		super.tick();
 
-		++this.ticksExisted;
+		++this.tickCount;
 
 		if (this.dragon.getSegmentCount() < this.partIndex) {
 			// this.world.removeEntityDangerously(this);
-			this.setDead();
+			this.remove();
 		}
-		if (this.world.isRemote && (this.dragon == null || this.dragon.isDead)) {
-			this.setDead();
+		if (this.level.isClientSide && (this.dragon == null || !this.dragon.isAlive())) {
+			this.remove();
 		}
 
 	}
 
-	// As this is a part it does not make any noises
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
-	}
-
-	@Override
-	public void setRotation(float yaw, float pitch) {
-		super.setRotation(yaw, pitch);
-	}
-
-	@Override
-	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-		if (this.dragon == null || this.dragon.isDead) {
-			return false;
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		if (this.dragon == null || !this.dragon.isAlive()) {
+			return ActionResultType.FAIL;
 		}
-		return this.dragon.processInitialInteract(player, hand);
+		return this.dragon.interact(player, hand);
 	}
 
 	@Nullable
@@ -93,15 +90,15 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 	}
 
 	public void explode() {
-		if (!this.world.isRemote) {
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 1, false);
+		if (!this.level.isClientSide) {
+			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1, Mode.DESTROY);
 		}
 	}
 
 	public void switchToSkeletalState() {
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			this.isSkeletal = true;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 0, false);
+			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1, Mode.DESTROY);
 		}
 	}
 
@@ -110,18 +107,17 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-		super.save(compound);
-		compound.setBoolean("skeletal", this.isSkeletal());
-		compound.setInteger("realID", this.realID);
-		compound.setInteger("partIndex", this.partIndex);
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		compound.putBoolean("skeletal", this.isSkeletal());
+		compound.putInt("realID", this.realID);
+		compound.putInt("partIndex", this.partIndex);
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
-		this.realID = compound.getInteger("realID");
-		this.partIndex = compound.getInteger("partIndex");
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		this.realID = compound.getInt("realID");
+		this.partIndex = compound.getInt("partIndex");
+		this.isSkeletal = compound.getBoolean("skeletal");
 	}
 
 	@Override
@@ -131,6 +127,11 @@ public class SubEntityNetherDragonSegment extends PartEntity implements IBlackli
 
 	public int getPartIndex() {
 		return this.partIndex;
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		
 	}
 
 }
