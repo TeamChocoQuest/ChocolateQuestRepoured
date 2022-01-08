@@ -24,9 +24,9 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 	@Override
 	public void updatePositionAndRotation() {
 		// TODO reduce unnecessary vec3d creation
-		Vector3d vec1 = new Vector3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
+		Vector3d vec1 = this.caster.position().add(0, this.caster.getBbHeight() * 0.6D,0);
 		vec1 = vec1.add(this.getOffsetVector());
-		Vector3d vec2 = new Vector3d(this.target.posX, this.target.posY + this.target.height * 0.6D, this.target.posZ);
+		Vector3d vec2 = this.target.position().add(0, this.target.getBbHeight() * 0.6D, 0);
 		Vector3d vec3 = vec2.subtract(vec1);
 		double dist = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z);
 		// TODO make pitch rotatable to < -90 and > 90
@@ -43,20 +43,20 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 		this.rotationYawCQR += deltaYaw;
 		this.rotationYawCQR = MathHelper.wrapDegrees(this.rotationYawCQR);
 		this.rotationPitchCQR += deltaPitch;
-		Vector3d vec4 = Vector3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
-		this.setPosition(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
+		Vector3d vec4 = Vector3d.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR);
+		this.setPos(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
 	}
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		super.writeSpawnData(buffer);
-		buffer.writeInt(this.target.getEntityId());
+		buffer.writeInt(this.target.getId());
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		super.readSpawnData(additionalData);
-		this.target = (LivingEntity) this.world.getEntityByID(additionalData.readInt());
+		this.target = (LivingEntity) this.level.getEntity(additionalData.readInt());
 	}
 
 }
