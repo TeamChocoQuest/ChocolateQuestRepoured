@@ -12,7 +12,7 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 	}
 
 	public EntityExterminatorHandLaser(LivingEntity caster, LivingEntity target, Vector3d offset) {
-		this(caster.world, caster, 48, target, offset);
+		this(caster.level, caster, 48, target, offset);
 	}
 
 	@Override
@@ -26,17 +26,17 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 		this.offsetVector = offset;
 
 		// TODO reduce unnecessary vec3d creation
-		Vector3d vec1 = new Vector3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
+		Vector3d vec1 = this.caster.position().add(0, this.caster.getBbHeight() * 0.6D, 0);//  Vector3d(this.caster.posX, this.caster.posY + this.caster.height * 0.6D, this.caster.posZ);
 		vec1 = vec1.add(this.getOffsetVector());
-		Vector3d vec2 = new Vector3d(target.posX, target.posY + target.height * 0.6D, target.posZ);
+		Vector3d vec2 = target.position().add(0, target.getBbHeight() * 0.6D, 0); //new Vector3d(target.posX, target.posY + target.height * 0.6D, target.posZ);
 		Vector3d vec3 = vec2.subtract(vec1);
 		double dist = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z);
 		float yaw = (float) Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
 		float pitch = (float) Math.toDegrees(Math.atan2(-vec3.y, dist));
 		this.rotationYawCQR = yaw;
 		this.rotationPitchCQR = pitch;
-		Vector3d vec4 = Vector3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR);
-		this.setPosition(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
+		Vector3d vec4 = Vector3d.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR);
+		this.setPos(vec1.x + vec4.x * 0.25D, vec1.y + vec4.y * 0.25D, vec1.z + vec4.z * 0.25D);
 
 		this.maxRotationPerTick = 1.25F;
 	}

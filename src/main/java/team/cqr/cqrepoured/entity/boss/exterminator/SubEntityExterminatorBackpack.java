@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.entity.boss.exterminator;
 import java.util.function.Supplier;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
@@ -12,7 +13,7 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 
 	private Supplier<Boolean> funcGetAnyEmitterActive;
 	private EntityCQRExterminator exterminator;
-
+	
 	public SubEntityExterminatorBackpack(EntityCQRExterminator parent, String partName, Supplier<Boolean> funcGetAnyEmitterActive) {
 		super(parent, partName, 1.0F, 1.0F);
 		this.exterminator = parent;
@@ -20,7 +21,12 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean isPickable() {
+		return true;
+	}
+	
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
 		// If at least one emitter emits electricity, we are vulnerable!!
 		if (source == DamageSource.DROWN) {
 			if (this.funcGetAnyEmitterActive.get()) {
@@ -33,18 +39,18 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 		}
 
 		if (!this.exterminator.isStunned() && this.funcGetAnyEmitterActive.get() && !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this.exterminator)) {
-			return super.attackEntityFrom(DamageSource.DROWN, amount /= 2);
+			return super.hurt(DamageSource.DROWN, amount /= 2);
 		}
 
-		return super.attackEntityFrom(source, amount * 2);
+		return super.hurt(source, amount * 2);
 	}
 
 	@Override
-	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-		if (this.exterminator == null || this.exterminator.isDead) {
-			return false;
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		if (this.exterminator == null || !this.exterminator.isAlive()) {
+			return ActionResultType.FAIL;
 		}
-		return this.exterminator.processInitialInteract(player, hand);
+		return this.exterminator.interact(player, hand);
 	}
 
 }

@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -8,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
@@ -33,28 +33,28 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 		this.funcGetIsActive = funcGetIsActive;
 		this.funcSetIsActiveInParent = funcSetIsActiveInParent;
 	}
-
+	
 	@Override
-	protected void entityInit() {
-		super.defineSynchedData();
+	public boolean isPickable() {
+		return true;
 	}
 
 	public boolean isActive() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return this.funcGetIsActive.get();
 		}
 		return this.exterminator.canElectricCoilsBeActive() && this.remainingActiveTime > 0;
 	}
 
 	@Override
-	public void onEntityUpdate() {
-		super.onEntityUpdate();
+	public void tick() {
+		super.tick();
 
 		boolean active = this.isActive();
 		this.funcSetIsActiveInParent.accept(active);
 		if (active) {
 
-			if (this.ticksExisted % 30 == 0) {
+			if (this.tickCount % 30 == 0) {
 				// Play a sound
 				this.playSound(CQRSounds.EXTERMINATOR_ELECTRO_ZAP, 0.75F, 1.0F);
 			}
@@ -69,9 +69,15 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 				}
 			} else {
 				// Damage the target by making it electrocuted
-				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingTicks(200);
-				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingSpreads(8);
-				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setCasterID(this.exterminator.getPersistentID());
+				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).ifPresent((cap) -> {
+					cap.setRemainingTicks(200);
+				});
+				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).ifPresent((cap) -> {
+					cap.setRemainingSpreads(8);
+				});
+				target.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).ifPresent((cap) -> {
+					cap.setCasterID(this.exterminator.getUUID());
+				});
 			}
 		} else {
 			this.cooldown--;
@@ -79,9 +85,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 				this.remainingActiveTime = -1;
 			}
 			if (this.cooldown <= 0) {
-				this.cooldown = DungeonGenUtils.randomBetween(120, 360, this.rand);
+				this.cooldown = DungeonGenUtils.randomBetween(120, 360, this.getParent().getRandom());
 				// Now, re-set the active time
-				this.remainingActiveTime = DungeonGenUtils.randomBetween(100, 200, this.rand);
+				this.remainingActiveTime = DungeonGenUtils.randomBetween(100, 200, this.getParent().getRandom());
 				this.activeTimeNoTarget = 0;
 			}
 		}
@@ -92,16 +98,12 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 		return this.funcGetElectrocuteTarget.get();
 	}
 
-	public Random getRNG() {
-		return this.exterminator.getRNG();
-	}
-
 	@Override
-	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-		if (this.exterminator == null || this.exterminator.isDead) {
-			return false;
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		if (this.exterminator == null || !this.exterminator.isAlive()) {
+			return ActionResultType.FAIL;
 		}
-		return this.exterminator.processInitialInteract(player, hand);
+		return this.exterminator.interact(player, hand);
 	}
 
 }

@@ -6,29 +6,30 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -40,17 +41,15 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
+import team.cqr.cqrepoured.entity.IEntityMultiPart;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
-import team.cqr.cqrepoured.entity.ISizable;
-import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowPath;
 import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
 import team.cqr.cqrepoured.entity.ai.EntityAIMoveToHome;
 import team.cqr.cqrepoured.entity.ai.EntityAIMoveToLeader;
 import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
-import team.cqr.cqrepoured.entity.ai.EntityAITasksProfiled;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttack;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIBackstab;
@@ -73,7 +72,6 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRMaterials;
 import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
@@ -81,7 +79,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
+public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart<EntityCQRExterminator>, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
 
 	// Entity parts
 	// 0 => Backpack
@@ -89,52 +87,36 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	// 2 => Emitter right
 	// 3 & 4 => Artificial hitbox (left and right), purpose is to avoid entities punching though the boss when it is in
 	// non-stunned state
-	private PartEntity[] parts;
+	private PartEntity<?>[] parts;
 
 	private LivingEntity electroCuteTargetEmitterLeft;
 	private LivingEntity electroCuteTargetEmitterRight;
 
 	private int stunTime = 0;
 
-	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
-	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 	private boolean partSoundFlag;
 
-	public EntityCQRExterminator(World worldIn) {
-		super(worldIn);
-		this.experienceValue = 100;
+	public EntityCQRExterminator(EntityType<? extends EntityCQRExterminator> type, World worldIn) {
+		super(type, worldIn);
+		this.xpReward = 100;
 
 		this.parts = new PartEntity[5];
 
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
-		this.parts[3] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
-			@Override
-			public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-				if (this.parent == null || ((LivingEntity) this.parent).isDead) {
-					return false;
-				}
-				return ((LivingEntity) this.parent).processInitialInteract(player, hand);
-			}
-		};
-		this.parts[4] = new MultiPartEntityPartSizable<EntityCQRExterminator>(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight()) {
-			@Override
-			public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-				if (this.parent == null || ((LivingEntity) this.parent).isDead) {
-					return false;
-				}
-				return ((LivingEntity) this.parent).processInitialInteract(player, hand);
-			}
-		};
+		this.parts[3] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
+		this.parts[4] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
 
 	protected boolean isAnyEmitterActive() {
@@ -156,75 +138,71 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	protected boolean isEmitterLeftActive() {
-		return this.dataManager.get(EMITTER_LEFT_ACTIVE);
+		return this.entityData.get(EMITTER_LEFT_ACTIVE);
 	}
 
 	protected void setEmitterLeftActive(boolean value) {
-		this.dataManager.set(EMITTER_LEFT_ACTIVE, value);
+		this.entityData.set(EMITTER_LEFT_ACTIVE, value);
 	}
 
 	protected boolean isEmitterRightActive() {
-		return this.dataManager.get(EMITTER_RIGHT_ACTIVE);
+		return this.entityData.get(EMITTER_RIGHT_ACTIVE);
 	}
 
 	protected void setEmitterRightActive(boolean value) {
-		this.dataManager.set(EMITTER_RIGHT_ACTIVE, value);
+		this.entityData.set(EMITTER_RIGHT_ACTIVE, value);
 	}
 
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 
-		this.dataManager.register(IS_STUNNED, false);
-		this.dataManager.register(CANNON_RAISED, false);
-		this.dataManager.register(PUNCH_IS_KICK, false);
-		this.dataManager.register(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
-		this.dataManager.register(EMITTER_LEFT_ACTIVE, false);
-		this.dataManager.register(EMITTER_RIGHT_ACTIVE, false);
+		this.entityData.define(IS_STUNNED, false);
+		this.entityData.define(CANNON_RAISED, false);
+		this.entityData.define(PUNCH_IS_KICK, false);
+		this.entityData.define(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
+		this.entityData.define(EMITTER_LEFT_ACTIVE, false);
+		this.entityData.define(EMITTER_RIGHT_ACTIVE, false);
 	}
-
-	@Override
-	protected void collideWithEntity(Entity entityIn) {
-		return;
-	}
-
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(Attributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDamageReductionAmount(EquipmentSlotType.CHEST));
-		this.getEntityAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
+		this.getAttribute(Attributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDefenseForSlot(EquipmentSlotType.CHEST));
+		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
 	}
 
+	
 	@Override
-	public void applyEntityCollision(Entity entityIn) {
-		if (entityIn.width * entityIn.width * entityIn.height > this.getWidth() * this.getWidth() * this.getHeight()) {
-			super.applyEntityCollision(entityIn);
+	public void push(Entity entityIn) {
+		if (entityIn.getBbWidth() * entityIn.getBbWidth() * entityIn.getBbHeight() > this.getBbWidth() * this.getBbWidth() * this.getBbHeight()) {
+			super.doPush(entityIn);
 		}
 	}
 
 	@Override
 	protected void registerGoals() {
 		if (CQRConfig.advanced.debugAI) {
-			this.tasks = new EntityAITasksProfiled(this.world.profiler, this.world);
-			this.targetTasks = new EntityAITasksProfiled(this.world.profiler, this.world);
+			//this.goalSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
+			//this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
-		this.tasks.addTask(1, new SwimGoal(this));
-		this.tasks.addTask(2, new EntityAIOpenCloseDoor(this));
+		this.goalSelector.addGoal(1, new SwimGoal(this));
+		this.goalSelector.addGoal(2, new EntityAIOpenCloseDoor(this));
 
-		this.tasks.addTask(0, new BossAIExterminatorStun(this));
+		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
-		this.tasks.addTask(2, new BossAIExterminatorHulkSmash(this));
-		this.tasks.addTask(3, new BossAIExterminatorHandLaser(this));
-		this.tasks.addTask(4, new BossAIArmCannon(this));
+		this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
+		this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
+		this.goalSelector.addGoal(4, new BossAIArmCannon(this));
 
-		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
-		this.tasks.addTask(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
-		this.tasks.addTask(14, new EntityAIPotionThrower(this)); /* AI for secondary Item */
-		this.tasks.addTask(15, new EntityAIFireball(this)); /* AI for secondary Item */
-		this.tasks.addTask(16, new EntityAIHooker(this)); /* AI for secondary Item */
-		this.tasks.addTask(17, new EntityAIBackstab(this));
-		this.tasks.addTask(18, new EntityAIAttack(this) {
+		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
+		this.goalSelector.addGoal(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
+		this.goalSelector.addGoal(14, new EntityAIPotionThrower(this)); /* AI for secondary Item */
+		this.goalSelector.addGoal(15, new EntityAIFireball(this)); /* AI for secondary Item */
+		this.goalSelector.addGoal(16, new EntityAIHooker(this)); /* AI for secondary Item */
+		this.goalSelector.addGoal(17, new EntityAIBackstab(this));
+		this.goalSelector.addGoal(18, new EntityAIAttack(this) {
 			@Override
 			public boolean canUse() {
 				return super.canUse() && !EntityCQRExterminator.this.isStunned();
@@ -235,21 +213,21 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 				return super.canContinueToUse() && !EntityCQRExterminator.this.isStunned();
 			}
 		});
-		this.tasks.addTask(19, new EntityAICursedBoneSummoner(this));
+		this.goalSelector.addGoal(19, new EntityAICursedBoneSummoner(this));
 
-		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
-		this.tasks.addTask(24, new EntityAILooter(this));
+		this.goalSelector.addGoal(20, new EntityAIFollowAttackTarget(this));
+		this.goalSelector.addGoal(24, new EntityAILooter(this));
 
-		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(31, new EntityAIFollowPath(this));
-		this.tasks.addTask(32, new EntityAIMoveToHome(this));
-		this.tasks.addTask(33, new EntityAIIdleSit(this));
+		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
+		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
+		this.goalSelector.addGoal(33, new EntityAIIdleSit(this));
 
 		// Target tasks for the electro stuff
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
-		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
-		this.targetTasks.addTask(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
+		this.targetSelector.addGoal(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this));
+		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
+		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
 	}
 
 	public LivingEntity getElectroCuteTargetLeft() {
@@ -260,7 +238,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.electroCuteTargetEmitterLeft = electroCuteTargetA;
 
 		if (this.isServerWorld()) {
-			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEmitterTarget(this, true), this);
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this) ,new SPacketUpdateEmitterTarget(this, true));
 		}
 	}
 
@@ -272,7 +250,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		this.electroCuteTargetEmitterRight = electroCuteTargetB;
 
 		if (this.isServerWorld()) {
-			CQRMain.NETWORK.sendToAllTracking(new SPacketUpdateEmitterTarget(this, false), this);
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this) ,new SPacketUpdateEmitterTarget(this, false));
 		}
 	}
 
@@ -287,11 +265,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		if (this.isCannonRaised() && value) {
 			this.switchCannonArmState(false);
 		}
-		this.dataManager.set(IS_STUNNED, value);
+		this.entityData.set(IS_STUNNED, value);
 	}
 
 	@Override
-	public void onStruckByLightning(LightningBoltEntity lightningBolt) {
+	public void thunderHit(ServerWorld pLevel, LightningBoltEntity pLightning) {
 		if (this.isStunned()) {
 			this.stunTime += (50 / 3);
 		} else if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
@@ -302,12 +280,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean isStunned() {
-		return this.dataManager.get(IS_STUNNED);
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_EXTERMINATOR;
+		return this.entityData.get(IS_STUNNED);
 	}
 
 	@Override
@@ -322,11 +295,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Override
 	public World getWorld() {
-		return this.getEntityWorld();
+		return this.level;
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 
@@ -402,11 +375,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public static final String ANIM_NAME_CANNON_LOWERED = ANIM_NAME_PREFIX + "lowered_cannon";
 
 	private <E extends IAnimatable> PlayState predicateCannonArmPosition(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive() || super.isSitting()) {
+		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive() || super.isSitting()) {
 			return PlayState.STOP;
 		}
 
-		if (this.dataManager.get(CANNON_RAISED)) {
+		if (this.entityData.get(CANNON_RAISED)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_RAISED, true));
 		} else {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_LOWERED, true));
@@ -426,12 +399,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	private boolean smashIndicator;// = false;
 
 	private <E extends IAnimatable> PlayState predicateBigAnimations(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive()) {
 			return PlayState.STOP;
 		}
 
 		// Second condition: XOR Operator "^"
-		if (this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
+		if (this.entityData.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
 			if (this.shootIndicator) {
 				event.getController().clearAnimationCache();
 				this.shootIndicator = false;
@@ -455,16 +428,16 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	public static final String ANIM_NAME_KICK = ANIM_NAME_PREFIX + "kick";
 
 	private <E extends IAnimatable> PlayState predicateSimpleAttack(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive()) {
 			return PlayState.STOP;
 		}
 
-		if (this.dataManager.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
+		if (this.entityData.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
 			return PlayState.STOP;
 		}
 
-		if (this.getSwingProgress(PartialTicksUtil.getCurrentPartialTicks()) > 0.0F) {
-			boolean isKicking = this.dataManager.get(PUNCH_IS_KICK);
+		if (this.getAttackAnim(PartialTicksUtil.getCurrentPartialTicks()) > 0.0F) {
+			boolean isKicking = this.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, false));
 
@@ -495,7 +468,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	protected boolean isEmitterShortCircuited(SubEntityExterminatorFieldEmitter emitter) {
 		if (emitter.isActive()) {
-			if (emitter.isInWater() || emitter.isWet()) {
+			if (emitter.isInWater() || emitter.isInWaterOrRain() || emitter.isUnderWater()) {
 				return true;
 			}
 		}
@@ -503,10 +476,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void baseTick() {
+		super.baseTick();
 
-		if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isWet() || this.isInWater()) && !this.isStunned()) {
+		if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isInWaterOrRain() || this.isInWater()) && !this.isStunned()) {
 			this.setStunned(true, 10);
 		}
 
@@ -520,8 +493,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			}
 			this.setStunned(this.stunTime > 0);
 		}
-		for (PartEntity part : this.parts) {
-			this.world.updateEntityWithOptionalForce(part, true);
+		for (PartEntity<?> part : this.parts) {
+			//this.level.updateEntityWithOptionalForce(part, true);
 			part.tick();
 		}
 
@@ -529,9 +502,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public void onEntityUpdate() {
+	public void tick() {
 		this.updateAnimationTimersServer();
-		super.onEntityUpdate();
+		super.tick();
 	}
 
 	public static final int ARMS_THROW_DURATION = 14;
@@ -566,7 +539,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			return;
 		}
 		this.currentAnimationPlaying = animationName;
-		this.dataManager.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
+		this.entityData.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
 	}
 
 	private int animationTimer = -1;
@@ -591,7 +564,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			if (this.animationTimer <= 0) {
 				this.onAnimationEnd(this.currentAnimationPlaying);
 				this.currentAnimationPlaying = null;
-				this.dataManager.set(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
+				this.entityData.set(ARMS_BLOCKED_BY_LONG_ANIMATION, false);
 			}
 		}
 	}
@@ -610,7 +583,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public boolean attackEntityFromPart(PartEntity part, DamageSource source, float damage) {
+	public boolean hurt(PartEntity part, DamageSource source, float damage) {
 		boolean isMainHBPart = ((part != this.parts[3]) && (part != this.parts[4])) || part == null;
 		return this.attackEntityFrom(source, damage, isMainHBPart);
 	}
@@ -629,19 +602,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			}
 		}
 
-		if (source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
+		if (source.getDirectEntity() instanceof ProjectileCannonBall && source.getEntity() != this) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
-		if (source.isExplosion() && source.getTrueSource() != null && source.getTrueSource() == this) {
+		if (source.isExplosion() && source.getEntity() != null && source.getEntity() == this) {
 			return false;
 		}
 
-		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof PlayerEntity && ((PlayerEntity) source.getTrueSource()).isCreative())) {
+		if (source.isCreativePlayer() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof PlayerEntity && ((PlayerEntity) source.getEntity()).isCreative())) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 
-		if (source.isFireDamage()) {
+		if (source.isFire()) {
 			return false;
 		}
 
@@ -672,7 +645,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	private void handleAttackedByLargeGroups() {
-		if (this.getRNG().nextBoolean() && !this.isCannonRaised() && !this.isCurrentlyPlayingAnimation()) {
+		if (this.getRandom().nextBoolean() && !this.isCannonRaised() && !this.isCurrentlyPlayingAnimation()) {
 			List<Entity> groupInFrontOfMe = this.isSurroundedByGroupWithMinSize(5);
 			if (groupInFrontOfMe != null) {
 				this.tryStartThrowingAnimation(groupInFrontOfMe, null);
@@ -682,7 +655,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
-		List<Entity> groupInFrontOfMe = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() / 2)).grow(1));
+		List<Entity> groupInFrontOfMe = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getWidth() / 2)).inflate(1));
 		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
@@ -697,33 +670,35 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	// Kick handling
 	@Override
-	public boolean canAttack(Entity entityIn) {
+	public boolean doHurtTarget(Entity entityIn) {
 		if(this.isStunned()) {
 			return false;
 		}
-		boolean result = super.canAttack(entityIn);
+		boolean result = super.doHurtTarget(entityIn);
 
 		if (result) {
 			if (this.isCurrentlyPlayingAnimation()) {
 				if (this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
-					if (!(this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing)) {
+					if (!(this.getMainHandItem().getItem() instanceof ItemStaffHealing)) {
 						Vector3d v = entityIn.position().subtract(this.position());
 						v = v.normalize().scale(1.5D);
 
 						// YEET!
-						entityIn.motionX += v.x;
+						Vector3d yeet = entityIn.getDeltaMovement().add(v).add(0, 0.75, 0);
+						/*entityIn.motionX += v.x;
 						entityIn.motionY += v.y + 0.75;
 						entityIn.motionZ += v.z;
-						entityIn.velocityChanged = true;
+						entityIn.velocityChanged = true;*/
+						entityIn.setDeltaMovement(yeet);
 
-						this.dataManager.set(PUNCH_IS_KICK, true);
+						this.entityData.set(PUNCH_IS_KICK, true);
 					}
 				}
 			} else {
-				this.dataManager.set(PUNCH_IS_KICK, false);
-				if (this.getRNG().nextBoolean() && !this.isCannonRaised()) {
+				this.entityData.set(PUNCH_IS_KICK, false);
+				if (this.getRandom().nextBoolean() && !this.isCannonRaised()) {
 					// Throw animation
-					List<Entity> affectedEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.getLookVec().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
+					List<Entity> affectedEntities = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
 					this.tryStartThrowingAnimation(affectedEntities, entityIn);
 				}
 			}
@@ -737,16 +712,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
 				if ((entity instanceof LivingEntity && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (LivingEntity) entity))) || checkPred.test(entity)) {
-					Vector3d flyDirection = entity.position().subtract(this.position()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRNG()), 0);
+					Vector3d flyDirection = entity.position().subtract(this.position()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRandom()), 0);
 
-					entity.motionX += flyDirection.x;
+					/*entity.motionX += flyDirection.x;
 					entity.motionY += flyDirection.y;
 					entity.motionZ += flyDirection.z;
 
-					entity.velocityChanged = true;
+					entity.velocityChanged = true;*/
+					entity.setDeltaMovement(entity.getDeltaMovement().add(flyDirection));
 
 					if (entity != attackingMob) {
-						super.canAttack(entity);
+						super.doHurtTarget(entity);
 					}
 				}
 			});
@@ -758,43 +734,32 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	// Multipart stuff
 	@Override
-	public Entity[] getParts() {
+	public PartEntity<?>[] getParts() {
 		return this.parts;
 	}
 
 	private void alignParts() {
 		// Artificial main hitbox
-		final Vector3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookVec().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
-		this.parts[4].setPosition(this.posX + offsetMainHitbox.x, this.posY, this.posZ + offsetMainHitbox.z);
-		this.parts[3].setPosition(this.posX - offsetMainHitbox.x, this.posY, this.posZ - offsetMainHitbox.z);
+		final Vector3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookAngle().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
+		this.parts[4].setPos(this.getX() + offsetMainHitbox.x, this.getY(), this.getZ() + offsetMainHitbox.z);
+		this.parts[3].setPos(this.getX() - offsetMainHitbox.x, this.getY(), this.getZ() - offsetMainHitbox.z);
 
 		// Backpack and emitters
-		Vector3d offset = this.getLookVec().normalize().scale(-0.25D * this.getSizeVariation());
+		Vector3d offset = this.getLookAngle().normalize().scale(-0.25D * this.getSizeVariation());
 		offset = offset.add(0, 1.25D * this.getSizeVariation(), 0);
 
-		this.parts[0].setPosition(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z);
+		this.parts[0].setPos(this.getX() + offset.x, this.getY() + offset.y, this.getZ() + offset.z);
 
-		Vector3d offsetEmittersHorizontal = this.getLookVec().normalize().scale(0.5 * this.getSizeVariation());
+		Vector3d offsetEmittersHorizontal = this.getLookAngle().normalize().scale(0.5 * this.getSizeVariation());
 
-		Vector3d offsetEmitters = this.getLookVec().normalize().scale(-0.4D * this.getSizeVariation());
+		Vector3d offsetEmitters = this.getLookAngle().normalize().scale(-0.4D * this.getSizeVariation());
 		offsetEmitters = offsetEmitters.add(0, 2.375D * this.getSizeVariation(), 0);
 
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 90);
-		this.parts[2].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
+		this.parts[2].setPos(this.getX() + offsetEmitters.x + offsetEmittersHorizontal.x, this.getY() + offsetEmitters.y, this.getZ() + offsetEmitters.z + offsetEmittersHorizontal.z);
 
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 180);
-		this.parts[1].setPosition(this.posX + offsetEmitters.x + offsetEmittersHorizontal.x, this.posY + offsetEmitters.y, this.posZ + offsetEmitters.z + offsetEmittersHorizontal.z);
-	}
-
-	@Override
-	public void resize(float widthScale, float heightSacle) {
-		super.resize(widthScale, heightSacle);
-
-		for (PartEntity part : this.parts) {
-			if (part instanceof ISizable) {
-				((ISizable) part).resize(widthScale, heightSacle);
-			}
-		}
+		this.parts[1].setPos(this.getX() + offsetEmitters.x + offsetEmittersHorizontal.x, this.getY() + offsetEmitters.y, this.getZ() + offsetEmitters.z + offsetEmittersHorizontal.z);
 	}
 
 	@Override
@@ -803,12 +768,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public void setDead() {
-		for (PartEntity part : this.parts) {
-			this.world.removeEntityDangerously(part);
+	public void remove() {
+		for (PartEntity<?> part : this.parts) {
+			part.remove(false);
 		}
 
-		super.setDead();
+		super.remove();
 	}
 
 	// Cannon arm
@@ -852,20 +817,20 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	private DamageSource deathCause = null;
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		this.deathCause = cause;
 		super.die(cause);
 	}
 
 	@Override
-	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
-		// Nope
+	protected void dropCustomDeathLoot(DamageSource deathCause, int lootingModifier, boolean wasRecentlyHit) {
+		//Nope
 	}
-
+	
 	// Death animation
 	// Death animation time: 1.44s => 29 ticks
 	@Override
-	protected void onDeathUpdate() {
+	protected void tickDeath() {
 		++this.deathTime;
 
 		if (this.deathTime == 65) {
@@ -874,21 +839,22 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		if (this.deathTime >= 70 && this.isServerWorld()) {
 			if (this.deathCause != null) {
-				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				super.dropAllDeathLoot(deathCause);
+				//super.dropLoot(this.lastHurtByPlayerTime > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getEntity(), this.deathCause), this.deathCause);
 			}
 
 			// Copied from EntityLivingBase
-			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
-				int i = this.getExperiencePoints(this.attackingPlayer);
-				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+			if (!this.level.isClientSide && this.lastHurtByPlayerTime > 0 && this.shouldDropLoot() && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+				int i = this.getExperienceReward(this.lastHurtByPlayer);
+				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, i);
 				while (i > 0) {
-					int j = ExperienceOrbEntity.getXPSplit(i);
+					int j = ExperienceOrbEntity.getExperienceValue(i);
 					i -= j;
-					this.world.spawnEntity(new ExperienceOrbEntity(this.world, this.posX, this.posY, this.posZ, j));
+					this.level.addFreshEntity(new ExperienceOrbEntity(this.level, this.getX(), this.getY(), this.getZ(), j));
 				}
 			}
 
-			this.setDead();
+			this.remove();
 
 			this.onFinalDeath();
 		}
@@ -897,23 +863,23 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		if (!this.partSoundFlag) {
-			return SoundEvents.BLOCK_ANVIL_LAND;
+			return SoundEvents.ANVIL_LAND;
 		}
-		return SoundEvents.ENTITY_IRONGOLEM_HURT;
+		return SoundEvents.IRON_GOLEM_HURT;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_IRONGOLEM_STEP;
+		return SoundEvents.IRON_GOLEM_STEP;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_IRONGOLEM_DEATH;
+		return SoundEvents.IRON_GOLEM_DEATH;
 	}
-
+	
 	@Override
-	public boolean isImmuneToExplosions() {
+	public boolean ignoreExplosion() {
 		return true;
 	}
 
@@ -927,14 +893,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 		// First: reset the timeout
 		this.resetCannonTimeout();
 
-		if (raised == this.dataManager.get(CANNON_RAISED)) {
+		if (raised == this.entityData.get(CANNON_RAISED)) {
 			return true;
 		}
 		if (this.cannonArmTimer != 0) {
 			return false;
 		}
 
-		this.dataManager.set(CANNON_RAISED, raised);
+		this.entityData.set(CANNON_RAISED, raised);
 		this.cannonArmTimer = CANNON_RAISE_OR_LOWER_DURATION;
 
 		return true;
@@ -970,7 +936,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	public boolean isCannonRaised() {
-		return this.dataManager.get(CANNON_RAISED);
+		return this.entityData.get(CANNON_RAISED);
 	}
 
 	public Vector3d getCannonFiringPointOffset() {
@@ -980,7 +946,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 		result = result.add(0, 2.0D, 0);
 
-		final Vector3d facing = this.getLookVec().normalize();
+		final Vector3d facing = this.getLookAngle().normalize();
 		result = result.add(facing.scale(0.75));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.65));
 
@@ -991,7 +957,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 
 	public Vector3d getCannonFiringLocation() {
 		Vector3d result = this.getCannonFiringPointOffset();
-		result = result.add(this.posX, this.posY, this.posZ);
+		result = result.add(this.position());
 		return result;
 	}
 
@@ -1049,25 +1015,25 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMec
 	}
 
 	@Override
-	public boolean isWet() {
+	public boolean isInWaterOrRain() {
 		return this.isInWater();
 	}
 
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		super.setEquipmentBasedOnDifficulty(difficulty);
+	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+		super.populateDefaultEquipmentSlots(difficulty);
 
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL));
-	}
-
-	@Override
-	public void tick() {
-		
+		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL, 1));
 	}
 
 	@Override
 	public int tickTimer() {
-		return this.ticksExisted;
+		return this.tickCount;
+	}
+
+	@Override
+	public LivingEntity getEntity() {
+		return this;
 	}
 	
 }
