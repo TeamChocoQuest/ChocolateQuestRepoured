@@ -11,14 +11,17 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
@@ -232,6 +235,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected ResourceLocation textureOverride;
 
 	protected ServerBossInfo bossInfoServer;
+	
+	//Sizing bullshit
+	protected final EntitySize size;
 
 	// Client only
 	@OnlyIn(Dist.CLIENT)
@@ -244,6 +250,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 		this.xpReward = 5;
 		this.initializeSize();
+		this.size = new EntitySize(this.getDefaultWidth(), this.getDefaultWidth(), false);
 	}
 
 	public void enableBossBar() {
@@ -376,21 +383,29 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		double knockbackResistance = this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
 		strength *= 1.0F - Math.min((float) knockbackResistance, 1.0F);
 
-		this.isAirBorne = true;
+		Vector3d currentMovement = this.getDeltaMovement();
+		
+		double vX = currentMovement.x;
+		double vY = currentMovement.y;
+		double vZ = currentMovement.z;
+		
+		this.hasImpulse = true;
 		double d = 1.0D / MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-		this.motionX *= 0.5D;
-		this.motionZ *= 0.5D;
-		this.motionX -= xRatio * d * strength;
-		this.motionZ -= zRatio * d * strength;
+		vX *= 0.5D;
+		vZ *= 0.5D;
+		vX -= xRatio * d * strength;
+		vZ -= zRatio * d * strength;
 
 		if (this.onGround) {
-			this.motionY *= 0.5D;
-			this.motionY += strength;
+			vY *= 0.5D;
+			vY += strength;
 
-			if (this.motionY > 0.4D) {
-				this.motionY = 0.4D;
+			if (vY > 0.4D) {
+				vY = 0.4D;
 			}
 		}
+		
+		this.setDeltaMovement(vX, vY, vZ);
 	}
 
 	protected boolean damageCapEnabled() {
@@ -416,7 +431,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
-		if (!damageSourceIn.isUnblockable() && this.isBlocking()) {
+		if (!damageSourceIn.isBypassArmor() && this.isBlocking()) {
 			Vector3d vec3d = damageSourceIn.getSourcePosition();
 
 			if (vec3d != null) {
@@ -747,7 +762,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 	
 	@Override
-	public void tick() {
+	public void baseTick() {
 		LivingEntity attackTarget = this.getTarget();
 		if (attackTarget != null) {
 			this.lastTickWithAttackTarget = this.tickCount;
@@ -776,7 +791,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			attribute.removeModifier(BASE_ATTACK_SPEED_ID);
 		}
 
-		super.tick();
+		super.baseTick();
 
 		if (!this.level.isClientSide && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
@@ -793,14 +808,18 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.prevPotion = stack;
 
 		if (this.isCrouching() && !this.prevSneaking) {
-			this.resize(1.0F, 0.8F);
+			this.setPose(Pose.CROUCHING);
+			//this.resize(1.0F, 0.8F);
 		} else if (!this.isCrouching() && this.prevSneaking) {
-			this.resize(1.0F, 1.25F);
+			this.setPose(Pose.STANDING);
+			//this.resize(1.0F, 1.25F);
 		}
 		if (this.isSitting() && !this.prevSitting) {
+			//TODO: Create sitting pose
 			this.resize(1.0F, 0.75F);
 		} else if (!this.isSitting() && this.prevSitting) {
-			this.resize(1.0F, 4.0F / 3.0F);
+			this.setPose(Pose.STANDING);
+			//this.resize(1.0F, 4.0F / 3.0F);
 		}
 		this.prevSneaking = this.isCrouching();
 		this.prevSitting = this.isSitting();
@@ -851,9 +870,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		this.updateArmSwingProgress();
-		super.onLivingUpdate();
+	public void tick() {
+		//this.updateSwingTime(); //Already called in aiStep()
+		super.tick();
 
 		// Bossbar
 		if (this.bossInfoServer != null) {
@@ -966,8 +985,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		if (flag) {
 			if (i > 0 && entityIn instanceof LivingEntity) {
 				((LivingEntity) entityIn).knockback(i * 0.5F, MathHelper.sin(this.yBodyRot * 0.017453292F), (-MathHelper.cos(this.yBodyRot * 0.017453292F)));
-				this.motionX *= 0.6D;
-				this.motionZ *= 0.6D;
+			
+				Vector3d deltaNew = this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D);
+				
+				this.setDeltaMovement(deltaNew);
 			}
 
 			int j = EnchantmentHelper.getFireAspect(this);
@@ -991,14 +1012,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				}
 			}
 
-			this.applyEnchantments(this, entityIn);
+			this.doEnchantDamageEffects(this, entityIn);
 		}
 
 		return flag;
 	}
 
 	@Override
-	protected boolean canDropLoot() {
+	protected boolean shouldDropLoot() {
 		return true;
 	}
 
@@ -1534,14 +1555,6 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		return 1.95F;
 	}
 
-	@Override
-	public void resize(float widthScale, float heightSacle) {
-		this.setSize(this.width * widthScale, this.height * heightSacle);
-		if (this.stepHeight * heightSacle >= 1.0) {
-			this.stepHeight *= heightSacle;
-		}
-	}
-
 	public Path getPath() {
 		return this.path;
 	}
@@ -1751,6 +1764,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	// ISizable stuff
+	public EntitySize getSize() {
+		return this.size;
+	}
+	
 	@Override
 	public float getSizeVariation() {
 		return this.sizeScaling;
@@ -1760,9 +1777,19 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public void applySizeVariation(float value) {
 		this.sizeScaling = value;
 	}
+	
+	private EntitySize getDimensionsCloneFromEntity(Pose poseIn) {
+		return poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize().scale(this.getScale());
+	}
 
-	public boolean canPlayDeathAnimation() {
-		return this.dead || this.getHealth() < 0.01 || this.dead || !this.isAlive();
+	@Override
+	public EntitySize getDimensions(Pose pPose) {
+		EntitySize result = this.getDimensionsCloneFromEntity(pPose);
+		if(this instanceof ISizable) {
+			ISizable is = (ISizable)this;
+			return is.callOnGetDimensions(result);
+		}
+		return result;
 	}
 
 	//ITradeRestockOverTime data accessors
@@ -1778,6 +1805,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public World getWorld() {
 		return this.level;
+	}
+	
+	//Misc
+	
+	public boolean canPlayDeathAnimation() {
+		return this.dead || this.getHealth() < 0.01 || this.dead || !this.isAlive();
 	}
 	
 	@Override
