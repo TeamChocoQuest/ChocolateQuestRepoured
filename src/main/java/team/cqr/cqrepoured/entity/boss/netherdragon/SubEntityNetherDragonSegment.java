@@ -52,7 +52,7 @@ public class SubEntityNetherDragonSegment extends PartEntity<EntityCQRNetherDrag
 			return false;
 		}
 
-		return this.dragon.attackEntityFromPart(this, source, amount);
+		return this.dragon.hurt(this, source, amount);
 	}
 
 	@Override
