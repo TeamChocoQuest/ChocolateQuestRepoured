@@ -414,8 +414,15 @@ public class FactionRegistry {
 
 	public void saveAllReputationData(final boolean removeMapsFromMemory) {
 		for (UUID playerID : this.playerFactionRepuMap.keySet()) {
-			this.savePlayerReputation(playerID, removeMapsFromMemory);
+			this.savePlayerReputation(playerID);
 		}
+		if(removeMapsFromMemory) {
+			this.playerFactionRepuMap.clear();
+		}
+	}
+	
+	public void savePlayerReputation(final UUID playerID) {
+		this.savePlayerReputation(playerID, false);
 	}
 
 	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap) {
