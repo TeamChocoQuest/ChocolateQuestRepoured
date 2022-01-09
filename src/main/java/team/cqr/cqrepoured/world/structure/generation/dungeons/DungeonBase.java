@@ -16,11 +16,14 @@ import org.apache.commons.io.FileUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -45,7 +48,7 @@ public abstract class DungeonBase {
 	protected int weight = 0;
 	protected int chance = 0;
 	protected int spawnLimit = -1;
-	protected int[] allowedDims = new int[0];
+	protected ResourceLocation[] allowedDims = new ResourceLocation[0];
 	protected boolean allowedDimsAsBlacklist = false;
 	protected ResourceLocation[] allowedBiomes = new ResourceLocation[0];
 	protected String[] allowedBiomeTypes = new String[0];
@@ -93,7 +96,7 @@ public abstract class DungeonBase {
 		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight, 0, Integer.MAX_VALUE);
 		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance, 0, 100);
 		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", this.spawnLimit, -1, Integer.MAX_VALUE);
-		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", this.allowedDims, true);
+		this.allowedDims = PropertyFileHelper.getResourceLocationArrayProperty(prop, "allowedDims", this.allowedDims, true);
 		this.allowedDimsAsBlacklist = PropertyFileHelper.getBooleanProperty(prop, "allowedDimsAsBlacklist", this.allowedDimsAsBlacklist);
 		this.allowedBiomes = PropertyFileHelper.getResourceLocationArrayProperty(prop, "allowedBiomes", this.allowedBiomes, true);
 		this.allowedBiomeTypes = PropertyFileHelper.getStringArrayProperty(prop, "allowedBiomeTypes", this.allowedBiomeTypes, true);
@@ -194,7 +197,7 @@ public abstract class DungeonBase {
 		return files.stream().skip(rand.nextInt(files.size())).findFirst().get();
 	}
 
-	public boolean canSpawnInDim(int dim) {
+	public boolean canSpawnInDim(ResourceLocation dim) {
 		if (this.isModDependencyMissing()) {
 			return false;
 		}
@@ -223,7 +226,7 @@ public abstract class DungeonBase {
 		if (this.isModDependencyMissing()) {
 			return false;
 		}
-		if (!this.isValidDim(world.provider.getDimension())) {
+		if (!this.isValidDim(world.dimension().getRegistryName())) {
 			return false;
 		}
 		if (this.isDungeonDependencyMissing(world)) {
@@ -232,7 +235,7 @@ public abstract class DungeonBase {
 		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
-		if (this.spawnOnlyBehindWall && world.provider.getDimension() == 0 && CQRConfig.wall.enabled && pos.getZ() >> 4 < -CQRConfig.wall.distance) {
+		if (this.spawnOnlyBehindWall && world.dimension() == World.OVERWORLD && CQRConfig.wall.enabled && pos.getZ() >> 4 < -CQRConfig.wall.distance) {
 			return false;
 		}
 		if (!this.isValidBiome(biome)) {
@@ -248,7 +251,7 @@ public abstract class DungeonBase {
 		if (this.isModDependencyMissing()) {
 			return false;
 		}
-		if (!this.isValidDim(world.provider.getDimension())) {
+		if (!this.isValidDim(world.dimension().getRegistryName())) {
 			return false;
 		}
 		return this.isLockedPositionInChunk(world, chunkX, chunkZ);
@@ -256,16 +259,16 @@ public abstract class DungeonBase {
 
 	public boolean isModDependencyMissing() {
 		for (String s : this.modDependencies) {
-			if (!Loader.isModLoaded(s)) {
+			if (!ModList.get().isLoaded(s)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean isValidDim(int dim) {
-		for (int i : this.allowedDims) {
-			if (i == dim) {
+	public boolean isValidDim(ResourceLocation dim) {
+		for (ResourceLocation i : this.allowedDims) {
+			if (i.equals(dim)) {
 				return !this.allowedDimsAsBlacklist;
 			}
 		}
@@ -284,7 +287,10 @@ public abstract class DungeonBase {
 
 	public boolean isValidBiome(Biome biome) {
 		ResourceLocation biomeName = biome.getRegistryName();
-		Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
+		
+		RegistryKey<Biome> biomeKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeName);
+		
+		Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biomeKey);
 		boolean flag = this.allowedInAllBiomes;
 
 		if (!flag) {
@@ -383,7 +389,7 @@ public abstract class DungeonBase {
 		return this.spawnLimit;
 	}
 
-	public int[] getAllowedDims() {
+	public ResourceLocation[] getAllowedDims() {
 		return this.allowedDims;
 	}
 
