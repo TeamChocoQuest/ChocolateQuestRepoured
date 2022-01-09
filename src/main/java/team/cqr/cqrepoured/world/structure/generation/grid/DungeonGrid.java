@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -63,7 +65,8 @@ public class DungeonGrid {
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, pos);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
-			log(world, chunkX, chunkZ, "Could not find any dungeon for biome: %s (%s)", biome, BiomeDictionary.getTypes(biome));
+			RegistryKey<Biome> rk = RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName());
+			log(world, chunkX, chunkZ, "Could not find any dungeon for biome: %s (%s)", biome, BiomeDictionary.getTypes(rk));
 			return null;
 		}
 
@@ -168,7 +171,7 @@ public class DungeonGrid {
 		if (!CQRConfig.advanced.debugDungeonGen) {
 			return;
 		}
-		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.provider.getDimension(), String.format(message, params));
+		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.dimension().getRegistryName().toString(), String.format(message, params));
 	}
 
 	private CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, BlockPos pos) {

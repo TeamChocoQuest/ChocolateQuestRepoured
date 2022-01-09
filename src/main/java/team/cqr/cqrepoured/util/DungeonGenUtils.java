@@ -13,6 +13,7 @@ import net.minecraft.nbt.LongNBT;
 import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -146,7 +147,7 @@ public class DungeonGenUtils {
 			return false;
 		}
 		// Check if the world is the overworld
-		if (world.provider.getDimension() != 0) {
+		if (world.dimension() == World.OVERWORLD) {
 			return false;
 		}
 		// Check the coordinates
@@ -157,7 +158,8 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
-		if (!world.provider.canRespawnHere()) {
+		//Correct replacement?
+		if (!world.dimensionType().respawnAnchorWorks()) {
 			return true;
 		}
 		int x = chunkX - (getSpawnX(world) >> 4);
@@ -166,7 +168,7 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int distance) {
-		int dim = world.provider.getDimension();
+		ResourceLocation dim = world.dimension().getRegistryName();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getDungeons()) {
 			if (!dungeon.isEnabled()) {
@@ -277,7 +279,7 @@ public class DungeonGenUtils {
 
 	public static int getYForPos(World world, int x, int z, boolean ignoreWater) {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable(x, chunk.getTopFilledSegment() + 15, z);
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable(x, chunk.getHighestSectionPosition() + 15, z);
 		Material material = chunk.getBlockState(mutablePos).getMaterial();
 		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
 			mutablePos.setY(mutablePos.getY() - 1);
