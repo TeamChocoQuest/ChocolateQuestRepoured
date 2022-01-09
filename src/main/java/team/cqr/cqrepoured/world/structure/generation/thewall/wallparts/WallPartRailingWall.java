@@ -13,7 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -37,7 +38,7 @@ public class WallPartRailingWall implements IWallPart {
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, GeneratableDungeon.Builder dungeonBuilder) {
+	public void generateWall(int chunkX, int chunkZ, ChunkGenerator cg, GeneratableDungeon.Builder dungeonBuilder, ServerWorld sw) {
 		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 		int startY = this.getTopY();
@@ -63,7 +64,7 @@ public class WallPartRailingWall implements IWallPart {
 		}
 
 		// Spawner
-		this.placeSpawner(new BlockPos(4, 6, 7), world, partBuilder);
+		this.placeSpawner(new BlockPos(4, 6, 7), sw, partBuilder);
 
 		dungeonBuilder.add(partBuilder, dungeonBuilder.getPlacement(new BlockPos(startX, startY, startZ)));
 	}

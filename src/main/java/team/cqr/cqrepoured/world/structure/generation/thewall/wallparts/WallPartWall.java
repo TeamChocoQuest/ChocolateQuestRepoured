@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.world.structure.generation.thewall.wallparts;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
@@ -21,10 +21,10 @@ public class WallPartWall implements IWallPart {
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, GeneratableDungeon.Builder dungeonBuilder) {
+	public void generateWall(int chunkX, int chunkZ, ChunkGenerator cg, GeneratableDungeon.Builder dungeonBuilder, ServerWorld sw) {
 		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
-		int startY = this.getBottomY(world, startX, startZ);
+		int startY = this.getBottomY(cg, startX, startZ);
 
 		if (this.getTopY() > startY) {
 			// All the calculated block positions are stored within this map

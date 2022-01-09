@@ -8,29 +8,31 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import team.cqr.cqrepoured.CQRMain;
 
 @EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonGenerationHelper {
 
-	private static final Map<Integer, Set<PlayerEntity>> TRAVELING_PLAYERS = new HashMap<>();
+	private static final Map<DimensionType, Set<PlayerEntity>> TRAVELING_PLAYERS = new HashMap<>();
 	private static final Map<World, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
 	private static boolean isGeneratingDelayedChunks = false;
 
 	public static void onWorldUnloadEvent(World world) {
 		generateDelayedChunks(world);
-		TRAVELING_PLAYERS.remove(world.provider.getDimension());
+		TRAVELING_PLAYERS.remove(world.dimensionType());
 		DELAYED_CHUNKS.remove(world);
 	}
 
@@ -42,24 +44,24 @@ public class DungeonGenerationHelper {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onEntityTravelToDimensionEvent(EntityTravelToDimensionEvent event) {
 		if (event.getEntity() instanceof PlayerEntity) {
-			TRAVELING_PLAYERS.computeIfAbsent(event.getDimension(), k -> new HashSet<>()).add((PlayerEntity) event.getEntity());
+			TRAVELING_PLAYERS.computeIfAbsent(event.getEntity().level.dimensionType(), k -> new HashSet<>()).add((PlayerEntity) event.getEntity());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onChunkLoadEvent(ChunkEvent.Load event) {
-		TRAVELING_PLAYERS.computeIfPresent(event.getWorld().provider.getDimension(), (k, v) -> {
+		TRAVELING_PLAYERS.computeIfPresent(event.getWorld().dimensionType(), (k, v) -> {
 			Iterator<PlayerEntity> iterator = v.iterator();
 			while (iterator.hasNext()) {
 				PlayerEntity player = iterator.next();
 
-				int chunkX = MathHelper.floor(player.posX) >> 4;
-				int chunkZ = MathHelper.floor(player.posZ) >> 4;
+				int chunkX = MathHelper.floor(player.getX()) >> 4;
+				int chunkZ = MathHelper.floor(player.getZ()) >> 4;
 				int radius = 4;
 
 				for (int x = -radius; x <= radius + 1; x++) {
 					for (int z = -radius; z <= radius + 1; z++) {
-						player.world.getChunk(chunkX + x, chunkZ + z);
+						player.level.getChunk(chunkX + x, chunkZ + z);
 					}
 				}
 
@@ -71,7 +73,7 @@ public class DungeonGenerationHelper {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
-		TRAVELING_PLAYERS.computeIfPresent(event.toDim, (k, v) -> {
+		TRAVELING_PLAYERS.computeIfPresent(event.getTo(), (k, v) -> {
 			v.remove(event.player);
 			return v;
 		});
@@ -89,10 +91,10 @@ public class DungeonGenerationHelper {
 		if (isGeneratingDelayedChunks) {
 			return true;
 		}
-		if (world.playerEntities.isEmpty()) {
+		if (world.players().isEmpty()) {
 			return true;
 		}
-		Set<PlayerEntity> set = TRAVELING_PLAYERS.get(world.provider.getDimension());
+		Set<PlayerEntity> set = TRAVELING_PLAYERS.get(world.dimensionType());
 		return set != null && !set.isEmpty();
 	}
 
