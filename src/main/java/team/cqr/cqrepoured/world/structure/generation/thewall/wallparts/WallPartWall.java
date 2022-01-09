@@ -29,12 +29,12 @@ public class WallPartWall implements IWallPart {
 		if (this.getTopY() > startY) {
 			// All the calculated block positions are stored within this map
 			BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-			BlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
-			BlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
+			BlockState stateBrick = Blocks.STONE_BRICKS.defaultBlockState();
+			BlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.defaultBlockState() : stateBrick;
 
 			int height = this.getTopY() - startY;
 			// Calculates all the block positions
-			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 4, 15, height, 11)) {
+			for (BlockPos pos : BlockPos.betweenClosed(0, 0, 4, 15, height, 11)) {
 				if (pos.getY() < height && pos.getZ() >= 6 && pos.getZ() <= 9) {
 					partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
 				} else {

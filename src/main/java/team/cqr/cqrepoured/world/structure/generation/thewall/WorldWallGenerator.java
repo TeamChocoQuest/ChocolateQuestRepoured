@@ -6,8 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.PlainsBiome;
-import net.minecraft.world.biome.BiomeSnow;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -38,7 +37,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 			return;
 		}
 
-		if (!CQRConfig.wall.enabled || world.isRemote || world.provider.getDimension() != 0) {
+		if (!CQRConfig.wall.enabled || world.isClientSide || world.dimension() != World.OVERWORLD) {
 			return;
 		}
 		// Check if it is the wall region
@@ -51,8 +50,8 @@ public class WorldWallGenerator implements IWorldGenerator {
 			BlockPos pos = new BlockPos((chunkX << 4) + 8, world.getSeaLevel(), (chunkZ << 4) + 8);
 			GeneratableDungeon.Builder dungeonBuilder = new GeneratableDungeon.Builder(world, pos, "Wall in the North", CQRConfig.wall.mob);
 
-			Biome biome = world.getBiomeProvider().getBiome(pos);
-			if (biome instanceof PlainsBiome || biome instanceof BiomeSnow) {
+			Biome biome = world.getBiome(pos);
+			if(biome.getRegistryName().equals(Biomes.PLAINS.getRegistryName()) || biome.getRegistryName().equals(Biomes.SNOWY_TUNDRA.getRegistryName())) {
 				// Flag for the gate
 			}
 			IWallPart wallPart = null;
@@ -89,7 +88,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		// Wall is enabled -> check farther
 		// Now check if the world is the overworld...
-		if (world.provider.getDimension() != 0) {
+		if (world.dimension() != World.OVERWORLD) {
 			return false;
 		}
 		// The world is the overworld....

@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall.wallparts;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Items;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -44,7 +43,7 @@ public class WallPartRailingWall implements IWallPart {
 		int startY = this.getTopY();
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		BlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
+		BlockState stateBlock = Blocks.SMOOTH_STONE.defaultBlockState();
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
 		for (int y = 0; y < 8; y++) {
@@ -85,34 +84,34 @@ public class WallPartRailingWall implements IWallPart {
 				((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
 			}
 
-			BlockState state2 = CQRBlocks.SPAWNER.getDefaultState();
-			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
+			BlockState state2 = CQRBlocks.SPAWNER.defaultBlockState();
+			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(state2, world);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
-			partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.writeToNBT(new CompoundNBT())));
+			partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.save(new CompoundNBT())));
 		}
 	}
 
 	private void equipWeaponBasedOnDifficulty(LivingEntity entity, Difficulty difficulty) {
-		switch (entity.getRNG().nextInt(5)) {
+		switch (entity.getRandom().nextInt(5)) {
 		case 0:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 1:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
-			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 2:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
 			break;
 		case 3:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
-			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
 			break;
 		case 4:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
 			break;
 		}
 	}
@@ -124,21 +123,21 @@ public class WallPartRailingWall implements IWallPart {
 		ItemStack feet = new ItemStack(CQRItems.BOOTS_IRON_DYABLE);
 
 		if (difficulty == Difficulty.HARD) {
-			if (entity.getRNG().nextDouble() < 0.35D) {
+			if (entity.getRandom().nextDouble() < 0.35D) {
 				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
 				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
 				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
 				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
 			}
 		} else if (difficulty == Difficulty.NORMAL) {
-			if (entity.getRNG().nextDouble() < 0.25D) {
+			if (entity.getRandom().nextDouble() < 0.25D) {
 				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
 				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
 				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
 				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
 			}
 		} else {
-			if (entity.getRNG().nextDouble() < 0.2D) {
+			if (entity.getRandom().nextDouble() < 0.2D) {
 				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
 				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
 				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
@@ -146,7 +145,7 @@ public class WallPartRailingWall implements IWallPart {
 			}
 		}
 
-		if (entity.getRNG().nextDouble() < 0.005D) {
+		if (entity.getRandom().nextDouble() < 0.005D) {
 			((ItemArmorDyable) helm.getItem()).setColor(helm, 0x1008FFFF);
 			((ItemArmorDyable) helm.getItem()).setColor(chest, 0x1008FFFF);
 			((ItemArmorDyable) helm.getItem()).setColor(legs, 0x1008FFFF);
@@ -158,10 +157,10 @@ public class WallPartRailingWall implements IWallPart {
 			((ItemArmorDyable) helm.getItem()).setColor(feet, 0);
 		}
 
-		entity.setItemStackToSlot(EquipmentSlotType.HEAD, helm);
-		entity.setItemStackToSlot(EquipmentSlotType.CHEST, chest);
-		entity.setItemStackToSlot(EquipmentSlotType.LEGS, legs);
-		entity.setItemStackToSlot(EquipmentSlotType.FEET, feet);
+		entity.setItemSlot(EquipmentSlotType.HEAD, helm);
+		entity.setItemSlot(EquipmentSlotType.CHEST, chest);
+		entity.setItemSlot(EquipmentSlotType.LEGS, legs);
+		entity.setItemSlot(EquipmentSlotType.FEET, feet);
 	}
 
 }
