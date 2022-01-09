@@ -83,8 +83,8 @@ public class InventoryMerchant implements IInventory {
 
 	@Override
 	public void setItem(int index, ItemStack stack) {
-		if (stack.getCount() > this.getInventoryStackLimit()) {
-			stack.setCount(this.getInventoryStackLimit());
+		if (stack.getCount() > this.getMaxStackSize()) {
+			stack.setCount(this.getMaxStackSize());
 		}
 		this.slots.set(index, stack);
 		this.resetTradeAndSlots();
@@ -140,22 +140,21 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 64;
 	}
-
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
+	public boolean canPlaceItem(int index, ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 
 	}
 
@@ -168,7 +167,7 @@ public class InventoryMerchant implements IInventory {
 	public void setField(int id, int value) {
 
 	}
-
+	
 	@Override
 	public int getFieldCount() {
 		return 0;
