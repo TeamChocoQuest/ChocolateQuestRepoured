@@ -34,7 +34,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	private int roomSizeY = 10;
 	private int roomSizeZ = 17;
 
-	private BlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
+	private BlockState wallBlock = Blocks.STONE_BRICKS.defaultBlockState();
 
 	// Important: All rooms must have the same dimensions!!!
 
@@ -58,7 +58,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
 		this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 17);
 
-		this.wallBlock = PropertyFileHelper.getBlockStateProperty(prop, "wallBlock", Blocks.STONEBRICK.getDefaultState());
+		this.wallBlock = PropertyFileHelper.getBlockStateProperty(prop, "wallBlock", Blocks.STONE_BRICKS.defaultBlockState());
 	}
 
 	@Override

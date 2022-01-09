@@ -60,10 +60,10 @@ public class DungeonRandomizedCastle extends DungeonBase {
 		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
 		EnumMCWoodType woodType = PropertyFileHelper.getWoodTypeProperty(prop, "woodType", EnumMCWoodType.OAK);
-		this.mainBlock = PropertyFileHelper.getBlockStateProperty(prop, "mainBlock", Blocks.STONEBRICK.getDefaultState());
-		this.stairBlock = PropertyFileHelper.getBlockStateProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		this.slabBlock = PropertyFileHelper.getBlockStateProperty(prop, "slabBlock", Blocks.STONE_SLAB.getDefaultState());
-		this.fancyBlock = PropertyFileHelper.getBlockStateProperty(prop, "fancyBlock", Blocks.STONEBRICK.getDefaultState());
+		this.mainBlock = PropertyFileHelper.getBlockStateProperty(prop, "mainBlock", Blocks.STONE_BRICKS.defaultBlockState());
+		this.stairBlock = PropertyFileHelper.getBlockStateProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		this.slabBlock = PropertyFileHelper.getBlockStateProperty(prop, "slabBlock", Blocks.STONE_SLAB.defaultBlockState());
+		this.fancyBlock = PropertyFileHelper.getBlockStateProperty(prop, "fancyBlock", Blocks.STONE_BRICKS.defaultBlockState());
 		this.floorBlock = PropertyFileHelper.getBlockStateProperty(prop, "floorBlock", woodType.getPlankBlockState());
 		this.roofBlock = PropertyFileHelper.getBlockStateProperty(prop, "roofBlock", woodType.getStairBlockState());
 		this.fenceBlock = PropertyFileHelper.getBlockStateProperty(prop, "fenceBlock", woodType.getFenceBlockState());

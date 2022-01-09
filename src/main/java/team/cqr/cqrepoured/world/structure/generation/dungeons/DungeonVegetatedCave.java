@@ -7,10 +7,10 @@ import java.util.Random;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
+import net.minecraft.loot.LootTables;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTables;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
@@ -45,15 +45,15 @@ public class DungeonVegetatedCave extends DungeonBase {
 
 	public DungeonVegetatedCave(String name, Properties prop) {
 		super(name, prop);
-		this.vineBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineBlock", Blocks.VINE.getDefaultState());
+		this.vineBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineBlock", Blocks.VINE.defaultBlockState());
 		// DONE: Add a non-cross-shape vine thing
 		this.crossVine = (this.vineBlock.getBlock() instanceof VineBlock);
-		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airBlock", Blocks.AIR.getDefaultState());
-		this.pumpkinBlock = PropertyFileHelper.getBlockStateProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN.getDefaultState());
-		this.flowerBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "flowerBlocks", new BlockState[] { Blocks.RED_FLOWER.getDefaultState(), Blocks.YELLOW_FLOWER.getDefaultState() }, false);
-		this.mushrooms = PropertyFileHelper.getBlockStateArrayProperty(prop, "mushroomBlocks", new BlockState[] { Blocks.BROWN_MUSHROOM.getDefaultState(), Blocks.RED_MUSHROOM.getDefaultState() }, false);
-		this.floorBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "floorBlocks", new BlockState[] { Blocks.GRASS.getDefaultState() }, false);
-		this.grassBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "grassBlocks", new BlockState[] { Blocks.AIR.getDefaultState() }, false);
+		this.airBlock = PropertyFileHelper.getBlockStateProperty(prop, "airBlock", Blocks.AIR.defaultBlockState());
+		this.pumpkinBlock = PropertyFileHelper.getBlockStateProperty(prop, "lanternBlock", Blocks.JACK_O_LANTERN.defaultBlockState());
+		this.flowerBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "flowerBlocks", new BlockState[] { Blocks.POPPY.defaultBlockState(), Blocks.DANDELION.defaultBlockState() }, false);
+		this.mushrooms = PropertyFileHelper.getBlockStateArrayProperty(prop, "mushroomBlocks", new BlockState[] { Blocks.BROWN_MUSHROOM.defaultBlockState(), Blocks.RED_MUSHROOM.defaultBlockState() }, false);
+		this.floorBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "floorBlocks", new BlockState[] { Blocks.GRASS.defaultBlockState() }, false);
+		this.grassBlocks = PropertyFileHelper.getBlockStateArrayProperty(prop, "grassBlocks", new BlockState[] { Blocks.AIR.defaultBlockState() }, false);
 		this.vineLengthModifier = Math.max(1, PropertyFileHelper.getDoubleProperty(prop, "vineLengthModifier", 2));
 		this.vineChance = PropertyFileHelper.getIntProperty(prop, "vineChance", 20);
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
@@ -64,9 +64,9 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.tunnelCountMin = PropertyFileHelper.getIntProperty(prop, "tunnelCountMin", 3);
 		this.tunnelCountMax = PropertyFileHelper.getIntProperty(prop, "tunnelCountMax", 5);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
-		this.vineLatchBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE.getDefaultState());
+		this.vineLatchBlock = PropertyFileHelper.getBlockStateProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE.defaultBlockState());
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTables.CHESTS_ABANDONED_MINESHAFT, LootTables.CHESTS_NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD }, false);
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTables.ABANDONED_MINESHAFT, LootTables.NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD }, false);
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 

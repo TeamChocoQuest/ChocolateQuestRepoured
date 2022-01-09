@@ -28,9 +28,9 @@ public class DungeonGridCity extends DungeonBase {
 	// private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
 	private boolean makeSpaceForBuildings = true;
-	private BlockState bridgeBlock = Blocks.NETHER_BRICK.getDefaultState();
-	private BlockState floorBlock = Blocks.LAVA.getDefaultState();
-	private BlockState airBlockForPocket = Blocks.AIR.getDefaultState();
+	private BlockState bridgeBlock = Blocks.NETHER_BRICKS.defaultBlockState();
+	private BlockState floorBlock = Blocks.LAVA.defaultBlockState();
+	private BlockState airBlockForPocket = Blocks.AIR.defaultBlockState();
 
 	protected File buildingFolder;
 	protected File centralBuildingsFolder;
@@ -50,9 +50,9 @@ public class DungeonGridCity extends DungeonBase {
 
 		this.bridgeSizeMultiplier = PropertyFileHelper.getDoubleProperty(prop, "bridgelengthmultiplier", 1.2D);
 
-		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "streetblock", Blocks.NETHER_BRICK.getDefaultState());
-		this.floorBlock = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.LAVA.getDefaultState());
-		this.airBlockForPocket = PropertyFileHelper.getBlockStateProperty(prop, "airPocketBlock", Blocks.AIR.getDefaultState());
+		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "streetblock", Blocks.NETHER_BRICKS.defaultBlockState());
+		this.floorBlock = PropertyFileHelper.getBlockStateProperty(prop, "floorblock", Blocks.LAVA.defaultBlockState());
+		this.airBlockForPocket = PropertyFileHelper.getBlockStateProperty(prop, "airPocketBlock", Blocks.AIR.defaultBlockState());
 
 		this.buildingFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "nether_city_buildings");
 		this.centralBuildingsFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centralStructureFolder", "nether_city_buildings");

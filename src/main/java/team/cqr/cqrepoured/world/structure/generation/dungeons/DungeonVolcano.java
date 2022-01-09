@@ -34,11 +34,11 @@ public class DungeonVolcano extends DungeonBase {
 	private boolean damagedVolcano = true;
 	private int maxHoleSize = 8;
 
-	private CQRWeightedRandom<BlockState> volcanoBlocks = new CQRWeightedRandom<>(new CQRWeightedRandom.WeightedObject<>(Blocks.STONE.getDefaultState(), 1));
-	private BlockState lavaBlock = Blocks.LAVA.getDefaultState();
+	private CQRWeightedRandom<BlockState> volcanoBlocks = new CQRWeightedRandom<>(new CQRWeightedRandom.WeightedObject<>(Blocks.STONE.defaultBlockState(), 1));
+	private BlockState lavaBlock = Blocks.LAVA.defaultBlockState();
 	private int lavaWeight = 10;
-	private BlockState rampBlock = Blocks.NETHERRACK.getDefaultState();
-	private BlockState pillarBlock = CQRBlocks.GRANITE_LARGE.getDefaultState();
+	private BlockState rampBlock = Blocks.NETHERRACK.defaultBlockState();
+	private BlockState pillarBlock = CQRBlocks.GRANITE_LARGE.defaultBlockState();
 
 	private boolean buildStairwell = true;
 	private boolean digEntranceTunnel = true;

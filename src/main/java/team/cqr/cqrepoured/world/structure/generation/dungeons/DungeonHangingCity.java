@@ -31,12 +31,12 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	private boolean constructBridges = true;
 	private float bridgeTension = 3.0F;
 
-	private BlockState islandMaterial = Blocks.NETHERRACK.getDefaultState();
-	private BlockState chainBlock = Blocks.OBSIDIAN.getDefaultState();
-	private BlockState bridgeBlock = Blocks.PLANKS.getDefaultState();
-	private BlockState bridgeFenceBlock = Blocks.OAK_FENCE.getDefaultState();
-	private BlockState bridgeRailingBlock = Blocks.AIR.getDefaultState();
-	private BlockState bridgeAnchorBlock = Blocks.OBSERVER.getDefaultState();
+	private BlockState islandMaterial = Blocks.NETHERRACK.defaultBlockState();
+	private BlockState chainBlock = Blocks.OBSIDIAN.defaultBlockState();
+	private BlockState bridgeBlock = Blocks.OAK_PLANKS.defaultBlockState();
+	private BlockState bridgeFenceBlock = Blocks.OAK_FENCE.defaultBlockState();
+	private BlockState bridgeRailingBlock = Blocks.AIR.defaultBlockState();
+	private BlockState bridgeAnchorBlock = Blocks.OBSERVER.defaultBlockState();
 	// private Block bridgeBlock = Blocks.NETHER_BRICK;
 	// private int bridgeChance = 20;
 	private boolean buildChains = true;
@@ -64,12 +64,12 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 		this.structureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "structureFolder", "floatingCity/islands");
 		this.centralStructureFolder = PropertyFileHelper.getStructureFolderProperty(prop, "centralStructureFolder", "floatingCity/centers");
 
-		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.getDefaultState());
-		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.getDefaultState());
-		this.bridgeAnchorBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeAnchorBlock", Blocks.OBSIDIAN.getDefaultState());
-		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeBlock", Blocks.PLANKS.getDefaultState());
-		this.bridgeFenceBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeFenceBlock", Blocks.OAK_FENCE.getDefaultState());
-		this.bridgeRailingBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeRailingBlock", Blocks.AIR.getDefaultState());
+		this.islandMaterial = PropertyFileHelper.getBlockStateProperty(prop, "islandBlock", Blocks.NETHERRACK.defaultBlockState());
+		this.chainBlock = PropertyFileHelper.getBlockStateProperty(prop, "chainBlock", Blocks.OBSIDIAN.defaultBlockState());
+		this.bridgeAnchorBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeAnchorBlock", Blocks.OBSIDIAN.defaultBlockState());
+		this.bridgeBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeBlock", Blocks.OAK_PLANKS.defaultBlockState());
+		this.bridgeFenceBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeFenceBlock", Blocks.OAK_FENCE.defaultBlockState());
+		this.bridgeRailingBlock = PropertyFileHelper.getBlockStateProperty(prop, "bridgeRailingBlock", Blocks.AIR.defaultBlockState());
 	}
 
 	@Override
