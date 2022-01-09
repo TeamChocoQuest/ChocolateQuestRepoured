@@ -144,8 +144,11 @@ public final class SpawnerFactory {
 
 		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITIES.getValue(entityResLoc));
 
-		spawner.updateContainingBlockInfo();
-		spawner.update();
+		spawner.setChanged();
+		
+		//Correct method?
+		spawner.requestModelDataUpdate();
+		spawner.tick();
 	}
 
 	public static MobSpawnerTileEntity getSpawnerTile(World world, ResourceLocation entity, BlockPos pos) {
@@ -199,7 +202,7 @@ public final class SpawnerFactory {
 					entities[i] = null;
 				}
 			}
-			world.setBlockToAir(pos);
+			world.destroyBlock(pos, false);
 
 			placeSpawner(entities, true, spawnerSettings, world, pos);
 		}
@@ -253,7 +256,7 @@ public final class SpawnerFactory {
 	}
 
 	public static CompoundNBT createSpawnerNBTFromEntity(Entity entity) {
-		return createSpawnerNBTFromEntity(entity, (!(entity instanceof AbstractEntityCQRBoss) && entity.isNonBoss()));
+		return createSpawnerNBTFromEntity(entity, (!(entity instanceof AbstractEntityCQRBoss) /*&& entity.isNonBoss()*/));
 	}
 
 	public static CompoundNBT createSpawnerNBTFromEntity(Entity entity, boolean removeUUID) {
