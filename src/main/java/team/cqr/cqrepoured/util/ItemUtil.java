@@ -15,28 +15,29 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraftforge.entity.PartEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
@@ -81,7 +82,7 @@ public class ItemUtil {
 	}
 
 	public static void replaceModifier(Multimap<Attribute, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, Function<Double, Double> function) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
+		Collection<AttributeModifier> modifiers = modifierMultimap.values();
 		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
@@ -119,7 +120,7 @@ public class ItemUtil {
 			return;
 		}
 		if (targetEntity.isAttackable()) {
-			if (!targetEntity.hitByEntity(player)) {
+			if (!targetEntity.skipAttackInteraction(player)) {
 				float f = (float) player.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 				// CQR: Add flat damage bonus
 				f = f + damageBonus;
@@ -131,10 +132,10 @@ public class ItemUtil {
 					f1 = EnchantmentHelper.getDamageBonus(player.getMainHandItem(), CreatureAttribute.UNDEFINED);
 				}
 
-				float f2 = player.getCooledAttackStrength(0.5F);
+				float f2 = player.getAttackStrengthScale(0.5F);
 				f = f * (0.2F + f2 * f2 * 0.8F);
 				f1 = f1 * f2;
-				player.resetCooldown();
+				player.resetAttackStrengthTicker();
 
 				if (f > 0.0F || f1 > 0.0F) {
 					boolean flag = f2 > 0.9F;
@@ -143,12 +144,12 @@ public class ItemUtil {
 					i = i + EnchantmentHelper.getKnockbackBonus(player);
 
 					if (player.isSprinting() && flag) {
-						player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
+						player.level.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
 						++i;
 						flag1 = true;
 					}
 
-					boolean flag2 = flag && player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isRiding() && targetEntity instanceof LivingEntity;
+					boolean flag2 = flag && player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(Effects.BLINDNESS) && !player.isPassenger() && targetEntity instanceof LivingEntity;
 					flag2 = flag2 && !player.isSprinting();
 
 					CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(player, targetEntity, flag2, flag2 ? 1.5F : 1.0F);
@@ -161,10 +162,10 @@ public class ItemUtil {
 					// CQR: Add damage bonus multiplier
 					f = f * damageMultiplier;
 					boolean flag3 = false;
-					double d0 = player.distanceWalkedModified - player.prevDistanceWalkedModified;
+					double d0 = player.walkDist - player.walkDistO;
 
 					// CQR: Disable sweep attack when sweepingEnabled is false
-					if (sweepingEnabled && flag && !flag2 && !flag1 && player.isOnGround() && d0 < player.getAIMoveSpeed()) {
+					if (sweepingEnabled && flag && !flag2 && !flag1 && player.isOnGround() && d0 < player.getSpeed()) {
 						ItemStack itemstack = player.getItemInHand(Hand.MAIN_HAND);
 
 						if (itemstack.getItem() instanceof SwordItem) {
@@ -185,21 +186,19 @@ public class ItemUtil {
 						}
 					}
 
-					double d1 = targetEntity.motionX;
-					double d2 = targetEntity.motionY;
-					double d3 = targetEntity.motionZ;
-					boolean flag5 = targetEntity.attackEntityFrom(DamageSource.playerAttack(player), f);
+					Vector3d motion = player.getDeltaMovement();
+					
+					boolean flag5 = targetEntity.hurt(DamageSource.playerAttack(player), f);
 
 					if (flag5) {
 						if (i > 0) {
 							if (targetEntity instanceof LivingEntity) {
-								((LivingEntity) targetEntity).knockback(player, i * 0.5F, MathHelper.sin(player.rotationYaw * 0.017453292F), (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
+								((LivingEntity) targetEntity).knockback(i * 0.5F, MathHelper.sin(player.yRot * 0.017453292F), (-MathHelper.cos(player.yRot * 0.017453292F)));
 							} else {
-								targetEntity.addVelocity(-MathHelper.sin(player.rotationYaw * 0.017453292F) * i * 0.5F, 0.1D, MathHelper.cos(player.rotationYaw * 0.017453292F) * i * 0.5F);
+								targetEntity.push(-MathHelper.sin(player.yRot * 0.017453292F) * i * 0.5F, 0.1D, MathHelper.cos(player.yRot * 0.017453292F) * i * 0.5F);
 							}
 
-							player.motionX *= 0.6D;
-							player.motionZ *= 0.6D;
+							player.setDeltaMovement(player.getDeltaMovement().multiply(0.6, 1.0, 0.6));
 							player.setSprinting(false);
 						}
 
@@ -215,51 +214,49 @@ public class ItemUtil {
 								// CQR: Increase sweeping range when players reach distance is higher
 								if (entitylivingbase != player && entitylivingbase != targetEntity && !player.isAlliedTo(entitylivingbase) && player.distanceToSqr(entitylivingbase) < entityReachDistanceSqr) {
 									// CQR: Allow modification of sweeping knockback strength
-									entitylivingbase.knockback(player, sweepingKnockback, MathHelper.sin(player.rotationYaw * 0.017453292F), (-MathHelper.cos(player.rotationYaw * 0.017453292F)));
-									entitylivingbase.attackEntityFrom(DamageSource.playerAttack(player), f3);
+									entitylivingbase.knockback(sweepingKnockback, MathHelper.sin(player.yRot * 0.017453292F), (-MathHelper.cos(player.yRot * 0.017453292F)));
+									entitylivingbase.hurt(DamageSource.playerAttack(player), f3);
 								}
 							}
 
-							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
+							player.level.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
 							player.sweepAttack();
 						}
 
-						if (targetEntity instanceof ServerPlayerEntity && targetEntity.velocityChanged) {
-							((ServerPlayerEntity) targetEntity).connection.sendPacket(new SEntityVelocityPacket(targetEntity));
-							targetEntity.velocityChanged = false;
-							targetEntity.motionX = d1;
-							targetEntity.motionY = d2;
-							targetEntity.motionZ = d3;
+						if (targetEntity instanceof ServerPlayerEntity && targetEntity.hurtMarked) {
+							((ServerPlayerEntity) targetEntity).connection.send(new SEntityVelocityPacket(targetEntity));
+							targetEntity.hurtMarked = false;
+							targetEntity.setDeltaMovement(motion);
 						}
 
 						if (flag2) {
-							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.0F);
-							player.onCriticalHit(targetEntity);
+							player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.0F);
+							player.crit(targetEntity);
 						} else if (fakeCrit) { // CQR: Allow fake crits to happen
-							player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.2F);
-							player.onCriticalHit(targetEntity);
+							player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.2F);
+							player.crit(targetEntity);
 						}
 
 						if (!flag2 && !fakeCrit && !flag3) {
 							if (flag) {
-								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0F, 1.0F);
+								player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0F, 1.0F);
 							} else {
-								player.level.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundSource(), 1.0F, 1.0F);
+								player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, player.getSoundSource(), 1.0F, 1.0F);
 							}
 						}
 
 						if (f1 > 0.0F) {
-							player.onEnchantmentCritical(targetEntity);
+							player.magicCrit(targetEntity);
 						}
 
-						player.setLastAttackedEntity(targetEntity);
+						player.setLastHurtMob(targetEntity);
 
 						if (targetEntity instanceof LivingEntity) {
-							EnchantmentHelper.applyThornEnchantments((LivingEntity) targetEntity, player);
+							EnchantmentHelper.doPostHurtEffects((LivingEntity) targetEntity, player);
 						}
 
-						EnchantmentHelper.applyArthropodEnchantments(player, targetEntity);
-						ItemStack itemstack1 = player.getHeldItemMainhand();
+						EnchantmentHelper.doPostDamageEffects(player, targetEntity);
+						ItemStack itemstack1 = player.getMainHandItem();
 						Entity entity = targetEntity;
 
 						if (targetEntity instanceof PartEntity) {
@@ -272,7 +269,7 @@ public class ItemUtil {
 
 						if (!itemstack1.isEmpty() && entity instanceof LivingEntity) {
 							ItemStack beforeHitCopy = itemstack1.copy();
-							itemstack1.hitEntity((LivingEntity) entity, player);
+							itemstack1.hurtEnemy((LivingEntity) entity, player);
 
 							if (itemstack1.isEmpty()) {
 								ForgeEventFactory.onPlayerDestroyItem(player, beforeHitCopy, Hand.MAIN_HAND);
@@ -290,16 +287,16 @@ public class ItemUtil {
 
 							if (player.level instanceof ServerWorld && f5 > 2.0F) {
 								int k = (int) (f5 * 0.5D);
-								((ServerWorld) player.level).spawnParticle(ParticleTypes.DAMAGE_INDICATOR, targetEntity.posX, targetEntity.posY + targetEntity.height * 0.5F, targetEntity.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
+								((ServerWorld)targetEntity.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR, targetEntity.getX(), targetEntity.getY(0.5D), targetEntity.getZ(), k, 0.1D, 0.0D, 0.1D, 0.2D);
 							}
 						}
 
-						player.addExhaustion(0.1F);
+						player.causeFoodExhaustion(0.1F);
 					} else {
-						player.world.playSound((PlayerEntity) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0F, 1.0F);
+						player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0F, 1.0F);
 
 						if (flag4) {
-							targetEntity.extinguish();
+							targetEntity.clearFire();
 						}
 					}
 				}
@@ -308,7 +305,7 @@ public class ItemUtil {
 	}
 
 	private static double getEntityReachDistanceSqr(PlayerEntity player) {
-		double d = player.getEntityAttribute(PlayerEntity.REACH_DISTANCE).getAttributeValue();
+		double d = player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
 		if (!player.isCreative()) {
 			d -= 0.5D;
 		}
