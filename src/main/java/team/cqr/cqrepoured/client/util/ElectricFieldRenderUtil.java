@@ -71,7 +71,7 @@ public class ElectricFieldRenderUtil {
 		COUNT_BUFFER.flip();
 
 		VertexFormat format = VERTEX_BUFFER.getVertexFormat();
-		IntStream.range(0, format.getElements().size()).forEach((int i) -> format.getElements().get(i).getUsage().preDraw(format, i, format.getVertexSize(), VERTEX_BUFFER.getgetByteBuffer()));
+		IntStream.range(0, format.getElements().size()).forEach((int i) -> format.getElements().get(i).getUsage().preDraw(format, i, format.getVertexSize(), VERTEX_BUFFER.getByteBuffer()));
 
 		GL14.glMultiDrawArrays(GL11.GL_LINE_STRIP, FIRST_BUFFER, COUNT_BUFFER);
 
