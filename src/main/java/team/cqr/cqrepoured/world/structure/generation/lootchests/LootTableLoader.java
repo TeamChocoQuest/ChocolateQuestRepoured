@@ -14,7 +14,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.minecraft.world.storage.loot.ILootGenerator;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.cache.LoadingCache;
@@ -25,13 +24,16 @@ import com.google.gson.JsonSyntaxException;
 
 import meldexun.reflectionutil.ReflectionConstructor;
 import meldexun.reflectionutil.ReflectionField;
+import net.minecraft.loot.ILootGenerator;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTableManager;
+import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.functions.ILootFunction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.LootTableManager;
-import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import team.cqr.cqrepoured.CQRMain;
@@ -184,7 +186,7 @@ public class LootTableLoader {
 				properties.load(inputStream);
 
 				List<WeightedItemStack> items = getItemList(properties);
-				LootTable newLootTable = new LootTable(new LootPool[0]);
+				LootTable newLootTable = LootTable.EMPTY;
 
 				if (CQRConfig.general.singleLootPoolPerLootTable) {
 					ILootGenerator[] entries = new ILootGenerator[items.size()];
@@ -220,7 +222,7 @@ public class LootTableLoader {
 	public static void registerCustomLootTables(ServerWorld worldServer) {
 		Collection<File> files = FileUtils.listFiles(new File(CQRMain.CQ_CHEST_FOLDER, "chests"), new String[] { "json", "properties" }, false);
 		Set<ResourceLocation> cqrChestLootTables = CQRLoottables.getChestLootTables();
-		LootTableManager lootTableManager = worldServer.getLootTableManager();
+		LootTableManager lootTableManager = worldServer.getServer().getLootTables();
 		LoadingCache<ResourceLocation, LootTable> registeredLootTables = FIELD_REGISTERED_LOOT_TABLES.get(lootTableManager);
 
 		for (File file : files) {
@@ -231,7 +233,7 @@ public class LootTableLoader {
 				continue;
 			}
 
-			LootTable table = new LootTable(new LootPool[0]);
+			LootTable table = LootTable.EMPTY;
 			table = ForgeEventFactory.loadLootTable(name, table, lootTableManager);
 			registeredLootTables.put(name, table);
 		}
