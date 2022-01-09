@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,6 +18,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
@@ -87,12 +88,12 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public BlockPos getPosition() {
-		return new BlockPos(this.getPositionVector());
+	public BlockPos blockPosition() {
+		return new BlockPos(this.position());
 	}
 
 	@Override
-	public Vector3d getPositionVector() {
+	public Vector3d position() {
 		return super.position().add(this.getOffsetVector());
 	}
 
@@ -136,49 +137,49 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public void onEntityUpdate() {
-		if (!this.world.isRemote && !this.caster.isEntityAlive()) {
-			this.setDead();
+	public void tick() {
+		if (!this.level.isClientSide && !this.caster.isAlive()) {
+			this.remove();
 		}
 
-		super.onEntityUpdate();
+		super.tick();
 
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
 
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			this.rotationYawCQR = this.serverRotationYawCQR;
 			this.rotationPitchCQR = this.serverRotationPitchCQR;
 		} else {
 			this.updatePositionAndRotation();
-			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncLaserRotation(this), this);
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getEntity), new SPacketSyncLaserRotation(this));
 		}
 
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			Vector3d start = this.getPositionVector();
-			Vector3d end = start.add(Vector3d.fromPitchYaw(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
-			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, false, false);
-			double d = result != null ? (float) result.hitVec.subtract(this.getPositionVector()).length() : this.length;
+			Vector3d end = start.add(Vector3d.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
+			RayTraceResult result = this.level.rayTraceBlocks(start, end, false, false, false);
+			double d = result != null ? (float) result.getLocation().subtract(this.getPositionVector()).length() : this.length;
 
 			if (result != null) {
-				BlockPos pos = result.getBlockPos();
-				BlockState state = this.world.getBlockState(pos);
+				BlockPos pos = new BlockPos(result.getLocation());
+				BlockState state = this.level.getBlockState(pos);
 				if (this.canHitBlock(pos, state)) {
 					float breakProgress = this.onHitBlock(pos, state);
 					if (breakProgress > 0.0F) {
 						if (breakProgress >= 1.0F) {
 							// destroy block
-							this.world.setBlockToAir(pos);
+							this.level.destroyBlock(pos, true);
 						} else {
 							BreakingInfo breakingInfo = this.blockBreakMap.computeIfAbsent(pos, key -> new BreakingInfo());
-							breakingInfo.lastTimeHit = this.ticksExisted;
+							breakingInfo.lastTimeHit = this.tickCount;
 							breakingInfo.progress += breakProgress;
 							if (breakingInfo.progress >= 1.0F) {
 								// destroy block
-								this.world.setBlockToAir(pos);
+								this.level.destroyBlock(pos, true);
 								this.blockBreakMap.remove(pos);
-								int i = 0x1000000 + this.getEntityId() * 256 + breakingInfo.id;
-								this.world.sendBlockBreakProgress(i, pos, -1);
+								int i = 0x1000000 + this.getEntity() * 256 + breakingInfo.id;
+								this.level.sendBlockBreakProgress(i, pos, -1);
 							}
 						}
 					}
@@ -188,25 +189,25 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 			while (iterator.hasNext()) {
 				Map.Entry<BlockPos, BreakingInfo> entry = iterator.next();
 				BreakingInfo breakingInfo = entry.getValue();
-				if (this.ticksExisted - breakingInfo.lastTimeHit >= this.blockBreakThreshhold()) {
+				if (this.tickCount - breakingInfo.lastTimeHit >= this.blockBreakThreshhold()) {
 					breakingInfo.progress -= this.blockBreakRevert();
 				}
-				int i = 0x1000000 + this.getEntityId() * 256 + breakingInfo.id;
+				int i = 0x1000000 + this.getId() * 256 + breakingInfo.id;
 				if (breakingInfo.progress <= 0.0F) {
 					iterator.remove();
-					this.world.sendBlockBreakProgress(i, entry.getKey(), -1);
+					this.level.sendBlockBreakProgress(i, entry.getKey(), -1);
 				} else {
-					this.world.sendBlockBreakProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
+					this.level.sendBlockBreakProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
 				}
 			}
 
 			Vector3d vec1 = new Vector3d(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
 			Vector3d vec2 = new Vector3d(this.laserEffectRadius(), this.laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
-			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.world, this.caster, LivingEntity.class, bb)) {
-				if (this.canHitEntity(entity) && this.ticksExisted - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
+			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.level, this.caster, LivingEntity.class, bb)) {
+				if (this.canHitEntity(entity) && this.tickCount - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
 					this.onEntityHit(entity);
-					this.hitInfoMap.put(entity, this.ticksExisted);
+					this.hitInfoMap.put(entity, this.tickCount);
 				}
 			}
 		}
@@ -217,7 +218,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	public float onHitBlock(BlockPos pos, BlockState state) {
-		float hardness = state.getBlockHardness(this.world, pos);
+		float hardness = state.getBlockHardness(this.level, pos);
 		if (hardness < 0.0F) {
 			return 0.0F;
 		}
@@ -250,7 +251,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	public void onEntityHit(LivingEntity entity) {
-		entity.attackEntityFrom(new DamageSource("ray").setDamageBypassesArmor(), this.getDamage());
+		entity.hurt(new DamageSource("ray").bypassArmor(), this.getDamage());
 	}
 
 	public boolean canBreakBlocks() {
@@ -268,12 +269,12 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	@Override
 	public void onRemovedFromWorld() {
 		super.onRemovedFromWorld();
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			Iterator<Map.Entry<BlockPos, BreakingInfo>> iterator = this.blockBreakMap.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Map.Entry<BlockPos, BreakingInfo> entry = iterator.next();
-				int i = 0x1000000 + this.getEntityId() * 256 + entry.getValue().id;
-				this.world.sendBlockBreakProgress(i, entry.getKey(), -1);
+				int i = 0x1000000 + this.getId() * 256 + entry.getValue().id;
+				this.level.sendBlockBreakProgress(i, entry.getKey(), -1);
 			}
 		}
 	}
@@ -286,8 +287,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeInt(this.caster.getEntityId());
+	public void writeSpawnData(PacketBuffer buffer) {
+		buffer.writeInt(this.caster.getId());
 		buffer.writeFloat(this.length);
 		buffer.writeFloat(this.rotationYawCQR);
 		buffer.writeFloat(this.rotationPitchCQR);
@@ -298,8 +299,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		this.caster = (LivingEntity) this.world.getEntityByID(additionalData.readInt());
+	public void readSpawnData(PacketBuffer additionalData) {
+		this.caster = (LivingEntity) this.level.getEntity(additionalData.readInt());
 		this.length = additionalData.readFloat();
 		this.rotationYawCQR = additionalData.readFloat();
 		this.rotationPitchCQR = additionalData.readFloat();
