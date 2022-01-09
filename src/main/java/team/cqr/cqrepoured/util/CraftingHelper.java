@@ -16,17 +16,17 @@ public class CraftingHelper {
 		if (stack1.getItem() != stack2.getItem()) {
 			return false;
 		}
-		if (!ignoreMeta && stack1.getMetadata() != stack2.getMetadata()) {
+		if (!ignoreMeta && stack1.getDamageValue() != stack2.getDamageValue()) {
 			return false;
 		}
 		if (!ignoreTag) {
-			if (stack1.getTagCompound() == null && stack2.getTagCompound() == null) {
+			if (stack1.getTag() == null && stack2.getTag() == null) {
 				return true;
 			}
-			if (stack1.hasTagCompound() != stack2.hasTagCompound()) {
+			if (stack1.hasTag() != stack2.hasTag()) {
 				return false;
 			}
-			if (!stack1.getTagCompound().equals(stack2.getTagCompound())) {
+			if (!stack1.getTag().equals(stack2.getTag())) {
 				return false;
 			}
 			if (!stack1.areCapsCompatible(stack2)) {
