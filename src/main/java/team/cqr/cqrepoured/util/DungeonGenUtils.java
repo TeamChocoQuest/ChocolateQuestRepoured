@@ -261,7 +261,9 @@ public class DungeonGenUtils {
 		if (settings.getMirror() == Mirror.NONE && settings.getRotation() == Rotation.NONE) {
 			return startPos;
 		}
-		BlockPos pos = Template.transformedBlockPos(settings, size);
+		//Source pos, mirror, rot, offset
+		//Zero offset is correct?
+		BlockPos pos = Template.transform(size, settings.getMirror(), settings.getRotation(), BlockPos.ZERO);
 		int x = startPos.getX();
 		int y = startPos.getY();
 		int z = startPos.getZ();
@@ -281,7 +283,7 @@ public class DungeonGenUtils {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
 		BlockPos.Mutable mutablePos = new BlockPos.Mutable(x, chunk.getHighestSectionPosition() + 15, z);
 		Material material = chunk.getBlockState(mutablePos).getMaterial();
-		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
+		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANT || (ignoreWater && material == Material.WATER))) {
 			mutablePos.setY(mutablePos.getY() - 1);
 			material = chunk.getBlockState(mutablePos).getMaterial();
 		}
@@ -365,21 +367,23 @@ public class DungeonGenUtils {
 	 */
 	@Deprecated
 	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
-		BlockPos transformedSize = Template.transformedBlockPos(settings, structure.getSize());
+		//Source pos, mirror, rot, offset
+		//Zero offset is correct?
+		BlockPos transformedSize = Template.transform(structure.getSize(), settings.getMirror(), settings.getRotation(), BlockPos.ZERO);
 		return pos.offset(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
 	}
 
 	public static int getSpawnX(World world) {
-		int x = world.getWorldInfo().getSpawnX();
+		int x = world.getLevelData().getXSpawn();
 		return x >= world.getWorldBorder().getMinX() && x < world.getWorldBorder().getMaxX() ? x : MathHelper.floor(world.getWorldBorder().getCenterX());
 	}
 
 	public static int getSpawnY(World world) {
-		return world.getWorldInfo().getSpawnY();
+		return world.getLevelData().getYSpawn();
 	}
 
 	public static int getSpawnZ(World world) {
-		int z = world.getWorldInfo().getSpawnZ();
+		int z = world.getLevelData().getYSpawn();
 		return z >= world.getWorldBorder().getMinZ() && z < world.getWorldBorder().getMaxZ() ? z : MathHelper.floor(world.getWorldBorder().getCenterZ());
 	}
 
