@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 
 public class CoverDungeonPart implements IDungeonPart {
 
-	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
+	private static final BlockPos.Mutable MUTABLE = new BlockPos.Mutable();
 	private final BlockState coverBlock;
 	private final int startX;
 	private final int startZ;
@@ -41,7 +41,7 @@ public class CoverDungeonPart implements IDungeonPart {
 							continue;
 						}
 
-						MUTABLE.setPos((cx << 4) + x, chunk.getTopFilledSegment() + 15, (cz << 4) + z);
+						MUTABLE.set((cx << 4) + x, chunk.getHighestSectionPosition() + 15, (cz << 4) + z);
 						while (MUTABLE.getY() >= 0) {
 							BlockState state = chunk.getBlockState(MUTABLE);
 							if (state.getBlock() == Blocks.AIR) {

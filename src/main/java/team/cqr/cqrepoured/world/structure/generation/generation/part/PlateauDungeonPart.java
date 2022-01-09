@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -20,7 +19,7 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 public class PlateauDungeonPart implements IDungeonPart {
 
-	private static final MutableBlockPos MUTABLE = new MutableBlockPos();
+	private static final BlockPos.Mutable MUTABLE = new BlockPos.Mutable();
 	private final int startX;
 	private final int startZ;
 	private final int endX;
@@ -48,7 +47,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 	public void generate(World world, GeneratableDungeon dungeon) {
 		for (int x = this.startX - this.wallSize; x <= this.endX + this.wallSize; x++) {
 			for (int z = this.startZ - this.wallSize; z <= this.endZ + this.wallSize; z++) {
-				MUTABLE.setPos(x, 0, z);
+				MUTABLE.set(x, 0, z);
 				BlockState state1 = this.supportHillBlock;
 				BlockState state2 = this.supportHillTopBlock;
 				if (state1 == null || state2 == null) {
@@ -102,12 +101,12 @@ public class PlateauDungeonPart implements IDungeonPart {
 	private static boolean isGround(World world, Chunk chunk, BlockPos pos) {
 		BlockState state = chunk.getBlockState(pos);
 		Material material = state.getMaterial();
-		return material.blocksMovement() && material != Material.WOOD && material != Material.LEAVES && material != Material.PLANTS;
+		return material.blocksMotion() && material != Material.WOOD && material != Material.LEAVES && material != Material.PLANT;
 	}
 
 	private static int getHeight(World world, int x, int y, int z) {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
-		MUTABLE.setPos(x, y, z);
+		MUTABLE.set(x, y, z);
 		boolean upwards = isGround(world, chunk, MUTABLE);
 
 		while (true) {
