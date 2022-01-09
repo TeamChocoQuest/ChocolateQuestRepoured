@@ -528,15 +528,15 @@ public class ProtectedRegion {
 			this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
 			PacketBuffer buf = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
 			while (buf.readerIndex() < buf.writerIndex()) {
-				this.entityDependencies.add(ByteBufUtil.readUuid(buf));
+				this.entityDependencies.add(buf.readUUID());
 			}
-			PacketBuffer buf1 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
+			PacketBuffer buf1 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("blockDependencies")));
 			while (buf1.readerIndex() < buf1.writerIndex()) {
-				this.blockDependencies.add(ByteBufUtil.readBlockPos(buf1));
+				this.blockDependencies.add(buf1.readBlockPos());
 			}
-			PacketBuffer buf2 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
+			PacketBuffer buf2 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("unprotectedBlocks")));
 			while (buf2.readerIndex() < buf2.writerIndex()) {
-				this.unprotectedBlocks.add(ByteBufUtil.readBlockPos(buf2));
+				this.unprotectedBlocks.add(buf2.readBlockPos());
 			}
 		}
 

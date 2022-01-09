@@ -4,7 +4,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class CPacketCloseMapPlaceholderGuiSimple extends AbstractPacket<CPacketCloseMapPlaceholderGuiSimple> {
 
@@ -42,7 +41,7 @@ public class CPacketCloseMapPlaceholderGuiSimple extends AbstractPacket<CPacketC
 	public CPacketCloseMapPlaceholderGuiSimple fromBytes(PacketBuffer buf) {
 		CPacketCloseMapPlaceholderGuiSimple result = new CPacketCloseMapPlaceholderGuiSimple();
 		
-		result.pos = ByteBufUtil.readBlockPos(buf);
+		result.pos = buf.readBlockPos();
 		result.facing = Direction.from2DDataValue(buf.readByte());
 		result.scale = buf.readByte();
 		result.orientation = Direction.from2DDataValue(buf.readByte());
@@ -59,7 +58,7 @@ public class CPacketCloseMapPlaceholderGuiSimple extends AbstractPacket<CPacketC
 
 	@Override
 	public void toBytes(CPacketCloseMapPlaceholderGuiSimple packet, PacketBuffer buf) {
-		ByteBufUtil.writeBlockPos(buf, this.pos);
+		buf.writeBlockPos(packet.pos);
 		buf.writeByte(packet.facing.get2DDataValue());
 		buf.writeByte(packet.scale);
 		buf.writeByte(packet.orientation.get2DDataValue());

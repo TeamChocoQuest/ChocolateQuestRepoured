@@ -83,7 +83,7 @@ public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInit
 
 	@Override
 	public void toBytes(SPacketInitialFactionInformation packet, PacketBuffer buf) {
-		ByteBufUtil.writeUuid(buf, packet.playerId);
+		buf.writeUUID(packet.playerId);
 		buf.writeInt(packet.factions.length);
 		for (int i = 0; i < packet.factions.length; i++) {
 			buf.writeUtf(packet.factions[i]);

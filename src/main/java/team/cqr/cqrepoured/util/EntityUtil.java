@@ -120,7 +120,7 @@ public class EntityUtil {
 		if (!world.isClientSide) {
 			return ((ServerWorld) world).getEntity(uuid);
 		}
-
+		
 		for (Entity entity : world.loadedEntityList) {
 			if (entity.getUUID().equals(uuid)) {
 				return entity;

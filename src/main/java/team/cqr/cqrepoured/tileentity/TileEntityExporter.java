@@ -115,7 +115,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		public void writeChanges(PacketBuffer buf) {
 			buf.writeInt(this.value.length);
 			for (BlockPos pos : this.value) {
-				ByteBufUtil.writeBlockPos(buf, pos);
+				buf.writeBlockPos(pos);
 			}
 		}
 
@@ -123,7 +123,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		protected void readChangesInternal(PacketBuffer buf) {
 			this.value = new BlockPos[buf.readInt()];
 			for (int i = 0; i < this.value.length; i++) {
-				this.value[i] = ByteBufUtil.readBlockPos(buf);
+				this.value[i] = buf.readBlockPos();
 			}
 		}
 	};

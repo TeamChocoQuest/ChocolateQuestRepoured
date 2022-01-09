@@ -5,7 +5,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 
 public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 
@@ -43,7 +42,7 @@ public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 		CPacketAddPathNode result = new CPacketAddPathNode();
 		result.hand = Hand.values()[buf.readByte()];
 		result.rootNode = buf.readInt();
-		result.pos = ByteBufUtil.readBlockPos(buf);
+		result.pos = buf.readBlockPos();
 		result.waitingTimeMin = buf.readShort();
 		result.waitingTimeMax = buf.readShort();
 		result.waitingRotation = buf.readFloat();
@@ -62,7 +61,7 @@ public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 	public void toBytes(CPacketAddPathNode packet, PacketBuffer buf) {
 		buf.writeByte(packet.hand.ordinal());
 		buf.writeInt(packet.rootNode);
-		ByteBufUtil.writeBlockPos(buf, packet.pos);
+		buf.writeBlockPos(packet.pos);
 		buf.writeShort(packet.waitingTimeMin);
 		buf.writeShort(packet.waitingTimeMax);
 		buf.writeFloat(packet.waitingRotation);

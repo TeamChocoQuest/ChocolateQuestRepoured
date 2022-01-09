@@ -32,14 +32,14 @@ public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity>
 	@Override
 	public CPacketSyncTileEntity fromBytes(PacketBuffer buf) {
 		CPacketSyncTileEntity result = new CPacketSyncTileEntity();
-		result.pos = ByteBufUtil.readBlockPos(buf);
+		result.pos = buf.readBlockPos();
 		result.buffer.writeBytes(buf);
 		return result;
 	}
 
 	@Override
 	public void toBytes(CPacketSyncTileEntity packet, PacketBuffer buf) {
-		ByteBufUtil.writeBlockPos(buf, packet.pos);
+		buf.writeBlockPos(packet.pos);
 		buf.writeBytes(packet.buffer);
 	}
 
