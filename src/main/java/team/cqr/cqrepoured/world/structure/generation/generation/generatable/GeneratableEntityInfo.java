@@ -20,7 +20,7 @@ public class GeneratableEntityInfo implements IGeneratable {
 
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
-		world.spawnEntity(this.entity);
+		world.addFreshEntity(this.entity);
 	}
 
 	public Entity getEntity() {
@@ -29,7 +29,7 @@ public class GeneratableEntityInfo implements IGeneratable {
 
 	public CompoundNBT writeToNBT() {
 		CompoundNBT compound = new CompoundNBT();
-		this.entity.writeToNBTAtomically(compound);
+		this.entity.saveWithoutId(compound);
 		return compound;
 	}
 

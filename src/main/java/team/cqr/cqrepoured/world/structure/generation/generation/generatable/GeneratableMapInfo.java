@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.storage.MapData;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -51,13 +51,13 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 	}
 
 	@Override
-	public boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		BlockState state = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+	public boolean place(World world, Chunk chunk, ChunkSection blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
+		BlockState state = blockStorage.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
 		int light = state.getLightValue(world, pos);
 		if (light > 0) {
 			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), light);
 		}
-		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16);
+		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.defaultBlockState(), null, 16);
 		ItemStack stack = FilledMapItem.setupNewMap(world, this.mapX, this.mapZ, this.scale, true, true);
 		if (this.fillMap) {
 			updateMapData(world, this.mapOriginX, this.mapOriginZ, this.fillRadius, ((FilledMapItem) stack.getItem()).getMapData(stack, world));
