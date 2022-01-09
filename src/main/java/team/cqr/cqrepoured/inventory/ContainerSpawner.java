@@ -6,6 +6,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -19,33 +20,39 @@ public class ContainerSpawner extends Container {
 	public ContainerSpawner(final int containerID, PlayerInventory playerInv, TileEntitySpawner tileentity) {
 		super(ContainerType.GENERIC_3x3, containerID);
 		this.tileEntity = tileentity;
-		IItemHandler inventory = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		LazyOptional<IItemHandler> lOptCap = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		
+		if(lOptCap.isPresent()) {
+			IItemHandler inventory = lOptCap.resolve().get();
+			
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 9; j++) {
+					this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				}
+			}
 
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			for (int k = 0; k < 9; k++) {
+				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
+			}
+
+			for (int l = 0; l < 3; l++) {
+				for (int m = 0; m < 3; m++) {
+					this.addSlot(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
+						@Override
+						public void setChanged() {
+							tileentity.setChanged();
+						}
+
+						@Override
+						public boolean mayPlace(ItemStack stack) {
+							return stack.getItem() instanceof ItemSoulBottle && stack.hasTag() && stack.getTag().contains("EntityIn");
+						}
+					});
+				}
 			}
 		}
 
-		for (int k = 0; k < 9; k++) {
-			this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
-		}
-
-		for (int l = 0; l < 3; l++) {
-			for (int m = 0; m < 3; m++) {
-				this.addSlot(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
-					@Override
-					public void setChanged() {
-						tileentity.setChanged();
-					}
-
-					@Override
-					public boolean mayPlace(ItemStack stack) {
-						return stack.getItem() instanceof ItemSoulBottle && stack.hasTag() && stack.getTag().contains("EntityIn");
-					}
-				});
-			}
-		}
+		
 	}
 
 	@Override

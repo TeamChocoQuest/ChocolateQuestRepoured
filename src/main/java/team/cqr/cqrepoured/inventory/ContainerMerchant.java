@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
@@ -22,26 +23,34 @@ public class ContainerMerchant extends Container implements IInteractable {
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;
 
-	public ContainerMerchant(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerEntity player) {
+	public static ContainerMerchant fromNetwork(int id, PlayerInventory playerInv) {
+		return new ContainerMerchant(id, null, playerInv);
+	}
+	
+	public ContainerMerchant(final int containerID, AbstractEntityCQR entity, PlayerInventory playerInv) {
+		this(CQRContainerTypes.MERCHANT.get(), containerID, entity, playerInv);
+	}
+	
+	private ContainerMerchant(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerInventory playerInv) {
 		super(type, containerID);
 		this.entity = entity;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 139 + j * 18, 84 + i * 18));
+				this.addSlot(new Slot(playerInv, j + i * 9 + 9, 139 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlot(new Slot(player.inventory, k, 139 + k * 18, 142));
+			this.addSlot(new Slot(playerInv, k, 139 + k * 18, 142));
 		}
 
-		this.merchantInventory = new InventoryMerchant(entity, player);
+		this.merchantInventory = new InventoryMerchant(entity, playerInv.player);
 		this.addSlot(new Slot(this.merchantInventory, 0, 141, 37));
 		this.addSlot(new Slot(this.merchantInventory, 1, 167, 37));
 		this.addSlot(new Slot(this.merchantInventory, 2, 193, 37));
 		this.addSlot(new Slot(this.merchantInventory, 3, 219, 37));
-		this.addSlot(new SlotMerchantOutput(player, this.merchantInventory, 4, 277, 37));
+		this.addSlot(new SlotMerchantOutput(playerInv.player, this.merchantInventory, 4, 277, 37));
 	}
 
 	@Override
@@ -123,11 +132,11 @@ public class ContainerMerchant extends Container implements IInteractable {
 
 		if (!playerIn.isAlive() || playerIn instanceof ServerPlayerEntity && ((ServerPlayerEntity) playerIn).hasDisconnected()) {
 			for (int i = 0; i < 4; i++) {
-				playerIn.drop(this.merchantInventory.removeStackFromSlot(i), false);
+				playerIn.drop(this.merchantInventory.removeItemNoUpdate(i), false);
 			}
 		} else {
 			for (int i = 0; i < 4; i++) {
-				playerIn.inventory.placeItemBackInInventory(playerIn.level, this.merchantInventory.removeStackFromSlot(i));
+				playerIn.inventory.placeItemBackInInventory(playerIn.level, this.merchantInventory.removeItemNoUpdate(i));
 			}
 		}
 	}
@@ -138,13 +147,13 @@ public class ContainerMerchant extends Container implements IInteractable {
 			NonNullList<TradeInput> input = trade.getInputItems();
 
 			for (int i = 0; i < 4; i++) {
-				ItemStack stack = this.merchantInventory.getStackInSlot(i);
+				ItemStack stack = this.merchantInventory.getItem(i);
 				if (!stack.isEmpty()) {
 					if (!this.moveItemStackTo(stack, 0, 36, true)) {
 						return;
 					}
 
-					this.merchantInventory.setInventorySlotContents(i, stack);
+					this.merchantInventory.setItem(i, stack);
 				}
 			}
 
@@ -159,14 +168,14 @@ public class ContainerMerchant extends Container implements IInteractable {
 			for (int i = 0; i < 36; i++) {
 				ItemStack stack1 = this.slots.get(i).getItem();
 				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(input.getStack(), stack1, input.ignoreMeta(), input.ignoreNBT())) {
-					ItemStack stack2 = this.merchantInventory.getStackInSlot(slotIndex);
+					ItemStack stack2 = this.merchantInventory.getItem(slotIndex);
 					int j = stack2.isEmpty() ? 0 : stack2.getCount();
 					int k = Math.min(input.getStack().getMaxStackSize() - j, stack1.getCount());
 					ItemStack stack3 = stack1.copy();
 					int l = j + k;
 					stack1.shrink(k);
 					stack3.setCount(l);
-					this.merchantInventory.setInventorySlotContents(slotIndex, stack3);
+					this.merchantInventory.setItem(slotIndex, stack3);
 					if (l >= input.getStack().getMaxStackSize()) {
 						break;
 					}
