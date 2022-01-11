@@ -2,36 +2,33 @@ package team.cqr.cqrepoured.client.render.entity.layer;
 
 import java.util.function.Function;
 
-import net.minecraft.client.renderer.entity.MobRenderer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
-import team.cqr.cqrepoured.client.util.EmissiveUtil;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerGlowingAreas<T extends MobEntity> implements LayerRenderer<T> {
+public class LayerGlowingAreas<T extends AbstractEntityCQR, M extends EntityModel<T>> extends LayerRenderer<T, M> {
 
-	protected final MobRenderer<T> renderer;
 	protected final Function<T, ResourceLocation> funcGetCurrentTexture;
 
-	public LayerGlowingAreas(MobRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture) {
-		this.renderer = renderer;
+	public LayerGlowingAreas(IEntityRenderer<T, M> renderer, Function<T, ResourceLocation> funcGetCurrentTexture) {
+		super(renderer);
 		this.funcGetCurrentTexture = funcGetCurrentTexture;
 	}
 
 	@Override
-	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		EmissiveUtil.preEmissiveTextureRendering();
-
-		this.renderer.bindTexture(AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(entitylivingbaseIn)));
-		this.renderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-
-		EmissiveUtil.postEmissiveTextureRendering();
-	}
-
-	@Override
-	public boolean shouldCombineTextures() {
-		return false;
+	public void render(MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount,
+			float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		ResourceLocation texture = AutoGlowingTexture.get(this.funcGetCurrentTexture.apply(pLivingEntity));
+		this.getParentModel().renderToBuffer(pMatrixStack, pBuffer.getBuffer(CQRRenderTypes.emissive(texture)), pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F,
+				1.0F, 1.0F, 1.0F);
 	}
 
 }
