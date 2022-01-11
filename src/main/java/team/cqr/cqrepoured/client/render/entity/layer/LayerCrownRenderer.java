@@ -1,58 +1,44 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.LivingRenderer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.armor.ModelCrown;
-import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.item.armor.ItemCrown;
 
-public class LayerCrownRenderer extends BipedArmorLayer {
+public class LayerCrownRenderer<T extends LivingEntity, M extends BipedModel<T>, A extends BipedModel<T>> extends BipedArmorLayer<T, M, A> {
 
-	protected static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/models/armor/king_crown_layer_1.png");
+	private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/models/armor/king_crown_layer_1.png");
 
-	public LayerCrownRenderer(LivingRenderer<?> rendererIn) {
-		super(rendererIn);
+	public LayerCrownRenderer(IEntityRenderer<T, M> renderer) {
+		super(renderer, null, CQRArmorModels.crown);
 	}
 
 	@Override
-	protected void initArmor() {
-		this.modelLeggings = new ModelCrown(0.5F);
-		this.modelArmor = new ModelCrown(1.0F);
+	public void render(MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount,
+			float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		if (ItemCrown.hasCrown(pLivingEntity.getItemBySlot(EquipmentSlotType.HEAD))) {
+			this.renderArmorPiece(pMatrixStack, pBuffer, pLivingEntity, EquipmentSlotType.HEAD, pPackedLight, this.getArmorModel(EquipmentSlotType.HEAD));
+		}
 	}
 
 	@Override
-	public void doRenderLayer(LivingEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		// First. Check if we should render at all, if not => don't render!
-		if (ItemCrown.hasCrown(entitylivingbaseIn.getItemStackFromSlot(EquipmentSlotType.HEAD))) {
-			super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
-		}
-		//Crown is not attached => you don't need to do anything!
-	}
-
-	@Override
-	protected ModelBiped getArmorModelHook(LivingEntity entity, ItemStack itemStack, EquipmentSlotType slot, ModelBiped model) {
-		if (slot != EquipmentSlotType.HEAD) {
-			return model;
-		}
-		if (ItemCrown.hasCrown(itemStack)) {
-			return CQRItems.KING_CROWN.getArmorModel(entity, itemStack, slot, model);
-		}
-		return model;
+	protected A getArmorModelHook(T entity, ItemStack itemStack, EquipmentSlotType slot, A model) {
+		return CQRArmorModels.crown;
 	}
 
 	@Override
 	public ResourceLocation getArmorResource(Entity entity, ItemStack stack, EquipmentSlotType slot, String type) {
-		if (slot == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
-			return CROWN_TEXTURE;
-		}
-		return super.getArmorResource(entity, stack, slot, type);
+		return CROWN_TEXTURE;
 	}
 
 }
