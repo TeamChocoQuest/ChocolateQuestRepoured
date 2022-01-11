@@ -15,18 +15,12 @@ import team.cqr.cqrepoured.util.GuiHandler;
 public class SPacketHandlerOpenMerchantGui extends AbstractPacketHandler<CPacketOpenMerchantGui> {
 
 	@Override
-	public void handlePacket(CPacketOpenMerchantGui packet, Supplier<Context> context) {
-		context.get().enqueueWork(() -> {
-			PlayerEntity player = context.get().getSender();
-			World world = player.level;
-			
-			Entity entity = world.getEntity(packet.getEntityId());
+	protected void execHandlePacket(CPacketOpenMerchantGui packet, Supplier<Context> context, World world, PlayerEntity player) {
+		Entity entity = world.getEntity(packet.getEntityId());
 
-			if (entity instanceof AbstractEntityCQR) {
-				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, world, packet.getEntityId(), 0, 0);
-			}
-		});
-		context.get().setPacketHandled(true);
+		if (entity instanceof AbstractEntityCQR) {
+			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, world, packet.getEntityId(), 0, 0);
+		}		
 	}
 
 }

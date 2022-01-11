@@ -15,32 +15,28 @@ import team.cqr.cqrepoured.tileentity.ITileEntitySyncable;
 
 public class SPacketHandlerSyncTileEntity extends AbstractPacketHandler<CPacketSyncTileEntity> {
 
+
 	@Override
-	public void handlePacket(CPacketSyncTileEntity packet, Supplier<Context> context) {
-		context.get().enqueueWork(() -> {
-			PlayerEntity player = context.get().getSender();
-			World world = player.level;
-			TileEntity tileEntity = world.getBlockEntity(packet.getPos());
+	protected void execHandlePacket(CPacketSyncTileEntity packet, Supplier<Context> context, World world, PlayerEntity sender) {
+		TileEntity tileEntity = world.getBlockEntity(packet.getPos());
 
-			if (tileEntity instanceof ITileEntitySyncable) {
-				TileEntityDataManager dataManager = ((ITileEntitySyncable) tileEntity).getDataManager();
-				PacketBuffer buf = packet.getBuffer();
+		if (tileEntity instanceof ITileEntitySyncable) {
+			TileEntityDataManager dataManager = ((ITileEntitySyncable) tileEntity).getDataManager();
+			PacketBuffer buf = packet.getBuffer();
 
-				int size = buf.readVarInt();
-				for (int i = 0; i < size; i++) {
-					int id = buf.readVarInt();
-					DataEntry<?> entry = dataManager.getById(id);
-					if (entry == null) {
-						throw new IllegalArgumentException(String.format("No tile entity data manager entry found for id %s.", id));
-					} else if (!entry.isClientModificationAllowed()) {
-						throw new IllegalArgumentException("Tile entity data manager entry does not allow modification from client.");
-					} else {
-						entry.readChanges(buf);
-					}
+			int size = buf.readVarInt();
+			for (int i = 0; i < size; i++) {
+				int id = buf.readVarInt();
+				DataEntry<?> entry = dataManager.getById(id);
+				if (entry == null) {
+					throw new IllegalArgumentException(String.format("No tile entity data manager entry found for id %s.", id));
+				} else if (!entry.isClientModificationAllowed()) {
+					throw new IllegalArgumentException("Tile entity data manager entry does not allow modification from client.");
+				} else {
+					entry.readChanges(buf);
 				}
 			}
-		});
-		context.get().setPacketHandled(true);
+		}
 	}
 
 }
