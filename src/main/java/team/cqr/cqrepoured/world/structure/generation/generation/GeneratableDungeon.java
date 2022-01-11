@@ -16,12 +16,11 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.Mutable;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.ChunkInfo.ChunkInfoMap;
@@ -128,17 +127,17 @@ public class GeneratableDungeon {
 			Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
 			if (world.provider.hasSkyLight()) {
 				for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
-					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-						blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
-						chunk.getBlockStorageArray()[chunkY] = blockStorage;
+					ChunkSection blockStorage = chunk.getSections()[chunkY];
+					if (blockStorage == Chunk.EMPTY_SECTION) {
+						blockStorage = new ChunkSection(chunkY << 4/*, true*/);
+						chunk.getSections()[chunkY] = blockStorage;
 					}
 					Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 				}
 			}
 			chunkInfo.forEach(chunkY -> {
-				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-				if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
+				ChunkSection blockStorage = chunk.getSections()[chunkY];
+				if (blockStorage != Chunk.EMPTY_SECTION) {
 					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
 				}
 				int r = 1;

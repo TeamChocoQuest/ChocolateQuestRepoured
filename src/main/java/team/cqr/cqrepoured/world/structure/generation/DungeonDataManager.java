@@ -9,11 +9,12 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
@@ -55,7 +56,7 @@ public class DungeonDataManager {
 		DUNGEON_GENERATION, LOCKED_COORDINATE, DUNGEON_PLACER_ITEM;
 	}
 
-	private static final Map<World, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
+	private static final Map<IWorld, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
 	private final Map<String, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
 	private final File file;
@@ -98,7 +99,7 @@ public class DungeonDataManager {
 		}
 	}
 
-	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
+	public static void addDungeonEntry(IWorld world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
 		if (INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).addDungeonEntry(dungeon, position, spawnType);
 		}

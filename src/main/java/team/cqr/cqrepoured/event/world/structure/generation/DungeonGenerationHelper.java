@@ -8,10 +8,10 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
@@ -27,13 +27,13 @@ import team.cqr.cqrepoured.CQRMain;
 public class DungeonGenerationHelper {
 
 	private static final Map<DimensionType, Set<PlayerEntity>> TRAVELING_PLAYERS = new HashMap<>();
-	private static final Map<World, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
+	private static final Map<IWorld, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
 	private static boolean isGeneratingDelayedChunks = false;
 
-	public static void onWorldUnloadEvent(World world) {
-		generateDelayedChunks(world);
-		TRAVELING_PLAYERS.remove(world.dimensionType());
-		DELAYED_CHUNKS.remove(world);
+	public static void onWorldUnloadEvent(IWorld iWorld) {
+		generateDelayedChunks(iWorld);
+		TRAVELING_PLAYERS.remove(iWorld.dimensionType());
+		DELAYED_CHUNKS.remove(iWorld);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -74,16 +74,16 @@ public class DungeonGenerationHelper {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
 		TRAVELING_PLAYERS.computeIfPresent(event.getTo(), (k, v) -> {
-			v.remove(event.player);
+			v.remove(event.getPlayer());
 			return v;
 		});
 	}
 
-	public static boolean shouldDelayDungeonGeneration(World world) {
+	public static boolean shouldDelayDungeonGeneration(IWorld world) {
 		return world.findingSpawnPoint;
 	}
 
-	public static void addDelayedChunk(World world, int chunkX, int chunkZ) {
+	public static void addDelayedChunk(IWorld world, int chunkX, int chunkZ) {
 		DELAYED_CHUNKS.computeIfAbsent(world, k -> new HashSet<>()).add(new ChunkPos(chunkX, chunkZ));
 	}
 
@@ -98,7 +98,7 @@ public class DungeonGenerationHelper {
 		return set != null && !set.isEmpty();
 	}
 
-	private static void generateDelayedChunks(World world) {
+	private static void generateDelayedChunks(IWorld world) {
 		DELAYED_CHUNKS.computeIfPresent(world, (k, v) -> {
 			for (ChunkPos chunkPos : v) {
 				long worldSeed = world.getSeed();
