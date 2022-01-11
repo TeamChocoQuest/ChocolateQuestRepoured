@@ -1,32 +1,26 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 
-public class CPacketHandlerUpdateEntityPrevPos implements IMessageHandler<SPacketUpdateEntityPrevPos, IMessage> {
+public class CPacketHandlerUpdateEntityPrevPos extends AbstractPacketHandler<SPacketUpdateEntityPrevPos> {
 
 	@Override
-	public IMessage onMessage(SPacketUpdateEntityPrevPos message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				Entity entity = world.getEntityByID(message.getEntityId());
+	protected void execHandlePacket(SPacketUpdateEntityPrevPos message, Supplier<Context> context, World world, PlayerEntity player) {
+		Entity entity = world.getEntity(message.getEntityId());
 
-				entity.setPosition(message.getX(), message.getY(), message.getZ());
-				entity.prevPosX = entity.posX;
-				entity.prevPosY = entity.posY;
-				entity.prevPosZ = entity.posZ;
-				entity.rotationYaw = message.getYaw();
-				entity.prevRotationYaw = entity.rotationYaw;
-			});
-		}
-		return null;
+		entity.setPos(message.getX(), message.getY(), message.getZ());
+		entity.xOld = entity.getX();
+		entity.yOld = entity.getY();
+		entity.zOld = entity.getZ();
+		entity.yRot = message.getYaw();
+		entity.yRotO = entity.yRot;
 	}
 
 }

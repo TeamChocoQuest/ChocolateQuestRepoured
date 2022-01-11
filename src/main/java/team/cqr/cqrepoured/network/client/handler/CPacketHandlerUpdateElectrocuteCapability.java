@@ -1,49 +1,46 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 
-public class CPacketHandlerUpdateElectrocuteCapability implements IMessageHandler<SPacketUpdateElectrocuteCapability, IMessage> {
+public class CPacketHandlerUpdateElectrocuteCapability extends AbstractPacketHandler<SPacketUpdateElectrocuteCapability> {
 
 	@Override
-	public IMessage onMessage(SPacketUpdateElectrocuteCapability message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				if (world == null) {
-					return;
-				}
-
-				Entity entity = world.getEntityByID(message.getEntityId());
-				if (entity == null) {
-					return;
-				}
-
-				CapabilityElectricShock cap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-				if (cap == null) {
-					return;
-				}
-
-				// int charge = message.getElectroCharge();
-				int charge = message.isElectrocutionActive() ? 20 : 0;
-				cap.setRemainingTicks(charge);
-				if (message.hasTarget()) {
-					Entity target = world.getEntityByID(message.getEntityIdTarget());
-					cap.setTarget(target);
-				} else {
-					cap.setTarget(null);
-				}
-			});
+	protected void execHandlePacket(SPacketUpdateElectrocuteCapability message, Supplier<Context> context, World world, PlayerEntity player) {
+		if (world == null) {
+			return;
 		}
-		return null;
+
+		Entity entity = world.getEntity(message.getEntityId());
+		if (entity == null) {
+			return;
+		}
+
+		LazyOptional<CapabilityElectricShock> lOpCap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		if (!lOpCap.isPresent()) {
+			return;
+		}
+		
+		CapabilityElectricShock cap = lOpCap.resolve().get();
+
+		// int charge = message.getElectroCharge();
+		int charge = message.isElectrocutionActive() ? 20 : 0;
+		cap.setRemainingTicks(charge);
+		if (message.hasTarget()) {
+			Entity target = world.getEntity(message.getEntityIdTarget());
+			cap.setTarget(target);
+		} else {
+			cap.setTarget(null);
+		}
 	}
 
 }

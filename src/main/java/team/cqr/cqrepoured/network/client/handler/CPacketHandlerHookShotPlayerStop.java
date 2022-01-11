@@ -1,25 +1,20 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
 
-public class CPacketHandlerHookShotPlayerStop implements IMessageHandler<SPacketHookShotPlayerStop, IMessage> {
+public class CPacketHandlerHookShotPlayerStop extends AbstractPacketHandler<SPacketHookShotPlayerStop> {
 
 	@Override
-	public IMessage onMessage(final SPacketHookShotPlayerStop message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
-				player.setVelocity(0.0D, 0.0D, 0.0D);
-				player.velocityChanged = true;
-			});
-		}
-		return null;
+	protected void execHandlePacket(SPacketHookShotPlayerStop packet, Supplier<Context> context, World world, PlayerEntity player) {
+		player.setDeltaMovement(Vector3d.ZERO);
+		player.hasImpulse = true;
 	}
 
 }

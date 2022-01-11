@@ -1,40 +1,33 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
 
-public class CPacketHandlerSyncTrades implements IMessageHandler<SPacketSyncTrades, IMessage> {
+public class CPacketHandlerSyncTrades extends AbstractPacketHandler<SPacketSyncTrades> {
 
 	@Override
-	public IMessage onMessage(SPacketSyncTrades message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				Entity entity = world.getEntityByID(message.getEntityId());
-				PlayerEntity player = CQRMain.proxy.getPlayer(ctx);
+	protected void execHandlePacket(SPacketSyncTrades message, Supplier<Context> context, World world, PlayerEntity player) {
+		Entity entity = world.getEntity(message.getEntityId());
 
-				if (entity instanceof AbstractEntityCQR) {
-					TraderOffer trades = ((AbstractEntityCQR) entity).getTrades();
+		if (entity instanceof AbstractEntityCQR) {
+			TraderOffer trades = ((AbstractEntityCQR) entity).getTrades();
 
-					trades.readFromNBT(message.getTrades());
-					if (player.openContainer instanceof ContainerMerchant) {
-						((ContainerMerchant) player.openContainer).onTradesUpdated();;
-					}
-					CQRMain.proxy.updateGui();
-				}
-			});
+			trades.readFromNBT(message.getTrades());
+			if (player.containerMenu instanceof ContainerMerchant) {
+				((ContainerMerchant) player.containerMenu).onTradesUpdated();
+			}
+			CQRMain.proxy.updateGui();
 		}
-		return null;
 	}
 
 }

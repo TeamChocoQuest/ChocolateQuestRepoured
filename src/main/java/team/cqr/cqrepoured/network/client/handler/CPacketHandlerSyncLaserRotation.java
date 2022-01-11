@@ -1,31 +1,25 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 
-public class CPacketHandlerSyncLaserRotation implements IMessageHandler<SPacketSyncLaserRotation, IMessage> {
+public class CPacketHandlerSyncLaserRotation extends AbstractPacketHandler<SPacketSyncLaserRotation> {
 
 	@Override
-	public IMessage onMessage(SPacketSyncLaserRotation message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				Entity entity = world.getEntityByID(message.getEntityId());
+	protected void execHandlePacket(SPacketSyncLaserRotation message, Supplier<Context> context, World world, PlayerEntity player) {
+		Entity entity = world.getEntity(message.getEntityId());
 
-				if (entity instanceof AbstractEntityLaser) {
-					((AbstractEntityLaser) entity).serverRotationYawCQR = message.getYaw();
-					((AbstractEntityLaser) entity).serverRotationPitchCQR = message.getPitch();
-				}
-			});
+		if (entity instanceof AbstractEntityLaser) {
+			((AbstractEntityLaser) entity).serverRotationYawCQR = message.getYaw();
+			((AbstractEntityLaser) entity).serverRotationPitchCQR = message.getPitch();
 		}
-		return null;
 	}
 
 }

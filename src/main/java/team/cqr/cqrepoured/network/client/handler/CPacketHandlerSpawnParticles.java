@@ -1,38 +1,31 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.init.CQRParticleType;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
 
-public class CPacketHandlerSpawnParticles implements IMessageHandler<SPacketSpawnParticles, IMessage> {
+public class CPacketHandlerSpawnParticles extends AbstractPacketHandler<SPacketSpawnParticles> {
 
 	@Override
-	public IMessage onMessage(SPacketSpawnParticles message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-
-				int particleId = message.getParticleId();
-				double xCoord = message.getxCoord();
-				double yCoord = message.getyCoord();
-				double zCoord = message.getzCoord();
-				double xSpeed = message.getxSpeed();
-				double ySpeed = message.getySpeed();
-				double zSpeed = message.getzSpeed();
-				int count = message.getCount();
-				double xOffset = message.getxOffset();
-				double yOffset = message.getyOffset();
-				double zOffset = message.getzOffset();
-				int[] optionalArguments = message.getOptionalArguments();
-				CQRParticleType.spawnParticles(particleId, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
-			});
-		}
-		return null;
+	protected void execHandlePacket(SPacketSpawnParticles message, Supplier<Context> context, World world, PlayerEntity player) {
+		int particleId = message.getParticleId();
+		double xCoord = message.getxCoord();
+		double yCoord = message.getyCoord();
+		double zCoord = message.getzCoord();
+		double xSpeed = message.getxSpeed();
+		double ySpeed = message.getySpeed();
+		double zSpeed = message.getzSpeed();
+		int count = message.getCount();
+		double xOffset = message.getxOffset();
+		double yOffset = message.getyOffset();
+		double zOffset = message.getzOffset();
+		int[] optionalArguments = message.getOptionalArguments();
+		CQRParticleType.spawnParticles(particleId, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
 	}
 
 }

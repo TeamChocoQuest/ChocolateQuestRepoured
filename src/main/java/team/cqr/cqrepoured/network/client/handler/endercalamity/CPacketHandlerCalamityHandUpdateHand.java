@@ -1,32 +1,24 @@
 package team.cqr.cqrepoured.network.client.handler.endercalamity;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 
-public class CPacketHandlerCalamityHandUpdateHand implements IMessageHandler<SPacketCalamityUpdateHand, IMessage> {
+public class CPacketHandlerCalamityHandUpdateHand extends AbstractPacketHandler<SPacketCalamityUpdateHand> {
 
 	@Override
-	public IMessage onMessage(SPacketCalamityUpdateHand message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				Entity entity = world.getEntityByID(message.getEntityId());
-
-				if (entity instanceof EntityCQREnderCalamity) {
-					EntityCQREnderCalamity calamity = (EntityCQREnderCalamity) entity;
-
-					calamity.processHandUpdates(message.getHandStates());
-				}
-			});
+	protected void execHandlePacket(SPacketCalamityUpdateHand packet, Supplier<Context> context, World world, PlayerEntity player) {
+		Entity entity = world.getEntity(packet.getEntityId());
+		
+		if(entity instanceof EntityCQREnderCalamity) {
+			((EntityCQREnderCalamity)entity).processHandUpdates(packet.getHandStates());
 		}
-		return null;
 	}
 
 }

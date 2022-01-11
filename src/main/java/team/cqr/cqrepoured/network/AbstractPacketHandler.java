@@ -28,8 +28,8 @@ public abstract class AbstractPacketHandler<P extends Object> implements IMessag
 				}
 			}
 			if(context.get().getNetworkManager().getPacketListener() instanceof ClientPlayNetHandler) {
-				sender = ClientPlayerUtil.getClientPlayer();
-				world = ClientPlayerUtil.getWorld();
+				sender = ClientOnlyMethods.getClientPlayer();
+				world = ClientOnlyMethods.getWorld();
 			}
 			
 			

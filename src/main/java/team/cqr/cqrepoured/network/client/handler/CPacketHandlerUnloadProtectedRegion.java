@@ -1,30 +1,24 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
-public class CPacketHandlerUnloadProtectedRegion implements IMessageHandler<SPacketUnloadProtectedRegion, IMessage> {
+public class CPacketHandlerUnloadProtectedRegion extends AbstractPacketHandler<SPacketUnloadProtectedRegion> {
 
 	@Override
-	public IMessage onMessage(SPacketUnloadProtectedRegion message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
+	protected void execHandlePacket(SPacketUnloadProtectedRegion message, Supplier<Context> context, World world, PlayerEntity player) {
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
 
-				if (protectedRegionManager != null) {
-					protectedRegionManager.removeProtectedRegion(message.getUuid());
-				}
-			});
+		if (protectedRegionManager != null) {
+			protectedRegionManager.removeProtectedRegion(message.getUuid());
 		}
-		return null;
 	}
 
 }

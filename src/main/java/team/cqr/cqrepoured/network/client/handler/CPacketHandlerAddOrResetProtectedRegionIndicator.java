@@ -1,25 +1,19 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.client.world.structure.protection.ProtectionIndicatorHelper;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
 
-public class CPacketHandlerAddOrResetProtectedRegionIndicator implements IMessageHandler<SPacketAddOrResetProtectedRegionIndicator, IMessage> {
+public class CPacketHandlerAddOrResetProtectedRegionIndicator extends AbstractPacketHandler<SPacketAddOrResetProtectedRegionIndicator> {
 
 	@Override
-	public IMessage onMessage(SPacketAddOrResetProtectedRegionIndicator message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, message.getUuid(), message.getStart(), message.getEnd(), message.getPos(), null);
-			});
-		}
-		return null;
+	protected void execHandlePacket(SPacketAddOrResetProtectedRegionIndicator message, Supplier<Context> context, World world, PlayerEntity player) {
+		ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, message.getUuid(), message.getStart(), message.getEnd(), message.getPos(), null);
 	}
 
 }

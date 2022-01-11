@@ -1,35 +1,29 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 
-public class CPacketHandlerUpdateReputation implements IMessageHandler<SPacketUpdatePlayerReputation, IMessage> {
+public class CPacketHandlerUpdateReputation extends AbstractPacketHandler<SPacketUpdatePlayerReputation> {
 
 	@Override
-	public IMessage onMessage(SPacketUpdatePlayerReputation message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				FactionRegistry FAC_REG = FactionRegistry.instance(world);
-				try {
-					Faction faction = FAC_REG.getFactionInstance(message.getFaction());
-					if (faction != null) {
-						FAC_REG.setReputation(message.getPlayerId(), message.getScore(), faction);
-					}
-				} catch (Exception ex) {
-					// IGNORE
-					ex.printStackTrace();
-				}
-			});
+	protected void execHandlePacket(SPacketUpdatePlayerReputation message, Supplier<Context> context, World world, PlayerEntity player) {
+		FactionRegistry FAC_REG = FactionRegistry.instance(world);
+		try {
+			Faction faction = FAC_REG.getFactionInstance(message.getFaction());
+			if (faction != null) {
+				FAC_REG.setReputation(message.getPlayerId(), message.getScore(), faction);
+			}
+		} catch (Exception ex) {
+			// IGNORE
+			ex.printStackTrace();
 		}
-		return null;
 	}
 
 }
