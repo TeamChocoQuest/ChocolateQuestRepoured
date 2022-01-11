@@ -3,17 +3,18 @@ package team.cqr.cqrepoured.client.util;
 import java.util.Random;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EnderDragonRenderer;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 
 public class BossDeathRayHelper {
 
+	private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0D) / 2.0D);
 	private final int red;
 	private final int green;
 	private final int blue;
@@ -32,71 +33,57 @@ public class BossDeathRayHelper {
 		this.raySize = raySize;
 	}
 
-	public void renderRays(MatrixStack ms, int ticks, float partialTicks) {
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
-		RenderHelper.disableStandardItemLighting();
-		float f = (ticks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
-		float f1 = 0.0F;
-
-		if (f > 0.8F) {
-			f1 = (f - 0.8F) / 0.2F;
-		}
-
+	/**
+	 * Copied from {@link EnderDragonRenderer#render(EnderDragonEntity, float, float, MatrixStack, IRenderTypeBuffer, int)}
+	 */
+	public void renderRays(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int ticks, float partialTicks) {
+		float f = (ticks + partialTicks) / 200.0F;
+		float f1 = Math.min(f > 0.8F ? (f - 0.8F) / 0.2F : 0.0F, 1.0F);
 		Random random = new Random(432L);
+		matrixStack.pushPose();
+		matrixStack.translate(0.0D, -1.0D, -2.0D);
 
-		GlStateManager.pushAttrib();
-
-		GlStateManager._disableTexture();
-		GlStateManager._shadeModel(7425);
-		GlStateManager._enableBlend();
-		GlStateManager._blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE.value);
-		GlStateManager._disableAlphaTest();
-		GlStateManager._enableCull();
-		GlStateManager._depthMask(false);
-		//GlStateManager.pushMatrix();
-		ms.pushPose();
-		// GlStateManager.translate(0.0F, -entitylivingbaseIn.height / 2, 0.0F);
-
-		float rays = (f + f * f) / 2.0F * 60.0F;
-		rays = Math.min(this.maxRays, rays);
-		for (int i = 0; i < rays; ++i) {
-			ms.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360F));
-			ms.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360F));
-			ms.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360F));
-			ms.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360F));
-			ms.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360F));
-			ms.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360F + f * 90.0F));
-			//GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			//GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			//GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-			//GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			//GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			//GlStateManager.rotate(random.nextFloat() * 360.0F + f * 90.0F, 0.0F, 0.0F, 1.0F);
-			float f2 = random.nextFloat() * this.raySize + (this.raySize / 4) + f1 * (this.raySize / 2F);
-			float f3 = random.nextFloat() * (this.raySize / 10F) + 1.0F + f1 * (this.raySize / 10F);
-			bufferbuilder.begin(6, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(0.0D, 0.0D, 0.0D).color(this.red, this.green, this.blue, (int) (this.raySize * (1.0F - f1))).endVertex();
-			bufferbuilder.vertex(-0.866D * f3, f2, -0.5F * f3).color(this.red, this.green, this.blue, 0).endVertex();
-			bufferbuilder.vertex(0.866D * f3, f2, -0.5F * f3).color(this.red, this.green, this.blue, 0).endVertex();
-			bufferbuilder.vertex(0.0D, f2, 1.0F * f3).color(this.red, this.green, this.blue, 0).endVertex();
-			bufferbuilder.vertex(-0.866D * f3, f2, -0.5F * f3).color(this.red, this.green, this.blue, 0).endVertex();
-			tessellator.end();
+		int rayCount = Math.min(MathHelper.ceil((f + f * f) / 2.0F * 60.0F), this.maxRays);
+		for (int i = 0; i < rayCount; ++i) {
+			matrixStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360.0F + f * 90.0F));
+			float y = random.nextFloat() * this.raySize + (this.raySize / 4.0F) + f1 * (this.raySize / 2.0F);
+			float xz = random.nextFloat() * (this.raySize / 10.0F) + 1.0F + f1 * (this.raySize / 10.0F);
+			Matrix4f matrix = matrixStack.last().pose();
+			int alpha = (int) (255.0F * (1.0F - f1));
+			vertex01(vertexBuilder, matrix, alpha);
+			vertex2(vertexBuilder, matrix, y, xz);
+			vertex3(vertexBuilder, matrix, y, xz);
+			vertex01(vertexBuilder, matrix, alpha);
+			vertex3(vertexBuilder, matrix, y, xz);
+			vertex4(vertexBuilder, matrix, y, xz);
+			vertex01(vertexBuilder, matrix, alpha);
+			vertex4(vertexBuilder, matrix, y, xz);
+			vertex2(vertexBuilder, matrix, y, xz);
 		}
 
-		ms.popPose();
-		//GlStateManager.popMatrix();
-		GlStateManager._depthMask(true);
-		GlStateManager._disableCull();
-		GlStateManager._disableBlend();
-		GlStateManager._shadeModel(7424);
-		GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager._enableTexture();
-		GlStateManager._enableAlphaTest();
+		matrixStack.popPose();
+	}
 
-		GlStateManager.popAttrib();
+	private void vertex01(IVertexBuilder vertexBuilder, Matrix4f matrix, int alpha) {
+		vertexBuilder.vertex(matrix, 0.0F, 0.0F, 0.0F).color(255, 255, 255, alpha).endVertex();
+		vertexBuilder.vertex(matrix, 0.0F, 0.0F, 0.0F).color(255, 255, 255, alpha).endVertex();
+	}
 
-		RenderHelper.enableStandardItemLighting();
+	private void vertex2(IVertexBuilder vertexBuilder, Matrix4f matrix, float y, float xz) {
+		vertexBuilder.vertex(matrix, -HALF_SQRT_3 * xz, y, -0.5F * xz).color(red, green, blue, 0).endVertex();
+	}
+
+	private void vertex3(IVertexBuilder vertexBuilder, Matrix4f matrix, float y, float xz) {
+		vertexBuilder.vertex(matrix, HALF_SQRT_3 * xz, y, -0.5F * xz).color(red, green, blue, 0).endVertex();
+	}
+
+	private void vertex4(IVertexBuilder vertexBuilder, Matrix4f matrix, float y, float xz) {
+		vertexBuilder.vertex(matrix, 0.0F, y, 1.0F * xz).color(red, green, blue, 0).endVertex();
 	}
 
 }
