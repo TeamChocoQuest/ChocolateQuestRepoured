@@ -148,6 +148,10 @@ public class CQRMessages {
 		register(clsMessage, clsHandler, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 	}
 	
+	protected static <MSG> void register(Class<? extends IMessage<MSG>> clsMessage, Class<? extends IMessageHandler<MSG>> clsHandler) {
+		register(clsMessage, clsHandler, Optional.empty());
+	}
+	
 	protected static <MSG> void register(Class<? extends IMessage<MSG>> clsMessage, Class<? extends IMessageHandler<MSG>> clsHandler, final Optional<NetworkDirection> networkDirection) {
 		IMessage<MSG> message = null;
 		try {
