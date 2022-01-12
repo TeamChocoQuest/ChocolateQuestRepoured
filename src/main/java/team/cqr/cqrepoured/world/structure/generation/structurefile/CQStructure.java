@@ -281,7 +281,7 @@ public class CQStructure {
 					&& !(block instanceof BlockExporterChest)
 					&& block != CQRBlocks.SPAWNER
 					&& block != CQRBlocks.MAP_PLACEHOLDER
-					&& state.getBlockHardness(world, pos) < 0.0F) {
+					&& state.getDestroySpeed(world, pos) < 0.0F) {
 				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, pos);
 			}
 
