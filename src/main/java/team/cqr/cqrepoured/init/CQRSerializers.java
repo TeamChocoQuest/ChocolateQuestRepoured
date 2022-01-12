@@ -1,14 +1,12 @@
 package team.cqr.cqrepoured.init;
 
-import java.io.IOException;
-
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.DataSerializerEntry;
 import team.cqr.cqrepoured.CQRMain;
 
@@ -27,17 +25,17 @@ public class CQRSerializers {
 		}
 
 		@Override
-		public Vector3d read(PacketBuffer buf) throws IOException {
+		public Vector3d read(PacketBuffer buf) {
 			return new Vector3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		}
-
+		
 		@Override
-		public DataParameter<Vector3d> createKey(int id) {
+		public DataParameter<Vector3d> createAccessor(int id) {
 			return new DataParameter<>(id, this);
 		}
 
 		@Override
-		public Vector3d copyValue(Vector3d value) {
+		public Vector3d copy(Vector3d value) {
 			return value;
 		}
 	};
