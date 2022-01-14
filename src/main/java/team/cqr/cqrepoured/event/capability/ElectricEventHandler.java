@@ -101,14 +101,14 @@ public class ElectricEventHandler {
 		} else if (currentCap.isElectrocutionActive()) {
 			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1);
 		}
-		if (entity.isDead || entity.getHealth() < 1) {
+		if (!entity.isEntityAlive()) {
 			currentCap.setTarget(null);
 		}
 		// Maybe you could spread to other entities?
 		if (currentCap.canSpread() && currentCap.getTarget() == null && currentCap.getRemainignSpreads() > 0) {
 			spreadElectrocute(entity, currentCap);
 		} else if (currentCap.getTarget() != null) {
-			if (!entity.canEntityBeSeen(currentCap.getTarget()) || entity.getDistance(currentCap.getTarget()) > 16) {
+			if (!currentCap.getTarget().isEntityAlive() || !entity.canEntityBeSeen(currentCap.getTarget()) || entity.getDistance(currentCap.getTarget()) > 16) {
 				currentCap.setTarget(null);
 			} else {
 				CapabilityElectricShock targetCap = currentCap.getTarget().getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
