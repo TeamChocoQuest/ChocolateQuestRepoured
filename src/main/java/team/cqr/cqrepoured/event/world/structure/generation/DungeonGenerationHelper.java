@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -48,8 +50,9 @@ public class DungeonGenerationHelper {
 
 	@SubscribeEvent
 	public static void onChunkLoadEvent(ChunkEvent.Load event) {
-		TRAVELING_PLAYERS.computeIfPresent(event.getWorld().provider.getDimension(), (k, v) -> {
-			Iterator<EntityPlayer> iterator = v.iterator();
+		TRAVELING_PLAYERS.computeIfPresent(event.getWorld().provider.getDimension(), (dimension, playersInDimension) -> {
+			Iterator<EntityPlayer> iterator = playersInDimension.iterator();
+			Set<Triple<World, Integer, Integer>> chunksToProcess = new HashSet<>();
 			while (iterator.hasNext()) {
 				EntityPlayer player = iterator.next();
 
@@ -60,13 +63,19 @@ public class DungeonGenerationHelper {
 				for (int x = -radius; x <= radius + 1; x++) {
 					for (int z = -radius; z <= radius + 1; z++) {
 						//warning: This can cause a concurrent access modification cause this causes another chunkLoad event!
-						player.world.getChunk(chunkX + x, chunkZ + z);
+						//player.world.getChunk(chunkX + x, chunkZ + z);
+						chunksToProcess.add(Triple.of(player.world, chunkX + x, chunkZ + z));
 					}
 				}
 
 				iterator.remove();
 			}
-			return v;
+			
+			for(Triple<World, Integer, Integer> chunkPos : chunksToProcess) {
+				chunkPos.getLeft().getChunk(chunkPos.getMiddle(), chunkPos.getRight());
+			}
+			
+			return playersInDimension;
 		});
 	}
 
