@@ -35,6 +35,11 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 	
 	@Override
+	public void onKillCommand() {
+		this.exterminator.onKillCommand();
+	}
+
+	@Override
 	public boolean isPickable() {
 		return true;
 	}

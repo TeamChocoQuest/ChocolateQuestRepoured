@@ -26,6 +26,11 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 	}
 	
 	@Override
+	public void onKillCommand() {
+		this.exterminator.onKillCommand();
+	}
+	
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		// If at least one emitter emits electricity, we are vulnerable!!
 		if (source == DamageSource.DROWN) {
