@@ -59,6 +59,7 @@ public class DungeonGenerationHelper {
 
 				for (int x = -radius; x <= radius + 1; x++) {
 					for (int z = -radius; z <= radius + 1; z++) {
+						//warning: This can cause a concurrent access modification cause this causes another chunkLoad event!
 						player.world.getChunk(chunkX + x, chunkZ + z);
 					}
 				}
