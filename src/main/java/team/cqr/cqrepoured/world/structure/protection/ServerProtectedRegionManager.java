@@ -175,7 +175,12 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	@Override
 	public Iterable<ProtectedRegion> getProtectedRegions() {
-		return () -> new Iterator<ProtectedRegion>() {
+		List<ProtectedRegion> regionsTmp = new ArrayList<>(this.protectedRegions.values().size());
+		this.protectedRegions.values().forEach(prc -> {
+			regionsTmp.add(prc.protectedRegion);
+		});
+		return regionsTmp;
+		/*return () -> new Iterator<ProtectedRegion>() {
 			private final Iterator<ProtectedRegionContainer> iterator = Collections.unmodifiableCollection(ServerProtectedRegionManager.this.protectedRegions.values()).iterator();
 
 			@Override
@@ -187,7 +192,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			public ProtectedRegion next() {
 				return this.iterator.next().protectedRegion;
 			}
-		};
+		};*/
 	}
 
 	@Override
