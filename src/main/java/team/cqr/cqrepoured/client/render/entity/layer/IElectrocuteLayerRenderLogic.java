@@ -40,8 +40,8 @@ public interface IElectrocuteLayerRenderLogic<T extends EntityLivingBase> {
 
 				GlStateManager.pushMatrix();
 
-				GlStateManager.translate(0, 1.501, 0);
-				GlStateManager.scale(-1, -1, 1);
+
+				this.performPreLineRenderPreparation();
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
 				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
@@ -49,6 +49,11 @@ public interface IElectrocuteLayerRenderLogic<T extends EntityLivingBase> {
 				GlStateManager.popMatrix();
 			}
 		}
+	}
+	
+	public default void performPreLineRenderPreparation() {
+		GlStateManager.translate(0, 1.501, 0);
+		GlStateManager.scale(-1, -1, 1);
 	}
 
 }
