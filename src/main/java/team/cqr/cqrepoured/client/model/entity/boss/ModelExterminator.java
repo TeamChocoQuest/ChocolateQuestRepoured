@@ -52,7 +52,9 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 			}
 
 			// Taken from ModelIronGolem.class
-			final float legAngle = 1.5F * this.triangleWave(entity.limbSwing, 13.0F) * entity.limbSwingAmount;
+			float limbSwingAmount = Math.min(entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks, 1);
+			float limbSwing = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
+			final float legAngle = 1.5F * this.triangleWave(limbSwing, 13.0F) * limbSwingAmount;
 
 			IBone leftLeg = this.getAnimationProcessor().getBone(BONE_IDENT_LEFT_LEG);
 			IBone rightLeg = this.getAnimationProcessor().getBone(BONE_IDENT_RIGHT_LEG);
