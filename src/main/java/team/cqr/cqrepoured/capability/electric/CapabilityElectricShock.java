@@ -141,7 +141,7 @@ public class CapabilityElectricShock {
 	}
 
 	public boolean canSpread() {
-		return this.remainingTicks >= 50;
+		return this.remainingTicks >= 20;
 	}
 
 }
