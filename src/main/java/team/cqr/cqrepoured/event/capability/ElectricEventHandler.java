@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.capability.electric.IDontSpreadElectrocution;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -105,7 +106,7 @@ public class ElectricEventHandler {
 			currentCap.setTarget(null);
 		}
 		// Maybe you could spread to other entities?
-		if (currentCap.canSpread() && currentCap.getTarget() == null && currentCap.getRemainignSpreads() > 0) {
+		if (!(entity instanceof IDontSpreadElectrocution) && currentCap.canSpread() && currentCap.getTarget() == null && currentCap.getRemainignSpreads() > 0) {
 			spreadElectrocute(entity, currentCap);
 		} else if (currentCap.getTarget() != null) {
 			if (!currentCap.getTarget().isEntityAlive() || !entity.canEntityBeSeen(currentCap.getTarget()) || entity.getDistance(currentCap.getTarget()) > 16) {
