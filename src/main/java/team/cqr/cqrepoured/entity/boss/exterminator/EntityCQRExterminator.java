@@ -39,6 +39,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.capability.electric.IDontSpreadElectrocution;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.IEntityMultiPart;
@@ -79,8 +80,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IMechanical, IDontRenderFire, IEntityMultiPart<EntityCQRExterminator>, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
-
+public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDontSpreadElectrocution, IMechanical, IDontRenderFire, IEntityMultiPart<EntityCQRExterminator>, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
 	// Entity parts
 	// 0 => Backpack
 	// 1 => Emitter left
