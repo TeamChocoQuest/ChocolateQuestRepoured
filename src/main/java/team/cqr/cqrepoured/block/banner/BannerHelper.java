@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.BannerTileEntity;
+import team.cqr.cqrepoured.init.CQRBannerPatterns;
 
 public class BannerHelper {
 
@@ -26,7 +27,7 @@ public class BannerHelper {
 		}
 		for (int i = 0; i < bannerTile.itemPatterns.size(); i++) {
 			CompoundNBT nbttagcompound = bannerTile.itemPatterns.getCompound(i);
-			if (nbttagcompound.getString("Pattern").equals(EBannerPatternsCQ.CQ_BLANK.getPattern().getHashname())) {
+			if (nbttagcompound.getString("Pattern").equals(CQRBannerPatterns.CQ_BLANK.getHashname())) {
 				return true;
 			}
 		}
