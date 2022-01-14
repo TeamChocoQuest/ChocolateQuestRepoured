@@ -24,5 +24,10 @@ public class LayerElectrocuteGeo<T extends LivingEntity & IAnimatable> extends A
 	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
 		this.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, headPitch);
 	}
+	
+	@Override
+	public void performPreLineRenderPreparation() {
+		//Fixes rotations on glib entities
+	}
 
 }
