@@ -9,8 +9,11 @@ import net.minecraft.block.Block;
 <<<<<<< HEAD
 =======
 import net.minecraft.block.BlockHorizontal;
+<<<<<<< HEAD
 import net.minecraft.block.properties.PropertyDirection;
 >>>>>>> af436f9cc... check if state has property
+=======
+>>>>>>> a6ae3bbc4... correct previous commit (method not existant yet)
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +44,7 @@ public class TileEntityExporterChestRenderer extends TileEntityRenderer<TileEnti
 		ResourceLocation texture = new ResourceLocation(CQRMain.MODID, "textures/entity/chest/exporter_chest.png");
 		ResourceLocation overlayTexture = new ResourceLocation("textures/items/stick.png");
 
-		if (world != null && world.getBlockState(pos).hasProperty(BlockHorizontal.FACING)) {
+		if (world != null && world.getBlockState(pos).getPropertyKeys().contains(BlockHorizontal.FACING)) {
 			facing = world.getBlockState(pos).getValue(HorizontalBlock.FACING);
 
 			if (this.isDoubleChest(world, pos)) {
