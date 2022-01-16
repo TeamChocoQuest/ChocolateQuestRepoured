@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -36,7 +37,7 @@ public class TileEntityExporterChestRenderer extends TileEntitySpecialRenderer<T
 		ResourceLocation texture = new ResourceLocation(CQRMain.MODID, "textures/entity/chest/exporter_chest.png");
 		ResourceLocation overlayTexture = new ResourceLocation("textures/items/stick.png");
 
-		if (world != null) {
+		if (world != null && world.getBlockState(pos).hasProperty(BlockHorizontal.FACING)) {
 			facing = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
 
 			if (this.isDoubleChest(world, pos)) {
