@@ -37,8 +37,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public void baseTick() {
-		super.baseTick();
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
 			if (ent == null || ent.removed) {

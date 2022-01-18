@@ -70,9 +70,9 @@ public class EntityCalamitySpawner extends Entity {
 	private static final int FIREWORK_DIVISOR = 5;
 
 	@Override
-	public void onEntityUpdate() {
+	public void baseTick() {
 		if (this.world.isRemote) {
-			super.onEntityUpdate();
+			super.baseTick();
 			return;
 		} else {
 			this.timer++;
@@ -127,7 +127,7 @@ public class EntityCalamitySpawner extends Entity {
 					}
 				}
 			}
-			super.onEntityUpdate();
+			super.baseTick();
 		}
 	}
 

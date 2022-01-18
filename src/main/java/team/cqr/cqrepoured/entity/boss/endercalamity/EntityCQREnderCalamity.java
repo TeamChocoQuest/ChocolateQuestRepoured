@@ -707,12 +707,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public void onEntityUpdate() {
+	public void baseTick() {
 		if (this.firstUpdate && !this.hasHomePositionCQR() && !this.world.isRemote) {
 			this.setHomePositionCQR(this.getPosition());
 			this.forceTeleport();
 		}
-		super.onEntityUpdate();
+		super.baseTick();
 
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
 		if (this.world.isRemote) {
@@ -1114,7 +1114,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// Transition time: 10 ticks
 	// DONE: Maybe shoot out items whilst dead?
 	@Override
-	protected void onDeathUpdate() {
+	protected void tickDeath() {
 		if (!this.isServerWorld()) {
 			return;
 		}
@@ -1179,12 +1179,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 			item.setEntityInvulnerable(true);
 		}
-	}
-
-	@Override
-	public void tick() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

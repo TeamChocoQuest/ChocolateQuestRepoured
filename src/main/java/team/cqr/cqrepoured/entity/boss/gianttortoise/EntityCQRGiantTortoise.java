@@ -344,8 +344,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void onEntityUpdate() {
-		super.onEntityUpdate();
+	public void baseTick() {
+		super.baseTick();
 		if (this.hasAttackTarget()) {
 			if (this.lastTickPos == null) {
 				this.lastTickPos = this.position();
@@ -700,16 +700,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	// Death animation
 	// Death animation time: 1.44s => 29 ticks
 	@Override
-	protected void onDeathUpdate() {
+	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime > 20) {
 			float sizeVariation = this.getSizeVariation();
 			sizeVariation *= 1.5F;
-			double f = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
-			double f1 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
-			double f2 = (this.rand.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
+			double f = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
+			double f1 = (this.random.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
+			double f2 = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
 			for (int i = 0; i < 20; i++) {
-				this.world.spawnParticle(ParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+				this.level.spawnParticle(ParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 				this.world.spawnParticle(ParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 			}
 		}
@@ -735,11 +735,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				((ISizable) part).resize(widthScale, heightSacle);
 			}
 		}
-	}
-
-	@Override
-	public void tick() {
-		
 	}
 
 	@Override

@@ -435,8 +435,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
 
 		this.destroyBlocksInAABB(this.getBoundingBox().inflate(0.5).move(this.getDeltaMovement().scale(1.5)));
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
@@ -607,7 +607,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void baseTick() {
+	public void tick() {
 		if (this.phase == 1 && !this.level.isClientSide) {
 			this.phaseChangeTimer--;
 			if (this.phaseChangeTimer <= 0) {
@@ -658,7 +658,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.lengthSyncServer();
 		}
 
-		super.baseTick();
+		super.tick();
 
 		// update bodySegments parts
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {

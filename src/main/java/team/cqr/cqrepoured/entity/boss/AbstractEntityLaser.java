@@ -137,12 +137,12 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public void tick() {
+	public void baseTick() {
 		if (!this.level.isClientSide && !this.caster.isAlive()) {
 			this.remove();
 		}
 
-		super.tick();
+		super.baseTick();
 
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;

@@ -65,7 +65,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		super.tick();
 
 		if (!this.world.isRemote) {

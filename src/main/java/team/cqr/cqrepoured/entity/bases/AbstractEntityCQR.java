@@ -240,7 +240,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	
 	//Sizing bullshit
 	protected final EntitySize size;
-
+	
 	// Client only
 	@OnlyIn(Dist.CLIENT)
 	protected ESpeechBubble currentSpeechBubbleID;
@@ -780,7 +780,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 	
 	@Override
-	public void baseTick() {
+	public void tick() {
 		LivingEntity attackTarget = this.getTarget();
 		if (attackTarget != null) {
 			this.lastTickWithAttackTarget = this.tickCount;
@@ -809,7 +809,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			attribute.removeModifier(BASE_ATTACK_SPEED_ID);
 		}
 
-		super.baseTick();
+		super.tick();
 
 		if (!this.level.isClientSide && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
@@ -902,9 +902,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public void tick() {
+	public void baseTick() {
 		//this.updateSwingTime(); //Already called in aiStep()
-		super.tick();
+		super.baseTick();
 
 		// Bossbar
 		if (this.bossInfoServer != null) {

@@ -141,7 +141,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public void tick() {
+	public void onLivingUpdate() {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
@@ -149,7 +149,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 						(this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
-		super.tick();
+		super.onLivingUpdate();
 	}
 
 	@Override

@@ -71,8 +71,8 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
 		this.filterSummonLists();
 
 		if (!this.summonedSkulls.isEmpty() && !this.hasAttackTarget()) {

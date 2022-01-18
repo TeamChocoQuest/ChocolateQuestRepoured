@@ -476,8 +476,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public void baseTick() {
-		super.baseTick();
+	public void tick() {
+		super.tick();
 
 		if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this) && (this.isInWaterOrRain() || this.isInWater()) && !this.isStunned()) {
 			this.setStunned(true, 10);
@@ -502,9 +502,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public void tick() {
+	public void baseTick() {
 		this.updateAnimationTimersServer();
-		super.tick();
+		super.baseTick();
 	}
 
 	public static final int ARMS_THROW_DURATION = 14;

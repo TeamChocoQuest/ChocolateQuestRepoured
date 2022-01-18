@@ -43,10 +43,10 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		super.tick();
 
-		++this.ticksExisted;
+		++this.tickCount;
 	}
 
 	// As this is a part it does not make any noises

@@ -41,7 +41,7 @@ public class EntitySpiderEgg extends Entity {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		// TODO: Play particles and sound on mob spawning
 		if (!this.world.isRemote) {
 			this.currentStageDuration++;

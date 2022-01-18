@@ -52,8 +52,8 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void baseTick() {
+		super.baseTick();
 
 		boolean active = this.isActive();
 		this.funcSetIsActiveInParent.accept(active);

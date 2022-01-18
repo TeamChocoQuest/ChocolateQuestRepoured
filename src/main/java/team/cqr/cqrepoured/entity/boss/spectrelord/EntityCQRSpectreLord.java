@@ -89,7 +89,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public void onEntityUpdate() {
+	public void baseTick() {
 		if (!this.world.isRemote && this.fallDistance > 3.0F) {
 			this.fallDistance = 0.0F;
 			if (this.hasAttackTarget()) {
@@ -108,7 +108,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 			}
 		}
 
-		super.onEntityUpdate();
+		super.baseTick();
 
 		for (Iterator<Entity> iterator = this.summonedEntities.iterator(); iterator.hasNext();) {
 			Entity e = iterator.next();
