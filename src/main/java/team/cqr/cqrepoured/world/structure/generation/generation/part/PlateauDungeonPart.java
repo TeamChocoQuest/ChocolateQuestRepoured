@@ -105,12 +105,15 @@ public class PlateauDungeonPart implements IDungeonPart {
 		return material.blocksMovement() && material != Material.WOOD && material != Material.LEAVES && material != Material.PLANTS;
 	}
 
+	//TODO: Adjust in 1.17+ to automatically adapt to the world!
+	public static final int LOWEST_WORLD_Y = 0;
+	
 	private static int getHeight(World world, int x, int y, int z) {
 		Chunk chunk = world.getChunk(x >> 4, z >> 4);
 		MUTABLE.setPos(x, y, z);
 		boolean upwards = isGround(world, chunk, MUTABLE);
 
-		while (true) {
+		while (MUTABLE.getY() >= LOWEST_WORLD_Y) {
 			boolean isGround = isGround(world, chunk, MUTABLE);
 			if (upwards) {
 				if (!isGround) {
