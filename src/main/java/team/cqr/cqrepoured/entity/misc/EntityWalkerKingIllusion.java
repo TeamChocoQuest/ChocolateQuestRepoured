@@ -120,7 +120,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	}
 
 	@Override
-	public void onEntityUpdate() {
+	public void baseTick() {
 		if (!this.world.isRemote) {
 			if (this.ttl < 0) {
 				this.setDead();
@@ -147,7 +147,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 				this.setDead();
 				return;
 			}
-			super.onEntityUpdate();
+			super.baseTick();
 			this.setHealth(this.parent.getHealth());
 
 			if (this.parent.getAttackTarget() != null || this.getAttackTarget() != null) {
@@ -156,7 +156,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 				this.ttl -= 10;
 			}
 		} else {
-			super.onEntityUpdate();
+			super.baseTick();
 		}
 	}
 
