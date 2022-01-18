@@ -4,32 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.entity.PartEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -39,6 +39,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.IEntityMultiPart;
 import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
 import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
@@ -74,10 +75,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 	}
 
-	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>defineId(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>defineId(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 
-	private static final DataParameter<Integer> CURRENT_ANIMATION_ID = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> CURRENT_ANIMATION_ID = EntityDataManager.<Integer>defineId(EntityCQRGiantTortoise.class, DataSerializers.INT);
 	private int nextAnimationId = ANIMATION_ID_IN_SHELL;
 	private int currentAnimationTick = 0;
 	public static final int ANIMATION_ID_IN_SHELL = 5;
@@ -114,8 +115,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private static List<ResourceLocation> hardBlocks = new ArrayList<>();
 
-	public EntityCQRGiantTortoise(World worldIn) {
-		super(worldIn);
+	public EntityCQRGiantTortoise(EntityType<? extends EntityCQRGiantTortoise> type, World worldIn) {
+		super(type, worldIn);
 
 		this.stepHeight = 2.1F;
 
@@ -124,7 +125,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 		this.parts[this.parts.length - 1] = new SubEntityGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
 
-		this.noClip = false;
 		this.setNoGravity(false);
 		this.isImmuneToFire = true;
 		this.experienceValue = 100;
@@ -155,13 +155,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	protected void registerGoals() {
-		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
-		this.tasks.addTask(2, new BossAITortoiseStun(this));
-		this.tasks.addTask(4, new BossAITortoiseHealing(this));
-		this.tasks.addTask(6, new BossAITortoiseSpinAttack(this));
-		this.tasks.addTask(19, new BossAITortoiseMoveToLeader(this));
-		this.tasks.addTask(20, new BossAITortoiseMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this) {
+		this.goalSelector.addGoal(0, new BossAITortoiseSwimming(this));
+		this.goalSelector.addGoal(2, new BossAITortoiseStun(this));
+		this.goalSelector.addGoal(4, new BossAITortoiseHealing(this));
+		this.goalSelector.addGoal(6, new BossAITortoiseSpinAttack(this));
+		this.goalSelector.addGoal(19, new BossAITortoiseMoveToLeader(this));
+		this.goalSelector.addGoal(20, new BossAITortoiseMoveToHome(this));
+		this.goalSelector.addGoal(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean canUse() {
 				if (super.canUse() && ((EntityCQRGiantTortoise) this.entity).isInShell() && !EntityCQRGiantTortoise.this.isHealing && !EntityCQRGiantTortoise.this.isStunned() && !EntityCQRGiantTortoise.this.isSpinning()) {
@@ -177,8 +177,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 		});
 
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		this.targetSelector.addGoal(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
@@ -195,19 +195,19 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 
-		this.dataManager.register(IN_SHELL, true);
-		this.dataManager.register(IN_SHELL_BYPASS, false);
-		this.dataManager.register(CURRENT_ANIMATION_ID, this.nextAnimationId);
+		this.entityData.define(IN_SHELL, true);
+		this.entityData.define(IN_SHELL_BYPASS, false);
+		this.entityData.define(CURRENT_ANIMATION_ID, this.nextAnimationId);
 	}
 
 	public int getCurrentAnimationId() {
-		return this.dataManager.get(CURRENT_ANIMATION_ID);
+		return this.entityData.get(CURRENT_ANIMATION_ID);
 	}
 
 	private void setCurrentAnimation(int id) {
 		if (this.isServerWorld()) {
 			if (id >= 0 && id < ANIMATIONS.length) {
-				this.dataManager.set(CURRENT_ANIMATION_ID, id);
+				this.entityData.set(CURRENT_ANIMATION_ID, id);
 			}
 		}
 	}
@@ -243,19 +243,19 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		 */
 		this.partSoundFlag = sentFromPart;
 
-		if (source.getTrueSource() instanceof LivingEntity && !(source.getTrueSource() instanceof PlayerEntity)) {
-			if (this.getRNG().nextBoolean() && !sentFromPart) {
+		if (source.getEntity() instanceof LivingEntity && !(source.getEntity() instanceof PlayerEntity)) {
+			if (this.getRandom().nextBoolean() && !sentFromPart) {
 				sentFromPart = true;
 			}
 		}
 
-		if (source.getTrueSource() instanceof LivingEntity) {
-			this.setRevengeTarget((LivingEntity) source.getTrueSource());
+		if (source.getEntity() instanceof LivingEntity) {
+			this.setRevengeTarget((LivingEntity) source.getEntity());
 		}
 
 		if (!sentFromPart) {
 			amount = 0;
-			this.world.playSound(this.posX, this.posY, this.posZ, this.getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
+			this.level.playSound(this.getX(), this.getY(), this.getZ(), this.getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 		}
 		if (sentFromPart && (!this.isInShell() || source == DamageSource.IN_WALL)) {
 			if (this.stunned) {
@@ -272,7 +272,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		 * return this.getCurrentAnimationId() > ANIMATION_ID_STUNNED;
 		 * }
 		 */
-		return this.dataManager.get(IN_SHELL);
+		return this.entityData.get(IN_SHELL);
 	}
 
 	public boolean isStunned() {
@@ -294,15 +294,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	public boolean bypassInShell() {
-		return this.dataManager.get(IN_SHELL_BYPASS);
+		return this.entityData.get(IN_SHELL_BYPASS);
 	}
 
 	public void setBypassInShell(boolean val) {
-		this.dataManager.set(IN_SHELL_BYPASS, val);
+		this.entityData.set(IN_SHELL_BYPASS, val);
 	}
 
 	@Override
-	public int getAir() {
+	public int getAirSupply() {
 		return 100;
 	}
 
@@ -334,9 +334,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void tick() {
 		super.tick();
 
-		this.setAir(999);
+		this.setAirSupply(999);
 		for (SubEntityGiantTortoisePart part : this.parts) {
-			this.world.updateEntityWithOptionalForce(part, true);
+			this.level.updateEntityWithOptionalForce(part, true);
 		}
 
 		this.alignParts();
@@ -351,14 +351,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				this.lastTickPos = this.position();
 			}
 			if (this.getHomePositionCQR() == null) {
-				this.setHomePositionCQR(this.getPosition());
+				this.setHomePositionCQR(this.blockPosition());
 			}
-			Vector3d curPos = this.position();
-			if (this.getHomePositionCQR().distanceSq(curPos.x, curPos.y, curPos.z) > 16) {
-				if (curPos.distanceTo(this.lastTickPos) <= 0.05) {
+			if (this.getHomePositionCQR().distSqr(this.blockPosition()) > 16) {
+				if (this.position().distanceTo(this.lastTickPos) <= 0.05) {
 					this.stuckTicks++;
 				} else {
-					this.lastTickPos = curPos;
+					this.lastTickPos = this.position();
 				}
 				if (this.stuckTicks >= MAX_STUCK_TICKS) {
 					this.setTarget(null);
@@ -373,10 +372,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	private void breakBlocksInWay() {
-		for (BlockPos pos : BlockPos.getAllInBoxMutable(this.getPosition().add(this.width + 1, this.height, this.width + 1), this.getPosition().add(-this.width - 1, -1, -this.width - 1))) {
-			Block block = this.world.getBlockState(pos).getBlock();
-			if ((!block.isCollidable() || block.isPassable(this.world, pos)) && ((((block != Blocks.FLOWING_WATER) && (block != Blocks.WATER)) && (block != Blocks.FLOWING_LAVA)) && (block != Blocks.LAVA))) {
-				this.world.setBlockToAir(pos);
+		for (BlockPos pos : BlockPos.betweenClosed(this.blockPosition().offset(this.getBbWidth() + 1, this.getBbHeight(), this.getBbWidth() + 1), this.blockPosition().offset(-this.getBbWidth() - 1, -1, -this.getBbWidth() - 1))) {
+			Block block = this.level.getBlockState(pos).getBlock();
+			if ((!block.isCollidable() || block.isPassable(this.level, pos)) && ((((block != Blocks.FLOWING_WATER) && (block != Blocks.WATER)) && (block != Blocks.FLOWING_LAVA)) && (block != Blocks.LAVA))) {
+				this.level.destroyBlock(pos, true);
 			}
 		}
 	}
@@ -385,31 +384,31 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		// Legs
 		/* Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1); */
 
-		float rotYawHead = this.rotationYawHead;// - 90;
+		float rotYawHead = this.yHeadRot;// - 90;
 		if (rotYawHead > 180F) {
 			rotYawHead -= 360F;
 		}
 		// v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
-		Vector3d v = this.getLookVec().scale(this.width / 2 + this.width * 0.1);
+		Vector3d v = this.getLookAngle().scale(this.getBbWidth() / 2 + this.getBbWidth() * 0.1);
 
 		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.15F : 0.5F;
 		vy *= this.getSizeVariation();
 
 		// First, position your head
-		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
-		this.parts[this.parts.length - 1].setRotation(rotYawHead, this.rotationPitch);
+		this.parts[this.parts.length - 1].setPos(this.getX() + v.x, this.getY() + vy, this.getZ() + v.z);
+		this.parts[this.parts.length - 1].setRotation(rotYawHead, this.xRot);
 
 		// Then rotate 45 degrees to the right so that you face the front right leg
 		v = VectorUtil.rotateVectorAroundY(v, 45D);
 
 		// Now, position each individual leg
 		for (int i = 0; i < (this.parts.length - 1); i++) {
-			double x = this.posX + v.x;
-			double y = this.posY;
-			double z = this.posZ + v.z;
+			double x = this.getX() + v.x;
+			double y = this.getY();
+			double z = this.getZ() + v.z;
 
-			this.parts[i].setPosition(x, y, z);
-			this.parts[i].setRotation(rotYawHead + (i * 90F + 45F), this.rotationPitch);
+			this.parts[i].setPos(x, y, z);
+			this.parts[i].setRotation(rotYawHead + (i * 90F + 45F), this.xRot);
 
 			// leg positioned, now rotate to the next leg (clockwise)
 			v = VectorUtil.rotateVectorAroundY(v, 90D);
@@ -417,39 +416,40 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public Entity[] getParts() {
+	public PartEntity<?>[] getParts() {
 		return this.parts;
 	}
 
 	@Override
-	public void setDead() {
-		super.setDead();
+	public void remove() {
 		for (SubEntityGiantTortoisePart part : this.parts) {
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
-			this.world.removeEntityDangerously(part);
+			this.level.removeEntityDangerously(part);
+			part.remove();
 		}
+		super.remove();
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		if (this.isInShell()) {
-			return SoundEvents.ENTITY_BLAZE_HURT;
+			return SoundEvents.BLAZE_HURT;
 		}
 		if (this.partSoundFlag) {
 			this.partSoundFlag = false;
-			return SoundEvents.ENTITY_SLIME_HURT;
+			return SoundEvents.SLIME_HURT;
 		}
-		return SoundEvents.ENTITY_BLAZE_HURT;
+		return SoundEvents.BLAZE_HURT;
 	}
 
 	@Override
-	protected void collideWithEntity(Entity entityIn) {
+	protected void doPush(Entity entityIn) {
 		if (this.isSpinning()) {
 			boolean blocked = false;
 			if (entityIn instanceof LivingEntity) {
-				if (((LivingEntity) entityIn).getActiveItemStack().getItem() instanceof ShieldItem) {
-					if (this.getRNG().nextBoolean()) {
+				if (((LivingEntity) entityIn).getUseItem().getItem() instanceof ShieldItem || ((LivingEntity) entityIn).getUseItem().getItem().isShield( ((LivingEntity) entityIn).getUseItem(), (LivingEntity) entityIn)) {
+					if (this.getRandom().nextBoolean()) {
 						this.spinsBlocked++;
 					}
 					this.spinsBlocked++;
@@ -458,7 +458,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 
 			if (!blocked) {
-				entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F * (Math.max(1, this.world.getDifficulty().getId()) * 1.5F));
+				entityIn.hurt(DamageSource.thorns(this), 4F * (Math.max(1, this.level.getDifficulty().getId()) * 1.5F));
 			}
 			Vector3d v = entityIn.position().subtract(this.position());
 			v = v.normalize();
@@ -467,30 +467,34 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			} else {
 				v = v.scale(1.5D);
 			}
-			entityIn.motionX = v.x;
+			/*entityIn.motionX = v.x;
 			entityIn.motionY = v.y + 0.75;
 			entityIn.motionZ = v.z;
-			entityIn.velocityChanged = true;
+			entityIn.velocityChanged = true;*/
+			entityIn.setDeltaMovement(v.add(0, 0.75, 0));
+			entityIn.hasImpulse = true;
 			if (blocked) {
 				v = v.scale(1.7D);
-				this.motionX = -v.x;
+				/*this.motionX = -v.x;
 				this.motionY = v.y + 0.25;
 				this.motionZ = -v.z;
-				this.velocityChanged = true;
+				this.velocityChanged = true;*/
+				this.setDeltaMovement(-v.x, v.y + 0.25, -v.z);
+				this.hasImpulse = true;
 
-				this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
+				this.level.playSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BLAZE_HURT, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 			}
 		} else {
-			super.collideWithEntity(entityIn);
+			super.doPush(entityIn);
 		}
 	}
-
+	
 	@Override
-	public void setFire(int seconds) {
+	public void setSecondsOnFire(int seconds) {
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 
@@ -500,28 +504,28 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.ARTHROPOD;
 	}
 
 	public void setInShell(boolean val) {
-		this.dataManager.set(IN_SHELL, val);
+		this.entityData.set(IN_SHELL, val);
 		this.readyToSpin = val && !this.isHealing();
 	}
 
 	@Override
-	public void save(CompoundNBT compound) {
-		super.save(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 
-		compound.setInteger("timesHealed", this.timesHealed);
-		compound.setBoolean("inShell", this.isInShell());
+		compound.putInt("timesHealed", this.timesHealed);
+		compound.putBoolean("inShell", this.isInShell());
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 
-		this.setTimesHealed(compound.getInteger("timesHealed"));
+		this.setTimesHealed(compound.getInt("timesHealed"));
 		if (this.getTimesHealed() < 1) {
 			this.setTimesHealed(1);
 		}
@@ -604,7 +608,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	// Animation controller
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 /*|| this.isDead*/ || !this.isAlive()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATION_NAME_DEATH, false));
 			return PlayState.CONTINUE;
 		}
@@ -687,7 +691,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private DamageSource deathCause = null;
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		this.deathCause = cause;
 		super.die(cause);
 	}
@@ -710,17 +714,17 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double f2 = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
 			for (int i = 0; i < 20; i++) {
 				this.level.spawnParticle(ParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
-				this.world.spawnParticle(ParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+				this.level.spawnParticle(ParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
 			}
 		}
 		if (this.deathTime == 34 && this.isServerWorld()) {
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+			this.level.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
 		}
 		if (this.deathTime >= 35 && this.isServerWorld()) {
 			if (this.deathCause != null) {
 				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 			}
-			this.setDead();
+			this.remove();
 
 			this.onFinalDeath();
 		}
@@ -739,7 +743,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public int tickTimer() {
-		return this.ticksExisted;
+		return this.tickCount;
 	}
 
 }

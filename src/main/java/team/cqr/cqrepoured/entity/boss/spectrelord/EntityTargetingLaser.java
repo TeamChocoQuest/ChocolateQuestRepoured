@@ -1,15 +1,18 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
 public class EntityTargetingLaser extends AbstractEntityLaser {
 
-	private LivingEntity target;
+	protected LivingEntity target;
 	protected float maxRotationPerTick = 2.0F;
 
 	public EntityTargetingLaser(World worldIn) {
@@ -48,15 +51,35 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
+	public void writeSpawnData(PacketBuffer buffer) {
 		super.writeSpawnData(buffer);
 		buffer.writeInt(this.target.getId());
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
+	public void readSpawnData(PacketBuffer additionalData) {
 		super.readSpawnData(additionalData);
 		this.target = (LivingEntity) this.level.getEntity(additionalData.readInt());
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		
+	}
+
+	@Override
+	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+		
+	}
+
+	@Override
+	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+		
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

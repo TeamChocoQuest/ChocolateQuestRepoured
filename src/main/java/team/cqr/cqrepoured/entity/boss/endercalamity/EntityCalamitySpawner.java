@@ -1,17 +1,21 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -23,16 +27,19 @@ public class EntityCalamitySpawner extends Entity {
 
 	private static final int CALAMITY_SPAWN_DURATION = 800;
 
-	public EntityCalamitySpawner(World worldIn) {
-		super(worldIn);
-		this.setSize(1, 1);
+	public EntityCalamitySpawner(World world) {
+		this(CQREntityTypes.CALAMITY_SPAWNER.get(), world);
+	}
+	
+	public EntityCalamitySpawner(EntityType<? extends EntityCalamitySpawner> type, World worldIn) {
+		super(type, worldIn);
 		this.setNoGravity(true);
 		this.setInvisible(true);
-		this.setEntityInvulnerable(true);
+		this.setInvulnerable(true);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		return false;
 	}
 
@@ -42,20 +49,25 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	@Override
-	public void onCollideWithPlayer(PlayerEntity entityIn) {
+	public boolean canCollideWith(Entity pEntity) {
+		return false;
+	}
+	
+	@Override
+	public void playerTouch(PlayerEntity pEntity) {
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 
 	@Override
-	public void applyEntityCollision(Entity entityIn) {
+	public void push(Entity entityIn) {
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void defineSynchedData() {
 
 	}
 
@@ -64,14 +76,14 @@ public class EntityCalamitySpawner extends Entity {
 		return false;
 	}
 
-	public static ItemStack FIREWORK_PURPLE_SPARK = Items.FIREWORKS.getDefaultInstance();
+	public static ItemStack FIREWORK_PURPLE_SPARK = Items.FIREWORK_ROCKET.getDefaultInstance();
 
 	private static final int FIREWORK_DURATION = 120;
 	private static final int FIREWORK_DIVISOR = 5;
 
 	@Override
 	public void baseTick() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			super.baseTick();
 			return;
 		} else {
@@ -83,24 +95,24 @@ public class EntityCalamitySpawner extends Entity {
 				if (this.timer % 40 == 0) {
 					this.spawnScaryEffect((int) (Math.round(25.0D * percentage) + 5));
 					if ((CALAMITY_SPAWN_DURATION - this.timer > FIREWORK_DURATION + 60)) {
-						if (DungeonGenUtils.percentageRandom(0.75, this.rand)) {
+						if (DungeonGenUtils.percentageRandom(0.75, this.random)) {
 							this.spawnFireworks((int) (Math.round(3.0D * percentage) + 1));
 						}
 					}
 				}
 				// Keep the lightning? Idk, it looks cool but it is a bit overused :/
-				if ((this.timer - 2) % 40 == 0 && this.rand.nextBoolean()) {
-					EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.world, this.posX, this.posY, this.posZ, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
-					lightning.setPosition(this.posX, this.posY, this.posZ);
-					this.world.spawnEntity(lightning);
+				if ((this.timer - 2) % 40 == 0 && this.random.nextBoolean()) {
+					EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.level, this.getX(), this.getY(), this.getZ(), true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+					lightning.setPos(this.getX(), this.getY(), this.getZ());
+					this.level.addFreshEntity(lightning);
 				}
 
 				if (this.timer >= CALAMITY_SPAWN_DURATION) {
-					if (this.timer == CALAMITY_SPAWN_DURATION && !this.world.isRemote) {
+					if (this.timer == CALAMITY_SPAWN_DURATION && !this.level.isClientSide) {
 						// DONE: SPawn ender calamity
 						this.spawnCalamity();
 					}
-					this.setDead();
+					this.remove();
 					return;
 				}
 
@@ -132,37 +144,37 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	private void spawnFirework(double x, double y, double z, ItemStack stack) {
-		FireworkRocketEntity firework = new FireworkRocketEntity(this.world, x, y, z, FIREWORK_PURPLE_SPARK);
+		FireworkRocketEntity firework = new FireworkRocketEntity(this.level, x, y, z, FIREWORK_PURPLE_SPARK);
 		firework.lifetime = 1;
 
 		firework.setInvisible(true);
 		firework.setSilent(true);
 
-		this.world.spawnEntity(firework);
+		this.level.addFreshEntity(firework);
 	}
 
 	private Vector3d getRandomPositionAroundPosition() {
-		Vector3d v = new Vector3d(EntityCQREnderCalamity.getArenaRadius() * this.rand.nextDouble(), 0, 0);
-		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.rand));
+		Vector3d v = new Vector3d(EntityCQREnderCalamity.getArenaRadius() * this.random.nextDouble(), 0, 0);
+		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.random));
 
 		return v.add(this.position());
 	}
 
 	private void spawnCalamity() {
-		EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(this.world);
+		EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(this.level);
 		calamity.setFaction(this.faction, false);
-		calamity.setHomePositionCQR(this.getPosition());
-		calamity.setPosition(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
+		calamity.setHomePositionCQR(this.blockPosition());
+		calamity.setPos(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
 
-		this.world.spawnEntity(calamity);
+		this.level.addFreshEntity(calamity);
 
-		EntityUtil.addEntityToAllRegionsAt(this.getPosition(), calamity);
-		EntityUtil.removeEntityFromAllRegionsAt(this.getPosition(), this);
+		EntityUtil.addEntityToAllRegionsAt(this.blockPosition(), calamity);
+		EntityUtil.removeEntityFromAllRegionsAt(this.blockPosition(), this);
 	}
 
 	// Spawns some firework and flame particles and plays a scary sound
 	protected void spawnScaryEffect(int count) {
-		this.playSound(SoundEvents.ENTITY_ENDERMEN_SCREAM, 1.0F, 0.5F + 0.5F * this.rand.nextFloat());
+		this.playSound(SoundEvents.ENDERMAN_SCREAM, 1.0F, 0.5F + 0.5F * this.random.nextFloat());
 	}
 
 	// Spawns some fireworks and a small enderman too
@@ -183,15 +195,15 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		this.timer = compound.getInteger("entityTimer");
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		this.timer = compound.getInt("entityTimer");
 		this.setFaction(compound.getString("faction"));
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-		compound.setInteger("entityTimer", this.timer);
-		compound.setString("faction", this.getFaction());
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		compound.putInt("entityTimer", this.timer);
+		compound.putString("faction", this.getFaction());
 	}
 
 	public String getFaction() {
@@ -203,7 +215,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	static {
-		CompoundNBT compound = FIREWORK_PURPLE_SPARK.getTagCompound();
+		CompoundNBT compound = FIREWORK_PURPLE_SPARK.getTag();
 		if (compound == null) {
 			compound = new CompoundNBT();
 		}
@@ -211,14 +223,19 @@ public class EntityCalamitySpawner extends Entity {
 		ListNBT explosionCompoundList = new ListNBT();
 
 		CompoundNBT explosionCompound = new CompoundNBT();
-		explosionCompound.setInteger("Type", 4);
-		explosionCompound.setIntArray("Colors", new int[] { 0x7B2FBE });
-		explosionCompound.setIntArray("FadeColors", new int[] { 0x253192, 0x6689D3, 0xC354CD });
+		explosionCompound.putInt("Type", 4);
+		explosionCompound.putIntArray("Colors", new int[] { 0x7B2FBE });
+		explosionCompound.putIntArray("FadeColors", new int[] { 0x253192, 0x6689D3, 0xC354CD });
 
-		explosionCompoundList.appendTag(explosionCompound);
-		fwCompound.setTag("Explosions", explosionCompoundList);
-		compound.setTag("Fireworks", fwCompound);
-		FIREWORK_PURPLE_SPARK.setTagCompound(compound);
+		explosionCompoundList.add(explosionCompound);
+		fwCompound.put("Explosions", explosionCompoundList);
+		compound.put("Fireworks", fwCompound);
+		FIREWORK_PURPLE_SPARK.setTag(compound);
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

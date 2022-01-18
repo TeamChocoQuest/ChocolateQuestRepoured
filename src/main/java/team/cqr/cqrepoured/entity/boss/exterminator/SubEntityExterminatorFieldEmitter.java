@@ -35,8 +35,8 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 	
 	@Override
-	public void onKillCommand() {
-		this.exterminator.onKillCommand();
+	public void kill() {
+		this.exterminator.kill();
 	}
 
 	@Override

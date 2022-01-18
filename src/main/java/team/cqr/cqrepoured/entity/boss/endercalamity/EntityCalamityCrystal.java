@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Optional;
-
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -18,14 +19,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class EntityCalamityCrystal extends Entity {
@@ -39,33 +43,39 @@ public class EntityCalamityCrystal extends Entity {
 
 	private float absorbedHealth = 0F;
 
-	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.<Optional<BlockPos>>createKey(EntityCalamityCrystal.class, DataSerializers.OPTIONAL_BLOCK_POS);
-	private static final DataParameter<Boolean> ABSORBING = EntityDataManager.<Boolean>createKey(EntityCalamityCrystal.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.defineId(EntityCalamityCrystal.class, DataSerializers.OPTIONAL_BLOCK_POS);
+	private static final DataParameter<Boolean> ABSORBING = EntityDataManager.<Boolean>defineId(EntityCalamityCrystal.class, DataSerializers.BOOLEAN);
 
 	private static final int EXPLOSION_EFFECT_RADIUS = 16;
 
-	public EntityCalamityCrystal(World worldIn) {
-		super(worldIn);
-		this.preventEntitySpawning = true;
-		this.setSize(2.0F, 2.0F);
-		this.innerRotation = this.rand.nextInt(100_000);
+	public EntityCalamityCrystal(EntityType<? extends EntityCalamityCrystal> type, World worldIn) {
+		super(type, worldIn);
+		this.blocksBuilding = true;
+		this.innerRotation = this.random.nextInt(100_000);
 	}
 
 	public EntityCalamityCrystal(World world, MobEntity owningEntity, double x, double y, double z) {
-		this(world);
+		this(CQREntityTypes.CALAMITY_CRYSTAL.get(), world);
 		this.owningEntity = owningEntity;
-		this.setPosition(x, y, z);
+		this.setPos(x, y, z);
 	}
 
 	@Override
-	protected boolean canTriggerWalking() {
+	protected boolean isMovementNoisy() {
 		return false;
 	}
 
+	/**
+	 * Returns true if other Entities should be prevented from moving through this Entity.
+	 */
+	public boolean isPickable() {
+		return true;
+	}
+
 	@Override
-	protected void entityInit() {
-		this.getDataManager().register(BEAM_TARGET, Optional.absent());
-		this.getDataManager().register(ABSORBING, true);
+	protected void defineSynchedData() {
+		this.entityData.define(BEAM_TARGET, Optional.empty());
+		this.entityData.define(ABSORBING, true);
 	}
 
 	@Override
@@ -74,51 +84,47 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		if (compound.hasKey("BeamTarget", 10)) {
-			this.setBeamTarget(NBTUtil.getPosFromTag(compound.getCompoundTag("BeamTarget")));
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		if (compound.contains("BeamTarget", 10)) {
+			this.setBeamTarget(NBTUtil.readBlockPos(compound.getCompound("BeamTarget")));
 		}
-		if (compound.hasKey("Absorbing", Constants.NBT.TAG_BYTE)) {
+		if (compound.contains("Absorbing", Constants.NBT.TAG_BYTE)) {
 			this.setAbsorbing(compound.getBoolean("Absorbing"));
 		}
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundNBT compound) {
 		if (this.getBeamTarget() != null) {
-			compound.setTag("BeamTarget", NBTUtil.createPosTag(this.getBeamTarget()));
+			compound.put("BeamTarget", NBTUtil.writeBlockPos(this.getBeamTarget()));
 		}
-		compound.setBoolean("Absorbing", this.isAbsorbing());
+		compound.putBoolean("Absorbing", this.isAbsorbing());
 	}
 
 	@Override
 	public void tick() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-
 		++this.innerRotation;
 
 		// Following code must not be run on the client
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return;
 		}
 
 		this.checkCurrentTarget();
-		if (this.currentTarget != null && this.currentTarget.isEntityAlive()) {
+		if (this.currentTarget != null && this.currentTarget.isAlive()) {
 			if (this.noTargetTicks != 0) {
 				this.noTargetTicks = 0;
 			}
-			this.setBeamTarget(this.currentTarget.getPosition());
+			this.setBeamTarget(this.currentTarget.blockPosition());
 			// Only absorb health every 10 ticks, other wise it is too op
-			if (this.ticksExisted % 10 == 0) {
+			if (this.tickCount % 10 == 0) {
 				if (this.isAbsorbing()) {
 
-					if (this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 4F)) {
+					if (this.currentTarget.hurt(DamageSource.MAGIC, 4F)) {
 						this.absorbedHealth += 2F;
 					}
 
-					if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() + 1)) {
+					if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.level.getDifficulty().getId() + 1)) {
 						this.setAbsorbing(false);
 						this.currentTarget = this.owningEntity;
 						if (this.owningEntity == null) {
@@ -131,7 +137,7 @@ public class EntityCalamityCrystal extends Entity {
 				this.owningEntity.heal(1F);
 				this.absorbedHealth--;
 				if (this.absorbedHealth <= 0F) {
-					this.setDead();
+					this.remove();
 					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
 				}
 			} else if (!this.isAbsorbing()) {
@@ -147,7 +153,7 @@ public class EntityCalamityCrystal extends Entity {
 						this.setBeamTarget(null);
 					}
 				} else {
-					this.setDead();
+					this.remove();
 					this.onCrystalDestroyed(DamageSource.OUT_OF_WORLD);
 				}
 			}
@@ -156,11 +162,11 @@ public class EntityCalamityCrystal extends Entity {
 
 	private void checkCurrentTarget() {
 		if (this.currentTarget != null) {
-			if (this.currentTarget.isDead || !this.currentTarget.isEntityAlive() || (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
+			if (!this.currentTarget.isAlive() || (this.currentTarget.getHealth() / this.currentTarget.getMaxHealth() <= 0.25F)) {
 				// Target is dead or remove or has too few hp=> search a different one!
 				this.currentTarget = null;
 				this.setBeamTarget(null);
-			} else if (this.getDistance(this.currentTarget) >= 3 * EXPLOSION_EFFECT_RADIUS) {
+			} else if (this.distanceTo(this.currentTarget) >= 3 * EXPLOSION_EFFECT_RADIUS) {
 				this.currentTarget = null;
 				this.setBeamTarget(null);
 			}
@@ -171,32 +177,32 @@ public class EntityCalamityCrystal extends Entity {
 			Vector3d p1 = this.position().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			Vector3d p2 = this.position().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb, this::doesEntityFitForAbsorbing);
+			List<MobEntity> affectedEntities = this.level.getEntitiesOfClass(MobEntity.class, aabb, this::doesEntityFitForAbsorbing);
 			if (!affectedEntities.isEmpty()) {
-				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() - 1, this.rand));
+				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() - 1, this.random));
 			}
 		}
 	}
 
 	@Override
-	public void onKillCommand() {
+	public void kill() {
 		this.onCrystalDestroyed(DamageSource.GENERIC);
-		super.onKillCommand();
+		super.kill();
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (this.isEntityInvulnerable(source)) {
+	public boolean hurt(DamageSource source, float amount) {
+		if (this.isInvulnerableTo(source)) {
 			return false;
-		} else if (source.getTrueSource() == this.owningEntity) {
+		} else if (source.getEntity() == this.owningEntity) {
 			return false;
 		} else {
-			if (!this.isDead && !this.world.isRemote) {
-				this.setDead();
+			if (this.isAlive() && !this.level.isClientSide) {
+				this.remove();
 
-				if (!this.world.isRemote) {
+				if (!this.level.isClientSide) {
 					if (!source.isExplosion()) {
-						this.world.createExplosion((Entity) null, this.posX, this.posY, this.posZ, 6.0F, true);
+						this.level.explode((Entity) null, this.getX(), this.getY(), this.getZ(), 6.0F, Explosion.Mode.DESTROY);
 					}
 
 					this.onCrystalDestroyed(source);
@@ -216,7 +222,7 @@ public class EntityCalamityCrystal extends Entity {
 			Vector3d p1 = this.position().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			Vector3d p2 = this.position().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-			List<MobEntity> affectedEntities = this.world.getEntitiesWithinAABB(MobEntity.class, aabb);
+			List<MobEntity> affectedEntities = this.level.getEntitiesOfClass(MobEntity.class, aabb);
 			if (!affectedEntities.isEmpty()) {
 				final float healingAmount = 4 * (this.absorbedHealth / affectedEntities.size());
 				affectedEntities.forEach(arg0 -> arg0.heal(healingAmount));
@@ -226,23 +232,23 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	private void setBeamTarget(@Nullable BlockPos beamTarget) {
-		this.getDataManager().set(BEAM_TARGET, Optional.fromNullable(beamTarget));
+		this.entityData.set(BEAM_TARGET, Optional.ofNullable(beamTarget));
 	}
 
 	@Nullable
 	public BlockPos getBeamTarget() {
-		return this.getDataManager().get(BEAM_TARGET).orNull();
+		return this.entityData.get(BEAM_TARGET).orElse(null);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public boolean isInRangeToRenderDist(double distance) {
-		return super.isInRangeToRenderDist(distance) || this.getBeamTarget() != null;
+	public boolean shouldRenderAtSqrDistance(double distance) {
+		return super.shouldRenderAtSqrDistance(distance) || this.getBeamTarget() != null;
 	}
 
 	@Nullable
 	private Faction getFaction() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return null;
 		}
 		if (this.owningEntity != null) {
@@ -255,12 +261,7 @@ public class EntityCalamityCrystal extends Entity {
 		if (living != this.owningEntity) {
 			if (TargetUtil.PREDICATE_LIVING.apply(living)) {
 				/*
-				 * CQRFaction myFaction = this.getFaction();
-				 * if (myFaction != null) {
-				 * if (myFaction.isAlly(living)) {
-				 * return false;
-				 * }
-				 * }
+				 * CQRFaction myFaction = this.getFaction(); if (myFaction != null) { if (myFaction.isAlly(living)) { return false; } }
 				 */
 				return living.getHealth() / living.getMaxHealth() >= 0.5F;
 			}
@@ -269,13 +270,18 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	public boolean isAbsorbing() {
-		return this.dataManager.get(ABSORBING);
+		return this.entityData.get(ABSORBING);
 	}
 
 	private void setAbsorbing(boolean value) {
-		if (!this.world.isRemote) {
-			this.dataManager.set(ABSORBING, value);
+		if (!this.level.isClientSide) {
+			this.entityData.set(ABSORBING, value);
 		}
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
