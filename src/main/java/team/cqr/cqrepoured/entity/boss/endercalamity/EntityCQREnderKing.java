@@ -210,7 +210,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void aiStep() {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
@@ -218,7 +218,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 						(this.rand.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
-		super.onLivingUpdate();
+		super.aiStep();
 	}
 
 	@Override

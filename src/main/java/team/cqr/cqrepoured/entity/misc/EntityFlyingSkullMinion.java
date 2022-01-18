@@ -78,7 +78,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 
 	@Override
 	public void onLivingUpdate() {
-		super.onLivingUpdate();
+		super.aiStep();
 		// If we hit a wall we explode
 		if (!this.isInsideOfMaterial(Material.AIR)) {
 			this.explode(1.25F);

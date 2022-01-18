@@ -108,7 +108,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void aiStep() {
 		if (this.dragonAttackCooldown > 0) {
 			this.dragonAttackCooldown--;
 		}
@@ -183,7 +183,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		} else if (this.level.isRemote) {
 			this.active = false;
 		}
-		super.onLivingUpdate();
+		super.aiStep();
 	}
 
 	private void handleInWeb() {

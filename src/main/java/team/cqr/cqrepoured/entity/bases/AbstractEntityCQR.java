@@ -902,9 +902,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	@Override
-	public void baseTick() {
+	public void aiStep() {
 		//this.updateSwingTime(); //Already called in aiStep()
-		super.baseTick();
+		super.aiStep();
 
 		// Bossbar
 		if (this.bossInfoServer != null) {

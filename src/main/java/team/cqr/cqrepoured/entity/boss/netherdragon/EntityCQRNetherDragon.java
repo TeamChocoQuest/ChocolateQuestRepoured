@@ -435,8 +435,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
+	public void aiStep() {
+		super.aiStep();
 
 		this.destroyBlocksInAABB(this.getBoundingBox().inflate(0.5).move(this.getDeltaMovement().scale(1.5)));
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {

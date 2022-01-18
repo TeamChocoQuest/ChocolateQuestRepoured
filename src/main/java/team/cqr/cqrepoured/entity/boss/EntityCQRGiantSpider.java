@@ -136,8 +136,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
+	public void aiStep() {
+		super.aiStep();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.activeEggs) {
 			if (ent == null || !ent.isAlive()) {

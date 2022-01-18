@@ -763,7 +763,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void aiStep() {
 		if (this.world.isRemote) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
@@ -781,7 +781,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 
 		this.isJumping = false;
-		super.onLivingUpdate();
+		super.aiStep();
 	}
 
 	public int getCurrentPhaseRunningTicks() {
