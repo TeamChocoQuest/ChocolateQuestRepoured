@@ -45,15 +45,13 @@ public interface ISizable {
 	void applySizeVariation(float value);
 
 	// wrapper for setSize cause interfaces don'T allow protected methods >:(
-	//ReflectionMethod<Void> METHOD_SET_SIZE = new ReflectionMethod<>(Entity.class, "func_70105_a", "setSize", Float.TYPE, Float.TYPE);
+	// ReflectionMethod<Void> METHOD_SET_SIZE = new ReflectionMethod<>(Entity.class, "func_70105_a", "setSize", Float.TYPE, Float.TYPE);
 
 	// Access the setSize method of an entity
-	/*default void hackSize(float w, float h) {
-		if (this instanceof Entity) {
-			METHOD_SET_SIZE.invoke(this, w, h);
-		}
-	}*/
-	
+	/*
+	 * default void hackSize(float w, float h) { if (this instanceof Entity) { METHOD_SET_SIZE.invoke(this, w, h); } }
+	 */
+
 	default EntitySize callOnGetDimensions(EntitySize parentResult) {
 		return parentResult.scale(this.getSizeVariation());
 	}
@@ -62,13 +60,28 @@ public interface ISizable {
 	default void initializeSize() {
 		this.setSizeVariation(1.0F);
 	}
-
+	
 	// Always use this to change the size, never call resize directly!!
 	default void setSizeVariation(float size) {
 		this.applySizeVariation(size);
-		if(this instanceof Entity) {
-			((Entity)this).refreshDimensions();
+		if (this instanceof Entity) {
+			Entity myself = (Entity) this;
+			
+			//Copy from SlimeEntity code
+			this.reapplyPositionClone(myself);
+			
+			double d0 = myself.getX();
+			double d1 = myself.getY();
+			double d2 = myself.getZ();
+
+			myself.refreshDimensions();
+
+			myself.setPos(d0, d1, d2);
 		}
+	}
+
+	default void reapplyPositionClone(Entity myself) {
+		myself.setPos(myself.position().x, myself.position().y, myself.position().z);
 	}
 
 	// These two methods NEED to be called on read/write entity to NBT!! OTherwise it won't get saved!
