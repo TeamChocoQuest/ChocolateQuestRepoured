@@ -20,9 +20,9 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell<AbstractEntityC
 
 	@Override
 	public void startCastingSpell() {
-		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
+		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRandom());
 
-		Vector3d vector = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
+		Vector3d vector = this.entity.getTarget().position().subtract(this.entity.position()).normalize();
 		vector = vector.add(vector).add(vector).add(vector);
 		double angle = 180D / projectiles;
 		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
@@ -32,24 +32,26 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell<AbstractEntityC
 		}
 
 		for (Vector3d v : velocities) {
-			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.world, this.entity);
+			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.level, this.entity);
 			// proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
-			proj.motionX = v.x * 0.5D;
+			/*proj.motionX = v.x * 0.5D;
 			proj.motionY = v.y * 0.5D;
 			proj.motionZ = v.z * 0.5D;
-			proj.velocityChanged = true;
-			this.entity.world.spawnEntity(proj);
+			proj.velocityChanged = true;*/
+			proj.setDeltaMovement(v.scale(0.5D));
+			proj.hasImpulse = true;
+			this.entity.level.addFreshEntity(proj);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

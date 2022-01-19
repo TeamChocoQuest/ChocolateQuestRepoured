@@ -14,15 +14,15 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 
 	@Override
 	public boolean canUse() {
-		return this.entity.getAttackTarget() != null;
+		return this.entity.getTarget() != null;
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		if (this.entity.getAttackTarget() == null) {
+		if (this.entity.getTarget() == null) {
 			return false;
 		}
-		if (this.entity.hasPath()) {
+		if (this.entity.isPathFinding()) {
 			return true;
 		}
 		if (this.ticksWaiting < 100) {
@@ -35,21 +35,21 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 	@Override
 	public void start() {
 		Vector3d v = this.entity.getLastPosAttackTarget();
-		this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
+		this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.0D);
 	}
 
 	@Override
 	public void stop() {
-		this.entity.getNavigator().clearPath();
+		this.entity.getNavigation().stop();
 	}
 
 	@Override
 	public void tick() {
-		if (this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.ticksExisted) {
+		if (this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.tickCount) {
 			Vector3d v = this.entity.getLastPosAttackTarget();
-			this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.0D);
+			this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.0D);
 		}
-		if (!this.entity.hasPath()) {
+		if (!this.entity.isPathFinding()) {
 			this.ticksWaiting++;
 		} else {
 			this.ticksWaiting = 0;

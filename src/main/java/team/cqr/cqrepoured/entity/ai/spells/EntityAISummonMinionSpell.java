@@ -66,14 +66,14 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 		int aliveMinions = 0;
 		List<Entity> toRemove = new ArrayList<>();
 		for (Entity minio : this.activeCircles) {
-			if (minio != null && !minio.isDead) {
+			if (minio != null && minio.isAlive()) {
 				aliveMinions++;
 			} else {
 				toRemove.add(minio);
 			}
 		}
 		for (Entity minio : this.summoner.getSummonedEntities()) {
-			if (minio != null && !minio.isDead) {
+			if (minio != null && minio.isAlive()) {
 				aliveMinions++;
 			}
 		}
@@ -83,7 +83,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d vector = this.entity.getLookVec().normalize();
+		Vector3d vector = this.entity.getLookAngle().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();
 		if (minionCount > this.MAX_MINIONS_AT_A_TIME) {
@@ -94,10 +94,10 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[minionCount];
 			for (int i = 0; i < minionCount; i++) {
-				spawnPositions[i] = this.entity.getPosition().add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
+				spawnPositions[i] = this.entity.blockPosition().offset(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
 			}
 			for (BlockPos p : spawnPositions) {
-				if (this.entity.getNavigator().getPathToPos(p) != null) {
+				if (this.entity.getNavigation().createPath(p, 3 /* doesn't need to be too accurate... */) != null) {
 					// System.out.println("Pos: " + p.toString());
 					ResourceLocation summon = null;
 					boolean rdmFlag = false;
@@ -105,7 +105,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 						summon = this.minionOverride;
 					} else {
 						summon = new ResourceLocation(CQRMain.MODID, "zombie");
-						if (this.entity.getRNG().nextInt(4) == 3) {
+						if (this.entity.getRandom().nextInt(4) == 3) {
 							summon = new ResourceLocation(CQRMain.MODID, "skeleton");
 							rdmFlag = true;
 						}
@@ -119,22 +119,22 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 							texture = ECircleTexture.SKELETON;
 						}
 					}
-					if (this.entity.world.getBlockState(p).isFullBlock()) {
-						p = p.add(0, 1, 0);
+					if (this.entity.level.getBlockState(p).isFullBlock()) {
+						p = p.offset(0, 1, 0);
 					}
 					if (this.summonViaCircle) {
-						EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
+						EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.level, summon, 1.1F, texture, (ISummoner) this.entity);
 						circle.setSummon(summon);
-						circle.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.1 + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
+						circle.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.1 + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
-						this.entity.world.spawnEntity(circle);
+						this.entity.level.addFreshEntity(circle);
 						this.summoner.addSummonedEntityToList(circle);
 						this.activeCircles.add(circle);
 					} else {
-						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.world);
+						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.level);
 
 						summoned.setUniqueId(MathHelper.getRandomUUID());
-						summoned.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
+						summoned.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
 						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
 						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);
@@ -161,12 +161,12 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

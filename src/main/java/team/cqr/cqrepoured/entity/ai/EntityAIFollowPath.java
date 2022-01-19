@@ -26,7 +26,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public void stop() {
-		this.entity.getNavigator().clearPath();
+		this.entity.getNavigation().stop();
 		this.hasPath = false;
 		this.ticksToWait = 0;
 		this.tick = 0;
@@ -38,19 +38,19 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 		Path.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
 
 		if (currentNode != null) {
-			BlockPos pos = this.entity.getHomePositionCQR().add(currentNode.getPos());
+			BlockPos pos = this.entity.getHomePositionCQR().offset(currentNode.getPos());
 
-			if (this.entity.hasPath()) {
-				this.entity.getLookHelper().setLookPosition(pos.getX() + 0.5D, pos.getY() + this.entity.getEyeHeight(), pos.getZ() + 0.5D, 30.0F, 30.0F);
+			if (this.entity.isPathFinding()) {
+				this.entity.getLookControl().setLookAt(pos.getX() + 0.5D, pos.getY() + this.entity.getEyeHeight(), pos.getZ() + 0.5D, 30.0F, 30.0F);
 			} else if (this.hasPath) {
 				this.hasPath = false;
-				if (this.entity.getDistanceSq(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D) <= 1.0D) {
-					this.ticksToWait = MathHelper.getInt(this.random, currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
+				if (this.entity.distanceToSqr(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D) <= 1.0D) {
+					this.ticksToWait = MathHelper.nextInt(this.random, currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
 				}
 			} else if (this.ticksToWait > 0) {
 				this.ticksToWait--;
-				this.entity.rotationYaw = currentNode.getWaitingRotation();
-				long time = this.world.getWorldTime() % 24000;
+				this.entity.yRot = currentNode.getWaitingRotation();
+				long time = this.world.getGameTime() % 24000;
 				if (time < currentNode.getTimeMin() || time > currentNode.getTimeMax()) {
 					this.ticksToWait = 0;
 				}
@@ -58,7 +58,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.calculateNextNode();
 			}
 		} else {
-			this.entity.getNavigator().clearPath();
+			this.entity.getNavigation().stop();
 			this.calculateNextNode();
 		}
 	}
@@ -75,12 +75,12 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 		Path.PathNode nextNode = null;
 
 		if (currentNode != null) {
-			nextNode = currentNode.getNextNode(this.world, this.entity.getRNG(), prevNode);
+			nextNode = currentNode.getNextNode(this.world, this.entity.getRandom(), prevNode);
 		} else {
-			BlockPos pos = new BlockPos(this.entity).subtract(this.entity.getHomePositionCQR());
+			BlockPos pos = this.entity.blockPosition().subtract(this.entity.getHomePositionCQR());
 			double min = Double.MAX_VALUE;
 			for (Path.PathNode node : path.getNodes()) {
-				double dist = pos.distanceSq(node.getPos());
+				double dist = pos.distSqr(node.getPos());
 				if (dist < min) {
 					min = dist;
 					nextNode = node;
@@ -90,8 +90,8 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 		if (nextNode != null) {
 			this.entity.setCurrentPathTargetPoint(nextNode.getIndex());
-			BlockPos pos = this.entity.getHomePositionCQR().add(nextNode.getPos());
-			this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), Math.sqrt(0.75D));
+			BlockPos pos = this.entity.getHomePositionCQR().offset(nextNode.getPos());
+			this.entity.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), Math.sqrt(0.75D));
 			this.hasPath = true;
 		} else {
 			this.tick = 40;

@@ -17,11 +17,11 @@ public class EntityAITeleportToTargetWhenStuck<T extends AbstractEntityCQR> exte
 			return false;
 		}
 		if (this.entity.hasAttackTarget()) {
-			if (this.entity.getDistanceSq(this.entity.getAttackTarget()) >= 256) {
+			if (this.entity.distanceToSqr(this.entity.getTarget()) >= 256) {
 				// TODO: Maybe check if we are not ranged...
 				return true;
 			}
-			return (this.entity.hasPath() && this.entity.collidedHorizontally) || !this.entity.hasPath();
+			return (this.entity.isPathFinding() && this.entity.horizontalCollision) || !this.entity.isPathFinding();
 		}
 		return false;
 	}
@@ -35,7 +35,7 @@ public class EntityAITeleportToTargetWhenStuck<T extends AbstractEntityCQR> exte
 	public void start() {
 		super.start();
 
-		this.entity.teleport(this.entity.getAttackTarget().posX, this.entity.getAttackTarget().posY, this.entity.getAttackTarget().posZ);
+		this.entity.teleport(this.entity.getTarget().getX(), this.entity.getTarget().getY(), this.entity.getTarget().getZ());
 	}
 
 	@Override

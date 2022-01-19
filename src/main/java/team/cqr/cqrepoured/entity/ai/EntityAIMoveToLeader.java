@@ -20,7 +20,7 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 	public boolean canUse() {
 		if (this.entity.hasLeader()) {
 			LivingEntity leader = this.entity.getLeader();
-			return this.entity.getDistanceSq(leader) > 64.0D;
+			return this.entity.distanceToSqr(leader) > 64.0D;
 		}
 		return false;
 	}
@@ -30,8 +30,8 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (this.entity.hasLeader()) {
 			LivingEntity leader = this.entity.getLeader();
 
-			if (this.entity.getDistanceSq(leader) > 16.0D) {
-				return this.entity.hasPath();
+			if (this.entity.distanceToSqr(leader) > 16.0D) {
+				return this.entity.isPathFinding();
 			}
 		}
 		return false;
@@ -40,41 +40,41 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 	@Override
 	public void start() {
 		LivingEntity leader = this.entity.getLeader();
-		this.entity.getNavigator().tryMoveToEntityLiving(leader, 1.0D);
+		this.entity.getNavigation().moveTo(leader, 1.0D);
 	}
 
 	@Override
 	public void tick() {
-		if (this.entity.hasPath()) {
+		if (this.entity.isPathFinding()) {
 			LivingEntity leader = this.entity.getLeader();
 
-			if (this.entity.getDistance(leader) > 24) {
-				int i = MathHelper.floor(leader.posX) - 2;
-				int j = MathHelper.floor(leader.posZ) - 2;
-				int k = MathHelper.floor(leader.getEntityBoundingBox().minY);
+			if (this.entity.distanceTo(leader) > 24) {
+				int i = MathHelper.floor(leader.getX()) - 2;
+				int j = MathHelper.floor(leader.getZ()) - 2;
+				int k = MathHelper.floor(leader.getBoundingBox().minY);
 
 				for (int l = 0; l <= 4; ++l) {
 					for (int i1 = 0; i1 <= 4; ++i1) {
 						if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isTeleportFriendlyBlock(i, j, k, l, i1)) {
-							this.entity.setLocationAndAngles(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.rotationYaw, this.entity.rotationPitch);
-							this.entity.getNavigator().clearPath();
+							this.entity.setLocationAndAngles(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.yRot, this.entity.xRot);
+							this.entity.getNavigation().stop();
 							return;
 						}
 					}
 				}
 			}
 
-			PathPoint target = this.entity.getNavigator().getPath().getFinalPathPoint();
+			PathPoint target = this.entity.getNavigation().getPath().getEndNode();
 
-			if (leader.getDistanceSq(target.x + 0.5D, target.y, target.z + 0.5D) > 16.0D) {
-				this.entity.getNavigator().tryMoveToEntityLiving(leader, 1.0D);
+			if (leader.distanceToSqr(target.x + 0.5D, target.y, target.z + 0.5D) > 16.0D) {
+				this.entity.getNavigation().moveTo(leader, 1.0D);
 			}
 		}
 	}
 
 	@Override
 	public void stop() {
-		this.entity.getNavigator().clearPath();
+		this.entity.getNavigation().stop();
 	}
 
 	protected boolean isTeleportFriendlyBlock(int x, int z, int y, int xOffset, int zOffset) {

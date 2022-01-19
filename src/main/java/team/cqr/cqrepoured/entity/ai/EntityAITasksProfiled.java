@@ -30,7 +30,7 @@ public class EntityAITasksProfiled extends GoalSelector {
 
 	@Override
 	public void tick() {
-		this.profiler.startSection("goalSetup");
+		this.profiler.push("goalSetup");
 
 		if (this.tickCount++ % this.tickRate == 0) {
 			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry : this.taskEntries) {
@@ -72,10 +72,10 @@ public class EntityAITasksProfiled extends GoalSelector {
 			}
 		}
 
-		this.profiler.endSection();
+		this.profiler.pop();
 
 		if (!this.executingTaskEntries.isEmpty()) {
-			this.profiler.startSection("goalTick");
+			this.profiler.push("goalTick");
 
 			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry2 : this.executingTaskEntries) {
 				long t = System.nanoTime();
@@ -87,7 +87,7 @@ public class EntityAITasksProfiled extends GoalSelector {
 				AI_TIMES.put(entityaitasks$entityaitaskentry2.action.getClass(), t);
 			}
 
-			this.profiler.endSection();
+			this.profiler.pop();
 		}
 
 		if (this.world.getTotalWorldTime() - lastTimeLogged > 200) {

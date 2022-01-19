@@ -14,25 +14,25 @@ public class EntityAIMoveToHome extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public boolean canUse() {
 		if (this.entity.hasHomePositionCQR()) {
 			BlockPos pos = this.entity.getHomePositionCQR();
-			return this.entity.getDistanceSqToCenter(pos) > 16.0D;
+			return this.entity.blockPosition().distSqr(pos) > 16.0D;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return this.entity.hasPath();
+		return this.entity.isPathFinding();
 	}
 
 	@Override
 	public void start() {
 		BlockPos pos = this.entity.getHomePositionCQR();
-		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
+		this.entity.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
 	}
 
 	@Override
 	public void stop() {
-		this.entity.getNavigator().clearPath();
+		this.entity.getNavigation().stop();
 	}
 
 }

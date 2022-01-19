@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -25,7 +26,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 
 	protected AbstractEntityAISpell(T entity, int cooldown, int chargingTicks, int castingTicks) {
 		this.entity = entity;
-		this.world = entity.world;
+		this.world = entity.level;
 		this.cooldown = cooldown;
 		this.chargingTicks = Math.max(chargingTicks, 0);
 		this.castingTicks = Math.max(castingTicks, 1);
@@ -34,11 +35,11 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.entity.isEntityAlive()) {
+		if (!this.entity.isAlive()) {
 			return false;
 		}
 		if (this.needsTargetToStart) {
-			EntityLivingBase attackTarget = this.entity.getAttackTarget();
+			LivingEntity attackTarget = this.entity.getTarget();
 			if (attackTarget == null) {
 				return false;
 			}
@@ -46,16 +47,16 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 				return false;
 			}
 		}
-		return this.entity.ticksExisted > this.prevTimeCasted + this.cooldown;
+		return this.entity.tickCount > this.prevTimeCasted + this.cooldown;
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (!this.entity.isEntityAlive()) {
+		if (!this.entity.isAlive()) {
 			return false;
 		}
 		if (this.needsTargetToContinue) {
-			EntityLivingBase attackTarget = this.entity.getAttackTarget();
+			LivingEntity attackTarget = this.entity.getTarget();
 			if (attackTarget == null) {
 				return false;
 			}
@@ -78,7 +79,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 
 	@Override
 	public void resetTask() {
-		this.prevTimeCasted = this.entity.ticksExisted;
+		this.prevTimeCasted = this.entity.tickCount;
 		this.tick = -1;
 	}
 
