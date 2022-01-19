@@ -71,10 +71,10 @@ public class EntityCalamitySpawner extends Entity {
 
 	}
 
-	@Override
+	/*@Override //Has been moved to renderer!
 	public boolean shouldRenderInPass(int pass) {
 		return false;
-	}
+	}*/
 
 	public static ItemStack FIREWORK_PURPLE_SPARK = Items.FIREWORK_ROCKET.getDefaultInstance();
 
