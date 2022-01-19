@@ -72,6 +72,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRMaterials;
 import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
@@ -106,6 +107,10 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	private AnimationFactory factory = new AnimationFactory(this);
 	private boolean partSoundFlag;
 
+	public EntityCQRExterminator(World world) {
+		this(CQREntityTypes.EXTERMINATOR.get(), world);
+	}
+	
 	public EntityCQRExterminator(EntityType<? extends EntityCQRExterminator> type, World worldIn) {
 		super(type, worldIn);
 		this.xpReward = 100;
