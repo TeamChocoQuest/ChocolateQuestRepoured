@@ -1,35 +1,40 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -39,50 +44,54 @@ import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManag
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
-	protected static final DataParameter<Boolean> WIDE = EntityDataManager.<Boolean>createKey(EntityCQREnderKing.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> WIDE = EntityDataManager.<Boolean>defineId(EntityCQREnderKing.class, DataSerializers.BOOLEAN);
 
-	public EntityCQREnderKing(World worldIn) {
-		super(worldIn);
-		this.stepHeight = 1.0F;
-		this.setPathPriority(PathNodeType.WATER, -1.0F);
+	public EntityCQREnderKing(World world) {
+		this(CQREntityTypes.ENDER_KING.get(), world);
+	}
+	
+	public EntityCQREnderKing(EntityType<? extends EntityCQREnderKing> type, World worldIn) {
+		super(type, worldIn);
+		this.maxUpStep = 1.0F;
+		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
 	}
 
 	@Override
-	protected void updateAITasks() {
-		if (this.isInWater() || (this.isWet() && this.getItemStackFromSlot(EquipmentSlotType.HEAD).isEmpty())) {
-			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+	protected void customServerAiStep() {
+		if (this.isInWater() || (this.isInWaterOrRain() && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty())) {
+			this.hurt(DamageSource.DROWN, 1.0F);
 		}
-		super.updateAITasks();
+		super.customServerAiStep();
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 
-		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<>(this));
+		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<>(this));
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		amount /= 2;
-		if (source instanceof IndirectEntityDamageSource || source.isUnblockable()) {
+		if (source instanceof IndirectEntityDamageSource || source.isBypassArmor()) {
 			for (int i = 0; i < 64; ++i) {
 				if (this.teleportRandomly()) {
-					if (source.isUnblockable()) {
-						return super.attackEntityFrom(source, amount);
+					if (source.isBypassArmor()) {
+						return super.hurt(source, amount);
 					}
 					return false;
 				}
 			}
 		}
-		return super.attackEntityFrom(source, amount);
+		return super.hurt(source, amount);
 	}
 
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 
-		this.dataManager.register(WIDE, DungeonGenUtils.percentageRandom(0.05));
+		this.entityData.define(WIDE, DungeonGenUtils.percentageRandom(0.05));
 	}
 
 	@Override
@@ -94,7 +103,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	public boolean isWide() {
-		return this.dataManager.get(WIDE);
+		return this.entityData.get(WIDE);
 	}
 
 	@Override
@@ -108,17 +117,17 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		// DONE: SPawn the true boss, BEFORE super.onDeath (that one creates the living death event)
-		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.world);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(this.level);
 		if (manager instanceof ServerProtectedRegionManager) {
 
-			EntityCalamitySpawner cs = new EntityCalamitySpawner(this.world);
-			BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition();
-			cs.setPosition(pos.getX(), pos.getY(), pos.getZ());
+			EntityCalamitySpawner cs = new EntityCalamitySpawner(this.level);
+			BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.blockPosition();
+			cs.setPos(pos.getX(), pos.getY(), pos.getZ());
 			cs.setFaction(this.getFaction().getName());
 
-			this.world.spawnEntity(cs);
+			this.level.addFreshEntity(cs);
 
 			EntityUtil.addEntityToAllRegionsAt(pos, cs);
 		}
@@ -126,25 +135,42 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	protected boolean teleportRandomly() {
-		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-		double d1 = this.posY + (this.rand.nextInt(64) - 32);
-		double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
-		return this.teleportTo(d0, d1, d2);
+		double d0 = this.getX() + (this.getRandom().nextDouble() - 0.5D) * 64.0D;
+		double d1 = this.getY() + (this.getRandom().nextInt(64) - 32);
+		double d2 = this.getZ() + (this.getRandom().nextDouble() - 0.5D) * 64.0D;
+		return this.teleportEnderman(d0, d1, d2);
 	}
-
-	private boolean teleportTo(double x, double y, double z) {
-		EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
-		if (MinecraftForge.EVENT_BUS.post(event)) {
-			return false;
+	
+	@Override
+	public void teleport(double x, double y, double z) {
+		if(!this.teleportEnderman(x, y, z)) {
+			super.teleport(x, y, z);
 		}
-		boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+	}
+	
+	public boolean teleportEnderman(double pX, double pY, double pZ) {
+		 BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(pX, pY, pZ);
 
-		if (flag) {
-			this.world.playSound((PlayerEntity) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
-			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
-		}
+	      while(blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
+	         blockpos$mutable.move(Direction.DOWN);
+	      }
 
-		return flag;
+	      BlockState blockstate = this.level.getBlockState(blockpos$mutable);
+	      boolean flag = blockstate.getMaterial().blocksMotion();
+	      boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
+	      if (flag && !flag1) {
+	         net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
+	         if (event.isCanceled()) return false;
+	         boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+	         if (flag2 && !this.isSilent()) {
+	            this.level.playSound((PlayerEntity)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+	            this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+	         }
+
+	         return flag2;
+	      } else {
+	         return false;
+	      }
 	}
 
 	@Override
@@ -159,24 +185,24 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return /* this.isScreaming() ? SoundEvents.ENTITY_ENDERMEN_SCREAM : */ SoundEvents.ENTITY_ENDERMEN_AMBIENT;
+		return /* this.isScreaming() ? SoundEvents.ENTITY_ENDERMEN_SCREAM : */ SoundEvents.ENDERMAN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_ENDERMEN_HURT;
+		return SoundEvents.ENDERMAN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_ENDERMEN_DEATH;
+		return SoundEvents.ENDERMAN_DEATH;
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
-		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.0D);
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.0D);
 	}
 
 	@Override
@@ -188,10 +214,10 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	public boolean canMountEntity() {
 		return false;
 	}
-
+	
 	@Override
-	public float getEyeHeight() {
-		return this.height * 0.875F;
+	public double getEyeY() {
+		return this.getBbHeight() * 0.875F;
 	}
 
 	@Override
@@ -205,54 +231,45 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public void teleport(double x, double y, double z) {
-		this.teleportTo(x, y, z);
-	}
-
-	@Override
 	public void aiStep() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			// Client
-			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
-						(this.rand.nextDouble() - 0.5D) * 2.0D);
+			for (int i = 0; i < 4; ++i) {
+				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), (this.getRandom().nextDouble() - 0.5D) * 2.0D, -this.getRandom().nextDouble(),
+						(this.getRandom().nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 		super.aiStep();
 	}
-
+	
 	@Override
-	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
-		this.setEquipmentBasedOnDifficulty(difficulty);
-		return super.onInitialSpawn(difficulty, livingdata);
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
+		this.populateDefaultEquipmentSlots(difficulty);
+		
+		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		super.setEquipmentBasedOnDifficulty(difficulty);
+	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+		super.populateDefaultEquipmentSlots(difficulty);
 
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND));
+		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 3));
 
-		this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
 
 		// Give him some armor...
 		CompoundNBT nbttagcompound = new CompoundNBT();
-		CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+		CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
 
-		if (!nbttagcompound.hasKey("display", 10)) {
-			nbttagcompound.setTag("display", nbttagcompound1);
+		if (!nbttagcompound.contains("display", 10)) {
+			nbttagcompound.put("display", nbttagcompound1);
 		}
 
-		nbttagcompound1.setInteger("color", 0x9000FF);
-		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+		nbttagcompound1.putInt("color", 0x9000FF);
+		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE, 1, nbttagcompound);
 		((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 0x9000FF);
-		this.setItemStackToSlot(EquipmentSlotType.CHEST, chest);
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_ENDERMAN;
+		this.setItemSlot(EquipmentSlotType.CHEST, chest);
 	}
 
 	@Override
@@ -261,31 +278,31 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	protected float getSoundPitch() {
-		return 0.75F * super.getSoundPitch();
+	protected float getVoicePitch() {
+		return 0.75F * super.getVoicePitch();
 	}
-
+	
 	@Override
-	public int getTalkInterval() {
+	public int getAmbientSoundInterval() {
 		// Super: 80
 		return 60;
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.VOID;
 	}
 
 	@Override
-	public void save(CompoundNBT compound) {
-		super.save(compound);
-		compound.setBoolean("wide_enderman", this.isWide());
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("wide_enderman", this.isWide());
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
-		this.dataManager.set(WIDE, compound.getBoolean("wide_enderman"));
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
+		this.entityData.set(WIDE, compound.getBoolean("wide_enderman"));
 	}
 
 }
