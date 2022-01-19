@@ -22,7 +22,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
@@ -87,7 +86,6 @@ import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
-import team.cqr.cqrepoured.entity.CQRAttributeInfo;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
 import team.cqr.cqrepoured.entity.ISizable;
@@ -870,8 +868,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				float f = /* OLD: renderYawOffset */this.rotOffs * 0.017453292F + MathHelper.cos(this.tickCount * 0.6662F) * 0.25F;
 				float f1 = MathHelper.cos(f);
 				float f2 = MathHelper.sin(f);
-				this.level.spawnParticle(ParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
-				this.level.spawnParticle(ParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + this.height, this.posZ - (double) f2 * (double) this.width, red, green, blue);
+				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double) f1 * (double) this.getBbWidth(), this.getY() + this.getBbHeight(), this.getZ() + (double) f2 * (double) this.getBbWidth(), red, green, blue);
+				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double) f1 * (double) this.getBbWidth(), this.getY() + this.getBbHeight(), this.getZ() - (double) f2 * (double) this.getBbWidth(), red, green, blue);
 			}
 			if (this.isChatting() && this.tickCount % LayerCQRSpeechbubble.CHANGE_BUBBLE_INTERVAL == 0) {
 				this.chooseNewRandomSpeechBubble();
@@ -1030,6 +1028,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			}
 
 			if (entityIn instanceof PlayerEntity) {
+				//Handles shield stuff, however there is a method in the parent class, we might want to use that?
 				PlayerEntity entityplayer = (PlayerEntity) entityIn;
 				ItemStack itemstack = this.getMainHandItem();
 				ItemStack itemstack1 = entityplayer.isUsingItem() ? entityplayer.getUseItem() : ItemStack.EMPTY;
@@ -1039,12 +1038,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 					if (this.random.nextFloat() < f1) {
 						entityplayer.getCooldowns().addCooldown(itemstack1.getItem(), 100);
-						this.level.setEntityState(entityplayer, (byte) 30);
+						this.level.broadcastEntityEvent(entityplayer, (byte) 30);
 					}
 				}
 			}
 
 			this.doEnchantDamageEffects(this, entityIn);
+			//Wasn't present in cqr but in super class
+			this.setLastHurtMob(entityIn);
 		}
 
 		return flag;
