@@ -3,41 +3,51 @@ package team.cqr.cqrepoured.entity.boss.endercalamity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameter;
+import net.minecraft.loot.LootParameterSet;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -72,6 +82,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
@@ -86,17 +97,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final int ARENA_RADIUS = 20;
 
 	private int cqrHurtTime = 0;
-	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>createKey(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
 
-	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<BlockState>>createKey(EntityCQREnderCalamity.class, DataSerializers.OPTIONAL_BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
+	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
 
 	// AI stuff
 	private boolean isDowned = false;
@@ -183,7 +194,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private BossAIEnergyTennis tennisAI;
 
 	public EntityCQREnderCalamity(World worldIn) {
-		super(worldIn);
+		this(CQREntityTypes.ENDER_CALAMITY.get(), worldIn);
+	}
+	
+	public EntityCQREnderCalamity(EntityType<? extends EntityCQREnderCalamity> type, World worldIn) {
+		super(type, worldIn);
 		this.setSizeVariation(2.0F);
 	}
 
@@ -192,53 +207,53 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		super.registerGoals();
 
 		this.teleportAI = new BossAITeleportAroundHome(this, 40);
-		this.tasks.addTask(8, this.teleportAI);
+		this.goalSelector.addGoal(8, this.teleportAI);
 
-		this.tasks.addTask(4, new BossAIStunned(this));
+		this.goalSelector.addGoal(4, new BossAIStunned(this));
 		this.tennisAI = new BossAIEnergyTennis(this);
-		this.tasks.addTask(5, this.tennisAI);
+		this.goalSelector.addGoal(5, this.tennisAI);
 
 		this.blockThrowerAI = new BossAIBlockThrower(this);
-		this.tasks.addTask(6, this.blockThrowerAI);
-		this.tasks.addTask(6, new BossAICalamityBuilding(this));
+		this.goalSelector.addGoal(6, this.blockThrowerAI);
+		this.goalSelector.addGoal(6, new BossAICalamityBuilding(this));
 
-		this.tasks.addTask(5, new BossAIEndLaser(this));
-		this.tasks.addTask(6, new BossAICalamityHealing(this));
-		this.tasks.addTask(8, new BossAISummonMinions(this));
-		this.tasks.addTask(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
-		this.tasks.addTask(7, new BossAIRandomTeleportEyes(this));
-		this.tasks.addTask(7, new BossAIRandomTeleportLaser(this));
+		this.goalSelector.addGoal(5, new BossAIEndLaser(this));
+		this.goalSelector.addGoal(6, new BossAICalamityHealing(this));
+		this.goalSelector.addGoal(8, new BossAISummonMinions(this));
+		this.goalSelector.addGoal(8, new BossAIAreaLightnings(this, ARENA_RADIUS));
+		this.goalSelector.addGoal(7, new BossAIRandomTeleportEyes(this));
+		this.goalSelector.addGoal(7, new BossAIRandomTeleportLaser(this));
 
-		this.targetTasks.taskEntries.clear();
-		this.targetTasks.addTask(0, new EntityAINearestAttackTargetAtHomeArea<>(this));
-		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		this.targetSelector.availableGoals.clear();
+		this.targetSelector.addGoal(0, new EntityAINearestAttackTargetAtHomeArea<>(this));
+		this.targetSelector.addGoal(2, new EntityAICQRNearestAttackTarget(this));
+		this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 
-		this.dataManager.register(IS_HURT, false);
-		this.dataManager.register(SHIELD_ACTIVE, true);
-		this.dataManager.register(ROTATE_BODY_PITCH, false);
-		this.dataManager.register(IS_DEAD_AND_ON_THE_GROUND, false);
+		this.entityData.define(IS_HURT, false);
+		this.entityData.define(SHIELD_ACTIVE, true);
+		this.entityData.define(ROTATE_BODY_PITCH, false);
+		this.entityData.define(IS_DEAD_AND_ON_THE_GROUND, false);
 
-		this.dataManager.register(BLOCK_LEFT_UPPER, Optional.absent());// of(Blocks.END_STONE.getDefaultState()));
-		this.dataManager.register(BLOCK_LEFT_MIDDLE, Optional.absent());
-		this.dataManager.register(BLOCK_LEFT_LOWER, Optional.absent());
-		this.dataManager.register(BLOCK_RIGHT_UPPER, Optional.absent());
-		this.dataManager.register(BLOCK_RIGHT_MIDDLE, Optional.absent());// of(Blocks.OBSIDIAN.getDefaultState()));
-		this.dataManager.register(BLOCK_RIGHT_LOWER, Optional.absent());
+		this.entityData.define(BLOCK_LEFT_UPPER, Optional.empty());// of(Blocks.END_STONE.getDefaultState()));
+		this.entityData.define(BLOCK_LEFT_MIDDLE, Optional.empty());
+		this.entityData.define(BLOCK_LEFT_LOWER, Optional.empty());
+		this.entityData.define(BLOCK_RIGHT_UPPER, Optional.empty());
+		this.entityData.define(BLOCK_RIGHT_MIDDLE, Optional.empty());// of(Blocks.OBSIDIAN.getDefaultState()));
+		this.entityData.define(BLOCK_RIGHT_LOWER, Optional.empty());
 	}
 
 	public boolean rotateBodyPitch() {
-		return this.dataManager.get(ROTATE_BODY_PITCH);
+		return this.entityData.get(ROTATE_BODY_PITCH);
 	}
 
 	public void setRotateBodyPitch(boolean value) {
 		if (this.isServerWorld()) {
-			this.dataManager.set(ROTATE_BODY_PITCH, value);
+			this.entityData.set(ROTATE_BODY_PITCH, value);
 		}
 	}
 
@@ -271,8 +286,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@SuppressWarnings("unchecked")
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
-			if (this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
+			if (this.entityData.get(IS_DEAD_AND_ON_THE_GROUND)) {
 				event.getController().transitionLengthTicks = 0;
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH_ON_GROUND, false));
 			} else {
@@ -281,7 +296,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.CONTINUE;
 		}
 
-		if (this.dataManager.get(IS_HURT)) {
+		if (this.entityData.get(IS_HURT)) {
 			event.getController().transitionLengthTicks = 0;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, false));
 			return PlayState.CONTINUE;
@@ -291,7 +306,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		if (this.newAnimation.isPresent()) {
 			this.currentAnimation = this.newAnimation.get();
-			this.newAnimation = Optional.absent();
+			this.newAnimation = Optional.empty();
 		}
 		if (this.currentAnimation != null) {
 			if (this.currentAnimation.equalsIgnoreCase(ANIM_NAME_SHOOT_BALL)) {
@@ -336,7 +351,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return;
 		}
 
-		this.world.playSound(this.posX, this.posY, this.posZ, sound, this.getSoundSource(), volume, pitch, false);
+		this.playSound(sound, volume, pitch);
 	}
 
 	private static final String ANIM_NAME_ARM_RU_IDLE = ANIM_NAME_PREFIX + "idle_armRU";
@@ -345,7 +360,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateArmRightUpper(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
@@ -365,7 +380,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateArmRightMiddle(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
@@ -385,7 +400,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateArmRightLower(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
@@ -405,7 +420,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateArmLeftUpper(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
@@ -425,7 +440,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateArmLeftMiddle(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
@@ -446,7 +461,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private <E extends IAnimatable> PlayState predicateArmLeftLower(AnimationEvent<E> event) {
 		// Death animation
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
@@ -504,11 +519,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_ENDERMAN_BOSS;
-	}
-
-	@Override
 	public float getBaseHealth() {
 		return CQRConfig.baseHealths.EnderCalamity;
 	}
@@ -538,22 +548,23 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 
+	
 	@Override
-	public void move(MoverType type, double x, double y, double z) {
-		if (this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
+	public void move(MoverType type, Vector3d direction) {
+		if (this.entityData.get(IS_DEAD_AND_ON_THE_GROUND)) {
 			return;
 		}
 
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
-			if (this.posY <= 1 + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY)) {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
+			if (this.getY() <= 1 + (this.getBoundingBox().maxY - this.getBoundingBox().minY)) {
 				this.isFalling = false;
 				return;
 			}
-			super.move(type, x, 0.125D * y, z);
+			super.move(type, direction.multiply(1, 0.125D, 1));
 		}
 		return;
 	}
@@ -565,17 +576,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_ENDERMEN_HURT;
+		return SoundEvents.ENDERMAN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_ENDERMEN_AMBIENT;
+		return SoundEvents.ENDERMAN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_ENDERMEN_DEATH;
+		return SoundEvents.ENDERMAN_DEATH;
 	}
 
 	@Override
@@ -584,67 +595,67 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	protected float getSoundPitch() {
-		return 0.75F * super.getSoundPitch();
+	protected float getVoicePitch() {
+		return 0.75F * super.getVoicePitch();
 	}
 
 	@Override
-	public int getTalkInterval() {
+	public int getAmbientSoundInterval() {
 		// Super: 80
 		return 60;
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(16.0D);
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(16.0D);
 	}
 
 	public boolean isShieldActive() {
-		return this.dataManager.get(SHIELD_ACTIVE);
+		return this.entityData.get(SHIELD_ACTIVE);
 	}
 
 	private boolean canSphereDestroyShield(ProjectileEnergyOrb orb) {
 		if (orb.getDeflectionCount() >= 5) {
 			return true;
 		}
-		if (orb.getDeflectionCount() < this.world.getDifficulty().getId()) {
+		if (orb.getDeflectionCount() < this.level.getDifficulty().getId()) {
 			return false;
 		}
 
 		double chance = (1.0D - (1.0D / orb.getDeflectionCount()));
-		return DungeonGenUtils.percentageRandom(chance, this.getRNG());
+		return DungeonGenUtils.percentageRandom(chance, this.getRandom());
 
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative()) {
+		if (source.isBypassInvul()) {
 			return super.hurt(source, amount, sentFromPart);
 		}
 		amount /= 2;
 		// Projectile attack
-		if (source.getImmediateSource() instanceof ProjectileEnergyOrb) {
+		if (source.getDirectEntity() instanceof ProjectileEnergyOrb) {
 			// TODO: Hit by energy ball
 			/*
 			 * If already hit often enough, Spawn explosion, then teleport to center and be unconscious
 			 */
-			if (this.canSphereDestroyShield((ProjectileEnergyOrb) source.getImmediateSource())) {
+			if (this.canSphereDestroyShield((ProjectileEnergyOrb) source.getDirectEntity())) {
 
 				// Avoid switching to wrong phase
 				this.tennisAI.calculateRemainingAttempts();
 
-				this.dataManager.set(SHIELD_ACTIVE, false);
+				this.entityData.set(SHIELD_ACTIVE, false);
 				this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 
 				// TODO: Create own particle explosion that just looks nice
-				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 3, false);
-				this.playSound(SoundEvents.ENTITY_ENDERMEN_SCREAM, 10.0F, 1.0F);
+				this.level.explode(this, this.getX(), this.getY(), this.getZ(), 3, Explosion.Mode.BREAK);
+				this.playSound(SoundEvents.ENDERMAN_SCREAM, 10.0F, 1.0F);
 
 				return true;
 			} else {
-				((ProjectileEnergyOrb) source.getImmediateSource()).redirect(source.getTrueSource(), this);
+				((ProjectileEnergyOrb) source.getDirectEntity()).redirect(source.getEntity(), this);
 			}
 
 			return false;
@@ -661,8 +672,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			 * waits 1 second, repeat
 			 */
 			if (this.teleportAI != null) {
-				if (source.getTrueSource() != null && source.getTrueSource() instanceof LivingEntity) {
-					this.setTarget((LivingEntity) source.getTrueSource());
+				if (source.getEntity() != null && source.getEntity() instanceof LivingEntity) {
+					this.setTarget((LivingEntity) source.getEntity());
 				}
 
 				this.forceTeleport();
@@ -684,17 +695,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 
 		// Other attack
-		if (!this.dataManager.get(IS_HURT) && !this.isShieldActive()) {
+		if (!this.entityData.get(IS_HURT) && !this.isShieldActive()) {
 			if (!super.hurt(source, amount, sentFromPart)) {
 				return false;
 			}
-			if (!this.world.isRemote) {
-				this.dataManager.set(IS_HURT, true);
+			if (!this.level.isClientSide) {
+				this.entityData.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
 				this.attackCounter++;
-				if (this.attackCounter >= 2 * this.world.getDifficulty().getId()) {
-					if (this.getRNG().nextBoolean()) {
-						this.dataManager.set(SHIELD_ACTIVE, true);
+				if (this.attackCounter >= 2 * this.level.getDifficulty().getId()) {
+					if (this.getRandom().nextBoolean()) {
+						this.entityData.set(SHIELD_ACTIVE, true);
 						this.attackCounter = 0;
 						this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 					}
@@ -708,79 +719,76 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public void baseTick() {
-		if (this.firstUpdate && !this.hasHomePositionCQR() && !this.world.isRemote) {
-			this.setHomePositionCQR(this.getPosition());
+		if (this.firstTick && !this.hasHomePositionCQR() && !this.level.isClientSide) {
+			this.setHomePositionCQR(this.blockPosition());
 			this.forceTeleport();
 		}
 		super.baseTick();
 
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			this.rotationPitchCQR = this.serverRotationPitchCQR;
 		} else {
-			CQRMain.NETWORK.sendToAllTracking(new SPacketSyncCalamityRotation(this), this);
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(this::getEntity),new SPacketSyncCalamityRotation(this));
 		}
 	}
-
+	
 	@Override
-	protected void updateAITasks() {
-		if (this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive()) {
-			super.updateAITasks();
+	protected void customServerAiStep() {
+		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
+			super.customServerAiStep();
 			return;
 		}
 
-		if (this.isWet() && !this.getSummonedEntities().isEmpty()) {
+		//If it rains => NO!
+		if (this.isInWaterOrRain() && !this.isInWater() && !this.getSummonedEntities().isEmpty() && (this.level instanceof ServerWorld)) {
 
-			this.world.getWorldInfo().setCleanWeatherTime(20000);
-			this.world.getWorldInfo().setRainTime(0);
-			this.world.getWorldInfo().setThunderTime(0);
-			this.world.getWorldInfo().setRaining(false);
-			this.world.getWorldInfo().setThundering(false);
+			((ServerWorld)this.level).setWeatherParameters(2000, 0, false, false);
 
-			this.playSound(SoundEvents.ENTITY_ENDERMEN_STARE, 2.5F, this.getSoundPitch());
+			this.playSound(SoundEvents.ENDERMAN_STARE, 2.5F, this.getVoicePitch());
 		}
 
 		this.blockDestructionTimer--;
 		if (this.blockDestructionTimer <= 0) {
 			this.blockDestructionTimer = 10;
 			boolean flag = false;
-			Vector3i size = new Vector3i(this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX, this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY, this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ);
+			Vector3i size = new Vector3i(this.getBoundingBox().maxX - this.getBoundingBox().minX, this.getBoundingBox().maxY - this.getBoundingBox().minY, this.getBoundingBox().maxZ - this.getBoundingBox().minZ);
 			size = new Vector3i(size.getX() * 0.5, size.getY() * 0.5, size.getZ() * 0.5);
-			for (BlockPos blockpos : BlockPos.getAllInBox(this.getPosition().add(size), this.getPosition().subtract(size).add(0, size.getY(), 0))) {
-				BlockState iblockstate = this.world.getBlockState(blockpos);
+			for (BlockPos blockpos : BlockPos.betweenClosed(this.blockPosition().offset(size), this.blockPosition().subtract(size).offset(0, size.getY(), 0))) {
+				BlockState iblockstate = this.level.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 
-				if (!block.isAir(iblockstate, this.world, blockpos) && block.canEntityDestroy(iblockstate, this.world, blockpos, this) && net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
-					flag = this.world.destroyBlock(blockpos, true) || flag;
+				if (!block.isAir(iblockstate, this.level, blockpos) && block.canEntityDestroy(iblockstate, this.level, blockpos, this) && net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
+					flag = this.level.destroyBlock(blockpos, true) || flag;
 				}
 			}
 			if (flag) {
-				this.world.playEvent((PlayerEntity) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, new BlockPos(this), 0);
+				this.level.levelEvent((PlayerEntity) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, this.blockPosition(), 0);
 			}
 		}
 
-		super.updateAITasks();
+		super.customServerAiStep();
 	}
 
 	@Override
 	public void aiStep() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
-						(this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), (this.getRandom().nextDouble() - 0.5D) * 2.0D, -this.getRandom().nextDouble(),
+						(this.getRandom().nextDouble() - 0.5D) * 2.0D);
 			}
 		} else {
 			// SErver
 			if (this.cqrHurtTime > 0) {
 				this.cqrHurtTime--;
 			}
-			this.dataManager.set(IS_HURT, this.cqrHurtTime > 0);
+			this.entityData.set(IS_HURT, this.cqrHurtTime > 0);
 
 			this.handlePhases();
 		}
 
-		this.isJumping = false;
+		this.jumping = false;
 		super.aiStep();
 	}
 
@@ -812,7 +820,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				if (this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
 					this.tennisAI.calculateRemainingAttempts();
 					this.noTennisCounter++;
-					if (this.noTennisCounter > (this.world.getDifficulty().getId() + 2) * 2) {
+					if (this.noTennisCounter > (this.level.getDifficulty().getId() + 2) * 2) {
 						this.switchToPhase(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 						this.noTennisCounter = 0;
 					}
@@ -825,14 +833,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	public void setCantUpdatePhase(boolean value) {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return;
 		}
 		this.dontUpdatePhase = value;
 	}
 
 	private boolean cantUpdatePhase() {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return true;
 		}
 		return this.dontUpdatePhase;
@@ -887,7 +895,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		List<Entity> tmp = new ArrayList<>();
 		boolean result = false;
 		for (Entity ent : this.summonedEntities) {
-			if (ent == null || ent.isDead) {
+			if (ent == null || !ent.isAlive()) {
 				tmp.add(ent);
 			}
 		}
@@ -901,63 +909,63 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	public void swingHand(E_CALAMITY_HAND hand) {
 		SPacketCalamityUpdateHand packet = SPacketCalamityUpdateHand.builder(this).swingArm(hand, true).build();
-		CQRMain.NETWORK.sendToAllTracking(packet, this);
+		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(this::getEntity), packet);
 	}
 
 	public Optional<BlockState> getBlockFromHand(E_CALAMITY_HAND hand) {
 		if (hand == null) {
-			return Optional.absent();
+			return Optional.empty();
 		}
 		switch (hand) {
 		case LEFT_LOWER:
-			return this.dataManager.get(BLOCK_LEFT_LOWER);
+			return this.entityData.get(BLOCK_LEFT_LOWER);
 		case LEFT_MIDDLE:
-			return this.dataManager.get(BLOCK_LEFT_MIDDLE);
+			return this.entityData.get(BLOCK_LEFT_MIDDLE);
 		case LEFT_UPPER:
-			return this.dataManager.get(BLOCK_LEFT_UPPER);
+			return this.entityData.get(BLOCK_LEFT_UPPER);
 		case RIGHT_LOWER:
-			return this.dataManager.get(BLOCK_RIGHT_LOWER);
+			return this.entityData.get(BLOCK_RIGHT_LOWER);
 		case RIGHT_MIDDLE:
-			return this.dataManager.get(BLOCK_RIGHT_MIDDLE);
+			return this.entityData.get(BLOCK_RIGHT_MIDDLE);
 		case RIGHT_UPPER:
-			return this.dataManager.get(BLOCK_RIGHT_UPPER);
+			return this.entityData.get(BLOCK_RIGHT_UPPER);
 		default:
-			return Optional.absent();
+			return Optional.empty();
 		}
 	}
 
 	public void removeHandBlock(E_CALAMITY_HAND hand) {
-		Optional<BlockState> value = Optional.absent();
+		Optional<BlockState> value = Optional.empty();
 		this.equipBlock(hand, value);
 	}
 
 	public void equipBlock(E_CALAMITY_HAND hand, Block block) {
-		this.equipBlock(hand, block.getDefaultState());
+		this.equipBlock(hand, block.defaultBlockState());
 	}
 
 	public void equipBlock(E_CALAMITY_HAND hand, Optional<BlockState> value) {
 		// Don't execute this on client side
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return;
 		}
 		switch (hand) {
 		case LEFT_LOWER:
-			this.dataManager.set(BLOCK_LEFT_LOWER, value);
+			this.entityData.set(BLOCK_LEFT_LOWER, value);
 			break;
 		case LEFT_MIDDLE:
-			this.dataManager.set(BLOCK_LEFT_MIDDLE, value);
+			this.entityData.set(BLOCK_LEFT_MIDDLE, value);
 			break;
 		case LEFT_UPPER:
-			this.dataManager.set(BLOCK_LEFT_UPPER, value);
+			this.entityData.set(BLOCK_LEFT_UPPER, value);
 			break;
 		case RIGHT_LOWER:
-			this.dataManager.set(BLOCK_RIGHT_LOWER, value);
+			this.entityData.set(BLOCK_RIGHT_LOWER, value);
 			break;
 		case RIGHT_MIDDLE:
-			this.dataManager.set(BLOCK_RIGHT_MIDDLE, value);
+			this.entityData.set(BLOCK_RIGHT_MIDDLE, value);
 			break;
 		case RIGHT_UPPER:
-			this.dataManager.set(BLOCK_RIGHT_UPPER, value);
+			this.entityData.set(BLOCK_RIGHT_UPPER, value);
 			break;
 		default:
 			break;
@@ -969,7 +977,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public void setFire(int seconds) {
+	public void setSecondsOnFire(int seconds) {
 		// Nope
 	}
 
@@ -1002,27 +1010,57 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public void teleport(double x, double y, double z) {
-		double oldX = this.posX;
-		double oldY = this.posY;
-		double oldZ = this.posZ;
+		double oldX = this.getX();
+		double oldY = this.getY();
+		double oldZ = this.getZ();
 		super.teleport(x, y, z);
-		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 3.0F, 0.9F + this.rand.nextFloat() * 0.2F);
-		((ServerWorld) this.world).spawnParticle(ParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
-		((ServerWorld) this.world).spawnParticle(ParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+		this.playSound(SoundEvents.SHULKER_TELEPORT, 3.0F, 0.9F + this.getRandom().nextFloat() * 0.2F);
+		for(int i = 0; i < 4; i++) {
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0.2D, -0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0.2D, -0.2D);
+			
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0, -0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0, -0.2D);
+			
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, -0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, -0.2D, -0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, -0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, -0.2D, -0.2D);
+			
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0.2D, -0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0.2D, -0.2D);
+			
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0, -0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0, -0.2D);
+			
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, -0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, -0.2D, -0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, -0.2D, 0.2D);
+			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, -0.2D, -0.2D);
+		}
+		
 	}
 
 	@Override
-	public void save(CompoundNBT compound) {
-		super.save(compound);
-		compound.setBoolean("isDowned", this.isDowned);
-		compound.setBoolean("deadAndOnGround", this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND));
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("isDowned", this.isDowned);
+		compound.putBoolean("deadAndOnGround", this.entityData.get(IS_DEAD_AND_ON_THE_GROUND));
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 		this.isDowned = compound.getBoolean("isDowned");
-		this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, compound.getBoolean("deadAndOnGround"));
+		this.entityData.set(IS_DEAD_AND_ON_THE_GROUND, compound.getBoolean("deadAndOnGround"));
 	}
 
 	public static int getArenaRadius() {
@@ -1032,7 +1070,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// Hand syncing
 	public void processHandUpdates(byte[] handStates) {
 		// Only process this on client!!
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			for (int i = 0; i < handStates.length; i++) {
 				if (handStates[i] != 0) {
 					E_CALAMITY_HAND hand = E_CALAMITY_HAND.values()[i];
@@ -1062,17 +1100,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.VOID;
 	}
 
-	private Optional<String> newAnimation = Optional.absent();
+	private Optional<String> newAnimation = Optional.empty();
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void processAnimationUpdate(String animationID) {
 		// Only process this on client!!
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			this.newAnimation = Optional.of(animationID);
 			// System.out.println("New animation!" + this.newAnimation.get());
 		}
@@ -1083,30 +1121,30 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (this.hasHomePositionCQR()) {
 			return this.getHomePositionCQR();
 		}
-		return this.getPosition();
+		return this.blockPosition();
 	}
-
+	
 	@Override
-	public boolean canEntityBeSeen(Entity entityIn) {
+	public boolean canSee(Entity entityIn) {
 		// 48 * 48 = 2304
-		return entityIn.getDistanceSq(this.getCirclingCenter()) <= 2304;
+		return entityIn.blockPosition().distSqr(this.getCirclingCenter()) <= 2304;
 	}
 
 	private DamageSource deathCause = null;
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		this.deathCause = cause;
-		this.dataManager.set(SHIELD_ACTIVE, false);
+		this.entityData.set(SHIELD_ACTIVE, false);
 		super.die(cause);
 	}
 
 	private boolean isFalling = false;
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 		this.isFalling = !onGroundIn;
-		super.updateFallState(y, onGroundIn, state, pos);
+		super.checkFallDamage(y, onGroundIn, state, pos);
 	}
 
 	// Death animation
@@ -1131,21 +1169,23 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		// LOOTVOLCANO
 		if (this.deathTime % 2 == 0) {
-			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+			//Recent second arg: recentlyHit
+			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.lastHurt > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getEntity(), this.deathCause), this.deathCause);
 		}
 
-		if (!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
-			this.dataManager.set(IS_DEAD_AND_ON_THE_GROUND, true);
+		if (!this.entityData.get(IS_DEAD_AND_ON_THE_GROUND)) {
+			this.entityData.set(IS_DEAD_AND_ON_THE_GROUND, true);
 		}
 		if (this.deathTime == 53) {
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, Mode.NONE);
 			this.setSizeVariation(0.0F);
 		}
 		if (this.deathTime >= 54) {
 			if (this.deathCause != null) {
-				this.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				//Recent first arg: recentlyHit
+				this.dropCustomDeathLoot(this.deathCause, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getEntity(), this.deathCause), this.lastHurt > 0);
 			}
-			this.setDead();
+			this.remove();
 
 			this.onFinalDeath();
 		}
@@ -1153,37 +1193,51 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	private void dropSingleItemFromLoottable(ResourceLocation table, boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 		if (table != null) {
-			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(table);
-			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.world).withLootedEntity(this).withDamageSource(source);
-			if (wasRecentlyHit && this.attackingPlayer != null) {
-				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
+			LootTable lootTable = this.level.getServer().getLootTables().get(table);
+			float luck = 0;
+			if(this.lastHurtByPlayer != null && wasRecentlyHit) {
+				luck = this.lastHurtByPlayer.getLuck();
 			}
+			LootContext lootContext = new LootContext.Builder((ServerWorld) this.level)
+					.withParameter(LootParameters.THIS_ENTITY, this)
+					.withParameter(LootParameters.DAMAGE_SOURCE, source)
+					.withOptionalParameter(LootParameters.LAST_DAMAGE_PLAYER, wasRecentlyHit ? this.lastHurtByPlayer : null)
+					.withLuck(luck)
+					.withRandom(this.getRandom())
+					.create(LootParameterSets.ENTITY);
 
-			List<ItemStack> loot = lootTable.generateLootForPools(this.rand, lootContextBuilder.build());
+			List<ItemStack> loot = lootTable.getRandomItems(lootContext);
 			if (loot.isEmpty()) {
 				return;
 			}
-			Collections.shuffle(loot, this.getRNG());
+			Collections.shuffle(loot, this.getRandom());
 
 			ItemStack rolledItem = loot.get(0);
-			ItemEntity item = this.entityDropItem(rolledItem, 0.0F);
+			ItemEntity item = this.spawnAtLocation(rolledItem, 0.0F);
 
-			double vy = 0.25D + 0.5D * this.getRNG().nextDouble();
-			double vx = -0.25D + 0.5D * this.getRNG().nextDouble();
-			double vz = -0.25D + 0.5D * this.getRNG().nextDouble();
+			double vy = 0.25D + 0.5D * this.getRandom().nextDouble();
+			double vx = -0.25D + 0.5D * this.getRandom().nextDouble();
+			double vz = -0.25D + 0.5D * this.getRandom().nextDouble();
 
-			item.motionX = vx;
+			/*item.motionX = vx;
 			item.motionY = vy;
 			item.motionZ = vz;
-			item.velocityChanged = true;
+			item.velocityChanged = true;*/
+			item.setDeltaMovement(vx, vy, vz);
+			item.hasImpulse = true;
 
-			item.setEntityInvulnerable(true);
+			item.setInvulnerable(true);
 		}
 	}
 
 	@Override
 	public int tickTimer() {
-		return this.ticksExisted;
+		return this.tickCount;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
