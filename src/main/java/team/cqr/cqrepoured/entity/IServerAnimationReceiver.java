@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
 public interface IServerAnimationReceiver {
 
-	default LivingEntity getEntity() {
+	default LivingEntity getSelf() {
 		if (this instanceof LivingEntity) {
 			return (LivingEntity) this;
 		}
@@ -21,7 +21,7 @@ public interface IServerAnimationReceiver {
 
 	default void sendAnimationUpdate(final String animationName) {
 		SPacketUpdateAnimationOfEntity message = SPacketUpdateAnimationOfEntity.builder(this).animate(animationName).build();
-		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getEntity), message);
+		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getSelf), message);
 	}
 
 }
