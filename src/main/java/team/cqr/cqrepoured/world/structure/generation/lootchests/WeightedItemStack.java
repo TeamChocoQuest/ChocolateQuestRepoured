@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.Item;
-import net.minecraft.world.storage.loot.ILootGenerator;
-import net.minecraft.world.storage.loot.ItemLootEntry;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.conditions.RandomChance;
-import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
-import net.minecraft.world.storage.loot.functions.ILootFunction;
-import net.minecraft.world.storage.loot.functions.SetCount;
-import net.minecraft.world.storage.loot.functions.SetMetadata;
+import net.minecraft.loot.ILootGenerator;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.conditions.RandomChance;
+import net.minecraft.loot.functions.EnchantWithLevels;
+import net.minecraft.loot.functions.ILootFunction;
+import net.minecraft.loot.functions.SetCount;
+import net.minecraft.loot.functions.SetDamage;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -72,7 +71,7 @@ public class WeightedItemStack {
 			}
 		}
 		if (this.damage != 0 && this.damage > 0) {
-			functions.add(new SetMetadata(null, new RandomValueRange(this.damage)));
+			functions.add(new SetDamage(null, new RandomValueRange(this.damage)));
 		}
 
 		ILootGenerator entry = new ItemLootEntry(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new ILootFunction[0]), conditionC, "entry_" + indx + this.itemName);
@@ -102,7 +101,7 @@ public class WeightedItemStack {
 			}
 		}
 		if (this.damage != 0 && this.damage > 0) {
-			functions.add(new SetMetadata(null, new RandomValueRange(this.damage)));
+			functions.add(new SetDamage(null, new RandomValueRange(this.damage)));
 		}
 
 		ILootGenerator entry = new ItemLootEntry(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new ILootFunction[0]), conditionA, "entry_" + indx + this.itemName);
