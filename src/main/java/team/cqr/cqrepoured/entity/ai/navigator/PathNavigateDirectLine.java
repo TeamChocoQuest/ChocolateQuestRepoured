@@ -14,52 +14,56 @@ public class PathNavigateDirectLine extends PathNavigator {
 	}
 
 	@Override
-	protected PathFinder getPathFinder() {
-		this.nodeProcessor = new DirectLineNodeProcessor();
-		this.nodeProcessor.setCanEnterDoors(true);
-		this.nodeProcessor.setCanSwim(true);
-		return new PathFinder(this.nodeProcessor);
+	protected PathFinder createPathFinder(int arg) {
+		this.nodeEvaluator = new DirectLineNodeProcessor();
+		this.nodeEvaluator.setCanOpenDoors(true);
+		this.nodeEvaluator.setCanFloat(true);
+		return new PathFinder(this.nodeEvaluator, this.getPathSearchRange());
 	}
 
 	@Override
-	protected void pathFollow() {
-		Vector3d vec3d = this.getEntityPosition();
-		float f = this.entity.width * this.entity.width;
+	protected void followThePath() {
+		Vector3d vec3d = this.getTempMobPos();
+		float f = this.mob.getBbWidth() * this.mob.getBbWidth();
 		// int i = 6;
 
-		if (vec3d.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < f) {
-			this.currentPath.incrementPathIndex();
+		if (vec3d.distanceToSqr(this.path.getEntityPosAtNode(this.mob, this.path.getNextNodeIndex())) < f) {
+			this.path.advance();
 		}
 
-		for (int j = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); j > this.currentPath.getCurrentPathIndex(); --j) {
-			Vector3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, j);
+		for (int j = Math.min(this.path.getNextNodeIndex() + 6, this.path.getNodeCount() - 1); j > this.path.getNextNodeIndex(); --j) {
+			Vector3d vec3d1 = this.path.getEntityPosAtNode(this.mob, j);
 
-			if (vec3d1.squareDistanceTo(vec3d) <= 36.0D && this.isDirectPathBetweenPoints(vec3d, vec3d1, 0, 0, 0)) {
-				this.currentPath.setCurrentPathIndex(j);
+			if (vec3d1.distanceToSqr(vec3d) <= 36.0D && this.canMoveDirectly(vec3d, vec3d1, 0, 0, 0)) {
+				this.path.setNextNodeIndex(j);
 				break;
 			}
 		}
-
 	}
 
 	@Override
-	protected Vector3d getEntityPosition() {
-		return new Vector3d(this.entity.posX, this.entity.posY + this.entity.height * 0.5D, this.entity.posZ);
+	protected Vector3d getTempMobPos() {
+		return this.mob.position();
 	}
 
 	@Override
-	protected boolean canNavigate() {
-		return !this.entity.isRiding();
+	protected boolean canUpdatePath() {
+		return !this.mob.isPassenger();
 	}
 
 	@Override
-	protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
+	protected boolean canMoveDirectly(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
+		return true;
+	}
+	
+	@Override
+	public boolean isStableDestination(BlockPos pPos) {
 		return true;
 	}
 
-	@Override
-	public boolean canEntityStandOnPos(BlockPos pos) {
-		return true;
+	public int getPathSearchRange() {
+		return 64;
 	}
+
 
 }
