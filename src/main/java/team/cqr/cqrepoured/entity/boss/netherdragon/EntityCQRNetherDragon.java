@@ -37,6 +37,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion.Mode;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -58,11 +59,12 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHotFireball;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, ICirclingEntity, IDontRenderFire {
+public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, IRangedAttackMob, ICirclingEntity, IDontRenderFire {
 
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks
@@ -123,6 +125,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return 0F;
 	}
 
+	public EntityCQRNetherDragon(World world) {
+		this(CQREntityTypes.NETHER_DRAGON.get(), world);
+	}
+	
 	public EntityCQRNetherDragon(EntityType<? extends EntityCQRNetherDragon> type, World worldIn) {
 		super(type, worldIn);
 		this.xpReward = 100;
@@ -379,11 +385,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return false;
 	}
 
-	@Override
-	public void setSwingingArms(boolean swingingArms) {
-		// Unused?
-	}
-
 	// This code is not entirely made by me, it is oriented from this:
 	// https://github.com/TeamTwilight/twilightforest/blob/1.12.x/src/main/java/twilightforest/entity/boss/EntityTFNaga.java
 	protected void moveParts() {
@@ -552,7 +553,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (!CQRConfig.bosses.netherDragonDestroysBlocks || this.dead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.level.isClientSide) {
+		if (!CQRConfig.bosses.netherDragonDestroysBlocks || this.dead || !(this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) || this.level.isClientSide) {
 			return false;
 		}
 
@@ -663,7 +664,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		// update bodySegments parts
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (segment != null) {
-				this.level.updateEntityWithOptionalForce(segment, true);
+				//this.level.updateEntityWithOptionalForce(segment, true);
 				segment.tick();
 				if (this.phase == 2 && !segment.isSkeletal() && !this.level.isClientSide) {
 					segment.switchToSkeletalState();
@@ -687,7 +688,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				if (i < partsTmp.length) {
 					partsTmp[i] = this.dragonBodyParts[i];
 				} else {
-					this.level.removeEntity(this.dragonBodyParts[i]);
+					//this.level.removeEntity(this.dragonBodyParts[i]);
+					this.dragonBodyParts[i].remove();
 				}
 			}
 			this.dragonBodyParts = partsTmp;
@@ -721,7 +723,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_VILLAGER_AMBIENT;
+		return SoundEvents.VILLAGER_AMBIENT;
 	}
 
 	@Override
@@ -748,8 +750,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return new PathNavigateDirectLine(this, worldIn) {
 			
 			@Override
-			public float getPathSearchRange() {
-				return 128.0F;
+			public int getPathSearchRange() {
+				return 128;
 			}
 		};
 	}
@@ -801,7 +803,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if (this.deathTime % 5 == 0) {
 			if (this.dragonBodyParts.length > 0) {
 				SubEntityNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
-				if (!this.level.isClientSide && this.level.getGameRules().getBoolean("doMobLoot")) {
+				if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 					this.dropExperience(MathHelper.floor(120), segment.getX(), segment.getY(), segment.getZ());
 					this.level.explode(segment, segment.getX(), segment.getY(), segment.getZ(), 1, Mode.DESTROY);
 					this.removeLastSegment();
@@ -866,14 +868,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	protected void onFinalDeath() {
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
-			if (!this.level.isClientSide && this.level.getGameRules().getBoolean("doMobLoot")) {
+			if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				this.dropExperience(MathHelper.floor(120), segment.getX(), segment.getY(), segment.getZ());
 			}
 			this.level.explode(segment, segment.getX(), segment.getY(), segment.getZ(), 1, Mode.DESTROY);
 			//this.level.removeEntityDangerously(segment);
 			segment.remove();
 		}
-		if (!this.level.isClientSide && this.level.getGameRules().getBoolean("doMobLoot")) {
+		if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			this.dropExperience(MathHelper.floor(800), this.getX(), this.getY(), this.getZ());
 		}
 		this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1, Mode.DESTROY);
@@ -887,24 +889,25 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public BlockPos getCirclingCenter() {
 		if (this.getHomePositionCQR() == null) {
-			this.setHomePositionCQR(this.getPosition());
+			this.setHomePositionCQR(this.blockPosition());
 		}
 		return this.getHomePositionCQR();
 	}
 
 	// Methods from entity flying
 	@Override
-	public void fall(float distance, float damageMultiplier) {
+	public boolean causeFallDamage(float distance, float damageMultiplier) {
+		return false;
 	}
 	
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
-
+	
 	@Override
-	public void travel(float strafe, float vertical, float forward) {
-		EntityUtil.move3D(this, strafe, vertical, forward, this.getMoveHelper().getSpeed(), this.rotationYaw, this.rotationPitch);
-		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+	public void travel(Vector3d pTravelVector) {
+		EntityUtil.move3D(this, pTravelVector.x(), pTravelVector.y(), pTravelVector.z(), this.getMoveControl().getSpeedModifier(), this.yRot, this.xRot);
+		this.move(MoverType.SELF, this.getDeltaMovement());
 		/*this.motionX *= 0.9;
 		this.motionY *= 0.9;
 		this.motionZ *= 0.9;
@@ -917,7 +920,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * AI reasons)
 	 */
 	@Override
-	public boolean isOnLadder() {
+	public boolean onClimbable() {
 		return false;
 	}
 	
