@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.entity.PartEntity;
 
 public interface ISizable {
 
@@ -77,6 +78,14 @@ public interface ISizable {
 			myself.refreshDimensions();
 
 			myself.setPos(d0, d1, d2);
+			
+			if(myself.getParts() != null) {
+				for(PartEntity part : myself.getParts()) {
+					if(part instanceof ISizable) {
+						((ISizable)part).setSizeVariation(size);
+					}
+				}
+			}
 		}
 	}
 
