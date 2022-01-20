@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -12,6 +11,7 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,12 +20,12 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -40,7 +40,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IEntityMultiPart;
-import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
 import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
 import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseMoveToHome;
@@ -52,10 +51,10 @@ import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
-import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatable, IAnimationTickable {
+public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRGiantTortoise>, IRangedAttackMob, IAnimatable, IAnimationTickable {
 
 	public static class AnimationGecko {
 		private final String animationName;
@@ -115,10 +114,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private static List<ResourceLocation> hardBlocks = new ArrayList<>();
 
+	public EntityCQRGiantTortoise(World worldIn) {
+		this(CQREntityTypes.GIANT_TORTOISE.get(), worldIn);
+	}
+	
 	public EntityCQRGiantTortoise(EntityType<? extends EntityCQRGiantTortoise> type, World worldIn) {
 		super(type, worldIn);
 
-		this.stepHeight = 2.1F;
+		this.maxUpStep = 2.1F;
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
 			this.parts[i] = new SubEntityGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
@@ -126,10 +129,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.parts[this.parts.length - 1] = new SubEntityGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
 
 		this.setNoGravity(false);
-		this.isImmuneToFire = true;
-		this.experienceValue = 100;
-
-		this.ignoreFrustumCheck = true;
+		this.xpReward = 100;
+	}
+	
+	@Override
+	public boolean fireImmune() {
+		return true;
 	}
 
 	@Override
@@ -213,13 +218,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
 
-		this.getEntityAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10);
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10);
 
-		this.getEntityAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(0.99D);
-		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.125D);
+		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(0.99D);
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.125D);
 	}
 
 	@Override
@@ -228,13 +233,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public boolean attackEntityFromPart(PartEntity dragonPart, DamageSource source, float damage) {
+	public boolean hurt(PartEntity dragonPart, DamageSource source, float damage) {
 		return this.hurt(source, damage, true);
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof PlayerEntity && ((PlayerEntity) source.getTrueSource()).isCreative())) {
+		if (source.isBypassInvul() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof PlayerEntity && ((PlayerEntity) source.getEntity()).isCreative())) {
 			return super.hurt(source, amount, sentFromPart);
 		}
 
@@ -250,12 +255,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 
 		if (source.getEntity() instanceof LivingEntity) {
-			this.setRevengeTarget((LivingEntity) source.getEntity());
+			this.setLastHurtByMob((LivingEntity) source.getEntity());
+			//this.setRevengeTarget((LivingEntity) source.getEntity());
 		}
 
 		if (!sentFromPart) {
 			amount = 0;
-			this.level.playSound(this.getX(), this.getY(), this.getZ(), this.getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
+			this.playSound(this.getHurtSound(source), 1.0F, 1.0F);
 		}
 		if (sentFromPart && (!this.isInShell() || source == DamageSource.IN_WALL)) {
 			if (this.stunned) {
@@ -307,11 +313,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_TURTLE;
-	}
-
-	@Override
 	public float getBaseHealth() {
 		return CQRConfig.baseHealths.GiantTortoise;
 	}
@@ -322,13 +323,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
+	public void performRangedAttack(LivingEntity target, float distanceFactor) {
 	}
 
-	@Override
+	/*@Override
 	public void setSwingingArms(boolean swingingArms) {
 
-	}
+	}*/
 
 	@Override
 	public void tick() {
@@ -336,7 +337,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.setAirSupply(999);
 		for (SubEntityGiantTortoisePart part : this.parts) {
-			this.level.updateEntityWithOptionalForce(part, true);
+			//this.level.updateEntityWithOptionalForce(part, true);
+			part.tick();
 		}
 
 		this.alignParts();
@@ -374,7 +376,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private void breakBlocksInWay() {
 		for (BlockPos pos : BlockPos.betweenClosed(this.blockPosition().offset(this.getBbWidth() + 1, this.getBbHeight(), this.getBbWidth() + 1), this.blockPosition().offset(-this.getBbWidth() - 1, -1, -this.getBbWidth() - 1))) {
 			Block block = this.level.getBlockState(pos).getBlock();
-			if ((!block.isCollidable() || block.isPassable(this.level, pos)) && ((((block != Blocks.FLOWING_WATER) && (block != Blocks.WATER)) && (block != Blocks.FLOWING_LAVA)) && (block != Blocks.LAVA))) {
+			if ((!block.isCollidable() || block.isPassable(this.level, pos)) && this.level.getFluidState(pos) == Fluids.EMPTY.defaultFluidState()) {
 				this.level.destroyBlock(pos, true);
 			}
 		}
@@ -396,7 +398,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		// First, position your head
 		this.parts[this.parts.length - 1].setPos(this.getX() + v.x, this.getY() + vy, this.getZ() + v.z);
-		this.parts[this.parts.length - 1].setRotation(rotYawHead, this.xRot);
+		this.parts[this.parts.length - 1].setYHeadRot(rotYawHead);
 
 		// Then rotate 45 degrees to the right so that you face the front right leg
 		v = VectorUtil.rotateVectorAroundY(v, 45D);
@@ -408,7 +410,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double z = this.getZ() + v.z;
 
 			this.parts[i].setPos(x, y, z);
-			this.parts[i].setRotation(rotYawHead + (i * 90F + 45F), this.xRot);
+			this.parts[i].setYHeadRot(rotYawHead + (i * 90F + 45F));
 
 			// leg positioned, now rotate to the next leg (clockwise)
 			v = VectorUtil.rotateVectorAroundY(v, 90D);
@@ -425,7 +427,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		for (SubEntityGiantTortoisePart part : this.parts) {
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
-			this.level.removeEntityDangerously(part);
+			//this.level.removeEntityDangerously(part);
 			part.remove();
 		}
 		super.remove();
@@ -482,7 +484,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				this.setDeltaMovement(-v.x, v.y + 0.25, -v.z);
 				this.hasImpulse = true;
 
-				this.level.playSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BLAZE_HURT, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
+				this.playSound(SoundEvents.BLAZE_HURT, 1.0F, 1.0F);
 			}
 		} else {
 			super.doPush(entityIn);
@@ -575,12 +577,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public boolean isReadyToSpin() {
 		return this.readyToSpin;
 	}
-
-	@Override
+	
+	/*@Override
 	public Vector3d getPositionEyes(float partialTicks) {
 		Vector3d headPos = this.parts[this.parts.length - 1].position();
 		return headPos.add(headPos.subtract(this.posX, 0, this.posZ)).normalize().scale(0.25D);
-	}
+	}*/
 
 	public int getSpinsBlocked() {
 		return this.spinsBlocked;
@@ -697,9 +699,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
+	protected void dropCustomDeathLoot(DamageSource deathCause, int lootingModifier, boolean wasRecentlyHit) {
+		//Nope
+	}
+	
+	/*@Override
 	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 		// Nope
-	}
+		// 1.16: Replaced by above method
+	}*/
 
 	// Death animation
 	// Death animation time: 1.44s => 29 ticks
@@ -713,31 +721,20 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double f1 = (this.random.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
 			double f2 = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
 			for (int i = 0; i < 20; i++) {
-				this.level.spawnParticle(ParticleTypes.SLIME, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
-				this.level.spawnParticle(ParticleTypes.DAMAGE_INDICATOR, this.posX + f, this.posY + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+				this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
+				this.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
 			}
 		}
 		if (this.deathTime == 34 && this.isServerWorld()) {
-			this.level.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, false);
+			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, Mode.NONE);
 		}
 		if (this.deathTime >= 35 && this.isServerWorld()) {
 			if (this.deathCause != null) {
-				super.dropLoot(this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+				super.dropCustomDeathLoot(this.deathCause, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getEntity(), this.deathCause), this.lastHurt > 0);
 			}
 			this.remove();
 
 			this.onFinalDeath();
-		}
-	}
-
-	@Override
-	public void resize(float widthScale, float heightSacle) {
-		super.resize(widthScale, heightSacle);
-
-		for (SubEntityGiantTortoisePart part : this.parts) {
-			if (part instanceof ISizable) {
-				((ISizable) part).resize(widthScale, heightSacle);
-			}
 		}
 	}
 

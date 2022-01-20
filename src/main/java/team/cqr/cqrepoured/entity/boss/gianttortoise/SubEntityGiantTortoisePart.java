@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.entity.boss.gianttortoise;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 
 public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<EntityCQRGiantTortoise> {
@@ -14,27 +13,28 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	public SubEntityGiantTortoisePart(EntityCQRGiantTortoise parent, String partName, float width, float height, boolean isHead) {
 		super(parent, partName, width, height);
 
-		this.isImmuneToFire = true;
-
-		this.setSize(width, height);
-
 		// setInvisible(true);
+	}
+	
+	@Override
+	public boolean fireImmune() {
+		return true;
 	}
 
 	public EntityCQRGiantTortoise getParent() {
-		return (EntityCQRGiantTortoise) this.parent;
+		return (EntityCQRGiantTortoise) this.getParent();
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		if (this.isHead) {
 			amount *= 1.5F;
 		}
-		return this.getParent().attackEntityFromPart(this, source, amount);
+		return this.getParent().hurt(this, source, amount);
 	}
 
 	@Override
-	public void setFire(int seconds) {
+	public void setSecondsOnFire(int seconds) {
 	}
 
 	@Override
@@ -50,21 +50,13 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	}
 
 	// As this is a part it does not make any noises
+	
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
-	}
-
-	@Override
-	public void setRotation(float yaw, float pitch) {
-		super.setRotation(yaw, pitch);
-	}
-
-	@Override
-	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-		if (this.getParent().isDead) {
-			return false;
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		if (this.getParent() == null || (this.getParent() != null && !this.getParent().isAlive())) {
+			return ActionResultType.FAIL;
 		}
-		return this.getParent().processInitialInteract(player, hand);
+		return this.getParent().interact(player, hand);
 	}
 
 	@Override

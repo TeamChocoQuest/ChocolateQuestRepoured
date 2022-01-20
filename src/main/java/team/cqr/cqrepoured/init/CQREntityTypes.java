@@ -13,6 +13,7 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamitySpawner;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 public class CQREntityTypes {
 
@@ -28,6 +29,9 @@ public class CQREntityTypes {
 	
 	//Exterminator
 	public static final RegistryObject<EntityType<EntityCQRExterminator>> EXTERMINATOR = registerSized(EntityCQRExterminator::new, "exterminator", 2, 2.75F, 3);
+
+	//Giant Tortoise
+	public static final RegistryObject<EntityType<EntityCQRGiantTortoise>> GIANT_TORTOISE = registerSized(EntityCQRGiantTortoise::new, "giant_tortoise", 2F, 1.7F,3);
 	
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSized(IFactory<T> factory, final String entityName, float width, float height, int updateInterval) {
 		return ENTITY_TYPES.register(entityName, () -> EntityType.Builder
