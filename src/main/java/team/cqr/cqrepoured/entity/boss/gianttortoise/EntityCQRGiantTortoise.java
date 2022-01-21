@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.boss.gianttortoise;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -375,8 +375,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private void breakBlocksInWay() {
 		for (BlockPos pos : BlockPos.betweenClosed(this.blockPosition().offset(this.getBbWidth() + 1, this.getBbHeight(), this.getBbWidth() + 1), this.blockPosition().offset(-this.getBbWidth() - 1, -1, -this.getBbWidth() - 1))) {
-			Block block = this.level.getBlockState(pos).getBlock();
-			if ((!block.isCollidable() || block.isPassable(this.level, pos)) && this.level.getFluidState(pos) == Fluids.EMPTY.defaultFluidState()) {
+			BlockState blockState = this.level.getBlockState(pos);
+			//TODO: Verify that this shit works
+			boolean blockIsCollidable = !blockState.getCollisionShape(this.level, pos).isEmpty();
+			if ((!blockIsCollidable/* || block.isPassable(this.level, pos)*/) && this.level.getFluidState(pos) == Fluids.EMPTY.defaultFluidState()) {
 				this.level.destroyBlock(pos, true);
 			}
 		}

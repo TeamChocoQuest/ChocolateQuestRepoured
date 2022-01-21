@@ -573,7 +573,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 					BlockPos blockpos = new BlockPos(k1, l1, i2);
 					BlockState iblockstate = this.level.getBlockState(blockpos);
 					Block block = iblockstate.getBlock();
-
+					boolean blockIsCollidable = !iblockstate.getCollisionShape(this.level, blockpos).isEmpty();
+					
 					if (!block.isAir(iblockstate, this.level, blockpos) && iblockstate.getMaterial() != Material.FIRE) {
 						if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
 							cancelled = true;
@@ -582,7 +583,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(iblockstate, this.level).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).isPresent();
-							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
+							if (breakableBlocks.contains(block.getRegistryName()) && !container && blockIsCollidable && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
 									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.NETHER_PORTAL && block != CQRBlocks.PHYLACTERY && block != CQRBlocks.FORCE_FIELD_NEXUS && block != CQRBlocks.EXPORTER) {
 								blockDestroyed = this.level.destroyBlock(blockpos, false) || blockDestroyed;
 							} else {
