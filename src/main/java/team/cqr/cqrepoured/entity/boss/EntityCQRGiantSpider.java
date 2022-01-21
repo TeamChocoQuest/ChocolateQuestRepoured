@@ -3,16 +3,19 @@ package team.cqr.cqrepoured.entity.boss;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.WebBlock;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -24,8 +27,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.eventbus.api.Event.Result;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowPath;
@@ -43,6 +49,8 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.init.CQRBlockTags;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISummoner {
@@ -51,6 +59,10 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 
 	protected List<Entity> activeEggs = new ArrayList<>();
 
+	public EntityCQRGiantSpider(World world) {
+		this(CQREntityTypes.GIANT_SPIDER.get(), world);
+	}
+	
 	public EntityCQRGiantSpider(EntityType<? extends EntityCQRGiantSpider> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -119,20 +131,25 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
-		this.setEquipmentBasedOnDifficulty(difficulty);
-		return super.onInitialSpawn(difficulty, livingdata);
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
+		this.populateDefaultEquipmentSlots(difficulty);
+		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SPIDERHOOK, 1));
+	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+		super.populateDefaultEquipmentSlots(difficulty);
+		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SPIDERHOOK, 1));
 	}
-
+	
 	@Override
-	public void fall(float p_180430_1_, float p_180430_2_) {
-		// What do we say to fall damge? Not today!
+	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+		return false;
+	}
+	
+	@Override
+	protected void checkFallDamage(double pY, boolean pOnGround, BlockState pState, BlockPos pPos) {
+		return;
 	}
 
 	@Override
@@ -190,11 +207,11 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getAttributeMap().getAttributeInstance(Attributes.ATTACK_DAMAGE).setBaseValue(8);
-		this.getAttributeMap().getAttributeInstance(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(4);
-		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.8D * 0.30000001192092896D);
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
+		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(4);
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.8D * 0.30000001192092896D);
 	}
 
 	@Override
@@ -242,12 +259,16 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+	protected void playStepSound(BlockPos pPos, BlockState pBlock) {
+		this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
 	}
 
 	@Override
-	public void setInWeb() {
+	public void makeStuckInBlock(BlockState pState, Vector3d pMotionMultiplier) {
+		if(pState.is(CQRBlockTags.SPIDER_WEBS) || pState.getBlock() instanceof WebBlock) {
+			return;
+		}
+		super.makeStuckInBlock(pState, pMotionMultiplier);
 	}
 	
 	@Override
@@ -255,7 +276,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		if (potioneffectIn.getEffect() == Effects.POISON) {
 			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-			return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
+			return event.getResult() == Result.ALLOW;
 		}
 		return super.addEffect(potioneffectIn);
 	}
