@@ -1585,7 +1585,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	@Override
 	public float getDefaultHeight() {
-		return 1.95F;
+		return 1.875F;
 	}
 
 	public Path getPath() {
