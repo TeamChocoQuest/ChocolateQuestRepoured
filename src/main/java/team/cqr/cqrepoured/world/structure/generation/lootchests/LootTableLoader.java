@@ -24,14 +24,11 @@ import com.google.gson.JsonSyntaxException;
 
 import meldexun.reflectionutil.ReflectionConstructor;
 import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.loot.ILootGenerator;
-import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTableManager;
 import net.minecraft.loot.RandomValueRange;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.functions.ILootFunction;
+import net.minecraft.loot.StandaloneLootEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
@@ -189,14 +186,30 @@ public class LootTableLoader {
 				LootTable newLootTable = LootTable.EMPTY;
 
 				if (CQRConfig.general.singleLootPoolPerLootTable) {
-					ILootGenerator[] entries = new ILootGenerator[items.size()];
+					StandaloneLootEntry.Builder[] entries = new StandaloneLootEntry.Builder[items.size()];
 					for (int i = 0; i < items.size(); i++) {
 						entries[i] = items.get(i).getAsLootEntry(i);
 					}
 
-					return new LootTable(new LootPool[] {
-							new LootPool(entries, new ILootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())),
-									new RandomValueRange(0), name.getPath() + "_pool") });
+					LootPool.Builder poolBuilder = LootPool.lootPool()
+							.setRolls(RandomValueRange.between(
+									Math.min(
+											CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest
+											), 
+									Math.min(
+											Math.max(
+													CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest
+													),
+											items.size()
+											)
+									)
+								)
+							.name(name.getPath() + "_pool");
+					for(StandaloneLootEntry.Builder builder : entries) {
+						poolBuilder = poolBuilder.add(builder);
+					}
+					
+					return LootTable.lootTable().withPool(poolBuilder).build();
 				} else {
 					for (int i = 0; i < items.size(); i++) {
 						newLootTable.addPool(items.get(i).getAsSingleLootPool(i));
