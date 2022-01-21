@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -16,6 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIBlindTargetSpell;
@@ -27,6 +29,7 @@ import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {
 
@@ -35,6 +38,10 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
 
+	public EntityCQRNecromancer(World world) {
+		this(CQREntityTypes.NECROMANCER.get(), world);
+	}
+	
 	public EntityCQRNecromancer(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -118,7 +125,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	private void filterSummonLists() {
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.removed) {
+			if (ent == null || !ent.isAlive()) {
 				tmp.add(ent);
 			}
 		}
@@ -127,7 +134,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		}
 		tmp.clear();
 		for (Entity ent : this.summonedSkulls) {
-			if (ent == null || ent.removed) {
+			if (ent == null || !ent.isAlive()) {
 				tmp.add(ent);
 			}
 		}
@@ -140,7 +147,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public void die(DamageSource cause) {
 		// Kill minions
 		for (Entity e : this.getSummonedEntities()) {
-			if (e != null && !e.removed) {
+			if (e != null && e.isAlive()) {
 				if (e instanceof LivingEntity) {
 					((LivingEntity) e).die(cause);
 				}
@@ -195,6 +202,11 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 
 	public boolean isBoneShieldActive() {
 		return this.entityData.get(BONE_SHIELD_ACTIVE);
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

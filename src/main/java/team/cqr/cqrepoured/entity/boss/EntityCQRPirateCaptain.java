@@ -7,6 +7,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -16,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
@@ -25,6 +27,7 @@ import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehi
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateTurnInvisible;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
@@ -36,6 +39,10 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 
 	private boolean spawnedParrot = false;
 
+	public EntityCQRPirateCaptain(World world) {
+		this(CQREntityTypes.PIRATE_CAPTAIN.get(), world);
+	}
+	
 	public EntityCQRPirateCaptain(EntityType<? extends EntityCQRPirateCaptain> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -161,5 +168,10 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	protected int getInvisibilityTurningTime() {
 		return EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

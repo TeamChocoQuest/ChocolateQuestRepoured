@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -15,7 +16,7 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 		this(worldIn, null, 4.0F, 1.0F, 0.0F);
 	}
 
-	public EntityRotatingLaser(World worldIn, EntityLivingBase caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
+	public EntityRotatingLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
 		super(worldIn, caster, length);
 		this.deltaRotationYawPerTick = deltaRotationYawPerTick;
 		this.deltaRotationPitchPerTick = deltaRotationPitchPerTick;

@@ -9,11 +9,13 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIArmorSpell;
@@ -26,12 +28,17 @@ import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected BlockPos currentPhylacteryPosition = null;
 
+	public EntityCQRLich(World world) {
+		this(CQREntityTypes.LICH.get(), world);
+	}
+	
 	public EntityCQRLich(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -41,7 +48,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		super.aiStep();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.removed) {
+			if (ent == null || !ent.isAlive()) {
 				tmp.add(ent);
 			}
 		}
@@ -166,6 +173,11 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	public boolean hasPhylactery() {
 		return (this.currentPhylacteryPosition != null && (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY));
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

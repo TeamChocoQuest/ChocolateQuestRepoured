@@ -7,9 +7,10 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.boss.boarmage.BossAIBoarmageExplodeAreaAttack;
 import team.cqr.cqrepoured.entity.ai.boss.boarmage.BossAIBoarmageTeleportSpell;
@@ -19,9 +20,9 @@ import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonFireWall;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMeteors;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
-import team.cqr.cqrepoured.init.CQRLoottables;
+import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
 
@@ -29,6 +30,10 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	protected boolean startedExplodeAreaAttack = false;
 
+	public EntityCQRBoarmage(World world) {
+		this(CQREntityTypes.BOARMAGE.get(), world);
+	}
+	
 	public EntityCQRBoarmage(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -60,7 +65,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		super.aiStep();
 		List<Entity> tmp = new ArrayList<>();
 		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.removed) {
+			if (ent == null || !ent.isAlive()) {
 				tmp.add(ent);
 			}
 		}
@@ -77,7 +82,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public void die(DamageSource cause) {
 		// Kill minions
 		for (Entity e : this.summonedMinions) {
-			if (e != null && !e.removed) {
+			if (e != null && e.isAlive()) {
 				if (e instanceof LivingEntity) {
 					((LivingEntity) e).die(cause);
 				}
@@ -138,6 +143,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	@Override
 	public boolean canPutOutFire() {
 		return false;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

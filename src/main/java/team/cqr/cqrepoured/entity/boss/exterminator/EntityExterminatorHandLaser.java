@@ -1,8 +1,10 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityTargetingLaser;
 
 public class EntityExterminatorHandLaser extends EntityTargetingLaser {
@@ -77,6 +79,11 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 	@Override
 	public int getBreakingSpeed() {
 		return 12;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
