@@ -365,6 +365,8 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		Vec3d v = this.getLatchedPos();
 		this.setPosition(v.x, v.y, v.z);
 
+		//TODO: Only run this code when on the server or the current client player is the thrower
+		
 		Vec3d v1 = Vec3d.fromPitchYaw(0.0F, this.rotationYaw);
 		double x = this.posX - this.thrower.posX + v1.x * 0.1D;
 		double y = this.posY - this.thrower.posY + 1.0D;
