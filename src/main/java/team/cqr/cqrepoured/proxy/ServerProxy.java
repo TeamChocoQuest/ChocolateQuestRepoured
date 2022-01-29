@@ -68,4 +68,9 @@ public class ServerProxy implements IProxy {
 
 	}
 
+	@Override
+	public boolean isPlayerCurrentClientPlayer(EntityPlayer player) {
+		return false;
+	}
+
 }

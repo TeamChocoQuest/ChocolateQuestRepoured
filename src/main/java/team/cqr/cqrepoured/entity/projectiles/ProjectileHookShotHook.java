@@ -18,6 +18,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRSerializers;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
@@ -360,6 +361,10 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 		if (!this.world.isRemote) {
 			this.checkForEntityStuck(this.thrower);
+		} else {
+			if(this.thrower == null || !(this.thrower instanceof EntityPlayer && CQRMain.proxy.isPlayerCurrentClientPlayer((EntityPlayer) this.thrower))) {
+				return;
+			}
 		}
 
 		Vector3d v = this.getLatchedPos();

@@ -55,7 +55,7 @@ public class ElectricFieldRenderUtil {
 		vertexCount++;
 
 		if (endLineStrip) {
-			FIRST_BUFFER.put(VERTEX_BUFFER.getVertexCount() - vertexCount);
+			FIRST_BUFFER.put(VERTEX_BUFFER.vertexCounts.size() - vertexCount);
 			COUNT_BUFFER.put(vertexCount);
 			vertexCount = 0;
 		}

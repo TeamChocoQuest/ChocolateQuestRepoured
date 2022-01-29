@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IRideable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -13,24 +15,27 @@ import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-public abstract class EntityCQRMountBase extends AnimalEntity {
+public abstract class EntityCQRMountBase extends AnimalEntity implements IRideable {
 
-	public EntityCQRMountBase(World worldIn) {
-		super(worldIn);
+	public EntityCQRMountBase(EntityType<? extends EntityCQRMountBase> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
-	protected void initEntityAI() {
-		this.tasks.addTask(0, new SwimGoal(this));
-		this.tasks.addTask(1, new PanicGoal(this, 0.9D));
-		this.tasks.addTask(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-		this.tasks.addTask(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-		this.tasks.addTask(8, new LookRandomlyGoal(this));
+	protected void registerGoals() {
+		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(1, new PanicGoal(this, 0.9D));
+		this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
+		this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 	}
 
 	@Override
@@ -39,8 +44,13 @@ public abstract class EntityCQRMountBase extends AnimalEntity {
 	}
 
 	@Override
-	public AgeableEntity createChild(AgeableEntity ageable) {
-		return null;
+	public void spawnChildFromBreeding(ServerWorld pLevel, AnimalEntity p_234177_2_) {
+		return;
+	}
+
+	@Override
+	public boolean canFallInLove() {
+		return false;
 	}
 
 	@Override
@@ -48,57 +58,61 @@ public abstract class EntityCQRMountBase extends AnimalEntity {
 	public Entity getControllingPassenger() {
 		return this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
 	}
-
+	
 	@Override
-	public boolean canBeSteered() {
+	public boolean canBeControlledByRider() {
 		Entity entity = this.getControllingPassenger();
 
 		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof PlayerEntity);
 	}
-
+	
 	@Override
-	public boolean processInteract(PlayerEntity player, Hand hand) {
-		if (!super.processInteract(player, hand)) {
-			if (!this.isBeingRidden()) {
-				if (!this.world.isRemote) {
+	public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+		if (super.mobInteract(player, hand) != ActionResultType.SUCCESS) {
+			if (!this.isVehicle()) {
+				if (!this.level.isClientSide) {
 					player.startRiding(this);
 				}
 
-				return true;
+				return ActionResultType.SUCCESS;
 			}
 
 		}
-		return false;
+		return ActionResultType.FAIL;
 
 	}
-
+	
 	@Override
-	public void travel(float strafe, float vertical, float forward) {
-		if (this.isBeingRidden() && this.canBeSteered()) {
+	public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
+		return null;
+	}
+	
+	@Override
+	public void travel(Vector3d direction) {
+		if (this.isVehicle() && this.canBeControlledByRider()) {
+			double vertical = direction.y();
 			LivingEntity entity = (LivingEntity) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null :
 																						// (Entity)this.getPassengers().get(0);
-			this.rotationYaw = entity.rotationYaw;
-			this.prevRotationYaw = this.rotationYaw;
-			this.rotationPitch = entity.rotationPitch * 0.5F;
-			this.setRotation(this.rotationYaw, this.rotationPitch);
-			this.renderYawOffset = this.rotationYaw;
-			this.rotationYawHead = this.rotationYaw;
-			this.stepHeight = 1.0F;
-			this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
+			this.yRot = entity.yRot;
+			this.yRotO = this.yRot;
+			this.xRot = entity.xRot * 0.5F;
+			this.setRot(this.yRot, this.xRot);
+			this.yBodyRot = this.yRot;
+			this.yHeadRot = this.yBodyRot;
+			//this.stepHeight = 1.0F;
+			//this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
 
-			float v = 0.0F;
+			double v = 0.0;
 			if (this.isInWater() || this.isInLava()) {
-				v = vertical * 0.5F;
+				v = vertical * 0.5;
 			}
-			if (this.canPassengerSteer()) {
-				float f = (float) this.getEntityAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue() * 0.5F;
+			if (this.isControlledByLocalInstance()) {
+				float f = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.5F;
 
-				this.setAIMoveSpeed(f);
-				super.travel(entity.moveStrafing * f, v, entity.moveForward * f);
+				this.setSpeed(f);
+				super.travel(new Vector3d(direction.x * f, v, direction.z * f));
 			} else {
-				this.motionX = 0.0D;
-				this.motionY = 0.0D;
-				this.motionZ = 0.0D;
+				this.setDeltaMovement(Vector3d.ZERO);
 			}
 
 			this.prevLimbSwingAmount = this.limbSwingAmount;
@@ -118,8 +132,10 @@ public abstract class EntityCQRMountBase extends AnimalEntity {
 			super.travel(strafe, vertical, forward);
 		}
 	}
-
+	
 	@Override
-	protected abstract ResourceLocation getLootTable();
+	public void travelWithInput(Vector3d pTravelVec) {
+		super.travel(pTravelVec);
+	}
 
 }

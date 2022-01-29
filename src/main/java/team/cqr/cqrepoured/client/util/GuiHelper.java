@@ -24,7 +24,7 @@ public class GuiHelper {
 
 	public static void drawString(FontRenderer fontRenderer, String text, int x, int y, int color, boolean centered, boolean withShadow) {
 		if (centered) {
-			x -= fontRenderer.getStringWidth(text) / 2;
+			x -= fontRenderer.width(text) / 2;
 		}
 		if (withShadow) {
 			fontRenderer.drawStringWithShadow(text, x, y, color);

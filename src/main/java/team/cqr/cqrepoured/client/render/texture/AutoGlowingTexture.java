@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.render.texture;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
@@ -38,7 +37,8 @@ public class AutoGlowingTexture extends Texture {
 		ResourceLocation glowingTexture = new ResourceLocation(originalTexture.getNamespace(), path.substring(0, i) + "_glowing" + path.substring(i));
 		EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
 		if (renderManager.textureManager.getTexture(glowingTexture) == null) {
-			renderManager.textureManager.loadTexture(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
+			//Correct method? Old one was "loadTexture"
+			renderManager.textureManager.register(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
 		}
 		return glowingTexture;
 	}

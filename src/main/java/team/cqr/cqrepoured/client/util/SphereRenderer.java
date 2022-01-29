@@ -278,11 +278,11 @@ public class SphereRenderer {
 
 		if (drawBack) {
 			GL11.glCullFace(GL11.GL_FRONT);
-			GL11.glDrawArrays(mode, 0, buffer.getVertexCount());
+			GL11.glDrawArrays(mode, 0, buffer.vertexCounts.size()/*getVertexCount()*/);
 			GL11.glCullFace(GL11.GL_BACK);
 		}
 		if (drawFront) {
-			GL11.glDrawArrays(mode, 0, buffer.getVertexCount());
+			GL11.glDrawArrays(mode, 0, buffer.vertexCounts.size()/*getVertexCount()*/);
 		}
 
 		GL20.glDisableVertexAttribArray(0);
