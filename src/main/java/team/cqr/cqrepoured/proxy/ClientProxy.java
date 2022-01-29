@@ -126,6 +126,9 @@ public class ClientProxy implements IProxy {
 	@Override
 	public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
 		IntegratedServer integratedServer = Minecraft.getMinecraft().getIntegratedServer();
+		if(integratedServer.isSinglePlayer()) {
+			return true;
+		}
 		return integratedServer != null && player.getName().equals(integratedServer.getServerOwner());
 	}
 
@@ -136,6 +139,14 @@ public class ClientProxy implements IProxy {
 		if (id == GuiHandler.ADD_PATH_NODE_GUI_ID) {
 			mc.displayGuiScreen(new GuiAddPathNode(EnumHand.values()[args[0]], args[1], new BlockPos(args[2], args[3], args[4])));
 		}
+	}
+
+	@Override
+	public boolean isPlayerCurrentClientPlayer(EntityPlayer player) {
+		if(player != null) {
+			return ((EntityPlayer)Minecraft.getMinecraft().player).equals(player);
+		}
+		return false;
 	}
 
 }
