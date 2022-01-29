@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
-import java.awt.Color;
 import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
@@ -8,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
