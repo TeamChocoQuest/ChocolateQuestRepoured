@@ -12,7 +12,7 @@
   "logoFile": "assets/cqrepoured/logo.png",
   "screenshots": [],
   "dependencies": ["phosphor-lighting", "jei", "entity_culling"],
-  "requiredMods": ["forge@[14.23.5.2817,)", "geckolib3@[3.0.13,)", "reachfix@[1.0.1,)"],
+  "requiredMods": ["forge@[14.23.5.2817,)", "geckolib3@[3.0.19,)", "reachfix@[1.0.1,)"],
   "useDependencyInformation": true
 }
 ]
