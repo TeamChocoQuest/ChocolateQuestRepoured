@@ -123,6 +123,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 				MUTABLE.setY(MUTABLE.getY() - 1);
 			}
 		}
+		return MUTABLE.getY();
 	}
 
 	public int getStartX() {
