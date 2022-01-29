@@ -149,4 +149,12 @@ public class ClientProxy implements IProxy {
 		return false;
 	}
 
+	@Override
+	public boolean isPlayerCurrentClientPlayer(EntityPlayer player) {
+		if(player != null) {
+			return ((EntityPlayer)Minecraft.getMinecraft().player).equals(player);
+		}
+		return false;
+	}
+
 }

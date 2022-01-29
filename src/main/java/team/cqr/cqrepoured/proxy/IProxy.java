@@ -30,7 +30,7 @@ public interface IProxy {
 
 	void updateGui();
 
-	boolean isOwnerOfIntegratedServer(EntityPlayer player);
+	boolean isOwnerOfIntegratedServer(PlayerEntity player);
 	
 	boolean isPlayerCurrentClientPlayer(PlayerEntity player);
 
