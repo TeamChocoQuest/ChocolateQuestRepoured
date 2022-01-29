@@ -63,7 +63,7 @@ dependencies {
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.57')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.66')
 
     atDependencies 'curse.maven:ReachFix-556777:3584670'
 	//1.12.2
