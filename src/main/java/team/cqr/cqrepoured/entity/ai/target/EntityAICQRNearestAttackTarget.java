@@ -25,7 +25,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	protected LivingEntity wrapperGetAttackTarget() {
-		return this.entity.getAttackTarget();
+		return this.entity.getTarget();
 	}
 
 	@Override
@@ -48,8 +48,8 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 
 	@Override
 	public void start() {
-		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
-		List<LivingEntity> possibleTargets = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb);
+		AxisAlignedBB aabb = this.entity.getBoundingBox().inflate(32.0D);
+		List<LivingEntity> possibleTargets = this.world.getEntitiesOfClass(LivingEntity.class, aabb);
 		List<LivingEntity> possibleTargetsAlly = new ArrayList<>();
 		List<LivingEntity> possibleTargetsEnemy = new ArrayList<>();
 		this.fillLists(possibleTargets, possibleTargetsAlly, possibleTargetsEnemy);
@@ -66,7 +66,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 				continue;
 			}
-			if (!EntityPredicates.IS_ALIVE.apply(possibleTarget)) {
+			if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(possibleTarget)) {
 				continue;
 			}
 			if (possibleTarget == this.entity) {
@@ -81,7 +81,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	}
 
 	protected boolean canTargetAlly() {
-		Item item = this.entity.getHeldItemMainhand().getItem();
+		Item item = this.entity.getMainHandItem().getItem();
 		return item instanceof ISupportWeapon<?> || item instanceof IFakeWeapon<?>;
 	}
 
@@ -115,20 +115,20 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (this.entity.isEntityInFieldOfView(possibleTarget)) {
 			return this.entity.isInSightRange(possibleTarget);
 		}
-		return !possibleTarget.isSneaking() && this.entity.getDistanceSq(possibleTarget) < 12.0D * 12.0D;
+		return !possibleTarget.isCrouching() && this.entity.distanceToSqr(possibleTarget) < 12.0D * 12.0D;
 	}
 
 	protected boolean isStillSuitableTarget(LivingEntity possibleTarget) {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(possibleTarget)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(possibleTarget)) {
 			return false;
 		}
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		if (this.entity.getDistanceSq(possibleTarget) > 64.0D * 64.0D) {
+		if (this.entity.distanceToSqr(possibleTarget) > 64.0D * 64.0D) {
 			return false;
 		}
 		if (TargetUtil.isAllyCheckingLeaders(this.entity, possibleTarget)) {
@@ -139,13 +139,13 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 				return false;
 			}
 		} else if (this.canTargetAlly()) {
-			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
-			List<LivingEntity> possibleTargets = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb);
+			AxisAlignedBB aabb = this.entity.getBoundingBox().inflate(32.0D);
+			List<LivingEntity> possibleTargets = this.world.getEntitiesOfClass(LivingEntity.class, aabb);
 			for (LivingEntity possibleTargetAlly : possibleTargets) {
 				if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTargetAlly)) {
 					continue;
 				}
-				if (!EntityPredicates.IS_ALIVE.apply(possibleTargetAlly)) {
+				if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(possibleTargetAlly)) {
 					continue;
 				}
 				if (possibleTargetAlly == this.entity) {

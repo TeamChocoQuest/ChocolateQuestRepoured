@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
@@ -21,7 +22,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(input)) {
 			return false;
 		}
 		return EntityAINearestAttackTargetAtHomeArea.this.isSuitableTarget(input);
@@ -33,11 +34,11 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 
 	@Override
 	public boolean canUse() {
-		if (this.entity.world.getDifficulty() == Difficulty.PEACEFUL) {
+		if (this.entity.level.getDifficulty() == Difficulty.PEACEFUL) {
 			this.entity.setTarget(null);
 			return false;
 		}
-		if (this.isStillSuitableTarget(this.entity.getAttackTarget())) {
+		if (this.isStillSuitableTarget(this.entity.getTarget())) {
 			return false;
 		}
 		this.entity.setTarget(null);
@@ -53,8 +54,8 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 
 	@Override
 	public void start() {
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().add(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
-		List<LivingEntity> possibleTargets = this.entity.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.predicate);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().offset(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
+		List<LivingEntity> possibleTargets = this.entity.level.getEntitiesOfClass(LivingEntity.class, aabb, this.predicate);
 		if (!possibleTargets.isEmpty()) {
 			this.entity.setTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
 		}
@@ -65,7 +66,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 			return false;
 		}
 		Faction faction = this.entity.getFaction();
-		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
+		if (this.entity.getMainHandItem().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
@@ -90,21 +91,21 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		/*
 		 * if (this.entity.isEntityInFieldOfView(possibleTarget)) { return this.entity.isInSightRange(possibleTarget); }
 		 */
-		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 32.0D;
+		return !possibleTarget.isCrouching() && this.entity.distanceTo(possibleTarget) < 32.0D;
 	}
 
 	private boolean isStillSuitableTarget(LivingEntity possibleTarget) {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(possibleTarget)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(possibleTarget)) {
 			return false;
 		}
 		if (possibleTarget == this.entity) {
 			return false;
 		}
 		Faction faction = this.entity.getFaction();
-		if (this.entity.getHeldItemMainhand().getItem() == CQRItems.STAFF_HEALING) {
+		if (this.entity.getMainHandItem().getItem() == CQRItems.STAFF_HEALING) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
@@ -128,7 +129,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	}
 
 	private boolean isInHomeZone(LivingEntity possibleTarget) {
-		double distance = possibleTarget.getPosition().getDistance(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		double distance = possibleTarget.position().distanceTo(new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
 		return Math.abs(distance) <= 48 + 8 * (this.world.getDifficulty().ordinal());
 	}
 

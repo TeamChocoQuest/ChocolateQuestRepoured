@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity.ai.target;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.entity.CreatureEntity;
@@ -33,20 +34,21 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 		this.targetClass = classTarget;
 		this.targetChance = chance;
 		this.sorter = new EntityAIPetNearestAttackTarget.Sorter(creature);
-		this.setMutexBits(1);
+		//this.setMutexBits(1);
+		this.setFlags(EnumSet.of(Flag.TARGET));
 	}
 
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute() {
-		Faction faction = FactionRegistry.instance(this.taskOwner).getFactionOf(this.taskOwner);
-		if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
+	public boolean canUse() {
+		Faction faction = FactionRegistry.instance(this.mob).getFactionOf(this.mob);
+		if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
 			return false;
 		} else if (faction != null)/* if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) */
 		{
-			List<T> list = this.taskOwner.world.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), TargetUtil.createPredicateNonAlly(faction));
+			List<T> list = this.mob.level.<T>getEntitiesOfClass(this.targetClass, this.getTargetableArea(this.getFollowDistance()), TargetUtil.createPredicateNonAlly(faction));
 
 			if (list.isEmpty()) {
 				return false;
@@ -80,15 +82,15 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 	}
 
 	protected AxisAlignedBB getTargetableArea(double targetDistance) {
-		return this.taskOwner.getEntityBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+		return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	@Override
-	public void startExecuting() {
-		this.taskOwner.setTarget(this.targetEntity);
+	public void start() {
+		this.mob.setTarget(this.targetEntity);
 		super.start();
 	}
 
@@ -101,8 +103,8 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 
 		@Override
 		public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-			double d0 = this.entity.getDistanceSq(p_compare_1_);
-			double d1 = this.entity.getDistanceSq(p_compare_2_);
+			double d0 = this.entity.distanceToSqr(p_compare_1_);
+			double d1 = this.entity.distanceToSqr(p_compare_2_);
 
 			if (d0 < d1) {
 				return -1;

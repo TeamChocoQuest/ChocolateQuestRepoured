@@ -11,12 +11,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.OcelotEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
@@ -40,19 +39,19 @@ public class TargetUtil {
 		if (input == null) {
 			return false;
 		}
-		return EntityPredicates.CAN_AI_TARGET.apply(input);
+		return EntityPredicates.ATTACK_ALLOWED.test(input);
 	};
 
 	public static final Predicate<LivingEntity> PREDICATE_CAN_BE_ELECTROCUTED = input -> {
-		if (input == null || input.isDead) {
+		if (input == null || input.isDeadOrDying()) {
 			return false;
 		}
-		if (!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
+		if (!input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).isPresent()) {
 			return false;
 		}
-		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
-		if (input instanceof IMechanical || input.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
-			return input.isWet();
+		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).resolve().get();
+		if (input instanceof IMechanical || input.getMobType() == CQRCreatureAttributes.MECHANICAL) {
+			return input.isInWaterOrRain();
 		}
 		if (icapability.isElectrocutionActive()) {
 			return false;
@@ -64,13 +63,13 @@ public class TargetUtil {
 	};
 
 	public static final Predicate<LivingEntity> PREDICATE_IS_ELECTROCUTED = input -> {
-		if (input == null || input.isDead) {
+		if (input == null || input.isDeadOrDying()) {
 			return false;
 		}
-		if (!input.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
+		if (!input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).isPresent()) {
 			return false;
 		}
-		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		CapabilityElectricShock icapability = input.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).resolve().get();
 		return icapability.isElectrocutionActive();
 	};
 
@@ -78,10 +77,10 @@ public class TargetUtil {
 		if (input == null) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(input)) {
 			return false;
 		}
-		if (input.isBeingRidden()) {
+		if (input.isVehicle()) {
 			return false;
 		}
 		/*
@@ -89,27 +88,27 @@ public class TargetUtil {
 		 * return false;
 		 * }
 		 */
-		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorseEntity /* || input instanceof EntityPig */;
+		return input.canBeControlledByRider() || input instanceof EntityCQRMountBase || input instanceof AbstractHorseEntity /* || input instanceof EntityPig */;
 	};
 
 	public static final Predicate<TameableEntity> PREDICATE_PETS = input -> {
 		if (input == null) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(input)) {
 			return false;
 		}
-		if (input.getOwnerId() != null) {
+		if (input.getOwnerUUID() != null) {
 			return false;
 		}
-		return input instanceof OcelotEntity || input instanceof WolfEntity;
+		return input instanceof CatEntity || input instanceof WolfEntity || input instanceof TameableEntity;
 	};
 
 	public static final Predicate<Entity> PREDICATE_LIVING = input -> {
 		if (input == null) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.ENTITY_STILL_ALIVE.test(input)) {
 			return false;
 		}
 		return input instanceof LivingEntity;
@@ -127,7 +126,7 @@ public class TargetUtil {
 		T nearestEntity = null;
 		double min = Double.MAX_VALUE;
 		for (T otherEntity : list) {
-			double distance = entity.getDistanceSq(otherEntity);
+			double distance = entity.distanceToSqr(otherEntity);
 			if (distance < min) {
 				nearestEntity = otherEntity;
 				min = distance;
@@ -153,21 +152,21 @@ public class TargetUtil {
 
 	@Nullable
 	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Vector3d target, Vector3d vec, double minDist, double dxz, double dy) {
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		int tries = 200;
 		for (int i = 0; i < tries; i++) {
-			double x = target.x + world.rand.nextDouble() * dxz * 2.0D - dxz;
-			double y = target.y + 1.0D + world.rand.nextDouble() * dy * 2.0D - dy;
-			double z = target.z + world.rand.nextDouble() * dxz * 2.0D - dxz;
+			double x = target.x + world.random.nextDouble() * dxz * 2.0D - dxz;
+			double y = target.y + 1.0D + world.random.nextDouble() * dy * 2.0D - dy;
+			double z = target.z + world.random.nextDouble() * dxz * 2.0D - dxz;
 			if (i < tries * 3 / 5 && (x - vec.x) * (x - vec.x) + (z - vec.z) * (z - vec.z) < minDist * minDist) {
 				continue;
 			}
 			boolean flag = false;
-			mutablePos.setPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+			mutablePos.set(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
 			for (int k = 0; k < 4; k++) {
 				BlockState state = world.getBlockState(mutablePos);
-				if (state.getMaterial().blocksMovement()) {
-					AxisAlignedBB aabb = state.getBoundingBox(world, mutablePos);
+				if (state.getMaterial().blocksMotion()) {
+					AxisAlignedBB aabb = state.getShape(world, mutablePos).bounds();
 					if (y >= mutablePos.getY() + aabb.maxY) {
 						y = mutablePos.getY() + aabb.maxY;
 						flag = true;
@@ -179,18 +178,18 @@ public class TargetUtil {
 			if (!flag) {
 				continue;
 			}
-			if (world.collidesWithAnyBlock(entity.getEntityBoundingBox().offset(x - entity.posX, y - entity.posY, z - entity.posZ))) {
+			if (!world.noCollision(entity.getBoundingBox().move(x - entity.getX(), y - entity.getY(), z - entity.getZ()))) {
 				continue;
 			}
 			if (i < tries * 3 / 5) {
-				double oldX = entity.posX;
-				double oldY = entity.posY;
-				double oldZ = entity.posZ;
-				entity.setPosition(x, y, z);
-				entity.onGround = true;
-				Path path = entity.getNavigator().getPathToXYZ(vec.x, vec.y, vec.z);
-				int l = path != null ? path.getCurrentPathLength() : 100;
-				entity.setPosition(oldX, oldY, oldZ);
+				double oldX = entity.getX();
+				double oldY = entity.getY();
+				double oldZ = entity.getZ();
+				entity.setPos(x, y, z);
+				entity.setOnGround(true);
+				Path path = entity.getNavigation().createPath(vec.x, vec.y, vec.z, 1 /* accuracy */);
+				int l = path != null ? path.getNodeCount() : 100;
+				entity.setPos(oldX, oldY, oldZ);
 				if (l > dxz * 2) {
 					continue;
 				}
@@ -210,8 +209,8 @@ public class TargetUtil {
 
 		@Override
 		public int compare(Entity entity1, Entity entity2) {
-			double d1 = this.entity.getDistanceSq(entity1);
-			double d2 = this.entity.getDistanceSq(entity2);
+			double d1 = this.entity.distanceToSqr(entity1);
+			double d2 = this.entity.distanceToSqr(entity2);
 
 			if (d1 < d2) {
 				return -1;
@@ -310,8 +309,8 @@ public class TargetUtil {
 				entity = ((AbstractEntityCQR) entity).getLeader();
 				continue;
 			}
-			if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() instanceof LivingEntity) {
-				entity = (LivingEntity) ((IEntityOwnable) entity).getOwner();
+			if (entity instanceof TameableEntity && ((TameableEntity) entity).getOwner() instanceof LivingEntity) {
+				entity = (LivingEntity) ((TameableEntity) entity).getOwner();
 				continue;
 			}
 			break;

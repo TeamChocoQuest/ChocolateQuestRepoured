@@ -35,14 +35,14 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (this.world.getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
-		if (this.entity.getRevengeTimer() == this.prevRevengeTimer) {
+		if (this.entity.getLastHurtByMobTimestamp() == this.prevRevengeTimer) {
 			return false;
 		}
-		LivingEntity revengeTarget = this.entity.getRevengeTarget();
+		LivingEntity revengeTarget = this.entity.getLastHurtByMob();
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(revengeTarget)) {
 			return false;
 		}
-		if (!revengeTarget.isEntityAlive()) {
+		if (!revengeTarget.isAlive()) {
 			return false;
 		}
 		Faction faction = this.entity.getFaction();
@@ -66,7 +66,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	@Override
 	public void start() {
-		this.prevRevengeTimer = this.entity.getRevengeTimer();
+		this.prevRevengeTimer = this.entity.getLastHurtByMobTimestamp();
 		this.trySetAttackTarget(this.entity);
 		Faction faction = this.entity.getFaction();
 		if (faction != null && faction.isEnemy(this.attackTarget) && !(this.entity.getLeader() instanceof PlayerEntity)) {
@@ -75,19 +75,19 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	protected void callForHelp() {
-		double x = this.entity.posX;
-		double y = this.entity.posY + this.entity.getEyeHeight();
-		double z = this.entity.posZ;
+		double x = this.entity.getX();
+		double y = this.entity.getY() + this.entity.getEyeHeight();
+		double z = this.entity.getZ();
 		double r = CQRConfig.mobs.alertRadius;
 		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
-		List<AbstractEntityCQR> allies = this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, this::isSuitableAlly);
+		List<AbstractEntityCQR> allies = this.world.getEntitiesOfClass(AbstractEntityCQR.class, aabb, this::isSuitableAlly);
 		for (AbstractEntityCQR ally : allies) {
 			this.trySetAttackTarget(ally);
 		}
 	}
 
 	protected boolean isSuitableAlly(AbstractEntityCQR possibleAlly) {
-		if (!EntityPredicates.IS_ALIVE.apply(possibleAlly)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(possibleAlly)) {
 			return false;
 		}
 		if (possibleAlly == this.entity) {
@@ -96,25 +96,25 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (!isAllyCheckingLeadersWhenAttacked(this.entity, possibleAlly)) {
 			return false;
 		}
-		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
+		Path path = possibleAlly.getNavigation().createPath(this.entity, 1 /* accuracy */);
 		if (path == null) {
 			return false;
 		}
-		PathPoint end = path.getFinalPathPoint();
+		PathPoint end = path.getEndNode();
 		if (end == null) {
 			return false;
 		}
-		if (this.entity.getDistanceSq(end.x, end.y, end.z) > MAX_PATH_END_TO_TARGET_DISTANCE_SQ) {
+		if (this.entity.distanceToSqr(end.x, end.y, end.z) > MAX_PATH_END_TO_TARGET_DISTANCE_SQ) {
 			return false;
 		}
-		if (path.getCurrentPathLength() > MAX_PATH_LENGTH) {
+		if (path.getNodeCount() > MAX_PATH_LENGTH) {
 			return false;
 		}
 		return getPathComplexity(path) <= MAX_PATH_COMPLEXITY;
 	}
 
 	protected boolean trySetAttackTarget(AbstractEntityCQR ally) {
-		ItemStack stack = ally.getHeldItemMainhand();
+		ItemStack stack = ally.getMainHandItem();
 		if (stack.getItem() instanceof ISupportWeapon) {
 			return false;
 		}
@@ -124,8 +124,8 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (!isEnemyCheckingLeadersWhenAttacked(ally, this.attackTarget)) {
 			return false;
 		}
-		LivingEntity oldAttackTarget = ally.getAttackTarget();
-		if (oldAttackTarget != null && ally.getSensing().canSee(oldAttackTarget) && ally.getDistanceSq(oldAttackTarget) < ally.getDistanceSq(this.attackTarget)) {
+		LivingEntity oldAttackTarget = ally.getTarget();
+		if (oldAttackTarget != null && ally.getSensing().canSee(oldAttackTarget) && ally.distanceToSqr(oldAttackTarget) < ally.distanceToSqr(this.attackTarget)) {
 			return false;
 		}
 		ally.setTarget(this.attackTarget);
@@ -150,17 +150,17 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	}
 
 	private static int getPathComplexity(Path path) {
-		if (path.getCurrentPathLength() == 0) {
+		if (path.getNodeCount() == 0) {
 			return 0;
 		}
 		int pathComplexity = 0;
 		Axis prevPrevPrevAxis = null;
 		Axis prevPrevAxis = null;
 		Axis prevAxis = null;
-		int prevX = path.getPathPointFromIndex(0).x;
-		int prevZ = path.getPathPointFromIndex(0).z;
-		for (int i = 0; i < path.getCurrentPathLength(); i++) {
-			PathPoint point = path.getPathPointFromIndex(i);
+		int prevX = path.getNode(0).x;
+		int prevZ = path.getNode(0).z;
+		for (int i = 0; i < path.getNodeCount(); i++) {
+			PathPoint point = path.getNode(i);
 			int x = point.x;
 			int z = point.z;
 			Axis axis;
