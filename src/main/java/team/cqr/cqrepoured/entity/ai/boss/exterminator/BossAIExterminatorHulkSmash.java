@@ -1,6 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Explosion.Mode;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
@@ -17,12 +20,13 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	public BossAIExterminatorHulkSmash(EntityCQRExterminator entity) {
 		super(entity);
 
-		this.setMutexBits(2);
+		//this.setMutexBits(2);
+		this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
 	@Override
 	public boolean canUse() {
-		if (this.entity != null && !this.entity.isDead && this.entity.hasAttackTarget()) {
+		if (this.entity != null && !this.entity.isDeadOrDying() && this.entity.hasAttackTarget()) {
 
 			if (this.entity.isStunned()) {
 				return false;
@@ -78,19 +82,19 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 			this.shockwaveWasSpawnedInCurrentCycle = true;
 
 			// Now, spawn a explosion and create the shockwave entities
-			final Vector3d hitLocation = this.entity.position().add(this.entity.getLookVec().normalize().scale(1.5 * this.entity.getSizeVariation()));
-			this.world.createExplosion(this.entity, hitLocation.x, hitLocation.y, hitLocation.z, 4.0F, false);
+			final Vector3d hitLocation = this.entity.position().add(this.entity.getLookAngle().normalize().scale(1.5 * this.entity.getSizeVariation()));
+			this.world.explode(this.entity, hitLocation.x, hitLocation.y, hitLocation.z, 4.0F, Mode.BREAK);
 
 			// now, create the shockwaves
 			final int quakeCount = 64;
 			float angle = 360.0F / quakeCount;
 			for (int i = 0; i < quakeCount; i++) {
 				ProjectileEarthQuake peq = new ProjectileEarthQuake(this.world, this.entity);
-				peq.shoot(this.entity, 0, angle * i, 0.0F, 0.5F, 0.0F);
+				peq.shootFromRotation(this.entity, 0, angle * i, 0.0F, 0.5F, 0.0F);
 				peq.setThrowHeight(0.6D);
-				peq.setPosition(hitLocation.x, hitLocation.y, hitLocation.z);
+				peq.setPos(hitLocation.x, hitLocation.y, hitLocation.z);
 
-				this.world.spawnEntity(peq);
+				this.world.addFreshEntity(peq);
 			}
 		}
 	}
@@ -98,7 +102,7 @@ public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQREx
 	@Override
 	public void stop() {
 		super.stop();
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 		this.shockwaveWasSpawnedInCurrentCycle = false;
 	}
 

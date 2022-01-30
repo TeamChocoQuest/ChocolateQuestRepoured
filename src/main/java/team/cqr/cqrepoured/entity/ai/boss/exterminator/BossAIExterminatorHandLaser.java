@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -21,7 +23,8 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 	public BossAIExterminatorHandLaser(EntityCQRExterminator entity) {
 		super(entity);
 
-		this.setMutexBits(7);
+		//this.setMutexBits(7);
+		this.setFlags(EnumSet.allOf(Flag.class));
 	}
 
 	@Override
@@ -30,13 +33,13 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			this.timeOut--;
 			return false;
 		}
-		if (this.entity != null && this.entity.isEntityAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
+		if (this.entity != null && this.entity.isAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
 			if (this.entity.isStunned()) {
 				return false;
 			}
 
-			final float distance = this.entity.getDistance(this.entity.getAttackTarget());
-			this.target = this.entity.getAttackTarget();
+			final float distance = this.entity.distanceTo(this.entity.getTarget());
+			this.target = this.entity.getTarget();
 			return this.entity.hasAttackTarget() && distance <= MAX_DISTANCE && distance >= MIN_DISTANCE;
 		}
 		return false;
@@ -47,7 +50,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		if (this.entity.isStunned()) {
 			return false;
 		}
-		return this.entity.isEntityAlive() && this.target != null && this.target.isEntityAlive() && this.timer > 0;
+		return this.entity.isAlive() && this.target != null && this.target.isAlive() && this.timer > 0;
 	}
 
 	@Override
@@ -76,7 +79,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			// System.out.println("Cannon is ready and cannon is raised");
 			// System.out.println("Laser does not exist, cannon is raised, so create the laser...");
 			this.activeLaser = new EntityExterminatorHandLaser(this.entity, this.target, Vector3d.ZERO);
-			this.world.spawnEntity(this.activeLaser);
+			this.world.addFreshEntity(this.activeLaser);
 			this.entity.switchCannonArmState(true);
 			return true;
 		}
@@ -93,7 +96,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			this.entity.rotationYaw = this.activeLaser.rotationYawCQR /* + 90.0F */;
 			this.entity.prevRotationYaw = this.activeLaser.prevRotationYawCQR /* + 90.0F */;
 
-			this.entity.faceEntity(this.target, 180, 180);
+			this.entity.getLookControl().setLookAt(this.target, 180, 180);
 		} else {
 			// System.out.println("No laser :/");
 		}
@@ -110,7 +113,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		this.target = null;
 		this.timer = 300;
 		if (this.activeLaser != null) {
-			this.activeLaser.setDead();
+			this.activeLaser.remove();
 			this.activeLaser = null;
 		}
 		this.entity.setCannonArmAutoTimeoutForLowering(40);

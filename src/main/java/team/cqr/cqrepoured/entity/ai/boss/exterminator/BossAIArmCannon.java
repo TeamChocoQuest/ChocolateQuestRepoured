@@ -39,7 +39,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 			}
 			if (this.isFarAwayEnough()) {
 				if (this.entity.hasAttackTarget()) {
-					this.cooldown -= this.entity.getDistance(this.entity.getAttackTarget());
+					this.cooldown -= this.entity.distanceTo(this.entity.getTarget());
 				}
 
 				return this.cooldown <= 0;
@@ -62,7 +62,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	}
 
 	private boolean isFarAwayEnough() {
-		return this.entity.getDistanceSq(this.entity.getAttackTarget()) >= MIN_DISTANCE_SQ;
+		return this.entity.distanceToSqr(this.entity.getTarget()) >= MIN_DISTANCE_SQ;
 	}
 
 	public BossAIArmCannon(EntityCQRExterminator entity) {
@@ -71,29 +71,29 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 	@Override
 	protected void checkAndPerformAttack(LivingEntity attackTarget) {
-		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
+		if (this.entity.tickCount > this.prevTimeAttacked + this.getAttackCooldown()) {
 			if (this.entity.isCannonRaised()) {
 				if (this.entity.isCannonArmReadyToShoot()) {
 					if (!this.isSequenceRunning) {
 						this.isSequenceRunning = true;
-						this.isCurrentSequenceFast = this.entity.getRNG().nextBoolean();
+						this.isCurrentSequenceFast = this.entity.getRandom().nextBoolean();
 						this.remainingShotsInSequence = this.isCurrentSequenceFast ? SHOT_COUNT_FAST : SHOT_COUNT_NORMAL;
 					}
 
 					this.entity.startShootingAnimation(this.isCurrentSequenceFast);
 
-					this.entity.faceEntity(attackTarget, 180, 180);
+					this.entity.getLookControl().setLookAt(attackTarget, 180, 180);
 
 					ProjectileCannonBall cannonBall = new ProjectileCannonBall(this.world, this.entity, this.isCurrentSequenceFast);
 					final Vector3d armPos = this.entity.getCannonFiringLocation();
 
 					this.spawnParticles(armPos);
 
-					cannonBall.setPosition(armPos.x, armPos.y, armPos.z);
+					cannonBall.setPos(armPos.x, armPos.y, armPos.z);
 
-					double vx = attackTarget.posX - this.entity.posX + this.entity.motionX;
-					double vy = attackTarget.posY + attackTarget.height * 0.5D - armPos.y + this.entity.motionY;
-					double vz = attackTarget.posZ - this.entity.posZ + this.entity.motionZ;
+					double vx = attackTarget.getX() - this.entity.getX() + this.entity.getDeltaMovement().x;
+					double vy = attackTarget.getY() + attackTarget.getBbHeight() * 0.5D - armPos.y + this.entity.getDeltaMovement().y;
+					double vz = attackTarget.getZ() - this.entity.getZ() + this.entity.getDeltaMovement().z;
 
 					float inaccuracy = this.getInaccuracy();
 					if (this.isCurrentSequenceFast) {
@@ -101,13 +101,13 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 					}
 
 					cannonBall.shoot(vx, vy, vz, 1.2F, inaccuracy);
-					this.entity.playSound(CQRSounds.EXTERMINATOR_CANNON_SHOOT, 5.0F, 0.75F + this.entity.getRNG().nextFloat() * 0.5F);
+					this.entity.playSound(CQRSounds.EXTERMINATOR_CANNON_SHOOT, 5.0F, 0.75F + this.entity.getRandom().nextFloat() * 0.5F);
 
-					this.world.spawnEntity(cannonBall);
+					this.world.addFreshEntity(cannonBall);
 
 					this.remainingShotsInSequence--;
 					if (this.remainingShotsInSequence <= 0) {
-						this.prevTimeAttacked = this.entity.ticksExisted;
+						this.prevTimeAttacked = this.entity.tickCount;
 						this.stop();
 					}
 				}
@@ -128,15 +128,19 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 	private void spawnParticles(Vector3d armPos) {
 		if (this.world instanceof ServerWorld) {
-			((ServerWorld) this.world).spawnParticle(ParticleTypes.SMOKE_LARGE, true, armPos.x, armPos.y, armPos.z, 10, 0, 0, 0, 0.05);
-			((ServerWorld) this.world).spawnParticle(ParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
-			((ServerWorld) this.world).spawnParticle(ParticleTypes.FLAME, true, armPos.x, armPos.y, armPos.z, 5, 0, 0, 0, 0.05);
+			for(int i = 0; i < 5; i++) {
+				((ServerWorld) this.world).addParticle(ParticleTypes.LARGE_SMOKE, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
+				((ServerWorld) this.world).addParticle(ParticleTypes.LARGE_SMOKE, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
+				
+				((ServerWorld) this.world).addParticle(ParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
+				((ServerWorld) this.world).addParticle(ParticleTypes.FLAME, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
+			}
 		}
 	}
 
 	@Override
 	public boolean isInterruptable() {
-		return this.entity.getRNG().nextBoolean();
+		return this.entity.getRandom().nextBoolean();
 	}
 
 	@Override
@@ -160,7 +164,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 		this.isSequenceRunning = false;
 
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 	}
 
 	// Since the weapon belongs to the entity we always have a weapon, but only if the cannon is ready and not in use
