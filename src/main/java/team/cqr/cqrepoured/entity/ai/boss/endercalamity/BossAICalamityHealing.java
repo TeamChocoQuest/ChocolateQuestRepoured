@@ -18,7 +18,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 		super(entity);
 		//this.setMutexBits(0);
 		//Correct??
-		this.setFlags(EnumSet.allOf(Flag.class));
+		this.setFlags(EnumSet.noneOf(Flag.class));
 	}
 
 	/*@Override

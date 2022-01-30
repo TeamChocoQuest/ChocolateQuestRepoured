@@ -71,7 +71,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation
 		// Head distance with scale = 100%: 0.75 blocks
-		float yaw = this.entity.rotationYaw;
+		float yaw = this.entity.yRot;
 		if (this.entity.hasAttackTarget()) {
 			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getTarget().getX() - this.entity.getX()), this.entity.getTarget().getZ() - this.entity.getZ()));
 		}

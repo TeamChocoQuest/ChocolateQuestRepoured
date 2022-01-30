@@ -16,7 +16,7 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	public BossAITeleportAroundHome(EntityCQREnderCalamity entity, final int cooldownTime) {
 		super(entity);
 		this.MAX_COOLDOWN = cooldownTime;
-		this.setFlags(EnumSet.allOf(Flag.class));
+		this.setFlags(EnumSet.noneOf(Flag.class));
 	}
 
 	/*@Override

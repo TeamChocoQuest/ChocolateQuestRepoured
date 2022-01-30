@@ -27,7 +27,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	public BossAISummonMinions(EntityCQREnderCalamity entity) {
 		super(entity);
 		//this.setMutexBits(0);
-		this.setFlags(EnumSet.allOf(Flag.class));
+		this.setFlags(EnumSet.noneOf(Flag.class));
 	}
 
 	/*@Override

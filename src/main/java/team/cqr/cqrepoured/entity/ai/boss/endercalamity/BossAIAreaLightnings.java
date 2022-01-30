@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
@@ -18,7 +17,7 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 		super(entity);
 		//this.setMutexBits(0);
 		//Correct??
-		this.setFlags(EnumSet.allOf(Flag.class));
+		this.setFlags(EnumSet.noneOf(Flag.class));
 		this.LIGHTNING_AREA_RADIUS = lightningRadius;
 	}
 
