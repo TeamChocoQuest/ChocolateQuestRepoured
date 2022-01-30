@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
@@ -14,13 +16,15 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 
 	public BossAICalamityHealing(EntityCQREnderCalamity entity) {
 		super(entity);
-		this.setMutexBits(0);
+		//this.setMutexBits(0);
+		//Correct??
+		this.setFlags(EnumSet.allOf(Flag.class));
 	}
 
-	@Override
+	/*@Override
 	public int getMutexBits() {
 		return 0;
-	}
+	}*/
 
 	@Override
 	public boolean canUse() {
@@ -32,7 +36,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	}
 
 	protected boolean internalCheck() {
-		if (this.entity.isEntityAlive()) {
+		if (this.entity.isAlive()) {
 			if (this.entity.getHealth() / this.entity.getMaxHealth() <= MAX_HEALTH_PERCENT_TO_START) {
 				return super.canUse();
 			}
@@ -56,13 +60,13 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 	public void start() {
 		// Spawn the crystals
 		final int crystalCount = this.getCrystalCount();
-		BlockPos centralPosition = this.entity.getCirclingCenter().add(0, 8, 0);
+		BlockPos centralPosition = this.entity.getCirclingCenter().offset(0, 8, 0);
 		if (crystalCount > 1) {
-			Vector3d direction = this.entity.getLookVec();
+			Vector3d direction = this.entity.getLookAngle();
 			direction = direction.normalize().scale(16);
 			double angle = 360 / crystalCount;
 			for (int i = 0; i < crystalCount; i++) {
-				this.spawnCrystal(centralPosition.add(direction.x, 0, direction.z));
+				this.spawnCrystal(centralPosition.offset(direction.x, 0, direction.z));
 
 				direction = VectorUtil.rotateVectorAroundY(direction, angle);
 			}
@@ -74,7 +78,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 
 	protected void spawnCrystal(BlockPos position) {
 		EntityCalamityCrystal crystal = new EntityCalamityCrystal(this.world, this.entity, position.getX(), position.getY(), position.getZ());
-		this.world.spawnEntity(crystal);
+		this.world.addFreshEntity(crystal);
 	}
 
 	@Override

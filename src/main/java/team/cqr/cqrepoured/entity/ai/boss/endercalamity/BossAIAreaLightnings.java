@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import java.util.EnumSet;
+
+import net.minecraft.entity.ai.goal.Goal.Flag;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
@@ -13,13 +16,10 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 
 	public BossAIAreaLightnings(EntityCQREnderCalamity entity, final int lightningRadius) {
 		super(entity);
-		this.setMutexBits(0);
+		//this.setMutexBits(0);
+		//Correct??
+		this.setFlags(EnumSet.allOf(Flag.class));
 		this.LIGHTNING_AREA_RADIUS = lightningRadius;
-	}
-
-	@Override
-	public int getMutexBits() {
-		return 0;
 	}
 
 	@Override
@@ -61,22 +61,22 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 		}
 		// AI only executes every 3 ticks!
 		this.borderLightning /= 3;
-		int x = -this.LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1);
-		int z = -this.LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1);
-		int y = (-this.LIGHTNING_AREA_RADIUS + this.entity.getRNG().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1)) / 2;
+		int x = -this.LIGHTNING_AREA_RADIUS + this.entity.getRandom().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1);
+		int z = -this.LIGHTNING_AREA_RADIUS + this.entity.getRandom().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1);
+		int y = (-this.LIGHTNING_AREA_RADIUS + this.entity.getRandom().nextInt((2 * this.LIGHTNING_AREA_RADIUS) + 1)) / 2;
 
 		BlockPos cp;
 		if (this.entity.hasHomePositionCQR()) {
 			cp = this.entity.getHomePositionCQR();
 		} else {
-			cp = this.entity.getPosition();
+			cp = this.entity.blockPosition();
 		}
 		x += cp.getX();
 		y += cp.getY();
 		z += cp.getZ();
 
 		EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, x, y, z, true, false, 0.8F, 0.01F, 0.98F, 0.4F);
-		this.world.spawnEntity(entitybolt);
+		this.world.addFreshEntity(entitybolt);
 	}
 
 	@Override

@@ -15,13 +15,13 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 	@Override
 	protected int execRandomShoot() {
 		Vector3d laserPosition = this.entity.position();
-		laserPosition = laserPosition.add(0, this.entity.height / 2, 0);
+		laserPosition = laserPosition.add(0, this.entity.getBbHeight() / 2, 0);
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation
 		// Head distance with scale = 100%: 0.75 blocks
-		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget(), Vector3d.ZERO);
-		laser.setPosition(laserPosition.x, laserPosition.y, laserPosition.z);
-		this.world.spawnEntity(laser);
+		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getTarget(), Vector3d.ZERO);
+		laser.setPos(laserPosition.x, laserPosition.y, laserPosition.z);
+		this.world.addFreshEntity(laser);
 		this.projectile = laser;
 		// 5 ticks buffer
 		// DONE: Make animation longer to make this longer

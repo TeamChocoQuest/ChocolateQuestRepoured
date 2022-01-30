@@ -50,7 +50,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 	public void tick() {
 		super.tick();
 		if (this.entity.hasAttackTarget()) {
-			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+			this.entity.getLookControl().setLookAt(this.entity.getTarget(), 90, 90);
 		}
 		if (this.blockEquipTimer > 0) {
 			this.blockEquipTimer--;
@@ -63,7 +63,7 @@ public class BossAICalamityBuilding extends BossAIBlockThrower {
 						continue;
 					}
 
-					this.entity.equipBlock(hand, Blocks.END_BRICKS);
+					this.entity.equipBlock(hand, Blocks.END_STONE_BRICKS);
 					this.setStateOfHand(hand, E_HAND_STATE.BLOCK);
 
 					this.spawnEquipParticlesForHand(hand);

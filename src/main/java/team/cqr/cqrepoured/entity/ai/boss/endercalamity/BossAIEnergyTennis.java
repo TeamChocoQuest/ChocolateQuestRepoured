@@ -70,7 +70,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	@Override
 	public void tick() {
 		if (this.entity.hasAttackTarget()) {
-			this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+			this.entity.getLookControl().setLookAt(this.entity.getTarget(), 90, 90);
 		}
 		if (this.warmupTime > 0) {
 			if (this.warmupTime == (16/* bang sound duration */)) {
@@ -91,7 +91,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 
 			this.entity.sendAnimationUpdate(EntityCQREnderCalamity.ANIM_NAME_SHOOT_BALL);
 
-			this.tennisball = ProjectileEnergyOrb.shootAt(this.entity.getAttackTarget(), this.entity, this.world);
+			this.tennisball = ProjectileEnergyOrb.shootAt(this.entity.getTarget(), this.entity, this.world);
 		} else {
 			this.ballTicks++;
 		}
@@ -101,7 +101,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	public void stop() {
 		super.stop();
 		if (this.tennisball != null) {
-			this.tennisball.setDead();
+			this.tennisball.remove();
 		}
 		this.tennisball = null;
 		this.warmupTime = WARMUP_DURATION;

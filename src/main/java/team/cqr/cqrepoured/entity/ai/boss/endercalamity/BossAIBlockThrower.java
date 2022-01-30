@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -91,13 +91,13 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected void execHandStateThrowingWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(80, 140, this.entity.getRNG());
+		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(80, 140, this.entity.getRandom());
 	}
 
 	protected void execHandStateNoBlockWhenDone(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		BlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.getDefaultState() : Blocks.END_STONE.getDefaultState();
+		BlockState block = DungeonGenUtils.percentageRandom(0.25) ? Blocks.OBSIDIAN.defaultBlockState() : Blocks.END_STONE.defaultBlockState();
 		this.entity.equipBlock(hand, block);
-		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRNG());
+		this.handCooldowns[hand.getIndex()] = DungeonGenUtils.randomBetween(40, 200, this.entity.getRandom());
 		this.handstates[hand.getIndex()] = E_HAND_STATE.BLOCK;
 		// DONE: SPawn some particles
 		this.spawnEquipParticlesForHand(hand);
@@ -143,14 +143,16 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			ServerWorld ws = (ServerWorld) this.world;
 			Vector3d pos = this.getPositionOfHand(hand);
 			for (int i = 0; i < 50; i++) {
-				double dx = -0.5 + this.entity.getRNG().nextDouble();
+				double dx = -0.5 + this.entity.getRandom().nextDouble();
 				dx *= 2;
-				double dy = -0.5 + this.entity.getRNG().nextDouble();
+				double dy = -0.5 + this.entity.getRandom().nextDouble();
 				dy *= 2;
-				double dz = -0.5 + this.entity.getRNG().nextDouble();
+				double dz = -0.5 + this.entity.getRandom().nextDouble();
 				dz *= 2;
-				ws.spawnParticle(ParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
-				this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
+				for(int j = 0; j < 10; j++) {
+					ws.addParticle(ParticleTypes.ENCHANT, pos.x, pos.y, pos.z, dx * 0.05, dy * 0.05, dz * 0.05);
+				}
+				this.entity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 			}
 		}
 	}
@@ -161,9 +163,9 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		Vector3d v = this.entity.getLookVec().normalize();
+		Vector3d v = this.entity.getLookAngle().normalize();
 		if (this.entity.hasAttackTarget()) {
-			v = this.entity.getAttackTarget().position().subtract(this.entity.position());
+			v = this.entity.getTarget().position().subtract(this.entity.position());
 			v = v.normalize();
 			v = v.scale(0.5);
 			v = v.add(0, 0.5, 0);
@@ -172,7 +174,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected Vector3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		Vector3d offset = this.entity.getLookVec().normalize().scale(1.25);
+		Vector3d offset = this.entity.getLookAngle().normalize().scale(1.25);
 		offset = new Vector3d(offset.x, 0, offset.z);
 		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 90 : 270);
 		switch (hand.name().split("_")[1].toUpperCase()) {
@@ -207,13 +209,15 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			Vector3d position = this.getPositionOfHand(hand);
 			BlockState block = handContent.get();
 			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.world, this.entity, block, true);
-			blockProj.setPosition(position.x, position.y, position.z);
-			blockProj.motionX = velocity.x;
+			blockProj.setPos(position.x, position.y, position.z);
+			/*blockProj.motionX = velocity.x;
 			blockProj.motionY = velocity.y;
 			blockProj.motionZ = velocity.z;
-			blockProj.velocityChanged = true;
+			blockProj.velocityChanged = true;*/
+			blockProj.setDeltaMovement(velocity);
+			blockProj.hasImpulse = true;
 
-			this.world.spawnEntity(blockProj);
+			this.world.addFreshEntity(blockProj);
 
 			this.setStateOfHand(hand, E_HAND_STATE.THROWING);
 			this.handCooldowns[hand.getIndex()] = THROWING_TIME;

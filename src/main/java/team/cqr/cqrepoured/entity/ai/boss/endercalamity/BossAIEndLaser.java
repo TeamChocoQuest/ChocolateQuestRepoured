@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
@@ -16,7 +18,8 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 
 	public BossAIEndLaser(EntityCQREnderCalamity entity) {
 		super(entity);
-		this.setMutexBits(2);
+		//this.setMutexBits(2);
+		this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
 	@Override
@@ -64,27 +67,27 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 
 	private void createLaser() {
 		Vector3d laserPosition = this.entity.position();
-		laserPosition = laserPosition.add(0, this.entity.height / 2, 0);
+		laserPosition = laserPosition.add(0, this.entity.getBbHeight() / 2, 0);
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation
 		// Head distance with scale = 100%: 0.75 blocks
 		float yaw = this.entity.rotationYaw;
 		if (this.entity.hasAttackTarget()) {
-			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getAttackTarget().posX - this.entity.posX), this.entity.getAttackTarget().posZ - this.entity.posZ));
+			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getTarget().getX() - this.entity.getX()), this.entity.getTarget().getZ() - this.entity.getZ()));
 		}
 
-		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getEntityWorld(), this.entity, 64.0F, 8.0F, -0.01F);
+		AbstractEntityLaser laser = new EntityEndLaser(this.entity.getWorld(), this.entity, 64.0F, 8.0F, -0.01F);
 		laser.rotationYawCQR = yaw;
 		laser.rotationPitchCQR = 11.25F;
-		laser.setPosition(laserPosition.x, laserPosition.y, laserPosition.z);
-		this.world.spawnEntity(laser);
+		laser.setPos(laserPosition.x, laserPosition.y, laserPosition.z);
+		this.world.addFreshEntity(laser);
 		this.endlaser = laser;
 	}
 
 	@Override
 	public void stop() {
 		if (this.endlaser != null) {
-			this.endlaser.setDead();
+			this.endlaser.remove();
 			this.endlaser = null;
 		}
 		// IMessage message =

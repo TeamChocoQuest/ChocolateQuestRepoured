@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import java.util.EnumSet;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
@@ -18,7 +20,8 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 
 	protected AbstractBossAIRandomShoot(EntityCQREnderCalamity entity) {
 		super(entity);
-		this.setMutexBits(2);
+		//this.setMutexBits(2);
+		this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 		this.cooldown--;
 		if (this.entity.hasAttackTarget()) {
 			if (this.faceTarget()) {
-				this.entity.faceEntity(this.entity.getAttackTarget(), 90, 90);
+				this.entity.getLookControl().setLookAt(this.entity.getTarget(), 90, 90);
 			}
 			this.entity.setCantUpdatePhase(false);
 		}
@@ -64,7 +67,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 				break;
 			case PREPARING_TO_TELEPORT:
 				if (this.projectile != null) {
-					this.projectile.setDead();
+					this.projectile.remove();
 				}
 				this.cooldown = 1;
 				this.currentPhase = E_PHASE.TELEPORT;
@@ -101,7 +104,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 
 	protected void killProjectile() {
 		if (this.projectile != null) {
-			this.projectile.setDead();
+			this.projectile.remove();
 		}
 	}
 

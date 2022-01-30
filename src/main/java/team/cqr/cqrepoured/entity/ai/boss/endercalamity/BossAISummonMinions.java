@@ -1,10 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import java.util.EnumSet;
+
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
@@ -23,13 +26,14 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	public BossAISummonMinions(EntityCQREnderCalamity entity) {
 		super(entity);
-		this.setMutexBits(0);
+		//this.setMutexBits(0);
+		this.setFlags(EnumSet.allOf(Flag.class));
 	}
 
-	@Override
+	/*@Override
 	public int getMutexBits() {
 		return 0;
-	}
+	}*/
 
 	@Override
 	public boolean canUse() {
@@ -71,14 +75,14 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			seed *= 4;
 
 			AbstractEntityCQR minion = this.getNewMinion((int) seed, this.world);
-			BlockPos pos = this.entity.hasHomePositionCQR() ? this.entity.getHomePositionCQR() : this.entity.getPosition();
-			pos = pos.add(-2 + this.entity.getRNG().nextInt(3), 0, -2 + this.entity.getRNG().nextInt(3));
-			minion.setPosition(pos.getX(), pos.getY(), pos.getZ());
+			BlockPos pos = this.entity.hasHomePositionCQR() ? this.entity.getHomePositionCQR() : this.entity.blockPosition();
+			pos = pos.offset(-2 + this.entity.getRandom().nextInt(3), 0, -2 + this.entity.getRandom().nextInt(3));
+			minion.setPos(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
-			minion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(minion)), null);
+			minion.onInitialSpawn(this.world.getCurrentDifficultyAt(new BlockPos(minion)), null);
 			this.entity.addSummonedEntityToList(minion);
-			this.entity.tryEquipSummon(minion, this.world.rand);
-			this.world.spawnEntity(minion);
+			this.entity.tryEquipSummon(minion, this.world.random);
+			this.world.addFreshEntity(minion);
 		}
 	}
 
@@ -96,31 +100,31 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		AbstractEntityCQR entity = new EntityCQREnderman(world);
 		switch (seed) {
 		case 4:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS));
-			entity.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
-			entity.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-			entity.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-			entity.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS));
+			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
 			break;
 		case 3:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-			entity.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-			entity.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-			entity.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
 			break;
 		case 2:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
-			entity.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-			entity.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
 			break;
 		case 1:
-			entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
 			break;
 		}
 
-		if (DungeonGenUtils.percentageRandom(0.33, world.rand)) {
+		if (DungeonGenUtils.percentageRandom(0.33, world.random)) {
 			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
 		}
 
@@ -135,8 +139,11 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	private ItemStack generateBadgeWithPotion() {
 		ItemStack stack = new ItemStack(CQRItems.BADGE, 1);
 
-		IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		inventory.insertItem(0, new ItemStack(CQRItems.POTION_HEALING, 1), false);
+		LazyOptional<IItemHandler> lOpCap = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		if(lOpCap.isPresent()) {
+			IItemHandler inventory = lOpCap.resolve().get();
+			inventory.insertItem(0, new ItemStack(CQRItems.POTION_HEALING, 1), false);
+		}
 
 		return stack;
 	}

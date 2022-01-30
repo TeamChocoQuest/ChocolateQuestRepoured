@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
@@ -14,12 +16,13 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	public BossAITeleportAroundHome(EntityCQREnderCalamity entity, final int cooldownTime) {
 		super(entity);
 		this.MAX_COOLDOWN = cooldownTime;
+		this.setFlags(EnumSet.allOf(Flag.class));
 	}
 
-	@Override
+	/*@Override
 	public int getMutexBits() {
 		return 0;
-	}
+	}*/
 
 	@Override
 	public boolean canUse() {
@@ -42,9 +45,9 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 
 	@Override
 	public void start() {
-		float angle = this.entity.getRNG().nextFloat() * 360F;
+		float angle = this.entity.getRandom().nextFloat() * 360F;
 		Vector3d vec = new Vector3d(EntityCQREnderCalamity.getArenaRadius(), 0, 0);
-		vec = vec.rotateYaw(angle);
+		vec = vec.yRot(angle);
 
 		BlockPos home = this.entity.getHomePositionCQR();
 		if (home == null) {
@@ -60,7 +63,7 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	}
 
 	public void forceExecution() {
-		if (this.world.isRemote) {
+		if (this.world.isClientSide) {
 			return;
 		}
 		this.start();
