@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -34,25 +35,25 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 
 	@Override
 	public void startCastingSpell() {
-		LivingEntity entitylivingbase = this.entity.getAttackTarget();
-		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
-		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
-		float entityAngle = (float) MathHelper.atan2(entitylivingbase.posZ - this.entity.posZ, entitylivingbase.posX - this.entity.posX);
+		LivingEntity entitylivingbase = this.entity.getTarget();
+		double d0 = Math.min(entitylivingbase.getY(), this.entity.getY());
+		double d1 = Math.max(entitylivingbase.getY(), this.entity.getY()) + 1.0D;
+		float entityAngle = (float) MathHelper.atan2(entitylivingbase.getZ() - this.entity.getZ(), entitylivingbase.getX() - this.entity.getX());
 
-		if (this.entity.getDistanceSq(entitylivingbase) < 9.0D) {
+		if (this.entity.distanceToSqr(entitylivingbase) < 9.0D) {
 			for (int i = 0; i < 5; ++i) {
 				float f1 = entityAngle + i * (float) Math.PI * 0.4F;
-				this.spawnFangs(this.entity.posX + MathHelper.cos(f1) * 1.5D, this.entity.posZ + MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+				this.spawnFangs(this.entity.getX() + MathHelper.cos(f1) * 1.5D, this.entity.getZ() + MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
 			}
 
 			for (int k = 0; k < 8; ++k) {
 				float f2 = entityAngle + k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
-				this.spawnFangs(this.entity.posX + MathHelper.cos(f2) * 2.5D, this.entity.posZ + MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
+				this.spawnFangs(this.entity.getX() + MathHelper.cos(f2) * 2.5D, this.entity.getZ() + MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {
 			Vector3d v = new Vector3d(MathHelper.cos(entityAngle), 0, MathHelper.sin(entityAngle));
 			v = v.normalize().scale(1.25D);
-			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRNG());
+			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRandom());
 			double angle = rows > 0 ? 120 / rows : 0;
 			if (angle != 0) {
 				v = VectorUtil.rotateVectorAroundY(v, -60);
@@ -62,7 +63,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 					double d2 = 1.25D * (fangcount + 1);
 					v = v.normalize();
 					v = v.scale(d2);
-					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, entityAngle, fangcount);
+					this.spawnFangs(this.entity.getX() + v.x, this.entity.getZ() + v.z, d0, d1, entityAngle, fangcount);
 				}
 				if (angle != 0) {
 					v = v.normalize();
@@ -78,10 +79,10 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		double d0 = 0.0D;
 
 		while (true) {
-			if (!this.entity.world.isBlockNormalCube(blockpos, true) && this.entity.world.isBlockNormalCube(blockpos.down(), true)) {
-				if (!this.entity.world.isAirBlock(blockpos)) {
-					BlockState iblockstate = this.entity.world.getBlockState(blockpos);
-					AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.entity.world, blockpos);
+			if (this.entity.level.getBlockState(blockpos).isFaceSturdy(this.entity.level, blockpos.below(), Direction.UP)/*!this.entity.level.isBlockNormalCube(blockpos, true) && this.entity.level.isBlockNormalCube(blockpos.below(), true)*/) {
+				if (!this.entity.level.isEmptyBlock(blockpos)) {
+					BlockState iblockstate = this.entity.level.getBlockState(blockpos);
+					AxisAlignedBB axisalignedbb = iblockstate.getShape(this.entity.level, blockpos).bounds();
 
 					if (axisalignedbb != null) {
 						d0 = axisalignedbb.maxY;
@@ -92,7 +93,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 				break;
 			}
 
-			blockpos = blockpos.down();
+			blockpos = blockpos.below();
 
 			if (blockpos.getY() < MathHelper.floor(minY) - 1) {
 				break;
@@ -100,19 +101,19 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		}
 
 		if (flag) {
-			EvokerFangsEntity entityevokerfangs = new EvokerFangsEntity(this.entity.world, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
-			this.entity.world.spawnEntity(entityevokerfangs);
+			EvokerFangsEntity entityevokerfangs = new EvokerFangsEntity(this.entity.level, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
+			this.entity.level.addFreshEntity(entityevokerfangs);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

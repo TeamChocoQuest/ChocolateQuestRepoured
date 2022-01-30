@@ -18,7 +18,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d v = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
+		Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
 		v = new Vector3d(v.x, 0, v.z);
 		v = v.normalize();
 		Vector3d vR = VectorUtil.rotateVectorAroundY(v, 90);
@@ -37,26 +37,28 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 
 		for (Vector3d p : positions) {
 			if (p != null) {
-				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity.world, this.entity);
-				wallPart.setPosition(p.x, p.y, p.z);
+				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity.level, this.entity);
+				wallPart.setPos(p.x, p.y, p.z);
 				// wallPart.setVelocity(v.x / 2, 0, v.z / 2);
-				wallPart.motionX = v.x / 2D;
+				/*wallPart.motionX = v.x / 2D;
 				wallPart.motionY = 0;
 				wallPart.motionZ = v.z / 2D;
-				wallPart.velocityChanged = true;
-				this.entity.world.spawnEntity(wallPart);
+				wallPart.velocityChanged = true;*/
+				wallPart.setDeltaMovement(v.x / 2D, 0, v.z / 2D);
+				wallPart.hasImpulse = true;
+				this.entity.level.addFreshEntity(wallPart);
 			}
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

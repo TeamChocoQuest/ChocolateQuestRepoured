@@ -23,33 +23,33 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d vector = this.entity.getLookVec().normalize();
+		Vector3d vector = this.entity.getLookAngle().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 
-		int ballCount = DungeonGenUtils.randomBetween(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRNG());
+		int ballCount = DungeonGenUtils.randomBetween(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRandom());
 
 		if (ballCount > 0) {
 			double angle = 360D / ballCount;
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
-			BlockPos centeredPos = this.entity.getAttackTarget().getPosition();
-			Vector3d v = this.entity.getAttackTarget().position().subtract(this.entity.position());
+			BlockPos centeredPos = this.entity.getTarget().blockPosition();
+			Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
 			v = v.normalize().scale(Math.abs((ballCount / 3) - 2));
-			centeredPos = centeredPos.add(v.x, v.y, v.z);
+			centeredPos = centeredPos.offset(v.x, v.y, v.z);
 			for (int i = 0; i < ballCount; i++) {
-				spawnPositions[i] = centeredPos.add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
+				spawnPositions[i] = centeredPos.offset(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
 			}
 			for (BlockPos p : spawnPositions) {
-				if (this.entity.getNavigator().getPathToPos(p) != null) {
+				if (this.entity.getNavigation().createPath(p, 1 /* accuracy */) != null) {
 					// System.out.println("Pos: " + p.toString());
 					ResourceLocation summon = new ResourceLocation("cqrepoured", "projectile_hot_fireball");
 					ECircleTexture texture = ECircleTexture.METEOR;
-					EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 0.1F, texture, null);
+					EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.level, summon, 0.1F, texture, null);
 					circle.setSummon(summon);
-					circle.setPosition(p.getX(), p.getY() + 10.0D, p.getZ());
+					circle.setPos(p.getX(), p.getY() + 10.0D, p.getZ());
 					circle.setVelocityForSummon(new Vector3d(0D, -1D, 0D));
 
-					this.entity.world.spawnEntity(circle);
+					this.entity.level.addFreshEntity(circle);
 				}
 			}
 		}
@@ -57,12 +57,12 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.ENTITY_WITHER_SPAWN;
+		return SoundEvents.WITHER_SPAWN;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

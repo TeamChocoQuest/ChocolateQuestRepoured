@@ -33,8 +33,8 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell<AbstractEntityCQR>
 	public void startCastingSpell() {
 		super.startCastingSpell();
 		if (this.entity instanceof EntityCQRLich) {
-			BlockPos pos = new BlockPos(this.entity);
-			this.entity.world.setBlockState(pos, CQRBlocks.PHYLACTERY.getDefaultState());
+			BlockPos pos = entity.blockPosition();
+			this.entity.level.setBlockAndUpdate(pos, CQRBlocks.PHYLACTERY.defaultBlockState());
 			((EntityCQRLich) this.entity).setCurrentPhylacteryBlock(pos);
 		} else {
 			this.entity.setMagicArmorCooldown(300);
@@ -43,12 +43,12 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell<AbstractEntityCQR>
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

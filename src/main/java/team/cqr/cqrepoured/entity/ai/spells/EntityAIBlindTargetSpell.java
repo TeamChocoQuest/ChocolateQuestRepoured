@@ -22,27 +22,27 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 
 	@Override
 	public void startCastingSpell() {
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		Vector3d vec = attackTarget.position();
-		vec = vec.subtract(attackTarget.getLookVec().scale(8.0D));
+		vec = vec.subtract(attackTarget.getLookAngle().scale(8.0D));
 		vec = vec.subtract(0.0D, 0.001D, 0.0D);
 		BlockPos pos = new BlockPos(vec);
 
-		attackTarget.addPotionEffect(new EffectInstance(Effects.BLINDNESS, this.duration));
-		if (this.entity.world.getBlockState(pos).isSideSolid(this.entity.world, pos, Direction.UP)) {
-			this.entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.7F, 1.1F);
-			this.entity.attemptTeleport(vec.x, vec.y, vec.z);
+		attackTarget.addEffect(new EffectInstance(Effects.BLINDNESS, this.duration));
+		if (this.entity.level.getBlockState(pos).isFaceSturdy(this.entity.level, pos, Direction.UP)) {
+			this.entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 0.7F, 1.1F);
+			this.entity.randomTeleport(vec.x, vec.y, vec.z, true);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

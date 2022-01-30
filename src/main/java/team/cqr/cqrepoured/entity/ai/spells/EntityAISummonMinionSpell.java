@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -119,7 +120,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 							texture = ECircleTexture.SKELETON;
 						}
 					}
-					if (this.entity.level.getBlockState(p).isFullBlock()) {
+					if (this.entity.level.getBlockState(p).isFaceSturdy(this.world, p.below(), Direction.UP)) {
 						p = p.offset(0, 1, 0);
 					}
 					if (this.summonViaCircle) {
@@ -133,19 +134,19 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 					} else {
 						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.level);
 
-						summoned.setUniqueId(MathHelper.getRandomUUID());
+						summoned.setUUID(MathHelper.createInsecureUUID());
 						summoned.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
-						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
-						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);
-						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, -0.5F, 1);
-						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, 0.5F, 1);
-						this.entity.world.spawnParticle(ParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, -0.5F, 1);
+						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F);
+						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F);
+						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, -0.5F);
+						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, 0.5F);
+						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, -0.5F);
 
-						this.entity.world.spawnEntity(summoned);
-						if (this.summoner != null && !this.summoner.getSummoner().isDead) {
+						this.entity.level.addFreshEntity(summoned);
+						if (this.summoner != null && !this.summoner.getSummoner().isDeadOrDying()) {
 							this.summoner.setSummonedEntityFaction(summoned);
-							this.summoner.tryEquipSummon(summoned, this.world.rand);
+							this.summoner.tryEquipSummon(summoned, this.world.random);
 							this.summoner.addSummonedEntityToList(summoned);
 						}
 

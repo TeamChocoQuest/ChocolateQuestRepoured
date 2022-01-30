@@ -22,13 +22,13 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 		if (!super.shouldExecute()) {
 			return false;
 		}
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		Faction faction = this.entity.getFaction();
 		if ((faction != null && faction.isAlly(attackTarget)) || this.entity.getLeader() == attackTarget) {
 			return false;
 		}
-		if (attackTarget.isRiding()) {
-			Entity entity = attackTarget.getLowestRidingEntity();
+		if (attackTarget.isPassenger()) {
+			Entity entity = attackTarget.getVehicle();
 			if (entity instanceof LivingEntity) {
 				attackTarget = (LivingEntity) entity;
 			}
@@ -39,9 +39,9 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 	@Override
 	public void startCastingSpell() {
 		super.startCastingSpell();
-		LivingEntity attackTarget = this.entity.getAttackTarget();
-		EntityColoredLightningBolt coloredLightningBolt = new EntityColoredLightningBolt(this.world, attackTarget.posX, attackTarget.posY, attackTarget.posZ, true, false, 0.8F, 0.35F, 0.1F, 0.3F);
-		this.world.spawnEntity(coloredLightningBolt);
+		LivingEntity attackTarget = this.entity.getTarget();
+		EntityColoredLightningBolt coloredLightningBolt = new EntityColoredLightningBolt(this.world, attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), true, false, 0.8F, 0.35F, 0.1F, 0.3F);
+		this.world.addFreshEntity(coloredLightningBolt);
 	}
 
 	@Override

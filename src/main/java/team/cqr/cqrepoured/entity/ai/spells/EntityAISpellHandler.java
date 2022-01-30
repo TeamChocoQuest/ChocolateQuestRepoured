@@ -28,7 +28,8 @@ public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR>
 	public EntityAISpellHandler(AbstractEntityCQR entity, int cooldown) {
 		super(entity);
 		this.cooldown = cooldown;
-		this.setMutexBits(7);
+		//this.setMutexBits(7);
+		//7 => no flags => default
 	}
 
 	public void addSpell(int priority, IEntityAISpell spell) {
@@ -43,7 +44,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (this.spells.isEmpty()) {
 			return false;
 		}
-		if (this.prevTimeCasted + this.cooldown >= this.entity.ticksExisted) {
+		if (this.prevTimeCasted + this.cooldown >= this.entity.tickCount) {
 			return false;
 		}
 		int sum = 0;
@@ -94,7 +95,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR>
 	public void stop() {
 		this.activeSpell.resetTask();
 		this.activeSpell = null;
-		this.prevTimeCasted = this.entity.ticksExisted;
+		this.prevTimeCasted = this.entity.tickCount;
 	}
 
 	@Override

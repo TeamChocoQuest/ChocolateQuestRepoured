@@ -22,9 +22,9 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 
 	@Override
 	public void startCastingSpell() {
-		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
+		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRandom());
 
-		Vector3d vector = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
+		Vector3d vector = this.entity.getTarget().position().subtract(this.entity.position()).normalize();
 		double angle = 180D / projectiles;
 		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
 		Vector3d[] velocities = new Vector3d[projectiles];
@@ -33,29 +33,31 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 		}
 
 		for (Vector3d v : velocities) {
-			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity.world, this.entity);
+			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity.level, this.entity);
 			// proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
 
-			if (this.entity.getCreatureAttribute() == CreatureAttribute.ARTHROPOD) {
+			if (this.entity.getMobType() == CreatureAttribute.ARTHROPOD) {
 				proj.enableAuraPlacement();
 			}
 
-			proj.motionX = v.x * SPEED_MULTIPLIER;
+			/*proj.motionX = v.x * SPEED_MULTIPLIER;
 			proj.motionY = v.y * SPEED_MULTIPLIER;
 			proj.motionZ = v.z * SPEED_MULTIPLIER;
-			proj.velocityChanged = true;
-			this.entity.world.spawnEntity(proj);
+			proj.velocityChanged = true;*/
+			proj.setDeltaMovement(v.scale(SPEED_MULTIPLIER));
+			proj.hasImpulse = true;
+			this.entity.level.addFreshEntity(proj);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE;
+		return SoundEvents.ZOMBIE_VILLAGER_CURE;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

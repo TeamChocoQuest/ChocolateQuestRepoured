@@ -4,6 +4,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Explosion.Mode;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -16,30 +17,30 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQ
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d v = new Vector3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
+		Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
 		int explosionCount = (int) v.length();
 		v = v.normalize().scale(2);
 		explosionCount /= 2;
-		BlockPos start = this.entity.getPosition();
+		BlockPos start = this.entity.blockPosition();
 		BlockPos[] positions = new BlockPos[explosionCount];
 		for (int i = 1; i <= explosionCount; i++) {
-			BlockPos p = start.add(v.x * i, v.y * i, v.z * i);
+			BlockPos p = start.offset(v.x * i, v.y * i, v.z * i);
 			positions[i - 1] = p;
 		}
 
 		for (BlockPos p : positions) {
-			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
+			this.entity.level.explode(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRandom().nextBoolean(), CQRConfig.bosses.boarmageExplosionRayDestroysTerrain ? Mode.DESTROY : Mode.NONE);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.ENTITY_CREEPER_PRIMED;
+		return SoundEvents.CREEPER_PRIMED;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override
