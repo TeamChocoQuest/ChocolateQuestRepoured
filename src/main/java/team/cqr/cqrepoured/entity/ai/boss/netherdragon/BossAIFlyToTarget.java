@@ -22,26 +22,26 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	@Override
 	public boolean canUse() {
 		this.aiCooldown--;
-		return super.canUse() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead && this.aiCooldown <= 0 && !this.entity.isFlyingUp();
+		return super.canUse() && this.entity.getTarget() != null && !this.entity.getTarget().isDeadOrDying() && this.aiCooldown <= 0 && !this.entity.isFlyingUp();
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return super.canContinueToUse() && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead;
+		return super.canContinueToUse() && this.entity.getTarget() != null && !this.entity.getTarget().isDeadOrDying();
 	}
 
 	@Override
 	public void tick() {
 		if (this.entity.position().distanceTo(this.getTargetLocation()) <= 4) {
-			this.entity.canAttack(this.entity.getAttackTarget());
+			this.entity.canAttack(this.entity.getTarget());
 			this.stop();
 		}
 		super.tick();
 		if (!this.breathFire) {
 			this.attackCooldown--;
 			if (this.attackCooldown <= 0) {
-				this.attackCooldown = 20 + this.entity.getRNG().nextInt(41);
-				this.entity.attackEntityWithRangedAttack(this.entity.getAttackTarget(), this.entity.getDistance(this.entity.getAttackTarget()));
+				this.attackCooldown = 20 + this.entity.getRandom().nextInt(41);
+				this.entity.performRangedAttack(this.entity.getTarget(), this.entity.distanceTo(this.entity.getTarget()));
 			}
 		} else {
 			this.entity.breatheFire();
@@ -53,7 +53,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	public void start() {
 		super.start();
 
-		this.breathFire = this.entity.getRNG().nextDouble() >= 0.75;
+		this.breathFire = this.entity.getRandom().nextDouble() >= 0.75;
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 
 	@Override
 	protected Vector3d getTargetLocation() {
-		return (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) ? this.entity.getAttackTarget().position() : null;
+		return (this.entity.getTarget() != null && !this.entity.getTarget().isDeadOrDying()) ? this.entity.getTarget().position() : null;
 	}
 
 }

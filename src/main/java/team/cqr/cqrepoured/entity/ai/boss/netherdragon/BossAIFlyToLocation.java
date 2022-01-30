@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
@@ -12,7 +14,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 
 	public BossAIFlyToLocation(EntityCQRNetherDragon entity) {
 		super(entity);
-		this.setMutexBits(1 | 2 | 4);
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 		super.tick();
 		if (this.cooldown <= 0) {
 			this.cooldown = 10;
-			this.entity.getNavigator().tryMoveToXYZ(this.getTargetLocation().x, this.getTargetLocation().y, this.getTargetLocation().z, this.getMovementSpeed());
+			this.entity.getNavigation().moveTo(this.getTargetLocation().x, this.getTargetLocation().y, this.getTargetLocation().z, this.getMovementSpeed());
 		}
 		this.cooldown--;
 	}

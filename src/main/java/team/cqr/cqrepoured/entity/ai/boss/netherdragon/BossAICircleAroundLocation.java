@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
@@ -21,7 +23,7 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 
 	public BossAICircleAroundLocation(EntityCQRNetherDragon entity) {
 		super(entity);
-		this.setMutexBits(1 | 2 | 4);
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	@Override
@@ -62,17 +64,18 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	@Override
 	public void tick() {
 		super.tick();
-		double dist = this.entity.getDistance(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z);
+		double dist = this.entity.distanceToSqr(new Vector3d(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z));
+		dist = Math.sqrt(dist);
 		if (dist <= MIN_DISTANCE_TO_TARGET) {
 			this.calculateTargetPositions();
 		}
-		this.entity.getNavigator().tryMoveToXYZ(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z, getSpeed());
+		this.entity.getNavigation().moveTo(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z, getSpeed());
 
-		if (this.entity.getAttackTarget() != null) {
+		if (this.entity.getTarget() != null) {
 			this.attackTimer--;
 			if (this.attackTimer <= 0) {
-				this.attackTimer = 40 + this.entity.getRNG().nextInt(81);
-				this.entity.attackEntityWithRangedAttack(this.entity.getAttackTarget(), 1);
+				this.attackTimer = 40 + this.entity.getRandom().nextInt(81);
+				this.entity.performRangedAttack(this.entity.getTarget(), 1);
 			}
 		}
 	}

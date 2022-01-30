@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
@@ -16,21 +18,21 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 
 	public BossAISpiralUpToCirclingCenter(EntityCQRNetherDragon entity) {
 		super(entity);
-		this.setMutexBits(1 | 2 | 4);
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	@Override
 	public boolean canUse() {
 		Vector3d center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		double yCirclingCenter = center.y + BossAICircleAroundLocation.CIRCLING_HEIGHT + (1.5 * BossAICircleAroundLocation.DELTA_Y);
-		return this.entity.position().distanceTo(center) <= MIN_DISTANCE_TO_HOME && this.entity.posY < yCirclingCenter;
+		return this.entity.position().distanceTo(center) <= MIN_DISTANCE_TO_HOME && this.entity.getY() < yCirclingCenter;
 	}
 
 	@Override
 	public boolean canContinueToUse() {
 		Vector3d center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		double yCirclingCenter = center.y + BossAICircleAroundLocation.CIRCLING_HEIGHT + (1.5 * BossAICircleAroundLocation.DELTA_Y);
-		return this.entity.posY < yCirclingCenter;
+		return this.entity.getY() < yCirclingCenter;
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 		this.entity.setFlyingUp(true);
 		this.center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		this.targetPos = this.center.add(this.v);
-		this.entity.getNavigator().tryMoveToXYZ(this.targetPos.x, this.targetPos.y, this.targetPos.z, getSpeed());
+		this.entity.getNavigation().moveTo(this.targetPos.x, this.targetPos.y, this.targetPos.z, getSpeed());
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 			this.targetPos = this.center.add(this.v);
 			// System.out.println("Center: " + center.toString());
 		}
-		this.entity.getNavigator().tryMoveToXYZ(this.targetPos.x, this.targetPos.y, this.targetPos.z, getSpeed());
+		this.entity.getNavigation().moveTo(this.targetPos.x, this.targetPos.y, this.targetPos.z, getSpeed());
 	}
 
 	private static double getSpeed() {
