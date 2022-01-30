@@ -264,8 +264,8 @@ public class FactionRegistry {
 			}
 		}
 
-		if (entity instanceof PartEntity && ((PartEntity) entity).getParent() instanceof Entity) {
-			return this.getFactionOf((Entity) ((PartEntity) entity).getParent());
+		if (entity instanceof PartEntity && ((PartEntity<?>) entity).getParent() instanceof Entity) {
+			return this.getFactionOf((Entity) ((PartEntity<?>) entity).getParent());
 		}
 
 		if (entity instanceof AbstractEntityCQR) {
@@ -305,7 +305,7 @@ public class FactionRegistry {
 		}
 		if (playerID != null && this.playerFactionRepuMap.containsKey(playerID)) {
 			if (this.playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
-				return this.playerFactionRepuMap.get(playerID).get(faction.getName());
+				return this.playerFactionRepuMap.get(playerID).getInt(faction.getName());
 			}
 		}
 		return faction.getDefaultReputation().getValue();
