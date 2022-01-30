@@ -20,7 +20,7 @@ public class BossAITortoiseStun extends AbstractCQREntityAI<EntityCQRGiantTortoi
 
 	@Override
 	public boolean canUse() {
-		if (this.getBoss() != null && !this.getBoss().isDead && this.getBoss().isStunned()) {
+		if (this.getBoss() != null && !this.getBoss().isDeadOrDying() && this.getBoss().isStunned()) {
 			return true;
 		}
 		return false;

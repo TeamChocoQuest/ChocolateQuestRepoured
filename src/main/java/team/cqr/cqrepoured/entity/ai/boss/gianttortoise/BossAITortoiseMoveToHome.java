@@ -32,7 +32,7 @@ public class BossAITortoiseMoveToHome extends EntityAIMoveToHome {
 		if (this.getBoss().hasAttackTarget()) {
 			return false;
 		}
-		if ((!this.getBoss().hasHomePositionCQR() && !this.getBoss().hasHome())) {
+		if ((!this.getBoss().hasHomePositionCQR() /*&& !this.getBoss().hasHome()*/)) {
 			return false;
 		}
 		if (!this.getBoss().hasAttackTarget() && (!this.getBoss().isStunned() && !this.getBoss().isSpinning() && !this.getBoss().isHealing())) {

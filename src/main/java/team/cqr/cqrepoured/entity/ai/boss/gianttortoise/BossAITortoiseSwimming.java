@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.ai.goal.SwimGoal;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
@@ -10,30 +12,31 @@ public class BossAITortoiseSwimming extends SwimGoal {
 	public BossAITortoiseSwimming(EntityCQRGiantTortoise entityIn) {
 		super(entityIn);
 		this.boss = entityIn;
-		this.setMutexBits(0);
+		//this.setMutexBits(0);
+		this.setFlags(EnumSet.noneOf(Flag.class));
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (super.canUse()) {
-			return this.boss.getAttackTarget() != null;
+			return this.boss.getTarget() != null;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (super.canContinueToUse()) {
-			return this.boss.getAttackTarget() != null;
+			return this.boss.getTarget() != null;
 		}
 		return false;
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		super.tick();
-		if (this.boss.getAttackTarget() != null) {
-			this.boss.getNavigator().tryMoveToEntityLiving(this.boss.getAttackTarget(), 3);
+		if (this.boss.getTarget() != null) {
+			this.boss.getNavigation().createPath(this.boss.getTarget(), 3);
 		}
 	}
 

@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
+import java.util.EnumSet;
+
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -15,7 +17,8 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 
 	public BossAITortoiseHealing(EntityCQRGiantTortoise entity) {
 		super(entity);
-		this.setMutexBits(8);
+		//this.setMutexBits(8);
+		this.setFlags(EnumSet.allOf(Flag.class));
 	}
 
 	private EntityCQRGiantTortoise getBoss() {
@@ -58,7 +61,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 	@Override
 	public boolean canContinueToUse() {
 		this.healingActive = false;
-		if (!this.entity.isDead && this.currHealTicks <= this.getHealingAmount()) {
+		if (!this.entity.isDeadOrDying() && this.currHealTicks <= this.getHealingAmount()) {
 			if (this.entity.isInShell()) {
 				this.healingActive = true;
 			}
@@ -82,7 +85,9 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 				this.entity.setTimesHealed(this.entity.getTimesHealed() + 1);
 				this.getBoss().setCanBeStunned(true);
 			} else {
-				((ServerWorld) this.entity.getEntityWorld()).spawnParticle(ParticleTypes.HEART, this.entity.posX, this.entity.posY, this.entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
+				for(int i = 0; i < 5; i++) {
+					((ServerWorld) this.entity.getWorld()).addParticle(ParticleTypes.HEART, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 0.5D, 1.0D, 0.5D);
+				}
 				this.getBoss().heal(1F);
 				this.getBoss().setCanBeStunned(false);
 				this.getBoss().setStunned(false);
