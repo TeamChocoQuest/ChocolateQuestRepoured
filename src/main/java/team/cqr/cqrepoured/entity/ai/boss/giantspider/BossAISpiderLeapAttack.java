@@ -1,7 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.giantspider;
 
-import net.minecraft.entity.MobEntity;
+import java.util.EnumSet;
+
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
 
@@ -23,32 +25,33 @@ public class BossAISpiderLeapAttack extends Goal {
 	public BossAISpiderLeapAttack(MobEntity leapingEntity, float leapMotionYIn) {
 		this.leaper = leapingEntity;
 		this.leapMotionY = leapMotionYIn;
-		this.setMutexBits(5);
+		//this.setMutexBits(5);
+		this.setFlags(EnumSet.of(Flag.JUMP, Flag.LOOK, Flag.MOVE));
 	}
 
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.cooldown > 0) {
 			this.cooldown--;
 			return false;
 		}
-		this.leapTarget = this.leaper.getAttackTarget();
+		this.leapTarget = this.leaper.getTarget();
 
 		if (this.leapTarget == null) {
 			return false;
 		} else {
-			double d0 = this.leaper.getDistanceSq(this.leapTarget);
+			double d0 = this.leaper.distanceToSqr(this.leapTarget);
 
-			double distVert = this.leapTarget.posY - this.leaper.posY;
+			double distVert = this.leapTarget.getY() - this.leaper.getY();
 
 			if ((d0 >= this.MIN_DISTANCE_TO_LEAP || distVert >= this.MIN_VERTICAL_DISTANCE_TO_LEAP) && d0 <= this.MAX_LEAP_DISTANCE) {
-				if (!this.leaper.onGround) {
+				if (!this.leaper.isOnGround()) {
 					return false;
 				} else {
-					return this.leaper.getRNG().nextInt(3) == 0;
+					return this.leaper.getRandom().nextInt(3) == 0;
 				}
 			} else {
 				return false;
@@ -60,35 +63,40 @@ public class BossAISpiderLeapAttack extends Goal {
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean shouldContinueExecuting() {
-		return !this.leaper.onGround;
+	public boolean canContinueToUse() {
+		return !this.leaper.isOnGround();
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	@Override
-	public void startExecuting() {
-		double d0 = this.leapTarget.posX - this.leaper.posX;
-		double d1 = this.leapTarget.posZ - this.leaper.posZ;
+	public void start() {
+		double d0 = this.leapTarget.getX() - this.leaper.getX();
+		double d1 = this.leapTarget.getZ() - this.leaper.getZ();
 		float f = MathHelper.sqrt(d0 * d0 + d1 * d1);
 
-		this.leaper.faceEntity(this.leapTarget, 100F, 100F);
+		this.leaper.getLookControl().setLookAt(this.leapTarget, 100F, 100F);
 
+		double vx = this.leaper.getDeltaMovement().x;
+		double vy = this.leaper.getDeltaMovement().y;
+		double vz = this.leaper.getDeltaMovement().z;
+		
 		if (f >= 1.0E-4D) {
-			this.leaper.motionX += d0 / f * 0.5D * 8.4F + this.leaper.motionX * 8.4F;
-			this.leaper.motionZ += d1 / f * 0.5D * 8.4F + this.leaper.motionZ * 8.4F;
+			vx += d0 / f * 0.5D * 8.4F + vx * 8.4F;
+			vz += d1 / f * 0.5D * 8.4F + vz * 8.4F;
 		}
 
-		this.leaper.motionY = (this.leapTarget.posY - this.leaper.posY) * 0.5;
+		vy = (this.leapTarget.getY() - this.leaper.getY()) * 0.5;
 
-		this.leaper.motionY = this.leaper.motionY < this.leapMotionY ? this.leapMotionY : this.leaper.motionY;
+		vy = vy < this.leapMotionY ? this.leapMotionY : vy;
 
-		this.leaper.velocityChanged = true;
+		this.leaper.setDeltaMovement(vx, vy, vz);
+		this.leaper.hasImpulse = true;
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.cooldown = this.MAX_COOLDOWN;
 
 		super.stop();

@@ -30,12 +30,12 @@ public class BossAISpiderHook extends EntityAIHooker {
 		super.start();
 		this.state = STATE.PREPARING;
 		if (this.entity.isPathFinding()) {
-			this.entity.getNavigation().clearPath();
+			this.entity.getNavigation().stop();
 			double dist = this.entity.distanceToSqr(this.entity.getTarget());
 			if (dist > this.MAX_RANGE) {
 				this.entity.getNavigation().moveTo(this.entity.getTarget(), 1.1);
 			} else if (dist >= this.MIN_RANGE) {
-				this.entity.getNavigation().clearPath();
+				this.entity.getNavigation().stop();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				this.stop();

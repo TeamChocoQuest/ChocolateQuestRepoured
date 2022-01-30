@@ -27,7 +27,7 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 
 	@Override
 	public boolean canUse() {
-		if (this.entity == null || this.entity.isDead) {
+		if (this.entity == null || this.entity.isDeadOrDying()) {
 			return false;
 		}
 		if (this.cooldown > 0) {
@@ -50,10 +50,12 @@ public class BossAISpiderWebshot extends AbstractCQREntityAI<EntityCQRGiantSpide
 			velo = velo.add(0, 0.1, 0);
 
 			ProjectileBase web = this.entity.getRandom().nextDouble() > 0.8 ? new ProjectilePoisonSpell(this.entity.level, this.entity) : new ProjectileWeb(this.entity.level, this.entity);
-			web.motionX = velo.x * SPEED_MULTIPLIER;
+			/*web.motionX = velo.x * SPEED_MULTIPLIER;
 			web.motionY = velo.y * SPEED_MULTIPLIER;
 			web.motionZ = velo.z * SPEED_MULTIPLIER;
-			web.velocityChanged = true;
+			web.velocityChanged = true;*/
+			web.setDeltaMovement(velo.scale(SPEED_MULTIPLIER));
+			web.hasImpulse = true;
 			this.entity.level.addFreshEntity(web);
 
 		}

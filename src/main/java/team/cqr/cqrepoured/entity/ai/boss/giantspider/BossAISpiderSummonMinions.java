@@ -49,7 +49,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 	protected int getAliveMinionCount() {
 		int aliveMinions = 0;
 		for (Entity minio : this.summoner.getSummonedEntities()) {
-			if (minio != null && !minio.isDead) {
+			if (minio != null && minio.isAlive()) {
 				aliveMinions++;
 			}
 		}
@@ -68,15 +68,15 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 			Vector3d pos = this.entity.position().add(v);
 			v = VectorUtil.rotateVectorAroundY(v, angle);
 
-			Entity minion = EntityList.createEntityByIDFromName(this.minionOverride, this.entity.world);
-			minion.setPosition(pos.x, pos.y, pos.z);
-			this.entity.world.spawnEntity(minion);
-			if (this.summoner != null && !this.summoner.getSummoner().isDead) {
+			Entity minion = EntityList.createEntityByIDFromName(this.minionOverride, this.entity.level);
+			minion.setPos(pos.x, pos.y, pos.z);
+			this.entity.level.addFreshEntity(minion);
+			if (this.summoner != null && this.summoner.getSummoner().isAlive()) {
 				this.summoner.setSummonedEntityFaction(minion);
 				this.summoner.addSummonedEntityToList(minion);
 			}
 		}
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 	}
 
 	@Override
