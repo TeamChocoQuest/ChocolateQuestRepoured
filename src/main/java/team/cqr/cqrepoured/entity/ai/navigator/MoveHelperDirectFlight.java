@@ -4,6 +4,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class MoveHelperDirectFlight extends MovementController {
 
@@ -11,6 +12,8 @@ public class MoveHelperDirectFlight extends MovementController {
 		super(entitylivingIn);
 	}
 
+	final Vector3d DIRECTION_UP = new Vector3d(0,1,0);
+	
 	@Override
 	public void tick() {
 		if (this.operation == MovementController.Action.MOVE_TO) {
@@ -39,7 +42,9 @@ public class MoveHelperDirectFlight extends MovementController {
 			double d4 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 			float f2 = (float) (-(MathHelper.atan2(d1, d4) * (180D / Math.PI)));
 			this.mob.xRot = f2;// this.limitAngle(this.entity.rotationPitch, f2, 10.0F);
-			this.mob.setMoveVertical(d1 > 0.0D ? f1 : -f1);
+			//this.mob.setMoveVertical(d1 > 0.0D ? f1 : -f1);
+			//Is this the correct replacement?
+			this.mob.moveRelative(d1 > 0.0D ? f1 : -f1, DIRECTION_UP);
 		}
 		/*
 		 * } else { this.entity.setNoGravity(false); this.entity.setMoveVertical(0.0F); this.entity.setMoveForward(0.0F); }
