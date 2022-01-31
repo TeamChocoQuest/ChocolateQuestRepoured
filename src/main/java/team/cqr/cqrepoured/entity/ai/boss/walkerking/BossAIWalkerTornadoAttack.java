@@ -22,7 +22,7 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 
 	@Override
 	public boolean canUse() {
-		if (this.entity != null && this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
+		if (this.entity != null && this.entity.getTarget() != null && !this.entity.getTarget().isDeadOrDying()) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -37,25 +37,25 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	@Override
 	public void start() {
 		super.start();
-		this.spawnTornadoes(DungeonGenUtils.randomBetween(MIN_TORNADOES, MAX_TORNADOES + 1, this.entity.getRNG()));
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.spawnTornadoes(DungeonGenUtils.randomBetween(MIN_TORNADOES, MAX_TORNADOES + 1, this.entity.getRandom()));
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 	}
 
 	private void spawnTornadoes(int count) {
 		// System.out.println("Executing");
 		double angle = 90 / (count - 1);
-		Vector3d velocity = this.entity.getAttackTarget().position().subtract(this.entity.position());
+		Vector3d velocity = this.entity.getTarget().position().subtract(this.entity.position());
 		velocity = VectorUtil.rotateVectorAroundY(velocity, -45);
 		for (int i = 0; i < count; i++) {
 			Vector3d v = VectorUtil.rotateVectorAroundY(velocity, angle * i);
 			Vector3d p = this.entity.position().add(v.normalize().scale(0.5));
 			v = v.normalize().scale(0.25);
 			// System.out.println("V=" + v.toString());
-			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.world);
-			tornado.setOwner(this.entity.getPersistentID());
-			tornado.setPosition(p.x, p.y, p.z);
+			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.level);
+			tornado.setOwner(this.entity.getUUID());
+			tornado.setPos(p.x, p.y, p.z);
 			tornado.setVelocity(v);
-			this.entity.world.spawnEntity(tornado);
+			this.entity.level.addFreshEntity(tornado);
 		}
 	}
 

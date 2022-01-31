@@ -27,7 +27,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 
 	@Override
 	public boolean canUse() {
-		if (!this.entity.world.isRemote && !this.entity.isDead && this.entity.getAttackTarget() != null && this.lightningCount < MAX_LIGHTNINGS) {
+		if (!this.entity.level.isClientSide && !this.entity.isDeadOrDying() && this.entity.getTarget() != null && this.lightningCount < MAX_LIGHTNINGS) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -62,9 +62,9 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 	private void spawnLightning() {
 		Vector3d v = new Vector3d(this.r, 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, this.angle);
-		EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.world, this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
-		lightning.setPosition(this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z);
-		this.entity.world.spawnEntity(lightning);
+		EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.level, this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+		lightning.setPos(this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z);
+		this.entity.level.addFreshEntity(lightning);
 		this.r += RADIUS_INCREMENT;
 		this.angle += ANGLE_INCREMENT;
 		if (this.angle >= 360) {
@@ -77,7 +77,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 		this.r = 2;
 		this.lightningCount = 0;
 		this.angle = 0;
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 		super.stop();
 	}
 

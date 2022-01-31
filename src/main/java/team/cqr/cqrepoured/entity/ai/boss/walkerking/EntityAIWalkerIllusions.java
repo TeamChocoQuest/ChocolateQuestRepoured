@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.boss.walkerking;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
@@ -25,28 +25,28 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 	@Override
 	public void startCastingSpell() {
 		// entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-		this.entity.world.getEntitiesInAABBexcluding(this.entity, new AxisAlignedBB(this.entity.getPosition().add(-20, -10, -20), this.entity.getPosition().add(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(t -> {
+		this.entity.level.getEntities(this.entity, new AxisAlignedBB(this.entity.blockPosition().offset(-20, -10, -20), this.entity.blockPosition().offset(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(t -> {
 			if (t instanceof LivingEntity) {
-				((LivingEntity) t).addPotionEffect(new EffectInstance(Effect.getPotionById(15), 40));
+				((LivingEntity) t).addEffect(new EffectInstance(Effects.BLINDNESS, 40));
 			}
 		});
 		Vector3d v = new Vector3d(2.5, 0, 0);
 		for (int i = 0; i < 3; i++) {
 			Vector3d pos = this.entity.position().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
-			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.getEntityWorld());
-			illusion.setPosition(pos.x, pos.y, pos.z);
-			this.entity.world.spawnEntity(illusion);
+			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.level);
+			illusion.setPos(pos.x, pos.y, pos.z);
+			this.entity.level.addFreshEntity(illusion);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED;
+		return SoundEvents.ZOMBIE_VILLAGER_CONVERTED;
 	}
 
 	@Override
 	protected SoundEvent getStartCastingSound() {
-		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+		return SoundEvents.EVOKER_CAST_SPELL;
 	}
 
 	@Override

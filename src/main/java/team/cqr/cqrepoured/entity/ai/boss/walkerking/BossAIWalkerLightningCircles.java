@@ -23,7 +23,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 
 	@Override
 	public boolean canUse() {
-		if (!this.entity.world.isRemote && !this.entity.isDead && this.entity.getAttackTarget() != null) {
+		if (!this.entity.level.isClientSide && !this.entity.isDeadOrDying() && this.entity.getTarget() != null) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -59,16 +59,16 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 		Vector3d v = new Vector3d(this.circleRad, 0, 0);
 		for (int i = 0; i < count; i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle);
-			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.world, this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
-			lightning.setPosition(this.entity.posX + v.x, this.entity.posY + v.y, this.entity.posZ + v.z);
-			this.entity.world.spawnEntity(lightning);
+			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.level, this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+			lightning.setPos(this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z);
+			this.entity.level.addFreshEntity(lightning);
 		}
 	}
 
 	@Override
 	public void stop() {
 		this.circleRad = 4;
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 		super.stop();
 	}
 
