@@ -31,13 +31,13 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		this.cd--;
-		return this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && this.cd <= 0;
+		return this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.cd <= 0;
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		super.start();
 
 		// Equip potion
@@ -46,7 +46,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 
 	private void equipPotion(EntityCQRPirateParrot entity2) {
 		Potion type = null;
-		switch (this.entity.getRNG().nextInt((3))) {
+		switch (this.entity.getRandom().nextInt((3))) {
 		case 0:
 			type = Potions.HARMING;
 			break;
@@ -57,7 +57,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 			type = Potions.STRONG_POISON;
 			break;
 		}
-		if (this.entity.getAttackTarget().getCreatureAttribute() == CreatureAttribute.UNDEAD) {
+		if (this.entity.getTarget().getMobType() == CreatureAttribute.UNDEAD) {
 			if (type == Potions.STRONG_HARMING) {
 				type = Potions.STRONG_HEALING;
 			}
@@ -65,44 +65,45 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 				type = Potions.HEALING;
 			}
 		}
-		ItemStack potion = PotionUtils.addPotionToItemStack(new ItemStack(Items.SPLASH_POTION), type);
-		this.entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, potion);
+		ItemStack potion = PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), type);
+		this.entity.setItemSlot(EquipmentSlotType.MAINHAND, potion);
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		super.tick();
 
-		this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
-		if (this.entity.getDistanceSq(this.entity.getAttackTarget()) <= MIN_DISTANCE_SQ) {
+		this.entity.getLookControl().setLookAt(this.entity.getTarget(), 30, 30);
+		if (this.entity.distanceToSqr(this.entity.getTarget()) <= MIN_DISTANCE_SQ) {
 			// Throw stuff
-			this.throwPotion(this.entity, this.entity.getAttackTarget());
+			this.throwPotion(this.entity, this.entity.getTarget());
 
 			this.cd = COOLDOWN;
 		} else {
-			this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), SPEED);
+			this.entity.getNavigation().moveTo(this.entity.getTarget(), SPEED);
 		}
 	}
 
 	private void throwPotion(EntityCQRPirateParrot thrower, LivingEntity target) {
-		double d0 = target.posY + target.getEyeHeight() - 1.100000023841858D;
-		double d1 = target.posX + target.motionX - thrower.posX;
-		double d2 = d0 - thrower.posY;
-		double d3 = target.posZ + target.motionZ - thrower.posZ;
+		double d0 = target.getY() + target.getEyeHeight() - 1.100000023841858D;
+		double d1 = target.getX() + target.getDeltaMovement().x() - thrower.getX();
+		double d2 = d0 - thrower.getY();
+		double d3 = target.getZ() + target.getDeltaMovement().z() - thrower.getZ();
 		float f = MathHelper.sqrt(d1 * d1 + d3 * d3);
-		ItemStack potionItem = thrower.getHeldItemMainhand();
-		PotionEntity potion = new PotionEntity(thrower.getEntityWorld(), thrower, potionItem);
-		potion.rotationPitch += 20F;
+		ItemStack potionItem = thrower.getMainHandItem();
+		PotionEntity potion = new PotionEntity(thrower.level, thrower/*, potionItem*/);
+		potion.setItem(potionItem);
+		potion.xRot += 20F;
 		potion.shoot(d1, d2 + f * 0.2F, d3, 0.75F, 8.0F);
-		thrower.world.playSound((PlayerEntity) null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundSource(), 1.0F, 0.8F + thrower.getRNG().nextFloat() * 0.4F);
-		thrower.world.spawnEntity(potion);
+		thrower.level.playSound((PlayerEntity) null, thrower.getX(), thrower.getY(), thrower.getZ(), SoundEvents.WITCH_THROW, thrower.getSoundSource(), 1.0F, 0.8F + thrower.getRandom().nextFloat() * 0.4F);
+		thrower.level.addFreshEntity(potion);
 
-		this.entity.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+		this.entity.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return super.canContinueToUse() && this.shouldExecute();
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && this.canUse();
 	}
 
 }

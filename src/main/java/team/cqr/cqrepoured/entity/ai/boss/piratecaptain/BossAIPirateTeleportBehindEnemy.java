@@ -23,12 +23,12 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	@Override
 	public boolean canUse() {
 		this.cooldown--;
-		return this.cooldown <= 0 && this.entity.getAttackTarget() != null && this.entity.getDistance(this.entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE && (!this.entity.isInvisible() && !this.entity.isReintegrating() && !this.entity.isDisintegrating());
+		return this.cooldown <= 0 && this.entity.getTarget() != null && this.entity.distanceTo(this.entity.getTarget()) >= MIN_ATTACK_DISTANCE && (!this.entity.isInvisible() && !this.entity.isReintegrating() && !this.entity.isDisintegrating());
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return this.timer < 120 && this.entity.getAttackTarget() != null;
+		return this.timer < 120 && this.entity.getTarget() != null;
 	}
 
 	@Override
@@ -36,15 +36,15 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 		this.timer++;
 		super.tick();
 		if (this.timer == 10) {
-			this.entity.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
+			this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
 		}
 
 		if (this.timer == 100) {
-			Vector3d v = this.entity.getAttackTarget().getLookVec().normalize().scale(2);
-			Vector3d p = this.entity.getAttackTarget().position().subtract(v).add(0, 0.5, 0);
-			this.entity.attemptTeleport(p.x, p.y, p.z);
-			this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
-			this.entity.canAttack(this.entity.getAttackTarget());
+			Vector3d v = this.entity.getTarget().getLookAngle().normalize().scale(2);
+			Vector3d p = this.entity.getTarget().position().subtract(v).add(0, 0.5, 0);
+			this.entity.randomTeleport(p.x, p.y, p.z, true); //OLD: attemptTeleport
+			this.entity.getLookControl().setLookAt(this.entity.getTarget(), 30, 30);
+			this.entity.canAttack(this.entity.getTarget());
 
 			this.cooldown = MAX_COOLDOWN;
 		}
@@ -54,7 +54,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	public void stop() {
 		super.stop();
 		this.timer = 0;
-		this.entity.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
+		this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
 	}
 
 }

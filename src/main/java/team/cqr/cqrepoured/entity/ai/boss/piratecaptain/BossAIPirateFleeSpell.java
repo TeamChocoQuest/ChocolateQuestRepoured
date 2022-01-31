@@ -21,7 +21,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
 			return false;
 		}
-		if (!EntityPredicates.IS_ALIVE.apply(input)) {
+		if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(input)) {
 			return false;
 		}
 		return BossAIPirateFleeSpell.this.isSuitableAlly(input);
@@ -51,7 +51,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		Vector3d v2 = this.entity.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
-		List<MobEntity> allies = this.entity.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly);
+		List<MobEntity> allies = this.entity.level.getEntitiesOfClass(MobEntity.class, aabb, this.predicateAlly);
 		return !allies.isEmpty();
 	}
 
@@ -60,7 +60,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		Vector3d v1 = o1.position().add(vec);
 		Vector3d v2 = o1.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
-		return o1.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly).size();
+		return o1.level.getEntitiesOfClass(MobEntity.class, aabb, this.predicateAlly).size();
 	}
 
 	@Override
@@ -72,14 +72,14 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		Vector3d v2 = this.entity.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
-		List<MobEntity> allies = this.entity.world.getEntitiesWithinAABB(MobEntity.class, aabb, this.predicateAlly);
+		List<MobEntity> allies = this.entity.level.getEntitiesOfClass(MobEntity.class, aabb, this.predicateAlly);
 		allies.sort((o1, o2) -> {
 			int entCount1 = BossAIPirateFleeSpell.this.getNearbyAllies(o1);
 			int entCount2 = BossAIPirateFleeSpell.this.getNearbyAllies(o2);
 			return entCount2 - entCount1;
 		});
 		Vector3d p = allies.get(0).position();
-		this.entity.attemptTeleport(p.x, p.y, p.z);
+		this.entity.randomTeleport(p.x, p.y, p.z, true); //OLD: attemptTeleport
 	}
 
 	@Override
@@ -114,8 +114,8 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		if (!this.entity.getFaction().isAlly(possibleAlly)) {
 			return false;
 		}
-		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
-		return path != null && path.getCurrentPathLength() <= 10;
+		Path path = possibleAlly.getNavigation().createPath(this.entity, 1 /* accuracy */);
+		return path != null && path.getNodeCount() <= 10;
 	}
 
 }

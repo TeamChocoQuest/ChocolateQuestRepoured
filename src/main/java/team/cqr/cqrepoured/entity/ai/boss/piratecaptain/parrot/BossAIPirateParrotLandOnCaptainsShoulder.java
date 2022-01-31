@@ -20,7 +20,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends Goal {
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		LivingEntity entitylivingbase = this.entity.getOwner();
 		boolean flag = entitylivingbase != null && !entitylivingbase.isInWater();
 		return !this.entity.isSitting() && flag && this.entity.canSitOnShoulder();
@@ -31,7 +31,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends Goal {
 	 * value set to true.
 	 */
 	@Override
-	public boolean isInterruptible() {
+	public boolean isInterruptable() {
 		return !this.isSittingOnShoulder;
 	}
 
@@ -39,7 +39,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends Goal {
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.owner = this.entity.getOwner();
 		this.isSittingOnShoulder = false;
 	}
@@ -48,9 +48,9 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends Goal {
 	 * Keep ticking a continuous task that has already been started
 	 */
 	@Override
-	public void updateTask() {
-		if (!this.isSittingOnShoulder && !this.entity.isSitting() && !this.entity.getLeashed()) {
-			if (this.entity.getEntityBoundingBox().intersects(this.owner.getEntityBoundingBox())) {
+	public void tick() {
+		if (!this.isSittingOnShoulder && !this.entity.isSitting() && !this.entity.isLeashed()) {
+			if (this.entity.getBoundingBox().intersects(this.owner.getBoundingBox())) {
 				if (this.owner instanceof AbstractEntityCQR) {
 					this.isSittingOnShoulder = this.entity.setCQREntityOnShoulder((AbstractEntityCQR) this.owner);
 				} else if (this.owner instanceof PlayerEntity) {
