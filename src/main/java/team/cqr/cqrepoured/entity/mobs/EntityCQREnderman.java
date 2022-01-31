@@ -12,8 +12,6 @@ import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -53,33 +51,31 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void updateAITasks() {
-		if (this.isInWater() /*|| (this.isWet()*/ && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty())) {
-			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+	protected void customServerAiStep() {
+		if (this.isInWater() /*|| (this.isWet()*/ && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
+			this.hurt(DamageSource.DROWN, 1.0F);
 		}
-		super.updateAITasks();
+		super.customServerAiStep();
 	}
 
 	protected boolean teleportRandomly() {
-		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-		double d1 = this.posY + (this.rand.nextInt(64) - 32);
-		double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
-		return this.teleportTo(d0, d1, d2);
+		double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
+		double d1 = this.getY() + (this.random.nextInt(64) - 32);
+		double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
+		return this.customTeleportTo(d0, d1, d2);
 	}
 
-	private boolean teleportTo(double x, double y, double z) {
-		EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
-		if (MinecraftForge.EVENT_BUS.post(event)) {
-			return false;
-		}
-		boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+	
+	private boolean customTeleportTo(double pX, double pY, double pZ) {
+		 net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
+         if (event.isCanceled()) return false;
+         boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+         if (flag2 && !this.isSilent()) {
+            this.level.playSound((PlayerEntity)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+            this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+         }
 
-		if (flag) {
-			this.world.playSound((PlayerEntity) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
-			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
-		}
-
-		return flag;
+         return flag2;
 	}
 
 	@Override
@@ -99,17 +95,17 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return /* this.isScreaming() ? SoundEvents.ENTITY_ENDERMEN_SCREAM : */ SoundEvents.ENTITY_ENDERMEN_AMBIENT;
+		return /* this.isScreaming() ? SoundEvents.ENTITY_ENDERMEN_SCREAM : */ SoundEvents.ENDERMAN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_ENDERMEN_HURT;
+		return SoundEvents.ENDERMAN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_ENDERMEN_DEATH;
+		return SoundEvents.ENDERMAN_DEATH;
 	}
 	
 	@Override
@@ -130,11 +126,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getEyeHeight() {
-		return this.height * 0.875F;
-	}
-
-	@Override
 	public float getDefaultWidth() {
 		return 0.6F;
 	}
@@ -145,15 +136,15 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		if (this.world.isRemote) {
+	public void aiStep() {
+		if (this.level.isClientSide) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
-						(this.rand.nextDouble() - 0.5D) * 2.0D);
+				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.random.nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
+						(this.random.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
-		super.onLivingUpdate();
+		super.aiStep();
 	}
 
 	@Override
