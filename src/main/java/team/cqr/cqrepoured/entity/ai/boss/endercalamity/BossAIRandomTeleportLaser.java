@@ -50,8 +50,11 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 			// this.entity.rotationPitch = ((AbstractEntityLaser)this.projectile).rotationPitchCQR;
 			// DONE: Fix buggy rotation
 			AbstractEntityLaser laser = (AbstractEntityLaser) this.projectile;
-			this.entity.rotationYaw = laser.rotationYawCQR /* + 90.0F */;
-			this.entity.prevRotationYaw = laser.prevRotationYawCQR /* + 90.0F */;
+			//this.entity.rotationYaw = laser.rotationYawCQR /* + 90.0F */;
+			//this.entity.prevRotationYaw = laser.prevRotationYawCQR /* + 90.0F */;
+			//TODO: Is yBodyRot correct or should we use yRot?
+			this.entity.yBodyRot = laser.rotationYawCQR /* + 90.0F */;
+			this.entity.yBodyRotO = laser.prevRotationYawCQR /* + 90.0F */;
 
 			this.entity.rotationPitchCQR = laser.rotationPitchCQR;
 			this.entity.prevRotationPitchCQR = laser.prevRotationPitchCQR;
@@ -59,8 +62,10 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 			// System.out.println("Laser pitch: " + laser.rotationPitchCQR);
 			// System.out.println("Entity pitch: " + entity.rotationPitchCQR);
 
-			this.entity.rotationYawHead = this.entity.rotationYaw;
-			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
+			//this.entity.rotationYawHead = this.entity.rotationYaw;
+			//this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
+			this.entity.yHeadRot = this.entity.yBodyRot;
+			this.entity.yHeadRotO = this.entity.yBodyRotO;
 		}
 	}
 

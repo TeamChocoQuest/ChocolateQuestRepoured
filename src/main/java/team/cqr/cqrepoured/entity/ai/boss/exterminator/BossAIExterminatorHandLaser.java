@@ -93,9 +93,11 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		// System.out.println("Executing...");
 		if (this.checkAndOrStartCannonLaser()) {
 			// System.out.println("we have a laser, let's position it...");
-			this.entity.rotationYaw = this.activeLaser.rotationYawCQR /* + 90.0F */;
-			this.entity.prevRotationYaw = this.activeLaser.prevRotationYawCQR /* + 90.0F */;
-
+			//this.entity.rotationYaw = this.activeLaser.rotationYawCQR /* + 90.0F */;
+			//this.entity.prevRotationYaw = this.activeLaser.prevRotationYawCQR /* + 90.0F */;
+			this.entity.yBodyRot = this.activeLaser.rotationYawCQR /* + 90.0F */;
+			this.entity.yBodyRotO = this.activeLaser.prevRotationYawCQR /* + 90.0F */;
+			
 			this.entity.getLookControl().setLookAt(this.target, 180, 180);
 		} else {
 			// System.out.println("No laser :/");

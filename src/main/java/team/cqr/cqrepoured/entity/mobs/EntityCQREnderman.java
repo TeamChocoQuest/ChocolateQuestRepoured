@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.entity.mobs;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -20,13 +19,18 @@ import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
 
+	public EntityCQREnderman(World world) {
+		this(CQREntityTypes.ENDERMAN.get(), world);
+	}
+	
 	public EntityCQREnderman(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
-		this.stepHeight = 1.0F;
-		this.setPathPriority(PathNodeType.WATER, -1.0F);
+		this.maxUpStep = 1.0F;
+		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
 	}
 
 	@Override

@@ -2,10 +2,12 @@ package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -79,7 +81,8 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			pos = pos.offset(-2 + this.entity.getRandom().nextInt(3), 0, -2 + this.entity.getRandom().nextInt(3));
 			minion.setPos(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
-			minion.onInitialSpawn(this.world.getCurrentDifficultyAt(new BlockPos(minion)), null);
+			//minion.onInitialSpawn(this.world.getCurrentDifficultyAt(minion.blockPosition()), null);
+			minion.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(minion.blockPosition()), SpawnReason.REINFORCEMENT, null, null);
 			this.entity.addSummonedEntityToList(minion);
 			this.entity.tryEquipSummon(minion, this.world.random);
 			this.world.addFreshEntity(minion);

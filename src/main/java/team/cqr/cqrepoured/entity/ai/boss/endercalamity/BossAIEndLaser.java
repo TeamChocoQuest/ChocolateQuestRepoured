@@ -54,14 +54,19 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		}
 		if (this.endlaser != null) {
 			// DONE: Fix buggy rotation
-			this.entity.rotationYaw = this.endlaser.rotationYawCQR + 90.0F;
-			this.entity.prevRotationYaw = this.endlaser.prevRotationYawCQR + 90.0F;
+			//this.entity.rotationYaw = this.endlaser.rotationYawCQR + 90.0F;
+			//this.entity.prevRotationYaw = this.endlaser.prevRotationYawCQR + 90.0F;
+			//TODO: Is yBodyRot correct or should we use yRot?
+			this.entity.yBodyRot = this.endlaser.rotationYawCQR + 90.0F;
+			this.entity.yBodyRotO = this.endlaser.prevRotationYawCQR + 90.0F;
 
 			this.entity.rotationPitchCQR = this.endlaser.rotationPitchCQR;
 			this.entity.prevRotationPitchCQR = this.endlaser.prevRotationPitchCQR;
 
-			this.entity.rotationYawHead = this.entity.rotationYaw;
-			this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
+			//this.entity.rotationYawHead = this.entity.rotationYaw;
+			//this.entity.prevRotationYawHead = this.entity.prevRotationYaw;
+			this.entity.yHeadRot = this.entity.yBodyRot;
+			this.entity.yHeadRotO = this.entity.yBodyRotO;
 		}
 	}
 
