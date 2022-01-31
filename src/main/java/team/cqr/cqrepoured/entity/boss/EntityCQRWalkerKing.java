@@ -15,7 +15,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -135,7 +134,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
 				teleportPos = new BlockPos(this.getTarget().position().subtract(v));
-				if (this.level.isBlockFullCube(teleportPos) || this.level.isBlockFullCube(teleportPos.relative(Direction.UP)) || this.level.isEmptyBlock(teleportPos.relative(Direction.DOWN))) {
+				if (this.level.getBlockState(teleportPos) .isFaceSturdy(this.level, teleportPos, Direction.UP)|| this.level.isEmptyBlock(teleportPos.relative(Direction.DOWN))) {
 					teleportPos = this.getTarget().blockPosition();
 				}
 			} else if (this.getHomePositionCQR() != null && !this.level.isClientSide) {
@@ -149,7 +148,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 					}
 				}
 				this.level.playSound(null, this.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundCategory.AMBIENT, 1, 1);
-				this.attemptTeleport(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
+				this.randomTeleport(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ(), true);
 			}
 		}
 		if (this.active && !this.level.isClientSide) {
@@ -193,7 +192,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 
 			// Anti cobweb stuff
-			if (this.isInWeb || this.level.getBlockState(this.blockPosition()).getBlock() instanceof WebBlock) {
+			if (this.stuckSpeedMultiplier.lengthSqr() > 0 /* potential replacement to isInWeb */ || this.level.getBlockState(this.blockPosition()).getBlock() instanceof WebBlock) {
 				this.handleInWeb();
 			}
 
@@ -248,7 +247,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				this.teleport(p.x, p.y, p.z);
 				return true;
 			}
-			return this.attemptTeleport(p.x, p.y, p.z);
+			return this.randomTeleport(p.x, p.y, p.z, true);
 		}
 		return false;
 	}
@@ -457,7 +456,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		double d0 = 0.0D;
 
 		while (true) {
-			if (!this.level.isBlockNormalCube(blockpos, true) && this.level.isBlockNormalCube(blockpos.below(), true)) {
+			if (this.level.getBlockState(blockpos.below()).isFaceSturdy(this.level, blockpos.below(), Direction.UP)) {
 				if (!this.level.isEmptyBlock(blockpos)) {
 					BlockState iblockstate = this.level.getBlockState(blockpos);
 					AxisAlignedBB axisalignedbb = iblockstate.getCollisionShape(this.level, blockpos).bounds();
