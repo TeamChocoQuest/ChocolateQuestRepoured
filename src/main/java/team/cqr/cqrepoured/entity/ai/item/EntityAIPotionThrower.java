@@ -36,40 +36,45 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 
 	@Override
 	protected void checkAndPerformAttack(LivingEntity attackTarget) {
-		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
+		if (this.entity.tickCount > this.prevTimeAttacked + this.getAttackCooldown()) {
 			ItemStack stack = this.getEquippedWeapon();
 			Item item = stack.getItem();
 
+			final double x = attackTarget.getX() - this.entity.getX();
+			double y = attackTarget.getY() + attackTarget.getBbHeight() * 0.5D;
+			final double z = attackTarget.getZ() - this.entity.getZ();
+			final double distance = Math.sqrt(x * x + z * z);
+			
 			// Throwable potions
 			if (item instanceof SplashPotionItem || item instanceof LingeringPotionItem) {
-				PotionEntity proj = new PotionEntity(this.world, this.entity, stack.copy());
-				double x = attackTarget.posX - this.entity.posX;
-				double y = attackTarget.posY + attackTarget.height * 0.5D - proj.posY;
-				double z = attackTarget.posZ - this.entity.posZ;
-				double distance = Math.sqrt(x * x + z * z);
-				proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
-				proj.motionX += this.entity.motionX;
+				PotionEntity proj = new PotionEntity(this.world, this.entity/*, stack.copy()*/);
+				proj.setItem(stack.copy());
+				y -= proj.getY();
+				proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRandom().nextFloat() * 0.25F);
+				/*proj.motionX += this.entity.motionX;
 				proj.motionZ += this.entity.motionZ;
 				if (!this.entity.onGround) {
 					proj.motionY += this.entity.motionY;
-				}
-				this.entity.world.spawnEntity(proj);
-				this.entity.swingArm(Hand.OFF_HAND);
-				this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+				}*/
+				proj.setDeltaMovement(proj.getDeltaMovement().add(this.entity.getDeltaMovement()));
+				proj.hasImpulse = true;
+				this.entity.level.addFreshEntity(proj);
+				this.entity.swing(Hand.OFF_HAND);
+				this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 
 				if (CQRConfig.mobs.offhandPotionsAreSingleUse) {
 					stack.shrink(1);
 				}
 
-				this.prevTimeAttacked = this.entity.ticksExisted;
+				this.prevTimeAttacked = this.entity.tickCount;
 			} else if (item instanceof ItemAlchemyBag) {
-				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				int indx = this.entity.getRNG().nextInt(inventory.getSlots());
+				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).resolve().get();
+				int indx = this.entity.getRandom().nextInt(inventory.getSlots());
 				ItemStack st = inventory.getStackInSlot(indx);
 				Set<Integer> usedIDs = new HashSet<>();
 				int counter = 0;
 				while (st.isEmpty() && !usedIDs.contains(indx) && counter > inventory.getSlots()) {
-					indx = this.entity.getRNG().nextInt(inventory.getSlots());
+					indx = this.entity.getRandom().nextInt(inventory.getSlots());
 					usedIDs.add(indx);
 					st = inventory.getStackInSlot(indx);
 					counter++;
@@ -79,25 +84,24 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 
 					// Now throw it
 					if (potion.getItem() instanceof SplashPotionItem || potion.getItem() instanceof LingeringPotionItem) {
-						PotionEntity proj = new PotionEntity(this.world, this.entity, potion);
-						double x = attackTarget.posX - this.entity.posX;
-						double y = attackTarget.posY + attackTarget.height * 0.5D - proj.posY;
-						double z = attackTarget.posZ - this.entity.posZ;
-						double distance = Math.sqrt(x * x + z * z);
-						proj.shoot(x, y + distance * 0.08D, z, 1.F, this.entity.getRNG().nextFloat() * 0.25F);
-						proj.motionX += this.entity.motionX;
+						PotionEntity proj = new PotionEntity(this.world, this.entity/*, potion*/);
+						proj.setItem(potion);
+						y -= proj.getY();
+						proj.shoot(x, y + distance * 0.08D, z, 1.F, this.entity.getRandom().nextFloat() * 0.25F);
+						/*proj.motionX += this.entity.motionX;
 						proj.motionZ += this.entity.motionZ;
 						if (!this.entity.onGround) {
 							proj.motionY += this.entity.motionY;
-						}
-						proj.velocityChanged = true;
-						this.entity.world.spawnEntity(proj);
-						this.entity.swingArm(Hand.OFF_HAND);
-						this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+						}*/
+						proj.setDeltaMovement(proj.getDeltaMovement().add(this.entity.getDeltaMovement()));
+						proj.hasImpulse = true;
+						this.entity.level.addFreshEntity(proj);
+						this.entity.swing(Hand.OFF_HAND);
+						this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}
 				}
 
-				this.prevTimeAttacked = this.entity.ticksExisted;
+				this.prevTimeAttacked = this.entity.tickCount;
 			}
 		}
 	}

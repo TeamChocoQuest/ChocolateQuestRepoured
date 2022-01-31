@@ -33,11 +33,12 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 
 	public EntityAICursedBoneSummoner(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(0);
+		//this.setMutexBits(0);
+		//No flags needed here
 	}
 
 	private boolean hasCursedBone() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemCursedBone || this.entity.getMainHandItem().getItem() instanceof ItemCursedBone;
+		return this.entity.getMainHandItem().getItem() instanceof ItemCursedBone || this.entity.getOffhandItem().getItem() instanceof ItemCursedBone;
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		if (!this.entity.hasAttackTarget()) {
 			return false;
 		}
-		if (this.entity.ticksExisted - this.prevTimeUsed < this.cooldown) {
+		if (this.entity.tickCount - this.prevTimeUsed < this.cooldown) {
 			return false;
 		}
 		return this.summonedEntities.size() < this.getMaxSummonedEntities();
@@ -70,7 +71,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		if (this.summonedEntities.isEmpty()) {
 			return;
 		}
-		this.summonedEntities.removeIf(e -> !e.isEntityAlive());
+		this.summonedEntities.removeIf(e -> !e.isAlive());
 	}
 
 	@Override
@@ -87,16 +88,16 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		this.chargingTicks--;
 		super.tick();
 
-		ItemStack stack = this.entity.getHeldItemMainhand();
+		if(!hasCursedBone()) {
+			return;
+		}
+		
+		ItemStack stack = this.entity.getMainHandItem();
 		if (!(stack.getItem() instanceof ItemCursedBone)) {
-			stack = this.entity.getMainHandItem();
-			if (!(stack.getItem() instanceof ItemCursedBone)) {
-				return;
-			} else {
-				this.entity.swingArm(Hand.OFF_HAND);
-			}
+			stack = this.entity.getOffhandItem();
+			this.entity.swing(Hand.OFF_HAND);
 		} else {
-			this.entity.swingArm(Hand.MAIN_HAND);
+			this.entity.swing(Hand.MAIN_HAND);
 		}
 
 		if (this.chargingTicks < 0) {
@@ -104,7 +105,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 			int mobCount = Math.min(SUMMONS_PER_CAST, remainingEntitySlots);
 
 			if (mobCount > 0) {
-				Vector3d vector = this.entity.getLookVec().normalize().scale(3);
+				Vector3d vector = this.entity.getLookAngle().normalize().scale(3);
 				ItemCursedBone cursedBone = (ItemCursedBone) stack.getItem();
 				for (int i = 0; i < mobCount; i++) {
 					Vector3d posV = this.entity.position().add(vector);
@@ -121,9 +122,9 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 
 	@Override
 	public void stop() {
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRNG());
+		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
 		this.chargingTicks = 20;
-		this.prevTimeUsed = this.entity.ticksExisted;
+		this.prevTimeUsed = this.entity.tickCount;
 		super.stop();
 	}
 
@@ -147,7 +148,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedEntities.add(summoned);
-		this.tryEquipSummon(summoned, this.world.rand);
+		this.tryEquipSummon(summoned, this.world.random);
 	}
 
 }

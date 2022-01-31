@@ -23,7 +23,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 			this.cooldown--;
 			return false;
 		}
-		return this.entity != null && !this.entity.isDead && this.entity.hasAttackTarget() && this.cooldown <= 0 && this.hasFireball();
+		return this.entity != null && !this.entity.isDeadOrDying() && this.entity.hasAttackTarget() && this.cooldown <= 0 && this.hasFireball();
 	}
 
 	private boolean hasFireball() {
@@ -39,9 +39,9 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 		super.start();
 		this.cooldown = 140;
 		this.entity.getMainHandItem().shrink(1);
-		Vector3d v = this.entity.getAttackTarget().position().subtract(this.entity.position());
-		DamagingProjectileEntity fireball = this.entity.getRNG().nextDouble() > 0.7 ? new FireballEntity(this.entity.world, this.entity, v.x, v.y, v.z) : new SmallFireballEntity(this.entity.world, this.entity, v.x, v.y, v.z);
-		this.entity.world.spawnEntity(fireball);
+		Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
+		DamagingProjectileEntity fireball = this.entity.getRandom().nextDouble() > 0.7 ? new FireballEntity(this.entity.level, this.entity, v.x, v.y, v.z) : new SmallFireballEntity(this.entity.level, this.entity, v.x, v.y, v.z);
+		this.entity.level.addFreshEntity(fireball);
 	}
 
 }

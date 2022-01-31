@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.BlockState;
@@ -25,7 +26,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 
 	public EntityAIHealingPotion(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void start() {
-		this.entity.getNavigator().clearPath();
+		this.entity.getNavigation().stop();
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
 	}
@@ -44,7 +46,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 	public void stop() {
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
-		this.entity.resetActiveHand();
+		//this.entity.resetActiveHand();
+		this.entity.stopUsingItem();
 		if (this.entity.isHoldingPotion()) {
 			this.entity.swapWeaponAndPotionSlotItemStacks();
 		}
@@ -52,10 +55,10 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void tick() {
-		Entity attackTarget = this.entity.getAttackTarget();
+		Entity attackTarget = this.entity.getTarget();
 
 		if (this.isHealing) {
-			this.entity.swingArm(Hand.MAIN_HAND);
+			this.entity.swing(Hand.MAIN_HAND);
 		} else {
 			if (attackTarget == null) {
 				this.startHealing();
@@ -68,16 +71,16 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 			Vector3d vec1 = this.entity.position().add(alertRadius, alertRadius * 0.5D, alertRadius);
 			Vector3d vec2 = this.entity.position().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<Entity> possibleEnts = this.entity.world.getEntitiesInAABBexcluding(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
+			List<Entity> possibleEnts = this.entity.level.getEntities(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 
 			if (!possibleEnts.isEmpty()) {
 				Entity e1 = null;
 				int count = -1;
 				double distance = Double.MAX_VALUE;
 				for (Entity e2 : possibleEnts) {
-					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.posX - 4, e2.posY - 2, e2.posZ - 4, e2.posX + 4, e2.posY + 2, e2.posZ + 4);
-					List<Entity> list = e2.world.getEntitiesInAABBexcluding(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
-					double d = this.entity.getDistanceSq(e2);
+					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.getX() - 4, e2.getY() - 2, e2.getZ() - 4, e2.getX() + 4, e2.getY() + 2, e2.getZ() + 4);
+					List<Entity> list = e2.level.getEntities(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
+					double d = this.entity.distanceToSqr(e2);
 					if (list.size() > count || (list.size() == count && d < distance)) {
 						e1 = e2;
 						count = list.size();
@@ -85,7 +88,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 					}
 				}
 				if (count >= 5) {
-					this.entity.getNavigator().tryMoveToEntityLiving(e1, 1.0D);
+					this.entity.getNavigation().moveTo(e1, 1.0D);
 					flag = false;
 				}
 			}
@@ -97,12 +100,12 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				this.updateRotation(attackTarget, 2.5F, 2.5F);
 
 				if (canMoveBackwards) {
-					EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
+					EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * 1.5, this.entity.yHeadRot);
 				}
 			}
 
 			if (!this.isHealing) {
-				if (this.entity.collidedHorizontally || !canMoveBackwards || this.ticksNotHealing > 80 || this.entity.getDistance(attackTarget) > 8.0F) {
+				if (this.entity.horizontalCollision || !canMoveBackwards || this.ticksNotHealing > 80 || this.entity.distanceTo(attackTarget) > 8.0F) {
 					this.startHealing();
 				} else {
 					this.checkAndPerformBlock();
@@ -112,36 +115,36 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 	}
 
 	private void updateRotation(Entity entity, float deltaYaw, float deltaPitch) {
-		double x = entity.posX - this.entity.posX;
-		double y = entity.posY - this.entity.posY;
-		double z = entity.posZ - this.entity.posZ;
+		double x = entity.getX() - this.entity.getX();
+		double y = entity.getY() - this.entity.getY();
+		double z = entity.getZ() - this.entity.getZ();
 		double d = Math.sqrt(x * x + z * z);
 
 		float yaw = (float) Math.toDegrees(Math.atan2(-x, z));
 		float pitch = (float) Math.toDegrees(Math.atan2(-y, d));
-		this.entity.rotationYaw += MathHelper.clamp(MathHelper.wrapDegrees(yaw - this.entity.rotationYaw), -deltaYaw, deltaYaw);
-		this.entity.rotationYaw = MathHelper.wrapDegrees(this.entity.rotationYaw);
-		this.entity.rotationPitch += MathHelper.clamp(MathHelper.wrapDegrees(pitch - this.entity.rotationPitch), -deltaPitch, deltaPitch);
-		this.entity.rotationPitch = MathHelper.clamp(this.entity.rotationPitch, -90.0F, 90.0F);
-		this.entity.rotationYawHead = this.entity.rotationYaw;
+		this.entity.yBodyRot += MathHelper.clamp(MathHelper.wrapDegrees(yaw - this.entity.yBodyRot), -deltaYaw, deltaYaw);
+		this.entity.yBodyRot = MathHelper.wrapDegrees(this.entity.yBodyRot);
+		this.entity.xRot += MathHelper.clamp(MathHelper.wrapDegrees(pitch - this.entity.xRot), -deltaPitch, deltaPitch);
+		this.entity.xRot = MathHelper.clamp(this.entity.xRot, -90.0F, 90.0F);
+		this.entity.yHeadRot = this.entity.yBodyRot;
 	}
 
 	private void checkAndPerformBlock() {
-		if (!this.entity.isActiveItemStackBlocking()) {
-			ItemStack offhand = this.entity.getHeldItem(Hand.OFF_HAND);
+		if (!this.entity.isBlocking()) {
+			ItemStack offhand = this.entity.getItemInHand(Hand.OFF_HAND);
 
 			if (offhand.getItem().isShield(offhand, this.entity)) {
-				this.entity.setActiveHand(Hand.OFF_HAND);
+				this.entity.startUsingItem(Hand.OFF_HAND);;
 			}
 		}
 	}
 
 	private boolean canMoveBackwards() {
-		double sin = -Math.sin(Math.toRadians(this.entity.rotationYaw));
-		double cos = Math.cos(Math.toRadians(this.entity.rotationYaw));
-		BlockPos pos = new BlockPos(this.entity.posX - sin, this.entity.posY - 0.001D, this.entity.posZ - cos);
-		BlockState state = this.entity.world.getBlockState(pos);
-		return state.isSideSolid(this.entity.world, pos, Direction.UP);
+		double sin = -Math.sin(Math.toRadians(this.entity.yBodyRot));
+		double cos = Math.cos(Math.toRadians(this.entity.yBodyRot));
+		BlockPos pos = new BlockPos(this.entity.getX() - sin, this.entity.getY() - 0.001D, this.entity.getZ() - cos);
+		BlockState state = this.entity.level.getBlockState(pos);
+		return state.isFaceSturdy(this.entity.level, pos, Direction.UP);
 	}
 
 	public void startHealing() {
@@ -150,8 +153,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 			if (!this.entity.isHoldingPotion()) {
 				this.entity.swapWeaponAndPotionSlotItemStacks();
 			}
-			this.entity.resetActiveHand();
-			this.entity.setActiveHand(Hand.MAIN_HAND);
+			this.entity.stopUsingItem();
+			this.entity.startUsingItem(Hand.MAIN_HAND);
 		}
 	}
 
