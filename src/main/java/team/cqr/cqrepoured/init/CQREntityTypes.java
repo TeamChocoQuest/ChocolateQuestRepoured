@@ -23,6 +23,7 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.entity.misc.EntityElectricField;
+import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 
 public class CQREntityTypes {
@@ -69,6 +70,8 @@ public class CQREntityTypes {
 	
 	//Walker King
 	public static final RegistryObject<EntityType<EntityCQRWalkerKing>> WALKER_KING = registerSizedHumanoid(EntityCQRWalkerKing::new, "walker_king", 1);
+	public static final RegistryObject<EntityType<EntityWalkerKingIllusion>> WALKER_KING_ILLUSION = registerSizedHumanoid(EntityWalkerKingIllusion::new, "walker_king_illusion", 1);
+	
 	
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSizedHumanoid(IFactory<T> factory, final String entityName, int updateInterval) {
 		return registerSized(factory, entityName, 0.6F, 1.875F, updateInterval);
