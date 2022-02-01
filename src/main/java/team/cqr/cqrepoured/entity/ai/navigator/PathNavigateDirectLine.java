@@ -17,6 +17,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 	protected PathFinder createPathFinder(int arg) {
 		this.nodeEvaluator = new DirectLineNodeProcessor();
 		this.nodeEvaluator.setCanOpenDoors(true);
+		this.nodeEvaluator.setCanPassDoors(true);
 		this.nodeEvaluator.setCanFloat(true);
 		return new PathFinder(this.nodeEvaluator, this.getPathSearchRange());
 	}
