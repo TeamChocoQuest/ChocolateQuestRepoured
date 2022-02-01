@@ -22,6 +22,7 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamitySpawner;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 
 public class CQREntityTypes {
@@ -41,7 +42,9 @@ public class CQREntityTypes {
 	
 	//Exterminator
 	public static final RegistryObject<EntityType<EntityCQRExterminator>> EXTERMINATOR = registerSized(EntityCQRExterminator::new, "exterminator", 2, 2.75F, 1);
-
+	public static final RegistryObject<EntityType<EntityElectricField>> ELECTRIC_FIELD = registerSized(EntityElectricField::new, "electric_field", 1.125F, 1.125F, 3);
+	
+	
 	//Giant Tortoise
 	public static final RegistryObject<EntityType<EntityCQRGiantTortoise>> GIANT_TORTOISE = registerSized(EntityCQRGiantTortoise::new, "giant_tortoise", 2F, 1.7F,1);
 	

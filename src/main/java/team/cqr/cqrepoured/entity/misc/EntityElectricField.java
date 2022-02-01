@@ -14,18 +14,22 @@ import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class EntityElectricField extends Entity implements IDontRenderFire, IEntityOwnable {
@@ -38,8 +42,8 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 
 	private UUID ownerID = null;
 
-	public EntityElectricField(World worldIn) {
-		this(worldIn, 100, null);
+	public EntityElectricField(EntityType<? extends EntityElectricField> type, World worldIn) {
+		this(type, worldIn, 100, null);
 	}
 
 	private Queue<Direction> generateFacesQueue() {
@@ -54,46 +58,49 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 
 		return q;
 	}
-
+	
 	public EntityElectricField(World worldIn, int charge, UUID ownerId) {
-		super(worldIn);
-		this.noClip = true;
+		this(CQREntityTypes.ELECTRIC_FIELD.get(), worldIn, charge, ownerId);
+	}
+
+	public EntityElectricField(EntityType<? extends EntityElectricField> type, World worldIn, int charge, UUID ownerId) {
+		super(type, worldIn);
+		this.noPhysics = true;
 		this.charge = charge;
 		this.ownerID = ownerId;
-		this.setSize(1.125F, 1.125F);
 	}
 
 	@Override
-	protected void entityInit() {
-		// Unused
-	}
-
-	@Override
-	public void setPosition(double x, double y, double z) {
-		super.setPosition(x, y, z);
+	public void setPos(double x, double y, double z) {
+		super.setPos(x, y, z);
 
 		BlockPos p = new BlockPos(x, y, z);
 		EXISTING_FIELDS.add(p);
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
-
+	
+	@Override
+	public boolean isPushedByFluid() {
+		return false;
+	}
+	
 	protected List<LivingEntity> getEntitiesAffectedByField() {
-		return this.world.getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox(), this.selectionPredicate);
+		return this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox(), this.selectionPredicate);
 	}
 
 	private Predicate<LivingEntity> selectionPredicate = input -> {
 		if (!TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(input)) {
 			return false;
 		}
-		if (this.ownerID == null || this.getOwner() == null || this.getOwner().isDead || !this.getOwner().isEntityAlive()) {
+		if (this.ownerID == null || this.getOwner() == null /*|| this.getOwner().dead*/ || !this.getOwner().isAlive()) {
 			return true;
 		}
 
-		if (input.getPersistentID().equals(this.ownerID)) {
+		if (input.getUUID().equals(this.ownerID)) {
 			return false;
 		}
 		if (input instanceof IEntityOwnable) {
@@ -110,23 +117,23 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	};
 
 	@Override
-	public boolean isBurning() {
+	public boolean isOnFire() {
 		return false;
 	}
 
 	public void destroyField() {
-		this.setDead();
-		EXISTING_FIELDS.remove(new BlockPos(this.posX, this.posY, this.posZ));
+		EXISTING_FIELDS.remove(this.blockPosition());
+		this.remove();
 	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
 
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			this.charge--;
 
-			BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
+			BlockPos pos = this.blockPosition();
 
 			if (this.charge < 0) {
 				this.destroyField();
@@ -134,8 +141,13 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 			}
 
 			this.getEntitiesAffectedByField().forEach(t -> {
-				t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingTicks(200);
-				t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingSpreads(4);
+				t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).ifPresent(cap -> {
+					cap.setRemainingTicks(200);
+					cap.setRemainingSpreads(4);
+				});
+				
+				//t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingTicks(200);
+				//t.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).setRemainingSpreads(4);
 			});
 
 			if (!this.facesToSpreadTo.isEmpty()) {
@@ -146,16 +158,16 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 					while (!this.facesToSpreadTo.isEmpty()) {
 						Direction face = this.facesToSpreadTo.poll();
 						if (face != null) {
-							BlockPos currentPos = pos.offset(face);
+							BlockPos currentPos = pos.relative(face); //Correct?
 							if (!EXISTING_FIELDS.contains(currentPos)) {
-								BlockState blockState = this.world.getBlockState(currentPos);
-								if (blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.IRON) {
+								BlockState blockState = this.level.getBlockState(currentPos);
+								if (blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.METAL) {
 									int charge = this.charge - 10;
 									if (charge > 0) {
-										EntityElectricField newField = new EntityElectricField(this.world, charge, this.ownerID);
-										newField.setPosition(currentPos.getX() + 0.5, currentPos.getY(), currentPos.getZ() + 0.5);
+										EntityElectricField newField = new EntityElectricField(this.level, charge, this.ownerID);
+										newField.setPos(currentPos.getX() + 0.5, currentPos.getY(), currentPos.getZ() + 0.5);
 
-										this.world.spawnEntity(newField);
+										this.level.addFreshEntity(newField);
 
 										break;
 									}
@@ -171,18 +183,18 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		this.charge = compound.getInteger("charge");
-		if (compound.hasKey("ownerId")) {
-			this.ownerID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("ownerId"));
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		this.charge = compound.getInt("charge");
+		if (compound.contains("ownerId")) {
+			this.ownerID = NBTUtil.loadUUID(compound.getCompound("ownerId"));
 		}
 	}
 
 	@Override
-	protected void save(CompoundNBT compound) {
-		compound.setInteger("charge", this.charge);
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		compound.putInt("charge", this.charge);
 		if (this.getOwner() != null) {
-			compound.setTag("ownerId", NBTUtil.createUUIDTag(this.getOwnerId()));
+			compound.put("ownerId", NBTUtil.createUUID(this.getOwnerId()));
 		}
 	}
 
@@ -199,7 +211,17 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	@Nullable
 	@Override
 	public Entity getOwner() {
-		return EntityUtil.getEntityByUUID(this.world, this.ownerID);
+		return EntityUtil.getEntityByUUID(this.level, this.ownerID);
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		//NOT NEEDED
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
