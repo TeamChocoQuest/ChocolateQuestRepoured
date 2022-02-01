@@ -82,11 +82,11 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2, Mode.DESTROY);
 		}
 	}
-	
+
 	@Override
 	public void setInSittingPose(boolean p_233686_1_) {
 	}
-	
+
 	@Override
 	public boolean isInSittingPose() {
 		return false;
@@ -103,32 +103,29 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 		}
 	}
 
-	final BlockPos OWNER_RANGE_RADIUS = new BlockPos(20,20,20);
-	
+	final BlockPos OWNER_RANGE_RADIUS = new BlockPos(20, 20, 20);
+
 	private LivingEntity getOwnerInRange(UUID uuid) {
-		
-		List<Entity> ents = this.level.getEntities(this, new AxisAlignedBB(this.blockPosition().subtract(OWNER_RANGE_RADIUS), this.blockPosition().offset(OWNER_RANGE_RADIUS)), input -> input instanceof LivingEntity && input
-				.getUUID().equals(uuid));
+
+		List<Entity> ents = this.level.getEntities(this, new AxisAlignedBB(this.blockPosition().subtract(OWNER_RANGE_RADIUS), this.blockPosition().offset(OWNER_RANGE_RADIUS)), input -> input instanceof LivingEntity && input.getUUID().equals(uuid));
 		return ents.isEmpty() ? null : (LivingEntity) ents.get(0);
 	}
-	
-	public static AttributeModifierMap.MutableAttribute createAttributes() {
-	      return MobEntity
-	    		  .createMobAttributes()
-	    		  .add(Attributes.MAX_HEALTH, 40.0D)
-	    		  .add(Attributes.FLYING_SPEED, (double)0.8F)
-	    		  .add(Attributes.MOVEMENT_SPEED, (double)0.4F);
-	   }
 
-	/*@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(40);
-	}*/
+	public static AttributeModifierMap.MutableAttribute createAttributes() {
+		return MobEntity
+				.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 40.0D)
+				.add(Attributes.FLYING_SPEED, (double) 0.8F)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.4F);
+	}
+
+	/*
+	 * @Override protected void applyEntityAttributes() { super.applyEntityAttributes(); this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(40); }
+	 */
 
 	public boolean setCQREntityOnShoulder(AbstractEntityCQR p_191994_1_) {
 		CompoundNBT nbttagcompound = new CompoundNBT();
-		nbttagcompound.putString("id", this.getEncodeId()); //Correct?
+		nbttagcompound.putString("id", this.getEncodeId()); // Correct?
 		this.saveWithoutId(nbttagcompound);
 
 		if (p_191994_1_.addShoulderEntity(nbttagcompound)) {
@@ -142,7 +139,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
 		super.populateDefaultEquipmentSlots(pDifficulty);
-		//WHY TF?!
+		// WHY TF?!
 		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.FIRE_CHARGE, 1));
 	}
 
@@ -155,7 +152,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	public boolean setEntityOnShoulder(ServerPlayerEntity p_213439_1_) {
 		return super.setEntityOnShoulder(p_213439_1_);
 	}
-	
+
 	@Override
 	public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
 		if (this.isTame() && (player == this.getOwner() || this.getOwnerUUID().equals(player.getUUID()))) {
