@@ -7,6 +7,7 @@ import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPirateCaptain> implements IEntityAISpellAnimatedVanilla {
@@ -28,7 +29,7 @@ public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPir
 		if (this.entity.level.getBlockState(new BlockPos(this.entity.position().add(v).add(0, 1, 0))).getBlock() != Blocks.AIR) {
 			v = new Vector3d(0, 1, 0);
 		}
-		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(this.world);
+		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(CQREntityTypes.PIRATE_PARROT.get(), this.world);
 		parrot.setOwnerUUID(this.entity.getUUID());
 		parrot.setTame(true);
 		parrot.setOwnerUUID(this.entity.getUUID());

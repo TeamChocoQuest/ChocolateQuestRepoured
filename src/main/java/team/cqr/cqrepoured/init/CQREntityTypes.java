@@ -13,6 +13,7 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.entity.boss.EntityCQRLich;
 import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
+import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;
@@ -61,6 +62,7 @@ public class CQREntityTypes {
 	
 	//Pirate Captain
 	public static final RegistryObject<EntityType<EntityCQRPirateCaptain>> PIRATE_CAPTAIN = registerSizedHumanoid(EntityCQRPirateCaptain::new, "pirate_captain", 1);
+	public static final RegistryObject<EntityType<EntityCQRPirateParrot>> PIRATE_PARROT = registerSized(EntityCQRPirateParrot::new, "pirate_parrot", 0.5F, 0.9F, 3);
 	
 	//Walker King
 	public static final RegistryObject<EntityType<EntityCQRWalkerKing>> WALKER_KING = registerSizedHumanoid(EntityCQRWalkerKing::new, "walker_king", 1);
