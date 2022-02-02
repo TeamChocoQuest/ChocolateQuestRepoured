@@ -16,6 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -128,7 +129,15 @@ public class DungeonGrid {
 
 		int x = Math.floorDiv(cx, dungeonSeparation);
 		int z = Math.floorDiv(cz, dungeonSeparation);
-		Random random = world.setRandomSeed(x, z, this.seed);
+		Random random = world.getRandom();//OLD: world.setRandomSeed(x, z, this.seed);
+		//New cause 1.16 removed that method:
+		long seed = 0;
+		if(world instanceof ServerWorld) {
+			seed = ((ServerWorld) world).getSeed();
+		}
+		long lTmp = (long)x * 341873128712L + (long)z * 132897987541L + seed + (long)this.seed;
+		random.setSeed(lTmp);
+		
 		x *= dungeonSeparation;
 		z *= dungeonSeparation;
 		x += random.nextInt(dungeonSpread);
