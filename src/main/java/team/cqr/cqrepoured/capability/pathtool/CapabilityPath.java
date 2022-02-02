@@ -3,19 +3,19 @@ package team.cqr.cqrepoured.capability.pathtool;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 
 public class CapabilityPath {
 
 	private final ItemStack stack;
-	private final Path path = new Path() {
+	private final CQRNPCPath path = new CQRNPCPath() {
 		@Override
 		public void onPathChanged() {
 			super.onPathChanged();
 			CapabilityPath.this.writeToStack();
 		}
 	};
-	private Path.PathNode selectedNode;
+	private CQRNPCPath.PathNode selectedNode;
 	private boolean readFromStack = false;
 	private boolean isReading = false;
 
@@ -23,17 +23,17 @@ public class CapabilityPath {
 		this.stack = stack;
 	}
 
-	public Path getPath() {
+	public CQRNPCPath getPath() {
 		this.readFromStack();
 		return this.path;
 	}
 
-	public void setSelectedNode(Path.PathNode selectedNode) {
+	public void setSelectedNode(CQRNPCPath.PathNode selectedNode) {
 		this.selectedNode = selectedNode;
 		this.writeToStack();
 	}
 
-	public Path.PathNode getSelectedNode() {
+	public CQRNPCPath.PathNode getSelectedNode() {
 		this.readFromStack();
 		return this.selectedNode;
 	}

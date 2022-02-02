@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.entity.ai;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 
 public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -34,8 +34,8 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public void tick() {
-		Path path = this.entity.getPath();
-		Path.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
+		CQRNPCPath path = this.entity.getPath();
+		CQRNPCPath.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
 
 		if (currentNode != null) {
 			BlockPos pos = this.entity.getHomePositionCQR().offset(currentNode.getPos());
@@ -69,17 +69,17 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 			return;
 		}
 
-		Path path = this.entity.getPath();
-		Path.PathNode prevNode = path.getNode(this.entity.getPrevPathTargetPoint());
-		Path.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
-		Path.PathNode nextNode = null;
+		CQRNPCPath path = this.entity.getPath();
+		CQRNPCPath.PathNode prevNode = path.getNode(this.entity.getPrevPathTargetPoint());
+		CQRNPCPath.PathNode currentNode = path.getNode(this.entity.getCurrentPathTargetPoint());
+		CQRNPCPath.PathNode nextNode = null;
 
 		if (currentNode != null) {
 			nextNode = currentNode.getNextNode(this.world, this.entity.getRandom(), prevNode);
 		} else {
 			BlockPos pos = this.entity.blockPosition().subtract(this.entity.getHomePositionCQR());
 			double min = Double.MAX_VALUE;
-			for (Path.PathNode node : path.getNodes()) {
+			for (CQRNPCPath.PathNode node : path.getNodes()) {
 				double dist = pos.distSqr(node.getPos());
 				if (dist < min) {
 					min = dist;

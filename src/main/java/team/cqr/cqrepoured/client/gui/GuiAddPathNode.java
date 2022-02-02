@@ -27,7 +27,7 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
-import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
@@ -130,9 +130,9 @@ public class GuiAddPathNode extends Screen {
 		this.pathMapWidth = 130;
 		this.pathMapHeight = 130;
 		ItemStack stack = this.mc.player.getHeldItem(this.hand);
-		Path path = ItemPathTool.getPath(stack);
+		CQRNPCPath path = ItemPathTool.getPath(stack);
 		if (path != null) {
-			Path.PathNode rootNode = path.getNode(this.rootNodeIndex);
+			CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 			if (rootNode != null) {
 				this.centerOffsetX = rootNode.getPos().getX();
 				this.centerOffsetY = rootNode.getPos().getZ();
@@ -269,10 +269,10 @@ public class GuiAddPathNode extends Screen {
 			this.pathMapClicked = false;
 		}
 		if (mouseButton == 0) {
-			Path.PathNode clickedNode = this.getNodeAt(mouseX, mouseY);
+			CQRNPCPath.PathNode clickedNode = this.getNodeAt(mouseX, mouseY);
 			if (clickedNode != null) {
-				Path path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
-				Path.PathNode rootNode = path.getNode(this.rootNodeIndex);
+				CQRNPCPath path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
+				CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 				if (rootNode != null && clickedNode.getConnectedNodes().contains(this.rootNodeIndex)) {
 					if (!this.blacklistedPrevNodes.contains(clickedNode.getIndex())) {
 						this.blacklistedPrevNodes.add(clickedNode.getIndex());
@@ -320,7 +320,7 @@ public class GuiAddPathNode extends Screen {
 		this.drawPathMap(this.pathMapX, this.pathMapY, this.pathMapWidth, this.pathMapHeight, this.centerOffsetX, this.centerOffsetY);
 		GuiHelper.drawString(this.fontRenderer, "Help?", this.pathMapX, this.pathMapY + this.pathMapHeight + 4, 0xE0E0E0, false, true);
 
-		Path.PathNode selectedNode = this.getNodeAt(mouseX, mouseY);
+		CQRNPCPath.PathNode selectedNode = this.getNodeAt(mouseX, mouseY);
 		if (selectedNode != null) {
 			this.drawHoveringText(String.format("Index: %d, %s", selectedNode.getIndex(), selectedNode.getPos()), mouseX, mouseY);
 		}
@@ -390,24 +390,24 @@ public class GuiAddPathNode extends Screen {
 	}
 
 	@Nullable
-	private Path.PathNode getNodeAt(int mouseX, int mouseY) {
+	private CQRNPCPath.PathNode getNodeAt(int mouseX, int mouseY) {
 		if (mouseX < this.pathMapX || mouseX > this.pathMapX + this.pathMapWidth) {
 			return null;
 		}
 		if (mouseY < this.pathMapY || mouseY > this.pathMapY + this.pathMapHeight) {
 			return null;
 		}
-		Path path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
-		Path.PathNode clickedNode = null;
+		CQRNPCPath path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
+		CQRNPCPath.PathNode clickedNode = null;
 		int posX = (mouseX - this.pathMapX - (this.pathMapWidth / 2)) / 2 + this.centerOffsetX;
 		int posY = (mouseY - this.pathMapY - (this.pathMapHeight / 2)) / 2 + this.centerOffsetY;
-		for (Path.PathNode node : path.getNodes()) {
+		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			if (node.getPos().getX() == posX && node.getPos().getZ() == posY) {
 				clickedNode = node;
 				break;
 			}
 		}
-		for (Path.PathNode node : path.getNodes()) {
+		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			int nodeX = node.getPos().getX();
 			int nodeZ = node.getPos().getZ();
 			if (Math.abs(nodeX - posX) <= 1 && Math.abs(nodeZ - posY) <= 1) {
@@ -423,8 +423,8 @@ public class GuiAddPathNode extends Screen {
 		height /= 2;
 		int radiusX = width / 2;
 		int radiusY = height / 2;
-		Path path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
-		Path.PathNode rootNode = path.getNode(this.rootNodeIndex);
+		CQRNPCPath path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
+		CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0.0D);
@@ -451,12 +451,12 @@ public class GuiAddPathNode extends Screen {
 		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
 		GL11.glLineWidth(new ScaledResolution(this.mc).getScaleFactor());
 		GL11.glBegin(GL11.GL_LINES);
-		for (Path.PathNode node : path.getNodes()) {
+		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			int offsetX = node.getPos().getX() - centerX;
 			int offsetZ = node.getPos().getZ() - centerY;
 			boolean flag = offsetX < -radiusX || offsetX > radiusX || offsetZ < -radiusY || offsetZ > radiusY;
 			for (int index : node.getConnectedNodes()) {
-				Path.PathNode connectedNode = path.getNode(index);
+				CQRNPCPath.PathNode connectedNode = path.getNode(index);
 				int offsetX2 = connectedNode.getPos().getX() - centerX;
 				int offsetZ2 = connectedNode.getPos().getZ() - centerY;
 				boolean flag2 = offsetX2 < -radiusX || offsetX2 > radiusX || offsetZ2 < -radiusY || offsetZ2 > radiusY;
@@ -511,7 +511,7 @@ public class GuiAddPathNode extends Screen {
 		GL11.glColor4d(1.0D, 1.0D, 1.0D, 1.0D);
 		this.mc.getTextureManager().bindTexture(new ResourceLocation(CQRMain.MODID, "textures/gui/path_map.png"));
 		GL11.glBegin(GL11.GL_QUADS);
-		for (Path.PathNode node : path.getNodes()) {
+		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			int offsetX = node.getPos().getX() - centerX;
 			int offsetZ = node.getPos().getZ() - centerY;
 			if (offsetX < -radiusX || offsetX > radiusX || offsetZ < -radiusY || offsetZ > radiusY) {

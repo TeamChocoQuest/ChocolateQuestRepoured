@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
@@ -20,10 +20,10 @@ public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddP
 		ItemStack stack = player.getItemInHand(packet.getHand());
 
 		if (stack.getItem() instanceof ItemPathTool) {
-			Path path = ItemPathTool.getPath(stack);
+			CQRNPCPath path = ItemPathTool.getPath(stack);
 
 			if (path != null) {
-				Path.PathNode rootNode = path.getNode(packet.getRootNode());
+				CQRNPCPath.PathNode rootNode = path.getNode(packet.getRootNode());
 				BlockPos pos = packet.getPos();
 				int waitingTimeMin = packet.getWaitingTimeMin();
 				int waitingTimeMax = packet.getWaitingTimeMax();
@@ -34,9 +34,9 @@ public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddP
 				boolean bidirectional = packet.isBidirectional();
 
 				if (path.addNode(rootNode, pos, waitingTimeMin, waitingTimeMax, waitingRotaiton, weight, timeMin, timeMax, bidirectional)) {
-					Path.PathNode addedNode = path.getNode(path.getSize() - 1);
+					CQRNPCPath.PathNode addedNode = path.getNode(path.getSize() - 1);
 					for (int index : packet.getBlacklistedPrevNodes()) {
-						Path.PathNode blacklistedPrevNode = path.getNode(index);
+						CQRNPCPath.PathNode blacklistedPrevNode = path.getNode(index);
 						if (blacklistedPrevNode != null) {
 							addedNode.addBlacklistedPrevNode(blacklistedPrevNode);
 						}

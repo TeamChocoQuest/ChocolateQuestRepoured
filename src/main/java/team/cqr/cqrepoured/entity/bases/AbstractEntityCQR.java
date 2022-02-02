@@ -117,7 +117,7 @@ import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
-import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 import team.cqr.cqrepoured.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
@@ -192,9 +192,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected EntityAIRideHorse<AbstractEntityCQR> horseAI;
 
 	// Pathing AI stuff
-	protected Path path = new Path() {
+	protected CQRNPCPath path = new CQRNPCPath() {
 		@Override
-		public boolean removeNode(Path.PathNode node) {
+		public boolean removeNode(CQRNPCPath.PathNode node) {
 			boolean flag = super.removeNode(node);
 			if (flag) {
 				if (AbstractEntityCQR.this.prevPathTargetPoint == node.getIndex()) {
@@ -219,7 +219,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 
 		@Override
-		public void copyFrom(Path path, BlockPos offset) {
+		public void copyFrom(CQRNPCPath path, BlockPos offset) {
 			super.copyFrom(path, offset);
 			AbstractEntityCQR.this.prevPathTargetPoint = -1;
 			AbstractEntityCQR.this.currentPathTargetPoint = -1;
@@ -1331,7 +1331,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void onExportFromWorld() {
-		for (Path.PathNode node : this.path.getNodes()) {
+		for (CQRNPCPath.PathNode node : this.path.getNodes()) {
 			node.setPos(node.getPos().subtract(this.blockPosition()));
 		}
 	}
@@ -1346,7 +1346,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.setLastTimedRestockTime(this.level.getGameTime());
 		
 		// Recalculate path points
-		for (Path.PathNode node : this.path.getNodes()) {
+		for (CQRNPCPath.PathNode node : this.path.getNodes()) {
 			node.setPos(DungeonPlacement.transform(node.getPos().getX(), node.getPos().getY(), node.getPos().getZ(), BlockPos.ZERO, placement.getMirror(), placement.getRotation()));
 			node.setWaitingRotation(getTransformedYaw(node.getWaitingRotation(), placement.getMirror(), placement.getRotation()));
 		}
@@ -1588,7 +1588,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		return 1.875F;
 	}
 
-	public Path getPath() {
+	public CQRNPCPath getPath() {
 		return this.path;
 	}
 

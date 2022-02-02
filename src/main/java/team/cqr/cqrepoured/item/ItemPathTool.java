@@ -21,7 +21,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.pathtool.CapabilityPathProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.entity.pathfinding.Path;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 import team.cqr.cqrepoured.util.GuiHandler;
 
 public class ItemPathTool extends ItemLore {
@@ -35,16 +35,16 @@ public class ItemPathTool extends ItemLore {
 		return CapabilityPathProvider.createProvider(stack);
 	}
 
-	public static Path getPath(ItemStack stack) {
+	public static CQRNPCPath getPath(ItemStack stack) {
 		return stack.getCapability(CapabilityPathProvider.PATH, null).getPath();
 	}
 
-	public static void setSelectedNode(ItemStack stack, Path.PathNode node) {
+	public static void setSelectedNode(ItemStack stack, CQRNPCPath.PathNode node) {
 		stack.getCapability(CapabilityPathProvider.PATH, null).setSelectedNode(node);
 	}
 
 	@Nullable
-	public static Path.PathNode getSelectedNode(ItemStack stack) {
+	public static CQRNPCPath.PathNode getSelectedNode(ItemStack stack) {
 		return stack.getCapability(CapabilityPathProvider.PATH, null).getSelectedNode();
 	}
 
@@ -76,9 +76,9 @@ public class ItemPathTool extends ItemLore {
 		 */
 		ItemStack stack = player.getHeldItem(hand);
 		BlockPos position = pos.offset(side);
-		Path path = getPath(stack);
-		Path.PathNode node = path.getNode(position);
-		Path.PathNode selectedNode = getSelectedNode(stack);
+		CQRNPCPath path = getPath(stack);
+		CQRNPCPath.PathNode node = path.getNode(position);
+		CQRNPCPath.PathNode selectedNode = getSelectedNode(stack);
 
 		if (world.isRemote) {
 			if (node == null) {
@@ -119,10 +119,10 @@ public class ItemPathTool extends ItemLore {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
 		if (isSelected && entityIn instanceof PlayerEntity && !worldIn.isRemote) {
-			Path path = getPath(stack);
-			Path.PathNode selectedNode = getSelectedNode(stack);
+			CQRNPCPath path = getPath(stack);
+			CQRNPCPath.PathNode selectedNode = getSelectedNode(stack);
 
-			for (Path.PathNode node : path.getNodes()) {
+			for (CQRNPCPath.PathNode node : path.getNodes()) {
 				BlockPos pos = node.getPos();
 				Vector3d vec = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
@@ -131,7 +131,7 @@ public class ItemPathTool extends ItemLore {
 
 				// Draw connection lines
 				for (int index : node.getConnectedNodes()) {
-					Path.PathNode connectedNode = path.getNode(index);
+					CQRNPCPath.PathNode connectedNode = path.getNode(index);
 					BlockPos pos1 = connectedNode.getPos();
 					Vector3d vec1 = new Vector3d(pos1.getX() + 0.5D - vec.x, pos1.getY() + 0.5D - vec.y, pos1.getZ() + 0.5D - vec.z);
 					double dist = vec1.length();

@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
-public class Path {
+public class CQRNPCPath {
 
 	private static final String VERSION = "1.0.0";
 	private final List<PathNode> nodes = new ArrayList<>();
@@ -127,11 +127,11 @@ public class Path {
 		return null;
 	}
 
-	public void copyFrom(Path path) {
+	public void copyFrom(CQRNPCPath path) {
 		this.copyFrom(path, BlockPos.ZERO);
 	}
 
-	public void copyFrom(Path path, BlockPos offset) {
+	public void copyFrom(CQRNPCPath path, BlockPos offset) {
 		this.nodes.clear();
 		for (PathNode node : path.nodes) {
 			this.nodes.add(node.copy(this, offset));
@@ -145,7 +145,7 @@ public class Path {
 
 	public class PathNode {
 
-		private final Path path;
+		private final CQRNPCPath path;
 		private BlockPos pos;
 		private int waitingTimeMin;
 		private int waitingTimeMax;
@@ -157,7 +157,7 @@ public class Path {
 		private final IntList connectedNodes = new IntArrayList();
 		private final IntList blacklistedPrevNodes = new IntArrayList();
 
-		private PathNode(Path path, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, int index) {
+		private PathNode(CQRNPCPath path, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, int index) {
 			this.path = path;
 			this.pos = pos.immutable();
 			this.waitingTimeMin = MathHelper.clamp(Math.min(waitingTimeMin, waitingTimeMax), 0, 24000);
@@ -169,7 +169,7 @@ public class Path {
 			this.index = index;
 		}
 
-		private PathNode(Path path, CompoundNBT compound) {
+		private PathNode(CQRNPCPath path, CompoundNBT compound) {
 			this.path = path;
 			this.pos = DungeonGenUtils.readPosFromList(compound.getList("pos", Constants.NBT.TAG_INT));
 			this.waitingTimeMin = compound.getInt("waitingTimeMin");
@@ -218,7 +218,7 @@ public class Path {
 				node.connectedNodes.add(this.index);
 			}
 			if (updateWhenChanged) {
-				Path.this.onPathChanged();
+				CQRNPCPath.this.onPathChanged();
 			}
 			return true;
 		}
@@ -234,7 +234,7 @@ public class Path {
 				return false;
 			}
 			if (updateWhenChanged) {
-				Path.this.onPathChanged();
+				CQRNPCPath.this.onPathChanged();
 			}
 			return true;
 		}
@@ -264,7 +264,7 @@ public class Path {
 			}
 			this.blacklistedPrevNodes.add(node.index);
 			if (updateWhenChanged) {
-				Path.this.onPathChanged();
+				CQRNPCPath.this.onPathChanged();
 			}
 			return true;
 		}
@@ -278,7 +278,7 @@ public class Path {
 				return false;
 			}
 			if (updateWhenChanged) {
-				Path.this.onPathChanged();
+				CQRNPCPath.this.onPathChanged();
 			}
 			return true;
 		}
@@ -350,7 +350,7 @@ public class Path {
 
 		public void setPos(BlockPos pos) {
 			this.pos = pos.immutable();
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public BlockPos getPos() {
@@ -359,7 +359,7 @@ public class Path {
 
 		public void setWaitingTimeMin(int waitingTimeMin) {
 			this.waitingTimeMin = waitingTimeMin;
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public int getWaitingTimeMin() {
@@ -368,7 +368,7 @@ public class Path {
 
 		public void setWaitingTimeMax(int waitingTimeMax) {
 			this.waitingTimeMax = waitingTimeMax;
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public int getWaitingTimeMax() {
@@ -377,7 +377,7 @@ public class Path {
 
 		public void setWaitingRotation(float waitingRotation) {
 			this.waitingRotation = waitingRotation;
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public float getWaitingRotation() {
@@ -386,7 +386,7 @@ public class Path {
 
 		public void setWeight(int weight) {
 			this.weight = weight;
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public int getWeight() {
@@ -395,7 +395,7 @@ public class Path {
 
 		public void setTimeMin(int timeMin) {
 			this.timeMin = timeMin;
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public int getTimeMin() {
@@ -404,7 +404,7 @@ public class Path {
 
 		public void setTimeMax(int timeMax) {
 			this.timeMax = timeMax;
-			Path.this.onPathChanged();
+			CQRNPCPath.this.onPathChanged();
 		}
 
 		public int getTimeMax() {
@@ -415,7 +415,7 @@ public class Path {
 			return this.index;
 		}
 
-		private PathNode copy(Path path, BlockPos offset) {
+		private PathNode copy(CQRNPCPath path, BlockPos offset) {
 			BlockPos posNew = new BlockPos(
 					this.pos.getX() + offset.getX(),
 					this.pos.getY() + offset.getY(),
