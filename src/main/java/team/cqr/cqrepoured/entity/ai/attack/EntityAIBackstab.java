@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.MathHelper;
@@ -15,46 +16,50 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 	@Override
 	public boolean canUse() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.canUse();
+		return this.entity.getMainHandItem().getItem() instanceof ItemDagger && super.canUse();
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.canContinueToUse();
+		return this.entity.getMainHandItem().getItem() instanceof ItemDagger && super.canContinueToUse();
 	}
 
 	@Override
 	public void stop() {
 		super.stop();
-		this.entity.setSneaking(false);
+		this.entity.setPose(Pose.STANDING);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
 
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 
 		if (attackTarget instanceof AbstractEntityCQR) {
 			AbstractEntityCQR target = (AbstractEntityCQR) attackTarget;
-			boolean flag = this.entity.getDistanceSq(target) < 20.0D * 20.0D && target.getSensing().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
-			this.entity.setSneaking(flag);
+			boolean flag = this.entity.distanceToSqr(target) < 20.0D * 20.0D && target.getSensing().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
+			if(flag) {
+				this.entity.setPose(Pose.CROUCHING);
+			} else {
+				this.entity.setPose(Pose.STANDING);
+			}
 		}
 	}
 
 	@Override
 	protected void updatePath(LivingEntity target) {
-		double distance = Math.min(4.0D, this.entity.getDistance(target.posX, target.posY, target.posZ) * 0.5D);
-		double rad = Math.toRadians(target.rotationYaw);
+		double distance = Math.min(4.0D, this.entity.distanceTo(target) * 0.5D);
+		double rad = Math.toRadians(target.yRot);
 		double sin = MathHelper.sin((float) rad);
 		double cos = MathHelper.cos((float) rad);
-		PathNavigator navigator = this.entity.getNavigator();
+		PathNavigator navigator = this.entity.getNavigation();
 		Path path = null;
 		for (int i = 4; path == null && i >= 0; i--) {
 			double d = distance * i / 4.0D;
-			path = navigator.getPathToXYZ(target.posX + sin * d, target.posY, target.posZ - cos * d);
+			path = navigator.createPath(target.getX() + sin * d, target.getY(), target.getZ() - cos * d, 1);
 		}
-		navigator.setPath(path, 1.0D);
+		navigator.moveTo(path, 1.0D);//Correct?!
 	}
 
 	@Override

@@ -1,19 +1,23 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 
 public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractCQREntityAI<T> {
@@ -25,11 +29,12 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 
 	public EntityAIAttackRanged(T entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	protected ItemStack getEquippedWeapon() {
-		return this.entity.getHeldItemMainhand();
+		return this.entity.getMainHandItem();
 	}
 
 	@Override
@@ -37,7 +42,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		if (attackTarget == null) {
 			return false;
 		}
@@ -49,42 +54,42 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 		if (!this.isRangedWeapon(this.getEquippedWeapon().getItem())) {
 			return false;
 		}
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		if (attackTarget == null) {
 			return false;
 		}
-		return this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.ticksExisted;
+		return this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.tickCount;
 	}
 
 	@Override
 	public void start() {
-		this.entity.getNavigator().clearPath();
+		this.entity.getNavigation().stop();
 	}
 
 	@Override
 	public void stop() {
-		this.entity.getNavigator().clearPath();
-		this.entity.resetActiveHand();
-		this.entity.isSwingInProgress = false;
+		this.entity.getNavigation().stop();
+		this.entity.stopUsingItem();
+		this.entity.swinging = false;
 	}
 
 	@Override
 	public void tick() {
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		if (attackTarget == null) {
 			return;
 		}
-		double distanceSq = this.entity.getDistanceSq(attackTarget);
+		double distanceSq = this.entity.distanceToSqr(attackTarget);
 		double attackRangeSq = this.getAttackRange() * this.getAttackRange();
 
-		if (this.entity.getSensing().canSee(attackTarget) && (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.hasPath()))) {
+		if (this.entity.getSensing().canSee(attackTarget) && (distanceSq < attackRangeSq * 0.9D * 0.9D || (distanceSq < attackRangeSq && !this.entity.isPathFinding()))) {
 			// this.entity.faceEntity(attackTarget, 30.0F, 30.0F);
-			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+			this.entity.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
 			this.checkAndPerformAttack(attackTarget);
-			this.entity.getNavigator().clearPath();
+			this.entity.getNavigation().stop();
 			this.strafingTime++;
 		} else {
-			this.entity.getNavigator().tryMoveToEntityLiving(attackTarget, 1.0D);
+			this.entity.getNavigation().moveTo(attackTarget, 1.0D);
 			this.strafingTime = -1;
 			// this.entity.resetActiveHand();
 			// this.entity.isSwingInProgress = false;
@@ -110,29 +115,29 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 			}
 
 			float f = this.getStrafingSpeed();
-			this.entity.getMoveHelper().strafe(this.strafingBackwards ? -f : f, this.strafingClockwise ? f : -f);
+			this.entity.getMoveControl().strafe(this.strafingBackwards ? -f : f, this.strafingClockwise ? f : -f);
 		}
 	}
 
 	protected float getStrafingSpeed() {
-		return (float) (this.entity.isNonBoss() ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
+		return (float) (this.entity instanceof AbstractEntityCQRBoss ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
 	}
 
 	protected boolean canStrafe() {
 		if (!this.entity.canStrafe()) {
 			return false;
 		}
-		return this.entity.isNonBoss() ? CQRConfig.mobs.enableEntityStrafing : CQRConfig.mobs.enableEntityStrafingBoss;
+		return this.entity instanceof AbstractEntityCQRBoss ? CQRConfig.mobs.enableEntityStrafing : CQRConfig.mobs.enableEntityStrafingBoss;
 	}
 
 	protected void checkAndPerformAttack(LivingEntity attackTarget) {
-		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
+		if (this.entity.tickCount > this.prevTimeAttacked + this.getAttackCooldown()) {
 			if (this.getAttackChargeTicks() > 0) {
-				this.entity.setActiveHand(Hand.MAIN_HAND);
-				this.entity.isSwingInProgress = true;
+				this.entity.startUsingItem(Hand.MAIN_HAND);
+				this.entity.swinging = true;
 			}
 
-			if (this.entity.getItemInUseMaxCount() >= this.getAttackChargeTicks()) {
+			if (this.entity.getUseItemRemainingTicks() >= this.getAttackChargeTicks()) {
 				ItemStack stack = this.getEquippedWeapon();
 				Item item = stack.getItem();
 
@@ -144,18 +149,20 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					AbstractArrowEntity arrow = ((ArrowItem) arrowItem.getItem()).createArrow(this.world, arrowItem, this.entity);
 					// arrowItem.shrink(1);
 
-					double x = attackTarget.posX - this.entity.posX;
-					double y = attackTarget.posY + attackTarget.height * 0.5D - arrow.posY;
-					double z = attackTarget.posZ - this.entity.posZ;
+					double x = attackTarget.getX() - this.entity.getX();
+					double y = attackTarget.getY() + attackTarget.getBbHeight() * 0.5D - arrow.getY();
+					double z = attackTarget.getZ() - this.entity.getZ();
 					double distance = Math.sqrt(x * x + z * z);
 					arrow.shoot(x, y + distance * distance * 0.0045D, z, 2.4F, this.getInaccuracy());
-					arrow.motionX += this.entity.motionX;
+					/*arrow.motionX += this.entity.motionX;
 					arrow.motionZ += this.entity.motionZ;
 					if (!this.entity.onGround) {
 						arrow.motionY += this.entity.motionY;
-					}
-					this.world.spawnEntity(arrow);
-					this.entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+					}*/
+					Vector3d shooterVec = this.entity.getDeltaMovement();
+					arrow.setDeltaMovement(arrow.getDeltaMovement().add(shooterVec.x(), this.entity.isOnGround() ? 0 : shooterVec.y(), shooterVec.z()));
+					this.world.addFreshEntity(arrow);
+					this.entity.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 				} else if (item instanceof IRangedWeapon) {
 					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, Hand.MAIN_HAND);
 					if (((IRangedWeapon) item).getShootSound() != null) {
@@ -163,12 +170,12 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					}
 				}
 
-				this.prevTimeAttacked = this.entity.ticksExisted;
+				this.prevTimeAttacked = this.entity.tickCount;
 				if (this.getAttackChargeTicks() > 0) {
-					this.entity.resetActiveHand();
-					this.entity.isSwingInProgress = false;
+					this.entity.stopUsingItem();
+					this.entity.swinging = false;
 				} else {
-					this.entity.swingArm(Hand.MAIN_HAND);
+					this.entity.startUsingItem(Hand.MAIN_HAND);
 				}
 			}
 		}
