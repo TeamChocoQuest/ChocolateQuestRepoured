@@ -297,7 +297,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 					for (int i = 0; i < segmentCount; i++) {
 						EntranceBuilderHelper.buildEntranceSegment(segmentPos, entranceTunnelBlocks, direction);
 
-						segmentPos = segmentPos.offset(direction, EntranceBuilderHelper.SEGMENT_LENGTH);
+						segmentPos = segmentPos.relative(direction, EntranceBuilderHelper.SEGMENT_LENGTH);
 					}
 				}
 			}
