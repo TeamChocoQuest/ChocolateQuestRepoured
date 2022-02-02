@@ -14,8 +14,10 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
@@ -63,11 +65,24 @@ public class DungeonDataManager {
 	private boolean modifiedSinceLastSave = false;
 
 	public DungeonDataManager(World world) {
-		int dim = world.provider.getDimension();
+		/*int dim = world.provider.getDimension();
 		if (dim == 0) {
 			this.file = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/structures.nbt");
 		} else {
 			this.file = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/structures.nbt");
+		}*/
+		if(world instanceof ServerWorld) {
+			ServerWorld sw = (ServerWorld)world;
+			if(world.dimension().equals(DimensionType.OVERWORLD_LOCATION)) {
+				//Is now a .dat file
+				this.file = sw.getDataStorage().getDataFile("CQR/structures");
+			} else {
+				this.file = sw.getDataStorage().getDataFile("CQR/structures");
+			}
+		}
+		else {
+			//TODO: Crash, this must be run on the server world
+			this.file = null;
 		}
 	}
 
