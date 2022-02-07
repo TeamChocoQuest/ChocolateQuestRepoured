@@ -43,7 +43,7 @@ public class ModelGiantTortoiseGecko extends ModelGeoCQRBase<EntityCQRGiantTorto
 		if (entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
 			IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
 
-			headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch));
+			headBone.setRotationX((float) Math.toRadians(-entity.xRot));
 			headBone.setRotationY((float) Math.toRadians(-(entity.yHeadRot - entity.yBodyRot)));
 
 		}

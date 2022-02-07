@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.model.entity.boss;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -8,6 +7,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
+import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 public class ModelEnderCalamity extends ModelGeoCQRBase<EntityCQREnderCalamity> {
 
@@ -57,7 +57,7 @@ public class ModelEnderCalamity extends ModelGeoCQRBase<EntityCQREnderCalamity> 
 		IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
 		float correctPitch = bodyBone.getRotationX();
 		if (entity.rotateBodyPitch()) {
-			float pitch = (float) Math.toRadians(this.getPitch(entity, Minecraft.getInstance().getRenderPartialTicks()) - 90F);
+			float pitch = (float) Math.toRadians(this.getPitch(entity, PartialTicksUtil.getCurrentPartialTicks()) - 90F);
 			pitch -= rootBone.getRotationX();
 			// System.out.println("Client pitch: " + pitch);
 			// System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);
