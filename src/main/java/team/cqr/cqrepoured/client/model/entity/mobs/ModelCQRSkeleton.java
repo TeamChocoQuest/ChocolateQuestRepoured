@@ -1,40 +1,43 @@
 package team.cqr.cqrepoured.client.model.entity.mobs;
 
-import net.minecraft.client.model.ModelRenderer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.HandSide;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRSkeleton;
 
 /** Copied from vanilla skeleton model but modified */
-public class ModelCQRSkeleton extends ModelCQRBiped {
+public class ModelCQRSkeleton extends ModelCQRBiped<EntityCQRSkeleton> {
 
 	public ModelCQRSkeleton() {
 		super(64, 64, false);
 
-		this.bipedRightArm = new ModelRenderer(this, 40, 16);
-		this.bipedRightArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
-		this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-		this.bipedLeftArm = new ModelRenderer(this, 40, 16);
-		this.bipedLeftArm.mirror = true;
-		this.bipedLeftArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
-		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
-		this.bipedRightLeg = new ModelRenderer(this, 0, 16);
-		this.bipedRightLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
-		this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
-		this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-		this.bipedLeftLeg.mirror = true;
-		this.bipedLeftLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
-		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
+		this.rightArm = new ModelRenderer(this, 40, 16);
+		this.rightArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
+		this.rightArm.setPos(-5.0F, 2.0F, 0.0F);
+		this.leftArm = new ModelRenderer(this, 40, 16);
+		this.leftArm.mirror = true;
+		this.leftArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
+		this.leftArm.setPos(5.0F, 2.0F, 0.0F);
+		this.rightLeg = new ModelRenderer(this, 0, 16);
+		this.rightLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
+		this.rightLeg.setPos(-2.0F, 12.0F, 0.0F);
+		this.leftLeg = new ModelRenderer(this, 0, 16);
+		this.leftLeg.mirror = true;
+		this.leftLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, 0.0F);
+		this.leftLeg.setPos(2.0F, 12.0F, 0.0F);
 
 		this.setClothingLayerVisible(false);
 	}
 
 	@Override
-	public void postRenderArm(float scale, HandSide side) {
-		float f = side == HandSide.RIGHT ? 1.0F : -1.0F;
-		ModelRenderer modelrenderer = this.getArmForSide(side);
-		modelrenderer.rotationPointX += f;
-		modelrenderer.postRender(scale);
-		modelrenderer.rotationPointX -= f;
+	public void translateToHand(HandSide pSide, MatrixStack pMatrixStack) {
+		float f = pSide == HandSide.RIGHT ? 1.0F : -1.0F;
+		ModelRenderer modelrenderer = this.getArm(pSide);
+		modelrenderer.x += f;
+		modelrenderer.translateAndRotate(pMatrixStack);
+		modelrenderer.x -= f;
 	}
 
 }
