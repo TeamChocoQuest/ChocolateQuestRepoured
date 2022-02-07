@@ -53,10 +53,10 @@ public class PlateauDungeonPart implements IDungeonPart {
 				if (state1 == null || state2 == null) {
 					Biome biome = world.getBiome(MUTABLE);
 					if (state1 == null) {
-						state1 = biome.fillerBlock;
+						state1 = biome.getGenerationSettings().getSurfaceBuilder().get().config.getUnderMaterial();
 					}
 					if (state2 == null) {
-						state2 = biome.topBlock;
+						state2 = biome.getGenerationSettings().getSurfaceBuilder().get().config.getTopMaterial();
 					}
 				}
 
@@ -123,7 +123,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 				MUTABLE.setY(MUTABLE.getY() - 1);
 			}
 		}
-		return MUTABLE.getY();
+		//return MUTABLE.getY();
 	}
 
 	public int getStartX() {
