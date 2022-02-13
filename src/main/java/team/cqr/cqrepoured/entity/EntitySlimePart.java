@@ -5,17 +5,22 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntitySlimePart extends SlimeEntity {
 
 	private UUID ownerUuid;
 
+	public EntitySlimePart(World world) {
+		this(CQREntityTypes.SMALL_SLIME.get(), world);
+	}
+	
 	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -31,13 +36,14 @@ public class EntitySlimePart extends SlimeEntity {
 		this.targetSelector.availableGoals.clear();
 	}
 
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		ModifiableAttributeInstance iattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-		iattributeinstance.setBaseValue(iattributeinstance.getBaseValue() * 0.5D);
+	public static AttributeModifierMap.MutableAttribute createMobAttributes() {
+		return LivingEntity
+			.createLivingAttributes()
+			.add(Attributes.FOLLOW_RANGE, 16.0D)
+			.add(Attributes.ATTACK_KNOCKBACK)
+			.add(Attributes.MOVEMENT_SPEED, 0.35);
 	}
-	
+
 	@Override
 	public void tick() {
 		if (this.tickCount > 400) {
@@ -46,12 +52,12 @@ public class EntitySlimePart extends SlimeEntity {
 
 		super.tick();
 	}
-	
+
 	@Override
 	protected void doPush(Entity pEntity) {
 		this.push(pEntity);
 	}
-	
+
 	@Override
 	public void push(Entity entityIn) {
 		if (entityIn instanceof LivingEntity && entityIn.getUUID().equals(this.ownerUuid)) {
@@ -59,7 +65,7 @@ public class EntitySlimePart extends SlimeEntity {
 			this.remove();
 		}
 	}
-	
+
 	@Override
 	protected boolean shouldDropLoot() {
 		return false;

@@ -4,10 +4,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntityType.IFactory;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.EntitySlimePart;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
 import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.entity.boss.EntityCQRLich;
@@ -26,11 +31,14 @@ import team.cqr.cqrepoured.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 
+@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
 
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, CQRMain.MODID);
 	
 	//Default ticking rate is 3 => every 3 ticks it updates
+	//Misc mobs
+	public static final RegistryObject<EntityType<EntitySlimePart>> SMALL_SLIME = registerSized(EntitySlimePart::new, "slime_part", 0.25F, 0.25F, 1); 
 	
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
@@ -86,6 +94,12 @@ public class CQREntityTypes {
 				.updateInterval(updateInterval)
 				.setShouldReceiveVelocityUpdates(true)
 				.build(CQRMain.prefix(entityName).toString()));
+	}
+	
+	@SubscribeEvent
+	public static void initializeAttributes(EntityAttributeCreationEvent event) {
+		event.put(SMALL_SLIME.get(), EntitySlimePart.createMobAttributes().build());
+		//TODO
 	}
 	
 }
