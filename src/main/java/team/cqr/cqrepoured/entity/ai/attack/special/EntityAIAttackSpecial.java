@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.entity.LivingEntity;
@@ -23,12 +24,13 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	public EntityAIAttackSpecial(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
 	}
 
 	@Override
 	public boolean canUse() {
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		if (attackTarget == null) {
 			return false;
 		}
@@ -36,7 +38,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 			return false;
 		}
 		for (AbstractEntityAIAttackSpecial specialAttack : SPECIAL_ATTACKS) {
-			if (this.specialAttackTick + specialAttack.getCooldown(this.entity) >= this.entity.ticksExisted) {
+			if (this.specialAttackTick + specialAttack.getCooldown(this.entity) >= this.entity.tickCount) {
 				continue;
 			}
 			if (!specialAttack.shouldStartAttack(this.entity, attackTarget)) {
@@ -56,7 +58,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 		if (this.tick >= this.activeSpecialAttack.getMaxUseTime()) {
 			return false;
 		}
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		if ((this.activeSpecialAttack.needsTargetToContinue() || this.activeSpecialAttack.needsSightToContinue()) && attackTarget == null) {
 			return false;
 		}
@@ -73,10 +75,10 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void start() {
-		this.specialAttackTick = this.entity.ticksExisted;
+		this.specialAttackTick = this.entity.tickCount;
 		this.tick = 0;
 
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		this.activeSpecialAttack.startAttack(this.entity, attackTarget);
 	}
 
@@ -89,7 +91,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void tick() {
-		LivingEntity attackTarget = this.entity.getAttackTarget();
+		LivingEntity attackTarget = this.entity.getTarget();
 		this.activeSpecialAttack.continueAttack(this.entity, attackTarget, this.tick++);
 
 		if (this.tick == this.activeSpecialAttack.getMaxUseTime()) {

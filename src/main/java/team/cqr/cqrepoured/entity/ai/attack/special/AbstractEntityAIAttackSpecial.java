@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity.ai.attack.special;
 
 import java.util.Random;
 
+import net.minecraft.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public abstract class AbstractEntityAIAttackSpecial {
@@ -19,31 +20,31 @@ public abstract class AbstractEntityAIAttackSpecial {
 		this.cooldown = cooldown;
 	}
 
-	public abstract boolean shouldStartAttack(AbstractEntityCQR attacker, EntityLivingBase target);
+	public abstract boolean shouldStartAttack(AbstractEntityCQR attacker, LivingEntity target);
 
-	public abstract boolean shouldContinueAttack(AbstractEntityCQR attacker, EntityLivingBase target);
+	public abstract boolean shouldContinueAttack(AbstractEntityCQR attacker, LivingEntity target);
 
 	public abstract boolean isInterruptible(AbstractEntityCQR entity);
 
-	public abstract void startAttack(AbstractEntityCQR attacker, EntityLivingBase target);
+	public abstract void startAttack(AbstractEntityCQR attacker, LivingEntity target);
 
-	public abstract void continueAttack(AbstractEntityCQR attacker, EntityLivingBase target, int tick);
+	public abstract void continueAttack(AbstractEntityCQR attacker, LivingEntity target, int tick);
 
 	/**
 	 * Gets called when this attack is finished.
 	 */
-	public abstract void stopAttack(AbstractEntityCQR attacker, EntityLivingBase target);
+	public abstract void stopAttack(AbstractEntityCQR attacker, LivingEntity target);
 
 	/**
 	 * Gets called when this attack is finished or interrupted.
 	 */
 	public abstract void resetAttack(AbstractEntityCQR attacker);
 
-	public double getAttackRange(AbstractEntityCQR attacker, EntityLivingBase target) {
+	public double getAttackRange(AbstractEntityCQR attacker, LivingEntity target) {
 		return attacker.getAttackReach(target);
 	}
 
-	public double getAttackChance(AbstractEntityCQR attacker, EntityLivingBase target) {
+	public double getAttackChance(AbstractEntityCQR attacker, LivingEntity target) {
 		return 0.1D;
 	}
 

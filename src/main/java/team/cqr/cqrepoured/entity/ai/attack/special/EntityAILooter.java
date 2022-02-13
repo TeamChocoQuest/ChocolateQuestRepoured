@@ -1,19 +1,21 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.entity.MobEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -36,7 +38,8 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAILooter(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(2);
+		//this.setMutexBits(2);
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override
@@ -47,27 +50,28 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (this.cooldown > 0) {
 			return false;
 		}
-		if (this.entity.ticksExisted % 4 == 0) {
+		if (this.entity.tickCount % 4 == 0) {
 			if (!this.hasBackpack(this.entity)) {
 				return false;
 			}
 			if (!this.hasBackpackSpace()) {
 				return false;
 			}
-			BlockPos pos = new BlockPos(this.entity);
-			Vector3d vec = this.entity.getPositionEyes(1.0F);
+			BlockPos pos = this.entity.blockPosition();
+			Vector3d vec = this.entity.getEyePosition(1.0F);
 			int horizontalRadius = CQRConfig.mobs.looterAIChestSearchRange;
 			int verticalRadius = horizontalRadius >> 1;
-			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.height) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
+			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.getBbHeight()) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
 				if (this.visitedChests.contains(mutablePos)) {
 					return false;
 				}
-				TileEntity te = this.world.getTileEntity(mutablePos);
+				TileEntity te = this.world.getBlockEntity(mutablePos);
 				if (!(te instanceof ChestTileEntity) || ((ChestTileEntity) te).isEmpty()) {
 					return false;
 				}
 				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
-				return result == null || result.getBlockPos().equals(mutablePos);
+				BlockPos.Mutable bp = new BlockPos(result.getLocation()).mutable();
+				return result == null || bp.equals(mutablePos);
 			});
 		}
 
@@ -75,9 +79,10 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	private boolean hasBackpackSpace() {
-		ItemStack backpack = this.entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
-		IItemHandler inventory = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		if (inventory != null) {
+		ItemStack backpack = this.entity.getItemBySlot(EquipmentSlotType.CHEST);
+		LazyOptional<IItemHandler> lOpCap = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		if(lOpCap.isPresent()) {
+			IItemHandler inventory = lOpCap.resolve().get();
 			for (int i = 0; i < inventory.getSlots(); i++) {
 				if (inventory.getStackInSlot(i).isEmpty()) {
 					return true;
@@ -91,7 +96,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void start() {
 		super.start();
 		this.currentLootingTime = this.LOOTING_DURATION;
-		this.entity.getNavigator().tryMoveToXYZ(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
+		this.entity.getNavigation().moveTo(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
 	}
 
 	@Override
@@ -103,34 +108,34 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void tick() {
 		super.tick();
 
-		if (this.entity.getNavigator().getPathToPos(this.currentTarget) == null) {
+		if (this.entity.getNavigation().createPath(this.currentTarget, 1) == null) {
 			this.visitedChests.add(this.currentTarget);
 			this.currentTarget = null;
 			return;
 		}
 
 		if (this.isInLootingRange()) {
-			this.entity.getNavigator().clearPath();
-			ChestTileEntity tile = (ChestTileEntity) this.world.getTileEntity(this.currentTarget);
+			this.entity.getNavigation().stop();
+			ChestTileEntity tile = (ChestTileEntity) this.world.getBlockEntity(this.currentTarget);
 			// TODO: let it stay open
 			if (this.currentLootingTime >= 0) {
 				this.currentLootingTime--;
 				if (this.currentLootingTime % (this.LOOTING_DURATION / CQRConfig.mobs.looterAIStealableItems) == 0) {
 					ItemStack stolenItem = null;
-					for (int i = 0; i < tile.getSizeInventory(); i++) {
-						if (!tile.getStackInSlot(i).isEmpty()) {
-							stolenItem = tile.getStackInSlot(i).copy();
-							tile.removeStackFromSlot(i);
+					for (int i = 0; i < tile.getContainerSize(); i++) {
+						if (!tile.getItem(i).isEmpty()) {
+							stolenItem = tile.removeItemNoUpdate(i);
 							break;
 						}
 					}
 					if (stolenItem != null) {
-						tile.markDirty();
-						this.entity.swingArm(Hand.MAIN_HAND);
-						this.entity.swingArm(Hand.OFF_HAND);
-						ItemStack backpack = this.entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
-						IItemHandler inventory = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-						if (inventory != null) {
+						tile.setChanged();
+						this.entity.swing(Hand.MAIN_HAND);
+						this.entity.swing(Hand.OFF_HAND);
+						ItemStack backpack = this.entity.getItemBySlot(EquipmentSlotType.CHEST);
+						LazyOptional<IItemHandler> lOpCap = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+						if(lOpCap.isPresent()) {
+							IItemHandler inventory = lOpCap.resolve().get();
 							for (int i = 0; i < inventory.getSlots(); i++) {
 								if (inventory.getStackInSlot(i).isEmpty()) {
 									inventory.insertItem(i, stolenItem, false);
@@ -144,19 +149,19 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.visitedChests.add(this.currentTarget);
 			}
 		} else {
-			this.entity.getLookHelper().setLookPosition(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 30, 30);
-			if (!this.entity.hasPath()) {
-				this.entity.getNavigator().tryMoveToXYZ(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
+			this.entity.getLookControl().setLookAt(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 30, 30);
+			if (!this.entity.isPathFinding()) {
+				this.entity.getNavigation().moveTo(this.currentTarget.getX(), this.currentTarget.getY(), this.currentTarget.getZ(), 1.125D);
 			}
 		}
 	}
 
 	private boolean isInLootingRange() {
-		return this.entity.getDistanceSq(this.currentTarget) <= this.REQUIRED_DISTANCE_TO_LOOT;
+		return this.entity.blockPosition().distSqr(this.currentTarget) <= this.REQUIRED_DISTANCE_TO_LOOT;
 	}
 
 	protected boolean hasBackpack(MobEntity living) {
-		ItemStack chest = living.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		ItemStack chest = living.getItemBySlot(EquipmentSlotType.CHEST);
 		return chest != null && chest.getItem() instanceof ItemBackpack;
 	}
 
@@ -167,7 +172,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (this.visitedChests.contains(this.currentTarget)) {
 			return false;
 		}
-		TileEntity tile = this.world.getTileEntity(this.currentTarget);
+		TileEntity tile = this.world.getBlockEntity(this.currentTarget);
 		return tile != null && tile instanceof ChestTileEntity && !((ChestTileEntity) tile).isEmpty();
 	}
 

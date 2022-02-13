@@ -13,13 +13,13 @@ public class EntityAIAttackSpecialDagger extends AbstractEntityAIAttackSpecial {
 
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		ItemStack stack = attacker.getHeldItemMainhand();
+		ItemStack stack = attacker.getMainHandItem();
 		return stack.getItem() instanceof ItemDagger;
 	}
 
 	@Override
 	public boolean shouldContinueAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		ItemStack stack = attacker.getHeldItemMainhand();
+		ItemStack stack = attacker.getMainHandItem();
 		return stack.getItem() instanceof ItemDagger;
 	}
 

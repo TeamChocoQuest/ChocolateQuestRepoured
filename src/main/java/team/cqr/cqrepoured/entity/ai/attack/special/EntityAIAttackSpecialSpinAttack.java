@@ -36,7 +36,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 		if (!attacker.canUseSpinToWinAttack()) {
 			return false;
 		}
-		ItemStack itemStackMain = attacker.getHeldItemMainhand();
+		ItemStack itemStackMain = attacker.getMainHandItem();
 		ItemStack itemStackOff = attacker.getMainHandItem();
 
 		return this.doesItemStackFitForSpinAttack(itemStackMain) && this.doesItemStackFitForSpinAttack(itemStackOff);
@@ -56,7 +56,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 
 	@Override
 	public boolean shouldContinueAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		return (target == null || attacker.getDistance(target) <= MAX_DISTANCE_TO_TARGET) && (!attacker.collidedHorizontally || (this.ticksCollided < 20));
+		return (target == null || attacker.distanceTo(target) <= MAX_DISTANCE_TO_TARGET) && (!attacker.horizontalCollision || (this.ticksCollided < 20));
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	@Override
 	public void continueAttack(AbstractEntityCQR attacker, LivingEntity target, int tick) {
 		final boolean oldTargetWasNull = this.targetWasNullInLastCycle;
-		this.targetWasNullInLastCycle = target == null || target.isDead;
-		if (attacker.collidedHorizontally) {
+		this.targetWasNullInLastCycle = target == null || target.isDeadOrDying();
+		if (attacker.horizontalCollision) {
 			this.ticksCollided++;
 		} else {
 			this.ticksCollided = 0;
@@ -89,13 +89,16 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			this.calcAttackDirection(attacker, target);
 		}
 
-		attacker.motionX = this.attackDirection.x;
+		Vector3d deltaMovement = new Vector3d(this.attackDirection.x, attacker.getDeltaMovement().y(), this.attackDirection.z);
+		/*attacker.motionX = this.attackDirection.x;
 		attacker.motionZ = this.attackDirection.z;
-		attacker.velocityChanged = true;
+		atacker.velocityChanged = true;*/
+		attacker.setDeltaMovement(deltaMovement);
+		attacker.hasImpulse = true;
 
 		// First: Damage all entities around us
 		final double radius = 1.5 * attacker.getSizeVariation();
-		List<Entity> affectedEntities = attacker.getEntityWorld().getEntitiesInAABBexcluding(attacker, attacker.getEntityBoundingBox().grow(radius), TargetUtil.createPredicateNonAlly(attacker.getFaction()));
+		List<Entity> affectedEntities = attacker.getWorld().getEntities(attacker, attacker.getBoundingBox().inflate(radius), TargetUtil.createPredicateNonAlly(attacker.getFaction()));
 		affectedEntities.forEach((Entity entity) -> {
 			if (entity == null) {
 				return;
@@ -103,15 +106,15 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			if (entity instanceof PartEntity) {
 				return;
 			}
-			if (attacker.getDistance(entity) > radius) {
+			if (attacker.distanceTo(entity) > radius) {
 				return;
 			}
 			if (entity instanceof LivingEntity) {
 				LivingEntity living = (LivingEntity) entity;
 
-				float dmg = (float) attacker.getEntityAttribute(Attributes.ATTACK_DAMAGE).getAttributeValue();
-				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getHeldItemMainhand(), living.getCreatureAttribute());
-				dmg += 0.75 * EnchantmentHelper.getModifierForCreature(attacker.getMainHandItem(), living.getCreatureAttribute());
+				float dmg = (float) attacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+				dmg += 0.75 * EnchantmentHelper.getDamageBonus(attacker.getOffhandItem(), living.getMobType());
+				dmg += 0.75 * EnchantmentHelper.getDamageBonus(attacker.getMainHandItem(), living.getMobType());
 
 				/*
 				 * living.attackEntityFrom(DamageSource.causeThornsDamage(attacker), dmg);
@@ -124,8 +127,8 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				 */
 
 				final float knockbackStrength = 0.6125F * attacker.getSizeVariation();
-				living.attackEntityFrom(DamageSource.causeMobDamage(attacker), dmg);
-				living.knockback(entity, knockbackStrength, 1, 1);
+				living.hurt(DamageSource.mobAttack(attacker), dmg);
+				living.knockback(/*entity,*/ knockbackStrength, 1, 1);//Correct replacement?
 			}
 		});
 	}

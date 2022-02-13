@@ -13,13 +13,13 @@ public class EntityAIAttackSpecialGreatSword extends AbstractEntityAIAttackSpeci
 
 	@Override
 	public boolean shouldStartAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		ItemStack stack = attacker.getHeldItemMainhand();
+		ItemStack stack = attacker.getMainHandItem();
 		return stack.getItem() instanceof ItemGreatSword;
 	}
 
 	@Override
 	public boolean shouldContinueAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		ItemStack stack = attacker.getHeldItemMainhand();
+		ItemStack stack = attacker.getMainHandItem();
 		return stack.getItem() instanceof ItemGreatSword;
 	}
 

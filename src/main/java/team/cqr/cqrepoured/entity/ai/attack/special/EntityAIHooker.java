@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -26,7 +28,8 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIHooker(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.cooldown--;
 				return false;
 			}
-			return this.entity.hasAttackTarget() && this.entity.getSensing().canSee(this.entity.getAttackTarget());
+			return this.entity.hasAttackTarget() && this.entity.getSensing().canSee(this.entity.getTarget());
 		}
 
 		return false;
@@ -46,19 +49,19 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void start() {
 		super.start();
 		this.state = STATE.PREPARING;
-		if (this.entity.hasPath()) {
-			this.entity.getNavigator().clearPath();
-			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
+		if (this.entity.isPathFinding()) {
+			this.entity.getNavigation().stop();
+			double dist = this.entity.distanceToSqr(this.entity.getTarget());
 			if (dist > this.MAX_RANGE) {
-				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
+				this.entity.getNavigation().moveTo(this.entity.getTarget(), 1.1);
 			} else if (dist >= this.MIN_RANGE) {
-				this.entity.getNavigator().clearPath();
+				this.entity.getNavigation().stop();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vector3d v = this.entity.position().subtract(this.entity.getAttackTarget().position()).normalize().scale(6);
+				Vector3d v = this.entity.position().subtract(this.entity.getTarget().position()).normalize().scale(6);
 				v = v.add(this.entity.position());
-				this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.3);
+				this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.3);
 			}
 		}
 	}
@@ -67,43 +70,43 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public void tick() {
 		super.tick();
 
-		if (this.hook != null && !this.hook.isDead) {
-			this.entity.getLookHelper().setLookPositionWithEntity(this.hook, 30, 30);
+		if (this.hook != null && this.hook.isAlive()) {
+			this.entity.getLookControl().setLookAt(this.hook, 30, 30);
 		} else if (this.entity.hasAttackTarget()) {
-			this.entity.getLookHelper().setLookPositionWithEntity(this.entity.getAttackTarget(), 30, 30);
+			this.entity.getLookControl().setLookAt(this.entity.getTarget(), 30, 30);
 		}
 
 		switch (this.state) {
 		case HOOK_FLYING:
-			if (this.entity.hasPath()) {
-				this.entity.getNavigator().clearPath();
+			if (this.entity.isPathFinding()) {
+				this.entity.getNavigation().stop();
 			}
-			if (this.hook == null || this.hook.isDead) {
+			if (this.hook == null || !this.hook.isAlive()) {
 				this.state = STATE.PREPARING;
 				this.cooldown = this.MAX_COOLDOWN / 2;
 			}
 			break;
 		case PREPARING:
-			double dist = this.entity.getDistanceSq(this.entity.getAttackTarget());
+			double dist = this.entity.distanceToSqr(this.entity.getTarget());
 			if (dist > this.MAX_RANGE) {
-				this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getAttackTarget(), 1.1);
+				this.entity.getNavigation().moveTo(this.entity.getTarget(), 1.1);
 			} else if (dist >= 64) {
-				this.entity.getNavigator().clearPath();
+				this.entity.getNavigation().stop();
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vector3d v = this.entity.position().subtract(this.entity.getAttackTarget().position()).normalize().scale(6);
+				Vector3d v = this.entity.position().subtract(this.entity.getTarget().position()).normalize().scale(6);
 				v = v.add(this.entity.position());
-				this.entity.getNavigator().tryMoveToXYZ(v.x, v.y, v.z, 1.3);
+				this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.3);
 			}
 			break;
 		case PREPARING_LAUNCH:
-			if (this.entity.hasPath()) {
-				this.entity.getNavigator().clearPath();
+			if (this.entity.isPathFinding()) {
+				this.entity.getNavigation().stop();
 			}
 			ItemStack hookItem = this.entity.getMainHandItem();
 			if (hookItem.getItem() instanceof ItemHookshotBase) {
-				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getAttackTarget(), Hand.OFF_HAND);
+				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getTarget(), Hand.OFF_HAND);
 				this.state = STATE.HOOK_FLYING;
 			}
 
@@ -115,7 +118,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean canContinueToUse() {
-		return super.canContinueToUse() && this.entity.hasAttackTarget() && this.entity.getSensing().canSee(this.entity.getAttackTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
+		return super.canContinueToUse() && this.entity.hasAttackTarget() && this.entity.getSensing().canSee(this.entity.getTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
 	}
 
 	@Override
