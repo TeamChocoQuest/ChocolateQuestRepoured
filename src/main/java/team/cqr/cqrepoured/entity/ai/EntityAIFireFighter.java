@@ -1,20 +1,20 @@
 package team.cqr.cqrepoured.entity.ai;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.block.FireBlock;
+import net.minecraft.entity.ai.goal.BreakBlockGoal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.IWorldReader;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.BlockPosUtil;
 
-public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> {
+public class EntityAIFireFighter extends /*AbstractCQREntityAI<AbstractEntityCQR>*/BreakBlockGoal {
 
-	private static final int SEARCH_RADIUS_HORIZONTAL = 16;
+	public EntityAIFireFighter(AbstractEntityCQR entity) {
+		super(Blocks.FIRE, entity, 1.1, 16); //block to break, entity, speedModifier, search range
+	}
+
+	/*private static final int SEARCH_RADIUS_HORIZONTAL = 16;
 	private static final int SEARCH_RADIUS_VERTICAL = 2;
 	private static final double REACH_DISTANCE_SQ = 3.0D * 3.0D;
 	private BlockPos nearestFire = null;
@@ -83,6 +83,22 @@ public class EntityAIFireFighter extends AbstractCQREntityAI<AbstractEntityCQR> 
 			}
 			this.nearestFire = null;
 		}
+	}*/
+	
+	@Override
+	public boolean canUse() {
+		return super.canUse() && (this.mob instanceof AbstractEntityCQR && ((AbstractEntityCQR) this.mob).canPutOutFire());
+	}
+	
+	@Override
+	public boolean canContinueToUse() {
+		return super.canContinueToUse() && (this.mob instanceof AbstractEntityCQR && ((AbstractEntityCQR) this.mob).canPutOutFire());
+	}
+	
+	@Override
+	protected boolean isValidTarget(IWorldReader pLevel, BlockPos pPos) {
+		Block block = pLevel.getBlockState(pPos).getBlock();
+		return super.isValidTarget(pLevel, pPos) || block instanceof FireBlock;
 	}
 
 }
