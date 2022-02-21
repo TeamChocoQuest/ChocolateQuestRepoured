@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.entity.misc;
 
 import java.util.UUID;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -16,9 +16,11 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
@@ -30,46 +32,49 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	protected boolean isLeftSkull = false;
 	protected Vector3d direction = null;
 
-	public EntityFlyingSkullMinion(World worldIn) {
-		super(worldIn);
-		this.setSize(0.5F, 0.5F);
+	public EntityFlyingSkullMinion(World world) {
+		this(CQREntityTypes.FLYING_SKULL.get(), world);
+	}
+
+	public EntityFlyingSkullMinion(EntityType<? extends EntityFlyingSkullMinion> type, World worldIn) {
+		super(type, worldIn);
 		this.setNoGravity(true);
 		this.setHealth(1F);
-		this.getEntityAttribute(Attributes.MAX_HEALTH).setBaseValue(1F);
-		this.navigator = new FlyingPathNavigator(this, worldIn);
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1F);
+		this.navigation = new FlyingPathNavigator(this, worldIn);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		if (source.isExplosion()) {
 			return false;
 		}
-		if (source.getTrueSource() != null && EntityUtil.isEntityFlying(source.getTrueSource())) {
+		if (source.getEntity() != null && EntityUtil.isEntityFlying(source.getEntity())) {
 			return false;
 		}
-		if (source.getImmediateSource() instanceof SpectralArrowEntity) {
+		if (source.getDirectEntity() instanceof SpectralArrowEntity) {
 			Entity summonerTmp = this.summoner;
-			this.summoner = source.getTrueSource();
+			this.summoner = source.getEntity();
 			this.target = summonerTmp;
 			// this.explode(10F);
 			// this.setDead();
 			return true;
 		}
-		if (this.getRNG().nextInt(10) == 9) {
+		if (this.getRandom().nextInt(10) == 9) {
 			Entity summonerTmp = this.summoner;
-			this.summoner = source.getTrueSource();
+			this.summoner = source.getEntity();
 			this.target = summonerTmp;
-			this.setDead();
+			this.remove();
 			return true;
 		}
 		this.explode(1.25F);
-		this.setDead();
+		this.remove();
 		return true;
 	}
 
 	@Override
-	public PathNavigator getNavigator() {
-		return this.navigator;
+	public PathNavigator getNavigation() {
+		return this.navigation;
 	}
 
 	public void setSummoner(Entity ent) {
@@ -77,81 +82,87 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void aiStep() {
 		super.aiStep();
 		// If we hit a wall we explode
-		if (!this.isInsideOfMaterial(Material.AIR)) {
+		if (this.isInWall()) {
 			this.explode(1.25F);
-			this.setDead();
+			this.remove();
 		}
 		if (this.attacking) {
-			if (this.target != null && !this.target.isDead) {
+			if (this.target != null && this.target.isAlive()) {
 				this.updateDirection();
 			}
 			Vector3d v = this.direction;
 			v = v.normalize();
 			// this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
-			this.motionX = v.x * 0.4D;
-			this.motionY = v.y * 0.25D;
-			this.motionZ = v.z * 0.4D;
-			this.velocityChanged = true;
-			if (this.target != null && !this.target.isDead) {
-				this.getLookHelper().setLookPositionWithEntity(this.target, 30, 30);
+			this.setDeltaMovement(v.multiply(0.4, 0.25, 0.4));
+			this.hasImpulse = true;
+			if (this.target != null && this.target.isAlive()) {
+				this.getLookControl().setLookAt(this.target, 30, 30);
 			}
 
 		} else if (this.summoner != null) {
-			Vector3d v = this.summoner.getLookVec();
+			Vector3d v = this.summoner.getLookAngle();
 			v = new Vector3d(v.x, 2.25D, v.z);
 			v = v.normalize();
 			v = v.scale(2.5D);
 			v = VectorUtil.rotateVectorAroundY(v, this.isLeftSkull ? 270 : 90);
 			Vector3d targetPos = this.summoner.position().add(v);
-			this.getLookHelper().setLookPositionWithEntity(this.summoner, 30, 30);
-			if (this.getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
+			this.getLookControl().setLookAt(this.summoner, 30, 30);
+			if (this.position().distanceTo(targetPos) > 1) {
 				Vector3d velo = targetPos.subtract(this.position());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
 				// this.setVelocity(velo.x, velo.y * 1.5, velo.z);
-				this.motionX = velo.x;
-				this.motionY = velo.y * 2.5D;
-				this.motionZ = velo.z;
-				this.velocityChanged = true;
+				this.setDeltaMovement(velo.multiply(1, 2.5, 1));
+				this.hasImpulse = true;
 			}
 		}
 	}
 
 	@Override
-	protected void collideWithEntity(Entity entityIn) {
+	public void push(Entity pEntity) {
+		this.collideAndExplosion(pEntity);
+	}
+
+	@Override
+	protected void doPush(Entity pEntity) {
+		this.collideAndExplosion(pEntity);
+	}
+
+	protected void collideAndExplosion(Entity entityIn) {
 		if (entityIn != this.summoner) {
-			super.collideWithEntity(entityIn);
+			// super.collideAndExplosion(entityIn);
 
 			if (EntityUtil.isEntityFlying(entityIn)) {
 				if (this.summoner instanceof LivingEntity && entityIn instanceof LivingEntity) {
 					((LivingEntity) this.summoner).heal(((LivingEntity) entityIn).getHealth() / 2);
-					((LivingEntity) entityIn).motionY *= -2;
-					((LivingEntity) entityIn).velocityChanged = true;
+
+					((LivingEntity) entityIn).setDeltaMovement(entityIn.getDeltaMovement().multiply(1, -2.0, 1));
+					entityIn.hasImpulse = true;
 				}
 			}
 			this.explode(0.75F);
-			this.setDead();
+			this.remove();
 		}
 	}
 
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		super.die(cause);
 		this.explode(1.25F);
 	}
 
 	private void explode(float strengthMultiplier) {
-		if (this.world != null) {
-			if (this.summoner != null && !this.summoner.isDead && !this.isDead) {
-				this.world.newExplosion(this.summoner, this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), 2 * strengthMultiplier, false, false);
+		if (this.level != null) {
+			if (this.summoner != null && this.summoner.isAlive() && this.isAlive()) {
+				this.level.explode(this.summoner, this.position().x(), this.position().y(), this.position().z(), 2 * strengthMultiplier, false, Mode.NONE);
 			}
-			this.world.spawnParticle(ParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
-			this.world.spawnParticle(ParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
-			this.world.spawnParticle(ParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
-			this.world.spawnParticle(ParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
+			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 0.5F, 0.0F, 0.5F);
+			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 0.5F, 0.0F, -0.5F);
+			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), -0.5F, 0.0F, -0.5F);
+			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), -0.5F, 0.0F, 0.5F);
 		}
 	}
 
@@ -169,17 +180,17 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		super.save(compound);
-		compound.setBoolean("attacking", this.attacking);
-		compound.setDouble("vX", this.direction == null ? 0D : this.direction.x);
-		compound.setDouble("vY", this.direction == null ? 0D : this.direction.y);
-		compound.setDouble("vZ", this.direction == null ? 0D : this.direction.z);
-		if (this.summoner != null && !this.summoner.isDead) {
-			compound.setTag("summonerID", NBTUtil.createUUIDTag(this.summoner.getPersistentID()));
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("attacking", this.attacking);
+		compound.putDouble("vX", this.direction == null ? 0D : this.direction.x);
+		compound.putDouble("vY", this.direction == null ? 0D : this.direction.y);
+		compound.putDouble("vZ", this.direction == null ? 0D : this.direction.z);
+		if (this.summoner != null && this.summoner.isAlive()) {
+			compound.put("summonerID", NBTUtil.createUUID(this.summoner.getUUID()));
 		}
-		if (this.target != null && !this.target.isDead) {
-			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(this.target.getPersistentID()));
+		if (this.target != null && this.target.isAlive()) {
+			compound.put("targetID", NBTUtil.createUUID(this.target.getUUID()));
 		}
 	}
 
@@ -188,7 +199,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	public boolean hasTarget() {
-		return this.target != null && !this.target.isDead;
+		return this.target != null && this.target.isAlive();
 	}
 
 	public void setSide(boolean left) {
@@ -196,29 +207,29 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 		this.attacking = compound.getBoolean("attacking");
 		double x, y, z;
 		x = compound.getDouble("vX");
 		y = compound.getDouble("vY");
 		z = compound.getDouble("vZ");
 		this.direction = new Vector3d(x, y, z);
-		if (compound.hasKey("targetID")) {
-			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("targetID"));
-			if (this.world != null) {
-				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
-					if (ent.getPersistentID().equals(id)) {
+		if (compound.contains("targetID")) {
+			UUID id = net.minecraft.nbt.NBTUtil.loadUUID(compound.getCompound("targetID"));
+			if (this.level != null) {
+				for (Entity ent : this.level.getEntities(this, new AxisAlignedBB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+					if (ent.getUUID().equals(id)) {
 						this.target = ent;
 					}
 				}
 			}
 		}
-		if (compound.hasKey("summonerID")) {
-			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("summonerID"));
-			if (this.world != null) {
-				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
-					if (ent.getPersistentID().equals(id)) {
+		if (compound.contains("summonerID")) {
+			UUID id = net.minecraft.nbt.NBTUtil.loadUUID(compound.getCompound("summonerID"));
+			if (this.level != null) {
+				for (Entity ent : this.level.getEntities(this, new AxisAlignedBB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+					if (ent.getUUID().equals(id)) {
 						this.summoner = ent;
 					}
 				}

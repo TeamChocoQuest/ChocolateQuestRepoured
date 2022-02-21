@@ -17,14 +17,14 @@ public class EntityElectricFieldSizable extends EntityElectricField implements I
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 		this.callOnReadFromNBT(compound);
 	}
 
 	@Override
-	protected void save(CompoundNBT compound) {
-		super.writeEntityToNBT(compound);
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 		this.callOnWriteToNBT(compound);
 	}
 

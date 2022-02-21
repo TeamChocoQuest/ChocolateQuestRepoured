@@ -2,12 +2,16 @@ package team.cqr.cqrepoured.entity.misc;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntitySpiderEgg extends Entity {
 
@@ -15,18 +19,21 @@ public class EntitySpiderEgg extends Entity {
 	private static final int STAGE_COUNT = 5;
 	private static final ResourceLocation MINION_ID = new ResourceLocation("minecraft", "cave_spider");
 
-	protected static final DataParameter<Integer> STAGE = EntityDataManager.<Integer>createKey(EntitySpiderEgg.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> STAGE = EntityDataManager.<Integer>defineId(EntitySpiderEgg.class, DataSerializers.INT);
 
 	private int currentStageDuration = 0;
 
 	public EntitySpiderEgg(World worldIn) {
-		super(worldIn);
-		this.setSize(1F, 1F);
+		this(CQREntityTypes.SPIDER_EGG.get(), worldIn);
+	}
+	
+	public EntitySpiderEgg(EntityType<? extends EntitySpiderEgg> type, World worldIn) {
+		super(type, worldIn);
 
 	}
-
+	
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 
@@ -36,28 +43,28 @@ public class EntitySpiderEgg extends Entity {
 	}
 
 	@Override
-	protected void entityInit() {
-		this.dataManager.register(STAGE, 0);
+	protected void defineSynchedData() {
+		this.entityData.define(STAGE, 0);
 	}
 
 	@Override
 	public void tick() {
 		// TODO: Play particles and sound on mob spawning
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			this.currentStageDuration++;
 			if (this.currentStageDuration > STAGE_DURATION) {
-				this.dataManager.set(STAGE, this.getStage() + 1);
+				this.entityData.set(STAGE, this.getStage() + 1);
 				this.currentStageDuration = 0;
 			}
 			super.tick();
 			if (this.getStage() >= STAGE_COUNT) {
 				// Destroy yourself and spawn the spider
-				Entity spider = EntityList.createEntityByIDFromName(MINION_ID, this.world);
+				Entity spider = EntityList.createEntityByIDFromName(MINION_ID, this.level);
 				if (spider != null) {
-					spider.setPosition(this.posX, this.posY + 0.5D, this.posZ);
-					this.world.spawnEntity(spider);
+					spider.setPos(this.position().x, this.position().y + 0.5D, this.position().z);
+					this.level.addFreshEntity(spider);
 				}
-				this.setDead();
+				this.remove();
 			}
 		} else {
 			super.tick();
@@ -65,19 +72,24 @@ public class EntitySpiderEgg extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-		this.dataManager.set(STAGE, compound.getInteger("stage"));
-		this.currentStageDuration = compound.getInteger("stage_duration");
+	protected void readAdditionalSaveData(CompoundNBT compound) {
+		this.entityData.set(STAGE, compound.getInt("stage"));
+		this.currentStageDuration = compound.getInt("stage_duration");
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-		compound.setInteger("stage", this.getStage());
-		compound.setInteger("stage_duration", this.currentStageDuration);
+	protected void addAdditionalSaveData(CompoundNBT compound) {
+		compound.putInt("stage", this.getStage());
+		compound.putInt("stage_duration", this.currentStageDuration);
 	}
 
 	public int getStage() {
-		return this.dataManager.get(STAGE);
+		return this.entityData.get(STAGE);
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

@@ -28,6 +28,11 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.entity.misc.EntityElectricField;
+import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
+import team.cqr.cqrepoured.entity.misc.EntityIceSpike;
+import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
+import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
+import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 
@@ -79,6 +84,13 @@ public class CQREntityTypes {
 	//Walker King
 	public static final RegistryObject<EntityType<EntityCQRWalkerKing>> WALKER_KING = registerSizedHumanoid(EntityCQRWalkerKing::new, "walker_king", 1);
 	public static final RegistryObject<EntityType<EntityWalkerKingIllusion>> WALKER_KING_ILLUSION = registerSizedHumanoid(EntityWalkerKingIllusion::new, "walker_king_illusion", 1);
+	
+	//Musc
+	public static final RegistryObject<EntityType<EntityTNTPrimedCQR>> TNT_CQR = registerSized(EntityTNTPrimedCQR::new, "tnt_cqr", 1.0F, 1.0F, 3);
+	public static final RegistryObject<EntityType<EntitySummoningCircle>> SUMMONING_CIRCLE = registerSized(EntitySummoningCircle::new, "summoning_circle", 2.0F, 0.005F, 3);
+	public static final RegistryObject<EntityType<EntitySpiderEgg>> SPIDER_EGG = registerSized(EntitySpiderEgg::new, "spider_egg", 1.0F, 1.0F, 3);
+	public static final RegistryObject<EntityType<EntityIceSpike>> ICE_SPIKE = registerSized(EntityIceSpike::new, "ice_spike", 0.5F, 0.8F, 3);
+	public static final RegistryObject<EntityType<EntityFlyingSkullMinion>> FLYING_SKULL = registerSized(EntityFlyingSkullMinion::new, "flying_skull", 0.5F, 0.5F, 3);
 	
 	
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSizedHumanoid(IFactory<T> factory, final String entityName, int updateInterval) {
