@@ -220,6 +220,21 @@
 				}
 			}
 		},
+		"animation.biped.arms.left.reload-crossbow": {
+			"animation_length": 1.24,
+			"bones": {
+				"bipedArmRight": {
+					"rotation": {
+						"0.0": {
+							"vector": [-7.5, 0, 0]
+						},
+						"1.24": {
+							"vector": [-7.5, -45, 0]
+						}
+					}
+				}
+			}
+		},
 		"animation.biped.arms.left.firearm": {
 			"loop": true,
 			"bones": {
@@ -468,6 +483,21 @@
 						},
 						"0.44": {
 							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.biped.arms.right.reload-crossbow": {
+			"animation_length": 1.24,
+			"bones": {
+				"bipedArmLeft": {
+					"rotation": {
+						"0.0": {
+							"vector": [-7.5, 0, 0]
+						},
+						"1.24": {
+							"vector": [-7.5, 90, 0]
 						}
 					}
 				}
