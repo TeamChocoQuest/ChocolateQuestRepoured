@@ -45,12 +45,12 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 	}
 
 	private void summonIllusions() {
-		Vector3d start = this.entity.getPositionEyes(1.0F);
+		Vector3d start = this.entity.getEyePosition(1.0F);
 		double d = this.random.nextDouble() * 360.0D;
 
 		for (int i = 0; i < this.amount; i++) {
 			double d1 = d + ((double) i / (double) this.amount + (this.random.nextDouble() - 0.5D) * 0.1D) * 360.0D;
-			Vector3d look = Vector3d.fromPitchYaw(30.0F, (float) d1);
+			Vector3d look = Vector3d.directionFromRotation(30.0F, (float) d1);
 			Vector3d end = start.add(look.scale(8.0D));
 			RayTraceResult result = this.world.rayTraceBlocks(start, end, false, true, false);
 
@@ -75,12 +75,12 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			}
 
 			EntitySpectreLordIllusion illusion = new EntitySpectreLordIllusion(this.world, this.entity, this.lifeTime, i == 0, i == 2);
-			illusion.setPosition(x, y, z);
-			this.entity.tryEquipSummon(illusion, this.world.rand);
-			illusion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(illusion)), null);
+			illusion.setPos(x, y, z);
+			this.entity.tryEquipSummon(illusion, this.world.random);
+			illusion.onInitialSpawn(this.world.getCurrentDifficultyAt(illusion.blockPosition()), null);
 			this.entity.addSummonedEntityToList(illusion);
-			this.world.spawnEntity(illusion);
-			((ServerWorld) this.world).spawnParticle(ParticleTypes.SPELL, illusion.posX, illusion.posY + 0.5D * illusion.height, illusion.posZ, 8, 0.25D, 0.25D, 0.25D, 0.5D);
+			this.world.addFreshEntity(illusion);
+			((ServerWorld) this.world).addParticle(ParticleTypes.EFFECT, illusion.getX(), illusion.getY() + 0.5D * illusion.getBbHeight(), illusion.getZ(), 8, 0.25D, 0.25D, 0.25D, 0.5D);
 		}
 	}
 

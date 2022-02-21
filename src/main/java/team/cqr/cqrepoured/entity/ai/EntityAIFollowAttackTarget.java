@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -9,7 +11,8 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 
 	public EntityAIFollowAttackTarget(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override

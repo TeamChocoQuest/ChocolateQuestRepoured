@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -13,7 +15,8 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIFollowPath(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.MOVE/*, Flag.JUMP, Flag.LOOK*/));
 	}
 
 	@Override

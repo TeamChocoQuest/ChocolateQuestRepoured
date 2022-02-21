@@ -26,7 +26,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		}
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
 		Faction faction = this.entity.getFaction();
-		List<LivingEntity> alliesToHeal = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> {
+		List<LivingEntity> alliesToHeal = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;
 			}
@@ -52,7 +52,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		super.startChargingSpell();
 		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
 		Faction faction = this.entity.getFaction();
-		List<LivingEntity> alliesToHeal = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> {
+		List<LivingEntity> alliesToHeal = this.world.getEntities(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;
 			}

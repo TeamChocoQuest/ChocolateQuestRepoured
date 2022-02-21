@@ -5,10 +5,13 @@ import java.util.List;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.passive.horse.HorseEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundCategory;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 /*
@@ -19,15 +22,24 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
  */
 public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQREntityAI<T> {
 
-	private static final AttributeModifier FOLLOW_RANGE_MODIFIER = new AttributeModifier("modifier.cqr_horse_path_extension", 24.d, 0).setSaved(false);
+	private static final AttributeModifier FOLLOW_RANGE_MODIFIER = new AttributeModifier("modifier.cqr_horse_path_extension", 24.d, Operation.ADDITION) {
+		//Disable saving
+		public net.minecraft.nbt.CompoundNBT save() {
+			return new CompoundNBT();};
+	};
 	private final AttributeModifier moveSpeedModifier;
 
 	protected MobEntity horse;
-	private final List<GoalSelector.EntityAITaskEntry> horseAI = new ArrayList<>();
+	private final List<PrioritizedGoal> horseAI = new ArrayList<>();
 
 	public EntityAIRideHorse(T entity, double speedFactor) {
 		super(entity);
-		this.moveSpeedModifier = new AttributeModifier("modifier.cqr_ride_speed", speedFactor, 1).setSaved(false);
+		this.moveSpeedModifier = new AttributeModifier("modifier.cqr_ride_speed", speedFactor, Operation.MULTIPLY_BASE) {
+			// Disable saving
+			public net.minecraft.nbt.CompoundNBT save() {
+				return new CompoundNBT();
+			};
+		};
 	}
 
 	@Override
@@ -39,12 +51,12 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	}
 
 	protected boolean shouldRideHorse() {
-		return this.horse == null && this.entity.getRidingEntity() instanceof HorseEntity;
+		return this.horse == null && this.entity.getVehicle() instanceof HorseEntity;
 	}
 
 	@Override
 	public void start() {
-		this.horse = (MobEntity) this.entity.getRidingEntity();
+		this.horse = (MobEntity) this.entity.getVehicle();
 		this.onMountHorse();
 	}
 
@@ -52,9 +64,9 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 		this.removeHorseAI();
 		if (this.horse instanceof AbstractHorseEntity) {
 			AbstractHorseEntity h = (AbstractHorseEntity) this.horse;
-			h.setHorseSaddled(true);
-			h.setEatingHaystack(false);
-			h.setRearing(false);
+			h.equipSaddle(SoundCategory.AMBIENT);
+			h.setEating(false);
+			h.setJumping(false); //Previously setRearing, is this the correct replacement?
 		}
 		this.applyModifiers();
 	}
@@ -69,7 +81,7 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	protected void onDismountHorse() {
 		this.addHorseAI();
 		if (this.horse instanceof AbstractHorseEntity) {
-			((AbstractHorseEntity) this.horse).setHorseSaddled(true);
+			((AbstractHorseEntity) this.horse).equipSaddle(SoundCategory.AMBIENT);
 			this.removeModifiers();
 		}
 	}
@@ -77,27 +89,27 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	private void applyModifiers() {
 		if (this.horse instanceof AbstractHorseEntity) {
 			this.removeModifiers();
-			this.horse.getEntityAttribute(Attributes.MOVEMENT_SPEED).applyModifier(this.moveSpeedModifier);
-			this.horse.getEntityAttribute(Attributes.FOLLOW_RANGE).applyModifier(FOLLOW_RANGE_MODIFIER);
+			this.horse.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(this.moveSpeedModifier);
+			this.horse.getAttribute(Attributes.FOLLOW_RANGE).addTransientModifier(FOLLOW_RANGE_MODIFIER);
 		}
 	}
 
 	private void removeModifiers() {
-		this.horse.getEntityAttribute(Attributes.MOVEMENT_SPEED).removeModifier(this.moveSpeedModifier);
-		this.horse.getEntityAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_MODIFIER);
+		this.horse.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(this.moveSpeedModifier);
+		this.horse.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_MODIFIER);
 	}
 
 	private void removeHorseAI() {
 		this.horseAI.clear();
-		this.horseAI.addAll(this.horse.tasks.taskEntries);
-		for (GoalSelector.EntityAITaskEntry task : this.horseAI) {
-			this.horse.tasks.removeTask(task.action);
+		this.horseAI.addAll(this.horse.goalSelector.availableGoals);
+		for (PrioritizedGoal task : this.horseAI) {
+			this.horse.goalSelector.removeGoal(task.getGoal());
 		}
 	}
 
 	private void addHorseAI() {
-		if (this.horse.tasks.taskEntries.isEmpty()) {
-			this.horse.tasks.taskEntries.addAll(this.horseAI);
+		if (this.horse.goalSelector.availableGoals.isEmpty()) {
+			this.horse.goalSelector.availableGoals.addAll(this.horseAI);
 		}
 		this.horseAI.clear();
 	}

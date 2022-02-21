@@ -1,8 +1,12 @@
 package team.cqr.cqrepoured.entity.ai;
 
 import net.minecraft.block.state.BlockFaceShape;
+
+import java.util.EnumSet;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal.Flag;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +17,8 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	public EntityAIMoveToLeader(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override

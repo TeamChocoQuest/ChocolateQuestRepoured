@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -7,7 +9,8 @@ public class EntityAIMoveToHome extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIMoveToHome(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		//this.setMutexBits(3);
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override

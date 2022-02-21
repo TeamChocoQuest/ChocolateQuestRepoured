@@ -13,13 +13,13 @@ public class EntityAIPanicElectrocute extends PanicGoal {
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		if (this.creature instanceof IMechanical || this.creature.getCreatureAttribute() == CQRCreatureAttributes.MECHANICAL) {
+	public boolean canUse() {
+		if (this.mob instanceof IMechanical || this.mob.getMobType() == CQRCreatureAttributes.MECHANICAL) {
 			return false;
 		}
 
-		if (this.creature.hasCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null)) {
-			return this.creature.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).isElectrocutionActive() && this.findRandomPosition();
+		if (this.mob.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).isPresent()) {
+			return this.mob.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).resolve().get().isElectrocutionActive() && this.findRandomPosition();
 		}
 		return false;
 	}

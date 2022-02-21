@@ -24,7 +24,7 @@ public class EntityAISpectreLordSwordShield extends AbstractEntityAISpell<Entity
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.ENTITY_ILLAGER_PREPARE_MIRROR;
+		return SoundEvents.ILLUSIONER_PREPARE_MIRROR;
 	}
 
 	@Override
