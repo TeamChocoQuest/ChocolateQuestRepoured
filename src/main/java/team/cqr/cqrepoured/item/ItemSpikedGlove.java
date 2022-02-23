@@ -58,14 +58,16 @@ public class ItemSpikedGlove extends ItemLore {
 							}
 
 							entity.motionY = vY;
-							entity.getHeldItemMainhand().damageItem(1, entity);
-							entity.getMainHandItem().damageItem(1, entity);
+
 							this.createClimbingParticles(entity, worldIn);
 						} else if (entity.isSneaking()) {
 							entity.motionY = 0.0D;
 						} else {
 							entity.motionY = -0.2D;
 						}
+					} else {
+						entity.getHeldItemMainhand().damageItem(1, entity);
+						entity.getHeldItemOffhand().damageItem(1, entity);
 					}
 
 					entity.onGround = true;
