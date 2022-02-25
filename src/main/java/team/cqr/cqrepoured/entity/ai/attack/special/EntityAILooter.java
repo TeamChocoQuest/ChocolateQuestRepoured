@@ -8,6 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -123,8 +124,12 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				if (this.currentLootingTime % (this.LOOTING_DURATION / CQRConfig.mobs.looterAIStealableItems) == 0) {
 					ItemStack stolenItem = null;
 					for (int i = 0; i < tile.getContainerSize(); i++) {
-						if (!tile.getItem(i).isEmpty()) {
+						if (!tile.getItem(i).isEmpty() && tile.getItem(i).getItem() != Items.BREAD) {
 							stolenItem = tile.removeItemNoUpdate(i);
+							//Suggestion from slayer and i liked it: Leave behind bread
+							ItemStack bread = Items.BREAD.getDefaultInstance();
+							bread.setCount(1);
+							tile.setItem(i, bread);
 							break;
 						}
 					}
