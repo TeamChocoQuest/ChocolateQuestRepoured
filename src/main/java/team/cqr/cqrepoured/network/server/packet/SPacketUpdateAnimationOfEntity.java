@@ -47,7 +47,7 @@ public class SPacketUpdateAnimationOfEntity extends AbstractPacket<SPacketUpdate
 	public static class Builder {
 
 		private Builder(IServerAnimationReceiver entity) {
-			this.entityID = entity.getEntity().getId();
+			this.entityID = entity.getSelf().getId();
 		}
 
 		private int entityID;
