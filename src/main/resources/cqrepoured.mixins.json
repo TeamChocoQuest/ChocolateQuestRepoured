@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "team.cq.cqrepoured.mixin",
+	"package": "team.cqr.cqrepoured.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
