@@ -1373,7 +1373,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			y = (target.posY + target.height) - this.posY;
 			y *= 1.0D + ((double) this.getEyeHeight() / this.height);
 		} else if (target.posY > this.posY + this.height) {
-			y = this.posY - (this.posY + this.height);
+			y = target.posY - (this.posY + this.height);
 			y *= 1.0D + (((double) this.height - this.getEyeHeight()) / this.height);
 		} else {
 			y = 0.0D;
