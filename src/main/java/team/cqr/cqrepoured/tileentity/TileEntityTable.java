@@ -10,6 +10,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryByte;
 import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler;
 import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler.CustomItemStackHandler;
@@ -27,8 +28,8 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 	}, false);
 	private final DataEntryByte rotation = new DataEntryByte("rotation", (byte) 0, false);
 
-	public TileEntityTable(TileEntityType<? extends TileEntityTable> type) {
-		super(type);
+	public TileEntityTable() {
+		super(CQRBlockEntities.TABLE.get());
 		this.dataManager.register(this.inventory);
 		this.dataManager.register(this.rotation);
 	}

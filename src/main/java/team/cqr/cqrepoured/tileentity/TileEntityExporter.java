@@ -18,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
@@ -133,8 +134,8 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	private final BlockPos.Mutable minPosRelative = new BlockPos.Mutable();
 	private final BlockPos.Mutable maxPosRelative = new BlockPos.Mutable();
 
-	public TileEntityExporter(TileEntityType<? extends TileEntityExporter> type) {
-		super(type);
+	public TileEntityExporter() {
+		super(CQRBlockEntities.EXPORTER.get());
 		this.dataManager.register(this.structureName);
 		this.dataManager.register(this.startX);
 		this.dataManager.register(this.startY);

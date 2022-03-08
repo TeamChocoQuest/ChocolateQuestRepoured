@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
@@ -49,8 +50,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	private final DataEntryInt activatingRangeFromPlayer = new DataEntryInt("activatingRangeFromPlayer", 16, true);
 	private final DataEntryInt spawnRange = new DataEntryInt("spawnRange", 4, true);
 
-	public TileEntitySpawner(TileEntityType<? extends TileEntitySpawner> type) {
-		super(type);
+	public TileEntitySpawner() {
+		super(CQRBlockEntities.SPAWNER.get());
 		this.dataManager.register(this.vanillaSpawner);
 		this.dataManager.register(this.minSpawnDelay);
 		this.dataManager.register(this.maxSpawnDelay);
