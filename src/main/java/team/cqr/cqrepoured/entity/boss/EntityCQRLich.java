@@ -57,7 +57,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		}
 		// Phylactery
 		if (this.currentPhylacteryPosition != null) {
-			if (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY) {
+			if (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY.get()) {
 				this.setMagicArmorActive(true);
 			} else {
 				this.currentPhylacteryPosition = null;
@@ -172,7 +172,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	public boolean hasPhylactery() {
-		return (this.currentPhylacteryPosition != null && (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY));
+		return (this.currentPhylacteryPosition != null && (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY.get()));
 	}
 	
 	@Override
