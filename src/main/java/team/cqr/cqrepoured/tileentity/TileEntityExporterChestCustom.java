@@ -7,6 +7,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.init.CQREnchantments;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryResourceLocation;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
@@ -16,8 +18,8 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 
 	private final DataEntryResourceLocation lootTable = new DataEntryResourceLocation("lootTable", LootTables.EMPTY, true);
 
-	public TileEntityExporterChestCustom(TileEntityType<? extends TileEntityExporterChestCustom> type) {
-		super(type);
+	public TileEntityExporterChestCustom() {
+		super(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get());
 		this.dataManager.register(this.lootTable);
 	}
 

@@ -5,11 +5,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.items.ItemStackHandler;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 
 public class TileEntityBoss extends TileEntity {
 
-	public TileEntityBoss(TileEntityType<?> p_i48289_1_) {
-		super(p_i48289_1_);
+	public TileEntityBoss() {
+		super(CQRBlockEntities.BOSS.get());
 	}
 
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {

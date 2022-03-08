@@ -23,20 +23,11 @@ public class BlockPhylactery extends Block {
 
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
 
-	public BlockPhylactery(Material materialIn) {
-		super(materialIn);
+	public BlockPhylactery() {
+		super(Material.GLASS);
 		this.setHardness(0.5F);
 		this.setLightOpacity(8);
 		this.setLightLevel(1.0F);
-		this.setSoundType(SoundType.GLASS);
-		this.setTickRandomly(true);
-	}
-
-	public BlockPhylactery(Material blockMaterialIn, MaterialColor blockMapColorIn) {
-		super(blockMaterialIn, blockMapColorIn);
-		this.setHardness(0.5F);
-		this.setLightOpacity(8);
-		this.setLightLevel(1.5F);
 		this.setSoundType(SoundType.GLASS);
 		this.setTickRandomly(true);
 	}

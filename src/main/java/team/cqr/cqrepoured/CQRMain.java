@@ -39,6 +39,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
@@ -47,6 +48,7 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRMaterials;
 import team.cqr.cqrepoured.init.CQRMessages;
+import team.cqr.cqrepoured.init.CQRTileEntities;
 import team.cqr.cqrepoured.item.crafting.smelting.SmeltingHandler;
 import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.util.ConfigBackupHandler;
@@ -65,8 +67,6 @@ public class CQRMain {
 	public static final String MODID = "cqrepoured";
 	public static final String VERSION = "2.6.3B";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
-
-	public static CQRMain INSTANCE;
 
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main-network-channel"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
@@ -154,11 +154,12 @@ public class CQRMain {
 	public static final WorldWallGenerator WALL_GENERATOR = new WorldWallGenerator();
 
 	public CQRMain() {
-		INSTANCE = this;
-		
-		GeckoLib.initialize();
-		
 		isWorkspaceEnvironment = !CQRMain.class.getResource("").getProtocol().equals("jar");
+
+		GeckoLib.initialize();
+
+		CQRBlocks.registerBlocks();
+		CQRBlockEntities.registerBlockEntities();
 	}
 	
 	@SubscribeEvent

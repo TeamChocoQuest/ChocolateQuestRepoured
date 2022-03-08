@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryFacing;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
@@ -27,8 +28,8 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 	private final DataEntryBoolean fillMap = new DataEntryBoolean("fillMap", false, true);
 	private final DataEntryInt fillRadius = new DataEntryInt("fillRadius", 256, true);
 
-	public TileEntityMap(TileEntityType<? extends TileEntityMap> type) {
-		super(type);
+	public TileEntityMap() {
+		super(CQRBlockEntities.MAP.get());
 		this.dataManager.register(this.scale);
 		this.dataManager.register(this.orientation);
 		this.dataManager.register(this.lockOrientation);
