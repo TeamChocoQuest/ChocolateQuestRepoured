@@ -34,7 +34,7 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell<AbstractEntityCQR>
 		super.startCastingSpell();
 		if (this.entity instanceof EntityCQRLich) {
 			BlockPos pos = entity.blockPosition();
-			this.entity.level.setBlockAndUpdate(pos, CQRBlocks.PHYLACTERY.defaultBlockState());
+			this.entity.level.setBlockAndUpdate(pos, CQRBlocks.PHYLACTERY.get().defaultBlockState());
 			((EntityCQRLich) this.entity).setCurrentPhylacteryBlock(pos);
 		} else {
 			this.entity.setMagicArmorCooldown(300);
