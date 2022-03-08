@@ -586,7 +586,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(iblockstate, this.level).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).isPresent();
 							if (breakableBlocks.contains(block.getRegistryName()) && !container && blockIsCollidable && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK
-									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.NETHER_PORTAL && block != CQRBlocks.PHYLACTERY && block != CQRBlocks.FORCE_FIELD_NEXUS && block != CQRBlocks.EXPORTER) {
+									&& block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.NETHER_PORTAL && block != CQRBlocks.PHYLACTERY.get() && block != CQRBlocks.FORCE_FIELD_NEXUS.get() && block != CQRBlocks.EXPORTER.get()) {
 								blockDestroyed = this.level.destroyBlock(blockpos, false) || blockDestroyed;
 							} else {
 								cancelled = true;
