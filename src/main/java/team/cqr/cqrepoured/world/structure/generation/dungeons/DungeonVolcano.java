@@ -38,7 +38,7 @@ public class DungeonVolcano extends DungeonBase {
 	private BlockState lavaBlock = Blocks.LAVA.defaultBlockState();
 	private int lavaWeight = 10;
 	private BlockState rampBlock = Blocks.NETHERRACK.defaultBlockState();
-	private BlockState pillarBlock = CQRBlocks.GRANITE_LARGE.defaultBlockState();
+	private BlockState pillarBlock = CQRBlocks.GRANITE_LARGE.get().defaultBlockState();
 
 	private boolean buildStairwell = true;
 	private boolean digEntranceTunnel = true;
