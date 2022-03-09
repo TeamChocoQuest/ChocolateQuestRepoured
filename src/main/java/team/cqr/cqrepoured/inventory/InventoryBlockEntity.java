@@ -28,7 +28,7 @@ public class InventoryBlockEntity extends Inventory {
 		if (pPlayer.level.getBlockEntity(this.blockEntity.getBlockPos()) != this.blockEntity) {
 			return false;
 		}
-		return pPlayer.blockPosition().distManhattan(this.blockEntity.getBlockPos()) <= 64.0D;
+		return this.blockEntity.getBlockPos().distSqr(pPlayer.position(), true) < 64.0D;
 	}
 
 	public CompoundNBT save(CompoundNBT compound) {

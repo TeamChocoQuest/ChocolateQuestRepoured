@@ -2,32 +2,26 @@ package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
-import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItem;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 
 public class ContainerBadge extends Container {
 
-	private final ItemStack stack;
-	private final Hand hand;
+	private final IInventory inventory;
 
-	public ContainerBadge(ContainerType<?> containerType, final int containerID, PlayerInventory playerInv, ItemStack stack, Hand hand) {
-		super(containerType, containerID);
-		this.stack = stack;
-		this.hand = hand;
-		LazyOptional<IItemHandler> lOpCap = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		IItemHandler inventory = null;
-		if(lOpCap.isPresent()) {
-			inventory = lOpCap.resolve().get();
-		}
-		int currentItemIndex = playerInv.selected;
+	/** Client **/
+	public ContainerBadge(final int containerID, PlayerInventory playerInv) {
+		this(containerID, playerInv, new Inventory(9));
+	}
+
+	/** Server **/
+	public ContainerBadge(final int containerID, PlayerInventory playerInv, IInventory inventory) {
+		super(CQRContainerTypes.BADGE.get(), containerID);
+		this.inventory = inventory;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -35,45 +29,21 @@ public class ContainerBadge extends Container {
 			}
 		}
 
+		// TODO prevent moving container item
 		for (int k = 0; k < 9; k++) {
-			if (k != currentItemIndex) {
-				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
-			} else {
-				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142) {
-					
-					@Override
-					public boolean mayPickup(PlayerEntity playerIn) {
-						return false;
-					}
-
-				});
-			}
+			this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
 		}
 
 		for (int l = 0; l < 3; l++) {
 			for (int m = 0; m < 3; m++) {
-				int index = m + l * 3;
-				this.addSlot(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
-
-					@Override
-					public void setChanged() {
-						super.setChanged();
-						if (this.getItemHandler() instanceof CapabilityItemHandlerItem) {
-							((CapabilityItemHandlerItem) this.getItemHandler()).onContentsChanged(index);
-						}
-					}
-
-				});
+				this.addSlot(new Slot(inventory, m + l * 3, 62 + m * 18, 17 + l * 18));
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean stillValid(PlayerEntity playerIn) {
-		if (!playerIn.isCreative()) {
-			return false;
-		}
-		return playerIn.getItemInHand(this.hand) == this.stack;
+		return this.inventory.stillValid(playerIn);
 	}
 
 	@Override
