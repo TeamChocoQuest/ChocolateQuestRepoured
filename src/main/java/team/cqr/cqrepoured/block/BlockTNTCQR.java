@@ -1,17 +1,19 @@
 package team.cqr.cqrepoured.block;
 
-import java.util.Random;
-
-import net.minecraft.block.TNTBlock;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.TNTBlock;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -28,43 +30,44 @@ public class BlockTNTCQR extends TNTBlock {
 	public static final BooleanProperty HIDDEN = BooleanProperty.create("hidden");
 
 	public BlockTNTCQR() {
-		super();
+		//Copied from Blocks.class
+		super(AbstractBlock.Properties.of(Material.EXPLOSIVE).instabreak().sound(SoundType.GRASS));
 		this.registerDefaultState(super.defaultBlockState().setValue(HIDDEN, false));
 	}
 
 	@Override
-	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
-		// Copied from vanilla
-		if (!worldIn.isRemote) {
-			EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(worldIn, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, explosionIn.getExplosivePlacedBy());
-			entitytntprimed.setFuse((short) (worldIn.rand.nextInt(entitytntprimed.getFuse() / 4) + entitytntprimed.getFuse() / 8));
-			worldIn.spawnEntity(entitytntprimed);
-		}
+	public void wasExploded(World pLevel, BlockPos pPos, Explosion pExplosion) {
+		if (!pLevel.isClientSide) {
+			EntityTNTPrimedCQR tntentity = new EntityTNTPrimedCQR(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, pExplosion.getSourceMob());
+	         tntentity.setFuse((short)(pLevel.random.nextInt(tntentity.getLife() / 4) + tntentity.getLife() / 8));
+	         pLevel.addFreshEntity(tntentity);
+	      }
 	}
-
+	
 	@Override
-	public void explode(World worldIn, BlockPos pos, BlockState state, LivingEntity igniter) {
-		if (worldIn.isRemote) {
+	public void catchFire(BlockState state, World worldIn, BlockPos pos, Direction face, LivingEntity igniter) {
+		if (worldIn.isClientSide) {
 			return;
 		}
-		if (!state.getValue(EXPLODE)) {
+		if (!state.getValue(UNSTABLE)) {
 			return;
 		}
 		EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, igniter);
-		worldIn.spawnEntity(entitytntprimed);
-		worldIn.playSound(null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		worldIn.addFreshEntity(entitytntprimed);
+		worldIn.playSound(null, entitytntprimed.getX(), entitytntprimed.getY(), entitytntprimed.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	}
 
 	@Override
-	public Item getItemDropped(BlockState state, Random rand, int fortune) {
-		return Item.getItemFromBlock(Blocks.TNT);
+	public Item asItem() {
+		return Item.BY_BLOCK.get(Blocks.TNT);
 	}
+	
 
-	@Override
+	/*@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, EXPLODE, HIDDEN);
 	}
-
+	
 	@Deprecated
 	@Override
 	public BlockState getStateFromMeta(int meta) {
@@ -73,13 +76,19 @@ public class BlockTNTCQR extends TNTBlock {
 
 	@Override
 	public int getMetaFromState(BlockState state) {
-		/*
-		 * 0: Hidden + explode = false
-		 * 1: Hidden = false, explode = true
-		 * 2: Hidden = true, explode = false
-		 * 3: Hidden + expldoe = true
-		 */
+		
+		// 0: Hidden + explode = false
+		// 1: Hidden = false, explode = true
+		// 2: Hidden = true, explode = false
+		// 3: Hidden + expldoe = true
+		 
 		return (state.getValue(HIDDEN) ? 2 : 0) + super.getMetaFromState(state);
+	}*/
+	
+	@Override
+	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
+		super.createBlockStateDefinition(pBuilder);
+		pBuilder.add(HIDDEN);
 	}
 
 }
