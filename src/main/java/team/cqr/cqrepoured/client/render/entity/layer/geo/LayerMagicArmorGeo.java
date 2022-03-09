@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
 import java.util.function.Function;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -18,7 +18,7 @@ public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> exten
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
 	}
 
-	@Override
+	/*@Override
 	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
 		if(entity.isMagicArmorActive()) {
 			//TODO: Fix weird bug where the entity inflates when it is being looked at and the game gets paused!
@@ -50,6 +50,16 @@ public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> exten
 			GlStateManager.disableBlend();
 
 			GlStateManager.popMatrix();
+		}
+	}*/
+
+	@Override
+	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+		if(entity.isMagicArmorActive()) {
+			float f = (float)entity.tickCount + partialTicks;
+			float xOffset = f * 0.01F;
+			
+			this.reRenderCurrentModelInRenderer(entity, partialTicks, matrixStackIn, bufferIn, packedLightIn, RenderType.energySwirl(RenderCQREntityGeo.TEXTURES_ARMOR, xOffset, xOffset));
 		}
 	}
 

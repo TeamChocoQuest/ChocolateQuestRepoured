@@ -2,10 +2,12 @@ package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
 import java.util.function.Function;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.IElectrocuteLayerRenderLogic;
 
@@ -16,18 +18,13 @@ public class LayerElectrocuteGeo<T extends LivingEntity & IAnimatable> extends A
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		this.renderLayerLogic(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+	public void performPreLineRenderPreparation(MatrixStack matrix) {
+		//Fixes rotations on glib entities
 	}
 
 	@Override
-	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
-		this.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, headPitch);
-	}
-	
-	@Override
-	public void performPreLineRenderPreparation() {
-		//Fixes rotations on glib entities
+	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.renderLayerLogic(entityLivingBaseIn, matrixStackIn, bufferIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
 	}
 
 }

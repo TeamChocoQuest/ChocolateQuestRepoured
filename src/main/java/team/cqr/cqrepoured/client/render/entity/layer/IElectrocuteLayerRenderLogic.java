@@ -1,9 +1,12 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -12,7 +15,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 	
-	public default void renderLayerLogic(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public default void renderLayerLogic(T entity, MatrixStack matrix, IRenderTypeBuffer buffer, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}
@@ -27,34 +30,35 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 				if (cap.getTarget() != null) {
 					Entity target = cap.getTarget();
 
-					float yaw = entity.prevRenderYawOffset + (entity.renderYawOffset - entity.prevRenderYawOffset) * partialTicks;
+					float yaw = entity.yBodyRotO + (entity.yBodyRot - entity.yBodyRotO) * partialTicks;
 
-					double x1 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
-					double y1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
-					double z1 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
+					//Are those the correct replacements?!
+					double x1 = entity.xOld + (entity.getX() - entity.xOld) * partialTicks;
+					double y1 = entity.yOld + (entity.getY() - entity.yOld) * partialTicks;
+					double z1 = entity.zOld + (entity.getZ() - entity.zOld) * partialTicks;
 
-					double x2 = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTicks;
-					double y2 = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTicks;
-					double z2 = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTicks;
+					double x2 = target.xOld + (target.getX() - target.xOld) * partialTicks;
+					double y2 = target.yOld + (target.getY() - target.yOld) * partialTicks;
+					double z2 = target.zOld + (target.getZ() - target.zOld) * partialTicks;
 
-					final Vector3d start = new Vector3d(0, entity.height * 0.5, 0);
-					final Vector3d end = new Vector3d(x2 - x1, target.height * 0.5 + y2 - y1, z2 - z1);
+					final Vector3d start = new Vector3d(0, entity.getBbHeight() * 0.5, 0);
+					final Vector3d end = new Vector3d(x2 - x1, target.getBbHeight() * 0.5 + y2 - y1, z2 - z1);
 
-					GlStateManager.pushMatrix();
+					matrix.pushPose();
 
-					this.performPreLineRenderPreparation();
-					GlStateManager.rotate(yaw - 180, 0, 1, 0);
+					this.performPreLineRenderPreparation(matrix);
+					matrix.mulPose(Vector3f.YP.rotation(yaw -180));
 
 					ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
 
-					GlStateManager.popMatrix();
+					matrix.popPose();
 				}
 			}
 	}
 	
-	public default void performPreLineRenderPreparation() {
-		GlStateManager.translate(0, 1.501, 0);
-		GlStateManager.scale(-1, -1, 1);
+	public default void performPreLineRenderPreparation(MatrixStack matrix) {
+		matrix.translate(0, 1.501, 0);
+		matrix.scale(-1, -1, 1);
 	}
 
 }
