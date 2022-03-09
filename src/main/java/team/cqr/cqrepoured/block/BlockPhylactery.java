@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,6 +37,9 @@ public class BlockPhylactery extends Block {
 				.randomTicks()
 				.noDrops()
 				.lightLevel((state) -> 3)
+				.noOcclusion()
+				.isViewBlocking(Blocks::never)
+				.isValidSpawn(Block::never)
 		);
 	}
 

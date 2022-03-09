@@ -1,17 +1,20 @@
 package team.cqr.cqrepoured.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,16 +22,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockNull extends Block {
 
-	public static final PropertyBool PASSABLE = PropertyBool.create("passable");
+	public static final BooleanProperty PASSABLE = BooleanProperty.create("passable");
 
 	public BlockNull() {
-		super(Material.GLASS);
-
-		this.setSoundType(SoundType.GLASS);
-		this.setBlockUnbreakable();
-		this.setResistance(Float.MAX_VALUE);
-		this.setHarvestLevel("hand", 0);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(PASSABLE, false));
+		super(Properties
+				.of(Material.GLASS)
+				.sound(SoundType.GLASS)
+				.noDrops()
+				.noOcclusion()
+				.isViewBlocking(Blocks::never)
+				.strength(-1.0F, Float.MAX_VALUE)
+				.isValidSpawn(Blocks::never)
+		);
+		this.registerDefaultState(this.stateDefinition.any().setValue(PASSABLE, false));
 	}
 
 	@Deprecated
@@ -44,16 +50,17 @@ public class BlockNull extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-		if (playerIn.capabilities.isCreativeMode && playerIn.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand pHand, BlockRayTraceResult pHit) {
+		
+		if (playerIn.isCreative() && playerIn.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
 			if (state.getValue(PASSABLE)) {
-				worldIn.setBlockState(pos, state.withProperty(PASSABLE, false), 3);
+				worldIn.setBlock(pos, state.setValue(PASSABLE, false), 3);
 			} else {
-				worldIn.setBlockState(pos, state.withProperty(PASSABLE, true), 3);
+				worldIn.setBlock(pos, state.setValue(PASSABLE, true), 3);
 			}
-			return true;
+			return ActionResultType.SUCCESS;
 		} else {
-			return false;
+			return ActionResultType.PASS;
 		}
 	}
 
