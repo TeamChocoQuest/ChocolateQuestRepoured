@@ -4,33 +4,24 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryByte;
-import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler;
-import team.cqr.cqrepoured.network.datasync.DataEntryItemStackHandler.CustomItemStackHandler;
+import team.cqr.cqrepoured.network.datasync.DataEntryInventory;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
+public class TileEntityTable extends BlockEntityContainer implements ITileEntitySyncable {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
-	private final DataEntryItemStackHandler inventory = new DataEntryItemStackHandler("inventory", new CustomItemStackHandler(1) {
-		@Override
-		public int getSlotLimit(int slot) {
-			return 1;
-		}
-	}, false);
+	private final DataEntryInventory dataEntryInventory = new DataEntryInventory("inventory", this.inventory, false);
 	private final DataEntryByte rotation = new DataEntryByte("rotation", (byte) 0, false);
 
 	public TileEntityTable() {
-		super(CQRBlockEntities.TABLE.get());
-		this.dataManager.register(this.inventory);
+		super(CQRBlockEntities.TABLE.get(), 1, 1);
+		this.dataManager.register(this.dataEntryInventory);
 		this.dataManager.register(this.rotation);
 	}
 
@@ -38,19 +29,6 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 	public TileEntityDataManager getDataManager() {
 		return this.dataManager;
 	}
-
-	/*Not needed anymore?
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) this.inventory.get() : super.getCapability(capability, facing);
-	}*/
 
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
@@ -106,10 +84,6 @@ public class TileEntityTable extends TileEntity implements ITileEntitySyncable {
 		}
 
 		this.rotation.set((byte) rotation);
-	}
-
-	public ItemStackHandler getInventory() {
-		return this.inventory.get();
 	}
 
 	public int getRotation() {

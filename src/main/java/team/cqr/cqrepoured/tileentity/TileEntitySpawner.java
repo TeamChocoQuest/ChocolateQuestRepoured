@@ -14,11 +14,8 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.Difficulty;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
@@ -28,17 +25,9 @@ import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
-public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable {
+public class TileEntitySpawner extends BlockEntityContainer implements ITileEntitySyncable {
 
 	private static final Random RANDOM = new Random();
-	public final ItemStackHandler inventory = new ItemStackHandler(9) {
-		@Override
-		protected void onContentsChanged(int slot) {
-			if (TileEntitySpawner.this.level != null && !TileEntitySpawner.this.level.isClientSide) {
-				TileEntitySpawner.this.setChanged();
-			}
-		}
-	};
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
@@ -51,7 +40,7 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	private final DataEntryInt spawnRange = new DataEntryInt("spawnRange", 4, true);
 
 	public TileEntitySpawner() {
-		super(CQRBlockEntities.SPAWNER.get());
+		super(CQRBlockEntities.SPAWNER.get(), 9);
 		this.dataManager.register(this.vanillaSpawner);
 		this.dataManager.register(this.minSpawnDelay);
 		this.dataManager.register(this.maxSpawnDelay);
@@ -66,23 +55,9 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 		return this.dataManager;
 	}
 
-	//No longer needed?
-	/*@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) this.inventory : super.getCapability(capability, facing);
-	}*/
-
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
 		super.save(compound);
-		compound.put("inventory", this.inventory.serializeNBT());
 		this.dataManager.write(compound);
 		return compound;
 	}
@@ -90,7 +65,6 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
 		super.load(state, compound);
-		this.inventory.deserializeNBT(compound.getCompound("inventory"));
 		this.dataManager.read(compound);
 	}
 
@@ -138,8 +112,8 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 
 			List<CompoundNBT> entitiesToSpawn = new ArrayList<>();
 
-			for (int i = 0; i < this.inventory.getSlots(); i++) {
-				ItemStack stack = this.inventory.getStackInSlot(i);
+			for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+				ItemStack stack = this.inventory.getItem(i);
 
 				if (!stack.isEmpty() && stack.hasTag()) {
 					CompoundNBT nbt = stack.getTag().getCompound("EntityIn");

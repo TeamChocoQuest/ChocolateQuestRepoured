@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -13,10 +12,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
@@ -25,7 +25,6 @@ import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.DataEntryObject;
 import team.cqr.cqrepoured.network.datasync.DataEntryString;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 public class TileEntityExporter extends TileEntity implements ITileEntitySyncable {
@@ -227,14 +226,15 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
 	}
-	
+
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public double getViewDistance() {
-		double d = Minecraft.getInstance().gameRenderer.getRenderDistance() * 16.0D;
-		return d * d;
+		return Double.POSITIVE_INFINITY;
 	}
 
 	public void saveStructure(PlayerEntity author) {
