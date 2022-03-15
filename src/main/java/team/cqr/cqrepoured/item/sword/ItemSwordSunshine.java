@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.item.sword;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -17,8 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -70,7 +69,7 @@ public class ItemSwordSunshine extends SwordItem implements IEquipListener {
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 
-		tooltip.add(new StringTextComponent(TextFormatting.GOLD + "+3 " + I18n.get("description.attack_damage_at_day.name")));
+		tooltip.add(new TranslationTextComponent(TextFormatting.GOLD + "description.attack_damage_at_day.name", 3));
 	}
 
 }
