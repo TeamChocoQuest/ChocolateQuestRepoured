@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import it.unimi.dsi.fastutil.floats.FloatArrayFIFOQueue;
 import it.unimi.dsi.fastutil.floats.FloatPriorityQueue;
@@ -60,6 +62,101 @@ public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> 
 		modelRenderer.zRot = z;
 	}
 	
+	@Override
+	public void renderToBuffer(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+		this.applyRotations(model);
+
+		pMatrixStack.pushPose();
+
+		if (this.young) {
+			pMatrixStack.scale(0.75F, 0.75F, 0.75F);
+			pMatrixStack.translate(0.0F, 16.0F * scale, 0.0F);
+
+			pMatrixStack.pushPose();
+			renderer.setupHeadOffsets(this.head, slot);
+			this.head.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.popPose();
+			pMatrixStack.pushPose();
+			pMatrixStack.scale(0.5F, 0.5F, 0.5F);
+			pMatrixStack.translate(0.0F, 24.0F * scale, 0.0F);
+
+			pMatrixStack.pushPose();
+			renderer.setupBodyOffsets(this.body, slot);
+			this.body.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupRightArmOffsets(this.rightArm, slot);
+			this.rightArm.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupLeftArmOffsets(this.leftArm, slot);
+			this.leftArm.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupRightLegOffsets(this.rightLeg, slot);
+			this.rightLeg.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupLeftLegOffsets(this.leftLeg, slot);
+			this.leftLeg.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupHeadwearOffsets(this.hat, slot);
+			this.hat.render(scale);
+			pMatrixStack.popPose();
+		} else {
+			if (entityIn.isCrouching()) {
+				pMatrixStack.translate(0.0F, 0.2F, 0.0F);
+			}
+
+			pMatrixStack.pushPose();
+			renderer.setupHeadOffsets(this.head, slot);
+			this.head.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupBodyOffsets(this.body, slot);
+			this.body.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupRightArmOffsets(this.rightArm, slot);
+			this.rightArm.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupLeftArmOffsets(this.leftArm, slot);
+			this.leftArm.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupRightLegOffsets(this.rightLeg, slot);
+			this.rightLeg.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupLeftLegOffsets(this.leftLeg, slot);
+			this.leftLeg.render(scale);
+			pMatrixStack.popPose();
+
+			pMatrixStack.pushPose();
+			renderer.setupHeadwearOffsets(this.hat, slot);
+			this.hat.render(scale);
+			pMatrixStack.popPose();
+		}
+
+		pMatrixStack.popPose();
+
+		this.resetRotations();
+	}
+	
 	// TODO: Exchange type of "model" to something like "IBipedArmorPoseProvider", this one has methods to set the rotations
 	// of the armor bones => interface that
 	// has to be implemented by the model!
@@ -67,48 +164,48 @@ public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> 
 	public void render(T entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EntityEquipmentSlot slot) {
 		this.applyRotations(model);
 
-		GlStateManager.pushMatrix();
+		GlStateManager.pushPose();
 
 		if (this.young) {
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupHeadOffsets(this.head, slot);
 			this.head.render(scale);
-			GlStateManager.popMatrix();
+			GlStateManager.popPose();
 
-			GlStateManager.popMatrix();
-			GlStateManager.pushMatrix();
+			GlStateManager.popPose();
+			GlStateManager.pushPose();
 			GlStateManager.scale(0.5F, 0.5F, 0.5F);
 			GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupBodyOffsets(this.body, slot);
 			this.body.render(scale);
-			GlStateManager.popMatrix();
+			GlStateManager.popPose();
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupRightArmOffsets(this.rightArm, slot);
 			this.rightArm.render(scale);
-			GlStateManager.popMatrix();
+			GlStateManager.popPose();
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupLeftArmOffsets(this.leftArm, slot);
 			this.leftArm.render(scale);
 			GlStateManager.popMatrix();
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupRightLegOffsets(this.rightLeg, slot);
 			this.rightLeg.render(scale);
 			GlStateManager.popMatrix();
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupLeftLegOffsets(this.leftLeg, slot);
 			this.leftLeg.render(scale);
 			GlStateManager.popMatrix();
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupHeadwearOffsets(this.hat, slot);
 			this.hat.render(scale);
 			GlStateManager.popMatrix();
@@ -117,12 +214,12 @@ public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> 
 				GlStateManager.translate(0.0F, 0.2F, 0.0F);
 			}
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupHeadOffsets(this.head, slot);
 			this.head.render(scale);
 			GlStateManager.popMatrix();
 
-			GlStateManager.pushMatrix();
+			GlStateManager.pushPose();
 			renderer.setupBodyOffsets(this.body, slot);
 			this.body.render(scale);
 			GlStateManager.popMatrix();
