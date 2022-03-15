@@ -3,8 +3,10 @@ package team.cqr.cqrepoured.item.armor;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
@@ -15,20 +17,20 @@ public class ItemHelmetDragon extends ArmorItem {
 	private AttributeModifier attackDamage;
 	private AttributeModifier health;
 
-	public ItemHelmetDragon(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
-		super(materialIn, renderIndexIn, equipmentSlotIn);
+	public ItemHelmetDragon(ArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties props) {
+		super(materialIn, equipmentSlotIn, props);
 
-		this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, 0);
-		this.attackDamage = new AttributeModifier("DragonHelmetDamageModifier", 1D, 2);
+		this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION);
+		this.attackDamage = new AttributeModifier("DragonHelmetDamageModifier", 1D, Operation.MULTIPLY_TOTAL);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(Attributes.MAX_HEALTH.getName(), this.health);
-			multimap.put(Attributes.ATTACK_DAMAGE.getName(), this.attackDamage);
+		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
+			multimap.put(Attributes.MAX_HEALTH, this.health);
+			multimap.put(Attributes.ATTACK_DAMAGE, this.attackDamage);
 		}
 
 		return multimap;
