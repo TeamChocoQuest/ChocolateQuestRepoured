@@ -43,7 +43,7 @@ public class ItemDagger extends ItemCQRWeapon {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-		boolean flag = ItemUtil.compareRotations(player.rotationYaw, entity.rotationYaw, 50.0D);
+		boolean flag = ItemUtil.compareRotations(player.yRot, entity.yRot, 50.0D);
 		ItemUtil.attackTarget(stack, player, entity, flag, 0.0F, flag ? 2.0F : 1.0F, true, 1.0F, 0.0F, 0.25D, 0.25D, 0.3F);
 		return true;
 	}
@@ -63,7 +63,7 @@ public class ItemDagger extends ItemCQRWeapon {
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if (playerIn.isOnGround() && !playerIn.isSwingInProgress) {
+		if (playerIn.isOnGround() && !playerIn.swinging) {
 			EntityUtil.move2D(playerIn, playerIn.moveStrafing, playerIn.moveForward, 1.0D, playerIn.rotationYaw);
 
 			playerIn.motionY = 0.2D;
