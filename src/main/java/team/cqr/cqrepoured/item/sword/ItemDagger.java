@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -14,17 +13,16 @@ import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -35,9 +33,9 @@ public class ItemDagger extends ItemCQRWeapon {
 	private final double movementSpeedBonus;
 	private final int specialAttackCooldown;
 
-	public ItemDagger(Properties props, IItemTier material, int cooldown) {
-		super(material, CQRConfig.materials.toolMaterials.daggerAttackDamageBonus, CQRConfig.materials.toolMaterials.daggerAttackSpeedBonus, props);
-		this.movementSpeedBonus = CQRConfig.materials.toolMaterials.daggerMovementSpeedBonus;
+	public ItemDagger(Properties props, IExtendedItemTier material, int cooldown) {
+		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
+		this.movementSpeedBonus = material.getMovementSpeedBonus();
 		this.specialAttackCooldown = cooldown;
 	}
 
@@ -64,18 +62,18 @@ public class ItemDagger extends ItemCQRWeapon {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (playerIn.isOnGround() && !playerIn.swinging) {
-			EntityUtil.move2D(playerIn, playerIn.moveStrafing, playerIn.moveForward, 1.0D, playerIn.rotationYaw);
+			EntityUtil.move2D(playerIn, playerIn.xxa, playerIn.zza, 1.0D, playerIn.yRot);
 
-			playerIn.motionY = 0.2D;
-			playerIn.getCooldownTracker().setCooldown(stack.getItem(), this.specialAttackCooldown);
+			playerIn.setDeltaMovement(playerIn.getDeltaMovement().add(0, 0.2, 0));
+			playerIn.getCooldowns().addCooldown(stack.getItem(), this.specialAttackCooldown);
 		}
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
-	
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new StringTextComponent(TextFormatting.BLUE + "200% " + I18n.get("description.rear_damage.name")));
+		tooltip.add(new TranslationTextComponent(TextFormatting.BLUE + "description.rear_damage.name", "200%"));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 	}
