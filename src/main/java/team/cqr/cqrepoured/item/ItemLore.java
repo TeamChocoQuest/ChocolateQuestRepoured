@@ -7,13 +7,12 @@ import javax.annotation.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,10 +45,14 @@ public class ItemLore extends Item {
 	
 	public static void addHoverTextLogic(List<ITextComponent> tooltip, ITooltipFlag flagIn, String registryNamePath) {
 		if (isLShiftPressed() || isRShiftPressed()) {
-			tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.get("description." + registryNamePath + ".name", '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n')));
+			tooltip.add(new TranslationTextComponent(TextFormatting.BLUE + "description." + registryNamePath + ".name"));
 		} else {
-			tooltip.add(new StringTextComponent(TextFormatting.BLUE + I18n.get("description.click_shift.name")));
+			tooltip.add(new TranslationTextComponent(TextFormatting.BLUE + "description.click_shift.name"));
 		}
+	}
+	
+	public static void addHoverTextLogic(Item item, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		addHoverTextLogic(tooltip, flagIn, item.getRegistryName().getPath());
 	}
 	
 	public boolean hasLore(ItemStack stack) {
