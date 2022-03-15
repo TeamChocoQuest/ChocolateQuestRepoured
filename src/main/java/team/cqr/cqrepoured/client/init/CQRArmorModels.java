@@ -33,6 +33,6 @@ public class CQRArmorModels {
 	public static BipedModel<? extends LivingEntity> SPIDER_ARMOR = new ModelArmorSpider<>(1.0F);
 	public static BipedModel<? extends LivingEntity> SPIDER_ARMOR_LEGS = new ModelArmorSpider<>(0.5F);
 	
-	public static BipedModel<? extends LivingEntity> CROWN = new ModelCrown<LivingEntity>(1.0F);
+	public static BipedModel<? extends LivingEntity> CROWN = new ModelCrown<>(1.0F);
 
 }
