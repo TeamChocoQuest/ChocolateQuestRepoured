@@ -5,34 +5,31 @@ import java.awt.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.DyeableArmorItem;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 
-public class ItemArmorDyable extends ArmorItem {
+public class ItemArmorDyable extends DyeableArmorItem {
 
-	public ItemArmorDyable(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
-		super(materialIn, renderIndexIn, equipmentSlotIn);
-	}
-
-	@Override
-	public boolean hasOverlay(ItemStack stack) {
-		return true;
+	public ItemArmorDyable(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
+		super(materialIn, equipmentSlotIn, prop);
 	}
 
 	/**
 	 * Return whether the specified armor ItemStack has a color.
 	 */
 	@Override
-	public boolean hasColor(ItemStack stack) {
-		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTagCompound();
-			return nbttagcompound != null && nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND) ? nbttagcompound.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT) : false;
+	public boolean hasCustomColor(ItemStack stack) {
+		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
+			CompoundNBT nbttagcompound = stack.getTag();
+			return nbttagcompound != null && nbttagcompound.contains("display", Constants.NBT.TAG_COMPOUND) ? nbttagcompound.getCompound("display").contains("color", Constants.NBT.TAG_INT) : false;
 		} else {
-			return super.hasColor(stack);
+			return super.hasCustomColor(stack);
 		}
 	}
 
@@ -41,23 +38,23 @@ public class ItemArmorDyable extends ArmorItem {
 	 */
 	@Override
 	public int getColor(ItemStack stack) {
-		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTagCompound();
+		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
+			CompoundNBT nbttagcompound = stack.getTag();
 
 			if (nbttagcompound != null) {
-				CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+				CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
 
-				if (nbttagcompound1 != null && nbttagcompound1.hasKey("color", Constants.NBT.TAG_INT)) {
-					int color = nbttagcompound1.getInteger("color");
-					Minecraft mc = Minecraft.getMinecraft();
-					if (mc.world != null) {
+				if (nbttagcompound1 != null && nbttagcompound1.contains("color", Constants.NBT.TAG_INT)) {
+					int color = nbttagcompound1.getInt("color");
+					Minecraft mc = Minecraft.getInstance();
+					if (mc.level != null) {
 						if ((color >> 28 & 1) == 1) {
 							float j = 1530.0F / (color >> 16 & 255);
 							float s = (color >> 8 & 255) / 255.0F;
 							float b = (color & 255) / 255.0F;
-							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
+							return Color.HSBtoRGB((mc.level.getGameTime() + mc.getFrameTime()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
 						} else if ((color >> 24 & 15) > 0) {
-							float f = 0.5F + 0.5F * MathHelper.sin((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) / 15.0F * (color >> 25 & 15));
+							float f = 0.5F + 0.5F * MathHelper.sin((mc.level.getGameTime() + mc.getFrameTime()) / 15.0F * (color >> 25 & 15));
 							int r = Math.round((color >> 16 & 255) * f);
 							int g = Math.round((color >> 8 & 255) * f);
 							int b = Math.round((color & 255) * f);
@@ -68,7 +65,7 @@ public class ItemArmorDyable extends ArmorItem {
 				}
 			}
 
-			if (this.getArmorMaterial() == ArmorMaterial.DIAMOND) {
+			if (this.getMaterial() == ArmorMaterial.DIAMOND) {
 				return 0x00FFFF;
 			} else {
 				return 0xCCCCCC;
@@ -82,15 +79,15 @@ public class ItemArmorDyable extends ArmorItem {
 	 * Remove the color from the specified armor ItemStack.
 	 */
 	@Override
-	public void removeColor(ItemStack stack) {
-		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTagCompound();
+	public void clearColor(ItemStack stack) {
+		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
+			CompoundNBT nbttagcompound = stack.getTag();
 
 			if (nbttagcompound != null) {
-				CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+				CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
 
-				if (nbttagcompound1.hasKey("color")) {
-					nbttagcompound1.removeTag("color");
+				if (nbttagcompound1.contains("color")) {
+					nbttagcompound1.remove("color");
 				}
 			}
 		}
@@ -101,40 +98,40 @@ public class ItemArmorDyable extends ArmorItem {
 	 */
 	@Override
 	public void setColor(ItemStack stack, int color) {
-		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND || this.getArmorMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTagCompound();
+		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
+			CompoundNBT nbttagcompound = stack.getTag();
 
 			if (nbttagcompound == null) {
 				nbttagcompound = new CompoundNBT();
-				stack.setTagCompound(nbttagcompound);
+				stack.setTag(nbttagcompound);
 			}
 
-			CompoundNBT nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+			CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
 
-			if (!nbttagcompound.hasKey("display", Constants.NBT.TAG_COMPOUND)) {
-				nbttagcompound.setTag("display", nbttagcompound1);
+			if (!nbttagcompound.contains("display", Constants.NBT.TAG_COMPOUND)) {
+				nbttagcompound.put("display", nbttagcompound1);
 			}
 
-			nbttagcompound1.setInteger("color", color);
+			nbttagcompound1.putInt("color", color);
 		} else {
 			super.setColor(stack, color);
 		}
 	}
 
 	public int getPersistentColor(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
+		if (!stack.hasTag()) {
 			return 0;
 		}
 
-		return stack.getTagCompound().getCompoundTag("display").getInteger("color");
+		return stack.getTag().getCompound("display").getInt("color");
 	}
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-		if (this.getArmorMaterial() == ArmorMaterial.IRON) {
+		if (this.getMaterial() == ArmorMaterial.IRON) {
 			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EquipmentSlotType.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
-		if (this.getArmorMaterial() == ArmorMaterial.DIAMOND) {
+		if (this.getMaterial() == ArmorMaterial.DIAMOND) {
 			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EquipmentSlotType.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
