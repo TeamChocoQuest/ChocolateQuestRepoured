@@ -7,7 +7,8 @@
 		"AccessorAbstractSpawner",
 		"MixinEndermanEntity",
 		"MixinShulkerEntity",
-		"MixinEnderdragonEntity"
+		"MixinEnderdragonEntity",
+		"MixinLivingEntity"
 	],
 	"minVersion": "0.8"
 }
