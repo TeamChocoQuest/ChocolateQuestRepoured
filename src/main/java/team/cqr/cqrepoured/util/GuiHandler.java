@@ -8,8 +8,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import team.cqr.cqrepoured.client.gui.GuiAlchemyBag;
-import team.cqr.cqrepoured.client.gui.GuiBackpack;
+import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
+import team.cqr.cqrepoured.client.gui.ScreenBackpack;
 import team.cqr.cqrepoured.client.gui.GuiBadge;
 import team.cqr.cqrepoured.client.gui.GuiBossBlock;
 import team.cqr.cqrepoured.client.gui.GuiExporter;
@@ -103,11 +103,11 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == BACKPACK_GUI_ID) {
-			return new GuiBackpack(this.getServerGuiElement(ID, player, world, x, y, z));
+			return new ScreenBackpack(this.getServerGuiElement(ID, player, world, x, y, z));
 		}
 
 		if (ID == ALCHEMY_BAG_GUI_ID) {
-			return new GuiAlchemyBag(this.getServerGuiElement(ID, player, world, x, y, z));
+			return new ScreenAlchemyBag(this.getServerGuiElement(ID, player, world, x, y, z));
 		}
 
 		if (ID == CQR_ENTITY_GUI_ID) {
