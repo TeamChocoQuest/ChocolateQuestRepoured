@@ -20,6 +20,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -52,9 +53,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 	protected List<ITag.INamedTag<Block>> latchGroups = new ArrayList<>();
 
 	public ItemHookshotBase(String hookshotName, Properties props) {
-		super(props);
-		this.setMaxDamage(300);
-		this.setMaxStackSize(1);
+		super(props.stacksTo(1));
 
 		this.loadPropertiesFromFile(hookshotName);
 
@@ -133,7 +132,9 @@ public abstract class ItemHookshotBase extends ItemLore {
 			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
 			worldIn.addFreshEntity(hookEntity);
 			player.getCooldowns().addCooldown(this, 100);
-			stack.damageItem(1, player);
+			stack.hurtAndBreak(1, player, (p_220045_0_) -> {
+		         p_220045_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+		      });
 			worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		}
 	}
