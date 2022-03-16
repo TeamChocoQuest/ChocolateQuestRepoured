@@ -23,6 +23,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -33,10 +35,11 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.Tags.IOptionalNamedTag;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.util.CQRBlockUtil;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 /**
@@ -44,42 +47,9 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
  */
 public abstract class ItemHookshotBase extends ItemLore {
 
-	private enum BlockGroup {
-		BASE_SOLID("BASE_SOLID"), BASE_WOOD("BASE_WOOD"), BASE_STONE("BASE_STONE"), BASE_DIRT("BASE_DIRT");
-
-		private final String configName;
-
-		BlockGroup(String configName) {
-			this.configName = configName;
-		}
-
-		public static Optional<BlockGroup> fromConfigString(String string) {
-			for (BlockGroup bg : BlockGroup.values()) {
-				if (bg.configName.equalsIgnoreCase(string)) {
-					return Optional.of(bg);
-				}
-			}
-			return Optional.empty();
-		}
-
-		public boolean containsBlock(Block block) {
-			switch (this) {
-			case BASE_SOLID:
-				return true;
-			case BASE_WOOD:
-				return CQRBlockUtil.VANILLA_WOOD_SET.contains(block);
-			case BASE_STONE:
-				return CQRBlockUtil.VANILLA_STONE_SET.contains(block);
-			case BASE_DIRT:
-				return CQRBlockUtil.VANILLA_DIRT_SET.contains(block);
-			default:
-				return false;
-			}
-		}
-	}
-
+	//TODO: Replace with tags
 	protected List<Block> validLatchBlocks = new ArrayList<>();
-	protected List<BlockGroup> latchGroups = new ArrayList<>();
+	protected List<ITag.INamedTag<Block>> latchGroups = new ArrayList<>();
 
 	public ItemHookshotBase(String hookshotName, Properties props) {
 		super(props);
@@ -116,27 +86,18 @@ public abstract class ItemHookshotBase extends ItemLore {
 
 				String[] latchBlocks = PropertyFileHelper.getStringArrayProperty(hookshotConfig, "latchblocks", new String[0], true);
 				for (String blockType : latchBlocks) {
-					Optional<BlockGroup> groupMatch = BlockGroup.fromConfigString(blockType);
-					if (groupMatch.isPresent()) {
-						this.latchGroups.add(groupMatch.get());
+					ResourceLocation rs = new ResourceLocation(blockType);
+					if(ForgeRegistries.BLOCKS.containsKey(rs)) {
+						this.validLatchBlocks.add(ForgeRegistries.BLOCKS.getValue(rs));
+						continue;
+					} else {
+						IOptionalNamedTag<Block> groupMatch = BlockTags.createOptional(rs);
+						if(!groupMatch.isDefaulted()) {
+							this.latchGroups.add(groupMatch);
+						}
 						continue;
 					}
-
-					Block blockMatch;
-					// Try the vanilla blocks first
-					blockMatch = Block.getBlockFromName(blockType);
-					if (blockMatch != null) {
-						this.validLatchBlocks.add(blockMatch);
-						continue;
-					}
-
-					// Then try CQR blocks
-					// TODO: Create modblocks lookup by name function and check against that
-
-					// Then try other Mod blocks
-					// TODO: Search other mod block registries
-
-					CQRMain.logger.error("{}: Invalid latch block: {}", configFile.get().getName(), blockType);
+					//CQRMain.logger.error("{}: Invalid latch block: {}", configFile.get().getName(), blockType);
 				}
 
 			} catch (IOException e) {
@@ -146,8 +107,8 @@ public abstract class ItemHookshotBase extends ItemLore {
 	}
 
 	public boolean canLatchToBlock(Block block) {
-		for (BlockGroup bg : this.latchGroups) {
-			if (bg.containsBlock(block)) {
+		for (ITag.INamedTag<Block> bg : this.latchGroups) {
+			if (bg.contains(block)) {
 				return true;
 			}
 		}
@@ -171,9 +132,9 @@ public abstract class ItemHookshotBase extends ItemLore {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
 			hookEntity.shootHook(player, this.getHookRange(), 1.8D);
 			worldIn.addFreshEntity(hookEntity);
-			player.getCooldownTracker().setCooldown(this, 100);
+			player.getCooldowns().addCooldown(this, 100);
 			stack.damageItem(1, player);
-			worldIn.playSound(null, player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		}
 	}
 
