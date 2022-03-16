@@ -1,18 +1,22 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.LivingEntity;
 
-public class LayerElectrocute implements LayerRenderer<LivingEntity>, IElectrocuteLayerRenderLogic<LivingEntity>{
+public class LayerElectrocute<T extends LivingEntity, M extends EntityModel<T>> extends LayerRenderer<T,M> implements IElectrocuteLayerRenderLogic<T>{
 
-	@Override
-	public void doRenderLayer(LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		this.renderLayerLogic(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+	public LayerElectrocute(IEntityRenderer<T, M> p_i50926_1_) {
+		super(p_i50926_1_);
 	}
 
 	@Override
-	public boolean shouldCombineTextures() {
-		return false;
+	public void render(MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		this.renderLayerLogic(pLivingEntity, pMatrixStack, pBuffer, pLimbSwing, pLimbSwingAmount, pPartialTicks, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 	}
 
 }
