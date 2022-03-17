@@ -1,8 +1,0 @@
-{
-    "variants": {
-		"explode=true,hidden=true": { "model": "tnt" },
-		"explode=false,hidden=true": { "model": "tnt" },
-        "explode=true,hidden=false": { "model": "cqrepoured:tnt" },
-        "explode=false,hidden=false": { "model": "cqrepoured:tnt" }
-	}
-}

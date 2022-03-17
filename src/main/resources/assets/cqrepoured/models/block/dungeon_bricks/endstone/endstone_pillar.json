@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "cqrepoured:blocks/endstone_pillar_top",
-        "side": "cqrepoured:blocks/endstone_pillar"
-    }
-}

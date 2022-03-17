@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "cqrepoured:blocks/granite_pillar_top",
-        "side": "cqrepoured:blocks/granite_pillar"
-    }
-}
