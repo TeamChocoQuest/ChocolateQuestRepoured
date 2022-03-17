@@ -85,6 +85,7 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 
 	@Override
 	public void tick() {
+		if (true) return;
 		if (!this.level.isClientSide && this.level.getDifficulty() != Difficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
 			this.turnBackIntoEntity();
 		} else {
