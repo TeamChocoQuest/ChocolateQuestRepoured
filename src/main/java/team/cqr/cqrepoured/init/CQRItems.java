@@ -1,60 +1,23 @@
 package team.cqr.cqrepoured.init;
 
-import static team.cqr.cqrepoured.util.InjectionUtil.Null;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRBoarman;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRDummy;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRDwarf;
-import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRGolem;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRGremlin;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRIllager;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRMinotaur;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRMummy;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRNPC;
-import team.cqr.cqrepoured.entity.mobs.EntityCQROgre;
-import team.cqr.cqrepoured.entity.mobs.EntityCQROrc;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRPirate;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRSkeleton;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRTriton;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
-import team.cqr.cqrepoured.entity.mobs.EntityCQRZombie;
 import team.cqr.cqrepoured.item.ItemAlchemyBag;
 import team.cqr.cqrepoured.item.ItemBadge;
 import team.cqr.cqrepoured.item.ItemBullBattleAxe;
 import team.cqr.cqrepoured.item.ItemCursedBone;
-import team.cqr.cqrepoured.item.ItemDungeonPlacer;
-import team.cqr.cqrepoured.item.ItemGoldenFeather;
 import team.cqr.cqrepoured.item.ItemHookshot;
 import team.cqr.cqrepoured.item.ItemLongshot;
 import team.cqr.cqrepoured.item.ItemLore;
-import team.cqr.cqrepoured.item.ItemMagicBell;
 import team.cqr.cqrepoured.item.ItemMobToSpawner;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.item.ItemPotionHealing;
 import team.cqr.cqrepoured.item.ItemShieldDummy;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
-import team.cqr.cqrepoured.item.ItemSpawnEggCQR;
 import team.cqr.cqrepoured.item.ItemSpawnerConverter;
 import team.cqr.cqrepoured.item.ItemSpiderHook;
 import team.cqr.cqrepoured.item.ItemSpikedGlove;
@@ -67,7 +30,6 @@ import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.item.armor.ItemArmorHeavy;
 import team.cqr.cqrepoured.item.armor.ItemArmorInquisition;
 import team.cqr.cqrepoured.item.armor.ItemArmorSlime;
-import team.cqr.cqrepoured.item.armor.ItemArmorSpider;
 import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.item.armor.ItemBootsCloud;
@@ -94,7 +56,6 @@ import team.cqr.cqrepoured.item.staff.ItemStaffThunder;
 import team.cqr.cqrepoured.item.staff.ItemStaffVampiric;
 import team.cqr.cqrepoured.item.staff.ItemStaffWind;
 import team.cqr.cqrepoured.item.sword.ItemDagger;
-import team.cqr.cqrepoured.item.sword.ItemDaggerNinja;
 import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
 import team.cqr.cqrepoured.item.sword.ItemSwordMoonlight;
@@ -105,183 +66,188 @@ import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
 
 public class CQRItems {
 
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CQRMain.MODID);
+
 	// Daggers
-	public static final Item DAGGER_IRON = Null();
-	public static final Item DAGGER_DIAMOND = Null();
-	public static final Item DAGGER_NINJA = Null();
-	public static final Item DAGGER_MONKING = Null();
+	public static final RegistryObject<ItemDagger> DAGGER_IRON = null;
+	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = null;
+	public static final RegistryObject<ItemDagger> DAGGER_NINJA = null;
+	public static final RegistryObject<ItemDagger> DAGGER_MONKING = null;
 
 	// Swords
-	public static final Item SWORD_TURTLE = Null();
-	public static final Item SWORD_SPIDER = Null();
-	public static final Item SWORD_MOONLIGHT = Null();
-	public static final Item SWORD_SUNSHINE = Null();
+	public static final RegistryObject<ItemSwordTurtle> SWORD_TURTLE = null;
+	public static final RegistryObject<ItemSwordSpider> SWORD_SPIDER = null;
+	public static final RegistryObject<ItemSwordMoonlight> SWORD_MOONLIGHT = null;
+	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = null;
 
 	// Battle Axes
-	public static final Item BATTLE_AXE_BULL = Null();
+	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = null;
 
-	// Walker items
-	public static final Item SWORD_WALKER = Null();
-	public static final Item SHIELD_WALKER_KING = Null();
+	// Walker RegistryObject<Item>s
+	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = null;
+	public static final RegistryObject<ItemShieldWalkerKing> SHIELD_WALKER_KING = null;
 
 	// Shields
-	public static final Item SHIELD_BULL = Null();
-	public static final Item SHIELD_CARL = Null();
-	public static final Item SHIELD_DRAGONSLAYER = Null();
-	public static final Item SHIELD_FIRE = Null();
-	public static final Item SHIELD_GOBLIN = Null();
-	public static final Item SHIELD_MONKING = Null();
-	public static final Item SHIELD_MOON = Null();
-	public static final Item SHIELD_MUMMY = Null();
-	public static final Item SHIELD_PIGMAN = Null();
-	public static final Item SHIELD_PIRATE = Null();
-	public static final Item SHIELD_PIRATE2 = Null();
-	public static final Item SHIELD_RAINBOW = Null();
-	public static final Item SHIELD_REFLECTIVE = Null();
-	public static final Item SHIELD_RUSTED = Null();
-	public static final Item SHIELD_SKELETON_FRIENDS = Null();
-	public static final Item SHIELD_SPECTER = Null();
-	public static final Item SHIELD_SPIDER = Null();
-	public static final Item SHIELD_SUN = Null();
-	public static final Item SHIELD_TOMB = Null();
-	public static final Item SHIELD_TRITON = Null();
-	public static final Item SHIELD_TURTLE = Null();
-	public static final Item SHIELD_WARPED = Null();
-	public static final Item SHIELD_WALKER = Null();
-	public static final Item SHIELD_ZOMBIE = Null();
+	public static final RegistryObject<ItemShieldCQR> SHIELD_BULL = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_CARL = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_DRAGONSLAYER = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_FIRE = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_GOBLIN = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_MONKING = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_MOON = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_MUMMY = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_PIGMAN = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_PIRATE = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_PIRATE2 = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_RAINBOW = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_REFLECTIVE = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_RUSTED = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SKELETON_FRIENDS = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SPECTER = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SPIDER = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SUN = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_TOMB = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_TRITON = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_TURTLE = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_WARPED = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_WALKER = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_ZOMBIE = null;
 
 	// Great Swords
-	public static final Item GREAT_SWORD_IRON = Null();
-	public static final Item GREAT_SWORD_DIAMOND = Null();
-	public static final Item GREAT_SWORD_BULL = Null();
-	public static final Item GREAT_SWORD_MONKING = Null();
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = null;
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = null;
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_BULL = null;
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_MONKING = null;
 
 	// Spears
-	public static final Item SPEAR_DIAMOND = Null();
-	public static final Item SPEAR_IRON = Null();
+	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = null;
+	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = null;
 
 	// Staves
-	public static final Item STAFF = Null();
-	public static final Item STAFF_FIRE = Null();
-	public static final Item STAFF_VAMPIRIC = Null(); // #TODO DESCRIPTION
-	public static final Item STAFF_WIND = Null(); // #TODO DESCRIPTION
-	public static final Item STAFF_POISON = Null(); // #TODO DESCRIPTION
-	public static final ItemStaffHealing STAFF_HEALING = Null();
-	public static final ItemFakeSwordHealingStaff DIAMOND_SWORD_FAKE_HEALING_STAFF = Null();
-	public static final Item STAFF_THUNDER = Null();
-	public static final Item STAFF_SPIDER = Null();
-	public static final Item STAFF_GUN = Null(); // #TODO TEXTURES
+	public static final RegistryObject<ItemStaff> STAFF = null;
+	public static final RegistryObject<ItemStaffFire> STAFF_FIRE = null;
+	public static final RegistryObject<ItemStaffVampiric> STAFF_VAMPIRIC = null; // #TODO DESCRIPTION
+	public static final RegistryObject<ItemStaffWind> STAFF_WIND = null; // #TODO DESCRIPTION
+	public static final RegistryObject<ItemStaffPoison> STAFF_POISON = null; // #TODO DESCRIPTION
+	public static final RegistryObject<ItemStaffHealing> STAFF_HEALING = null;
+	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = null;
+	public static final RegistryObject<ItemStaffThunder> STAFF_THUNDER = null;
+	public static final RegistryObject<ItemStaffSpider> STAFF_SPIDER = null;
+	public static final RegistryObject<ItemStaffGun> STAFF_GUN = null; // #TODO TEXTURES
 
 	// Guns
-	public static final Item REVOLVER = Null();
-	public static final Item CAPTAIN_REVOLVER = Null();
-	public static final Item MUSKET = Null();
-	public static final Item MUSKET_DAGGER_IRON = Null(); // #TODO TEXTURES
-	public static final Item MUSKET_DAGGER_DIAMOND = Null(); // #TODO TEXTURES
-	public static final Item MUSKET_DAGGER_MONKING = Null(); // #TODO TEXTURES
-	public static final Item BULLET_IRON = Null();
-	public static final Item BULLET_GOLD = Null();
-	public static final Item BULLET_DIAMOND = Null();
-	public static final Item BULLET_FIRE = Null();
-	public static final Item CANNON_BALL = Null();
-	public static final Item FLAMETHROWER = Null(); // #TODO TEXTURES
-	public static final Item BUBBLE_PISTOL = Null();
-	public static final Item BUBBLE_RIFLE = Null();
+	public static final RegistryObject<ItemRevolver> REVOLVER = null;
+	public static final RegistryObject<Item> CAPTAIN_REVOLVER = null;
+	public static final RegistryObject<ItemMusket> MUSKET = null;
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemBullet> BULLET_IRON = null;
+	public static final RegistryObject<ItemBullet> BULLET_GOLD = null;
+	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = null;
+	public static final RegistryObject<ItemBullet> BULLET_FIRE = null;
+	public static final RegistryObject<ItemCannonBall> CANNON_BALL = null;
+	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = null;
+	public static final RegistryObject<ItemBubbleRifle> BUBBLE_RIFLE = null;
 
 	// Hookers
-	public static final ItemHookshot HOOKSHOT = Null();
-	public static final ItemLongshot LONGSHOT = Null();
-	public static final ItemSpiderHook SPIDERHOOK = Null();
+	public static final RegistryObject<ItemHookshot> HOOKSHOT = null;
+	public static final RegistryObject<ItemLongshot> LONGSHOT = null;
+	public static final RegistryObject<ItemSpiderHook> SPIDERHOOK = null;
 
-	// Single Armor Items
-	public static final Item HELMET_DRAGON = Null(); // #TODO Make model centered on head // Abandon for now
-	public static final Item BOOTS_CLOUD = Null();
-	public static final Item BACKPACK = Null();
-	public static final Item SPIKED_GLOVE = Null();
-	public static final Item KING_CROWN = Null();
+	// Single Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = null; // #TODO Make model centered on head // Abandon for now
+	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = null;
+	public static final RegistryObject<ItemBackpack> BACKPACK = null;
+	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = null;
+	public static final RegistryObject<ItemCrown> KING_CROWN = null;
 
-	// Slime Armor Items
-	public static final Item HELMET_SLIME = Null();
-	public static final Item CHESTPLATE_SLIME = Null();
-	public static final Item LEGGINGS_SLIME = Null();
-	public static final Item BOOTS_SLIME = Null();
+	// Slime Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorSlime> HELMET_SLIME = null;
+	public static final RegistryObject<ItemArmorSlime> CHESTPLATE_SLIME = null;
+	public static final RegistryObject<ItemArmorSlime> LEGGINGS_SLIME = null;
+	public static final RegistryObject<ItemArmorSlime> BOOTS_SLIME = null;
 
-	// Turtle Armor Items
-	public static final Item HELMET_TURTLE = Null();
-	public static final Item CHESTPLATE_TURTLE = Null();
-	public static final Item LEGGINGS_TURTLE = Null();
-	public static final Item BOOTS_TURTLE = Null();
+	// Turtle Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorTurtle> HELMET_TURTLE = null;
+	public static final RegistryObject<ItemArmorTurtle> CHESTPLATE_TURTLE = null;
+	public static final RegistryObject<ItemArmorTurtle> LEGGINGS_TURTLE = null;
+	public static final RegistryObject<ItemArmorTurtle> BOOTS_TURTLE = null;
 
-	// Bull Armor Items
-	public static final Item HELMET_BULL = Null();
-	public static final Item CHESTPLATE_BULL = Null();
-	public static final Item LEGGINGS_BULL = Null();
-	public static final Item BOOTS_BULL = Null();
+	// Bull Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorBull> HELMET_BULL = null;
+	public static final RegistryObject<ItemArmorBull> CHESTPLATE_BULL = null;
+	public static final RegistryObject<ItemArmorBull> LEGGINGS_BULL = null;
+	public static final RegistryObject<ItemArmorBull> BOOTS_BULL = null;
 
-	// Spider Armor Items
-	public static final Item HELMET_SPIDER = Null();
-	public static final Item CHESTPLATE_SPIDER = Null();
-	public static final Item LEGGINGS_SPIDER = Null();
-	public static final Item BOOTS_SPIDER = Null();
+	// Spider Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorSlime> HELMET_SPIDER = null;
+	public static final RegistryObject<ItemArmorSlime> CHESTPLATE_SPIDER = null;
+	public static final RegistryObject<ItemArmorSlime> LEGGINGS_SPIDER = null;
+	public static final RegistryObject<ItemArmorSlime> BOOTS_SPIDER = null;
 
-	// Inquisition Armor Items
-	public static final Item HELMET_INQUISITION = Null();
-	public static final Item CHESTPLATE_INQUISITION = Null();
-	public static final Item LEGGINGS_INQUISITION = Null();
-	public static final Item BOOTS_INQUISITION = Null();
+	// Inquisition Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorInquisition> HELMET_INQUISITION = null;
+	public static final RegistryObject<ItemArmorInquisition> CHESTPLATE_INQUISITION = null;
+	public static final RegistryObject<ItemArmorInquisition> LEGGINGS_INQUISITION = null;
+	public static final RegistryObject<ItemArmorInquisition> BOOTS_INQUISITION = null;
 
-	// Heavy Diamond Armor Items
-	public static final Item HELMET_HEAVY_DIAMOND = Null();
-	public static final Item CHESTPLATE_HEAVY_DIAMOND = Null();
-	public static final Item LEGGINGS_HEAVY_DIAMOND = Null();
-	public static final Item BOOTS_HEAVY_DIAMOND = Null();
+	// Heavy Diamond Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorHeavy> HELMET_HEAVY_DIAMOND = null;
+	public static final RegistryObject<ItemArmorHeavy> CHESTPLATE_HEAVY_DIAMOND = null;
+	public static final RegistryObject<ItemArmorHeavy> LEGGINGS_HEAVY_DIAMOND = null;
+	public static final RegistryObject<ItemArmorHeavy> BOOTS_HEAVY_DIAMOND = null;
 
-	// Heavy Iron Armor Items
-	public static final Item HELMET_HEAVY_IRON = Null();
-	public static final Item CHESTPLATE_HEAVY_IRON = Null();
-	public static final Item LEGGINGS_HEAVY_IRON = Null();
-	public static final Item BOOTS_HEAVY_IRON = Null();
+	// Heavy Iron Armor RegistryObject<Item>s
+	public static final RegistryObject<ItemArmorHeavy> HELMET_HEAVY_IRON = null;
+	public static final RegistryObject<ItemArmorHeavy> CHESTPLATE_HEAVY_IRON = null;
+	public static final RegistryObject<ItemArmorHeavy> LEGGINGS_HEAVY_IRON = null;
+	public static final RegistryObject<ItemArmorHeavy> BOOTS_HEAVY_IRON = null;
 
 	// Dyable Iron Armor
-	public static final Item HELMET_IRON_DYABLE = Null();
-	public static final Item CHESTPLATE_IRON_DYABLE = Null();
-	public static final Item LEGGINGS_IRON_DYABLE = Null();
-	public static final Item BOOTS_IRON_DYABLE = Null();
+	public static final RegistryObject<ItemArmorDyable> HELMET_IRON_DYABLE = null;
+	public static final RegistryObject<ItemArmorDyable> CHESTPLATE_IRON_DYABLE = null;
+	public static final RegistryObject<ItemArmorDyable> LEGGINGS_IRON_DYABLE = null;
+	public static final RegistryObject<ItemArmorDyable> BOOTS_IRON_DYABLE = null;
 
 	// Dyable Diamond Armor
-	public static final Item HELMET_DIAMOND_DYABLE = Null();
-	public static final Item CHESTPLATE_DIAMOND_DYABLE = Null();
-	public static final Item LEGGINGS_DIAMOND_DYABLE = Null();
-	public static final Item BOOTS_DIAMOND_DYABLE = Null();
+	public static final RegistryObject<ItemArmorDyable> HELMET_DIAMOND_DYABLE = null;
+	public static final RegistryObject<ItemArmorDyable> CHESTPLATE_DIAMOND_DYABLE = null;
+	public static final RegistryObject<ItemArmorDyable> LEGGINGS_DIAMOND_DYABLE = null;
+	public static final RegistryObject<ItemArmorDyable> BOOTS_DIAMOND_DYABLE = null;
 
 	// Ingridients
-	public static final Item SCALE_TURTLE = Null();
-	public static final Item LEATHER_BULL = Null();
-	public static final Item HORN_BULL = Null();
-	public static final Item BALL_SLIME = Null();
-	public static final Item LEATHER_SPIDER = Null();
-	public static final Item BONE_MONKING = Null();
-	public static final Item GIANT_SPIDER_POISON = Null();
-	public static final Item FEATHER_GOLDEN = Null();
+	public static final RegistryObject<ItemLore> SCALE_TURTLE = null;
+	public static final RegistryObject<ItemLore> LEATHER_BULL = null;
+	public static final RegistryObject<ItemLore> HORN_BULL = null;
+	public static final RegistryObject<ItemLore> BALL_SLIME = null;
+	public static final RegistryObject<ItemLore> LEATHER_SPIDER = null;
+	public static final RegistryObject<ItemLore> BONE_MONKING = null;
+	public static final RegistryObject<ItemLore> GIANT_SPIDER_POISON = null;
+	public static final RegistryObject<ItemLore> FEATHER_GOLDEN = null;
 
 	// Other
-	public static final Item POTION_HEALING = Null();
-	public static final Item TELEPORT_STONE = Null();
-	public static final Item CURSED_BONE = Null();
+	public static final RegistryObject<ItemPotionHealing> POTION_HEALING = null;
+	public static final RegistryObject<ItemTeleportStone> TELEPORT_STONE = null;
+	public static final RegistryObject<ItemCursedBone> CURSED_BONE = null;
 
 	// Creative
-	public static final Item SUPER_TOOL = Null();
-	public static final Item STRUCTURE_SELECTOR = Null();
-	public static final Item SOUL_BOTTLE = Null();
-	public static final Item MOB_TO_SPAWNER_TOOL = Null();
-	public static final Item SPAWNER_CONVERTER = Null();
-	public static final Item BADGE = Null();
-	public static final Item PATH_TOOL = Null();
-	public static final Item DUMMY_SHIELD = Null();
-	public static final Item ALCHEMY_BAG = Null();
-	public static final Item UNPROTECTED_POSITIONS_TOOL = Null();
+	public static final RegistryObject<ItemSuperTool> SUPER_TOOL = null;
+	public static final RegistryObject<ItemStructureSelector> STRUCTURE_SELECTOR = null;
+	public static final RegistryObject<ItemSoulBottle> SOUL_BOTTLE = null;
+	public static final RegistryObject<ItemMobToSpawner> MOB_TO_SPAWNER_TOOL = null;
+	public static final RegistryObject<ItemSpawnerConverter> SPAWNER_CONVERTER = null;
+	public static final RegistryObject<ItemBadge> BADGE = null;
+	public static final RegistryObject<ItemPathTool> PATH_TOOL = null;
+	public static final RegistryObject<ItemShieldDummy> DUMMY_SHIELD = null;
+	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = null;
+	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = null;
 
-	@EventBusSubscriber(modid = CQRMain.MODID)
+	public static void registerItems() {
+		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+	}
+
 	/*
 	public static class EventHandler {
 
