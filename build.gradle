@@ -52,7 +52,7 @@ repositories {
 
     // JEI
     maven { url 'https://dvs1.progwml6.com/files/maven' }
-    maven { url 'https://modmaven.k-4u.nl' }
+    maven { url 'https://modmaven.dev' }
 
     // CurseForge
     maven { url 'https://www.cursemaven.com' }
@@ -71,7 +71,8 @@ dependencies {
     atDependencies 'curse.maven:ReachFix-556777:3648997'
 
     // JEI
-    // atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152:api')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152')
 
     // Mixin
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
