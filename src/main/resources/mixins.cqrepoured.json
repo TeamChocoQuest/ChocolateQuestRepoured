@@ -5,6 +5,7 @@
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
 		"AccessorAbstractSpawner",
+		"MixinChestBlock",
 		"MixinEndermanEntity",
 		"MixinShulkerEntity",
 		"MixinEnderdragonEntity",
