@@ -2,11 +2,11 @@
   "variants": {
     "facing=down": {
       "model": "cqrepoured:block/map_placeholder",
-      "x": 270
+      "x": 90
     },
     "facing=up": {
       "model": "cqrepoured:block/map_placeholder",
-      "x": 90
+      "x": 270
     },
     "facing=north": {
       "model": "cqrepoured:block/map_placeholder"

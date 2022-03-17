@@ -41,7 +41,7 @@ public class CQRBlockStateProvider extends BlockStateProvider {
 		valuesOfClass(CQRBlocks.BLOCKS, RotatedPillarBlock.class).forEach(this::axisBlock);
 		valuesOfClass(CQRBlocks.BLOCKS, BlockTable.class).forEach(this::table);
 		simpleBlock(CQRBlocks.UNLIT_TORCH.get(), models().torch(CQRBlocks.UNLIT_TORCH.getId().getPath(), blockTexture(CQRBlocks.UNLIT_TORCH.get())));
-		horizontalBlock(CQRBlocks.UNLIT_TORCH_WALL.get(), models().torchWall(CQRBlocks.UNLIT_TORCH_WALL.getId().getPath(), blockTexture(CQRBlocks.UNLIT_TORCH.get())));
+		horizontalBlock(CQRBlocks.UNLIT_TORCH_WALL.get(), models().torchWall(CQRBlocks.UNLIT_TORCH_WALL.getId().getPath(), blockTexture(CQRBlocks.UNLIT_TORCH.get())), 90);
 		simpleBlock(CQRBlocks.EXPORTER.get());
 		getVariantBuilder(CQRBlocks.NULL_BLOCK.get()).forAllStates(booleanPropertyMapper(BlockNull.PASSABLE, models()::cubeAll));
 		simpleBlock(CQRBlocks.SPAWNER.get());
@@ -51,7 +51,7 @@ public class CQRBlockStateProvider extends BlockStateProvider {
 			Direction dir = state.getValue(BlockStateProperties.FACING);
 			return ConfiguredModel.builder()
 					.modelFile(models().withExistingParent(state.getBlock().getRegistryName().getPath(), blockLoc(mcLoc("item_frame_map"))))
-					.rotationX(dir == Direction.DOWN ? 270 : dir.getAxis().isHorizontal() ? 0 : 90)
+					.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isHorizontal() ? 0 : 270)
 					.rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot() + 180) % 360)
 					.build();
 		});

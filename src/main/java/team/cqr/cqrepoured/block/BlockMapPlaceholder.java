@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.HorizontalFaceBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -11,7 +10,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.state.properties.AttachFace;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -27,12 +25,12 @@ import team.cqr.cqrepoured.tileentity.TileEntityMap;
 
 public class BlockMapPlaceholder extends DirectionalBlock {
 
-	private static final VoxelShape SHAPE_FLOOR = VoxelShapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D);
-	private static final VoxelShape SHAPE_CEIL = VoxelShapes.box(0.0D, 0.9375D, 0.0D, 1.0D, 1.0D, 1.0D);
-	private static final VoxelShape SHAPE_WALL_NORTH = VoxelShapes.box(0.0D, 0.0D, 0.9375D, 1.0D, 1.0D, 1.0D);
-	private static final VoxelShape SHAPE_WALL_SOUTH = VoxelShapes.box(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.0625D);
-	private static final VoxelShape SHAPE_WALL_WEST = VoxelShapes.box(0.9375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-	private static final VoxelShape SHAPE_WALL_EAST = VoxelShapes.box(0.0D, 0.0D, 0.0D, 0.0625D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_UP = VoxelShapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D);
+	private static final VoxelShape SHAPE_DOWN = VoxelShapes.box(0.0D, 0.9375D, 0.0D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_NORTH = VoxelShapes.box(0.0D, 0.0D, 0.9375D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_SOUTH = VoxelShapes.box(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.0625D);
+	private static final VoxelShape SHAPE_WEST = VoxelShapes.box(0.9375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_EAST = VoxelShapes.box(0.0D, 0.0D, 0.0D, 0.0625D, 1.0D, 1.0D);
 
 	public BlockMapPlaceholder() {
 		super(Properties.of(Material.WOOD)
@@ -62,17 +60,17 @@ public class BlockMapPlaceholder extends DirectionalBlock {
 	public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
 		switch (state.getValue(FACING)) {
 		case DOWN:
-			return SHAPE_FLOOR;
+			return SHAPE_DOWN;
 		case UP:
-			return SHAPE_CEIL;
+			return SHAPE_UP;
 		case NORTH:
-			return SHAPE_WALL_NORTH;
+			return SHAPE_NORTH;
 		case SOUTH:
-			return SHAPE_WALL_SOUTH;
+			return SHAPE_SOUTH;
 		case WEST:
-			return SHAPE_WALL_WEST;
+			return SHAPE_WEST;
 		case EAST:
-			return SHAPE_WALL_EAST;
+			return SHAPE_EAST;
 		default:
 			throw new IllegalStateException();
 		}
@@ -80,8 +78,7 @@ public class BlockMapPlaceholder extends DirectionalBlock {
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext pContext) {
-		// TODO Auto-generated method stub
-		return super.getStateForPlacement(pContext);
+		return super.getStateForPlacement(pContext).setValue(FACING, pContext.getClickedFace());
 	}
 
 	@Override
