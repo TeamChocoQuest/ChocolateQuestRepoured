@@ -12,7 +12,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.armor.ItemCrown;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class TooltipEventHandler {
 
 	@SubscribeEvent

@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketDungeonSync;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonPlacerEventHandler {
 
 	@SubscribeEvent

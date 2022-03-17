@@ -25,7 +25,7 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class ElectricEventHandler {
 
 	@SubscribeEvent

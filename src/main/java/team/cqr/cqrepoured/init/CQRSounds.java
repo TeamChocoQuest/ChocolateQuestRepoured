@@ -98,7 +98,7 @@ public class CQRSounds {
 	@ObjectHolder("entity.bubble.bubble")
 	public static final SoundEvent BUBBLE_BUBBLE = Null();
 
-	@EventBusSubscriber(modid = CQRMain.MODID)
+	//@EventBusSubscriber(modid = CQRMain.MODID)
 	public static class EventHandler {
 
 		@SubscribeEvent

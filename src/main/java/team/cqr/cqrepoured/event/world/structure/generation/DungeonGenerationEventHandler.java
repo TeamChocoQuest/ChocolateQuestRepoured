@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonGenerationEventHandler {
 
 	@SubscribeEvent

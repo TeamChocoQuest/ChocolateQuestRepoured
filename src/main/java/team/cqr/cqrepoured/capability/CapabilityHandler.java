@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandle
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class CapabilityHandler {
 
 	@SubscribeEvent

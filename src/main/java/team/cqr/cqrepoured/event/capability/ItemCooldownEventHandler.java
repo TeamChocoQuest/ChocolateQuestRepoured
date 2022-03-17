@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandler;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
 import team.cqr.cqrepoured.network.server.packet.SPacketArmorCooldownSync;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class ItemCooldownEventHandler {
 
 	@SubscribeEvent

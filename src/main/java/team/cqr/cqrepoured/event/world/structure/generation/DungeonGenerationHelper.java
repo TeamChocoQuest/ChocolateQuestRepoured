@@ -25,7 +25,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import team.cqr.cqrepoured.CQRMain;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonGenerationHelper {
 
 	private static final Map<DimensionType, Set<PlayerEntity>> TRAVELING_PLAYERS = new HashMap<>();

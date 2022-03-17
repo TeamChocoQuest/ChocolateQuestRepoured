@@ -13,7 +13,7 @@ import team.cqr.cqrepoured.CQRMain;
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class CQRSerializers {
 
 	public static final IDataSerializer<Vector3d> VEC3D = new IDataSerializer<Vector3d>() {

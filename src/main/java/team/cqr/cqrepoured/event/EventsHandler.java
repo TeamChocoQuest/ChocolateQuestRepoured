@@ -57,7 +57,7 @@ import team.cqr.cqrepoured.item.crafting.RecipesArmorDyes;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader;
 
-@EventBusSubscriber
+//@EventBusSubscriber
 public class EventsHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

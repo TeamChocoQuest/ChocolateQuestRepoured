@@ -103,7 +103,6 @@ import team.cqr.cqrepoured.item.sword.ItemSwordSunshine;
 import team.cqr.cqrepoured.item.sword.ItemSwordTurtle;
 import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
 
-@ObjectHolder(CQRMain.MODID)
 public class CQRItems {
 
 	// Daggers
@@ -283,6 +282,7 @@ public class CQRItems {
 	public static final Item UNPROTECTED_POSITIONS_TOOL = Null();
 
 	@EventBusSubscriber(modid = CQRMain.MODID)
+	/*
 	public static class EventHandler {
 
 		public static final List<Item> ITEMS = new ArrayList<>();
@@ -479,5 +479,6 @@ public class CQRItems {
 		}
 
 	}
+	*/
 
 }

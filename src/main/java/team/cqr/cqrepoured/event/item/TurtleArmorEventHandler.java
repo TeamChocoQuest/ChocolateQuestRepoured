@@ -21,7 +21,7 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class TurtleArmorEventHandler {
 
 	@SubscribeEvent

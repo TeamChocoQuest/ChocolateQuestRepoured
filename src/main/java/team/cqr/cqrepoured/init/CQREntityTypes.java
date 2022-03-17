@@ -36,7 +36,7 @@ import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 
-@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
+//@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
 
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, CQRMain.MODID);

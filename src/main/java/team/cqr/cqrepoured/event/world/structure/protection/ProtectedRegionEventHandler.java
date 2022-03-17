@@ -70,7 +70,7 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager.ProtectedRegionContainer;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class ProtectedRegionEventHandler {
 
 	/*

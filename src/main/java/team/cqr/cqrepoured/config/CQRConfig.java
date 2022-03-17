@@ -440,7 +440,7 @@ public class CQRConfig {
 		return false;
 	}
 
-	@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+	//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 	private static class EventHandler {
 
 		@SubscribeEvent

@@ -85,7 +85,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class CQREntities {
 
 	private static int entityID = 0;

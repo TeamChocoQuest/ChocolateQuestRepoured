@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQREnchantments;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class LightningProtectionEventHandler {
 
 	@SubscribeEvent

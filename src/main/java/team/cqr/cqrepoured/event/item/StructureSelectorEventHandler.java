@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.ItemStructureSelector;
 import team.cqr.cqrepoured.network.client.packet.CPacketStructureSelector;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRMain.MODID)
 public class StructureSelectorEventHandler {
 
 	@SubscribeEvent

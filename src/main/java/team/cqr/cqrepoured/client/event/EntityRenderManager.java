@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CachedBlockAccess;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface

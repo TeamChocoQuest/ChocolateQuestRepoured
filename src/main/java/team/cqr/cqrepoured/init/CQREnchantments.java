@@ -16,7 +16,7 @@ public class CQREnchantments {
 	public static final Enchantment LIGHTNING_PROTECTION = new EnchantmentLightningProtection();
 	public static final Enchantment SPECTRAL = new EnchantmentSpectral();
 
-	@EventBusSubscriber(modid = CQRMain.MODID)
+	//@EventBusSubscriber(modid = CQRMain.MODID)
 	public static class EventHandler {
 
 		@SubscribeEvent

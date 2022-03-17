@@ -30,7 +30,7 @@ import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class RenderEventHandler {
 
 	@SubscribeEvent

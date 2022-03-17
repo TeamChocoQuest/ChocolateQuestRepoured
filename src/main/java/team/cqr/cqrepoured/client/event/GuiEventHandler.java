@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiDungeonMapTool;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 
-@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class GuiEventHandler {
 
 	@SubscribeEvent

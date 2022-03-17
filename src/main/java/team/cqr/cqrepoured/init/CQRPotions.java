@@ -16,7 +16,7 @@ public class CQRPotions {
 
 	public static final Effect TWOHANDED = Null();
 
-	@EventBusSubscriber(modid = CQRMain.MODID)
+	//@EventBusSubscriber(modid = CQRMain.MODID)
 	public static class EventHandler {
 
 		@SubscribeEvent

@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 
-@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class DyableItemEventHandler {
 
 	@SubscribeEvent
