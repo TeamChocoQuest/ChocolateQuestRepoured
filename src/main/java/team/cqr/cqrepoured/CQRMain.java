@@ -63,15 +63,13 @@ public class CQRMain {
 	public static final ItemGroup CQR_BLOCKS_TAB = new ItemGroup(CQRMain.MODID + "_blocks") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(Items.APPLE);
-			//return new ItemStack(CQRBlocks.TABLE_OAK);
+			return new ItemStack(CQRBlocks.TABLE_OAK.get());
 		}
 	};
 	public static final ItemGroup CQR_CREATIVE_TOOL_TAB = new ItemGroup(CQRMain.MODID + "_creative_tools") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(Items.APPLE);
-			//return new ItemStack(CQRBlocks.EXPORTER);
+			return new ItemStack(CQRBlocks.EXPORTER.get());
 		}
 	};
 	public static final ItemGroup CQR_BANNERS_TAB = new ItemGroup(CQRMain.MODID + "_banners") {
@@ -102,8 +100,7 @@ public class CQRMain {
 	public static final ItemGroup CQR_EXPORTER_CHEST_TAB = new ItemGroup(CQRMain.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(Items.APPLE);
-			//return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
+			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE.get());
 		}
 	};
 	public static final ItemGroup CQR_SPAWN_EGG_TAB = new ItemGroup(CQRMain.MODID + "_spawn_eggs") {
