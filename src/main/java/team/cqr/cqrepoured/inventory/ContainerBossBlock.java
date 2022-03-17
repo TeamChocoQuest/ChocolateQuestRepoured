@@ -16,7 +16,12 @@ public class ContainerBossBlock extends Container {
 
 	/** Client **/
 	public ContainerBossBlock(final int containerID, PlayerInventory playerInv) {
-		this(containerID, playerInv, new Inventory(1));
+		this(containerID, playerInv, new Inventory(1) {
+			@Override
+			public int getMaxStackSize() {
+				return 1;
+			}
+		});
 	}
 
 	/** Server **/
