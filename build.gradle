@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         // Mixin
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
         // Parchment
         classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
     }
@@ -74,7 +74,7 @@ dependencies {
     // atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
 
     // Mixin
-    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 minecraft {
