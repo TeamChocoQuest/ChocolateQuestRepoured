@@ -1,63 +1,37 @@
 package team.cqr.cqrepoured.block;
 
-import java.util.Random;
+import javax.annotation.Nullable;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.util.Direction;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.inventory.ContainerBossBlock;
+import team.cqr.cqrepoured.tileentity.BlockEntityContainer;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
-import team.cqr.cqrepoured.util.GuiHandler;
 
 public class BlockBossBlock extends Block {
 
+	private static final ITextComponent CONTAINER_TITLE = new TranslationTextComponent("container.boss_block");
+
 	public BlockBossBlock() {
-		super(Material.ROCK);
-
-		this.setSoundType(SoundType.STONE);
-		this.setBlockUnbreakable();
-		this.setResistance(Float.MAX_VALUE);
-	}
-
-	@Deprecated
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
-	}
-
-	@Deprecated
-	@Override
-	public boolean isOpaqueCube(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public Item getItemDropped(BlockState state, Random rand, int fortune) {
-		return Items.AIR;
-	}
-
-	@Deprecated
-	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
+		super(Properties.of(Material.STONE)
+				.noDrops()
+				.strength(-1.0F, 3600000.0F)
+				.sound(SoundType.METAL)
+				.noOcclusion());
 	}
 
 	@Override
@@ -66,16 +40,31 @@ public class BlockBossBlock extends Block {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, BlockState state) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileEntityBoss();
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote && playerIn.isCreative()) {
-			playerIn.openGui(CQRMain.INSTANCE, GuiHandler.BOSS_BLOCK_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+	public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
+		if (!pPlayer.isCreative()) {
+			return ActionResultType.PASS;
 		}
-		return true;
+		if (!pLevel.isClientSide) {
+			pPlayer.openMenu(this.getMenuProvider(pState, pLevel, pPos));
+		}
+		return ActionResultType.SUCCESS;
+	}
+
+	@Override
+	@Nullable
+	public INamedContainerProvider getMenuProvider(BlockState pState, World pLevel, BlockPos pPos) {
+		TileEntity tileEntity = pLevel.getBlockEntity(pPos);
+		if (!(tileEntity instanceof BlockEntityContainer)) {
+			return null;
+		}
+		return new SimpleNamedContainerProvider((id, playerInv, player) -> {
+			return new ContainerBossBlock(id, playerInv, ((BlockEntityContainer) tileEntity).getInventory());
+		}, CONTAINER_TITLE);
 	}
 
 }

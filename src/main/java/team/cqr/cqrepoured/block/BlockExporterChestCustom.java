@@ -2,15 +2,17 @@ package team.cqr.cqrepoured.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
-import team.cqr.cqrepoured.util.GuiHandler;
 
 public class BlockExporterChestCustom extends BlockExporterChest {
 
@@ -27,17 +29,28 @@ public class BlockExporterChestCustom extends BlockExporterChest {
 	}
 
 	@Override
-	public TileEntityExporterChest createTileEntity(World world, BlockState state) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileEntityExporterChestCustom();
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote) {
-			playerIn.openGui(CQRMain.INSTANCE, GuiHandler.EXPORTER_CHEST_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+		if (!player.isCreative()) {
+			return ActionResultType.PASS;
 		}
+		TileEntity tileEntity = level.getBlockEntity(pos);
+		if (!(tileEntity instanceof TileEntityExporterChestCustom)) {
+			return ActionResultType.FAIL;
+		}
+		if (level.isClientSide) {
+			this.openScreen((TileEntityExporterChestCustom) tileEntity);
+		}
+		return ActionResultType.SUCCESS;
+	}
 
-		return true;
+	@OnlyIn(Dist.CLIENT)
+	private void openScreen(TileEntityExporterChestCustom tileEntity) {
+		// Minecraft.getInstance().setScreen(new GuiExporterChestCustom(tileEntity));
 	}
 
 }

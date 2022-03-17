@@ -2,64 +2,50 @@ package team.cqr.cqrepoured.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.DirectionalBlock;
+import net.minecraft.block.HorizontalFaceBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.state.properties.AttachFace;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
-import team.cqr.cqrepoured.util.GuiHandler;
 
-public class BlockMapPlaceholder extends HorizontalBlock {
+public class BlockMapPlaceholder extends DirectionalBlock {
 
-	protected static final AxisAlignedBB LADDER_EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0625D, 1.0D, 1.0D);
-	protected static final AxisAlignedBB LADDER_WEST_AABB = new AxisAlignedBB(0.9375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-	protected static final AxisAlignedBB LADDER_SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.0625D);
-	protected static final AxisAlignedBB LADDER_NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.9375D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_FLOOR = VoxelShapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D);
+	private static final VoxelShape SHAPE_CEIL = VoxelShapes.box(0.0D, 0.9375D, 0.0D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_WALL_NORTH = VoxelShapes.box(0.0D, 0.0D, 0.9375D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_WALL_SOUTH = VoxelShapes.box(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.0625D);
+	private static final VoxelShape SHAPE_WALL_WEST = VoxelShapes.box(0.9375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+	private static final VoxelShape SHAPE_WALL_EAST = VoxelShapes.box(0.0D, 0.0D, 0.0D, 0.0625D, 1.0D, 1.0D);
 
 	public BlockMapPlaceholder() {
-		super(Material.WOOD);
-
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, Direction.NORTH));
-		this.setSoundType(SoundType.WOOD);
-		this.setBlockUnbreakable();
-		this.setResistance(Float.MAX_VALUE);
+		super(Properties.of(Material.WOOD)
+				.sound(SoundType.WOOD)
+				.strength(-1.0F, 3600000.0F)
+				.noDrops()
+				.noOcclusion());
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (worldIn.isRemote && (placer instanceof PlayerEntity) && !placer.isSneaking()) {
-			Direction facing1 = state.getValue(FACING);
-			int x = pos.getX() - facing1.getXOffset();
-			int y = (pos.getY() & 0x9FFFFFFF) | (facing1.getHorizontalIndex() << 29);
-			int z = pos.getZ() - facing1.getZOffset();
-			((PlayerEntity) placer).openGui(CQRMain.INSTANCE, GuiHandler.MAP_GUI_SIMPLE_ID, worldIn, x, y, z);
-		}
-	}
-
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote) {
-			playerIn.openGui(CQRMain.INSTANCE, GuiHandler.MAP_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
-		}
-
-		return true;
+	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
+		pBuilder.add(FACING);
 	}
 
 	@Override
@@ -68,129 +54,50 @@ public class BlockMapPlaceholder extends HorizontalBlock {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, BlockState state) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileEntityMap();
 	}
 
-	@Deprecated
 	@Override
-	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
 		switch (state.getValue(FACING)) {
+		case DOWN:
+			return SHAPE_FLOOR;
+		case UP:
+			return SHAPE_CEIL;
 		case NORTH:
-			return LADDER_NORTH_AABB;
+			return SHAPE_WALL_NORTH;
 		case SOUTH:
-			return LADDER_SOUTH_AABB;
+			return SHAPE_WALL_SOUTH;
 		case WEST:
-			return LADDER_WEST_AABB;
+			return SHAPE_WALL_WEST;
 		case EAST:
+			return SHAPE_WALL_EAST;
 		default:
-			return LADDER_EAST_AABB;
+			throw new IllegalStateException();
 		}
 	}
 
-	@Deprecated
 	@Override
-	public boolean isOpaqueCube(BlockState state) {
-		return false;
-	}
-
-	@Deprecated
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
+	public BlockState getStateForPlacement(BlockItemUseContext pContext) {
+		// TODO Auto-generated method stub
+		return super.getStateForPlacement(pContext);
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, Direction side) {
-		if (this.canAttachTo(worldIn, pos.west(), side)) {
-			return true;
-		} else if (this.canAttachTo(worldIn, pos.east(), side)) {
-			return true;
-		} else if (this.canAttachTo(worldIn, pos.north(), side)) {
-			return true;
-		} else {
-			return this.canAttachTo(worldIn, pos.south(), side);
+	public void setPlacedBy(World level, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
+		if (entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
+			// TODO open gui
 		}
 	}
 
-	public boolean canAttachTo(World world, BlockPos pos, Direction side) {
-		BlockState iblockstate = world.getBlockState(pos);
-		boolean flag = isExceptBlockForAttachWithPiston(iblockstate.getBlock());
-		return !flag && iblockstate.getBlockFaceShape(world, pos, side) == BlockFaceShape.SOLID && !iblockstate.canProvidePower();
-	}
-
 	@Override
-	public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-		if (facing.getAxis().isHorizontal() && this.canAttachTo(worldIn, pos.offset(facing.getOpposite()), facing)) {
-			return this.getDefaultState().withProperty(FACING, facing);
-		} else {
-			for (Direction enumfacing : Direction.Plane.HORIZONTAL) {
-				if (this.canAttachTo(worldIn, pos.offset(enumfacing.getOpposite()), enumfacing)) {
-					return this.getDefaultState().withProperty(FACING, enumfacing);
-				}
-			}
-
-			return this.getDefaultState();
+	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+		if (player.isCreative()) {
+			// TODO open gui
+			return ActionResultType.SUCCESS;
 		}
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		Direction enumfacing = state.getValue(FACING);
-
-		if (!this.canAttachTo(worldIn, pos.offset(enumfacing.getOpposite()), enumfacing)) {
-			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockToAir(pos);
-		}
-
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
-	}
-
-	@Deprecated
-	@Override
-	public BlockState getStateFromMeta(int meta) {
-		Direction enumfacing = Direction.byIndex(meta);
-
-		if (enumfacing.getAxis() == Direction.Axis.Y) {
-			enumfacing = Direction.NORTH;
-		}
-
-		return this.getDefaultState().withProperty(FACING, enumfacing);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public int getMetaFromState(BlockState state) {
-		return state.getValue(FACING).getIndex();
-	}
-
-	@Deprecated
-	@Override
-	public BlockState withRotation(BlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
-	}
-
-	@Deprecated
-	@Override
-	public BlockState withMirror(BlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
-	}
-
-	@Deprecated
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-		return BlockFaceShape.UNDEFINED;
+		return ActionResultType.PASS;
 	}
 
 }

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.block;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCQR;
 
 public class BlockExporterChestCQR extends BlockExporterChest {
@@ -12,7 +12,8 @@ public class BlockExporterChestCQR extends BlockExporterChest {
 	private final ResourceLocation lootTable;
 
 	public BlockExporterChestCQR(ResourceLocation lootTable) {
-		this(lootTable, new ResourceLocation(CQRMain.MODID, "textures/blocks/exporter_chest_overlays/" + lootTable.getPath().substring(lootTable.getPath().lastIndexOf('/') + 1) + ".png"));
+		this(lootTable, new ResourceLocation(CQRMain.MODID,
+				"textures/blocks/exporter_chest_overlays/" + lootTable.getPath().substring(lootTable.getPath().lastIndexOf('/') + 1) + ".png"));
 	}
 
 	public BlockExporterChestCQR(ResourceLocation lootTable, String resourceName) {
@@ -29,11 +30,11 @@ public class BlockExporterChestCQR extends BlockExporterChest {
 	}
 
 	@Override
-	public TileEntityExporterChest createTileEntity(World world, BlockState state) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileEntityExporterChestCQR();
 	}
 
-	public ResourceLocation getLootTable() {
+	public ResourceLocation getLootTableCQR() {
 		return this.lootTable;
 	}
 

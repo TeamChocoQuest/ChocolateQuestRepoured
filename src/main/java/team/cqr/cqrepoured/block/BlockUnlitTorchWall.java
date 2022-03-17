@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.TorchBlock;
+import net.minecraft.block.WallTorchBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -23,18 +23,19 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
+public class BlockUnlitTorchWall extends WallTorchBlock implements IWaterLoggable {
 
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-	public BlockUnlitTorch() {
-		super(Properties.copy(Blocks.TORCH).lightLevel(state -> 0), null);
+	public BlockUnlitTorchWall() {
+		super(Properties.copy(Blocks.WALL_TORCH).lightLevel(state -> 0), null);
 		this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false).setValue(WATERLOGGED, false));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(LIT, WATERLOGGED);
 	}
 
@@ -67,7 +68,7 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 	@Override
 	public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean p_220082_5_) {
 		if (state.getValue(LIT)) {
-			level.setBlock(pos, Blocks.TORCH.defaultBlockState(), 11);
+			level.setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(FACING, state.getValue(FACING)), 11);
 			this.spawnIgniteParticles(level, pos, state);
 		}
 	}
@@ -75,7 +76,7 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 	@Override
 	public void entityInside(BlockState state, World level, BlockPos pos, Entity entity) {
 		if (!level.isClientSide && entity.isOnFire()) {
-			level.setBlock(pos, Blocks.TORCH.defaultBlockState(), 11);
+			level.setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(FACING, state.getValue(FACING)), 11);
 			level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			this.spawnIgniteParticles(level, pos, state);
 		}
@@ -86,6 +87,10 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 			double x = pos.getX() + 0.5D;
 			double y = pos.getY() + 0.7D;
 			double z = pos.getZ() + 0.5D;
+			Direction dir = state.getValue(FACING).getOpposite();
+			x += dir.getStepX() * 0.25D;
+			y += 0.22D;
+			z += dir.getStepZ() * 0.25D;
 			((ServerWorld) level).sendParticles(ParticleTypes.FLAME, x, y, z, 4, 0.0625D, 0.0625D, 0.0625D, 0.0078125D);
 		}
 	}
