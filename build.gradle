@@ -67,7 +67,7 @@ dependencies {
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.65')
 
     // ReachFix
-    atDependencies 'curse.maven:ReachFix-556777:3648997'
+    // TODO seems to cause issues in dev? atDependencies 'curse.maven:ReachFix-556777:3648997'
 
     // JEI
     compileOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152:api')
