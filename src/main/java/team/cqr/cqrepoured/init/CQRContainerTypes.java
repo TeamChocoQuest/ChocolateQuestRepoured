@@ -19,8 +19,8 @@ public class CQRContainerTypes {
 	
 	public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, CQRMain.MODID);
 
-	public static final RegistryObject<ContainerType<ContainerMerchant>> MERCHANT = CONTAINERS.register("merchant", () -> new ContainerType<>(ContainerMerchant::new));
-	public static final RegistryObject<ContainerType<ContainerMerchantEditTrade>> MERCHANT_EDIT_TRADE = CONTAINERS.register("merchant_edit_trade", () -> new ContainerType<>(ContainerMerchantEditTrade::new));
+	//public static final RegistryObject<ContainerType<ContainerMerchant>> MERCHANT = CONTAINERS.register("merchant", () -> new ContainerType<>(ContainerMerchant::new));
+	//public static final RegistryObject<ContainerType<ContainerMerchantEditTrade>> MERCHANT_EDIT_TRADE = CONTAINERS.register("merchant_edit_trade", () -> new ContainerType<>(ContainerMerchantEditTrade::new));
 	public static final RegistryObject<ContainerType<ContainerAlchemyBag>> ALCHEMY_BAG = CONTAINERS.register("alchemy_bag", () -> new ContainerType<>(ContainerAlchemyBag::new));
 	public static final RegistryObject<ContainerType<ContainerBackpack>> BACKPACK = CONTAINERS.register("backpack", () -> new ContainerType<>(ContainerBackpack::new));
 	public static final RegistryObject<ContainerType<ContainerBadge>> BADGE = CONTAINERS.register("badge", () -> new ContainerType<>(ContainerBadge::new));
