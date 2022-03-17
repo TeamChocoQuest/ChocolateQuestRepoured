@@ -61,17 +61,11 @@ public class ContainerBossBlock extends Container {
 			ItemStack itemstack = itemstack1.copy();
 
 			if (index > 35) {
-				if (this.moveItemStackTo(itemstack1, 0, 36, false)) {
-					return itemstack;
-				}
-			} else if (this.moveItemStackTo(itemstack1, 36, this.slots.size(), false)) {
-				return itemstack;
-			} else if (index > 26) {
-				if (this.moveItemStackTo(itemstack1, 0, 27, false)) {
+				if (this.moveItemStackTo(itemstack1, 0, 36, true)) {
 					return itemstack;
 				}
 			} else {
-				if (this.moveItemStackTo(itemstack1, 27, 36, false)) {
+				if (this.moveItemStackTo(itemstack1, 36, this.slots.size(), false)) {
 					return itemstack;
 				}
 			}
