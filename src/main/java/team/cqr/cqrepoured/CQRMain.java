@@ -11,9 +11,11 @@ import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import software.bernie.geckolib3.GeckoLib;
+import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
@@ -126,6 +128,8 @@ public class CQRMain {
 		CQRBlockEntities.registerBlockEntities();
 		CQRContainerTypes.registerContainerTypes();
 		CQRMessages.registerMessages();
+
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(CQRepouredClient::setupClient);
 	}
 
 	/*
