@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -9,8 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Util;
 import net.minecraft.util.datafix.TypeReferences;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
@@ -29,34 +29,30 @@ public class CQRBlockEntities {
 
 	public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, CQRMain.MODID);
 
-	public static final RegistryObject<TileEntityType<TileEntityExporter>> EXPORTER = register("exporter", TileEntityExporter::new, CQRBlocks.EXPORTER.get());
+	public static final RegistryObject<TileEntityType<TileEntityExporter>> EXPORTER = register("exporter", TileEntityExporter::new, CQRBlocks.EXPORTER);
 	public static final RegistryObject<TileEntityType<TileEntityTable>> TABLE = register("table", TileEntityTable::new, blocks(BlockTable.class));
-	public static final RegistryObject<TileEntityType<TileEntitySpawner>> SPAWNER = register("spawner", TileEntitySpawner::new, CQRBlocks.SPAWNER.get());
-	public static final RegistryObject<TileEntityType<TileEntityForceFieldNexus>> FORCE_FIELD_NEXUS = register("force_field_nexus", TileEntityForceFieldNexus::new, CQRBlocks.FORCE_FIELD_NEXUS.get());
+	public static final RegistryObject<TileEntityType<TileEntitySpawner>> SPAWNER = register("spawner", TileEntitySpawner::new, CQRBlocks.SPAWNER);
+	public static final RegistryObject<TileEntityType<TileEntityForceFieldNexus>> FORCE_FIELD_NEXUS = register("force_field_nexus", TileEntityForceFieldNexus::new, CQRBlocks.FORCE_FIELD_NEXUS);
 	public static final RegistryObject<TileEntityType<TileEntityExporterChestCQR>> EXPORTER_CHEST_CQR = register("exporter_chest_cqr", TileEntityExporterChestCQR::new, blocks(BlockExporterChestCQR.class));
-	public static final RegistryObject<TileEntityType<TileEntityExporterChestCustom>> EXPORTER_CHEST_CUSTOM = register("exporter_chest_custom", TileEntityExporterChestCustom::new, CQRBlocks.EXPORTER_CHEST_CUSTOM.get());
-	public static final RegistryObject<TileEntityType<TileEntityBoss>> BOSS = register("boss", TileEntityBoss::new, CQRBlocks.BOSS_BLOCK.get());
-	public static final RegistryObject<TileEntityType<TileEntityMap>> MAP = register("map", TileEntityMap::new, CQRBlocks.MAP_PLACEHOLDER.get());
+	public static final RegistryObject<TileEntityType<TileEntityExporterChestCustom>> EXPORTER_CHEST_CUSTOM = register("exporter_chest_custom", TileEntityExporterChestCustom::new, CQRBlocks.EXPORTER_CHEST_CUSTOM);
+	public static final RegistryObject<TileEntityType<TileEntityBoss>> BOSS = register("boss", TileEntityBoss::new, CQRBlocks.BOSS_BLOCK);
+	public static final RegistryObject<TileEntityType<TileEntityMap>> MAP = register("map", TileEntityMap::new, CQRBlocks.MAP_PLACEHOLDER);
 
-	private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> s, Block... b) {
-		return TILE_ENTITIES.register(name, () -> TileEntityType.Builder.of(s, b).build(Util.fetchChoiceType(TypeReferences.BLOCK_ENTITY, name)));
+	private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> s, Stream<RegistryObject<Block>> b) {
+		return TILE_ENTITIES.register(name, () -> TileEntityType.Builder.of(s, b.map(Supplier::get).toArray(Block[]::new)).build(Util.fetchChoiceType(TypeReferences.BLOCK_ENTITY, name)));
 	}
 
-	@SuppressWarnings("unused")
-	private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> s, Collection<? extends Block> b) {
-		return register(name, s, b.stream());
+	@SuppressWarnings("unchecked")
+	private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> s, RegistryObject<?>... b) {
+		return register(name, s, Arrays.stream((RegistryObject<Block>[]) b));
 	}
 
-	private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> s, Stream<? extends Block> b) {
-		return register(name, s, b.toArray(Block[]::new));
-	}
-
-	private static Stream<Block> blocks(Class<? extends Block> blockClass) {
-		return CQRBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get).filter(blockClass::isInstance);
+	private static Stream<RegistryObject<Block>> blocks(Class<? extends Block> blockClass) {
+		return CQRBlocks.BLOCKS.getEntries().stream().filter(b -> blockClass.isInstance(b.get()));
 	}
 
 	public static void registerBlockEntities() {
-		TILE_ENTITIES.register(MinecraftForge.EVENT_BUS);
+		TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 }
