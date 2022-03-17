@@ -4,7 +4,7 @@
 	"textures": {
 		"particle": "minecraft:block/obsidian",
 		"texture": "minecraft:block/obsidian",
-		"texture2": "minecraft:block/end_bricks",
+		"texture2": "minecraft:block/end_stone_bricks",
 		"texture3": "cqrepoured:block/table"
 	},
 	"elements": [ 	 
