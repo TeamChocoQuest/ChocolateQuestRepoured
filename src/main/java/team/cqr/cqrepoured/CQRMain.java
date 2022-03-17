@@ -18,6 +18,7 @@ import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.init.CQRMessages;
 
 @Mod(CQRMain.MODID)
 public class CQRMain {
@@ -124,6 +125,7 @@ public class CQRMain {
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();
 		CQRContainerTypes.registerContainerTypes();
+		CQRMessages.registerMessages();
 	}
 
 	/*
