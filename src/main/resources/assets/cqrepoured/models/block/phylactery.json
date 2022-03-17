@@ -1,8 +1,8 @@
 {
 	"__comment": "Designed by Mrbaumeister98 with Cubik Studio - https://cubik.studio",
 	"textures": {
-		"0": "cqrepoured:blocks/phylactery",
-		"particle": "cqrepoured:blocks/phylactery"
+		"0": "cqrepoured:block/phylactery",
+		"particle": "cqrepoured:block/phylactery"
 	},
 	"elements": [ 	 
 		{

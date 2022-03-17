@@ -2,10 +2,10 @@
 	"__comment": "Designed by DerToaster98 with Cubik Studio - https://cubik.studio",
 	"parent": "block/block",
 	"textures": {
-		"particle": "minecraft:blocks/obsidian",
-		"texture": "minecraft:blocks/obsidian",
-		"texture2": "minecraft:blocks/end_bricks",
-		"texture3": "cqrepoured:blocks/table"
+		"particle": "minecraft:block/obsidian",
+		"texture": "minecraft:block/obsidian",
+		"texture2": "minecraft:block/end_bricks",
+		"texture3": "cqrepoured:block/table"
 	},
 	"elements": [ 	 
 		{
