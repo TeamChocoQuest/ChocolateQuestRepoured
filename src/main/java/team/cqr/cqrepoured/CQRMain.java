@@ -16,6 +16,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 
 @Mod(CQRMain.MODID)
@@ -122,6 +123,7 @@ public class CQRMain {
 		CQRBlocks.registerBlocks();
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();
+		CQRContainerTypes.registerContainerTypes();
 	}
 
 	/*
