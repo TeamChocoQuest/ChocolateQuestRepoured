@@ -1,44 +1,41 @@
 package team.cqr.cqrepoured.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.util.GuiHelper;
+import team.cqr.cqrepoured.inventory.ContainerBossBlock;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiBossBlock extends ContainerScreen {
+public class GuiBossBlock extends ContainerScreen<ContainerBossBlock> {
 
-	private static final ResourceLocation GUI_BOSS_BLOCK = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_boss_block.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_boss_block.png");
 
-	public GuiBossBlock(Container inventorySlotsIn) {
-		super(inventorySlotsIn);
-		this.xSize = 176;
-		this.ySize = 132;
+	public GuiBossBlock(ContainerBossBlock container, PlayerInventory playerInv, ITextComponent title) {
+		super(container, playerInv, title);
+		this.imageWidth = 176;
+		this.imageHeight = 132;
+		this.inventoryLabelY = this.imageHeight - 94;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		GuiHelper.drawString(this.fontRenderer, I18n.format("Boss Block"), this.xSize / 2, 7, 0x404040, true, false);
-		GuiHelper.drawString(this.fontRenderer, I18n.format("container.inventory"), 8, 39, 0x404040, false, false);
+	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+		this.renderBackground(pMatrixStack);
+		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+		this.renderTooltip(pMatrixStack, pMouseX, pMouseY);
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(GUI_BOSS_BLOCK);
-		GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, this.xSize, this.ySize, this.xSize / 256.0D, this.ySize / 256.0D);
+	protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.minecraft.getTextureManager().bind(TEXTURE);
+		this.blit(pMatrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 	}
 
 }
