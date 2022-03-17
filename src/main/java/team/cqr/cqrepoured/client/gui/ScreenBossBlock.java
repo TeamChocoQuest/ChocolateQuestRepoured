@@ -13,11 +13,11 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.inventory.ContainerBossBlock;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiBossBlock extends ContainerScreen<ContainerBossBlock> {
+public class ScreenBossBlock extends ContainerScreen<ContainerBossBlock> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_boss_block.png");
 
-	public GuiBossBlock(ContainerBossBlock container, PlayerInventory playerInv, ITextComponent title) {
+	public ScreenBossBlock(ContainerBossBlock container, PlayerInventory playerInv, ITextComponent title) {
 		super(container, playerInv, title);
 		this.imageWidth = 176;
 		this.imageHeight = 132;

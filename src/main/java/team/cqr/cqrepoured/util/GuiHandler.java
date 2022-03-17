@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
 import team.cqr.cqrepoured.client.gui.ScreenBackpack;
-import team.cqr.cqrepoured.client.gui.GuiBadge;
-import team.cqr.cqrepoured.client.gui.GuiBossBlock;
+import team.cqr.cqrepoured.client.gui.ScreenBadge;
+import team.cqr.cqrepoured.client.gui.ScreenBossBlock;
 import team.cqr.cqrepoured.client.gui.GuiExporter;
 import team.cqr.cqrepoured.client.gui.GuiExporterChestCustom;
 import team.cqr.cqrepoured.client.gui.GuiMapPlaceholder;
@@ -95,7 +95,7 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, PlayerEntity player, World world, int x, int y, int z) {
 		if (ID == BADGE_GUI_ID) {
-			return new GuiBadge(this.getServerGuiElement(ID, player, world, x, y, z));
+			return new ScreenBadge(this.getServerGuiElement(ID, player, world, x, y, z));
 		}
 
 		if (ID == SPAWNER_GUI_ID) {
@@ -135,7 +135,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == BOSS_BLOCK_GUI_ID) {
-			return new GuiBossBlock(this.getServerGuiElement(ID, player, world, x, y, z));
+			return new ScreenBossBlock(this.getServerGuiElement(ID, player, world, x, y, z));
 		}
 
 		if (ID == MAP_GUI_ID) {

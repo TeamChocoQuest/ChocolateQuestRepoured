@@ -9,14 +9,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
+import team.cqr.cqrepoured.inventory.ContainerBadge;
 
 @OnlyIn(Dist.CLIENT)
-public class ScreenAlchemyBag extends ContainerScreen<ContainerAlchemyBag> {
+public class ScreenBadge extends ContainerScreen<ContainerBadge> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/hopper.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
 
-	public ScreenAlchemyBag(ContainerAlchemyBag container, PlayerInventory playerInv, ITextComponent title) {
+	public ScreenBadge(ContainerBadge container, PlayerInventory playerInv, ITextComponent title) {
 		super(container, playerInv, title);
 		// TODO set titleLabelX and titleLabelY
 	}
