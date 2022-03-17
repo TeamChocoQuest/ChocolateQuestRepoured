@@ -1,23 +1,24 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
-		maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-		//Parchment Mappings
-        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
+        // Parchment
+        maven { url = 'https://maven.parchmentmc.org' }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-		classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-		classpath 'org.parchmentmc:librarian:1.+'
+        // Mixin
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        // Parchment
+        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
+// Mixin
+apply plugin: 'org.spongepowered.mixin'
+// Parchment
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = "$mcVersion-$modVersion"
 group = 'team.cqr.cqrepoured'
@@ -43,7 +44,7 @@ repositories {
             artifact '[organisation]/[module]/releases/download/v[revision]/[module]-[revision].[ext]'
         }
 
-        metadataSources { artifact() } 
+        metadataSources { artifact() }
     }
 
     // GeckoLib
@@ -63,19 +64,17 @@ dependencies {
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
+    // GeckoLib
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.65')
 
+    // ReachFix
     atDependencies 'curse.maven:ReachFix-556777:3648997'
-	//1.12.2
-    //atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
 
-	//Stuck on 1.12.2
-    //buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
-    //buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
-    //buildDependencies 'curse.maven:CubicChunks-292243:3186888'
-	
-	//Mixin annotations
-	annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+    // JEI
+    // atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
+
+    // Mixin
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
 minecraft {
@@ -90,16 +89,11 @@ minecraft {
 
     runs {
         client {
-            taskName 'runClient CQR 1.16.5'
-            environment 'MC_VERSION', '1.16.5'
-			
-			arg "-mixin.config=cqrepoured.mixins.json"
-			
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            taskName 'runClient CQR 1.16'
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
-            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin,meldexun.reachfix.asm.ReachFixPlugin'
-			
-			mods {
+
+            mods {
                 cqrepoured {
                     source sourceSets.main
                 }
@@ -107,16 +101,24 @@ minecraft {
         }
 
         server {
-            taskName 'runServer CQR 1.16.5'
-            environment 'MC_VERSION', '1.16.5'
-			
-			arg "-mixin.config=cqrepoured.mixins.json"
-			
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            taskName 'runServer CQR 1.16'
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
-            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin,meldexun.reachfix.asm.ReachFixPlugin'
-			
-			mods {
+
+            mods {
+                cqrepoured {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            taskName 'runData CQR 1.16'
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            args '--mod', 'cqrepoured', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
                 cqrepoured {
                     source sourceSets.main
                 }
@@ -129,7 +131,8 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
-    add sourceSets.main, "cqrepoured.refmap.json"
+    add sourceSets.main, 'mixins.cqrepoured.refmap.json'
+    config 'mixins.cqrepoured.json'
 }
 
 // Generate a fixed tsrg file after generating the default tsrg file
@@ -177,22 +180,24 @@ jar {
         configurations.includedDependencies.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
-	classifier = 'universal'
+    // TODO update this
+
+    classifier = 'universal'
 
     manifest {
-		attributes([
-			'FMLCorePlugin': 'team.cqr.cqrepoured.asm.CQRPlugin',
-			'FMLCorePluginContainsFMLMod': 'true',
-			
-			"Specification-Title": "$modName",
-			"Specification-Vendor": "CQ-Repoured Team",
-			"Specification-Version": "$modVersion", // We are version 1 of ourselves
-			"Implementation-Title": "$modName",
-			"Implementation-Version": "$modVersion",
-			"Implementation-Vendor" :"CQ-Repoured Team",
-			"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-			"MixinConfigs": "cqrepoured.mixins.json"
-		])
+        attributes([
+            'FMLCorePlugin': 'team.cqr.cqrepoured.asm.CQRPlugin',
+            'FMLCorePluginContainsFMLMod': 'true',
+            
+            "Specification-Title": "$modName",
+            "Specification-Vendor": "CQ-Repoured Team",
+            "Specification-Version": "$modVersion", // We are version 1 of ourselves
+            "Implementation-Title": "$modName",
+            "Implementation-Version": "$modVersion",
+            "Implementation-Vendor" :"CQ-Repoured Team",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "cqrepoured.mixins.json"
+        ])
     }
 }
 
@@ -200,4 +205,4 @@ compileJava {
     classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
 }
 
-jar.finalizedBy('reobfJar') 
+jar.finalizedBy('reobfJar')
