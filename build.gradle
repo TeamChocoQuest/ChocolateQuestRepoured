@@ -59,7 +59,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.8'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.31'
 
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
