@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#wood"
+  },
+  "elements": [
+    {
+      "from": [ 0, 13, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "north": { "uv": [ 0, 5, 16, 8 ], "texture": "#wood" },
+        "east": { "uv": [ 0, 5, 16, 8 ], "texture": "#wood" },
+        "south": { "uv": [ 0, 9, 16, 12 ], "texture": "#wood" },
+        "west": { "uv": [ 0, 5, 16, 8 ], "texture": "#wood" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#wood" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#wood" }
+      }
+    }
+  ]
+}
