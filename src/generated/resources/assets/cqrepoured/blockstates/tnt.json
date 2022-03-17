@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "hidden=false,unstable=false": {
+      "model": "cqrepoured:block/tnt_hidden"
+    },
+    "hidden=true,unstable=false": {
+      "model": "minecraft:block/tnt"
+    },
+    "hidden=false,unstable=true": {
+      "model": "cqrepoured:block/tnt_hidden"
+    },
+    "hidden=true,unstable=true": {
+      "model": "minecraft:block/tnt"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "cqrepoured:block/endstone_pillar_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "cqrepoured:block/endstone_pillar"
+    },
+    "axis=z": {
+      "model": "cqrepoured:block/endstone_pillar_horizontal",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "cqrepoured:block/template_table_top",
+  "textures": {
+    "wood": "minecraft:block/spruce_planks"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "top=false": {
+      "model": "cqrepoured:block/birch_table"
+    },
+    "top=true": {
+      "model": "cqrepoured:block/birch_table_top"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "passable=false": {
+      "model": "cqrepoured:block/null_block"
+    },
+    "passable=true": {
+      "model": "cqrepoured:block/null_block_passable"
+    }
+  }
+}

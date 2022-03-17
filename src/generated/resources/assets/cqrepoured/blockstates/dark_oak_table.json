@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "top=false": {
+      "model": "cqrepoured:block/dark_oak_table"
+    },
+    "top=true": {
+      "model": "cqrepoured:block/dark_oak_table_top"
+    }
+  }
+}

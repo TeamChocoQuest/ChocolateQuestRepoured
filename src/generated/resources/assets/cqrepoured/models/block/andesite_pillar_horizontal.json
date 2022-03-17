@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "side": "cqrepoured:block/andesite_pillar_side",
+    "end": "cqrepoured:block/andesite_pillar_end"
+  }
+}
