@@ -83,14 +83,6 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 		this.dataManager.read(pkt.getTag());
 	}
 
-	/*Gone?
-	@Nullable
-	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent(I18n.format("tile.spawner.name"));
-	}
-	*/
-
 	@Override
 	public void tick() {
 		if (!this.level.isClientSide && this.level.getDifficulty() != Difficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
