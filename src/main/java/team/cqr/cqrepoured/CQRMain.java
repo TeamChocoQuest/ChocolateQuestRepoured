@@ -1,78 +1,33 @@
 package team.cqr.cqrepoured;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.FireBlock;
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;raftforge.fml.network.simple.SimpleChannel;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import software.bernie.geckolib3.GeckoLib;
-import team.cqr.cqrepoured.block.banner.EBannerPatternsCQ;
-import team.cqr.cqrepoured.block.banner.EBanners;
-import team.cqr.cqrepoured.command.CommandChangeReputation;
-import team.cqr.cqrepoured.command.CommandDeleteProtectedRegion;
-import team.cqr.cqrepoured.command.CommandExport;
-import team.cqr.cqrepoured.command.CommandGetProtectedRegion;
-import team.cqr.cqrepoured.command.CommandImport;
-import team.cqr.cqrepoured.command.CommandLocateDungeon;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.customtextures.TextureSetManager;
-import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
-import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.init.CQRCapabilities;
-import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.init.CQRDispenseBehaviors;
-import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRLoottables;
-import team.cqr.cqrepoured.init.CQRMaterials;
-import team.cqr.cqrepoured.init.CQRMessages;
-import team.cqr.cqrepoured.init.CQRTileEntities;
-import team.cqr.cqrepoured.item.crafting.smelting.SmeltingHandler;
-import team.cqr.cqrepoured.proxy.IProxy;
-import team.cqr.cqrepoured.util.ConfigBackupHandler;
-import team.cqr.cqrepoured.util.CopyHelper;
-import team.cqr.cqrepoured.util.GuiHandler;
-import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
-import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-import team.cqr.cqrepoured.world.structure.generation.thewall.WorldWallGenerator;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
 @Mod(CQRMain.MODID)
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
 	public static final String VERSION = "2.6.3B";
-	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main-network-channel"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
-	@SidedProxy(clientSide = "team.cqr.cqrepoured.proxy.ClientProxy", serverSide = "team.cqr.cqrepoured.proxy.ServerProxy")
-	public static IProxy proxy;
+	//@SidedProxy(clientSide = "team.cqr.cqrepoured.proxy.ClientProxy", serverSide = "team.cqr.cqrepoured.proxy.ServerProxy")
+	//public static IProxy proxy;
 
 	public static Logger logger = LogManager.getLogger();
 
@@ -100,47 +55,55 @@ public class CQRMain {
 	public static final ItemGroup CQR_ITEMS_TAB = new ItemGroup(CQRMain.MODID + "_items") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(CQRItems.BOOTS_CLOUD);
+			return new ItemStack(Items.APPLE);
+			//return new ItemStack(CQRItems.BOOTS_CLOUD);
 		}
 
 	};
 	public static final ItemGroup CQR_BLOCKS_TAB = new ItemGroup(CQRMain.MODID + "_blocks") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(CQRBlocks.TABLE_OAK);
+			return new ItemStack(Items.APPLE);
+			//return new ItemStack(CQRBlocks.TABLE_OAK);
 		}
 	};
 	public static final ItemGroup CQR_CREATIVE_TOOL_TAB = new ItemGroup(CQRMain.MODID + "_creative_tools") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(CQRBlocks.EXPORTER);
+			return new ItemStack(Items.APPLE);
+			//return new ItemStack(CQRBlocks.EXPORTER);
 		}
 	};
 	public static final ItemGroup CQR_BANNERS_TAB = new ItemGroup(CQRMain.MODID + "_banners") {
 		@Override
 		public ItemStack makeIcon() {
-			return EBanners.WALKER_ORDO.getBanner();
+			return new ItemStack(Items.APPLE);
+			//return EBanners.WALKER_ORDO.getBanner();
 		}
 		
 		@Override
 		public void fillItemList(NonNullList<ItemStack> itemList) {
 			super.fillItemList(itemList);
+			/*
 			List<ItemStack> banners = BannerHelper.addBannersToTabs();
 			for (ItemStack stack : banners) {
 				itemList.add(stack);
 			}
+			*/
 		}
 	};
 	public static final ItemGroup CQR_DUNGEON_PLACER_TAB = new ItemGroup(CQRMain.MODID + "_dungeon_placers") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
+			return new ItemStack(Items.APPLE);
+			//return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
 		}
 	};
 	public static final ItemGroup CQR_EXPORTER_CHEST_TAB = new ItemGroup(CQRMain.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
+			return new ItemStack(Items.APPLE);
+			//return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE);
 		}
 	};
 	public static final ItemGroup CQR_SPAWN_EGG_TAB = new ItemGroup(CQRMain.MODID + "_spawn_eggs") {
@@ -150,8 +113,8 @@ public class CQRMain {
 		}
 	};
 
-	public static final WorldDungeonGenerator DUNGEON_GENERATOR = new WorldDungeonGenerator();
-	public static final WorldWallGenerator WALL_GENERATOR = new WorldWallGenerator();
+	//public static final WorldDungeonGenerator DUNGEON_GENERATOR = new WorldDungeonGenerator();
+	//public static final WorldWallGenerator WALL_GENERATOR = new WorldWallGenerator();
 
 	public CQRMain() {
 		isWorkspaceEnvironment = !CQRMain.class.getResource("").getProtocol().equals("jar");
@@ -161,7 +124,8 @@ public class CQRMain {
 		CQRBlocks.registerBlocks();
 		CQRBlockEntities.registerBlockEntities();
 	}
-	
+
+	/*
 	@SubscribeEvent
 	public void preInit(FMLPreInitializationEvent event) {
 		// The geckolib comment says this should be in the constructor but that only applies to MC 1.16+
@@ -191,7 +155,7 @@ public class CQRMain {
 		EBannerPatternsCQ.values();
 		EBanners.values();
 		CreatureAttribute.values();
-		/* DO NOT REMOVE, this fixes the neat issue */
+		// DO NOT REMOVE, this fixes the neat issue
 		CQRCreatureAttributes.VOID.name();
 
 		CQRMessages.registerMessages();
@@ -292,6 +256,7 @@ public class CQRMain {
 		FactionRegistry.getServerInstance().saveAllReputationData(true, event.getServer().overworld());
 		CQStructure.clearCache();
 	}
+	*/
 	
 	public static final ResourceLocation prefix(final String path) {
 		return new ResourceLocation(MODID, path);
