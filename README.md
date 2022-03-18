@@ -12,31 +12,14 @@ The mod is dependant on reachfix and geckolib.
 
 ## dev team
 
-<li>
-  <ul>
-Lordepos
-Owner
+Lead devs: Lordepos, dertoaster_98
+
+devs: meldexun
+
+Artist: Silentine_ , Sir_Squid1y , Pi0nStEaM
 
 
-Silentine_
-Artist
 
-
-Sir_Squid1y
-Artist
-
-
-Pi0nStEaM
-Artist
-
-
-meldexun
-Author
-
-dertoaster_98
-Author
-  </ul>
-</li>
 ## Links
 
 [Discord](https://discord.gg/StWzzFw)
