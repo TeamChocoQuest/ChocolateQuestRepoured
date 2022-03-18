@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -10,6 +11,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.EquipmentSlotType.Group;
@@ -23,7 +25,7 @@ import team.cqr.cqrepoured.item.armor.ItemArmorSlime;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends LivingEntity {
+public abstract class MixinLivingEntity extends Entity {
 
 	protected MixinLivingEntity(EntityType<? extends LivingEntity> type, World world) {
 		super(type, world);
@@ -87,6 +89,26 @@ public abstract class MixinLivingEntity extends LivingEntity {
 	        	 }
 	         }
 		 }
+	}
+
+	@Shadow
+	private boolean isFallFlying() {
+		throw new IllegalStateException("Mixin failed to shadow isFallFlying()");
+	}
+
+	@Shadow
+	private boolean canStandOnFluid(Fluid type) {
+		throw new IllegalStateException("Mixin failed to shadow canStandOnFluid()");
+	}
+
+	@Shadow
+	public boolean isAffectedByFluids() {
+		throw new IllegalStateException("Mixin failed to shadow isAffectedByFluids()");
+	}
+
+	@Shadow
+	public boolean isEffectiveAi() {
+		throw new IllegalStateException("Mixin failed to shadow isEffectiveAi()");
 	}
 
 }

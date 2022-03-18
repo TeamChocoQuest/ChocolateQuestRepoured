@@ -44,6 +44,13 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 public class ItemUtil {
 
+	public static boolean hasFullSet(Entity entity, Class<? extends Item> itemClass) {
+		if(entity instanceof LivingEntity) {
+			return hasFullSet((LivingEntity)entity, itemClass);
+		}
+		return false;
+	}
+	
 	public static boolean hasFullSet(LivingEntity entity, Class<? extends Item> itemClass) {
 		Iterator<ItemStack> iterable = entity.getArmorSlots().iterator();
 		Class<? extends Item> helm, chest, legs, feet;
