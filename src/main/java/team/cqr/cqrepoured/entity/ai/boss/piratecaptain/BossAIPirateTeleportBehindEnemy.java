@@ -36,7 +36,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 		this.timer++;
 		super.tick();
 		if (this.timer == 10) {
-			this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA, 1));
+			this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA.get(), 1));
 		}
 
 		if (this.timer == 100) {
@@ -54,7 +54,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	public void stop() {
 		super.stop();
 		this.timer = 0;
-		this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER, 1));
+		this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER.get(), 1));
 	}
 
 }

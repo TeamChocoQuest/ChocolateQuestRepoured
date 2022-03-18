@@ -104,7 +104,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		switch (seed) {
 		case 4:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS.get()));
 			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
 			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
@@ -140,12 +140,12 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	}
 
 	private ItemStack generateBadgeWithPotion() {
-		ItemStack stack = new ItemStack(CQRItems.BADGE, 1);
+		ItemStack stack = new ItemStack(CQRItems.BADGE.get(), 1);
 
 		LazyOptional<IItemHandler> lOpCap = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		if(lOpCap.isPresent()) {
 			IItemHandler inventory = lOpCap.resolve().get();
-			inventory.insertItem(0, new ItemStack(CQRItems.POTION_HEALING, 1), false);
+			inventory.insertItem(0, new ItemStack(CQRItems.POTION_HEALING.get(), 1), false);
 		}
 
 		return stack;
