@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cqrepoured:item/banner_pattern_cqr"
+  }
+}
