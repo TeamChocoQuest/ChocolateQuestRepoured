@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;
+import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.ItemUtil;
 
@@ -34,10 +35,10 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	private final int specialAttackCooldown;
 
 	//#TODO Materials
-	public ItemGreatSword(IItemTier material, float attackDamage, int cooldown, Item.Properties props)
+	public ItemGreatSword(Properties props, IExtendedItemTier material, int cooldown)
 	{
-		super(material, CQRConfig.materials.toolMaterials.greatSwordAttackDamageBonus, CQRConfig.materials.toolMaterials.greatSwordAttackSpeedBonus, props);
-		this.specialAttackDamage = attackDamage;
+		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
+		this.specialAttackDamage = material.getAttackDamageBonus();
 		this.specialAttackCooldown = cooldown;
 	}
 
