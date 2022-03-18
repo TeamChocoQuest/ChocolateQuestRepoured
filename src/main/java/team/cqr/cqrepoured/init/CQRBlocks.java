@@ -183,8 +183,6 @@ public class CQRBlocks {
 	}
 
 	public static void registerBlocks() {
-		// TODO override vanilla fire block
-
 		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
