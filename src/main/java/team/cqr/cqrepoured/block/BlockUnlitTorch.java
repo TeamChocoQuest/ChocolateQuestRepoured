@@ -9,7 +9,6 @@ import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
@@ -18,7 +17,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -122,16 +120,6 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 			return ActionResultType.SUCCESS;
 		}
 		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
-	}
-	
-	@Override
-	public void onProjectileHit(World pLevel, BlockState pState, BlockRayTraceResult pHit, ProjectileEntity pProjectile) {
-		if(pProjectile.isOnFire()) {
-			pProjectile.kill();
-			pLevel.setBlock(pHit.getBlockPos(), Blocks.TORCH.defaultBlockState(), 11);
-			pLevel.playSound(null, pHit.getBlockPos(), SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			this.spawnIgniteParticles(pLevel, pHit.getBlockPos(), pState);
-		}
 	}
 
 }
