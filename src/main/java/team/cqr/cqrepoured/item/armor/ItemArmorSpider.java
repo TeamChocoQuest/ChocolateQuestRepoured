@@ -6,97 +6,110 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
-import net.java.games.input.Keyboard;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
+import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.ItemUtil;
 
+//#TODO Needs tests
 public class ItemArmorSpider extends ArmorItem {
 
 	private AttributeModifier movementSpeed;
 
-	public ItemArmorSpider(ArmorMaterial materialIn, int renderIndexIn, EquipmentSlotType equipmentSlotIn) {
-		super(materialIn, renderIndexIn, equipmentSlotIn);
+	public ItemArmorSpider(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties properties) {
+		super(materialIn, slot, properties);
 
-		this.movementSpeed = new AttributeModifier("SpiderArmorModifier", 0.05D, 2);
+		this.movementSpeed = new AttributeModifier("SpiderArmorModifier", 0.05D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack)
+	{
+		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-		if (slot == MobEntity.getSlotForItemStack(stack)) {
-			multimap.put(Attributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
+		if(slot == MobEntity.getEquipmentSlotForItem(stack))
+		{
+			multimap.put(Attributes.MOVEMENT_SPEED, this.movementSpeed);
 		}
-
 		return multimap;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.spider_armor.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	{
+		ItemLore.addHoverTextLogic(tooltip, flagIn, "spider_armor");
 	}
 
 	@Override
-	public void onArmorTick(World world, PlayerEntity player, ItemStack itemStack) {
-		if (ItemUtil.hasFullSet(player, ItemArmorSpider.class)) {
-			if (player.isSpectator()) {
+	public void onArmorTick(ItemStack stack, World world, PlayerEntity player)
+	{
+		if(ItemUtil.hasFullSet(player, ItemArmorSpider.class))
+		{
+			if(player.isSpectator())
+			{
 				return;
 			}
-			if (player.collidedHorizontally) {
-				if (world.isRemote) {
-					if (player.moveForward > 0) {
-						player.motionY = 0.2D;
+			if(player.horizontalCollision)
+			{
+				if(world.isClientSide)
+				{
+					if(player.zza > 0)
+					{
+						player.setDeltaMovement(player.getDeltaMovement().x, 0.2D, player.getDeltaMovement().z); //.motionY = 0.2D;
 						this.createClimbingParticles(player, world);
-					} else if (player.isSneaking()) {
-						player.motionY = 0.0D;
-					} else {
-						player.motionY = -0.2D;
+					}
+					else if(player.isCrouching())
+					{
+						player.setDeltaMovement(player.getDeltaMovement().x, 0.0D, player.getDeltaMovement().z);
+						//player.motionY = 0.0D;
+					}
+					else
+					{
+						player.setDeltaMovement(player.getDeltaMovement().x, -0.2D, player.getDeltaMovement().z);
+
+						//player.motionY = -0.2D;
 					}
 				}
 
-				player.onGround = true;
+				player.setOnGround(true); //should do
+				//player.onGround = true;
 			}
 			player.fallDistance = 0F;
-			player.jumpMovementFactor += 0.005;
-			player.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 0, 1, false, false));
+			player.flyingSpeed += 0.005;
+			player.addEffect(new EffectInstance(Effects.JUMP, 0, 1, false, false));
 		}
 	}
 
-	private void createClimbingParticles(PlayerEntity player, World world) {
-		int i = (int) player.posX;
-		int j = MathHelper.floor(player.getPosition().getY());
-		int k = (int) player.posZ;
+	private void createClimbingParticles(PlayerEntity player, World world)
+	{
+		int i = (int) player.position().x;
+		int j = MathHelper.floor(player.blockPosition().getY());
+		int k = (int) player.position().z;
 
-		int direction = MathHelper.floor((player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int direction = MathHelper.floor((player.yRot * 4.0F / 360.0F) + 0.5D) & 3;
 
 		if (direction == 0) // south
 		{
@@ -112,9 +125,12 @@ public class ItemArmorSpider extends ArmorItem {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), player.position().x + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getBoundingBox().minY + 0.1D,
+							(player.position().z + 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							//-player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
 				}
 			}
 		}
@@ -137,9 +153,12 @@ public class ItemArmorSpider extends ArmorItem {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate),
+							(player.position().x - 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getBoundingBox().minY + 0.1D, player.position().z + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
+							//-player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D);
 				}
 			}
 		}
@@ -162,9 +181,13 @@ public class ItemArmorSpider extends ArmorItem {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), player.position().x + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getBoundingBox().minY + 0.1D,
+							(player.position().z - 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
+
+									//-player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D);
 				}
 			}
 		}
@@ -183,9 +206,13 @@ public class ItemArmorSpider extends ArmorItem {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), (player.position().x + 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getBoundingBox().minY + 0.1D,
+							player.position().z + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
+
+					//-player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D, );
 				}
 			}
 		}
@@ -194,8 +221,9 @@ public class ItemArmorSpider extends ArmorItem {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
-	public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
-		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.spiderArmorLegs : CQRArmorModels.spiderArmor;
+	public BipedModel getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, BipedModel _default)
+	{
+		return armorSlot == EquipmentSlotType.LEGS ? CQRArmorModels.SPIDER_ARMOR_LEGS : CQRArmorModels.SPIDER_ARMOR;
 	}
 
 }
