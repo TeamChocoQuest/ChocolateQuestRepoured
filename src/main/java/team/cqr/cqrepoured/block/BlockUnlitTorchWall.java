@@ -109,15 +109,10 @@ public class BlockUnlitTorchWall extends WallTorchBlock implements IWaterLoggabl
 	@Override
 	public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
 		ItemStack stack = pPlayer.getItemInHand(pHand);
-		Block block = Block.byItem(stack.getItem());
 
-		if ((stack.getItem() != null &&stack.getItem().is(CQRItemTags.TORCH_IGNITERS)) || block.getLightValue(block.defaultBlockState(), pLevel, pHit.getBlockPos()) > 0.0F) {
+		if (!stack.isEmpty() && stack.getItem().is(CQRItemTags.TORCH_IGNITERS)) {
 			if (!pLevel.isClientSide) {
-				if(stack.getItem().is(CQRItemTags.SOUL_FIRE_EMITTERS)) {
-					pLevel.setBlock(pHit.getBlockPos(), Blocks.SOUL_WALL_TORCH.defaultBlockState().setValue(FACING, pState.getValue(FACING)), 11);
-				} else {
-					pLevel.setBlock(pHit.getBlockPos(), Blocks.WALL_TORCH.defaultBlockState().setValue(FACING, pState.getValue(FACING)), 11);
-				}
+				pLevel.setBlock(pHit.getBlockPos(), Blocks.WALL_TORCH.defaultBlockState().setValue(FACING, pState.getValue(FACING)), 11);
 				pLevel.playSound(null, pHit.getBlockPos(), SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				this.spawnIgniteParticles(pLevel, pHit.getBlockPos(), pState);
 			}

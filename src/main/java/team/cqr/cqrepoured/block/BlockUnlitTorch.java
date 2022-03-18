@@ -86,7 +86,7 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 			this.spawnIgniteParticles(level, pos, state);
 		}
 	}
-	
+
 	private void spawnIgniteParticles(World level, BlockPos pos, BlockState state) {
 		if (!level.isClientSide) {
 			double x = pos.getX() + 0.5D;
@@ -100,20 +100,14 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 	public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
 
 	}
-	
+
 	@Override
 	public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
 		ItemStack stack = pPlayer.getItemInHand(pHand);
-		Block block = Block.byItem(stack.getItem());
 
-		if ((stack.getItem() != null &&stack.getItem().is(CQRItemTags.TORCH_IGNITERS)) || block.getLightValue(block.defaultBlockState(), pLevel, pHit.getBlockPos()) > 0.0F) {
+		if (!stack.isEmpty() && stack.getItem().is(CQRItemTags.TORCH_IGNITERS)) {
 			if (!pLevel.isClientSide) {
-				if(stack.getItem().is(CQRItemTags.SOUL_FIRE_EMITTERS)) {
-					pLevel.setBlock(pHit.getBlockPos(), Blocks.SOUL_TORCH.defaultBlockState(), 11);
-				}
-				else {
-					pLevel.setBlock(pHit.getBlockPos(), Blocks.TORCH.defaultBlockState(), 11);
-				}
+				pLevel.setBlock(pHit.getBlockPos(), Blocks.TORCH.defaultBlockState(), 11);
 				pLevel.playSound(null, pHit.getBlockPos(), SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				this.spawnIgniteParticles(pLevel, pHit.getBlockPos(), pState);
 			}
