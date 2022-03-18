@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import software.bernie.geckolib3.GeckoLib;
+import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -87,12 +89,12 @@ public class CQRMain {
 		@Override
 		public void fillItemList(NonNullList<ItemStack> itemList) {
 			super.fillItemList(itemList);
-			/*
+			
 			List<ItemStack> banners = BannerHelper.addBannersToTabs();
 			for (ItemStack stack : banners) {
 				itemList.add(stack);
 			}
-			*/
+			
 		}
 	};
 	public static final ItemGroup CQR_DUNGEON_PLACER_TAB = new ItemGroup(CQRMain.MODID + "_dungeon_placers") {

@@ -1,23 +1,65 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.tileentity.BannerPattern;
-import team.cqr.cqrepoured.CQRMain;
+import java.lang.reflect.Field;
+import java.util.Locale;
 
+import net.minecraft.item.BannerPatternItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.block.banner.EBanners;
+
+@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQRBannerPatterns {
-	
-	public static BannerPattern CQ_BLANK = create("cq_blank", "blk", false);
-	public static BannerPattern WITHER_SKULL = create("cq_wither_skull", "wskl", false);
-	public static BannerPattern WITHER_SKULL_EYES = create("cq_wither_eyes", "wsey", false);
-	public static BannerPattern FIRE = create("cq_fire", "fre", false);
-	public static BannerPattern EMERALD = create("cq_emerald", "erld", false);
-	public static BannerPattern BONES = create("cq_bbones", "bns", false);
-	public static BannerPattern WALKER_BACKGROUND = create("walker_black_bg", "wblbg", false);
-	public static BannerPattern WALKER_BORDER = create("walker_border", "wkbd", false);
-	public static BannerPattern WALKER_INNER_BORDER = create("walker_inner_border", "wibd", false);
-	public static BannerPattern WALKER_SKULL = create("walker_skull", "wlksk", false);
-			
-	protected static BannerPattern create(String name, String hashName, boolean hasPatternItem) {
-		return BannerPattern.create(CQRMain.MODID + "_" + "cq_blank", CQRMain.MODID + "." + name, "cqr." + hashName, hasPatternItem);
+
+	public static BannerPattern CQ_BLANK = addBanner("cq_blank");
+	public static BannerPattern WITHER_SKULL = addBanner("cq_wither_skull");
+	public static BannerPattern WITHER_SKULL_EYES = addBanner("cq_wither_eyes");
+	public static BannerPattern FIRE = addBanner("cq_fire");
+	public static BannerPattern EMERALD = addBanner("cq_emerald");
+	public static BannerPattern BONES = addBanner("cq_bbones");
+	public static BannerPattern WALKER_BACKGROUND = addBanner("walker_black_bg");
+	public static BannerPattern WALKER_BORDER = addBanner("walker_border");
+	public static BannerPattern WALKER_INNER_BORDER = addBanner("walker_inner_border");
+	public static BannerPattern WALKER_SKULL = addBanner("walker_skull");
+
+	public static BannerPattern addBanner(String name) {
+		return addBanner(name, null);
+	}
+
+	public static BannerPattern addBanner(String name, ItemStack craftingStack) {
+		return BannerPattern.create(name.toUpperCase(), name, CQRMain.MODID + "." + name, true);
+	}
+
+	//!!!CALL AFTER ITEMS ARE REGISTERED!!!
+	@SubscribeEvent
+	public static void registerBanners(RegistryEvent.Register<Item> event) {
+		// Needed to just initialize that crap lol
+		try {
+			for (Field f : CQRBannerPatterns.class.getDeclaredFields()) {
+				Object obj = f.get(null);
+				if (obj instanceof BannerPattern) {
+					BannerPattern pattern = (BannerPattern) obj;
+					String name = f.getName().replace("PATTERN_", "").toLowerCase(Locale.ROOT);
+					event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).stacksTo(1).tab(CQRMain.CQR_BANNERS_TAB)).setRegistryName(CQRMain.MODID + ":banner_pattern_" + name));
+
+				}
+			}
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		
+		NonNullList<ItemStack> bannersCQR = NonNullList.create();
+		for(EBanners banner : EBanners.values()) {
+			bannersCQR.add(banner.getBanner());
+		}
+		CQRMain.CQR_BANNERS_TAB.fillItemList(bannersCQR);
 	}
 
 }
