@@ -6,6 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WebBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.util.Direction;
@@ -14,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class BlockTemporaryWeb extends WebBlock {
 
@@ -84,6 +89,14 @@ public class BlockTemporaryWeb extends WebBlock {
 
 	private void decay(BlockState state, World level, BlockPos pos) {
 		level.removeBlock(pos, false);
+	}
+	
+	@Override
+	public void entityInside(BlockState pState, World pLevel, BlockPos pPos, Entity pEntity) {
+		super.entityInside(pState, pLevel, pPos, pEntity);
+		if(pEntity instanceof LivingEntity && DungeonGenUtils.percentageRandom(25, RANDOM)) {
+			((LivingEntity)pEntity).addEffect(new EffectInstance(Effects.POISON	, 60));
+		}
 	}
 
 }
