@@ -23,7 +23,7 @@ public class CQRBannerPatterns {
 	public static BannerPattern WITHER_SKULL_EYES = addBanner("cq_wither_eyes");
 	public static BannerPattern FIRE = addBanner("cq_fire");
 	public static BannerPattern EMERALD = addBanner("cq_emerald");
-	public static BannerPattern BONES = addBanner("cq_bbones");
+	public static BannerPattern BONES = addBanner("cq_bones");
 	public static BannerPattern WALKER_BACKGROUND = addBanner("walker_black_bg");
 	public static BannerPattern WALKER_BORDER = addBanner("walker_border");
 	public static BannerPattern WALKER_INNER_BORDER = addBanner("walker_inner_border");
