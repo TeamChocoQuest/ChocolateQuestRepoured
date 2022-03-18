@@ -39,7 +39,7 @@ public class CQRItemModelProvider extends ItemModelProvider {
 		withExistingParent(CQRBlocks.TNT.getId().getPath(), blockLoc(extend(CQRBlocks.TNT.getId(), "_hidden")));
 		valuesOfType(CQRBlocks.BLOCKS, BlockExporterChest.class).forEach(this::blockModel);
 		blockModel(CQRBlocks.PHYLACTERY.get());
-		itemGenerated(CQRBlocks.TEMPORARY_WEB.getId().getPath(), blockLoc(extend(CQRBlocks.TEMPORARY_WEB.getId(), "_0")));
+		itemGenerated(CQRBlocks.POISONOUS_WEB.getId().getPath(), blockLoc(extend(CQRBlocks.POISONOUS_WEB.getId(), "_0")));
 	}
 
 	private void registerItemModels() {

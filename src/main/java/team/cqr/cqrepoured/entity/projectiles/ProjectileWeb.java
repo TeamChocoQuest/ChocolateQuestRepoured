@@ -41,7 +41,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 					entity.addPotionEffect(new EffectInstance(Effects.POISON, 60, 0));
 					entity.setInWeb();
-					this.world.setBlockState(entity.getPosition(), CQRBlocks.TEMPORARY_WEB.getDefaultState());
+					this.world.setBlockState(entity.getPosition(), CQRBlocks.POISONOUS_WEB.getDefaultState());
 					this.setDead();
 				}
 			} else if (DungeonGenUtils.percentageRandom(75)) {

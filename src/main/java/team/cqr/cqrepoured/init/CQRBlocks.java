@@ -164,7 +164,7 @@ public class CQRBlocks {
 
 	// Technical
 	public static final RegistryObject<BlockPhylactery> PHYLACTERY = register("phylactery", BlockPhylactery::new, CQRMain.CQR_BLOCKS_TAB);
-	public static final RegistryObject<BlockPoisonousWeb> TEMPORARY_WEB = register("temporary_web", BlockPoisonousWeb::new, CQRMain.CQR_BLOCKS_TAB);
+	public static final RegistryObject<BlockPoisonousWeb> POISONOUS_WEB = register("poisonous_web", BlockPoisonousWeb::new, CQRMain.CQR_BLOCKS_TAB);
 
 	private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier) {
 		return register(name, blockSupplier, (Function<T, Item>) null);
@@ -192,7 +192,7 @@ public class CQRBlocks {
 		RenderTypeLookup.setRenderLayer(CQRBlocks.NULL_BLOCK.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(CQRBlocks.PHYLACTERY.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(CQRBlocks.SPAWNER.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(CQRBlocks.TEMPORARY_WEB.get(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(CQRBlocks.POISONOUS_WEB.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(CQRBlocks.UNLIT_TORCH.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(CQRBlocks.UNLIT_TORCH_WALL.get(), RenderType.cutout());
 	}
