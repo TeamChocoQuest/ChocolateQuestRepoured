@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cqrepoured:block/temporary_web_0"
+    "layer0": "cqrepoured:block/poisonous_web_0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "cqrepoured:block/temporary_web_0"
+    "cross": "cqrepoured:block/poisonous_web_1"
   }
 }
