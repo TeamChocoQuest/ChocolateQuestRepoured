@@ -9,6 +9,34 @@ Please refer to the curseforge page, our website, the wiki or our discord for in
 
 The mod is dependant on reachfix and geckolib.
 
+
+## dev team
+
+<li>
+  <ul>
+Lordepos
+Owner
+
+
+Silentine_
+Artist
+
+
+Sir_Squid1y
+Artist
+
+
+Pi0nStEaM
+Artist
+
+
+meldexun
+Author
+
+dertoaster_98
+Author
+  </ul>
+</li>
 ## Links
 
 [Discord](https://discord.gg/StWzzFw)
