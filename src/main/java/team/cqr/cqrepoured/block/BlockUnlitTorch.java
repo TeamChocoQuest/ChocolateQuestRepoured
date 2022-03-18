@@ -8,20 +8,28 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import team.cqr.cqrepoured.init.CQRItemTags;
 
 public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 
@@ -80,7 +88,7 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 			this.spawnIgniteParticles(level, pos, state);
 		}
 	}
-
+	
 	private void spawnIgniteParticles(World level, BlockPos pos, BlockState state) {
 		if (!level.isClientSide) {
 			double x = pos.getX() + 0.5D;
@@ -93,6 +101,37 @@ public class BlockUnlitTorch extends TorchBlock implements IWaterLoggable {
 	@Override
 	public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
 
+	}
+	
+	@Override
+	public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
+		ItemStack stack = pPlayer.getItemInHand(pHand);
+		Block block = Block.byItem(stack.getItem());
+
+		if ((stack.getItem() != null &&stack.getItem().is(CQRItemTags.TORCH_IGNITERS)) || block.getLightValue(block.defaultBlockState(), pLevel, pHit.getBlockPos()) > 0.0F) {
+			if (!pLevel.isClientSide) {
+				if(stack.getItem().is(CQRItemTags.SOUL_FIRE_EMITTERS)) {
+					pLevel.setBlock(pHit.getBlockPos(), Blocks.SOUL_TORCH.defaultBlockState(), 11);
+				}
+				else {
+					pLevel.setBlock(pHit.getBlockPos(), Blocks.TORCH.defaultBlockState(), 11);
+				}
+				pLevel.playSound(null, pHit.getBlockPos(), SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				this.spawnIgniteParticles(pLevel, pHit.getBlockPos(), pState);
+			}
+			return ActionResultType.SUCCESS;
+		}
+		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+	}
+	
+	@Override
+	public void onProjectileHit(World pLevel, BlockState pState, BlockRayTraceResult pHit, ProjectileEntity pProjectile) {
+		if(pProjectile.isOnFire()) {
+			pProjectile.kill();
+			pLevel.setBlock(pHit.getBlockPos(), Blocks.TORCH.defaultBlockState(), 11);
+			pLevel.playSound(null, pHit.getBlockPos(), SoundEvents.FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			this.spawnIgniteParticles(pLevel, pHit.getBlockPos(), pState);
+		}
 	}
 
 }
