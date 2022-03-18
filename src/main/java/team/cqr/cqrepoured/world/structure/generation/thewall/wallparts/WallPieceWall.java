@@ -127,9 +127,9 @@ public class WallPieceWall extends AbstractWallPiece {
 				((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
 			}
 
-			BlockState state2 = CQRBlocks.SPAWNER.defaultBlockState();
-			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(state2, iSeedReader);
-			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
+			BlockState state2 = CQRBlocks.SPAWNER.get().defaultBlockState();
+			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.get().createTileEntity(state2, iSeedReader);
+			tileSpawner.getInventory().setItem(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
 			//partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.save(new CompoundNBT())));
 			this.placeBlock(iSeedReader, state2, spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), this.boundingBox);
@@ -140,18 +140,18 @@ public class WallPieceWall extends AbstractWallPiece {
 		switch (entity.getRandom().nextInt(5)) {
 		case 0:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER.get(), 1));
 			break;
 		case 1:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
-			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER.get(), 1));
 			break;
 		case 2:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
 			break;
 		case 3:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW, 1));
-			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER, 1));
+			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SPECTER.get(), 1));
 			break;
 		case 4:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
@@ -161,31 +161,31 @@ public class WallPieceWall extends AbstractWallPiece {
 	}
 
 	private void equipArmorBasedOnDifficulty(LivingEntity entity, Difficulty difficulty) {
-		ItemStack helm = new ItemStack(CQRItems.HELMET_IRON_DYABLE);
-		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_IRON_DYABLE);
-		ItemStack legs = new ItemStack(CQRItems.LEGGINGS_IRON_DYABLE);
-		ItemStack feet = new ItemStack(CQRItems.BOOTS_IRON_DYABLE);
+		ItemStack helm = new ItemStack(CQRItems.HELMET_IRON_DYABLE.get());
+		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_IRON_DYABLE.get());
+		ItemStack legs = new ItemStack(CQRItems.LEGGINGS_IRON_DYABLE.get());
+		ItemStack feet = new ItemStack(CQRItems.BOOTS_IRON_DYABLE.get());
 
 		if (difficulty == Difficulty.HARD) {
 			if (entity.getRandom().nextDouble() < 0.35D) {
-				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
-				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
-				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
-				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
+				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE.get());
+				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE.get());
+				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE.get());
+				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE.get());
 			}
 		} else if (difficulty == Difficulty.NORMAL) {
 			if (entity.getRandom().nextDouble() < 0.25D) {
-				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
-				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
-				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
-				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
+				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE.get());
+				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE.get());
+				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE.get());
+				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE.get());
 			}
 		} else {
 			if (entity.getRandom().nextDouble() < 0.2D) {
-				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE);
-				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE);
-				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE);
-				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE);
+				helm = new ItemStack(CQRItems.HELMET_DIAMOND_DYABLE.get());
+				chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE.get());
+				legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE.get());
+				feet = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE.get());
 			}
 		}
 
