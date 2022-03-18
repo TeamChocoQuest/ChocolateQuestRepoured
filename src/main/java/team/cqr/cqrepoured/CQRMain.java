@@ -82,7 +82,7 @@ public class CQRMain {
 	public static final ItemGroup CQR_BANNERS_TAB = new ItemGroup(CQRMain.MODID + "_banners") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(Items.APPLE);
+			return new ItemStack(Items.SKULL_BANNER_PATTERN);
 			//return EBanners.WALKER_ORDO.getBanner();
 		}
 		
