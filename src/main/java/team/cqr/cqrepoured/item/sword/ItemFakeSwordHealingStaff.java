@@ -15,7 +15,7 @@ public class ItemFakeSwordHealingStaff extends SwordItem implements IFakeWeapon<
 
 	@Override
 	public ItemStaffHealing getOriginalItem() {
-		return CQRItems.STAFF_HEALING;
+		return CQRItems.STAFF_HEALING.get();
 	}
 
 }
