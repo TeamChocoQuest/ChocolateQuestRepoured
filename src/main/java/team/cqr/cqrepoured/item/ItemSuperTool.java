@@ -9,7 +9,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -17,23 +19,27 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemSuperTool extends Item {
 
 	private static final String MODE_TAG = "Mode";
 	private static final String BLOCK_TAG = "Block";
 
-	public ItemSuperTool() {
-		this.setMaxStackSize(1);
+	public ItemSuperTool(Properties properties)
+	{
+		super(properties.stacksTo(1));
+		//Max stack size 1 //Move
 	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		if (player.isCreative() && !(entity instanceof PlayerEntity)) {
-			entity.onKillCommand();
+			entity.kill();
 			return true;
 		}
 
@@ -41,10 +47,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(TextFormatting.BLUE + "Mode: " + this.getModeName(this.getMode(stack)));
-		tooltip.add(TextFormatting.BLUE + "Block: " + this.getBlock(stack).getLocalizedName());
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		tooltip.add(new StringTextComponent(TextFormatting.BLUE + "Mode: " + this.getModeName(this.getMode(stack))));
+		tooltip.add(new StringTextComponent(TextFormatting.BLUE + "Block: " + this.getBlock(stack).getName()));
 	}
 
 	public String getModeName(int mode) {
@@ -60,14 +66,14 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (!playerIn.isCreative()) {
 			return new ActionResult<>(ActionResultType.FAIL, stack);
 		}
 
-		if (playerIn.isSneaking()) {
+		if (playerIn.isCrouching()) {
 			int mode = this.getMode(stack) + 1;
 
 			if (mode < 0 || mode > 2) {
@@ -76,8 +82,8 @@ public class ItemSuperTool extends Item {
 
 			this.setMode(stack, mode);
 
-			if (!worldIn.isRemote) {
-				playerIn.sendStatusMessage(new StringTextComponent("Pickaxe Mode: " + this.getModeName(mode)), true);
+			if (!worldIn.isClientSide) {
+				playerIn.displayClientMessage(new StringTextComponent("Pickaxe Mode: " + this.getModeName(mode)), true);
 			}
 
 			return new ActionResult<>(ActionResultType.SUCCESS, stack);
@@ -87,15 +93,21 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
+	public ActionResultType useOn(ItemUseContext context)
+	{
+		PlayerEntity player = context.getPlayer();
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		Direction facing = context.getClickedFace();
+		ItemStack stack = context.getItemInHand();
+		//ItemStack stack = player.getItemInHand(hand);
 
 		if (!player.isCreative()) {
 			return ActionResultType.PASS;
 		}
 
-		if (player.isSneaking()) {
-			this.setBlock(stack, worldIn.getBlockState(pos).getBlock());
+		if (player.isCrouching()) {
+			this.setBlock(stack, world.getBlockState(pos).getBlock());
 			return ActionResultType.SUCCESS;
 		}
 
@@ -108,12 +120,12 @@ public class ItemSuperTool extends Item {
 			facing2 = Direction.EAST;
 		} else {
 			facing1 = Direction.UP;
-			facing2 = facing.rotateY();
+			facing2 = facing.getClockWise();
 		}
 
 		for (int i = -size; i <= size; i++) {
 			for (int j = -size; j <= size; j++) {
-				this.performAction(worldIn, pos.offset(facing1, i).offset(facing2, j), stack);
+				this.performAction(world, pos.relative(facing1, i).relative(facing2, j), stack);
 			}
 		}
 
@@ -124,35 +136,35 @@ public class ItemSuperTool extends Item {
 		int mode = this.getMode(stack);
 
 		if (mode == 0) {
-			worldIn.setBlockState(pos, this.getBlock(stack).getDefaultState());
+			worldIn.setBlockAndUpdate(pos, this.getBlock(stack).defaultBlockState());
 		} else if (mode == 1) {
 			Block block = worldIn.getBlockState(pos).getBlock();
 
 			if (block != Blocks.AIR) {
-				worldIn.setBlockState(pos, this.getBlock(stack).getDefaultState());
+				worldIn.setBlockAndUpdate(pos, this.getBlock(stack).defaultBlockState());
 			}
 		} else if (mode == 2) {
 			Block block = worldIn.getBlockState(pos).getBlock();
 
 			if (block != Blocks.AIR) {
-				worldIn.setBlockToAir(pos);
+				worldIn.removeBlock(pos, false);
 
 				for (int i = 0; i < 5; i++) {
-					worldIn.spawnParticle(ParticleTypes.BLOCK_CRACK, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 0, 0, 0, Block.getIdFromBlock(block));
+					worldIn.addParticle(new BlockParticleData(ParticleTypes.BLOCK, block.defaultBlockState()), pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 0, 0, 0);
 				}
 			}
 		}
 	}
 
 	public int getMode(ItemStack stack) {
-		CompoundNBT stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTag();
 
 		if (stackTag == null) {
 			stackTag = new CompoundNBT();
-			stack.setTagCompound(stackTag);
+			stack.setTag(stackTag);
 		}
 
-		int mode = stackTag.getInteger(MODE_TAG);
+		int mode = stackTag.getInt(MODE_TAG);
 
 		if (mode < 0 || mode > 2) {
 			mode = 0;
@@ -163,42 +175,43 @@ public class ItemSuperTool extends Item {
 	}
 
 	public Block getBlock(ItemStack stack) {
-		CompoundNBT stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTag();
 
 		if (stackTag == null) {
 			stackTag = new CompoundNBT();
-			stack.setTagCompound(stackTag);
+			stack.setTag(stackTag);
 		}
 
-		Block block = Block.REGISTRY.getObject(new ResourceLocation(stackTag.getString(BLOCK_TAG)));
+		Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(stackTag.getString(BLOCK_TAG)));
+		//Block block = Block.REGISTRY.getObject(new ResourceLocation(stackTag.getString(BLOCK_TAG)));
 
 		return block != Blocks.AIR ? block : Blocks.STONE;
 	}
 
 	public void setMode(ItemStack stack, int mode) {
-		CompoundNBT stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTag();
 
 		if (stackTag == null) {
 			stackTag = new CompoundNBT();
-			stack.setTagCompound(stackTag);
+			stack.setTag(stackTag);
 		}
 
 		if (mode < 0 || mode > 2) {
 			mode = 0;
 		}
 
-		stackTag.setInteger(MODE_TAG, mode);
+		stackTag.putInt(MODE_TAG, mode);
 	}
 
 	public void setBlock(ItemStack stack, Block blockIn) {
-		CompoundNBT stackTag = stack.getTagCompound();
+		CompoundNBT stackTag = stack.getTag();
 
 		if (stackTag == null) {
 			stackTag = new CompoundNBT();
-			stack.setTagCompound(stackTag);
+			stack.setTag(stackTag);
 		}
 
-		stackTag.setString(BLOCK_TAG, blockIn.getRegistryName().toString());
+		stackTag.putString(BLOCK_TAG, blockIn.getRegistryName().toString());
 	}
 
 }
