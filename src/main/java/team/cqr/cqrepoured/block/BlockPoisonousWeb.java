@@ -20,11 +20,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
-public class BlockTemporaryWeb extends WebBlock {
+public class BlockPoisonousWeb extends WebBlock {
 
 	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
 
-	public BlockTemporaryWeb() {
+	public BlockPoisonousWeb() {
 		super(Properties.copy(Blocks.COBWEB).randomTicks());
 		this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
 	}

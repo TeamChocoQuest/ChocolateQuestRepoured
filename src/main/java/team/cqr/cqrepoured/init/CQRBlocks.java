@@ -43,7 +43,7 @@ import team.cqr.cqrepoured.block.BlockPhylactery;
 import team.cqr.cqrepoured.block.BlockSpawner;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.block.BlockTable;
-import team.cqr.cqrepoured.block.BlockTemporaryWeb;
+import team.cqr.cqrepoured.block.BlockPoisonousWeb;
 import team.cqr.cqrepoured.block.BlockUnlitTorch;
 import team.cqr.cqrepoured.block.BlockUnlitTorchWall;
 
@@ -164,7 +164,7 @@ public class CQRBlocks {
 
 	// Technical
 	public static final RegistryObject<BlockPhylactery> PHYLACTERY = register("phylactery", BlockPhylactery::new, CQRMain.CQR_BLOCKS_TAB);
-	public static final RegistryObject<BlockTemporaryWeb> TEMPORARY_WEB = register("temporary_web", BlockTemporaryWeb::new, CQRMain.CQR_BLOCKS_TAB);
+	public static final RegistryObject<BlockPoisonousWeb> TEMPORARY_WEB = register("temporary_web", BlockPoisonousWeb::new, CQRMain.CQR_BLOCKS_TAB);
 
 	private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier) {
 		return register(name, blockSupplier, (Function<T, Item>) null);

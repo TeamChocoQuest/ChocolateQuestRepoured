@@ -26,7 +26,7 @@ import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockNull;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.block.BlockTable;
-import team.cqr.cqrepoured.block.BlockTemporaryWeb;
+import team.cqr.cqrepoured.block.BlockPoisonousWeb;
 import team.cqr.cqrepoured.init.CQRBlocks;
 
 public class CQRBlockStateProvider extends BlockStateProvider {
@@ -63,7 +63,7 @@ public class CQRBlockStateProvider extends BlockStateProvider {
 		}));
 		valuesOfType(CQRBlocks.BLOCKS, BlockExporterChest.class).forEach(block -> simpleBlock(block, models().getBuilder(block.getRegistryName().getPath()).texture("particle", blockLoc(mcLoc("oak_planks")))));
 		simpleBlock(CQRBlocks.PHYLACTERY.get(), models().getExistingFile(blockTexture(CQRBlocks.PHYLACTERY.get())));
-		getVariantBuilder(CQRBlocks.TEMPORARY_WEB.get()).forAllStates(intPropertyMapper(BlockTemporaryWeb.AGE, models()::cross));
+		getVariantBuilder(CQRBlocks.TEMPORARY_WEB.get()).forAllStates(intPropertyMapper(BlockPoisonousWeb.AGE, models()::cross));
 	}
 
 	public <T extends Comparable<T>> void test(Block block, Property<T> property, BiFunction<Block, T, ModelFile> modelFileFunc) {
