@@ -33,7 +33,7 @@ public enum EBanners {
 			new DyeColor[] { DyeColor.WHITE, DyeColor.RED, DyeColor.LIGHT_GRAY, DyeColor.GRAY, DyeColor.LIGHT_GRAY, DyeColor.BLACK, DyeColor.LIGHT_GRAY }),
 	WALKER_ORDO(DyeColor.WHITE,
 			new BannerPattern[] { CQRBannerPatterns.CQ_BLANK, CQRBannerPatterns.WALKER_BORDER, CQRBannerPatterns.WALKER_BORDER, CQRBannerPatterns.WALKER_BACKGROUND, CQRBannerPatterns.WALKER_INNER_BORDER, CQRBannerPatterns.WALKER_SKULL },
-			new DyeColor[] { DyeColor.WHITE, DyeColor.PURPLE, DyeColor.PURPLE, DyeColor.BLACK, DyeColor.GRAY, DyeColor.BLACK, }),
+			new DyeColor[] { DyeColor.WHITE, DyeColor.PURPLE, DyeColor.PURPLE, DyeColor.BLACK, DyeColor.GRAY, DyeColor.GRAY, }),
 	GREMLIN_BANNER(DyeColor.GRAY, new BannerPattern[] { CQRBannerPatterns.CQ_BLANK, BannerPattern.STRIPE_SMALL, BannerPattern.STRIPE_CENTER, BannerPattern.DIAGONAL_RIGHT_MIRROR, BannerPattern.FLOWER, BannerPattern.GRADIENT_UP, BannerPattern.GRADIENT },
 			new DyeColor[] { DyeColor.WHITE, DyeColor.RED, DyeColor.GRAY, DyeColor.GRAY, DyeColor.WHITE, DyeColor.RED, DyeColor.BLACK });
 
