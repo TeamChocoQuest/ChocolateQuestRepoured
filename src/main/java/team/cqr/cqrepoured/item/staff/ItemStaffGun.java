@@ -1,24 +1,11 @@
 package team.cqr.cqrepoured.item.staff;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.input.Keyboard;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -27,43 +14,48 @@ import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemStaffGun extends ItemLore implements IRangedWeapon {
 
-	public ItemStaffGun() {
-		this.setMaxDamage(2048);
-		this.setMaxStackSize(1);
+	public ItemStaffGun(Properties properties)
+	{
+		super(properties.durability(2048).stacksTo(1));
+		//this.setMaxDamage(2048);
+		//this.setMaxStackSize(1);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 		this.shootStaff(worldIn, playerIn, stack, handIn);
-		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+		return ActionResult.success(stack);
 	}
 
 	public void shootStaff(World worldIn, PlayerEntity player, ItemStack stack, Hand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F) * 0.7F, false);
 
-		if (!worldIn.isRemote) {
+		if (!worldIn.isClientSide) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player, false);
-			ball.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 0F);
-			worldIn.spawnEntity(ball);
-			stack.damageItem(1, player);
-			player.getCooldownTracker().setCooldown(stack.getItem(), 20);
+			ball.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 0F);
+			worldIn.addFreshEntity(ball);
+			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(handIn));
+			player.getCooldowns().addCooldown(stack.getItem(), 20);
 		}
 	}
 
 	@Override
 	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isClientSide) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, shooter, false);
 			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(3.5D);
+			ball.setDeltaMovement(v);
+			//ball.setDeltaMovement();
 			// ball.setVelocity(v.x, v.y, v.z);
-			ball.motionX = v.x;
-			ball.motionY = v.y;
-			ball.motionZ = v.z;
-			ball.velocityChanged = true;
-			worldIn.spawnEntity(ball);
+			//ball.set
+			//ball.getDeltaMovement(). = v.x;
+			//ball.motionY = v.y;
+			//ball.motionZ = v.z;
+			//ball.velocityChanged = true; //Dont need I guess
+			worldIn.addFreshEntity(ball);
 		}
 	}
 
