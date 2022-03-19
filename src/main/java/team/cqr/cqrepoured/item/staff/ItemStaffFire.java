@@ -1,34 +1,26 @@
 package team.cqr.cqrepoured.item.staff;
 
-import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
+import net.minecraft.block.WallTorchBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.*;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -37,83 +29,93 @@ import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 
-	public ItemStaffFire() {
-		this.setMaxStackSize(1);
-		this.setMaxDamage(2048);
+	public ItemStaffFire(Properties properties)
+	{
+		super(properties.stacksTo(1).durability(2048));
+		//this.setMaxStackSize(1);
+		//.setMaxDamage(2048);
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		boolean flag = super.hitEntity(stack, target, attacker);
+	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
+	{
+		boolean flag = super.hurtEnemy(stack, target, attacker);
 
-		if (flag && itemRand.nextInt(5) == 0) {
-			if (target.getRidingEntity() != null) {
-				target.dismountRidingEntity();
+		if (flag && random.nextInt(5) == 0) {
+			if (target.getVehicle() != null) {
+				target.stopRiding();
 			}
 		}
 		return flag;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
-		playerIn.swingArm(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	{
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		playerIn.swing(handIn);
 		this.shootFromEntity(playerIn);
 		this.changeTorch(worldIn, playerIn);
-		stack.damageItem(1, playerIn);
-		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
-		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+		stack.hurtAndBreak(1, playerIn, p -> p.broadcastBreakEvent(handIn));
+		playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+		return ActionResult.success(stack);
 	}
 
-	public void changeTorch(World worldIn, PlayerEntity player) {
-		Vector3d start = player.getPositionEyes(1.0F);
-		Vector3d end = start.add(player.getLookVec().scale(10.0D));
-		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
+	public void changeTorch(World worldIn, PlayerEntity player)
+	{
+		Vector3d start = player.getEyePosition(1.0F);
+		Vector3d end = start.add(player.getLookAngle().scale(10.0D)); //#TODO CHECK
+		RayTraceResult result = worldIn.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.VISUAL, RayTraceContext.FluidMode.NONE, player));
 
-		if (result != null && !worldIn.isRemote) {
-			BlockPos pos = new BlockPos(result.hitVec);
+		if (result != null && !worldIn.isClientSide) {
+			BlockPos pos = new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z);
 			BlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
-			if (blockStateLookingAt.getBlock() == CQRBlocks.UNLIT_TORCH) {
-				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(TorchBlock.FACING, blockStateLookingAt.getValue(TorchBlock.FACING)));
+			if(blockStateLookingAt.getBlock() == CQRBlocks.UNLIT_TORCH.get())
+			{
+				worldIn.setBlockAndUpdate(pos, Blocks.TORCH.defaultBlockState());//.setValue(TorchBlock.FACING, blockStateLookingAt.getValue(TorchBlock.FACING)));
+			}
+			else if(blockStateLookingAt.getBlock() == CQRBlocks.UNLIT_TORCH_WALL.get())
+			{
+				worldIn.setBlockAndUpdate(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, blockStateLookingAt.getValue(WallTorchBlock.FACING)));
 			}
 		}
 	}
 
 	public void shootFromEntity(LivingEntity shooter) {
-		World world = shooter.world;
+		World world = shooter.level;
 
-		if (!world.isRemote) {
-			Random r = shooter.getRNG();
+		if (!world.isClientSide) {
+			Random r = shooter.getRandom();
 			for (int i = 0; i < 20; i++) {
 				// TODO don't send 20 packets
-				Vector3d v = shooter.getLookVec();
+				Vector3d v = shooter.getLookAngle();
 				v = v.add((r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D);
-				((ServerWorld) world).spawnParticle(ParticleTypes.FLAME, shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
+				((ServerWorld) world).sendParticles(ParticleTypes.FLAME, shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
 			}
 
-			world.getEntitiesWithinAABB(LivingEntity.class, shooter.getEntityBoundingBox().grow(8.0D), entity -> {
+			world.getEntitiesOfClass(LivingEntity.class, shooter.getBoundingBox().inflate(8.0D), entity -> {
 				if (TargetUtil.isAllyCheckingLeaders(shooter, entity)) {
 					return false;
 				}
 
-				double x = MathHelper.clamp(shooter.posX, entity.posX - entity.width * 0.5D, entity.posX + entity.width * 0.5D) - shooter.posX;
-				double y = MathHelper.clamp(shooter.posY + shooter.getEyeHeight(), entity.posY, entity.posY + entity.height) - (shooter.posY + shooter.getEyeHeight());
-				double z = MathHelper.clamp(shooter.posZ, entity.posZ - entity.width * 0.5D, entity.posZ + entity.width * 0.5D) - shooter.posZ;
+				double x = MathHelper.clamp(shooter.position().x, entity.position().x - entity.getBbWidth() * 0.5D, entity.position().x + entity.getBbWidth() * 0.5D) - shooter.position().x;
+				double y = MathHelper.clamp(shooter.position().y + shooter.getEyeHeight(), entity.position().y, entity.position().y + entity.getBbHeight()) - (shooter.position().y + shooter.getEyeHeight());
+				double z = MathHelper.clamp(shooter.position().z, entity.position().z - entity.getBbWidth() * 0.5D, entity.position().z + entity.getBbWidth() * 0.5D) - shooter.position().z;
 				if (x * x + y * y + z * z > 8.0D * 8.0D) {
 					return false;
 				}
 
-				Vector3d a = shooter.getLookVec();
+				Vector3d a = shooter.getLookAngle();
 				Vector3d b = new Vector3d(x, y, z);
-				if (Math.toDegrees(Math.acos(a.dotProduct(b) / (a.length() * b.length()))) > 40.0D) {
+				if (Math.toDegrees(Math.acos(a.dot(b) / (a.length() * b.length()))) > 40.0D) {
 					return false;
 				}
 
-				return shooter.canEntityBeSeen(entity);
+				return shooter.canSee(entity);
 			}).forEach(target -> {
-				if (target.attackEntityFrom(DamageSource.causeMobDamage(shooter).setFireDamage(), 3.0F)) {
-					target.setFire(5);
+				if (target.hurt(DamageSource.mobAttack(shooter).setIsFire(), 3.0F)) {
+					target.setSecondsOnFire(5);
 				}
 			});
 		}
@@ -126,7 +128,7 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		return SoundEvents.ENTITY_GHAST_SHOOT;
+		return SoundEvents.GHAST_SHOOT;
 	}
 
 	@Override

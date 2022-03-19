@@ -4,12 +4,10 @@ import java.time.Month;
 import java.time.MonthDay;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
@@ -91,36 +89,36 @@ public class CQRConfig {
 	public static class Materials {
 
 		public ArmorMaterials armorMaterials = new ArmorMaterials();
-		public ToolMaterials toolMaterials = new ToolMaterials();
+		public ItemTiers itemTiers = new ItemTiers();
 
 	}
-
+	//TODO tweak knockback resistnace? Optional
 	public static class ArmorMaterials {
 
-		public ArmorConfig backpack = new ArmorConfig(67, 5, new int[] { 1, 3, 4, 1 }, 0);
-		public ArmorConfig bull = new ArmorConfig(38, 10, new int[] { 2, 5, 7, 2 }, 1);
-		public ArmorConfig cloud = new ArmorConfig(20, 10, new int[] { 4, 7, 9, 4 }, 1);
-		public ArmorConfig dragon = new ArmorConfig(87, 10, new int[] { 4, 7, 9, 4 }, 1);
-		public ArmorConfig heavyDiamond = new ArmorConfig(82, 10, new int[] { 4, 7, 9, 4 }, 4);
-		public ArmorConfig heavyIron = new ArmorConfig(74, 9, new int[] { 3, 6, 8, 3 }, 2);
-		public ArmorConfig inquisition = new ArmorConfig(38, 10, new int[] { 3, 6, 8, 3 }, 1);
-		public ArmorConfig kingCrown = new ArmorConfig(10, 25, new int[] { 4, 7, 9, 4 }, 0.5F);
-		public ArmorConfig slime = new ArmorConfig(38, 10, new int[] { 1, 4, 6, 1 }, 1);
-		public ArmorConfig spider = new ArmorConfig(38, 10, new int[] { 2, 5, 7, 2 }, 1);
-		public ArmorConfig turtle = new ArmorConfig(38, 10, new int[] { 3, 6, 8, 3 }, 1);
+		public ArmorMaterialConfig backpack = new ArmorMaterialConfig(67, new int[] { 1, 3, 4, 1 } ,5, 0.0F, 0.0F);
+		public ArmorMaterialConfig bull = new ArmorMaterialConfig(38, new int[] { 2, 5, 7, 2 }, 10, 1.0F, 0.0F);
+		public ArmorMaterialConfig cloud = new ArmorMaterialConfig(20, new int[] { 4, 7, 9, 4 }, 10, 1.0F, 0.0F);
+		public ArmorMaterialConfig dragon = new ArmorMaterialConfig(87, new int[] { 4, 7, 9, 4 }, 10, 1.0F, 0.0F);
+		public ArmorMaterialConfig heavyDiamond = new ArmorMaterialConfig(82, new int[] { 4, 7, 9, 4 }, 10, 4.0F, 0.0F);
+		public ArmorMaterialConfig heavyIron = new ArmorMaterialConfig(74, new int[] { 3, 6, 8, 3 }, 9, 2.0F, 0.0F);
+		public ArmorMaterialConfig inquisition = new ArmorMaterialConfig(38, new int[] { 3, 6, 8, 3 }, 10, 1.0F, 0.0F);
+		public ArmorMaterialConfig kingCrown = new ArmorMaterialConfig(10, new int[] { 4, 7, 9, 4 }, 25, 0.5F, 0.0F);
+		public ArmorMaterialConfig slime = new ArmorMaterialConfig(38, new int[] { 1, 4, 6, 1 }, 10, 1.0F, 0.0F);
+		public ArmorMaterialConfig spider = new ArmorMaterialConfig(38, new int[] { 2, 5, 7, 2 }, 10, 1.0F, 0.0F);
+		public ArmorMaterialConfig turtle = new ArmorMaterialConfig(38, new int[] { 3, 6, 8, 3 }, 10, 1.0F, 0.0F);
 
 	}
 
-	public static class ToolMaterials {
+	public static class ItemTiers {
 
-		public ToolConfig bull = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig monking = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig moonlight = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig ninja = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig spider = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig sunshine = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig turtle = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig walker = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ItemTierConfig bull = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig monking = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig moonlight = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig ninja = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig spider = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig sunshine = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig turtle = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig walker = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
 
 		public int daggerAttackDamageBonus = -1;
 		public float daggerAttackSpeedBonus = 0.4F;
