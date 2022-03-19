@@ -321,7 +321,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@Override
 	protected PathNavigator createNavigation(World worldIn) {
 		PathNavigator navigator = new PathNavigateGroundCQR(this, worldIn);
-		((GroundPathNavigator) navigator).setCanOpenDoors(this.canOpenDoors());
+		((GroundPathNavigator) navigator).setCanOpenDoors(true);
 		//Seems to be moved or removed in 1.16
 		//((GroundPathNavigator) navigator).setBreakDoors(this.canOpenDoors());
 		return navigator;
