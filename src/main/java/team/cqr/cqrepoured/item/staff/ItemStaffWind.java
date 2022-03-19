@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.item.staff;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -12,9 +11,11 @@ import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemStaffWind extends ItemLore implements IRangedWeapon {
 
-	public ItemStaffWind() {
-		this.setMaxDamage(2048);
-		this.setMaxStackSize(1);
+	public ItemStaffWind(Properties properties)
+	{
+		super(properties.durability(2048).stacksTo(1));
+		//this.setMaxDamage(2048);
+		//this.setMaxStackSize(1);
 	}
 
 	@Override
