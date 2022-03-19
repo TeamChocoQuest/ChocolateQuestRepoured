@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.item.spear;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -28,6 +29,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
@@ -108,32 +110,32 @@ public class ItemSpearBase extends ItemCQRWeapon {
 				Vector3d vec1 = player.getEyePosition(1.0F);
 				Vector3d vec2 = player.getLookAngle();
 				double reachDistance = player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
-				float charge = Math.min((float) player.getItemInUseMaxCount() / (float) 40, 1.0F);
+				float charge = Math.min((float) player.getTicksUsingItem() / (float) 40, 1.0F);
 
 				for (LivingEntity entity : this.getEntities(worldIn, LivingEntity.class, player, vec1, vec2, reachDistance, null)) {
 					// TODO apply enchantments
-					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), (1.0F + this.getDamage()) * charge);
+					entity.hurt(DamageSource.playerAttack(player), (1.0F + this.getDamage()) * charge);
 				}
 
-				Vector3d vec3 = vec1.add(new Vector3d(0.0D, -0.5D, 0.0D).rotatePitch((float) Math.toRadians(-player.rotationPitch))).add(new Vector3d(-0.4D, 0.0D, 0.0D).rotateYaw((float) Math.toRadians(-player.rotationYaw)));
+				Vector3d vec3 = vec1.add(new Vector3d(0.0D, -0.5D, 0.0D).xRot((float) Math.toRadians(-player.xRot))).add(new Vector3d(-0.4D, 0.0D, 0.0D).yRot((float) Math.toRadians(-player.yRot)));
 				for (double d = reachDistance; d >= 0.0D; d--) {
 					Vector3d vec4 = vec3.add(vec2.scale(d));
-					((ServerWorld) worldIn).spawnParticle(ParticleTypes.SMOKE_NORMAL, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
+					((ServerWorld) worldIn).sendParticles(ParticleTypes.SMOKE, vec4.x, vec4.y, vec4.z, 1, 0.05D, 0.05D, 0.05D, 0.0D);
 				}
 
-				player.level.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
-				player.getCooldownTracker().setCooldown(stack.getItem(), 200);
+				player.level.playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
+				player.getCooldowns().addCooldown(stack.getItem(), 200);
 			} else {
 				player.swing(Hand.MAIN_HAND);
 			}
 		}
 	}
-
+	//#TODO needs tests
 	private <T extends Entity> List<T> getEntities(World world, Class<T> entityClass, @Nullable T toIgnore, Vector3d vec1, Vector3d vec2, double range, @Nullable Predicate<T> predicate) {
 		List<T> list = new ArrayList<>();
 		Vector3d vec3 = vec1.add(vec2.normalize().scale(range));
-		RayTraceResult rayTraceResult1 = world.rayTraceBlocks(vec1, vec3, false, true, false);
-		Vector3d vec4 = rayTraceResult1 != null ? rayTraceResult1.hitVec : vec3;
+		RayTraceResult rayTraceResult1 = world.clip(new RayTraceContext(vec1, vec3, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, null));
+		Vector3d vec4 = rayTraceResult1 != null ? rayTraceResult1.getLocation() : vec3;
 		AxisAlignedBB aabb1 = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec4.x, vec4.y, vec4.z);
 
 		for (T entity : world.getEntitiesOfClass(entityClass, aabb1, predicate)) {
@@ -141,10 +143,11 @@ public class ItemSpearBase extends ItemCQRWeapon {
 				continue;
 			}
 
-			AxisAlignedBB aabb2 = entity.getBoundingBox().inflate(entity.getCollisionBorderSize());
-			RayTraceResult rayTraceResult2 = aabb2.intersects(vec1, vec4);
+			AxisAlignedBB aabb2 = entity.getBoundingBox().inflate(entity.getPickRadius());
+			Optional opt = aabb2.clip(vec1, vec4);
 
-			if (rayTraceResult2 != null) {
+			if (opt.isPresent())
+			{
 				list.add(entity);
 			}
 		}
