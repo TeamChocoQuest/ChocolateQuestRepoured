@@ -89,7 +89,7 @@ public class CQRConfig {
 	public static class Materials {
 
 		public ArmorMaterials armorMaterials = new ArmorMaterials();
-		public ToolMaterials toolMaterials = new ToolMaterials();
+		public ItemTiers itemTiers = new ItemTiers();
 
 	}
 	//TODO tweak knockback resistnace? Optional
@@ -109,7 +109,7 @@ public class CQRConfig {
 
 	}
 
-	public static class ToolMaterials {
+	public static class ItemTiers {
 
 		public ItemTierConfig bull = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
 		public ItemTierConfig monking = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);

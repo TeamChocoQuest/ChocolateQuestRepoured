@@ -52,8 +52,8 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	private final double reachDistanceBonus;
 
 	public ItemSpearBase(Properties props, IItemTier material) {
-		super(material, CQRConfig.materials.toolMaterials.spearAttackDamageBonus, CQRConfig.materials.toolMaterials.spearAttackSpeedBonus, props);
-		this.reachDistanceBonus = CQRConfig.materials.toolMaterials.spearReachDistanceBonus;
+		super(material, CQRConfig.materials.itemTiers.spearAttackDamageBonus, CQRConfig.materials.itemTiers.spearAttackSpeedBonus, props);
+		this.reachDistanceBonus = CQRConfig.materials.itemTiers.spearReachDistanceBonus;
 	}
 
 	public double getReach() {

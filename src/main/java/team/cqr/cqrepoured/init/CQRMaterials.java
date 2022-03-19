@@ -47,14 +47,14 @@ public class CQRMaterials {
 
 	public static class CQRItemTiers
 	{
-		public static final CQRItemTier TOOL_BULL = createItemTier(CQRConfig.materials.toolMaterials.bull, () -> Ingredient.of(CQRItems.LEATHER_BULL.get()));
-		public static final CQRItemTier TOOL_MONKING = createItemTier(CQRConfig.materials.toolMaterials.monking, () -> Ingredient.of(CQRItems.BONE_MONKING.get()));
-		public static final CQRItemTier TOOL_MOONLIGHT = createItemTier(CQRConfig.materials.toolMaterials.moonlight, () -> Ingredient.EMPTY);
-		public static final CQRItemTier TOOL_NINJA = createItemTier(CQRConfig.materials.toolMaterials.ninja, () -> Ingredient.EMPTY);
-		public static final CQRItemTier TOOL_SPIDER = createItemTier(CQRConfig.materials.toolMaterials.spider, () -> Ingredient.of(CQRItems.LEATHER_SPIDER.get()));
-		public static final CQRItemTier TOOL_SUNSHINE = createItemTier(CQRConfig.materials.toolMaterials.sunshine, () -> Ingredient.EMPTY);
-		public static final CQRItemTier TOOL_TURTLE = createItemTier(CQRConfig.materials.toolMaterials.turtle, () -> Ingredient.of(CQRItems.SCALE_TURTLE.get()));
-		public static final CQRItemTier TOOL_WALKER = createItemTier(CQRConfig.materials.toolMaterials.walker, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_BULL = createItemTier(CQRConfig.materials.itemTiers.bull, () -> Ingredient.of(CQRItems.LEATHER_BULL.get()));
+		public static final CQRItemTier TOOL_MONKING = createItemTier(CQRConfig.materials.itemTiers.monking, () -> Ingredient.of(CQRItems.BONE_MONKING.get()));
+		public static final CQRItemTier TOOL_MOONLIGHT = createItemTier(CQRConfig.materials.itemTiers.moonlight, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_NINJA = createItemTier(CQRConfig.materials.itemTiers.ninja, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_SPIDER = createItemTier(CQRConfig.materials.itemTiers.spider, () -> Ingredient.of(CQRItems.LEATHER_SPIDER.get()));
+		public static final CQRItemTier TOOL_SUNSHINE = createItemTier(CQRConfig.materials.itemTiers.sunshine, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_TURTLE = createItemTier(CQRConfig.materials.itemTiers.turtle, () -> Ingredient.of(CQRItems.SCALE_TURTLE.get()));
+		public static final CQRItemTier TOOL_WALKER = createItemTier(CQRConfig.materials.itemTiers.walker, () -> Ingredient.EMPTY);
 
 		private static CQRItemTier createItemTier(ItemTierConfig config, Supplier<Ingredient> repairIngredient)
 		{
