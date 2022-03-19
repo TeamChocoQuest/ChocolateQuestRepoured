@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -10,55 +9,62 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ItemSpikedGlove extends ItemLore {
-
-	public ItemSpikedGlove() {
-		super();
-		this.setMaxStackSize(1);
+public class ItemSpikedGlove extends ItemLore
+{
+	public ItemSpikedGlove(Properties properties)
+	{
+		super(properties.durability(6000).stacksTo(1));
+		//this.setMaxStackSize(1);
 		// With this durability you should be able to climb 1200m in total
-		this.setMaxDamage(6000);
+		//this.setMaxDamage(6000);
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (entityIn instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) entityIn;
-			if (entity.getHeldItemMainhand().getItem() instanceof ItemSpikedGlove && entity.getMainHandItem().getItem() instanceof ItemSpikedGlove) {
+			if (entity.getMainHandItem().getItem() instanceof ItemSpikedGlove && entity.getMainHandItem().getItem() instanceof ItemSpikedGlove) {
 				// We actually have two bear hands
 				if (entity instanceof PlayerEntity && ((PlayerEntity) entity).isSpectator()) {
 					return;
 				}
-				if (entity.collidedHorizontally) {
-					if (worldIn.isRemote) {
-						if (entity.moveForward > 0) {
+				if (entity.horizontalCollision) {
+					if (worldIn.isClientSide) {
+						if (entity.zza > 0) {
 							double vY = 0.2D;
 
-							int effLvlMain = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getHeldItemMainhand());
-							int effLvlOff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, entity.getMainHandItem());
+							int effLvlMain = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY, entity.getMainHandItem());
+							int effLvlOff = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY, entity.getOffhandItem());
 							if (effLvlMain > 0 && effLvlOff > 0) {
 								vY += 0.1D * (((0.5D * effLvlMain) + (0.5D * effLvlOff)) / 2);
 							}
 
-							entity.motionY = vY;
+							entity.setDeltaMovement(entity.getDeltaMovement().x, vY, entity.getDeltaMovement().z);
+							//entity.motionY = vY;
 
 							this.createClimbingParticles(entity, worldIn);
-						} else if (entity.isSneaking()) {
-							entity.motionY = 0.0D;
+						} else if (entity.isCrouching())
+						{
+							entity.setDeltaMovement(entity.getDeltaMovement().x, 0.0D, entity.getDeltaMovement().z);
+							//entity.motionY = 0.0D;
 						} else {
-							entity.motionY = -0.2D;
+							entity.setDeltaMovement(entity.getDeltaMovement().x, -0.2D, entity.getDeltaMovement().z);
+							//entity.motionY = -0.2D;
 						}
 					} else {
-						entity.getHeldItemMainhand().damageItem(1, entity);
-						entity.getHeldItemOffhand().damageItem(1, entity);
+						entity.getMainHandItem().hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(Hand.MAIN_HAND));
+						entity.getOffhandItem().hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(Hand.MAIN_HAND));
 					}
 
-					entity.onGround = true;
+					entity.setOnGround(true);
 				}
 				entity.fallDistance = 0F;
 			}
@@ -67,15 +73,15 @@ public class ItemSpikedGlove extends ItemLore {
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-		return (enchantment == Enchantments.EFFICIENCY || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING);
+		return (enchantment == Enchantments.BLOCK_EFFICIENCY || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING);
 	}
 
 	private void createClimbingParticles(LivingEntity player, World world) {
-		int i = (int) player.posX;
-		int j = MathHelper.floor(player.getPosition().getY());
-		int k = (int) player.posZ;
+		int i = (int) player.position().x;
+		int j = MathHelper.floor(player.blockPosition().getY());
+		int k = (int) player.position().z;
 
-		int direction = MathHelper.floor((player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int direction = MathHelper.floor((player.yRot * 4.0F / 360.0F) + 0.5D) & 3;
 
 		if (direction == 0) // south
 		{
@@ -91,9 +97,10 @@ public class ItemSpikedGlove extends ItemLore {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), player.position().x + (random.nextFloat() - 0.5D) * player.getBbWidth(), player.getBoundingBox().minY + 0.1D, (player.position().z + 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							//-player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D);
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
 				}
 			}
 		}
@@ -116,9 +123,9 @@ public class ItemSpikedGlove extends ItemLore {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, (player.posX - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), (player.position().x - 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(), player.getBoundingBox().minY + 0.1D, player.position().z + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
 				}
 			}
 		}
@@ -141,9 +148,9 @@ public class ItemSpikedGlove extends ItemLore {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, player.posX + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, (player.posZ - 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), player.position().x + (random.nextFloat() - 0.5D) * player.getBbWidth(), player.getBoundingBox().minY + 0.1D, (player.position().z - 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
 				}
 			}
 		}
@@ -162,9 +169,9 @@ public class ItemSpikedGlove extends ItemLore {
 			BlockState iblockstate = world.getBlockState(blockpos);
 
 			if (!iblockstate.getBlock().addRunningEffects(iblockstate, world, blockpos, player)) {
-				if (iblockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-					world.spawnParticle(ParticleTypes.BLOCK_CRACK, (player.posX + 0.3) + (itemRand.nextFloat() - 0.5D) * player.width, player.getEntityBoundingBox().minY + 0.1D, player.posZ + (itemRand.nextFloat() - 0.5D) * player.width, -player.motionX * 4.0D, 1.5D, -player.motionZ * 4.0D,
-							Block.getStateId(iblockstate));
+				if (iblockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+					world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), (player.position().x + 0.3) + (random.nextFloat() - 0.5D) * player.getBbWidth(), player.getBoundingBox().minY + 0.1D, player.position().z + (random.nextFloat() - 0.5D) * player.getBbWidth(),
+							player.getDeltaMovement().multiply(-4.0D, 1.0D, 1.0D).x, 1.5D, player.getDeltaMovement().multiply(1.0D, 1.0D, -4.0D).z);
 				}
 			}
 		}
