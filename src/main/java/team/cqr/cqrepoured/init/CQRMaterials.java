@@ -1,17 +1,14 @@
 package team.cqr.cqrepoured.init;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.common.util.EnumHelper;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.config.ArmorConfig;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.config.IToolConfig;
+import team.cqr.cqrepoured.config.*;
+
+import java.util.function.Supplier;
 
 public class CQRMaterials {
 
@@ -48,22 +45,26 @@ public class CQRMaterials {
 		//}
 	}
 
-	public static class ToolMaterials {
-		public static final ToolMaterial TOOL_BULL = createToolMaterial("bull", CQRConfig.materials.toolMaterials.bull);
-		public static final ToolMaterial TOOL_MONKING = createToolMaterial("monking", CQRConfig.materials.toolMaterials.monking);
-		public static final ToolMaterial TOOL_MOONLIGHT = createToolMaterial("moonlight", CQRConfig.materials.toolMaterials.moonlight);
-		public static final ToolMaterial TOOL_NINJA = createToolMaterial("ninja", CQRConfig.materials.toolMaterials.ninja);
-		public static final ToolMaterial TOOL_SPIDER = createToolMaterial("spider", CQRConfig.materials.toolMaterials.spider);
-		public static final ToolMaterial TOOL_SUNSHINE = createToolMaterial("sunshine", CQRConfig.materials.toolMaterials.sunshine);
-		public static final ToolMaterial TOOL_TURTLE = createToolMaterial("turtle", CQRConfig.materials.toolMaterials.turtle);
-		public static final ToolMaterial TOOL_WALKER = createToolMaterial("walker", CQRConfig.materials.toolMaterials.walker);
+	public static class CQRItemTiers
+	{
+		public static final CQRItemTier TOOL_BULL = createItemTier(CQRConfig.materials.toolMaterials.bull, () -> Ingredient.of(CQRItems.LEATHER_BULL.get()));
+		public static final CQRItemTier TOOL_MONKING = createItemTier(CQRConfig.materials.toolMaterials.monking, () -> Ingredient.of(CQRItems.BONE_MONKING.get()));
+		public static final CQRItemTier TOOL_MOONLIGHT = createItemTier(CQRConfig.materials.toolMaterials.moonlight, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_NINJA = createItemTier(CQRConfig.materials.toolMaterials.ninja, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_SPIDER = createItemTier(CQRConfig.materials.toolMaterials.spider, () -> Ingredient.of(CQRItems.LEATHER_SPIDER.get()));
+		public static final CQRItemTier TOOL_SUNSHINE = createItemTier(CQRConfig.materials.toolMaterials.sunshine, () -> Ingredient.EMPTY);
+		public static final CQRItemTier TOOL_TURTLE = createItemTier(CQRConfig.materials.toolMaterials.turtle, () -> Ingredient.of(CQRItems.SCALE_TURTLE.get()));
+		public static final CQRItemTier TOOL_WALKER = createItemTier(CQRConfig.materials.toolMaterials.walker, () -> Ingredient.EMPTY);
 
-		private static ToolMaterial createToolMaterial(String name, IToolConfig config) {
-			return createToolMaterial(name, config.getHarvestLevel(), config.getMaxUses(), config.getEfficiency(), config.getDamage(), config.getEnchantability());
+		private static CQRItemTier createItemTier(ItemTierConfig config, Supplier<Ingredient> repairIngredient)
+		{
+			return createItemTier(config.getUses(), config.getSpeed(), config.getAttackDamageBonus(), config.getLevel(), config.getEnchantmentValue(), repairIngredient);
 		}
 
-		private static ToolMaterial createToolMaterial(String name, int harvestLevel, int maxUses, float efficiency, float damage, int enchantability) {
-			return EnumHelper.addToolMaterial(CQRMain.MODID + ":" + name, harvestLevel, maxUses, efficiency, damage, enchantability);
+		private static CQRItemTier createItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Supplier<Ingredient> repairIngredient)
+		{
+			return new CQRItemTier(uses, speed, attackDamageBonus, level, enchantmentValue, repairIngredient);
+			//return EnumHelper.addToolMaterial(CQRMain.MODID + ":" + name, harvestLevel, maxUses, efficiency, damage, enchantability);
 		}
 	}
 
@@ -85,8 +86,12 @@ public class CQRMaterials {
 		//setRepairItemForToolMaterial(ToolMaterials.TOOL_TURTLE, CQRItems.SCALE_TURTLE);
 	}
 
-	public static void setRepairItemForToolMaterial(ToolMaterial toolMaterial, Item item) {
-		toolMaterial.setRepairItem(new ItemStack(item));
-	}
+	//public static void setRepairItemForArmorlMaterial(ArmorMaterial armorMaterial, Item item) {
+	//	armorMaterial.setRepairItem(new ItemStack(item));
+	//}
+
+	//public static void setRepairItemForToolMaterial(ToolMaterial toolMaterial, Item item) {
+	//	toolMaterial.setRepairItem(new ItemStack(item));
+	//}
 
 }

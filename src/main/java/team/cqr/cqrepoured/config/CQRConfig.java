@@ -4,12 +4,10 @@ import java.time.Month;
 import java.time.MonthDay;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
@@ -113,14 +111,14 @@ public class CQRConfig {
 
 	public static class ToolMaterials {
 
-		public ToolConfig bull = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig monking = new ToolConfig(5.0F, 0.0F, 10, 0, 1561);
-		public ToolConfig moonlight = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig ninja = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig spider = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig sunshine = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig turtle = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
-		public ToolConfig walker = new ToolConfig(5.0F, 0.0F, 10, 0, 2048);
+		public ItemTierConfig bull = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig monking = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig moonlight = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig ninja = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig spider = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig sunshine = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig turtle = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public ItemTierConfig walker = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
 
 		public int daggerAttackDamageBonus = -1;
 		public float daggerAttackSpeedBonus = 0.4F;

@@ -6,17 +6,21 @@ import net.minecraft.util.LazyValue;
 
 import java.util.function.Supplier;
 
-public class WeaponConfig implements IItemTier {
+public class CQRItemTier implements IItemTier {
 
 	public int uses;
+	public float speed;
 	public float attackDamageBonus;
+	public int level;
 	public int enchantmentValue;
 	public LazyValue<Ingredient> repairIngredient;
 
-	public WeaponConfig(int uses, float attackDamageBonus, int enchantmentValue, Supplier<Ingredient> repairIngredient)
+	public CQRItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Supplier<Ingredient> repairIngredient)
 	{
 		this.uses = uses;
+		this.speed = speed;
 		this.attackDamageBonus = attackDamageBonus;
+		this.level = level;
 		this.enchantmentValue = enchantmentValue;
 		this.repairIngredient = new LazyValue<>(repairIngredient);
 	}
@@ -30,7 +34,7 @@ public class WeaponConfig implements IItemTier {
 	@Override
 	public float getSpeed()
 	{
-		return 0;
+		return this.speed;
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class WeaponConfig implements IItemTier {
 	@Override
 	public int getLevel()
 	{
-		return 0;
+		return this.level;
 	}
 
 	@Override
