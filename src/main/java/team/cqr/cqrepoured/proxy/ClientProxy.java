@@ -126,9 +126,6 @@ public class ClientProxy implements IProxy {
 	@Override
 	public boolean isOwnerOfIntegratedServer(EntityPlayer player) {
 		IntegratedServer integratedServer = Minecraft.getMinecraft().getIntegratedServer();
-		if(integratedServer.isSinglePlayer()) {
-			return true;
-		}
 		return integratedServer != null && player.getName().equals(integratedServer.getServerOwner());
 	}
 
