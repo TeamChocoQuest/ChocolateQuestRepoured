@@ -28,6 +28,7 @@ import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.entity.misc.*;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
 
 public class CQREntityTypes {
 
@@ -40,7 +41,12 @@ public class CQREntityTypes {
 	//Projectiles
 	public static final RegistryObject<EntityType<ProjectileBubble>> PROJECTILE_BUBBLE = ENTITY_TYPES.register("projectile_bubble",
 			() -> EntityType.Builder.<ProjectileBubble>of(ProjectileBubble::new, EntityClassification.MISC).clientTrackingRange(4).updateInterval(10) //.fireImmune() I guess it isn't though
-					.build(CQRMain.prefix("bubble").toString()));
+					.build(CQRMain.prefix("projectile_bubble").toString()));
+
+	public static final RegistryObject<EntityType<ProjectileBullet>> PROJECTILE_BULLET = ENTITY_TYPES.register("projectile_bullet",
+			() -> EntityType.Builder.<ProjectileBullet>of(ProjectileBullet::new, EntityClassification.MISC).clientTrackingRange(4).updateInterval(10).fireImmune()
+					.build(CQRMain.prefix("projectile_bullet").toString()));
+
 
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);

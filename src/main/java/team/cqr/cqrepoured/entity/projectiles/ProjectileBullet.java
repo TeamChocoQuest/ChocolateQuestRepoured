@@ -1,40 +1,90 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.util.EntityUtil;
 
-public class ProjectileBullet extends ProjectileBase implements IEntityAdditionalSpawnData {
+public class ProjectileBullet extends ProjectileBase implements IEntityAdditionalSpawnData
+{
+	private int bulletType;
+	private LivingEntity shooter;
 
-	private int type;
-
-	public ProjectileBullet(World worldIn) {
-		super(worldIn);
+	public ProjectileBullet(EntityType<? extends ThrowableEntity> throwableEntity, World world)
+	{
+		super(throwableEntity, world);
 	}
 
-	public ProjectileBullet(World worldIn, double x, double y, double z, int type) {
-		super(worldIn, x, y, z);
-		this.type = type;
+	public ProjectileBullet(EntityType<? extends ThrowableEntity> throwableEntity, double pX, double pY, double pZ, World world, int type)
+	{
+		super(throwableEntity, world);
+		this.bulletType = type;
 	}
 
-	public ProjectileBullet(World worldIn, LivingEntity shooter, int type) {
-		super(worldIn, shooter);
-		this.type = type;
+	public ProjectileBullet(EntityType<? extends ThrowableEntity> throwableEntity, LivingEntity shooter, World world, int type)
+	{
+		super(throwableEntity, shooter, world);
+		this.bulletType = type;
+		this.shooter = shooter;
 	}
 
-	public int getType() {
-		return this.type;
+	public int getBulletType()
+	{
+		return this.bulletType;
 	}
 
 	@Override
-	protected void onHit(RayTraceResult result) {
-		if (!this.world.isRemote) {
+	public void onHitEntity(EntityRayTraceResult entityResult)
+	{
+		Entity entity = entityResult.getEntity();
+
+		if(entity instanceof LivingEntity)
+		{
+			LivingEntity livingEntity = (LivingEntity)entity;
+
+			float damage = 5.0F;
+			if (this.bulletType == 1) {
+				damage += 2.5F;
+			} else if (this.bulletType == 2) {
+				damage += 3.75F;
+			} else if (this.bulletType == 3) {
+				damage += 5.0F;
+			} else if (this.bulletType == 4) {
+				damage += 5.0F;
+
+				//#TODO test that
+				if(livingEntity.hurt(new IndirectEntityDamageSource("onFire", this, this.shooter).setIsFire(), damage / 2)) {
+					livingEntity.setSecondsOnFire(3);
+				}
+			}
+			if (EntityUtil.isEntityFlying(entity)) {
+				damage *= 2;
+			}
+			entity.hurt(DamageSource.indirectMobAttack(this, this.shooter), damage);
+			this.remove();
+		}
+	}
+
+	@Override
+	protected void onHitBlock(BlockRayTraceResult result)
+	{
+		super.onHitBlock(result);
+		this.remove();
+	}
+
+	/*@Override
+	protected void onHit(RayTraceResult result)
+	{
+		if (!this.level.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit == this.thrower) {
 					return;
@@ -68,25 +118,34 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 
 			super.onHit(result);
 		}
-	}
+	} */
 
 	@Override
-	protected void onUpdateInAir() {
-		if (this.world.isRemote) {
-			if (this.ticksExisted < 10) {
-				this.world.spawnParticle(ParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+	protected void onUpdateInAir()
+	{
+		if (this.level.isClientSide)
+		{
+			if (this.tickCount < 10)
+			{
+				this.level.addParticle(ParticleTypes.SMOKE, this.position().x, this.position().y, this.position().z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeInt(this.type);
+	public void writeSpawnData(PacketBuffer buffer)
+	{
+		buffer.writeInt(this.bulletType);
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		this.type = additionalData.readInt();
+	public void readSpawnData(PacketBuffer buffer)
+	{
+		this.bulletType = buffer.readInt();
 	}
 
+	@Override
+	protected void defineSynchedData() {
+
+	}
 }

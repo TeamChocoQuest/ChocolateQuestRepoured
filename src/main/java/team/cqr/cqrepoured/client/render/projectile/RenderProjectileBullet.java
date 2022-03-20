@@ -13,14 +13,15 @@ public class RenderProjectileBullet extends RenderSpriteBase<ProjectileBullet> {
 	public static final ResourceLocation DIAMOND = new ResourceLocation(CQRMain.MODID, "textures/entity/bullet_diamond_single.png");
 	public static final ResourceLocation FIRE = new ResourceLocation(CQRMain.MODID, "textures/entity/bullet_fire_single.png");
 
-	public RenderProjectileBullet(EntityRendererManager renderManager) {
+	public RenderProjectileBullet(EntityRendererManager renderManager)
+	{
 		super(renderManager, IRON);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileBullet entity) {
+	public ResourceLocation getTextureLocation(ProjectileBullet entity) {
 
-		switch (entity.getType()) {
+		switch (entity.getBulletType()) {
 		case 2:
 			return GOLD;
 		case 3:
@@ -28,7 +29,7 @@ public class RenderProjectileBullet extends RenderSpriteBase<ProjectileBullet> {
 		case 4:
 			return FIRE;
 		default:
-			return super.getEntityTexture(entity);
+			return super.getTextureLocation(entity);
 		}
 	}
 

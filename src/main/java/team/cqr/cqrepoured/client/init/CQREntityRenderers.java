@@ -189,7 +189,7 @@ public class CQREntityRenderers
 
 	protected static void registerProjectileAndMiscRenderers() {
 		// Projectiles
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileBullet.class, RenderProjectileBullet::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, RenderProjectileCannonBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, RenderProjectileEarthQuake::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, RenderProjectilePoisonSpell::new);
