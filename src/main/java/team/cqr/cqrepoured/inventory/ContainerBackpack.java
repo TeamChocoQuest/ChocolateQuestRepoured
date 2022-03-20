@@ -10,6 +10,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 
@@ -18,7 +19,7 @@ public class ContainerBackpack extends Container {
 	private final IInventory inventory;
 
 	/** Client **/
-	public ContainerBackpack(final int containerID, PlayerInventory playerInv) {
+	public ContainerBackpack(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
 		this(containerID, playerInv, new Inventory(27));
 	}
 

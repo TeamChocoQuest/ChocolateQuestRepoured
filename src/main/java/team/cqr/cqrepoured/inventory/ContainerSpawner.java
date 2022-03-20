@@ -7,6 +7,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 
@@ -15,7 +16,7 @@ public class ContainerSpawner extends Container {
 	private final IInventory inventory;
 
 	/** Client **/
-	public ContainerSpawner(final int containerID, PlayerInventory playerInv) {
+	public ContainerSpawner(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
 		this(containerID, playerInv, new Inventory(9));
 	}
 

@@ -8,6 +8,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 
 public class ContainerAlchemyBag extends Container {
@@ -15,7 +16,7 @@ public class ContainerAlchemyBag extends Container {
 	private final IInventory inventory;
 
 	/** Client **/
-	public ContainerAlchemyBag(final int containerID, PlayerInventory playerInv) {
+	public ContainerAlchemyBag(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
 		this(containerID, playerInv, new Inventory(9));
 	}
 
