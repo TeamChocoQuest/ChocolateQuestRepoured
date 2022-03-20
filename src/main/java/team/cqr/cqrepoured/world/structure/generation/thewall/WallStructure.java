@@ -9,6 +9,7 @@ import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
@@ -25,7 +26,12 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 
 	@Override
 	public IStartFactory<NoFeatureConfig> getStartFactory() {
-		return null;
+		return Start::new;
+	}
+	
+	@Override
+	public Decoration step() {
+		return Decoration.SURFACE_STRUCTURES;
 	}
 	
 	@Override

@@ -85,7 +85,7 @@ public class WallPieceWall extends AbstractWallPiece {
 		}
 
 		// Spawner
-		this.placeSpawner(new BlockPos(4, 6, 7).offset(startX, startYRailing, startZ), pLevel);
+		//this.placeSpawner(new BlockPos(4, 6, 7).offset(startX, startYRailing, startZ), pLevel);
 
 		if (this.getTopY() > startY) {
 			// All the calculated block positions are stored within this map
