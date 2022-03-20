@@ -55,7 +55,7 @@ public class ItemArmorTurtle extends ArmorItem {
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		PlayerEntity player = Minecraft.getInstance().player;
 		if (player != null) {
-			int cooldown = CapabilityCooldownHandlerHelper.getCooldown(player, CQRItems.CHESTPLATE_TURTLE);
+			int cooldown = CapabilityCooldownHandlerHelper.getCooldown(player, CQRItems.CHESTPLATE_TURTLE.get());
 			if (cooldown > 0) {
 				tooltip.add(new TranslationTextComponent(TextFormatting.RED + "description.turtle_armor_charging.name", this.convertCooldown(cooldown)));
 			}
