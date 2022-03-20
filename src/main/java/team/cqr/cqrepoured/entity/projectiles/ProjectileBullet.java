@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class ProjectileBullet extends ProjectileBase implements IEntityAdditionalSpawnData
@@ -24,15 +25,15 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 		super(throwableEntity, world);
 	}
 
-	public ProjectileBullet(EntityType<? extends ThrowableEntity> throwableEntity, double pX, double pY, double pZ, World world, int type)
+	public ProjectileBullet(double pX, double pY, double pZ, World world, int type)
 	{
-		super(throwableEntity, world);
+		super(CQREntityTypes.PROJECTILE_BULLET.get(), world);
 		this.bulletType = type;
 	}
 
-	public ProjectileBullet(EntityType<? extends ThrowableEntity> throwableEntity, LivingEntity shooter, World world, int type)
+	public ProjectileBullet(LivingEntity shooter, World world, int type)
 	{
-		super(throwableEntity, shooter, world);
+		super(CQREntityTypes.PROJECTILE_BULLET.get(), shooter, world);
 		this.bulletType = type;
 		this.shooter = shooter;
 	}
